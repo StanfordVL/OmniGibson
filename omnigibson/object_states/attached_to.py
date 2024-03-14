@@ -43,6 +43,19 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
         on_contact function attempts to attach self.obj to other when a CONTACT_FOUND event happens
         on_joint_break function breaks the current attachment
     """
+    # This is to force the __init__ args to be "self" and "obj" only.
+    # Otherwise, it will inherit from LinkBasedStateMixin and the __init__ args will be "self", "args", "kwargs".
+    def __init__(self, obj):
+        # Run super method
+        super().__init__(obj=obj)
+
+    def initialize(self):
+        super().initialize()
+        og.sim.add_callback_on_stop(name=f"{self.obj.name}_detach", callback=self._detach)
+
+    def remove(self):
+        super().remove()
+        og.sim.remove_callback_on_stop(name=f"{self.obj.name}_detach")
 
     @classproperty
     def metalink_prefix(cls):
@@ -89,24 +102,54 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
                 if self.set_value(other, True):
                     break
 
-    def _set_value(self, other, new_value, bypass_alignment_checking=False):
+    def _set_value(self, other, new_value, bypass_alignment_checking=False, check_physics_stability=False, can_joint_break=True):
+        """
+        Args:
+            other (DatasetObject): parent object to attach to.
+            new_value (bool): whether to attach or detach.
+            bypass_alignment_checking (bool): whether to bypass alignment checking when finding attachment links.
+                Normally when finding attachment links, we check if the child and parent links have aligned positions
+                or poses. This flag allows users to bypass this check and find attachment links solely based on the
+                attachment meta link types. Default is False.
+            check_physics_stability (bool): whether to check if the attachment is stable after attachment.
+                If True, it will check if the child object is not colliding with other objects except the parent object.
+                If False, it will not check the stability and simply attach the child to the parent.
+                Default is False.
+            can_joint_break (bool): whether the joint can break or not.
+
+        Returns:
+            bool: whether the attachment setting was successful or not.
+        """
         # Attempt to attach
         if new_value:
             if self.parent == other:
                 # Already attached to this object. Do nothing.
                 return True
-            elif self.parent is None:
-                # Find attachment links that satisfy the proximity requirements
-                child_link, parent_link = self._find_attachment_links(other, bypass_alignment_checking)
-                if child_link is not None:
-                    self._attach(other, child_link, parent_link)
-                    return True
-                else:
-                    return False
-            else:
+            elif self.parent is not None:
                 log.debug(f"Trying to attach object {self.obj.name} to object {other.name},"
                           f"but it is already attached to object {self.parent.name}. Try detaching first.")
                 return False
+            else:
+                # Find attachment links that satisfy the proximity requirements
+                child_link, parent_link = self._find_attachment_links(other, bypass_alignment_checking)
+                if child_link is None:
+                    return False
+                else:
+                    if check_physics_stability:
+                        state = og.sim.dump_state()
+                    self._attach(other, child_link, parent_link, can_joint_break=can_joint_break)
+                    if not check_physics_stability:
+                        return True
+                    else:
+                        og.sim.step_physics()
+                        # self.obj should not collide with other objects except the parent
+                        success = len(self.obj.states[ContactBodies].get_value(ignore_objs=(other,))) == 0
+                        if success:
+                            return True
+                        else:
+                            self._detach()
+                            og.sim.load_state(state)
+                            return False
 
         # Attempt to detach
         else:
@@ -190,7 +233,7 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
     def attachment_joint_prim_path(self):
         return f"{self.parent_link.prim_path}/{self.obj.name}_attachment_joint" if self.parent_link is not None else None
 
-    def _attach(self, other, child_link, parent_link, joint_type=m.DEFAULT_JOINT_TYPE, break_force=m.DEFAULT_BREAK_FORCE, break_torque=m.DEFAULT_BREAK_TORQUE):
+    def _attach(self, other, child_link, parent_link, joint_type=m.DEFAULT_JOINT_TYPE, can_joint_break=True):
         """
         Creates a fixed or spherical joint between a male meta link of self.obj (@child_link) and a female meta link of
          @other (@parent_link) with a given @joint_type, @break_force and @break_torque
@@ -200,16 +243,9 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
             child_link (RigidPrim): male meta link of @self.obj.
             parent_link (RigidPrim): female meta link of @other.
             joint_type (JointType): joint type of the attachment, {JointType.JOINT_FIXED, JointType.JOINT_SPHERICAL}
-            break_force (float or None): break force for linear dofs, unit is Newton.
-            break_torque (float or None): break torque for angular dofs, unit is Newton-meter.
+            can_joint_break (bool): whether the joint can break or not.
         """
         assert joint_type in {JointType.JOINT_FIXED, JointType.JOINT_SPHERICAL}, f"Unsupported joint type {joint_type}"
-        # Set the parent references
-        self.parent = other
-        self.parent_link = parent_link
-
-        # Set the child reference for @other
-        other.states[AttachedTo].children[parent_link.body_name] = self.obj
 
         # Set pose for self.obj so that child_link and parent_link align (6dof alignment for FixedJoint and 3dof alignment for SphericalJoint)
         parent_pos, parent_quat = parent_link.get_position_orientation()
@@ -229,6 +265,7 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
         # Actually move the object and also keep it still for stability purposes.
         self.obj.set_position_orientation(new_child_root_pos, new_child_root_quat)
         self.obj.keep_still()
+        other.keep_still()
 
         if joint_type == JointType.JOINT_FIXED:
             # FixedJoint: the parent link, the child link and the joint frame all align.
@@ -237,6 +274,15 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
             # SphericalJoint: the same except that the rotation of the parent link doesn't align with the joint frame.
             # The child link and the joint frame still align.
             _, parent_local_quat = T.relative_pose_transform([0, 0, 0], child_quat, [0, 0, 0], parent_quat)
+
+        # Set the parent references
+        self.parent = other
+        self.parent_link = parent_link
+
+        # Set the child reference for @other
+        other.states[AttachedTo].children[parent_link.body_name] = self.obj
+
+        kwargs = {"break_force": m.DEFAULT_BREAK_FORCE, "break_torque": m.DEFAULT_BREAK_TORQUE} if can_joint_break else dict()
 
         # Create the joint
         create_joint(
@@ -248,55 +294,29 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
             joint_frame_in_parent_frame_quat=parent_local_quat,
             joint_frame_in_child_frame_pos=np.zeros(3),
             joint_frame_in_child_frame_quat=np.array([0.0, 0.0, 0.0, 1.0]),
-            break_force=break_force,
-            break_torque=break_torque,
+            **kwargs
         )
 
     def _detach(self):
         """
         Removes the current attachment joint
         """
-        # Remove the attachment joint prim from the stage
-        og.sim.stage.RemovePrim(self.attachment_joint_prim_path)
+        if self.parent_link is not None:
+            # Remove the attachment joint prim from the stage
+            og.sim.stage.RemovePrim(self.attachment_joint_prim_path)
 
-        # Remove child reference from the parent object
-        self.parent.states[AttachedTo].children[self.parent_link.body_name] = None
+            # Remove child reference from the parent object
+            self.parent.states[AttachedTo].children[self.parent_link.body_name] = None
 
-        # Remove reference to the parent object and link
-        self.parent = None
-        self.parent_link = None
+            # Remove reference to the parent object and link
+            self.parent = None
+            self.parent_link = None
 
     @property
     def settable(self):
         return True
 
-    @property
-    def state_size(self):
-        return 1
-
-    def _dump_state(self):
-        return dict(attached_obj_uuid=-1 if self.parent is None else self.parent.uuid)
-
-    def _load_state(self, state):
-        uuid = state["attached_obj_uuid"]
-        if uuid == -1:
-            attached_obj = None
-        else:
-            attached_obj = og.sim.scene.object_registry("uuid", uuid)
-            assert attached_obj is not None, "attached_obj_uuid does not match any object in the scene."
-
-        # If it's currently attached to something, detach.
-        if self.parent is not None:
-            self.set_value(self.parent, False)
-            assert self.parent is None, "parent reference is not cleared after detachment"
-
-        # If the loaded state requires attachment, attach.
-        if attached_obj is not None:
-            self.set_value(attached_obj, True)
-            assert self.parent == attached_obj, "parent reference is not updated after attachment"
-
-    def _serialize(self, state):
-        return np.array([state["attached_obj_uuid"]], dtype=float)
-
-    def _deserialize(self, state):
-        return dict(attached_obj_uuid=int(state[0])), 1
+    # No need to explicitly dump/load state for this state. When kinematic states are restored and one physics step is
+    # taken (e.g. og.sim.scene.reset()), the attachment (if exists) will be re-established. The assumption here is that
+    # the physics timestep is small enough that the two objects will not have moved too far from each other, and hence
+    # will still pass alignment checks.
