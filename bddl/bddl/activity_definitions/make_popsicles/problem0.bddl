@@ -60,11 +60,7 @@
             (real ?ice_lolly.n.01_1) 
             (real ?ice_lolly.n.01_2) 
             (real ?ice_lolly.n.01_3) 
-            (real ?ice_lolly.n.01_4) 
-            (forall 
-                (?ice_lolly.n.01 - ice_lolly.n.01) 
-                (frozen ?ice_lolly.n.01)
-            )
+            (real ?ice_lolly.n.01_4)
         )
     )
 )

@@ -129,6 +129,9 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
         if ("nonSubstance" in synset_content[synset]) and ("cookable" in synset_content[synset] or "fillable" in synset_content[synset]):
             # cookables and fillables are both heatable
             synset_content[synset]["heatable"] = {}
+        if ("nonSubstance" in synset_content[synset]) and ("cookable" in synset_content[synset] or "fillable" in synset_content[synset]):
+            # cookables and fillables are both freezable
+            synset_content[synset]["freezable"] = {}
         if "nonSubstance" in synset_content[synset]: # non-substances are both wetable and mixable
                 synset_content[synset].update({
                     "wetable": {},
@@ -143,7 +146,7 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
                     "wrinkleable": {},
                     "disinfectable": {},
                 })
-        synset_content[synset]["freezable"] = {}    # all synsets are freezable
+
 
         # Hardcode in a place where the synset is seen, since not all scene synsets made it:
         if synset == "sink.n.01":
