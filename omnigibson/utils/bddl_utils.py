@@ -1097,10 +1097,16 @@ class BDDLSampler:
                     # Sample!
                     for condition, positive, entity, child_scope_name in conditions_to_sample:
                         success = False
+
+                        kwargs = dict()
+                        # Reset if we're sampling a kinematic state
+                        if condition.STATE_NAME in {"inside", "ontop", "under"}:
+                            kwargs["reset_before_sampling"] = True
+
                         while True:
                             num_trials = 1
                             for _ in range(num_trials):
-                                success = condition.sample(binary_state=positive)
+                                success = condition.sample(binary_state=positive, **kwargs)
                                 if success:
                                     # Update state
                                     state = og.sim.dump_state(serialized=False)
