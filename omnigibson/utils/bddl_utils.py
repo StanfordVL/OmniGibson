@@ -815,11 +815,11 @@ class BDDLSampler:
                 # We allow burners to be used as if they are stoves
                 # No need to safeguard check for subtree_substances because inroom objects will never be substances
                 categories = OBJECT_TAXONOMY.get_subtree_categories(obj_synset)
-                abilities = OBJECT_TAXONOMY.get_abilities(obj_synset)
 
                 # Grab all models that fully support all abilities for the corresponding category
-                valid_models = {cat: set(get_all_object_category_models_with_abilities(cat, abilities))
-                                for cat in categories}
+                valid_models = {cat: set(get_all_object_category_models_with_abilities(
+                    cat, OBJECT_TAXONOMY.get_abilities(OBJECT_TAXONOMY.get_synset_from_category(cat))))
+                    for cat in categories}
                 valid_models = {cat: models - BAD_MODELS.get(cat, set()) for cat, models in valid_models.items()}
                 room_insts = [None] if self._scene_model is None else og.sim.scene.seg_map.room_sem_name_to_ins_name[room_type]
                 for room_inst in room_insts:
