@@ -1258,8 +1258,8 @@ stages:
       md5: dc6210569748bc3f9875a148c181e8eb
       size: 339445
     - path: params.yaml
-      md5: 79e98b29f7f025aa3897e61693b5fa9b
-      size: 11083
+      md5: 3c6a1c48811fc91bd89e986a8d540ea3
+      size: 12211
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -1541,8 +1541,8 @@ stages:
       md5: dc6210569748bc3f9875a148c181e8eb
       size: 339445
     - path: params.yaml
-      md5: 79e98b29f7f025aa3897e61693b5fa9b
-      size: 11083
+      md5: 3c6a1c48811fc91bd89e986a8d540ea3
+      size: 12211
     outs:
     - path: artifacts/pipeline/object_inventory.json
       md5: 4bad4cddaf0131479aba186f8d9e21e5
@@ -4286,8 +4286,8 @@ stages:
       md5: 50380e7647a34c18af72965e5ec76a1f
       size: 137
     - path: params.yaml
-      md5: 79e98b29f7f025aa3897e61693b5fa9b
-      size: 11083
+      md5: 3c6a1c48811fc91bd89e986a8d540ea3
+      size: 12211
     outs:
     - path: artifacts/pipeline/sanitycheck.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -6792,7 +6792,7 @@ stages:
     deps:
     - path: b1k_pipeline/check_success_aggregate.py
       md5: ec5fb462feecef40a9e7654a758841dc
-      size: 1356
+      size: 1320
     - path: cad/objects/batch-00/artifacts/export_meshes.json
       md5: 421088329e40daed7836152711eb07bc
       size: 20250
@@ -6890,8 +6890,8 @@ stages:
       md5: 3c9e037208f5ce55c05f80a326d87c22
       size: 30196
     - path: cad/scenes/Beechwood_0_garden/artifacts/export_meshes.json
-      md5: 1c8dbaa0afdeb9b98ed05d38f17635d0
-      size: 35531
+      md5: 4b4a546903bfeb9def6d035c7cf4fc6e
+      size: 35524
     - path: cad/scenes/Beechwood_0_int/artifacts/export_meshes.json
       md5: 9f9aecf7cefcb1d6757cf430c6d63c3a
       size: 23772
@@ -7277,8 +7277,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/export_objs_global.py
-      md5: 5695a2b0c4b1de79fd32042f7354eed1
-      size: 31596
+      md5: f9ecc0522c476d86f90fa3b381d2ac68
+      size: 31668
     - path: b1k_pipeline/mesh_tree.py
       md5: 7ed516b18128f96cb05dfea5974e193c
       size: 14897
@@ -7667,14 +7667,14 @@ stages:
       md5: d7d5be575707522493a7d4ee8f5ce6d9
       size: 56814
     - path: cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
-      md5: 3acb6dba1f280dd9b467c6cb0859b8be
-      size: 1699335
+      md5: b43963fc5c03f3d7b1a6b67e71b4fecf
+      size: 1549658
     - path: cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
       md5: f65108f2f20a037e606c2036a67c7bbf
       size: 2851
     - path: cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
-      md5: 2d0f42e275c8c216877baba165ec1cea
-      size: 256818544
+      md5: a0ecc1b41cb4a196e4bd1f5f51820830
+      size: 256268516
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       md5: 870d89f8bcdfbf8eb5e6bab8644e2d04
       size: 113211
@@ -7909,7 +7909,8 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: dcbb008c11ecf22d07a48920b9bcf682
       size: 3096152
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 853a65dca047d7689e9362254b31e804
       size: 9347
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -8355,8 +8356,8 @@ stages:
       size: 201675
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: 4806f32166ca36bdcfd7282c5615beba
-      size: 19216079716
+      md5: 180c86784e70c15fbc91139defa47d34
+      size: 8070638
     - path: artifacts/pipeline/export_objs.json
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
       size: 31
@@ -8364,8 +8365,8 @@ stages:
     cmd: python -m b1k_pipeline.aggregate_metadata
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 3586a3bf92ffacdee3950d9529c11805
-      size: 89722
+      md5: 694d2ab303a5f6f7bebd4b7489e6239a
+      size: 89723
     - path: artifacts/pipeline/collision_average_volumes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8389,8 +8390,8 @@ stages:
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: 5156525fd588a261f4bfaee0f1461911
-      size: 76089
+      md5: c4ac88771294866bbb8a22da9dccebb7
+      size: 76092
     - path: artifacts/pipeline/aggregate_metadata.json
       md5: 599e2d604543e31d01aec8c6540d96ff
       size: 13839
@@ -8412,14 +8413,14 @@ stages:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
     - path: artifacts/parallels/fillable_volumes.zip
-      md5: b37a67ed8a8ac78776b1454e08ba258d
-      size: 1203775
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
     - path: artifacts/parallels/metadata.zip
-      md5: 5156525fd588a261f4bfaee0f1461911
-      size: 76089
+      md5: c4ac88771294866bbb8a22da9dccebb7
+      size: 76092
     - path: artifacts/parallels/objects.zip
-      md5: 4806f32166ca36bdcfd7282c5615beba
-      size: 19216079716
+      md5: 180c86784e70c15fbc91139defa47d34
+      size: 8070638
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8449,8 +8450,8 @@ stages:
       size: 2230
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 316124978ffa260c160579b3d5c5607e
-      size: 22004759019
+      md5: a451177352aaa32885ee3cf521949cda
+      size: 9111963
     - path: artifacts/pipeline/usdify_objects.json
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
       size: 51
@@ -10045,14 +10046,14 @@ stages:
       md5: d7d5be575707522493a7d4ee8f5ce6d9
       size: 56814
     - path: cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
-      md5: 3acb6dba1f280dd9b467c6cb0859b8be
-      size: 1699335
+      md5: b43963fc5c03f3d7b1a6b67e71b4fecf
+      size: 1549658
     - path: cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
       md5: f65108f2f20a037e606c2036a67c7bbf
       size: 2851
     - path: cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
-      md5: 2d0f42e275c8c216877baba165ec1cea
-      size: 256818544
+      md5: a0ecc1b41cb4a196e4bd1f5f51820830
+      size: 256268516
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       md5: 870d89f8bcdfbf8eb5e6bab8644e2d04
       size: 113211
@@ -10287,7 +10288,8 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: dcbb008c11ecf22d07a48920b9bcf682
       size: 3096152
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 853a65dca047d7689e9362254b31e804
       size: 9347
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -11140,14 +11142,14 @@ stages:
       md5: d7d5be575707522493a7d4ee8f5ce6d9
       size: 56814
     - path: cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
-      md5: 3acb6dba1f280dd9b467c6cb0859b8be
-      size: 1699335
+      md5: b43963fc5c03f3d7b1a6b67e71b4fecf
+      size: 1549658
     - path: cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
       md5: f65108f2f20a037e606c2036a67c7bbf
       size: 2851
     - path: cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
-      md5: 2d0f42e275c8c216877baba165ec1cea
-      size: 256818544
+      md5: a0ecc1b41cb4a196e4bd1f5f51820830
+      size: 256268516
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       md5: 870d89f8bcdfbf8eb5e6bab8644e2d04
       size: 113211
@@ -11382,7 +11384,8 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: dcbb008c11ecf22d07a48920b9bcf682
       size: 3096152
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 853a65dca047d7689e9362254b31e804
       size: 9347
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -11825,15 +11828,15 @@ stages:
       size: 339445
     outs:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 3586a3bf92ffacdee3950d9529c11805
-      size: 89722
+      md5: 694d2ab303a5f6f7bebd4b7489e6239a
+      size: 89723
   collision_average_volumes_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_average_volumes.json
       artifacts/pipeline/collision_average_volumes.success
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 3586a3bf92ffacdee3950d9529c11805
-      size: 89722
+      md5: 694d2ab303a5f6f7bebd4b7489e6239a
+      size: 89723
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707
@@ -12185,7 +12188,8 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: 72c82c8e34bff048822fc06de024715a
       size: 4752
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     outs:
@@ -13200,8 +13204,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/max/export_meshes.py
-      md5: 08b6378d12a2ce5b7c24ef986d091fd5
-      size: 23780
+      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
+      size: 23189
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       md5: 870d89f8bcdfbf8eb5e6bab8644e2d04
       size: 113211
@@ -13475,8 +13479,8 @@ stages:
       size: 12868880
       nfiles: 1134
     - path: artifacts/parallels/objects.zip
-      md5: 4806f32166ca36bdcfd7282c5615beba
-      size: 19216079716
+      md5: 180c86784e70c15fbc91139defa47d34
+      size: 8070638
     - path: b1k_pipeline/aggregate_fillable_volumes.py
       md5: ab2f3acdfa7f7785a38e1b66441b6cd1
       size: 3069
@@ -13485,8 +13489,8 @@ stages:
       size: 13835
     outs:
     - path: artifacts/parallels/fillable_volumes.zip
-      md5: b37a67ed8a8ac78776b1454e08ba258d
-      size: 1203775
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
   room_object_list_success:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/room_object_list.json
       artifacts/pipeline/room_object_list.success scenes
@@ -14061,7 +14065,8 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: 2b617e1652f7762c84de2dfb464ffdfa
       size: 4794
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip

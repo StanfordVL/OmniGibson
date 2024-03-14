@@ -618,6 +618,9 @@ def process_target(target, objects_path, executor):
         saveable_roots = [root_node for root_node in roots if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]]
         object_futures = {}
         for root_node in saveable_roots:
+            if root_node[0] != "walls":
+                continue
+
             # Start processing the object. We start by creating an object-specific
             # copy of the mesh tree (also including info about any parts)
             relevant_nodes = set(nx.dfs_tree(G, root_node).nodes())
@@ -651,7 +654,7 @@ def main():
         target_futures = {}
      
         with futures.ThreadPoolExecutor(max_workers=50) as target_executor, futures.ProcessPoolExecutor(max_workers=16) as obj_executor:
-            targets = get_targets("combined")
+            targets = ["scenes/Beechwood_0_garden"]
             for target in tqdm.tqdm(targets):
                 target_futures[target_executor.submit(process_target, target, objects_dir, obj_executor)] = target
             
