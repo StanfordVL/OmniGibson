@@ -316,6 +316,7 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
     def settable(self):
         return True
 
-    # No need to explicitly dump/load state for this state. When kinematic states are restore, the attachment
-    # (if exists) will be re-established. The assumption here, however, is that the physics timestep is small enough
-    # that the two objects will not have moved too far from each other (still passing alignment checks).
+    # No need to explicitly dump/load state for this state. When kinematic states are restored and one physics step is
+    # taken (e.g. og.sim.scene.reset()), the attachment (if exists) will be re-established. The assumption here is that
+    # the physics timestep is small enough that the two objects will not have moved too far from each other, and hence
+    # will still pass alignment checks.
