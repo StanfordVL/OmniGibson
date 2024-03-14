@@ -81,6 +81,13 @@ def main(random_selection=False, headless=False, short_exec=False):
     scene_row = None if args.offline else validate_scene_can_be_sampled(scene=args.scene_model)
 
     if not args.offline:
+        completed = worksheet.get(f"W{scene_row}")
+        if completed and completed[0] and str(completed[0][0]) == "1":
+            # If completed is set, then immediately return
+            print(f"\nScene {args.scene_model} already completed sampling, terminating immediately!\n")
+            return
+
+        worksheet.update_acell(f"W{scene_row}", 1)
         # Potentially update start_at based on current task observed
         # Current task is either an empty list [] or a filled list [['<ACTIVITY>']]
         current_task = worksheet.get(f"Y{scene_row}")
@@ -356,9 +363,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         worksheet.update_acell(f"W{scene_row}", 1)
         worksheet.update_acell(f"Y{scene_row}", "")
 
-    # Shutdown at the end
-    og.shutdown()
-
 
 if __name__ == "__main__":
     main()
+
+    # Shutdown at the end
+    og.shutdown()
