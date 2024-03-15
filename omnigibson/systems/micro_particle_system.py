@@ -43,6 +43,7 @@ m.CLOTH_DRAG = 0.001
 m.CLOTH_LIFT = 0.003
 m.MIN_PARTICLE_CONTACT_OFFSET = 0.005   # Minimum particle contact offset for physical micro particles
 m.FLUID_PARTICLE_PARTICLE_DISTANCE_SCALE = 0.8   # How much overlap expected between fluid particles at rest
+m.MICRO_PARTICLE_SYSTEM_MAX_VELOCITY = None     # If set, the maximum particle velocity for micro particle systems
 
 def set_carb_settings_for_fluid_isosurface():
     """
@@ -633,6 +634,10 @@ class MicroPhysicalParticleSystem(MicroParticleSystem, PhysicalParticleSystem):
 
         # Run super
         super().initialize()
+
+        # Potentially set system prim's max velocity value
+        if m.MICRO_PARTICLE_SYSTEM_MAX_VELOCITY is not None:
+            cls.system_prim.GetProperty("maxVelocity").Set(m.MICRO_PARTICLE_SYSTEM_MAX_VELOCITY)
 
         # Initialize class variables that are mutable so they don't get overridden by children classes
         cls.particle_instancers = dict()
