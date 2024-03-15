@@ -6,7 +6,7 @@
         lemon-pepper_seasoning.n.01_1 - lemon-pepper_seasoning.n.01
         cooked__lemon-pepper_seasoning.n.01_1 - cooked__lemon-pepper_seasoning.n.01
         chicken_wing.n.01_1 chicken_wing.n.01_2 chicken_wing.n.01_3 chicken_wing.n.01_4 chicken_wing.n.01_5 chicken_wing.n.01_6 chicken_wing.n.01_7 chicken_wing.n.01_8 - chicken_wing.n.01
-        tupperware.n.01_1 tupperware.n.01_2 - tupperware.n.01
+        tray.n.01_1 tray.n.01_2 - tray.n.01
         olive_oil.n.01_1 - olive_oil.n.01
         cooked__olive_oil.n.01_1 - cooked__olive_oil.n.01
         stove.n.01_1 - stove.n.01
@@ -56,16 +56,16 @@
         (not 
             (cooked chicken_wing.n.01_8)
         ) 
-        (inside chicken_wing.n.01_1 tupperware.n.01_1) 
-        (inside chicken_wing.n.01_2 tupperware.n.01_1) 
-        (inside chicken_wing.n.01_3 tupperware.n.01_1) 
-        (inside chicken_wing.n.01_4 tupperware.n.01_1) 
-        (inside chicken_wing.n.01_5 tupperware.n.01_2) 
-        (inside chicken_wing.n.01_6 tupperware.n.01_2) 
-        (inside chicken_wing.n.01_7 tupperware.n.01_2) 
-        (inside chicken_wing.n.01_8 tupperware.n.01_2) 
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
-        (inside tupperware.n.01_2 electric_refrigerator.n.01_1) 
+        (ontop chicken_wing.n.01_1 tray.n.01_1)
+        (ontop chicken_wing.n.01_2 tray.n.01_1)
+        (ontop chicken_wing.n.01_3 tray.n.01_1)
+        (ontop chicken_wing.n.01_4 tray.n.01_1)
+        (ontop chicken_wing.n.01_5 tray.n.01_2)
+        (ontop chicken_wing.n.01_6 tray.n.01_2)
+        (ontop chicken_wing.n.01_7 tray.n.01_2)
+        (ontop chicken_wing.n.01_8 tray.n.01_2)
+        (inside tray.n.01_1 electric_refrigerator.n.01_1)
+        (inside tray.n.01_2 electric_refrigerator.n.01_1)
         (filled olive_oil__bottle.n.01_1 olive_oil.n.01_1) 
         (ontop olive_oil__bottle.n.01_1 countertop.n.01_1) 
         (ontop tongs.n.01_1 countertop.n.01_2)

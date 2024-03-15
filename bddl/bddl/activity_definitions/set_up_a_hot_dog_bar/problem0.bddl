@@ -15,7 +15,7 @@
         chopping_board.n.01_1 - chopping_board.n.01
         sack.n.01_1 - sack.n.01
         tablecloth.n.01_1 - tablecloth.n.01
-        plate.n.04_1 plate.n.04_2 - plate.n.04
+        plate.n.04_1 plate.n.04_2 plate.n.04_3 - plate.n.04
         floor.n.01_1 - floor.n.01
         countertop.n.01_1 - countertop.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -32,8 +32,9 @@
         (inside hotdog.n.02_2 electric_refrigerator.n.01_1) 
         (inside bottle__of__catsup.n.01_1 electric_refrigerator.n.01_1) 
         (inside bottle__of__mustard.n.01_1 electric_refrigerator.n.01_1) 
-        (inside vidalia_onion.n.01_1 bowl.n.01_1)
-        (inside vidalia_onion.n.01_2 bowl.n.01_1)
+        (ontop vidalia_onion.n.01_1 plate.n.04_3)
+        (ontop vidalia_onion.n.01_2 plate.n.04_3)
+        (ontop plate.n.04_3 countertop.n.01_1)
         (ontop bowl.n.01_1 countertop.n.01_1)
         (ontop chopping_board.n.01_1 countertop.n.01_1)
         (ontop carving_knife.n.01_1 chopping_board.n.01_1)

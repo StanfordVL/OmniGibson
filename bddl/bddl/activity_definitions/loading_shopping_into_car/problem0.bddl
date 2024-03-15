@@ -4,11 +4,10 @@
     (:objects
         car.n.01_1 - car.n.01
         driveway.n.01_1 - driveway.n.01
-        pineapple.n.02_1 pineapple.n.02_2 pineapple.n.02_3 - pineapple.n.02
+        pineapple.n.02_1 - pineapple.n.02
         sack.n.01_1 sack.n.01_2 - sack.n.01
-        chicken.n.01_1 - chicken.n.01
+        egg.n.02_1 egg.n.02_2 - egg.n.02
         wine_bottle.n.01_1 wine_bottle.n.01_2 - wine_bottle.n.01
-        egg.n.02_1 - egg.n.02
         bag__of__jerky.n.01_1 - bag__of__jerky.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -16,13 +15,10 @@
     
     (:init 
         (ontop car.n.01_1 driveway.n.01_1) 
-        (inside pineapple.n.02_1 sack.n.01_1) 
-        (inside pineapple.n.02_2 sack.n.01_1) 
-        (inside pineapple.n.02_3 sack.n.01_1) 
-        (inside egg.n.02_1 sack.n.01_2) 
+        (inside pineapple.n.02_1 sack.n.01_1)
+        (inside egg.n.02_1 sack.n.01_2)
+        (inside egg.n.02_2 sack.n.01_2)
         (inside bag__of__jerky.n.01_1 sack.n.01_2)
-        (inside chicken.n.01_1 sack.n.01_2)
-        (frozen chicken.n.01_1)
         (ontop wine_bottle.n.01_1 driveway.n.01_1)
         (ontop wine_bottle.n.01_2 driveway.n.01_1)
         (ontop sack.n.01_1 driveway.n.01_1) 

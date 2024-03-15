@@ -12,8 +12,8 @@
     
     (:init 
         (ontop clothesline.n.01_1 floor.n.01_1) 
-        (inside sheet.n.03_1 wicker_basket.n.01_1) 
-        (inside sheet.n.03_2 wicker_basket.n.01_1) 
+        (ontop sheet.n.03_1 floor.n.01_1)
+        (ontop sheet.n.03_2 floor.n.01_1)
         (ontop wicker_basket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom tree.n.01_1 garden) 

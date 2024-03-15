@@ -5,7 +5,6 @@
         bread_slice.n.01_1 - bread_slice.n.01
         sack.n.01_1 - sack.n.01
         carton__of__milk.n.01_1 - carton__of__milk.n.01
-        chicken.n.01_1 - chicken.n.01
         floor.n.01_1 - floor.n.01
         driveway.n.01_1 - driveway.n.01
         door.n.01_1 - door.n.01
@@ -15,7 +14,6 @@
     (:init 
         (inside bread_slice.n.01_1 sack.n.01_1)
         (inside carton__of__milk.n.01_1 sack.n.01_1)
-        (inside chicken.n.01_1 sack.n.01_1)
         (ontop sack.n.01_1 driveway.n.01_1)
         (inroom door.n.01_1 corridor) 
         (inroom floor.n.01_1 corridor) 
@@ -29,7 +27,6 @@
             (ontop ?sack.n.01_1 ?floor.n.01_1)
             (inside ?bread_slice.n.01_1 ?sack.n.01_1)
             (inside ?carton__of__milk.n.01_1 ?sack.n.01_1)
-            (inside ?chicken.n.01_1 ?sack.n.01_1)
         )
     )
 )
