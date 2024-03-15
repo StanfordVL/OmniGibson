@@ -181,6 +181,7 @@ SUPPORTED_PREDICATES = {
     "hot": get_unary_predicate_for_state(object_states.Heated, "hot"),
     "open": get_unary_predicate_for_state(object_states.Open, "open"),
     "toggled_on": get_unary_predicate_for_state(object_states.ToggledOn, "toggled_on"),
+    "on_fire": get_unary_predicate_for_state(object_states.OnFire, "on_fire"),
     "attached": get_binary_predicate_for_state(object_states.AttachedTo, "attached"),
     "overlaid": get_binary_predicate_for_state(object_states.Overlaid, "overlaid"),
     "folded": get_unary_predicate_for_state(object_states.Folded, "folded"),
