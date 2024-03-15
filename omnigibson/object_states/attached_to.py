@@ -61,6 +61,7 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
     def initialize(self):
         super().initialize()
         og.sim.add_callback_on_stop(name=f"{self.obj.name}_detach", callback=self._detach)
+        self.parents_disabled_collisions = set()
 
     def remove(self):
         super().remove()
@@ -313,6 +314,10 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
         """
         Disables collision between the child and parent objects
         """
+        if parent in self.parents_disabled_collisions:
+            return
+        self.parents_disabled_collisions.add(parent)
+
         was_playing = og.sim.is_playing()
         if was_playing:
             state = og.sim.dump_state()
