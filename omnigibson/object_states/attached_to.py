@@ -14,6 +14,7 @@ from omnigibson.utils.constants import JointType
 from omnigibson.utils.usd_utils import create_joint
 from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.utils.python_utils import classproperty
+from omnigibson.utils.usd_utils import CollisionAPI
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
