@@ -1254,7 +1254,7 @@ class BDDLSampler:
 
                             # Can't re-sample non-kinematics or rescale cloth or agent, so in
                             # those cases terminate immediately
-                            if condition.STATE_NAME == "attached" or group != "kinematic" or "agent" in child_scope_name or entity.prim_type == PrimType.CLOTH:
+                            if group != "kinematic" or condition.STATE_NAME == "attached" or "agent" in child_scope_name or entity.prim_type == PrimType.CLOTH:
                                 break
 
                             # If any scales are equal or less than the lower threshold, terminate immediately
@@ -1306,8 +1306,9 @@ class BDDLSampler:
             og.sim.stop()
             for obj_inst in problematic_objs:
                 obj = self._object_scope[obj_inst]
-                # Can't rescale cloth or agent, so play again and then terminate immediately if found
-                if "agent" in obj_inst or obj.prim_type == PrimType.CLOTH:
+                # If the object's initial condition is attachment, or it's agent or cloth, we can't / shouldn't scale
+                # down, so play again and then terminate immediately
+                if obj_inst in self._attached_objects or "agent" in obj_inst or obj.prim_type == PrimType.CLOTH:
                     og.sim.play()
                     return error_msg, None
                 assert np.all(obj.scale > m.DYNAMIC_SCALE_INCREMENT)

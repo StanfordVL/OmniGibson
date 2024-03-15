@@ -183,10 +183,15 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         CollisionAPI.create_collision_group(col_group="fixed_base_root_links", filter_self_collisions=True)
         # Disable collision between building structures
         CollisionAPI.create_collision_group(col_group="structures", filter_self_collisions=True)
+        # Create collision group for attached objects
+        CollisionAPI.create_collision_group(col_group="attached_objects", filter_self_collisions=False)
 
-        # Disable collision between building structures and fixed base objects
+        # Disable collision between building structures and 1. fixed base objects, 2. attached objects
         CollisionAPI.add_group_filter(col_group="structures", filter_group="fixed_base_nonroot_links")
         CollisionAPI.add_group_filter(col_group="structures", filter_group="fixed_base_root_links")
+        # Temporary hack to disable collision between the attached child object and all building structures
+        # such that objects attached to the wall_nails do not collide with the walls.
+        CollisionAPI.add_group_filter(col_group="structures", filter_group="attached_objects")
 
         # We just add a ground plane if requested
         if self._use_floor_plane:
