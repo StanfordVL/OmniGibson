@@ -30,7 +30,15 @@ m.DEFAULT_JOINT_TYPE = JointType.JOINT_FIXED
 m.DEFAULT_BREAK_FORCE = 10000  # Newton
 m.DEFAULT_BREAK_TORQUE = 10000  # Newton-Meter
 
-
+# TODO: Make AttachedTo into a global state that manages all the attachments in the scene.
+# When an attachment of a child and a parent is about to happen:
+# 1. stop the sim
+# 2. remove all existing attachment joints (and save information to restore later)
+# 3. disable collision between the child and the parent
+# 4. play the sim
+# 5. reload the state
+# 6. restore all existing attachment joints
+# 7. create the joint
 class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateMixin, JointBreakSubscribedStateMixin, LinkBasedStateMixin):
     """
         Handles attachment between two rigid objects, by creating a fixed/spherical joint between self.obj (child) and
@@ -275,6 +283,9 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
             # The child link and the joint frame still align.
             _, parent_local_quat = T.relative_pose_transform([0, 0, 0], child_quat, [0, 0, 0], parent_quat)
 
+        # Disable collision between the parent and child objects
+        self._disable_collision_between_child_and_parent(child=self.obj, parent=other)
+
         # Set the parent references
         self.parent = other
         self.parent_link = parent_link
@@ -297,6 +308,23 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
             **kwargs
         )
 
+    def _disable_collision_between_child_and_parent(self, child, parent):
+        """
+        Disables collision between the child and parent objects
+        """
+        was_playing = og.sim.is_playing()
+        if was_playing:
+            state = og.sim.dump_state()
+            og.sim.stop()
+
+        for child_link in child.links.values():
+            for parent_link in parent.links.values():
+                child_link.add_filtered_collision_pair(parent_link)
+
+        if was_playing:
+            og.sim.play()
+            og.sim.load_state(state)
+
     def _detach(self):
         """
         Removes the current attachment joint
@@ -316,7 +344,38 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
     def settable(self):
         return True
 
-    # No need to explicitly dump/load state for this state. When kinematic states are restored and one physics step is
-    # taken (e.g. og.sim.scene.reset()), the attachment (if exists) will be re-established. The assumption here is that
-    # the physics timestep is small enough that the two objects will not have moved too far from each other, and hence
-    # will still pass alignment checks.
+    @property
+    def state_size(self):
+        return 1
+
+    def _dump_state(self):
+        return dict(attached_obj_uuid=-1 if self.parent is None else self.parent.uuid)
+
+    def _load_state(self, state):
+        uuid = state["attached_obj_uuid"]
+        if uuid == -1:
+            attached_obj = None
+        else:
+            attached_obj = og.sim.scene.object_registry("uuid", uuid)
+            assert attached_obj is not None, "attached_obj_uuid does not match any object in the scene."
+
+        if self.parent != attached_obj:
+            # If it's currently attached to something else, detach.
+            if self.parent is not None:
+                self.set_value(self.parent, False)
+                # assert self.parent is None, "parent reference is not cleared after detachment"
+                if self.parent is not None:
+                    log.warning(f"parent reference is not cleared after detachment")
+
+            # If the loaded state requires attachment, attach.
+            if attached_obj is not None:
+                self.set_value(attached_obj, True)
+                # assert self.parent == attached_obj, "parent reference is not updated after attachment"
+                if self.parent != attached_obj:
+                    log.warning(f"parent reference is not updated after attachment")
+
+    def _serialize(self, state):
+        return np.array([state["attached_obj_uuid"]], dtype=float)
+
+    def _deserialize(self, state):
+        return dict(attached_obj_uuid=int(state[0])), 1

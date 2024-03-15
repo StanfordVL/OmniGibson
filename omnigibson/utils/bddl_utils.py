@@ -181,6 +181,7 @@ SUPPORTED_PREDICATES = {
     "hot": get_unary_predicate_for_state(object_states.Heated, "hot"),
     "open": get_unary_predicate_for_state(object_states.Open, "open"),
     "toggled_on": get_unary_predicate_for_state(object_states.ToggledOn, "toggled_on"),
+    "on_fire": get_unary_predicate_for_state(object_states.OnFire, "on_fire"),
     "attached": get_binary_predicate_for_state(object_states.AttachedTo, "attached"),
     "overlaid": get_binary_predicate_for_state(object_states.Overlaid, "overlaid"),
     "folded": get_unary_predicate_for_state(object_states.Folded, "folded"),
@@ -821,6 +822,7 @@ class BDDLSampler:
                     cat, OBJECT_TAXONOMY.get_abilities(OBJECT_TAXONOMY.get_synset_from_category(cat))))
                     for cat in categories}
                 valid_models = {cat: models - BAD_MODELS.get(cat, set()) for cat, models in valid_models.items()}
+                valid_models = {cat: self._filter_model_choices_by_attached_states(models, cat, obj_inst) for cat, models in valid_models.items()}
                 room_insts = [None] if self._scene_model is None else og.sim.scene.seg_map.room_sem_name_to_ins_name[room_type]
                 for room_inst in room_insts:
                     # A list of scene objects that satisfy the requested categories
@@ -984,53 +986,67 @@ class BDDLSampler:
                 }
 
     def _filter_model_choices_by_attached_states(self, model_choices, category, obj_inst):
-        if obj_inst not in self._attached_objects:
+        # If obj_inst is a child object that depends on a parent object that has been imported or exists in the scene,
+        # we filter in only models that match the parent object's attachment metalinks.
+        if obj_inst in self._attached_objects:
+            parent_insts = self._attached_objects[obj_inst]
+            parent_objects = []
+            for parent_inst in parent_insts:
+                # If parent_inst is not an inroom object, it must be a non-sampleable object that has already been imported.
+                # Grab it from the object_scope
+                if parent_inst not in self._inroom_object_instances:
+                    assert self._object_scope[parent_inst] is not None
+                    parent_objects.append([self._object_scope[parent_inst].wrapped_obj])
+                # If parent_inst is an inroom object, it can refer to multiple objects in the scene in different rooms.
+                # We gather all of them and require that the model choice supports attachment to at least one of them.
+                else:
+                    for _, parent_inst_to_parent_objs in self._inroom_object_scope.items():
+                        if parent_inst in parent_inst_to_parent_objs:
+                            parent_objects.append(sum(parent_inst_to_parent_objs[parent_inst].values(), []))
+
+            # Help function to check if a child object can attach to a parent object
+            def can_attach(child_attachment_links, parent_attachment_links):
+                for child_link_name in child_attachment_links:
+                    child_category = child_link_name.split("_")[1]
+                    if child_category.endswith("F"):
+                        continue
+                    assert child_category.endswith("M")
+                    parent_category = child_category[:-1] + "F"
+                    for parent_link_name in parent_attachment_links:
+                        if parent_category in parent_link_name:
+                            return True
+                return False
+
+            # Filter out models that don't support the attached states
+            new_model_choices = set()
+            for model_choice in model_choices:
+                child_attachment_links = get_attachment_metalinks(category, model_choice)
+                # The child model choice needs to be able to attach to all parent instances.
+                # For in-room parent instances, there might be multiple parent objects (e.g. different wall nails),
+                # and the child object needs to be able to attach to at least one of them.
+                if all(
+                        any(
+                            can_attach(child_attachment_links, get_attachment_metalinks(parent_obj.category, parent_obj.model))
+                            for parent_obj in parent_objs_per_inst
+                        )
+                    for parent_objs_per_inst in parent_objects):
+                    new_model_choices.add(model_choice)
+
+            return new_model_choices
+
+        # If obj_inst is a prent object that other objects depend on, we filter in only models that have at least some
+        # attachment links.
+        elif any(obj_inst in parents for parents in self._attached_objects.values()):
+            # Filter out models that don't support the attached states
+            new_model_choices = set()
+            for model_choice in model_choices:
+                if len(get_attachment_metalinks(category, model_choice)) > 0:
+                    new_model_choices.add(model_choice)
+            return new_model_choices
+
+        # If neither of the above cases apply, we don't need to filter the model choices
+        else:
             return model_choices
-
-        parent_insts = self._attached_objects[obj_inst]
-        parent_objects = []
-        for parent_inst in parent_insts:
-            # If parent_inst is not an inroom object, it must be a non-sampleable object that has already been imported.
-            # Grab it from the object_scope
-            if parent_inst not in self._inroom_object_instances:
-                assert self._object_scope[parent_inst] is not None
-                parent_objects.append([self._object_scope[parent_inst].wrapped_obj])
-            # If parent_inst is an inroom object, it can refer to multiple objects in the scene in different rooms.
-            # We gather all of them and require that the model choice supports attachment to at least one of them.
-            else:
-                for _, parent_inst_to_parent_objs in self._inroom_object_scope.items():
-                    if parent_inst in parent_inst_to_parent_objs:
-                        parent_objects.append(sum(parent_inst_to_parent_objs[parent_inst].values(), []))
-
-        # Help function to check if a child object can attach to a parent object
-        def can_attach(child_attachment_links, parent_attachment_links):
-            for child_link_name in child_attachment_links:
-                child_category = child_link_name.split("_")[1]
-                if child_category.endswith("F"):
-                    continue
-                assert child_category.endswith("M")
-                parent_category = child_category[:-1] + "F"
-                for parent_link_name in parent_attachment_links:
-                    if parent_category in parent_link_name:
-                        return True
-            return False
-
-        # Filter out models that don't support the attached states
-        new_model_choices = set()
-        for model_choice in model_choices:
-            child_attachment_links = get_attachment_metalinks(category, model_choice)
-            # The child model choice needs to be able to attach to all parent instances.
-            # For in-room parent instances, there might be multiple parent objects (e.g. different wall nails),
-            # and the child object needs to be able to attach to at least one of them.
-            if all(
-                    any(
-                        can_attach(child_attachment_links, get_attachment_metalinks(parent_obj.category, parent_obj.model))
-                        for parent_obj in parent_objs_per_inst
-                    )
-                for parent_objs_per_inst in parent_objects):
-                new_model_choices.add(model_choice)
-
-        return new_model_choices
 
     def _import_sampleable_objects(self):
         """
