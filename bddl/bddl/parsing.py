@@ -297,7 +297,6 @@ def gen_natural_language_condition(parsed_condition, indent=0):
     if isinstance(term, list):
         if any([isinstance(subterm, list) for subterm in term]):
             if term[0] == "and":
-                print('indent from and:', indent)
                 yield f", and\n".join([list(gen_natural_language_condition(subterm, indent=indent + 1))[0] for subterm in term[1:]])
             elif term[0] == "or":
                 yield f", or\n".join([list(gen_natural_language_condition(subterm, indent=indent + 1))[0] for subterm in term[1:]]) + \
