@@ -17,10 +17,10 @@
     (:init 
         (ontop broom.n.01_1 floor.n.01_1) 
         (ontop vacuum.n.04_1 floor.n.01_1) 
-        (ontop rake.n.03_1 shovel.n.01_1) 
+        (ontop rake.n.03_1 floor.n.01_1) 
         (ontop shovel.n.01_1 floor.n.01_1) 
-        (ontop chicken_wire.n.01_1 leaf_blower.n.01_1) 
-        (ontop trowel.n.01_1 rake.n.03_1) 
+        (ontop chicken_wire.n.01_1 floor.n.01_1) 
+        (ontop trowel.n.01_1 floor.n.01_1) 
         (ontop leaf_blower.n.01_1 floor.n.01_1) 
         (covered leaf_blower.n.01_1 dust.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
