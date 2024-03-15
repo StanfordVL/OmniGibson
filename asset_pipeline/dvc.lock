@@ -7277,8 +7277,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/export_objs_global.py
-      md5: f9ecc0522c476d86f90fa3b381d2ac68
-      size: 31668
+      md5: ef23d35be0d53e776101313c3e57157d
+      size: 31702
     - path: b1k_pipeline/mesh_tree.py
       md5: 7ed516b18128f96cb05dfea5974e193c
       size: 14897
@@ -7871,11 +7871,11 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
-      md5: 5970288de404b0f9877c49d7197240b3
-      size: 1943451
+      md5: e7246676469fd206eaade2d3ae889fcb
+      size: 2274733
     - path: cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
-      md5: c097755ed3c09ff6d5a451dfa5dec942
-      size: 5369
+      md5: fae4c54eaeda7bfc281391109cfcee8d
+      size: 5444
     - path: cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
       md5: 5d644b2762aba36b8cca37fed01beb2f
       size: 490842587
@@ -8356,8 +8356,8 @@ stages:
       size: 201675
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: 180c86784e70c15fbc91139defa47d34
-      size: 8070638
+      md5: faff1e3175e23c0e78da9d912d751b8d
+      size: 5204520
     - path: artifacts/pipeline/export_objs.json
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
       size: 31
@@ -8365,8 +8365,8 @@ stages:
     cmd: python -m b1k_pipeline.aggregate_metadata
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 694d2ab303a5f6f7bebd4b7489e6239a
-      size: 89723
+      md5: 86d945d98e7201633c19e39a1c61b58c
+      size: 89718
     - path: artifacts/pipeline/collision_average_volumes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8390,8 +8390,8 @@ stages:
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: c4ac88771294866bbb8a22da9dccebb7
-      size: 76092
+      md5: 2d98ca674d86ffaa61b0675812b14cbb
+      size: 76090
     - path: artifacts/pipeline/aggregate_metadata.json
       md5: 599e2d604543e31d01aec8c6540d96ff
       size: 13839
@@ -8416,11 +8416,11 @@ stages:
       md5: 76cdb2bad9582d23c1f6f4d868218d6c
       size: 22
     - path: artifacts/parallels/metadata.zip
-      md5: c4ac88771294866bbb8a22da9dccebb7
-      size: 76092
+      md5: 2d98ca674d86ffaa61b0675812b14cbb
+      size: 76090
     - path: artifacts/parallels/objects.zip
-      md5: 180c86784e70c15fbc91139defa47d34
-      size: 8070638
+      md5: faff1e3175e23c0e78da9d912d751b8d
+      size: 5204520
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8450,8 +8450,8 @@ stages:
       size: 2230
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: a451177352aaa32885ee3cf521949cda
-      size: 9111963
+      md5: 04a682d2bed9570d24676aae40457624
+      size: 7389077
     - path: artifacts/pipeline/usdify_objects.json
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
       size: 51
@@ -10250,11 +10250,11 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
-      md5: 5970288de404b0f9877c49d7197240b3
-      size: 1943451
+      md5: e7246676469fd206eaade2d3ae889fcb
+      size: 2274733
     - path: cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
-      md5: c097755ed3c09ff6d5a451dfa5dec942
-      size: 5369
+      md5: fae4c54eaeda7bfc281391109cfcee8d
+      size: 5444
     - path: cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
       md5: 5d644b2762aba36b8cca37fed01beb2f
       size: 490842587
@@ -11346,11 +11346,11 @@ stages:
       md5: ba387a277a62217576b1542a4b88d40f
       size: 35708
     - path: cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
-      md5: 5970288de404b0f9877c49d7197240b3
-      size: 1943451
+      md5: e7246676469fd206eaade2d3ae889fcb
+      size: 2274733
     - path: cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
-      md5: c097755ed3c09ff6d5a451dfa5dec942
-      size: 5369
+      md5: fae4c54eaeda7bfc281391109cfcee8d
+      size: 5444
     - path: cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
       md5: 5d644b2762aba36b8cca37fed01beb2f
       size: 490842587
@@ -11828,15 +11828,15 @@ stages:
       size: 339445
     outs:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 694d2ab303a5f6f7bebd4b7489e6239a
-      size: 89723
+      md5: 86d945d98e7201633c19e39a1c61b58c
+      size: 89718
   collision_average_volumes_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_average_volumes.json
       artifacts/pipeline/collision_average_volumes.success
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 694d2ab303a5f6f7bebd4b7489e6239a
-      size: 89723
+      md5: 86d945d98e7201633c19e39a1c61b58c
+      size: 89718
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707
@@ -13479,8 +13479,8 @@ stages:
       size: 12868880
       nfiles: 1134
     - path: artifacts/parallels/objects.zip
-      md5: 180c86784e70c15fbc91139defa47d34
-      size: 8070638
+      md5: faff1e3175e23c0e78da9d912d751b8d
+      size: 5204520
     - path: b1k_pipeline/aggregate_fillable_volumes.py
       md5: ab2f3acdfa7f7785a38e1b66441b6cd1
       size: 3069
