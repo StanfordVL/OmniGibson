@@ -42,12 +42,21 @@ GOOD_MODELS = {
     "jar": {"kijnrj"},
 }
 
+GOOD_BBOXES = {
+    "pill_bottle": {
+        "csvdbe": [0.078, 0.078, 0.109],
+        "wsasmm": [0.078, 0.078, 0.109],
+    },
+    "envelope": {
+        "urcigc": [0.004, 0.06535058, 0.10321216],
+    },
+}
+
 BAD_MODELS = {
     "curtain": {"ohvomi"},
     "dishtowel": {"ltydgg"},
     "dress": {"gtghon"},
     "hammock": {'aiftuk', 'fglfga', 'klhkgd', 'lqweda', 'qewdqa'},
-    "jar": {"kijnrj"},
     'jacket': {'kiiium', 'nogevo', 'remcyk'},
     "quilt": {"mksdlu", "prhems"},
     'paper_towel': {'jdsryb', 'jgfsug', 'lhjush', 'taedgk', 'wjcyoi', 'yedsde'},
@@ -1127,12 +1136,18 @@ class BDDLSampler:
                 # Randomly select an object model
                 model = np.random.choice(list(model_choices))
 
+                # Potentially add additional kwargs
+                obj_kwargs = dict()
+
+                obj_kwargs["bounding_box"] = GOOD_BBOXES.get(category, dict()).get(model, None)
+
                 # create the object
                 simulator_obj = DatasetObject(
                     name=f"{category}_{len(og.sim.scene.objects)}",
                     category=category,
                     model=model,
                     prim_type=PrimType.CLOTH if "cloth" in OBJECT_TAXONOMY.get_abilities(obj_synset) else PrimType.RIGID,
+                    **obj_kwargs,
                 )
                 num_new_obj += 1
 
