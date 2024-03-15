@@ -957,7 +957,7 @@ def launch_simulator(*args, **kwargs):
             Args:
                 name (str): Name of the callback
             """
-            self._callbacks_on_play.pop(name)
+            self._callbacks_on_play.pop(name, None)
 
         def remove_callback_on_stop(self, name):
             """
@@ -966,7 +966,7 @@ def launch_simulator(*args, **kwargs):
             Args:
                 name (str): Name of the callback
             """
-            self._callbacks_on_stop.pop(name)
+            self._callbacks_on_stop.pop(name, None)
 
         def remove_callback_on_import_obj(self, name):
             """
@@ -975,7 +975,7 @@ def launch_simulator(*args, **kwargs):
             Args:
                 name (str): Name of the callback
             """
-            self._callbacks_on_import_obj.pop(name)
+            self._callbacks_on_import_obj.pop(name, None)
 
         def remove_callback_on_remove_obj(self, name):
             """
@@ -984,7 +984,7 @@ def launch_simulator(*args, **kwargs):
             Args:
                 name (str): Name of the callback
             """
-            self._callbacks_on_remove_obj.pop(name)
+            self._callbacks_on_remove_obj.pop(name, None)
 
         @classmethod
         def clear_instance(cls):
