@@ -27,7 +27,9 @@
         (covered coffee_maker.n.01_1 coffee_grounds.n.01_1)
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
-        (toggled_on coffee_maker.n.01_1) 
+        (not 
+            (toggled_on coffee_maker.n.01_1)
+        ) 
         (insource sink.n.01_1 water.n.06_1) 
         (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1) 
         (ontop disinfectant__bottle.n.01_1 countertop.n.01_1)
@@ -43,9 +45,6 @@
             (inside ?paper_coffee_filter.n.01_1 ?ashcan.n.01_1)
             (not
                 (covered ?coffee_maker.n.01_1 ?coffee_grounds.n.01_1)
-            )
-            (not 
-                (toggled_on ?coffee_maker.n.01_1)
             )
             (covered ?coffee_maker.n.01_1 ?disinfectant.n.01_1)
         )

@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        coffee_maker.n.01_1 - coffee_maker.n.01
         countertop.n.01_1 - countertop.n.01
         mug.n.04_1 mug.n.04_2 - mug.n.04
         drip_coffee.n.01_1 - drip_coffee.n.01
@@ -12,8 +11,6 @@
     )
     
     (:init 
-        (toggled_on coffee_maker.n.01_1)
-        (ontop coffee_maker.n.01_1 countertop.n.01_1)
         (ontop mug.n.04_1 countertop.n.01_1)
         (ontop mug.n.04_2 countertop.n.01_1)
         (filled mug.n.04_1 drip_coffee.n.01_1)
@@ -25,9 +22,6 @@
     
     (:goal 
         (and 
-            (not 
-                (toggled_on ?coffee_maker.n.01_1)
-            )
             (forall 
                 (?mug.n.04 - mug.n.04)
                 (not
