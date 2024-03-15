@@ -177,8 +177,8 @@ class KnowledgeBaseProcessor():
                     objs.append(object)
 
         # Check that all of the renames have happened
-        for _, final_name in self.object_rename_mapping.values():
-            assert Object.exists(name=final_name), f"{final_name} does not exist in the database. Did you rename a nonexistent object?"
+        missing_renames = {final_name for _, final_name in self.object_rename_mapping.values() if not Object.exists(name=final_name)}
+        assert len(missing_renames) == 0, f"{missing_renames} do not exist in the database. Did you rename a nonexistent object (or one in the deletion queue)?"
 
 
     def create_scenes(self):
