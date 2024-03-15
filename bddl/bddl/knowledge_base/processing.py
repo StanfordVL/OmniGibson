@@ -65,7 +65,6 @@ class KnowledgeBaseProcessor():
 
         # get object rename mapping
         self.object_rename_mapping = {}
-        self.obj_rename_mapping_unique_set = set()
         self.obj_rename_mapping_duplicate_set = set()
         with open(GENERATED_DATA_DIR / "object_renames.csv", newline='') as csvfile:
             reader = csv.DictReader(csvfile)
@@ -76,11 +75,9 @@ class KnowledgeBaseProcessor():
                 if obj_name != "":
                     assert len(obj_name.split('-')) == 2, f"{obj_name} should only have one \'-\'"
                     obj_id = obj_name.split('-')[1]
-                    if obj_id not in self.obj_rename_mapping_unique_set:
-                        self.obj_rename_mapping_unique_set.add(obj_id)
-                    else:
+                    if obj_id in self.object_rename_mapping:
                         self.obj_rename_mapping_duplicate_set.add(obj_id)
-                    self.object_rename_mapping[obj_name] = f"{new_cat}-{obj_id}"
+                    self.object_rename_mapping[obj_id] = (obj_name, f"{new_cat}-{obj_id}")
             assert len(self.obj_rename_mapping_duplicate_set) == 0, f"object rename mapping have duplicates: {self.obj_rename_mapping_duplicate_set}"
 
         self.debug_print("Finished prep work...")
@@ -144,10 +141,12 @@ class KnowledgeBaseProcessor():
             inventory = json.load(f)
             for orig_name, provider in self.tqdm(inventory["providers"].items()):
                 object_name = orig_name
-                if orig_name.split("-")[1] in self.obj_rename_mapping_unique_set:
-                    assert orig_name in self.object_rename_mapping, f"{orig_name}'s ID is in the object rename mapping, but with a wrong category."
-                    object_name = self.object_rename_mapping[orig_name]
-                if object_name.split("-")[1] in self.deletion_queue:
+                orig_id = orig_name.split("-")[1]
+                if orig_id in self.object_rename_mapping:
+                    from_name, to_name = self.object_rename_mapping[orig_id]
+                    assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
+                    object_name = to_name
+                if orig_id in self.deletion_queue:
                     continue
 
                 # Create the object
@@ -162,8 +161,13 @@ class KnowledgeBaseProcessor():
         with open(GENERATED_DATA_DIR / "object_inventory.json", "r") as f:
             objs = []
             for orig_name in self.tqdm(json.load(f)["providers"].keys()):
-                object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                if object_name.split("-")[1] not in self.deletion_queue:
+                orig_id = orig_name.split("-")[1]
+                object_name = orig_name
+                if orig_id in self.object_rename_mapping:
+                    from_name, to_name = self.object_rename_mapping[orig_id]
+                    assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
+                    object_name = to_name
+                if orig_id not in self.deletion_queue:
                     category_name = object_name.split("-")[0]
                     category, _ = Category.get_or_create(name=category_name)
                     # safeguard to ensure currently available objects are also in future planned dataset
@@ -173,7 +177,7 @@ class KnowledgeBaseProcessor():
                     objs.append(object)
 
         # Check that all of the renames have happened
-        for final_name in self.object_rename_mapping.values():
+        for _, final_name in self.object_rename_mapping.values():
             assert Object.exists(name=final_name), f"{final_name} does not exist in the database. Did you rename a nonexistent object?"
 
 
@@ -200,14 +204,15 @@ class KnowledgeBaseProcessor():
                         raise Exception(f"room {room_name} in {scene.name} (not ready) already exists!")
                     for orig_name, count in planned_scene_dict[scene_name][room_name].items():
                         if orig_name.split("-")[1] not in self.deletion_queue:
-                            object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                            object, _ = Object.get(name=object_name, defaults={
-                                "original_name": orig_name,
-                                "ready": False,
-                                "planned": False,
-                                "category": Category.get(name=object_name.split("-")[0]),
-                            })
-                            RoomObject.create(room=room, object=object, count=count)
+                            object_name = orig_name
+                            orig_id = orig_name.split("-")[1]
+                            if orig_id in self.object_rename_mapping:
+                                from_name, to_name = self.object_rename_mapping[orig_id]
+                                assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
+                                object_name = to_name
+                            object = Object.get(name=object_name)
+                            assert object is not None, f"Scene {scene_name} object {object_name} does not exist in the database."
+                RoomObject.create(room=room, object=object, count=count)
 
         with open(GENERATED_DATA_DIR / "combined_room_object_list.json", "r") as f:
             current_scene_dict = json.load(f)["scenes"]
@@ -225,13 +230,14 @@ class KnowledgeBaseProcessor():
                         raise Exception(f"room {room_name} in {scene.name} (ready) already exists!")
                     for orig_name, count in current_scene_dict[scene_name][room_name].items():
                         if orig_name.split("-")[1] not in self.deletion_queue:
-                            object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                            object, _ = Object.get(name=object_name, defaults={
-                                "original_name": orig_name,
-                                "ready": False,
-                                "planned": False,
-                                "category": Category.get(name=object_name.split("-")[0])
-                            })
+                            object_name = orig_name
+                            orig_id = orig_name.split("-")[1]
+                            if orig_id in self.object_rename_mapping:
+                                from_name, to_name = self.object_rename_mapping[orig_id]
+                                assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
+                                object_name = to_name
+                            object = Object.get(name=object_name)
+                            assert object is not None, f"Scene {scene_name} object {object_name} does not exist in the database."
                             RoomObject.create(room=room, object=object, count=count)
 
 
