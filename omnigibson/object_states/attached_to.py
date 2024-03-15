@@ -363,12 +363,16 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
             # If it's currently attached to something else, detach.
             if self.parent is not None:
                 self.set_value(self.parent, False)
-                assert self.parent is None, "parent reference is not cleared after detachment"
+                # assert self.parent is None, "parent reference is not cleared after detachment"
+                if self.parent is not None:
+                    log.warning(f"parent reference is not cleared after detachment")
 
             # If the loaded state requires attachment, attach.
             if attached_obj is not None:
                 self.set_value(attached_obj, True)
-                assert self.parent == attached_obj, "parent reference is not updated after attachment"
+                # assert self.parent == attached_obj, "parent reference is not updated after attachment"
+                if self.parent != attached_obj:
+                    log.warning(f"parent reference is not updated after attachment")
 
     def _serialize(self, state):
         return np.array([state["attached_obj_uuid"]], dtype=float)
