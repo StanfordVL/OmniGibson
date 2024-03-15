@@ -14,6 +14,7 @@ from omnigibson.utils.constants import JointType
 from omnigibson.utils.usd_utils import create_joint
 from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.utils.python_utils import classproperty
+from omnigibson.utils.usd_utils import CollisionAPI
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -321,6 +322,10 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
             for parent_link in parent.links.values():
                 child_link.add_filtered_collision_pair(parent_link)
 
+        # Temporary hack to disable collision between the attached child object and all building structures
+        # such that objects attached to the wall_nails do not collide with the walls.
+        CollisionAPI.add_to_collision_group(col_group="attached_objects", prim_path=child.prim_path)
+
         if was_playing:
             og.sim.play()
             og.sim.load_state(state)
@@ -369,7 +374,7 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
 
             # If the loaded state requires attachment, attach.
             if attached_obj is not None:
-                self.set_value(attached_obj, True)
+                self.set_value(attached_obj, True, bypass_alignment_checking=True, check_physics_stability=False, can_joint_break=True)
                 # assert self.parent == attached_obj, "parent reference is not updated after attachment"
                 if self.parent != attached_obj:
                     log.warning(f"parent reference is not updated after attachment")

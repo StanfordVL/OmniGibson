@@ -380,7 +380,7 @@ def validate_task(task, task_scene_dict, default_scene_dict):
                     curr_pos_min, curr_pos_max = np.min(current_particle_positions, axis=0), np.max(current_particle_positions, axis=0)
                     for name, pos, curr_pos in zip(("min", "max"), (pos_min, pos_max), (curr_pos_min, curr_pos_max)):
                         if not np.all(np.isclose(pos, curr_pos, atol=0.05)):
-                            return False, f"Got mismatch in cloth {obj_name} particle positions range: {name} {pos} vs. {curr_pos}"
+                            return False, f"Got mismatch in cloth {obj_name} particle positions range: {name} min {pos_min} max {pos_max} vs. min {curr_pos_min} max {curr_pos_max}"
 
                 else:
                     continue
