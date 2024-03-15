@@ -9,7 +9,6 @@
         dress.n.01_1 - dress.n.01
         brassiere.n.01_1 - brassiere.n.01
         tank_top.n.01_1 - tank_top.n.01
-        cardigan.n.01_1 - cardigan.n.01
         bed.n.01_1 - bed.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -23,8 +22,7 @@
         (ontop dress.n.01_1 bed.n.01_1) 
         (ontop brassiere.n.01_1 bed.n.01_1) 
         (ontop tank_top.n.01_1 bed.n.01_1) 
-        (ontop cardigan.n.01_1 bed.n.01_1) 
-        (ontop agent.n.01_1 floor.n.01_1) 
+        (ontop agent.n.01_1 floor.n.01_1)
         (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom)
     )
@@ -38,11 +36,9 @@
             (folded ?dress.n.01_1) 
             (folded ?brassiere.n.01_1) 
             (folded ?tank_top.n.01_1) 
-            (folded ?cardigan.n.01_1) 
-            (ontop ?jean.n.01_1 ?bed.n.01_1) 
+            (ontop ?jean.n.01_1 ?bed.n.01_1)
             (ontop ?short_pants.n.01_1 ?bed.n.01_1)
-            (ontop ?cardigan.n.01_1 ?bed.n.01_1) 
-            (ontop ?polo_shirt.n.01_1 ?bed.n.01_1) 
+            (ontop ?polo_shirt.n.01_1 ?bed.n.01_1)
             (ontop ?blouse.n.01_1 ?bed.n.01_1) 
             (ontop ?tank_top.n.01_1 ?bed.n.01_1)
             (ontop ?dress.n.01_1 ?bed.n.01_1) 

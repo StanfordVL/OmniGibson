@@ -116,7 +116,10 @@ def get_annots_canonical(syn_prop_dict):
 ############ GETTING PROPERTIES #############
 
 def add_programmatic_properties(synset_content): # runs programmatic addition over existing canonical input
-    valid_attachments_dict = dict(VALID_ATTACHMENTS)
+    attachable_objects = set()
+    for pair in VALID_ATTACHMENTS:
+        attachable_objects.add(pair[0])
+        attachable_objects.add(pair[1])
     for synset in synset_content:
         if "liquid" in synset_content[synset]:
             synset_content[synset]["boilable"] = {}
@@ -134,7 +137,7 @@ def add_programmatic_properties(synset_content): # runs programmatic addition ov
         if ("nonSubstance" in synset_content[synset]) and ("cookable" in synset_content[synset] or "fillable" in synset_content[synset]):
             # cookables and fillables are both freezable
             synset_content[synset]["freezable"] = {}
-        if synset in valid_attachments_dict.keys() or synset in valid_attachments_dict.values():
+        if synset in attachable_objects:
             synset_content[synset]["attachable"] = {}
         if "nonSubstance" in synset_content[synset]: # non-substances are both wetable and mixable
                 synset_content[synset].update({

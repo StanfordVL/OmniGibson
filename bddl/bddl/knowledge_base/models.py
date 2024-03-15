@@ -206,8 +206,11 @@ class Object(Model):
         model_id = self.name.split('-')[-1]
         return f'https://cvgl.stanford.edu/b1k/object_images/{model_id}.webp'
     
-    def fully_supports_synset(self, synset) -> bool:       
-        return synset.required_meta_links.issubset({x.name for x in self.meta_links})
+    def fully_supports_synset(self, synset, ignore=None) -> bool:
+        all_required = synset.required_meta_links
+        if ignore:
+            all_required -= set(ignore)
+        return all_required.issubset({x.name for x in self.meta_links})
     
     @cached_property
     def missing_meta_links(self) -> List[str]:
@@ -215,8 +218,8 @@ class Object(Model):
 
     @classmethod
     def view_objects_with_missing_meta_links(cls):
-        """Objects with Missing Meta Links"""
-        return [o for o in cls.all_objects() if not o.fully_supports_synset(o.category.synset)]
+        """Objects with Missing Meta Links (Not Including Subpart)"""
+        return [o for o in cls.all_objects() if not o.fully_supports_synset(o.category.synset, ignore={"subpart"})]
 
 
 @dataclass(eq=False, order=False)
