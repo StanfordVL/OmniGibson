@@ -172,6 +172,10 @@ class KnowledgeBaseProcessor():
                     object.ready = True
                     objs.append(object)
 
+        # Check that all of the renames have happened
+        for final_name in self.object_rename_mapping.values():
+            assert Object.exists(name=final_name), f"{final_name} does not exist in the database. Did you rename a nonexistent object?"
+
 
     def create_scenes(self):
         """
@@ -197,7 +201,7 @@ class KnowledgeBaseProcessor():
                     for orig_name, count in planned_scene_dict[scene_name][room_name].items():
                         if orig_name.split("-")[1] not in self.deletion_queue:
                             object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                            object, _ = Object.get_or_create(name=object_name, defaults={
+                            object, _ = Object.get(name=object_name, defaults={
                                 "original_name": orig_name,
                                 "ready": False,
                                 "planned": False,
@@ -222,7 +226,7 @@ class KnowledgeBaseProcessor():
                     for orig_name, count in current_scene_dict[scene_name][room_name].items():
                         if orig_name.split("-")[1] not in self.deletion_queue:
                             object_name = self.object_rename_mapping[orig_name] if orig_name in self.object_rename_mapping else orig_name
-                            object, _ = Object.get_or_create(name=object_name, defaults={
+                            object, _ = Object.get(name=object_name, defaults={
                                 "original_name": orig_name,
                                 "ready": False,
                                 "planned": False,
