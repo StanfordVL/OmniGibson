@@ -15405,9 +15405,9 @@
         "particleRemover": {
             "conditions": {
                 "water.n.06": null,
-                "dust.n.01": null,
-                "dirt.n.02": null,
-                "debris.n.01": null,
+                "dust.n.01": [],
+                "dirt.n.02": [],
+                "debris.n.01": [],
                 "bunchgrass.n.01": null,
                 "mud.n.03": [
                     [
@@ -15955,7 +15955,7 @@
                 ],
                 "wrinkle.n.01": null
             },
-            "default_visual_conditions": null,
+            "default_visual_conditions": [],
             "default_non_fluid_conditions": null,
             "default_fluid_conditions": null,
             "method": "adjacency"
@@ -21918,6 +21918,7 @@
         "visualSubstance": {}
     },
     "coatrack.n.01": {
+        "attachable": {},
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
@@ -84626,7 +84627,6 @@
         "wrinkleable": {}
     },
     "recreational_vehicle.n.01": {
-        "attachable": {},
         "disinfectable": {},
         "dustyable": {},
         "grassyable": {},
@@ -96696,7 +96696,7 @@
                 "wrinkle.n.01": null
             },
             "default_visual_conditions": null,
-            "default_non_fluid_conditions": [],
+            "default_non_fluid_conditions": null,
             "default_fluid_conditions": [],
             "method": "adjacency"
         },
@@ -100529,10 +100529,30 @@
         "particleRemover": {
             "conditions": {
                 "water.n.06": [],
-                "dust.n.01": [],
-                "dirt.n.02": [],
-                "debris.n.01": [],
-                "bunchgrass.n.01": [],
+                "dust.n.01": [
+                    [
+                        "saturated",
+                        "water.n.06"
+                    ]
+                ],
+                "dirt.n.02": [
+                    [
+                        "saturated",
+                        "water.n.06"
+                    ]
+                ],
+                "debris.n.01": [
+                    [
+                        "saturated",
+                        "water.n.06"
+                    ]
+                ],
+                "bunchgrass.n.01": [
+                    [
+                        "saturated",
+                        "water.n.06"
+                    ]
+                ],
                 "mud.n.03": [
                     [
                         "saturated",
@@ -101079,8 +101099,18 @@
                 ],
                 "wrinkle.n.01": null
             },
-            "default_visual_conditions": [],
-            "default_non_fluid_conditions": [],
+            "default_visual_conditions": [
+                [
+                    "saturated",
+                    "water.n.06"
+                ]
+            ],
+            "default_non_fluid_conditions": [
+                [
+                    "saturated",
+                    "water.n.06"
+                ]
+            ],
             "default_fluid_conditions": [],
             "method": "adjacency"
         },
@@ -111681,7 +111711,6 @@
         "wrinkleable": {}
     },
     "wardrobe.n.01": {
-        "attachable": {},
         "disinfectable": {},
         "dustyable": {},
         "grassyable": {},
