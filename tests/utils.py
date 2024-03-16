@@ -2,6 +2,7 @@ import omnigibson as og
 
 from omnigibson.macros import gm
 from omnigibson.object_states import *
+from omnigibson.simulator import launch_simulator
 from omnigibson.utils.constants import PrimType, ParticleModifyCondition, ParticleModifyMethod
 from omnigibson.systems import *
 import omnigibson.utils.transform_utils as T
@@ -20,10 +21,11 @@ SYSTEM_EXAMPLES = {
 def og_test(func):
     def wrapper():
         assert_test_scene()
-        try:
-            func()
-        finally:
-            og.sim.scene.reset()
+        func()
+        # try:
+        #     func()
+        # finally:
+        #     og.sim.scene.reset()
     return wrapper
 
 num_objs = 0
@@ -88,6 +90,8 @@ def assert_test_scene():
                 get_obj_cfg("vacuum", "vacuum", "bdmsbr", visual_only=True, abilities={"toggleable": {}, "particleRemover": {"method": ParticleModifyMethod.PROJECTION, "conditions": {"water": [(ParticleModifyCondition.TOGGLEDON, True)]}}}),
                 get_obj_cfg("blender", "blender", "cwkvib", bounding_box=[0.316, 0.318, 0.649], abilities={"fillable": {}, "toggleable": {}, "heatable": {}}),
                 get_obj_cfg("oven", "oven", "cgtaer", bounding_box=[0.943, 0.837, 1.297]),
+                get_obj_cfg("knife", "carving_knife", "usqmjc"),
+                get_obj_cfg("apple", "apple", "agveuv", bounding_box=[0.098, 0.098, 0.115]),
                 get_obj_cfg("baking_sheet", "baking_sheet", "yhurut", bounding_box=[0.41607812, 0.43617093, 0.02281223]),
                 get_obj_cfg("bagel_dough", "bagel_dough", "iuembm", scale=np.ones(3) * 0.8),
                 get_obj_cfg("raw_egg", "raw_egg", "ydgivr"),

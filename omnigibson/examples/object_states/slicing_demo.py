@@ -37,9 +37,8 @@ def main(random_selection=False, headless=False, short_exec=False):
     knife_cfg = dict(
         type="DatasetObject",
         name="knife",
-        category="table_knife",
-        model="lrdmpf",
-        bounding_box=[0.401, 0.044, 0.009],
+        category="carving_knife",
+        model="usqmjc",
         position=[0, 0, 10.0],
     )
 
@@ -95,6 +94,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Step simulation for a bit so that apple is sliced
     for i in range(1000):
+    # while True:
         env.step(np.array([]))
 
     input("Apple has been sliced! Press [ENTER] to terminate the demo.")
