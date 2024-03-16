@@ -22,11 +22,11 @@
         (inroom table.n.02_1 living_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
-    
-    (:goal 
-        (and 
+
+    (:goal
+        (and
             (attached ?dartboard.n.01_1 ?wall_nail.n.01_1)
-            (forall 
+            (forall
                 (?dart.n.01 - dart.n.01)
                 (inside ?dart.n.01 ?packing_box.n.02_1)
             )

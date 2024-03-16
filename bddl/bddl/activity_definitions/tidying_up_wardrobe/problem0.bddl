@@ -5,7 +5,7 @@
         hanger.n.02_1 hanger.n.02_2 hanger.n.02_3 - hanger.n.02
         wardrobe.n.01_1 - wardrobe.n.01
         jersey.n.03_1 - jersey.n.03
-        wicker_basket.n.01_1 - wicker_basket.n.01
+        bed.n.01_1 - bed.n.01
         belt.n.02_1 - belt.n.02
         underwear.n.01_1 - underwear.n.01
         floor.n.01_1 - floor.n.01
@@ -16,10 +16,10 @@
         (attached hanger.n.02_1 wardrobe.n.01_1) 
         (attached hanger.n.02_2 wardrobe.n.01_1) 
         (attached hanger.n.02_3 wardrobe.n.01_1) 
-        (inside jersey.n.03_1 wicker_basket.n.01_1) 
-        (inside belt.n.02_1 wicker_basket.n.01_1)
-        (inside underwear.n.01_1 wicker_basket.n.01_1) 
-        (ontop wicker_basket.n.01_1 floor.n.01_1)
+        (ontop jersey.n.03_1 bed.n.01_1)
+        (ontop belt.n.02_1 floor.n.01_1)
+        (ontop underwear.n.01_1 floor.n.01_1)
+        (inroom bed.n.01_1 bedroom)
         (inroom wardrobe.n.01_1 closet) 
         (inroom floor.n.01_1 closet) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -45,7 +45,6 @@
                     )
                 )
             )
-            (nextto ?wicker_basket.n.01_1 ?wardrobe.n.01_1)
             (inside ?belt.n.02_1 ?wardrobe.n.01_1)
         )
     )
