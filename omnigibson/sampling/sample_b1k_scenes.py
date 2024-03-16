@@ -45,6 +45,8 @@ parser.add_argument("--overwrite_existing", action="store_true",
                     help="If set, will overwrite any existing tasks that are found. Otherwise, will skip.")
 parser.add_argument("--offline", action="store_true",
                     help="If set, will sample offline, and will not sync / check with google sheets")
+parser.add_argument("--ignore_in_progress", action="store_true",
+                    help="If set and --offline is False, will in progress flag")
 
 gm.HEADLESS = True
 gm.USE_GPU_DYNAMICS = True
@@ -78,6 +80,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         args.randomize = os.environ.get("SAMPLING_RANDOMIZE") in {"1", "true", "True"}
     if not args.overwrite_existing:
         args.overwrite_existing = os.environ.get("SAMPLING_OVERWRITE_EXISTING") in {"1", "true", "True"}
+    if not args.ignore_in_progress:
+        args.ignore_in_progress = os.environ.get("SAMPLING_IGNORE_IN_PROGRESS") in {"1", "true", "True"}
 
     # Make sure scene can be sampled by current user
     scene_row = None if args.offline else validate_scene_can_be_sampled(scene=args.scene_model)
@@ -206,7 +210,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 continue
 
             # If another thread is already in the process of sampling, skip
-            if in_progress not in {None, ""}:
+            if not args.ignore_in_progress and in_progress not in {None, ""}:
                 continue
 
             # Reserve this task by marking in_progress = 1
@@ -304,11 +308,14 @@ def main(random_selection=False, headless=False, short_exec=False):
 
             # Write to google sheets
             if not args.offline:
-                cell_list = worksheet.range(f"B{row}:H{row}")
-                for cell, val in zip(cell_list,
-                                     ("", int(success), "", args.scene_model, USER, reason, "")):
-                    cell.value = val
-                worksheet.update_cells(cell_list)
+                # Check if another thread succeeded already
+                already_succeeded = worksheet.get(f"C{row}")
+                if not (already_succeeded and already_succeeded[0] and str(already_succeeded[0][0]) == "1"):
+                    cell_list = worksheet.range(f"B{row}:H{row}")
+                    for cell, val in zip(cell_list,
+                                         ("", int(success), "", args.scene_model, USER, reason, "")):
+                        cell.value = val
+                    worksheet.update_cells(cell_list)
 
             # Clear task callbacks if sampled
             if should_sample:
@@ -336,12 +343,15 @@ def main(random_selection=False, headless=False, short_exec=False):
             og.log.error(f"\n\nCaught exception sampling activity {activity} in scene {args.scene_model}:\n\n{e}\n\n")
 
             if not args.offline:
-                # Clear the in_progress reservation and note the exception
-                cell_list = worksheet.range(f"B{row}:H{row}")
-                for cell, val in zip(cell_list,
-                                     ("", 0, "", args.scene_model, USER, reason, traceback_str)):
-                    cell.value = val
-                worksheet.update_cells(cell_list)
+                # Check if another thread succeeded already
+                already_succeeded = worksheet.get(f"C{row}")
+                if not (already_succeeded and already_succeeded[0] and str(already_succeeded[0][0]) == "1"):
+                    # Clear the in_progress reservation and note the exception
+                    cell_list = worksheet.range(f"B{row}:H{row}")
+                    for cell, val in zip(cell_list,
+                                         ("", 0, "", args.scene_model, USER, reason, traceback_str)):
+                        cell.value = val
+                    worksheet.update_cells(cell_list)
 
             try:
                 # Stop sim, clear simulator, and re-create environment
