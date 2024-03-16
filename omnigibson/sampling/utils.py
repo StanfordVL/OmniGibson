@@ -29,38 +29,44 @@ folder_path = os.path.dirname(os.path.abspath(__file__))
 SAMPLING_SHEET_KEY = "1Vt5s3JrFZ6_iCkfzZr0eb9SBt2Pkzx3xxzb4wtjEaDI"
 CREDENTIALS = os.environ.get("CREDENTIALS_FPATH", os.path.join(folder_path, "key.json"))
 WORKSHEET = "GTC2024 - 8dd81c"
-USER = getpass.getuser()
 
-for _ in range(120):
-    try:
-        client = gspread.service_account(filename=CREDENTIALS)
-        worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
-        break
-    except:
-        time.sleep(1.0)
+if os.path.exists(CREDENTIALS):
+    USER = getpass.getuser()
 
-class RetryWrapper:
-    def __init__(self, obj, retries=120, delay=1.0):
-        self.obj = obj
-        self.retries = retries
-        self.delay = delay
+    for _ in range(120):
+        try:
+            client = gspread.service_account(filename=CREDENTIALS)
+            worksheet = client.open_by_key(SAMPLING_SHEET_KEY).worksheet(WORKSHEET)
+            break
+        except:
+            time.sleep(1.0)
 
-    def __getattr__(self, attr):
-        orig_attr = getattr(self.obj, attr)
-        def wrapped(*args, **kwargs):
-            for _ in range(self.retries):
-                try:
-                    result = orig_attr(*args, **kwargs)
-                    return result
-                except Exception as e:
-                    print(f"Exception caught: {e}")
-                    time.sleep(self.delay)
-            raise Exception(f"Failed after {self.retries} retries")
-        return wrapped
+    class RetryWrapper:
+        def __init__(self, obj, retries=120, delay=1.0):
+            self.obj = obj
+            self.retries = retries
+            self.delay = delay
 
-worksheet = RetryWrapper(worksheet)
+        def __getattr__(self, attr):
+            orig_attr = getattr(self.obj, attr)
+            def wrapped(*args, **kwargs):
+                for _ in range(self.retries):
+                    try:
+                        result = orig_attr(*args, **kwargs)
+                        return result
+                    except Exception as e:
+                        print(f"Exception caught: {e}")
+                        time.sleep(self.delay)
+                raise Exception(f"Failed after {self.retries} retries")
+            return wrapped
 
-ACTIVITY_TO_ROW = {activity: i + 2 for i, activity in enumerate(worksheet.col_values(1)[1:])}
+    worksheet = RetryWrapper(worksheet)
+
+    ACTIVITY_TO_ROW = {activity: i + 2 for i, activity in enumerate(worksheet.col_values(1)[1:])}
+else:
+    USER = None
+    worksheet = None
+    ACTIVITY_TO_ROW = None
 
 SCENE_INFO_FPATH = os.path.join(folder_path, "BEHAVIOR-1K Scenes.csv")
 TASK_INFO_FPATH = os.path.join(folder_path, "BEHAVIOR-1K Tasks.csv")
