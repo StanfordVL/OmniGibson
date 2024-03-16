@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        bunchgrass.n.01_1 - bunchgrass.n.01
+        stain.n.01_1 - stain.n.01
         pruner.n.02_1 - pruner.n.02
         pot_plant.n.01_1 pot_plant.n.01_2 - pot_plant.n.01
         dust.n.01_1 - dust.n.01
@@ -25,13 +25,13 @@
     )
     
     (:init 
-        (covered pruner.n.02_1 bunchgrass.n.01_1) 
+        (covered pruner.n.02_1 stain.n.01_1) 
         (ontop pruner.n.02_1 floor.n.01_1) 
         (covered shovel.n.01_1 dust.n.01_1) 
         (ontop shovel.n.01_1 floor.n.01_1) 
         (covered trowel.n.01_1 stain.n.01_1) 
         (ontop trowel.n.01_1 floor.n.01_1) 
-        (covered rake.n.03_1 bunchgrass.n.01_1) 
+        (covered rake.n.03_1 stain.n.01_1) 
         (ontop rake.n.03_1 floor.n.01_1) 
         (ontop glove.n.02_1 floor.n.01_1) 
         (ontop glove.n.02_2 floor.n.01_1) 
@@ -54,7 +54,7 @@
     (:goal 
         (and 
             (not 
-                (covered ?pruner.n.02_1 ?bunchgrass.n.01_1)
+                (covered ?pruner.n.02_1 ?stain.n.01_1)
             ) 
             (nextto ?pruner.n.02_1 ?rail_fence.n.01_1) 
             (not 
@@ -66,7 +66,7 @@
             ) 
             (nextto ?trowel.n.01_1 ?rail_fence.n.01_1) 
             (not 
-                (covered ?rake.n.03_1 ?bunchgrass.n.01_1)
+                (covered ?rake.n.03_1 ?stain.n.01_1)
             ) 
             (nextto ?rake.n.03_1 ?rail_fence.n.01_1) 
             (forall 
