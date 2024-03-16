@@ -539,18 +539,6 @@ class InteractiveSampler:
 
 s = InteractiveSampler(scene_model="Rs_int")
 
-s.set_activity("freeze_meat")
-objs = []
-for cat_name in ["tupperware", "tupperware", "steak", "steak", "plate", "plate", "chicken", "chicken", "wax_paper", "wax_paper"]:
-    obj = s.import_obj(cat_name)
-    objs.append(obj)
-
-for obj in objs:
-    obj.set_position([-0.8, 1.5, 1.1])
-
-og.sim.play()
-og.sim.stop()
-
 
 ####### EXAMPLE USAGE #######
 
@@ -558,6 +546,7 @@ og.sim.stop()
 s.set_activity("clean_whiskey_stones")
 
 # Import all sampleable objects for the current activity
+# TODO: Explain how to add to BAD / GOOD MODELS / GOOD BBOXES
 s.import_sampleable_objects()
 
 # Do NOT call og.sim.stop / og.sim.play(). Call the sampler's version instead
