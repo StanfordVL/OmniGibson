@@ -3,7 +3,7 @@
 
     (:objects
         teddy.n.01_1 - teddy.n.01
-        shelf.n.01_1 - shelf.n.01
+        cabinet.n.01_1 - cabinet.n.01
         doll.n.01_1 - doll.n.01
         blanket.n.01_1 - blanket.n.01
         floor.n.01_1 - floor.n.01
@@ -12,11 +12,11 @@
     )
     
     (:init 
-        (inside teddy.n.01_1 shelf.n.01_1) 
-        (inside doll.n.01_1 shelf.n.01_1) 
-        (inside blanket.n.01_1 shelf.n.01_1)
+        (inside teddy.n.01_1 cabinet.n.01_1) 
+        (ontop doll.n.01_1 cabinet.n.01_1) 
+        (inside blanket.n.01_1 cabinet.n.01_1)
         (inroom floor.n.01_1 childs_room) 
-        (inroom shelf.n.01_1 childs_room) 
+        (inroom cabinet.n.01_1 childs_room) 
         (ontop crib.n.01_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
