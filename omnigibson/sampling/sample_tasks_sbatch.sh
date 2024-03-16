@@ -26,6 +26,7 @@ declare -A ENVS=(
     [SAMPLING_START_AT]=""
     [SAMPLING_RANDOMIZE]=""
     [SAMPLING_OVERWRITE_EXISTING]=""
+    [SAMPLING_IGNORE_IN_PROGRESS]=""
     [SAMPLING_THREAD_ID]=${SLURM_JOB_ID}
 )
 
@@ -35,18 +36,20 @@ declare -A ENVS=(
 # s - start at
 # r - randomize order
 # o - overwrite
+# i - ignore in progress
 
 print_usage() {
   printf "Usage: ..."
 }
 
-while getopts 'm:a:s:ro' flag; do
+while getopts 'm:a:s:roi' flag; do
   case "${flag}" in
     m) ENVS[SAMPLING_SCENE_MODEL]="${OPTARG}" ;;
     a) ENVS[SAMPLING_ACTIVITIES]="${OPTARG}" ;;
     s) ENVS[SAMPLING_START_AT]="${OPTARG}" ;;
     r) ENVS[SAMPLING_RANDOMIZE]="1" ;;
     o) ENVS[SAMPLING_OVERWRITE_EXISTING]="1" ;;
+    i) ENVS[SAMPLING_IGNORE_IN_PROGRESS]="1" ;;
     *) print_usage
        exit 1 ;;
   esac
