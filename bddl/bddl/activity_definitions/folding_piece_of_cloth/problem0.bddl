@@ -10,7 +10,6 @@
     
     (:init 
         (inside sheet.n.03_1 clothes_dryer.n.01_1)
-        (unfolded sheet.n.03_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom clothes_dryer.n.01_1 utility_room)
         (ontop agent.n.01_1 floor.n.01_1)
