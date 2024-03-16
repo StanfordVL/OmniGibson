@@ -465,6 +465,7 @@ class InteractiveSampler:
             obj.scale = obj.scale
 
         og.sim.play()
+        og.sim.scene.reset()
 
     def stop(self):
         og.sim.stop()
@@ -570,6 +571,8 @@ class InteractiveSampler:
 
         return target_floor
 
+
+############################
 
 s = InteractiveSampler(scene_model="Rs_int")
 
