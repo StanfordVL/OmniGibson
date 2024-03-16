@@ -372,7 +372,7 @@ def validate_task(task, task_scene_dict, default_scene_dict):
             # tol = 0.15 if "ori" in key else 0.05
             # If particle positions are being checked, only check the min / max
             if "particle" in key:
-                # Only check position
+                # Only check particle position
                 if "position" in key:
                     particle_positions = np.array(val)
                     current_particle_positions = np.array(obj_val)
@@ -381,15 +381,15 @@ def validate_task(task, task_scene_dict, default_scene_dict):
                     for name, pos, curr_pos in zip(("min", "max"), (pos_min, pos_max), (curr_pos_min, curr_pos_max)):
                         if not np.all(np.isclose(pos, curr_pos, atol=0.05)):
                             return False, f"Got mismatch in cloth {obj_name} particle positions range: {name} min {pos_min} max {pos_max} vs. min {curr_pos_min} max {curr_pos_max}"
-
                 else:
                     continue
-            elif key == "ori":
-                # Grab the axis angle representation to compute magnitude difference
-                obj_val = np.linalg.norm(T.quat2axisangle(T.quat_distance(val, obj_val)))
-                val = 0
-            if not np.all(np.isclose(np.array(val), np.array(obj_val), atol=atol, rtol=0.0)):
-                return False, f"{obj_name} root link mismatch in {key}: default_obj_dict has: {val}, obj_dict has: {obj_val}"
+            else:
+                if key == "ori":
+                    # Grab the axis angle representation to compute magnitude difference
+                    obj_val = np.linalg.norm(T.quat2axisangle(T.quat_distance(val, obj_val)))
+                    val = 0
+                if not np.all(np.isclose(np.array(val), np.array(obj_val), atol=atol, rtol=0.0)):
+                    return False, f"{obj_name} root link mismatch in {key}: default_obj_dict has: {val}, obj_dict has: {obj_val}"
 
         # Check any non-robot joint values
         # This is because the controller can cause the robot to drift over time
