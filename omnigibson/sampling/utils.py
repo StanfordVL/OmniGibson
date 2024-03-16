@@ -90,6 +90,21 @@ def write_scenes_to_spreadsheet():
     worksheet.update_cells(cell_list)
 
 
+def get_successful_activities():
+    n_tasks = len(ACTIVITY_TO_ROW)
+    cell_list = worksheet.range(f"A{2}:C{2 + n_tasks - 1}")
+    successful_activities = set()
+    for activity, status in zip(cell_list[::3], cell_list[2::3]):
+        if ".bddl" in activity.value or str(status.value) == "1":
+            successful_activities.add(activity.value)
+
+    return successful_activities
+
+
+def get_unsuccessful_activities():
+    return sorted(set(ACTIVITY_TO_ROW.keys()) - get_successful_activities())
+
+
 def get_worksheet_scene_row(scene_model):
     scenes_sorted = get_scenes()
 

@@ -92,7 +92,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         # Potentially update start_at based on current task observed
         # Current task is either an empty list [] or a filled list [['<ACTIVITY>']]
         current_task = worksheet.get(f"Y{scene_row}")
-        if args.start_at is None and current_task and current_task[0]:
+        if not args.randomize and args.start_at is None and current_task and current_task[0]:
             args.start_at = current_task[0][0]
             # Also clear the in_progress bar in case this is from a failed run
             worksheet.update_acell(f"B{ACTIVITY_TO_ROW[args.start_at]}", "")
@@ -138,6 +138,10 @@ def main(random_selection=False, headless=False, short_exec=False):
     mapping = parse_task_mapping(fpath=TASK_INFO_FPATH)
     activities = get_scene_compatible_activities(scene_model=args.scene_model, mapping=mapping) \
         if args.activities is None else args.activities.split(",")
+
+    # if we're not offline, only keep the failure cases
+    if not args.offline:
+        activities = list(set(activities).intersection(get_unsuccessful_activities()))
 
     # Create the environment
     # Attempt to sample the activity
