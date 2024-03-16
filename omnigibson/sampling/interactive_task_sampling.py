@@ -535,6 +535,40 @@ class InteractiveSampler:
 
                 self.import_obj(category, model, obj_inst)
 
+        self.play()
+        self.stop()
+
+    def pick_floor_and_move_objects_to_valid_room(self, i=0, x_offset=0, y_offset=0, z_offset=1.5):
+        target_room = None
+        for room_type, obj_insts in self._room_type_to_object_instance.items():
+            if "floor.n.01_1" in set(obj_insts):
+                target_room = room_type
+                break
+
+        assert target_room is not None
+
+        # Find all floors with this room type
+        valid_floors = []
+        for floor in og.sim.scene.object_registry("category", "floors"):
+            for room_inst in floor.in_rooms:
+                if target_room in room_inst:
+                    valid_floors.append(floor)
+                    break
+
+        assert len(valid_floors) > 0
+        target_floor = valid_floors[i]
+
+        # Move all objects to this position plus the desired offset
+        floor_pos = target_floor.get_position()
+        target_pos = floor_pos + np.array([x_offset, y_offset, z_offset])
+
+        for obj in og.sim.scene.objects[self.n_scene_objects:]:
+            obj.set_position(target_pos)
+
+        # Also set viewer camera
+        og.sim.viewer_camera.set_position(target_pos + np.ones(3))
+
+        return target_floor
 
 
 s = InteractiveSampler(scene_model="Rs_int")
@@ -568,6 +602,10 @@ print(s.object_scope)
 # Because floor.n.01_1 is required to be in the kitchen, I click that floor in the kitchen to find its name
 floor = s.get_obj("floor_ifmioj_0")
 s.set_task_entity("floor.n.01_1", floor)
+
+# You can also have the sampler automatically find a valid floor and teleport all sampled objects to that floor's
+# location, offset by a desired amount
+floor = s.pick_floor_and_move_objects_to_valid_room(i=0, x_offset=0, y_offset=0, z_offset=1.5)
 
 # Set the in-room parameter for a given object, and have it infer from another object
 # In this case, whiskey infers it from the floor
