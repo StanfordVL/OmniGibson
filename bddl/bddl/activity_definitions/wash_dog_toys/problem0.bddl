@@ -7,7 +7,7 @@
         stain.n.01_1 - stain.n.01
         dust.n.01_1 - dust.n.01
         tennis_ball.n.01_1 - tennis_ball.n.01
-        bunchgrass.n.01_1 - bunchgrass.n.01
+        debris.n.01_1 - debris.n.01
         ball.n.01_1 - ball.n.01
         rag.n.01_1 - rag.n.01
         cabinet.n.01_1 - cabinet.n.01
@@ -24,7 +24,7 @@
         (inside teddy.n.01_2 washer.n.03_1) 
         (covered teddy.n.01_2 dust.n.01_1) 
         (inside tennis_ball.n.01_1 washer.n.03_1) 
-        (covered tennis_ball.n.01_1 bunchgrass.n.01_1) 
+        (covered tennis_ball.n.01_1 debris.n.01_1) 
         (inside ball.n.01_1 washer.n.03_1) 
         (covered ball.n.01_1 stain.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
@@ -51,7 +51,7 @@
                 )
             )
             (not 
-                (covered ?tennis_ball.n.01_1 ?bunchgrass.n.01_1)
+                (covered ?tennis_ball.n.01_1 ?debris.n.01_1)
             ) 
             (not 
                 (covered ?ball.n.01_1 ?stain.n.01_1)

@@ -13,9 +13,10 @@
     )
     
     (:init 
-        (inside long_trousers.n.01_1 washer.n.03_1)
+        (open washer.n.03_1)
+        (ontop long_trousers.n.01_1 floor.n.01_1)
         (covered long_trousers.n.01_1 stain.n.01_1)
-        (inside long_trousers.n.01_2 washer.n.03_1)
+        (ontop long_trousers.n.01_2 floor.n.01_1)
         (covered long_trousers.n.01_2 stain.n.01_1)
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 washer.n.03_1)
