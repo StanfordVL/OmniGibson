@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        jean.n.01_1 jean.n.01_2 - jean.n.01
+        long_trousers.n.01_1 long_trousers.n.01_2 - long_trousers.n.01
         washer.n.03_1 - washer.n.03
         stain.n.01_1 - stain.n.01
         detergent.n.02_1 - detergent.n.02
@@ -13,10 +13,10 @@
     )
     
     (:init 
-        (inside jean.n.01_1 washer.n.03_1) 
-        (covered jean.n.01_1 stain.n.01_1) 
-        (inside jean.n.01_2 washer.n.03_1) 
-        (covered jean.n.01_2 stain.n.01_1) 
+        (inside long_trousers.n.01_1 washer.n.03_1)
+        (covered long_trousers.n.01_1 stain.n.01_1)
+        (inside long_trousers.n.01_2 washer.n.03_1)
+        (covered long_trousers.n.01_2 stain.n.01_1)
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 washer.n.03_1)
         (inroom floor.n.01_1 utility_room) 
@@ -28,9 +28,9 @@
     (:goal 
         (and 
             (forall 
-                (?jean.n.01 - jean.n.01) 
+                (?long_trousers.n.01 - long_trousers.n.01)
                 (not 
-                    (covered ?jean.n.01 ?stain.n.01_1)
+                    (covered ?long_trousers.n.01 ?stain.n.01_1)
                 )
             ) 
         )

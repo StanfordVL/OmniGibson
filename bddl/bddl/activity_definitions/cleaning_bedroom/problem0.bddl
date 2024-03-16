@@ -4,7 +4,7 @@
     (:objects
         dust.n.01_1 - dust.n.01
         floor.n.01_1 - floor.n.01
-        jean.n.01_1 jean.n.01_2 - jean.n.01
+        trouser.n.01_1 trouser.n.01_2 - trouser.n.01
         bed.n.01_1 - bed.n.01
         jewelry.n.01_1 - jewelry.n.01
         bottle__of__perfume.n.01_1 - bottle__of__perfume.n.01
@@ -19,9 +19,9 @@
     (:init 
         (covered cabinet.n.01_1 dust.n.01_1) 
         (covered cabinet.n.01_2 dust.n.01_1) 
-        (ontop jean.n.01_1 bed.n.01_1)
-        (ontop jean.n.01_2 bed.n.01_1)
-        (ontop jewelry.n.01_1 floor.n.01_1) 
+        (ontop trouser.n.01_1 bed.n.01_1)
+        (ontop trouser.n.01_2 bed.n.01_1)
+        (ontop jewelry.n.01_1 floor.n.01_1)
         (ontop bottle__of__perfume.n.01_1 floor.n.01_1)
         (ontop painting.n.01_1 bed.n.01_1) 
         (not 
@@ -40,10 +40,10 @@
     (:goal 
         (and 
             (forall 
-                (?jean.n.01 - jean.n.01)
+                (?trouser.n.01 - trouser.n.01)
                 (exists 
                     (?cabinet.n.01 - cabinet.n.01) 
-                    (inside ?jean.n.01 ?cabinet.n.01)
+                    (inside ?trouser.n.01 ?cabinet.n.01)
                 )
             ) 
             (and 

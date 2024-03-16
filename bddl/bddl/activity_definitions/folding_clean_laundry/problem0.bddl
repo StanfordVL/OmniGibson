@@ -4,9 +4,7 @@
     (:objects
         tablecloth.n.01_1 - tablecloth.n.01
         sock.n.01_1 sock.n.01_2 - sock.n.01
-        jean.n.01_1 - jean.n.01
-        sweatshirt.n.01_1 - sweatshirt.n.01
-        polo_shirt.n.01_1 - polo_shirt.n.01
+        trouser.n.01_1 - trouser.n.01
         dishtowel.n.01_1 dishtowel.n.01_2 - dishtowel.n.01
         bed.n.01_1 - bed.n.01
         floor.n.01_1 - floor.n.01
@@ -17,10 +15,8 @@
         (ontop tablecloth.n.01_1 bed.n.01_1) 
         (ontop sock.n.01_1 bed.n.01_1) 
         (ontop sock.n.01_2 bed.n.01_1) 
-        (ontop jean.n.01_1 bed.n.01_1) 
-        (ontop sweatshirt.n.01_1 bed.n.01_1) 
-        (ontop polo_shirt.n.01_1 bed.n.01_1) 
-        (ontop dishtowel.n.01_1 bed.n.01_1) 
+        (ontop trouser.n.01_1 bed.n.01_1)
+        (ontop dishtowel.n.01_1 bed.n.01_1)
         (ontop dishtowel.n.01_2 bed.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom bed.n.01_1 bedroom) 
@@ -34,10 +30,8 @@
                 (?sock.n.01 - sock.n.01) 
                 (folded ?sock.n.01)
             ) 
-            (folded ?jean.n.01_1) 
-            (folded ?sweatshirt.n.01_1) 
-            (folded ?polo_shirt.n.01_1) 
-            (forall 
+            (folded ?trouser.n.01_1)
+            (forall
                 (?dishtowel.n.01 - dishtowel.n.01) 
                 (folded ?dishtowel.n.01)
             ) 
@@ -46,10 +40,8 @@
                 (?dishtowel.n.01 - dishtowel.n.01) 
                 (ontop ?dishtowel.n.01 ?bed.n.01_1)
             )
-            (ontop ?sweatshirt.n.01_1 ?bed.n.01_1) 
-            (ontop ?jean.n.01_1 ?bed.n.01_1) 
-            (ontop ?polo_shirt.n.01_1 ?bed.n.01_1) 
-            (forall 
+            (ontop ?trouser.n.01_1 ?bed.n.01_1)
+            (forall
                 (?sock.n.01 - sock.n.01) 
                 (ontop ?sock.n.01 ?bed.n.01_1)
             )

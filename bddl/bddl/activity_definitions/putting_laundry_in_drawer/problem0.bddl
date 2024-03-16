@@ -5,23 +5,14 @@
         desk.n.01_1 - desk.n.01
         floor.n.01_1 - floor.n.01
         short_pants.n.01_1 - short_pants.n.01
-        polo_shirt.n.01_1 polo_shirt.n.01_2 - polo_shirt.n.01
-        jean.n.01_1 - jean.n.01
-        pajama.n.02_1 - pajama.n.02
         tank_top.n.01_1 tank_top.n.01_2 - tank_top.n.01
-        sweatshirt.n.01_1 - sweatshirt.n.01
         cabinet.n.01_1 - cabinet.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop jean.n.01_1 desk.n.01_1) 
-        (ontop short_pants.n.01_1 desk.n.01_1) 
-        (ontop polo_shirt.n.01_1 desk.n.01_1) 
-        (ontop polo_shirt.n.01_2 desk.n.01_1) 
-        (ontop sweatshirt.n.01_1 desk.n.01_1) 
-        (ontop pajama.n.02_1 desk.n.01_1) 
-        (ontop tank_top.n.01_1 desk.n.01_1) 
+        (ontop short_pants.n.01_1 desk.n.01_1)
+        (ontop tank_top.n.01_1 desk.n.01_1)
         (ontop tank_top.n.01_2 desk.n.01_1) 
         (inroom desk.n.01_1 bedroom)
         (inroom floor.n.01_1 bedroom)
@@ -36,32 +27,7 @@
                 (inside ?short_pants.n.01_1 ?cabinet.n.01)
             )
             (folded ?short_pants.n.01_1)
-            (exists
-                (?cabinet.n.01 - cabinet.n.01)
-                (inside ?jean.n.01_1 ?cabinet.n.01)
-            )
-            (folded ?jean.n.01_1)
-            (exists
-                (?cabinet.n.01 - cabinet.n.01)
-                (inside ?pajama.n.02_1 ?cabinet.n.01)
-            )
-            (folded ?pajama.n.02_1)
-            (exists
-                (?cabinet.n.01 - cabinet.n.01)
-                (inside ?sweatshirt.n.01_1 ?cabinet.n.01)
-            )
-            (folded ?sweatshirt.n.01_1)
-            (forall 
-                (?polo_shirt.n.01 - polo_shirt.n.01) 
-                (and
-                    (exists 
-                        (?cabinet.n.01 - cabinet.n.01)
-                        (inside ?polo_shirt.n.01 ?cabinet.n.01)   
-                    )
-                    (folded ?polo_shirt.n.01)             
-                )
-            ) 
-            (forall 
+            (forall
                 (?tank_top.n.01 - tank_top.n.01) 
                 (and
                     (exists 

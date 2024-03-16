@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        polo_shirt.n.01_1 - polo_shirt.n.01
         clothesline.n.01_1 - clothesline.n.01
         blouse.n.01_1 - blouse.n.01
         tank_top.n.01_1 - tank_top.n.01
@@ -12,8 +11,7 @@
     )
     
     (:init 
-        (draped polo_shirt.n.01_1 clothesline.n.01_1) 
-        (draped blouse.n.01_1 clothesline.n.01_1) 
+        (draped blouse.n.01_1 clothesline.n.01_1)
         (draped tank_top.n.01_1 clothesline.n.01_1) 
         (ontop hamper.n.02_1 floor.n.01_1) 
         (ontop clothesline.n.01_1 floor.n.01_1) 
@@ -23,8 +21,7 @@
     
     (:goal 
         (and 
-            (inside ?polo_shirt.n.01_1 ?hamper.n.02_1) 
-            (inside ?tank_top.n.01_1 ?hamper.n.02_1) 
+            (inside ?tank_top.n.01_1 ?hamper.n.02_1)
             (inside ?blouse.n.01_1 ?hamper.n.02_1)
         )
     )

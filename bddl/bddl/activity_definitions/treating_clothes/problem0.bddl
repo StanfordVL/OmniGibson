@@ -7,8 +7,7 @@
         detergent.n.02_1 - detergent.n.02
         detergent__bottle.n.01_1 - detergent__bottle.n.01
         iron.n.04_1 - iron.n.04
-        jean.n.01_1 - jean.n.01
-        polo_shirt.n.01_1 - polo_shirt.n.01
+        long_trousers.n.01_1 - long_trousers.n.01
         floor.n.01_1 - floor.n.01
         sink.n.01_1 - sink.n.01
         shelf.n.01_1 - shelf.n.01
@@ -16,10 +15,8 @@
     )
     
     (:init 
-        (covered jean.n.01_1 wrinkle.n.01_1) 
-        (covered polo_shirt.n.01_1 wrinkle.n.01_1) 
-        (ontop jean.n.01_1 floor.n.01_1) 
-        (ontop polo_shirt.n.01_1 floor.n.01_1) 
+        (covered long_trousers.n.01_1 wrinkle.n.01_1)
+        (ontop long_trousers.n.01_1 floor.n.01_1)
         (ontop iron.n.04_1 floor.n.01_1)
         (filled detergent__bottle.n.01_1 detergent.n.02_1)
         (ontop detergent__bottle.n.01_1 floor.n.01_1)
@@ -32,16 +29,11 @@
     
     (:goal 
         (and 
-            (draped ?jean.n.01_1 ?shelf.n.01_1) 
-            (draped ?polo_shirt.n.01_1 ?shelf.n.01_1) 
-            (not 
-                (covered ?jean.n.01_1 ?wrinkle.n.01_1)
+            (draped ?long_trousers.n.01_1 ?shelf.n.01_1)
+            (not
+                (covered ?long_trousers.n.01_1 ?wrinkle.n.01_1)
             )
-            (not 
-                (covered ?polo_shirt.n.01_1 ?wrinkle.n.01_1)
-            )
-            (saturated ?jean.n.01_1 ?detergent.n.02_1)
-            (saturated ?polo_shirt.n.01_1 ?detergent.n.02_1)
+            (saturated ?long_trousers.n.01_1 ?detergent.n.02_1)
         )
     )
 )

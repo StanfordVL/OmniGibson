@@ -3,7 +3,6 @@
 
     (:objects
         wrinkle.n.01_1 - wrinkle.n.01
-        polo_shirt.n.01_1 - polo_shirt.n.01
         blouse.n.01_1 - blouse.n.01
         dress.n.01_1 - dress.n.01
         jersey.n.03_1 - jersey.n.03
@@ -15,13 +14,11 @@
     )
     
     (:init 
-        (covered polo_shirt.n.01_1 wrinkle.n.01_1) 
-        (covered blouse.n.01_1 wrinkle.n.01_1) 
+        (covered blouse.n.01_1 wrinkle.n.01_1)
         (covered dress.n.01_1 wrinkle.n.01_1)
         (covered jersey.n.03_1 wrinkle.n.01_1) 
         (ontop hamper.n.02_1 floor.n.01_1)
-        (inside polo_shirt.n.01_1 hamper.n.02_1) 
-        (inside blouse.n.01_1 hamper.n.02_1) 
+        (inside blouse.n.01_1 hamper.n.02_1)
         (inside dress.n.01_1 hamper.n.02_1)
         (inside jersey.n.03_1 hamper.n.02_1)
         (ontop ironing_board.n.01_1 floor.n.01_1) 
@@ -31,10 +28,7 @@
     )
     
     (:goal 
-        (and 
-            (not 
-                (covered ?polo_shirt.n.01_1 ?wrinkle.n.01_1)
-            ) 
+        (and
             (not 
                 (covered ?blouse.n.01_1 ?wrinkle.n.01_1)
             )
@@ -44,8 +38,7 @@
             (not 
                 (covered ?jersey.n.03_1 ?wrinkle.n.01_1)
             ) 
-            (folded ?polo_shirt.n.01_1) 
-            (folded ?blouse.n.01_1) 
+            (folded ?blouse.n.01_1)
             (folded ?dress.n.01_1)
             (folded ?jersey.n.03_1)
         )
