@@ -8,13 +8,14 @@
         diced__virginia_ham.n.01_1 - diced__virginia_ham.n.01
         place_mat.n.01_1 - place_mat.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
-        tray.n.01_1 tray.n.01_2 - tray.n.01
+        tray.n.01_1 - tray.n.01
         teacup.n.02_1 - teacup.n.02
         teapot.n.01_1 - teapot.n.01
         scone.n.01_1 - scone.n.01
         jar__of__jam.n.01_1 - jar__of__jam.n.01
         sugar_cookie.n.01_1 - sugar_cookie.n.01
         jar__of__honey.n.01_1 - jar__of__honey.n.01
+        bowl.n.01_1 bowl.n.01_2 bowl.n.01_3 - bowl.n.01
         plate.n.04_1 - plate.n.04
         table_knife.n.01_1 table_knife.n.01_2 - table_knife.n.01
         tablefork.n.01_1 - tablefork.n.01
@@ -35,10 +36,12 @@
         (ontop danish.n.02_1 tray.n.01_1)
         (ontop scone.n.01_1 tray.n.01_1)
         (ontop sugar_cookie.n.01_1 tray.n.01_1)
-        (ontop tray.n.01_2 console_table.n.01_3)
-        (filled tray.n.01_2 diced__virginia_ham.n.01_1)
-        (filled tray.n.01_2 diced__cheddar.n.01_1)
-        (filled tray.n.01_2 diced__cucumber.n.01_1)
+        (ontop bowl.n.01_1 console_table.n.01_3)
+        (ontop bowl.n.01_2 console_table.n.01_3)
+        (ontop bowl.n.01_3 console_table.n.01_3)
+        (filled bowl.n.01_1 diced__virginia_ham.n.01_1)
+        (filled bowl.n.01_2 diced__cheddar.n.01_1)
+        (filled bowl.n.01_3 diced__cucumber.n.01_1)
         (ontop table_knife.n.01_1 console_table.n.01_4)
         (ontop table_knife.n.01_2 console_table.n.01_4)
         (ontop tablefork.n.01_1 console_table.n.01_4)
@@ -73,12 +76,7 @@
                 (?table_knife.n.01 - table_knife.n.01)
                 (touching ?table_knife.n.01 ?jar__of__jam.n.01_1)
             )
-            (ontop ?tray.n.01_1 ?breakfast_table.n.01_1) 
-            (contains ?tray.n.01_2 ?diced__cheddar.n.01_1) 
-            (contains ?tray.n.01_2 ?diced__cucumber.n.01_1) 
-            (contains ?tray.n.01_2 ?diced__virginia_ham.n.01_1)
-            (nextto ?tray.n.01_2 ?tray.n.01_1) 
-
+            (ontop ?tray.n.01_1 ?breakfast_table.n.01_1)
             (nextto ?teacup.n.02_1 ?plate.n.04_1) 
             (ontop ?teapot.n.01_1 ?breakfast_table.n.01_1) 
             (ontop ?plate.n.04_1 ?place_mat.n.01_1)

@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        clothesline.n.01_1 - clothesline.n.01
+        coatrack.n.01_1 - coatrack.n.01
         blouse.n.01_1 - blouse.n.01
         tank_top.n.01_1 - tank_top.n.01
         hamper.n.02_1 - hamper.n.02
@@ -11,10 +11,10 @@
     )
     
     (:init 
-        (draped blouse.n.01_1 clothesline.n.01_1)
-        (draped tank_top.n.01_1 clothesline.n.01_1) 
+        (draped blouse.n.01_1 coatrack.n.01_1)
+        (draped tank_top.n.01_1 coatrack.n.01_1) 
         (ontop hamper.n.02_1 floor.n.01_1) 
-        (ontop clothesline.n.01_1 floor.n.01_1) 
+        (ontop coatrack.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
