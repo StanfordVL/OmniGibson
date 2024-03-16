@@ -40,15 +40,21 @@ m.DYNAMIC_SCALE_INCREMENT = 0.1
 
 GOOD_MODELS = {
     "jar": {"kijnrj"},
+    "carton": {"causya", "msfzpz", "sxlklf"},
+    "hamper": {"drgdfh", "hlgjme", "iofciz", "pdzaca", "ssfvij"},
+    "tray": {"gsxbym", "huwhjg", "txcjux", "uekqey", "yqtlhy"},
 }
 
 GOOD_BBOXES = {
+    "envelope": {
+        "urcigc": [0.004, 0.06535058, 0.10321216],
+    },
     "pill_bottle": {
         "csvdbe": [0.078, 0.078, 0.109],
         "wsasmm": [0.078, 0.078, 0.109],
     },
-    "envelope": {
-        "urcigc": [0.004, 0.06535058, 0.10321216],
+    "tupperware": {
+        "mkstwr": [0.33, 0.33, 0.21],
     },
 }
 
