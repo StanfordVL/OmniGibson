@@ -9533,14 +9533,14 @@ stages:
     cmd: python -m b1k_pipeline.pack_dataset
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: 5156525fd588a261f4bfaee0f1461911
-      size: 76089
+      md5: 568913f7e715afbaef3c59bbf1e39099
+      size: 76078
     - path: artifacts/parallels/objects_usd.zip
-      md5: 316124978ffa260c160579b3d5c5607e
-      size: 22004759019
+      md5: 8e63e8517587e9252794d55dca414625
+      size: 16687515
     - path: artifacts/parallels/scenes_json.zip
-      md5: 914fe14152fda084ed9db13db48af5c5
-      size: 5268251
+      md5: 54e127ece9bff69c2d488ca6540ef254
+      size: 1622975
     - path: artifacts/parallels/systems.zip
       md5: ed2d37aa0483f48fd2616350f755a3fb
       size: 359422776
@@ -9561,8 +9561,8 @@ stages:
       size: 4857
     outs:
     - path: artifacts/og_dataset.zip
-      md5: 8dd81c0c20a13150040b98ae9bf6e91c
-      size: 22010448739
+      md5: e2fd5f695a446a09d7484940778c2b47
+      size: 22011135406
     - path: artifacts/og_dataset_demo.zip
       md5: 56fdc2465ec640630408dce6487f59c3
       size: 178105348
