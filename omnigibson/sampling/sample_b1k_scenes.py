@@ -82,7 +82,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Make sure scene can be sampled by current user
     scene_row = None if args.offline else validate_scene_can_be_sampled(scene=args.scene_model)
 
-    if not args.offline:
+    if not args.offline and not args.randomize:
         completed = worksheet.get(f"W{scene_row}")
         if completed and completed[0] and str(completed[0][0]) == "1":
             # If completed is set, then immediately return
