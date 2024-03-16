@@ -40,19 +40,47 @@ m.DYNAMIC_SCALE_INCREMENT = 0.1
 
 GOOD_MODELS = {
     "jar": {"kijnrj"},
-    "curtain": {"didlbp"},
+    "carton": {"causya", "msfzpz", "sxlklf"},
+    "hamper": {"drgdfh", "hlgjme", "iofciz", "pdzaca", "ssfvij"},
+    "hardback": {"esxakn"},
+    "notebook": {"hwhisw"},
+    "paperback": {"okcflv"},
+    "plant_pot": {"ihnfbi", "vhglly", "ygrtaz"},
+    "recycling_bin": {"nuoypc"},
+    "tray": {"gsxbym", "huwhjg", "txcjux", "uekqey", "yqtlhy"},
 }
 
 GOOD_BBOXES = {
-    "pill_bottle": {
-        "csvdbe": [0.078, 0.078, 0.109],
-        "wsasmm": [0.078, 0.078, 0.109],
+    "basil": {
+        "dkuhvb": [0.07286304, 0.0545199 , 0.03108144],
+    },
+    "basil_jar": {
+        "swytaw": [0.22969539, 0.19492961, 0.30791675],
+    },
+    "bicycle_chain": {
+        "czrssf": [0.242, 0.012, 0.021],
+    },
+    "clam": {
+        "ihhbfj": [0.039, 0.041, 0.017],
     },
     "envelope": {
         "urcigc": [0.004, 0.06535058, 0.10321216],
     },
-    "curtain": {
-        "didlbp": [0.04473936, 0.40565056, 0.77447192], # small curtain to drape over
+    "pill_bottle": {
+        "csvdbe": [0.078, 0.078, 0.109],
+        "wsasmm": [0.078, 0.078, 0.109],
+    },
+    "plant_pot": {
+        "ihnfbi": [0.24578613, 0.2457865 , 0.18862737],
+    },
+    "razor": {
+        "jocsgp": [0.046, 0.063, 0.204],
+    },
+    "recycling_bin": {
+        "nuoypc": [0.69529409, 0.80712041, 1.07168694],
+    },
+    "tupperware": {
+        "mkstwr": [0.33, 0.33, 0.21],
     },
 }
 
