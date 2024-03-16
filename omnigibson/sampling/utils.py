@@ -106,6 +106,14 @@ def get_successful_activities():
 
     return successful_activities
 
+def get_successful_activities_to_scenes():
+    n_tasks = len(ACTIVITY_TO_ROW)
+    cell_list = worksheet.range(f"A{2}:E{2 + n_tasks - 1}")
+    activity_to_scene = {}
+    for activity, status, scene in zip(cell_list[::5], cell_list[2::5], cell_list[4::5]):
+        if ".bddl" not in activity.value and str(status.value) == "1":
+            activity_to_scene[activity.value] = scene.value
+    return activity_to_scene
 
 def get_unsuccessful_activities():
     return sorted(set(ACTIVITY_TO_ROW.keys()) - get_successful_activities())
