@@ -212,7 +212,7 @@ class KnowledgeBaseProcessor():
                                 object_name = to_name
                             object = Object.get(name=object_name)
                             assert object is not None, f"Scene {scene_name} object {object_name} does not exist in the database."
-                RoomObject.create(room=room, object=object, count=count)
+                            RoomObject.create(room=room, object=object, count=count)
 
         with open(GENERATED_DATA_DIR / "combined_room_object_list.json", "r") as f:
             current_scene_dict = json.load(f)["scenes"]
