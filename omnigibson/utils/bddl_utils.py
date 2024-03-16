@@ -40,6 +40,7 @@ m.DYNAMIC_SCALE_INCREMENT = 0.1
 
 GOOD_MODELS = {
     "jar": {"kijnrj"},
+    "curtain": {"didlbp"},
 }
 
 GOOD_BBOXES = {
@@ -49,6 +50,9 @@ GOOD_BBOXES = {
     },
     "envelope": {
         "urcigc": [0.004, 0.06535058, 0.10321216],
+    },
+    "curtain": {
+        "didlbp": [0.04473936, 0.40565056, 0.77447192], # small curtain to drape over
     },
 }
 
@@ -914,8 +918,8 @@ class BDDLSampler:
                                 kwargs["bypass_alignment_checking"] = True
                                 kwargs["check_physics_stability"] = True
                                 kwargs["can_joint_break"] = False
-                            # if condition.STATE_NAME == "attached":
-                            #     from IPython import embed; print("attached", condition.body), embed()
+                            # if condition.STATE_NAME in {"attached", "draped"}:
+                            #     from IPython import embed; print("hard state", condition.body), embed()
                             success = condition.sample(binary_state=positive, **kwargs)
                             log_msg = " ".join(
                                 [
@@ -1257,8 +1261,8 @@ class BDDLSampler:
                         while True:
                             num_trials = 1
                             for _ in range(num_trials):
-                                # if condition.STATE_NAME == "attached":
-                                #     from IPython import embed; print("attached", condition.body), embed()
+                                # if condition.STATE_NAME in {"attached", "draped"}:
+                                #     from IPython import embed; print("hard state", condition.body), embed()
                                 success = condition.sample(binary_state=positive, **kwargs)
                                 if success:
                                     # Update state
