@@ -59,13 +59,13 @@ GOOD_BBOXES = {
 }
 
 BAD_MODELS = {
-    "bandana": {"wbhliu"}, # bddl fixed
+    "bandana": {"wbhliu"},
     "curtain": {"ohvomi"},
     "cardigan": {"itrkhr"},
-    "sweatshirt": {"nowqqh"}, # bddl fixed
-    "jeans": {"nmvvil", "pvzxyp"}, # bddl NOT FIXED
-    "pajamas": {"rcgdde"},  # bddl NOT FIXED
-    "polo_shirt": {"vqbvph"},  # bddl NOT FIXED
+    "sweatshirt": {"nowqqh"},
+    "jeans": {"nmvvil", "pvzxyp"},
+    "pajamas": {"rcgdde"},
+    "polo_shirt": {"vqbvph"},
     "vest": {"girtqm"}, # bddl NOT FIXED
     "onesie": {"pbytey"},
     "dishtowel": {"ltydgg"},
@@ -73,7 +73,6 @@ BAD_MODELS = {
     "hammock": {'aiftuk', 'fglfga', 'klhkgd', 'lqweda', 'qewdqa'},
     'jacket': {'kiiium', 'nogevo', 'remcyk'},
     "quilt": {"mksdlu", "prhems"},
-    "paper_towel": {"jdsryb", "jgfsug", "lhjush", "taedgk", "wjcyoi", "yedsde"},
     "pennant": {"tfnwti"},
     "pillowcase": {"dtoahb", "yakvci"},
     "rubber_glove": {"leuiso"},
