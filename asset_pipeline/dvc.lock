@@ -4553,21 +4553,21 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/max/export_meshes.py
-      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
-      size: 23730
+      md5: 08b6378d12a2ce5b7c24ef986d091fd5
+      size: 23780
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
-      md5: f2aafc735b49e784ceb1310bbbe27455
-      size: 83032
+      md5: 20415e9157528a361aedceac6799bdec
+      size: 83177
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/processed.max
-      md5: 86e94f5c0d82be136d89ae0ac4bde49b
-      size: 54358196
+      md5: d5666416e569dc6843a93ff1018b91e3
+      size: 54362292
     outs:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/export_meshes.json
-      md5: bc6ac761d7264062adc723cdfa9c50f2
-      size: 30922
+      md5: f262554fc442fc28a978e41485cb8818
+      size: 30899
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
-      md5: 8e4a9e2ed71e5e4198e5ef6a2c7fb08e
-      size: 131677306
+      md5: 7662596bbfb2860c1caefa71a7098d60
+      size: 131142966
   export_meshes@scenes/Merom_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_int/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -6315,21 +6315,21 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/max/export_meshes.py
-      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
-      size: 23730
+      md5: 08b6378d12a2ce5b7c24ef986d091fd5
+      size: 23780
     - path: cad/objects/batch-04/artifacts/object_list.json
-      md5: 8938f2483545612419cb698bb0ece358
-      size: 35581
+      md5: c74361dbe206f0c7b27b293a41554267
+      size: 36537
     - path: cad/objects/batch-04/processed.max
-      md5: 055e22f59541a10e8c41d0a0affe92ec
-      size: 105509440
+      md5: 195c40e2613e5169895292e6f73fb2ae
+      size: 105374628
     outs:
     - path: cad/objects/batch-04/artifacts/export_meshes.json
-      md5: e16dbd0f32e82bc66300bbaf576bcaa5
-      size: 18965
+      md5: 01e1482607aa3576903ed1d33d6f3992
+      size: 19113
     - path: cad/objects/batch-04/artifacts/meshes.zip
-      md5: a6b2844f6ce17f7095358c40cd1ae444
-      size: 194512452
+      md5: 32300a4700e6de30b0471613bd772f9e
+      size: 193663505
   export_meshes@objects/batch-03:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-03/processed.max b1k_pipeline/max/export_meshes.py
     deps:
@@ -6427,21 +6427,21 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/max/export_meshes.py
-      md5: 8f67c8a3cae22b0303e1082e4d76f9c9
-      size: 23730
+      md5: 08b6378d12a2ce5b7c24ef986d091fd5
+      size: 23780
     - path: cad/objects/batch-00/artifacts/object_list.json
-      md5: c073f8eaa5e10be23dc451138b76aa22
-      size: 39354
+      md5: 713b3f1dcb1e5b366b7063805bd43f07
+      size: 39537
     - path: cad/objects/batch-00/processed.max
-      md5: 98755a3d8b29d6805cc72edea307a483
-      size: 146674856
+      md5: c6a5bdcf56786a2c59934d56e2fae18a
+      size: 146556072
     outs:
     - path: cad/objects/batch-00/artifacts/export_meshes.json
-      md5: 421088329e40daed7836152711eb07bc
-      size: 20250
+      md5: 8d27776e2caf0d5f99cedea0dd516536
+      size: 20254
     - path: cad/objects/batch-00/artifacts/meshes.zip
-      md5: 519dc76efe4898ef8079097bc023f733
-      size: 234906036
+      md5: e42cbed1ae0f13318a24cb1b585726e3
+      size: 234501676
   object_list@objects/task_relevant-xy:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/task_relevant-xy/processed.max
       b1k_pipeline/max/object_list.py
