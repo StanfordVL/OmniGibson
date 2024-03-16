@@ -327,9 +327,17 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
             for parent_link in parent.links.values():
                 child_link.add_filtered_collision_pair(parent_link)
 
-        # Temporary hack to disable collision between the attached child object and all building structures
-        # such that objects attached to the wall_nails do not collide with the walls.
-        CollisionAPI.add_to_collision_group(col_group="attached_objects", prim_path=child.prim_path)
+        if parent.category == "wall_nail":
+            # Temporary hack to disable collision between the attached child object and all walls/floors so that objects
+            # attached to the wall_nails do not collide with the walls/floors.
+            for wall in og.sim.scene.object_registry("category", "walls", set()):
+                for wall_link in wall.links.values():
+                    for child_link in child.links.values():
+                        child_link.add_filtered_collision_pair(wall_link)
+            for wall in og.sim.scene.object_registry("category", "floors", set()):
+                for floor_link in wall.links.values():
+                    for child_link in child.links.values():
+                        child_link.add_filtered_collision_pair(floor_link)
 
         # Temporary hack to disable gravity for the attached child object if the parent is kinematic_only
         # Otherwise, the parent metalink will oscillate due to the gravity force of the child.
