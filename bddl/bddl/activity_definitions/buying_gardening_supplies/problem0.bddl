@@ -12,7 +12,7 @@
         shovel.n.01_1 - shovel.n.01
         bag__of__mulch.n.01_1 - bag__of__mulch.n.01
         fertilizer__atomizer.n.01_1 - fertilizer__atomizer.n.01
-        pot_plant.n.01_1 pot_plant.n.01_2 pot_plant.n.01_3 - pot_plant.n.01
+        pot_plant.n.01_1 pot_plant.n.01_2 - pot_plant.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -30,7 +30,6 @@
         (ontop fertilizer__atomizer.n.01_1 shelf.n.01_2) 
         (ontop pot_plant.n.01_1 shelf.n.01_3) 
         (ontop pot_plant.n.01_2 shelf.n.01_3) 
-        (ontop pot_plant.n.01_3 shelf.n.01_3) 
         (inroom floor.n.01_1 grocery_store) 
         (inroom shelf.n.01_1 grocery_store) 
         (inroom shelf.n.01_2 grocery_store) 
@@ -50,7 +49,6 @@
             (ontop ?fertilizer__atomizer.n.01_1 ?checkout.n.03_1) 
             (ontop ?pot_plant.n.01_1 ?checkout.n.03_1) 
             (ontop ?pot_plant.n.01_2 ?checkout.n.03_1) 
-            (ontop ?pot_plant.n.01_3 ?shelf.n.01_3)
             (forall 
                 (?money.n.01 - money.n.01) 
                 (nextto ?money.n.01 ?cash_register.n.01_1)
