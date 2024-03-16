@@ -13,12 +13,12 @@
     )
     
     (:init 
-        (ontop hamper.n.02_1 washer.n.03_1) 
-        (inside hand_towel.n.01_1 clothes_dryer.n.01_1)
-        (inside hand_towel.n.01_2 clothes_dryer.n.01_1)
-        (inside bath_towel.n.01_1 clothes_dryer.n.01_1)
-        (inside bath_towel.n.01_2 clothes_dryer.n.01_1)
-        (inside bath_towel.n.01_3 clothes_dryer.n.01_1)
+        (ontop hamper.n.02_1 floor.n.01_1) 
+        (ontop hand_towel.n.01_1 washer.n.03_1)
+        (ontop hand_towel.n.01_2 washer.n.03_1)
+        (ontop bath_towel.n.01_1 clothes_dryer.n.01_1)
+        (ontop bath_towel.n.01_2 clothes_dryer.n.01_1)
+        (ontop bath_towel.n.01_3 clothes_dryer.n.01_1)
         (inside rag.n.01_1 clothes_dryer.n.01_1)
         (inroom floor.n.01_1 utility_room) 
         (inroom washer.n.03_1 utility_room) 
