@@ -43,32 +43,31 @@ GOOD_MODELS = {
 }
 
 BAD_MODELS = {
+    "bandana": {"wbhliu"}, # bddl fixed
     "curtain": {"ohvomi"},
     "cardigan": {"itrkhr"},
+    "sweatshirt": {"nowqqh"}, # bddl fixed
+    "jeans": {"nmvvil", "pvzxyp"}, # bddl NOT FIXED
+    "pajamas": {"rcgdde"},  # bddl NOT FIXED
+    "polo_shirt": {"vqbvph"},  # bddl NOT FIXED
+    "vest": {"girtqm"}, # bddl NOT FIXED
+    "onesie": {"pbytey"},
     "dishtowel": {"ltydgg"},
     "dress": {"gtghon"},
-    "hammock": {'aiftuk', 'fglfga', 'klhkgd', 'lqweda', 'qewdqa'},
+    "hammock": {"aiftuk", "fglfga", "klhkgd", "lqweda", "qewdqa"},
     "jar": {"kijnrj"},
-    'jacket': {'kiiium', 'nogevo', 'remcyk'},
+    "jacket": {"kiiium", "nogevo", "remcyk"},
     "quilt": {"mksdlu", "prhems"},
-    'paper_towel': {'jdsryb', 'jgfsug', 'lhjush', 'taedgk', 'wjcyoi', 'yedsde'},
-    'pennant': {'tfnwti'},
-    'pillowcase': {'dtoahb', 'yakvci'},
-    'rubber_glove': {'leuiso'},
-    'scarf': {'kclcrj'},
-    'sock': {'vpafgj'},
-    'tank_top': {'fzldgi'},
+    "paper_towel": {"jdsryb", "jgfsug", "lhjush", "taedgk", "wjcyoi", "yedsde"},
+    "pennant": {"tfnwti"},
+    "pillowcase": {"dtoahb", "yakvci"},
+    "rubber_glove": {"leuiso"},
+    "scarf": {"kclcrj"},
+    "sock": {"vpafgj"},
+    "tank_top": {"fzldgi"},
 }
 
-DO_NOT_REMESH_CLOTHS = {
-    "bandana": {"wbhliu"},
-    'jeans': {'nmvvil', 'pvzxyp'},
-    "onesie": {'pbytey'},
-    "pajamas": {"rcgdde"},
-    'polo_shirt': {'vqbvph'},
-    'sweatshirt': {'nowqqh'},
-    'vest': {'girtqm'},
-}
+DO_NOT_REMESH_CLOTHS = {}
 DO_NOT_REMESH_CLOTHS.update(BAD_MODELS)
 
 class UnsampleablePredicate:
@@ -907,7 +906,8 @@ class BDDLSampler:
                                 kwargs["bypass_alignment_checking"] = True
                                 kwargs["check_physics_stability"] = True
                                 kwargs["can_joint_break"] = False
-
+                            # if condition.STATE_NAME == "attached":
+                            #     from IPython import embed; print("attached", condition.body), embed()
                             success = condition.sample(binary_state=positive, **kwargs)
                             log_msg = " ".join(
                                 [
@@ -1243,6 +1243,8 @@ class BDDLSampler:
                         while True:
                             num_trials = 1
                             for _ in range(num_trials):
+                                # if condition.STATE_NAME == "attached":
+                                #     from IPython import embed; print("attached", condition.body), embed()
                                 success = condition.sample(binary_state=positive, **kwargs)
                                 if success:
                                     # Update state
