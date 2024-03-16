@@ -585,7 +585,8 @@ s.set_activity("clean_whiskey_stones")
 
 # Import all sampleable objects for the current activity
 # TODO: Explain how to add to BAD / GOOD MODELS / GOOD BBOXES
-s.import_sampleable_objects()
+error_msg = s.import_sampleable_objects()
+assert error_msg is None, f"Some objects couldn't be imported: {error_msg}"
 
 # Do NOT call og.sim.stop / og.sim.play(). Call the sampler's version instead
 s.play()
