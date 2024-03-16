@@ -946,8 +946,8 @@ class BDDLSampler:
                                 kwargs["bypass_alignment_checking"] = True
                                 kwargs["check_physics_stability"] = True
                                 kwargs["can_joint_break"] = False
-                            # if condition.STATE_NAME == "attached":
-                            #     from IPython import embed; print("attached", condition.body), embed()
+                            # if condition.STATE_NAME in {"attached", "draped"}:
+                            #     from IPython import embed; print("hard state", condition.body), embed()
                             success = condition.sample(binary_state=positive, **kwargs)
                             log_msg = " ".join(
                                 [
@@ -1289,8 +1289,8 @@ class BDDLSampler:
                         while True:
                             num_trials = 1
                             for _ in range(num_trials):
-                                # if condition.STATE_NAME == "attached":
-                                #     from IPython import embed; print("attached", condition.body), embed()
+                                # if condition.STATE_NAME in {"attached", "draped"}:
+                                #     from IPython import embed; print("hard state", condition.body), embed()
                                 success = condition.sample(binary_state=positive, **kwargs)
                                 if success:
                                     # Update state
