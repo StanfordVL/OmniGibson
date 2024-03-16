@@ -3,8 +3,8 @@
 
     (:objects
         napkin.n.01_1 - napkin.n.01
-        console_table.n.01_1 - console_table.n.01
-        danish.n.02_1 danish.n.02_2 - danish.n.02
+        console_table.n.01_1 console_table.n.01_2 console_table.n.01_3 console_table.n.01_4 - console_table.n.01
+        danish.n.02_1 - danish.n.02
         diced__virginia_ham.n.01_1 - diced__virginia_ham.n.01
         place_mat.n.01_1 - place_mat.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
@@ -26,28 +26,30 @@
     )
     
     (:init 
-        (ontop napkin.n.01_1 console_table.n.01_1) 
-        (ontop place_mat.n.01_1 breakfast_table.n.01_1) 
+        (ontop napkin.n.01_1 console_table.n.01_1)
+        (ontop teacup.n.02_1 console_table.n.01_1)
+        (ontop teapot.n.01_1 console_table.n.01_1)
+        (ontop jar__of__jam.n.01_1 console_table.n.01_1)
+        (ontop jar__of__honey.n.01_1 console_table.n.01_1)
+        (ontop tray.n.01_1 console_table.n.01_2)
         (ontop danish.n.02_1 tray.n.01_1)
-        (ontop danish.n.02_2 tray.n.01_1) 
-        (ontop scone.n.01_1 tray.n.01_1) 
-        (ontop sugar_cookie.n.01_1 tray.n.01_1) 
-        (ontop tray.n.01_1 console_table.n.01_1) 
-        (ontop teacup.n.02_1 console_table.n.01_1) 
-        (ontop teapot.n.01_1 console_table.n.01_1) 
-        (ontop jar__of__jam.n.01_1 console_table.n.01_1) 
-        (ontop jar__of__honey.n.01_1 console_table.n.01_1) 
-        (ontop table_knife.n.01_1 plate.n.04_1)
-        (ontop table_knife.n.01_2 plate.n.04_1)
-        (ontop tablefork.n.01_1 plate.n.04_1) 
-        (ontop teaspoon.n.02_1 plate.n.04_1) 
-        (ontop plate.n.04_1 console_table.n.01_1) 
+        (ontop scone.n.01_1 tray.n.01_1)
+        (ontop sugar_cookie.n.01_1 tray.n.01_1)
+        (ontop tray.n.01_2 console_table.n.01_3)
         (filled tray.n.01_2 diced__virginia_ham.n.01_1)
         (filled tray.n.01_2 diced__cheddar.n.01_1)
         (filled tray.n.01_2 diced__cucumber.n.01_1)
-        (ontop tray.n.01_2 console_table.n.01_1) 
+        (ontop table_knife.n.01_1 console_table.n.01_4)
+        (ontop table_knife.n.01_2 console_table.n.01_4)
+        (ontop tablefork.n.01_1 console_table.n.01_4)
+        (ontop teaspoon.n.02_1 console_table.n.01_4)
+        (ontop plate.n.04_1 console_table.n.01_4)
+        (ontop place_mat.n.01_1 breakfast_table.n.01_1)
         (inroom breakfast_table.n.01_1 dining_room) 
-        (inroom console_table.n.01_1 dining_room) 
+        (inroom console_table.n.01_1 dining_room)
+        (inroom console_table.n.01_2 dining_room)
+        (inroom console_table.n.01_3 dining_room)
+        (inroom console_table.n.01_4 dining_room)
         (inroom floor.n.01_1 dining_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
