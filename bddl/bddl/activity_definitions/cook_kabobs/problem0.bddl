@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        tupperware.n.01_1 - tupperware.n.01
         kabob.n.01_1 kabob.n.01_2 kabob.n.01_3 kabob.n.01_4 - kabob.n.01
         cooking_oil.n.01_1 - cooking_oil.n.01
         cooking_oil__bottle.n.01_1 - cooking_oil__bottle.n.01
@@ -17,11 +16,10 @@
     )
     
     (:init 
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
-        (inside kabob.n.01_1 tupperware.n.01_1) 
-        (inside kabob.n.01_2 tupperware.n.01_1) 
-        (inside kabob.n.01_3 tupperware.n.01_1) 
-        (inside kabob.n.01_4 tupperware.n.01_1) 
+        (inside kabob.n.01_1 electric_refrigerator.n.01_1)
+        (inside kabob.n.01_2 electric_refrigerator.n.01_1)
+        (inside kabob.n.01_3 electric_refrigerator.n.01_1)
+        (inside kabob.n.01_4 electric_refrigerator.n.01_1)
         (filled cooking_oil__bottle.n.01_1 cooking_oil.n.01_1) 
         (inside cooking_oil__bottle.n.01_1 cabinet.n.01_1)
         (not 
@@ -37,7 +35,7 @@
             (cooked kabob.n.01_4)
         ) 
         (insource coriander__shaker.n.01_1 coriander.n.02_1)
-        (inside coriander__shaker.n.01_1 electric_refrigerator.n.01_1)
+        (inside coriander__shaker.n.01_1 cabinet.n.01_1)
         (inside plate.n.04_1 cabinet.n.01_1)
         (inroom cabinet.n.01_1 kitchen) 
         (inroom grill.n.02_1 kitchen) 

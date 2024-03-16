@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        desk.n.01_1 - desk.n.01
+        bed.n.01_1 - bed.n.01
         floor.n.01_1 - floor.n.01
         short_pants.n.01_1 - short_pants.n.01
         tank_top.n.01_1 tank_top.n.01_2 - tank_top.n.01
@@ -11,10 +11,10 @@
     )
     
     (:init 
-        (ontop short_pants.n.01_1 desk.n.01_1)
-        (ontop tank_top.n.01_1 desk.n.01_1)
-        (ontop tank_top.n.01_2 desk.n.01_1) 
-        (inroom desk.n.01_1 bedroom)
+        (ontop short_pants.n.01_1 bed.n.01_1)
+        (ontop tank_top.n.01_1 bed.n.01_1)
+        (ontop tank_top.n.01_2 bed.n.01_1) 
+        (inroom bed.n.01_1 bedroom)
         (inroom floor.n.01_1 bedroom)
         (inroom cabinet.n.01_1 bedroom)
         (ontop agent.n.01_1 floor.n.01_1)
