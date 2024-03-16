@@ -11,7 +11,7 @@
         pen.n.01_1 pen.n.01_2 - pen.n.01
         computer.n.01_1 - computer.n.01
         backpack.n.01_1 backpack.n.01_2 backpack.n.01_3 backpack.n.01_4 - backpack.n.01
-        packing_box.n.02_1 packing_box.n.02_2 - packing_box.n.02
+        carton.n.02_1 carton.n.02_2 - carton.n.02
         mat.n.03_1 - mat.n.03
         blackboard.n.01_1 - blackboard.n.01
         table.n.02_1 table.n.02_10 table.n.02_2 table.n.02_3 table.n.02_4 table.n.02_5 table.n.02_6 table.n.02_7 table.n.02_8 table.n.02_9 - table.n.02
@@ -26,19 +26,19 @@
         (ontop teddy.n.01_2 floor.n.01_1) 
         (ontop teddy.n.01_3 floor.n.01_1) 
         (ontop teddy.n.01_4 floor.n.01_1) 
-        (inside notebook.n.01_1 packing_box.n.02_2) 
-        (inside notebook.n.01_2 packing_box.n.02_2) 
-        (inside notebook.n.01_3 packing_box.n.02_2) 
-        (inside notebook.n.01_4 packing_box.n.02_2) 
-        (ontop packing_box.n.02_2 floor.n.01_1)
-        (inside pencil.n.01_1 packing_box.n.02_1) 
-        (inside pencil.n.01_2 packing_box.n.02_1) 
-        (inside pencil.n.01_3 packing_box.n.02_1) 
-        (inside pencil.n.01_4 packing_box.n.02_1) 
-        (ontop packing_box.n.02_1 floor.n.01_1)
+        (inside notebook.n.01_1 carton.n.02_2) 
+        (inside notebook.n.01_2 carton.n.02_2) 
+        (inside notebook.n.01_3 carton.n.02_2) 
+        (inside notebook.n.01_4 carton.n.02_2) 
+        (ontop carton.n.02_2 floor.n.01_1)
+        (inside pencil.n.01_1 carton.n.02_1) 
+        (inside pencil.n.01_2 carton.n.02_1) 
+        (inside pencil.n.01_3 carton.n.02_1) 
+        (inside pencil.n.01_4 carton.n.02_1) 
+        (ontop carton.n.02_1 floor.n.01_1)
         (ontop globe.n.03_1 floor.n.01_1) 
-        (inside pen.n.01_1 packing_box.n.02_1) 
-        (inside pen.n.01_2 packing_box.n.02_1) 
+        (inside pen.n.01_1 carton.n.02_1) 
+        (inside pen.n.01_2 carton.n.02_1) 
         (ontop computer.n.01_1 floor.n.01_1) 
         (ontop backpack.n.01_1 floor.n.01_1) 
         (ontop backpack.n.01_2 floor.n.01_1) 

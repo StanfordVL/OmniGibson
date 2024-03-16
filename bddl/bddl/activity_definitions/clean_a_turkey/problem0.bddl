@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        packing_box.n.02_1 - packing_box.n.02
+        carton.n.02_1 - carton.n.02
         mud.n.03_1 - mud.n.03
         turkey.n.04_1 - turkey.n.04
         string.n.01_1 - string.n.01
@@ -16,10 +16,10 @@
     )
     
     (:init 
-        (inside turkey.n.04_1 packing_box.n.02_1) 
+        (inside turkey.n.04_1 carton.n.02_1)
         (covered turkey.n.04_1 mud.n.03_1)
         (ontop string.n.01_1 turkey.n.04_1) 
-        (ontop packing_box.n.02_1 countertop.n.01_1)
+        (ontop carton.n.02_1 countertop.n.01_1)
         (ontop hand_towel.n.01_1 countertop.n.01_1)
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
