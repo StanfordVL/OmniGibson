@@ -7,7 +7,7 @@
         rake.n.03_1 - rake.n.03
         money.n.01_1 - money.n.01
         checkout.n.03_1 - checkout.n.03
-        bag.n.04_1 - bag.n.04
+        backpack.n.01_1 - backpack.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -15,8 +15,8 @@
     (:init 
         (ontop shovel.n.01_1 shelf.n.01_1) 
         (ontop rake.n.03_1 shelf.n.01_1) 
-        (inside money.n.01_1 bag.n.04_1)
-        (ontop bag.n.04_1 floor.n.01_1)
+        (inside money.n.01_1 backpack.n.01_1)
+        (ontop backpack.n.01_1 floor.n.01_1)
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shelf.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 

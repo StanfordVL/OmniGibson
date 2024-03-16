@@ -4,7 +4,7 @@
     (:objects
         rug.n.01_1 - rug.n.01
         floor.n.01_1 - floor.n.01
-        duffel_bag.n.01_1 - duffel_bag.n.01
+        carton.n.02_1 - carton.n.02
         sofa.n.01_1 - sofa.n.01
         laptop.n.01_1 - laptop.n.01
         videodisk.n.01_1 videodisk.n.01_2 - videodisk.n.01
@@ -17,13 +17,14 @@
 
     (:init 
         (ontop rug.n.01_1 floor.n.01_1) 
-        (ontop duffel_bag.n.01_1 sofa.n.01_1) 
-        (inside laptop.n.01_1 duffel_bag.n.01_1) 
-        (inside videodisk.n.01_1 duffel_bag.n.01_1) 
-        (inside videodisk.n.01_2 duffel_bag.n.01_1) 
-        (inside battery.n.02_1 duffel_bag.n.01_1)
-        (inside wire.n.02_1 duffel_bag.n.01_1) 
-        (inside book.n.02_1 duffel_bag.n.01_1) 
+        (open carton.n.02_1) 
+        (ontop carton.n.02_1 sofa.n.01_1) 
+        (inside laptop.n.01_1 carton.n.02_1) 
+        (inside videodisk.n.01_1 carton.n.02_1) 
+        (inside videodisk.n.01_2 carton.n.02_1) 
+        (inside battery.n.02_1 carton.n.02_1)
+        (inside wire.n.02_1 carton.n.02_1) 
+        (inside book.n.02_1 carton.n.02_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom sofa.n.01_1 living_room) 
         (inroom shelf.n.01_1 living_room) 

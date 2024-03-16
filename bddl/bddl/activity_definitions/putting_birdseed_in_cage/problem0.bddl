@@ -14,7 +14,7 @@
     (:init 
         (ontop birdcage.n.01_1 floor.n.01_1) 
         (ontop pot_plant.n.01_1 floor.n.01_1) 
-        (inside bowl.n.01_1 birdcage.n.01_1) 
+        (ontop bowl.n.01_1 floor.n.01_1) 
         (filled bird_feed__bag.n.01_1 bird_feed.n.01_1) 
         (ontop bird_feed__bag.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 living_room) 
