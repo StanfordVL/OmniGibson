@@ -331,6 +331,11 @@ class AttachedTo(RelativeObjectState, BooleanStateMixin, ContactSubscribedStateM
         # such that objects attached to the wall_nails do not collide with the walls.
         CollisionAPI.add_to_collision_group(col_group="attached_objects", prim_path=child.prim_path)
 
+        # Temporary hack to disable gravity for the attached child object if the parent is kinematic_only
+        # Otherwise, the parent metalink will oscillate due to the gravity force of the child.
+        if parent.kinematic_only:
+            child.disable_gravity()
+
         if was_playing:
             og.sim.play()
             og.sim.load_state(state)
