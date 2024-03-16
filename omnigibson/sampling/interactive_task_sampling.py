@@ -458,6 +458,7 @@ class InteractiveSampler:
 
         # Set current activity
         self.initialize_activity_info(activity)
+        self.object_scope["agent.n.01_1"] = self.env.robots[0]
 
     def play(self):
         # Synchronize all scales
