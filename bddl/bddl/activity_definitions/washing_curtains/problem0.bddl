@@ -13,8 +13,8 @@
     )
     
     (:init 
-        (ontop curtain.n.01_1 washer.n.03_1) 
-        (ontop curtain.n.01_2 washer.n.03_1) 
+        (ontop curtain.n.01_1 floor.n.01_1) 
+        (ontop curtain.n.01_2 floor.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 washer.n.03_1) 
         (covered curtain.n.01_1 stain.n.01_1) 
