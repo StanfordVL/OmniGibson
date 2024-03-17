@@ -42,10 +42,12 @@ GOOD_MODELS = {
     "jar": {"kijnrj"},
     "carton": {"causya", "msfzpz", "sxlklf"},
     "hamper": {"drgdfh", "hlgjme", "iofciz", "pdzaca", "ssfvij"},
+    "hanging_plant": set(),
     "hardback": {"esxakn"},
     "notebook": {"hwhisw"},
     "paperback": {"okcflv"},
     "plant_pot": {"ihnfbi", "vhglly", "ygrtaz"},
+    "pot_plant": {"cvthyv", "dbjcic", "cecdwu"},
     "recycling_bin": {"nuoypc"},
     "tray": {"gsxbym", "huwhjg", "txcjux", "uekqey", "yqtlhy"},
 }
@@ -61,10 +63,17 @@ GOOD_BBOXES = {
         "czrssf": [0.242, 0.012, 0.021],
     },
     "clam": {
-        "ihhbfj": [0.039, 0.041, 0.017],
+        "ihhbfj": [0.078, 0.081, 0.034],
     },
     "envelope": {
         "urcigc": [0.004, 0.06535058, 0.10321216],
+    },
+    "mail": {
+        "azunex": [0.19989018, 0.005, 0.12992871],
+        "gvivdi": [0.28932137, 0.005, 0.17610794],
+        "mbbwhn": [0.27069291, 0.005, 0.13114884],
+        "ojkepk": [0.19092424, 0.005, 0.13252979],
+        "qpwlor": [0.22472473, 0.005, 0.18983322],
     },
     "pill_bottle": {
         "csvdbe": [0.078, 0.078, 0.109],
