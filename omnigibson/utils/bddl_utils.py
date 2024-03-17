@@ -105,6 +105,7 @@ BAD_MODELS = {
     "scarf": {"kclcrj"},
     "sock": {"vpafgj"},
     "tank_top": {"fzldgi"},
+    "curtain": {"shbakk"}
 }
 
 DO_NOT_REMESH_CLOTHS = {}

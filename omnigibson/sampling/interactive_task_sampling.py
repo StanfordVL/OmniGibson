@@ -25,7 +25,7 @@ from omnigibson.utils.bddl_utils import *
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.asset_utils import get_all_object_category_models_with_abilities
 from bddl.activity import Conditions, evaluate_state
-from utils import *
+from omnigibson.sampling.utils import *
 import numpy as np
 import random
 from pathlib import Path
@@ -604,73 +604,74 @@ class InteractiveSampler:
         og.sim.stop()
 
 
-############################
+if __name__ == "__main__":
+    ############################
 
-s = InteractiveSampler(scene_model="Rs_int")
+    s = InteractiveSampler(scene_model="Rs_int")
 
 
-####### EXAMPLE USAGE #######
+    ####### EXAMPLE USAGE #######
 
-# Set an activity
-s.set_activity("clean_whiskey_stones")
+    # Set an activity
+    s.set_activity("clean_whiskey_stones")
 
-# Import all sampleable objects for the current activity
-# TODO: Explain how to add to BAD / GOOD MODELS / GOOD BBOXES
-error_msg = s.import_sampleable_objects()
-assert error_msg is None, f"Some objects couldn't be imported: {error_msg}"
+    # Import all sampleable objects for the current activity
+    # TODO: Explain how to add to BAD / GOOD MODELS / GOOD BBOXES
+    error_msg = s.import_sampleable_objects()
+    assert error_msg is None, f"Some objects couldn't be imported: {error_msg}"
 
-# Do NOT call og.sim.stop / og.sim.play(). Call the sampler's version instead
-s.play()
-s.stop()
+    # Do NOT call og.sim.stop / og.sim.play(). Call the sampler's version instead
+    s.play()
+    s.stop()
 
-# Grab object by name, or by its synset instance
-stone = s.get_obj("whiskey_stone_82")
-stone = s.get_task_entity("whiskey_stone.n.01")
+    # Grab object by name, or by its synset instance
+    stone = s.get_obj("whiskey_stone_82")
+    stone = s.get_task_entity("whiskey_stone.n.01")
 
-# Grab system by name
-water = s.get_system("water")
+    # Grab system by name
+    water = s.get_system("water")
 
-# See the current mapping from synset instance to object / system instance
-print(s.object_scope)
+    # See the current mapping from synset instance to object / system instance
+    print(s.object_scope)
 
-# Some objects (such as floor.n.01 are None -- this is because it's not sampled, but is expected to pre-exist in the scene
-# We need to manually select a floor and map it to the instance
-# Because floor.n.01_1 is required to be in the kitchen, I click that floor in the kitchen to find its name
-floor = s.get_obj("floor_ifmioj_0")
-s.set_task_entity("floor.n.01_1", floor)
+    # Some objects (such as floor.n.01 are None -- this is because it's not sampled, but is expected to pre-exist in the scene
+    # We need to manually select a floor and map it to the instance
+    # Because floor.n.01_1 is required to be in the kitchen, I click that floor in the kitchen to find its name
+    floor = s.get_obj("floor_ifmioj_0")
+    s.set_task_entity("floor.n.01_1", floor)
 
-# You can also have the sampler automatically find a valid floor and teleport all sampled objects to that floor's
-# location, offset by a desired amount
-floor = s.pick_floor_and_move_objects_to_valid_room(i=0, x_offset=0, y_offset=0, z_offset=1.5)
+    # You can also have the sampler automatically find a valid floor and teleport all sampled objects to that floor's
+    # location, offset by a desired amount
+    floor = s.pick_floor_and_move_objects_to_valid_room(i=0, x_offset=0, y_offset=0, z_offset=1.5)
 
-# Set the in-room parameter for a given object, and have it infer from another object
-# In this case, whiskey infers it from the floor
-s.apply_in_rooms(source_obj=floor, objs=[stone])
+    # Set the in-room parameter for a given object, and have it infer from another object
+    # In this case, whiskey infers it from the floor
+    s.apply_in_rooms(source_obj=floor, objs=[stone])
 
-# You can always save your current progress -- this will save the current sim state, so sim needs to be playing
-s.save_checkpoint()
+    # You can always save your current progress -- this will save the current sim state, so sim needs to be playing
+    s.save_checkpoint()
 
-# Load your checkpoint at any time
-s.load_checkpoint()
+    # Load your checkpoint at any time
+    s.load_checkpoint()
 
-# Set object states as usual
-whiskey = s.get_system("whiskey")
-stone.states[Covered].set_value(whiskey, True)
+    # Set object states as usual
+    whiskey = s.get_system("whiskey")
+    stone.states[Covered].set_value(whiskey, True)
 
-# At any time you can validate if your current scene configuration if a valid init state
-# If it's valid, it will automatically save the scene task .json and you are done!!
-s.validate()
+    # At any time you can validate if your current scene configuration if a valid init state
+    # If it's valid, it will automatically save the scene task .json and you are done!!
+    s.validate()
 
-# You can clear the scene of all non-vanilla scene objects
-s.clear()
+    # You can clear the scene of all non-vanilla scene objects
+    s.clear()
 
-# You can always import custom objects and overwrite them in the object scope
-# If you don't specify model one will be randomly sampled
-# If you don't specify synset instance it will not be set in the object scope
-s.import_obj("stone", model=None, synset_instance="whiskey_stone.n.01_1")
+    # You can always import custom objects and overwrite them in the object scope
+    # If you don't specify model one will be randomly sampled
+    # If you don't specify synset instance it will not be set in the object scope
+    s.import_obj("stone", model=None, synset_instance="whiskey_stone.n.01_1")
 
-# You can also update the initial state at any time so you can preserve state between stop / play cycles
-s.update_initial_state()
+    # You can also update the initial state at any time so you can preserve state between stop / play cycles
+    s.update_initial_state()
 
 # Synchronize cloth scales (note: this updates initial state!)
 s.synchronize_cloth_scales()
