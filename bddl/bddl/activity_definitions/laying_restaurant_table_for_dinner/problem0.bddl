@@ -67,11 +67,6 @@
                 (folded ?dinner_napkin.n.01)
             )
             (forpairs
-                (?plate.n.04 - plate.n.04)
-                (?chair.n.01 - chair.n.01)
-                (nextto ?plate.n.04 ?chair.n.01)
-            )
-            (forpairs
                 (?wineglass.n.01 - wineglass.n.01)
                 (?plate.n.04 - plate.n.04)
                 (nextto ?wineglass.n.01 ?plate.n.04)
@@ -89,25 +84,12 @@
             (forpairs
                 (?dinner_napkin.n.01 - dinner_napkin.n.01)
                 (?tablefork.n.01 - tablefork.n.01)
-                (nextto ?tablefork.n.01 ?dinner_napkin.n.01)
+                (nextto ?dinner_napkin.n.01 ?tablefork.n.01)
             )
             (forpairs
                 (?tablespoon.n.02 - tablespoon.n.02)
                 (?table_knife.n.01 - table_knife.n.01)
                 (nextto ?tablespoon.n.02 ?table_knife.n.01)
-            )
-            (forpairs
-                (?table_knife.n.01 - table_knife.n.01)
-                (?plate.n.04 - plate.n.04)
-                (and
-                    (nextto ?table_knife.n.01 ?plate.n.04)
-                    (forall 
-                        (?tablefork.n.01 - tablefork.n.01)
-                        (not
-                            (nextto ?tablefork.n.01 ?table_knife.n.01)
-                        )
-                    )
-                )
             )
         )
     )

@@ -50,104 +50,56 @@
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?can__of__cat_food.n.01 - can__of__cat_food.n.01)
-                    (and 
-                        (inside ?can__of__cat_food.n.01 ?shelf.n.01)
-                        (or 
-                            (touching ?can__of__cat_food.n.01 ?can__of__cat_food.n.01_1)
-                            (touching ?can__of__cat_food.n.01 ?can__of__cat_food.n.01_2)
-                        )
-                    )
+                    (inside ?can__of__cat_food.n.01 ?shelf.n.01)
                 )
             )
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?pack__of__bread.n.01 - pack__of__bread.n.01)
-                    (and 
-                        (inside ?pack__of__bread.n.01 ?shelf.n.01)
-                        (or 
-                            (touching ?pack__of__bread.n.01 ?pack__of__bread.n.01_1)
-                            (touching ?pack__of__bread.n.01 ?pack__of__bread.n.01_2)
-                        )
-                    )
+                    (inside ?pack__of__bread.n.01 ?shelf.n.01)
                 )
             )
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?bottle__of__soda.n.01 - bottle__of__soda.n.01)
-                    (and 
-                        (inside ?bottle__of__soda.n.01 ?shelf.n.01)
-                        (or 
-                            (touching ?bottle__of__soda.n.01 ?bottle__of__soda.n.01_1)
-                            (touching ?bottle__of__soda.n.01 ?bottle__of__soda.n.01_2)
-                        )
-                    )
+                    (inside ?bottle__of__soda.n.01 ?shelf.n.01)
                 )
             )
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?bottle__of__cooking_oil.n.01 - bottle__of__cooking_oil.n.01)
-                    (and 
-                        (inside ?bottle__of__cooking_oil.n.01 ?shelf.n.01)
-                        (or 
-                            (touching ?bottle__of__cooking_oil.n.01 ?bottle__of__cooking_oil.n.01_1)
-                            (touching ?bottle__of__cooking_oil.n.01 ?bottle__of__cooking_oil.n.01_2)
-                        )
-                    )
+                    (inside ?bottle__of__cooking_oil.n.01 ?shelf.n.01)
                 )
             )
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?cigarette.n.01 - cigarette.n.01)
-                    (and 
-                        (inside ?cigarette.n.01 ?shelf.n.01)
-                        (or 
-                            (touching ?cigarette.n.01 ?cigarette.n.01_1)
-                            (touching ?cigarette.n.01 ?cigarette.n.01_2)
-                        )
-                    )
+                    (inside ?cigarette.n.01 ?shelf.n.01)
                 )
             )
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?toilet_tissue.n.01 - toilet_tissue.n.01)
-                    (and 
-                        (inside ?toilet_tissue.n.01 ?shelf.n.01)
-                        (or 
-                            (nextto ?toilet_tissue.n.01 ?toilet_tissue.n.01_1)
-                            (nextto ?toilet_tissue.n.01 ?toilet_tissue.n.01_2)
-                        )
-                    )
+                    (inside ?toilet_tissue.n.01 ?shelf.n.01)
                 )
             )
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?water_bottle.n.01 - water_bottle.n.01)
-                    (and 
-                        (inside ?water_bottle.n.01 ?shelf.n.01)
-                        (or 
-                            (touching ?water_bottle.n.01 ?water_bottle.n.01_1)
-                            (touching ?water_bottle.n.01 ?water_bottle.n.01_2)
-                        )
-                    )
+                    (inside ?water_bottle.n.01 ?shelf.n.01)
                 )
             )
             (exists 
                 (?shelf.n.01 - shelf.n.01)
                 (forall
                     (?pack__of__chocolate_bar.n.01 - pack__of__chocolate_bar.n.01)
-                    (and 
-                        (inside ?pack__of__chocolate_bar.n.01 ?shelf.n.01)
-                        (or 
-                            (touching ?pack__of__chocolate_bar.n.01 ?pack__of__chocolate_bar.n.01_1)
-                            (touching ?pack__of__chocolate_bar.n.01 ?pack__of__chocolate_bar.n.01_2)
-                        )
-                    )
+                    (inside ?pack__of__chocolate_bar.n.01 ?shelf.n.01)
                 )
             )
         )
