@@ -580,11 +580,12 @@ class InteractiveSampler:
         for i, obj in enumerate(og.sim.scene.objects[self.n_scene_objects:]):
             if obj.prim_type == PrimType.CLOTH:
                 new_model_info = dict(
-                    name=f"{obj.category}_{self.n_scene_objects + i}",
+                    name=obj.name,
                     category=obj.category,
                     model=obj.model,
                     scale=obj.scale,
                     in_rooms=obj.in_rooms,
+                    prim_type=obj.prim_type,
                 )
                 new_pose = obj.get_position_orientation()
                 models_to_create.append(new_model_info)
@@ -599,8 +600,14 @@ class InteractiveSampler:
             og.sim.import_object(obj)
             obj.set_position_orientation(*pose)
 
+            # Synchronize with object scope
+            for inst_name, old_obj in self.object_scope.items():
+                if old_obj is not None and obj.name == old_obj.name:
+                    self.object_scope[inst_name] = obj
+                    break
+
         og.sim.play()
-        og.sim.update_initial_state()
+        self.update_initial_state()
         og.sim.stop()
 
 
