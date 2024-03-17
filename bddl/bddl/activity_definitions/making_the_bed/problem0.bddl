@@ -3,7 +3,6 @@
 
     (:objects
         pillow.n.01_1 - pillow.n.01
-        hamper.n.02_1 - hamper.n.02
         blanket.n.01_1 - blanket.n.01
         bed.n.01_1 - bed.n.01
         floor.n.01_1 - floor.n.01
@@ -11,10 +10,9 @@
     )
     
     (:init 
-        (inside pillow.n.01_1 hamper.n.02_1) 
-        (inside blanket.n.01_1 hamper.n.02_1) 
-        (ontop hamper.n.02_1 floor.n.01_1) 
-        (inroom bed.n.01_1 bedroom) 
+        (ontop pillow.n.01_1 floor.n.01_1)
+        (ontop blanket.n.01_1 floor.n.01_1)
+        (inroom bed.n.01_1 bedroom)
         (inroom floor.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

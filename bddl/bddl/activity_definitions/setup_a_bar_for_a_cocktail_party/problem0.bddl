@@ -20,7 +20,6 @@
         corkscrew.n.01_1 - corkscrew.n.01
         tray.n.01_1 - tray.n.01
         floor.n.01_1 - floor.n.01
-        shelf.n.01_1 shelf.n.01_2 - shelf.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -45,16 +44,14 @@
         (inside tray.n.01_1 electric_refrigerator.n.01_1)
         (ontop bucket.n.01_1 bar.n.02_1) 
         (ontop corkscrew.n.01_1 bar.n.02_1) 
-        (ontop shot_glass.n.01_1 shelf.n.01_1)
-        (ontop shot_glass.n.01_2 shelf.n.01_1)
-        (ontop wineglass.n.01_1 shelf.n.01_1)
-        (ontop wineglass.n.01_2 shelf.n.01_1)
-        (ontop water_glass.n.02_1 shelf.n.01_2)
-        (ontop water_glass.n.02_2 shelf.n.01_2)
+        (ontop shot_glass.n.01_1 bar.n.02_1)
+        (ontop shot_glass.n.01_2 bar.n.02_1)
+        (ontop wineglass.n.01_1 bar.n.02_1)
+        (ontop wineglass.n.01_2 bar.n.02_1)
+        (ontop water_glass.n.02_1 bar.n.02_1)
+        (ontop water_glass.n.02_2 bar.n.02_1)
         (inroom bar.n.02_1 bar) 
-        (inroom electric_refrigerator.n.01_1 bar) 
-        (inroom shelf.n.01_1 bar) 
-        (inroom shelf.n.01_2 bar) 
+        (inroom electric_refrigerator.n.01_1 bar)
         (inroom floor.n.01_1 bar) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
