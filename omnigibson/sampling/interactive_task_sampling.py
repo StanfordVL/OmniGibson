@@ -572,6 +572,37 @@ class InteractiveSampler:
 
         return target_floor
 
+    def synchronize_cloth_scales(self):
+        assert og.sim.is_stopped()
+
+        models_to_create = []
+        poses_to_create = []
+        for i, obj in enumerate(og.sim.scene.objects[self.n_scene_objects:]):
+            if obj.prim_type == PrimType.CLOTH:
+                new_model_info = dict(
+                    name=f"{obj.category}_{self.n_scene_objects + i}",
+                    category=obj.category,
+                    model=obj.model,
+                    scale=obj.scale,
+                    in_rooms=obj.in_rooms,
+                )
+                new_pose = obj.get_position_orientation()
+                models_to_create.append(new_model_info)
+                poses_to_create.append(new_pose)
+
+                # Delete the original object
+                og.sim.remove_object(obj)
+
+        # Import the new objects
+        for model_info, pose in zip(models_to_create, poses_to_create):
+            obj = DatasetObject(**model_info)
+            og.sim.import_object(obj)
+            obj.set_position_orientation(*pose)
+
+        og.sim.play()
+        og.sim.update_initial_state()
+        og.sim.stop()
+
 
 ############################
 
@@ -640,4 +671,7 @@ s.import_obj("stone", model=None, synset_instance="whiskey_stone.n.01_1")
 
 # You can also update the initial state at any time so you can preserve state between stop / play cycles
 s.update_initial_state()
+
+# Synchronize cloth scales (note: this updates initial state!)
+s.synchronize_cloth_scales()
 
