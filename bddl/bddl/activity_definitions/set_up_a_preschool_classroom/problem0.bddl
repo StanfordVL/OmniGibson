@@ -5,8 +5,8 @@
         blackboard_eraser.n.01_1 - blackboard_eraser.n.01
         floor.n.01_1 - floor.n.01
         teddy.n.01_1 teddy.n.01_2 teddy.n.01_3 teddy.n.01_4 - teddy.n.01
-        notebook.n.01_1 notebook.n.01_2 notebook.n.01_3 notebook.n.01_4 - notebook.n.01
-        pencil.n.01_1 pencil.n.01_2 pencil.n.01_3 pencil.n.01_4 - pencil.n.01
+        notebook.n.01_1 notebook.n.01_2 - notebook.n.01
+        pencil.n.01_1 pencil.n.01_2 - pencil.n.01
         globe.n.03_1 - globe.n.03
         pen.n.01_1 pen.n.01_2 - pen.n.01
         computer.n.01_1 - computer.n.01
@@ -27,14 +27,10 @@
         (ontop teddy.n.01_3 floor.n.01_1) 
         (ontop teddy.n.01_4 floor.n.01_1) 
         (inside notebook.n.01_1 carton.n.02_2) 
-        (inside notebook.n.01_2 carton.n.02_2) 
-        (inside notebook.n.01_3 carton.n.02_2) 
-        (inside notebook.n.01_4 carton.n.02_2) 
+        (inside notebook.n.01_2 carton.n.02_2)
         (ontop carton.n.02_2 floor.n.01_1)
         (inside pencil.n.01_1 carton.n.02_1) 
-        (inside pencil.n.01_2 carton.n.02_1) 
-        (inside pencil.n.01_3 carton.n.02_1) 
-        (inside pencil.n.01_4 carton.n.02_1) 
+        (inside pencil.n.01_2 carton.n.02_1)
         (ontop carton.n.02_1 floor.n.01_1)
         (ontop globe.n.03_1 floor.n.01_1) 
         (inside pen.n.01_1 carton.n.02_1) 

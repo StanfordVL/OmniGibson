@@ -3,9 +3,9 @@
 
     (:objects
         sweater.n.01_1 - sweater.n.01
-        wardrobe.n.01_1 - wardrobe.n.01
+        bed.n.01_1 - bed.n.01
         boot.n.01_1 boot.n.01_2 - boot.n.01
-        floor.n.01_1 - floor.n.01
+        floor.n.01_1 floor.n.01_2 - floor.n.01
         sandal.n.01_1 sandal.n.01_2 - sandal.n.01
         dress.n.01_1 - dress.n.01
         jersey.n.03_1 - jersey.n.03
@@ -14,17 +14,18 @@
     )
     
     (:init 
-        (inroom wardrobe.n.01_1 closet)
-        (inside sweater.n.01_1 wardrobe.n.01_1) 
+        (inroom bed.n.01_1 bedroom)
+        (ontop sweater.n.01_1 bed.n.01_1)
         (ontop boot.n.01_1 floor.n.01_1) 
         (ontop boot.n.01_2 floor.n.01_1) 
         (ontop sandal.n.01_1 floor.n.01_1) 
         (ontop sandal.n.01_2 floor.n.01_1) 
-        (inside dress.n.01_1 wardrobe.n.01_1) 
-        (inside jersey.n.03_1 wardrobe.n.01_1) 
+        (inside dress.n.01_1 bed.n.01_1)
+        (inside jersey.n.03_1 bed.n.01_1)
         (ontop carton.n.02_1 floor.n.01_1) 
         (inroom floor.n.01_1 closet) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_2)
+        (inroom floor.n.01_2 bedroom)
     )
     
     (:goal 

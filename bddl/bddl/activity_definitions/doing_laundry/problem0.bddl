@@ -6,9 +6,9 @@
         floor.n.01_1 - floor.n.01
         detergent.n.02_1 - detergent.n.02
         hamper.n.02_1 - hamper.n.02
-        lingerie.n.01_1 lingerie.n.01_2 - lingerie.n.01
+        lingerie.n.01_1 - lingerie.n.01
         stain.n.01_1 - stain.n.01
-        blouse.n.01_1 blouse.n.01_2 - blouse.n.01
+        blouse.n.01_1 - blouse.n.01
         washer.n.03_1 - washer.n.03
         clothes_dryer.n.01_1 - clothes_dryer.n.01
         water.n.06_1 - water.n.06
@@ -17,18 +17,14 @@
     )
     
     (:init 
-        (ontop detergent__bottle.n.01_1 floor.n.01_1) 
+        (ontop detergent__bottle.n.01_1 floor.n.01_1)
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop hamper.n.02_1 floor.n.01_1) 
         (inside lingerie.n.01_1 hamper.n.02_1) 
-        (inside lingerie.n.01_2 hamper.n.02_1) 
-        (covered lingerie.n.01_1 stain.n.01_1) 
-        (covered lingerie.n.01_2 stain.n.01_1) 
-        (inside blouse.n.01_1 hamper.n.02_1) 
-        (inside blouse.n.01_2 hamper.n.02_1) 
-        (covered blouse.n.01_1 stain.n.01_1) 
-        (covered blouse.n.01_2 stain.n.01_1) 
-        (ontop hanger.n.02_1 floor.n.01_1) 
+        (covered lingerie.n.01_1 stain.n.01_1)
+        (ontop blouse.n.01_1 floor.n.01_1)
+        (covered blouse.n.01_1 stain.n.01_1)
+        (ontop hanger.n.02_1 floor.n.01_1)
         (ontop hanger.n.02_2 floor.n.01_1)
         (inroom washer.n.03_1 utility_room)
         (inroom clothes_dryer.n.01_1 utility_room)
