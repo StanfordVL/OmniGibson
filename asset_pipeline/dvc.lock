@@ -14436,3 +14436,29 @@ stages:
     - path: artifacts/pipeline/object_images.zip
       md5: 35e38254e165668b0090a3e7fd3a0541
       size: 3147580
+  patch_sampled:
+    cmd: b1k_pipeline/patch_sampled.sh og_dataset_demo && b1k_pipeline/patch_sampled.sh
+      og_dataset && touch artifacts/pipeline/patch_sampled.success
+    deps:
+    - path: artifacts/og_dataset.zip
+      md5: e2fd5f695a446a09d7484940778c2b47
+      size: 22011135406
+    - path: artifacts/og_dataset_demo.zip
+      md5: 56fdc2465ec640630408dce6487f59c3
+      size: 178105348
+    - path: b1k_pipeline/patch_sampled.sh
+      md5: e3965fe559e78fc19469756dcd3a6b0d
+      size: 1885
+    - path: sampled_tasks.zip
+      md5: ae0f2bc1578f59151a675c1bbcd2c628
+      size: 296841540
+    outs:
+    - path: artifacts/og_dataset_demo_sampled.tar.gz
+      md5: 5adb04fa6ff38ee7dffc18000a0ccfa4
+      size: 190165449
+    - path: artifacts/og_dataset_sampled.tar.gz
+      md5: f6f00da7882fad9dd0f4a205d74a539d
+      size: 22321609648
+    - path: artifacts/pipeline/patch_sampled.success
+      md5: d41d8cd98f00b204e9800998ecf8427e
+      size: 0

@@ -9,7 +9,9 @@ fi
 
 # Get the pipeline path
 SCRIPTDIR="$(dirname "$0")"
+SCRIPTDIR="$(cd "$SCRIPTDIR" && pwd)"
 PIPELINEDIR="${SCRIPTDIR}/.."
+PIPELINEDIR="$(cd "$PIPELINEDIR" && pwd)"
 
 # Create a temp dir
 TMP_DIR=$(mktemp -d)
@@ -21,7 +23,7 @@ cd $TMP_DIR
 # Unpack the full dataset into the og_dataset directory
 mkdir og_dataset
 cd og_dataset
-unzip -q $PIPELINEDIR/artifacts/$1.zip
+unzip -q $PIPELINEDIR/artifacts/${1}.zip
 echo "Unpacked og_dataset"
 
 # Unpack the sampled tasks over the og_dataset
@@ -42,20 +44,20 @@ fi
 
 # Tar the og dataset using 7za
 cd $TMP_DIR
-7za a $1.tar og_dataset
+7za a ${1}_sampled.tar og_dataset > /dev/null 2>&1
 echo "Tared og_dataset"
-gzip -9 $1.tar
+gzip -9 ${1}_sampled.tar
 echo "Gzipped og_dataset"
 
 # Check that the tar.gz file exists
-if [ ! -f $1.tar.gz ]; then
-    echo "ERROR: $1.tar.gz not found in ${TMP_DIR}"
+if [ ! -f ${1}_sampled.tar.gz ]; then
+    echo "ERROR: ${1}_sampled.tar.gz not found in ${TMP_DIR}"
     exit 1
 fi
 
 # Move the tar.gz file to the artifacts directory
-mv $1.tar.gz $PIPELINEDIR/artifacts/
-echo "Moved $1.tar.gz to $PIPELINEDIR/artifacts/"
+mv ${1}_sampled.tar.gz $PIPELINEDIR/artifacts/
+echo "Moved ${1}_sampled.tar.gz to $PIPELINEDIR/artifacts/"
 
 # Clean up
 rm -rf $TMP_DIR
