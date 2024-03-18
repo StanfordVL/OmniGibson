@@ -392,7 +392,6 @@ stages:
     deps:
     - artifacts/og_dataset.zip
     - artifacts/og_dataset_demo.zip
-    - artifacts/pipeline/pack_dataset.success
     - b1k_pipeline/patch_sampled.sh
     - sampled_tasks.zip
     outs:
