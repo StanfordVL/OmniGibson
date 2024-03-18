@@ -1,6 +1,6 @@
 # Behavior Domain Definition Language 
 
-**Note: You are reading the docs for the 3.1.0 release, which is a backwards-incompatible version of BDDL containing a subset of BEHAVIOR-1K activities released as part of the BEHAVIOR-1K beta release. Please go to the tags menu to see BEHAVIOR-100 code and files.**
+**Note: If you are interested in the BEHAVIOR-100 version of BDDL, please go to the tags menu and navigate to the latest 1.x.x version.**
 
 The Behavior Domain Definition Language (BDDL) is a domain-specific language designed for the Benchmark for Everyday Household Activities in Virtual, Interactive, and ecOlogical enviRonments (BEHAVIOR). 
 
@@ -9,10 +9,10 @@ BDDL is a predicate logic-based language inspired by, but distinct from, the Pla
 ## Installation
 
 ### Recommended: pip
-The easiest way to install BDDL is through pip. To get this BEHAVIOR-1K beta version, run the below command:
+The easiest way to install BDDL is through pip. To get the BEHAVIOR-1K version, run the below command:
 
 ```bash
-pip install --pre -u bddl
+pip install -u bddl
 ```
 
 Otherwise, for the latest BEHAVIOR-100 release, you can run the below command:
