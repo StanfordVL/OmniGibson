@@ -387,3 +387,15 @@ stages:
     - artifacts/pipeline/pack_dataset.json
     - artifacts/pipeline/pack_dataset.success
 
+  patch_sampled:
+    cmd: b1k_pipeline/patch_sampled.sh og_dataset_demo && b1k_pipeline/patch_sampled.sh og_dataset
+    deps:
+    - artifacts/og_dataset.zip
+    - artifacts/og_dataset_demo.zip
+    - artifacts/pipeline/pack_dataset.success
+    - b1k_pipeline/patch_sampled.sh
+    - sampled_tasks.zip
+    outs:
+    - artifacts/og_dataset_sampled.tar.gz
+    - artifacts/og_dataset_demo_sampled.tar.gz
+    - artifacts/pipeline/patch_sampled.success
