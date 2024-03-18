@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710742073472,
+  "lastUpdate": 1710744315079,
   "repoUrl": "https://github.com/StanfordVL/OmniGibson",
   "entries": {
     "Benchmark": [
@@ -14187,6 +14187,138 @@ window.BENCHMARK_DATA = {
           {
             "name": "Empty scene, with 1 Fetch, macro particles",
             "value": 6.774967447916667,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "yinhang0226@gmail.com",
+            "name": "Hang Yin",
+            "username": "hang-yin"
+          },
+          "committer": {
+            "email": "yinhang0226@gmail.com",
+            "name": "Hang Yin",
+            "username": "hang-yin"
+          },
+          "distinct": true,
+          "id": "282adda4c2cdba4bc8d3c1a4b524d3ff94453f3a",
+          "message": "Merge branch 'og-develop' of https://github.com/StanfordVL/OmniGibson into og-develop",
+          "timestamp": "2024-03-17T23:09:36-07:00",
+          "tree_id": "d7512ba8b2c82aaa97e35e9b9dbea169260d21cf",
+          "url": "https://github.com/StanfordVL/OmniGibson/commit/282adda4c2cdba4bc8d3c1a4b524d3ff94453f3a"
+        },
+        "date": 1710744313406,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Empty scene",
+            "value": 21.87556529045105,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 20.698214224939395,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 47.82921075820923,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 0.4841359456380208,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 6.162307014465332,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 5.26953125,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 72.47568583488464,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 10.89039074377302,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 86.15636189778645,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 5.667707920074463,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 6.86641357421875,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 7.85546875,
             "unit": "GB",
             "extra": [
               "Vram usage",
