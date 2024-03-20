@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1710914544461,
+  "lastUpdate": 1710928109318,
   "repoUrl": "https://github.com/StanfordVL/OmniGibson",
   "entries": {
     "Benchmark": [
@@ -15471,6 +15471,462 @@ window.BENCHMARK_DATA = {
           {
             "name": "Empty scene, with 1 Fetch, cloth, fluids, macro particles",
             "value": 8.908697916666666,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "1408354+cgokmen@users.noreply.github.com",
+            "name": "Cem Gökmen",
+            "username": "cgokmen"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "21ca40e441bca240598f04f306617cc3eb69beb8",
+          "message": "Merge pull request #670 from StanfordVL/colab-docker\n\nRemove dev docker image, add colab image & improve example/installation usability",
+          "timestamp": "2024-03-20T01:59:19-07:00",
+          "tree_id": "504f67594cf85eb96e726dae27590a2e3897816d",
+          "url": "https://github.com/StanfordVL/OmniGibson/commit/21ca40e441bca240598f04f306617cc3eb69beb8"
+        },
+        "date": 1710928107459,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "Empty scene",
+            "value": 21.695770502090454,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 21.104460514188965,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 46.91582997639974,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 0.4675181706746419,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 6.151363945007324,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Empty scene",
+            "value": 5.3046875,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 73.82868218421936,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 10.066027619171424,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 92.78120597203572,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 6.562848885854085,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 6.857678438822428,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Rs_int",
+            "value": 7.859375,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          },
+          {
+            "name": "Rs_int, with 1 Fetch",
+            "value": 141.41673278808594,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Rs_int, with 1 Fetch",
+            "value": 6.470506496978012,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Rs_int, with 1 Fetch",
+            "value": 128.40407768885294,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Rs_int, with 1 Fetch",
+            "value": 26.14332914352417,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Rs_int, with 1 Fetch",
+            "value": 7.220517539978028,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Rs_int, with 1 Fetch",
+            "value": 9.2685546875,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          },
+          {
+            "name": "grocery_store_cafe, with 1 Fetch",
+            "value": 123.7099940776825,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "grocery_store_cafe, with 1 Fetch",
+            "value": 7.999008301659378,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "grocery_store_cafe, with 1 Fetch",
+            "value": 103.37528228759766,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "grocery_store_cafe, with 1 Fetch",
+            "value": 21.640214920043945,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "grocery_store_cafe, with 1 Fetch",
+            "value": 7.119133313496907,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "grocery_store_cafe, with 1 Fetch",
+            "value": 7.5107421875,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, fluids",
+            "value": 36.935341596603394,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, fluids",
+            "value": 6.6028235335973795,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, fluids",
+            "value": 132.542245388031,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, fluids",
+            "value": 18.908114433288574,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, fluids",
+            "value": 6.7618114980061845,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, fluids",
+            "value": 8.659225260416667,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth",
+            "value": 44.13533902168274,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth",
+            "value": 4.971926437243815,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth",
+            "value": 179.09833113352457,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth",
+            "value": 22.030951976776123,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth",
+            "value": 6.550148569742839,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth",
+            "value": 8.0751953125,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, macro particles",
+            "value": 29.993298768997192,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, macro particles",
+            "value": 5.1552050201027155,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, macro particles",
+            "value": 136.14244302113852,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, macro particles",
+            "value": 57.83626317977905,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, macro particles",
+            "value": 6.555401598612468,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, macro particles",
+            "value": 6.774420572916667,
+            "unit": "GB",
+            "extra": [
+              "Vram usage",
+              "Vram usage"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth, fluids, macro particles",
+            "value": 48.17864918708801,
+            "unit": "time (ms)",
+            "extra": [
+              "Loading time",
+              "Loading time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth, fluids, macro particles",
+            "value": 2.2996623433138694,
+            "unit": "fps",
+            "extra": [
+              "FPS",
+              "FPS"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth, fluids, macro particles",
+            "value": 323.4021894137065,
+            "unit": "time (ms)",
+            "extra": [
+              "Omni step time",
+              "Omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth, fluids, macro particles",
+            "value": 111.44425789515178,
+            "unit": "time (ms)",
+            "extra": [
+              "Non-omni step time",
+              "Non-omni step time"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth, fluids, macro particles",
+            "value": 6.87855094909668,
+            "unit": "GB",
+            "extra": [
+              "Memory usage",
+              "Memory usage"
+            ]
+          },
+          {
+            "name": "Empty scene, with 1 Fetch, cloth, fluids, macro particles",
+            "value": 8.8796875,
             "unit": "GB",
             "extra": [
               "Vram usage",
