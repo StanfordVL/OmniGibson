@@ -5,6 +5,7 @@ import os
 import omnigibson.lazy as lazy
 
 import numpy as np
+from scipy.spatial.transform import Rotation as R
 import trimesh
 
 import omnigibson as og
@@ -14,6 +15,45 @@ from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.ui_utils import suppress_omni_log
 
 import omnigibson.utils.transform_utils as T
+
+
+PRIM_CACHE = {}
+
+
+def get_prim_at_path(prim_path, fabric=False):
+    """
+    Get the prim at the given prim path
+
+    Args:
+        prim_path (str): The prim path
+        fabric (bool): Whether to get the prim from the fabric stage or the USD stage
+
+    Returns:
+        Usd.Prim: The prim at the given prim path
+    """
+    if prim_path in PRIM_CACHE:
+        prim = PRIM_CACHE[(prim_path, fabric)]
+        if prim.IsValid():
+            return prim
+        else:
+            del PRIM_CACHE[(prim_path, fabric)]
+    prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path, fabric=fabric)
+    PRIM_CACHE[(prim_path, fabric)] = prim
+    return prim
+
+
+def is_prim_path_valid(prim_path, fabric=False):
+    """
+    Check if the prim path is valid
+
+    Args:
+        prim_path (str): The prim path
+        fabric (bool): Whether to check the prim path on the fabric stage or the USD stage
+
+    Returns:
+        bool: Whether the prim path is valid
+    """
+    return get_prim_at_path(prim_path, fabric=fabric).IsValid()
 
 
 def array_to_vtarray(arr, element_type):
@@ -541,6 +581,61 @@ class PoseAPI:
     def mark_valid(cls):
         cls.VALID = True
 
+    # This is pasted verbatim from omni.isaac.core.utils.xforms and edited to use our own get_prim_at_path
+    @classmethod
+    def _get_world_pose_transform_w_scale(cls, prim_path):
+        # This will return a transformation matrix with translation as the last row and scale included
+        if not is_prim_path_valid(prim_path, fabric=False):
+            raise Exception("Prim path is not valid")
+        fabric_prim = get_prim_at_path(prim_path=prim_path, fabric=True)
+        xformable_prim = lazy.usdrt.Rt.Xformable(fabric_prim)
+        if xformable_prim.HasWorldXform():
+            world_pos_attr = xformable_prim.GetWorldPositionAttr()
+            if not world_pos_attr.IsValid():
+                world_pos = lazy.usdrt.Gf.Vec3d(0)
+            else:
+                world_pos = world_pos_attr.Get(lazy.usdrt.Usd.TimeCode.Default())
+            world_orientation_attr = xformable_prim.GetWorldOrientationAttr()
+            if not world_orientation_attr.IsValid():
+                world_orientation = lazy.usdrt.Gf.Quatf(1)
+            else:
+                world_orientation = world_orientation_attr.Get(lazy.usdrt.Usd.TimeCode.Default())
+            world_scale_attr = xformable_prim.GetWorldScaleAttr()
+            if not world_scale_attr.IsValid():
+                world_scale = lazy.usdrt.Gf.Vec3d(1)
+            else:
+                world_scale = world_scale_attr.Get(lazy.usdrt.Usd.TimeCode.Default())
+            scale = lazy.usdrt.Gf.Matrix4d()
+            rot = lazy.usdrt.Gf.Matrix4d()
+            scale.SetScale(lazy.usdrt.Gf.Vec3d(world_scale))
+            rot.SetRotate(lazy.usdrt.Gf.Quatd(world_orientation))
+            result = scale * rot
+            result.SetTranslateOnly(world_pos)
+            return result
+        elif xformable_prim.HasLocalXform():
+            local_transform = xformable_prim.GetLocalMatrixAttr().Get(lazy.usdrt.Usd.TimeCode.Default())
+            parent_prim = lazy.omni.isaac.core.utils.prims.get_prim_parent(
+                get_prim_at_path(prim_path=prim_path, fabric=False)
+            )
+            parent_world_transform = lazy.usdrt.Gf.Matrix4d(1.0)
+            if parent_prim:
+                parent_world_transform = cls._get_world_pose_transform_w_scale(
+                    lazy.omni.isaac.core.utils.prims.get_prim_path(parent_prim)
+                )
+            return local_transform * parent_world_transform
+        else:
+            usd_prim = get_prim_at_path(prim_path=prim_path, fabric=False)
+            local_transform = lazy.usdrt.Gf.Matrix4d(
+                lazy.pxr.UsdGeom.Xformable(usd_prim).GetLocalTransformation(lazy.pxr.Usd.TimeCode.Default())
+            )
+            parent_prim = lazy.omni.isaac.core.utils.prims.get_prim_parent(usd_prim)
+            parent_world_transform = lazy.usdrt.Gf.Matrix4d(1.0)
+            if parent_prim:
+                parent_world_transform = cls._get_world_pose_transform_w_scale(
+                    lazy.omni.isaac.core.utils.prims.get_prim_path(parent_prim)
+                )
+            return local_transform * parent_world_transform
+
     @classmethod
     def _refresh(cls):
         if og.sim is not None and not cls.VALID:
@@ -557,8 +652,11 @@ class PoseAPI:
     @classmethod
     def get_world_pose(cls, prim_path):
         cls._refresh()
-        position, orientation = lazy.omni.isaac.core.utils.xforms.get_world_pose(prim_path)
-        return np.array(position), np.array(orientation)[[1, 2, 3, 0]]
+        result_transform = cls._get_world_pose_transform_w_scale(prim_path)
+        result_transform.Orthonormalize()
+        result_transform = np.transpose(result_transform)
+        r = R.from_matrix(result_transform[:3, :3])
+        return np.array(result_transform[:3, 3]), r.as_quat()
 
     @classmethod
     def get_world_pose_with_scale(cls, prim_path):
@@ -567,7 +665,7 @@ class PoseAPI:
         e.g. when converting points in the prim frame to the world frame.
         """
         cls._refresh()
-        return np.array(lazy.omni.isaac.core.utils.xforms._get_world_pose_transform_w_scale(prim_path)).T
+        return np.array(cls._get_world_pose_transform_w_scale(prim_path)).T
 
 
 def clear():
