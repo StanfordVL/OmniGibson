@@ -4,6 +4,7 @@ Example script for interacting with OmniGibson scenes with VR and BehaviorRobot.
 import omnigibson as og
 from omnigibson.utils.teleop_utils import OVXRSystem
 
+
 def main():
     """
     Spawn a BehaviorRobot in Rs_int and users can navigate around and interact with the scene using VR.

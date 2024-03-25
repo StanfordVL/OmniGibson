@@ -1,21 +1,21 @@
+import builtins
 import logging
 import os
 import shutil
 import signal
 import tempfile
-import builtins
+
+from omnigibson.controllers import REGISTERED_CONTROLLERS
+from omnigibson.envs import Environment
 
 # TODO: Need to fix somehow -- omnigibson gets imported first BEFORE we can actually modify the macros
 from omnigibson.macros import gm
-
-from omnigibson.envs import Environment
-from omnigibson.scenes import REGISTERED_SCENES
 from omnigibson.objects import REGISTERED_OBJECTS
 from omnigibson.robots import REGISTERED_ROBOTS
-from omnigibson.controllers import REGISTERED_CONTROLLERS
-from omnigibson.tasks import REGISTERED_TASKS
+from omnigibson.scenes import REGISTERED_SCENES
 from omnigibson.sensors import ALL_SENSOR_MODALITIES
 from omnigibson.simulator import launch_simulator as launch
+from omnigibson.tasks import REGISTERED_TASKS
 
 # Create logger
 logging.basicConfig(format='[%(levelname)s] [%(name)s] %(message)s')
@@ -27,6 +27,7 @@ builtins.ISAAC_LAUNCHED_FROM_JUPYTER = (
 
 # Always enable nest_asyncio because MaterialPrim calls asyncio.run()
 import nest_asyncio
+
 nest_asyncio.apply()
 
 __version__ = "1.0.0"
