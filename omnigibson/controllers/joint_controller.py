@@ -1,11 +1,15 @@
 import numpy as np
 
-from omnigibson.controllers import IsGraspingState, ControlType, LocomotionController, ManipulationController, \
-    GripperController
-from omnigibson.utils.python_utils import assert_valid_key
 import omnigibson.utils.transform_utils as T
-
+from omnigibson.controllers import (
+    ControlType,
+    GripperController,
+    IsGraspingState,
+    LocomotionController,
+    ManipulationController,
+)
 from omnigibson.macros import create_module_macros
+from omnigibson.utils.python_utils import assert_valid_key
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)

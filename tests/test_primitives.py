@@ -1,10 +1,15 @@
 import numpy as np
 import pytest
+
 import omnigibson as og
-from omnigibson.macros import gm
-from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives, StarterSemanticActionPrimitiveSet
 import omnigibson.utils.transform_utils as T
+from omnigibson.action_primitives.starter_semantic_action_primitives import (
+    StarterSemanticActionPrimitives,
+    StarterSemanticActionPrimitiveSet,
+)
+from omnigibson.macros import gm
 from omnigibson.objects.dataset_object import DatasetObject
+
 
 def execute_controller(ctrl_gen, env):
     for action in ctrl_gen:
