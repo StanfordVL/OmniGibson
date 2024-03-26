@@ -104,7 +104,8 @@ class PlanningContext(object):
     """
     A context manager that sets up a robot copy for collision checking in planning.
     """
-    def __init__(self, robot, robot_copy, robot_copy_type="original"):
+    def __init__(self, env, robot, robot_copy, robot_copy_type="original"):
+        self.env = env
         self.robot = robot
         self.robot_copy = robot_copy
         self.robot_copy_type = robot_copy_type if robot_copy_type in robot_copy.prims.keys() else "original"
@@ -192,7 +193,7 @@ class PlanningContext(object):
         # Disable original robot colliders so copy can't collide with it
         disabled_colliders += [link.prim_path for link in self.robot.links.values()]
         filter_categories = ["floors"]
-        for obj in og.sim.scenes[0].objects:
+        for obj in self.env.scene.objects:
             if obj.category in filter_categories:
                 disabled_colliders += [link.prim_path for link in obj.links.values()]
 
@@ -904,7 +905,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to move arm or None if its at the joint positions
         """
-        with PlanningContext(self.robot, self.robot_copy, "original") as context:
+        with PlanningContext(self.env, self.robot, self.robot_copy, "original") as context:
             plan = plan_arm_motion(
                 robot=self.robot,
                 end_conf=joint_pos,
@@ -939,7 +940,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         eef_ori = T.quat2axisangle(eef_pose[1])
         end_conf = np.append(eef_pos, eef_ori)
 
-        with PlanningContext(self.robot, self.robot_copy, "original") as context:
+        with PlanningContext(self.env, self.robot, self.robot_copy, "original") as context:
             plan = plan_arm_motion_ik(
                 robot=self.robot,
                 end_conf=end_conf,
@@ -1426,7 +1427,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to navigate or None if it is done navigating
         """
-        with PlanningContext(self.robot, self.robot_copy, "simplified") as context:
+        with PlanningContext(self.env, self.robot, self.robot_copy, "simplified") as context:
             plan = plan_base_motion(
                 robot=self.robot,
                 end_conf=pose_2d,
@@ -1606,7 +1607,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 - 3-array: (x,y,z) Position in the world frame
                 - 4-array: (x,y,z,w) Quaternion orientation in the world frame
         """
-        with PlanningContext(self.robot, self.robot_copy, "simplified") as context:
+        with PlanningContext(self.env, self.robot, self.robot_copy, "simplified") as context:
             for _ in range(m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT):
                 if pose_on_obj is None:
                     pos_on_obj = self._sample_position_on_aabb_side(obj)

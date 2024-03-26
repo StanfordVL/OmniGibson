@@ -21,13 +21,12 @@ from omnigibson.utils.python_utils import assert_valid_key, merge_nested_dicts, 
 log = create_module_logger(module_name=__name__)
 
 DIST_BETWEEN_ENVS = 10
-NUM_ENVS_PER_ROW = 5
 
 class Environment(gym.Env, GymObservable, Recreatable):
     """
     Core environment class that handles loading scene, robot(s), and task, following OpenAI Gym interface.
     """
-    def __init__(self, configs, num_env=1):
+    def __init__(self, configs):
         """
         Args:
             configs (str or dict or list of str or dict): config_file path(s) or raw config dictionaries.
@@ -73,11 +72,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._scene_graph_builder = None
         if "scene_graph" in self.config and self.config["scene_graph"] is not None:
             self._scene_graph_builder = SceneGraphBuilder(**self.config["scene_graph"])
-          
-        self.num_env = num_env
-        origin_offset_x = (self.num_env % NUM_ENVS_PER_ROW) * DIST_BETWEEN_ENVS
-        origin_offset_y = int(self.num_env / NUM_ENVS_PER_ROW) * DIST_BETWEEN_ENVS
-        self.origin_offset = [origin_offset_x, origin_offset_y, 0.0]
+
+        self.num_env = len(og.sim.scenes)
+        self.origin_offset = [self.num_env * DIST_BETWEEN_ENVS, 0.0, 0.0]
 
         # Load this environment
         self.load()
@@ -194,24 +191,19 @@ class Environment(gym.Env, GymObservable, Recreatable):
         Load the scene and robot specified in the config file.
         """
         og.sim.stop()
-        assert og.sim.is_stopped(), "Simulator must be stopped before loading scene!"
 
         # Set the simulator settings
         # NOTE: This must be done BEFORE the scene is loaded, or else all vision sensors can't retrieve observations
         og.sim.set_simulation_dt(physics_dt=(1. / self.physics_frequency), rendering_dt=(1. / self.action_frequency))
 
         # Create the scene from our scene config
-        scene = create_class_from_registry_and_config(
+        self._scene = create_class_from_registry_and_config(
             cls_name=self.scene_config["type"],
             cls_registry=REGISTERED_SCENES,
             cfg=self.scene_config,
             cls_type_descriptor="scene",
         )
-        
-        scene.id = "scene_{}".format(str(self.num_env))
-        scene.origin_offset = self.origin_offset
-        self._scene = scene
-        og.sim.import_scene(scene)
+        og.sim.import_scene(self._scene)
 
         # Set the rendering settings
         og.sim.viewer_width = self.render_config["viewer_width"]
