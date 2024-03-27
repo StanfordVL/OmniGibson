@@ -2,6 +2,7 @@ from abc import abstractmethod
 from copy import deepcopy
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.spatial.transform import Rotation as R
 
 from omnigibson.macros import create_module_macros
 from omnigibson.sensors import (
@@ -15,10 +16,12 @@ from omnigibson.objects.usd_object import USDObject
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.objects.controllable_object import ControllableObject
 from omnigibson.utils.gym_utils import GymObservable
-from omnigibson.utils.usd_utils import add_asset_to_stage
+from omnigibson.utils.usd_utils import ControllableObjectViewAPI, add_asset_to_stage
 from omnigibson.utils.python_utils import classproperty, merge_nested_dicts
 from omnigibson.utils.vision_utils import segmentation_to_rgb
 from omnigibson.utils.constants import PrimType
+
+import omnigibson.utils.transform_utils as T
 
 # Global dicts that will contain mappings
 REGISTERED_ROBOTS = dict()
@@ -162,8 +165,25 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # Run super first
         prim = super()._load()
 
-        # Also import dummy object if this robot is not fixed base
-        if self._use_dummy:
+        # Also import dummy object if this robot is not fixed base AND it has a controller that
+        # requires generalized gravity forces. We incur a relatively heavy cost at every step if we
+        # have to move the dummy. So we only do this if we absolutely need to.
+        needs_dummy = False
+        if not self.fixed_base:
+            # TODO: Make this work after controllers get updated post-load.
+            # TODO: Make this work - for now this feature is disabled because we can't check the config
+            # at this time.
+            # Check if we have any operational space controllers or joint controllers with use_impedances on.
+            # for cfg in self._controller_config.values():
+            #     if cfg["controller_type"] == "OperationalSpaceController":
+            #         needs_dummy = True
+            #         break
+            #     if cfg["controller_type"] == "JointController" and cfg.get("use_impedances", False):
+            #         needs_dummy = True
+            #         break
+            pass
+
+        if needs_dummy:
             dummy_path = f"{self._prim_path}_dummy"
             dummy_prim = add_asset_to_stage(asset_path=self._dummy_usd_path, prim_path=dummy_path)
             self._dummy = BaseObject(
@@ -287,7 +307,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # This is done prior to any state getter calls, since setting kinematic state results in physx backend
         # having to re-fetch tensorized state.
         # We do this so we have more optimal runtime performance
-        if self._use_dummy:
+        if self._dummy is not None:
             self._dummy.set_joint_positions(self.get_joint_positions())
             self._dummy.set_joint_velocities(self.get_joint_velocities())
             self._dummy.set_position_orientation(*self.get_position_orientation())
@@ -334,11 +354,21 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             dict: keyword-mapped proprioception observations available for this robot.
                 Can be extended by subclasses
         """
-        joint_positions = self.get_joint_positions(normalized=False)
-        joint_velocities = self.get_joint_velocities(normalized=False)
-        joint_efforts = self.get_joint_efforts(normalized=False)
-        pos, ori = self.get_position(), self.get_rpy()
-        ori_2d = self.get_2d_orientation()
+        joint_positions = ControllableObjectViewAPI.get_joint_positions(self.articulation_root_path)
+        joint_velocities = ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
+        joint_efforts = ControllableObjectViewAPI.get_joint_efforts(self.articulation_root_path)
+        pos, quat = ControllableObjectViewAPI.get_position_orientation(self.articulation_root_path)
+        ori = T.quat2euler(quat)
+
+        # Compute ori2d
+        ori_2d = 0.0
+        fwd = R.from_quat(quat).apply([1, 0, 0])
+        fwd[2] = 0.0
+        if np.linalg.norm(fwd) > 1e-4:
+            fwd /= np.linalg.norm(fwd)
+            ori_2d = np.arctan2(fwd[1], fwd[0])
+
+        # Pack everything together
         return dict(
             joint_qpos=joint_positions,
             joint_qpos_sin=np.sin(joint_positions),
@@ -351,8 +381,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             robot_2d_ori=ori_2d,
             robot_2d_ori_cos=np.cos(ori_2d),
             robot_2d_ori_sin=np.sin(ori_2d),
-            robot_lin_vel=self.get_linear_velocity(),
-            robot_ang_vel=self.get_angular_velocity(),
+            robot_lin_vel=ControllableObjectViewAPI.get_linear_velocity(self.articulation_root_path),
+            robot_ang_vel=ControllableObjectViewAPI.get_angular_velocity(self.articulation_root_path),
         )
 
     def _load_observation_space(self):
@@ -503,9 +533,12 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
 
     def get_generalized_gravity_forces(self, clone=True):
         # Override method based on whether we're using a dummy or not
+        assert (
+            self._dummy is not None or not self.fixed_base
+        ), "Cannot compute generalized gravity forces for fixed base robot without a dummy!"
         return (
             self._dummy.get_generalized_gravity_forces(clone=clone)
-            if self._use_dummy
+            if not self.fixed_base
             else super().get_generalized_gravity_forces(clone=clone)
         )
 
@@ -635,15 +668,6 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             str: file path to the robot urdf file.
         """
         raise NotImplementedError
-
-    @property
-    def _use_dummy(self):
-        """
-        Returns:
-            bool: Whether the robot dummy should be loaded and used for some computations, e.g., gravity compensation
-        """
-        # By default, only load if robot is not fixed base
-        return not self.fixed_base
 
     @classproperty
     def _do_not_register_classes(cls):

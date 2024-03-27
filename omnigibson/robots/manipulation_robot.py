@@ -19,7 +19,7 @@ from omnigibson.robots.robot_base import BaseRobot
 from omnigibson.utils.python_utils import classproperty, assert_valid_key
 from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function
 from omnigibson.utils.constants import JointType, PrimType
-from omnigibson.utils.usd_utils import create_joint
+from omnigibson.utils.usd_utils import ControllableObjectViewAPI, GripperRigidContactAPI, create_joint
 from omnigibson.utils.sampling_utils import raytest_batch
 
 # Create settings for this module
@@ -276,31 +276,51 @@ class ManipulationRobot(BaseRobot):
                     set of unique robot link prim_paths that it is in contact with
         """
         arm = self.default_arm if arm == "default" else arm
-        robot_contact_links = dict()
-        contact_data = set()
-        # Find all objects in contact with all finger joints for this arm
-        con_results = [con for link in self.finger_links[arm] for con in link.contact_list()]
 
         # Get robot contact links
         link_paths = set(self.link_prim_paths)
 
-        for con_res in con_results:
-            # Only add this contact if it's not a robot self-collision
-            other_contact_set = {con_res.body0, con_res.body1} - link_paths
-            if len(other_contact_set) == 1:
-                link_contact, other_contact = (
-                    (con_res.body0, con_res.body1)
-                    if list(other_contact_set)[0] == con_res.body1
-                    else (con_res.body1, con_res.body0)
-                )
-                # Add to contact data
-                contact_data.add(
-                    (other_contact, tuple(con_res.position)) if return_contact_positions else other_contact
-                )
-                # Also add robot contact link info
+        if not return_contact_positions:
+            # If return contact positions is False, we only need to return the contact prim_paths.
+            # For this we can simply use the impulse matrix.
+            impulses = GripperRigidContactAPI.get_all_impulses()
+            interesting_col_paths = [link.prim_path for link in self.finger_links[arm]]
+            interesting_columns = [GripperRigidContactAPI.get_body_col_idx(pp) for pp in interesting_col_paths]
+
+            # Get the interesting-columns from the impulse matrix
+            interesting_impulse_columns = impulses[:, interesting_columns]
+            interesting_row_idxes = np.nonzero(np.any(interesting_impulse_columns > 0, axis=1))[0]
+            interesting_row_paths = [GripperRigidContactAPI.get_row_idx_prim_path(i) for i in interesting_row_idxes]
+
+            # Get the full interesting section of the impulse matrix
+            interesting_impulses = interesting_impulse_columns[interesting_row_idxes]
+
+            # Get all of the (row, col) pairs where the impulse is greater than 0
+            raw_contact_data = {
+                (interesting_row_paths[row], interesting_col_paths[col])
+                for row, col in np.argwhere(interesting_impulses > 0)
+                if interesting_row_paths[row] not in link_paths
+            }
+
+            # Translate that to robot contact data
+            robot_contact_links = {}
+            for con_data in raw_contact_data:
+                other_contact, link_contact = con_data
                 if other_contact not in robot_contact_links:
                     robot_contact_links[other_contact] = set()
                 robot_contact_links[other_contact].add(link_contact)
+
+            return {other for other, _ in raw_contact_data}, robot_contact_links
+
+        # Otherwise, we rely on the simpler, but more costly, get_contact_data API.
+        contacts = GripperRigidContactAPI.get_contact_data_from_columns(link_paths)
+        contact_data = {(contact[0], contact[3]) for contact in contacts}
+        robot_contact_links = {}
+        for con_data in contacts:
+            other_contact, link_contact = con_data[:2]
+            if other_contact not in robot_contact_links:
+                robot_contact_links[other_contact] = set()
+            robot_contact_links[other_contact].add(link_contact)
 
         return contact_data, robot_contact_links
 
@@ -325,7 +345,7 @@ class ManipulationRobot(BaseRobot):
                 new_obj_pose = new_eef_pose @ inv_original_eef_pose @ original_obj_pose
                 self._ag_obj_in_hand[arm].set_position_orientation(*T.mat2pose(hmat=new_obj_pose))
 
-    def deploy_control(self, control, control_type, indices=None, normalized=False):
+    def deploy_control(self, control, control_type):
         # We intercept the gripper control and replace it with the current joint position if we're freezing our gripper
         for arm in self.arm_names:
             if self._ag_freeze_gripper[arm]:
@@ -335,7 +355,7 @@ class ManipulationRobot(BaseRobot):
                     else 0.0
                 )
 
-        super().deploy_control(control=control, control_type=control_type, indices=indices, normalized=normalized)
+        super().deploy_control(control=control, control_type=control_type)
 
         # Then run assisted grasping
         if self.grasping_mode != "physical" and not self._disable_grasp_handling:
@@ -382,6 +402,7 @@ class ManipulationRobot(BaseRobot):
         # In addition to super method, add in EEF states
         fcns = super().get_control_dict()
 
+        # TODO: Implement these also with the view.
         for arm in self.arm_names:
             self._add_arm_control_dict(fcns=fcns, arm=arm)
 
@@ -396,25 +417,35 @@ class ManipulationRobot(BaseRobot):
             fcns (CachedFunctions): Keyword-mapped control values for this object, mapping names to n-arrays.
             arm (str): specific arm to generate necessary control dict entries for
         """
-        fcns[f"_eef_{arm}_pos_quat_relative"] = lambda: self.get_relative_eef_pose(arm)
+        fcns[f"_eef_{arm}_pos_quat_relative"] = (
+            lambda: ControllableObjectViewAPI.get_link_relative_position_orientation(
+                self.articulation_root_path, self.eef_link_names[arm]
+            )
+        )
         fcns[f"eef_{arm}_pos_relative"] = lambda: fcns[f"_eef_{arm}_pos_quat_relative"][0]
         fcns[f"eef_{arm}_quat_relative"] = lambda: fcns[f"_eef_{arm}_pos_quat_relative"][1]
-        fcns[f"eef_{arm}_lin_vel_relative"] = lambda: self.get_relative_eef_lin_vel(arm)
-        fcns[f"eef_{arm}_ang_vel_relative"] = lambda: self.get_relative_eef_ang_vel(arm)
+        fcns[f"eef_{arm}_lin_vel_relative"] = lambda: ControllableObjectViewAPI.get_link_relative_linear_velocity(
+            self.articulation_root_path, self.eef_link_names[arm]
+        )
+        fcns[f"eef_{arm}_ang_vel_relative"] = lambda: ControllableObjectViewAPI.get_link_relative_angular_velocity(
+            self.articulation_root_path, self.eef_link_names[arm]
+        )
+        # TODO: This is currently disabled because it is NOT implemented with ControllableObjectViewAPI. Fix that.
         # -n_joints because there may be an additional 6 entries at the beginning of the array, if this robot does
         # not have a fixed base (i.e.: the 6DOF --> "floating" joint)
         # see self.get_relative_jacobian() for more info
-        eef_link_idx = self._articulation_view.get_body_index(self.eef_links[arm].body_name)
-        fcns[f"eef_{arm}_jacobian_relative"] = lambda: self.get_relative_jacobian(clone=False)[
-            eef_link_idx, :, -self.n_joints :
-        ]
+        # eef_link_idx = self._articulation_view.get_body_index(self.eef_links[arm].body_name)
+        # TODO: Replace this with a ControllableObjectViewAPI call too.
+        # fcns[f"eef_{arm}_jacobian_relative"] = lambda: self.get_relative_jacobian(clone=False)[
+        #     eef_link_idx, :, -self.n_joints :
+        # ]
 
     def _get_proprioception_dict(self):
         dic = super()._get_proprioception_dict()
 
         # Loop over all arms to grab proprio info
-        joint_positions = self.get_joint_positions(normalized=False)
-        joint_velocities = self.get_joint_velocities(normalized=False)
+        joint_positions = ControllableObjectViewAPI.get_joint_positions(self.articulation_root_path)
+        joint_velocities = ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
         for arm in self.arm_names:
             # Add arm info
             dic["arm_{}_qpos".format(arm)] = joint_positions[self.arm_control_idx[arm]]
@@ -423,10 +454,12 @@ class ManipulationRobot(BaseRobot):
             dic["arm_{}_qvel".format(arm)] = joint_velocities[self.arm_control_idx[arm]]
 
             # Add eef and grasping info
-            dic["eef_{}_pos_global".format(arm)] = self.get_eef_position(arm)
-            dic["eef_{}_quat_global".format(arm)] = self.get_eef_orientation(arm)
-            dic["eef_{}_pos".format(arm)] = self.get_relative_eef_position(arm)
-            dic["eef_{}_quat".format(arm)] = self.get_relative_eef_orientation(arm)
+            # TODO: Should we include this? Seems hacky.
+            # dic["eef_{}_pos_global".format(arm)] = self.get_eef_position(arm)
+            # dic["eef_{}_quat_global".format(arm)] = self.get_eef_orientation(arm)
+            dic["eef_{}_pos".format(arm)], dic["eef_{}_quat".format(arm)] = (
+                ControllableObjectViewAPI.get_link_relative_position_orientation(self.eef_link_names[arm])
+            )
             dic["grasp_{}".format(arm)] = np.array([self.is_grasping(arm)])
             dic["gripper_{}_qpos".format(arm)] = joint_positions[self.gripper_control_idx[arm]]
             dic["gripper_{}_qvel".format(arm)] = joint_velocities[self.gripper_control_idx[arm]]
