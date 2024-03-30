@@ -349,12 +349,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         robot_copy = RobotCopy()
 
         robots_to_copy = {"original": {"robot": self.robot, "copy_path": "/World/robot_copy"}}
-        if hasattr(self.robot, "simplified_mesh_usd_path"):
-            simplified_robot = {
-                "robot": USDObject("simplified_copy", self.robot.simplified_mesh_usd_path),
-                "copy_path": "/World/simplified_robot_copy",
-            }
-            robots_to_copy["simplified"] = simplified_robot
+        # if hasattr(self.robot, "simplified_mesh_usd_path"):
+        #     simplified_robot = {
+        #         "robot": USDObject("simplified_copy", self.robot.simplified_mesh_usd_path),
+        #         "copy_path": "/World/simplified_robot_copy",
+        #     }
+        #     robots_to_copy["simplified"] = simplified_robot
 
         for robot_type, rc in robots_to_copy.items():
             copy_robot = None
