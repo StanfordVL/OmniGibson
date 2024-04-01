@@ -9,7 +9,7 @@ import json
 from PIL import Image
 
 
-REALTIME_FPS = 10
+REALTIME_FPS = 30
 
 
 def get_profile_data():
