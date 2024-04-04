@@ -27,7 +27,6 @@ import multiprocessing
 import csv
 import nltk
 from pathlib import Path
-# from b1k_pipeline.utils import PIPELINE_ROOT
 nltk.download('wordnet')
 nltk.download('omw-1.4')
 from nltk.corpus import wordnet as wn
@@ -35,7 +34,6 @@ from nltk.corpus import wordnet as wn
 
 gm.ENABLE_FLATCACHE = False
 
-TOTAL_IDS = 5
 CAMERA_X = 0.0
 CAMERA_Y = 0.0
 CAMERA_OBJECT_DISTANCE = 1.0
@@ -43,9 +41,11 @@ FIXED_X_SPACING = 0.5
 
 
 class BatchQAViewer:
-    def __init__(self, record_path, your_id, pipeline_root):
+    def __init__(self, record_path, your_id, total_ids, seed, pipeline_root):
         self.record_path = record_path
         self.your_id = your_id
+        self.total_ids = total_ids
+        self.seed = seed
         self.processed_objs = self.load_processed_objects()
         self.all_objs = self.get_all_objects()
         self.filtered_objs = self.filter_objects()
@@ -75,7 +75,7 @@ class BatchQAViewer:
     def filter_objects(self):
         return {
             (cat, model) for cat, model in self.all_objs 
-            if int(hashlib.md5((cat + "round_one").encode()).hexdigest(), 16) % TOTAL_IDS == self.your_id
+            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
         }
 
     def get_remaining_objects(self):
@@ -363,7 +363,7 @@ class BatchQAViewer:
         return human_prim, phone
     
     def run(self):
-        if self.your_id < 0 or self.your_id >= TOTAL_IDS:
+        if self.your_id < 0 or self.your_id >= self.total_ids:
             print("Invalid id!")
             sys.exit(1)
 
@@ -625,8 +625,11 @@ class ObjectComplaintHandler:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process some integers.")
     parser.add_argument('--record_path', type=str, required=True, help='The path to save recorded orientations and scales.')
-    parser.add_argument('--id', type=int, required=True, help=f'Your assigned id (0-{TOTAL_IDS-1}).')
+    parser.add_argument('--id', type=int, required=True, help=f'Your assigned id in range (0, total_ids-1).')
+    parser.add_argument('--total_ids', type=int, required=True, help=f'Total number of IDs.')
+    parser.add_argument('--seed', type=str, required=True, help=f'The shuffling seed.')
     args = parser.parse_args()
 
-    viewer = BatchQAViewer(args.record_path, args.id, pipeline_root="/scr/ig_pipeline")
+    from b1k_pipeline.utils import PIPELINE_ROOT
+    viewer = BatchQAViewer(args.record_path, args.id, args.total_ids, args.seed, pipeline_root=str(PIPELINE_ROOT))
     viewer.run()
