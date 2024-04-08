@@ -7,6 +7,7 @@ import os
 import sys
 import json
 import argparse
+import time
 import numpy as np
 from omnigibson.prims.xform_prim import XFormPrim
 from scipy.spatial.transform import Rotation as R
@@ -47,8 +48,14 @@ class BatchQAViewer:
         self.total_ids = total_ids
         self.seed = seed
         self.processed_objs = self.load_processed_objects()
-        self.all_objs = self.get_all_objects()
-        self.filtered_objs = self.filter_objects()
+        self.all_objs = {
+            (cat, model) for cat in get_all_object_categories()
+            for model in get_all_object_category_models(cat)
+        }
+        self.filtered_objs = {
+            (cat, model) for cat, model in self.all_objs 
+            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
+        }
         self.remaining_objs = self.get_remaining_objects()
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
 
@@ -66,18 +73,6 @@ class BatchQAViewer:
                         processed_objs.add(file[:-5])
         return processed_objs
 
-    def get_all_objects(self):
-        return {
-            (cat, model) for cat in get_all_object_categories()
-            for model in get_all_object_category_models(cat)
-        }
-
-    def filter_objects(self):
-        return {
-            (cat, model) for cat, model in self.all_objs 
-            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
-        }
-
     def get_remaining_objects(self):
         return {(cat, model) for cat, model in self.filtered_objs if model not in self.processed_objs}
     
@@ -94,7 +89,7 @@ class BatchQAViewer:
         all_objects_x_coordinates = []
 
         for index, obj_model in enumerate(batch):
-            x_coordinate = CAMERA_X if index == 0 else all_objects_x_coordinates[-1] + np.linalg.norm(all_objects[-1].aabb_extent[:2])/2.0 + fixed_x_spacing
+            x_coordinate = 0 if index == 0 else all_objects_x_coordinates[-1] + np.linalg.norm(all_objects[-1].aabb_extent[:2])/2.0 + fixed_x_spacing
 
             obj = DatasetObject(
                 name=obj_model,
@@ -115,18 +110,27 @@ class BatchQAViewer:
 
         return all_objects
 
-    def save_object_config(self, all_objects, record_path, category, skip):
-        if not skip:
-            for obj in all_objects:
-                orientation = obj.get_orientation()
-                scale = obj.scale
-                if not os.path.exists(os.path.join(record_path, category)):
-                    os.makedirs(os.path.join(record_path, category))
-                with open(os.path.join(record_path, category, obj.model + ".json"), "w") as f:
-                    json.dump([orientation.tolist(), scale.tolist()], f)
+    def save_object_results(self, obj, complaints):
+        orientation = obj.get_orientation()
+        scale = obj.scale
+        if not os.path.exists(os.path.join(self.record_path, obj.category)):
+            os.makedirs(os.path.join(self.record_path, obj.category))
+        with open(os.path.join(self.record_path, obj.category, obj.model + ".json"), "w") as f:
+            json.dump({
+                "orientation": orientation.tolist(),
+                "scale": scale.tolist(),
+                "complaints": complaints,
+            }, f)
 
     def evaluate_batch(self, batch, category, human_ref, phone_ref):
-        done, skip = False, False
+        pan, tilt, dist = 0., 0., 1.
+        def update_camera(d_pan, d_tilt, d_dist):
+            nonlocal pan, tilt, dist
+            pan = (pan + d_pan) % (2 * np.pi)
+            tilt = np.clip(tilt + d_tilt, -np.pi / 2, np.pi / 2)
+            dist = np.clip(dist + d_dist, 0, 100)
+
+        done = False
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
 
@@ -134,12 +138,6 @@ class BatchQAViewer:
             nonlocal done
             done = True
 
-        def set_skip():
-            nonlocal skip
-            skip = True
-            nonlocal done
-            done = True
-        
         def toggle_gravity():
             obj = get_selected_object()
             obj.visual_only = not obj.visual_only
@@ -215,6 +213,32 @@ class BatchQAViewer:
         
         all_objects = self.position_objects(category, batch, FIXED_X_SPACING)
 
+        # Camera controls
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.UP,
+            callback_fn=lambda: update_camera(0, np.pi/6, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.DOWN,
+            callback_fn=lambda: update_camera(0, -np.pi/6, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.LEFT,
+            callback_fn=lambda: update_camera(-np.pi/6, 0, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.RIGHT,
+            callback_fn=lambda: update_camera(np.pi/6, 0, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
+            callback_fn=lambda: update_camera(0, 0, 0.1),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
+            callback_fn=lambda: update_camera(0, 0, -0.1),
+        )
+
 
         """
         KeyboardEventHandler.add_keyboard_callback(
@@ -256,7 +280,6 @@ class BatchQAViewer:
         print("Press 'C' to continue to complaint process.")
         print("-"*80)
         
-        multiprocess_queue = multiprocessing.Queue()
         inspected_object = all_objects[0]
         
         # When current ref obj is None, this is the first object in this category
@@ -290,6 +313,7 @@ class BatchQAViewer:
             self.current_ref_obj.scale = self.current_ref_obj_pose[1]
             
         
+        # Prompt the user to fix the scale and orientation of the object. Keep the camera in position, too.
         step = 0               
         while not done:
             step += 1
@@ -300,31 +324,34 @@ class BatchQAViewer:
         
         # Now we're done with bbox and scale and orientation. Start complaint process
         # Launch the complaint thread
+        multiprocess_queue = multiprocessing.Queue()
         questions = self.complaint_handler.get_questions(inspected_object)
         complaint_process = multiprocessing.Process(
             target=self.complaint_handler.process_complaints,
             args=[multiprocess_queue, inspected_object.category, inspected_object.name, questions, sys.stdin.fileno()],
             daemon=True)
         complaint_process.start()
-        
-        done = False
-        
-        while not done:
+
+        # Wait to receive the complaints
+        complaints = None
+        while complaints is None:
             og.sim.step()
     
             if not multiprocess_queue.empty():
                 message = multiprocess_queue.get()
-                if message == "done":
-                    set_done()
-                else:
-                    print(message)
+                complaints = json.loads(message)
         
+        # Wait for the complaint process to finish to not have to kill it
+        time.sleep(0.5)
+
+        # If the complaint process is still alive, kill it.
         if complaint_process.is_alive():
             # Join the finished thread
             complaint_process.join()
             assert complaint_process.exitcode == 0, "Complaint process exited."
 
-        self.save_object_config(all_objects, self.record_path, category, skip)
+        # Save the object results
+        self.save_object_results(obj, complaints)
 
         if self.first_obj_flag:
             self.current_ref_obj_pose = [inspected_object.get_position_orientation(), inspected_object.scale]
@@ -345,6 +372,7 @@ class BatchQAViewer:
         human_prim = XFormPrim(human_prim_path, "human")
         human_prim.set_position_orientation(position=[CAMERA_X+0.1, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 20.0])
         human_prim.scale = [0.012, 0.012, 0.012]
+        
         print("Human aabb extent: " + str(human_prim.aabb_extent))
         
         # Add a cellphone into the scene
@@ -464,49 +492,26 @@ class ObjectComplaintHandler:
         print("-"*80)
 
         for message in messages:
-            self._process_single_complaint(message, category, model)
+            complaint = self._process_single_complaint(message, category, model)
+            if complaint:
+                existing_complaints.append(complaint)
             print("-"*80)
         
-        self._backpropogate_processed_complaints(category, model, existing_complaints)
-        queue.put("done")
-    
-    def _backpropogate_processed_complaints(self, category, model, existing_complaints):
-        obj_key = f"{category}-{model}"
-        target_name = self.inventory_dict[obj_key]
-        complaints_file = self.pipeline_root / "cad" / target_name / "complaints.json"
-        complaints = self._load_complaints(complaints_file)
-        for complaint in complaints:
-            message = complaint["message"]
-            complaint_text = complaint["complaint"]
-            key = message + complaint_text
-            if complaint["object"] != obj_key: continue
-            if "meta link" in message.lower(): continue
-            if key in existing_complaints:
-                complaint["processed"] = True
-        self._save_complaints(complaints, complaints_file)
+        queue.put(json.dumps(existing_complaints))
 
     def _process_single_complaint(self, message, category, model):
         print(message)
-        while True:
-            response = input("Enter a complaint (or hit enter if all's good): ")
-            if response:
-                self._record_complaint(category, model, message, response)
-            break
-
-    def _record_complaint(self, category, model, message, response):
-        obj_key = f"{category}-{model}"
-        target_name = self.inventory_dict[obj_key]
-        complaints_file = self.pipeline_root / "cad" / target_name / "complaints.json"
-        complaints = self._load_complaints(complaints_file)
-        complaint = {
-            "object": obj_key,
-            "message": message,
-            "complaint": response,
-            "processed": False,
-            "new": True,
-        }
-        complaints.append(complaint)
-        self._save_complaints(complaints, complaints_file)
+        response = input("Enter a complaint (or hit enter if all's good): ")
+        if response:
+            return {
+                "object": f"{category}-{model}",
+                "message": message,
+                "complaint": response,
+                "processed": False,
+                "new": True,
+            }
+        
+        return None
 
     def _load_complaints(self, filepath):
         if os.path.exists(filepath):
@@ -521,7 +526,6 @@ class ObjectComplaintHandler:
     def get_questions(self, obj):
         messages = [
             self._user_complained_synset(obj),
-            self._user_complained_bbox(obj),
             self._user_complained_appearance(obj),
             self._user_complained_collision(obj),
             self._user_complained_articulation(obj),
@@ -551,6 +555,7 @@ class ObjectComplaintHandler:
 
     def _user_complained_synset(self, obj):
         synset, definition = self._get_synset_and_definition(obj.category)
+        # TODO: Explain the containers better.
         message = (
             "Confirm object synset assignment.\n"
             f"Object assigned to category: {obj.category}\n"
@@ -561,17 +566,6 @@ class ObjectComplaintHandler:
             "and not orange_juice.n.01)\n"
             "If the object category is wrong, please add this object to the Object Rename tab.\n"
             "If the object synset is empty or wrong, please modify the Object Category Mapping tab."
-        )
-        return message
-
-    def _user_complained_bbox(self, obj):
-        original_bounding_box = obj.aabb_extent / obj.scale
-        message = (
-            "Confirm reasonable bounding box size (in meters):\n"
-            f"{', '.join([str(item) for item in original_bounding_box])}\n"
-            "Make sure these sizes are within the same order of magnitude you expect from this object in real life.\n"
-            "Press Enter if the size is good. Otherwise, enter the scaling factor you want to apply to the object.\n"
-            "2 means the object should be scaled 2x larger and 0.5 means the object should be shrunk to half."
         )
         return message
 
