@@ -364,10 +364,15 @@ class VisionSensor(BaseSensor):
 
         # Preprocess id_to_labels and update instance registry
         replicator_mapping = {}
+        micro_physical_particle_keys = set()
         for key, value in id_to_labels.items():
             key = int(key)
             if value in ["BACKGROUND", "UNLABELLED"]:
                 value = value.lower()
+            elif "Instancer" in value:
+                # We will handle MicroPhysicalParticleSystem later
+                micro_physical_particle_keys.add(key)
+                continue
             else:
                 assert "/" in value, f"Instance segmentation (ID) label {value} is not a valid prim path!"
                 prim_name = value.split("/")[-1]
@@ -388,7 +393,7 @@ class VisionSensor(BaseSensor):
                         else:
                             obj = og.sim.scene.object_registry("prim_path", value)
                             # Remap instance segmentation labels from prim path to object name
-                            assert obj is not None, f"Object with prim path {value} cannot be found in objct registry!"
+                            assert obj is not None, f"Object with prim path {value} cannot be found in object registry!"
                             value = obj.name
 
                     # Keep the instance segmentation ID labels intact (prim paths of visual meshes)
@@ -399,11 +404,11 @@ class VisionSensor(BaseSensor):
             replicator_mapping[key] = value
 
         # Handle the cases for MicroPhysicalParticleSystem (FluidSystem, GranularSystem).
-        # They show up in the image, but not in the info (id_to_labels).
+        # They show up in the image, but may not in the info (id_to_labels).
         # We identify these values, find the corresponding semantic label (system name), and add the mapping.
         image_keys, key_indices = np.unique(img, return_index=True)
         for key, img_idx in zip(image_keys, key_indices):
-            if str(key) not in id_to_labels:
+            if key in micro_physical_particle_keys or str(key) not in id_to_labels:
                 semantic_label = semantic_img.flatten()[img_idx]
                 assert (
                     semantic_label in semantic_labels
