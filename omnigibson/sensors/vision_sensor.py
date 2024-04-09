@@ -257,8 +257,6 @@ class VisionSensor(BaseSensor):
 
         # Initialize sensors
         self.initialize_sensors(names=self._modalities)
-        for _ in range(3):
-            render()
 
     def initialize_sensors(self, names):
         """Initializes a raw sensor in the simulation.
@@ -270,6 +268,8 @@ class VisionSensor(BaseSensor):
         names = {names} if isinstance(names, str) else set(names)
         for name in names:
             self._add_modality_to_backend(modality=name)
+        for _ in range(3):
+            render()
 
     def _get_obs(self):
         # Make sure we're initialized
