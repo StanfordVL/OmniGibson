@@ -35,10 +35,8 @@ from nltk.corpus import wordnet as wn
 
 gm.ENABLE_FLATCACHE = False
 
-CAMERA_X = 0.0
-CAMERA_Y = 0.0
-CAMERA_OBJECT_DISTANCE = 1.0
-FIXED_X_SPACING = 0.5
+ANGLE_INCREMENT = np.pi / 90
+FIXED_Y_SPACING = 0.1
 
 
 class BatchQAViewer:
@@ -64,6 +62,9 @@ class BatchQAViewer:
         self.current_ref_obj_pose = None
         self.first_obj_flag = False
 
+        self.human = None
+        self.phone = None
+
     def load_processed_objects(self):
         processed_objs = set()
         if os.path.exists(self.record_path):
@@ -84,29 +85,30 @@ class BatchQAViewer:
             grouped_objs[cat].append(model)
         return grouped_objs
 
-    def position_objects(self, category, batch, fixed_x_spacing):
+    def position_objects(self, category, batch):
         all_objects = []
-        all_objects_x_coordinates = []
+        all_objects_y_coordinates = []
 
         for index, obj_model in enumerate(batch):
-            x_coordinate = 0 if index == 0 else all_objects_x_coordinates[-1] + np.linalg.norm(all_objects[-1].aabb_extent[:2])/2.0 + fixed_x_spacing
-
             obj = DatasetObject(
                 name=obj_model,
                 category=category,
                 model=obj_model,
                 visual_only=True,
             )
-            all_objects.append(obj)
             og.sim.import_object(obj)
-            obj.set_position_orientation(position=[x_coordinate, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 10])
-            og.sim.step()
-            og.sim.step()
-            og.sim.step()
-            offset = obj.get_position()[2] - obj.aabb_center[2]
-            z_coordinate = obj.aabb_extent[2]/2 + offset + 0.05
-            obj.set_position_orientation(position=[x_coordinate, CAMERA_Y+CAMERA_OBJECT_DISTANCE, z_coordinate])
-            all_objects_x_coordinates.append(x_coordinate+np.linalg.norm(obj.aabb_extent[:2])/2.0)
+            obj_radius = np.linalg.norm(obj.aabb_extent[:2]) / 2.0
+            y_coordinate = 0 if index == 0 else all_objects_y_coordinates[-1] + np.linalg.norm(all_objects[-1].aabb_extent[:2]) / 2.0 + FIXED_Y_SPACING + obj_radius
+            obj_in_min = obj.get_position() - obj.aabb[0]
+
+            obj.set_position_orientation(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05], orientation=[0, 0, 0, 1])
+
+            all_objects.append(obj)
+            all_objects_y_coordinates.append(y_coordinate)
+
+        og.sim.step()
+        og.sim.step()
+        og.sim.step()
 
         return all_objects
 
@@ -122,18 +124,91 @@ class BatchQAViewer:
                 "complaints": complaints,
             }, f)
 
-    def evaluate_batch(self, batch, category, human_ref, phone_ref):
-        pan, tilt, dist = 0., 0., 1.
+    @staticmethod
+    def update_camera(target, pan, tilt, dist):
+        # Get the camera position by starting at the target point and moving back by the distance
+        # along the negative pan / tilt direction
+        camera_pos = target - dist * np.array([
+            np.cos(pan) * np.cos(tilt),
+            np.sin(pan) * np.cos(tilt),
+            -np.sin(tilt),
+        ])
+        # Camera matrix: note that this is the OpenGL frame, so the camera is looking down the negative z-axis
+        # and the up vector is the positive y-axis.
+        camera_matrix = np.array([
+            [0, 0, -1],
+            [-1, 0, 0],
+            [0, 1, 0],
+        ])
+        camera_orn = (R.from_euler("xyz", [0.0, tilt, pan]) * R.from_matrix(camera_matrix)).as_quat()
+        og.sim.viewer_camera.set_position_orientation(camera_pos, camera_orn)
+        # print(f"Camera position: {camera_pos}, target: {target}, pan: {pan}, tilt: {tilt}, dist: {dist}")
+
+    def evaluate_batch(self, batch, category):
+        all_objects = self.position_objects(category, batch)
+        self.position_reference_objects(target_y=0.)
+
+        # Camera controls
+        pan, tilt, dist = np.pi, 0., 3.
         def update_camera(d_pan, d_tilt, d_dist):
             nonlocal pan, tilt, dist
             pan = (pan + d_pan) % (2 * np.pi)
             tilt = np.clip(tilt + d_tilt, -np.pi / 2, np.pi / 2)
             dist = np.clip(dist + d_dist, 0, 100)
 
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.DOWN,
+            callback_fn=lambda: update_camera(0, ANGLE_INCREMENT, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.UP,
+            callback_fn=lambda: update_camera(0, -ANGLE_INCREMENT, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.RIGHT,
+            callback_fn=lambda: update_camera(-ANGLE_INCREMENT, 0, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.LEFT,
+            callback_fn=lambda: update_camera(ANGLE_INCREMENT, 0, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.PAGE_UP,
+            callback_fn=lambda: update_camera(0, 0, 0.1),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.PAGE_DOWN,
+            callback_fn=lambda: update_camera(0, 0, -0.1),
+        )
+
+        # Phase 1: Continuously pan across the full category to show the user all objects
+        y_min = np.min([obj.aabb[0][1] for obj in all_objects])
+        y_max = np.max([obj.aabb[1][1] for obj in all_objects])
+        average_pos = np.mean([obj.aabb_center for obj in all_objects], axis=0)
+        frame = 0
+        amplitude = (y_max - y_min) / 2
+        meters_per_second = 0.2
+        period = max(2 * amplitude / meters_per_second, 3)
+        frequency = 1 / period
+        angular_velocity = 2 * np.pi * frequency
+        while True:
+            y = y_min + amplitude * (np.sin(frame * og.sim.get_rendering_dt() * angular_velocity) + 1)
+            target = np.array([average_pos[0], y, average_pos[2]])
+            self.update_camera(target, pan, tilt, dist)
+            og.sim.step()
+            frame += 1
+
+
+        # Phase 2: Allow the user to interact with the object
+        selected_object = None
         done = False
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
 
+        og.sim.step()
+        og.sim.step()
+        og.sim.step()
+        
         def set_done():
             nonlocal done
             done = True
@@ -141,22 +216,11 @@ class BatchQAViewer:
         def toggle_gravity():
             obj = get_selected_object()
             obj.visual_only = not obj.visual_only
-        
-        def get_selected_object():
-            usd_context = lazy.omni.usd.get_context()
-            # returns a list of prim path strings
-            selection = usd_context.get_selection().get_selected_prim_paths()
-            if len(selection) != 1:
-                return None
-            assert len(selection) == 1, "Please select one object at a time."
-            selected_prim_path = selection[0]
-            tokens = selected_prim_path.split("/")
-            obj_name = tokens[2]
-            obj = og.sim.scene.object_registry("name", obj_name)
-            return obj
-        
+               
         def align_to_pca(pca_axis):
-            obj = get_selected_object()
+            obj = selected_object
+            if not obj:
+                return
             
             if pca_axis == 1 and obj in obj_first_pca_angle_map:
                 angle = obj_first_pca_angle_map[obj]
@@ -202,50 +266,14 @@ class BatchQAViewer:
             obj.set_orientation(rot.as_quat())
         
         def rotate_object(angle):
-            obj = get_selected_object()
+            obj = selected_object
+            if not obj:
+                return
             current_rot = R.from_quat(obj.get_orientation())
             new_rot = R.from_euler('z', angle) * current_rot
             obj.set_orientation(new_rot.as_quat())
 
-        og.sim.step()
-        og.sim.step()
-        og.sim.step()
-        
-        all_objects = self.position_objects(category, batch, FIXED_X_SPACING)
-
-        # Camera controls
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.UP,
-            callback_fn=lambda: update_camera(0, np.pi/6, 0),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.DOWN,
-            callback_fn=lambda: update_camera(0, -np.pi/6, 0),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.LEFT,
-            callback_fn=lambda: update_camera(-np.pi/6, 0, 0),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.RIGHT,
-            callback_fn=lambda: update_camera(np.pi/6, 0, 0),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
-            callback_fn=lambda: update_camera(0, 0, 0.1),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
-            callback_fn=lambda: update_camera(0, 0, -0.1),
-        )
-
-
-        """
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.V,
-            callback_fn=set_skip,
-        )
-        """
+        # Other controls
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.C,
             callback_fn=set_done,
@@ -271,14 +299,14 @@ class BatchQAViewer:
             callback_fn=toggle_gravity,
         )
         
-        print("-"*80)
+        print("-" * 80)
         print("Press 'A' to align object to its first principal component.")
         print("Press 'S' to align object to its second principal component.")
         print("Press 'J' to rotate object by 45 degrees counter-clockwise around z-axis.")
         print("Press 'K' to rotate object by 45 degrees clockwise around z-axis.")
         print("Press 'D' to toggle gravity for selected object.")
         print("Press 'C' to continue to complaint process.")
-        print("-"*80)
+        print("-" * 80)
         
         inspected_object = all_objects[0]
         
@@ -361,20 +389,18 @@ class BatchQAViewer:
             for obj in all_objects:
                 og.sim.remove_object(obj)
 
+    def position_reference_objects(self, target_y):
+        obj_in_center_frame = self.phone.get_position() - self.phone.aabb_center
+        obj_in_min_frame = self.phone.get_position() - self.phone.aabb[0]
+        obj_in_max_frame = self.phone.get_position() - self.phone.aabb[1]
+        self.phone.set_position(position=[-0.05 + obj_in_max_frame[0], target_y + obj_in_center_frame[1], obj_in_min_frame[2]])
+
+        human_in_center_frame = self.human.get_position() - self.human.aabb_center
+        human_in_min_frame = self.human.get_position() - self.human.aabb[0]
+        human_in_max_frame = self.human.get_position() - self.human.aabb[1]
+        self.human.set_position([-0.1 + self.phone.aabb_extent[0] + human_in_max_frame[0], target_y + human_in_center_frame[1], human_in_min_frame[2]])
+
     def add_reference_objects(self):
-        # Add a human into the scene
-        # get current directory
-        curr_dir = os.path.dirname(os.path.realpath(__file__))
-        human_usd_path = os.path.join(curr_dir, "HumanFemale/HumanFemale.usd")
-        print("Human usd path: " + human_usd_path)
-        human_prim_path = "/World/human"
-        lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
-        human_prim = XFormPrim(human_prim_path, "human")
-        human_prim.set_position_orientation(position=[CAMERA_X+0.1, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 20.0])
-        human_prim.scale = [0.012, 0.012, 0.012]
-        
-        print("Human aabb extent: " + str(human_prim.aabb_extent))
-        
         # Add a cellphone into the scene
         phone = DatasetObject(
             name="dbhfuh",
@@ -384,10 +410,20 @@ class BatchQAViewer:
         )
         og.sim.import_object(phone)
         og.sim.step()
+        phone.links["togglebutton_0_0_link"].visible = False
+        phone.set_orientation(orientation=R.from_euler("yx", [np.pi / 2, np.pi/2]).as_quat())
+
+        # Add a human into the scene
+        curr_dir = os.path.dirname(os.path.realpath(__file__))
+        human_usd_path = os.path.join(curr_dir, "HumanFemale/HumanFemale.usd")
+        print("Human usd path: " + human_usd_path)
+        human_prim_path = "/World/human"
+        lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
+        human_prim = XFormPrim(human_prim_path, "human")
+        human_prim.set_orientation(R.from_euler("z", np.pi / 2).as_quat())
+        human_prim.scale = [0.012, 0.012, 0.012]
         og.sim.step()
-        # phone.links["togglebutton_0_0_link"].visible = False
-        quat_orientation = R.from_euler('x', np.pi/2).as_quat()
-        phone.set_position_orientation(position=[CAMERA_X+0.1, CAMERA_Y+CAMERA_OBJECT_DISTANCE, 20.0], orientation=quat_orientation)
+
         return human_prim, phone
     
     def run(self):
@@ -398,24 +434,26 @@ class BatchQAViewer:
         print(f"{len(self.processed_objs)} objects have been processed.")
         print(f"{len(self.remaining_objs)} objects remaining out of {len(self.filtered_objs)}.")
 
-        cfg = {"scene": {"type": "Scene"}}
+        cfg = {"scene": {"type": "Scene", "floor_plane_visible": False}}
         env = og.Environment(configs=cfg)
-        dome_light = og.sim.scene.skybox
-        dome_light.intensity = 0.5e4
+        dome_light = env.scene.skybox
+        dome_light.intensity = 7.5e2
+        dome_light.light_link.prim.GetAttribute("inputs:texture:file").Clear()
+
+        self.human, self.phone = self.add_reference_objects()
 
         remaining_objs_by_cat = self.group_objects_by_category(self.remaining_objs)
         KeyboardEventHandler.initialize()
         
-        batch_size = 1
-        human_ref, phone_ref = self.add_reference_objects()
+        batch_size = 20
 
         for cat, models in remaining_objs_by_cat.items():
-            if cat in STRUCTURE_CATEGORIES:
+            if cat in STRUCTURE_CATEGORIES:  # TODO: Do we want this?
                 continue
             print(f"Processing category {cat}...")
             for batch_start in range(0, len(models), batch_size):
-                batch = models[batch_start:min(batch_start + batch_size, len(models))]
-                self.evaluate_batch(batch, cat, human_ref, phone_ref)
+                batch = models[batch_start:batch_start+batch_size]
+                self.evaluate_batch(batch, cat)
 
 
 class ObjectComplaintHandler:
@@ -624,6 +662,6 @@ if __name__ == "__main__":
     parser.add_argument('--seed', type=str, required=True, help=f'The shuffling seed.')
     args = parser.parse_args()
 
-    from b1k_pipeline.utils import PIPELINE_ROOT
-    viewer = BatchQAViewer(args.record_path, args.id, args.total_ids, args.seed, pipeline_root=str(PIPELINE_ROOT))
+    pipeline_root = Path(__file__).resolve().parents[2]
+    viewer = BatchQAViewer(args.record_path, args.id, args.total_ids, args.seed, pipeline_root=str(pipeline_root))
     viewer.run()
