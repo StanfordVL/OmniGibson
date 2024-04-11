@@ -52,18 +52,19 @@ class BatchQAViewer:
         }
         self.filtered_objs = {
             (cat, model) for cat, model in self.all_objs 
-            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
+            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id and cat == "notebook"
         }
         self.remaining_objs = self.get_remaining_objects()
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
 
-        self.current_ref_obj = None
-        self.current_ref_obj_category = None
-        self.current_ref_obj_pose = None
-        self.first_obj_flag = False
-
+        # Reference objects
         self.human = None
         self.phone = None
+
+        # Camera parameters
+        self.pan = 0.
+        self.tilt = 0.
+        self.dist = 3.
 
     def load_processed_objects(self):
         processed_objs = set()
@@ -87,7 +88,8 @@ class BatchQAViewer:
 
     def position_objects(self, category, batch):
         all_objects = []
-        all_objects_y_coordinates = []
+        y_coordinate = 0
+        prev_obj_radius = 0
 
         for index, obj_model in enumerate(batch):
             obj = DatasetObject(
@@ -98,13 +100,15 @@ class BatchQAViewer:
             )
             og.sim.import_object(obj)
             obj_radius = np.linalg.norm(obj.aabb_extent[:2]) / 2.0
-            y_coordinate = 0 if index == 0 else all_objects_y_coordinates[-1] + np.linalg.norm(all_objects[-1].aabb_extent[:2]) / 2.0 + FIXED_Y_SPACING + obj_radius
+            if index != 0:
+                y_coordinate += prev_obj_radius + FIXED_Y_SPACING + obj_radius
+            print(obj.name, "y_coordinate", y_coordinate, "prev radius", obj_radius)
             obj_in_min = obj.get_position() - obj.aabb[0]
 
             obj.set_position_orientation(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05], orientation=[0, 0, 0, 1])
 
             all_objects.append(obj)
-            all_objects_y_coordinates.append(y_coordinate)
+            prev_obj_radius = obj_radius
 
         og.sim.step()
         og.sim.step()
@@ -124,14 +128,45 @@ class BatchQAViewer:
                 "complaints": complaints,
             }, f)
 
-    @staticmethod
-    def update_camera(target, pan, tilt, dist):
+    def set_camera_bindings(self):
+        self.pan, self.tilt, self.dist = np.pi, 0., 3.
+        def update_camera(d_pan, d_tilt, d_dist):
+            self.pan = (self.pan + d_pan) % (2 * np.pi)
+            self.tilt = np.clip(self.tilt + d_tilt, -np.pi / 2, np.pi / 2)
+            self.dist = np.clip(self.dist + d_dist, 0, 100)
+
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.UP,
+            callback_fn=lambda: update_camera(0, ANGLE_INCREMENT, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.DOWN,
+            callback_fn=lambda: update_camera(0, -ANGLE_INCREMENT, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.LEFT,
+            callback_fn=lambda: update_camera(-ANGLE_INCREMENT, 0, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.RIGHT,
+            callback_fn=lambda: update_camera(ANGLE_INCREMENT, 0, 0),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.PAGE_DOWN,
+            callback_fn=lambda: update_camera(0, 0, 0.1),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.PAGE_UP,
+            callback_fn=lambda: update_camera(0, 0, -0.1),
+        )
+
+    def update_camera(self, target):
         # Get the camera position by starting at the target point and moving back by the distance
         # along the negative pan / tilt direction
-        camera_pos = target - dist * np.array([
-            np.cos(pan) * np.cos(tilt),
-            np.sin(pan) * np.cos(tilt),
-            -np.sin(tilt),
+        camera_pos = target - self.dist * np.array([
+            np.cos(self.pan) * np.cos(self.tilt),
+            np.sin(self.pan) * np.cos(self.tilt),
+            -np.sin(self.tilt),
         ])
         # Camera matrix: note that this is the OpenGL frame, so the camera is looking down the negative z-axis
         # and the up vector is the positive y-axis.
@@ -140,48 +175,15 @@ class BatchQAViewer:
             [-1, 0, 0],
             [0, 1, 0],
         ])
-        camera_orn = (R.from_euler("xyz", [0.0, tilt, pan]) * R.from_matrix(camera_matrix)).as_quat()
+        camera_orn = (R.from_euler("xyz", [0.0, self.tilt, self.pan]) * R.from_matrix(camera_matrix)).as_quat()
         og.sim.viewer_camera.set_position_orientation(camera_pos, camera_orn)
         # print(f"Camera position: {camera_pos}, target: {target}, pan: {pan}, tilt: {tilt}, dist: {dist}")
 
-    def evaluate_batch(self, batch, category):
-        all_objects = self.position_objects(category, batch)
-        self.position_reference_objects(target_y=0.)
+    def whole_batch_preview(self, all_objects):
+        KeyboardEventHandler.initialize()
+        self.set_camera_bindings()
 
-        # Camera controls
-        pan, tilt, dist = np.pi, 0., 3.
-        def update_camera(d_pan, d_tilt, d_dist):
-            nonlocal pan, tilt, dist
-            pan = (pan + d_pan) % (2 * np.pi)
-            tilt = np.clip(tilt + d_tilt, -np.pi / 2, np.pi / 2)
-            dist = np.clip(dist + d_dist, 0, 100)
-
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.DOWN,
-            callback_fn=lambda: update_camera(0, ANGLE_INCREMENT, 0),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.UP,
-            callback_fn=lambda: update_camera(0, -ANGLE_INCREMENT, 0),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.RIGHT,
-            callback_fn=lambda: update_camera(-ANGLE_INCREMENT, 0, 0),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.LEFT,
-            callback_fn=lambda: update_camera(ANGLE_INCREMENT, 0, 0),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.PAGE_UP,
-            callback_fn=lambda: update_camera(0, 0, 0.1),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.PAGE_DOWN,
-            callback_fn=lambda: update_camera(0, 0, -0.1),
-        )
-
-        # Phase 1: Continuously pan across the full category to show the user all objects
+        done = False
         y_min = np.min([obj.aabb[0][1] for obj in all_objects])
         y_max = np.max([obj.aabb[1][1] for obj in all_objects])
         average_pos = np.mean([obj.aabb_center for obj in all_objects], axis=0)
@@ -191,37 +193,42 @@ class BatchQAViewer:
         period = max(2 * amplitude / meters_per_second, 3)
         frequency = 1 / period
         angular_velocity = 2 * np.pi * frequency
-        while True:
-            y = y_min + amplitude * (np.sin(frame * og.sim.get_rendering_dt() * angular_velocity) + 1)
-            target = np.array([average_pos[0], y, average_pos[2]])
-            self.update_camera(target, pan, tilt, dist)
-            og.sim.step()
-            frame += 1
 
-
-        # Phase 2: Allow the user to interact with the object
-        selected_object = None
-        done = False
-        obj_first_pca_angle_map = {}
-        obj_second_pca_angle_map = {}
-
-        og.sim.step()
-        og.sim.step()
-        og.sim.step()
-        
-        def set_done():
+        def _set_done():
             nonlocal done
             done = True
 
-        def toggle_gravity():
-            obj = get_selected_object()
+        # Set done when the user presses 'C'
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
+            callback_fn=_set_done,
+        )
+
+        while not done:
+            y = y_min + amplitude * (np.sin(frame * og.sim.get_rendering_dt() * angular_velocity) + 1)
+            target = np.array([average_pos[0], y, average_pos[2]])
+            self.update_camera(target)
+            og.sim.step()
+            frame += 1
+
+        KeyboardEventHandler.reset()
+
+    def evaluate_single_object(self, obj):
+        KeyboardEventHandler.initialize()
+        self.set_camera_bindings()
+
+        done = False
+        obj_first_pca_angle_map = {}
+        obj_second_pca_angle_map = {}
+        
+        def _set_done():
+            nonlocal done
+            done = True
+
+        def _toggle_gravity():
             obj.visual_only = not obj.visual_only
                
-        def align_to_pca(pca_axis):
-            obj = selected_object
-            if not obj:
-                return
-            
+        def _align_to_pca(pca_axis):
             if pca_axis == 1 and obj in obj_first_pca_angle_map:
                 angle = obj_first_pca_angle_map[obj]
             elif pca_axis == 2 and obj in obj_second_pca_angle_map:
@@ -265,98 +272,108 @@ class BatchQAViewer:
             # Apply the rotation to the object
             obj.set_orientation(rot.as_quat())
         
-        def rotate_object(angle):
-            obj = selected_object
-            if not obj:
-                return
+        def _rotate_object(axis, angle):
             current_rot = R.from_quat(obj.get_orientation())
-            new_rot = R.from_euler('z', angle) * current_rot
-            obj.set_orientation(new_rot.as_quat())
+            new_rot = R.from_euler(axis, angle) * current_rot
+            # Round the new rotation to the nearest degree
+            rounded_rot = R.from_euler('xyz', np.deg2rad(np.round(np.rad2deg(new_rot.as_euler('xyz')))))
+            obj.set_orientation(rounded_rot.as_quat())
+
+        def _set_scale(new_scale):
+            obj.scale = new_scale
 
         # Other controls
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.C,
-            callback_fn=set_done,
+            key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
+            callback_fn=_set_done,
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.A,
-            callback_fn=lambda: align_to_pca(1),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_7,
+            callback_fn=lambda: _align_to_pca(1),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.S,
-            callback_fn=lambda: align_to_pca(2),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_9,
+            callback_fn=lambda: _align_to_pca(2),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.J,
-            callback_fn=lambda: rotate_object(np.pi/4),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_3,
+            callback_fn=lambda: _rotate_object("z", ANGLE_INCREMENT),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.K,
-            callback_fn=lambda: rotate_object(-np.pi/4),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_1,
+            callback_fn=lambda: _rotate_object("z", -ANGLE_INCREMENT),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.D,
-            callback_fn=toggle_gravity,
+            key=lazy.carb.input.KeyboardInput.NUMPAD_2,
+            callback_fn=lambda: _rotate_object("y", ANGLE_INCREMENT),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_8,
+            callback_fn=lambda: _rotate_object("y", -ANGLE_INCREMENT),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_4,
+            callback_fn=lambda: _rotate_object("x", ANGLE_INCREMENT),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_6,
+            callback_fn=lambda: _rotate_object("x", -ANGLE_INCREMENT),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_MULTIPLY,
+            callback_fn=lambda: obj.set_orientation([0, 0, 0, 1]),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_DEL,
+            callback_fn=_toggle_gravity,
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
+            callback_fn=lambda: _set_scale(obj.scale * 1.1),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
+            callback_fn=lambda: _set_scale(obj.scale / 1.1),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
+            callback_fn=lambda: _set_scale([1., 1., 1.]),
         )
         
         print("-" * 80)
-        print("Press 'A' to align object to its first principal component.")
-        print("Press 'S' to align object to its second principal component.")
-        print("Press 'J' to rotate object by 45 degrees counter-clockwise around z-axis.")
-        print("Press 'K' to rotate object by 45 degrees clockwise around z-axis.")
-        print("Press 'D' to toggle gravity for selected object.")
-        print("Press 'C' to continue to complaint process.")
+        print("All of the below are numpad keys.")
+        print("Press '7' to align object to its first principal component.")
+        print("Press '9' to align object to its second principal component.")
+        print("Press '1', '3' to rotate object around z-axis.")
+        print("Press '4', '6' to rotate object around x-axis.")
+        print("Press '2', '8' to rotate object around y-axis.")
+        print("Press '*' to reset object orientation.")
+        print("Press '+', '-' to change object scale.")
+        print("Press '/' to reset object scale.")
+        print("Press '.' to toggle gravity for selected object.")
+        print("Press 'Enter' to continue to complaint process.")
         print("-" * 80)
-        
-        inspected_object = all_objects[0]
-        
-        # When current ref obj is None, this is the first object in this category
-        if self.current_ref_obj is None:
-            self.current_ref_obj = inspected_object
-            self.current_ref_obj_category = category
-            self.first_obj_flag = True
-        # When current ref obj is not None, there are cases: 1) this curr obj is of the same category 2) not same
-        else:
-            if self.current_ref_obj_category != category:
-                og.sim.remove_object(self.current_ref_obj)
-                self.current_ref_obj = inspected_object
-                self.current_ref_obj_category = category
-                self.first_obj_flag = True
-            else:
-                self.first_obj_flag = False
 
         # position reference objects to be next to the inspected object
-        phone_ref.set_position_orientation(position=[inspected_object.get_position()[0]+np.linalg.norm(inspected_object.aabb_extent[:2])/2+np.linalg.norm(phone_ref.aabb_extent[:2])/2+0.05, 
-                                                inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2 + phone_ref.aabb_extent[1]/2 + 0.05, 
-                                                inspected_object.get_position()[2]+0.05])
-        human_ref.set_position_orientation(position=[inspected_object.get_position()[0]-np.linalg.norm(inspected_object.aabb_extent[:2])/2-np.linalg.norm(human_ref.aabb_extent[:2])/2-0.05, 
-                                                inspected_object.get_position()[1] + inspected_object.aabb_extent[1]/2 + human_ref.aabb_extent[1]/2 + 0.05, 
-                                                0.05])
-        
-        if not self.first_obj_flag and self.current_ref_obj_pose is not None:
-            # set current object pose
-            self.current_ref_obj.set_position_orientation(position=[phone_ref.get_position()[0]+np.linalg.norm(self.current_ref_obj.aabb_extent[:2])/2+np.linalg.norm(phone_ref.aabb_extent[:2])/2+0.05,
-                                                                    phone_ref.get_position()[1],
-                                                                    phone_ref.get_position()[2]+self.current_ref_obj.aabb_extent[2]/2.0], orientation=self.current_ref_obj_pose[0][1])
-            self.current_ref_obj.scale = self.current_ref_obj_pose[1]
-            
+        self.position_reference_objects(target_y=obj.aabb_center[1])
         
         # Prompt the user to fix the scale and orientation of the object. Keep the camera in position, too.
         step = 0               
         while not done:
             step += 1
             og.sim.step()
+            self.update_camera(obj.aabb_center)
             if step % 100 == 0:
-                print("Bounding box extent: " + str(inspected_object.aabb_extent) + "              ", end="\r")
+                print(f"Bounding box extent: {obj.aabb_extent}. Scale: {obj.scale}. Rotation: {np.rad2deg(T.quat2euler(obj.get_orientation()))}              ", end="\r")
         print("-"*80)
         
         # Now we're done with bbox and scale and orientation. Start complaint process
         # Launch the complaint thread
         multiprocess_queue = multiprocessing.Queue()
-        questions = self.complaint_handler.get_questions(inspected_object)
+        questions = self.complaint_handler.get_questions(obj)
         complaint_process = multiprocessing.Process(
             target=self.complaint_handler.process_complaints,
-            args=[multiprocess_queue, inspected_object.category, inspected_object.name, questions, sys.stdin.fileno()],
+            args=[multiprocess_queue, obj.category, obj.name, questions, sys.stdin.fileno()],
             daemon=True)
         complaint_process.start()
 
@@ -364,6 +381,7 @@ class BatchQAViewer:
         complaints = None
         while complaints is None:
             og.sim.step()
+            self.update_camera(obj.aabb_center)
     
             if not multiprocess_queue.empty():
                 message = multiprocess_queue.get()
@@ -381,13 +399,24 @@ class BatchQAViewer:
         # Save the object results
         self.save_object_results(obj, complaints)
 
-        if self.first_obj_flag:
-            self.current_ref_obj_pose = [inspected_object.get_position_orientation(), inspected_object.scale]
-            self.first_obj_flag = False
-        else:
-            # remove all objects
-            for obj in all_objects:
-                og.sim.remove_object(obj)
+        KeyboardEventHandler.reset()
+
+    def evaluate_batch(self, batch, category):
+        all_objects = self.position_objects(category, batch)
+        self.position_reference_objects(target_y=0.)
+
+        # Phase 1: Continuously pan across the full category to show the user all objects
+        self.whole_batch_preview(all_objects)
+
+        # Phase 2: Allow the user to interact with the objects one by one
+        for obj in all_objects:
+            self.evaluate_single_object(obj)
+
+        # Clean up.
+        for obj in all_objects:
+            og.sim.remove_object(obj)
+
+        KeyboardEventHandler.reset()
 
     def position_reference_objects(self, target_y):
         obj_in_center_frame = self.phone.get_position() - self.phone.aabb_center
@@ -434,16 +463,17 @@ class BatchQAViewer:
         print(f"{len(self.processed_objs)} objects have been processed.")
         print(f"{len(self.remaining_objs)} objects remaining out of {len(self.filtered_objs)}.")
 
+        # Load the environment and set the lighting parameters.
         cfg = {"scene": {"type": "Scene", "floor_plane_visible": False}}
         env = og.Environment(configs=cfg)
         dome_light = env.scene.skybox
         dome_light.intensity = 7.5e2
+        dome_light.color = [1.0, 1.0, 1.0]
         dome_light.light_link.prim.GetAttribute("inputs:texture:file").Clear()
 
         self.human, self.phone = self.add_reference_objects()
 
         remaining_objs_by_cat = self.group_objects_by_category(self.remaining_objs)
-        KeyboardEventHandler.initialize()
         
         batch_size = 20
 
