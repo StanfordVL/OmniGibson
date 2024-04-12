@@ -665,12 +665,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             action[self.robot.controller_action_idx["arm_{}".format(self.arm)][2]] = speed
             yield self._postprocess_action(action)
 
-    def _grasp(self, obj):
+    def _grasp(self, obj, grasp_info=None):
         """
         Yields action for the robot to navigate to object if needed, then to grasp it
 
         Args:
-            StatefulObject: Object for robot to grasp
+            obj: Object for robot to grasp
+            grasp_info: Grasp information for the object. If provided, it should be a tuple ((pos, quat), direction).
+                If not provided, one will be sampled.
 
         Returns:
             np.array or None: Action array for one step for the robot to grasp or None if grasp completed
@@ -694,8 +696,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         yield from self._execute_release()
 
         # Allow grasping from suboptimal extents if we've tried enough times.
-        grasp_poses = get_grasp_poses_for_object_sticky(obj)
-        grasp_pose, object_direction = random.choice(grasp_poses)
+        if not grasp_info:
+            grasp_infos = get_grasp_poses_for_object_sticky(obj)
+            grasp_info = random.choice(grasp_infos)
+
+        # Unpack the grasp info.
+        grasp_pose, object_direction = grasp_info
 
         # Prepare data for the approach later.
         approach_pos = grasp_pose[0] + object_direction * m.GRASP_APPROACH_DISTANCE
