@@ -475,10 +475,12 @@ class ObjectExporter:
                 rt.select([obj])
                 rt.IsolateSelection.EnterIsolateSelectionMode()
 
-                # Make sure it's triangle mesh
-                rt.polyop.setVertSelection(obj, rt.name('all'))
-                obj.connectVertices()
-                rt.polyop.setVertSelection(obj, rt.name('none'))
+                # Make sure it's a triangle mesh
+                ttp = rt.Turn_To_Poly()
+                ttp.limitPolySize = True
+                ttp.maxPolySize = 3
+                rt.addmodifier(obj, ttp)
+                rt.maxOps.collapseNodeTo(obj, 1, True)
 
                 obj.isHidden = False
                 for child in obj.children:
