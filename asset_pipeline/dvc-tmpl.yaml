@@ -115,14 +115,14 @@ stages:
       - cad/${item}/artifacts/generate_max_object_images.json
       - cad/${item}/artifacts/max_object_images.zip
 
-  max_object_images_success:
-    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json artifacts/pipeline/max_object_images.success'
+  generate_max_object_images_success:
+    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json artifacts/pipeline/generate_max_object_images.success'
     deps:
-    - cad/#{combined}/artifacts/max_object_images.json
+    - cad/#{combined}/artifacts/generate_max_object_images.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:
-    - artifacts/pipeline/max_object_images.success
+    - artifacts/pipeline/generate_max_object_images.success
 
   collision_selection_validation:
     cmd: 'python -m b1k_pipeline.collision_selection_validation'
