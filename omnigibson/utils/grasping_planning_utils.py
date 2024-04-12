@@ -397,7 +397,7 @@ def grasp_position_for_open_on_revolute_joint(robot, target_obj, relevant_joint,
     # Get the appropriate rotation
 
     # grasp_quat_in_bbox_frame = get_quaternion_between_vectors([1, 0, 0], canonical_open_direction * open_axis_closer_side_sign * -1)
-    grasp_quat_in_bbox_frame = _get_orientation_facing_vector_with_random_yaw(
+    grasp_quat_in_bbox_frame = get_orientation_facing_vector_with_random_yaw(
         canonical_open_direction * open_axis_closer_side_sign * -1
     )
 
@@ -454,7 +454,7 @@ def grasp_position_for_open_on_revolute_joint(robot, target_obj, relevant_joint,
     )
 
 
-def _get_orientation_facing_vector_with_random_yaw(vector):
+def get_orientation_facing_vector_with_random_yaw(vector):
     """
     Get a quaternion that orients the x-axis of the object to face the given vector and the y and z
     axes to be random.

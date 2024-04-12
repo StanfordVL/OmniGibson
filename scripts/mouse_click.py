@@ -2,6 +2,7 @@ import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
+from omnigibson.utils.grasping_planning_utils import get_orientation_facing_vector_with_random_yaw
 
 
 def add_click_callback(callback, window_name="Viewport"):
@@ -60,7 +61,41 @@ def main():
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
             "load_object_categories": ["walls", "floors"],
-        }
+        },
+        "robots": [
+            {
+                "type": "Fetch",
+                "obs_modalities": ["scan", "rgb", "depth"],
+                "scale": 1.0,
+                "self_collisions": True,
+                "action_normalize": False,
+                "action_type": "continuous",
+                "grasping_mode": "sticky",
+                "rigid_trunk": False,
+                "default_arm_pose": "diagonal30",
+                "default_trunk_offset": 0.365,
+                "controller_config": {
+                    "base": {
+                        "name": "DifferentialDriveController",
+                    },
+                    "arm_0": {
+                        "name": "InverseKinematicsController",
+                        "command_input_limits": "default",
+                        "command_output_limits": [[-0.2, -0.2, -0.2, -0.5, -0.5, -0.5], [0.2, 0.2, 0.2, 0.5, 0.5, 0.5]],
+                        "mode": "pose_absolute_ori",
+                        "kp": 300.0,
+                    },
+                    "gripper_0": {
+                        "name": "JointController",
+                        "motor_type": "position",
+                        "command_input_limits": [-1, 1],
+                        "command_output_limits": None,
+                        "use_delta_commands": True,
+                    },
+                    "camera": {"name": "JointController", "use_delta_commands": False},
+                },
+            }
+        ],
     }
     env = og.Environment(cfg)
 
@@ -72,7 +107,13 @@ def main():
             distance=np.linalg.norm(direction) * 1.5,
             bothSides=True,
         )
-        print(hit)
+        if not hit["hit"]:
+            return
+        position = np.array(hit["position"])
+        normal = np.array(hit["normal"])
+        prim_path = hit["rigidBody"]
+        distance = hit["distance"]
+        grasp_quat = get_orientation_facing_vector_with_random_yaw(normal)
 
     add_click_callback(callback)
 
