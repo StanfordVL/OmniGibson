@@ -20,7 +20,7 @@ from omnigibson.utils.asset_utils import (
 from omnigibson.objects.dataset_object import DatasetObject
 import omnigibson.utils.transform_utils as T
 import omnigibson.lazy as lazy
-from omnigibson.utils.ui_utils import KeyboardEventHandler
+from omnigibson.utils.ui_utils import KeyboardEventHandler, draw_text
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.macros import gm
 
@@ -107,8 +107,13 @@ class BatchQAViewer:
 
             obj.set_position_orientation(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05], orientation=[0, 0, 0, 1])
 
+            draw_text(obj_model, [0, y_coordinate, -0.1], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
+
             all_objects.append(obj)
             prev_obj_radius = obj_radius
+
+        # Write the category name across the total dimension
+        draw_text(category, [0, y_coordinate / 2, -0.3], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=y_coordinate)
 
         og.sim.step()
         og.sim.step()
@@ -128,8 +133,8 @@ class BatchQAViewer:
                 "complaints": complaints,
             }, f)
 
-    def set_camera_bindings(self):
-        self.pan, self.tilt, self.dist = np.pi, 0., 3.
+    def set_camera_bindings(self, default_dist = 3.):
+        self.pan, self.tilt, self.dist = np.pi, 0., default_dist
         def update_camera(d_pan, d_tilt, d_dist):
             self.pan = (self.pan + d_pan) % (2 * np.pi)
             self.tilt = np.clip(self.tilt + d_tilt, -np.pi / 2, np.pi / 2)
@@ -215,7 +220,7 @@ class BatchQAViewer:
 
     def evaluate_single_object(self, obj):
         KeyboardEventHandler.initialize()
-        self.set_camera_bindings()
+        self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
         done = False
         obj_first_pca_angle_map = {}
