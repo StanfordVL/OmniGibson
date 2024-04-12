@@ -102,6 +102,28 @@ stages:
     outs:
     - artifacts/pipeline/export_meshes.success
 
+  max_object_images:
+    # List the objects found in the entry.
+    foreach: ${combined_unfiltered}
+    do:
+      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/max_object_images.py'
+      deps:
+      - b1k_pipeline/max/max_object_images.py
+      - cad/${item}/processed.max
+      - artifacts/pipeline/sanitycheck.success
+      outs:
+      - cad/${item}/artifacts/max_object_images.json
+      - cad/${item}/artifacts/max_object_images.zip
+
+  max_object_images_success:
+    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json artifacts/pipeline/max_object_images.success'
+    deps:
+    - cad/#{combined}/artifacts/max_object_images.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/max_object_images.success
+
   collision_selection_validation:
     cmd: 'python -m b1k_pipeline.collision_selection_validation'
     deps: 
