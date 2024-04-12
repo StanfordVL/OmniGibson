@@ -102,17 +102,17 @@ stages:
     outs:
     - artifacts/pipeline/export_meshes.success
 
-  max_object_images:
+  generate_max_object_images:
     # List the objects found in the entry.
     foreach: ${combined_unfiltered}
     do:
-      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/max_object_images.py'
+      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_max_object_images.py'
       deps:
-      - b1k_pipeline/max/max_object_images.py
+      - b1k_pipeline/max/generate_max_object_images.py
       - cad/${item}/processed.max
       - artifacts/pipeline/sanitycheck.success
       outs:
-      - cad/${item}/artifacts/max_object_images.json
+      - cad/${item}/artifacts/generate_max_object_images.json
       - cad/${item}/artifacts/max_object_images.zip
 
   max_object_images_success:
