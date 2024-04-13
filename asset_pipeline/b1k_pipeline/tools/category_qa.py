@@ -27,6 +27,7 @@ from omnigibson.macros import gm
 import multiprocessing
 import csv
 import nltk
+import bddl.object_taxonomy
 from pathlib import Path
 nltk.download('wordnet')
 nltk.download('omw-1.4')
@@ -37,7 +38,8 @@ gm.ENABLE_FLATCACHE = False
 
 ANGLE_INCREMENT = np.pi / 90
 FIXED_Y_SPACING = 0.1
-
+INTERESTING_ABILITIES = {"fillable", "openable", "cloth", "heatSource", "coldSource", "particleApplier", "particleRemover", "toggleable", "particleSource", "particleSink"}
+JOINT_SECONDS_PER_CYCLE = 4.0
 
 class BatchQAViewer:
     def __init__(self, record_path, your_id, total_ids, seed, pipeline_root):
@@ -102,7 +104,7 @@ class BatchQAViewer:
             obj_radius = np.linalg.norm(obj.aabb_extent[:2]) / 2.0
             if index != 0:
                 y_coordinate += prev_obj_radius + FIXED_Y_SPACING + obj_radius
-            print(obj.name, "y_coordinate", y_coordinate, "prev radius", obj_radius)
+            # print(obj.name, "y_coordinate", y_coordinate, "prev radius", obj_radius)
             obj_in_min = obj.get_position() - obj.aabb[0]
 
             obj.set_position_orientation(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05], orientation=[0, 0, 0, 1])
@@ -384,9 +386,19 @@ class BatchQAViewer:
 
         # Wait to receive the complaints
         complaints = None
+        step = 0
+
         while complaints is None:
+            step += 1
             og.sim.step()
             self.update_camera(obj.aabb_center)
+
+            # During this part, we want to be moving the joints
+            for joint in obj.joints.values():
+                seconds_since_start = step * og.sim.get_rendering_dt()
+                interpolation_point = 0.5 * np.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * np.pi) + 0.5
+                target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
+                joint.set_pos(target_pos)
     
             if not multiprocess_queue.empty():
                 message = multiprocess_queue.get()
@@ -497,29 +509,12 @@ class ObjectComplaintHandler:
         self.inventory_dict = self._load_inventory()
         self.category_to_synset = self._load_category_to_synset()
         self.synset_to_property = self._load_synset_to_property()
+        self.taxonomy = bddl.object_taxonomy.ObjectTaxonomy()
 
     def _load_inventory(self):
         inventory_path = self.pipeline_root / "artifacts/pipeline/object_inventory.json"
         with open(inventory_path, "r") as file:
             return json.load(file)["providers"]
-
-    def _load_category_to_synset(self):
-        category_synset_mapping = {}
-        path = self.pipeline_root / "metadata/category_mapping.csv"
-        with open(path, "r") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                category_synset_mapping[row["category"].strip()] = row["synset"].strip()
-        return category_synset_mapping
-
-    def _load_synset_to_property(self):
-        synset_property_mapping = {}
-        path = self.pipeline_root / "metadata/synset_property.csv"
-        with open(path, "r") as file:
-            reader = csv.DictReader(file)
-            for row in reader:
-                synset_property_mapping[row["synset"].strip()] = row
-        return synset_property_mapping
     
     def _get_existing_complaints(self, category, model):
         obj_key = f"{category}-{model}"
@@ -599,82 +594,127 @@ class ObjectComplaintHandler:
     def get_questions(self, obj):
         messages = [
             self._get_synset_question(obj),
+            self._get_category_question(obj),
+            self._get_ability_question(obj),
+            self._get_single_rigid_body_question(obj),
             self._get_appearance_question(obj),
+            self._get_articulation_question(obj),
             # self._get_collision_question(obj),
-            # self._user_complained_articulation(obj),
+            self._get_cloth_question(obj),
         ]
 
-        _, properties = self._get_synset_and_properties(obj.category)
-        if properties["objectType"] in ["rope", "cloth"]:
-            messages.append(self._user_complained_cloth(obj))
+        if "cloth" in self._get_synset_and_abilities(obj.category)[1]:
+            self._get_unfolded_question(obj),
 
-        messages.append(self._user_complained_metas(obj))
         return messages
     
-    def _get_synset_and_properties(self, category):
-        assert category in self.category_to_synset
-        synset = self.category_to_synset[category]
-        assert synset in self.synset_to_property
-        return synset, self.synset_to_property[synset]
+    def _get_synset_and_abilities(self, category):
+        synset = self.taxonomy.get_synset_from_category(category)
+        assert synset is not None, f"Synset not found for category {category}"
+        return synset, self.taxonomy.get_abilities(synset)
 
     def _get_synset_and_definition(self, category):
-        synset, properties = self._get_synset_and_properties(category)
-        if bool(int(properties["is_custom"])):
-            s = wn.synset(properties["hypernyms"])
-            return f"{synset} (custom synset)", f"(hypernyms: {s.name()}): {s.definition()}"
-        else:
+        synset, _ = self._get_synset_and_abilities(category)
+        try:
             s = wn.synset(synset)
             return s.name(), s.definition()
+        except:
+            s = wn.synset(self.taxonomy.get_parents(synset)[0])
+            return f"{synset} (custom synset)", f"(hypernyms: {s.name()}): {s.definition()}"
 
     def _get_synset_question(self, obj):
         synset, definition = self._get_synset_and_definition(obj.category)
-        # TODO: Explain the containers better.
         message = (
-            "Confirm object synset assignment.\n"
-            f"Object assigned to category: {obj.category}\n"
+            "SYNSET: Confirm object synset assignment.\n"
             f"Object assigned to synset: {synset}\n"
             f"Definition: {definition}\n"
             "Reminder: synset should match the object and not its contents.\n"
-            "(e.g., orange juice bottle needs to match orange_juice__bottle.n.01\n"
-            "and not orange_juice.n.01)\n"
-            "If the object category is wrong, please add this object to the Object Rename tab.\n"
-            "If the object synset is empty or wrong, please modify the Object Category Mapping tab."
+            "(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\n"
+            "For containers, note that usable containers (e.g. ones that have an open cap and\n"
+            "can be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\n"
+            "non-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\n"
+            "If the synset is wrong, please type in the name of the correct synset the object\n"
+            "should be assigned to. In the next question also type in the correct category."
+        )
+        return message
+    
+    def _get_category_question(self, obj):
+        message = (
+            "CATEGORY: Confirm object category assignment.\n"
+            f"Object assigned to category: {obj.category}\n"
+            "If the object is not compatible with the rest of the objects in this category,\n"
+            "(e.g. tabletop sink vs regular sink), change the category here.\n"
+            "Confirm that the object is the same kind of object as the rest of the objects\n"
+            "in this category.\n\n"
+            "If the category is wrong, please type in the correct category."
+        )
+        return message
+    
+    def _get_ability_question(self, obj):
+        _, abilities = self._get_synset_and_abilities(obj.category)
+        interesting_abilities = set(abilities.keys()) & INTERESTING_ABILITIES
+        message = (
+            "ABILITIES: Confirm that this object can support all of the abilities seen below.\n"
+            f"Object abilities: {', '.join(sorted(interesting_abilities))}\n\n"
+            "If this object looks like it should not have some of these abilities, please\n"
+            "list the abilities that we should safely ignore as a comma separated list.\n"
+            "For example, for an unopenable window you would put in 'openable'."
+        )
+        return message
+
+    def _get_single_rigid_body_question(self, obj):
+        message = (
+            "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts."
         )
         return message
 
     def _get_appearance_question(self, obj):
         message = (
-            "Confirm object visual appearance.\n"
+            "APPEARANCE: Confirm object visual appearance.\n"
             "Requirements:\n"
-            "- make sure there is only one rigid body (e.g., one shoe instead of a pair of shoes).\n"
-            "- make sure the object has a valid texture or appearance (e.g., texture not black, transparency rendered correctly, etc).\n"
-            "- make sure the object has all parts necessary."
+            "- make sure the object has a valid texture or appearance (e.g., texture not black,\n"
+            "       transparency rendered correctly, etc).\n"
+            "- make sure any glass parts are transparent (would this object contain glass? e.g.\n"
+            "       wall pictures, clocks, etc. - anything wrong)\n"
+            "- compare the object against the 3ds Max image that should open up now."
         )
         return message
 
     def _get_collision_question(self, obj):
         message = (
-            "Confirm object collision meshes.\n"
+            "COLLISION:" Confirm object collision meshes.\n"
             "Requirements:\n"
             "- make sure the collision meshes well approximate the original visual meshes\n"
             "- make sure the collision meshes don't lose any affordance (e.g., holes and handles are preserved)."
         )
         return message
 
-    def _user_complained_articulation(self, obj):
-        message = "Confirm articulation:\n"
+    def _get_articulation_question(self, obj):
+        message = "ARTICULATION: Confirm articulation:\n"
         message += "This object has the below movable links annotated:\n"
         for j_name, j in obj.joints.items():
             message += f"- {j_name}, {j.joint_type}\n"
-        message += "Verify that these are all the moving parts you expect from this object\n"
-        message += "and that the joint limits look reasonable."
+        message += "Verify that the joint limits look reasonable and that the object is not\n"
+        message += "missing articulations that would make it useless. Do NOT be overly ambitious - we\n"
+        message += "only care about MUST-HAVE articulations here."
         return message
 
-    def _user_complained_cloth(self, obj):
+    def _get_cloth_question(self, obj):
+        _, abilities = self._get_synset_and_abilities(obj.category)
+        is_cloth = "cloth" in abilities
+        obj_type = "cloth" if is_cloth else "rigidBody"
+        message = (
+            "Confirm if the object is a cloth object.\n"
+            f"Currently, it is annotated as {obj_type}.\n\n"
+            "Enter 'cloth' or 'rigidBody' to change."
+        )
+        return message
+
+    def _get_unfolded_question(self, obj):
         message = "Confirm the default state of the rope/cloth object is unfolded."
         return message
 
-    def _user_complained_metas(self, obj):
+    def _get_meta_link_question(self, obj):
         meta_links = sorted({
             meta_name
             for link_metas in obj.metadata["meta_links"].values()
