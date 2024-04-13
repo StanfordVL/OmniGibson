@@ -21,7 +21,6 @@ from omnigibson.objects.dataset_object import DatasetObject
 import omnigibson.utils.transform_utils as T
 import omnigibson.lazy as lazy
 from omnigibson.utils.ui_utils import KeyboardEventHandler, draw_text
-from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.macros import gm
 
 import multiprocessing
@@ -36,6 +35,7 @@ from nltk.corpus import wordnet as wn
 
 gm.ENABLE_FLATCACHE = False
 
+LOW_PRECISION_ANGLE_INCREMENT = np.pi / 4
 ANGLE_INCREMENT = np.pi / 90
 FIXED_Y_SPACING = 0.1
 INTERESTING_ABILITIES = {"fillable", "openable", "cloth", "heatSource", "coldSource", "particleApplier", "particleRemover", "toggleable", "particleSource", "particleSink"}
@@ -54,7 +54,7 @@ class BatchQAViewer:
         }
         self.filtered_objs = {
             (cat, model) for cat, model in self.all_objs 
-            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id and cat == "notebook"
+            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
         }
         self.remaining_objs = self.get_remaining_objects()
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
@@ -63,10 +63,25 @@ class BatchQAViewer:
         self.human = None
         self.phone = None
 
+        # Precision mode
+        self.precision_mode = False
+
         # Camera parameters
         self.pan = 0.
         self.tilt = 0.
         self.dist = 3.
+
+    @property
+    def angle_increment(self):
+        return LOW_PRECISION_ANGLE_INCREMENT if self.precision_mode else ANGLE_INCREMENT
+    
+    @property
+    def scale_increment(self):
+        return 1.1 if self.precision_mode else 10.
+    
+    def _toggle_precision(self):
+        self.precision_mode = not self.precision_mode
+        print(f"Precision mode: {'ON' if self.precision_mode else 'OFF'}")
 
     def load_processed_objects(self):
         processed_objs = set()
@@ -304,43 +319,47 @@ class BatchQAViewer:
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_3,
-            callback_fn=lambda: _rotate_object("z", ANGLE_INCREMENT),
+            callback_fn=lambda: _rotate_object("z", self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_1,
-            callback_fn=lambda: _rotate_object("z", -ANGLE_INCREMENT),
+            callback_fn=lambda: _rotate_object("z", -self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_2,
-            callback_fn=lambda: _rotate_object("y", ANGLE_INCREMENT),
+            callback_fn=lambda: _rotate_object("y", self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_8,
-            callback_fn=lambda: _rotate_object("y", -ANGLE_INCREMENT),
+            callback_fn=lambda: _rotate_object("y", -self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_4,
-            callback_fn=lambda: _rotate_object("x", ANGLE_INCREMENT),
+            callback_fn=lambda: _rotate_object("x", self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_6,
-            callback_fn=lambda: _rotate_object("x", -ANGLE_INCREMENT),
+            callback_fn=lambda: _rotate_object("x", -self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_MULTIPLY,
             callback_fn=lambda: obj.set_orientation([0, 0, 0, 1]),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_DEL,
+            key=lazy.carb.input.KeyboardInput.NUMPAD_0,
             callback_fn=_toggle_gravity,
         )
         KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_DEL,
+            callback_fn=lambda: self._toggle_precision(),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
-            callback_fn=lambda: _set_scale(obj.scale * 1.1),
+            callback_fn=lambda: _set_scale(obj.scale * self.scale_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
-            callback_fn=lambda: _set_scale(obj.scale / 1.1),
+            callback_fn=lambda: _set_scale(obj.scale / self.scale_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
@@ -357,13 +376,14 @@ class BatchQAViewer:
         print("Press '*' to reset object orientation.")
         print("Press '+', '-' to change object scale.")
         print("Press '/' to reset object scale.")
-        print("Press '.' to toggle gravity for selected object.")
+        print("Press '0' to toggle gravity for selected object.")
+        print(f"Press . to change between normal and precision mode. Angle and scale increments are much smaller in precision mode.")
         print("Press 'Enter' to continue to complaint process.")
         print("-" * 80)
 
         print("\nEdit the currently selected object to match the realistic size of the category.")
         print("It should also face the same way as the other objects, and should be stable in its")
-        print("canonical orientation.")
+        print("canonical orientation.\n")
 
         # position reference objects to be next to the inspected object
         self.position_reference_objects(target_y=obj.aabb_center[1])
@@ -375,7 +395,11 @@ class BatchQAViewer:
             og.sim.step()
             self.update_camera(obj.aabb_center)
             if step % 100 == 0:
-                print(f"Bounding box extent: {obj.aabb_extent}. Scale: {obj.scale}. Rotation: {np.rad2deg(T.quat2euler(obj.get_orientation()))}              ", end="\r")
+                scale_str = f"{obj.scale[0]:.2f}, {obj.scale[1]:.2f}, {obj.scale[2]:.2f}"
+                rotation = np.rad2deg(T.quat2euler(obj.get_orientation()))
+                rotation_str = f"{rotation[0]:.2f}, {rotation[1]:.2f}, {rotation[2]:.2f}"
+                bbox_str = f"{obj.aabb_extent[0] * 100:.2f}cm, {obj.aabb_extent[1] * 100:.2f}cm, {obj.aabb_extent[2] * 100:.2f}cm"
+                print(f"Bounding box extent: {bbox_str}. Scale: {scale_str}. Rotation: {rotation_str}              ", end="\r")
         print("-"*80)
         
         # Now we're done with bbox and scale and orientation. Start complaint process
@@ -389,10 +413,8 @@ class BatchQAViewer:
         complaint_process.start()
 
         # Wait to receive the complaints
-        complaints = None
         step = 0
-
-        while complaints is None:
+        while complaint_process.is_alive():
             step += 1
             og.sim.step()
             self.update_camera(obj.aabb_center)
@@ -405,8 +427,12 @@ class BatchQAViewer:
                 joint.set_pos(target_pos)
     
             if not multiprocess_queue.empty():
-                message = multiprocess_queue.get()
-                complaints = json.loads(message)
+                # Got a response, we can stop.
+                break
+
+        assert not multiprocess_queue.empty(), "Complaint process did not return a message."
+        message = multiprocess_queue.get()
+        complaints = json.loads(message)
         
         # Wait for the complaint process to finish to not have to kill it
         time.sleep(0.5)
@@ -436,8 +462,6 @@ class BatchQAViewer:
         # Clean up.
         for obj in all_objects:
             og.sim.remove_object(obj)
-
-        KeyboardEventHandler.reset()
 
     def position_reference_objects(self, target_y):
         obj_in_center_frame = self.phone.get_position() - self.phone.aabb_center
@@ -499,11 +523,10 @@ class BatchQAViewer:
         batch_size = 20
 
         for cat, models in remaining_objs_by_cat.items():
-            if cat in STRUCTURE_CATEGORIES:  # TODO: Do we want this?
-                continue
             print(f"Processing category {cat}...")
-            for batch_start in range(0, len(models), batch_size):
-                batch = models[batch_start:batch_start+batch_size]
+            sorted_models = sorted(models)
+            for batch_start in range(0, len(sorted_models), batch_size):
+                batch = sorted_models[batch_start:batch_start+batch_size]
                 self.evaluate_batch(batch, cat)
 
 
@@ -511,8 +534,6 @@ class ObjectComplaintHandler:
     def __init__(self, pipeline_root):
         self.pipeline_root = Path(pipeline_root)
         self.inventory_dict = self._load_inventory()
-        self.category_to_synset = self._load_category_to_synset()
-        self.synset_to_property = self._load_synset_to_property()
         self.taxonomy = bddl.object_taxonomy.ObjectTaxonomy()
 
     def _load_inventory(self):
@@ -520,46 +541,49 @@ class ObjectComplaintHandler:
         with open(inventory_path, "r") as file:
             return json.load(file)["providers"]
     
-    def _get_existing_complaints(self, category, model):
-        obj_key = f"{category}-{model}"
-        try:
-            target_name = self.inventory_dict[obj_key]
-        except KeyError:
+    def _get_existing_complaints(self, model):
+        provider = None
+        for obj, provider_candidate in self.inventory_dict.items():
+            if obj.split("-")[-1] == model:
+                provider = provider_candidate
+                break
+        assert provider is not None, f"Provider not found for object {model}"
+
+        complaints_file = self.pipeline_root / "cad" / provider / "complaints.json"
+        if not complaints_file.exists():
             return []
-        complaints_file = self.pipeline_root / "cad" / target_name / "complaints.json"
-        all_complaints = self._load_complaints(complaints_file)
-        filtered_complaints = {}
+        with open(complaints_file, "r") as file:
+            all_complaints = json.load(file)
+        filtered_complaints = []
         for complaint in all_complaints:
-            message = complaint["message"]
-            complaint_text = complaint["complaint"]
-            key = message + complaint_text
-            if complaint["object"] != obj_key: continue
-            if "meta link" in message.lower(): continue
-            if key not in filtered_complaints:
-                filtered_complaints[key] = complaint
-        return [complaint for complaint in filtered_complaints.values() if not complaint["processed"]]
+            if complaint["object"].split("-")[-1] != model:
+                continue
+            filtered_complaints.append(complaint)
+        return filtered_complaints
 
     def process_complaints(self, queue, category, model, messages, stdin_fileno):
         sys.stdin = os.fdopen(stdin_fileno)
         
-        existing_complaints = self._get_existing_complaints(category, model)
-        if len(existing_complaints) > 0:
-            print(f"Found {len(existing_complaints)} existing complaints.")
-            for idx, complaint in enumerate(existing_complaints, start=1):
-                print(f"Complaint {idx}:")
-                print(complaint["message"])
-                print(f"Complaint: {complaint['complaint']}")
-                print(f"Processed: {complaint['processed']}")
-                print()
+        existing_complaints = self._get_existing_complaints(model)
+        unresolved_indices = [idx for idx, complaint in enumerate(existing_complaints) if not complaint["processed"]]
+        if len(unresolved_indices) > 0:
+            print(f"Found {len(unresolved_indices)} unresolved complaints.")
+            for i, idx in enumerate(unresolved_indices, start=1):
+                print(f"Complaint {i}:")
+                complaint = existing_complaints[idx]
+                print(f"Prompt: {complaint['message']}\n")
+                print(f"Complaint: {complaint['complaint']}\n")
             while True:
-                response = input("Enter complaint numbers to mark as processed (e.g., 1,2,3): ")
+                print("ALL complaints except the ones you enter below will be marked as RESOLVED.")
+                response = input("Enter complaint numbers to KEEP as UNRESOLVED (e.g., 1,2,3): ")
                 if response:
                     response = response.split(",")
                     for idx in response:
-                        existing_complaints[int(idx)-1]["processed"] = True
+                        complaint_idx = unresolved_indices[int(idx)-1]
+                        existing_complaints[complaint_idx]["processed"] = True
                     break
         else:
-            print("No existing complaints found.")
+            print("No unresolved complaints found.")
 
         print("-"*80)
 
@@ -585,16 +609,6 @@ class ObjectComplaintHandler:
         
         return None
 
-    def _load_complaints(self, filepath):
-        if os.path.exists(filepath):
-            with open(filepath, "r") as file:
-                return json.load(file)
-        return []
-
-    def _save_complaints(self, complaints, filepath):
-        with open(filepath, "w") as file:
-            json.dump(complaints, file, indent=4)
-    
     def get_questions(self, obj):
         messages = [
             self._get_synset_question(obj),
@@ -631,7 +645,7 @@ class ObjectComplaintHandler:
         message = (
             "SYNSET: Confirm object synset assignment.\n"
             f"Object assigned to synset: {synset}\n"
-            f"Definition: {definition}\n"
+            f"Definition: {definition}\n\n"
             "Reminder: synset should match the object and not its contents.\n"
             "(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\n"
             "For containers, note that usable containers (e.g. ones that have an open cap and\n"
@@ -696,9 +710,12 @@ class ObjectComplaintHandler:
     def _get_articulation_question(self, obj):
         message = "ARTICULATION: Confirm articulation:\n"
         message += "This object has the below movable links annotated:\n"
-        for j_name, j in obj.joints.items():
-            message += f"- {j_name}, {j.joint_type}\n"
-        message += "Verify that the joint limits look reasonable and that the object is not\n"
+        if len(obj.joints) == 0:
+            message += "- None\n"
+        else:
+            for j_name, j in obj.joints.items():
+                message += f"- {j_name}, {j.joint_type}\n"
+        message += "\nVerify that the joint limits look reasonable and that the object is not\n"
         message += "missing articulations that would make it useless. Do NOT be overly ambitious - we\n"
         message += "only care about MUST-HAVE articulations here."
         return message
