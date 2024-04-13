@@ -598,10 +598,10 @@ class ObjectComplaintHandler:
     
     def get_questions(self, obj):
         messages = [
-            self._user_complained_synset(obj),
-            self._user_complained_appearance(obj),
-            self._user_complained_collision(obj),
-            self._user_complained_articulation(obj),
+            self._get_synset_question(obj),
+            self._get_appearance_question(obj),
+            # self._get_collision_question(obj),
+            # self._user_complained_articulation(obj),
         ]
 
         _, properties = self._get_synset_and_properties(obj.category)
@@ -626,7 +626,7 @@ class ObjectComplaintHandler:
             s = wn.synset(synset)
             return s.name(), s.definition()
 
-    def _user_complained_synset(self, obj):
+    def _get_synset_question(self, obj):
         synset, definition = self._get_synset_and_definition(obj.category)
         # TODO: Explain the containers better.
         message = (
@@ -642,7 +642,7 @@ class ObjectComplaintHandler:
         )
         return message
 
-    def _user_complained_appearance(self, obj):
+    def _get_appearance_question(self, obj):
         message = (
             "Confirm object visual appearance.\n"
             "Requirements:\n"
@@ -652,7 +652,7 @@ class ObjectComplaintHandler:
         )
         return message
 
-    def _user_complained_collision(self, obj):
+    def _get_collision_question(self, obj):
         message = (
             "Confirm object collision meshes.\n"
             "Requirements:\n"
