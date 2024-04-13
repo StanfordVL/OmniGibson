@@ -686,7 +686,7 @@ class ObjectComplaintHandler:
 
     def _get_collision_question(self, obj):
         message = (
-            "COLLISION:" Confirm object collision meshes.\n"
+            "COLLISION: Confirm object collision meshes.\n"
             "Requirements:\n"
             "- make sure the collision meshes well approximate the original visual meshes\n"
             "- make sure the collision meshes don't lose any affordance (e.g., holes and handles are preserved)."
