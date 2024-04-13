@@ -56,6 +56,11 @@ class BatchQAViewer:
             (cat, model) for cat, model in self.all_objs 
             if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
         }
+        print("-"*80)
+        print("IMPORTANT: VERIFY THIS NUMBER!")
+        print("There are a total of", len(self.filtered_objs), "objects in this batch.")
+        print("-"*80)
+        input("Press Enter to continue...")
         self.remaining_objs = self.get_remaining_objects()
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
 
