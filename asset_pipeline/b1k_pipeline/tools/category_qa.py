@@ -361,6 +361,10 @@ class BatchQAViewer:
         print("Press 'Enter' to continue to complaint process.")
         print("-" * 80)
 
+        print("\nEdit the currently selected object to match the realistic size of the category.")
+        print("It should also face the same way as the other objects, and should be stable in its")
+        print("canonical orientation.")
+
         # position reference objects to be next to the inspected object
         self.position_reference_objects(target_y=obj.aabb_center[1])
         
