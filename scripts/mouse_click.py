@@ -75,9 +75,20 @@ def main():
                 "model": "lyipur",
                 "prim_type": PrimType.RIGID,
                 "position": [-0.3, -0.8, 0.5],
+                # "position": [-0.3, 1.513, 1.141],
                 "orientation": [0, 0, 0, 1],
                 "visual_only": False,
             },
+            # {
+            #     "type": "DatasetObject",
+            #     "name": "cologne1",
+            #     "category": "bottle_of_cologne",
+            #     "model": "lyipur",
+            #     "prim_type": PrimType.RIGID,
+            #     "position": [-0.07898478, -0.88635945, 0.47921503],
+            #     "orientation": [-0.10004481, 0.01489326, -0.19121832, 0.97632207],
+            #     "visual_only": False,
+            # },
         ],
         "robots": [
             {
@@ -115,6 +126,10 @@ def main():
         ],
     }
     env = og.Environment(cfg)
+
+    # Let the cologne settle
+    for _ in range(10):
+        og.sim.step()
 
     hit_record = []
 
