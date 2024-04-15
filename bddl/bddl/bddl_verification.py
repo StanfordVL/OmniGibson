@@ -314,6 +314,7 @@ def check_synset_predicate_alignment(atom, syns_to_props):
         assert ("rigidBody" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable touching: {atom}"
     if pred == "inside": 
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]] or "softBody" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
+        assert "fillable" in syns_to_props[objects[1]], f"Inapplicable inside: {atom}"
     if pred == "overlaid": 
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "attached":
