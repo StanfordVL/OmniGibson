@@ -45,7 +45,6 @@ class BatchQAViewer:
         self.your_id = your_id
         self.total_ids = total_ids
         self.seed = seed
-        self.processed_objs = self.load_processed_objects()
         self.all_objs = {
             (cat, model) for cat in get_all_object_categories()
             for model in get_all_object_category_models(cat)
@@ -85,7 +84,7 @@ class BatchQAViewer:
         self.precision_mode = not self.precision_mode
         print(f"Precision mode: {'ON' if self.precision_mode else 'OFF'}")
 
-    def load_processed_objects(self):
+    def get_processed_objects(self):
         processed_objs = set()
         if os.path.exists(self.record_path):
             for _, _, files in os.walk(self.record_path):
@@ -95,7 +94,7 @@ class BatchQAViewer:
         return processed_objs
 
     def get_remaining_objects(self):
-        return sorted({(cat, model) for cat, model in self.filtered_objs if model not in self.processed_objs})
+        return sorted({(cat, model) for cat, model in self.filtered_objs if model not in self.get_processed_objs()})
     
     def group_objects_by_category(self, objects):
         grouped_objs = {}
@@ -520,9 +519,7 @@ class BatchQAViewer:
             print("Invalid id!")
             sys.exit(1)
 
-        original_remaining_objects = len(self.get_remaining_objects())
-        print(f"{len(self.processed_objs)} objects have been processed.")
-        print(f"{original_remaining_objects} objects remaining out of {len(self.filtered_objs)}.")
+        print(f"{len(self.get_processed_objects())}/{len(self.filtered_objs)} objects processed. {len(self.get_remaining_objects())} objects remaining.")
 
         # Load the environment and set the lighting parameters.
         cfg = {"scene": {"type": "Scene", "floor_plane_visible": False}}
@@ -544,10 +541,7 @@ class BatchQAViewer:
             for batch_start in range(0, len(sorted_models), batch_size):
                 batch = sorted_models[batch_start:batch_start+batch_size]
                 self.evaluate_batch(batch, cat)
-
-                new_remaining_objects = len(self.get_remaining_objects())
-                processed_objects = original_remaining_objects - new_remaining_objects
-                print(f"{processed_objects}/{original_remaining_objects} objects processed. {new_remaining_objects} objects remaining.")
+                print(f"{len(self.get_processed_objects())}/{len(self.filtered_objs)} objects processed. {len(self.get_remaining_objects())} objects remaining.")
 
 
 class ObjectComplaintHandler:
