@@ -59,7 +59,6 @@ class BatchQAViewer:
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
         print("-"*80)
         input("Press Enter to continue...")
-        self.remaining_objs = self.get_remaining_objects()
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
 
         # Reference objects
@@ -394,7 +393,6 @@ class BatchQAViewer:
         # Prompt the user to fix the scale and orientation of the object. Keep the camera in position, too.
         step = 0               
         while not done:
-            step += 1
             og.sim.step()
             self.update_camera(obj.aabb_center)
             if step % 100 == 0:
@@ -403,6 +401,7 @@ class BatchQAViewer:
                 rotation_str = f"{rotation[0]:.2f}, {rotation[1]:.2f}, {rotation[2]:.2f}"
                 bbox_str = f"{obj.aabb_extent[0] * 100:.2f}cm, {obj.aabb_extent[1] * 100:.2f}cm, {obj.aabb_extent[2] * 100:.2f}cm"
                 print(f"Bounding box extent: {bbox_str}. Scale: {scale_str}. Rotation: {rotation_str}              ", end="\r")
+            step += 1
         print()
         print("-"*80)
         
@@ -521,8 +520,9 @@ class BatchQAViewer:
             print("Invalid id!")
             sys.exit(1)
 
+        original_remaining_objects = len(self.get_remaining_objects())
         print(f"{len(self.processed_objs)} objects have been processed.")
-        print(f"{len(self.remaining_objs)} objects remaining out of {len(self.filtered_objs)}.")
+        print(f"{original_remaining_objects} objects remaining out of {len(self.filtered_objs)}.")
 
         # Load the environment and set the lighting parameters.
         cfg = {"scene": {"type": "Scene", "floor_plane_visible": False}}
@@ -534,7 +534,7 @@ class BatchQAViewer:
 
         self.human, self.phone = self.add_reference_objects()
 
-        remaining_objs_by_cat = self.group_objects_by_category(self.remaining_objs)
+        remaining_objs_by_cat = self.group_objects_by_category(self.get_remaining_objects())
         
         batch_size = 20
 
@@ -544,6 +544,10 @@ class BatchQAViewer:
             for batch_start in range(0, len(sorted_models), batch_size):
                 batch = sorted_models[batch_start:batch_start+batch_size]
                 self.evaluate_batch(batch, cat)
+
+                new_remaining_objects = len(self.get_remaining_objects())
+                processed_objects = original_remaining_objects - new_remaining_objects
+                print(f"{processed_objects}/{original_remaining_objects} objects processed. {new_remaining_objects} objects remaining.")
 
 
 class ObjectComplaintHandler:
@@ -580,24 +584,32 @@ class ObjectComplaintHandler:
     def process_complaints(self, queue, category, model, messages, stdin_fileno):
         sys.stdin = os.fdopen(stdin_fileno)
         
+        # Get existing complaints.
         existing_complaints = self._get_existing_complaints(model)
+        
+        # Take note of the unresolved ones.
         unresolved_indices = [idx for idx, complaint in enumerate(existing_complaints) if not complaint["processed"]]
+
+        # Mark all as resolved
+        for complaint in existing_complaints:
+            complaint["processed"] = True
+
+        # Allow the user to pick which complaints to keep unresolved.
         if len(unresolved_indices) > 0:
             print(f"Found {len(unresolved_indices)} unresolved complaints.")
             for i, idx in enumerate(unresolved_indices, start=1):
-                print(f"Complaint {i}:")
+                print(f"\nComplaint {i}:")
                 complaint = existing_complaints[idx]
                 print(f"Prompt: {complaint['message']}\n")
                 print(f"Complaint: {complaint['complaint']}\n")
-            while True:
-                print("ALL complaints except the ones you enter below will be marked as RESOLVED.")
-                response = input("Enter complaint numbers to KEEP as UNRESOLVED (e.g., 1,2,3): ")
-                if response:
-                    response = response.split(",")
-                    for idx in response:
-                        complaint_idx = unresolved_indices[int(idx)-1]
-                        existing_complaints[complaint_idx]["processed"] = True
-                    break
+            
+            print("\nALL complaints except the ones you enter below will be marked as RESOLVED.")
+            response = input("Enter complaint numbers to KEEP as UNRESOLVED (e.g., 1,2,3): ")
+            if response:
+                response = response.split(",")
+                for idx in response:
+                    complaint_idx = unresolved_indices[int(idx)-1]
+                    existing_complaints[complaint_idx]["processed"] = False
         else:
             print("No unresolved complaints found.")
 
@@ -629,12 +641,12 @@ class ObjectComplaintHandler:
         messages = [
             self._get_synset_question(obj),
             self._get_category_question(obj),
+            self._get_substanceness_question(obj),
             self._get_ability_question(obj),
             self._get_single_rigid_body_question(obj),
             self._get_appearance_question(obj),
             self._get_articulation_question(obj),
             # self._get_collision_question(obj),
-            self._get_cloth_question(obj),
         ]
 
         if "cloth" in self._get_synset_and_abilities(obj.category)[1]:
@@ -644,6 +656,8 @@ class ObjectComplaintHandler:
     
     def _get_synset_and_abilities(self, category):
         synset = self.taxonomy.get_synset_from_category(category)
+        if synset is None:
+            synset = self.taxonomy.get_synset_from_substance(category)
         assert synset is not None, f"Synset not found for category {category}"
         return synset, self.taxonomy.get_abilities(synset)
 
@@ -659,7 +673,7 @@ class ObjectComplaintHandler:
     def _get_synset_question(self, obj):
         synset, definition = self._get_synset_and_definition(obj.category)
         message = (
-            "SYNSET: Confirm object synset assignment.\n"
+            "SYNSET: Confirm object synset assignment.\n\n"
             f"Object assigned to synset: {synset}\n"
             f"Definition: {definition}\n\n"
             "Reminder: synset should match the object and not its contents.\n"
@@ -674,8 +688,8 @@ class ObjectComplaintHandler:
     
     def _get_category_question(self, obj):
         message = (
-            "CATEGORY: Confirm object category assignment.\n"
-            f"Object assigned to category: {obj.category}\n"
+            "CATEGORY: Confirm object category assignment.\n\n"
+            f"Object assigned to category: {obj.category}\n\n"
             "If the object is not compatible with the rest of the objects in this category,\n"
             "(e.g. tabletop sink vs regular sink), change the category here.\n"
             "Confirm that the object is the same kind of object as the rest of the objects\n"
@@ -684,14 +698,29 @@ class ObjectComplaintHandler:
         )
         return message
     
+    def _get_substanceness_question(self, obj):
+        _, abilities = self._get_synset_and_abilities(obj.category)
+        substance_types = set(abilities.keys()) & {"rigidBody", "liquid", "macroPhysicalSubstance", "microPhysicalSubstance", "visualSubstance", "cloth", "softBody", "rope"}
+        assert len(substance_types) == 1, f"Multiple substance types found for object {obj.name}"
+        substance_type, = substance_types
+        message = (
+            "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\n"
+            "If it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\n"
+            f"Currently, it is annotated as: {substance_type}.\n\n"
+            'Enter one of "rigidBody", "liquid", "macroPhysicalSubstance", "microPhysicalSubstance", "visualSubstance", "cloth", "softBody", "rope" to change.'
+        )
+        return message
+    
     def _get_ability_question(self, obj):
         _, abilities = self._get_synset_and_abilities(obj.category)
         interesting_abilities = set(abilities.keys()) & INTERESTING_ABILITIES
         message = (
-            "ABILITIES: Confirm that this object can support all of the abilities seen below.\n"
-            f"Object abilities: {', '.join(sorted(interesting_abilities))}\n\n"
+            "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\n"
+            f"All abilities: {', '.join(sorted(abilities.keys()))}\n\n"
+            f"More interesting abilities (pay special attention): {', '.join(sorted(interesting_abilities))}\n\n"
             "If this object looks like it should not have some of these abilities, please\n"
             "list the abilities that we should safely ignore as a comma separated list.\n"
+            "Don't worry about things like dustyable etc. in the first list that are a bit fuzzy.\n"
             "For example, for an unopenable window you would put in 'openable'."
         )
         return message
@@ -734,17 +763,6 @@ class ObjectComplaintHandler:
         message += "\nVerify that the joint limits look reasonable and that the object is not\n"
         message += "missing articulations that would make it useless. Do NOT be overly ambitious - we\n"
         message += "only care about MUST-HAVE articulations here."
-        return message
-
-    def _get_cloth_question(self, obj):
-        _, abilities = self._get_synset_and_abilities(obj.category)
-        is_cloth = "cloth" in abilities
-        obj_type = "cloth" if is_cloth else "rigidBody"
-        message = (
-            "Confirm if the object is a cloth object.\n"
-            f"Currently, it is annotated as {obj_type}.\n\n"
-            "Enter 'cloth' or 'rigidBody' to change."
-        )
         return message
 
     def _get_unfolded_question(self, obj):
