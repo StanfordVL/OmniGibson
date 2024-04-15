@@ -50,7 +50,7 @@ class BatchQAViewer:
             for model in get_all_object_category_models(cat)
         }
         self.filtered_objs = sorted({
-            (cat, model) for cat, model in self.all_objs 
+            (cat, model) for cat, model in self.all_objs
             if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
         })
         self.processed_objects = self.load_processed_objects()
@@ -77,11 +77,11 @@ class BatchQAViewer:
     @property
     def angle_increment(self):
         return ANGLE_INCREMENT if self.precision_mode else LOW_PRECISION_ANGLE_INCREMENT
-    
+
     @property
     def scale_increment(self):
         return 1.1 if self.precision_mode else 10.
-    
+
     def _toggle_precision(self):
         self.precision_mode = not self.precision_mode
         print(f"Precision mode: {'ON' if self.precision_mode else 'OFF'}")
@@ -97,7 +97,7 @@ class BatchQAViewer:
     @property
     def remaining_objects(self):
         return sorted({(cat, model) for cat, model in self.filtered_objs if model not in self.processed_objects})
-    
+
     def group_objects_by_category(self, objects):
         grouped_objs = {}
         for cat, model in objects:
@@ -169,6 +169,8 @@ class BatchQAViewer:
             self.pan = (self.pan + d_pan) % (2 * np.pi)
             self.tilt = np.clip(self.tilt + d_tilt, -np.pi / 2, np.pi / 2)
             self.dist = np.clip(self.dist + d_dist, 0, 100)
+        def reset_camera():
+            self.pan, self.tilt, self.dist = np.pi, 0., default_dist
 
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.UP,
@@ -194,6 +196,11 @@ class BatchQAViewer:
             key=lazy.carb.input.KeyboardInput.PAGE_UP,
             callback_fn=lambda: update_camera(0, 0, -0.1),
         )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.END,
+            callback_fn=lambda: reset_camera(),
+        )
+
 
     def update_camera(self, target):
         # Get the camera position by starting at the target point and moving back by the distance
@@ -259,7 +266,7 @@ class BatchQAViewer:
         scale_queue = []  # We queue scales to apply them all at once to avoid .play getting called from .step
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
-        
+
         def _set_done():
             nonlocal done
             done = True
@@ -270,7 +277,7 @@ class BatchQAViewer:
             # Reposition everything
             self.position_objects(all_objects)
             self.position_reference_objects(target_y=obj.aabb_center[1])
-               
+
         def _align_to_pca(pca_axis):
             if pca_axis == 1 and obj in obj_first_pca_angle_map:
                 angle = obj_first_pca_angle_map[obj]
@@ -303,7 +310,7 @@ class BatchQAViewer:
 
                 # Compute the angle between the first principal component and the x-axis
                 angle = np.arctan2(pc[1], pc[0])
-                
+
                 if pca_axis == 1:
                     obj_first_pca_angle_map[obj] = angle
                 else:
@@ -318,7 +325,7 @@ class BatchQAViewer:
             # Reposition everything
             self.position_objects(all_objects)
             self.position_reference_objects(target_y=obj.aabb_center[1])
-        
+
         def _rotate_object(axis, angle):
             current_rot = R.from_quat(obj.get_orientation())
             new_rot = R.from_euler(axis, angle) * current_rot
@@ -404,7 +411,7 @@ class BatchQAViewer:
             key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
             callback_fn=lambda: scale_queue.append(0),
         )
-        
+
         print("-" * 80)
         print("All of the below are numpad keys.")
         print("Press '7' to align object to its first principal component.")
@@ -426,9 +433,9 @@ class BatchQAViewer:
 
         # position reference objects to be next to the inspected object
         self.position_reference_objects(target_y=obj.aabb_center[1])
-        
+
         # Prompt the user to fix the scale and orientation of the object. Keep the camera in position, too.
-        step = 0               
+        step = 0
         while not done:
             og.sim.step()
 
@@ -452,7 +459,7 @@ class BatchQAViewer:
             step += 1
         print()
         print("-"*80)
-        
+
         # Now we're done with bbox and scale and orientation. Save the data.
         orientation = obj.get_orientation()
         scale = obj.scale
@@ -489,7 +496,7 @@ class BatchQAViewer:
                 interpolation_point = 0.5 * np.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * np.pi) + 0.5
                 target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
                 joint.set_pos(target_pos)
-    
+
             if not multiprocess_queue.empty():
                 # Got a response, we can stop.
                 break
@@ -497,7 +504,7 @@ class BatchQAViewer:
         assert not multiprocess_queue.empty(), "Complaint process did not return a message."
         message = multiprocess_queue.get()
         complaints = json.loads(message)
-        
+
         # Wait for the complaint process to finish to not have to kill it
         time.sleep(0.5)
 
@@ -568,7 +575,7 @@ class BatchQAViewer:
         og.sim.step()
 
         return human_prim, phone
-    
+
     def run(self):
         if self.your_id < 0 or self.your_id >= self.total_ids:
             print("Invalid id!")
@@ -591,7 +598,7 @@ class BatchQAViewer:
         self.human, self.phone = self.add_reference_objects()
 
         remaining_objs_by_cat = self.group_objects_by_category(self.remaining_objects)
-        
+
         batch_size = 20
 
         for cat, models in remaining_objs_by_cat.items():
@@ -614,7 +621,7 @@ class ObjectComplaintHandler:
         inventory_path = self.pipeline_root / "artifacts/pipeline/object_inventory.json"
         with open(inventory_path, "r") as file:
             return json.load(file)["providers"]
-    
+
     def _get_existing_complaints(self, model):
         provider = None
         for obj, provider_candidate in self.inventory_dict.items():
@@ -637,10 +644,10 @@ class ObjectComplaintHandler:
 
     def process_complaints(self, queue, category, model, messages, stdin_fileno):
         sys.stdin = os.fdopen(stdin_fileno)
-        
+
         # Get existing complaints.
         existing_complaints = self._get_existing_complaints(model)
-        
+
         # Take note of the unresolved ones.
         unresolved_indices = [idx for idx, complaint in enumerate(existing_complaints) if not complaint["processed"]]
 
@@ -656,7 +663,7 @@ class ObjectComplaintHandler:
                 complaint = existing_complaints[idx]
                 print(f"Prompt: {complaint['message']}\n")
                 print(f"Complaint: {complaint['complaint']}\n")
-            
+
             print("\nALL complaints except the ones you enter below will be marked as RESOLVED.")
             response = input("Enter complaint numbers to KEEP as UNRESOLVED (e.g., 1,2,3): ")
             if response:
@@ -674,7 +681,7 @@ class ObjectComplaintHandler:
             if complaint:
                 existing_complaints.append(complaint)
             print("-"*80)
-        
+
         queue.put(json.dumps(existing_complaints))
 
     def _process_single_complaint(self, message, category, model):
@@ -688,7 +695,7 @@ class ObjectComplaintHandler:
                 "processed": False,
                 "new": True,
             }
-        
+
         return None
 
     def get_questions(self, obj):
@@ -707,7 +714,7 @@ class ObjectComplaintHandler:
             self._get_unfolded_question(obj),
 
         return messages
-    
+
     def _get_synset_and_abilities(self, category):
         synset = self.taxonomy.get_synset_from_category(category)
         if synset is None:
@@ -739,7 +746,7 @@ class ObjectComplaintHandler:
             "should be assigned to. In the next question also type in the correct category."
         )
         return message
-    
+
     def _get_category_question(self, obj):
         message = (
             "CATEGORY: Confirm object category assignment.\n\n"
@@ -751,7 +758,7 @@ class ObjectComplaintHandler:
             "If the category is wrong, please type in the correct category."
         )
         return message
-    
+
     def _get_substanceness_question(self, obj):
         _, abilities = self._get_synset_and_abilities(obj.category)
         substance_types = set(abilities.keys()) & {"rigidBody", "liquid", "macroPhysicalSubstance", "microPhysicalSubstance", "visualSubstance", "cloth", "softBody", "rope"}
@@ -764,7 +771,7 @@ class ObjectComplaintHandler:
             'Enter one of "rigidBody", "liquid", "macroPhysicalSubstance", "microPhysicalSubstance", "visualSubstance", "cloth", "softBody", "rope" to change.'
         )
         return message
-    
+
     def _get_ability_question(self, obj):
         _, abilities = self._get_synset_and_abilities(obj.category)
         interesting_abilities = [f"    {a}: {a in abilities}" for a in sorted(INTERESTING_ABILITIES)]
