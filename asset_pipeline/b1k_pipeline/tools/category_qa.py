@@ -57,6 +57,7 @@ class BatchQAViewer:
         print("-"*80)
         print("IMPORTANT: VERIFY THIS NUMBER!")
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
+        print("You are running the 4.15.1 version of this script.")
         print("-"*80)
         input("Press Enter to continue...")
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
@@ -105,12 +106,9 @@ class BatchQAViewer:
             grouped_objs[cat].append(model)
         return grouped_objs
 
-    def position_objects(self, category, batch):
+    def import_objects(self, category, batch):
         all_objects = []
-        y_coordinate = 0
-        prev_obj_radius = 0
-
-        for index, obj_model in enumerate(batch):
+        for i, obj_model in enumerate(batch):
             obj = DatasetObject(
                 name=obj_model,
                 category=category,
@@ -118,27 +116,40 @@ class BatchQAViewer:
                 visual_only=True,
             )
             og.sim.import_object(obj)
+            all_objects.append(obj)
+
+        return all_objects
+
+    def position_objects(self, all_objects, should_draw=True):
+        y_coordinate = 0
+        prev_obj_radius = 0
+
+        if should_draw:
+            clear_debug_drawing()
+
+        for index, obj in enumerate(all_objects):
             obj_radius = np.linalg.norm(obj.aabb_extent[:2]) / 2.0
             if index != 0:
                 y_coordinate += prev_obj_radius + FIXED_Y_SPACING + obj_radius
-            # print(obj.name, "y_coordinate", y_coordinate, "prev radius", obj_radius)
             obj_in_min = obj.get_position() - obj.aabb[0]
 
             obj.set_position_orientation(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05], orientation=[0, 0, 0, 1])
 
-            draw_text(obj_model, [0, y_coordinate, -0.1], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
+            if should_draw:
+                draw_text(obj.name, [0, y_coordinate, -0.1], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
 
-            all_objects.append(obj)
             prev_obj_radius = obj_radius
 
         # Write the category name across the total dimension
-        draw_text(category, [0, y_coordinate / 2, -0.3], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=y_coordinate)
-
+        min_y = all_objects[0].aabb[0][1]
+        max_y = all_objects[-1].aabb[1][1]
+        center_y = (min_y + max_y) / 2
+        length_y = max_y - min_y
+        if should_draw:
+            draw_text(obj.category, [0, center_y, -0.3], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=length_y)
         og.sim.step()
         og.sim.step()
         og.sim.step()
-
-        return all_objects
 
     def save_object_results(self, obj, orientation, scale, complaints):
         orientation = obj.get_orientation()
@@ -213,7 +224,7 @@ class BatchQAViewer:
         average_pos = np.mean([obj.aabb_center for obj in all_objects], axis=0)
         frame = 0
         amplitude = (y_max - y_min) / 2
-        meters_per_second = 0.2
+        meters_per_second = 0.1
         period = max(2 * amplitude / meters_per_second, 3)
         frequency = 1 / period
         angular_velocity = 2 * np.pi * frequency
@@ -237,14 +248,14 @@ class BatchQAViewer:
 
         KeyboardEventHandler.reset()
 
-    def evaluate_single_object(self, obj):
+    def evaluate_single_object(self, all_objects, i):
+        obj = all_objects[i]
         print(f"\n\n\n\nNow editing object {obj.name}\n")
 
         KeyboardEventHandler.initialize()
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
         done = False
-        obj_position = obj.get_position()
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
         
@@ -254,8 +265,10 @@ class BatchQAViewer:
 
         def _toggle_gravity():
             obj.visual_only = not obj.visual_only
-            if obj.visual_only:
-                obj.set_position(obj_position)
+
+            # Reposition everything
+            self.position_objects(all_objects)
+            self.position_reference_objects(target_y=obj.aabb_center[1])
                
         def _align_to_pca(pca_axis):
             if pca_axis == 1 and obj in obj_first_pca_angle_map:
@@ -300,6 +313,10 @@ class BatchQAViewer:
 
             # Apply the rotation to the object
             obj.set_orientation(rot.as_quat())
+
+            # Reposition everything
+            self.position_objects(all_objects)
+            self.position_reference_objects(target_y=obj.aabb_center[1])
         
         def _rotate_object(axis, angle):
             current_rot = R.from_quat(obj.get_orientation())
@@ -308,8 +325,22 @@ class BatchQAViewer:
             rounded_rot = R.from_euler('xyz', np.deg2rad(np.round(np.rad2deg(new_rot.as_euler('xyz')))))
             obj.set_orientation(rounded_rot.as_quat())
 
+            # Reposition everything
+            self.position_objects(all_objects)
+            self.position_reference_objects(target_y=obj.aabb_center[1])
+
         def _set_scale(new_scale):
+            object_poses = {o: o.get_position_orientation() for o in og.sim.scene.objects}
+            og.sim.stop()
             obj.scale = new_scale
+            og.sim.play()
+            for o, pose in object_poses.items():
+                o.set_position_orientation(*pose)
+            og.sim.step()
+
+            # Reposition everything
+            self.position_objects(all_objects)
+            self.position_reference_objects(target_y=obj.aabb_center[1])
 
         # Other controls
         KeyboardEventHandler.add_keyboard_callback(
@@ -414,9 +445,10 @@ class BatchQAViewer:
         orientation = obj.get_orientation()
         scale = obj.scale
 
-        # Set the object back to visual only
+        # Set the object back to visual only and reposition everything
         obj.visual_only = True
-        obj.set_position(obj_position)
+        self.position_objects(all_objects)
+        self.position_reference_objects(target_y=obj.aabb_center[1])
 
         # Set the keyboard bindings back to camera only
         KeyboardEventHandler.reset()
@@ -469,19 +501,20 @@ class BatchQAViewer:
         # Mark the object as processed
         self.processed_objects.add(obj.name)
 
-        clear_debug_drawing()
         KeyboardEventHandler.reset()
 
     def evaluate_batch(self, batch, category):
-        all_objects = self.position_objects(category, batch)
+        all_objects = self.import_objects(category, batch)
+        og.sim.step()
+        self.position_objects(all_objects)
         self.position_reference_objects(target_y=0.)
 
         # Phase 1: Continuously pan across the full category to show the user all objects
         self.whole_batch_preview(all_objects)
 
         # Phase 2: Allow the user to interact with the objects one by one
-        for obj in all_objects:
-            self.evaluate_single_object(obj)
+        for i in range(len(all_objects)):
+            self.evaluate_single_object(all_objects, i)
 
         # Clean up.
         for obj in all_objects:
