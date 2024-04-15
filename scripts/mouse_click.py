@@ -2,6 +2,11 @@ import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
+from omnigibson.action_primitives.starter_semantic_action_primitives import (
+    StarterSemanticActionPrimitives,
+    StarterSemanticActionPrimitiveSet,
+)
+from omnigibson.utils.constants import PrimType
 from omnigibson.utils.grasping_planning_utils import get_orientation_facing_vector_with_random_yaw
 
 
@@ -60,8 +65,20 @@ def main():
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
-            "load_object_categories": ["walls", "floors"],
+            "load_object_categories": ["walls", "floors", "ceilings", "coffee_table"],
         },
+        "objects": [
+            {
+                "type": "DatasetObject",
+                "name": "cologne",
+                "category": "bottle_of_cologne",
+                "model": "lyipur",
+                "prim_type": PrimType.RIGID,
+                "position": [-0.3, -0.8, 0.5],
+                "orientation": [0, 0, 0, 1],
+                "visual_only": False,
+            },
+        ],
         "robots": [
             {
                 "type": "Fetch",
@@ -99,6 +116,8 @@ def main():
     }
     env = og.Environment(cfg)
 
+    hit_record = []
+
     def callback(prim_path, pos_3d, pos_2d):
         direction = np.array(pos_3d) - og.sim.viewer_camera.get_position()
         hit = og.sim.psqi.raycast_closest(
@@ -115,10 +134,32 @@ def main():
         distance = hit["distance"]
         grasp_quat = get_orientation_facing_vector_with_random_yaw(normal)
 
+        prim_path = "/".join(prim_path.split("/")[:3])
+
+        clicked_obj = og.sim.scene.object_registry("prim_path", prim_path)
+
+        hit_record.append(
+            {"clicked_obj": clicked_obj, "position": position, "normal": normal, "grasp_quat": grasp_quat}
+        )
+
+        print(f"Clicked on object: {clicked_obj.name} at position {position} with normal {normal}")
+        print(f"Grasp quaternion: {grasp_quat}")
+
     add_click_callback(callback)
 
-    while True:
+    while hit_record == []:
         og.sim.render()
+
+    clicked_obj = hit_record[0]["clicked_obj"]
+    position = hit_record[0]["position"]
+    normal = hit_record[0]["normal"]
+    grasp_quat = hit_record[0]["grasp_quat"]
+
+    controller = StarterSemanticActionPrimitives(env, enable_head_tracking=False)
+    for action in controller.apply_ref(
+        StarterSemanticActionPrimitiveSet.GRASP, clicked_obj, ((position, grasp_quat), normal), attempts=3
+    ):
+        env.step(action)
 
 
 if __name__ == "__main__":
