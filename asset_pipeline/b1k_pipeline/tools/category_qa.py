@@ -53,6 +53,7 @@ class BatchQAViewer:
             (cat, model) for cat, model in self.all_objs 
             if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
         })
+        self.processed_objects = self.load_processed_objects()
         print("-"*80)
         print("IMPORTANT: VERIFY THIS NUMBER!")
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
@@ -84,17 +85,17 @@ class BatchQAViewer:
         self.precision_mode = not self.precision_mode
         print(f"Precision mode: {'ON' if self.precision_mode else 'OFF'}")
 
-    def get_processed_objects(self):
+    def load_processed_objects(self):
         processed_objs = set()
-        if os.path.exists(self.record_path):
-            for _, _, files in os.walk(self.record_path):
-                for file in files:
-                    if file.endswith(".json"):
-                        processed_objs.add(file[:-5])
+        for cat, mdl in self.filtered_objs:
+            path = os.path.join(self.record_path, cat, mdl + ".json")
+            if os.path.exists(path):
+                processed_objs.add(mdl)
         return processed_objs
 
-    def get_remaining_objects(self):
-        return sorted({(cat, model) for cat, model in self.filtered_objs if model not in self.get_processed_objs()})
+    @property
+    def remaining_objects(self):
+        return sorted({(cat, model) for cat, model in self.filtered_objs if model not in self.processed_objects})
     
     def group_objects_by_category(self, objects):
         grouped_objs = {}
@@ -237,6 +238,8 @@ class BatchQAViewer:
         KeyboardEventHandler.reset()
 
     def evaluate_single_object(self, obj):
+        print(f"\n\n\n\nNow editing object {obj.name}\n")
+
         KeyboardEventHandler.initialize()
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
@@ -459,6 +462,9 @@ class BatchQAViewer:
         # Save the object results
         self.save_object_results(obj, orientation, scale, complaints)
 
+        # Mark the object as processed
+        self.processed_objects.add(obj.name)
+
         clear_debug_drawing()
         KeyboardEventHandler.reset()
 
@@ -519,7 +525,7 @@ class BatchQAViewer:
             print("Invalid id!")
             sys.exit(1)
 
-        print(f"{len(self.get_processed_objects())}/{len(self.filtered_objs)} objects processed. {len(self.get_remaining_objects())} objects remaining.")
+        print(f"{len(self.processed_objects)}/{len(self.filtered_objs)} objects processed. {len(self.remaining_objects)} objects remaining.")
 
         # Load the environment and set the lighting parameters.
         cfg = {"scene": {"type": "Scene", "floor_plane_visible": False}}
@@ -531,7 +537,7 @@ class BatchQAViewer:
 
         self.human, self.phone = self.add_reference_objects()
 
-        remaining_objs_by_cat = self.group_objects_by_category(self.get_remaining_objects())
+        remaining_objs_by_cat = self.group_objects_by_category(self.remaining_objects)
         
         batch_size = 20
 
@@ -541,7 +547,8 @@ class BatchQAViewer:
             for batch_start in range(0, len(sorted_models), batch_size):
                 batch = sorted_models[batch_start:batch_start+batch_size]
                 self.evaluate_batch(batch, cat)
-                print(f"{len(self.get_processed_objects())}/{len(self.filtered_objs)} objects processed. {len(self.get_remaining_objects())} objects remaining.")
+                print(f"\n\n{len(self.processed_objects)}/{len(self.filtered_objs)} objects processed. {len(self.remaining_objects)} objects remaining.\n")
+                time.sleep(1)
 
 
 class ObjectComplaintHandler:
