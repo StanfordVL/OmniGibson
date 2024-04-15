@@ -76,7 +76,7 @@ class BatchQAViewer:
 
     @property
     def angle_increment(self):
-        return LOW_PRECISION_ANGLE_INCREMENT if self.precision_mode else ANGLE_INCREMENT
+        return ANGLE_INCREMENT if self.precision_mode else LOW_PRECISION_ANGLE_INCREMENT
     
     @property
     def scale_increment(self):
@@ -133,7 +133,7 @@ class BatchQAViewer:
                 y_coordinate += prev_obj_radius + FIXED_Y_SPACING + obj_radius
             obj_in_min = obj.get_position() - obj.aabb[0]
 
-            obj.set_position_orientation(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05], orientation=[0, 0, 0, 1])
+            obj.set_position(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05])
 
             if should_draw:
                 draw_text(obj.name, [0, y_coordinate, -0.1], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
@@ -256,6 +256,7 @@ class BatchQAViewer:
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
         done = False
+        scale_queue = []  # We queue scales to apply them all at once to avoid .play getting called from .step
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
         
@@ -336,11 +337,11 @@ class BatchQAViewer:
             og.sim.play()
             for o, pose in object_poses.items():
                 o.set_position_orientation(*pose)
-            og.sim.step()
 
             # Reposition everything
             self.position_objects(all_objects)
             self.position_reference_objects(target_y=obj.aabb_center[1])
+            self.dist = obj.aabb_extent[0] * 2.5
 
         # Other controls
         KeyboardEventHandler.add_keyboard_callback(
@@ -393,15 +394,15 @@ class BatchQAViewer:
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
-            callback_fn=lambda: _set_scale(obj.scale * self.scale_increment),
+            callback_fn=lambda: scale_queue.append(self.scale_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
-            callback_fn=lambda: _set_scale(obj.scale / self.scale_increment),
+            callback_fn=lambda: scale_queue.append(1 / self.scale_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
-            callback_fn=lambda: _set_scale([1., 1., 1.]),
+            callback_fn=lambda: scale_queue.append(0),
         )
         
         print("-" * 80)
@@ -430,6 +431,17 @@ class BatchQAViewer:
         step = 0               
         while not done:
             og.sim.step()
+
+            # Apply any scale changes
+            if len(scale_queue) > 0:
+                scale = np.array(obj.scale)
+                if any(s == 0 for s in scale_queue):
+                    scale = np.ones(3)  # Reset the scale
+                else:
+                    scale *= np.prod(scale_queue)
+                _set_scale(scale)
+                scale_queue.clear()
+
             self.update_camera(obj.aabb_center)
             if step % 100 == 0:
                 scale_str = f"{obj.scale[0]:.2f}, {obj.scale[1]:.2f}, {obj.scale[2]:.2f}"
