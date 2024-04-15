@@ -525,6 +525,10 @@ class BatchQAViewer:
             print("Invalid id!")
             sys.exit(1)
 
+        # Check the BDDL version
+        assert "fillable" in self.taxonomy.get_abilities("cabinet.n.01"), \
+            "Your BDDL version is too old. Please uninstall BDDL and pip install -e . within the latest develop branch."
+
         print(f"{len(self.processed_objects)}/{len(self.filtered_objs)} objects processed. {len(self.remaining_objects)} objects remaining.")
 
         # Load the environment and set the lighting parameters.
@@ -641,9 +645,9 @@ class ObjectComplaintHandler:
     def get_questions(self, obj):
         messages = [
             self._get_synset_question(obj),
-            self._get_category_question(obj),
             self._get_substanceness_question(obj),
             self._get_ability_question(obj),
+            self._get_category_question(obj),
             self._get_single_rigid_body_question(obj),
             self._get_appearance_question(obj),
             self._get_articulation_question(obj),
