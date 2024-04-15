@@ -244,6 +244,7 @@ class BatchQAViewer:
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
         done = False
+        obj_position = obj.get_position()
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
         
@@ -253,6 +254,8 @@ class BatchQAViewer:
 
         def _toggle_gravity():
             obj.visual_only = not obj.visual_only
+            if obj.visual_only:
+                obj.set_position(obj_position)
                
         def _align_to_pca(pca_axis):
             if pca_axis == 1 and obj in obj_first_pca_angle_map:
@@ -413,6 +416,7 @@ class BatchQAViewer:
 
         # Set the object back to visual only
         obj.visual_only = True
+        obj.set_position(obj_position)
 
         # Set the keyboard bindings back to camera only
         KeyboardEventHandler.reset()
@@ -526,7 +530,7 @@ class BatchQAViewer:
             sys.exit(1)
 
         # Check the BDDL version
-        assert "fillable" in self.taxonomy.get_abilities("cabinet.n.01"), \
+        assert "fillable" in bddl.object_taxonomy.ObjectTaxonomy().get_abilities("cabinet.n.01"), \
             "Your BDDL version is too old. Please uninstall BDDL and pip install -e . within the latest develop branch."
 
         print(f"{len(self.processed_objects)}/{len(self.filtered_objs)} objects processed. {len(self.remaining_objects)} objects remaining.")
@@ -718,14 +722,15 @@ class ObjectComplaintHandler:
     
     def _get_ability_question(self, obj):
         _, abilities = self._get_synset_and_abilities(obj.category)
-        interesting_abilities = set(abilities.keys()) & INTERESTING_ABILITIES
+        interesting_abilities = [f"    {a}: {a in abilities}" for a in sorted(INTERESTING_ABILITIES)]
         message = (
             "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\n"
-            f"All abilities: {', '.join(sorted(abilities.keys()))}\n\n"
-            f"More interesting abilities (pay special attention): {', '.join(sorted(interesting_abilities))}\n\n"
-            "If this object looks like it should not have some of these abilities, please\n"
-            "list the abilities that we should safely ignore as a comma separated list.\n"
-            "Don't worry about things like dustyable etc. in the first list that are a bit fuzzy.\n"
+            "Abilities to evaluate (subset of all abilities): \n"
+        )
+        message += '\n'.join(sorted(interesting_abilities))
+        message += (
+            "\n\nIf this object looks like it should have some of these abilities flipped, please\n"
+            "list the abilities that we should flip for this object as a comma separated list.\n"
             "For example, for an unopenable window you would put in 'openable'."
         )
         return message
