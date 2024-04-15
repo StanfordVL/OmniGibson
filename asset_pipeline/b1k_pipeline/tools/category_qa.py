@@ -20,7 +20,7 @@ from omnigibson.utils.asset_utils import (
 from omnigibson.objects.dataset_object import DatasetObject
 import omnigibson.utils.transform_utils as T
 import omnigibson.lazy as lazy
-from omnigibson.utils.ui_utils import KeyboardEventHandler, draw_text
+from omnigibson.utils.ui_utils import KeyboardEventHandler, draw_text, clear_debug_drawing
 from omnigibson.macros import gm
 
 import multiprocessing
@@ -28,8 +28,6 @@ import csv
 import nltk
 import bddl.object_taxonomy
 from pathlib import Path
-nltk.download('wordnet')
-nltk.download('omw-1.4')
 from nltk.corpus import wordnet as wn
 
 
@@ -52,10 +50,10 @@ class BatchQAViewer:
             (cat, model) for cat in get_all_object_categories()
             for model in get_all_object_category_models(cat)
         }
-        self.filtered_objs = {
+        self.filtered_objs = sorted({
             (cat, model) for cat, model in self.all_objs 
             if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
-        }
+        })
         print("-"*80)
         print("IMPORTANT: VERIFY THIS NUMBER!")
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
@@ -98,7 +96,7 @@ class BatchQAViewer:
         return processed_objs
 
     def get_remaining_objects(self):
-        return {(cat, model) for cat, model in self.filtered_objs if model not in self.processed_objs}
+        return sorted({(cat, model) for cat, model in self.filtered_objs if model not in self.processed_objs})
     
     def group_objects_by_category(self, objects):
         grouped_objs = {}
@@ -143,7 +141,7 @@ class BatchQAViewer:
 
         return all_objects
 
-    def save_object_results(self, obj, complaints):
+    def save_object_results(self, obj, orientation, scale, complaints):
         orientation = obj.get_orientation()
         scale = obj.scale
         if not os.path.exists(os.path.join(self.record_path, obj.category)):
@@ -405,9 +403,21 @@ class BatchQAViewer:
                 rotation_str = f"{rotation[0]:.2f}, {rotation[1]:.2f}, {rotation[2]:.2f}"
                 bbox_str = f"{obj.aabb_extent[0] * 100:.2f}cm, {obj.aabb_extent[1] * 100:.2f}cm, {obj.aabb_extent[2] * 100:.2f}cm"
                 print(f"Bounding box extent: {bbox_str}. Scale: {scale_str}. Rotation: {rotation_str}              ", end="\r")
+        print()
         print("-"*80)
         
-        # Now we're done with bbox and scale and orientation. Start complaint process
+        # Now we're done with bbox and scale and orientation. Save the data.
+        orientation = obj.get_orientation()
+        scale = obj.scale
+
+        # Set the object back to visual only
+        obj.visual_only = True
+
+        # Set the keyboard bindings back to camera only
+        KeyboardEventHandler.reset()
+        KeyboardEventHandler.initialize()
+        self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
+
         # Launch the complaint thread
         multiprocess_queue = multiprocessing.Queue()
         questions = self.complaint_handler.get_questions(obj)
@@ -449,8 +459,9 @@ class BatchQAViewer:
             assert complaint_process.exitcode == 0, "Complaint process exited."
 
         # Save the object results
-        self.save_object_results(obj, complaints)
+        self.save_object_results(obj, orientation, scale, complaints)
 
+        clear_debug_drawing()
         KeyboardEventHandler.reset()
 
     def evaluate_batch(self, batch, category):
