@@ -490,7 +490,7 @@ class BatchQAViewer:
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
         # First, load the background image
-        background_path = pathlib.Path(__file__).resolve().parents[1] / "background.jpg"
+        background_path = pathlib.Path(__file__).resolve().parent / "background.jpg"
         background = Image.open(background_path).resize((800, 800))
 
         # Open the zip file
