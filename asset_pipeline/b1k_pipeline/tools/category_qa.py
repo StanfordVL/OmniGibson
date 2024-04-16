@@ -59,7 +59,7 @@ class BatchQAViewer:
         print("-"*80)
         print("IMPORTANT: VERIFY THIS NUMBER!")
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
-        print("You are running the 4.16.1 version of this script.")
+        print("You are running the 4.16.2 version of this script.")
         print("-"*80)
         input("Press Enter to continue...")
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
@@ -561,18 +561,16 @@ class BatchQAViewer:
 
         # Phase 1: Continuously pan across the full category to show the user all objects
         skip = self.whole_batch_preview(all_objects)
-        if skip:
-            return True
-
-        # Phase 2: Allow the user to interact with the objects one by one
-        for i in range(len(all_objects)):
-            self.evaluate_single_object(all_objects, i)
+        if not skip:
+            # Phase 2: Allow the user to interact with the objects one by one
+            for i in range(len(all_objects)):
+                self.evaluate_single_object(all_objects, i)
 
         # Clean up.
         for obj in all_objects:
             og.sim.remove_object(obj)
 
-        return False
+        return skip
 
     def position_reference_objects(self, target_y):
         obj_in_center_frame = self.phone.get_position() - self.phone.aabb_center
