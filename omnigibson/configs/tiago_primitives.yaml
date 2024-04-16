@@ -32,53 +32,40 @@ scene:
 
 robots:
   - type: Tiago
-    name: Tiago
-    action_type: continuous
-    action_normalize: true
-    proprio_obs:
-      - eef_left_pos
-      - eef_left_quat
-      - eef_right_pos
-      - eef_right_quat
-      - trunk_qpos
-      - arm_left_qpos_sin
-      - arm_left_qpos_cos
-      - arm_right_qpos_sin
-      - arm_right_qpos_cos
-      - gripper_left_qpos
-      - gripper_right_qpos
-      - grasp_left
-      - grasp_right
-    reset_joint_pos: null
-    base_name: null
+    obs_modalities: [scan, rgb, depth]
     scale: 1.0
-    self_collision: true
-    grasping_mode: physical
+    self_collisions: true
+    action_normalize: false
+    action_type: continuous
+    grasping_mode: sticky
     rigid_trunk: false
-    default_trunk_offset: 0.365
     default_arm_pose: vertical
-    sensor_config:
-      VisionSensor:
-        sensor_kwargs:
-          image_height: 512
-          image_width: 512
-      ScanSensor:
-          sensor_kwargs:
-            min_range: 512
-            max_range: 512
     controller_config:
       base:
         name: JointController
       arm_left:
         name: InverseKinematicsController
+        command_output_limits:
+          - [-0.2, -0.2, -0.2, -0.5, -0.5, -0.5]
+          - [0.2, 0.2, 0.2, 0.5, 0.5, 0.5]
+        mode: pose_absolute_ori
+        kp: 300.0
       arm_right:
-        name: InverseKinematicsController
+        name: NullJointController
       gripper_left:
-        name: MultiFingerGripperController
+        name: JointController
+        motor_type: position
+        command_input_limits: [-1, 1]
+        command_output_limits: null
+        use_delta_commands: true
       gripper_right:
-        name: MultiFingerGripperController
+        name: NullJointController
       camera:
         name: JointController
+        motor_type: position
+        command_input_limits: null
+        command_output_limits: null
+        use_delta_commands: false
 
 objects: []
 
