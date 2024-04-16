@@ -4,6 +4,7 @@ Helper script to perform batch QA on OmniGibson objects.
 
 import hashlib
 import os
+import pathlib
 import sys
 import json
 import argparse
@@ -24,8 +25,8 @@ from omnigibson.utils.ui_utils import KeyboardEventHandler, draw_text, clear_deb
 from omnigibson.macros import gm
 
 import multiprocessing
-import csv
-import nltk
+from fs.zipfs import ZipFS
+from PIL import Image
 import bddl.object_taxonomy
 from pathlib import Path
 from nltk.corpus import wordnet as wn
@@ -41,6 +42,7 @@ JOINT_SECONDS_PER_CYCLE = 4.0
 
 class BatchQAViewer:
     def __init__(self, record_path, your_id, total_ids, seed, pipeline_root):
+        self.pipeline_root = pipeline_root
         self.record_path = record_path
         self.your_id = your_id
         self.total_ids = total_ids
@@ -57,7 +59,7 @@ class BatchQAViewer:
         print("-"*80)
         print("IMPORTANT: VERIFY THIS NUMBER!")
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
-        print("You are running the 4.15.1 version of this script.")
+        print("You are running the 4.16.1 version of this script.")
         print("-"*80)
         input("Press Enter to continue...")
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
@@ -226,6 +228,7 @@ class BatchQAViewer:
         self.set_camera_bindings()
 
         done = False
+        skip = False
         y_min = np.min([obj.aabb[0][1] for obj in all_objects])
         y_max = np.max([obj.aabb[1][1] for obj in all_objects])
         average_pos = np.mean([obj.aabb_center for obj in all_objects], axis=0)
@@ -240,11 +243,22 @@ class BatchQAViewer:
             nonlocal done
             done = True
 
+        def _set_skip():
+            nonlocal skip
+            skip = True
+            _set_done()
+
         # Set done when the user presses 'C'
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
             callback_fn=_set_done,
         )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.HOME,
+            callback_fn=_set_skip,
+        )
+        print("Hit numpad enter to continue to object editing.")
+        print("Hit home to skip to the next category.")
 
         while not done:
             y = y_min + amplitude * (np.sin(frame * og.sim.get_rendering_dt() * angular_velocity) + 1)
@@ -254,6 +268,7 @@ class BatchQAViewer:
             frame += 1
 
         KeyboardEventHandler.reset()
+        return skip
 
     def evaluate_single_object(self, all_objects, i):
         obj = all_objects[i]
@@ -474,6 +489,22 @@ class BatchQAViewer:
         KeyboardEventHandler.initialize()
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
+        # First, load the background image
+        background_path = pathlib.Path(__file__).resolve().parents[1] / "background.jpg"
+        background = Image.open(background_path).resize((800, 800))
+
+        # Open the zip file
+        zip_path = os.path.join(self.pipeline_root, "artifacts", "pipeline", "max_object_images.zip")
+        with ZipFS(zip_path) as zip_fs:
+            # Find and show photos of this object.
+            image_paths = sorted([x for x in zip_fs.listdir("/") if obj.name in x])
+            for image_path in image_paths:
+                with zip_fs.open(image_path, "rb") as f:
+                    image = background.copy()
+                    max_image = Image.open(f)
+                    image.paste(max_image, (0, 0),mask=max_image) 
+                    image.show()
+
         # Launch the complaint thread
         multiprocess_queue = multiprocessing.Queue()
         questions = self.complaint_handler.get_questions(obj)
@@ -529,7 +560,9 @@ class BatchQAViewer:
         self.position_reference_objects(target_y=0.)
 
         # Phase 1: Continuously pan across the full category to show the user all objects
-        self.whole_batch_preview(all_objects)
+        skip = self.whole_batch_preview(all_objects)
+        if skip:
+            return True
 
         # Phase 2: Allow the user to interact with the objects one by one
         for i in range(len(all_objects)):
@@ -538,6 +571,8 @@ class BatchQAViewer:
         # Clean up.
         for obj in all_objects:
             og.sim.remove_object(obj)
+
+        return False
 
     def position_reference_objects(self, target_y):
         obj_in_center_frame = self.phone.get_position() - self.phone.aabb_center
@@ -606,7 +641,10 @@ class BatchQAViewer:
             sorted_models = sorted(models)
             for batch_start in range(0, len(sorted_models), batch_size):
                 batch = sorted_models[batch_start:batch_start+batch_size]
-                self.evaluate_batch(batch, cat)
+                skip = self.evaluate_batch(batch, cat)
+                if skip:
+                    print("Skipping the rest of the category", cat)
+                    break
                 print(f"\n\n{len(self.processed_objects)}/{len(self.filtered_objs)} objects processed. {len(self.remaining_objects)} objects remaining.\n")
                 time.sleep(1)
 
