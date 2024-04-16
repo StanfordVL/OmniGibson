@@ -8,6 +8,102 @@ stages:
     - b1k_pipeline/aggregate_fillable_volumes.py
     outs:
     - artifacts/parallels/fillable_volumes.zip
+  aggregate_max_object_images:
+    cmd: python -m b1k_pipeline.aggregate_max_object_images
+    deps:
+    - b1k_pipeline/aggregate_max_object_images.py
+    - cad/objects/batch-00/artifacts/max_object_images.zip
+    - cad/objects/batch-01/artifacts/max_object_images.zip
+    - cad/objects/batch-02/artifacts/max_object_images.zip
+    - cad/objects/batch-03/artifacts/max_object_images.zip
+    - cad/objects/batch-04/artifacts/max_object_images.zip
+    - cad/objects/batch-05/artifacts/max_object_images.zip
+    - cad/objects/batch-06/artifacts/max_object_images.zip
+    - cad/objects/batch-07/artifacts/max_object_images.zip
+    - cad/objects/batch-08/artifacts/max_object_images.zip
+    - cad/objects/batch-09/artifacts/max_object_images.zip
+    - cad/objects/batch-10/artifacts/max_object_images.zip
+    - cad/objects/batch-11/artifacts/max_object_images.zip
+    - cad/objects/batch-12/artifacts/max_object_images.zip
+    - cad/objects/batch-13/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-00/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-01/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-02/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-03/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-04/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-05/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-06/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-07/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-08/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-09/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-10/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-11/artifacts/max_object_images.zip
+    - cad/objects/legacy_batch-12/artifacts/max_object_images.zip
+    - cad/objects/procedural-aa/artifacts/max_object_images.zip
+    - cad/objects/substances-01/artifacts/max_object_images.zip
+    - cad/objects/substances-02/artifacts/max_object_images.zip
+    - cad/objects/task_relavant-ab/artifacts/max_object_images.zip
+    - cad/objects/task_relevant-xy/artifacts/max_object_images.zip
+    - cad/scenes/Beechwood_0_garden/artifacts/max_object_images.zip
+    - cad/scenes/Beechwood_0_int/artifacts/max_object_images.zip
+    - cad/scenes/Beechwood_1_int/artifacts/max_object_images.zip
+    - cad/scenes/Benevolence_0_int/artifacts/max_object_images.zip
+    - cad/scenes/Benevolence_1_int/artifacts/max_object_images.zip
+    - cad/scenes/Benevolence_2_int/artifacts/max_object_images.zip
+    - cad/scenes/Ihlen_0_int/artifacts/max_object_images.zip
+    - cad/scenes/Ihlen_1_int/artifacts/max_object_images.zip
+    - cad/scenes/Merom_0_garden/artifacts/max_object_images.zip
+    - cad/scenes/Merom_0_int/artifacts/max_object_images.zip
+    - cad/scenes/Merom_1_int/artifacts/max_object_images.zip
+    - cad/scenes/Pomaria_0_garden/artifacts/max_object_images.zip
+    - cad/scenes/Pomaria_0_int/artifacts/max_object_images.zip
+    - cad/scenes/Pomaria_1_int/artifacts/max_object_images.zip
+    - cad/scenes/Pomaria_2_int/artifacts/max_object_images.zip
+    - cad/scenes/Rs_garden/artifacts/max_object_images.zip
+    - cad/scenes/Rs_int/artifacts/max_object_images.zip
+    - cad/scenes/Wainscott_0_garden/artifacts/max_object_images.zip
+    - cad/scenes/Wainscott_0_int/artifacts/max_object_images.zip
+    - cad/scenes/Wainscott_1_int/artifacts/max_object_images.zip
+    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/max_object_images.zip
+    - cad/scenes/commercial_kitchen_pans/artifacts/max_object_images.zip
+    - cad/scenes/grocery_store_asian/artifacts/max_object_images.zip
+    - cad/scenes/grocery_store_cafe/artifacts/max_object_images.zip
+    - cad/scenes/grocery_store_convenience/artifacts/max_object_images.zip
+    - cad/scenes/grocery_store_half_stocked/artifacts/max_object_images.zip
+    - cad/scenes/hall_arch_wood/artifacts/max_object_images.zip
+    - cad/scenes/hall_conference_large/artifacts/max_object_images.zip
+    - cad/scenes/hall_glass_ceiling/artifacts/max_object_images.zip
+    - cad/scenes/hall_train_station/artifacts/max_object_images.zip
+    - cad/scenes/hotel_gym_spa/artifacts/max_object_images.zip
+    - cad/scenes/hotel_suite_large/artifacts/max_object_images.zip
+    - cad/scenes/hotel_suite_small/artifacts/max_object_images.zip
+    - cad/scenes/house_double_floor_lower/artifacts/max_object_images.zip
+    - cad/scenes/house_double_floor_upper/artifacts/max_object_images.zip
+    - cad/scenes/house_single_floor/artifacts/max_object_images.zip
+    - cad/scenes/office_bike/artifacts/max_object_images.zip
+    - cad/scenes/office_cubicles_left/artifacts/max_object_images.zip
+    - cad/scenes/office_cubicles_right/artifacts/max_object_images.zip
+    - cad/scenes/office_large/artifacts/max_object_images.zip
+    - cad/scenes/office_vendor_machine/artifacts/max_object_images.zip
+    - cad/scenes/public_restroom_blue/artifacts/max_object_images.zip
+    - cad/scenes/public_restroom_brown/artifacts/max_object_images.zip
+    - cad/scenes/public_restroom_futuristic/artifacts/max_object_images.zip
+    - cad/scenes/public_restroom_marble/artifacts/max_object_images.zip
+    - cad/scenes/public_restroom_white/artifacts/max_object_images.zip
+    - cad/scenes/restaurant_asian/artifacts/max_object_images.zip
+    - cad/scenes/restaurant_brunch/artifacts/max_object_images.zip
+    - cad/scenes/restaurant_cafeteria/artifacts/max_object_images.zip
+    - cad/scenes/restaurant_diner/artifacts/max_object_images.zip
+    - cad/scenes/restaurant_hotel/artifacts/max_object_images.zip
+    - cad/scenes/restaurant_urban/artifacts/max_object_images.zip
+    - cad/scenes/school_biology/artifacts/max_object_images.zip
+    - cad/scenes/school_chemistry/artifacts/max_object_images.zip
+    - cad/scenes/school_computer_lab_and_infirmary/artifacts/max_object_images.zip
+    - cad/scenes/school_geography/artifacts/max_object_images.zip
+    - cad/scenes/school_gym/artifacts/max_object_images.zip
+    - artifacts/pipeline/generate_max_object_images.success
+    outs:
+    - artifacts/pipeline/max_object_images.zip
   aggregate_metadata:
     cmd: python -m b1k_pipeline.aggregate_metadata
     deps:

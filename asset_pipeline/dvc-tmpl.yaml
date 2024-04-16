@@ -124,6 +124,15 @@ stages:
     outs:
     - artifacts/pipeline/generate_max_object_images.success
 
+  aggregate_max_object_images:
+    cmd: 'python -m b1k_pipeline.aggregate_max_object_images'
+    deps:
+    - b1k_pipeline/aggregate_max_object_images.py
+    - cad/#{combined}/artifacts/max_object_images.zip
+    - artifacts/pipeline/generate_max_object_images.success
+    outs:
+    - artifacts/pipeline/max_object_images.zip
+
   collision_selection_validation:
     cmd: 'python -m b1k_pipeline.collision_selection_validation'
     deps: 
