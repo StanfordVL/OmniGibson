@@ -634,7 +634,7 @@ class BatchQAViewer:
 
         remaining_objs_by_cat = self.group_objects_by_category(self.remaining_objects)
 
-        batch_size = 20
+        batch_size = 50
 
         for cat, models in remaining_objs_by_cat.items():
             print(f"Processing category {cat}...")
