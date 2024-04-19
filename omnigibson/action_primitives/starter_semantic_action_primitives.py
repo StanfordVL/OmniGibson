@@ -189,20 +189,19 @@ class PlanningContext(object):
                 ]
 
         # Filter out collision pairs of meshes part of disabled collision pairs
-        else:
-            for pair in self.robot.disabled_collision_pairs:
-                link_1 = pair[0]
-                link_2 = pair[1]
-                if link_1 in robot_meshes_copy.keys() and link_2 in robot_meshes_copy.keys():
-                    for mesh in robot_meshes_copy[link_1].values():
-                        self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += [
-                            m.GetPrimPath().pathString for m in robot_meshes_copy[link_2].values()
-                        ]
+        for pair in self.robot.disabled_collision_pairs:
+            link_1 = pair[0]
+            link_2 = pair[1]
+            if link_1 in robot_meshes_copy.keys() and link_2 in robot_meshes_copy.keys():
+                for mesh in robot_meshes_copy[link_1].values():
+                    self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += [
+                        m.GetPrimPath().pathString for m in robot_meshes_copy[link_2].values()
+                    ]
 
-                    for mesh in robot_meshes_copy[link_2].values():
-                        self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += [
-                            m.GetPrimPath().pathString for m in robot_meshes_copy[link_1].values()
-                        ]
+                for mesh in robot_meshes_copy[link_2].values():
+                    self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += [
+                        m.GetPrimPath().pathString for m in robot_meshes_copy[link_1].values()
+                    ]
 
         # Filter out colliders all robot copy meshes should ignore
         disabled_colliders = []
