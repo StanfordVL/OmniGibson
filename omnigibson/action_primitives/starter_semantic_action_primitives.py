@@ -102,7 +102,6 @@ class RobotCopy:
         self.links_relative_poses = {}
         self.reset_pose = {
             "original": ([0, 0, -5.0], [0, 0, 0, 1]),
-            "simplified": ([5, 0, -5.0], [0, 0, 0, 1]),
         }
 
 
@@ -189,16 +188,6 @@ class PlanningContext(object):
                     m.GetPrimPath().pathString for m in meshes.values()
                 ]
 
-        # Filter out all self-collisions
-        if self.robot_copy_type == "simplified":
-            all_meshes = [
-                mesh.GetPrimPath().pathString
-                for link in robot_meshes_copy.keys()
-                for mesh in robot_meshes_copy[link].values()
-            ]
-            for link in robot_meshes_copy.keys():
-                for mesh in robot_meshes_copy[link].values():
-                    self.disabled_collision_pairs_dict[mesh.GetPrimPath().pathString] += all_meshes
         # Filter out collision pairs of meshes part of disabled collision pairs
         else:
             for pair in self.robot.disabled_collision_pairs:
@@ -349,12 +338,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         robot_copy = RobotCopy()
 
         robots_to_copy = {"original": {"robot": self.robot, "copy_path": "/World/robot_copy"}}
-        # if hasattr(self.robot, "simplified_mesh_usd_path"):
-        #     simplified_robot = {
-        #         "robot": USDObject("simplified_copy", self.robot.simplified_mesh_usd_path),
-        #         "copy_path": "/World/simplified_robot_copy",
-        #     }
-        #     robots_to_copy["simplified"] = simplified_robot
 
         for robot_type, rc in robots_to_copy.items():
             copy_robot = None
@@ -372,11 +355,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             copy_robot.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatd(*orientation))
 
             robot_to_copy = None
-            if robot_type == "simplified":
-                robot_to_copy = rc["robot"]
-                og.sim.import_object(robot_to_copy)
-            else:
-                robot_to_copy = rc["robot"]
+            robot_to_copy = rc["robot"]
 
             # Copy robot meshes
             for link in robot_to_copy.links.values():
@@ -405,9 +384,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 copy_robot_links_relative_poses[link_name] = T.relative_pose_transform(
                     *link.get_position_orientation(), *self.robot.get_position_orientation()
                 )
-
-            if robot_type == "simplified":
-                og.sim.remove_object(robot_to_copy)
 
             robot_copy.prims[robot_type] = copy_robot
             robot_copy.meshes[robot_type] = copy_robot_meshes
@@ -1478,46 +1454,35 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ]
         )
 
-        # reset_pose_tiago = np.array(
-        #     [
-        #         -1.78029833e-04,
-        #         3.20231302e-05,
-        #         -1.85759447e-07,
-        #         0.0,
-        #         -0.2,
-        #         0.0,
-        #         0.1,
-        #         -6.10000000e-01,
-        #         -1.10000000e00,
-        #         0.00000000e00,
-        #         -1.10000000e00,
-        #         1.47000000e00,
-        #         0.00000000e00,
-        #         8.70000000e-01,
-        #         2.71000000e00,
-        #         1.50000000e00,
-        #         1.71000000e00,
-        #         -1.50000000e00,
-        #         -1.57000000e00,
-        #         4.50000000e-01,
-        #         1.39000000e00,
-        #         0.00000000e00,
-        #         0.00000000e00,
-        #         4.50000000e-02,
-        #         4.50000000e-02,
-        #         4.50000000e-02,
-        #         4.50000000e-02,
-        #     ]
-        # )
         reset_pose_tiago = np.array(
-            [ 1.90735658e-08,  
-                                     3.85301071e-08, -3.14324353e-07, -9.16700102e-08,
-       -2.73824355e-07,  8.56583853e-08,  3.85000000e-01,  8.58460000e-01,
-        0.00000000e+00,  0.00000000e+00, -1.48520000e-01,  0.00000000e+00,
-       -4.50000000e-01,  1.81008000e+00,  0.00000000e+00,  1.63368000e+00,
-        0.00000000e+00,  1.37640000e-01,  0.00000000e+00, -1.32488000e+00,
-        0.00000000e+00, -6.84150000e-01,  0.00000000e+00,  4.50000000e-02,
-        4.50000000e-02,  0.00000000e+00,  0.00000000e+00])
+            [   1.90735658e-08,  
+                3.85301071e-08, 
+                -3.14324353e-07, 
+                -9.16700102e-08,
+                -2.73824355e-07,  
+                8.56583853e-08,  
+                3.85000000e-01,  
+                8.58460000e-01,
+                0.00000000e+00,  
+                0.00000000e+00, 
+                -1.48520000e-01,  
+                0.00000000e+00,
+                -4.50000000e-01,  
+                1.81008000e+00,  
+                0.00000000e+00,  
+                1.63368000e+00,
+                0.00000000e+00,  
+                1.37640000e-01,  
+                0.00000000e+00, 
+                -1.32488000e+00,
+                0.00000000e+00, 
+                -6.84150000e-01,  
+                0.00000000e+00,  
+                4.50000000e-02,
+                4.50000000e-02,  
+                0.00000000e+00,  
+                0.00000000e+00
+            ])
         return reset_pose_tiago if self.robot_model == "Tiago" else reset_pose_fetch
 
     def _navigate_to_pose(self, pose_2d):
@@ -1530,7 +1495,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to navigate or None if it is done navigating
         """
-        with PlanningContext(self.robot, self.robot_copy, "simplified") as context:
+        with PlanningContext(self.robot, self.robot_copy, "original") as context:
             plan = plan_base_motion(
                 robot=self.robot,
                 end_conf=pose_2d,
@@ -1710,7 +1675,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 - 3-array: (x,y,z) Position in the world frame
                 - 4-array: (x,y,z,w) Quaternion orientation in the world frame
         """
-        with PlanningContext(self.robot, self.robot_copy, "simplified") as context:
+        with PlanningContext(self.robot, self.robot_copy, "original") as context:
             for _ in range(m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT):
                 if pose_on_obj is None:
                     pos_on_obj = self._sample_position_on_aabb_side(obj)
