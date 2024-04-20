@@ -672,14 +672,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         )
 
     @property
-    def simplified_mesh_usd_path(self):
-        # TODO: How can we make this more general - maybe some automatic way to generate these?
-        return os.path.join(
-            gm.ASSET_PATH,
-            "models/tiago/tiago_dual_omnidirectional_stanford/tiago_dual_omnidirectional_stanford_33_simplified_collision_mesh.usd",
-        )
-
-    @property
     def robot_arm_descriptor_yamls(self):
         # TODO: Remove the need to do this by making the arm descriptor yaml files generated automatically
         return {
