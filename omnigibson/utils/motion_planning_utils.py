@@ -443,13 +443,12 @@ def set_base_and_detect_collision(context, pose):
         bool: Whether the robot is in collision
     """
     robot_copy = context.robot_copy
-    robot_copy_type = context.robot_copy_type
 
     translation = lazy.pxr.Gf.Vec3d(*np.array(pose[0], dtype=float))
-    robot_copy.prims[robot_copy_type].GetAttribute("xformOp:translate").Set(translation)
+    robot_copy.prim.GetAttribute("xformOp:translate").Set(translation)
 
     orientation = np.array(pose[1], dtype=float)[[3, 0, 1, 2]]
-    robot_copy.prims[robot_copy_type].GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatd(*orientation))
+    robot_copy.prim.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatd(*orientation))
 
     return detect_robot_collision(context)
 
@@ -466,16 +465,15 @@ def set_arm_and_detect_collision(context, joint_pos):
         bool: Whether the robot is in a valid state i.e. not in collision
     """
     robot_copy = context.robot_copy
-    robot_copy_type = context.robot_copy_type
 
     arm_links = context.robot.manipulation_link_names
     link_poses = context.fk_solver.get_link_poses(joint_pos, arm_links)
 
     for link in arm_links:
         pose = link_poses[link]
-        if link in robot_copy.meshes[robot_copy_type].keys():
-            for mesh_name, mesh in robot_copy.meshes[robot_copy_type][link].items():
-                relative_pose = robot_copy.relative_poses[robot_copy_type][link][mesh_name]
+        if link in robot_copy.meshes.keys():
+            for mesh_name, mesh in robot_copy.meshes[link].items():
+                relative_pose = robot_copy.relative_poses[link][mesh_name]
                 mesh_pose = T.pose_transform(*pose, *relative_pose)
                 translation = lazy.pxr.Gf.Vec3d(*np.array(mesh_pose[0], dtype=float))
                 mesh.GetAttribute("xformOp:translate").Set(translation)
@@ -496,7 +494,6 @@ def detect_robot_collision(context):
         bool: Whether the robot is in collision
     """
     robot_copy = context.robot_copy
-    robot_copy_type = context.robot_copy_type
 
     # Define function for checking overlap
     valid_hit = False
@@ -509,7 +506,7 @@ def detect_robot_collision(context):
 
         return not valid_hit
 
-    for meshes in robot_copy.meshes[robot_copy_type].values():
+    for meshes in robot_copy.meshes.values():
         for mesh in meshes.values():
             if valid_hit:
                 return valid_hit

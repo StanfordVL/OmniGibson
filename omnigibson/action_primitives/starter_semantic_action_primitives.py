@@ -96,13 +96,11 @@ class RobotCopy:
     """A data structure for storing information about a robot copy, used for collision checking in planning."""
 
     def __init__(self):
-        self.prims = {}
+        self.prim = None
         self.meshes = {}
         self.relative_poses = {}
         self.links_relative_poses = {}
-        self.reset_pose = {
-            "original": ([0, 0, -5.0], [0, 0, 0, 1]),
-        }
+        self.reset_pose = ([0, 0, -5.0], [0, 0, 0, 1])
 
 
 class PlanningContext(object):
@@ -110,10 +108,9 @@ class PlanningContext(object):
     A context manager that sets up a robot copy for collision checking in planning.
     """
 
-    def __init__(self, robot, robot_copy, robot_copy_type="original"):
+    def __init__(self, robot, robot_copy):
         self.robot = robot
         self.robot_copy = robot_copy
-        self.robot_copy_type = robot_copy_type if robot_copy_type in robot_copy.prims.keys() else "original"
         self.disabled_collision_pairs_dict = {}
 
     def __enter__(self):
@@ -123,7 +120,7 @@ class PlanningContext(object):
 
     def __exit__(self, *args):
         self._set_prim_pose(
-            self.robot_copy.prims[self.robot_copy_type], self.robot_copy.reset_pose[self.robot_copy_type]
+            self.robot_copy.prim, self.robot_copy.reset_pose
         )
 
     def _assemble_robot_copy(self):
@@ -153,10 +150,10 @@ class PlanningContext(object):
         link_poses = self.fk_solver.get_link_poses(joint_pos, arm_links)
 
         # Set position of robot copy root prim
-        self._set_prim_pose(self.robot_copy.prims[self.robot_copy_type], self.robot.get_position_orientation())
+        self._set_prim_pose(self.robot_copy.prim, self.robot.get_position_orientation())
 
         # Assemble robot meshes
-        for link_name, meshes in self.robot_copy.meshes[self.robot_copy_type].items():
+        for link_name, meshes in self.robot_copy.meshes.items():
             for mesh_name, copy_mesh in meshes.items():
                 # Skip grasping frame (this is necessary for Tiago, but should be cleaned up in the future)
                 if "grasping_frame" in link_name:
@@ -165,10 +162,10 @@ class PlanningContext(object):
                 link_pose = (
                     link_poses[link_name]
                     if link_name in arm_links
-                    else self.robot_copy.links_relative_poses[self.robot_copy_type][link_name]
+                    else self.robot_copy.links_relative_poses[link_name]
                 )
                 mesh_copy_pose = T.pose_transform(
-                    *link_pose, *self.robot_copy.relative_poses[self.robot_copy_type][link_name][mesh_name]
+                    *link_pose, *self.robot_copy.relative_poses[link_name][mesh_name]
                 )
                 self._set_prim_pose(copy_mesh, mesh_copy_pose)
 
@@ -179,7 +176,7 @@ class PlanningContext(object):
         prim.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatd(*orientation))
 
     def _construct_disabled_collision_pairs(self):
-        robot_meshes_copy = self.robot_copy.meshes[self.robot_copy_type]
+        robot_meshes_copy = self.robot_copy.meshes
 
         # Filter out collision pairs of meshes part of the same link
         for meshes in robot_meshes_copy.values():
@@ -336,58 +333,53 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         """Loads a copy of the robot that can be manipulated into arbitrary configurations for collision checking in planning."""
         robot_copy = RobotCopy()
 
-        robots_to_copy = {"original": {"robot": self.robot, "copy_path": "/World/robot_copy"}}
+        copy_path = "/World/robot_copy"
+        copy_robot = None
+        copy_robot_meshes = {}
+        copy_robot_meshes_relative_poses = {}
+        copy_robot_links_relative_poses = {}
 
-        for robot_type, rc in robots_to_copy.items():
-            copy_robot = None
-            copy_robot_meshes = {}
-            copy_robot_meshes_relative_poses = {}
-            copy_robot_links_relative_poses = {}
+        # Create prim under which robot meshes are nested and set position
+        lazy.omni.usd.commands.CreatePrimCommand("Xform", copy_path).do()
+        copy_robot = lazy.omni.isaac.core.utils.prims.get_prim_at_path(copy_path)
+        reset_pose = robot_copy.reset_pose
+        translation = lazy.pxr.Gf.Vec3d(*np.array(reset_pose[0], dtype=float))
+        copy_robot.GetAttribute("xformOp:translate").Set(translation)
+        orientation = np.array(reset_pose[1], dtype=float)[[3, 0, 1, 2]]
+        copy_robot.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatd(*orientation))
 
-            # Create prim under which robot meshes are nested and set position
-            lazy.omni.usd.commands.CreatePrimCommand("Xform", rc["copy_path"]).do()
-            copy_robot = lazy.omni.isaac.core.utils.prims.get_prim_at_path(rc["copy_path"])
-            reset_pose = robot_copy.reset_pose[robot_type]
-            translation = lazy.pxr.Gf.Vec3d(*np.array(reset_pose[0], dtype=float))
-            copy_robot.GetAttribute("xformOp:translate").Set(translation)
-            orientation = np.array(reset_pose[1], dtype=float)[[3, 0, 1, 2]]
-            copy_robot.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatd(*orientation))
+        # Copy robot meshes
+        for link in self.robot.links.values():
+            link_name = link.prim_path.split("/")[-1]
+            for mesh_name, mesh in link.collision_meshes.items():
+                split_path = mesh.prim_path.split("/")
+                # Do not copy grasping frame (this is necessary for Tiago, but should be cleaned up in the future)
+                if "grasping_frame" in link_name:
+                    continue
 
-            robot_to_copy = None
-            robot_to_copy = rc["robot"]
-
-            # Copy robot meshes
-            for link in robot_to_copy.links.values():
-                link_name = link.prim_path.split("/")[-1]
-                for mesh_name, mesh in link.collision_meshes.items():
-                    split_path = mesh.prim_path.split("/")
-                    # Do not copy grasping frame (this is necessary for Tiago, but should be cleaned up in the future)
-                    if "grasping_frame" in link_name:
-                        continue
-
-                    copy_mesh_path = rc["copy_path"] + "/" + link_name
-                    copy_mesh_path += f"_{split_path[-1]}" if split_path[-1] != "collisions" else ""
-                    lazy.omni.usd.commands.CopyPrimCommand(mesh.prim_path, path_to=copy_mesh_path).do()
-                    copy_mesh = lazy.omni.isaac.core.utils.prims.get_prim_at_path(copy_mesh_path)
-                    relative_pose = T.relative_pose_transform(
-                        *mesh.get_position_orientation(), *link.get_position_orientation()
-                    )
-                    relative_pose = (relative_pose[0], np.array([0, 0, 0, 1]))
-                    if link_name not in copy_robot_meshes.keys():
-                        copy_robot_meshes[link_name] = {mesh_name: copy_mesh}
-                        copy_robot_meshes_relative_poses[link_name] = {mesh_name: relative_pose}
-                    else:
-                        copy_robot_meshes[link_name][mesh_name] = copy_mesh
-                        copy_robot_meshes_relative_poses[link_name][mesh_name] = relative_pose
-
-                copy_robot_links_relative_poses[link_name] = T.relative_pose_transform(
-                    *link.get_position_orientation(), *self.robot.get_position_orientation()
+                copy_mesh_path = copy_path + "/" + link_name
+                copy_mesh_path += f"_{split_path[-1]}" if split_path[-1] != "collisions" else ""
+                lazy.omni.usd.commands.CopyPrimCommand(mesh.prim_path, path_to=copy_mesh_path).do()
+                copy_mesh = lazy.omni.isaac.core.utils.prims.get_prim_at_path(copy_mesh_path)
+                relative_pose = T.relative_pose_transform(
+                    *mesh.get_position_orientation(), *link.get_position_orientation()
                 )
+                relative_pose = (relative_pose[0], np.array([0, 0, 0, 1]))
+                if link_name not in copy_robot_meshes.keys():
+                    copy_robot_meshes[link_name] = {mesh_name: copy_mesh}
+                    copy_robot_meshes_relative_poses[link_name] = {mesh_name: relative_pose}
+                else:
+                    copy_robot_meshes[link_name][mesh_name] = copy_mesh
+                    copy_robot_meshes_relative_poses[link_name][mesh_name] = relative_pose
 
-            robot_copy.prims[robot_type] = copy_robot
-            robot_copy.meshes[robot_type] = copy_robot_meshes
-            robot_copy.relative_poses[robot_type] = copy_robot_meshes_relative_poses
-            robot_copy.links_relative_poses[robot_type] = copy_robot_links_relative_poses
+            copy_robot_links_relative_poses[link_name] = T.relative_pose_transform(
+                *link.get_position_orientation(), *self.robot.get_position_orientation()
+            )
+
+            robot_copy.prim = copy_robot
+            robot_copy.meshes = copy_robot_meshes
+            robot_copy.relative_poses = copy_robot_meshes_relative_poses
+            robot_copy.links_relative_poses = copy_robot_links_relative_poses
 
         og.sim.step()
         return robot_copy
@@ -937,7 +929,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to move arm or None if its at the joint positions
         """
-        with PlanningContext(self.robot, self.robot_copy, "original") as context:
+        with PlanningContext(self.robot, self.robot_copy) as context:
             plan = plan_arm_motion(
                 robot=self.robot,
                 end_conf=joint_pos,
@@ -972,7 +964,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         eef_ori = T.quat2axisangle(eef_pose[1])
         end_conf = np.append(eef_pos, eef_ori)
 
-        with PlanningContext(self.robot, self.robot_copy, "original") as context:
+        with PlanningContext(self.robot, self.robot_copy) as context:
             plan = plan_arm_motion_ik(
                 robot=self.robot,
                 end_conf=end_conf,
@@ -1496,7 +1488,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             np.array or None: Action array for one step for the robot to navigate or None if it is done navigating
         """
-        with PlanningContext(self.robot, self.robot_copy, "original") as context:
+        with PlanningContext(self.robot, self.robot_copy) as context:
             plan = plan_base_motion(
                 robot=self.robot,
                 end_conf=pose_2d,
@@ -1676,7 +1668,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 - 3-array: (x,y,z) Position in the world frame
                 - 4-array: (x,y,z,w) Quaternion orientation in the world frame
         """
-        with PlanningContext(self.robot, self.robot_copy, "original") as context:
+        with PlanningContext(self.robot, self.robot_copy) as context:
             for _ in range(m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT):
                 if pose_on_obj is None:
                     pos_on_obj = self._sample_position_on_aabb_side(obj)
