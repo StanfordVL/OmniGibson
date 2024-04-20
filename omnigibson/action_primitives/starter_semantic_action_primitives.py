@@ -119,9 +119,7 @@ class PlanningContext(object):
         return self
 
     def __exit__(self, *args):
-        self._set_prim_pose(
-            self.robot_copy.prim, self.robot_copy.reset_pose
-        )
+        self._set_prim_pose(self.robot_copy.prim, self.robot_copy.reset_pose)
 
     def _assemble_robot_copy(self):
         if m.TIAGO_TORSO_FIXED:
@@ -160,13 +158,9 @@ class PlanningContext(object):
                     continue
                 # Set poses of meshes relative to the robot to construct the robot
                 link_pose = (
-                    link_poses[link_name]
-                    if link_name in arm_links
-                    else self.robot_copy.links_relative_poses[link_name]
+                    link_poses[link_name] if link_name in arm_links else self.robot_copy.links_relative_poses[link_name]
                 )
-                mesh_copy_pose = T.pose_transform(
-                    *link_pose, *self.robot_copy.relative_poses[link_name][mesh_name]
-                )
+                mesh_copy_pose = T.pose_transform(*link_pose, *self.robot_copy.relative_poses[link_name][mesh_name])
                 self._set_prim_pose(copy_mesh, mesh_copy_pose)
 
     def _set_prim_pose(self, prim, pose):
