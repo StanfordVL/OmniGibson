@@ -53,7 +53,7 @@ class BatchQAViewer:
         }
         self.filtered_objs = sorted({
             (cat, model) for cat, model in self.all_objs
-            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
+            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id and cat == "walls"
         })
         self.processed_objects = self.load_processed_objects()
         print("-"*80)
@@ -112,7 +112,7 @@ class BatchQAViewer:
         all_objects = []
         for i, obj_model in enumerate(batch):
             obj = DatasetObject(
-                name=obj_model,
+                name="obj_" + obj_model,
                 category=category,
                 model=obj_model,
                 visual_only=True,
@@ -138,7 +138,7 @@ class BatchQAViewer:
             obj.set_position(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05])
 
             if should_draw:
-                draw_text(obj.name, [0, y_coordinate, -0.1], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
+                draw_text(obj.name.replace("obj_", ""), [0, y_coordinate, -0.1], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
 
             prev_obj_radius = obj_radius
 
@@ -232,12 +232,14 @@ class BatchQAViewer:
         y_min = np.min([obj.aabb[0][1] for obj in all_objects])
         y_max = np.max([obj.aabb[1][1] for obj in all_objects])
         average_pos = np.mean([obj.aabb_center for obj in all_objects], axis=0)
-        frame = 0
-        amplitude = (y_max - y_min) / 2
-        meters_per_second = 0.1
-        period = max(2 * amplitude / meters_per_second, 3)
-        frequency = 1 / period
-        angular_velocity = 2 * np.pi * frequency
+        # frame = 0
+        # amplitude = (y_max - y_min) / 2
+        # meters_per_second = 0.1
+        # period = max(2 * amplitude / meters_per_second, 3)
+        # frequency = 1 / period
+        # angular_velocity = 2 * np.pi * frequency
+
+        offset = 0.
 
         def _set_done():
             nonlocal done
@@ -248,6 +250,10 @@ class BatchQAViewer:
             skip = True
             _set_done()
 
+        def change_offset(d_offset):
+            nonlocal offset
+            offset += d_offset
+
         # Set done when the user presses 'C'
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
@@ -257,27 +263,37 @@ class BatchQAViewer:
             key=lazy.carb.input.KeyboardInput.HOME,
             callback_fn=_set_skip,
         )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.A,
+            callback_fn=lambda: change_offset(-1),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.D,
+            callback_fn=lambda: change_offset(1),
+        )
         print("Hit numpad enter to continue to object editing.")
         print("Hit home to skip to the next category.")
+        print("Hit Numpad 4-6 to translate camera.")
 
         while not done:
-            y = y_min + amplitude * (np.sin(frame * og.sim.get_rendering_dt() * angular_velocity) + 1)
+            y = np.clip(y_min + offset, y_min, y_max)
             target = np.array([average_pos[0], y, average_pos[2]])
             self.update_camera(target)
             og.sim.step()
-            frame += 1
+            # frame += 1
 
         KeyboardEventHandler.reset()
         return skip
 
     def evaluate_single_object(self, all_objects, i):
         obj = all_objects[i]
-        print(f"\n\n\n\nNow editing object {obj.name}\n")
+        print(f"\n\n\n\nNow editing object {obj.name.replace('obj_', '')}\n")
 
         KeyboardEventHandler.initialize()
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
         done = False
+        should_do_complaints = False
         scale_queue = []  # We queue scales to apply them all at once to avoid .play getting called from .step
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
@@ -285,6 +301,11 @@ class BatchQAViewer:
         def _set_done():
             nonlocal done
             done = True
+
+        def _set_complaint():
+            nonlocal should_do_complaints
+            should_do_complaints = not should_do_complaints
+            print("Set to do complaints:", should_do_complaints, "\n")
 
         def _toggle_gravity():
             obj.visual_only = not obj.visual_only
@@ -426,6 +447,10 @@ class BatchQAViewer:
             key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
             callback_fn=lambda: scale_queue.append(0),
         )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.C,
+            callback_fn=_set_complaint,
+        )
 
         print("-" * 80)
         print("All of the below are numpad keys.")
@@ -438,7 +463,8 @@ class BatchQAViewer:
         print("Press '+', '-' to change object scale.")
         print("Press '/' to reset object scale.")
         print("Press '0' to toggle gravity for selected object.")
-        print(f"Press . to change between normal and precision mode. Angle and scale increments are much smaller in precision mode.")
+        print("Press . to change between normal and precision mode. Angle and scale increments are much smaller in precision mode.")
+        print("Press C to change whether or not complaints will be made.")
         print("Press 'Enter' to continue to complaint process.")
         print("-" * 80)
 
@@ -448,6 +474,22 @@ class BatchQAViewer:
 
         # position reference objects to be next to the inspected object
         self.position_reference_objects(target_y=obj.aabb_center[1])
+
+        # First, load the background image
+        background_path = pathlib.Path(__file__).resolve().parent / "background.jpg"
+        background = Image.open(background_path).resize((800, 800))
+
+        # Open the zip file
+        zip_path = os.path.join(self.pipeline_root, "artifacts", "pipeline", "max_object_images.zip")
+        with ZipFS(zip_path) as zip_fs:
+            # Find and show photos of this object.
+            image_paths = sorted([x for x in zip_fs.listdir("/") if obj.name.replace("obj_", "") in x])
+            for image_path in image_paths:
+                with zip_fs.open(image_path, "rb") as f:
+                    image = background.copy()
+                    max_image = Image.open(f)
+                    image.paste(max_image, (0, 0),mask=max_image) 
+                    image.show()
 
         # Prompt the user to fix the scale and orientation of the object. Keep the camera in position, too.
         step = 0
@@ -489,67 +531,53 @@ class BatchQAViewer:
         KeyboardEventHandler.initialize()
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
-        # First, load the background image
-        background_path = pathlib.Path(__file__).resolve().parent / "background.jpg"
-        background = Image.open(background_path).resize((800, 800))
+        complaints = []
+        if should_do_complaints:
+            # Launch the complaint thread
+            multiprocess_queue = multiprocessing.Queue()
+            questions = self.complaint_handler.get_questions(obj)
+            complaint_process = multiprocessing.Process(
+                target=self.complaint_handler.process_complaints,
+                args=[multiprocess_queue, obj.category, obj.name.replace("obj_", ""), questions, sys.stdin.fileno()],
+                daemon=True)
+            complaint_process.start()
 
-        # Open the zip file
-        zip_path = os.path.join(self.pipeline_root, "artifacts", "pipeline", "max_object_images.zip")
-        with ZipFS(zip_path) as zip_fs:
-            # Find and show photos of this object.
-            image_paths = sorted([x for x in zip_fs.listdir("/") if obj.name in x])
-            for image_path in image_paths:
-                with zip_fs.open(image_path, "rb") as f:
-                    image = background.copy()
-                    max_image = Image.open(f)
-                    image.paste(max_image, (0, 0),mask=max_image) 
-                    image.show()
+            # Wait to receive the complaints
+            step = 0
+            while complaint_process.is_alive():
+                step += 1
+                og.sim.step()
+                self.update_camera(obj.aabb_center)
 
-        # Launch the complaint thread
-        multiprocess_queue = multiprocessing.Queue()
-        questions = self.complaint_handler.get_questions(obj)
-        complaint_process = multiprocessing.Process(
-            target=self.complaint_handler.process_complaints,
-            args=[multiprocess_queue, obj.category, obj.name, questions, sys.stdin.fileno()],
-            daemon=True)
-        complaint_process.start()
+                # During this part, we want to be moving the joints
+                for joint in obj.joints.values():
+                    seconds_since_start = step * og.sim.get_rendering_dt()
+                    interpolation_point = 0.5 * np.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * np.pi) + 0.5
+                    target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
+                    joint.set_pos(target_pos)
 
-        # Wait to receive the complaints
-        step = 0
-        while complaint_process.is_alive():
-            step += 1
-            og.sim.step()
-            self.update_camera(obj.aabb_center)
+                if not multiprocess_queue.empty():
+                    # Got a response, we can stop.
+                    break
 
-            # During this part, we want to be moving the joints
-            for joint in obj.joints.values():
-                seconds_since_start = step * og.sim.get_rendering_dt()
-                interpolation_point = 0.5 * np.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * np.pi) + 0.5
-                target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
-                joint.set_pos(target_pos)
+            assert not multiprocess_queue.empty(), "Complaint process did not return a message."
+            message = multiprocess_queue.get()
+            complaints = json.loads(message)
 
-            if not multiprocess_queue.empty():
-                # Got a response, we can stop.
-                break
+            # Wait for the complaint process to finish to not have to kill it
+            time.sleep(0.5)
 
-        assert not multiprocess_queue.empty(), "Complaint process did not return a message."
-        message = multiprocess_queue.get()
-        complaints = json.loads(message)
-
-        # Wait for the complaint process to finish to not have to kill it
-        time.sleep(0.5)
-
-        # If the complaint process is still alive, kill it.
-        if complaint_process.is_alive():
-            # Join the finished thread
-            complaint_process.join()
-            assert complaint_process.exitcode == 0, "Complaint process exited."
+            # If the complaint process is still alive, kill it.
+            if complaint_process.is_alive():
+                # Join the finished thread
+                complaint_process.join()
+                assert complaint_process.exitcode == 0, "Complaint process exited."
 
         # Save the object results
         self.save_object_results(obj, orientation, scale, complaints)
 
         # Mark the object as processed
-        self.processed_objects.add(obj.name)
+        self.processed_objects.add(obj.name.replace("obj_", ""))
 
         KeyboardEventHandler.reset()
 
@@ -561,10 +589,13 @@ class BatchQAViewer:
 
         # Phase 1: Continuously pan across the full category to show the user all objects
         skip = self.whole_batch_preview(all_objects)
-        if not skip:
-            # Phase 2: Allow the user to interact with the objects one by one
-            for i in range(len(all_objects)):
-                self.evaluate_single_object(all_objects, i)
+
+        # Save the object results
+        for obj in all_objects:
+            self.save_object_results(obj, [0., 0., 0., 1.], [1., 1., 1.], [])
+
+            # Mark the object as processed
+            self.processed_objects.add(obj.name.replace("obj_", ""))
 
         # Clean up.
         for obj in all_objects:
@@ -798,7 +829,7 @@ class ObjectComplaintHandler:
     def _get_substanceness_question(self, obj):
         _, abilities = self._get_synset_and_abilities(obj.category)
         substance_types = set(abilities.keys()) & {"rigidBody", "liquid", "macroPhysicalSubstance", "microPhysicalSubstance", "visualSubstance", "cloth", "softBody", "rope"}
-        assert len(substance_types) == 1, f"Multiple substance types found for object {obj.name}"
+        assert len(substance_types) == 1, f"Multiple substance types found for object {obj.name.replace('obj_', '')}"
         substance_type, = substance_types
         message = (
             "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\n"
