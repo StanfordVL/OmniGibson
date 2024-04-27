@@ -166,7 +166,7 @@ class BatchQAViewer:
             }, f)
 
     def set_camera_bindings(self, default_dist = 3.):
-        self.pan, self.tilt, self.dist = np.pi, 0., default_dist
+        # self.pan, self.tilt, self.dist = np.pi, 0., default_dist
         def update_camera(d_pan, d_tilt, d_dist):
             self.pan = (self.pan + d_pan) % (2 * np.pi)
             self.tilt = np.clip(self.tilt + d_tilt, -np.pi / 2, np.pi / 2)
@@ -303,9 +303,12 @@ class BatchQAViewer:
             done = True
 
         def _set_complaint():
-            nonlocal should_do_complaints
-            should_do_complaints = not should_do_complaints
-            print("Set to do complaints:", should_do_complaints, "\n")
+            # nonlocal should_do_complaints
+            # should_do_complaints = not should_do_complaints
+            # print("Set to do complaints:", should_do_complaints, "\n")
+            with open("/scr/ig_pipeline/todo-qa-auto.txt", 'a') as file:
+                file.write(obj.name.replace('obj_', '') + '\n')
+            print("Wrote complaint")
 
         def _toggle_gravity():
             obj.visual_only = not obj.visual_only
@@ -391,62 +394,62 @@ class BatchQAViewer:
             key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
             callback_fn=_set_done,
         )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_7,
-            callback_fn=lambda: _align_to_pca(1),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_9,
-            callback_fn=lambda: _align_to_pca(2),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_3,
-            callback_fn=lambda: _rotate_object("z", self.angle_increment),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_1,
-            callback_fn=lambda: _rotate_object("z", -self.angle_increment),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_2,
-            callback_fn=lambda: _rotate_object("y", self.angle_increment),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_8,
-            callback_fn=lambda: _rotate_object("y", -self.angle_increment),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_4,
-            callback_fn=lambda: _rotate_object("x", self.angle_increment),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_6,
-            callback_fn=lambda: _rotate_object("x", -self.angle_increment),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_MULTIPLY,
-            callback_fn=lambda: obj.set_orientation([0, 0, 0, 1]),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_0,
-            callback_fn=_toggle_gravity,
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_DEL,
-            callback_fn=lambda: self._toggle_precision(),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
-            callback_fn=lambda: scale_queue.append(self.scale_increment),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
-            callback_fn=lambda: scale_queue.append(1 / self.scale_increment),
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
-            callback_fn=lambda: scale_queue.append(0),
-        )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_7,
+        #     callback_fn=lambda: _align_to_pca(1),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_9,
+        #     callback_fn=lambda: _align_to_pca(2),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_3,
+        #     callback_fn=lambda: _rotate_object("z", self.angle_increment),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_1,
+        #     callback_fn=lambda: _rotate_object("z", -self.angle_increment),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_2,
+        #     callback_fn=lambda: _rotate_object("y", self.angle_increment),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_8,
+        #     callback_fn=lambda: _rotate_object("y", -self.angle_increment),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_4,
+        #     callback_fn=lambda: _rotate_object("x", self.angle_increment),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_6,
+        #     callback_fn=lambda: _rotate_object("x", -self.angle_increment),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_MULTIPLY,
+        #     callback_fn=lambda: obj.set_orientation([0, 0, 0, 1]),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_0,
+        #     callback_fn=_toggle_gravity,
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_DEL,
+        #     callback_fn=lambda: self._toggle_precision(),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
+        #     callback_fn=lambda: scale_queue.append(self.scale_increment),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
+        #     callback_fn=lambda: scale_queue.append(1 / self.scale_increment),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
+        #     callback_fn=lambda: scale_queue.append(0),
+        # )
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.C,
             callback_fn=_set_complaint,
@@ -475,21 +478,21 @@ class BatchQAViewer:
         # position reference objects to be next to the inspected object
         self.position_reference_objects(target_y=obj.aabb_center[1])
 
-        # First, load the background image
-        background_path = pathlib.Path(__file__).resolve().parent / "background.jpg"
-        background = Image.open(background_path).resize((800, 800))
+        # # First, load the background image
+        # background_path = pathlib.Path(__file__).resolve().parent / "background.jpg"
+        # background = Image.open(background_path).resize((800, 800))
 
-        # Open the zip file
-        zip_path = os.path.join(self.pipeline_root, "artifacts", "pipeline", "max_object_images.zip")
-        with ZipFS(zip_path) as zip_fs:
-            # Find and show photos of this object.
-            image_paths = sorted([x for x in zip_fs.listdir("/") if obj.name.replace("obj_", "") in x])
-            for image_path in image_paths:
-                with zip_fs.open(image_path, "rb") as f:
-                    image = background.copy()
-                    max_image = Image.open(f)
-                    image.paste(max_image, (0, 0),mask=max_image) 
-                    image.show()
+        # # Open the zip file
+        # zip_path = os.path.join(self.pipeline_root, "artifacts", "pipeline", "max_object_images.zip")
+        # with ZipFS(zip_path) as zip_fs:
+        #     # Find and show photos of this object.
+        #     image_paths = sorted([x for x in zip_fs.listdir("/") if obj.name.replace("obj_", "") in x])
+        #     for image_path in image_paths:
+        #         with zip_fs.open(image_path, "rb") as f:
+        #             image = background.copy()
+        #             max_image = Image.open(f)
+        #             image.paste(max_image, (0, 0),mask=max_image) 
+        #             image.show()
 
         # Prompt the user to fix the scale and orientation of the object. Keep the camera in position, too.
         step = 0
@@ -588,20 +591,17 @@ class BatchQAViewer:
         self.position_reference_objects(target_y=0.)
 
         # Phase 1: Continuously pan across the full category to show the user all objects
-        skip = self.whole_batch_preview(all_objects)
+        # skip = self.whole_batch_preview(all_objects)
 
         # Save the object results
-        for obj in all_objects:
-            self.save_object_results(obj, [0., 0., 0., 1.], [1., 1., 1.], [])
-
-            # Mark the object as processed
-            self.processed_objects.add(obj.name.replace("obj_", ""))
+        for i in range(len(all_objects)):
+            self.evaluate_single_object(all_objects, i)
 
         # Clean up.
         for obj in all_objects:
             og.sim.remove_object(obj)
 
-        return skip
+        return False
 
     def position_reference_objects(self, target_y):
         obj_in_center_frame = self.phone.get_position() - self.phone.aabb_center
