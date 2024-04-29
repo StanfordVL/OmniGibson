@@ -1,4 +1,5 @@
 from abc import abstractmethod
+
 import numpy as np
 
 from omnigibson.robots.robot_base import BaseRobot
@@ -105,7 +106,9 @@ class ActiveCameraRobot(BaseRobot):
         # We additionally add in camera default
         cfg["camera"] = {
             self._default_camera_joint_controller_config["name"]: self._default_camera_joint_controller_config,
-            self._default_camera_null_joint_controller_config["name"]: self._default_camera_null_joint_controller_config,
+            self._default_camera_null_joint_controller_config[
+                "name"
+            ]: self._default_camera_null_joint_controller_config,
         }
 
         return cfg

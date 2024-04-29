@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 import omnigibson as og
 import omnigibson.lazy as lazy
-from omnigibson.utils.python_utils import Serializable, UniquelyNamed, Recreatable
+from omnigibson.utils.python_utils import Recreatable, Serializable, UniquelyNamed
 from omnigibson.utils.sim_utils import check_deletable_prim
 from omnigibson.utils.ui_utils import create_module_logger
 
@@ -40,11 +40,11 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
 
         # Other values that will be filled in at runtime
         self._applied_visual_material = None
-        self._loaded = False                                # Whether this prim exists in the stage or not
-        self._initialized = False                           # Whether this prim has its internal handles / info initialized or not (occurs AFTER and INDEPENDENTLY from loading!)
+        self._loaded = False  # Whether this prim exists in the stage or not
+        self._initialized = False  # Whether this prim has its internal handles / info initialized or not (occurs AFTER and INDEPENDENTLY from loading!)
         self._prim = None
         self._state_size = None
-        self._n_duplicates = 0                              # Simple counter for keeping track of duplicates for unique name indexing
+        self._n_duplicates = 0  # Simple counter for keeping track of duplicates for unique name indexing
 
         # Run super init
         super().__init__()
@@ -69,8 +69,9 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         Initializes state of this object and sets up any references necessary post-loading. Subclasses should
         implement / extend the _initialize() method.
         """
-        assert not self._initialized, \
-            f"Prim {self.name} at prim_path {self._prim_path} can only be initialized once! (It is already initialized)"
+        assert (
+            not self._initialized
+        ), f"Prim {self.name} at prim_path {self._prim_path} can only be initialized once! (It is already initialized)"
         self._initialize()
 
         # Cache state size
@@ -176,7 +177,10 @@ class BasePrim(Serializable, UniquelyNamed, Recreatable, ABC):
         Returns:
             bool: true if the prim is visible in stage. false otherwise.
         """
-        return lazy.pxr.UsdGeom.Imageable(self.prim).ComputeVisibility(lazy.pxr.Usd.TimeCode.Default()) != lazy.pxr.UsdGeom.Tokens.invisible
+        return (
+            lazy.pxr.UsdGeom.Imageable(self.prim).ComputeVisibility(lazy.pxr.Usd.TimeCode.Default())
+            != lazy.pxr.UsdGeom.Tokens.invisible
+        )
 
     @visible.setter
     def visible(self, visible):

@@ -1,12 +1,12 @@
 import numpy as np
-from omnigibson.macros import create_module_macros
-from omnigibson.object_states.object_state_base import BooleanStateMixin
-from omnigibson.object_states.contact_bodies import ContactBodies
-from omnigibson.object_states.tensorized_value_state import TensorizedValueState
+
 import omnigibson as og
+from omnigibson.macros import create_module_macros
+from omnigibson.object_states.contact_bodies import ContactBodies
+from omnigibson.object_states.object_state_base import BooleanStateMixin
+from omnigibson.object_states.tensorized_value_state import TensorizedValueState
 from omnigibson.utils.python_utils import classproperty
 from omnigibson.utils.usd_utils import RigidContactAPI
-
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -125,8 +125,13 @@ class SlicerActive(TensorizedValueState, BooleanStateMixin):
             return currently_touching
 
         # Aggregate all link prim path indices
-        all_slicer_idxs = [[RigidContactAPI.get_body_row_idx(prim_path) for prim_path in link_paths] for link_paths in cls.SLICER_LINK_PATHS]
-        sliceable_idxs = [RigidContactAPI.get_body_col_idx(link.prim_path) for obj in sliceable_objs for link in obj.links.values()]
+        all_slicer_idxs = [
+            [RigidContactAPI.get_body_row_idx(prim_path) for prim_path in link_paths]
+            for link_paths in cls.SLICER_LINK_PATHS
+        ]
+        sliceable_idxs = [
+            RigidContactAPI.get_body_col_idx(link.prim_path) for obj in sliceable_objs for link in obj.links.values()
+        ]
         impulses = RigidContactAPI.get_all_impulses()
 
         # Batch check each slicer against all sliceables
@@ -175,10 +180,13 @@ class SlicerActive(TensorizedValueState, BooleanStateMixin):
 
     def _serialize(self, state):
         state_flat = super()._serialize(state=state)
-        return np.concatenate([
-            state_flat,
-            [state["previously_touching"], state["delay_counter"]],
-        ], dtype=float)
+        return np.concatenate(
+            [
+                state_flat,
+                [state["previously_touching"], state["delay_counter"]],
+            ],
+            dtype=float,
+        )
 
     def _deserialize(self, state):
         state_dict, idx = super()._deserialize(state=state)

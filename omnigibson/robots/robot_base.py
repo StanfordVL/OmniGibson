@@ -1,18 +1,25 @@
 from abc import abstractmethod
 from copy import deepcopy
-import numpy as np
+
 import matplotlib.pyplot as plt
+import numpy as np
 
 from omnigibson.macros import create_module_macros
-from omnigibson.sensors import create_sensor, SENSOR_PRIMS_TO_SENSOR_CLS, ALL_SENSOR_MODALITIES, VisionSensor, ScanSensor
-from omnigibson.objects.usd_object import USDObject
-from omnigibson.objects.object_base import BaseObject
 from omnigibson.objects.controllable_object import ControllableObject
-from omnigibson.utils.gym_utils import GymObservable
-from omnigibson.utils.usd_utils import add_asset_to_stage
-from omnigibson.utils.python_utils import classproperty, merge_nested_dicts
-from omnigibson.utils.vision_utils import segmentation_to_rgb
+from omnigibson.objects.object_base import BaseObject
+from omnigibson.objects.usd_object import USDObject
+from omnigibson.sensors import (
+    ALL_SENSOR_MODALITIES,
+    SENSOR_PRIMS_TO_SENSOR_CLS,
+    ScanSensor,
+    VisionSensor,
+    create_sensor,
+)
 from omnigibson.utils.constants import PrimType
+from omnigibson.utils.gym_utils import GymObservable
+from omnigibson.utils.python_utils import classproperty, merge_nested_dicts
+from omnigibson.utils.usd_utils import add_asset_to_stage
+from omnigibson.utils.vision_utils import segmentation_to_rgb
 
 # Global dicts that will contain mappings
 REGISTERED_ROBOTS = dict()
@@ -34,6 +41,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
     This class handles object loading, and provides method interfaces that should be
     implemented by subclassed robots.
     """
+
     def __init__(
         self,
         # Shared kwargs in hierarchy
@@ -46,22 +54,18 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         visual_only=False,
         self_collisions=False,
         load_config=None,
-
         # Unique to USDObject hierarchy
         abilities=None,
-
         # Unique to ControllableObject hierarchy
         control_freq=None,
         controller_config=None,
         action_type="continuous",
         action_normalize=True,
         reset_joint_pos=None,
-
         # Unique to this class
         obs_modalities="all",
         proprio_obs="default",
         sensor_config=None,
-
         **kwargs,
     ):
         """
@@ -109,8 +113,11 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
         # Store inputs
-        self._obs_modalities = obs_modalities if obs_modalities == "all" else \
-            {obs_modalities} if isinstance(obs_modalities, str) else set(obs_modalities)              # this will get updated later when we fill in our sensors
+        self._obs_modalities = (
+            obs_modalities
+            if obs_modalities == "all"
+            else {obs_modalities} if isinstance(obs_modalities, str) else set(obs_modalities)
+        )  # this will get updated later when we fill in our sensors
         self._proprio_obs = self.default_proprio_obs if proprio_obs == "default" else list(proprio_obs)
         self._sensor_config = sensor_config
 
@@ -119,13 +126,14 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         abilities = robot_abilities if abilities is None else robot_abilities.update(abilities)
 
         # Initialize internal attributes that will be loaded later
-        self._sensors = None                    # e.g.: scan sensor, vision sensor
-        self._dummy = None                      # Dummy version of the robot w/ fixed base for computing generalized gravity forces
+        self._sensors = None  # e.g.: scan sensor, vision sensor
+        self._dummy = None  # Dummy version of the robot w/ fixed base for computing generalized gravity forces
 
         # If specified, make sure scale is uniform -- this is because non-uniform scale can result in non-matching
         # collision representations for parts of the robot that were optimized (e.g.: bounding sphere for wheels)
-        assert scale is None or isinstance(scale, int) or isinstance(scale, float) or np.all(scale == scale[0]), \
-            f"Robot scale must be uniform! Got: {scale}"
+        assert (
+            scale is None or isinstance(scale, int) or isinstance(scale, float) or np.all(scale == scale[0])
+        ), f"Robot scale must be uniform! Got: {scale}"
 
         # Run super init
         super().__init__(
@@ -219,8 +227,11 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                     sensor_cls = SENSOR_PRIMS_TO_SENSOR_CLS[prim_type]
                     sensor_kwargs = self._sensor_config[sensor_cls.__name__]
                     if "modalities" not in sensor_kwargs:
-                        sensor_kwargs["modalities"] = sensor_cls.all_modalities if self._obs_modalities == "all" else \
-                            sensor_cls.all_modalities.intersection(self._obs_modalities)
+                        sensor_kwargs["modalities"] = (
+                            sensor_cls.all_modalities
+                            if self._obs_modalities == "all"
+                            else sensor_cls.all_modalities.intersection(self._obs_modalities)
+                        )
                     obs_modalities = obs_modalities.union(sensor_kwargs["modalities"])
                     # Create the sensor and store it internally
                     sensor = create_sensor(
@@ -355,7 +366,9 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
 
         # Have to handle proprio separately since it's not an actual sensor
         if "proprio" in self._obs_modalities:
-            obs_space["proprio"] = self._build_obs_box_space(shape=(self.proprioception_dim,), low=-np.inf, high=np.inf, dtype=np.float64)
+            obs_space["proprio"] = self._build_obs_box_space(
+                shape=(self.proprioception_dim,), low=-np.inf, high=np.inf, dtype=np.float64
+            )
 
         return obs_space
 
@@ -469,7 +482,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
 
         # Run super
         super().remove()
-    
+
     @property
     def reset_joint_pos_aabb_extent(self):
         """
@@ -491,8 +504,11 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
 
     def get_generalized_gravity_forces(self, clone=True):
         # Override method based on whether we're using a dummy or not
-        return self._dummy.get_generalized_gravity_forces(clone=clone) \
-            if self._use_dummy else super().get_generalized_gravity_forces(clone=clone)
+        return (
+            self._dummy.get_generalized_gravity_forces(clone=clone)
+            if self._use_dummy
+            else super().get_generalized_gravity_forces(clone=clone)
+        )
 
     @property
     def sensors(self):
@@ -561,7 +577,6 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                 "noise_type": None,
                 "noise_kwargs": None,
                 "sensor_kwargs": {
-
                     # Basic LIDAR kwargs
                     "min_range": 0.05,
                     "max_range": 10.0,
@@ -573,7 +588,6 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                     "rotation_rate": 0.0,
                     "draw_points": False,
                     "draw_lines": False,
-
                     # Occupancy Grid kwargs
                     "occupancy_grid_resolution": 128,
                     "occupancy_grid_range": 5.0,

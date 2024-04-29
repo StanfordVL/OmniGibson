@@ -1,5 +1,5 @@
-from omnigibson.termination_conditions.termination_condition_base import SuccessCondition
 import omnigibson.utils.transform_utils as T
+from omnigibson.termination_conditions.termination_condition_base import SuccessCondition
 
 
 class ReachingGoal(SuccessCondition):
@@ -25,5 +25,4 @@ class ReachingGoal(SuccessCondition):
 
     def _step(self, task, env, action):
         # Terminate if point goal is reached (distance below threshold)
-        return T.l2_distance(env.scene.robots[self._robot_idn].get_eef_position(), task.goal_pos) < \
-               self._distance_tol
+        return T.l2_distance(env.scene.robots[self._robot_idn].get_eef_position(), task.goal_pos) < self._distance_tol

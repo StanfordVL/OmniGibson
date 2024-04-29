@@ -1,15 +1,17 @@
 """
 Constant Definitions
 """
-from functools import cache
+
 import hashlib
 import os
-import numpy as np
 from enum import Enum, IntEnum
+from functools import cache
+
+import numpy as np
 
 import omnigibson as og
 from omnigibson.macros import gm
-from omnigibson.utils.asset_utils import get_og_avg_category_specs, get_all_object_categories
+from omnigibson.utils.asset_utils import get_all_object_categories, get_og_avg_category_specs
 
 MAX_INSTANCE_COUNT = np.iinfo(np.uint32).max
 MAX_CLASS_COUNT = np.iinfo(np.uint32).max
@@ -91,6 +93,7 @@ GEOM_TYPES = {"Sphere", "Cube", "Cone", "Cylinder", "Mesh"}
 # Valid joint axis
 JointAxis = ["X", "Y", "Z"]
 
+
 # TODO: Clean up this class to be better enum with sanity checks
 # Joint types
 class JointType:
@@ -133,7 +136,6 @@ class JointType:
 
 # Object category specs
 AVERAGE_OBJ_DENSITY = 67.0
-AVERAGE_CATEGORY_SPECS = get_og_avg_category_specs()
 
 
 def get_collision_group_mask(groups_to_exclude=[]):
@@ -174,6 +176,7 @@ UNDER_OBJECTS = [
     "bench",
 ]
 
+
 @cache
 def semantic_class_name_to_id():
     """
@@ -184,13 +187,15 @@ def semantic_class_name_to_id():
     """
     categories = get_all_object_categories()
     from omnigibson.systems.system_base import REGISTERED_SYSTEMS
+
     systems = sorted(REGISTERED_SYSTEMS)
     all_semantics = sorted(set(categories + systems + ["background", "unlabelled", "object", "light", "agent"]))
-    
+
     # Assign a unique class id to each class name with hashing
-    class_name_to_class_id = {s: int(hashlib.md5(s.encode()).hexdigest(), 16) % (2 ** 32) for s in all_semantics}
+    class_name_to_class_id = {s: int(hashlib.md5(s.encode()).hexdigest(), 16) % (2**32) for s in all_semantics}
 
     return class_name_to_class_id
+
 
 @cache
 def semantic_class_id_to_name():
@@ -201,4 +206,3 @@ def semantic_class_id_to_name():
         dict: class id to class name
     """
     return {v: k for k, v in semantic_class_name_to_id().items()}
-

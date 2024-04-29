@@ -1,10 +1,9 @@
-from omnigibson.objects import DatasetObject
-import omnigibson as og
-from omnigibson.utils.python_utils import NAMES
-
+import pytest
 from utils import og_test
 
-import pytest
+import omnigibson as og
+from omnigibson.objects import DatasetObject
+from omnigibson.utils.python_utils import NAMES
 
 
 @og_test
@@ -47,6 +46,7 @@ def test_removal_and_readdition():
 
     # Clear the stuff we added
     og.sim.remove_object(apple2)
+
 
 @og_test
 def test_readdition():

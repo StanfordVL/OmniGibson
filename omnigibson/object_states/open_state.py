@@ -1,7 +1,7 @@
 import numpy as np
 
 from omnigibson.macros import create_module_macros
-from omnigibson.object_states.object_state_base import BooleanStateMixin, AbsoluteObjectState
+from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanStateMixin
 from omnigibson.utils.constants import JointType
 from omnigibson.utils.ui_utils import create_module_logger
 
@@ -136,8 +136,11 @@ class Open(AbsoluteObjectState, BooleanStateMixin):
             return compatible, reason
 
         # Check whether this object has any openable joints
-        return (True, None) if obj.n_joints > 0 else \
-            (False, f"No relevant joints for Open state found for object {obj.name}")
+        return (
+            (True, None)
+            if obj.n_joints > 0
+            else (False, f"No relevant joints for Open state found for object {obj.name}")
+        )
 
     @classmethod
     def is_compatible_asset(cls, prim, **kwargs):
@@ -158,8 +161,11 @@ class Open(AbsoluteObjectState, BooleanStateMixin):
             return False
 
         # Check whether this object has any openable joints
-        return (True, None) if _find_articulated_joints(prim=prim) else \
-            (False, f"No relevant joints for Open state found for asset prim {prim.GetName()}")
+        return (
+            (True, None)
+            if _find_articulated_joints(prim=prim)
+            else (False, f"No relevant joints for Open state found for asset prim {prim.GetName()}")
+        )
 
     def _get_value(self):
         both_sides, relevant_joints, joint_directions = self.relevant_joints_info

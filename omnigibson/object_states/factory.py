@@ -1,8 +1,9 @@
-import networkx as nx
 from collections import namedtuple
 
-from omnigibson.object_states.kinematics_mixin import KinematicsMixin
+import networkx as nx
+
 from omnigibson.object_states import *
+from omnigibson.object_states.kinematics_mixin import KinematicsMixin
 
 # states: list of ObjectBaseState
 # requirements: list of ObjectBaseRequirement
@@ -92,8 +93,10 @@ _TEXTURE_CHANGE_PRIORITY = {
     ToggledOn: 0,
 }
 
+
 def get_system_states():
     return _SYSTEM_STATE_SET
+
 
 def get_fire_states():
     return _FIRE_STATE_SET

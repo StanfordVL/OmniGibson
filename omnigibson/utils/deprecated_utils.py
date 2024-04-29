@@ -1,26 +1,28 @@
 """
 A set of utility functions slated to be deprecated once Omniverse bugs are fixed
 """
+
+import math
+from typing import Callable, List, Optional, Tuple, Union
+
 import carb
-from typing import List, Optional, Tuple, Union, Callable
-import omni.usd as ou
-from omni.particle.system.core.scripts.core import Core as OmniCore
-from omni.particle.system.core.scripts.utils import Utils as OmniUtils
-from pxr import Sdf, UsdShade, PhysxSchema, Usd, UsdGeom, UsdPhysics
+import numpy as np
 import omni
 import omni.graph.core as ogc
-from omni.kit.primitive.mesh.command import _get_all_evaluators
-from omni.kit.primitive.mesh.command import CreateMeshPrimWithDefaultXformCommand as CMPWDXC
 import omni.timeline
-from omni.isaac.core.utils.prims import get_prim_at_path
-import numpy as np
+import omni.usd as ou
 import torch
 import warp as wp
-import math
 from omni.isaac.core.articulations import ArticulationView as _ArticulationView
 from omni.isaac.core.prims import RigidPrimView as _RigidPrimView
-from PIL import Image, ImageDraw
+from omni.isaac.core.utils.prims import get_prim_at_path
+from omni.kit.primitive.mesh.command import CreateMeshPrimWithDefaultXformCommand as CMPWDXC
+from omni.kit.primitive.mesh.command import _get_all_evaluators
+from omni.particle.system.core.scripts.core import Core as OmniCore
+from omni.particle.system.core.scripts.utils import Utils as OmniUtils
 from omni.replicator.core import random_colours
+from PIL import Image, ImageDraw
+from pxr import PhysxSchema, Sdf, Usd, UsdGeom, UsdPhysics, UsdShade
 
 DEG2RAD = math.pi / 180.0
 
@@ -90,9 +92,7 @@ class Utils(OmniUtils):
         if not self.stage.GetPrimAtPath(material_path + "/Looks"):
             self.stage.DefinePrim(material_path + "/Looks", "Scope")
         material_path += "/Looks/" + name
-        material_path = ou.get_stage_next_free_path(
-            self.stage, material_path, False
-        )
+        material_path = ou.get_stage_next_free_path(self.stage, material_path, False)
         prim = self.stage.DefinePrim(material_path, "Material")
         if material_url:
             prim.GetReferences().AddReference(material_url)
@@ -106,6 +106,7 @@ class Core(OmniCore):
     """
     Subclass that overrides a specific function within Omni's Core class to fix a bug
     """
+
     def __init__(self, popup_callback: Callable[[str], None], particle_system_name: str):
         self._popup_callback = popup_callback
         self.utils = Utils()
@@ -123,13 +124,18 @@ class Core(OmniCore):
         path appended to created_paths (if provided).
         """
         graph = None
-        graph_paths = [path for path in selected_paths
-                       if self.stage.GetPrimAtPath(path).GetTypeName() in ["ComputeGraph", "OmniGraph"] ]
+        graph_paths = [
+            path
+            for path in selected_paths
+            if self.stage.GetPrimAtPath(path).GetTypeName() in ["ComputeGraph", "OmniGraph"]
+        ]
 
         if len(graph_paths) > 0:
             graph = ogc.get_graph_by_path(graph_paths[0])
             if len(graph_paths) > 1:
-                carb.log_warn(f"Multiple ComputeGraph prims selected. Only the first will be used: {graph.get_path_to_graph()}")
+                carb.log_warn(
+                    f"Multiple ComputeGraph prims selected. Only the first will be used: {graph.get_path_to_graph()}"
+                )
         elif create_new_graph:
             # If no graph was found in the selected prims, we'll make a new graph.
             # TODO: THIS IS THE ONLY LINE THAT WE CHANGE! ONCE FIXED, REMOVE THIS
@@ -151,7 +157,7 @@ class Core(OmniCore):
                 is_global_graph=True,
                 backed_by_usd=True,
                 fc_backing_type=ogc.GraphBackingType.GRAPH_BACKING_TYPE_FLATCACHE_SHARED,
-                pipeline_stage=ogc.GraphPipelineStage.GRAPH_PIPELINE_STAGE_SIMULATION
+                pipeline_stage=ogc.GraphPipelineStage.GRAPH_PIPELINE_STAGE_SIMULATION,
             )
             graph = wrapper_node.get_wrapped_graph()
 
@@ -221,7 +227,7 @@ class ArticulationView(_ArticulationView):
                     dof_read_idx += 1
                 articulation_read_idx += 1
         return
-    
+
     def get_joint_limits(
         self,
         indices: Optional[Union[np.ndarray, List, torch.Tensor, wp.array]] = None,
@@ -272,12 +278,14 @@ class ArticulationView(_ArticulationView):
                     values[articulation_write_idx][dof_write_idx][0] = prim.GetAttribute("physics:lowerLimit").Get()
                     values[articulation_write_idx][dof_write_idx][1] = prim.GetAttribute("physics:upperLimit").Get()
                     if dof_types[dof_index] == omni.physics.tensors.DofType.Rotation:
-                        values[articulation_write_idx][dof_write_idx] = values[articulation_write_idx][dof_write_idx] * DEG2RAD
+                        values[articulation_write_idx][dof_write_idx] = (
+                            values[articulation_write_idx][dof_write_idx] * DEG2RAD
+                        )
                     dof_write_idx += 1
                 articulation_write_idx += 1
             values = self._backend_utils.convert(values, dtype="float32", device=self._device, indexed=True)
             return values
-        
+
     def set_max_velocities(
         self,
         values: Union[np.ndarray, torch.Tensor, wp.array],
@@ -381,9 +389,11 @@ class ArticulationView(_ArticulationView):
                     max_velocities[articulation_write_idx][dof_write_idx] = prim.GetMaxJointVelocityAttr().Get()
                     dof_write_idx += 1
                 articulation_write_idx += 1
-            max_velocities = self._backend_utils.convert(max_velocities, dtype="float32", device=self._device, indexed=True)
+            max_velocities = self._backend_utils.convert(
+                max_velocities, dtype="float32", device=self._device, indexed=True
+            )
             return max_velocities
-        
+
     def set_joint_positions(
         self,
         positions: Optional[Union[np.ndarray, torch.Tensor, wp.array]],
@@ -443,7 +453,7 @@ class ArticulationView(_ArticulationView):
                 [self._backend_utils.expand_dims(indices, 1) if self._backend != "warp" else indices, joint_indices],
             )
             self._physics_view.set_dof_positions(new_dof_pos, indices)
-            
+
             # THIS IS THE FIX: COMMENT OUT THE BELOW LINE AND SET TARGETS INSTEAD
             # self._physics_view.set_dof_position_targets(new_dof_pos, indices)
             self.set_joint_position_targets(positions, indices, joint_indices)
@@ -652,6 +662,7 @@ class RigidPrimView(_RigidPrimView):
                 self._physx_rigid_body_apis[i].GetDisableGravityAttr().Set(True)
             return
 
+
 def colorize_bboxes(bboxes_2d_data, bboxes_2d_rgb, num_channels=3):
     """Colorizes 2D bounding box data for visualization.
 
@@ -668,12 +679,12 @@ def colorize_bboxes(bboxes_2d_data, bboxes_2d_rgb, num_channels=3):
     rgb_img = Image.fromarray(bboxes_2d_rgb)
     rgb_img_draw = ImageDraw.Draw(rgb_img)
     for bbox_2d in bboxes_2d_data:
-        semantic_id_list.append(bbox_2d['semanticId'])
+        semantic_id_list.append(bbox_2d["semanticId"])
         bbox_2d_list.append(bbox_2d)
     semantic_id_list_np = np.unique(np.array(semantic_id_list))
     color_list = random_colours(len(semantic_id_list_np.tolist()), True, num_channels)
     for bbox_2d in bbox_2d_list:
-        index = np.where(semantic_id_list_np == bbox_2d['semanticId'])[0][0]
+        index = np.where(semantic_id_list_np == bbox_2d["semanticId"])[0][0]
         bbox_color = color_list[index]
         outline = (bbox_color[0], bbox_color[1], bbox_color[2])
         if num_channels == 4:
@@ -683,6 +694,8 @@ def colorize_bboxes(bboxes_2d_data, bboxes_2d_rgb, num_channels=3):
                 bbox_color[2],
                 bbox_color[3],
             )
-        rgb_img_draw.rectangle([(bbox_2d['x_min'], bbox_2d['y_min']), (bbox_2d['x_max'], bbox_2d['y_max'])], outline=outline, width=2)
+        rgb_img_draw.rectangle(
+            [(bbox_2d["x_min"], bbox_2d["y_min"]), (bbox_2d["x_max"], bbox_2d["y_max"])], outline=outline, width=2
+        )
     bboxes_2d_rgb = np.array(rgb_img)
     return bboxes_2d_rgb

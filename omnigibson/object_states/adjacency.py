@@ -6,9 +6,8 @@ import omnigibson as og
 from omnigibson.macros import create_module_macros
 from omnigibson.object_states.aabb import AABB
 from omnigibson.object_states.object_state_base import AbsoluteObjectState
-from omnigibson.utils.sampling_utils import raytest_batch, raytest
 from omnigibson.utils.constants import PrimType
-
+from omnigibson.utils.sampling_utils import raytest, raytest_batch
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -107,6 +106,7 @@ def compute_adjacencies(obj, axes, max_distance, use_aabb_center=True):
 
             idx = 0
             obj_link_paths = {link.prim_path for link in obj.links.values()}
+
             def _ray_callback(hit):
                 # Check for self-hit -- if so, record the position and terminate early
                 should_continue = True
@@ -130,11 +130,7 @@ def compute_adjacencies(obj, axes, max_distance, use_aabb_center=True):
     # Cast time.
     prim_paths = obj.link_prim_paths
     ray_results = raytest_batch(
-        ray_starts,
-        ray_endpoints,
-        only_closest=False,
-        ignore_bodies=prim_paths,
-        ignore_collisions=prim_paths
+        ray_starts, ray_endpoints, only_closest=False, ignore_bodies=prim_paths, ignore_collisions=prim_paths
     )
 
     # Add the results to the appropriate lists
@@ -168,7 +164,9 @@ class VerticalAdjacency(AbsoluteObjectState):
 
     def _get_value(self):
         # Call the adjacency computation with th Z axis.
-        bodies_by_axis = compute_adjacencies(self.obj, np.array([[0, 0, 1]]), m.MAX_DISTANCE_VERTICAL, use_aabb_center=False)
+        bodies_by_axis = compute_adjacencies(
+            self.obj, np.array([[0, 0, 1]]), m.MAX_DISTANCE_VERTICAL, use_aabb_center=False
+        )
 
         # Return the adjacencies from the only axis we passed in.
         return bodies_by_axis[0]
@@ -206,7 +204,9 @@ class HorizontalAdjacency(AbsoluteObjectState):
         coordinate_planes = get_equidistant_coordinate_planes(m.HORIZONTAL_AXIS_COUNT)
 
         # Flatten the axis dimension and input into compute_adjacencies.
-        bodies_by_axis = compute_adjacencies(self.obj, coordinate_planes.reshape(-1, 3), m.MAX_DISTANCE_HORIZONTAL, use_aabb_center=True)
+        bodies_by_axis = compute_adjacencies(
+            self.obj, coordinate_planes.reshape(-1, 3), m.MAX_DISTANCE_HORIZONTAL, use_aabb_center=True
+        )
 
         # Now reshape the bodies_by_axis to group by coordinate planes.
         bodies_by_plane = list(zip(bodies_by_axis[::2], bodies_by_axis[1::2]))

@@ -1,8 +1,9 @@
 import os
+
+from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.robots.robot_base import REGISTERED_ROBOTS
 from omnigibson.robots.robot_base import m as robot_macros
 from omnigibson.scenes.traversable_scene import TraversableScene
-from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.utils.asset_utils import get_og_scene_path
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.ui_utils import create_module_logger
@@ -17,6 +18,7 @@ class InteractiveTraversableScene(TraversableScene):
     In general, this supports curated, pre-defined scene layouts with annotated objects.
     This adds semantic support via a segmentation map generated for this specific scene.
     """
+
     def __init__(
         self,
         scene_model,
@@ -124,21 +126,22 @@ class InteractiveTraversableScene(TraversableScene):
             load_room_types (None or list): only load objects in these room types into the scene
             load_room_instances (None or list): if specified, only load objects in these room instances into the scene
         """
-        self.load_object_categories = [load_object_categories] if \
-            isinstance(load_object_categories, str) else load_object_categories
+        self.load_object_categories = (
+            [load_object_categories] if isinstance(load_object_categories, str) else load_object_categories
+        )
 
-        self.not_load_object_categories = [not_load_object_categories] if \
-            isinstance(not_load_object_categories, str) else not_load_object_categories
+        self.not_load_object_categories = (
+            [not_load_object_categories] if isinstance(not_load_object_categories, str) else not_load_object_categories
+        )
 
         if load_room_instances is not None:
             if isinstance(load_room_instances, str):
                 load_room_instances = [load_room_instances]
             load_room_instances_filtered = []
             for room_instance in load_room_instances:
-                if room_instance in self._seg_map.room_ins_name_to_ins_id:
-                    load_room_instances_filtered.append(room_instance)
-                else:
+                if room_instance not in self._seg_map.room_ins_name_to_ins_id:
                     log.warning("room_instance [{}] does not exist.".format(room_instance))
+                load_room_instances_filtered.append(room_instance)
             self.load_room_instances = load_room_instances_filtered
         elif load_room_types is not None:
             if isinstance(load_room_types, str):
@@ -178,9 +181,11 @@ class InteractiveTraversableScene(TraversableScene):
         is_task_relevant = name in task_relevant_names or category in STRUCTURE_CATEGORIES
         whitelisted = (
             # Either no whitelisting-only mode is on
-            (self.load_object_categories is None and not self.load_task_relevant_only) or
+            (self.load_object_categories is None and not self.load_task_relevant_only)
+            or
             # Or the object is in the whitelist
-            (self.load_object_categories is not None and category in self.load_object_categories) or
+            (self.load_object_categories is not None and category in self.load_object_categories)
+            or
             # Or it's in the task relevant list
             (self.load_task_relevant_only and is_task_relevant)
         )

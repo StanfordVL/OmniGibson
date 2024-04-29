@@ -1,7 +1,6 @@
 from abc import ABCMeta, abstractmethod
 
-from omnigibson.utils.python_utils import classproperty, Registerable
-
+from omnigibson.utils.python_utils import Registerable, classproperty
 
 # Registered sensor noises
 REGISTERED_SENSOR_NOISES = dict()
@@ -15,6 +14,7 @@ class BaseSensorNoise(Registerable, metaclass=ABCMeta):
     Args:
         enabled (bool): Whether this sensor should be enabled by default
     """
+
     def __init__(self, enabled=True):
         # Store whether this noise model is enabled or not
         self._enabled = enabled

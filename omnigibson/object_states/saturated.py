@@ -1,9 +1,9 @@
 import numpy as np
-from omnigibson.macros import create_module_macros
-from omnigibson.object_states.object_state_base import RelativeObjectState, BooleanStateMixin
-from omnigibson.systems.system_base import UUID_TO_SYSTEMS, REGISTERED_SYSTEMS
-from omnigibson.utils.python_utils import get_uuid
 
+from omnigibson.macros import create_module_macros
+from omnigibson.object_states.object_state_base import BooleanStateMixin, RelativeObjectState
+from omnigibson.systems.system_base import REGISTERED_SYSTEMS, UUID_TO_SYSTEMS
+from omnigibson.utils.python_utils import get_uuid
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -16,6 +16,7 @@ class ModifiedParticles(RelativeObjectState):
     """
     Object state tracking number of modified particles for a given object
     """
+
     def __init__(self, obj):
         # Run super first
         super().__init__(obj=obj)
@@ -64,21 +65,27 @@ class ModifiedParticles(RelativeObjectState):
         return state
 
     def _load_state(self, state):
-        self.particle_counts = {REGISTERED_SYSTEMS[system_name]: val for system_name, val in state.items() if system_name != "n_systems" and val > 0}
+        self.particle_counts = {
+            REGISTERED_SYSTEMS[system_name]: val
+            for system_name, val in state.items()
+            if system_name != "n_systems" and val > 0
+        }
 
     def _serialize(self, state):
         state_flat = np.array([state["n_systems"]], dtype=float)
         if state["n_systems"] > 0:
             system_names = tuple(state.keys())[1:]
             state_flat = np.concatenate(
-                [state_flat,
-                 np.concatenate([(get_uuid(system_name), state[system_name]) for system_name in system_names])]
+                [
+                    state_flat,
+                    np.concatenate([(get_uuid(system_name), state[system_name]) for system_name in system_names]),
+                ]
             ).astype(float)
         return state_flat
 
     def _deserialize(self, state):
         n_systems = int(state[0])
-        state_shaped = state[1:1 + n_systems * 2].reshape(-1, 2)
+        state_shaped = state[1 : 1 + n_systems * 2].reshape(-1, 2)
         state_dict = dict(n_systems=n_systems)
         systems = []
         for uuid, val in state_shaped:
@@ -93,12 +100,12 @@ class ModifiedParticles(RelativeObjectState):
 
 
 class Saturated(RelativeObjectState, BooleanStateMixin):
-    def __init__(self, obj, default_limit=m.DEFAULT_SATURATION_LIMIT):
+    def __init__(self, obj, default_limit=None):
         # Run super first
         super().__init__(obj=obj)
 
         # Limits
-        self._default_limit = default_limit
+        self._default_limit = default_limit if default_limit is not None else m.DEFAULT_SATURATION_LIMIT
         self._limits = None
 
     def _initialize(self):
@@ -219,15 +226,17 @@ class Saturated(RelativeObjectState, BooleanStateMixin):
         if state["n_systems"] > 0:
             system_names = tuple(state.keys())[2:]
             state_flat = np.concatenate(
-                [state_flat,
-                 np.concatenate([(get_uuid(system_name), state[system_name]) for system_name in system_names])]
+                [
+                    state_flat,
+                    np.concatenate([(get_uuid(system_name), state[system_name]) for system_name in system_names]),
+                ]
             ).astype(float)
         return state_flat
 
     def _deserialize(self, state):
         n_systems = int(state[0])
         state_dict = dict(n_systems=n_systems, default_limit=int(state[1]))
-        state_shaped = state[2:2 + n_systems * 2].reshape(-1, 2)
+        state_shaped = state[2 : 2 + n_systems * 2].reshape(-1, 2)
         systems = []
         for uuid, val in state_shaped:
             system = UUID_TO_SYSTEMS[int(uuid)]

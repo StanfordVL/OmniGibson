@@ -1,16 +1,15 @@
 import itertools
+import time
 from collections import Counter, defaultdict
 
 import numpy as np
-
-import time
 import trimesh
 from scipy.spatial.transform import Rotation as R
 from scipy.stats import truncnorm
 
 import omnigibson as og
-from omnigibson.macros import create_module_macros, gm
 import omnigibson.utils.transform_utils as T
+from omnigibson.macros import create_module_macros, gm
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -126,7 +125,7 @@ def draw_debug_markers(hit_positions, radius=0.01):
     color = np.concatenate([np.random.rand(3), [1]])
     for vec in hit_positions:
         time_str = str(time.time())
-        cur_time = time_str[(time_str.index(".") + 1):]
+        cur_time = time_str[(time_str.index(".") + 1) :]
         obj = PrimitiveObject(
             prim_path=f"/World/debug_marker_{cur_time}",
             name=f"debug_marker_{cur_time}",
@@ -139,9 +138,7 @@ def draw_debug_markers(hit_positions, radius=0.01):
         obj.set_position(vec)
 
 
-def get_parallel_rays(
-    source, destination, offset, new_ray_per_horizontal_distance
-):
+def get_parallel_rays(source, destination, offset, new_ray_per_horizontal_distance):
     """
     Given an input ray described by a source and a destination, sample parallel rays around it as the center.
 
@@ -251,7 +248,9 @@ def sample_origin_positions(mins, maxes, count, bimodal_mean_fraction, bimodal_s
     return results
 
 
-def raytest_batch(start_points, end_points, only_closest=True, ignore_bodies=None, ignore_collisions=None, callback=None):
+def raytest_batch(
+    start_points, end_points, only_closest=True, ignore_bodies=None, ignore_collisions=None, callback=None
+):
     """
     Computes raytest collisions for a set of rays cast from @start_points to @end_points.
 
@@ -286,14 +285,16 @@ def raytest_batch(start_points, end_points, only_closest=True, ignore_bodies=Non
     # For now, we do a naive for loop over individual raytests until a better API comes out
     results = []
     for start_point, end_point in zip(start_points, end_points):
-        results.append(raytest(
-            start_point=start_point,
-            end_point=end_point,
-            only_closest=only_closest,
-            ignore_bodies=ignore_bodies,
-            ignore_collisions=ignore_collisions,
-            callback=callback,
-        ))
+        results.append(
+            raytest(
+                start_point=start_point,
+                end_point=end_point,
+                only_closest=only_closest,
+                ignore_bodies=ignore_bodies,
+                ignore_collisions=ignore_collisions,
+                callback=callback,
+            )
+        )
 
     return results
 
@@ -357,14 +358,16 @@ def raytest(
         def hit_callback(hit):
             # Only add to hits if we're not ignoring this body or collision
             if hit.rigid_body not in ignore_bodies and hit.collision not in ignore_collisions:
-                hits.append({
-                    "hit": True,
-                    "position": np.array(hit.position),
-                    "normal": np.array(hit.normal),
-                    "distance": hit.distance,
-                    "collision": hit.collision,
-                    "rigidBody": hit.rigid_body,
-                })
+                hits.append(
+                    {
+                        "hit": True,
+                        "position": np.array(hit.position),
+                        "normal": np.array(hit.normal),
+                        "distance": hit.distance,
+                        "collision": hit.collision,
+                        "rigidBody": hit.rigid_body,
+                    }
+                )
             # We always want to continue traversing to collect all hits
             return True if callback is None else callback(hit)
 
@@ -392,8 +395,8 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
     bimodal_stdev_fraction,
     axis_probabilities,
     aabb_offset=None,
-    aabb_offset_fraction=m.DEFAULT_AABB_OFFSET_FRACTION,
-    max_sampling_attempts=m.DEFAULT_MAX_SAMPLING_ATTEMPTS,
+    aabb_offset_fraction=None,
+    max_sampling_attempts=None,
 ):
     """
     Sample the start points and end points around a given object by a symmetric bimodal distribution
@@ -417,6 +420,10 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
             - (n, s, 3)-array: (num_samples, max_sampling_attempts, 3) shaped array representing the end points for
                 raycasting defined in the world frame
     """
+    aabb_offset_fraction = aabb_offset_fraction if aabb_offset_fraction is not None else m.DEFAULT_AABB_OFFSET_FRACTION
+    max_sampling_attempts = (
+        max_sampling_attempts if max_sampling_attempts is not None else m.DEFAULT_MAX_SAMPLING_ATTEMPTS
+    )
     bbox_center, bbox_orn, bbox_bf_extent, _ = obj.get_base_aligned_bbox(xy_aligned=True)
     aabb_offset = aabb_offset_fraction * bbox_bf_extent if aabb_offset is None else aabb_offset
     half_extent_with_offset = (bbox_bf_extent / 2) + aabb_offset
@@ -448,8 +455,12 @@ def sample_raytest_start_end_symmetric_bimodal_distribution(
     # Convert the points into the world frame
     orig_shape = start_points.shape
     to_wf_transform = T.pose2mat((bbox_center, bbox_orn))
-    start_points = trimesh.transformations.transform_points(start_points.reshape(-1, 3), to_wf_transform).reshape(orig_shape)
-    end_points = trimesh.transformations.transform_points(end_points.reshape(-1, 3), to_wf_transform).reshape(orig_shape)
+    start_points = trimesh.transformations.transform_points(start_points.reshape(-1, 3), to_wf_transform).reshape(
+        orig_shape
+    )
+    end_points = trimesh.transformations.transform_points(end_points.reshape(-1, 3), to_wf_transform).reshape(
+        orig_shape
+    )
 
     return start_points, end_points
 
@@ -458,7 +469,7 @@ def sample_raytest_start_end_full_grid_topdown(
     obj,
     ray_spacing,
     aabb_offset=None,
-    aabb_offset_fraction=m.DEFAULT_AABB_OFFSET_FRACTION,
+    aabb_offset_fraction=None,
 ):
     """
     Sample the start points and end points around a given object by a dense grid from top down.
@@ -477,19 +488,26 @@ def sample_raytest_start_end_full_grid_topdown(
             - (n, s, 3)-array: (num_samples, max_sampling_attempts, 3) shaped array representing the end points for
                 raycasting defined in the world frame
     """
+    aabb_offset_fraction = aabb_offset_fraction if aabb_offset_fraction is not None else m.DEFAULT_AABB_OFFSET_FRACTION
     bbox_center, bbox_orn, bbox_bf_extent, _ = obj.get_base_aligned_bbox(xy_aligned=True)
     aabb_offset = aabb_offset_fraction * bbox_bf_extent if aabb_offset is None else aabb_offset
 
     half_extent_with_offset = (bbox_bf_extent / 2) + aabb_offset
-    x = np.linspace(-half_extent_with_offset[0], half_extent_with_offset[0], int(half_extent_with_offset[0] * 2 / ray_spacing) + 1)
-    y = np.linspace(-half_extent_with_offset[1], half_extent_with_offset[1], int(half_extent_with_offset[1] * 2 / ray_spacing) + 1)
+    x = np.linspace(
+        -half_extent_with_offset[0], half_extent_with_offset[0], int(half_extent_with_offset[0] * 2 / ray_spacing) + 1
+    )
+    y = np.linspace(
+        -half_extent_with_offset[1], half_extent_with_offset[1], int(half_extent_with_offset[1] * 2 / ray_spacing) + 1
+    )
     n_rays = len(x) * len(y)
 
-    start_points = np.stack([
-        np.tile(x, len(y)),
-        np.repeat(y, len(x)),
-        np.ones(n_rays) * half_extent_with_offset[2],
-    ]).T
+    start_points = np.stack(
+        [
+            np.tile(x, len(y)),
+            np.repeat(y, len(x)),
+            np.ones(n_rays) * half_extent_with_offset[2],
+        ]
+    ).T
 
     end_points = np.copy(start_points)
     end_points[:, 2] = -half_extent_with_offset[2]
@@ -512,15 +530,15 @@ def sample_cuboid_on_object_symmetric_bimodal_distribution(
     bimodal_mean_fraction,
     bimodal_stdev_fraction,
     axis_probabilities,
-    new_ray_per_horizontal_distance=m.DEFAULT_NEW_RAY_PER_HORIZONTAL_DISTANCE,
-    hit_proportion=m.DEFAULT_HIT_PROPORTION,
+    new_ray_per_horizontal_distance=None,
+    hit_proportion=None,
     aabb_offset=None,
-    aabb_offset_fraction=m.DEFAULT_AABB_OFFSET_FRACTION,
-    max_sampling_attempts=m.DEFAULT_MAX_SAMPLING_ATTEMPTS,
-    max_angle_with_z_axis=m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS,
-    parallel_ray_normal_angle_tolerance=m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE,
-    hit_to_plane_threshold=m.DEFAULT_HIT_TO_PLANE_THRESHOLD,
-    cuboid_bottom_padding=m.DEFAULT_CUBOID_BOTTOM_PADDING,
+    aabb_offset_fraction=None,
+    max_sampling_attempts=None,
+    max_angle_with_z_axis=None,
+    parallel_ray_normal_angle_tolerance=None,
+    hit_to_plane_threshold=None,
+    cuboid_bottom_padding=None,
     undo_cuboid_bottom_padding=True,
     verify_cuboid_empty=True,
     refuse_downwards=False,
@@ -574,6 +592,30 @@ def sample_cuboid_on_object_symmetric_bimodal_distribution(
             are set to None when no successful sampling happens within the max number of attempts. Refusal details are only
             filled if the m.DEBUG_SAMPLING flag is globally set to True.
     """
+    new_ray_per_horizontal_distance = (
+        new_ray_per_horizontal_distance
+        if new_ray_per_horizontal_distance is not None
+        else m.DEFAULT_NEW_RAY_PER_HORIZONTAL_DISTANCE
+    )
+    hit_proportion = hit_proportion if hit_proportion is not None else m.DEFAULT_HIT_PROPORTION
+    aabb_offset_fraction = aabb_offset_fraction if aabb_offset_fraction is not None else m.DEFAULT_AABB_OFFSET_FRACTION
+    max_sampling_attempts = (
+        max_sampling_attempts if max_sampling_attempts is not None else m.DEFAULT_MAX_SAMPLING_ATTEMPTS
+    )
+    max_angle_with_z_axis = (
+        max_angle_with_z_axis if max_angle_with_z_axis is not None else m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS
+    )
+    parallel_ray_normal_angle_tolerance = (
+        parallel_ray_normal_angle_tolerance
+        if parallel_ray_normal_angle_tolerance is not None
+        else m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE
+    )
+    hit_to_plane_threshold = (
+        hit_to_plane_threshold if hit_to_plane_threshold is not None else m.DEFAULT_HIT_TO_PLANE_THRESHOLD
+    )
+    cuboid_bottom_padding = (
+        cuboid_bottom_padding if cuboid_bottom_padding is not None else m.DEFAULT_CUBOID_BOTTOM_PADDING
+    )
     start_points, end_points = sample_raytest_start_end_symmetric_bimodal_distribution(
         obj,
         num_samples,
@@ -606,14 +648,14 @@ def sample_cuboid_on_object_full_grid_topdown(
     obj,
     ray_spacing,
     cuboid_dimensions,
-    new_ray_per_horizontal_distance=m.DEFAULT_NEW_RAY_PER_HORIZONTAL_DISTANCE,
-    hit_proportion=m.DEFAULT_HIT_PROPORTION,
+    new_ray_per_horizontal_distance=None,
+    hit_proportion=None,
     aabb_offset=None,
-    aabb_offset_fraction=m.DEFAULT_AABB_OFFSET_FRACTION,
-    max_angle_with_z_axis=m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS,
-    parallel_ray_normal_angle_tolerance=m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE,
-    hit_to_plane_threshold=m.DEFAULT_HIT_TO_PLANE_THRESHOLD,
-    cuboid_bottom_padding=m.DEFAULT_CUBOID_BOTTOM_PADDING,
+    aabb_offset_fraction=None,
+    max_angle_with_z_axis=None,
+    parallel_ray_normal_angle_tolerance=None,
+    hit_to_plane_threshold=None,
+    cuboid_bottom_padding=None,
     undo_cuboid_bottom_padding=True,
     verify_cuboid_empty=True,
     refuse_downwards=False,
@@ -662,6 +704,27 @@ def sample_cuboid_on_object_full_grid_topdown(
             are set to None when no successful sampling happens within the max number of attempts. Refusal details are only
             filled if the m.DEBUG_SAMPLING flag is globally set to True.
     """
+    new_ray_per_horizontal_distance = (
+        new_ray_per_horizontal_distance
+        if new_ray_per_horizontal_distance is not None
+        else m.DEFAULT_NEW_RAY_PER_HORIZONTAL_DISTANCE
+    )
+    hit_proportion = hit_proportion if hit_proportion is not None else m.DEFAULT_HIT_PROPORTION
+    aabb_offset_fraction = aabb_offset_fraction if aabb_offset_fraction is not None else m.DEFAULT_AABB_OFFSET_FRACTION
+    max_angle_with_z_axis = (
+        max_angle_with_z_axis if max_angle_with_z_axis is not None else m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS
+    )
+    parallel_ray_normal_angle_tolerance = (
+        parallel_ray_normal_angle_tolerance
+        if parallel_ray_normal_angle_tolerance is not None
+        else m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE
+    )
+    hit_to_plane_threshold = (
+        hit_to_plane_threshold if hit_to_plane_threshold is not None else m.DEFAULT_HIT_TO_PLANE_THRESHOLD
+    )
+    cuboid_bottom_padding = (
+        cuboid_bottom_padding if cuboid_bottom_padding is not None else m.DEFAULT_CUBOID_BOTTOM_PADDING
+    )
     start_points, end_points = sample_raytest_start_end_full_grid_topdown(
         obj,
         ray_spacing,
@@ -691,12 +754,12 @@ def sample_cuboid_on_object(
     end_points,
     cuboid_dimensions,
     ignore_objs=None,
-    new_ray_per_horizontal_distance=m.DEFAULT_NEW_RAY_PER_HORIZONTAL_DISTANCE,
-    hit_proportion=m.DEFAULT_HIT_PROPORTION,
-    max_angle_with_z_axis=m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS,
-    parallel_ray_normal_angle_tolerance=m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE,
-    hit_to_plane_threshold=m.DEFAULT_HIT_TO_PLANE_THRESHOLD,
-    cuboid_bottom_padding=m.DEFAULT_CUBOID_BOTTOM_PADDING,
+    new_ray_per_horizontal_distance=None,
+    hit_proportion=None,
+    max_angle_with_z_axis=None,
+    parallel_ray_normal_angle_tolerance=None,
+    hit_to_plane_threshold=None,
+    cuboid_bottom_padding=None,
     undo_cuboid_bottom_padding=True,
     verify_cuboid_empty=True,
     refuse_downwards=False,
@@ -746,15 +809,38 @@ def sample_cuboid_on_object(
             are set to None when no successful sampling happens within the max number of attempts. Refusal details are only
             filled if the m.DEBUG_SAMPLING flag is globally set to True.
     """
+    new_ray_per_horizontal_distance = (
+        new_ray_per_horizontal_distance
+        if new_ray_per_horizontal_distance is not None
+        else m.DEFAULT_NEW_RAY_PER_HORIZONTAL_DISTANCE
+    )
+    hit_proportion = hit_proportion if hit_proportion is not None else m.DEFAULT_HIT_PROPORTION
+    max_angle_with_z_axis = (
+        max_angle_with_z_axis if max_angle_with_z_axis is not None else m.DEFAULT_MAX_ANGLE_WITH_Z_AXIS
+    )
+    parallel_ray_normal_angle_tolerance = (
+        parallel_ray_normal_angle_tolerance
+        if parallel_ray_normal_angle_tolerance is not None
+        else m.DEFAULT_PARALLEL_RAY_NORMAL_ANGLE_TOLERANCE
+    )
+    hit_to_plane_threshold = (
+        hit_to_plane_threshold if hit_to_plane_threshold is not None else m.DEFAULT_HIT_TO_PLANE_THRESHOLD
+    )
+    cuboid_bottom_padding = (
+        cuboid_bottom_padding if cuboid_bottom_padding is not None else m.DEFAULT_CUBOID_BOTTOM_PADDING
+    )
 
-    assert start_points.shape == end_points.shape, \
-        "the start and end points of raycasting are expected to have the same shape."
+    assert (
+        start_points.shape == end_points.shape
+    ), "the start and end points of raycasting are expected to have the same shape."
     num_samples = start_points.shape[0]
 
     cuboid_dimensions = np.array(cuboid_dimensions)
     if np.any(cuboid_dimensions > 50.0):
-        log.warning("WARNING: Trying to sample for a very large cuboid (at least one dimensions > 50). "
-              "Terminating immediately, no hits will be registered.")
+        log.warning(
+            "WARNING: Trying to sample for a very large cuboid (at least one dimensions > 50). "
+            "Terminating immediately, no hits will be registered."
+        )
         return [(None, None, None, None, defaultdict(list)) for _ in range(num_samples)]
 
     assert cuboid_dimensions.ndim <= 2
@@ -764,8 +850,11 @@ def sample_cuboid_on_object(
 
     results = [(None, None, None, None, defaultdict(list)) for _ in range(num_samples)]
     rigid_bodies = None if obj is None else {link.prim_path for link in obj.links.values()}
-    ignore_rigid_bodies = None if ignore_objs is None else \
-        {link.prim_path for ignore_obj in ignore_objs for link in ignore_obj.links.values()}
+    ignore_rigid_bodies = (
+        None
+        if ignore_objs is None
+        else {link.prim_path for ignore_obj in ignore_objs for link in ignore_obj.links.values()}
+    )
 
     for i in range(num_samples):
         refusal_reasons = results[i][4]
@@ -778,11 +867,15 @@ def sample_cuboid_on_object(
 
             if not zero_cuboid_dimension:
                 # Make sure we have valid (nonzero) x and y values
-                assert (this_cuboid_dimensions[:-1] > 0).all(), \
-                    f"Cuboid x and y dimensions must not be zero if z dimension is nonzero! Got: {this_cuboid_dimensions}"
+                assert (
+                    this_cuboid_dimensions[:-1] > 0
+                ).all(), f"Cuboid x and y dimensions must not be zero if z dimension is nonzero! Got: {this_cuboid_dimensions}"
                 # Obtain the parallel rays using the direction sampling method.
                 sources, destinations, grid = get_parallel_rays(
-                    start_pos, end_pos, this_cuboid_dimensions[:2] / 2.0, new_ray_per_horizontal_distance,
+                    start_pos,
+                    end_pos,
+                    this_cuboid_dimensions[:2] / 2.0,
+                    new_ray_per_horizontal_distance,
                 )
                 sources = np.array(sources)
                 destinations = np.array(destinations)
@@ -791,11 +884,12 @@ def sample_cuboid_on_object(
                 destinations = np.array([end_pos])
 
             # Time to cast the rays.
-            cast_results = raytest_batch(start_points=sources, end_points=destinations, ignore_bodies=ignore_rigid_bodies)
+            cast_results = raytest_batch(
+                start_points=sources, end_points=destinations, ignore_bodies=ignore_rigid_bodies
+            )
 
             # Check whether sufficient number of rays hit the object
-            hits = check_rays_hit_object(
-                cast_results, hit_proportion, refusal_reasons["missed_object"], rigid_bodies)
+            hits = check_rays_hit_object(cast_results, hit_proportion, refusal_reasons["missed_object"], rigid_bodies)
             if hits is None:
                 continue
 
@@ -831,7 +925,12 @@ def sample_cuboid_on_object(
 
             # Check that none of the parallel rays' hit normal differs from center ray by more than threshold.
             if not zero_cuboid_dimension:
-                if not check_normal_similarity(center_hit_normal, hit_normals, parallel_ray_normal_angle_tolerance, refusal_reasons["hit_normal_similarity"]):
+                if not check_normal_similarity(
+                    center_hit_normal,
+                    hit_normals,
+                    parallel_ray_normal_angle_tolerance,
+                    refusal_reasons["hit_normal_similarity"],
+                ):
                     continue
 
                 # Fit a plane to the points.
@@ -848,13 +947,20 @@ def sample_cuboid_on_object(
 
                 # Check that the plane normal is similar to the hit normal
                 if not check_normal_similarity(
-                    center_hit_normal, plane_normal[None, :], parallel_ray_normal_angle_tolerance, refusal_reasons["plane_normal_similarity"]
+                    center_hit_normal,
+                    plane_normal[None, :],
+                    parallel_ray_normal_angle_tolerance,
+                    refusal_reasons["plane_normal_similarity"],
                 ):
                     continue
 
                 # Check that the points are all within some acceptable distance of the plane.
                 if not check_distance_to_plane(
-                    hit_positions, plane_centroid, plane_normal, hit_to_plane_threshold, refusal_reasons["dist_to_plane"]
+                    hit_positions,
+                    plane_centroid,
+                    plane_normal,
+                    hit_to_plane_threshold,
+                    refusal_reasons["dist_to_plane"],
                 ):
                     continue
 
@@ -867,8 +973,13 @@ def sample_cuboid_on_object(
                 cuboid_centroid = center_projected_hit + plane_normal * this_cuboid_dimensions[2] / 2.0
 
                 rotation = compute_rotation_from_grid_sample(
-                    grid, projected_hits, cuboid_centroid, this_cuboid_dimensions,
-                    hits, refusal_reasons["rotation_not_computable"])
+                    grid,
+                    projected_hits,
+                    cuboid_centroid,
+                    this_cuboid_dimensions,
+                    hits,
+                    refusal_reasons["rotation_not_computable"],
+                )
 
                 # Make sure there are enough hit points that can be used for alignment to find the rotation
                 if rotation is None:
@@ -891,10 +1002,10 @@ def sample_cuboid_on_object(
 
                 # Now we use the cuboid's diagonals to check that the cuboid is actually empty
                 if verify_cuboid_empty and not check_cuboid_empty(
-                        plane_normal,
-                        corner_positions,
-                        this_cuboid_dimensions,
-                        refusal_reasons["cuboid_not_empty"],
+                    plane_normal,
+                    corner_positions,
+                    this_cuboid_dimensions,
+                    refusal_reasons["cuboid_not_empty"],
                 ):
                     continue
 
@@ -926,7 +1037,9 @@ def sample_cuboid_on_object(
     return results
 
 
-def compute_rotation_from_grid_sample(two_d_grid, projected_hits, cuboid_centroid, this_cuboid_dimensions, hits, refusal_log):
+def compute_rotation_from_grid_sample(
+    two_d_grid, projected_hits, cuboid_centroid, this_cuboid_dimensions, hits, refusal_log
+):
     """
     Computes
 
@@ -981,9 +1094,7 @@ def check_normal_similarity(center_hit_normal, hit_normals, tolerance, refusal_l
         1.0,
     )
     parallel_hit_normal_angles_to_hit_normal = np.arccos(parallel_hit_main_hit_dot_products)
-    all_rays_hit_with_similar_normal = np.all(
-        parallel_hit_normal_angles_to_hit_normal < tolerance
-    )
+    all_rays_hit_with_similar_normal = np.all(parallel_hit_normal_angles_to_hit_normal < tolerance)
     if not all_rays_hit_with_similar_normal:
         if m.DEBUG_SAMPLING:
             refusal_log.append("angles %r" % (np.rad2deg(parallel_hit_normal_angles_to_hit_normal),))
@@ -1010,13 +1121,13 @@ def check_rays_hit_object(cast_results, threshold, refusal_log, body_names=None)
     """
     body_names = None if body_names is None else set(body_names)
     ray_hits = [
-        ray_res["hit"] and
-        (body_names is None or ray_res["rigidBody"] in body_names)
-        for ray_res in cast_results
+        ray_res["hit"] and (body_names is None or ray_res["rigidBody"] in body_names) for ray_res in cast_results
     ]
     if sum(ray_hits) / len(cast_results) < threshold:
         if m.DEBUG_SAMPLING:
-            refusal_log.append(f"{sum(ray_hits)} / {len(cast_results)} < {threshold} hits: {[ray_res['rigidBody'] for ray_res in cast_results if ray_res['hit']]}")
+            refusal_log.append(
+                f"{sum(ray_hits)} / {len(cast_results)} < {threshold} hits: {[ray_res['rigidBody'] for ray_res in cast_results if ray_res['hit']]}"
+            )
 
         return None
 

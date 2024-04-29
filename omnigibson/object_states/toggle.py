@@ -3,14 +3,13 @@ import numpy as np
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros
-from omnigibson.prims.geom_prim import VisualGeomPrim
 from omnigibson.object_states.link_based_state_mixin import LinkBasedStateMixin
 from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanStateMixin
-from omnigibson.object_states.update_state_mixin import UpdateStateMixin, GlobalUpdateStateMixin
-from omnigibson.utils.python_utils import classproperty
-from omnigibson.utils.usd_utils import create_primitive_mesh, RigidContactAPI
+from omnigibson.object_states.update_state_mixin import GlobalUpdateStateMixin, UpdateStateMixin
+from omnigibson.prims.geom_prim import VisualGeomPrim
 from omnigibson.utils.constants import PrimType
-
+from omnigibson.utils.python_utils import classproperty
+from omnigibson.utils.usd_utils import RigidContactAPI, create_primitive_mesh
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -48,10 +47,13 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
         cls._finger_contact_objs = set()
 
         # detect marker and hand interaction
-        robot_finger_links = set(link
-                                 for robot in og.sim.scene.robots if isinstance(robot, ManipulationRobot)
-                                 for finger_links in robot.finger_links.values()
-                                 for link in finger_links)
+        robot_finger_links = set(
+            link
+            for robot in og.sim.scene.robots
+            if isinstance(robot, ManipulationRobot)
+            for finger_links in robot.finger_links.values()
+            for link in finger_links
+        )
         cls._robot_finger_paths = set(link.prim_path for link in robot_finger_links)
 
         # If there aren't any valid robot link paths, immediately return

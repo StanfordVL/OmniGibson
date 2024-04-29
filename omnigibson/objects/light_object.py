@@ -1,11 +1,12 @@
+import numpy as np
+
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.prims.xform_prim import XFormPrim
-from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.constants import PrimType
+from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.ui_utils import create_module_logger
-import numpy as np
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -15,6 +16,7 @@ class LightObject(StatefulObject):
     """
     LightObjects are objects that generate light in the simulation
     """
+
     LIGHT_TYPES = {
         "Cylinder",
         "Disk",
@@ -41,7 +43,6 @@ class LightObject(StatefulObject):
         intensity=50000.0,
         **kwargs,
     ):
-
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
@@ -103,7 +104,11 @@ class LightObject(StatefulObject):
         base_link = og.sim.stage.DefinePrim(f"{self._prim_path}/base_link", "Xform")
 
         # Define the actual light link
-        light_prim = getattr(lazy.pxr.UsdLux, f"{self.light_type}Light").Define(og.sim.stage, f"{self._prim_path}/base_link/light").GetPrim()
+        light_prim = (
+            getattr(lazy.pxr.UsdLux, f"{self.light_type}Light")
+            .Define(og.sim.stage, f"{self._prim_path}/base_link/light")
+            .GetPrim()
+        )
 
         return prim
 
@@ -137,7 +142,6 @@ class LightObject(StatefulObject):
         # This is a virtual object (with no associated visual mesh), so omni returns an invalid AABB.
         # Therefore we instead return a hardcoded small value
         return np.ones(3) * -0.001, np.ones(3) * 0.001
-
 
     @property
     def light_link(self):
@@ -185,10 +189,8 @@ class LightObject(StatefulObject):
         Args:
             intensity (float): intensity to set
         """
-        self._light_link.set_attribute(
-            "inputs:intensity",
-            intensity)
-        
+        self._light_link.set_attribute("inputs:intensity", intensity)
+
     @property
     def color(self):
         """
@@ -207,9 +209,7 @@ class LightObject(StatefulObject):
         Args:
             color ([float, float, float]): color to set, each value in range [0, 1]
         """
-        self._light_link.set_attribute(
-            "inputs:color",
-            lazy.pxr.Gf.Vec3f(color))
+        self._light_link.set_attribute("inputs:color", lazy.pxr.Gf.Vec3f(color))
 
     @property
     def texture_file_path(self):
@@ -229,10 +229,7 @@ class LightObject(StatefulObject):
         Args:
             texture_file_path (str): path of texture file that should be used for this light
         """
-        self._light_link.set_attribute(
-            "inputs:texture:file",
-            lazy.pxr.Sdf.AssetPath(texture_file_path))
-
+        self._light_link.set_attribute("inputs:texture:file", lazy.pxr.Sdf.AssetPath(texture_file_path))
 
     def _create_prim_with_same_kwargs(self, prim_path, name, load_config):
         # Add additional kwargs (bounding_box is already captured in load_config)

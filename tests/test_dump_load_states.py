@@ -1,10 +1,10 @@
-import omnigibson as og
-from omnigibson.systems import *
-from omnigibson.object_states import Covered
-
-from utils import og_test, SYSTEM_EXAMPLES
-
 import pytest
+from utils import SYSTEM_EXAMPLES, og_test
+
+import omnigibson as og
+from omnigibson.object_states import Covered
+from omnigibson.systems import *
+
 
 @og_test
 def test_dump_load():
@@ -25,6 +25,7 @@ def test_dump_load():
     for system_name, system_class in SYSTEM_EXAMPLES.items():
         system = get_system(system_name)
         system.clear()
+
 
 @og_test
 def test_dump_load_serialized():

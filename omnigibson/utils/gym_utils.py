@@ -1,5 +1,6 @@
-import gym
 from abc import ABCMeta, abstractmethod
+
+import gym
 import numpy as np
 
 from omnigibson.utils.ui_utils import create_module_logger
@@ -70,6 +71,7 @@ class GymObservable(metaclass=ABCMeta):
     Args:
         kwargs: dict, does nothing, used to sink any extraneous arguments during initialization
     """
+
     def __init__(self, *args, **kwargs):
         # Initialize variables that we will fill in later
         self.observation_space = None

@@ -1,10 +1,9 @@
 from omnigibson.macros import create_module_macros
 from omnigibson.object_states import AABB
-from omnigibson.object_states.object_state_base import RelativeObjectState, BooleanStateMixin
 from omnigibson.object_states.contact_particles import ContactParticles
-from omnigibson.systems.system_base import VisualParticleSystem, is_visual_particle_system, is_physical_particle_system
+from omnigibson.object_states.object_state_base import BooleanStateMixin, RelativeObjectState
+from omnigibson.systems.system_base import VisualParticleSystem, is_physical_particle_system, is_visual_particle_system
 from omnigibson.utils.constants import PrimType
-
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -65,16 +64,19 @@ class Covered(RelativeObjectState, BooleanStateMixin):
                     value = system.num_group_particles(group=self._visual_particle_group) >= m.VISUAL_PARTICLE_THRESHOLD
             elif is_physical_particle_system(system_name=system.name):
                 # Make sure we're not cloth -- not supported yet
-                assert self.obj.prim_type != PrimType.CLOTH, \
-                    "Cloth objects currently cannot be Covered by physical particles!"
+                assert (
+                    self.obj.prim_type != PrimType.CLOTH
+                ), "Cloth objects currently cannot be Covered by physical particles!"
                 # We've already cached particle contacts, so we merely search through them to see if any particles are
                 # touching the object and are visible (the non-visible ones are considered already "removed")
                 n_near_particles = len(self.obj.states[ContactParticles].get_value(system))
                 # Heuristic: If the number of near particles is above the threshold, we consdier this covered
                 value = n_near_particles >= m.PHYSICAL_PARTICLE_THRESHOLD
             else:
-                raise ValueError(f"Invalid system {system} received for getting Covered state!"
-                                 f"Currently, only VisualParticleSystems and PhysicalParticleSystems are supported.")
+                raise ValueError(
+                    f"Invalid system {system} received for getting Covered state!"
+                    f"Currently, only VisualParticleSystems and PhysicalParticleSystems are supported."
+                )
 
         return value
 
@@ -103,8 +105,9 @@ class Covered(RelativeObjectState, BooleanStateMixin):
 
         elif is_physical_particle_system(system_name=system.name):
             # Make sure we're not cloth -- not supported yet
-            assert self.obj.prim_type != PrimType.CLOTH, \
-                "Cloth objects currently cannot be Covered by physical particles!"
+            assert (
+                self.obj.prim_type != PrimType.CLOTH
+            ), "Cloth objects currently cannot be Covered by physical particles!"
             # Check current state and only do something if we're changing state
             if self.get_value(system) != new_value:
                 if new_value:
@@ -119,7 +122,9 @@ class Covered(RelativeObjectState, BooleanStateMixin):
                     system.remove_particles(idxs=list(self.obj.states[ContactParticles].get_value(system)))
 
         else:
-            raise ValueError(f"Invalid system {system} received for setting Covered state!"
-                             f"Currently, only VisualParticleSystems and PhysicalParticleSystems are supported.")
+            raise ValueError(
+                f"Invalid system {system} received for setting Covered state!"
+                f"Currently, only VisualParticleSystems and PhysicalParticleSystems are supported."
+            )
 
         return success
