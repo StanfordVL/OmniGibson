@@ -32,7 +32,8 @@ from pathlib import Path
 from nltk.corpus import wordnet as wn
 
 
-gm.ENABLE_FLATCACHE = False
+gm.ENABLE_FLATCACHE = True
+gm.USE_GPU_DYNAMICS = False
 
 LOW_PRECISION_ANGLE_INCREMENT = np.pi / 4
 ANGLE_INCREMENT = np.pi / 90
@@ -306,7 +307,7 @@ class BatchQAViewer:
             # nonlocal should_do_complaints
             # should_do_complaints = not should_do_complaints
             # print("Set to do complaints:", should_do_complaints, "\n")
-            with open("/scr/ig_pipeline/todo-qa-auto.txt", 'a') as file:
+            with open(r"D:\ig_pipeline\todo-qa-auto.txt", 'a') as file:
                 file.write(obj.name.replace('obj_', '') + '\n')
             print("Wrote complaint")
 
