@@ -1,14 +1,27 @@
 [
     {
+        "object": "starch-npegpl",
+        "message": "Confirm reasonable bounding box size:\n2.08m, 2.20m, 97.08cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
+        "processed": true
+    },
+    {
+        "object": "bag_of_starch-npegpl",
+        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: rigidBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
+        "complaint": "softBody",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "bandana-wbhliu",
         "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
         "complaint": "cloth",
         "processed": true
     },
     {
-        "object": "blow_dryer-ylutzy",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "togglebutton; heatsource",
+        "object": "dog_food_bowl-fedafr",
+        "message": "Confirm reasonable bounding box size:\n1.11m, 29.82cm, 1.11m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x10",
         "processed": true
     },
     {
@@ -16,6 +29,19 @@
         "message": "Confirm reasonable bounding box size:\n20.03cm, 21.27cm, 44.23cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x5",
         "processed": true
+    },
+    {
+        "object": "pancake-ogghhf",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": false
+    },
+    {
+        "object": "buttermilk_pancake-ogghhf",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black",
+        "processed": false,
+        "new": true
     },
     {
         "object": "cardigan-itrkhr",
@@ -48,10 +74,45 @@
         "processed": true
     },
     {
+        "object": "chicken_breast-lpqpbn",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: chicken_breast.n.02 (custom synset)\nDefinition: (hypernyms: breast.n.03): meat carved from the breast of a fowl\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "fried_chicken.n.01",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "chicken_breast-lpqpbn",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: chicken_breast\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "fried_chicken",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "chicken_thigh-mtlxhf",
         "message": "Confirm reasonable bounding box size:\n1.40m, 1.34m, 59.04cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x10",
         "processed": true
+    },
+    {
+        "object": "chicken_thigh-mtlxhf",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: chicken_leg.n.01\nDefinition: the lower joint of the leg of a chicken\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "fried_chicken.n.01",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "chicken_thigh-mtlxhf",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: chicken_thigh\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "fried_chicken",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "chopping_block-ekowsj",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: chopping_block.n.01\nDefinition: a steady wooden block on which food can be cut or diced or wood can be split\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "----+-",
+        "processed": false,
+        "new": true
     },
     {
         "object": "cilantro-pzmblb",
@@ -60,10 +121,24 @@
         "processed": true
     },
     {
+        "object": "cilantro-pzmblb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture white (black in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "cilantro-xnjklm",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "white texture",
         "processed": true
+    },
+    {
+        "object": "cilantro-xnjklm",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture white (black in 3dsmax)",
+        "processed": false,
+        "new": true
     },
     {
         "object": "cilantro-zfadru",
@@ -78,10 +153,18 @@
         "processed": true
     },
     {
-        "object": "video_game-anslwz",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "two objects",
-        "processed": true
+        "object": "cilantro-zfadru",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture white (black in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cookie_cutter-fvxiun",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: cookie_cutter.n.01\nDefinition: a kitchen utensil used to cut a sheet of cookie dough into desired shapes before baking\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "s",
+        "processed": false,
+        "new": true
     },
     {
         "object": "cotton_ball-gabqdn",
@@ -90,28 +173,100 @@
         "processed": true
     },
     {
-        "object": "dog_food-glalke",
-        "message": "Confirm reasonable bounding box size:\n5.73cm, 2.94cm, 6.29cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x5",
-        "processed": true
-    },
-    {
-        "object": "dog_food-hkujlj",
-        "message": "Confirm reasonable bounding box size:\n5.73cm, 2.94cm, 6.29cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x5",
-        "processed": true
-    },
-    {
-        "object": "dog_food_bowl-fedafr",
-        "message": "Confirm reasonable bounding box size:\n1.11m, 29.82cm, 1.11m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x10",
-        "processed": true
+        "object": "cotton_ball-gabqdn",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black",
+        "processed": false,
+        "new": true
     },
     {
         "object": "granola_bar-iurfsq",
         "message": "Confirm reasonable bounding box size:\n21.16cm, 10.64cm, 2.44cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x2",
         "processed": true
+    },
+    {
+        "object": "blow_dryer-ylutzy",
+        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "togglebutton; heatsource",
+        "processed": true
+    },
+    {
+        "object": "half_buttermilk_pancake-rfgvmd",
+        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: rigidBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
+        "complaint": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_buttermilk_pancake-rfgvmd",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_buttermilk_pancake-svndrr",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_chicken_breast-axoton",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: half__chicken_breast.n.01 (custom synset)\nDefinition: (hypernyms: breast.n.03): meat carved from the breast of a fowl\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "fried chicken instead of chicken breast",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_chicken_breast-axoton",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: half_chicken_breast\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "fried chicken instead of chicken breast",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_chicken_breast-axoton",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_chicken_breast-emcign",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: half__chicken_breast.n.01 (custom synset)\nDefinition: (hypernyms: breast.n.03): meat carved from the breast of a fowl\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "fried chicken instead of chicken breast",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_chicken_breast-emcign",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: half_chicken_breast\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "fried chicken instead of chicken breast",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_chicken_breast-emcign",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_rhubarb-lyotpu",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "different texture from 3ds max",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_rhubarb-mtbhkr",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "different texture from 3ds max",
+        "processed": false,
+        "new": true
     },
     {
         "object": "hiking_boots-ljiila",
@@ -138,16 +293,25 @@
         "processed": true
     },
     {
-        "object": "knife-lwpdhi",
-        "message": "Confirm reasonable bounding box size:\n3.35m, 20.14cm, 50.91cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x2",
-        "processed": true
+        "object": "jar-qdnmwg",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "pancake-ogghhf",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
+        "object": "joystick-yofqbq",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: joystick.n.02\nDefinition: a manual control consisting of a vertical handle that can move freely in two directions; used as an input device to computers or to devices controlled by computers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "controller? this is a video game controller or gamepad not really a joystick",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "joystick-yofqbq",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: joystick\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "controller? this is a video game controller or gamepad not really a joystick",
+        "processed": false,
+        "new": true
     },
     {
         "object": "paraffin_wax-nnbvcm",
@@ -159,6 +323,12 @@
         "object": "paraffin_wax-onopqz",
         "message": "Confirm reasonable bounding box size:\n1.13cm, 9.06mm, 1.28cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "1/10",
+        "processed": true
+    },
+    {
+        "object": "knife-lwpdhi",
+        "message": "Confirm reasonable bounding box size:\n3.35m, 20.14cm, 50.91cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
         "processed": true
     },
     {
@@ -204,10 +374,51 @@
         "processed": true
     },
     {
-        "object": "ramen-kedmct",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
+        "object": "teddy_bear-faxvha",
+        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: softBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
+        "complaint": "3",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "van-zvidlq",
+        "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
+        "complaint": "need to access the inside",
         "processed": false
+    },
+    {
+        "object": "van-zvidlq",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "not articulated, can't get inside",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "video_game-anslwz",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "two objects",
+        "processed": true
+    },
+    {
+        "object": "video_game-anslwz",
+        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: rigidBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
+        "complaint": "gaming_console? not sore",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "waffle_maker-yjmnej",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "missing revolute joint",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walker-pmypfd",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "bad texture",
+        "processed": false,
+        "new": true
     },
     {
         "object": "shoes-uewtgk",
@@ -216,16 +427,11 @@
         "processed": true
     },
     {
-        "object": "starch-npegpl",
-        "message": "Confirm reasonable bounding box size:\n2.08m, 2.20m, 97.08cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x10",
-        "processed": true
-    },
-    {
-        "object": "van-zvidlq",
-        "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
-        "complaint": "need to access the inside",
-        "processed": false
+        "object": "walker-uewtgk",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "bad texture",
+        "processed": false,
+        "new": true
     },
     {
         "object": "weed-nbhoge",

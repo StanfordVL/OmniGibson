@@ -1,33 +1,28 @@
 [
     {
-        "object": "trowel-ematag",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: trowel.n.01\nDefinition: a small hand tool with a handle and flat metal blade; used for scooping or spreading plaster or similar materials\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "cant navigate to see what it is",
-        "processed": false
-    },
-    {
-        "object": "turnip-nnvlrd",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: turnip.n.01\nDefinition: widely cultivated plant having a large fleshy edible white or yellow root\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "it's not the plant",
-        "processed": false
-    },
-    {
-        "object": "t_shirt-kvidcx",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "no dfe",
-        "processed": false
-    },
-    {
         "object": "vinegar-snzyfk",
         "message": "Confirm object synset assignment.\nObject assigned to synset: vinegar.n.01\nDefinition: sour-tasting liquid produced usually by oxidation of the alcohol in wine or cider and used as a condiment or food preservative\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "bottle of",
-        "processed": false
+        "processed": true
     },
     {
         "object": "vinegar-snzyfk",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "texture is weird",
         "processed": false
+    },
+    {
+        "object": "bottle_of_vinegar-snzyfk",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "particleApplier",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "water_bottle-emquat",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "missing cap",
+        "processed": true
     },
     {
         "object": "cap-gmdwwe",
@@ -48,9 +43,15 @@
         "processed": true
     },
     {
-        "object": "water_bottle-emquat",
+        "object": "yogurt-kihdsj",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: yogurt__cup.n.01 (custom synset)\nDefinition: cup.n.01(hypernyms): a small open container usually used for drinking; usually has a handle\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cup of yoghurt maybe connect it to whats inside",
+        "processed": true
+    },
+    {
+        "object": "yogurt-kihdsj",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "missing cap",
+        "complaint": "brand? can't see",
         "processed": true
     },
     {
@@ -66,21 +67,41 @@
         "processed": true
     },
     {
+        "object": "lid-dadswa",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: lid\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "gift_lid",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "tray-xzcnjq",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trowel-ematag",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: trowel.n.01\nDefinition: a small hand tool with a handle and flat metal blade; used for scooping or spreading plaster or similar materials\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cant navigate to see what it is",
+        "processed": true
+    },
+    {
+        "object": "t_shirt-kvidcx",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no dfe",
+        "processed": true
+    },
+    {
+        "object": "turnip-nnvlrd",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: turnip.n.01\nDefinition: widely cultivated plant having a large fleshy edible white or yellow root\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "it's not the plant",
+        "processed": true
+    },
+    {
         "object": "wreath-rkrxno",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "lokks barren",
-        "processed": true
-    },
-    {
-        "object": "yogurt-kihdsj",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: yogurt__cup.n.01 (custom synset)\nDefinition: cup.n.01(hypernyms): a small open container usually used for drinking; usually has a handle\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "cup of yoghurt maybe connect it to whats inside",
-        "processed": true
-    },
-    {
-        "object": "yogurt-kihdsj",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "brand? can't see",
         "processed": true
     }
 ]

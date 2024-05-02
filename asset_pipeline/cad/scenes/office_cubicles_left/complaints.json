@@ -1,39 +1,24 @@
 [
     {
-        "object": "door-xqxiyb",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no handle",
-        "processed": false
+        "object": "bookcase-smeuzl",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "object is all black, in 3dsmax its all white",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "painting-lxirlt",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "cubicle-deceti",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "window part is not glass",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "ceilings-lezgrj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "needs splitting",
-        "processed": false
-    },
-    {
-        "object": "door-bkdxqa",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not accurate cutout",
-        "processed": false
-    },
-    {
-        "object": "floors-naavhr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "door-pwoerr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: floating door knob",
-        "processed": false
+        "object": "cubicle-hzalfx",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "window part is not glass. artifacts on outer walls",
+        "processed": false,
+        "new": true
     },
     {
         "object": "desk_organizer-rxxzzb",
@@ -42,63 +27,70 @@
         "processed": false
     },
     {
-        "object": "walls-wcsypr",
+        "object": "door-xqxiyb",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: wall too big, none of the choices is good",
-        "processed": false
+        "complaint": "no handle",
+        "processed": true
     },
     {
         "object": "document-mougvz",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: objecg missing baseboard",
+        "processed": true
+    },
+    {
+        "object": "painting-lxirlt",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
         "processed": false
     },
     {
-        "object": "door-bkdxqa",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: door handle detached from door",
-        "processed": false
+        "object": "printer-kqmlho",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: printer.n.03\nDefinition: a machine that prints\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[F",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-bmthbv",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "cmesh is diagonal in half. possibly didn't segment glass completely",
-        "processed": false
+        "object": "room_light-jnnhzm",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: room_light\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "rectangular_light",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-elcxze",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "glass not segmented?",
-        "processed": false
+        "object": "room_light-jnnhzm",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "light rectangle is apart from the light fixture",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-lvqeld",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "diagonal cmesh. glass not segmented completely?",
-        "processed": false
+        "object": "room_light-jnnhzm",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "light rectangle is apart from the light fixture",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-mtnluu",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "3",
-        "processed": false
+        "object": "room_light-nsjice",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: room_light\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "rectangular_light",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-ohtlts",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wall cut in half. glass not segmented?",
-        "processed": false
+        "object": "room_light-nsjice",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "has artifacts on side of light. or i can't tell what the texture is",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-sncalh",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "half wall",
-        "processed": false
-    },
-    {
-        "object": "walls-zcdbxz",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "half wall",
-        "processed": false
+        "object": "table_lamp-gycqmt",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
     }
 ]

@@ -1,15 +1,16 @@
 [
     {
-        "object": "adhseive_strip-kavsnx",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "cut the extended part",
-        "processed": true
-    },
-    {
         "object": "bacon-eclhdh",
         "message": "Confirm reasonable bounding box size:\n1.32cm, 4.18cm, 2.96mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "1/3",
         "processed": true
+    },
+    {
+        "object": "bacon-eclhdh",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: bacon.n.01\nDefinition: back and sides of a hog salted and dried or smoked; usually sliced thin and fried\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~",
+        "processed": false,
+        "new": true
     },
     {
         "object": "bacon-iiatla",
@@ -30,16 +31,82 @@
         "processed": true
     },
     {
+        "object": "chocolate_biscuit-ukcwqw",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "white texture",
+        "processed": true
+    },
+    {
+        "object": "biscuit-ukcwqw",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "dark brown texture does not rly look like normal biscuit",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "dish_soap_bottle-bnmixt",
+        "message": "Confirm object meta links listed below:\n- fluidsource\n- togglebutton\n\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "particleapplier instead of fluidsource?",
+        "processed": true
+    },
+    {
+        "object": "lemon_juice_bottle-vsjter",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "lemon_juice_bottle-vsjter",
+        "message": "Confirm reasonable bounding box size:\n2.55mm, 5.21mm, 2.55mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "1/10",
+        "processed": true
+    },
+    {
+        "object": "bottle_of_lemon_juice-vsjter",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_cap, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bottle_of_oil-kzvkyp",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "rock-whsafp",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
+        "processed": true
+    },
+    {
+        "object": "boulder-whsafp",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "all black, no texture. is red in 3dsmax",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "brussels_sprouts-siodbb",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "\u001b[3~",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "chocolate-dxnisi",
         "message": "Confirm reasonable bounding box size:\n5.00m, 2.60m, 18.00cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x50",
         "processed": true
     },
     {
-        "object": "chocolate_biscuit-ukcwqw",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "white texture",
-        "processed": true
+        "object": "clout_nail-smxpbm",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: clout_nail.n.01\nDefinition: a short nail with a flat head; used to attach sheet metal to wood\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[6~\u001b",
+        "processed": false,
+        "new": true
     },
     {
         "object": "crayon-coapeh",
@@ -114,16 +181,86 @@
         "processed": true
     },
     {
-        "object": "dish_soap_bottle-bnmixt",
-        "message": "Confirm object meta links listed below:\n- fluidsource\n- togglebutton\n\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "particleapplier instead of fluidsource?",
+        "object": "adhseive_strip-kavsnx",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "cut the extended part",
         "processed": true
+    },
+    {
+        "object": "duct_tape-kavsnx",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: duct_tape.n.01\nDefinition: a wide silvery adhesive tape intended to seal joints in sheet metal duct work but having many other uses\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "tape.n.01",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "duct_tape-kavsnx",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: duct_tape\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "not duct tape. sticky_tape?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "duct_tape-kavsnx",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "lacks the tape texture but still looks good",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "dvd-lggrfa",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent in inner ring. still looks okay",
+        "processed": false,
+        "new": true
     },
     {
         "object": "firewood-bfalqo",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": " ",
         "processed": true
+    },
+    {
+        "object": "french_press-zidmyo",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "glass is not transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_pork_rib-pwbysl",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_pork_rib-xnujmn",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hammock-lqweda",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "are all hammocks supposed to be cloth? some part of it is not cloth",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hammock-qewdqa",
+        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: cloth.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
+        "complaint": "are all hammocks supposed to be cloth? some part of it is not cloth",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hammock-qewdqa",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "are all hammocks supposed to be cloth? some part of it is not cloth",
+        "processed": false,
+        "new": true
     },
     {
         "object": "headstone-rlynvy",
@@ -144,22 +281,17 @@
         "processed": true
     },
     {
-        "object": "lemon_juice_bottle-vsjter",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
-    },
-    {
-        "object": "lemon_juice_bottle-vsjter",
-        "message": "Confirm reasonable bounding box size:\n2.55mm, 5.21mm, 2.55mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "1/10",
-        "processed": false
-    },
-    {
         "object": "measuring_cup-ahtzhp",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "no texture",
         "processed": false
+    },
+    {
+        "object": "measuring_cup-ahtzhp",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
     },
     {
         "object": "name_tag-xmncvq",
@@ -192,136 +324,179 @@
         "processed": true
     },
     {
+        "object": "quartz-drqtci",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "quartz-kilkpz",
         "message": "Confirm reasonable bounding box size:\n50.31cm, 1.59m, 43.57cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x10",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "quartz-kilkpz",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
         "object": "quartz-klgses",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "white texture",
-        "processed": false
+        "processed": true
     },
     {
         "object": "quartz-klgses",
         "message": "Confirm reasonable bounding box size:\n50.42cm, 2.12m, 43.76cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x20",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "quartz-klgses",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
         "object": "quartz-poplsu",
         "message": "Confirm reasonable bounding box size:\n50.30cm, 1.07m, 43.57cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x10",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "quartz-poplsu",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
         "object": "quartz-tgqodl",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "white texture",
-        "processed": false
+        "processed": true
     },
     {
         "object": "quartz-tgqodl",
         "message": "Confirm reasonable bounding box size:\n2.08m, 1.83m, 2.23m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x10",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "quartz-tgqodl",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
         "object": "quartz-vfuilh",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "white texture",
-        "processed": false
+        "processed": true
     },
     {
         "object": "quartz-vfuilh",
         "message": "Confirm reasonable bounding box size:\n56.28cm, 1.96m, 52.91cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x20",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "quartz-vfuilh",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
         "object": "radiator-cbjgea",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;heatsource",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-jgqckb",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;heatsource",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-jlhyiq",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Automated complaint: None was marked in original pass - please review.",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-jlhyiq",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;heatsource",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-jxrlul",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Automated complaint: None was marked in original pass - please review.",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-jxrlul",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;heatsource",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-lnvush",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;heatsource",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-talsmj",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Automated complaint: None was marked in original pass - please review.",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-talsmj",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;heatsource",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-zgjthd",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;heatsource",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-znmvtw",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Automated complaint: None was marked in original pass - please review.",
-        "processed": false
+        "processed": true
     },
     {
         "object": "radiator-znmvtw",
         "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;heatsource",
-        "processed": false
-    },
-    {
-        "object": "rock-whsafp",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
+        "processed": true
     },
     {
         "object": "saxophone-kladff",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "no texture",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "saxophone-kladff",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "bad texture (even in 3dsmax)",
+        "processed": false,
+        "new": true
     },
     {
         "object": "seashell-iuoykx",
@@ -336,10 +511,24 @@
         "processed": true
     },
     {
+        "object": "suitcase-njalke",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "suitcase-oqiwhb",
         "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "complaint": "needs to be openable",
         "processed": true
+    },
+    {
+        "object": "suitcase-oqiwhb",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     },
     {
         "object": "suitcase-qthouj",
@@ -352,6 +541,13 @@
         "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "complaint": "needs to be openable",
         "processed": true
+    },
+    {
+        "object": "suitcase-qthouj",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     },
     {
         "object": "thermostat-jophec",
@@ -370,5 +566,12 @@
         "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "complaint": "needs to be openable",
         "processed": true
+    },
+    {
+        "object": "violin_case-jlasop",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     }
 ]

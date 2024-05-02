@@ -1,51 +1,30 @@
 [
     {
+        "object": "conditioner_dispenser-elofnb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "bad object, missing bottom, also not stable",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "conditioner-udeflt",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": true
     },
     {
-        "object": "shower_stall-vcwkma",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "two parts",
-        "processed": true
+        "object": "conditioner_dispenser-udeflt",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "missing bottom",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "candle-acycbi",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "locker-bxlkyo",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "missing handle",
-        "processed": true
-    },
-    {
-        "object": "candle-aqryfd",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "vase-euqzpy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "mirror-lkzwcd",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "shampoo-ndrvvm",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
+        "object": "conditioner_dispenser-uncljo",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "missing bottom",
+        "processed": false,
+        "new": true
     },
     {
         "object": "door-lcrefl",
@@ -54,39 +33,169 @@
         "processed": true
     },
     {
+        "object": "floors-buymjp",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "is this actually a floor that just has its sides open? or is it a whole room? either way it needs some work done.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-oxhkpu",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "we should separate the actual floor and the elevated wood platform. does that have to be called floor, or do we have a better category & synset for it?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-rphmwm",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "there are weird cuts in the floor. lets cover them up - what is the purpose?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "locker-bxlkyo",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "missing handle",
+        "processed": true
+    },
+    {
         "object": "locker-bxlkyo",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "toilet-kwsuwy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "walls-ignqog",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "needs splitting",
-        "processed": true
-    },
-    {
-        "object": "sofa-hxlckz",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: none of the choices is good",
-        "processed": false
-    },
-    {
-        "object": "floors-qdlnea",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: floor too big, need segmentation",
         "processed": true
     },
     {
         "object": "locker-bxlkyo",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: does not model door handle",
+        "processed": true
+    },
+    {
+        "object": "massage_bed-snqlsq",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "mirror-lkzwcd",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": true
+    },
+    {
+        "object": "mirror-lkzwcd",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "candle-acycbi",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": true
+    },
+    {
+        "object": "pillar_candle-acycbi",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "wrong texture, all black",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "candle-aqryfd",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": true
+    },
+    {
+        "object": "pillar_candle-aqryfd",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "all black",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pillar_candle-iotqru",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "all black",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pillar_candle-qevocc",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "all black",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pillow-kktvay",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pillow-spkcvl",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "shampoo-ndrvvm",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": true
+    },
+    {
+        "object": "shampoo_dispenser-nrthyl",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture seems off",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "soap_dispenser-zoyyia",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: floating mesh on top of bottle",
+        "processed": false
+    },
+    {
+        "object": "shampoo_dispenser-zoyyia",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture seems off",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "showerhead-hukknl",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "particleApplier",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "showerhead-hukknl",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "showerhead-lfwwnr",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "particleApplier",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "shower_stall-vcwkma",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "two parts",
         "processed": true
     },
     {
@@ -96,10 +205,119 @@
         "processed": true
     },
     {
-        "object": "soap_dispenser-zoyyia",
+        "object": "shower_stall-vcwkma",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: shower_stall.n.01\nDefinition: booth for washing yourself, usually in a bathroom\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "this is just a door with walls",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "shower_stall-vcwkma",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "shower_stall-vcwkma",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: shower_stall\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "this is just a door with walls\\",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "shower_stall-vcwkma",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "door is away from the frame. ",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "shower_stall-vcwkma",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "door is away from the frame.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sink-buifoi",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: sink\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "pedestal_sink",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sink-buifoi",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "faucet is apart from the sink.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sink-pbmwrv",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: floating mesh on top of bottle",
+        "complaint": "object has 3 sinks, no option approximates all 3 well",
         "processed": false
+    },
+    {
+        "object": "sink-pbmwrv",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: sink\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "multiple_sink",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sink-pbmwrv",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "should have all sinks annotated?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "soap_dish-slksbk",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sofa-hxlckz",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: none of the choices is good",
+        "processed": true
+    },
+    {
+        "object": "tree-fggodd",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "vase-euqzpy",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": false
+    },
+    {
+        "object": "wall_mounted_shelf-apiaid",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "window-dpngol",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "unconnected hulls",
+        "processed": true
+    },
+    {
+        "object": "window-dpngol",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "disconnected meshes",
+        "processed": false,
+        "new": true
     },
     {
         "object": "window-xljwun",
@@ -108,27 +326,16 @@
         "processed": true
     },
     {
-        "object": "floors-xawgsl",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "holes and stairs not accurate",
-        "processed": false
-    },
-    {
-        "object": "window-dpngol",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "unconnected hulls",
-        "processed": false
-    },
-    {
         "object": "window-xljwun",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "unconnected hulls",
-        "processed": false
+        "processed": true
     },
     {
-        "object": "sink-pbmwrv",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "object has 3 sinks, no option approximates all 3 well",
-        "processed": false
+        "object": "window-xljwun",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "disconnected doors",
+        "processed": false,
+        "new": true
     }
 ]

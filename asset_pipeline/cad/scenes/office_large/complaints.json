@@ -1,50 +1,21 @@
 [
     {
-        "object": "door-dqnbsj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no handle",
-        "processed": true
-    },
-    {
-        "object": "floors-vdrztf",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "floors need splitting",
-        "processed": true
-    },
-    {
-        "object": "coffee_maker-artpwc",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "mouse-ptwame",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "walls-homply",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: none of the choices are good",
-        "processed": true
-    },
-    {
-        "object": "sink-yyntym",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: none of the chioces capture sink",
-        "processed": false
-    },
-    {
         "object": "ceilings-gksmdr",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: middle square not perpendicular",
         "processed": true
     },
     {
-        "object": "cup-wfavfd",
+        "object": "desk-pniubv",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "unstable object, missing one leg?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "door-dqnbsj",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: object is faulty (there is liquid inside the cup)",
+        "complaint": "no handle",
         "processed": true
     },
     {
@@ -60,51 +31,85 @@
         "processed": true
     },
     {
-        "object": "walls-rqlypk",
+        "object": "elevator_door-ymwnju",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "elevator_door-zlmfwf",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "coffee_maker-artpwc",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: wall too large",
+        "complaint": "not watertight",
+        "processed": true
+    },
+    {
+        "object": "espresso_machine-artpwc",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: True\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "heatSource",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floor_lamp-lnacuc",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "it will always tip over",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "room_light-lmicjz",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: room_light\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "rectangular_light",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "saucer-szzjzd",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: saucer.n.02\nDefinition: a small shallow dish for holding a cup at the table\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[A",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sink-yyntym",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: none of the chioces capture sink",
         "processed": false
     },
     {
-        "object": "floors-kftesq",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: corner not perpendicular",
-        "processed": false
+        "object": "sink-yyntym",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: sink\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "multiple_sink",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-accpnc",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
+        "object": "sink-yyntym",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "should all sinks be annotated",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-ncgwop",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: corner not perpendicular",
-        "processed": false
+        "object": "taboret-stnoqf",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "looks like a bad object, top surface not flat",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-xsycfc",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
-    },
-    {
-        "object": "walls-qitwsl",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
-    },
-    {
-        "object": "walls-qqflmk",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
-    },
-    {
-        "object": "walls-tflhgm",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
+        "object": "webcam-hqyxlb",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: webcam\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "room_webcam?",
+        "processed": false,
+        "new": true
     }
 ]

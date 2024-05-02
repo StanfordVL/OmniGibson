@@ -6,16 +6,11 @@
         "processed": true
     },
     {
-        "object": "caulk-iwhxca",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "fluidsource;togglebutton;particleapplier",
-        "processed": true
-    },
-    {
-        "object": "conch_shell-snrgok",
-        "message": "Confirm reasonable bounding box size:\n26.69cm, 22.67cm, 35.30cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x2",
-        "processed": true
+        "object": "baby_bottle-mzedhe",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "glass",
+        "processed": false,
+        "new": true
     },
     {
         "object": "laurel_leaf-blazyi",
@@ -72,33 +67,22 @@
         "processed": true
     },
     {
-        "object": "bra-xzuywj",
-        "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
-        "complaint": "cloth",
+        "object": "caulk-iwhxca",
+        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "fluidsource;togglebutton;particleapplier",
         "processed": true
     },
     {
-        "object": "measuring_tape-cnfiat",
+        "object": "bottle_of_onion_powder-xruqod",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "content texture is not visible",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bra-xzuywj",
         "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
         "complaint": "cloth",
-        "processed": false
-    },
-    {
-        "object": "parsnip-invznw",
-        "message": "Confirm reasonable bounding box size:\n13.89cm, 13.91cm, 3.61cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "1/2",
-        "processed": false
-    },
-    {
-        "object": "parsnip-jmxlll",
-        "message": "Confirm reasonable bounding box size:\n16.56cm, 10.09cm, 3.64cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "1/2",
-        "processed": false
-    },
-    {
-        "object": "pin-lpxemb",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
         "processed": true
     },
     {
@@ -108,15 +92,88 @@
         "processed": true
     },
     {
-        "object": "vase-nodcpg",
-        "message": "Confirm reasonable bounding box size:\n5.05cm, 9.49cm, 5.05cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "1/10",
+        "object": "pack_of_kielbasa-bhkkiq",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pack_of_kielbasa\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "cut_pack_of_kielbasa",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pack_of_kielbasa-ckzejj",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pack_of_kielbasa\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "half_pack_of_kielbasa",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pack_of_kielbasa-gmwwsh",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pack_of_kielbasa\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "cut_pack_of_kielbasa",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pack_of_kielbasa-herxxh",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pack_of_kielbasa\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "cut_pack_of_kielbasa",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pack_of_kielbasa-qwdfea",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pack_of_kielbasa\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "cut_pack_of_kielbasa",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "papaya-izjnbc",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: papaya.n.02\nDefinition: large oval melon-like tropical fruit with yellowish flesh\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "0",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "parsnip-invznw",
+        "message": "Confirm reasonable bounding box size:\n13.89cm, 13.91cm, 3.61cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "1/2",
+        "processed": true
+    },
+    {
+        "object": "parsnip-jmxlll",
+        "message": "Confirm reasonable bounding box size:\n16.56cm, 10.09cm, 3.64cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "1/2",
+        "processed": true
+    },
+    {
+        "object": "conch_shell-snrgok",
+        "message": "Confirm reasonable bounding box size:\n26.69cm, 22.67cm, 35.30cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "x2",
+        "processed": true
+    },
+    {
+        "object": "seashell-snrgok",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: seashell.n.01\nDefinition: the shell of a marine organism\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[2~",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pin-lpxemb",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "no texture",
         "processed": true
     },
     {
         "object": "tank-bsdexp",
         "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "complaint": "needs to be openable",
+        "processed": true
+    },
+    {
+        "object": "vase-nodcpg",
+        "message": "Confirm reasonable bounding box size:\n5.05cm, 9.49cm, 5.05cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
+        "complaint": "1/10",
         "processed": true
     }
 ]

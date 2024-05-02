@@ -1,9 +1,128 @@
 [
     {
+        "object": "baby_shoe-tnbjlw",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: baby_shoe.n.01\nDefinition: a shoe designed to be worn by infants\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "0",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "belt-gqwddb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "white (should be grey)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bok_choy-jpkewd",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: bok_choy.n.02\nDefinition: elongated head of dark green leaves on thick white stalks\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[2",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "can-gqwnfv",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: can.n.01\nDefinition: airtight sealed metal container for food or drink or paint etc.\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "tin.n.02 ?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "can-gqwnfv",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: can\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "tin ?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "can-xcppkc",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: can.n.01\nDefinition: airtight sealed metal container for food or drink or paint etc.\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "box.n.01",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "can-xcppkc",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: can\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "box",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "can_of_cat_food-omiuox",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture looks off",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "cement-dhwhbe",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: corner not handled",
         "processed": false
+    },
+    {
+        "object": "cola_bottle-oyqdtz",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "label not fully visible",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cup_of_ranch-wtlavb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no content texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "emery_paper-aozhnv",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: emery_paper.n.01\nDefinition: stiff paper coated with powdered emery or sand\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "sssss",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "flagpole-kbijbm",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: flagpole.n.02\nDefinition: a tall staff or pole on which a flag is raised\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_gelatin-eewkyp",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_gelatin-sggmch",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_mustard_leaf-zwbunc",
+        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: rigidBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
+        "complaint": "ww",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hose-qxgbfv",
+        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: rope.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
+        "complaint": "should it be unfolded?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hose-qxgbfv",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "lacks texture",
+        "processed": false,
+        "new": true
     },
     {
         "object": "hutch-vsqsuy",
@@ -12,10 +131,31 @@
         "processed": false
     },
     {
-        "object": "pottable_marigold-ivswnv",
+        "object": "hutch-vsqsuy",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: bad object",
+        "complaint": "needs some kind of manual mesh",
         "processed": false
+    },
+    {
+        "object": "pewter_teapot-dwfdpi",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "post_it-ooetjh",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: post-it.n.01\nDefinition: brand name for a slip of notepaper that has an adhesive that allows it to stick to a surface and be removed without damaging the surface\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[A\u001b[A\u001b[A\u001b[A",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "raw_egg-ydgivr",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black",
+        "processed": false,
+        "new": true
     },
     {
         "object": "recreational_vehicle-doiucd",
@@ -27,42 +167,71 @@
         "object": "recreational_vehicle-doiucd",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: door handle not modeled",
-        "processed": false
+        "processed": true
     },
     {
         "object": "recreational_vehicle-doiucd",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: door handle not modeled",
-        "processed": false
+        "processed": true
     },
     {
         "object": "recreational_vehicle-doiucd",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: door handle not modeled",
-        "processed": false
+        "processed": true
     },
     {
         "object": "recreational_vehicle-doiucd",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: door handle not modeled",
-        "processed": false
+        "processed": true
     },
     {
         "object": "recreational_vehicle-doiucd",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: door handle not modeled",
-        "processed": false
+        "processed": true
     },
     {
         "object": "recreational_vehicle-doiucd",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: door handle not modeled",
-        "processed": false
+        "processed": true
     },
     {
-        "object": "hutch-vsqsuy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "needs some kind of manual mesh",
-        "processed": false
+        "object": "scallop-phgkmn",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: scallop.n.02\nDefinition: edible muscle of mollusks having fan-shaped shells; served broiled or poached or in salads or cream sauces\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "scallop.n.04",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "skateboard_wheel-bbkthh",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: skateboard_wheel.n.01 (custom synset)\nDefinition: (hypernyms: wheel.n.01): a simple machine consisting of a circular frame with spokes (or a solid disc) that can rotate on a shaft or axle (as in vehicles or other machines)\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "g",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trailer_truck-dnvcsu",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: trailer_truck.n.01\nDefinition: a truck consisting of a tractor and trailer together\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[F",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "tray-yqtlhy",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "vase-toreid",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: vase.n.01\nDefinition: an open jar of glass or porcelain used as an ornament or to hold flowers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[6~\u001b[6~\u001b[6~",
+        "processed": false,
+        "new": true
     }
 ]

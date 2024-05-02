@@ -1,27 +1,85 @@
 [
     {
+        "object": "bush-jivsft",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bush-jonbyb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bush-jylruu",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bush-llcsvc",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bush-nhorlu",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bush-rkxgdi",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bush-ujrbvp",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bush-waafqw",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bush-zwhhlc",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "car-supuws",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "there should be revolute joints to make this openable and fillable",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "door-mfocvp",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "handle not well represented",
-        "processed": false
+        "processed": true
     },
     {
         "object": "door-poafwh",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "handle not well represented",
-        "processed": false
-    },
-    {
-        "object": "playground-vojjkc",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "may need finer mesh?",
-        "processed": false
-    },
-    {
-        "object": "window-yorgot",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "handle not well represented",
-        "processed": false
+        "processed": true
     },
     {
         "object": "gate-flveay",
@@ -30,51 +88,105 @@
         "processed": false
     },
     {
+        "object": "gate-flveay",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "two parts",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "gate-rhnrfc",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "there should be a joint to make this openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "glass_lantern-otidux",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "needs glass",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "lawn-uinmme",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: corner not handled",
-        "processed": false
+        "processed": true
     },
     {
-        "object": "walls-aszfdq",
+        "object": "playground-vojjkc",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
+        "complaint": "may need finer mesh?",
+        "processed": true
     },
     {
-        "object": "walls-dmjgyl",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
+        "object": "table_runner-mxxyva",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "particleRemover",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-dzhpsr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
+        "object": "toy_box-qgfbdj",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-lgkqiw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: wall too large, door not handled well",
-        "processed": false
+        "object": "wading_pool-sbvksi",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "water volume inside is grey",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-rbqsfx",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: slanted top",
-        "processed": false
+        "object": "wall_mounted_shelf-xezdng",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-spdzrh",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
+        "object": "window-agoayg",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "needs glass",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-ufwmvs",
+        "object": "window-jdxnzi",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "can't see through glass",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "window-uzxlbr",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "mesh misalignment + can't see through window",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "window-yorgot",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": false
+        "complaint": "handle not well represented",
+        "processed": true
+    },
+    {
+        "object": "window-yorgot",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "can't see through window",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "window-ysgkig",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     }
 ]
