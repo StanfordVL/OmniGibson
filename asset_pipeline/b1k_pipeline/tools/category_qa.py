@@ -398,7 +398,7 @@ class BatchQAViewer:
 
         # Other controls
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.Z,
+            key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
             callback_fn=_set_done,
         )
         KeyboardEventHandler.add_keyboard_callback(
