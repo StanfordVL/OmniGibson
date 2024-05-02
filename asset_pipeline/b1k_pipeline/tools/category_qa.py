@@ -54,7 +54,7 @@ class BatchQAViewer:
         }
         self.filtered_objs = sorted({
             (cat, model) for cat, model in self.all_objs
-            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id and cat in ("floors", "walls")
+            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
         })
         self.processed_objects = self.load_processed_objects()
         print("-"*80)
@@ -295,7 +295,7 @@ class BatchQAViewer:
 
         done = False
         should_show_photo = False
-        should_do_complaints = False
+        should_do_complaints = True
         scale_queue = []  # We queue scales to apply them all at once to avoid .play getting called from .step
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
@@ -401,102 +401,102 @@ class BatchQAViewer:
             key=lazy.carb.input.KeyboardInput.Z,
             callback_fn=_set_done,
         )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_7,
-        #     callback_fn=lambda: _align_to_pca(1),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_9,
-        #     callback_fn=lambda: _align_to_pca(2),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_3,
-        #     callback_fn=lambda: _rotate_object("z", self.angle_increment),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_1,
-        #     callback_fn=lambda: _rotate_object("z", -self.angle_increment),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_2,
-        #     callback_fn=lambda: _rotate_object("y", self.angle_increment),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_8,
-        #     callback_fn=lambda: _rotate_object("y", -self.angle_increment),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_4,
-        #     callback_fn=lambda: _rotate_object("x", self.angle_increment),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_6,
-        #     callback_fn=lambda: _rotate_object("x", -self.angle_increment),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_MULTIPLY,
-        #     callback_fn=lambda: obj.set_orientation([0, 0, 0, 1]),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_0,
-        #     callback_fn=_toggle_gravity,
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_DEL,
-        #     callback_fn=lambda: self._toggle_precision(),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
-        #     callback_fn=lambda: scale_queue.append(self.scale_increment),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
-        #     callback_fn=lambda: scale_queue.append(1 / self.scale_increment),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
-        #     callback_fn=lambda: scale_queue.append(0),
-        # )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.X,
-            callback_fn=lambda: _set_complaint("todo-manual.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_7,
+            callback_fn=lambda: _align_to_pca(1),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.S,
-            callback_fn=lambda: _set_complaint("todo-synset.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_9,
+            callback_fn=lambda: _align_to_pca(2),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.C,
-            callback_fn=lambda: _set_complaint("todo-category.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_3,
+            callback_fn=lambda: _rotate_object("z", self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.W,
-            callback_fn=lambda: _set_complaint("todo-thickness.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_1,
+            callback_fn=lambda: _rotate_object("z", -self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.Q,
-            callback_fn=lambda: _set_complaint("todo-multiple-pieces.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_2,
+            callback_fn=lambda: _rotate_object("y", self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.A,
-            callback_fn=lambda: _set_complaint("todo-appearance.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_8,
+            callback_fn=lambda: _rotate_object("y", -self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.E,
-            callback_fn=lambda: _set_complaint("todo-unclosed.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_4,
+            callback_fn=lambda: _rotate_object("x", self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.D,
-            callback_fn=lambda: _set_complaint("todo-glassness.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_6,
+            callback_fn=lambda: _rotate_object("x", -self.angle_increment),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.R,
-            callback_fn=lambda: _set_complaint("todo-triangulation.txt"),
+            key=lazy.carb.input.KeyboardInput.NUMPAD_MULTIPLY,
+            callback_fn=lambda: obj.set_orientation([0, 0, 0, 1]),
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.V,
-            callback_fn=_show_photo,
+            key=lazy.carb.input.KeyboardInput.NUMPAD_0,
+            callback_fn=_toggle_gravity,
         )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_DEL,
+            callback_fn=lambda: self._toggle_precision(),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
+            callback_fn=lambda: scale_queue.append(self.scale_increment),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
+            callback_fn=lambda: scale_queue.append(1 / self.scale_increment),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
+            callback_fn=lambda: scale_queue.append(0),
+        )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.X,
+        #     callback_fn=lambda: _set_complaint("todo-manual.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.S,
+        #     callback_fn=lambda: _set_complaint("todo-synset.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.C,
+        #     callback_fn=lambda: _set_complaint("todo-category.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.W,
+        #     callback_fn=lambda: _set_complaint("todo-thickness.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.Q,
+        #     callback_fn=lambda: _set_complaint("todo-multiple-pieces.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.A,
+        #     callback_fn=lambda: _set_complaint("todo-appearance.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.E,
+        #     callback_fn=lambda: _set_complaint("todo-unclosed.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.D,
+        #     callback_fn=lambda: _set_complaint("todo-glassness.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.R,
+        #     callback_fn=lambda: _set_complaint("todo-triangulation.txt"),
+        # )
+        # KeyboardEventHandler.add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.V,
+        #     callback_fn=_show_photo,
+        # )
 
 
         print("-" * 80)
@@ -511,17 +511,17 @@ class BatchQAViewer:
         print("Press '/' to reset object scale.")
         print("Press '0' to toggle gravity for selected object.")
         print("Press . to change between normal and precision mode. Angle and scale increments are much smaller in precision mode.")
-        print("Press Z to complete the object.")
-        print("Press X to select object for manual complaint.")
-        print("Press C to make a category complaint.")
-        print("Press S to make a synset complaint.")
-        print("Press W to make a thickness complaint.")
-        print("Press Q to make a multiple pieces complaint.")
-        print("Press A to make an appearance complaint.")
-        print("Press E to make an unclosed object complaint.")
-        print("Press D to make a glassness complaint.")
-        print("Press R to make a triangulation complaint.")
-        print("Press V to show photos of the object.")
+        # print("Press Z to complete the object.")
+        # print("Press X to select object for manual complaint.")
+        # print("Press C to make a category complaint.")
+        # print("Press S to make a synset complaint.")
+        # print("Press W to make a thickness complaint.")
+        # print("Press Q to make a multiple pieces complaint.")
+        # print("Press A to make an appearance complaint.")
+        # print("Press E to make an unclosed object complaint.")
+        # print("Press D to make a glassness complaint.")
+        # print("Press R to make a triangulation complaint.")
+        # print("Press V to show photos of the object.")
         print("Press 'Enter' to continue to complaint process.")
         print("-" * 80)
 
