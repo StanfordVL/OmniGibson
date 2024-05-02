@@ -1,8 +1,105 @@
 [
     {
-        "object": "cart-revrxw",
+        "object": "bottle_of_cooking_oil-ywrkyg",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bottle_of_olive_oil-wztvie",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "should be transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "can_of_tomato_paste-sqqdzb",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: can__of__tomato_paste.n.01 (custom synset)\nDefinition: (hypernyms: grocery.n.02): (usually plural) consumer goods sold by a grocer\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\t",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "boiler-lbcxwi",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "bad mesh, not accurate",
+        "complaint": "not watertight",
+        "processed": false
+    },
+    {
+        "object": "boiler-lbcxwi",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": true
+    },
+    {
+        "object": "cauldron-lbcxwi",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hanger-bndsom",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "hooks not modeled",
+        "processed": true
+    },
+    {
+        "object": "hanger-krcbvr",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "no hooks modeled",
+        "processed": true
+    },
+    {
+        "object": "cloche-gkimtn",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "should be transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "commercial_kitchen_sink-ollneo",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "no sink cavity",
+        "processed": true
+    },
+    {
+        "object": "commercial_kitchen_sink-ollneo",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": false
+    },
+    {
+        "object": "deep_fryer-jcmoji",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "heatSource",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "dishwasher-xvchpe",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": true
+    },
+    {
+        "object": "dish_rack-rniujn",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: dish_rack\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "cart_dish_rack",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "door-bandpe",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
+        "processed": true
+    },
+    {
+        "object": "door-bandpe",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "not watertight",
         "processed": true
     },
     {
@@ -12,43 +109,148 @@
         "processed": true
     },
     {
-        "object": "metal_bottom_cabinet-bbjuqu",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no handle",
-        "processed": true
-    },
-    {
-        "object": "hanger-bndsom",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "hooks not modeled",
-        "processed": false
-    },
-    {
-        "object": "door-bandpe",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "hanger-krcbvr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no hooks modeled",
-        "processed": false
-    },
-    {
         "object": "boiler-qmdgct",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": false
     },
     {
-        "object": "dishwasher-xvchpe",
+        "object": "electric_mixer-ceaeqf",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "fire_extinguisher-noepez",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "particleApplier",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "fridge-vwylob",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: bottom layer slanted",
+        "processed": true
+    },
+    {
+        "object": "grill-rdyuii",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: missing knob",
+        "processed": true
+    },
+    {
+        "object": "grill-wlzvfj",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: grill\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "griddle?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_chilli_powder-mxhrcl",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "all black",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_clove-dlvall",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_cumin-bpxhso",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_cumin-vyfehw",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_kidney_beans-kfzxah",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent (cannot see content inside)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_peppercorns-gkakwk",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent (cannot see content inside)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_pepper_seasoning-iuydyz",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "needs glass",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_sesame_seed-acsllv",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture. should be transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jar_of_tumeric-miivhi",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "lid-ejywmx",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: lid\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "pot_lid",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "metal_bottom_cabinet-bbjuqu",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "no handle",
+        "processed": true
+    },
+    {
+        "object": "metal_bottom_cabinet-bbjuqu",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_door, PrismaticJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "bad articulation, should be rotational joints",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "metal_bottom_cabinet-jqyhjy",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "door is floating",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "metal_bottom_cabinet-melxmd",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": true
     },
     {
         "object": "metal_bottom_cabinet-melxmd",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "wensi: msising handle",
+        "processed": false
+    },
+    {
+        "object": "metal_bottom_cabinet-mvsgdm",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": false
@@ -60,58 +262,51 @@
         "processed": false
     },
     {
-        "object": "boiler-lbcxwi",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "metal_bottom_cabinet-yfycfx",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "door is floating",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "boiler-lbcxwi",
+        "object": "oven-cgtaer",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "commercial_kitchen_sink-ollneo",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no sink cavity",
-        "processed": false
-    },
-    {
-        "object": "commercial_kitchen_sink-ollneo",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "door-bandpe",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
+        "complaint": "perhaps a custom mesh",
         "processed": true
     },
     {
-        "object": "metal_bottom_cabinet-mvsgdm",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "oven-cgtaer",
+        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: rigidBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
+        "complaint": ".",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "grill-rdyuii",
+        "object": "plate-aynjhg",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": ".",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cart-revrxw",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: missing knob",
+        "complaint": "bad mesh, not accurate",
         "processed": true
     },
     {
-        "object": "fridge-vwylob",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: bottom layer slanted",
-        "processed": true
+        "object": "teaspoon-rycter",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "metal_bottom_cabinet-melxmd",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: msising handle",
-        "processed": false
+        "object": "wall_mounted_shelf-notszn",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
     },
     {
         "object": "wall_socket-ilzahp",
@@ -120,9 +315,10 @@
         "processed": true
     },
     {
-        "object": "oven-cgtaer",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "perhaps a custom mesh",
-        "processed": true
+        "object": "window-fkfgvp",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     }
 ]

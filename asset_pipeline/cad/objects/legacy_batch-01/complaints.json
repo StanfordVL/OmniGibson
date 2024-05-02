@@ -3,7 +3,7 @@
         "object": "bathtub-azdgtl",
         "message": "Confirm reasonable bounding box size:\n83.25cm, 48.61cm, 26.56cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "might be too shirt",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bathtub-fdjykf",
@@ -12,184 +12,271 @@
         "processed": true
     },
     {
-        "object": "bathtub-gulceo",
-        "message": "Confirm reasonable bounding box size:\n83.20cm, 48.57cm, 26.77cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "might be too short",
-        "processed": true
-    },
-    {
-        "object": "bathtub-gulceo",
-        "message": "Confirm object properties:\n- dustyable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "toggleable watersource",
-        "processed": true
-    },
-    {
-        "object": "bathtub-gulceo",
-        "message": "Confirm reasonable bounding box size:\n83.20cm, 48.57cm, 26.77cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "might be too short",
-        "processed": true
-    },
-    {
         "object": "bathtub-jfhrwj",
         "message": "Confirm reasonable bounding box size:\n88.57cm, 39.36cm, 24.60cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "height might need to be higher",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bathtub-oobbwn",
         "message": "Confirm reasonable bounding box size:\n82.17cm, 49.19cm, 28.76cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too shallow height should be higher",
-        "processed": false
+        "processed": true
     },
     {
         "object": "bathtub-wxrafq",
         "message": "Confirm reasonable bounding box size:\n84.54cm, 45.95cm, 27.22cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too shallow",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-aybgkm",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "it's lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-chwwdg",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "it's a lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-dkncbi",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "lid-dkncbi",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: lid\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "jar_lid",
+        "processed": false,
+        "new": true
     },
     {
         "object": "lid-exiqxa",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-exzfzm",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "lid-exzfzm",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: lid.n.02\nDefinition: a movable top or cover (hinged or separate) for closing the opening at the top of a box, chest, jar, pan, etc.\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "seems like bottle_cap",
+        "processed": false,
+        "new": true
     },
     {
         "object": "lid-fnqhbz",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "lid-fnqhbz",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: lid\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "pot_lid",
+        "processed": false,
+        "new": true
     },
     {
         "object": "lid-haxrqc",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "lid-haxrqc",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: lid\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "tupperware_lid",
+        "processed": false,
+        "new": true
     },
     {
         "object": "lid-itwwle",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-jqvurl",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "lid-jqvurl",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: lid.n.02\nDefinition: a movable top or cover (hinged or separate) for closing the opening at the top of a box, chest, jar, pan, etc.\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "does not look like a lid. idk what it is",
+        "processed": false,
+        "new": true
     },
     {
         "object": "lid-jvqtqi",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "lid-jvqtqi",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: lid\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "pot_lid",
+        "processed": false,
+        "new": true
     },
     {
         "object": "lid-jvzjzp",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-kuibhu",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "lid-kuibhu",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: lid.n.02\nDefinition: a movable top or cover (hinged or separate) for closing the opening at the top of a box, chest, jar, pan, etc.\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "bottle_cap?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "lid-kuibhu",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: lid\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "does not look like a lid. idk what it is",
+        "processed": false,
+        "new": true
     },
     {
         "object": "lid-lwyfab",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-muczdt",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-niarsj",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-qferch",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-qfqccp",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-qhlsdq",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "lid-qhlsdq",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "lacks texture",
+        "processed": false,
+        "new": true
     },
     {
         "object": "lid-qkogll",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-utfcdx",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-uwzqlf",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
     },
     {
         "object": "lid-vkepll",
         "message": "Confirm object synset assignment.\nObject assigned to synset: eyelid.n.01\nDefinition: either of two folds of skin that can be moved to cover or open the eye\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": " lid not eyelid",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "straight_chair-axmhdk",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "straight_chair-haaiau",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: straight_chair.n.01\nDefinition: a straight-backed chair without arms\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "bar_stool.n.01",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "straight_chair-haaiau",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: straight_chair\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "bar_stool",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "straight_chair-pmpwwi",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black",
+        "processed": false,
+        "new": true
     },
     {
         "object": "swivel_chair-dxusxd",
         "message": "Confirm object synset assignment.\nObject assigned to synset: swivel_chair.n.01\nDefinition: a chair that swivels on its base\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "straight chair",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "swivel_chair-dxusxd",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: swivel_chair.n.01\nDefinition: a chair that swivels on its base\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "straight_chair.n.01",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "swivel_chair-dxusxd",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: swivel_chair\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "straight_chair",
+        "processed": false,
+        "new": true
     },
     {
         "object": "swivel_chair-lmmjpk",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Automated complaint: None was marked in original pass - please review.",
-        "processed": false
+        "processed": true
     },
     {
         "object": "swivel_chair-xppcsn",

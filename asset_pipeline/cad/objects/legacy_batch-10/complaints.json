@@ -1,21 +1,33 @@
 [
     {
-        "object": "ball-nofzds",
-        "message": "Confirm reasonable bounding box size:\n64.96cm, 64.96cm, 64.97cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "too big",
-        "processed": false
+        "object": "chip-qstxpj",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: bit.n.02\nDefinition: a small fragment of something broken off from the whole\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "should be chip 4",
+        "processed": true
+    },
+    {
+        "object": "chip-qstxpj",
+        "message": "Confirm reasonable bounding box size:\n6.83m, 17.25m, 20.44m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "giant",
+        "processed": true
+    },
+    {
+        "object": "chip-qstxpj",
+        "message": "Confirm object properties:\n- burnable\n- cookable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "freezable? ",
+        "processed": true
     },
     {
         "object": "banana-vvyyyv",
         "message": "Confirm object synset assignment.\nObject assigned to synset: banana.n.01\nDefinition: any of several tropical and subtropical treelike herbs of the genus Musa having a terminal crown of large entire leaves and usually bearing hanging clusters of elongated fruits\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "should be banana.n.02",
-        "processed": false
+        "processed": true
     },
     {
         "object": "banana-vvyyyv",
         "message": "Confirm reasonable bounding box size:\n21.44cm, 4.48cm, 13.46cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "basil-bebpnf",
@@ -36,21 +48,41 @@
         "processed": true
     },
     {
-        "object": "beef-vdfkby",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: beef.n.01\nDefinition: cattle that are reared for their meat\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "it's supposed to be beef.n.02",
+        "object": "basil-bebpnf",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "bad center of mass",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "beet-wantjv",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: beet.n.01\nDefinition: biennial Eurasian plant usually having a swollen edible root; widely cultivated as a food crop\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "should be beetroot or beet.n.02",
         "processed": true
     },
     {
-        "object": "beef-vdfkby",
-        "message": "Confirm reasonable bounding box size:\n1.40m, 1.40m, 82.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "way too big",
+        "object": "beet-wantjv",
+        "message": "Confirm reasonable bounding box size:\n23.20cm, 18.85cm, 40.13cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
         "processed": true
     },
     {
-        "object": "beef-vdfkby",
-        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "probably sliceable too",
+        "object": "beet-wantjv",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "probably sliceable",
+        "processed": true
+    },
+    {
+        "object": "beet-wantjv",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: beet.n.02\nDefinition: round red root vegetable\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~\u001b[5~",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bell-oshurh",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "if it's marked as toggleable(which it is) it should have toggle button ",
         "processed": true
     },
     {
@@ -84,27 +116,69 @@
         "processed": true
     },
     {
-        "object": "beet-wantjv",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: beet.n.01\nDefinition: biennial Eurasian plant usually having a swollen edible root; widely cultivated as a food crop\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "should be beetroot or beet.n.02",
+        "object": "catsup-hvxkso",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: catsup.n.01\nDefinition: thick spicy sauce made from tomatoes\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "it should be the bottle synset and not what's in it",
         "processed": true
     },
     {
-        "object": "beet-wantjv",
-        "message": "Confirm reasonable bounding box size:\n23.20cm, 18.85cm, 40.13cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "object": "catsup-hvxkso",
+        "message": "Confirm reasonable bounding box size:\n94.16cm, 2.03m, 4.50m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
         "processed": true
     },
     {
-        "object": "beet-wantjv",
-        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "probably sliceable",
+        "object": "catsup-hvxkso",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "the bottle is not burnable cookable freezable or liquid ... it is a liquid source though or maybe fillable depending on the design decision and it is also dustyable and stainable and the cap can be an attached part",
         "processed": true
     },
     {
-        "object": "bell-oshurh",
+        "object": "cologne-lyipur",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: cologne.n.01\nDefinition: a commercial center and river port in western Germany on the Rhine River; flourished during the 15th century as a member of the Hanseatic League\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cologne.n.02",
+        "processed": true
+    },
+    {
+        "object": "cologne-lyipur",
+        "message": "Confirm object properties:\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "fluid source?",
+        "processed": true
+    },
+    {
+        "object": "cologne-lyipur",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "if it's marked as toggleable(which it is) it should have toggle button ",
+        "complaint": "particle applier?",
+        "processed": true
+    },
+    {
+        "object": "conditioner-njqnuo",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: conditioner.n.01\nDefinition: exercise that conditions the body\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "can't see",
+        "processed": true
+    },
+    {
+        "object": "conditioner-njqnuo",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "can't see",
+        "processed": true
+    },
+    {
+        "object": "conditioner-njqnuo",
+        "message": "Confirm reasonable bounding box size:\n65.46m, 66.08m, 183.85m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "can't see",
+        "processed": true
+    },
+    {
+        "object": "conditioner-njqnuo",
+        "message": "Confirm object properties:\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "can't see",
+        "processed": true
+    },
+    {
+        "object": "conditioner-njqnuo",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "can't see",
         "processed": true
     },
     {
@@ -123,6 +197,60 @@
         "object": "bow-fhchql",
         "message": "Confirm object properties:\n- dustyable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "soakable ",
+        "processed": true
+    },
+    {
+        "object": "cpu_board-xlqvil",
+        "message": "Confirm reasonable bounding box size:\n33.46cm, 8.26cm, 26.72cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "cpu_board-xlqvil",
+        "message": "Confirm object properties:\n- dustyable\n- toggleable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "idk about toggleable but stainable?",
+        "processed": true
+    },
+    {
+        "object": "chocolate_box-bdvkbh",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no synset",
+        "processed": true
+    },
+    {
+        "object": "chocolate_box-bdvkbh",
+        "message": "Confirm reasonable bounding box size:\n48.42m, 31.27m, 2.59m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "chocolate_box-bdvkbh",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none apply to the box. I think the chocolate pieces might have to be separated",
+        "processed": true
+    },
+    {
+        "object": "cracker_box-cmdigf",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "no synset",
+        "processed": true
+    },
+    {
+        "object": "cracker_box-cmdigf",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "brand name",
+        "processed": true
+    },
+    {
+        "object": "cracker_box-cmdigf",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none of these apply to the box ",
+        "processed": true
+    },
+    {
+        "object": "flour-ylezpk",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "box of flour",
         "processed": true
     },
     {
@@ -195,24 +323,6 @@
         "object": "calculator-kwmmty",
         "message": "Confirm object properties:\n- dustyable\n- toggleable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "stainable ",
-        "processed": true
-    },
-    {
-        "object": "candle-bhaqam",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "two candles",
-        "processed": true
-    },
-    {
-        "object": "candle-bhaqam",
-        "message": "Confirm reasonable bounding box size:\n1.61m, 1.57m, 1.70m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "too big",
-        "processed": true
-    },
-    {
-        "object": "candle-bhaqam",
-        "message": "Confirm object properties:\n- dustyable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "heatsource(fire source?)",
         "processed": true
     },
     {
@@ -306,6 +416,36 @@
         "processed": true
     },
     {
+        "object": "carton-causya",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "no thickness",
+        "processed": false
+    },
+    {
+        "object": "carton-causya",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "no thickness",
+        "processed": true
+    },
+    {
+        "object": "carton-causya",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "no thickness",
+        "processed": true
+    },
+    {
+        "object": "carton-causya",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "no thickness",
+        "processed": true
+    },
+    {
+        "object": "egg-mimzbz",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: egg.n.01\nDefinition: animal reproductive body consisting of an ovum or embryo together with nutritive and protective envelopes; especially the thin-shelled reproductive body laid by e.g. female birds\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "dozen eggs or box of eggs",
+        "processed": true
+    },
+    {
         "object": "casserole-mmbavt",
         "message": "Confirm object synset assignment.\nObject assigned to synset: casserole.n.01\nDefinition: food cooked and served in a casserole\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "wrong one it should be the dish and not the food",
@@ -321,7 +461,7 @@
         "object": "casserole-mmbavt",
         "message": "Confirm reasonable bounding box size:\n1.15m, 85.24cm, 32.05cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "casserole-mmbavt",
@@ -336,39 +476,9 @@
         "processed": false
     },
     {
-        "object": "catsup-hvxkso",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: catsup.n.01\nDefinition: thick spicy sauce made from tomatoes\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "it should be the bottle synset and not what's in it",
-        "processed": true
-    },
-    {
-        "object": "catsup-hvxkso",
-        "message": "Confirm reasonable bounding box size:\n94.16cm, 2.03m, 4.50m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "too big",
-        "processed": true
-    },
-    {
-        "object": "catsup-hvxkso",
-        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "the bottle is not burnable cookable freezable or liquid ... it is a liquid source though or maybe fillable depending on the design decision and it is also dustyable and stainable and the cap can be an attached part",
-        "processed": true
-    },
-    {
         "object": "cauldron-zndohl",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "fillable ",
-        "processed": true
-    },
-    {
-        "object": "cheese-hwxeto",
-        "message": "Confirm reasonable bounding box size:\n10.43m, 8.41m, 1.70m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "giant",
-        "processed": true
-    },
-    {
-        "object": "cheese-hwxeto",
-        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "sliceable ",
         "processed": true
     },
     {
@@ -396,39 +506,27 @@
         "processed": true
     },
     {
-        "object": "chip-qstxpj",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: bit.n.02\nDefinition: a small fragment of something broken off from the whole\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "should be chip 4",
+        "object": "cookie-ggpang",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: cookie_dough.n.01 (custom synset)\nDefinition: dough.n.01(hypernyms): a flour mixture stiff enough to knead or roll\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cookies",
         "processed": true
     },
     {
-        "object": "chip-qstxpj",
-        "message": "Confirm reasonable bounding box size:\n6.83m, 17.25m, 20.44m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "giant",
+        "object": "cookie-ggpang",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "multiple",
         "processed": true
     },
     {
-        "object": "chip-qstxpj",
-        "message": "Confirm object properties:\n- burnable\n- cookable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "freezable? ",
-        "processed": true
-    },
-    {
-        "object": "chocolate_box-bdvkbh",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "no synset",
-        "processed": true
-    },
-    {
-        "object": "chocolate_box-bdvkbh",
-        "message": "Confirm reasonable bounding box size:\n48.42m, 31.27m, 2.59m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "object": "cookie-ggpang",
+        "message": "Confirm reasonable bounding box size:\n99.36cm, 1.15m, 24.04cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
         "processed": true
     },
     {
-        "object": "chocolate_box-bdvkbh",
+        "object": "cookie-ggpang",
         "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "none apply to the box. I think the chocolate pieces might have to be separated",
+        "complaint": "sliceable",
         "processed": true
     },
     {
@@ -466,6 +564,13 @@
         "message": "Confirm object properties:\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "don't know if we wanna have attachment points for ornaments ? ",
         "processed": true
+    },
+    {
+        "object": "christmas_tree-eadukw",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
     },
     {
         "object": "christmas_tree_decorated-wakmhn",
@@ -507,18 +612,6 @@
         "object": "clout_nail-gvfevt",
         "message": "Confirm reasonable bounding box size:\n66.50cm, 66.50cm, 2.42m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
-    },
-    {
-        "object": "clove-thigpl",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: clove.n.01\nDefinition: aromatic flower bud of a clove tree; yields a spice\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "looks like a garlic",
-        "processed": true
-    },
-    {
-        "object": "clove-thigpl",
-        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "it can be whole/parti if it is garlic ",
         "processed": true
     },
     {
@@ -561,13 +654,34 @@
         "object": "coffee_maker-pyttso",
         "message": "Confirm reasonable bounding box size:\n88.79cm, 1.00m, 1.55m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
+        "processed": true
     },
     {
         "object": "coffee_maker-pyttso",
         "message": "Confirm object properties:\n- dustyable\n- stainable\n- toggleable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "fluid source openable)",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "coffee_maker-pyttso",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: True\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "coffee_maker-pyttso",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: coffee_maker\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "particleSource?",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "coffee_maker-pyttso",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "the coffee maker part is all black. 3dsmax shows red",
+        "processed": false,
+        "new": true
     },
     {
         "object": "colander-ambnzk",
@@ -585,24 +699,6 @@
         "object": "colander-ambnzk",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "fluid drain? idk",
-        "processed": true
-    },
-    {
-        "object": "cologne-lyipur",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: cologne.n.01\nDefinition: a commercial center and river port in western Germany on the Rhine River; flourished during the 15th century as a member of the Hanseatic League\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "cologne.n.02",
-        "processed": true
-    },
-    {
-        "object": "cologne-lyipur",
-        "message": "Confirm object properties:\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "fluid source?",
-        "processed": true
-    },
-    {
-        "object": "cologne-lyipur",
-        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "particle applier?",
         "processed": true
     },
     {
@@ -636,93 +732,9 @@
         "processed": true
     },
     {
-        "object": "conditioner-njqnuo",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: conditioner.n.01\nDefinition: exercise that conditions the body\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "can't see",
-        "processed": true
-    },
-    {
-        "object": "conditioner-njqnuo",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "can't see",
-        "processed": true
-    },
-    {
-        "object": "conditioner-njqnuo",
-        "message": "Confirm reasonable bounding box size:\n65.46m, 66.08m, 183.85m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "can't see",
-        "processed": true
-    },
-    {
-        "object": "conditioner-njqnuo",
-        "message": "Confirm object properties:\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "can't see",
-        "processed": true
-    },
-    {
-        "object": "conditioner-njqnuo",
-        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "can't see",
-        "processed": true
-    },
-    {
-        "object": "date-kdfasq",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: date.n.01\nDefinition: the specified day of the month\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "wrong date",
-        "processed": false
-    },
-    {
-        "object": "date-lskefl",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: date.n.01\nDefinition: the specified day of the month\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "wrong date",
-        "processed": false
-    },
-    {
-        "object": "date-pfdasw",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: date.n.01\nDefinition: the specified day of the month\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "wrong date",
-        "processed": false
-    },
-    {
-        "object": "cookie-ggpang",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: cookie_dough.n.01 (custom synset)\nDefinition: dough.n.01(hypernyms): a flour mixture stiff enough to knead or roll\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "cookies",
-        "processed": true
-    },
-    {
-        "object": "cookie-ggpang",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "multiple",
-        "processed": true
-    },
-    {
-        "object": "cookie-ggpang",
-        "message": "Confirm reasonable bounding box size:\n99.36cm, 1.15m, 24.04cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "too big",
-        "processed": true
-    },
-    {
-        "object": "cookie-ggpang",
-        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "sliceable",
-        "processed": true
-    },
-    {
         "object": "countertop-tpuwys",
         "message": "Confirm reasonable bounding box size:\n2.10m, 1.15m, 6.54cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": false
-    },
-    {
-        "object": "cpu_board-xlqvil",
-        "message": "Confirm reasonable bounding box size:\n33.46cm, 8.26cm, 26.72cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "too big",
-        "processed": true
-    },
-    {
-        "object": "cpu_board-xlqvil",
-        "message": "Confirm object properties:\n- dustyable\n- toggleable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "idk about toggleable but stainable?",
         "processed": true
     },
     {
@@ -744,52 +756,11 @@
         "processed": true
     },
     {
-        "object": "cracker_box-cmdigf",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "no synset",
-        "processed": true
-    },
-    {
-        "object": "cracker_box-cmdigf",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "brand name",
-        "processed": true
-    },
-    {
-        "object": "cracker_box-cmdigf",
-        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "none of these apply to the box ",
-        "processed": true
-    },
-    {
-        "object": "cream-ompiss",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: cream.n.01\nDefinition: the best people or things in a group\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "cream is the wrong one and it is a box of cream",
-        "processed": true
-    },
-    {
-        "object": "cream-ompiss",
-        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
-        "complaint": "none apply to the box",
-        "processed": true
-    },
-    {
-        "object": "cream-ompiss",
-        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "fillable",
-        "processed": true
-    },
-    {
-        "object": "cream_pitcher-wmkwhg",
-        "message": "Confirm reasonable bounding box size:\n37.63cm, 26.76cm, 19.88cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "too big",
-        "processed": true
-    },
-    {
-        "object": "cream_pitcher-wmkwhg",
-        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "fillable",
-        "processed": true
+        "object": "crab-tjkiva",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "multiple parts",
+        "processed": false,
+        "new": true
     },
     {
         "object": "crib-oimydv",
@@ -804,10 +775,24 @@
         "processed": true
     },
     {
+        "object": "crib-oimydv",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "cruet-njqmqv",
         "message": "Confirm object properties:\n- dustyable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "fluid source or fillable",
         "processed": true
+    },
+    {
+        "object": "cruet-njqmqv",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable, fillable",
+        "processed": false,
+        "new": true
     },
     {
         "object": "cucumber-wcvwye",
@@ -822,16 +807,48 @@
         "processed": true
     },
     {
+        "object": "date-kdfasq",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: date.n.01\nDefinition: the specified day of the month\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong date",
+        "processed": true
+    },
+    {
+        "object": "date-lskefl",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: date.n.01\nDefinition: the specified day of the month\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong date",
+        "processed": true
+    },
+    {
+        "object": "date-pfdasw",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: date.n.01\nDefinition: the specified day of the month\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "wrong date",
+        "processed": true
+    },
+    {
         "object": "dental_floss-aokqke",
         "message": "Confirm object synset assignment.\nObject assigned to synset: dental_floss.n.01\nDefinition: a soft thread for cleaning the spaces between the teeth\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "box of dental floss?",
-        "processed": false
+        "processed": true
     },
     {
         "object": "digital_scale-ccphiu",
         "message": "Confirm object synset assignment.\nObject assigned to synset: \nDefinition: \nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "no definition",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "dinner_napkin-rpccls",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not unfolded",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "dish_rack-kxuutl",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: dish_rack\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "wall_dish_rack",
+        "processed": false,
+        "new": true
     },
     {
         "object": "dress-gtghon",
@@ -852,27 +869,29 @@
         "processed": true
     },
     {
+        "object": "duffel_bag-ozykxk",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "fillable",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "dustpan-espzwv",
         "message": "Confirm object synset assignment.\nObject assigned to synset: dustpan.n.01\nDefinition: the quantity that a dustpan will hold\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "wrong dustpan",
-        "processed": false
+        "processed": true
     },
     {
-        "object": "egg-mimzbz",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: egg.n.01\nDefinition: animal reproductive body consisting of an ovum or embryo together with nutritive and protective envelopes; especially the thin-shelled reproductive body laid by e.g. female birds\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "dozen eggs or box of eggs",
-        "processed": false
+        "object": "dustpan-espzwv",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: dustpan.n.02\nDefinition: a short-handled receptacle into which dust can be swept\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\\",
+        "processed": false,
+        "new": true
     },
     {
         "object": "envelope-urcigc",
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "not sure",
-        "processed": true
-    },
-    {
-        "object": "eraser-cungod",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "maybe get rid of the paper?",
         "processed": true
     },
     {
@@ -888,15 +907,15 @@
         "processed": false
     },
     {
-        "object": "fish-qofuoa",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: fish.n.01\nDefinition: any of various mostly cold-blooded aquatic vertebrates usually having scales and breathing through gills\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "fish.n.02",
-        "processed": false
+        "object": "clove-thigpl",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: clove.n.01\nDefinition: aromatic flower bud of a clove tree; yields a spice\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "looks like a garlic",
+        "processed": true
     },
     {
-        "object": "flour-ylezpk",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "box of flour",
+        "object": "clove-thigpl",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "it can be whole/parti if it is garlic ",
         "processed": true
     },
     {
@@ -939,7 +958,14 @@
         "object": "grill-ddlqye",
         "message": "Confirm object synset assignment.\nObject assigned to synset: grillroom.n.01\nDefinition: a restaurant where food is cooked on a grill\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "it's grill.n.02",
-        "processed": false
+        "processed": true
+    },
+    {
+        "object": "grill-ddlqye",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: grill\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "portable_grill",
+        "processed": false,
+        "new": true
     },
     {
         "object": "hairbrush-bdylnb",
@@ -952,6 +978,27 @@
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "i don't see anything",
         "processed": true
+    },
+    {
+        "object": "half_broccoli-swrjvx",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: half__broccoli.n.01 (custom synset)\nDefinition: (hypernyms: cruciferous_vegetable.n.01): a vegetable of the mustard family: especially mustard greens; various cabbages; broccoli; cauliflower; brussels sprouts\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "0",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_cantaloup-eydmty",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "bad inside material",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "half_cantaloup-rbshpi",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "bad inside material",
+        "processed": false,
+        "new": true
     },
     {
         "object": "hamburger-fyswch",
@@ -969,30 +1016,116 @@
         "object": "hanger-ffecvd",
         "message": "Confirm object synset assignment.\nObject assigned to synset: hanger.n.01\nDefinition: a worker who hangs something\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "clothes hanger.n.01",
-        "processed": false
+        "processed": true
     },
     {
-        "object": "carton-causya",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
+        "object": "hardback-nubbfj",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: hardback.n.01\nDefinition: a book with cardboard or cloth or leather covers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[6~",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "carton-causya",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
+        "object": "beef-vdfkby",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: beef.n.01\nDefinition: cattle that are reared for their meat\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "it's supposed to be beef.n.02",
+        "processed": true
     },
     {
-        "object": "carton-causya",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
+        "object": "beef-vdfkby",
+        "message": "Confirm reasonable bounding box size:\n1.40m, 1.40m, 82.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "way too big",
+        "processed": true
     },
     {
-        "object": "carton-causya",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
+        "object": "beef-vdfkby",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "probably sliceable too",
+        "processed": true
+    },
+    {
+        "object": "candle-bhaqam",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "two candles",
+        "processed": true
+    },
+    {
+        "object": "candle-bhaqam",
+        "message": "Confirm reasonable bounding box size:\n1.61m, 1.57m, 1.70m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "candle-bhaqam",
+        "message": "Confirm object properties:\n- dustyable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "heatsource(fire source?)",
+        "processed": true
+    },
+    {
+        "object": "cream-ompiss",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: cream.n.01\nDefinition: the best people or things in a group\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "cream is the wrong one and it is a box of cream",
+        "processed": true
+    },
+    {
+        "object": "cream-ompiss",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- liquid\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "none apply to the box",
+        "processed": true
+    },
+    {
+        "object": "cream-ompiss",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "fillable",
+        "processed": true
+    },
+    {
+        "object": "pitcher-ompiss",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pitcher\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "this is not a pitcher",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cream_pitcher-wmkwhg",
+        "message": "Confirm reasonable bounding box size:\n37.63cm, 26.76cm, 19.88cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
+    },
+    {
+        "object": "cream_pitcher-wmkwhg",
+        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
+        "complaint": "fillable",
+        "processed": true
+    },
+    {
+        "object": "eraser-cungod",
+        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+        "complaint": "maybe get rid of the paper?",
+        "processed": true
+    },
+    {
+        "object": "cheese-hwxeto",
+        "message": "Confirm reasonable bounding box size:\n10.43m, 8.41m, 1.70m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "giant",
+        "processed": true
+    },
+    {
+        "object": "cheese-hwxeto",
+        "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
+        "complaint": "sliceable ",
+        "processed": true
+    },
+    {
+        "object": "fish-qofuoa",
+        "message": "Confirm object synset assignment.\nObject assigned to synset: fish.n.01\nDefinition: any of various mostly cold-blooded aquatic vertebrates usually having scales and breathing through gills\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
+        "complaint": "fish.n.02",
+        "processed": true
+    },
+    {
+        "object": "ball-nofzds",
+        "message": "Confirm reasonable bounding box size:\n64.96cm, 64.96cm, 64.97cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
+        "complaint": "too big",
+        "processed": true
     }
 ]

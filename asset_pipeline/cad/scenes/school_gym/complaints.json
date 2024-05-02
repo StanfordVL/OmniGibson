@@ -1,14 +1,34 @@
 [
     {
-        "object": "bed_screen-klvmfw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
         "object": "bench-ftvzzg",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "chairs not split",
+        "processed": true
+    },
+    {
+        "object": "ceiling_mounted_basketball_hoop-szrztv",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: basket.n.03\nDefinition: horizontal circular metal hoop supporting a net through which players try to throw the basketball\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "00",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "display_case-khxpgc",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "needs to be openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "door-aknswb",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "no holes in handles",
+        "processed": true
+    },
+    {
+        "object": "door-ehwmol",
+        "message": "Was at least one of the collision mesh candidates acceptable?",
+        "complaint": "handle not represented very well",
         "processed": true
     },
     {
@@ -21,79 +41,19 @@
         "object": "door-rsypfh",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "no handle",
-        "processed": false
-    },
-    {
-        "object": "locker-gemgfz",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
         "processed": true
     },
     {
-        "object": "poster-aexuts",
+        "object": "door-uatmde",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "poster-kwbsov",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "square_light-qebtel",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
+        "complaint": "wensi: missing door handle",
         "processed": true
     },
     {
-        "object": "trash_can-fkosow",
+        "object": "door-uatmde",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
+        "complaint": "wensi: door handle incorrect",
         "processed": true
-    },
-    {
-        "object": "door-exaqtm",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "needs better handles",
-        "processed": false
-    },
-    {
-        "object": "poster-isnsjq",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "planar",
-        "processed": false
-    },
-    {
-        "object": "poster-xbqqjs",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "poster-xemqjy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
-    },
-    {
-        "object": "door-aknswb",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no holes in handles",
-        "processed": false
-    },
-    {
-        "object": "door-nwlbit",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no holes in handles",
-        "processed": false
-    },
-    {
-        "object": "door-xkfmjp",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no holes in handle",
-        "processed": false
     },
     {
         "object": "drinking_fountain-oyipuy",
@@ -102,70 +62,46 @@
         "processed": true
     },
     {
-        "object": "paper_towel_dispenser-jacqxv",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
+        "object": "drinking_fountain-oyipuy",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: drinking_fountain\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "seems more like a sink",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "poster-qfkdqm",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "drinking_fountain-oyipuy",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "missing back face",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "poster-rzoxls",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "drinking_fountain-xijidt",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: drinking_fountain.n.02 (custom synset)\nDefinition: (hypernyms: structure.n.01): a thing constructed; a complex entity constructed of many parts\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "more like sink",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "poster-taypei",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "drinking_fountain-xijidt",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "particleSource?",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "poster-uelkkc",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "drinking_fountain-xijidt",
+        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: drinking_fountain\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+        "complaint": "sink?",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "sign-sdsfzw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "top_cabinet-ldmnwh",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no handle",
-        "processed": false
-    },
-    {
-        "object": "wall_socket-neqiyu",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "bottom_cabinet-kctcuj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "floating handle",
-        "processed": false
-    },
-    {
-        "object": "top_cabinet-nitufd",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no handle",
-        "processed": false
-    },
-    {
-        "object": "door-xxipyh",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no handles",
-        "processed": false
+        "object": "drinking_fountain-xijidt",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true
     },
     {
         "object": "electric_switch-qxhtct",
@@ -174,7 +110,14 @@
         "processed": true
     },
     {
-        "object": "floors-sjywtq",
+        "object": "gym_mat-nakwsl",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not sure what this object is",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "locker-gemgfz",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": true
@@ -186,70 +129,66 @@
         "processed": true
     },
     {
-        "object": "map-umftoc",
+        "object": "locker-gemgfz",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: cabinet.n.03\nDefinition: a storage compartment for clothes and valuables; usually it has a lock\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[6~\u001b[6~\u001b[6~\u001b[6~",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "paper_towel_dispenser-jacqxv",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": true
     },
     {
-        "object": "poster-albbcj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "picture-mbfgxr",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "poster-aotmql",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "picture-pmtynn",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "poster-yjxhbg",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "picture-qzrpiw",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "poster-zbkntu",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "picture-wttqrk",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "wall_clock-fqvgny",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
+        "object": "picture-ydfgju",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "bottom_cabinet-kctcuj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: incorrect handle",
-        "processed": false
+        "object": "picture-zughoy",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "classroom_mock_up-zfwwfn",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "\\",
-        "processed": true
-    },
-    {
-        "object": "door-rwmofs",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: missing door handle",
-        "processed": false
-    },
-    {
-        "object": "door-uatmde",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: missing door handle",
-        "processed": false
-    },
-    {
-        "object": "stadium_stand-psxwbh",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: does not handle every row correctly",
-        "processed": true
+        "object": "picture-zywgbh",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "not transparent",
+        "processed": false,
+        "new": true
     },
     {
         "object": "stadium_stand-mtoaja",
@@ -258,285 +197,169 @@
         "processed": true
     },
     {
-        "object": "bottom_cabinet-kctcuj",
+        "object": "stadium_stand-psxwbh",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: door handle incorrect",
-        "processed": false
-    },
-    {
-        "object": "lab_table-jkemfk",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: item too large, need segmentation",
-        "processed": false
-    },
-    {
-        "object": "armchair-tgbaim",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: seat too thick",
-        "processed": false
-    },
-    {
-        "object": "door-uatmde",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: door handle incorrect",
-        "processed": false
-    },
-    {
-        "object": "ceilings-sffodh",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: ceiling too big, needs segmentation",
+        "complaint": "wensi: does not handle every row correctly",
         "processed": true
     },
     {
-        "object": "door-xxipyh",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: door handles not modeled",
-        "processed": false
+        "object": "trash_can-gxajos",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "bag doesn't have same transparency as in 3dsmax. still looks fine",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "drinking_fountain-wikvlp",
+        "object": "trash_can-mcukuh",
+        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+        "complaint": "public_trash_can",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-arbekb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-ayuubt",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-bgpvtb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-hlktkb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-jchomn",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-jwagmm",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-ldbalq",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-myaxie",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-paaegg",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-rpprcc",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-shnohg",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-tjawkk",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-wraizn",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-xnjodq",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "trophy-zoolef",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "texture black (even in 3dsmax)",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "volleyball_net-ykiiqr",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "center of mass needs to be annotated",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "wall_clock-fqvgny",
         "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: object not watertight",
+        "complaint": "not watertight",
         "processed": true
     },
     {
-        "object": "lab_table-ishrsy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "shelf holes are blocked",
-        "processed": false
+        "object": "wall_clock-fqvgny",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "clock glass problem",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "bottom_cabinet-kctcuj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "handle not represented",
-        "processed": false
+        "object": "window-dompiq",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "door-ehwmol",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "handle not represented very well",
-        "processed": false
+        "object": "window-ebtgyg",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-hcljaj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "holes are blocked",
-        "processed": true
-    },
-    {
-        "object": "poster-aexuts",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-akljkc",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-albbcj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-aotmql",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-dbqysa",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-ddfkbq",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-ddzrua",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-edqwhr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-gdscpy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-hoqliv",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-isiaik",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-isnsjq",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-jgvwms",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-kwbsov",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-lhdpiv",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-ljaevl",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-nizsen",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-obltbj",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-qfkdqm",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-rgclfl",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-rylufy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-taypei",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-uelkkc",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-umkxcb",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-vudafy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-xbqqjs",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-xemqjy",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-xkmcqc",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-xxmugv",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-ylvczf",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-zbkntu",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "poster-ziumqi",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "sign-sdsfzw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": true
-    },
-    {
-        "object": "walls-avkurm",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "doorway slanted",
-        "processed": false
-    },
-    {
-        "object": "walls-dgjipm",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "doorway slanted",
-        "processed": false
-    },
-    {
-        "object": "walls-fegmdo",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "doorways blocked",
-        "processed": false
+        "object": "window-ocpgvi",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
     }
 ]

@@ -6,33 +6,43 @@
         "processed": true
     },
     {
-        "object": "projector-pqtbkr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
         "object": "pillar-afgytu",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": true
     },
     {
-        "object": "walls-gxpqau",
+        "object": "place_mat-ujaolf",
+        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: place_mat.n.01\nDefinition: a mat serving as table linen for an individual place setting\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+        "complaint": "\u001b[2~-",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "place_mat-ujaolf",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "particleRemover",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "projector-pqtbkr",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": true
     },
     {
-        "object": "walls-mzhfxw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "doorways blocked",
-        "processed": false
+        "object": "signpost-tplfny",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "glass may be blocking visual",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "walls-wiueet",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "doorways blocked",
-        "processed": false
+        "object": "water_glass-szjfpb",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "should be glass",
+        "processed": false,
+        "new": true
     }
 ]
