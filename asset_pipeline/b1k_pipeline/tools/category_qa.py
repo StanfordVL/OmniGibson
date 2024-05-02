@@ -54,7 +54,7 @@ class BatchQAViewer:
         }
         self.filtered_objs = sorted({
             (cat, model) for cat, model in self.all_objs
-            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id and cat == "walls"
+            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id and cat in ("floors", "walls")
         })
         self.processed_objects = self.load_processed_objects()
         print("-"*80)
