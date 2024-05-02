@@ -1,5 +1,8 @@
 import numpy as np
 from numba import jit
+from numba.core.errors import NumbaPerformanceWarning
+import warnings
+warnings.simplefilter('ignore', category=NumbaPerformanceWarning)
 
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import ControlType, ManipulationController

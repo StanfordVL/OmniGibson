@@ -2,9 +2,9 @@
 set -eo &> /dev/null
 
 # Make sure that the ISAAC_SIM_PATH variable is set correctly
-if [[ -d ~/.local/share/ov/pkg ]] && [[ $(ls ~/.local/share/ov/pkg | grep isaac_sim) ]]; 
+if [[ -d ~/.local/share/ov/pkg ]] && [[ $(ls ~/.local/share/ov/pkg | grep isaac-sim) ]]; 
 then
-  FOUND_ISAAC_SIM_PATH=$(ls -d ~/.local/share/ov/pkg/* | grep isaac_sim | tail -n 1) 
+  FOUND_ISAAC_SIM_PATH=$(ls -d ~/.local/share/ov/pkg/* | grep isaac-sim | tail -n 1) 
   echo "We found Isaac Sim installed at [4m$FOUND_ISAAC_SIM_PATH[0m. OmniGibson will use it by default."
   read -p "If you want to use a different one, please type in the path containing isaac-sim.sh here (press enter to skip) >>> " ISAAC_SIM_PATH
   ISAAC_SIM_PATH=${ISAAC_SIM_PATH:-$FOUND_ISAAC_SIM_PATH}

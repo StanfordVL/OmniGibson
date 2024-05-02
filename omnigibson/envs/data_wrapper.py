@@ -58,17 +58,19 @@ class DataWrapper(EnvironmentWrapper):
         scene_file = og.sim.save()[0]
         config = deepcopy(env.config)
         self.add_metadata(group=data_grp, name="config", data=config)
+        self.add_metadata(group=data_grp, name="env_args", data={"env_name": "OmniGibson", "type": 4})
         self.add_metadata(group=data_grp, name="scene_file", data=scene_file)
 
         # Run super
         super().__init__(env=env)
 
-    def step(self, action):
+    def step(self, action, record: bool = True):
         """
         Run the environment step() function and collect data
 
         Args:
             action (np.array): action to take in environment
+            record (bool): Whether to record data during this step or not
 
         Returns:
             5-tuple:
@@ -84,14 +86,15 @@ class DataWrapper(EnvironmentWrapper):
             action = np.concatenate([act for act in action.values()])
 
         next_obs, reward, terminated, truncated, info = self.env.step(action)
-        self.step_count += 1
 
-        # Aggregate step data
-        step_data = self._parse_step_data(action, next_obs, reward, terminated, truncated, info)
+        if record:
+            self.step_count += 1
+            # Aggregate step data
+            step_data = self._parse_step_data(action, next_obs, reward, terminated, truncated, info)
 
-        # Update obs and traj history
-        self.current_traj_history.append(step_data)
-        self.current_obs = next_obs
+            # Update obs and traj history
+            self.current_traj_history.append(step_data)
+            self.current_obs = next_obs
 
         return next_obs, reward, terminated, truncated, info
 
@@ -155,7 +158,7 @@ class DataWrapper(EnvironmentWrapper):
         nested_keys = set(nested_keys)
         data_grp = self.hdf5_file.require_group("data")
         traj_grp = data_grp.create_group(traj_grp_name)
-        traj_grp.attrs["num_samples"] = len(traj_data)
+        traj_grp.attrs["num_samples"] = len(traj_data) - 1
 
         # Create the data dictionary -- this will dynamically add keys as we iterate through our trajectory
         # We need to do this because we're not guaranteed to have a full set of keys at every trajectory step; e.g.
@@ -184,7 +187,6 @@ class DataWrapper(EnvironmentWrapper):
                     obs_grp.create_dataset(mod, data=np.stack(traj_mod_data, axis=0))
             else:
                 traj_grp.create_dataset(k, data=np.stack(dat, axis=0))
-
         return traj_grp
 
     def flush_current_traj(self):
@@ -305,8 +307,8 @@ class DataCollectionWrapper(DataWrapper):
         og.sim.viewer_camera.active_camera_path = viewport_camera_path
 
         # Use asynchronous rendering for faster performance
-        lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", True)
-        lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
+        # lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", True)
+        # lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
 
         # Disable mouse grabbing since we're only using the UI passively
         lazy.carb.settings.get_settings().set_bool("/physics/mouseInteractionEnabled", False)
@@ -339,12 +341,19 @@ class DataCollectionWrapper(DataWrapper):
         # Store dumped state, reward, terminated, truncated
         step_data = dict()
         state = og.sim.dump_state(serialized=True)
-        step_data["action"] = action
+        if self.env.task.controller.parameters["is_delta_action"]:
+            step_data["actions"] = self.env.task.get_current_intent(clamp_normalize=True)
+        else:
+            step_data["actions"] = self.env.task.controller.target_pose["right"]
         step_data["state"] = state
         step_data["state_size"] = len(state)
+        step_data["obs"] = obs["task"]
         step_data["reward"] = reward
         step_data["terminated"] = terminated
         step_data["truncated"] = truncated
+
+        # Add ground truth intent
+        step_data["intent"] = self.env.task.get_current_intent()
 
         # Update max state size
         self.max_state_size = max(self.max_state_size, len(state))

@@ -16,6 +16,8 @@ from scipy.integrate import quad
 from scipy.interpolate import CubicSpline
 from scipy.spatial.transform import Rotation as R
 from termcolor import colored
+from matplotlib.text import TextPath
+import matplotlib.path as mpath
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -1002,6 +1004,108 @@ def generate_box_edges(center, extents):
     ]
 
     return edges
+
+def draw_text(
+    text,
+    position,
+    orientation=None,
+    color=(1.0, 0.0, 0.0, 1.0),
+    font_size=12,
+    line_size=1.0,
+    anchor="center",
+    max_height=np.inf,
+    max_width=np.inf,
+):
+    """
+    Draws text at a given position.
+    """
+
+    # First, get the line segments corresponding to the text
+    # font_family = "Ariel"
+    # fp = FontProperties(family=font_family)
+    path = TextPath((0, 0), text, size=font_size)
+
+    def _path_to_line_segments(path):
+        line_segments = []
+        subpath_start = None  # Store the start point of the current subpath
+
+        for points, code in zip(path.vertices, path.codes):
+            if code == mpath.Path.MOVETO:
+                # This is the starting point for drawing
+                current_point = points
+                subpath_start = points  # Remember the start of the subpath
+            elif code == mpath.Path.LINETO:
+                # This is a line to the next point
+                start_point = current_point
+                end_point = points
+                line_segments.append((start_point, end_point))
+                current_point = points
+            elif code == mpath.Path.CURVE3 or code == mpath.Path.CURVE4:
+                start_point = current_point
+                end_point = points[:2]
+                line_segments.append((start_point, end_point))
+                current_point = end_point
+            elif code == mpath.Path.CLOSEPOLY:
+                # This closes the path back to the starting point of the subpath
+                if np.allclose(current_point, subpath_start):
+                    # Only add a closing line if we're not already at the start point
+                    line_segments.append((current_point, subpath_start))
+                current_point = subpath_start  # Move back to start (though typically not needed)
+            else:
+                raise ValueError(f"What is {code}?")
+
+        return np.array(line_segments)
+
+    # Convert the Path to line segments
+    line_segments = _path_to_line_segments(path)
+
+    # Transform the line segments to the desired position
+    all_verts = line_segments.reshape(-1, 2)
+    orig_min = np.min(all_verts, axis=0)
+    orig_max = np.max(all_verts, axis=0)
+    orig_ext = orig_max - orig_min
+
+    # Figure out the necessary scaling
+    scale = 1.0
+    max_dims = np.array([max_width, max_height])
+    if np.any(np.isfinite(max_dims)):
+        scale = np.min(max_dims / orig_ext)
+    transformed_line_segments = line_segments * scale
+
+    # Recompute the extents
+    transformed_verts = transformed_line_segments.reshape(-1, 2)
+    min_pt = np.min(transformed_verts, axis=0)
+    max_pt = np.max(transformed_verts, axis=0)
+    center = (min_pt + max_pt) / 2
+
+    if anchor == "center":
+        anchor_pt = center
+    elif anchor == "bottomleft":
+        anchor_pt = min_pt
+    elif anchor == "topright":
+        anchor_pt = max_pt
+    elif anchor == "topleft":
+        anchor_pt = np.array([min_pt[0], max_pt[1]])
+    elif anchor == "bottomright":
+        anchor_pt = np.array([max_pt[0], min_pt[1]])
+    elif anchor == "bottomcenter":
+        anchor_pt = np.array([center[0], min_pt[1]])
+    elif anchor == "topcenter":
+        anchor_pt = np.array([center[0], max_pt[1]])
+    else:
+        raise ValueError(f"Unknown anchor point {anchor}")
+
+    rotation = R.identity()
+    if orientation is not None:
+        rotation = R.from_quat(orientation)
+
+    def _transform_point(pt):
+        centered_pt = pt - anchor_pt
+        return rotation.apply(np.array([centered_pt[0], centered_pt[1], 0])) + position
+
+    # Then, draw the line segments
+    for f, t in transformed_line_segments:
+        draw_line(_transform_point(f), _transform_point(t), color=color, size=line_size)
 
 
 def draw_line(start, end, color=(1.0, 0.0, 0.0, 1.0), size=1.0):

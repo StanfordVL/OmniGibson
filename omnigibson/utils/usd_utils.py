@@ -87,6 +87,7 @@ def create_joint(
     body0=None,
     body1=None,
     enabled=True,
+    exclude_from_articulation=False,
     joint_frame_in_parent_frame_pos=None,
     joint_frame_in_parent_frame_quat=None,
     joint_frame_in_child_frame_pos=None,
@@ -164,6 +165,9 @@ def create_joint(
         joint_prim.GetAttribute("physics:breakTorque").Set(break_torque)
 
     # Possibly (un-/)enable this joint
+    # Temp fix for assisted grasping 
+    joint_prim.GetAttribute("physics:excludeFromArticulation").Set(exclude_from_articulation)
+
     joint_prim.GetAttribute("physics:jointEnabled").Set(enabled)
 
     # We update the simulation now without stepping physics if sim is playing so we can bypass the snapping warning from PhysicsUSD
@@ -395,6 +399,9 @@ class RigidContactAPIImpl:
     def get_contact_data(self, scene_idx, row_prim_paths=None, column_prim_paths=None):
         # First check if the object has any contacts
         impulses = self.get_all_impulses(scene_idx)
+        impulses = np.linalg.norm(impulses, axis=-1)
+        assert len(impulses.shape) == 2, f"Impulse matrix should be 2D, found shape {impulses.shape}"
+
         row_idx = (
             list(range(impulses.shape[0]))
             if row_prim_paths is None
@@ -507,7 +514,7 @@ class GripperRigidContactAPIImpl(RigidContactAPIImpl):
         # 2 here is not the finger count, it's the number of items we will record contacts with, per finger.
         # e.g. it's N such that if the finger is touching more than N items at once, only the first N are recorded.
         # This number should very rarely go above 2.
-        return len(cls.get_column_filters()[0]) * 2
+        return len(cls.get_column_filters()[0]) * 100
 
 
 # Instantiate the GripperRigidContactAPI

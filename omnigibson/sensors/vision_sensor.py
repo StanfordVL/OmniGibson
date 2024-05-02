@@ -216,7 +216,7 @@ class VisionSensor(BaseSensor):
                     space=lazy.omni.ui.Workspace.get_window("DockSpace"),
                     name=viewport.name,
                     location=lazy.omni.ui.DockPosition.LEFT,
-                    ratio=0.25,
+                    ratio=0.5,
                 )
             elif n_auxiliary_sensors > 1:
                 # This is any additional auxiliary viewports, dock equally-spaced in the auxiliary column

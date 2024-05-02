@@ -33,7 +33,7 @@ m.ASSIST_FRACTION = 1.0
 m.ASSIST_GRASP_MASS_THRESHOLD = 10.0
 m.ARTICULATED_ASSIST_FRACTION = 0.7
 m.MIN_ASSIST_FORCE = 0
-m.MAX_ASSIST_FORCE = 100
+m.MAX_ASSIST_FORCE = 100000
 m.CONSTRAINT_VIOLATION_THRESHOLD = 0.1
 m.RELEASE_WINDOW = 1 / 30.0  # release window in seconds
 
@@ -272,32 +272,41 @@ class ManipulationRobot(BaseRobot):
                     set of unique robot link prim_paths that it is in contact with
         """
         arm = self.default_arm if arm == "default" else arm
-        # Get robot contact links
+
+        # Get robot finger links
+        finger_paths = set([link.prim_path for link in self.finger_links[arm]])
+
+        # Get robot links
         link_paths = set(self.link_prim_paths)
 
         if not return_contact_positions:
             raw_contact_data = {
                 (row, col)
-                for row, col in GripperRigidContactAPI.get_contact_pairs(self.scene.idx, column_prim_paths=link_paths)
+                for row, col in GripperRigidContactAPI.get_contact_pairs(self.scene.idx, column_prim_paths=finger_paths)
                 if row not in link_paths
             }
+        else:
+            try:
+                raw_contact_data = {
+                    (row, col, tuple(point))
+                    for row, col, force, point, normal, sep in GripperRigidContactAPI.get_contact_data(
+                        self.scene.idx, column_prim_paths=finger_paths
+                    )
+                    if row not in link_paths
+                }
+            except:
+                breakpoint()
 
-            # Translate that to robot contact data
-            robot_contact_links = {}
-            for con_data in raw_contact_data:
+        # Translate to robot contact data
+        robot_contact_links = dict()
+        contact_data = set()
+        for con_data in raw_contact_data:
+            if not return_contact_positions:
                 other_contact, link_contact = con_data
-                if other_contact not in robot_contact_links:
-                    robot_contact_links[other_contact] = set()
-                robot_contact_links[other_contact].add(link_contact)
-
-            return {other for other, _ in raw_contact_data}, robot_contact_links
-
-        # Otherwise, we rely on the simpler, but more costly, get_contact_data API.
-        contacts = GripperRigidContactAPI.get_contact_data(self.scene.idx, column_prim_paths=link_paths)
-        contact_data = {(contact[0], contact[3]) for contact in contacts}
-        robot_contact_links = {}
-        for con_data in contacts:
-            other_contact, link_contact = con_data[:2]
+                contact_data.add(other_contact)
+            else:
+                other_contact, link_contact, point = con_data
+                contact_data.add((other_contact, point))
             if other_contact not in robot_contact_links:
                 robot_contact_links[other_contact] = set()
             robot_contact_links[other_contact].add(link_contact)
@@ -1242,6 +1251,7 @@ class ManipulationRobot(BaseRobot):
             joint_type=joint_type,
             body0=self.eef_links[arm].prim_path,
             body1=ag_link.prim_path,
+            exclude_from_articulation=True,
             enabled=True,
             joint_frame_in_parent_frame_pos=parent_frame_pos / self.scale,
             joint_frame_in_parent_frame_quat=parent_frame_orn,
@@ -1268,7 +1278,7 @@ class ManipulationRobot(BaseRobot):
             "contact_pos": contact_pos,
         }
         self._ag_obj_in_hand[arm] = ag_obj
-        self._ag_freeze_gripper[arm] = True
+        # self._ag_freeze_gripper[arm] = True
         for joint in self.finger_joints[arm]:
             j_val = joint.get_state()[0][0]
             self._ag_freeze_joint_pos[arm][joint.joint_name] = j_val

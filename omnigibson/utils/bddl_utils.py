@@ -243,6 +243,7 @@ SUPPORTED_PREDICATES = {
     "folded": get_unary_predicate_for_state(object_states.Folded, "folded"),
     "unfolded": get_unary_predicate_for_state(object_states.Unfolded, "unfolded"),
     "draped": get_binary_predicate_for_state(object_states.Draped, "draped"),
+    "grasping": get_binary_predicate_for_state(object_states.IsGrasping, "grasping"),
     "future": ObjectStateFuturePredicate,
     "real": ObjectStateRealPredicate,
     "insource": ObjectStateInsourcePredicate,

@@ -78,7 +78,7 @@ gm.WEBRTC_PORT = os.getenv("OMNIGIBSON_WEBRTC_PORT", 49100)
 
 # Whether only the viewport should be shown in the GUI or not (if not, other peripherals are additionally shown)
 # CANNOT be set at runtime
-gm.GUI_VIEWPORT_ONLY = False
+gm.GUI_VIEWPORT_ONLY = True
 
 # Whether to use the viewer camera or not
 gm.RENDER_VIEWER_CAMERA = True

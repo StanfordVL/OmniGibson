@@ -95,6 +95,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self._pose = None
         self._pose_inv = None
         self._updated_state_objects = None
+        self.scene_model = None
 
         # Call super init
         super().__init__()
