@@ -294,6 +294,7 @@ class BatchQAViewer:
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
         done = False
+        should_show_photo = False
         should_do_complaints = False
         scale_queue = []  # We queue scales to apply them all at once to avoid .play getting called from .step
         obj_first_pca_angle_map = {}
@@ -303,13 +304,13 @@ class BatchQAViewer:
             nonlocal done
             done = True
 
-        def _set_complaint():
+        def _set_complaint(filename):
             # nonlocal should_do_complaints
             # should_do_complaints = not should_do_complaints
             # print("Set to do complaints:", should_do_complaints, "\n")
-            with open(r"D:\ig_pipeline\todo-qa-auto.txt", 'a') as file:
+            with open(os.path.join(r"D:\ig_pipeline", filename), 'a') as file:
                 file.write(obj.name.replace('obj_', '') + '\n')
-            print("Wrote complaint")
+            print(f"Wrote {filename} complaint")
 
         def _toggle_gravity():
             obj.visual_only = not obj.visual_only
@@ -390,9 +391,14 @@ class BatchQAViewer:
             self.position_reference_objects(target_y=obj.aabb_center[1])
             self.dist = obj.aabb_extent[0] * 2.5
 
+
+        def _show_photo():
+            nonlocal should_show_photo
+            should_show_photo = True
+
         # Other controls
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
+            key=lazy.carb.input.KeyboardInput.Z,
             callback_fn=_set_done,
         )
         # KeyboardEventHandler.add_keyboard_callback(
@@ -452,9 +458,46 @@ class BatchQAViewer:
         #     callback_fn=lambda: scale_queue.append(0),
         # )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.C,
-            callback_fn=_set_complaint,
+            key=lazy.carb.input.KeyboardInput.X,
+            callback_fn=lambda: _set_complaint("todo-manual.txt"),
         )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.S,
+            callback_fn=lambda: _set_complaint("todo-synset.txt"),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.C,
+            callback_fn=lambda: _set_complaint("todo-category.txt"),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.W,
+            callback_fn=lambda: _set_complaint("todo-thickness.txt"),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.Q,
+            callback_fn=lambda: _set_complaint("todo-multiple-pieces.txt"),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.A,
+            callback_fn=lambda: _set_complaint("todo-appearance.txt"),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.E,
+            callback_fn=lambda: _set_complaint("todo-unclosed.txt"),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.D,
+            callback_fn=lambda: _set_complaint("todo-glassness.txt"),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.R,
+            callback_fn=lambda: _set_complaint("todo-triangulation.txt"),
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.V,
+            callback_fn=_show_photo,
+        )
+
 
         print("-" * 80)
         print("All of the below are numpad keys.")
@@ -468,7 +511,17 @@ class BatchQAViewer:
         print("Press '/' to reset object scale.")
         print("Press '0' to toggle gravity for selected object.")
         print("Press . to change between normal and precision mode. Angle and scale increments are much smaller in precision mode.")
-        print("Press C to change whether or not complaints will be made.")
+        print("Press Z to complete the object.")
+        print("Press X to select object for manual complaint.")
+        print("Press C to make a category complaint.")
+        print("Press S to make a synset complaint.")
+        print("Press W to make a thickness complaint.")
+        print("Press Q to make a multiple pieces complaint.")
+        print("Press A to make an appearance complaint.")
+        print("Press E to make an unclosed object complaint.")
+        print("Press D to make a glassness complaint.")
+        print("Press R to make a triangulation complaint.")
+        print("Press V to show photos of the object.")
         print("Press 'Enter' to continue to complaint process.")
         print("-" * 80)
 
@@ -479,26 +532,29 @@ class BatchQAViewer:
         # position reference objects to be next to the inspected object
         self.position_reference_objects(target_y=obj.aabb_center[1])
 
-        # # First, load the background image
-        # background_path = pathlib.Path(__file__).resolve().parent / "background.jpg"
-        # background = Image.open(background_path).resize((800, 800))
-
-        # # Open the zip file
-        # zip_path = os.path.join(self.pipeline_root, "artifacts", "pipeline", "max_object_images.zip")
-        # with ZipFS(zip_path) as zip_fs:
-        #     # Find and show photos of this object.
-        #     image_paths = sorted([x for x in zip_fs.listdir("/") if obj.name.replace("obj_", "") in x])
-        #     for image_path in image_paths:
-        #         with zip_fs.open(image_path, "rb") as f:
-        #             image = background.copy()
-        #             max_image = Image.open(f)
-        #             image.paste(max_image, (0, 0),mask=max_image) 
-        #             image.show()
-
         # Prompt the user to fix the scale and orientation of the object. Keep the camera in position, too.
         step = 0
         while not done:
             og.sim.step()
+
+            if should_show_photo:
+                should_show_photo = False
+                # First, load the background image
+                background_path = os.path.join(self.pipeline_root, "b1k_pipeline", "tools", "background.jpg")
+                background = Image.open(background_path).resize((800, 800))
+
+                # Open the zip file
+                zip_path = os.path.join(self.pipeline_root, "artifacts", "pipeline", "max_object_images.zip")
+                with ZipFS(zip_path) as zip_fs:
+                    print(len(zip_fs.listdir("/")))
+                    # Find and show photos of this object.
+                    image_paths = sorted([x for x in zip_fs.listdir("/") if obj.name.replace("obj_", "") in x])
+                    for image_path in image_paths:
+                        with zip_fs.open(image_path, "rb") as f:
+                            image = background.copy()
+                            max_image = Image.open(f)
+                            image.paste(max_image, (0, 0),mask=max_image) 
+                            image.show()
 
             # Apply any scale changes
             if len(scale_queue) > 0:
