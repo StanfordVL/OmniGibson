@@ -167,7 +167,7 @@ class BatchQAViewer:
             }, f)
 
     def set_camera_bindings(self, default_dist = 3.):
-        # self.pan, self.tilt, self.dist = np.pi, 0., default_dist
+        self.pan, self.tilt, self.dist = np.pi, 0., default_dist
         def update_camera(d_pan, d_tilt, d_dist):
             self.pan = (self.pan + d_pan) % (2 * np.pi)
             self.tilt = np.clip(self.tilt + d_tilt, -np.pi / 2, np.pi / 2)
