@@ -493,10 +493,10 @@ class BatchQAViewer:
         #     key=lazy.carb.input.KeyboardInput.R,
         #     callback_fn=lambda: _set_complaint("todo-triangulation.txt"),
         # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.V,
-        #     callback_fn=_show_photo,
-        # )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.V,
+            callback_fn=_show_photo,
+        )
 
 
         print("-" * 80)
@@ -521,7 +521,7 @@ class BatchQAViewer:
         # print("Press E to make an unclosed object complaint.")
         # print("Press D to make a glassness complaint.")
         # print("Press R to make a triangulation complaint.")
-        # print("Press V to show photos of the object.")
+        print("Press V to show photos of the object.")
         print("Press 'Enter' to continue to complaint process.")
         print("-" * 80)
 
@@ -648,17 +648,17 @@ class BatchQAViewer:
         self.position_reference_objects(target_y=0.)
 
         # Phase 1: Continuously pan across the full category to show the user all objects
-        # skip = self.whole_batch_preview(all_objects)
-
-        # Save the object results
-        for i in range(len(all_objects)):
-            self.evaluate_single_object(all_objects, i)
+        skip = self.whole_batch_preview(all_objects)
+        if not skip:
+            # Phase 2: Allow the user to interact with the objects one by one
+            for i in range(len(all_objects)):
+                self.evaluate_single_object(all_objects, i)
 
         # Clean up.
         for obj in all_objects:
             og.sim.remove_object(obj)
 
-        return False
+        return skip
 
     def position_reference_objects(self, target_y):
         obj_in_center_frame = self.phone.get_position() - self.phone.aabb_center
