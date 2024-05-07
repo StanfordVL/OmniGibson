@@ -26,7 +26,7 @@ def main():
         with xmlrpc.client.ServerProxy("http://localhost:8000/") as proxy:
             return proxy.run_script(str(scene_file), str(script_file), args)
     else:
-        max_args = [["-mxsString", f"{key}:{value}"] for key, value in parsed_args]
+        max_args = [["-mxsString", f"{key}:{value}"] for key, value in parsed_args.items()]
         cmd = [THREEDSMAX_PATH, str(script_file), "-sceneFile", str(scene_file)]
         if max_args:
             cmd += sum(max_args)
