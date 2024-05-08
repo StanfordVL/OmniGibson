@@ -7,7 +7,7 @@ import xmlrpc.client
 sys.path.append(r"D:\ig_pipeline")
 import b1k_pipeline.utils
 
-USE_RPC = False
+USE_RPC = True
 
 THREEDSMAX_PATH = r"C:\Program Files\Autodesk\3ds Max 2022\3dsmaxbatch.exe"
 
@@ -29,7 +29,7 @@ def main():
         max_args = [["-mxsString", f"{key}:{value}"] for key, value in parsed_args.items()]
         cmd = [THREEDSMAX_PATH, str(script_file), "-sceneFile", str(scene_file)]
         if max_args:
-            cmd += sum(max_args)
+            cmd += [x for args in max_args for x in args]
         subprocess.run(cmd)
 
 if __name__ == "__main__":
