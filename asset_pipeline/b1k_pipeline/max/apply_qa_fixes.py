@@ -190,7 +190,7 @@ def apply_qa_fixes_in_all_files():
 
     candidates = [
         pathlib.Path(x)
-        for x in glob.glob(r"D:\ig_pipeline\cad\scenes\*\processed.max")
+        for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
     remaining = [x for x in candidates if not processed_fn(x).exists()]
     for i, f in enumerate(tqdm.tqdm(remaining)):
