@@ -101,10 +101,12 @@ def processFile(filename: pathlib.Path, fixes):
 
         # Apply orientation fixes (the pivot needs to be rotated by the inverse of the fix)
         # Note that child links also get their pivots rotated here. Is that good? idk.
-        if "orientation_old" in model_fixes:
-            rotate_pivot(obj, R.from_quat(model_fixes["orientation_old"]).inv())
-        if "orientation_new" in model_fixes:
-            rotate_pivot(obj, R.from_quat(model_fixes["orientation_new"]).inv())
+        # But we definitely don't want to rotate lights.
+        if rt.ClassOf(obj) == rt.Editable_Poly:
+            if "orientation_old" in model_fixes:
+                rotate_pivot(obj, R.from_quat(model_fixes["orientation_old"]).inv())
+            if "orientation_new" in model_fixes:
+                rotate_pivot(obj, R.from_quat(model_fixes["orientation_new"]).inv())
 
         # Record the object for possible scale fixes. We're doing this only for root-level
         # objects. We will reparent these objects for the process of applying scale fixes.
