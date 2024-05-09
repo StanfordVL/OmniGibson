@@ -20,7 +20,7 @@ def file_eligible(objdir):
 
     with open(complaint_path, "r") as f:
         x = json.load(f)
-        if any(not y["processed"] for y in x if not any(y["message"].startswith(ign) for ign in ignore_messages)):
+        if any(not y["processed"] for y in x if not any(ign in y["message"] for ign in ignore_messages)):
             return True
 
     return False
