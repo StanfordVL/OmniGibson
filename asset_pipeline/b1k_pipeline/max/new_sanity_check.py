@@ -43,6 +43,7 @@ ALLOWED_META_TYPES = {
     'togglebutton': "primitive",
     'attachment': "dimensionless",
     'heatsource': "dimensionless",
+    'com': "dimensionless",
     'particleapplier': "primitive",
     'particleremover': "primitive",
     'fluidsink': "primitive",
