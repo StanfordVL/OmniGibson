@@ -361,5 +361,35 @@
         "complaint": "openable",
         "processed": false,
         "new": true
+    },
+    {
+        "object": "walls-nhingy",
+        "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-mblctm",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-dwqjup",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-gvzlnj",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-vmjgcn",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
     }
 ]

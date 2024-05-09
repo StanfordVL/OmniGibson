@@ -337,5 +337,113 @@
         "complaint": "disconnected doors",
         "processed": false,
         "new": true
+    },
+    {
+        "object": "walls-yeozsn",
+        "message": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-cqizpg",
+        "message": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-ghutyr",
+        "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-xawgsl",
+        "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-fhydgh",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-fzfeof",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-yltaoz",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-yupwjg",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-ykgvny",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-dkoolt",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-ghutyr",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-vbdlka",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-gnfmsd",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-zpadmw",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-xidufr",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-yeozsn",
+        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-xawgsl",
+        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-qdlnea",
+        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+        "processed": false,
+        "new": true
     }
 ]

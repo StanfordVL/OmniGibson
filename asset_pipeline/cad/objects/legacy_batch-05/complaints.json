@@ -375,5 +375,11 @@
         "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "no texture",
         "processed": true
+    },
+    {
+        "object": "almond-acooui",
+        "message": "APPEARANCE: This object has multiple almonds. Keep just one.",
+        "processed": false,
+        "new": true
     }
 ]

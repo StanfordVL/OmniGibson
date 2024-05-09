@@ -100,5 +100,23 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
         "processed": true
+    },
+    {
+        "object": "walls-jyvcbs",
+        "message": "STRUCTURE-GLASSNESS: This object looks like it might be glass in 3ds Max but is not annotated as glass.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-jyvcbs",
+        "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-bfdewd",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
     }
 ]

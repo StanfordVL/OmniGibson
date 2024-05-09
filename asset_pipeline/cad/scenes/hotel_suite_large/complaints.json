@@ -256,5 +256,53 @@
         "complaint": "openable",
         "processed": false,
         "new": true
+    },
+    {
+        "object": "walls-jvlvng",
+        "message": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-bqgzsg",
+        "message": "STRUCTURE-GLASSNESS: This object looks like it might be glass in 3ds Max but is not annotated as glass.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-jvlvng",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-bqgzsg",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-nwjrkc",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-jvlvng",
+        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-girfza",
+        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "table_lamp-uzrovn",
+        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
+        "processed": false,
+        "new": true
     }
 ]
