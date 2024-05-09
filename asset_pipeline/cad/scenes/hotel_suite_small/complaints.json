@@ -99,5 +99,19 @@
         "complaint": "openable",
         "processed": false,
         "new": true
+    },
+    {
+        "object": "walls-ovzcgo",
+        "message": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-ovzcgo",
+        "message": "STRUCTURE-GLASSNESS: This object looks like it might be glass in 3ds Max but is not annotated as glass.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
     }
 ]

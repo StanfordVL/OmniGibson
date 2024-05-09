@@ -181,5 +181,33 @@
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: door handle incorrect",
         "processed": true
+    },
+    {
+        "object": "floors-ocnvcr",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-nvnauj",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "table_lamp-ykhxso",
+        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floor_lamp-lcmuvd",
+        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
     }
 ]
