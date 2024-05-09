@@ -1,3 +1,4 @@
+import re
 import sys
 import bisect
 sys.path.append(r"D:\ig_pipeline")
@@ -11,7 +12,8 @@ import b1k_pipeline.utils
 
 rt = pymxs.runtime
 
-ignore_messages = ["Confirm reasonable bounding box size:", "Confirm object synset assignment."]
+type_re = re.compile(r"([A-Z\-]+):")
+ignore_messages = ["SYNSET", "CATEGORY", "ABILITIES", "SUBSTANCE", "STRUCTURE-UNCLOSED"]
 def file_eligible(objdir):
     complaint_path = objdir / "complaints.json"
     
@@ -20,7 +22,18 @@ def file_eligible(objdir):
 
     with open(complaint_path, "r") as f:
         x = json.load(f)
-        if any(not y["processed"] for y in x if not any(ign in y["message"] for ign in ignore_messages)):
+        for complaint in x:
+            if complaint["processed"]:
+                continue
+                
+            complaint_type = "PREVIOUS PASS"
+            m = type_re.match(complaint["message"])
+            if m:
+                complaint_type = m.group(1)
+
+            if complaint_type in ignore_messages:
+                continue
+
             return True
 
     return False

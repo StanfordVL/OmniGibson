@@ -1,3 +1,4 @@
+import re
 import sys
 sys.path.append(r"D:\ig_pipeline")
 
@@ -8,6 +9,22 @@ import pathlib
 import pymxs
 
 rt = pymxs.runtime
+
+type_re = re.compile(r"([A-Z\-]+):")
+ignore_messages = ["SYNSET", "CATEGORY", "ABILITIES", "SUBSTANCE", "STRUCTURE-UNCLOSED"]
+def should_get_complaint(complaint):
+    if complaint["processed"]:
+        return False
+        
+    complaint_type = "PREVIOUS PASS"
+    m = type_re.match(complaint["message"])
+    if m:
+        complaint_type = m.group(1)
+
+    if complaint_type in ignore_messages:
+        return False
+
+    return True
 
 def main():
     current_max_dir = pathlib.Path(rt.maxFilePath).resolve()
@@ -32,7 +49,7 @@ def main():
     
     # Mark as processed
     for complaint in x:
-        if complaint["object"].split("-")[-1] not in selected_keys:
+        if complaint["object"].split("-")[-1] not in selected_keys or not should_get_complaint(complaint):
             continue
 
         complaint["processed"] = True
