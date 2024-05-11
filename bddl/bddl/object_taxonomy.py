@@ -11,8 +11,12 @@ DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
 
 class ObjectTaxonomy(object):
     def __init__(self, hierarchy_type="default"):
-        hierarchy_file = DEFAULT_HIERARCHY_FILE 
-        self.taxonomy = self._parse_taxonomy(hierarchy_file)
+        self.taxonomy = self._parse_taxonomy(DEFAULT_HIERARCHY_FILE)
+
+    def refresh_hierarchy_file(self):
+        DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
+            bddl.__package__, "generated_data/output_hierarchy_properties.json")
+        self.taxonomy = self._parse_taxonomy(DEFAULT_HIERARCHY_FILE)
 
     @staticmethod
     def _parse_taxonomy(json_str):
