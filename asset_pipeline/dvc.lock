@@ -6002,8 +6002,8 @@ stages:
       md5: ec5fb462feecef40a9e7654a758841dc
       size: 1356
     - path: cad/objects/custom-aa/artifacts/export_meshes.json
-      md5: 3f97a5261586b48df8b3dfa90446b526
-      size: 1872
+      md5: ebef8dd9ee5535350dc7774cc027bd81
+      size: 2996
     outs:
     - path: artifacts/pipeline/export_meshes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -7961,8 +7961,7 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: 72c82c8e34bff048822fc06de024715a
       size: 4752
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     outs:
@@ -10759,8 +10758,7 @@ stages:
       md5: d5666416e569dc6843a93ff1018b91e3
       size: 54362292
     outs:
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/generate_max_object_images.json
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/max_object_images.zip
@@ -11440,8 +11438,7 @@ stages:
       md5: de355bf4d13423d76861263de439bd82
       size: 93408350
     outs:
-    - path: 
-        cad/scenes/school_computer_lab_and_infirmary/artifacts/generate_max_object_images.json
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
     - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/max_object_images.zip
@@ -11649,8 +11646,7 @@ stages:
     - path: cad/scenes/Wainscott_1_int/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
-    - path: 
-        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/generate_max_object_images.json
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
     - path: cad/scenes/commercial_kitchen_pans/artifacts/generate_max_object_images.json
@@ -11752,8 +11748,7 @@ stages:
     - path: cad/scenes/school_chemistry/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
-    - path: 
-        cad/scenes/school_computer_lab_and_infirmary/artifacts/generate_max_object_images.json
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
     - path: cad/scenes/school_geography/artifacts/generate_max_object_images.json
@@ -12057,8 +12052,8 @@ stages:
       md5: bad85ae3c36fd65ea3852f55e49fe70a
       size: 25914
     - path: cad/objects/custom-aa/processed.max
-      md5: 9ed38a0f8f60d547474ce1e73daedd0d
-      size: 3014656
+      md5: 8ad8df84595b088a199bcf10b910a866
+      size: 3301376
     outs:
     - path: cad/objects/custom-aa/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -12073,12 +12068,12 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/custom-aa/processed.max
-      md5: 9ed38a0f8f60d547474ce1e73daedd0d
-      size: 3014656
+      md5: 8ad8df84595b088a199bcf10b910a866
+      size: 3301376
     outs:
     - path: cad/objects/custom-aa/artifacts/object_list.json
-      md5: 2a4c34ca5f974c25be7ecde379437bbf
-      size: 2742
+      md5: 12a2bd6326dda7f8e018f1e2d0fecc7d
+      size: 5202
   export_meshes@objects/custom-aa:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/custom-aa/processed.max b1k_pipeline/max/export_meshes.py
     deps:
@@ -12089,15 +12084,15 @@ stages:
       md5: 08b6378d12a2ce5b7c24ef986d091fd5
       size: 23780
     - path: cad/objects/custom-aa/artifacts/object_list.json
-      md5: 2a4c34ca5f974c25be7ecde379437bbf
-      size: 2742
+      md5: 12a2bd6326dda7f8e018f1e2d0fecc7d
+      size: 5202
     - path: cad/objects/custom-aa/processed.max
-      md5: 9ed38a0f8f60d547474ce1e73daedd0d
-      size: 3014656
+      md5: 8ad8df84595b088a199bcf10b910a866
+      size: 3301376
     outs:
     - path: cad/objects/custom-aa/artifacts/export_meshes.json
-      md5: 3f97a5261586b48df8b3dfa90446b526
-      size: 1872
+      md5: ebef8dd9ee5535350dc7774cc027bd81
+      size: 2996
     - path: cad/objects/custom-aa/artifacts/meshes.zip
-      md5: 174397817e528784dc1d9ef46ae0f983
-      size: 4533714
+      md5: 6fe4e74e820506b6e91bb8ac38f81884
+      size: 5228792
