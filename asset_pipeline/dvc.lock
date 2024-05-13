@@ -6530,8 +6530,8 @@ stages:
       md5: ec5fb462feecef40a9e7654a758841dc
       size: 1356
     - path: cad/objects/custom-aa/artifacts/export_meshes.json
-      md5: 36cb86c05022c20f2d13cc6338355abd
-      size: 1866
+      md5: 3f97a5261586b48df8b3dfa90446b526
+      size: 1872
     outs:
     - path: artifacts/pipeline/export_meshes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -16261,8 +16261,8 @@ stages:
       md5: bad85ae3c36fd65ea3852f55e49fe70a
       size: 25914
     - path: cad/objects/custom-aa/processed.max
-      md5: adbfe0a08210bd27a374571ee0260c4e
-      size: 2646016
+      md5: 9ed38a0f8f60d547474ce1e73daedd0d
+      size: 3014656
     outs:
     - path: cad/objects/custom-aa/artifacts/sanitycheck.json
       md5: d43f5c742c8056071450ffc514e3ace8
@@ -16277,11 +16277,11 @@ stages:
       md5: df89a45a38e9c1141f4e04bfff16e8cd
       size: 2770
     - path: cad/objects/custom-aa/processed.max
-      md5: adbfe0a08210bd27a374571ee0260c4e
-      size: 2646016
+      md5: 9ed38a0f8f60d547474ce1e73daedd0d
+      size: 3014656
     outs:
     - path: cad/objects/custom-aa/artifacts/object_list.json
-      md5: 099a9c49d24382a199bda111ca0f0ccc
+      md5: 2a4c34ca5f974c25be7ecde379437bbf
       size: 2742
   export_meshes@objects/custom-aa:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/custom-aa/processed.max b1k_pipeline/max/export_meshes.py
@@ -16293,15 +16293,15 @@ stages:
       md5: 08b6378d12a2ce5b7c24ef986d091fd5
       size: 23780
     - path: cad/objects/custom-aa/artifacts/object_list.json
-      md5: 099a9c49d24382a199bda111ca0f0ccc
+      md5: 2a4c34ca5f974c25be7ecde379437bbf
       size: 2742
     - path: cad/objects/custom-aa/processed.max
-      md5: adbfe0a08210bd27a374571ee0260c4e
-      size: 2646016
+      md5: 9ed38a0f8f60d547474ce1e73daedd0d
+      size: 3014656
     outs:
     - path: cad/objects/custom-aa/artifacts/export_meshes.json
-      md5: 36cb86c05022c20f2d13cc6338355abd
-      size: 1866
+      md5: 3f97a5261586b48df8b3dfa90446b526
+      size: 1872
     - path: cad/objects/custom-aa/artifacts/meshes.zip
-      md5: a1b882d3070b46e7730fdb1101227475
-      size: 4063146
+      md5: 174397817e528784dc1d9ef46ae0f983
+      size: 4533714
