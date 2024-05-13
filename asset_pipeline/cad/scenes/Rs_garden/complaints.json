@@ -103,5 +103,26 @@
         "complaint": "there is a hole (maybe for a window), but it only goes halfway. is this desired?",
         "processed": false,
         "new": true
+    },
+    {
+        "object": "floors-hhxpyk",
+        "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-hhxpyk",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-cdwbza",
+        "message": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
+        "complaint": "See message",
+        "processed": true,
+        "new": true
     }
 ]

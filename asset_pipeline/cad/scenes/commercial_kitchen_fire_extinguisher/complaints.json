@@ -320,5 +320,26 @@
         "complaint": "openable",
         "processed": false,
         "new": true
+    },
+    {
+        "object": "walls-gcjrbz",
+        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "electric_mixer-ceaeqf",
+        "message": "FILLABLE: put the bowl back together, add prismatic joint",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "electric_mixer-qornxa",
+        "message": "FILLABLE: add prismatic joint, figure out how to make moving fillable",
+        "complaint": "See message",
+        "processed": false,
+        "new": true
     }
 ]
