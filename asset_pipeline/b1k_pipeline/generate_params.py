@@ -71,14 +71,12 @@ FINAL_SCENES = [
 ]
 
 APPROVED_OBJS = {
-    ".*",
+    "custom-aa",
 }
 
 REJECTED_OBJS = set()
 
-APPROVED_SCENES = {
-    ".*",
-}
+APPROVED_SCENES = set()
 
 REJECTED_SCENES = {
     "gates_bedroom",
