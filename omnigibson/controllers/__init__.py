@@ -15,7 +15,7 @@ from omnigibson.controllers.joint_controller import JointController
 from omnigibson.controllers.multi_finger_gripper_controller import MultiFingerGripperController
 from omnigibson.controllers.null_joint_controller import NullJointController
 from omnigibson.utils.python_utils import assert_valid_key
-
+from omnigibson.controllers.qp_controller import QuadraticProgrammingController
 
 def create_controller(name, **kwargs):
     """

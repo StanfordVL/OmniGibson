@@ -85,6 +85,8 @@ def main(random_selection=False, headless=False, short_exec=False):
     robot0_cfg["obs_modalities"] = ["rgb", "depth", "seg_instance", "normal", "scan", "occupancy_grid"]
     robot0_cfg["action_type"] = "continuous"
     robot0_cfg["action_normalize"] = True
+    robot0_cfg["position"] = [0, 0, 0.5]
+    robot0_cfg["orientation"] = [0, 0, 0, 1]
 
     # Compile config
     cfg = dict(scene=scene_cfg, robots=[robot0_cfg])
@@ -94,7 +96,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Choose robot controller to use
     robot = env.robots[0]
-    controller_choices = choose_controllers(robot=robot, random_selection=random_selection)
+    # controller_choices = choose_controllers(robot=robot, random_selection=random_selection)
 
     # Choose control mode
     if random_selection:
@@ -103,8 +105,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         control_mode = choose_from_options(options=CONTROL_MODES, name="control mode")
 
     # Update the control mode of the robot
-    controller_config = {component: {"name": name} for component, name in controller_choices.items()}
-    robot.reload_controllers(controller_config=controller_config)
+    # controller_config = {component: {"name": name} for component, name in controller_choices.items()}
+    # robot.reload_controllers(controller_config=controller_config)
 
     # Because the controllers have been updated, we need to update the initial state so the correct controller state
     # is preserved
@@ -116,10 +118,14 @@ def main(random_selection=False, headless=False, short_exec=False):
         orientation=np.array([0.56829048, 0.09569975, 0.13571846, 0.80589577]),
     )
 
+    print(robot.get_joint_positions())
     # Reset environment and robot
     env.reset()
     robot.reset()
 
+    print(robot.get_joint_positions())
+    for i in range(200):
+        og.app.update()
     # Create teleop controller
     action_generator = KeyboardRobotController(robot=robot)
 
@@ -143,7 +149,11 @@ def main(random_selection=False, headless=False, short_exec=False):
     step = 0
     while step != max_steps:
         action = action_generator.get_random_action() if control_mode == "random" else action_generator.get_teleop_action()
+        # print(action)
         env.step(action=action)
+        # print('default:', robot._default_joint_pos)
+        # print(robot.get_joint_positions())
+        # og.sim.step()
         step += 1
 
     # Always shut down the environment cleanly at the end
