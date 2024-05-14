@@ -1249,7 +1249,7 @@ limeade.n.01,fruit_drink.n.01,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 limestone.n.01,"rock.n.02,sedimentary_rock.n.01",0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 liner.n.03,piece_of_cloth.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 lingerie.n.01,underwear.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
-lining.n.01,protective_covering.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
+lining.n.01,protective_covering.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,rigidBody
 linseed_oil.n.01,oil.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 lint_roller.n.01,roller.n.04,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,rigidBody
 lint_screen.n.01,screen.n.05,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2126,7 +2126,7 @@ yam.n.03,sweet_potato.n.02,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 yeast__shaker.n.01,container.n.01,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0,rigidBody
 yeast__jar.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 yeast.n.01,leaven.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,microPhysicalSubstance
-yoga_mat.n.01,exercise_device.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
+yoga_mat.n.01,exercise_device.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,softBody
 yogurt__carton.n.01,box.n.01,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 yogurt.n.01,"dairy_product.n.01,food.n.02",0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liquid
 zucchini.n.02,summer_squash.n.02,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2152,7 +2152,7 @@ waffle_batter.n.01,batter.n.02,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,liqui
 present.n.02,gift.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 oil__bottle.n.01,vessel.n.03,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 squeeze_bottle.n.01,vessel.n.03,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,rigidBody
-soft_roll.n.01,bun.n.01,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+soft_roll.n.01,bun.n.01,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,softBody
 hanging.n.01,decoration.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 pump.n.03,shoe.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 music_stool.n.01,stool.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2975,7 +2975,6 @@ box__of__wagashi.n.01,grocery.n.02,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,r
 satchel.n.01,baggage.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 bottle__of__tomato_juice.n.01,grocery.n.02,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 hook_rack.n.01,implement.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-soupspoon.n.01,spoon.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,rigidBody
 cooking_oil__atomizer.n.01,dispenser.n.01,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,rigidBody
 cellulose_tape_dispenser.n.01,dispenser.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 fried_chicken.n.01,poultry.n.02,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -2987,8 +2986,10 @@ jar__of__vegetable.n.01,grocery.n.02,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0
 sliced__watermelon.n.01,melon.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 christmas_stocking.n.01,hosiery.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,cloth
 gold.n.01,precious_metal.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-vine.n.01,,,,,,,,,,,,,,,,,,,,,,,,
-bed_frame.n.01,,,,,,,,,,,,,,,,,,,,,,,,
-dish_rack_cart.n.01,,,,,,,,,,,,,,,,,,,,,,,,
-cream_pitcher.n.02,,,,,,,,,,,,,,,,,,,,,,,,
-footstool.n.02,,,,,,,,,,,,,,,,,,,,,,,,
+vine.n.01,vascular_plant.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+bed_frame.n.01,framework.n.03,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+dish_rack_cart.n.01,handcart.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+cream_pitcher.n.02,vessel.n.03,1,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+footstool.n.02,stool.n.01,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+sliced__mushroom.n.01,vegetable.n.01,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+game_console.n.01,personal_computer.n.01,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
