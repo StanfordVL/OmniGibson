@@ -17,6 +17,12 @@ class OnTop(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
         return deps
 
     def _set_value(self, other, new_value, reset_before_sampling=False):
+        robot = og.sim.scene.robots[0]
+
+        # Never sample the robot because its pose will be hardcoded
+        if self.obj == robot:
+            return True
+
         if not new_value:
             raise NotImplementedError("OnTop does not support set_value(False)")
 
@@ -30,7 +36,8 @@ class OnTop(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
             self.obj.reset()
 
         for _ in range(os_m.DEFAULT_HIGH_LEVEL_SAMPLING_ATTEMPTS):
-            if sample_kinematics("onTop", self.obj, other) and self.get_value(other):
+            # The object must be within the workspace of the robot
+            if sample_kinematics("onTop", self.obj, other) and self.get_value(other) and robot.is_in_workspace(other):
                 return True
             else:
                 og.sim.load_state(state, serialized=False)

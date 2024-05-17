@@ -72,6 +72,7 @@ class BehaviorTask(BaseTask):
         highlight_task_relevant_objects=False,
         termination_config=None,
         reward_config=None,
+        skip_sampling=False,
     ):
         # Make sure object states are enabled
         assert gm.ENABLE_OBJECT_STATES, "Must set gm.ENABLE_OBJECT_STATES=True in order to use BehaviorTask!"
@@ -101,6 +102,7 @@ class BehaviorTask(BaseTask):
         self.ground_goal_state_options = None
         self.feedback = None  # None or str
         self.sampler = None  # BDDLSampler
+        self.skip_sampling = skip_sampling
 
         # Object info
         self.online_object_sampling = online_object_sampling  # bool
@@ -321,7 +323,7 @@ class BehaviorTask(BaseTask):
 
         if self.online_object_sampling:
             # Sample online
-            accept_scene, feedback = self.sampler.sample()
+            accept_scene, feedback = self.sampler.sample(skip_sampling=self.skip_sampling)
             if not accept_scene:
                 return accept_scene, feedback
         else:

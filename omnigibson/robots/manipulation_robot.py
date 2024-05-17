@@ -689,6 +689,23 @@ class ManipulationRobot(BaseRobot):
         """
         raise NotImplementedError
 
+    @property
+    def arm_workspace_length(self):
+        raise NotImplementedError
+
+    def is_in_workspace(self, obj, arm="default"):
+        arm = self.default_arm if arm == "default" else arm
+        obj_pose = obj.get_position_orientation()
+        base_link_pose = self.get_position_orientation()
+        pos_in_robot_frame, _ = T.relative_pose_transform(*obj_pose, *base_link_pose)
+        pos_x, pos_y = pos_in_robot_frame[:2]
+        r = np.sqrt(pos_x**2 + pos_y**2)
+        theta = np.arctan2(pos_y, pos_x)
+        return (
+            self.arm_workspace_range[arm][0] <= theta <= self.arm_workspace_range[arm][1]
+            and 0 <= r <= self.arm_workspace_length[arm]
+        )
+
     def get_eef_position(self, arm="default"):
         """
         Args:

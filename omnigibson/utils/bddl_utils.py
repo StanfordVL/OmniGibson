@@ -597,7 +597,7 @@ class BDDLSampler:
         self._inroom_object_scope_filtered_initial = None  # dict mapping str to BDDLEntity
         self._attached_objects = defaultdict(set)  # dict mapping str to set of str
 
-    def sample(self, validate_goal=False):
+    def sample(self, validate_goal=False, skip_sampling=False):
         """
         Run sampling for this BEHAVIOR task
 
@@ -615,10 +615,12 @@ class BDDLSampler:
         accept_scene, feedback = self._prepare_scene_for_sampling()
         if not accept_scene:
             return accept_scene, feedback
-        # Sample objects to satisfy initial conditions
-        accept_scene, feedback = self._sample_all_conditions(validate_goal=validate_goal)
-        if not accept_scene:
-            return accept_scene, feedback
+
+        if not skip_sampling:
+            # Sample objects to satisfy initial conditions
+            accept_scene, feedback = self._sample_all_conditions(validate_goal=validate_goal)
+            if not accept_scene:
+                return accept_scene, feedback
 
         log.info("Sampling succeeded!")
 
