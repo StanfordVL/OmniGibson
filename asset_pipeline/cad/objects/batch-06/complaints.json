@@ -48,7 +48,7 @@
         "object": "bottle_of_coke-bmtvvb",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent (can't see content inside)",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -62,7 +62,7 @@
         "object": "bottle_of_coke-uqusgj",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -128,7 +128,7 @@
         "object": "bottle_of_vodka-nwegts",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent (can't see content inside)",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -165,7 +165,7 @@
         "object": "bush-hqlggp",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -210,7 +210,7 @@
         "object": "drip_pot-xmxvml",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "outer cloth is being rendered as glass in omnigibson",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -464,7 +464,7 @@
         "object": "kitchen_analog_scale-tqvnpo",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "dial part not transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -595,33 +595,33 @@
         "object": "tweezers-jghpwr",
         "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "complaint": "needs to be articulated?",
-        "processed": false
+        "processed": true
     },
     {
         "object": "tweezers-jghpwr",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "needs articulation",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "tweezers-ngwoat",
         "message": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "complaint": "needs to be articulated?",
-        "processed": false
+        "processed": true
     },
     {
         "object": "tweezers-ngwoat",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "needs articulation",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "twine-fngeov",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should this be rope? part of it, the holder, is not rope",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {

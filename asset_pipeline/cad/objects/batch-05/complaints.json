@@ -279,7 +279,7 @@
         "object": "fuel_can-bfaqfe",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "joint to open to fill it?",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -330,14 +330,14 @@
         "object": "jar_of_jelly-ytlmmb",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should be transparent. looks like generic jar",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_jelly-ytlmmb",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "should be openable?",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -395,7 +395,7 @@
         "object": "pennant-tfnwti",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should probably remove the stick",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -497,7 +497,7 @@
         "object": "rice_cooker-qatgeb",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "toggle button should be moved off lid since it doesn't move with lid",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -541,7 +541,7 @@
         "object": "sticker-wshged",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no thickness",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -568,7 +568,7 @@
         "object": "table_lamp-fhsorf",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -606,14 +606,14 @@
         "object": "table_lamp-fhsorf",
         "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "fuel_can-bfaqfe",
         "message": "FILLABLE: fuel can cap is stuck",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
