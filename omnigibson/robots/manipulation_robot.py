@@ -1308,7 +1308,7 @@ class ManipulationRobot(BaseRobot):
         if gm.AG_CLOTH:
             return self._establish_grasp_cloth(arm, ag_data)
         else:
-            if ag_data is not None and ag_data[0].category == "cologne":
+            if ag_data is not None and ag_data[0].category == "bottle_of_cologne":
                 return self._establish_grasp_rigid(arm, ag_data, contact_pos)
 
     def _calculate_in_hand_object_cloth(self, arm="default"):

@@ -47,6 +47,7 @@ robots:
         use_delta_commands: true
         command_input_limits: default
         command_output_limits: null
+        use_impedances: false
       gripper_0:
         name: JointController
         use_delta_commands: true

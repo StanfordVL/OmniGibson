@@ -141,7 +141,7 @@ def train():
 
     # Decide whether to use a local environment or remote
     # n_envs = args.n_envs
-    n_envs = 5
+    n_envs = 20
     env_config = _get_env_config()
     env_config["task"]["precached_reset_pose_path"] = reset_poses_path
     del env_config["env"]["external_sensors"]
