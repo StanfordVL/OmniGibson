@@ -73,6 +73,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self._floor_plane = None
         self._use_skybox = use_skybox
         self._skybox = None
+        self._presampled_robot_classes = {}
 
         # Call super init
         super().__init__()
@@ -341,6 +342,11 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             with open(self.scene_file, "r") as f:
                 scene_info = json.load(f)
             init_state = scene_info["state"]
+            objects_info = scene_info["objects_info"]
+            # Record the pre-sampled robot classes
+            for key in objects_info["init_info"].keys():
+                if key.startswith("robot"):
+                    self._presampled_robot_classes[key] = objects_info["init_info"][key]["class_name"]
             og.sim.load_state(init_state, serialized=False)
 
         self._initial_state = init_state
@@ -497,6 +503,16 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
 
         # Reset the states of all objects (including robots), including (non-)kinematic states and internal variables.
         assert self._initial_state is not None
+        # check if the presampled robots match the ones in self.object_registry
+        # if they do not match, then update self._initial_state with the the object resgitry robot.dump_state()
+        # the only thing we keep is the root_link information
+        for obj in self.object_registry.objects:
+            for key, value in self._presampled_robot_classes.items():
+                if obj.name == key and type(obj).__name__ != value:
+                    robot_current_state = obj.dump_state(serialized=False)
+                    root_link_state = self._initial_state["object_registry"]["robot0"]["root_link"]
+                    self._initial_state["object_registry"][key] = robot_current_state
+                    self._initial_state["object_registry"][key]["root_link"] = root_link_state
         self.load_state(self._initial_state)
         og.sim.step_physics()
 
