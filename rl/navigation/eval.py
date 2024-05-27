@@ -32,6 +32,7 @@ from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecMonitor, VecVideoRecorder
 from wandb import AlertLevel
 from wandb.integration.sb3 import WandbCallback
+from typing import Dict, Any
 
 
 parser = argparse.ArgumentParser(description="Train or evaluate a PPO agent in BEHAVIOR")
@@ -46,12 +47,13 @@ args = parser.parse_args()
 
 def _get_env_config():
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    config_path = os.path.normpath(os.path.join(script_dir, "rl.yaml"))
+    config_path = os.path.normpath(os.path.join(script_dir, "nav.yaml"))
     config = yaml.load(open(config_path, "r"), Loader=yaml.FullLoader)
     return config
 
 NUM_EVAL_EPISODES = 10
-reset_poses_path = os.path.dirname(__file__) + "/../reset_poses.json"
+num_success = 0
+
 
 def train():
 
@@ -64,20 +66,31 @@ def train():
     gm.HEADLESS = False
 
     # Decide whether to use a local environment or remote
-    n_envs = 1
+    n_envs = 2
     env_config = _get_env_config()
-    env_config["task"]["precached_reset_pose_path"] = reset_poses_path
     del env_config["env"]["external_sensors"]
     env = SB3VectorEnvironment(n_envs, env_config, render_on_step=True)
     env = VecFrameStack(env, n_stack=5)
     env = VecMonitor(env, info_keywords=("is_success",))
 
+    def _log_success_callback(locals_: Dict[str, Any], globals_: Dict[str, Any]) -> None:
+        """
+        Callback passed to the  ``evaluate_policy`` function
+        in order to log the success rate (when applicable),
+        for instance when using HER.
+
+        :param locals_:
+        :param globals_:
+        """
+        info = locals_["info"]
+
+        if locals_["done"]:
+            maybe_is_success = info.get("is_success")
+            if maybe_is_success is not None:
+                print("success")
+
     prefix = ""
     seed = 0
-    task_config = _get_env_config()["task"]
-    task_config["precached_reset_pose_path"] = reset_poses_path
-    task_config["termination_config"]["max_steps"] = 1000
-    env.env_method("update_task", task_config)
 
     # Set the set
     set_random_seed(seed)
@@ -89,9 +102,10 @@ def train():
     # ceiling.visible = False
     model = PPO.load(args.checkpoint)
     print("Starting evaluation...")
-    mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=NUM_EVAL_EPISODES)
+    mean_reward, std_reward = evaluate_policy(model, env, n_eval_episodes=NUM_EVAL_EPISODES, callback=_log_success_callback)
     print("Finished evaluation!")
     print(f"Mean reward: {mean_reward} +/- {std_reward:.2f}")
+    print(num_success)
 
 
 if __name__ == "__main__":

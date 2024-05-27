@@ -387,7 +387,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             robot_pos=pos,
             robot_ori_cos=np.cos(ori),
             robot_ori_sin=np.sin(ori),
-            robot_2d_ori=ori_2d,
+            robot_2d_ori=np.array([ori_2d]),
             robot_2d_ori_cos=np.cos(ori_2d),
             robot_2d_ori_sin=np.sin(ori_2d),
             robot_lin_vel=ControllableObjectViewAPI.get_linear_velocity(self.articulation_root_path),

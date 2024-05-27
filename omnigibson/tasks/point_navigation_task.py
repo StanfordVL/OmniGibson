@@ -117,11 +117,11 @@ class PointNavigationTask(BaseTask):
     def _create_termination_conditions(self):
         # Initialize termination conditions dict and fill in with MaxCollision, Timeout, Falling, and PointGoal
         terminations = dict()
-        terminations["max_collision"] = MaxCollision(max_collisions=self._termination_config["max_collisions"])
+        # terminations["max_collision"] = MaxCollision(max_collisions=self._termination_config["max_collisions"])
         terminations["timeout"] = Timeout(max_steps=self._termination_config["max_steps"])
-        terminations["falling"] = Falling(
-            robot_idn=self._robot_idn, fall_height=self._termination_config["fall_height"]
-        )
+        # terminations["falling"] = Falling(
+        #     robot_idn=self._robot_idn, fall_height=self._termination_config["fall_height"]
+        # )
         terminations["pointgoal"] = PointGoal(
             robot_idn=self._robot_idn,
             distance_tol=self._goal_tolerance,
@@ -138,7 +138,12 @@ class PointNavigationTask(BaseTask):
             potential_fcn=self.get_potential,
             r_potential=self._reward_config["r_potential"],
         )
-        rewards["collision"] = CollisionReward(r_collision=self._reward_config["r_collision"])
+        # rewards["collision"] = CollisionReward(r_collision=self._reward_config["r_collision"])
+        # goal = PointGoal(
+        #     robot_idn=self._robot_idn,
+        #     distance_tol=self._goal_tolerance,
+        #     distance_axes="xy",
+        # )
         rewards["pointgoal"] = PointGoalReward(
             pointgoal=self._termination_conditions["pointgoal"],
             r_pointgoal=self._reward_config["r_pointgoal"],
@@ -150,11 +155,22 @@ class PointNavigationTask(BaseTask):
         # Load visualization
         self._load_visualization_markers(env=env)
 
+        # Update initial and goal positions
+        self._update_positions_for_environment(env=env)
+
         # Auto-initialize all markers
         og.sim.play()
         env.scene.reset()
         env.scene.update_initial_state()
         og.sim.stop()
+
+    def _update_positions_for_environment(self, env):
+        """
+        Update the initial and goal positions for the environment
+        """
+        robot = env.robots[self._robot_idn]
+        self._initial_pos, _ = T.pose_transform(*robot.scene.prim.get_position_orientation(), self._initial_pos, [0, 0, 0, 1])
+        self._goal_pos, _ = T.pose_transform(*robot.scene.prim.get_position_orientation(), self._goal_pos, [0, 0, 0, 1])
 
     def _load_visualization_markers(self, env):
         """
@@ -166,19 +182,19 @@ class PointNavigationTask(BaseTask):
         if self._visualize_goal:
             self._initial_pos_marker = PrimitiveObject(
                 relative_prim_path="/task_initial_pos_marker",
-                primitive_type="Cylinder",
+                primitive_type="Sphere",
                 name="task_initial_pos_marker",
                 radius=self._goal_tolerance,
-                height=self._goal_height,
+                # height=self._goal_height,
                 visual_only=True,
                 rgba=np.array([1, 0, 0, 0.3]),
             )
             self._goal_pos_marker = PrimitiveObject(
                 relative_prim_path="/task_goal_pos_marker",
-                primitive_type="Cylinder",
+                primitive_type="Sphere",
                 name="task_goal_pos_marker",
                 radius=self._goal_tolerance,
-                height=self._goal_height,
+                # height=self._goal_height,
                 visual_only=True,
                 rgba=np.array([0, 0, 1, 0.3]),
             )
@@ -315,10 +331,10 @@ class PointNavigationTask(BaseTask):
         for i in range(max_trials):
             initial_pos, initial_quat, goal_pos = self._sample_initial_pose_and_goal_pos(env)
             # Make sure the sampled robot start pose and goal position are both collision-free
-            success = test_valid_pose(
-                env.robots[self._robot_idn], initial_pos, initial_quat, env.initial_pos_z_offset
-            ) and test_valid_pose(env.robots[self._robot_idn], goal_pos, None, env.initial_pos_z_offset)
-
+            # success = test_valid_pose(
+            #     env.robots[self._robot_idn], initial_pos, initial_quat, env.initial_pos_z_offset
+            # ) and test_valid_pose(env.robots[self._robot_idn], goal_pos, None, env.initial_pos_z_offset)
+            success = True
             # Don't need to continue iterating if we succeeded
             if success:
                 break
@@ -328,7 +344,9 @@ class PointNavigationTask(BaseTask):
             log.warning("Failed to reset robot without collision")
 
         # Land the robot
-        land_object(env.robots[self._robot_idn], initial_pos, initial_quat, env.initial_pos_z_offset)
+        robot = env.robots[self._robot_idn]
+        robot.set_position_orientation(initial_pos, initial_quat)
+        # land_object(env.robots[self._robot_idn], initial_pos, initial_quat, env.initial_pos_z_offset)
 
         # Store the sampled values internally
         self._initial_pos = initial_pos
@@ -355,11 +373,11 @@ class PointNavigationTask(BaseTask):
 
         # Add additional info
         info["path_length"] = self._path_length
-        info["spl"] = (
-            float(info["success"]) * min(1.0, self._geodesic_dist / self._path_length)
-            if done and self._path_length != 0.0
-            else 0.0
-        )
+        # info["spl"] = (
+        #     float(info["success"]) * min(1.0, self._geodesic_dist / self._path_length)
+        #     if done and self._path_length != 0.0
+        #     else 0.0
+        # )
 
         return done, info
 
