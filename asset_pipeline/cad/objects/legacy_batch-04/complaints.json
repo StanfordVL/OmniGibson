@@ -916,7 +916,7 @@
         "object": "top_cabinet-qiausz",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_dof_rootd_ba001_r, RevoluteJoint\n- j_dof_rootd_bb001_r, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "joint limits is too small",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -1036,7 +1036,7 @@
         "object": "trash_can-wklill",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_link_0, PrismaticJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "joint should move more. barely moves so can't use it",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -1083,7 +1083,7 @@
         "object": "trash_can-wklill",
         "message": "FILLABLE: bad joint",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     }
 ]
