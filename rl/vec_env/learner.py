@@ -125,7 +125,6 @@ class AfterEvalCallback(BaseCallback):
 
     def _on_step(self) -> bool:
         self.env.reset()
-
         return True
 
 
@@ -260,13 +259,13 @@ def train():
         tensorboard_log_dir = f"runs/{run.id}"
         # if args.checkpoint is None:
         if True:
-            # model = PPO(
-            #     env=env,
-            #     verbose=1,
-            #     tensorboard_log=tensorboard_log_dir,
-            #     device="cuda",
-            #     **algo_config,
-            # )
+            model = PPO(
+                env=env,
+                verbose=1,
+                tensorboard_log=tensorboard_log_dir,
+                device="cuda",
+                **algo_config,
+            )
             # model = A2C(
             #     env=env,
             #     verbose=1,
@@ -274,13 +273,13 @@ def train():
             #     device="cuda",
             #     **a2c_config,
             # )
-            model = SAC(
-                env=env,
-                verbose=1,
-                tensorboard_log=tensorboard_log_dir,
-                device="cuda",
-                **sac_config,
-            )
+            # model = SAC(
+            #     env=env,
+            #     verbose=1,
+            #     tensorboard_log=tensorboard_log_dir,
+            #     device="cuda",
+            #     **sac_config,
+            # )
         else:
             model = PPO.load(args.checkpoint, env=env)
         report_infos_callback = ReportInfosCallback()

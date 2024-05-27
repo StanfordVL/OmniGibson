@@ -562,9 +562,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._current_step += 1
 
         # Hacky way of getting the success condition
-        # info["is_success"] = info["reward"]["grasp"]["grasp_success"]
-        info["is_success"] = info["reward"]["pointgoal"]["pointgoal_success"]
-        # info.update({("reward_" + k): v for k, v in info["reward"]["grasp"].items()})
+        # info["is_success"] = info["reward"]["pointgoal"]["pointgoal_success"]
+        info["is_success"] = info["reward"]["grasp"]["grasp_success"]
+        info.update({("reward_" + k): v for k, v in info["reward"]["grasp"].items()})
 
         return obs, reward, terminated, truncated, info
 
