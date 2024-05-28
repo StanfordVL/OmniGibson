@@ -32,7 +32,7 @@ mkdir -p /scr-ssd/${SLURM_JOB_USER}/rl-workspace/wandb
 # Define mounts to create (maps local directory to container directory)
 declare -A MOUNTS=(
     [/scr-ssd/og-data-0-2-1]=/data
-    [/scr-ssd/self/rl-workspace/logs]=/omnigibson-src/rl/vec_env/logs
+    [/scr-ssd/${SLURM_JOB_USER}/rl-workspace/logs]=/omnigibson-src/rl/vec_env/logs
     [/scr-ssd/${SLURM_JOB_USER}/rl-workspace/runs]=/omnigibson-src/rl/vec_env/runs
     [/scr-ssd/${SLURM_JOB_USER}/rl-workspace/videos]=/omnigibson-src/rl/vec_env/videos
     [/scr-ssd/${SLURM_JOB_USER}/rl-workspace/wandb]=/omnigibson-src/rl/vec_env/wandb
