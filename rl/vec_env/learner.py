@@ -15,8 +15,6 @@ sys.path.append(parent_directory)
 
 import torch as th
 import torch.nn as nn
-import wandb
-from service.telegym import GRPCClientVecEnv
 from stable_baselines3 import A2C, PPO, SAC
 from stable_baselines3.common.callbacks import (
     BaseCallback,
@@ -26,12 +24,12 @@ from stable_baselines3.common.callbacks import (
     StopTrainingOnNoModelImprovement,
 )
 from stable_baselines3.common.evaluation import evaluate_policy
-from stable_baselines3.common.preprocessing import maybe_transpose
-from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 from stable_baselines3.common.utils import set_random_seed
-from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecMonitor, VecVideoRecorder
-from wandb import AlertLevel
+from stable_baselines3.common.vec_env import VecFrameStack, VecMonitor, VecVideoRecorder
 from wandb.integration.sb3 import WandbCallback
+
+import wandb
+from wandb import AlertLevel
 
 # Parse args
 # parser = argparse.ArgumentParser(description="Train or evaluate a PPO agent in BEHAVIOR")
@@ -69,7 +67,7 @@ def get_open_port():
 
 
 EVAL_EVERY_N_EPISODES = 10
-NUM_EVAL_EPISODES = 5
+NUM_EVAL_EPISODES = 25
 STEPS_PER_EPISODE = _get_env_config()["task"]["termination_config"]["max_steps"]
 reset_poses_path = os.path.dirname(__file__) + "/../reset_poses.json"
 
@@ -148,9 +146,10 @@ def train():
     env = VecFrameStack(env, n_stack=5)
     env = VecMonitor(env, info_keywords=("is_success",))
 
+    n_eval_envs = 5
     eval_env_config = _get_env_config()
     eval_env_config["task"]["precached_reset_pose_path"] = reset_poses_path
-    eval_env = SB3VectorEnvironment(1, eval_env_config, render_on_step=True)
+    eval_env = SB3VectorEnvironment(n_eval_envs, eval_env_config, render_on_step=True)
     eval_env = VecFrameStack(eval_env, n_stack=5)
     eval_env = VecMonitor(eval_env, info_keywords=("is_success",))
 
@@ -168,6 +167,7 @@ def train():
         task_config = _get_env_config()["task"]
         task_config["precached_reset_pose_path"] = reset_poses_path
         task_config["reward_config"]["dist_coeff"] = wandb.config.dist_coeff
+        task_config["reward_config"]["dist_slope_coeff"] = wandb.config.dist_slope_coeff
         task_config["reward_config"]["grasp_reward"] = wandb.config.grasp_reward
         task_config["reward_config"]["collision_penalty"] = wandb.config.collision_penalty
         task_config["reward_config"]["eef_position_penalty_coef"] = wandb.config.eef_position_penalty_coef

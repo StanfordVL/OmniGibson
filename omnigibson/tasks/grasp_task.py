@@ -223,7 +223,9 @@ class GraspTask(BaseTask):
         obj = env.scene.object_registry("name", self.obj_name)
         robot = env.robots[0]
         relative_pos, _ = T.relative_pose_transform(*obj.get_position_orientation(), *robot.get_position_orientation())
-        relative_pos_eef, _ = T.relative_pose_transform(*obj.get_position_orientation(), robot.get_eef_position(), robot.get_orientation())
+        relative_pos_eef, _ = T.relative_pose_transform(
+            *obj.get_position_orientation(), robot.get_eef_position(), robot.get_orientation()
+        )
         return {"obj_pos": relative_pos, "relative_pos_eef": relative_pos_eef}, dict()
 
     def _load_non_low_dim_observation_space(self):
@@ -243,6 +245,7 @@ class GraspTask(BaseTask):
     def default_reward_config(cls):
         return {
             "dist_coeff": 0.1,
+            "dist_slope_coeff": 10.0,
             "grasp_reward": 1.0,
             "collision_penalty": 1.0,
             "eef_position_penalty_coef": 0.01,

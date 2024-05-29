@@ -64,6 +64,7 @@ task:
     max_steps: 200
   reward_config:
     dist_coeff: 1.0
+    dist_slope_coeff: 10.0
     grasp_reward: 1.0
     collision_penalty: 1.0
     eef_position_penalty_coef: 0.1

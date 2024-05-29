@@ -13,7 +13,6 @@ sys.path.append(parent_directory)
 
 import torch as th
 import torch.nn as nn
-import wandb
 from stable_baselines3 import PPO
 from stable_baselines3.common.callbacks import (
     BaseCallback,
@@ -28,8 +27,10 @@ from stable_baselines3.common.torch_layers import BaseFeaturesExtractor
 from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.vec_env import DummyVecEnv, VecFrameStack, VecMonitor, VecVideoRecorder
 from telegym import GRPCClientVecEnv
-from wandb import AlertLevel
 from wandb.integration.sb3 import WandbCallback
+
+import wandb
+from wandb import AlertLevel
 
 # Parse args
 parser = argparse.ArgumentParser(description="Train or evaluate a PPO agent in BEHAVIOR")
@@ -185,6 +186,7 @@ def train(env, eval_env):
         run = wandb.init(sync_tensorboard=True, monitor_gym=True)
         task_config = _get_env_config()["task"]
         task_config["reward_config"]["dist_coeff"] = wandb.config.dist_coeff
+        task_config["reward_config"]["dist_slope_coeff"] = wandb.config.dist_slope_coeff
         task_config["reward_config"]["grasp_reward"] = wandb.config.grasp_reward
         task_config["reward_config"]["collision_penalty"] = wandb.config.collision_penalty
         task_config["reward_config"]["eef_position_penalty_coef"] = wandb.config.eef_position_penalty_coef

@@ -8,6 +8,10 @@ parameters:
     distribution: log_uniform_values
     min: 0.01
     max: 1.0
+  dist_slope_coeff:
+    distribution: log_uniform_values
+    min: 1.0
+    max: 10.0
   grasp_reward:
     value: 1.0
   collision_penalty:
