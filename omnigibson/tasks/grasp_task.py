@@ -223,8 +223,8 @@ class GraspTask(BaseTask):
         obj = env.scene.object_registry("name", self.obj_name)
         robot = env.robots[0]
         relative_pos, _ = T.relative_pose_transform(*obj.get_position_orientation(), *robot.get_position_orientation())
-
-        return {"obj_pos": relative_pos}, dict()
+        relative_pos_eef, _ = T.relative_pose_transform(*obj.get_position_orientation(), robot.get_eef_position(), robot.get_orientation())
+        return {"obj_pos": relative_pos, "relative_pos_eef": relative_pos_eef}, dict()
 
     def _load_non_low_dim_observation_space(self):
         # No non-low dim observations so we return an empty dict

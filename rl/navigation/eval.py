@@ -66,7 +66,7 @@ def train():
     gm.HEADLESS = False
 
     # Decide whether to use a local environment or remote
-    n_envs = 2
+    n_envs = 1
     env_config = _get_env_config()
     del env_config["env"]["external_sensors"]
     env = SB3VectorEnvironment(n_envs, env_config, render_on_step=True)

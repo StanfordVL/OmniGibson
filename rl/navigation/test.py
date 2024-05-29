@@ -32,7 +32,7 @@ def main():
     config = _get_env_config()
 
     # Load the environment
-    n_envs = 1
+    n_envs = 2
     # vec_env = og.Environment(config)
     vec_env = SB3VectorEnvironment(n_envs, config, render_on_step=True)
 
@@ -42,9 +42,7 @@ def main():
             a = vec_env.action_space.sample()
             # [a for _ in range(n_envs)]
             obs, reward, done, info = vec_env.step([a for _ in range(n_envs)])
-            from IPython import embed; embed()
-        if done:
-            vec_env.reset()
+            # from IPython import embed; embed()
         fps = 100 / (time.time() - start_time)
         print("fps", fps)
         print("effective fps", fps * n_envs)

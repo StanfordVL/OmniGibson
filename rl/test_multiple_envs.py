@@ -54,7 +54,7 @@ def main():
     # Load the config
     gm.ENABLE_FLATCACHE = True
     gm.USE_GPU_DYNAMICS = False
-    gm.HEADLESS = True
+    gm.HEADLESS = False
     config = _get_env_config()
 
     reset_poses_path = os.path.dirname(__file__) + "/reset_poses.json"
@@ -68,7 +68,8 @@ def main():
         start_time = time.time()
         for _ in range(100):
             a = vec_env.action_space.sample()
-            vec_env.step([a for _ in range(n_envs)])
+            obs, _, _, _ = vec_env.step([a for _ in range(n_envs)])
+            from IPython import embed; embed()
         fps = 100 / (time.time() - start_time)
         print("fps", fps)
         print("effective fps", fps * n_envs)

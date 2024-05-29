@@ -1,6 +1,7 @@
 import numpy as np
 
 import omnigibson as og
+from omnigibson.objects.object_base import REGISTERED_OBJECTS
 import omnigibson.utils.transform_utils as T
 from omnigibson.object_states import Pose
 from omnigibson.objects.primitive_object import PrimitiveObject
@@ -13,7 +14,7 @@ from omnigibson.termination_conditions.falling import Falling
 from omnigibson.termination_conditions.max_collision import MaxCollision
 from omnigibson.termination_conditions.point_goal import PointGoal
 from omnigibson.termination_conditions.timeout import Timeout
-from omnigibson.utils.python_utils import assert_valid_key, classproperty
+from omnigibson.utils.python_utils import assert_valid_key, classproperty, create_class_from_registry_and_config
 from omnigibson.utils.sim_utils import land_object, test_valid_pose
 from omnigibson.utils.ui_utils import create_module_logger
 
@@ -81,6 +82,8 @@ class PointNavigationTask(BaseTask):
         reward_type="l2",
         termination_config=None,
         reward_config=None,
+        obj_name=None,
+        objects_config=None,
     ):
         # Store inputs
         self._robot_idn = robot_idn
@@ -111,6 +114,10 @@ class PointNavigationTask(BaseTask):
         self._current_robot_pos = None
         self._geodesic_dist = None
 
+        self._obj_name = obj_name
+        self._objects_config = objects_config
+        self._obj = None
+
         # Run super
         super().__init__(termination_config=termination_config, reward_config=reward_config)
 
@@ -122,11 +129,11 @@ class PointNavigationTask(BaseTask):
         # terminations["falling"] = Falling(
         #     robot_idn=self._robot_idn, fall_height=self._termination_config["fall_height"]
         # )
-        terminations["pointgoal"] = PointGoal(
-            robot_idn=self._robot_idn,
-            distance_tol=self._goal_tolerance,
-            distance_axes="xy",
-        )
+        # terminations["pointgoal"] = PointGoal(
+        #     robot_idn=self._robot_idn,
+        #     distance_tol=self._goal_tolerance,
+        #     distance_axes="xy",
+        # )
 
         return terminations
 
@@ -144,8 +151,13 @@ class PointNavigationTask(BaseTask):
         #     distance_tol=self._goal_tolerance,
         #     distance_axes="xy",
         # )
+        pointgoal_fcn = PointGoal(
+            robot_idn=self._robot_idn,
+            distance_tol=self._goal_tolerance,
+            distance_axes="xy",
+        )
         rewards["pointgoal"] = PointGoalReward(
-            pointgoal=self._termination_conditions["pointgoal"],
+            pointgoal=pointgoal_fcn,
             r_pointgoal=self._reward_config["r_pointgoal"],
         )
 
@@ -158,11 +170,37 @@ class PointNavigationTask(BaseTask):
         # Update initial and goal positions
         self._update_positions_for_environment(env=env)
 
+        # Load objects
+        self._load_objects(env=env)
+
         # Auto-initialize all markers
         og.sim.play()
         env.scene.reset()
         env.scene.update_initial_state()
         og.sim.stop()
+
+    def _load_objects(self, env):
+        # Load objects
+        for obj_config in self._objects_config:
+            obj = env.scene.object_registry("name", obj_config["name"])
+            # Create object
+            if obj is None:
+                obj = create_class_from_registry_and_config(
+                    cls_name=obj_config["type"],
+                    cls_registry=REGISTERED_OBJECTS,
+                    cfg=obj_config,
+                    cls_type_descriptor="object",
+                )
+                # Import the object into the simulator and set the pose
+                env.scene.add_object(obj)
+
+            # Set object pose
+            obj_pos = [0.0, 0.0, 0.0] if "position" not in obj_config else obj_config["position"]
+            obj_orn = [0.0, 0.0, 0.0, 1.0] if "orientation" not in obj_config else obj_config["orientation"]
+            obj_pos, obj_orn = T.pose_transform(*env.scene.prim.get_position_orientation(), obj_pos, obj_orn)
+            obj.set_position_orientation(obj_pos, obj_orn)
+
+        self._obj = env.scene.object_registry("name", self._obj_name)
 
     def _update_positions_for_environment(self, env):
         """
@@ -300,6 +338,7 @@ class PointNavigationTask(BaseTask):
             float: L2 distance to the target position
         """
         return T.l2_distance(env.robots[self._robot_idn].states[Pose].get_value()[0][:2], self._goal_pos[:2])
+        # return T.l2_distance(env.robots[self._robot_idn].states[Pose].get_value()[0][:2], self._obj.get_position()[:2])
 
     def get_potential(self, env):
         """
@@ -323,25 +362,31 @@ class PointNavigationTask(BaseTask):
     def _reset_agent(self, env):
         # Reset agent
         env.robots[self._robot_idn].reset()
+        robot = env.robots[self._robot_idn]
 
         # We attempt to sample valid initial poses and goal positions
         success, max_trials = False, 100
 
-        initial_pos, initial_quat, goal_pos = None, None, None
-        for i in range(max_trials):
-            initial_pos, initial_quat, goal_pos = self._sample_initial_pose_and_goal_pos(env)
-            # Make sure the sampled robot start pose and goal position are both collision-free
-            # success = test_valid_pose(
-            #     env.robots[self._robot_idn], initial_pos, initial_quat, env.initial_pos_z_offset
-            # ) and test_valid_pose(env.robots[self._robot_idn], goal_pos, None, env.initial_pos_z_offset)
-            success = True
-            # Don't need to continue iterating if we succeeded
-            if success:
-                break
+        initial_pos, initial_quat, goal_pos = self._initial_pos, self._initial_quat, self._goal_pos
+        # initial_pos, initial_quat, goal_pos = None, None, None
+        # for i in range(max_trials):
+        #     # initial_pos, initial_quat, goal_pos = self._sample_initial_pose_and_goal_pos(env)
+        #     # Make sure the sampled robot start pose and goal position are both collision-free
+        #     success = test_valid_pose(
+        #         env.robots[self._robot_idn], initial_pos, initial_quat, env.initial_pos_z_offset
+        #     ) and test_valid_pose(env.robots[self._robot_idn], goal_pos, None, env.initial_pos_z_offset)
+        #     success = True
+        #     # Don't need to continue iterating if we succeeded
+        #     if success:
+        #         break
 
-        # Notify user if we failed to reset a collision-free sampled pose
-        if not success:
-            log.warning("Failed to reset robot without collision")
+        # # Notify user if we failed to reset a collision-free sampled pose
+        # if not success:
+        #     log.warning("Failed to reset robot without collision")
+
+        x = np.random.uniform(-1.5, 1.5, 1)
+        y = np.random.uniform(-3, 1.5, 1)
+        goal_pos, _ = T.pose_transform(*robot.scene.prim.get_position_orientation(), [x, y, 0.0], [0, 0, 0, 1])
 
         # Land the robot
         robot = env.robots[self._robot_idn]
@@ -352,6 +397,8 @@ class PointNavigationTask(BaseTask):
         self._initial_pos = initial_pos
         self._initial_quat = initial_quat
         self._goal_pos = goal_pos
+
+        self._obj.set_position_orientation(self._goal_pos, [0, 0, 0, 1])
 
         # Update visuals if requested
         if self._visualize_goal:
@@ -397,7 +444,8 @@ class PointNavigationTask(BaseTask):
 
     def _get_obs(self, env):
         # Get relative position of goal with respect to the current agent position
-        xy_pos_to_goal = self._global_pos_to_robot_frame(env, self._goal_pos)[:2]
+        # xy_pos_to_goal = self._global_pos_to_robot_frame(env, self._goal_pos)[:2]
+        xy_pos_to_goal = self._global_pos_to_robot_frame(env, self._obj.get_position())[:2]
         if self._goal_in_polar:
             xy_pos_to_goal = np.array(T.cartesian_to_polar(*xy_pos_to_goal))
 
@@ -425,7 +473,8 @@ class PointNavigationTask(BaseTask):
         Returns:
             3-array: (x,y,z) global current goal position
         """
-        return self._goal_pos
+        # return self._goal_pos
+        return self._obj.get_position()
 
     def get_current_pos(self, env):
         """

@@ -39,7 +39,7 @@ def _get_env_config():
     config = yaml.load(open(config_path, "r"), Loader=yaml.FullLoader)
     return config
 
-EVAL_EVERY_N_EPISODES = 10
+EVAL_EVERY_N_EPISODES = 5
 NUM_EVAL_EPISODES = 5
 STEPS_PER_EPISODE = _get_env_config()["task"]["termination_config"]["max_steps"]
 
@@ -70,16 +70,16 @@ def train():
 
     gm.ENABLE_FLATCACHE = True
     gm.USE_GPU_DYNAMICS = False
-    gm.HEADLESS = False
+    gm.HEADLESS = True
 
-    run = Run()
+    # run = Run()
 
     # Decide whether to use a local environment or remote
     # n_envs = args.n_envs
-    n_envs = 2
+    n_envs = 10
     env_config = _get_env_config()
     del env_config["env"]["external_sensors"]
-    env = SB3VectorEnvironment(n_envs, env_config, render_on_step=True)
+    env = SB3VectorEnvironment(n_envs, env_config, render_on_step=False)
     env = VecFrameStack(env, n_stack=5)
     env = VecMonitor(env, info_keywords=("is_success",))
     # env = VecNormalize(env)
@@ -91,23 +91,23 @@ def train():
 
     prefix = ""
     seed = 0
-    # run = wandb.init(
-    #     entity="behavior-rl",
-    #     project="sb3",
-    #     sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
-    #     monitor_gym=True,  # auto-upload the videos of agents playing the game
-    #     # save_code=True,  # optional
-    # )
+    run = wandb.init(
+        entity="behavior-rl",
+        project="sb3",
+        sync_tensorboard=True,  # auto-upload sb3's tensorboard metrics
+        monitor_gym=True,  # auto-upload the videos of agents playing the game
+        # save_code=True,  # optional
+    )
 
     eval_env = VecVideoRecorder(
         eval_env,
-        # f"videos/{run.id}",
         f"videos/{run.id}",
+        # f"videos/{run.id}",
         record_video_trigger=lambda x: x % (NUM_EVAL_EPISODES * STEPS_PER_EPISODE) == 0,
         video_length=STEPS_PER_EPISODE,
     )
     # eval_env = VecNormalize(eval_env)
-    # eval_env.render()
+    eval_env.render()
 
     # Set the set
     set_random_seed(seed)
@@ -206,10 +206,10 @@ def train():
             model = PPO.load("/home/sujay/OmniGibson/rl/navigation/logs/best_model_test/best_model.zip", env=env)
         # report_infos_callback = ReportInfosCallback()
         checkpoint_callback = CheckpointCallback(save_freq=1000, save_path=tensorboard_log_dir, name_prefix=prefix)
-        # wandb_callback = WandbCallback(
-        #     model_save_path=tensorboard_log_dir,
-        #     verbose=2,
-        # )
+        wandb_callback = WandbCallback(
+            model_save_path=tensorboard_log_dir,
+            verbose=2,
+        )
         # stop_train_callback = StopTrainingOnNoModelImprovement(max_no_improvement_evals=10, min_evals=20, verbose=1)
         after_eval_callback = AfterEvalCallback(env, eval_env)
         eval_callback = EvalCallback(
@@ -225,7 +225,7 @@ def train():
         callback = CallbackList(
             [
                 # report_infos_callback,
-                # wandb_callback,
+                wandb_callback,
                 checkpoint_callback,
                 eval_callback,
             ]
