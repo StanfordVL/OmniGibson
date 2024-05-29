@@ -63,18 +63,12 @@ task:
   termination_config:
     max_steps: 200
   reward_config:
-    # dist_coeff: 1.0
-    # grasp_reward: 1.0
-    # collision_penalty: 1.0
-    # eef_position_penalty_coef: 0.1
-    # eef_orientation_penalty_coef: 0.01
-    # regularization_coef: 0.01
-    dist_coeff: 0.7885
-    grasp_reward: 0.1218
-    collision_penalty: 0.09284
-    eef_position_penalty_coef: 0.3233
-    eef_orientation_penalty_coef: 0.3687
-    regularization_coef: 0.4448
+    dist_coeff: 1.0
+    grasp_reward: 1.0
+    collision_penalty: 1.0
+    eef_position_penalty_coef: 0.1
+    eef_orientation_penalty_coef: 0.01
+    regularization_coef: 0.01
   objects_config:
     - type: DatasetObject
       name: cologne
