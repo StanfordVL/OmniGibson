@@ -71,14 +71,14 @@ FINAL_SCENES = [
 ]
 
 APPROVED_OBJS = {
-    ".*",
+    "batch-.*",
 }
 
 REJECTED_OBJS = set()
 
-APPROVED_SCENES = {
-    ".*",
-}
+APPROVED_SCENES = set() #{
+#     ".*",
+# }
 
 REJECTED_SCENES = {
     "gates_bedroom",
