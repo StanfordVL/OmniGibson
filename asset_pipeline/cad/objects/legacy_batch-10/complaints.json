@@ -51,7 +51,7 @@
         "object": "basil-bebpnf",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "bad center of mass",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -449,7 +449,7 @@
         "object": "casserole-mmbavt",
         "message": "Confirm object synset assignment.\nObject assigned to synset: casserole.n.01\nDefinition: food cooked and served in a casserole\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "wrong one it should be the dish and not the food",
-        "processed": false
+        "processed": true
     },
     {
         "object": "casserole-mmbavt",
@@ -467,13 +467,13 @@
         "object": "casserole-mmbavt",
         "message": "Confirm object properties:\n- burnable\n- cookable\n- freezable\n- stainable\nFull list of iGibson abilities: burnable, cleaningTool, coldSource, cookable, dustyable, freezable, heatSource, liquid, openable, sliceable, slicer, soakable, stainable, toggleable, waterSource\nCheck incorrect or missing properties, especially liquid property\n",
         "complaint": "not cookable or freezable or burnable but dustyable and Mfillable ",
-        "processed": false
+        "processed": true
     },
     {
         "object": "casserole-mmbavt",
         "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "fillable",
-        "processed": false
+        "processed": true
     },
     {
         "object": "cauldron-zndohl",
@@ -569,7 +569,7 @@
         "object": "christmas_tree-eadukw",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -759,7 +759,7 @@
         "object": "crab-tjkiva",
         "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
         "complaint": "multiple parts",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -840,7 +840,7 @@
         "object": "dinner_napkin-rpccls",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not unfolded",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -898,13 +898,13 @@
         "object": "facsimile-mcqqhy",
         "message": "Confirm object synset assignment.\nObject assigned to synset: facsimile.n.01\nDefinition: an exact copy or reproduction\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "facsimile.n.02",
-        "processed": false
+        "processed": true
     },
     {
         "object": "fillet-fqhuey",
         "message": "Confirm object synset assignment.\nObject assigned to synset: fillet.n.01\nDefinition: a boneless steak cut from the tenderloin of beef\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "fish fillet.n.01",
-        "processed": false
+        "processed": true
     },
     {
         "object": "clove-thigpl",
@@ -922,7 +922,7 @@
         "object": "ginger-wqcasl",
         "message": "Confirm object synset assignment.\nObject assigned to synset: ginger.n.01\nDefinition: perennial plants having thick branching aromatic rhizomes and leafy reedlike stems\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "ginger.n.03",
-        "processed": false
+        "processed": true
     },
     {
         "object": "gooseberry-cltzwx",
@@ -1010,7 +1010,7 @@
         "object": "hammer-bbzlel",
         "message": "Confirm object synset assignment.\nObject assigned to synset: hammer.n.01\nDefinition: the part of a gunlock that strikes the percussion cap when the trigger is pulled\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "should be n.02",
-        "processed": false
+        "processed": true
     },
     {
         "object": "hanger-ffecvd",

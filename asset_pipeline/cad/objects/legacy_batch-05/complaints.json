@@ -63,7 +63,7 @@
         "object": "bench-zfpjkj",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "physically not stable, maybe remove completely?",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -157,21 +157,21 @@
         "object": "oven-kfftgk",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_dof_rootd_aa001_r, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "needs window, nshould open more",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "oven-leqtlc",
         "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
         "complaint": "should have window. has crack through front",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "oven-nkxhvf",
         "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
         "complaint": "should have window?",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -185,21 +185,21 @@
         "object": "oven-nvqqkv",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_dof_rootd_aa001_r, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "joint doesnt go far enough",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "oven-rwuazb",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_dof_rootd_aa001_r, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "needs window glass?",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "oven-tllnvs",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_door, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "joint could go further",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -251,7 +251,7 @@
         "object": "sofa-rxtscm",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "remove pillows",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -361,7 +361,7 @@
         "object": "window-qdkcdn",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "can't see through window",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -380,7 +380,7 @@
         "object": "almond-acooui",
         "message": "APPEARANCE: This object has multiple almonds. Keep just one.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     }
 ]
