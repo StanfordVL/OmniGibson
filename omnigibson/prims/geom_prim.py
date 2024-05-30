@@ -466,6 +466,9 @@ class TriggerGeomPrim(CollisionGeomPrim):
         self._trigger_api = None
         self._trigger_state_api = None
 
+        # TODO: Load/save this & also figure out when to clear.
+        self._currently_inside = set()
+
         # Run super method
         super().__init__(
             relative_prim_path=relative_prim_path,
@@ -489,5 +492,20 @@ class TriggerGeomPrim(CollisionGeomPrim):
             else lazy.pxr.PhysxSchema.PhysxTriggerStateAPI.Apply(self._prim)
         )
 
+    def update_state(self, trigger_event_data):
+        other_object = og.sim._link_id_to_objects.get(trigger_event_data.other_body_prim_id, None)
+        if trigger_event_data.event_type == "trigger_enter":  # TODO: Get the right value
+            self._currently_inside.add(other_object)
+        else:
+            self._currently_inside.remove(other_object)
+
+    def objects_inside(self):
+        return set(self._currently_inside)
+
     def get_colliding_prim_paths(self):
         return [str(x) for x in self._trigger_state_api.GetTriggeredCollisionsRel().GetTargets()]
+
+    def update_handles(self):
+        # TODO: Make this get called
+        prim_id = lazy.pxr.PhysicsSchemaTools.sdfPathToInt(self.prim_path)
+        og.sim.psi.subscribe_physics_trigger_report_events(self.register_entry, og.sim.stage_id, prim_id)
