@@ -71,7 +71,7 @@ FINAL_SCENES = [
 ]
 
 APPROVED_OBJS = {
-    "batch-.*",
+    ".*",
 }
 
 REJECTED_OBJS = set()
