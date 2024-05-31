@@ -78,9 +78,9 @@ REJECTED_OBJS = set()
 
 APPROVED_SCENES = set()
 
-APPROVED_SCENES = {
-    ".*",
-}
+# APPROVED_SCENES = {
+#     ".*",
+# }
 
 REJECTED_SCENES = {
     "gates_bedroom",
