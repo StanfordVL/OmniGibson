@@ -10,7 +10,7 @@ sweep_configuration = {
         "collision_penalty": {"min": 0.01, "max": 10.0, "distribution": "log_uniform_values"},
         "eef_position_penalty_coef": {"min": 0.01, "max": 1.0, "distribution": "log_uniform_values"},
         "eef_orientation_penalty_coef_relative": {"min": 0.1, "max": 10.0, "distribution": "log_uniform_values"},
-        "regularization_coef": {"min": 0.01, "max": 1.0, "distribution": "log_uniform_values"},
+        "regularization_coef": {"min": 0.001, "max": 1.0, "distribution": "log_uniform_values"},
     },
 }
 

@@ -55,7 +55,7 @@ class GraspReward(BaseRewardFunction):
         reward = 0.0
 
         # Penalize large accelerations
-        action_mag = np.linalg.norm(robot.get_joint_efforts())
+        action_mag = np.linalg.norm(robot.get_applied_joint_efforts())
         regularization_penalty = -(action_mag * self.regularization_coef)
         reward += regularization_penalty
         info["regularization_penalty_factor"] = action_mag
