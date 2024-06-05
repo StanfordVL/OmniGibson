@@ -314,7 +314,7 @@ def train():
         log.info(f"model: {model}")
         log.info("Starting training...")
         wandb.alert(title="Run launched", text=f"Run ID: {wandb.run.id}", level=AlertLevel.INFO)
-        model.learn(total_timesteps=5_000_000, callback=callback, log_interval=4)
+        model.learn(total_timesteps=10_000_000, callback=callback, log_interval=4)
         log.info("Finished training!")
 
 
