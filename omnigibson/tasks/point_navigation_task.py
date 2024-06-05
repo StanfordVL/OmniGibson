@@ -337,8 +337,8 @@ class PointNavigationTask(BaseTask):
         Returns:
             float: L2 distance to the target position
         """
-        return T.l2_distance(env.robots[self._robot_idn].states[Pose].get_value()[0][:2], self._goal_pos[:2])
-        # return T.l2_distance(env.robots[self._robot_idn].states[Pose].get_value()[0][:2], self._obj.get_position()[:2])
+        # return T.l2_distance(env.robots[self._robot_idn].states[Pose].get_value()[0][:2], self._goal_pos[:2])
+        return T.l2_distance(env.robots[self._robot_idn].states[Pose].get_value()[0][:2], self._obj.get_position()[:2])
 
     def get_potential(self, env):
         """

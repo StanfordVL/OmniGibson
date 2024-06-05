@@ -248,9 +248,9 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
 
             # For EEF, add voxel sensor if the modality is there
             if link in self.eef_links.values():
-                if "voxel" in self._obs_modalities or self._obs_modalities == "all":
-                    sensor_cls = VoxelSensor
-                    voxel_prim_path = f"{link.prim_path}/voxel_sensor"
+                if "scan" in self._obs_modalities or self._obs_modalities == "all":
+                    sensor_cls = ScanSensor
+                    scan_prim_path = f"{link.prim_path}/scan_sensor"
                     sensor_kwargs = self._sensor_config[sensor_cls.__name__]
                     if "modalities" not in sensor_kwargs:
                         sensor_kwargs["modalities"] = (
@@ -265,7 +265,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                     # Create the sensor and store it internally
                     sensor = create_sensor(
                         sensor_type=sensor_cls.__name__,
-                        relative_prim_path=absolute_prim_path_to_scene_relative(self.scene, voxel_prim_path),
+                        relative_prim_path=absolute_prim_path_to_scene_relative(self.scene, scan_prim_path),
                         name=f"{self.name}:{link_name}:{sensor_cls.__name__}:{sensor_counts[sensor_cls]}",
                         **sensor_kwargs,
                     )
@@ -278,6 +278,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                 if prim_type in SENSOR_PRIMS_TO_SENSOR_CLS:
                     sensor_cls = SENSOR_PRIMS_TO_SENSOR_CLS[prim_type]
                     sensor_kwargs = self._sensor_config[sensor_cls.__name__]
+                    if sensor_cls == ScanSensor:
+                        continue
                     if "modalities" not in sensor_kwargs:
                         sensor_kwargs["modalities"] = (
                             sensor_cls.all_modalities

@@ -55,21 +55,23 @@ def main():
     gm.ENABLE_FLATCACHE = True
     gm.USE_GPU_DYNAMICS = False
     gm.HEADLESS = False
+    # gm.DEBUG_VISUALIZATION = True
     config = _get_env_config()
 
     reset_poses_path = os.path.dirname(__file__) + "/reset_poses.json"
     config["task"]["precached_reset_pose_path"] = reset_poses_path
+    del config["env"]["external_sensors"]
 
     # Load the environment
-    n_envs = 2
-    vec_env = SB3VectorEnvironment(n_envs, config, render_on_step=False)
+    n_envs = 1
+    vec_env = SB3VectorEnvironment(n_envs, config, render_on_step=True)
 
     while True:
         start_time = time.time()
         for _ in range(100):
             a = vec_env.action_space.sample()
             obs, _, _, _ = vec_env.step([a for _ in range(n_envs)])
-            from IPython import embed; embed()
+
         fps = 100 / (time.time() - start_time)
         print("fps", fps)
         print("effective fps", fps * n_envs)

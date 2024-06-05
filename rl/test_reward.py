@@ -47,6 +47,8 @@ def main(iterations):
     vec_env = SB3VectorEnvironment(1, config, render_on_step=True)
     env = vec_env.envs[0]
     robot = env.robots[0]
+    # robot.reset()
+    # robot.keep_still()
     # controller = StarterSemanticActionPrimitives(env, enable_head_tracking=False)
 
     # Testing primitives with env
@@ -74,12 +76,13 @@ def main(iterations):
     action_generator = KeyboardRobotController(robot=robot)
     action_generator.print_keyboard_teleop_info()
     # pose = controller._get_robot_pose_from_2d_pose([-0.433881, -0.210183, -2.0118])
-    pose = ([-0.433881, -0.210183, 0.01], [0.0, 0.0, -0.8446441, 0.53532825])
-    robot.set_position_orientation(*pose)
+    # pose = ([-0.433881, -0.210183, 0.01], [0.0, 0.0, -0.8446441, 0.53532825])
+    # robot.set_position_orientation(*pose)
     # obj = env.scene.object_registry("name", "cologne")
     while True:
         action = action_generator.get_teleop_action()
         obs, reward, done, info = vec_env.step(np.array([action]))
+        breakpoint()
         # print(reward)
 
     # Testing random actions with env
