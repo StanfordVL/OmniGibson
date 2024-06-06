@@ -112,12 +112,12 @@ def _launch_app():
     # expects the extensions to be reachable in the parent directory of the kit file. We copy on every launch to
     # ensure that the kit file is always up to date.
     assert "EXP_PATH" in os.environ, "The EXP_PATH variable is not set. Are you in an Isaac Sim installed environment?"
-    kit_file = Path(__file__).parent / "omnigibson.kit"
-    kit_file_target = Path(os.environ["EXP_PATH"]) / "omnigibson.kit"
-    try:
-        shutil.copy(kit_file, kit_file_target)
-    except Exception as e:
-        raise e from ValueError("Failed to copy omnigibson.kit to Isaac Sim apps directory.")
+    # kit_file = Path(__file__).parent / "omnigibson.kit"
+    # kit_file_target = Path(os.environ["EXP_PATH"]) / "omnigibson.kit"
+    # try:
+    #     shutil.copy(kit_file, kit_file_target)
+    # except Exception as e:
+    #     raise e from ValueError("Failed to copy omnigibson.kit to Isaac Sim apps directory.")
 
     launch_context = nullcontext if gm.DEBUG else suppress_omni_log
 
@@ -131,7 +131,7 @@ def _launch_app():
         ), "This version of OmniGibson supports Isaac Sim 2023.1.1 and above. Please update Isaac Sim."
 
     with launch_context(None):
-        app = lazy.omni.isaac.kit.SimulationApp(config_kwargs, experience=str(kit_file_target.resolve(strict=True)))
+        app = lazy.omni.isaac.kit.SimulationApp(config_kwargs)
 
     # Omni overrides the global logger to be DEBUG, which is very annoying, so we re-override it to the default WARN
     # TODO: Remove this once omniverse fixes it
@@ -351,8 +351,9 @@ def launch_simulator(*args, **kwargs):
 
             # Set the viewer dimensions
             if gm.RENDER_VIEWER_CAMERA:
-                self.viewer_width = viewer_width
-                self.viewer_height = viewer_height
+                pass
+                # self.viewer_width = viewer_width
+                # self.viewer_height = viewer_height
 
             # Toggle simulator state once so that downstream omni features can be used without bugs
             # e.g.: particle sampling, which for some reason requires sim.play() to be called at least once

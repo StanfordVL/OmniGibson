@@ -72,7 +72,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self.use_floor_plane = self.env_config["use_floor_plane"]
         self.floor_plane_visible = self.env_config["floor_plane_visible"]
         self.floor_plane_color = self.env_config["floor_plane_color"]
-        self.device = self.env_config["device"]
+        self.device = self.env_config["device"] if self.env_config["device"] else "cpu"
         self._initial_pos_z_offset = self.env_config[
             "initial_pos_z_offset"
         ]  # how high to offset object placement to account for one action step of dropping
