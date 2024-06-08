@@ -39,9 +39,27 @@ def get_random_joint_position(robot):
     return joint_positions, joint_control_idx
 
 
+def append_to_json(file_path, data):
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        # Create the file and initialize it with an empty list
+        with open(file_path, 'w') as file:
+            json.dump([], file)
+
+    # Open the file in read/write mode ('r+')
+    with open(file_path, "r+") as file:
+        file.seek(0, 2)  # Move to the end of the file
+        file.seek(file.tell() - 1, 0)  # Go back 1 character from the end to overwrite the ']'
+        if file.tell() > 1:  # If the file is not empty or contains more than just []
+            file.write(",")  # Write a comma to separate the last item
+        stringify_data = json.dumps(data)
+        append_format = stringify_data[1:-1]
+        file.write(append_format)  # Convert the dictionary to JSON and write it
+        file.write("]")  # Close the JSON array
+
+
 def main(iterations, file_path):
     MAX_JOINT_RANDOMIZATION_ATTEMPTS = 50
-
 
     cfg = {
         "env": {
@@ -219,15 +237,15 @@ def main(iterations, file_path):
                 saved_poses.append(pose)
                 progress += 1
                 progress_bar.update(1)
+                if progress % 40 == 0:
+                    append_to_json(file_path, saved_poses)
+                    saved_poses = []
 
             except Exception as e:
                 # print(e)
                 # print(place_obj.name)
                 # print("--------------------")
                 pass
-
-    with open(file_path, "w") as f:
-        json.dump(saved_poses, f)
 
 
 if __name__ == "__main__":
