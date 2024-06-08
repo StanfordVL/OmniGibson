@@ -2,9 +2,11 @@
 A set of utility functions for registering and tracking objects
 """
 
-from inspect import isclass
-import numpy as np
 from collections.abc import Iterable
+from inspect import isclass
+
+import numpy as np
+
 from omnigibson.macros import create_module_macros
 from omnigibson.utils.python_utils import Serializable, SerializableNonInstance, UniquelyNamed
 from omnigibson.utils.ui_utils import create_module_logger
@@ -53,7 +55,7 @@ class Registry(UniquelyNamed):
         default_key="name",
         unique_keys=None,
         group_keys=None,
-        default_value=m.DOES_NOT_EXIST,
+        default_value=None,
     ):
         """
         Args:
@@ -257,7 +259,7 @@ class Registry(UniquelyNamed):
             val = getattr(obj, attr)
 
         except:
-            val = self.default_value
+            val = self.default_value if self.default_value is not None else m.DOES_NOT_EXIST
 
         return val
 

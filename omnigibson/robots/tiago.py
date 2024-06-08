@@ -1,14 +1,15 @@
 import os
+
 import numpy as np
+
 import omnigibson as og
 import omnigibson.lazy as lazy
-from omnigibson.macros import gm
 import omnigibson.utils.transform_utils as T
-from omnigibson.macros import create_module_macros
+from omnigibson.macros import create_module_macros, gm
 from omnigibson.robots.active_camera_robot import ActiveCameraRobot
-from omnigibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
 from omnigibson.robots.locomotion_robot import LocomotionRobot
-from omnigibson.utils.python_utils import assert_valid_key
+from omnigibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
+from omnigibson.utils.python_utils import assert_valid_key, classproperty
 from omnigibson.utils.usd_utils import JointType
 
 # Create settings for this module
@@ -185,12 +186,12 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     def model_name(self):
         return "Tiago"
 
-    @property
-    def n_arms(self):
+    @classproperty
+    def n_arms(cls):
         return 2
 
-    @property
-    def arm_names(self):
+    @classproperty
+    def arm_names(cls):
         return ["left", "right"]
 
     @property
@@ -286,16 +287,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self._world_base_fixed_joint_prim.GetAttribute("physics:localRot0").Set(
             lazy.pxr.Gf.Quatf(*orientation[[3, 0, 1, 2]].tolist())
         )
-
-    def _initialize(self):
-        # Run super method first
-        super()._initialize()
-
-        # Set the joint friction for EEF to be higher
-        for arm in self.arm_names:
-            for joint in self.finger_joints[arm]:
-                if joint.joint_type != JointType.JOINT_FIXED:
-                    joint.friction = 500
 
     # Name of the actual root link that we are interested in. Note that this is different from self.root_link_name,
     # which is "base_footprint_x", corresponding to the first of the 6 1DoF joints to control the base.

@@ -1,9 +1,9 @@
 import numpy as np
-from omnigibson.macros import create_module_macros
-from omnigibson.object_states.object_state_base import RelativeObjectState, BooleanStateMixin
-from omnigibson.systems.system_base import UUID_TO_SYSTEMS, REGISTERED_SYSTEMS
-from omnigibson.utils.python_utils import get_uuid
 
+from omnigibson.macros import create_module_macros
+from omnigibson.object_states.object_state_base import BooleanStateMixin, RelativeObjectState
+from omnigibson.systems.system_base import REGISTERED_SYSTEMS, UUID_TO_SYSTEMS
+from omnigibson.utils.python_utils import get_uuid
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -100,12 +100,12 @@ class ModifiedParticles(RelativeObjectState):
 
 
 class Saturated(RelativeObjectState, BooleanStateMixin):
-    def __init__(self, obj, default_limit=m.DEFAULT_SATURATION_LIMIT):
+    def __init__(self, obj, default_limit=None):
         # Run super first
         super().__init__(obj=obj)
 
         # Limits
-        self._default_limit = default_limit
+        self._default_limit = default_limit if default_limit is not None else m.DEFAULT_SATURATION_LIMIT
         self._limits = None
 
     def _initialize(self):

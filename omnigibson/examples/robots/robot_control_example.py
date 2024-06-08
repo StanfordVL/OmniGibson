@@ -10,8 +10,7 @@ import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.macros import gm
 from omnigibson.robots import REGISTERED_ROBOTS
-from omnigibson.utils.ui_utils import choose_from_options, KeyboardRobotController
-
+from omnigibson.utils.ui_utils import KeyboardRobotController, choose_from_options
 
 CONTROL_MODES = dict(
     random="Use autonomous random actions (default)",
@@ -155,6 +154,7 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     # Loop control until user quits
     max_steps = -1 if not short_exec else 100
     step = 0
+
     while step != max_steps:
         action = (
             action_generator.get_random_action() if control_mode == "random" else action_generator.get_teleop_action()

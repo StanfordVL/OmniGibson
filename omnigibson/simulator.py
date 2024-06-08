@@ -1,50 +1,48 @@
-from collections import defaultdict
-import itertools
+import atexit
 import contextlib
+import itertools
+import json
 import logging
 import os
 import shutil
-import socket
-from pathlib import Path
-import atexit
 import signal
+import socket
+from collections import defaultdict
 from contextlib import nullcontext
+from pathlib import Path
 
 import numpy as np
-import json
 
 import omnigibson as og
 import omnigibson.lazy as lazy
-from omnigibson.macros import gm, create_module_macros
-from omnigibson.utils.constants import LightingMode
-from omnigibson.utils.config_utils import NumpyEncoder
-from omnigibson.utils.python_utils import (
-    clear as clear_pu,
-    create_object_from_init_info,
-    Serializable,
-    meets_minimum_version,
-)
-from omnigibson.utils.usd_utils import clear as clear_uu, FlatcacheAPI, RigidContactAPI, PoseAPI
-from omnigibson.utils.ui_utils import (
-    CameraMover,
-    disclaimer,
-    create_module_logger,
-    suppress_omni_log,
-    print_icon,
-    print_logo,
-    logo_small,
-)
-from omnigibson.scenes import Scene
+from omnigibson.macros import create_module_macros, gm
+from omnigibson.object_states.contact_subscribed_state_mixin import ContactSubscribedStateMixin
+from omnigibson.object_states.factory import get_states_by_dependency_order
+from omnigibson.object_states.joint_break_subscribed_state_mixin import JointBreakSubscribedStateMixin
+from omnigibson.object_states.update_state_mixin import GlobalUpdateStateMixin, UpdateStateMixin
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.objects.stateful_object import StatefulObject
-from omnigibson.object_states.contact_subscribed_state_mixin import ContactSubscribedStateMixin
-from omnigibson.object_states.joint_break_subscribed_state_mixin import JointBreakSubscribedStateMixin
-from omnigibson.object_states.factory import get_states_by_dependency_order
-from omnigibson.object_states.update_state_mixin import UpdateStateMixin, GlobalUpdateStateMixin
 from omnigibson.prims.material_prim import MaterialPrim
+from omnigibson.scenes import Scene
 from omnigibson.sensors.vision_sensor import VisionSensor
 from omnigibson.systems.macro_particle_system import MacroPhysicalParticleSystem
 from omnigibson.transition_rules import TransitionRuleAPI
+from omnigibson.utils.config_utils import NumpyEncoder
+from omnigibson.utils.constants import LightingMode
+from omnigibson.utils.python_utils import Serializable
+from omnigibson.utils.python_utils import clear as clear_pu
+from omnigibson.utils.python_utils import create_object_from_init_info, meets_minimum_version
+from omnigibson.utils.ui_utils import (
+    CameraMover,
+    create_module_logger,
+    disclaimer,
+    logo_small,
+    print_icon,
+    print_logo,
+    suppress_omni_log,
+)
+from omnigibson.utils.usd_utils import FlatcacheAPI, PoseAPI, RigidContactAPI
+from omnigibson.utils.usd_utils import clear as clear_uu
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -64,6 +62,8 @@ def print_save_usd_warning(_):
 
 
 def _launch_app():
+    log.setLevel(logging.DEBUG if gm.DEBUG else logging.INFO)
+
     log.info(f"{'-' * 5} Starting {logo_small()}. This will take 10-30 seconds... {'-' * 5}")
 
     # If multi_gpu is used, og.sim.render() will cause a segfault when called during on_contact callbacks,
@@ -77,8 +77,9 @@ def _launch_app():
     # Omni's logging is super annoying and overly verbose, so suppress it by modifying the logging levels
     if not gm.DEBUG:
         import sys
-        from numba.core.errors import NumbaPerformanceWarning
         import warnings
+
+        from numba.core.errors import NumbaPerformanceWarning
 
         # TODO: Find a more elegant way to prune omni logging
         # sys.argv.append("--/log/level=warning")
@@ -214,10 +215,12 @@ def launch_simulator(*args, **kwargs):
 
         Args:
             gravity (float): gravity on z direction.
-            physics_dt (float): dt between physics steps. Defaults to 1.0 / 120.0.
-            rendering_dt (float): dt between rendering steps. Note: rendering means rendering a frame of the current
-                application and not only rendering a frame to the viewports/ cameras. So UI elements of Isaac Sim will
-                be refreshed with this dt as well if running non-headless. Defaults to 1.0 / 30.0.
+            physics_dt (None or float): dt between physics steps. If None, will use default value
+                1 / gm.DEFAULT_PHYSICS_FREQ
+            rendering_dt (None or float): dt between rendering steps. Note: rendering means rendering a frame of the
+                current application and not only rendering a frame to the viewports/ cameras. So UI elements of
+                Isaac Sim will be refreshed with this dt as well if running non-headless. If None, will use default
+                value 1 / gm.DEFAULT_RENDERING_FREQ
             stage_units_in_meters (float): The metric units of assets. This will affect gravity value..etc.
                 Defaults to 0.01.
             viewer_width (int): width of the camera image, in pixels
@@ -230,8 +233,8 @@ def launch_simulator(*args, **kwargs):
         def __init__(
             self,
             gravity=9.81,
-            physics_dt=1.0 / 120.0,
-            rendering_dt=1.0 / 30.0,
+            physics_dt=None,
+            rendering_dt=None,
             stage_units_in_meters=1.0,
             viewer_width=gm.DEFAULT_VIEWER_WIDTH,
             viewer_height=gm.DEFAULT_VIEWER_HEIGHT,
@@ -244,8 +247,8 @@ def launch_simulator(*args, **kwargs):
 
             # Run super init
             super().__init__(
-                physics_dt=physics_dt,
-                rendering_dt=rendering_dt,
+                physics_dt=1.0 / gm.DEFAULT_PHYSICS_FREQ if physics_dt is None else physics_dt,
+                rendering_dt=1.0 / gm.DEFAULT_RENDERING_FREQ if rendering_dt is None else rendering_dt,
                 stage_units_in_meters=stage_units_in_meters,
                 device=device,
             )
@@ -1223,13 +1226,16 @@ def launch_simulator(*args, **kwargs):
 
             return
 
-        def save(self, json_path):
+        def save(self, json_path=None):
             """
             Saves the current simulation environment to @json_path.
 
             Args:
-                json_path (str): Full path of JSON file to save (should end with .json), which contains information
-                    to recreate the current scene.
+                json_path (None or str): Full path of JSON file to save (should end with .json), which contains information
+                    to recreate the current scene, if specified. If None, will return json string insted
+
+            Returns:
+                None or str: If @json_path is None, returns dumped json string. Else, None
             """
             # Make sure the sim is not stopped, since we need to grab joint states
             assert not self.is_stopped(), "Simulator cannot be stopped when saving to USD!"
@@ -1258,11 +1264,15 @@ def launch_simulator(*args, **kwargs):
             }
 
             # Write this to the json file
-            Path(os.path.dirname(json_path)).mkdir(parents=True, exist_ok=True)
-            with open(json_path, "w+") as f:
-                json.dump(scene_info, f, cls=NumpyEncoder, indent=4)
+            if json_path is None:
+                return json.dumps(scene_info, cls=NumpyEncoder, indent=4)
 
-            log.info("The current simulation environment saved.")
+            else:
+                Path(os.path.dirname(json_path)).mkdir(parents=True, exist_ok=True)
+                with open(json_path, "w+") as f:
+                    json.dump(scene_info, f, cls=NumpyEncoder, indent=4)
+
+                log.info("The current simulation environment saved.")
 
         def _open_new_stage(self):
             """
@@ -1459,6 +1469,10 @@ def launch_simulator(*args, **kwargs):
             return self._scene.deserialize(state=state), self._scene.state_size
 
     if not og.sim:
+        from omnigibson.systems.system_base import import_og_systems
+
+        # Import all OG systems from dataset
+        import_og_systems()
         og.sim = Simulator(*args, **kwargs)
 
         print()

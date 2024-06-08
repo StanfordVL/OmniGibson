@@ -1,8 +1,9 @@
 import os
+
+from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.robots.robot_base import REGISTERED_ROBOTS
 from omnigibson.robots.robot_base import m as robot_macros
 from omnigibson.scenes.traversable_scene import TraversableScene
-from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.utils.asset_utils import get_og_scene_path
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.ui_utils import create_module_logger
@@ -138,10 +139,9 @@ class InteractiveTraversableScene(TraversableScene):
                 load_room_instances = [load_room_instances]
             load_room_instances_filtered = []
             for room_instance in load_room_instances:
-                if room_instance in self._seg_map.room_ins_name_to_ins_id:
-                    load_room_instances_filtered.append(room_instance)
-                else:
+                if room_instance not in self._seg_map.room_ins_name_to_ins_id:
                     log.warning("room_instance [{}] does not exist.".format(room_instance))
+                load_room_instances_filtered.append(room_instance)
             self.load_room_instances = load_room_instances_filtered
         elif load_room_types is not None:
             if isinstance(load_room_types, str):

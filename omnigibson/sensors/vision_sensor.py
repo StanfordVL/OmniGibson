@@ -1,7 +1,8 @@
 import math
-import numpy as np
 import time
+
 import gym
+import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -11,8 +12,8 @@ from omnigibson.utils.constants import (
     MAX_CLASS_COUNT,
     MAX_INSTANCE_COUNT,
     MAX_VIEWER_SIZE,
-    semantic_class_name_to_id,
     semantic_class_id_to_name,
+    semantic_class_name_to_id,
 )
 from omnigibson.utils.python_utils import assert_valid_key, classproperty
 from omnigibson.utils.sim_utils import set_carb_setting
@@ -158,7 +159,7 @@ class VisionSensor(BaseSensor):
             self.all_modalities
         ), "VisionSensor._RAW_SENSOR_TYPES must have the same keys as VisionSensor.all_modalities!"
 
-        modalities = set([modalities]) if isinstance(modalities, str) else modalities
+        modalities = set([modalities]) if isinstance(modalities, str) else set(modalities)
 
         # 1) seg_instance and seg_instance_id require seg_semantic to be enabled (for rendering particle systems)
         # 2) bounding box observations require seg_semantic to be enabled (for remapping bounding box semantic IDs)
@@ -587,6 +588,17 @@ class VisionSensor(BaseSensor):
         """
         width, _ = self._viewport.viewport_api.get_texture_resolution()
         self._viewport.viewport_api.set_texture_resolution((width, height))
+
+        # Also update render product and update all annotators
+        old_render_product = self._render_product
+        new_render_product = lazy.omni.replicator.core.create.render_product(self._prim_path, (width, height))
+        for annotator in self._annotators.values():
+            annotator.detach([old_render_product.path])
+            annotator.attach([new_render_product])
+
+        old_render_product.destroy()
+        self._render_product = new_render_product
+
         # Requires 3 updates to propagate changes
         for i in range(3):
             render()
@@ -609,6 +621,17 @@ class VisionSensor(BaseSensor):
         """
         _, height = self._viewport.viewport_api.get_texture_resolution()
         self._viewport.viewport_api.set_texture_resolution((width, height))
+
+        # Also update render product and update all annotators
+        old_render_product = self._render_product
+        new_render_product = lazy.omni.replicator.core.create.render_product(self._prim_path, (width, height))
+        for annotator in self._annotators.values():
+            annotator.detach([old_render_product.path])
+            annotator.attach([new_render_product])
+
+        old_render_product.destroy()
+        self._render_product = new_render_product
+
         # Requires 3 updates to propagate changes
         for i in range(3):
             render()
@@ -756,6 +779,9 @@ class VisionSensor(BaseSensor):
         # Render to update
         render()
 
+        cls.SEMANTIC_REMAPPER = Remapper()
+        cls.INSTANCE_REMAPPER = Remapper()
+        cls.INSTANCE_ID_REMAPPER = Remapper()
         cls.SENSORS = dict()
         cls.KNOWN_SEMANTIC_IDS = set()
         cls.KEY_ARRAY = None

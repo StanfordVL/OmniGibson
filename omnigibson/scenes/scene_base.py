@@ -1,38 +1,36 @@
 import json
 from abc import ABC
 from itertools import combinations
+
 import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, gm
-from omnigibson.prims.xform_prim import XFormPrim
+from omnigibson.objects.dataset_object import DatasetObject
+from omnigibson.objects.light_object import LightObject
+from omnigibson.objects.object_base import BaseObject
 from omnigibson.prims.material_prim import MaterialPrim
+from omnigibson.prims.xform_prim import XFormPrim
+from omnigibson.robots.robot_base import m as robot_macros
+from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.python_utils import (
-    classproperty,
-    Serializable,
-    Registerable,
     Recreatable,
+    Registerable,
+    Serializable,
+    classproperty,
     create_object_from_init_info,
 )
 from omnigibson.utils.registry_utils import SerializableRegistry
 from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.utils.usd_utils import CollisionAPI
-from omnigibson.objects.object_base import BaseObject
-from omnigibson.objects.dataset_object import DatasetObject
-from omnigibson.systems.system_base import SYSTEM_REGISTRY, clear_all_systems, get_system
-from omnigibson.objects.light_object import LightObject
-from omnigibson.robots.robot_base import m as robot_macros
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
-
-# Default texture to use for skybox
-m.DEFAULT_SKYBOX_TEXTURE = f"{gm.ASSET_PATH}/models/background/sky.jpg"
 
 # Global dicts that will contain mappings
 REGISTERED_SCENES = dict()
@@ -207,7 +205,8 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             )
             og.sim.import_object(self._skybox, register=False)
             self._skybox.color = (1.07, 0.85, 0.61)
-            self._skybox.texture_file_path = m.DEFAULT_SKYBOX_TEXTURE
+            # Default texture to use for skybox
+            self._skybox.texture_file_path = f"{gm.ASSET_PATH}/models/background/sky.jpg"
 
     def _load_objects_from_scene_file(self):
         """

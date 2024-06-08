@@ -1,26 +1,29 @@
 from abc import abstractmethod
 from collections import namedtuple
-import numpy as np
+
 import networkx as nx
+import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
-from omnigibson.controllers import InverseKinematicsController, MultiFingerGripperController, OperationalSpaceController
-from omnigibson.macros import gm, create_module_macros
-from omnigibson.object_states import ContactBodies
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import (
-    IsGraspingState,
     ControlType,
-    ManipulationController,
     GripperController,
+    InverseKinematicsController,
+    IsGraspingState,
+    ManipulationController,
+    MultiFingerGripperController,
+    OperationalSpaceController,
 )
+from omnigibson.macros import create_module_macros, gm
+from omnigibson.object_states import ContactBodies
 from omnigibson.robots.robot_base import BaseRobot
-from omnigibson.utils.python_utils import classproperty, assert_valid_key
-from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function
 from omnigibson.utils.constants import JointType, PrimType
-from omnigibson.utils.usd_utils import create_joint
+from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function
+from omnigibson.utils.python_utils import assert_valid_key, classproperty
 from omnigibson.utils.sampling_utils import raytest_batch
+from omnigibson.utils.usd_utils import create_joint
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -31,7 +34,6 @@ m.ASSIST_GRASP_MASS_THRESHOLD = 10.0
 m.ARTICULATED_ASSIST_FRACTION = 0.7
 m.MIN_ASSIST_FORCE = 0
 m.MAX_ASSIST_FORCE = 100
-m.ASSIST_FORCE = m.MIN_ASSIST_FORCE + (m.MAX_ASSIST_FORCE - m.MIN_ASSIST_FORCE) * m.ASSIST_FRACTION
 m.CONSTRAINT_VIOLATION_THRESHOLD = 0.1
 m.RELEASE_WINDOW = 1 / 30.0  # release window in seconds
 
@@ -478,23 +480,23 @@ class ManipulationRobot(BaseRobot):
 
         return controllers
 
-    @property
-    def n_arms(self):
+    @classproperty
+    def n_arms(cls):
         """
         Returns:
             int: Number of arms this robot has. Returns 1 by default
         """
         return 1
 
-    @property
-    def arm_names(self):
+    @classproperty
+    def arm_names(cls):
         """
         Returns:
             list of str: List of arm names for this robot. Should correspond to the keys used to index into
                 arm- and gripper-related dictionaries, e.g.: eef_link_names, finger_link_names, etc.
                 Default is string enumeration based on @self.n_arms.
         """
-        return [str(i) for i in range(self.n_arms)]
+        return [str(i) for i in range(cls.n_arms)]
 
     @property
     def default_arm(self):
@@ -1158,8 +1160,8 @@ class ManipulationRobot(BaseRobot):
         # A link is non-fixed if it has any non-fixed parent joints.
         joint_type = "FixedJoint"
         for edge in nx.edge_dfs(ag_obj.articulation_tree, ag_link.body_name, orientation="reverse"):
-            joint = ag_obj.articulation_tree.edges[edge]["joint"]
-            if joint.joint_type != JointType.JOINT_FIXED:
+            joint = ag_obj.articulation_tree.edges[edge[:2]]
+            if joint["joint_type"] != JointType.JOINT_FIXED:
                 joint_type = "SphericalJoint"
                 break
 
@@ -1228,7 +1230,8 @@ class ManipulationRobot(BaseRobot):
 
         # Modify max force based on user-determined assist parameters
         # TODO
-        max_force = m.ASSIST_FORCE if joint_type == "FixedJoint" else m.ASSIST_FORCE * m.ARTICULATED_ASSIST_FRACTION
+        assist_force = m.MIN_ASSIST_FORCE + (m.MAX_ASSIST_FORCE - m.MIN_ASSIST_FORCE) * m.ASSIST_FRACTION
+        max_force = assist_force if joint_type == "FixedJoint" else assist_force * m.ARTICULATED_ASSIST_FRACTION
         # joint_prim.GetAttribute("physics:breakForce").Set(max_force)
 
         self._ag_obj_constraint_params[arm] = {
@@ -1403,7 +1406,7 @@ class ManipulationRobot(BaseRobot):
 
         # Modify max force based on user-determined assist parameters
         # TODO
-        max_force = m.ASSIST_FORCE
+        max_force = m.MIN_ASSIST_FORCE + (m.MAX_ASSIST_FORCE - m.MIN_ASSIST_FORCE) * m.ASSIST_FRACTION
         # joint_prim.GetAttribute("physics:breakForce").Set(max_force)
 
         self._ag_obj_constraint_params[arm] = {

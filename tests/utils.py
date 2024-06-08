@@ -1,12 +1,11 @@
-import omnigibson as og
-
-from omnigibson.macros import gm
-from omnigibson.object_states import *
-from omnigibson.utils.constants import PrimType, ParticleModifyCondition, ParticleModifyMethod
-from omnigibson.systems import *
-import omnigibson.utils.transform_utils as T
 import numpy as np
 
+import omnigibson as og
+import omnigibson.utils.transform_utils as T
+from omnigibson.macros import gm
+from omnigibson.object_states import *
+from omnigibson.systems import *
+from omnigibson.utils.constants import ParticleModifyCondition, ParticleModifyMethod, PrimType
 
 TEMP_RELATED_ABILITIES = {"cookable": {}, "freezable": {}, "burnable": {}, "heatable": {}}
 
@@ -175,14 +174,14 @@ def assert_test_scene():
             ],
         }
 
-        # Make sure sim is stopped
-        if og.sim is not None:
+        if og.sim is None:
+            # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
+            gm.ENABLE_OBJECT_STATES = True
+            gm.USE_GPU_DYNAMICS = True
+            gm.ENABLE_FLATCACHE = False
+        else:
+            # Make sure sim is stopped
             og.sim.stop()
-
-        # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
-        gm.ENABLE_OBJECT_STATES = True
-        gm.USE_GPU_DYNAMICS = True
-        gm.ENABLE_FLATCACHE = False
 
         # Create the environment
         env = og.Environment(configs=cfg)
