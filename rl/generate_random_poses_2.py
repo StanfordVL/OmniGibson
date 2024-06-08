@@ -39,12 +39,9 @@ def get_random_joint_position(robot):
     return joint_positions, joint_control_idx
 
 
-def main(iterations):
+def main(iterations, file_path):
     MAX_JOINT_RANDOMIZATION_ATTEMPTS = 50
 
-    place_categories = ["coffee_table", "breakfast_table", "countertop"]
-
-    all_categories = ["floors", "walls"] + place_categories
 
     cfg = {
         "env": {
@@ -65,7 +62,6 @@ def main(iterations):
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
-            "load_object_categories": all_categories,
         },
         "robots": [
             {
@@ -128,7 +124,9 @@ def main(iterations):
         ],
     }
 
+    gm.ENABLE_FLATCACHE = True
     gm.USE_GPU_DYNAMICS = False
+    gm.HEADLESS = True
 
     env = og.Environment(configs=cfg)
     # primitive_controller = env.task._primitive_controller
@@ -137,9 +135,28 @@ def main(iterations):
     robot = env.robots[0]
     obj = env.scene.object_registry("name", "cologne")
     place_objects = []
-    for category in place_categories:
-        o = env.scene.object_registry("category", category)
-        place_objects += list(o)
+    objects_name = [
+        ("shelf_njwsoa_1", object_states.Inside),
+        ("shelf_owvfik_0", object_states.Inside),
+        ("sofa_mnfbbh_0", object_states.OnTop),
+        ("ottoman_ycfbsd_0", object_states.OnTop),
+        ("shelf_njwsoa_0", object_states.Inside),
+        ("coffee_table_fqluyq_0", object_states.OnTop),
+        ("straight_chair_eospnr_0", object_states.OnTop),
+        ("countertop_tpuwys_0", object_states.OnTop),
+        ("bed_zrumze_0", object_states.OnTop),
+        ("sink_zexzrc_0", object_states.OnTop),
+        ("oven_wuinhm_0", object_states.OnTop),
+        ("straight_chair_amgwaw_0", object_states.OnTop),
+        ("breakfast_table_skczfi_0", object_states.OnTop),
+        ("bottom_cabinet_jhymlr_0", object_states.OnTop)
+    ]
+    for name, placement in objects_name:
+        o = env.scene.object_registry("name", name)
+        place_objects.append((o, placement))
+    # for category in place_categories:
+    #     o = env.scene.object_registry("category", category)
+    #     place_objects += list(o)
 
     # Randomize the robots joint positions
     joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
@@ -156,7 +173,7 @@ def main(iterations):
 
     progress_bar = tqdm(total=len(place_objects) * iterations, desc="Randomizing poses")
     saved_poses = []
-    for place_obj in place_objects:
+    for place_obj, placement in place_objects:
         progress = 0
         while progress < iterations:
             selected_obj_pose = None
@@ -165,7 +182,7 @@ def main(iterations):
             try:
                 # Randomize object positions
                 selected_obj_pose = primitive_controller._sample_pose_with_object_and_predicate(
-                    object_states.OnTop, obj, place_obj
+                    placement, obj, place_obj
                 )
                 obj.set_position_orientation(*selected_obj_pose)
                 og.sim.step()
@@ -197,25 +214,29 @@ def main(iterations):
                     "base_ori": selected_base_pose[1].tolist(),
                     "obj_pos": selected_obj_pose[0].tolist(),
                     "obj_ori": selected_obj_pose[1].tolist(),
+                    "place_obj_name": place_obj.name,
                 }
                 saved_poses.append(pose)
                 progress += 1
                 progress_bar.update(1)
 
             except Exception as e:
-                print(e)
-                print("--------------------")
+                # print(e)
+                # print(place_obj.name)
+                # print("--------------------")
+                pass
 
-    with open("reset_poses_varied.json", "w") as f:
+    with open(file_path, "w") as f:
         json.dump(saved_poses, f)
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run worker")
     parser.add_argument("iterations")
+    parser.add_argument("file_path")
 
     args = parser.parse_args()
-    main(int(args.iterations))
+    main(int(args.iterations), args.file_path)
 
     # seg semantic - 224 x 224
     # seg instance - 224 x 224

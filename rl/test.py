@@ -39,10 +39,7 @@ def get_random_joint_position(robot):
     return joint_positions, joint_control_idx
 
 
-def main(iterations):
-    place_categories = ["coffee_table", "breakfast_table", "countertop"]
-
-    all_categories = ["floors", "walls"] + place_categories
+def main():
 
     cfg = {
         "env": {
@@ -50,17 +47,24 @@ def main(iterations):
             "physics_frequency": 60,
             "flatten_obs_space": True,
             "flatten_action_space": True,
+            "external_sensors": [
+                {
+                    "sensor_type": "VisionSensor",
+                    "modalities": ["rgb"],
+                    "sensor_kwargs": {"image_width": 224, "image_height": 224},
+                    "local_position": [-0.5, -2.0, 1.0],
+                    "local_orientation": [0.707, 0.0, 0.0, 0.707],
+                }
+            ],
         },
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
-            # "load_object_categories": all_categories,
-            "not_load_object_categories": ["ceilings"],
         },
         "robots": [
             {
                 "type": "Fetch",
-                "obs_modalities": ["proprio", "rgb"],
+                "obs_modalities": ["proprio"],
                 "proprio_obs": ["joint_qpos", "joint_qvel", "eef_0_pos", "eef_0_quat", "grasp_0"],
                 "scale": 1.0,
                 "self_collisions": True,
@@ -123,38 +127,23 @@ def main(iterations):
 
     robot = env.robots[0]
     obj = env.scene.object_registry("name", "cologne")
+    place_obj = env.scene.object_registry("name", "shelf_njwsoa_1")
 
-    joint_control_idx = np.concatenate([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+    primitive_controller = StarterSemanticActionPrimitives(env, enable_head_tracking=False)
+
+    while True:
+        selected_obj_pose = primitive_controller._sample_pose_with_object_and_predicate(
+            object_states.Inside, obj, place_obj
+        )
+        obj.set_position_orientation(*selected_obj_pose)
+        for i in range(3000):
+            og.sim.step()
+
 
     # Open the file and load the data
-    with open("reset_poses_varied_test.json", "r") as file:
-        reset_poses = json.load(file)
-
-    for i in tqdm(range(iterations)):
-
-        reset = random.choice(reset_poses)
-
-        robot_joint_pos = reset["joint_pos"]
-        robot_base_pos = reset["base_pos"]
-        robot_base_ori = reset["base_ori"]
-        obj_pos = reset["obj_pos"]
-        obj_ori = reset["obj_ori"]
-
-        robot.set_joint_positions(robot_joint_pos, joint_control_idx)
-        robot.set_position_orientation(robot_base_pos, robot_base_ori)
-        obj.set_position_orientation(obj_pos, obj_ori)
-        pause_step(1)
-        env.reset()
+    # with open("reset_poses_varied.json", "r") as file:
+    #     reset_poses = json.load(file)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Run worker")
-    parser.add_argument("iterations")
-
-    args = parser.parse_args()
-    main(int(args.iterations))
-
-    # seg semantic - 224 x 224
-    # seg instance - 224 x 224
-    # depth - 224 x 224
-    # rgb - 224 x 224 x 4
+    main()

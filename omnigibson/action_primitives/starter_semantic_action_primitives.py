@@ -1742,7 +1742,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     else [self.env.scene._seg_map.get_room_instance_by_point(pose_on_obj[0][:2])]
                 )
                 if self.env.scene._seg_map.get_room_instance_by_point(pose_2d[:2]) not in obj_rooms:
-                    indented_print("Candidate position is in the wrong room.")
+                    # indented_print("Candidate position is in the wrong room.")
                     continue
 
                 if not self._test_pose(pose_2d, context, pose_on_obj=pose_on_obj, **kwargs):
@@ -1874,7 +1874,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 return False
 
         if set_base_and_detect_collision(context, pose):
-            indented_print("Candidate position failed collision test.")
+            # indented_print("Candidate position failed collision test.")
             return False
         return True
 
