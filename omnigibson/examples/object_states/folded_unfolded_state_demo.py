@@ -112,9 +112,11 @@ def main(random_selection=False, headless=False, short_exec=False):
 
             increments = 25
             for ctrl_pts in np.concatenate([np.linspace(start, mid, increments), np.linspace(mid, end, increments)]):
-                obj.root_link.set_particle_positions(ctrl_pts, idxs=indices)
+                # obj.root_link.set_particle_positions(ctrl_pts, idxs=indices)
                 og.sim.step()
                 print_state()
+
+        breakpoint()
 
         # Fold the t-shirt twice again along the y-axis
         for direction in [-1, 1]:

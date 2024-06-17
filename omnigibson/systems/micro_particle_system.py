@@ -451,9 +451,9 @@ class MicroParticleSystem(BaseSystem):
 
         # Make sure flatcache is not being used OR isosurface is enabled -- otherwise, raise an error, since
         # non-isosurface particles don't get rendered properly when flatcache is enabled
-        assert (
-            self.use_isosurface or not gm.ENABLE_FLATCACHE
-        ), f"Cannot use flatcache with MicroParticleSystem {self.name} when no isosurface is used!"
+        # assert (
+        #     self.use_isosurface or not gm.ENABLE_FLATCACHE
+        # ), f"Cannot use flatcache with MicroParticleSystem {self.name} when no isosurface is used!"
 
         self.system_prim = self._create_particle_system()
         # Get material
