@@ -140,7 +140,7 @@
         "object": "glass_lantern-fndlbf",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "needs glass",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -154,14 +154,14 @@
         "object": "glass_lantern-rqbseh",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "needs glass",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "glass_lantern-wvmsse",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "needs glass",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -336,7 +336,7 @@
         "object": "jar_of_cocoa-sjwgfn",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "nothing inside. looks like generic jar. 3dsmax shows cocoa inside though",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -350,7 +350,7 @@
         "object": "jar_of_coffee-bnrvcs",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "nothing inside. looks like generic jar. 3dsmax shows coffee inside and label",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -378,14 +378,14 @@
         "object": "jar_of_orange_jam-hjrnct",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should be glass",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_strawberry_jam-busiti",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "cannot see strawberry jam or label",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -427,7 +427,7 @@
         "object": "rum_bottle-ueagnt",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "its all grey",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -501,7 +501,7 @@
         "object": "water_glass-elwfms",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "label is glass? can't see it",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -556,7 +556,7 @@
         "object": "rum_bottle-ueagnt",
         "message": "FILLABLE: no proepr opening",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     }
 ]
