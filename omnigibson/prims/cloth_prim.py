@@ -61,7 +61,7 @@ class ClothPrim(GeomPrim):
         self._keypoint_idx = None
         self._keyface_idx = None
 
-        self._fabric_prim = None
+        self._fabric_mesh_prim = None
 
         # Run super init
         super().__init__(
@@ -72,8 +72,8 @@ class ClothPrim(GeomPrim):
 
     def _post_load(self):
 
-        self._fabric_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path=self.prim_path, fabric=True)
-        self._fabric_prim = lazy.usdrt.UsdGeom.Mesh(self._fabric_prim)
+        fabric_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path=self.prim_path, fabric=True)
+        self._fabric_mesh_prim = lazy.usdrt.UsdGeom.Mesh(fabric_prim)
 
         # run super first
         super()._post_load()
@@ -136,7 +136,7 @@ class ClothPrim(GeomPrim):
         self._prim.GetAttribute("primvars:isVolume").Set(False)
 
         # Store the default position of the points in the local frame
-        self._default_positions = np.array(self._fabric_prim.GetPointsAttr().Get())
+        self._default_positions = np.array(self._fabric_mesh_prim.GetPointsAttr().Get())
 
     @property
     def visual_aabb(self):
@@ -187,7 +187,7 @@ class ClothPrim(GeomPrim):
 
         # Don't copy to save compute, since we won't be returning a reference to the underlying object anyways
         # p_local = np.array(self.get_attribute(attr="points"), copy=False)
-        p_local = np.array(self._fabric_prim.GetPointsAttr().Get(), copy=False)
+        p_local = np.array(self._fabric_mesh_prim.GetPointsAttr().Get(), copy=False)
         # og.sim._physx_fabric_interface.update(og.sim.get_physics_dt(), og.sim.current_time)
         p_local = p_local[idxs] if idxs is not None else p_local
         p_world = (r @ (p_local * s).T).T + t
@@ -216,11 +216,11 @@ class ClothPrim(GeomPrim):
         # Fill the idxs if requested
         if idxs is not None:
             # p_local_old = np.array(self.get_attribute(attr="points"))
-            p_local_old = np.array(self._fabric_prim.GetPointsAttr().Get())
+            p_local_old = np.array(self._fabric_mesh_prim.GetPointsAttr().Get())
             p_local_old[idxs] = p_local
             p_local = p_local_old
 
-        self._fabric_prim.GetPointsAttr().Set(lazy.usdrt.Vt.Vec3fArray(p_local))
+        self._fabric_mesh_prim.GetPointsAttr().Set(lazy.usdrt.Vt.Vec3fArray(p_local))
         # og.sim._physx_fabric_interface.update(og.sim.get_physics_dt(), og.sim.current_time)
         # self.set_attribute(attr="points", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(p_local))
 
@@ -625,6 +625,6 @@ class ClothPrim(GeomPrim):
         Reset the points to their default positions in the local frame, and also zeroes out velocities
         """
         if self.initialized:
-            self._fabric_prim.GetPointsAttr().Set(lazy.usdrt.Vt.Vec3fArray(self._default_positions))
+            self._fabric_mesh_prim.GetPointsAttr().Set(lazy.usdrt.Vt.Vec3fArray(self._default_positions))
             # self.set_attribute(attr="points", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(self._default_positions))
             self.particle_velocities = np.zeros((self._n_particles, 3))
