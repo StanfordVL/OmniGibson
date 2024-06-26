@@ -15,6 +15,7 @@ sys.path.append(parent_directory)
 
 import torch as th
 import torch.nn as nn
+import wandb
 from stable_baselines3 import A2C, PPO, SAC
 from stable_baselines3.common.callbacks import (
     BaseCallback,
@@ -26,10 +27,8 @@ from stable_baselines3.common.callbacks import (
 from stable_baselines3.common.evaluation import evaluate_policy
 from stable_baselines3.common.utils import set_random_seed
 from stable_baselines3.common.vec_env import VecFrameStack, VecMonitor, VecVideoRecorder
-from wandb.integration.sb3 import WandbCallback
-
-import wandb
 from wandb import AlertLevel
+from wandb.integration.sb3 import WandbCallback
 
 # Parse args
 # parser = argparse.ArgumentParser(description="Train or evaluate a PPO agent in BEHAVIOR")
@@ -138,7 +137,7 @@ def train():
 
     # Decide whether to use a local environment or remote
     # n_envs = args.n_envs
-    n_envs = 20
+    n_envs = 64
     env_config = _get_env_config()
     env_config["task"]["precached_reset_pose_path"] = reset_poses_path
     del env_config["env"]["external_sensors"]
@@ -204,7 +203,7 @@ def train():
         log.info("Finished evaluation!")
         log.info(f"Mean reward: {mean_reward} +/- {std_reward:.2f}")
     else:
-        algo_config = {
+        ppo_config = {
             "policy": "MultiInputPolicy",
             "n_steps": STEPS_PER_EPISODE,
             "batch_size": STEPS_PER_EPISODE,
@@ -264,7 +263,7 @@ def train():
                 verbose=1,
                 tensorboard_log=tensorboard_log_dir,
                 device="cuda",
-                **algo_config,
+                **ppo_config,
             )
             # model = A2C(
             #     env=env,
@@ -314,7 +313,7 @@ def train():
         log.info(f"model: {model}")
         log.info("Starting training...")
         wandb.alert(title="Run launched", text=f"Run ID: {wandb.run.id}", level=AlertLevel.INFO)
-        model.learn(total_timesteps=10_000_000, callback=callback, log_interval=4)
+        model.learn(total_timesteps=30_000_000, callback=callback, log_interval=4)
         log.info("Finished training!")
 
 

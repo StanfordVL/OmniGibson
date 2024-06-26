@@ -60,7 +60,7 @@ robots:
       arm_0:
         name: JointController
         motor_type: position
-        use_delta_commands: true
+        use_delta_commands: false
         command_input_limits: default
         command_output_limits: null
         use_impedances: false
@@ -79,9 +79,9 @@ task:
   termination_config:
     max_steps: 200
   reward_config:
-    dist_coeff: 1.0
+    dist_coeff: 2.0
     dist_slope_coeff: 10.0
-    grasp_reward: 1.0
+    grasp_reward: 5.0
     collision_penalty: 1.0
     eef_position_penalty_coef: 1.0
     eef_orientation_penalty_coef: 0.1
