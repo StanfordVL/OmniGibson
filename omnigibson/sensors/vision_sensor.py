@@ -44,7 +44,7 @@ class VisionSensor(BaseSensor):
         - Camera state
 
     Args:
-        relative_prim_path (str): prim path of the Prim to encapsulate or create.
+        relative_prim_path (str): Scene-local prim path of the Sensor to encapsulate or create.
         name (str): Name for the object. Names need to be unique per scene.
         modalities (str or list of str): Modality(s) supported by this sensor. Default is "all", which corresponds
             to all modalities being used. Otherwise, valid options should be part of cls.all_modalities.
@@ -389,7 +389,7 @@ class VisionSensor(BaseSensor):
                     # Remap instance segmentation labels to object name
                     if not id:
                         # value is the prim path of the object
-                        if value == "/World/ground_plane":
+                        if value == og.sim.floor_plane.prim_path:
                             value = "groundPlane"
                         else:
                             obj = self.scene.object_registry("prim_path", value)
@@ -596,14 +596,16 @@ class VisionSensor(BaseSensor):
         self._viewport.viewport_api.set_texture_resolution((width, height))
 
         # Also update render product and update all annotators
-        old_render_product = self._render_product
-        new_render_product = lazy.omni.replicator.core.create.render_product(self.prim_path, (width, height))
         for annotator in self._annotators.values():
-            annotator.detach([old_render_product.path])
-            annotator.attach([new_render_product])
+            annotator.detach([self._render_product.path])
 
-        old_render_product.destroy()
-        self._render_product = new_render_product
+        self._render_product.destroy()
+        self._render_product = lazy.omni.replicator.core.create.render_product(
+            self.prim_path, (width, height), force_new=True
+        )
+
+        for annotator in self._annotators.values():
+            annotator.attach([self._render_product])
 
         # Requires 3 updates to propagate changes
         for i in range(3):
@@ -629,14 +631,16 @@ class VisionSensor(BaseSensor):
         self._viewport.viewport_api.set_texture_resolution((width, height))
 
         # Also update render product and update all annotators
-        old_render_product = self._render_product
-        new_render_product = lazy.omni.replicator.core.create.render_product(self.prim_path, (width, height))
         for annotator in self._annotators.values():
-            annotator.detach([old_render_product.path])
-            annotator.attach([new_render_product])
+            annotator.detach([self._render_product.path])
 
-        old_render_product.destroy()
-        self._render_product = new_render_product
+        self._render_product.destroy()
+        self._render_product = lazy.omni.replicator.core.create.render_product(
+            self.prim_path, (width, height), force_new=True
+        )
+
+        for annotator in self._annotators.values():
+            annotator.attach([self._render_product])
 
         # Requires 3 updates to propagate changes
         for i in range(3):
