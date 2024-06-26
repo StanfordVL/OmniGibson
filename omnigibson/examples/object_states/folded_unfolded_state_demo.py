@@ -116,8 +116,6 @@ def main(random_selection=False, headless=False, short_exec=False):
                 og.sim.step()
                 print_state()
 
-        breakpoint()
-
         # Fold the t-shirt twice again along the y-axis
         for direction in [-1, 1]:
             obj = shirt
