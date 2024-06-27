@@ -9,13 +9,13 @@
         "object": "walls-lsfzjg",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "doorways not represented well",
-        "processed": false
+        "processed": true
     },
     {
         "object": "walls-lsfzjg",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "is the pivot upside down?",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {

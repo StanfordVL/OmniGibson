@@ -3,14 +3,14 @@
         "object": "bottle_of_cooking_oil-ywrkyg",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bottle_of_olive_oil-wztvie",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should be transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -55,7 +55,7 @@
         "object": "cloche-gkimtn",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should be transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -151,63 +151,63 @@
         "object": "jar_of_chilli_powder-mxhrcl",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "all black",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_clove-dlvall",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no texture",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_cumin-bpxhso",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_cumin-vyfehw",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_kidney_beans-kfzxah",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent (cannot see content inside)",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_peppercorns-gkakwk",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent (cannot see content inside)",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_pepper_seasoning-iuydyz",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "needs glass",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_sesame_seed-acsllv",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no texture. should be transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "jar_of_tumeric-miivhi",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -227,14 +227,14 @@
         "object": "metal_bottom_cabinet-bbjuqu",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_door, PrismaticJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "bad articulation, should be rotational joints",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "metal_bottom_cabinet-jqyhjy",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "door is floating",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -259,13 +259,13 @@
         "object": "metal_bottom_cabinet-yfycfx",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
-        "processed": false
+        "processed": true
     },
     {
         "object": "metal_bottom_cabinet-yfycfx",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "door is floating",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -285,7 +285,7 @@
         "object": "plate-aynjhg",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": ".",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
