@@ -141,6 +141,11 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             scale is None or isinstance(scale, int) or isinstance(scale, float) or np.all(scale == scale[0])
         ), f"Robot scale must be uniform! Got: {scale}"
 
+        # If specified, make sure scale is set to 1 as we currently do not support non-1 scaling for robots
+        assert (
+            scale is None or scale == 1 or np.all(scale == 1)
+        ), f"Non-1 scaling for robots is not supported! Got: {scale}"
+
         # Run super init
         super().__init__(
             relative_prim_path=relative_prim_path,
