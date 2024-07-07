@@ -10,14 +10,14 @@
         "object": "cubicle-deceti",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "window part is not glass",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "cubicle-hzalfx",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "window part is not glass. artifacts on outer walls",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -90,7 +90,7 @@
         "object": "table_lamp-gycqmt",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -111,7 +111,7 @@
         "object": "floors-xmgdee",
         "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -251,7 +251,7 @@
         "object": "floors-xmgdee",
         "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -426,7 +426,7 @@
         "object": "table_lamp-gycqmt",
         "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     }
 ]
