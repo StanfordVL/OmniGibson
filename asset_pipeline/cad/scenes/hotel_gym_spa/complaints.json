@@ -3,7 +3,7 @@
         "object": "conditioner_dispenser-elofnb",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "bad object, missing bottom, also not stable",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -16,14 +16,14 @@
         "object": "conditioner_dispenser-udeflt",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "missing bottom",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "conditioner_dispenser-uncljo",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "missing bottom",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -229,14 +229,14 @@
         "object": "shower_stall-vcwkma",
         "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
         "complaint": "door is away from the frame. ",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "shower_stall-vcwkma",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "door is away from the frame.",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -290,7 +290,7 @@
         "object": "tree-fggodd",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {

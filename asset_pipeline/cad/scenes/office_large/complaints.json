@@ -9,7 +9,7 @@
         "object": "desk-pniubv",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "unstable object, missing one leg?",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -61,7 +61,7 @@
         "object": "floor_lamp-lnacuc",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "it will always tip over",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -82,7 +82,7 @@
         "object": "sink-yyntym",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: none of the chioces capture sink",
-        "processed": false
+        "processed": true
     },
     {
         "object": "sink-yyntym",
@@ -95,7 +95,7 @@
         "object": "sink-yyntym",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should all sinks be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -410,7 +410,7 @@
         "object": "floors-xdcthi",
         "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -431,7 +431,7 @@
         "object": "floors-zfuwfk",
         "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -466,7 +466,7 @@
         "object": "floor_lamp-lnacuc",
         "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     }
 ]
