@@ -37,7 +37,7 @@
         "object": "sink-kyxynl",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should have togglebutton for soap dispenser?",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -56,7 +56,7 @@
         "object": "walls-mdbihb",
         "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     }
 ]

@@ -23,63 +23,63 @@
         "object": "graduated_cylinder-egpkea",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "lab_table-ishrsy",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_door1, RevoluteJoint\n- j_door10, RevoluteJoint\n- j_door11, RevoluteJoint\n- j_door12, RevoluteJoint\n- j_door13, RevoluteJoint\n- j_door14, RevoluteJoint\n- j_door2, RevoluteJoint\n- j_door3, RevoluteJoint\n- j_door4, RevoluteJoint\n- j_door5, RevoluteJoint\n- j_door6, RevoluteJoint\n- j_door7, RevoluteJoint\n- j_door8, RevoluteJoint\n- j_door9, RevoluteJoint\n- j_drw1, RevoluteJoint\n- j_drw10, RevoluteJoint\n- j_drw11, RevoluteJoint\n- j_drw12, RevoluteJoint\n- j_drw13, RevoluteJoint\n- j_drw14, RevoluteJoint\n- j_drw2, RevoluteJoint\n- j_drw3, RevoluteJoint\n- j_drw4, RevoluteJoint\n- j_drw5, RevoluteJoint\n- j_drw6, RevoluteJoint\n- j_drw7, RevoluteJoint\n- j_drw8, RevoluteJoint\n- j_drw9, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "the drawer revolute joints should be prismatic",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "lab_table-jkemfk",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_door1, RevoluteJoint\n- j_door2, RevoluteJoint\n- j_door3, RevoluteJoint\n- j_door4, RevoluteJoint\n- j_door5, RevoluteJoint\n- j_drw1, RevoluteJoint\n- j_drw2, RevoluteJoint\n- j_drw3, RevoluteJoint\n- j_drw4, RevoluteJoint\n- j_drw5, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "the drawer revolute joints should be prismatic",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "magnetic_stirrer-xtamki",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "maybe the power cable should be removed? (assume it's wirelessly plugged in?)",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "reagent_bottle-tnjpsf",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "cannot see label",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "reagent_bottle-trtrsl",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "cannot see label",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "reagent_bottle-ukayce",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "cannot see label",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "reagent_bottle-xstykf",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "cannot see label",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "round_bottom_flask-fjytro",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent (texture also doesn't match 3dsmax)",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
