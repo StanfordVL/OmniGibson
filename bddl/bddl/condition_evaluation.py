@@ -520,6 +520,15 @@ def get_ground_state_options(compiled_state, backend, scope=None, object_map=Non
     return consistent_unpacked_options
 
 
+def compiled_to_parsed(compiled_condition, parsed_so_far=None):
+    parsed_so_far = parsed_so_far if parsed_so_far is not None else []
+    reverse_map = { v: k for k, v in TOKEN_MAPPING.items()}
+    reverse_map[HEAD] = "and"
+    parsed_expr = [reverse_map[type(compiled_condition)]]
+    for term in parsed_expr.body: 
+        
+
+
 #################### UTIL ######################
 
 
