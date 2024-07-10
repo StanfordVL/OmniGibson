@@ -71,7 +71,7 @@ FINAL_SCENES = [
 ]
 
 APPROVED_OBJS = {
-    "custom-aa",
+    ".*",
 }
 
 REJECTED_OBJS = set()
