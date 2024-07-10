@@ -3,63 +3,63 @@
         "object": "bush-jivsft",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bush-jonbyb",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bush-jylruu",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bush-llcsvc",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bush-nhorlu",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bush-rkxgdi",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bush-ujrbvp",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bush-waafqw",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
         "object": "bush-zwhhlc",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -98,7 +98,7 @@
         "object": "gate-rhnrfc",
         "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "there should be a joint to make this openable",
-        "processed": false,
+        "processed": true,
         "new": true
     },
     {
@@ -207,7 +207,7 @@
         "object": "floor_lamp-chjeoy",
         "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
         "complaint": "See message",
-        "processed": false,
+        "processed": true,
         "new": true
     }
 ]
