@@ -9,6 +9,7 @@ import tqdm
 import matplotlib.pyplot as plt
 import pybullet as p
 import json
+from fs.osfs import OSFS
 from fs.zipfs import ZipFS
 from fs.tempfs import TempFS
 import trimesh
@@ -164,14 +165,15 @@ def select_mesh(target_output_fs, mesh_name):
 
 def main():
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
-        all_targets = sorted(b1k_pipeline.utils.get_targets('combined'))
+        all_targets = ["/scr/ig_pipeline/obj_out"]
 
         # Get a list of all the objects that have already been processed
         print("Getting list of processed objects...")
         selections = set()
         for target in tqdm.tqdm(all_targets):
-            with pipeline_fs.target_output(target) as target_output_fs:
+            with OSFS(target) as target_output_fs:
                 if not target_output_fs.exists("collision_selection.json"):
+                    print("No selection found for", target)
                     continue
 
                 with target_output_fs.open("collision_selection.json", "r") as f:
@@ -183,20 +185,15 @@ def main():
         candidates = []
         total_in_batch = 0
         for target in tqdm.tqdm(all_targets):
-            with pipeline_fs.target_output(target) as target_output_fs:
-                if not target_output_fs.exists("collision_meshes.zip") or not target_output_fs.exists("object_list.json"):
+            with OSFS(target) as target_output_fs:
+                if not target_output_fs.exists("collision_meshes.zip"):
                     continue
-
-                with target_output_fs.open("object_list.json", "r") as f:
-                    object_list = json.load(f)
-
-                mesh_list = object_list["meshes"]
 
                 with target_output_fs.open("collision_meshes.zip", "rb") as zip_file, \
                      ZipFS(zip_file) as zip_fs, \
                      target_output_fs.open("meshes.zip", "rb") as meshes_zip_file, \
                      ZipFS(meshes_zip_file) as meshes_zip_fs:
-                    for mesh_name in mesh_list:
+                    for mesh_name in meshes_zip_fs.listdir("/"):
                         parsed_name = b1k_pipeline.utils.parse_name(mesh_name)
                         if not parsed_name:
                             print("Bad name", parsed_name)
@@ -234,10 +231,10 @@ def main():
 
         # Start iterating.
         p.connect(p.GUI)
-        for i, (mesh_name, target) in enumerate(candidates):
+        for i, (mesh_name, target) in enumerate(reversed(candidates)):
             print("\n--------------------------------------------------------------------------")
             print(f"{i + 1} / {len(candidates)}: {mesh_name} (from {target})\n")
-            with pipeline_fs.target_output(target) as target_output_fs:
+            with OSFS(target) as target_output_fs:
                 # Load the meshes and do the selection.
                 result, complaint = select_mesh(target_output_fs, mesh_name)
                 if result is None:
