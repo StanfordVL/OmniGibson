@@ -45,9 +45,10 @@ def load_mesh(mesh_fs, option_name, mesh_fns, output_fs, offset):
 
 def select_mesh(target_output_fs, mesh_name, out_fs):
     with target_output_fs.open("meshes.zip", "rb") as zip_file, ZipFS(zip_file) as zip_fs, zip_fs.opendir(mesh_name) as mesh_fs, out_fs.makedir(mesh_name) as mesh_out_fs:
+        fs.copy.copy_fs(mesh_fs, mesh_out_fs)
         fs.copy.copy_file(mesh_fs, f"{mesh_name}.obj", mesh_out_fs, "visual.obj")
-        fs.copy.copy_file(mesh_fs, f"{mesh_name}.mtl", mesh_out_fs, f"{mesh_name}.mtl")
-        fs.copy.copy_dir(mesh_fs, "material", mesh_out_fs, "material")
+        # fs.copy.copy_file(mesh_fs, f"{mesh_name}.mtl", mesh_out_fs, f"{mesh_name}.mtl")
+        # fs.copy.copy_dir(mesh_fs, "material", mesh_out_fs, "material")
 
         offset = b1k_pipeline.utils.load_mesh(mesh_fs, f"{mesh_name}.obj", force="mesh", skip_materials=True).centroid
 
@@ -63,28 +64,22 @@ def select_mesh(target_output_fs, mesh_name, out_fs):
 
 # Start iterating.
 def process_target(target, target_meshes):
-    with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
-        with pipeline_fs.target_output(target) as target_output_fs, OSFS("/scr/cmesh_dataset") as out_fs:
-            # Load the meshes and do the selection.
-            for mesh_name in target_meshes:
-                select_mesh(target_output_fs, mesh_name, out_fs)
+    with OSFS(target) as target_output_fs, OSFS("/scr/cmesh_test_dataset") as out_fs:
+        # Load the meshes and do the selection.
+        for mesh_name in target_meshes:
+            select_mesh(target_output_fs, mesh_name, out_fs)
 
 def preprocess_target(target):
     candidates = []
-    with b1k_pipeline.utils.PipelineFS() as pipeline_fs, pipeline_fs.target_output(target) as target_output_fs:
-        if not target_output_fs.exists("collision_meshes.zip") or not target_output_fs.exists("object_list.json"):
+    with OSFS(target) as target_output_fs:
+        if not target_output_fs.exists("collision_meshes.zip"):
             return
-
-        with target_output_fs.open("object_list.json", "r") as f:
-            object_list = json.load(f)
-
-        mesh_list = object_list["meshes"]
 
         with target_output_fs.open("collision_meshes.zip", "rb") as zip_file, \
                 ZipFS(zip_file) as zip_fs, \
                 target_output_fs.open("meshes.zip", "rb") as meshes_zip_file, \
                 ZipFS(meshes_zip_file) as meshes_zip_fs:
-            for mesh_name in mesh_list:
+            for mesh_name in meshes_zip_fs.listdir("/"):
                 parsed_name = b1k_pipeline.utils.parse_name(mesh_name)
                 if not parsed_name:
                     print("Bad name", parsed_name)
@@ -113,7 +108,7 @@ def preprocess_target(target):
     return candidates
 
 def main():
-    all_targets = sorted(b1k_pipeline.utils.get_targets('combined'))
+    all_targets = ["/scr/ig_pipeline/obj_out"]
 
     # Now get a list of all the objects that we can process.
     print("Getting list of objects to process...")
