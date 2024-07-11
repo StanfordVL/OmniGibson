@@ -19,6 +19,7 @@ def main(use_future=False):
     providers = defaultdict(list)
     meta_links = defaultdict(set)
     needed_by = defaultdict(list)
+    seen_as = defaultdict(set)
     skipped_files = []
     
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
@@ -55,6 +56,9 @@ def main(use_future=False):
                     if parsed_name is None:
                         continue
 
+                    # Record the seen-as categories
+                    seen_as[parsed_name.group("model_id")].add(parsed_name.group("category"))
+
                     # Get the tags that are on the parent
                     tags_str = parsed_name.group("tag")
                     tags = set()
@@ -88,12 +92,14 @@ def main(use_future=False):
         missing_objects = {x.split("-")[1] for x in needed} - {x.split("-")[1] for x in provided_objects}
         missing_objects &= {obj.split("-")[1] for obj, needers in needed_by.items() if any(t in params["final_scenes"] for t in needers)} # Limit this to stuff that shows up in final scenes
 
+        seen_as_multiple_categories = {obj_id: sorted(categories) for obj_id, categories in seen_as.items() if len(categories) > 1}
+
         id_occurrences = defaultdict(list)
         for obj_name, provider in single_provider.items():
             id_occurrences[obj_name.split("-")[1]].append(provider)
         id_collisions = {obj_id: obj_names for obj_id, obj_names in id_occurrences.items() if len(obj_names) > 1}
 
-        success = len(skipped_files) == 0 and len(multiple_provided) == 0 and len(missing_objects) == 0 and len(id_collisions) == 0
+        success = len(skipped_files) == 0 and len(multiple_provided) == 0 and len(missing_objects) == 0 and len(id_collisions) == 0 and len(seen_as_multiple_categories) == 0
         results = {
             "success": success,
             "providers": single_provider,
@@ -103,6 +109,7 @@ def main(use_future=False):
             "error_multiple_provided": multiple_provided,
             "error_missing_objects": sorted(missing_objects),
             "error_id_collisions": id_collisions,
+            "error_seen_as_multiple_categories": seen_as_multiple_categories,
         }
         with pipeline_fs.pipeline_output() as pipeline_output_fs:
             json_path = "object_inventory_future.json" if use_future else "object_inventory.json"

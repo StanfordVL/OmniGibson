@@ -101,15 +101,16 @@ def processFile(pipeline_fs, target, renames, deletions, avg_dims):
         # Check if it's on the deletion queue
         model_id = match.group("model_id")
         assert len(model_id) == 6, f"Object ID {model_id} is not 6 digits long."
-        if match.group("model_id") in deletions:
-            rt.delete(obj)
-            continue
+        # if match.group("model_id") in deletions:
+        #     rt.delete(obj)
+        #     continue
 
         # Otherwise check if it's in the rename list
         category = match.group("category")
         rename_key = f"{category}-{model_id}"
-        if rename_key in renames:
-            new_name = renames[rename_key]
+        if model_id in renames:
+            old_name, new_name = renames[model_id]
+            # assert rename_key == old_name, f"Rename key {rename_key} does not match old name {old_name}."
             obj.name = obj.name.replace(rename_key, new_name)
 
     # Run a final sanity check
@@ -138,22 +139,23 @@ def rename_and_rescale_all_files():
             new_cat = row["New Category"]
             in_name = f"{old_cat}-{obj_id}"
             out_name = f"{new_cat}-{obj_id}"
-            renames[in_name] = out_name
+            renames[obj_id] = (in_name, out_name)
 
     # Load files for deletion
     with pipeline_fs.open("metadata/deletion_queue.csv", "r") as f:
         reader = csv.DictReader(f)
         deletions = set()
-        for row in reader:
-            obj_name = row["Object"]
-            obj_id = obj_name.split("-")[1]
-            assert len(obj_id) == 6, f"Deletion object ID {obj_id} is not 6 digits long."
-            deletions.add(obj_id)
+        # for row in reader:
+        #     obj_name = row["Object"]
+        #     obj_id = obj_name.split("-")[1]
+        #     assert len(obj_id) == 6, f"Deletion object ID {obj_id} is not 6 digits long."
+        #     deletions.add(obj_id)
 
     # Load the scale needed for each category
-    with open(r"C:\Users\Cem\research\iGibson-dev\igibson\data\ig_dataset\metadata\avg_category_specs.json", "r") as f:
-        avg_specs = json.load(f)
-    avg_dims = {cat: np.array(spec["size"]) * 1000 for cat, spec in avg_specs.items()}
+    # with open(r"C:\Users\Cem\research\iGibson-dev\igibson\data\ig_dataset\metadata\avg_category_specs.json", "r") as f:
+    #     avg_specs = json.load(f)
+    # avg_dims = {cat: np.array(spec["size"]) * 1000 for cat, spec in avg_specs.items()}
+    avg_dims = {}
 
     # Find the targets that contain these objects
     selected_targets = []
@@ -169,10 +171,11 @@ def rename_and_rescale_all_files():
         mesh_list = rt.getMAXFileObjectNames(pipeline_fs.target(target).getsyspath("processed.max"), quiet=True)
         match_list = [b1k_pipeline.utils.parse_name(mesh) for mesh in mesh_list]
         object_list = {match.group("category") + "-" + match.group("model_id") for match in match_list if match}
+        ids = {x.split("-")[1] for x in object_list}
 
         # See if the target needs any of the operations
-        has_rename = object_list & set(renames.keys())
-        has_deletion = {x.split("-")[1] for x in object_list} & deletions
+        has_rename = ids & set(renames.keys())
+        has_deletion = ids & deletions
         has_scale = False # "objects/legacy_" in target
         if has_rename or has_deletion or has_scale:
             selected_targets.append(target)
