@@ -3,6 +3,7 @@ A set of helper utility functions for dealing with 3D geometry
 """
 
 import numpy as np
+
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.usd_utils import mesh_prim_mesh_to_trimesh_mesh
 
@@ -411,7 +412,7 @@ def generate_points_in_volume_checker_function(obj, volume_link, use_visual_mesh
             mesh.visible = True
 
         # Determine equally-spaced sampling distance to achieve this minimum particle count
-        aabb_volume = np.product(volume_link.visual_aabb_extent)
+        aabb_volume = np.prod(volume_link.visual_aabb_extent)
         sampling_distance = np.cbrt(aabb_volume / min_n_particles)
         low, high = volume_link.visual_aabb
         n_particles_per_axis = ((high - low) / sampling_distance).astype(int) + 1

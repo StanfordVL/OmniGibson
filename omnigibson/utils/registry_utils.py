@@ -2,11 +2,13 @@
 A set of utility functions for registering and tracking objects
 """
 
-from inspect import isclass
-import numpy as np
 from collections.abc import Iterable
+from inspect import isclass
+
+import numpy as np
+
 from omnigibson.macros import create_module_macros
-from omnigibson.utils.python_utils import Serializable, SerializableNonInstance, UniquelyNamed
+from omnigibson.utils.python_utils import Serializable, SerializableNonInstance
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -19,7 +21,7 @@ m = create_module_macros(module_path=__file__)
 m.DOES_NOT_EXIST = "DOES_NOT_EXIST"
 
 
-class Registry(UniquelyNamed):
+class Registry:
     """
     Simple class for easily registering and tracking arbitrary objects of the same (or very similar) class types.
 
@@ -53,7 +55,7 @@ class Registry(UniquelyNamed):
         default_key="name",
         unique_keys=None,
         group_keys=None,
-        default_value=m.DOES_NOT_EXIST,
+        default_value=None,
     ):
         """
         Args:
@@ -129,6 +131,12 @@ class Registry(UniquelyNamed):
                 None is default, which corresponds to all keys
         """
         keys = self.all_keys if keys is None else keys
+        # If this is a system object, we don't need to store its prim_path
+        from omnigibson.systems.system_base import BaseSystem
+
+        if isinstance(obj, BaseSystem):
+            # At this point, the system is not yet loaded, which means it does not have its global prim path yet
+            keys = [k for k in keys if k != "prim_path"]
         for k in keys:
             obj_attr = self._get_obj_attr(obj=obj, attr=k)
             # Standardize input as a list
@@ -257,7 +265,7 @@ class Registry(UniquelyNamed):
             val = getattr(obj, attr)
 
         except:
-            val = self.default_value
+            val = self.default_value if self.default_value is not None else m.DOES_NOT_EXIST
 
         return val
 
@@ -270,6 +278,16 @@ class Registry(UniquelyNamed):
             list of any: Instances owned by this registry
         """
         return list(self.get_dict(self.default_key).values())
+
+    @property
+    def object_names(self):
+        """
+        Get the names of the objects in this registry
+
+        Returns:
+            set of str: Names of the instances owned by this registry
+        """
+        return {obj.name for obj in self.objects}
 
     @property
     def all_keys(self):
@@ -320,10 +338,6 @@ class SerializableRegistry(Registry, Serializable):
         # Run super like normal
         super().add(obj=obj)
 
-    @property
-    def state_size(self):
-        return sum(obj.state_size for obj in self.objects)
-
     def _dump_state(self):
         # Iterate over all objects and grab their states
         state = dict()
@@ -342,7 +356,7 @@ class SerializableRegistry(Registry, Serializable):
                 continue
             obj.load_state(state[obj.name], serialized=False)
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Iterate over the entire dict and flatten
         return (
             np.concatenate([obj.serialize(state[obj.name]) for obj in self.objects])
@@ -350,17 +364,15 @@ class SerializableRegistry(Registry, Serializable):
             else np.array([])
         )
 
-    def _deserialize(self, state):
+    def deserialize(self, state):
         state_dict = dict()
         # Iterate over all the objects and deserialize their individual states, incrementing the index counter
         # along the way
         idx = 0
         for obj in self.objects:
-            log.debug(
-                f"obj: {obj.name}, state size: {obj.state_size}, idx: {idx}, passing in state length: {len(state[idx:])}"
-            )
+            log.debug(f"obj: {obj.name}, idx: {idx}, passing in state length: {len(state[idx:])}")
             # We pass in the entire remaining state vector, assuming the object only parses the relevant states
             # at the beginning
-            state_dict[obj.name] = obj.deserialize(state[idx:])
-            idx += obj.state_size
+            state_dict[obj.name], deserialized_items = obj.deserialize(state[idx:])
+            idx += deserialized_items
         return state_dict, idx

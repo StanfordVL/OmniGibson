@@ -1,21 +1,15 @@
 import math
 import os
+
 import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
-from omnigibson.macros import gm
-from omnigibson.objects.usd_object import USDObject
-from omnigibson.utils.constants import (
-    AVERAGE_CATEGORY_SPECS,
-    DEFAULT_JOINT_FRICTION,
-    SPECIAL_JOINT_FRICTIONS,
-    JointType,
-)
 import omnigibson.utils.transform_utils as T
-from omnigibson.utils.asset_utils import get_all_object_category_models
-from omnigibson.utils.constants import PrimType
-from omnigibson.macros import gm, create_module_macros
+from omnigibson.macros import create_module_macros, gm
+from omnigibson.objects.usd_object import USDObject
+from omnigibson.utils.asset_utils import get_all_object_category_models, get_og_avg_category_specs
+from omnigibson.utils.constants import DEFAULT_JOINT_FRICTION, SPECIAL_JOINT_FRICTIONS, JointType, PrimType
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -39,7 +33,7 @@ class DatasetObject(USDObject):
     def __init__(
         self,
         name,
-        prim_path=None,
+        relative_prim_path=None,
         category="object",
         model=None,
         uuid=None,
@@ -60,8 +54,7 @@ class DatasetObject(USDObject):
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
-            prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
-                created at /World/<name>
+            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
             category (str): Category for the object. Defaults to "object".
             model (None or str): If specified, this is used in conjunction with
                 @category to infer the usd filepath to load for this object, which evaluates to the following:
@@ -108,6 +101,8 @@ class DatasetObject(USDObject):
         # Add info to load config
         load_config = dict() if load_config is None else load_config
         load_config["bounding_box"] = bounding_box
+        # All DatasetObjects should have xform properties pre-loaded
+        load_config["xform_props_pre_loaded"] = True
 
         # Infer the correct usd path to use
         if model is None:
@@ -130,7 +125,7 @@ class DatasetObject(USDObject):
 
         # Run super init
         super().__init__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             usd_path=usd_path,
             encrypted=True,
             name=name,
@@ -467,12 +462,13 @@ class DatasetObject(USDObject):
         Returns:
             None or dict: Average object information based on its category
         """
-        return AVERAGE_CATEGORY_SPECS.get(self.category, None)
+        avg_specs = get_og_avg_category_specs()
+        return avg_specs.get(self.category, None)
 
-    def _create_prim_with_same_kwargs(self, prim_path, name, load_config):
+    def _create_prim_with_same_kwargs(self, relative_prim_path, name, load_config):
         # Add additional kwargs (bounding_box is already captured in load_config)
         return self.__class__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             name=name,
             category=self.category,
             scale=self.scale,

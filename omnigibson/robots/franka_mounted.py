@@ -1,9 +1,10 @@
 import os
+
 import numpy as np
 
 from omnigibson.macros import gm
-from omnigibson.robots.manipulation_robot import ManipulationRobot, GraspingPoint
 from omnigibson.robots.franka import FrankaPanda
+from omnigibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
 from omnigibson.utils.transform_utils import euler2quat
 
 
@@ -11,10 +12,6 @@ class FrankaMounted(FrankaPanda):
     """
     The Franka Emika Panda robot mounted on a custom chassis with a custom gripper
     """
-
-    @property
-    def model_name(self):
-        return "FrankaMounted"
 
     @property
     def controller_order(self):

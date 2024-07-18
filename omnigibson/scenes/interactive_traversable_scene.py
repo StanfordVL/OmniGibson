@@ -1,8 +1,10 @@
 import os
+
+import omnigibson as og
+from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.robots.robot_base import REGISTERED_ROBOTS
 from omnigibson.robots.robot_base import m as robot_macros
 from omnigibson.scenes.traversable_scene import TraversableScene
-from omnigibson.maps.segmentation_map import SegmentationMap
 from omnigibson.utils.asset_utils import get_og_scene_path
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.ui_utils import create_module_logger
@@ -84,6 +86,9 @@ class InteractiveTraversableScene(TraversableScene):
             load_object_categories, not_load_object_categories, load_room_types, load_room_instances
         )
 
+        # Assert that the floor plane is not enabled
+        assert not og.sim.floor_plane, "Floor plane should not be enabled for interactive scenes!"
+
         # Run super init first
         super().__init__(
             scene_model=scene_model,
@@ -156,9 +161,6 @@ class InteractiveTraversableScene(TraversableScene):
             self.load_room_instances = None
 
     def _load(self):
-        # Run super first
-        super()._load()
-
         # Load the traversability map if we have the connectivity graph
         maps_path = os.path.join(self.scene_dir, "layout")
         self._trav_map.load_map(maps_path)

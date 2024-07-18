@@ -1,3 +1,5 @@
+import pytest
+
 import omnigibson as og
 from omnigibson.macros import gm
 
@@ -19,19 +21,20 @@ def task_tester(task_type):
         "task": {
             "type": task_type,
             # BehaviorTask-specific
-            "activity_name": "assembling_gift_baskets",
+            "activity_name": "laying_wood_floors",
             "online_object_sampling": True,
         },
     }
 
-    # Make sure sim is stopped
-    if og.sim is not None:
+    if og.sim is None:
+        # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
+        gm.ENABLE_OBJECT_STATES = True
+        gm.USE_GPU_DYNAMICS = True
+        gm.ENABLE_FLATCACHE = True
+        gm.ENABLE_TRANSITION_RULES = False
+    else:
+        # Make sure sim is stopped
         og.sim.stop()
-
-    # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
-    gm.ENABLE_OBJECT_STATES = True
-    gm.USE_GPU_DYNAMICS = True
-    gm.ENABLE_FLATCACHE = True
 
     # Create the environment
     env = og.Environment(configs=cfg)
@@ -41,7 +44,7 @@ def task_tester(task_type):
         env.step(env.robots[0].action_space.sample())
 
     # Clear the sim
-    og.sim.clear()
+    og.clear()
 
 
 def test_dummy_task():
@@ -82,11 +85,6 @@ def test_rs_int_full_load():
     if og.sim:
         og.sim.stop()
 
-    # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth)
-    gm.ENABLE_OBJECT_STATES = True
-    gm.USE_GPU_DYNAMICS = True
-    gm.ENABLE_FLATCACHE = True
-
     # Create the environment
     env = og.Environment(configs=cfg)
 
@@ -95,4 +93,4 @@ def test_rs_int_full_load():
         env.step(env.robots[0].action_space.sample())
 
     # Clear the sim
-    og.sim.clear()
+    og.clear()

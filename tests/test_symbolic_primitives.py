@@ -1,19 +1,15 @@
 import os
+
 import pytest
 import yaml
-
-from omnigibson.macros import gm
-
-gm.USE_GPU_DYNAMICS = True
-gm.USE_FLATCACHE = True
 
 import omnigibson as og
 from omnigibson import object_states
 from omnigibson.action_primitives.symbolic_semantic_action_primitives import (
-    SymbolicSemanticActionPrimitiveSet,
     SymbolicSemanticActionPrimitives,
+    SymbolicSemanticActionPrimitiveSet,
 )
-from omnigibson.systems import get_system
+from omnigibson.macros import gm
 
 
 def start_env():
@@ -95,6 +91,9 @@ def start_env():
         ],
     }
 
+    gm.USE_GPU_DYNAMICS = True
+    gm.ENABLE_TRANSITION_RULES = False
+
     env = og.Environment(configs=config)
 
     return env
@@ -109,7 +108,7 @@ def shared_env():
 @pytest.fixture(scope="function")
 def env(shared_env):
     """Reset the environment before each test function."""
-    og.sim.scene.reset()
+    shared_env.scene.reset()
     return shared_env
 
 
@@ -219,7 +218,7 @@ class TestSymbolicPrimitives:
 
     @pytest.mark.skip(reason="primitives are broken")
     def test_soak_under(self, env, prim_gen, robot, sponge, sink):
-        water_system = get_system("water", force_active=True)
+        water_system = env.scene.get_system("water")
         assert not sponge.states[object_states.Saturated].get_value(water_system)
         assert not sink.states[object_states.ToggledOn].get_value()
 
@@ -244,12 +243,12 @@ class TestSymbolicPrimitives:
     @pytest.mark.skip(reason="primitives are broken")
     def test_wipe(self, env, prim_gen, sponge, sink, countertop):
         # Some pre-assertions
-        water_system = get_system("water", force_active=True)
+        water_system = env.scene.get_system("water")
         assert not sponge.states[object_states.Saturated].get_value(water_system)
         assert not sink.states[object_states.ToggledOn].get_value()
 
         # Dirty the countertop as the setup
-        mud_system = get_system("mud", force_active=True)
+        mud_system = env.scene.get_system("mud")
         countertop.states[object_states.Covered].set_value(mud_system, True)
         assert countertop.states[object_states.Covered].get_value(mud_system)
 
@@ -313,7 +312,7 @@ class TestSymbolicPrimitives:
     #    pass
 
     def teardown_class(cls):
-        og.sim.clear()
+        og.clear()
 
 
 def main():

@@ -5,7 +5,7 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import ControlType, ManipulationController
 from omnigibson.utils.control_utils import orientation_error
 from omnigibson.utils.processing_utils import MovingAverageFilter
-from omnigibson.utils.python_utils import nums2array, assert_valid_key
+from omnigibson.utils.python_utils import assert_valid_key, nums2array
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -157,7 +157,7 @@ class OperationalSpaceController(ManipulationController):
         self.mode = mode
         if self.mode == "pose_absolute_ori":
             if command_input_limits is not None:
-                if command_input_limits == "default":
+                if type(command_input_limits) == str and command_input_limits == "default":
                     command_input_limits = [
                         [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
                         [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
@@ -166,7 +166,7 @@ class OperationalSpaceController(ManipulationController):
                     command_input_limits[0][3:] = -np.pi
                     command_input_limits[1][3:] = np.pi
             if command_output_limits is not None:
-                if command_output_limits == "default":
+                if type(command_output_limits) == str and command_output_limits == "default":
                     command_output_limits = [
                         [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
                         [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],

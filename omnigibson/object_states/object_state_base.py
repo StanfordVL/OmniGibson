@@ -1,8 +1,8 @@
-from abc import ABC
 import inspect
-import omnigibson as og
-from omnigibson.utils.python_utils import classproperty, Serializable, Registerable, Recreatable
+from abc import ABC
 
+import omnigibson as og
+from omnigibson.utils.python_utils import Recreatable, Registerable, Serializable, classproperty
 
 # Global dicts that will contain mappings
 REGISTERED_OBJECT_STATES = dict()
@@ -118,7 +118,7 @@ class BaseObjectState(BaseObjectRequirement, Serializable, Registerable, Recreat
         return True, None
 
     @classmethod
-    def postprocess_ability_params(cls, params):
+    def postprocess_ability_params(cls, params, scene):
         """
         Post-processes ability parameters if needed. The default implementation is a simple passthrough.
         """

@@ -1,20 +1,21 @@
+import itertools
+import os
 from abc import ABC
 from collections import OrderedDict
-import itertools
+from typing import Iterable, List, Tuple
+
 import numpy as np
-import os
 from scipy.spatial.transform import Rotation as R
-from typing import List, Tuple, Iterable
 
 import omnigibson as og
 import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
-from omnigibson.utils.python_utils import classproperty
-from omnigibson.macros import gm, create_module_macros
-from omnigibson.robots.locomotion_robot import LocomotionRobot
-from omnigibson.robots.manipulation_robot import ManipulationRobot, GraspingPoint
-from omnigibson.robots.active_camera_robot import ActiveCameraRobot
+from omnigibson.macros import create_module_macros, gm
 from omnigibson.objects.usd_object import USDObject
+from omnigibson.robots.active_camera_robot import ActiveCameraRobot
+from omnigibson.robots.locomotion_robot import LocomotionRobot
+from omnigibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
+from omnigibson.utils.python_utils import classproperty
 
 m = create_module_macros(module_path=__file__)
 # component suffixes for the 6-DOF arm joint names
@@ -57,7 +58,7 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self,
         # Shared kwargs in hierarchy
         name,
-        prim_path=None,
+        relative_prim_path=None,
         uuid=None,
         scale=None,
         visible=True,
@@ -88,7 +89,7 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         """
 
         super(BehaviorRobot, self).__init__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             name=name,
             uuid=uuid,
             scale=scale,
@@ -116,13 +117,18 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             self.parts[arm_name] = BRPart(
                 name=arm_name,
                 parent=self,
-                prim_path=f"{arm_name}_palm",
+                relative_prim_path=f"/{arm_name}_palm",
                 eef_type="hand",
                 offset_to_body=m.HAND_TO_BODY_OFFSET[arm_name],
                 **kwargs,
             )
         self.parts["head"] = BRPart(
-            name="head", parent=self, prim_path="eye", eef_type="head", offset_to_body=m.HEAD_TO_BODY_OFFSET, **kwargs
+            name="head",
+            parent=self,
+            relative_prim_path="/eye",
+            eef_type="head",
+            offset_to_body=m.HEAD_TO_BODY_OFFSET,
+            **kwargs,
         )
 
         # whether to use ghost hands (visual markers to help visualize current vr hand pose)
@@ -135,10 +141,6 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def usd_path(self):
         return os.path.join(gm.ASSET_PATH, "models/behavior_robot/usd/BehaviorRobot.usd")
-
-    @property
-    def model_name(self):
-        return "BehaviorRobot"
 
     @classproperty
     def n_arms(cls):
@@ -173,6 +175,10 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         return [f"base_{component}_joint" for component in m.COMPONENT_SUFFIXES]
 
     @property
+    def camera_joint_names(self):
+        return [f"head_{component}_joint" for component in m.COMPONENT_SUFFIXES]
+
+    @property
     def arm_joint_names(self):
         """The head counts as a arm since it has the same 33 joint configuration"""
         return {
@@ -194,29 +200,6 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             )
             for arm in self.arm_names
         }
-
-    @property
-    def base_control_idx(self):
-        joints = list(self.joints.keys())
-        return [joints.index(joint) for joint in self.base_joint_names]
-
-    @property
-    def arm_control_idx(self):
-        joints = list(self.joints.keys())
-        return {
-            arm: [joints.index(f"{arm}_{component}_joint") for component in m.COMPONENT_SUFFIXES]
-            for arm in self.arm_names
-        }
-
-    @property
-    def gripper_control_idx(self):
-        joints = list(self.joints.values())
-        return {arm: [joints.index(joint) for joint in arm_joints] for arm, arm_joints in self.finger_joints.items()}
-
-    @property
-    def camera_control_idx(self):
-        joints = list(self.joints.keys())
-        return [joints.index(f"head_{component}_joint") for component in m.COMPONENT_SUFFIXES]
 
     @property
     def _default_joint_pos(self):
@@ -530,14 +513,14 @@ class BRPart(ABC):
         if self.eef_type == "hand" and self.parent._use_ghost_hands:
             gh_name = f"ghost_hand_{self.name}"
             self.ghost_hand = USDObject(
-                prim_path=f"/World/{gh_name}",
+                relative_prim_path=f"/{gh_name}",
                 usd_path=os.path.join(gm.ASSET_PATH, f"models/behavior_robot/usd/{gh_name}.usd"),
                 name=gh_name,
                 scale=0.001,
                 visible=False,
                 visual_only=True,
             )
-            og.sim.import_object(self.ghost_hand)
+            self.scene.add_object(self.ghost_hand)
 
     @property
     def local_position_orientation(self) -> Tuple[Iterable[float], Iterable[float]]:

@@ -4,17 +4,15 @@ A set of action primitives that work without executing low-level physics but ins
 objects directly into their post-condition states. Useful for learning high-level methods.
 """
 
-from aenum import IntEnum, auto
-
 import numpy as np
-from omnigibson.robots.robot_base import BaseRobot
-from omnigibson.systems.system_base import REGISTERED_SYSTEMS
-from omnigibson.transition_rules import REGISTERED_RULES, TransitionRuleAPI
+from aenum import IntEnum, auto
 
 from omnigibson import object_states
 from omnigibson.action_primitives.action_primitive_set_base import ActionPrimitiveError, ActionPrimitiveErrorGroup
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 from omnigibson.objects import DatasetObject
+from omnigibson.robots.robot_base import BaseRobot
+from omnigibson.transition_rules import REGISTERED_RULES, TransitionRuleAPI
 
 
 class SymbolicSemanticActionPrimitiveSet(IntEnum):
@@ -292,7 +290,7 @@ class SymbolicSemanticActionPrimitives(StarterSemanticActionPrimitives):
         # Check if the target object has any particles in it
         producing_systems = {
             ps
-            for ps in REGISTERED_SYSTEMS.values()
+            for ps in obj.scene.system_registry.objects
             if obj.states[object_states.ParticleSource].check_conditions_for_system(ps)
         }
         if not producing_systems:
@@ -366,7 +364,7 @@ class SymbolicSemanticActionPrimitives(StarterSemanticActionPrimitives):
 
         # Check if the target object has any particles in it
         contained_systems = {
-            ps for ps in REGISTERED_SYSTEMS.values() if obj.states[object_states.Contains].get_value(ps.states)
+            ps for ps in obj.scene.system_registry.objects if obj.states[object_states.Contains].get_value(ps.states)
         }
         if not contained_systems:
             raise ActionPrimitiveError(
@@ -440,7 +438,7 @@ class SymbolicSemanticActionPrimitives(StarterSemanticActionPrimitives):
 
         # Check if the target object has any particles on it
         covering_systems = {
-            ps for ps in REGISTERED_SYSTEMS.values() if obj.states[object_states.Covered].get_value(ps.states)
+            ps for ps in obj.scene.system_registry.objects if obj.states[object_states.Covered].get_value(ps.states)
         }
         if not covering_systems:
             raise ActionPrimitiveError(
@@ -529,7 +527,7 @@ class SymbolicSemanticActionPrimitives(StarterSemanticActionPrimitives):
         added_obj_attrs += output.add
         removed_objs += output.remove
 
-        TransitionRuleAPI.execute_transition(added_obj_attrs=added_obj_attrs, removed_objs=removed_objs)
+        obj.scene.transition_rule_api.execute_transition(added_obj_attrs=added_obj_attrs, removed_objs=removed_objs)
         yield from self._settle_robot()
 
     def _place_near_heating_element(self, heat_source_obj):
