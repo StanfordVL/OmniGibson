@@ -3,7 +3,6 @@ from numba import jit
 
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import ControlType, ManipulationController
-from omnigibson.utils.constants import MAGIC_DEFAULT
 from omnigibson.utils.control_utils import orientation_error
 from omnigibson.utils.processing_utils import MovingAverageFilter
 from omnigibson.utils.python_utils import assert_valid_key, nums2array

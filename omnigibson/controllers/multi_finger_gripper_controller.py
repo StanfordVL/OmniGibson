@@ -3,7 +3,6 @@ import numpy as np
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import ControlType, GripperController, IsGraspingState
 from omnigibson.macros import create_module_macros
-from omnigibson.utils.constants import MAGIC_DEFAULT
 from omnigibson.utils.python_utils import assert_valid_key
 
 VALID_MODES = {
@@ -115,7 +114,7 @@ class MultiFingerGripperController(GripperController):
         # When in delta mode, it doesn't make sense to infer output range using the joint limits (since that's an
         # absolute range and our values are relative). So reject the default mode option in that case.
         assert not (
-            mode == "smooth_delta" and MAGIC_DEFAULT == command_output_limits
+            mode == "smooth_delta" and type(command_output_limits) == "str" and command_output_limits == "default"
         ), "Cannot use 'default' command output limits in delta commands mode of JointController. Try None instead."
 
         # Run super init

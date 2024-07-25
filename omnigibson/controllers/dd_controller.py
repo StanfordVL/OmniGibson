@@ -1,7 +1,6 @@
 import numpy as np
 
 from omnigibson.controllers import ControlType, LocomotionController
-from omnigibson.utils.constants import MAGIC_DEFAULT
 
 
 class DifferentialDriveController(LocomotionController):

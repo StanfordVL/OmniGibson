@@ -9,7 +9,6 @@ from omnigibson.controllers import (
     ManipulationController,
 )
 from omnigibson.macros import create_module_macros
-from omnigibson.utils.constants import MAGIC_DEFAULT
 from omnigibson.utils.python_utils import assert_valid_key
 
 # Create settings for this module

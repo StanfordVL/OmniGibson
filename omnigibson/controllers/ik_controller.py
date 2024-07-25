@@ -4,7 +4,6 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import ControlType, ManipulationController
 from omnigibson.controllers.joint_controller import JointController
 from omnigibson.macros import create_module_macros, gm
-from omnigibson.utils.constants import MAGIC_DEFAULT
 from omnigibson.utils.control_utils import IKSolver
 from omnigibson.utils.processing_utils import MovingAverageFilter
 from omnigibson.utils.python_utils import assert_valid_key

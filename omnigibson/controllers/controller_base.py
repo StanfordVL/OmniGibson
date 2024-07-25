@@ -3,7 +3,6 @@ from enum import IntEnum
 
 import numpy as np
 
-from omnigibson.utils.constants import MAGIC_DEFAULT
 from omnigibson.utils.python_utils import Recreatable, Registerable, Serializable, assert_valid_key, classproperty
 
 # Global dicts that will contain mappings
