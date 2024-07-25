@@ -259,6 +259,22 @@ class ManipulationRobot(BaseRobot):
         return is_grasping
 
     def _find_gripper_contacts(self, arm="default", return_contact_positions=False):
+        """
+        For arm @arm, calculate any body IDs and corresponding link IDs that are not part of the robot
+        itself that are in contact with any of this arm's gripper's fingers
+        Args:
+            arm (str): specific arm whose gripper will be checked for contact. Default is "default" which
+                corresponds to the first entry in self.arm_names
+            return_contact_positions (bool): if True, will additionally return the contact (x,y,z) position
+        Returns:
+            2-tuple:
+                - set: set of unique contact prim_paths that are not the robot self-collisions.
+                    If @return_contact_positions is True, then returns (prim_path, pos), where pos is the contact
+                    (x,y,z) position
+                    Note: if no objects that are not the robot itself are intersecting, the set will be empty.
+                - dict: dictionary mapping unique contact objects defined by the contact prim_path to
+                    set of unique robot link prim_paths that it is in contact with
+        """
         arm = self.default_arm if arm == "default" else arm
         # Get robot contact links
         link_paths = set(self.link_prim_paths)
@@ -397,15 +413,14 @@ class ManipulationRobot(BaseRobot):
         fcns[f"eef_{arm}_ang_vel_relative"] = lambda: ControllableObjectViewAPI.get_link_relative_angular_velocity(
             self.articulation_root_path, self.eef_link_names[arm]
         )
-        # TODO(parallel): This is currently disabled because it is NOT implemented with ControllableObjectViewAPI. Fix that.
         # -n_joints because there may be an additional 6 entries at the beginning of the array, if this robot does
         # not have a fixed base (i.e.: the 6DOF --> "floating" joint)
         # see self.get_relative_jacobian() for more info
-        # eef_link_idx = self._articulation_view.get_body_index(self.eef_links[arm].body_name)
-        # TODO(parallel): Replace this with a ControllableObjectViewAPI call too.
-        # fcns[f"eef_{arm}_jacobian_relative"] = lambda: self.get_relative_jacobian(clone=False)[
-        #     eef_link_idx, :, -self.n_joints :
-        # ]
+        start_idx = 6 if self.fixed_base else 0
+        eef_link_idx = self._articulation_view.get_body_index(self.eef_links[arm].body_name)
+        fcns[f"eef_{arm}_jacobian_relative"] = lambda: ControllableObjectViewAPI.get_relative_jacobian(
+            self.articulation_root_path
+        )[eef_link_idx, :, start_idx : start_idx + self.n_joints]
 
     def _get_proprioception_dict(self):
         dic = super()._get_proprioception_dict()
@@ -536,6 +551,9 @@ class ManipulationRobot(BaseRobot):
         Returns:
             dict: Dictionary mapping arm appendage name to corresponding arm link names,
                 should correspond to specific link names in this robot's underlying model file
+
+                Note: the ordering within the dictionary is assumed to be intentional, and is
+                directly used to define the set of corresponding idxs.
         """
         raise NotImplementedError
 
@@ -546,6 +564,9 @@ class ManipulationRobot(BaseRobot):
         Returns:
             dict: Dictionary mapping arm appendage name to corresponding arm joint names,
                 should correspond to specific joint names in this robot's underlying model file
+
+                Note: the ordering within the dictionary is assumed to be intentional, and is
+                directly used to define the set of corresponding control idxs.
         """
         raise NotImplementedError
 
@@ -566,6 +587,9 @@ class ManipulationRobot(BaseRobot):
         Returns:
             dict: Dictionary mapping arm appendage name to array of link names corresponding to
                 this robot's fingers
+
+                Note: the ordering within the dictionary is assumed to be intentional, and is
+                directly used to define the set of corresponding idxs.
         """
         raise NotImplementedError
 
@@ -575,29 +599,36 @@ class ManipulationRobot(BaseRobot):
         """
         Returns:
             dict: Dictionary mapping arm appendage name to array of joint names corresponding to
-                this robot's fingers
+                this robot's fingers.
+
+                Note: the ordering within the dictionary is assumed to be intentional, and is
+                directly used to define the set of corresponding control idxs.
         """
         raise NotImplementedError
 
     @property
-    @abstractmethod
     def arm_control_idx(self):
         """
         Returns:
             dict: Dictionary mapping arm appendage name to indices in low-level control
                 vector corresponding to arm joints.
         """
-        raise NotImplementedError
+        return {
+            arm: np.array([list(self.joints.keys()).index(name) for name in self.arm_joint_names[arm]])
+            for arm in self.arm_names
+        }
 
     @property
-    @abstractmethod
     def gripper_control_idx(self):
         """
         Returns:
             dict: Dictionary mapping arm appendage name to indices in low-level control
                 vector corresponding to gripper joints.
         """
-        raise NotImplementedError
+        return {
+            arm: np.array([list(self.joints.keys()).index(name) for name in self.finger_joint_names[arm]])
+            for arm in self.arm_names
+        }
 
     @property
     def arm_links(self):
@@ -1157,8 +1188,8 @@ class ManipulationRobot(BaseRobot):
         # A link is non-fixed if it has any non-fixed parent joints.
         joint_type = "FixedJoint"
         for edge in nx.edge_dfs(ag_obj.articulation_tree, ag_link.body_name, orientation="reverse"):
-            joint = ag_obj.articulation_tree.edges[edge]["joint"]
-            if joint.joint_type != JointType.JOINT_FIXED:
+            joint = ag_obj.articulation_tree.edges[edge[:2]]
+            if joint["joint_type"] != JointType.JOINT_FIXED:
                 joint_type = "SphericalJoint"
                 break
 
@@ -1186,14 +1217,12 @@ class ManipulationRobot(BaseRobot):
         if joint_type is None:
             return
 
-        # TODO: Sometimes p2p joint rather than a fixed joint exists and this accounts for that
-        # if contact_pos is None:
-        #     force_data, _ = self._find_gripper_contacts(arm=arm, return_contact_positions=True)
-        #     for c_link_prim_path, c_contact_pos in force_data:
-        #         if c_link_prim_path == ag_link.prim_path:
-        #             contact_pos = np.array(c_contact_pos)
-        #             break
-        contact_pos = ag_obj.get_position()
+        if contact_pos is None:
+            force_data, _ = self._find_gripper_contacts(arm=arm, return_contact_positions=True)
+            for c_link_prim_path, c_contact_pos in force_data:
+                if c_link_prim_path == ag_link.prim_path:
+                    contact_pos = np.array(c_contact_pos)
+                    break
         assert contact_pos is not None
 
         # Joint frame set at the contact point
@@ -1434,7 +1463,13 @@ class ManipulationRobot(BaseRobot):
             return state
 
         # Include AG_state
-        state["ag_obj_constraint_params"] = self._ag_obj_constraint_params.copy()
+        ag_params = self._ag_obj_constraint_params.copy()
+        for arm in ag_params.keys():
+            if len(ag_params[arm]) > 0 and self.scene is not None:
+                ag_params[arm]["contact_pos"], _ = T.relative_pose_transform(
+                    ag_params[arm]["contact_pos"], [0, 0, 0, 1], *self.scene.prim.get_position_orientation()
+                )
+        state["ag_obj_constraint_params"] = ag_params
         return state
 
     def _load_state(self, state):
@@ -1455,11 +1490,16 @@ class ManipulationRobot(BaseRobot):
                 data = state["ag_obj_constraint_params"][arm]
                 obj = self.scene.object_registry("prim_path", data["ag_obj_prim_path"])
                 link = obj.links[data["ag_link_prim_path"].split("/")[-1]]
-                self._establish_grasp(arm=arm, ag_data=(obj, link), contact_pos=data["contact_pos"])
+                contact_pos_global = data["contact_pos"]
+                if self.scene is not None:
+                    contact_pos_global, _ = T.pose_transform(
+                        *self.scene.prim.get_position_orientation(), contact_pos_global, [0, 0, 0, 1]
+                    )
+                self._establish_grasp(arm=arm, ag_data=(obj, link), contact_pos=contact_pos_global)
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Call super first
-        state_flat = super()._serialize(state=state)
+        state_flat = super().serialize(state=state)
 
         # No additional serialization needed if we're using physical grasping
         if self.grasping_mode == "physical":
@@ -1470,7 +1510,7 @@ class ManipulationRobot(BaseRobot):
 
     def deserialize(self, state):
         # Call super first
-        state_dict, idx = super()._deserialize(state=state)
+        state_dict, idx = super().deserialize(state=state)
 
         # No additional deserialization needed if we're using physical grasping
         if self.grasping_mode == "physical":

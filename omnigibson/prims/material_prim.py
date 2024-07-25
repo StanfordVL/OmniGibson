@@ -18,7 +18,7 @@ class MaterialPrim(BasePrim):
     the specified prim path will be created.
 
     Args:
-        relative_prim_path (str): prim path of the Prim to encapsulate or create.
+        relative_prim_path (str): Scene-local prim path of the Prim to encapsulate or create.
         name (str): Name for the object. Names need to be unique per scene.
         load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
             loading this prim at runtime. Note that this is only needed if the prim does not already exist at
@@ -180,8 +180,9 @@ class MaterialPrim(BasePrim):
                 Note that a rendering step is necessary to load these I/Os, though if a step has already
                 occurred externally, no additional rendering step is needed
         """
+        # TODO: Consider optimizing this somehow.
         assert self._shader is not None
-        # asyncio.run(self._load_mdl_parameters(render=render))
+        asyncio.run(self._load_mdl_parameters(render=render))
 
     def shader_update_asset_paths_with_root_path(self, root_path):
         """

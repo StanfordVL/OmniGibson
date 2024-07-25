@@ -7,7 +7,6 @@ import numpy as np
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.sensors.sensor_base import BaseSensor
-from omnigibson.systems.system_base import REGISTERED_SYSTEMS
 from omnigibson.utils.constants import (
     MAX_CLASS_COUNT,
     MAX_INSTANCE_COUNT,
@@ -45,10 +44,10 @@ class VisionSensor(BaseSensor):
         - Camera state
 
     Args:
-        relative_prim_path (str): prim path of the Prim to encapsulate or create.
+        relative_prim_path (str): Scene-local prim path of the Sensor to encapsulate or create.
         name (str): Name for the object. Names need to be unique per scene.
-        modalities (str or list of str): Modality(s) supported by this sensor. Default is "all", which corresponds
-            to all modalities being used. Otherwise, valid options should be part of cls.all_modalities.
+        modalities (str or list of str): Modality(s) supported by this sensor. Default is "rgb".
+        Otherwise, valid options should be part of cls.all_modalities.
             For this vision sensor, this includes any of:
                 {rgb, depth, depth_linear, normal, seg_semantic, seg_instance, flow, bbox_2d_tight,
                 bbox_2d_loose, bbox_3d, camera}
@@ -114,7 +113,7 @@ class VisionSensor(BaseSensor):
         self,
         relative_prim_path,
         name,
-        modalities="all",
+        modalities=["rgb"],
         enabled=True,
         noise=None,
         load_config=None,
@@ -159,7 +158,7 @@ class VisionSensor(BaseSensor):
             self.all_modalities
         ), "VisionSensor._RAW_SENSOR_TYPES must have the same keys as VisionSensor.all_modalities!"
 
-        modalities = set([modalities]) if isinstance(modalities, str) else modalities
+        modalities = set([modalities]) if isinstance(modalities, str) else set(modalities)
 
         # 1) seg_instance and seg_instance_id require seg_semantic to be enabled (for rendering particle systems)
         # 2) bounding box observations require seg_semantic to be enabled (for remapping bounding box semantic IDs)
@@ -328,12 +327,16 @@ class VisionSensor(BaseSensor):
             if "," in replicator_mapping[key]:
                 # If there are multiple class names, grab the one that is a registered system
                 # This happens with MacroVisual particles, e.g. {"11": {"class": "breakfast_table,stain"}}
-                categories = [cat for cat in replicator_mapping[key].split(",") if cat in REGISTERED_SYSTEMS]
-                assert len(categories) == 1, "There should be exactly one category that belongs to REGISTERED_SYSTEMS"
+                categories = [
+                    cat for cat in replicator_mapping[key].split(",") if cat in self.scene.system_registry.object_names
+                ]
+                assert (
+                    len(categories) == 1
+                ), "There should be exactly one category that belongs to scene.system_registry"
                 replicator_mapping[key] = categories[0]
 
             assert (
-                replicator_mapping[key] in semantic_class_id_to_name().values()
+                replicator_mapping[key] in semantic_class_id_to_name(self._scene).values()
             ), f"Class {val['class']} does not exist in the semantic class name to id mapping!"
 
         image_keys = np.unique(img)
@@ -341,7 +344,9 @@ class VisionSensor(BaseSensor):
             set(replicator_mapping.keys())
         ), "Semantic segmentation image does not match the original id_to_labels mapping."
 
-        return VisionSensor.SEMANTIC_REMAPPER.remap(replicator_mapping, semantic_class_id_to_name(), img, image_keys)
+        return VisionSensor.SEMANTIC_REMAPPER.remap(
+            replicator_mapping, semantic_class_id_to_name(self._scene), img, image_keys
+        )
 
     def _remap_instance_segmentation(self, img, id_to_labels, semantic_img, semantic_labels, id=False):
         """
@@ -377,14 +382,14 @@ class VisionSensor(BaseSensor):
                 if "Particle" in prim_name:
                     category_name = prim_name.split("Particle")[0]
                     assert (
-                        category_name in REGISTERED_SYSTEMS
+                        category_name in self.scene.system_registry.object_names
                     ), f"System name {category_name} is not in the registered systems!"
                     value = category_name
                 else:
                     # Remap instance segmentation labels to object name
                     if not id:
                         # value is the prim path of the object
-                        if value == "/World/groundPlane":
+                        if value == og.sim.floor_plane.prim_path:
                             value = "groundPlane"
                         else:
                             obj = self.scene.object_registry("prim_path", value)
@@ -410,7 +415,7 @@ class VisionSensor(BaseSensor):
                     semantic_label in semantic_labels
                 ), f"Semantic map value {semantic_label} is not in the semantic labels!"
                 category_name = semantic_labels[semantic_label]
-                if category_name in REGISTERED_SYSTEMS:
+                if category_name in self.scene.system_registry.object_names:
                     value = category_name
                     self._register_instance(value, id=id)
                 # If the category name is not in the registered systems,
@@ -454,7 +459,7 @@ class VisionSensor(BaseSensor):
             list of dict: Remapped list of bounding boxes
         """
         for bbox in bboxes:
-            bbox["semanticId"] = VisionSensor.SEMANTIC_REMAPPER.remap_bbox(bbox["semanticId"])
+            bbox["semanticId"] = VisionSensor.SEMANTIC_REMAPPER.remap_bbox(bbox["semanticId"], self._scene)
         return bboxes
 
     def add_modality(self, modality):
@@ -589,6 +594,19 @@ class VisionSensor(BaseSensor):
         """
         width, _ = self._viewport.viewport_api.get_texture_resolution()
         self._viewport.viewport_api.set_texture_resolution((width, height))
+
+        # Also update render product and update all annotators
+        for annotator in self._annotators.values():
+            annotator.detach([self._render_product.path])
+
+        self._render_product.destroy()
+        self._render_product = lazy.omni.replicator.core.create.render_product(
+            self.prim_path, (width, height), force_new=True
+        )
+
+        for annotator in self._annotators.values():
+            annotator.attach([self._render_product])
+
         # Requires 3 updates to propagate changes
         for i in range(3):
             render()
@@ -611,6 +629,19 @@ class VisionSensor(BaseSensor):
         """
         _, height = self._viewport.viewport_api.get_texture_resolution()
         self._viewport.viewport_api.set_texture_resolution((width, height))
+
+        # Also update render product and update all annotators
+        for annotator in self._annotators.values():
+            annotator.detach([self._render_product.path])
+
+        self._render_product.destroy()
+        self._render_product = lazy.omni.replicator.core.create.render_product(
+            self.prim_path, (width, height), force_new=True
+        )
+
+        for annotator in self._annotators.values():
+            annotator.attach([self._render_product])
+
         # Requires 3 updates to propagate changes
         for i in range(3):
             render()
@@ -749,6 +780,14 @@ class VisionSensor(BaseSensor):
         """
         Clear all the class-wide variables.
         """
+        for sensor in cls.SENSORS.values():
+            # Destroy any sensor that is not attached to the main viewport window
+            if sensor._viewport.name != "Viewport":
+                sensor._viewport.destroy()
+
+        # Render to update
+        render()
+
         cls.SEMANTIC_REMAPPER = Remapper()
         cls.INSTANCE_REMAPPER = Remapper()
         cls.INSTANCE_ID_REMAPPER = Remapper()

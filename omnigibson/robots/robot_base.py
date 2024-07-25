@@ -143,6 +143,10 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             scale is None or isinstance(scale, int) or isinstance(scale, float) or np.all(scale == scale[0])
         ), f"Robot scale must be uniform! Got: {scale}"
 
+        # All BaseRobots should have xform properties pre-loaded
+        load_config = {} if load_config is None else load_config
+        load_config["xform_props_pre_loaded"] = True
+
         # Run super init
         super().__init__(
             relative_prim_path=relative_prim_path,
@@ -174,23 +178,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # Also import dummy object if this robot is not fixed base AND it has a controller that
         # requires generalized gravity forces. We incur a relatively heavy cost at every step if we
         # have to move the dummy. So we only do this if we absolutely need to.
-        needs_dummy = False
         if not self.fixed_base:
-            # TODO: Make this work after controllers get updated post-load.
-            # TODO(parallel): Make this work - for now this feature is disabled because we can't check the config
-            # at this time.
-            # Check if we have any operational space controllers or joint controllers with use_impedances on.
-            # for cfg in self._controller_config.values():
-            #     if cfg["controller_type"] == "OperationalSpaceController":
-            #         needs_dummy = True
-            #         break
-            #     if cfg["controller_type"] == "JointController" and cfg.get("use_impedances", False):
-            #         needs_dummy = True
-            #         break
-            pass
-
-        if needs_dummy:
-            dummy_path = f"{self.prim_path}_dummy"
+            dummy_path = self.prim_path.replace("controllable__", "dummy__")
             dummy_prim = add_asset_to_stage(asset_path=self._dummy_usd_path, prim_path=dummy_path)
             self._dummy = BaseObject(
                 name=f"{self.name}_dummy",
@@ -200,6 +189,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
                 fixed_base=True,
                 visual_only=True,
             )
+            self._dummy.load(self.scene)
 
         return prim
 
@@ -399,14 +389,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         pos, quat = ControllableObjectViewAPI.get_position_orientation(self.articulation_root_path)
         ori = T.quat2euler(quat)
 
-        # Compute ori2d
-        # TODO(parallel): Dedupe this code that is also used in get_2d_orientation
-        ori_2d = 0.0
-        fwd = R.from_quat(quat).apply([1, 0, 0])
-        fwd[2] = 0.0
-        if np.linalg.norm(fwd) > 1e-4:
-            fwd /= np.linalg.norm(fwd)
-            ori_2d = np.arctan2(fwd[1], fwd[0])
+        ori_2d = T.calculate_xy_plane_angle(quat)
 
         # Pack everything together
         return dict(

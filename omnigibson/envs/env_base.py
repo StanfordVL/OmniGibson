@@ -10,11 +10,11 @@ from omnigibson.robots import REGISTERED_ROBOTS
 from omnigibson.scene_graphs.graph_builder import SceneGraphBuilder
 from omnigibson.scenes import REGISTERED_SCENES
 from omnigibson.sensors import VisionSensor, create_sensor
-from omnigibson.simulator import launch_simulator
 from omnigibson.tasks import REGISTERED_TASKS
 from omnigibson.utils.config_utils import parse_config
 from omnigibson.utils.gym_utils import (
     GymObservable,
+    maxdim,
     recursively_generate_compatible_dict,
     recursively_generate_flat_dict,
 )
@@ -46,7 +46,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Call super first
         super().__init__()
 
-        # Support gymnasium's render mode metadata
+        # Required render mode metadata for gymnasium
         self.render_mode = "rgb_array"
         self.metadata = {"render.modes": ["rgb_array"]}
 
@@ -69,25 +69,39 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._flatten_obs_space = self.env_config["flatten_obs_space"]
         self.physics_frequency = self.env_config["physics_frequency"]
         self.action_frequency = self.env_config["action_frequency"]
-        self.use_floor_plane = self.env_config["use_floor_plane"]
-        self.floor_plane_visible = self.env_config["floor_plane_visible"]
-        self.floor_plane_color = self.env_config["floor_plane_color"]
         self.device = self.env_config["device"] if self.env_config["device"] else "cpu"
         self._initial_pos_z_offset = self.env_config[
             "initial_pos_z_offset"
         ]  # how high to offset object placement to account for one action step of dropping
 
-        # Launch Isaac Sim
-        launch_simulator(
-            physics_dt=(1.0 / self.physics_frequency),
-            rendering_dt=(1.0 / self.action_frequency),
-            use_floor_plane=self.use_floor_plane,
-            floor_plane_visible=self.floor_plane_visible,
-            floor_plane_color=self.floor_plane_color,
-            device=self.device,
-            viewer_width=self.render_config["viewer_width"],
-            viewer_height=self.render_config["viewer_height"],
-        )
+        physics_frequency = 1.0 / self.physics_frequency
+        rendering_frequency = 1.0 / self.action_frequency
+        viewer_width = self.render_config["viewer_width"]
+        viewer_height = self.render_config["viewer_height"]
+        # If the sim is launched, check that the parameters match
+        if og.sim is not None:
+            assert (
+                og.sim.initial_physics_dt == physics_frequency
+            ), f"Physics frequency mismatch! Expected {physics_frequency}, got {og.sim.initial_physics_dt}"
+            assert (
+                og.sim.initial_rendering_dt == rendering_frequency
+            ), f"Rendering frequency mismatch! Expected {rendering_frequency}, got {og.sim.initial_rendering_dt}"
+            assert og.sim.device == self.device, f"Device mismatch! Expected {self.device}, got {og.sim.device}"
+            assert (
+                og.sim.viewer_width == viewer_width
+            ), f"Viewer width mismatch! Expected {viewer_width}, got {og.sim.viewer_width}"
+            assert (
+                og.sim.viewer_height == viewer_height
+            ), f"Viewer height mismatch! Expected {viewer_height}, got {og.sim.viewer_height}"
+        # Otherwise, launch a simulator instance
+        else:
+            og.launch(
+                physics_dt=physics_frequency,
+                rendering_dt=rendering_frequency,
+                device=self.device,
+                viewer_width=viewer_width,
+                viewer_height=viewer_height,
+            )
 
         # Initialize other placeholders that will be filled in later
         self._task = None
@@ -225,6 +239,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         assert og.sim.is_stopped(), "Simulator must be stopped before loading scene!"
 
+        assert og.sim.get_physics_dt() == 1.0 / self.physics_frequency, "Physics frequency mismatch!"
+        assert og.sim.get_rendering_dt() == 1.0 / self.action_frequency, "Rendering frequency mismatch!"
+
         # Create the scene from our scene config
         self._scene = create_class_from_registry_and_config(
             cls_name=self.scene_config["type"],
@@ -259,6 +276,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 )
                 # Import the robot into the simulator
                 self.scene.add_object(robot)
+                # TODO: Fix this after scene_local_position_orientation API is fixed
                 robot.set_local_pose(position=position, orientation=orientation)
 
         assert og.sim.is_stopped(), "Simulator must be stopped after loading robots!"
@@ -327,12 +345,12 @@ class Environment(gym.Env, GymObservable, Recreatable):
         for robot in self.robots:
             # Load the observation space for the robot
             robot_obs = robot.load_observation_space()
-            if gym.spaces.utils.flatdim(robot_obs) > 0:
+            if maxdim(robot_obs) > 0:
                 obs_space[robot.name] = robot_obs
 
         # Also load the task obs space
         task_space = self._task.load_observation_space()
-        if gym.spaces.utils.flatdim(task_space) > 0:
+        if maxdim(task_space) > 0:
             obs_space["task"] = task_space
 
         # Also load any external sensors
@@ -397,11 +415,14 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._load_robots()
         self._load_objects()
         self._load_task()
-        # TODO(undorl): Do not merge this
         self._load_external_sensors()
 
     def post_play_load(self):
-        # Save the state
+        """Complete loading tasks that require the simulator to be playing."""
+        # Reset the scene first to potentially recover the state after load_task (e.g. BehaviorTask sampling)
+        self.scene.reset()
+
+        # Save the state for objects from load_robots / load_objects / load_task
         self.scene.update_initial_state()
 
         # Load the obs / action spaces
@@ -429,10 +450,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Denote scene as not loaded yet
         self._loaded = False
-        # TODO: Does this need to be here?
         og.sim.stop()
         self._load_task(task_config=task_config)
-        # TODO: Does this need to be here?
         og.sim.play()
 
         # Load obs / action spaces
@@ -462,11 +481,11 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Grab all observations from each robot
         for robot in self.robots:
-            if gym.spaces.utils.flatdim(robot.observation_space) > 0:
+            if maxdim(robot.observation_space) > 0:
                 obs[robot.name], info[robot.name] = robot.get_obs()
 
         # Add task observations
-        if gym.spaces.utils.flatdim(self._task.observation_space) > 0:
+        if maxdim(self._task.observation_space) > 0:
             obs["task"] = self._task.get_obs(env=self)
 
         # Add external sensor observations if they exist
@@ -513,6 +532,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
             info["scene_graph"] = self.get_scene_graph()
 
     def _pre_step(self, action):
+        """Apply the pre-sim-step part of an environment step, i.e. apply the robot actions."""
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()
@@ -530,6 +550,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
             robot.apply_action(action_dict[robot.name])
 
     def _post_step(self, action):
+        """Apply the post-sim-step part of an environment step, i.e. grab observations and return the step results."""
         # Grab observations
         obs, obs_info = self.get_obs()
 
@@ -586,17 +607,12 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 - bool: truncated, i.e. whether this episode ended due to a time limit etc.
                 - dict: info, i.e. dictionary with any useful information
         """
-        try:
-            self._pre_step(action)
-            # Run simulation step
-            og.sim.step()
-            return self._post_step(action)
-        except:
-            raise ValueError(
-                f"Failed to execute environment step {self._current_step} in episode {self._current_episode}"
-            )
+        self._pre_step(action)
+        og.sim.step()
+        return self._post_step(action)
 
     def render(self):
+        """Render the environment for debug viewing."""
         # Only works if there is an external sensor
         if not self._external_sensors:
             return None
@@ -614,7 +630,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         og.sim.render()
 
         # Grab the rendered image from each of the rgb sensors, concatenate along dim 1
-        # TODO: get_obs is a tuple, should it be?
         rgb_images = [sensor.get_obs()[0]["rgb"] for sensor in rgb_sensors]
         return np.concatenate(rgb_images, axis=1)[:, :, :3]
 
@@ -798,9 +813,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
             "env": {
                 "action_frequency": gm.DEFAULT_RENDERING_FREQ,
                 "physics_frequency": gm.DEFAULT_PHYSICS_FREQ,
-                "use_floor_plane": False,
-                "floor_plane_visible": True,
-                "floor_plane_color": (1.0, 1.0, 1.0),
                 "device": None,
                 "automatic_reset": False,
                 "flatten_action_space": False,

@@ -2,6 +2,7 @@ import json
 import os
 import random
 from collections import defaultdict
+from copy import deepcopy
 
 import bddl
 import networkx as nx
@@ -19,8 +20,6 @@ from omnigibson.object_states.factory import _KINEMATIC_STATE_SET, get_system_st
 from omnigibson.object_states.object_state_base import AbsoluteObjectState, RelativeObjectState
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.robots import BaseRobot
-from omnigibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
-from omnigibson.systems.system_base import get_system, is_system_active
 from omnigibson.utils.asset_utils import (
     get_all_object_categories,
     get_all_object_category_models_with_abilities,
@@ -569,9 +568,7 @@ class BDDLSampler:
     def __init__(self, env, activity_conditions, object_scope, backend):
         # Store internal variables from inputs
         self._env = env
-        self._scene_model = (
-            self._env.scene.scene_model if isinstance(self._env.scene, InteractiveTraversableScene) else None
-        )
+        self._scene_model = self._env.scene.scene_model
         self._agent = self._env.robots[0]
         self._backend = backend
         self._activity_conditions = activity_conditions
@@ -1015,8 +1012,8 @@ class BDDLSampler:
                         rigid_conditions = [c for c in conditions_to_sample if c[2].prim_type != PrimType.CLOTH]
                         cloth_conditions = [c for c in conditions_to_sample if c[2].prim_type == PrimType.CLOTH]
                         conditions_to_sample = list(
-                            reversed(sorted(rigid_conditions, key=lambda x: np.product(x[2].aabb_extent)))
-                        ) + list(reversed(sorted(cloth_conditions, key=lambda x: np.product(x[2].aabb_extent))))
+                            reversed(sorted(rigid_conditions, key=lambda x: np.prod(x[2].aabb_extent)))
+                        ) + list(reversed(sorted(cloth_conditions, key=lambda x: np.prod(x[2].aabb_extent))))
 
                         # Sample!
                         for condition, positive, entity, child_scope_name in conditions_to_sample:
@@ -1034,7 +1031,7 @@ class BDDLSampler:
                                     f"{condition_type} kinematic condition sampling",
                                     room_type,
                                     scene_obj,
-                                    room_inst,
+                                    str(room_inst),
                                     parent_obj_name,
                                     condition.STATE_NAME,
                                     str(condition.body),
@@ -1212,7 +1209,9 @@ class BDDLSampler:
                 system_name = OBJECT_TAXONOMY.get_subtree_substances(obj_synset)[0]
                 self._object_scope[obj_inst] = BDDLEntity(
                     bddl_inst=obj_inst,
-                    entity=None if obj_inst in self._future_obj_instances else get_system(system_name),
+                    entity=(
+                        None if obj_inst in self._future_obj_instances else self._env.scene.get_system(system_name)
+                    ),
                 )
             else:
                 valid_categories = set(OBJECT_TAXONOMY.get_subtree_categories(obj_synset))
@@ -1364,8 +1363,8 @@ class BDDLSampler:
                         rigid_conditions = [c for c in conditions_to_sample if c[2].prim_type != PrimType.CLOTH]
                         cloth_conditions = [c for c in conditions_to_sample if c[2].prim_type == PrimType.CLOTH]
                         conditions_to_sample = list(
-                            reversed(sorted(rigid_conditions, key=lambda x: np.product(x[2].aabb_extent)))
-                        ) + list(reversed(sorted(cloth_conditions, key=lambda x: np.product(x[2].aabb_extent))))
+                            reversed(sorted(rigid_conditions, key=lambda x: np.prod(x[2].aabb_extent)))
+                        ) + list(reversed(sorted(cloth_conditions, key=lambda x: np.prod(x[2].aabb_extent))))
 
                     # Sample!
                     for condition, positive, entity, child_scope_name in conditions_to_sample:
@@ -1392,7 +1391,7 @@ class BDDLSampler:
                                 # After the final round of kinematic sampling, we assign in_rooms to newly imported objects
                                 if group == "kinematic":
                                     parent = self._object_scope[condition.body[1]]
-                                    entity.in_rooms = parent.in_rooms.copy()
+                                    entity.in_rooms = deepcopy(parent.in_rooms)
 
                                 # Can terminate immediately
                                 break

@@ -56,8 +56,7 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
-            relative_prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
-                created at /World/<name>
+            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
             category (str): Category for the object. Defaults to "object".
             uuid (None or int): Unique unsigned-integer identifier to assign to this object (max 8-numbers).
                 If None is specified, then it will be auto-generated
@@ -112,6 +111,14 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         # Update init info for this
         self._init_info["args"]["name"] = self.name
         self._init_info["args"]["uuid"] = self.uuid
+
+    def prebuild(self, stage):
+        """
+        Implement this function to provide pre-building functionality on an USD stage
+        that is not loaded into Isaac Sim. This is useful for pre-compiling scene USDs,
+        speeding up load times especially for parallel envs.
+        """
+        pass
 
     def load(self, scene):
         prim = super().load(scene)

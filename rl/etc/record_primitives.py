@@ -1,7 +1,11 @@
+import json
 import os
+import pickle
+from pathlib import Path
 
 import numpy as np
 import yaml
+import zmq
 
 import omnigibson as og
 from omnigibson.action_primitives.action_primitive_set_base import ActionPrimitiveError
@@ -10,10 +14,6 @@ from omnigibson.action_primitives.starter_semantic_action_primitives import (
     StarterSemanticActionPrimitiveSet,
 )
 from omnigibson.macros import gm
-from pathlib import Path
-import zmq
-import json
-import pickle
 
 # Don't use GPU dynamics and use flatcache for performance boost
 # gm.USE_GPU_DYNAMICS = True
@@ -33,6 +33,7 @@ state_queue.connect("tcp://127.0.0.1:5556")
 # Subscribe to all messages
 state_queue.setsockopt_string(zmq.SUBSCRIBE, "")
 
+
 def execute_controller(ctrl_gen, env):
     episode_data = []
     for action in ctrl_gen:
@@ -42,6 +43,7 @@ def execute_controller(ctrl_gen, env):
         if terminated or truncated:
             data_queue.send(pickle.dumps(episode_data))
             break
+
 
 def main():
     """

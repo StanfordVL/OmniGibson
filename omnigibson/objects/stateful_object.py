@@ -85,8 +85,7 @@ class StatefulObject(BaseObject):
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
-            relative_prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
-                created at /World/<name>
+            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
             category (str): Category for the object. Defaults to "object".
             uuid (None or int): Unique unsigned-integer identifier to assign to this object (max 8-numbers).
                 If None is specified, then it will be auto-generated
@@ -236,7 +235,7 @@ class StatefulObject(BaseObject):
                     for state_type in get_states_for_ability(ability):
                         states_info[state_type] = {
                             "ability": ability,
-                            "params": state_type.postprocess_ability_params(params),
+                            "params": state_type.postprocess_ability_params(params, self.scene),
                         }
 
         # Add the dependencies into the list, too, and sort based on the dependency chain
@@ -442,7 +441,7 @@ class StatefulObject(BaseObject):
                 state = self.states[state_type]
                 if state_type in get_texture_change_states():
                     if state_type == Saturated:
-                        for particle_system in ParticleRemover.supported_active_systems.values():
+                        for particle_system in self.scene.active_systems.values():
                             if state.get_value(particle_system):
                                 texture_change_states.append(state)
                                 # Only need to do this once, since soaked handles all fluid systems
@@ -521,10 +520,8 @@ class StatefulObject(BaseObject):
         # Also add non-kinematic states
         non_kin_states = dict()
         for state_type, state_instance in self._states.items():
-            try:
+            if state_instance.stateful:
                 non_kin_states[get_state_name(state_type)] = state_instance.dump_state(serialized=False)
-            except NotImplementedError:
-                pass
 
         state["non_kin"] = non_kin_states
 
@@ -541,20 +538,18 @@ class StatefulObject(BaseObject):
         # Load all states that are stateful
         for state_type, state_instance in self._states.items():
             state_name = get_state_name(state_type)
-            if state_name in state["non_kin"]:
-                try:
+            if state_instance.stateful:
+                if state_name in state["non_kin"]:
                     state_instance.load_state(state=state["non_kin"][state_name], serialized=False)
-                except NotImplementedError:
-                    pass
-            else:
-                log.debug(f"Missing object state [{state_name}] in the state dump for obj {self.name}")
+                else:
+                    log.debug(f"Missing object state [{state_name}] in the state dump for obj {self.name}")
 
         # Clear cache after loading state
         self.clear_states_cache()
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Call super method first
-        state_flat = super()._serialize(state=state)
+        state_flat = super().serialize(state=state)
 
         # Iterate over all states and serialize them individually
         non_kin_state_flat = (
@@ -573,14 +568,15 @@ class StatefulObject(BaseObject):
 
     def deserialize(self, state):
         # Call super method first
-        state_dic, idx = super()._deserialize(state=state)
+        state_dic, idx = super().deserialize(state=state)
 
         # Iterate over all states and deserialize their states if they're stateful
         non_kin_state_dic = dict()
         for state_type, state_instance in self._states.items():
             state_name = get_state_name(state_type)
-            non_kin_state_dic[state_name], deserialized_items = state_instance._deserialize(state[idx:])
-            idx += deserialized_items
+            if state_instance.stateful:
+                non_kin_state_dic[state_name], deserialized_items = state_instance.deserialize(state[idx:])
+                idx += deserialized_items
         state_dic["non_kin"] = non_kin_state_dic
 
         return state_dic, idx

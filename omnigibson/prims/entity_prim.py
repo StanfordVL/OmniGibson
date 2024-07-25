@@ -29,7 +29,7 @@ class EntityPrim(XFormPrim):
     be converted into an articulation!
 
     Args:
-        relative_prim_path (str): prim path of the Prim to encapsulate or create.
+        relative_prim_path (str): Scene-local prim path of the Prim to encapsulate or create.
         name (str): Name for the object. Names need to be unique per scene.
         load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
             loading this prim at runtime. Note that by default, this assumes an articulation already exists (i.e.:
@@ -247,8 +247,9 @@ class EntityPrim(XFormPrim):
                 "kinematic_only": (
                     self._load_config.get("kinematic_only", False) if link_name == self._root_link_name else False
                 ),
-                "is_part_of_articulation": self._articulation_view is not None,
+                "belongs_to_articulation": self._articulation_view is not None and link_name != self._root_link_name,
                 "remesh": self._load_config.get("remesh", True),
+                "xform_props_pre_loaded": self._load_config.get("xform_props_pre_loaded", False),
             }
             self._links[link_name] = link_cls(
                 relative_prim_path=absolute_prim_path_to_scene_relative(self.scene, prim.GetPrimPath().__str__()),
@@ -1052,6 +1053,7 @@ class EntityPrim(XFormPrim):
         """
         return np.concatenate([joint.damping for joint in self._joints.values()])
 
+    # TODO: These are cached, but they are not updated when the joint limit is changed
     @cached_property
     def joint_lower_limits(self):
         """
@@ -1061,6 +1063,7 @@ class EntityPrim(XFormPrim):
         """
         return np.array([joint.lower_limit for joint in self._joints.values()])
 
+    # TODO: These are cached, but they are not updated when the joint limit is changed
     @cached_property
     def joint_upper_limits(self):
         """
@@ -1456,7 +1459,7 @@ class EntityPrim(XFormPrim):
         Enable physics for this articulation
         """
         if self.articulated:
-            prim_id = lazy.pxr.PhysicsSchemaTools.sdfPathToInt(self.prim_path)
+            prim_id = lazy.pxr.PhysicsSchemaTools.sdfPathToInt(self.articulation_root_path)
             og.sim.psi.wake_up(og.sim.stage_id, prim_id)
         else:
             for link in self._links.values():
@@ -1467,7 +1470,7 @@ class EntityPrim(XFormPrim):
         Disable physics for this articulation
         """
         if self.articulated:
-            prim_id = lazy.pxr.PhysicsSchemaTools.sdfPathToInt(self.prim_path)
+            prim_id = lazy.pxr.PhysicsSchemaTools.sdfPathToInt(self.articulation_root_path)
             og.sim.psi.put_to_sleep(og.sim.stage_id, prim_id)
         else:
             for link in self._links.values():
@@ -1562,7 +1565,7 @@ class EntityPrim(XFormPrim):
         # Make sure this object is awake
         self.wake()
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # We serialize by first flattening the root link state and then iterating over all joints and
         # adding them to the a flattened array
         state_flat = [self.root_link.serialize(state=state["root_link"])]
@@ -1578,12 +1581,12 @@ class EntityPrim(XFormPrim):
     def deserialize(self, state):
         # We deserialize by first de-flattening the root link state and then iterating over all joints and
         # sequentially grabbing from the flattened state array, incrementing along the way
-        root_link_state, idx = self.root_link._deserialize(state=state)
+        root_link_state, idx = self.root_link.deserialize(state=state)
         state_dict = dict(root_link=root_link_state)
         joint_state_dict = dict()
         for prim_name, prim in self._joints.items():
-            joint_state_dict[prim_name], deserialized_items = prim._deserialize(state=state[idx:])
-            idx += prim.deserialized_items
+            joint_state_dict[prim_name], deserialized_items = prim.deserialize(state=state[idx:])
+            idx += deserialized_items
         state_dict["joints"] = joint_state_dict
 
         return state_dict, idx

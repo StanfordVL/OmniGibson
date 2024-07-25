@@ -154,7 +154,7 @@ class InverseKinematicsController(JointController, ManipulationController):
         # The output orientation limits are also set to be values assuming delta commands, so those are updated too
         if self.mode == "pose_absolute_ori":
             if command_input_limits is not None:
-                if MAGIC_DEFAULT == command_input_limits:
+                if type(command_input_limits) == str and command_input_limits == "default":
                     command_input_limits = [
                         [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
                         [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
@@ -163,7 +163,7 @@ class InverseKinematicsController(JointController, ManipulationController):
                     command_input_limits[0][3:] = -np.pi
                     command_input_limits[1][3:] = np.pi
             if command_output_limits is not None:
-                if MAGIC_DEFAULT == command_output_limits:
+                if type(command_output_limits) == str and command_output_limits == "default":
                     command_output_limits = [
                         [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
                         [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
@@ -195,6 +195,11 @@ class InverseKinematicsController(JointController, ManipulationController):
             self.control_filter.reset()
         self._fixed_quat_target = None
 
+    @property
+    def state_size(self):
+        # Add state size from the control filter
+        return super().state_size + self.control_filter.state_size
+
     def _dump_state(self):
         # Run super first
         state = super()._dump_state()
@@ -215,9 +220,9 @@ class InverseKinematicsController(JointController, ManipulationController):
         # Load relevant info for this controller
         self.control_filter.load_state(state["control_filter"], serialized=False)
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Run super first
-        state_flat = super()._serialize(state=state)
+        state_flat = super().serialize(state=state)
 
         # Serialize state for this controller
         return np.concatenate(
@@ -229,10 +234,10 @@ class InverseKinematicsController(JointController, ManipulationController):
 
     def deserialize(self, state):
         # Run super first
-        state_dict, idx = super()._deserialize(state=state)
+        state_dict, idx = super().deserialize(state=state)
 
         # Deserialize state for this controller
-        state_dict["control_filter"], deserialized_items = self.control_filter._deserialize(state=state[idx:])
+        state_dict["control_filter"], deserialized_items = self.control_filter.deserialize(state=state[idx:])
 
         return state_dict, idx + deserialized_items
 

@@ -1,9 +1,9 @@
 import numpy as np
 
 import omnigibson as og
-from omnigibson.objects.object_base import REGISTERED_OBJECTS
 import omnigibson.utils.transform_utils as T
 from omnigibson.object_states import Pose
+from omnigibson.objects.object_base import REGISTERED_OBJECTS
 from omnigibson.objects.primitive_object import PrimitiveObject
 from omnigibson.reward_functions.collision_reward import CollisionReward
 from omnigibson.reward_functions.point_goal_reward import PointGoalReward
@@ -176,6 +176,7 @@ class PointNavigationTask(BaseTask):
         # Auto-initialize all markers
         og.sim.play()
         env.scene.reset()
+        self._reset_agent(env=env)
         env.scene.update_initial_state()
         og.sim.stop()
 
@@ -207,7 +208,9 @@ class PointNavigationTask(BaseTask):
         Update the initial and goal positions for the environment
         """
         robot = env.robots[self._robot_idn]
-        self._initial_pos, _ = T.pose_transform(*robot.scene.prim.get_position_orientation(), self._initial_pos, [0, 0, 0, 1])
+        self._initial_pos, _ = T.pose_transform(
+            *robot.scene.prim.get_position_orientation(), self._initial_pos, [0, 0, 0, 1]
+        )
         self._goal_pos, _ = T.pose_transform(*robot.scene.prim.get_position_orientation(), self._goal_pos, [0, 0, 0, 1])
 
     def _load_visualization_markers(self, env):
@@ -351,13 +354,16 @@ class PointNavigationTask(BaseTask):
             float: Computed potential
         """
         if self._reward_type == "l2":
-            reward = self._get_l2_potential(env)
+            potentail = self._get_l2_potential(env)
         elif self._reward_type == "geodesic":
-            reward = self._get_geodesic_potential(env)
+            potential = self._get_geodesic_potential(env)
+            # If no path is found, fall back to L2 potential
+            if potential is None:
+                potentail = self._get_l2_potential(env)
         else:
             raise ValueError(f"Invalid reward type! {self._reward_type}")
 
-        return reward
+        return potential
 
     def _reset_agent(self, env):
         # Reset agent

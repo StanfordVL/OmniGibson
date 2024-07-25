@@ -291,32 +291,6 @@ def get_uuid(name, n_digits=8):
     return abs(hash(name)) % (10**n_digits)
 
 
-def camel_case_to_snake_case(camel_case_text):
-    """
-    Helper function to convert a camel case text to snake case, e.g. "StrawberrySmoothie" -> "strawberry_smoothie"
-
-    Args:
-        camel_case_text (str): Text in camel case
-
-    Returns:
-        str: snake case text
-    """
-    return re.sub(r"(?<!^)(?=[A-Z])", "_", camel_case_text).lower()
-
-
-def snake_case_to_camel_case(snake_case_text):
-    """
-    Helper function to convert a snake case text to camel case, e.g. "strawberry_smoothie" -> "StrawberrySmoothie"
-
-    Args:
-        snake_case_text (str): Text in snake case
-
-    Returns:
-        str: camel case text
-    """
-    return "".join(item.title() for item in snake_case_text.split("_"))
-
-
 def meets_minimum_version(test_version, minimum_version):
     """
     Verify that @test_version meets the @minimum_version
@@ -451,20 +425,6 @@ class Serializable:
             )
         self._load_state(state=state)
 
-    def _serialize(self, state):
-        """
-        Serializes nested dictionary state @state into a flattened 1D numpy array for encoding efficiency.
-        Should be implemented by subclass.
-
-        Args:
-            state (dict): Keyword-mapped states of this object to encode. Should match structure of output from
-                self._dump_state()
-
-        Returns:
-            n-array: encoded + serialized, 1D numerical np.array capturing this object's state
-        """
-        raise NotImplementedError()
-
     def serialize(self, state):
         """
         Serializes nested dictionary state @state into a flattened 1D numpy array for encoding efficiency.
@@ -477,8 +437,7 @@ class Serializable:
         Returns:
             n-array: encoded + serialized, 1D numerical np.array capturing this object's state
         """
-        # Simply returns self._serialize() for now. this is for future proofing
-        return self._serialize(state=state)
+        raise NotImplementedError()
 
     def deserialize(self, state):
         """
@@ -563,21 +522,6 @@ class SerializableNonInstance:
         cls._load_state(state=state)
 
     @classmethod
-    def _serialize(cls, state):
-        """
-        Serializes nested dictionary state @state into a flattened 1D numpy array for encoding efficiency.
-        Should be implemented by subclass.
-
-        Args:
-            state (dict): Keyword-mapped states of this object to encode. Should match structure of output from
-                self._dump_state()
-
-        Returns:
-            n-array: encoded + serialized, 1D numerical np.array capturing this object's state
-        """
-        raise NotImplementedError()
-
-    @classmethod
     def serialize(cls, state):
         """
         Serializes nested dictionary state @state into a flattened 1D numpy array for encoding efficiency.
@@ -590,8 +534,8 @@ class SerializableNonInstance:
         Returns:
             n-array: encoded + serialized, 1D numerical np.array capturing this object's state
         """
-        # Simply returns self._serialize() for now. this is for future proofing
-        return cls._serialize(state=state)
+        # Simply returns self.serialize() for now. this is for future proofing
+        return NotImplementedError()
 
     @classmethod
     def deserialize(cls, state):

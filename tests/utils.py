@@ -16,10 +16,12 @@ SYSTEM_EXAMPLES = {
     "stain": MacroVisualParticleSystem,
 }
 
+env = None
+
 
 def og_test(func):
     def wrapper():
-        env = assert_test_env()
+        assert_test_env()
         try:
             func(env)
         finally:
@@ -64,16 +66,10 @@ def get_obj_cfg(
     }
 
 
-env = None
-
-
 def assert_test_env():
     global env
     if env is None:
         cfg = {
-            "env": {
-                "use_floor_plane": True,
-            },
             "scene": {
                 "type": "Scene",
             },
@@ -186,6 +182,7 @@ def assert_test_env():
             gm.ENABLE_OBJECT_STATES = True
             gm.USE_GPU_DYNAMICS = True
             gm.ENABLE_FLATCACHE = False
+            gm.ENABLE_TRANSITION_RULES = True
         else:
             # Make sure sim is stopped
             og.sim.stop()
@@ -203,7 +200,6 @@ def assert_test_env():
         og.sim.play()
 
     assert env is not None, "Environment not created"
-    return env
 
 
 def get_random_pose(pos_low=10.0, pos_hi=20.0):
@@ -244,7 +240,7 @@ def place_obj_on_floor_plane(obj, x_offset=0.0, y_offset=0.0, z_offset=0.01):
     obj.set_position(target_obj_aabb_pos + obj_aabb_offset)
 
 
-def remove_all_systems():
-    for system in ParticleRemover.supported_active_systems.values():
+def remove_all_systems(scene):
+    for system in scene.active_systems.values():
         system.remove_all_particles()
     og.sim.step()

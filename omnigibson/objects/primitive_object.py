@@ -53,8 +53,7 @@ class PrimitiveObject(StatefulObject):
             name (str): Name for the object. Names need to be unique per scene
             primitive_type (str): type of primitive object to create. Should be one of:
                 {"Cone", "Cube", "Cylinder", "Disk", "Plane", "Sphere", "Torus"}
-            relative_prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
-                created at /World/<name>
+            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
             category (str): Category for the object. Defaults to "object".
             uuid (None or int): Unique unsigned-integer identifier to assign to this object (max 8-numbers).
                 If None is specified, then it will be auto-generated
@@ -347,7 +346,6 @@ class PrimitiveObject(StatefulObject):
     def _dump_state(self):
         state = super()._dump_state()
         # state["extents"] = self._extents
-        # TODO: Why are these here and not in the init kwargs?
         state["radius"] = self.radius if self._primitive_type in VALID_RADIUS_OBJECTS else -1
         state["height"] = self.height if self._primitive_type in VALID_HEIGHT_OBJECTS else -1
         state["size"] = self.size if self._primitive_type in VALID_SIZE_OBJECTS else -1
@@ -364,16 +362,16 @@ class PrimitiveObject(StatefulObject):
             self.size = state["size"]
 
     def deserialize(self, state):
-        state_dict, idx = super()._deserialize(state=state)
+        state_dict, idx = super().deserialize(state=state)
         # state_dict["extents"] = state[idx: idx + 3]
         state_dict["radius"] = state[idx]
         state_dict["height"] = state[idx + 1]
         state_dict["size"] = state[idx + 2]
         return state_dict, idx + 3
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Run super first
-        state_flat = super()._serialize(state=state)
+        state_flat = super().serialize(state=state)
 
         return np.concatenate(
             [

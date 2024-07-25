@@ -48,8 +48,7 @@ class ControllableObject(BaseObject):
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
-            relative_prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
-                created at /World/<name>
+            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
             category (str): Category for the object. Defaults to "object".
             uuid (None or int): Unique unsigned-integer identifier to assign to this object (max 8-numbers).
                 If None is specified, then it will be auto-generated
@@ -94,15 +93,23 @@ class ControllableObject(BaseObject):
         self.dof_names_ordered = None
         self._control_enabled = True
 
+        class_name = self.__class__.__name__.lower()
         if relative_prim_path:
-            # If prim path is specified, assert that the last element starts with controllable_ to ensure that
+            # If prim path is specified, assert that the last element starts with the right prefix to ensure that
             # the object will be included in the ControllableObjectViewAPI.
-            assert relative_prim_path.split("/")[-1].startswith(
-                "controllable_"
-            ), "If relative_prim_path is specified, the last element of the path must start with 'controllable_'."
+            assert relative_prim_path.split("/")[-1].startswith(f"controllable__{class_name}__"), (
+                "If relative_prim_path is specified, the last element of the path must look like "
+                f"'controllable__{class_name}__robotname' where robotname can be an arbitrary "
+                "string containing no double underscores."
+            )
+            assert relative_prim_path.split("/")[-1].count("__") == 2, (
+                "If relative_prim_path is specified, the last element of the path must look like "
+                f"'controllable__{class_name}__robotname' where robotname can be an arbitrary "
+                "string containing no double underscores."
+            )
         else:
             # If prim path is not specified, set it to the default path, but prepend controllable.
-            relative_prim_path = f"/controllable_{name}"
+            relative_prim_path = f"/controllable__{class_name}__{name}"
 
         # Run super init
         super().__init__(
@@ -121,6 +128,23 @@ class ControllableObject(BaseObject):
         )
 
     def _initialize(self):
+        # Assert that the prim path matches ControllableObjectViewAPI's expected format
+        scene_id, robot_name = self.articulation_root_path.split("/")[2:4]
+        assert scene_id.startswith(
+            "scene_"
+        ), "Second component of articulation root path (scene ID) must start with 'scene_'"
+        robot_name_components = robot_name.split("__")
+        assert (
+            len(robot_name_components) == 3
+        ), "Third component of articulation root path (robot name) must have 3 components separated by '__'"
+        assert robot_name_components[0] in (
+            "controllable",
+            "dummy",
+        ), "Third component of articulation root path (robot name) must start with 'controllable' or 'dummy'"
+        assert (
+            robot_name_components[1] == self.__class__.__name__.lower()
+        ), "Third component of articulation root path (robot name) must contain the class name as the second part"
+
         # Run super first
         super()._initialize()
         # Fill in the DOF to joint mapping
@@ -148,14 +172,6 @@ class ControllableObject(BaseObject):
         # Reset the object and keep all joints still after loading
         self.reset()
         self.keep_still()
-
-        # If we haven't already created a physics callback, do so now so control gets updated every sim step
-        callback_name = f"{self.name}_controller_callback"
-        if not og.sim.physics_callback_exists(callback_name=callback_name):
-            og.sim.add_physics_callback(
-                callback_name=callback_name,
-                callback_fn=lambda x: self.step(),
-            )
 
     def load(self, scene):
         # Run super first
@@ -558,8 +574,10 @@ class ControllableObject(BaseObject):
         fcns["joint_effort"] = lambda: ControllableObjectViewAPI.get_joint_efforts(self.articulation_root_path)
         fcns["mass_matrix"] = lambda: ControllableObjectViewAPI.get_mass_matrix(self.articulation_root_path)
         # TODO: Move gravity force computation dummy to this class instead of BaseRobot
-        fcns["gravity_force"] = lambda: ControllableObjectViewAPI.get_generalized_gravity_forces(
-            self.articulation_root_path if not self.fixed_base else self._dummy.articulation_root_path
+        fcns["gravity_force"] = lambda: (
+            ControllableObjectViewAPI.get_generalized_gravity_forces(self.articulation_root_path)
+            if self.fixed_base
+            else ControllableObjectViewAPI.get_generalized_gravity_forces(self._dummy.articulation_root_path)
         )
         fcns["cc_force"] = lambda: ControllableObjectViewAPI.get_coriolis_and_centrifugal_forces(
             self.articulation_root_path
@@ -604,9 +622,9 @@ class ControllableObject(BaseObject):
         for controller_name, controller in self._controllers.items():
             controller.load_state(state=controller_states[controller_name])
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Run super first
-        state_flat = super()._serialize(state=state)
+        state_flat = super().serialize(state=state)
 
         # Serialize the controller states sequentially
         controller_states_flat = np.concatenate(
@@ -618,12 +636,12 @@ class ControllableObject(BaseObject):
 
     def deserialize(self, state):
         # Run super first
-        state_dict, idx = super()._deserialize(state=state)
+        state_dict, idx = super().deserialize(state=state)
 
         # Deserialize the controller states sequentially
         controller_states = dict()
         for c_name, c in self._controllers.items():
-            controller_states[c_name], deserialized_items = c._deserialize(state=state[idx:])
+            controller_states[c_name], deserialized_items = c.deserialize(state=state[idx:])
             idx += deserialized_items
         state_dict["controllers"] = controller_states
 
@@ -708,6 +726,7 @@ class ControllableObject(BaseObject):
 
         return dic
 
+    # TODO: These are cached, but they are not updated when the joint limit is changed
     @cached_property
     def control_limits(self):
         """

@@ -118,11 +118,26 @@ class BaseObjectState(BaseObjectRequirement, Serializable, Registerable, Recreat
         return True, None
 
     @classmethod
-    def postprocess_ability_params(cls, params):
+    def postprocess_ability_params(cls, params, scene):
         """
         Post-processes ability parameters if needed. The default implementation is a simple passthrough.
         """
         return params
+
+    @property
+    def stateful(self):
+        """
+        Returns:
+            bool: True if this object has a state that can be directly dumped / loaded via dump_state() and
+                load_state(), otherwise, returns False. Note that any sub object states that are NOT stateful do
+                not need to implement any of _dump_state(), _load_state(), _serialize(), or _deserialize()!
+        """
+        # Default is whether state size > 0
+        return self.state_size > 0
+
+    @property
+    def state_size(self):
+        return 0
 
     @property
     def cache(self):
@@ -342,6 +357,7 @@ class BaseObjectState(BaseObjectRequirement, Serializable, Registerable, Recreat
 
     def dump_state(self, serialized=False):
         assert self._initialized
+        assert self.stateful
         return super().dump_state(serialized=serialized)
 
     @classproperty

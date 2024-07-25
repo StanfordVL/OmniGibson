@@ -399,6 +399,10 @@ class AttachedTo(
     def settable(self):
         return True
 
+    @property
+    def state_size(self):
+        return 1
+
     def _dump_state(self):
         return dict(attached_obj_uuid=-1 if self.parent is None else self.parent.uuid)
 
@@ -431,7 +435,7 @@ class AttachedTo(
                 if self.parent != attached_obj:
                     log.warning(f"parent reference is not updated after attachment")
 
-    def _serialize(self, state):
+    def serialize(self, state):
         return np.array([state["attached_obj_uuid"]], dtype=float)
 
     def deserialize(self, state):
