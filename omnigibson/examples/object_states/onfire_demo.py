@@ -20,34 +20,42 @@ def main(random_selection=False, headless=False, short_exec=False):
     obj_configs = []
 
     # Light
-    obj_configs.append(dict(
-        type="LightObject",
-        light_type="Sphere",
-        name="light",
-        radius=0.01,
-        intensity=1e8,
-        position=[-2.0, -2.0, 1.0],
-    ))
+    obj_configs.append(
+        dict(
+            type="LightObject",
+            light_type="Sphere",
+            name="light",
+            radius=0.01,
+            intensity=1e8,
+            position=[-2.0, -2.0, 1.0],
+        )
+    )
 
     # Stove
-    obj_configs.append(dict(
-        type="DatasetObject",
-        name="stove",
-        category="stove",
-        model="yhjzwg",
-        position=[0, 0, 0.69],
-    ))
+    obj_configs.append(
+        dict(
+            type="DatasetObject",
+            name="stove",
+            category="stove",
+            model="yhjzwg",
+            bounding_box=[1.185, 0.978, 1.387],
+            position=[0, 0, 0.69],
+        )
+    )
 
     # 2 Apples
     for i in range(2):
-        obj_configs.append(dict(
-            type="DatasetObject",
-            name=f"apple{i}",
-            category="apple",
-            model="agveuv",
-            position=[0, i * 0.07, 2.0],
-            abilities={"flammable": {"ignition_temperature": 100, "distance_threshold": 0.5}},
-        ))
+        obj_configs.append(
+            dict(
+                type="DatasetObject",
+                name=f"apple{i}",
+                category="apple",
+                model="agveuv",
+                bounding_box=[0.065, 0.065, 0.077],
+                position=[0, i * 0.07, 2.0],
+                abilities={"flammable": {"ignition_temperature": 100, "distance_threshold": 0.5}},
+            )
+        )
 
     # Create the scene config to load -- empty scene with desired objects
     cfg = {
@@ -58,7 +66,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
 
     # Get reference to relevant objects
     stove = env.scene.object_registry("name", "stove")
@@ -66,8 +74,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Set camera to appropriate viewing pose
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([-0.42246569, -0.34745704,  1.56810353]),
-        orientation=np.array([ 0.50083786, -0.10407796, -0.17482619,  0.84128772]),
+        position=np.array([-0.42246569, -0.34745704, 1.56810353]),
+        orientation=np.array([0.50083786, -0.10407796, -0.17482619, 0.84128772]),
     )
 
     # Let objects settle

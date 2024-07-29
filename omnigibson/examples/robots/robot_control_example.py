@@ -3,13 +3,14 @@ Example script demo'ing robot control.
 
 Options for random actions, as well as selection of robot action space
 """
+
 import numpy as np
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import gm
 from omnigibson.robots import REGISTERED_ROBOTS
-from omnigibson.utils.ui_utils import choose_from_options, KeyboardRobotController
-
+from omnigibson.utils.ui_utils import KeyboardRobotController, choose_from_options
 
 CONTROL_MODES = dict(
     random="Use autonomous random actions (default)",
@@ -56,7 +57,7 @@ def choose_controllers(robot, random_selection=False):
     return controller_choices
 
 
-def main(random_selection=False, headless=False, short_exec=False):
+def main(random_selection=False, headless=False, short_exec=False, quickstart=False):
     """
     Robot control demo with selection
     Queries the user to select a robot, the controllers, a scene and a type of input (random actions or teleop)
@@ -64,14 +65,17 @@ def main(random_selection=False, headless=False, short_exec=False):
     og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
 
     # Choose scene to load
-    scene_model = choose_from_options(options=SCENES, name="scene", random_selection=random_selection)
+    scene_model = "Rs_int"
+    if not quickstart:
+        scene_model = choose_from_options(options=SCENES, name="scene", random_selection=random_selection)
 
     # Choose robot to create
-    robot_name = choose_from_options(
-        options=list(sorted(REGISTERED_ROBOTS.keys())), name="robot", random_selection=random_selection
-    )
+    robot_name = "Fetch"
+    if not quickstart:
+        robot_name = choose_from_options(
+            options=list(sorted(REGISTERED_ROBOTS.keys())), name="robot", random_selection=random_selection
+        )
 
-    # Create the config for generating the environment we want
     scene_cfg = dict()
     if scene_model == "empty":
         scene_cfg["type"] = "Scene"
@@ -82,7 +86,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Add the robot we want to load
     robot0_cfg = dict()
     robot0_cfg["type"] = robot_name
-    robot0_cfg["obs_modalities"] = ["rgb", "depth", "seg_instance", "normal", "scan", "occupancy_grid"]
+    robot0_cfg["obs_modalities"] = ["rgb"]
     robot0_cfg["action_type"] = "continuous"
     robot0_cfg["action_normalize"] = True
 
@@ -90,15 +94,24 @@ def main(random_selection=False, headless=False, short_exec=False):
     cfg = dict(scene=scene_cfg, robots=[robot0_cfg])
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Choose robot controller to use
     robot = env.robots[0]
-    controller_choices = choose_controllers(robot=robot, random_selection=random_selection)
+    controller_choices = {
+        "base": "DifferentialDriveController",
+        "arm_0": "InverseKinematicsController",
+        "gripper_0": "MultiFingerGripperController",
+        "camera": "JointController",
+    }
+    if not quickstart:
+        controller_choices = choose_controllers(robot=robot, random_selection=random_selection)
 
     # Choose control mode
     if random_selection:
         control_mode = "random"
+    elif quickstart:
+        control_mode = "teleop"
     else:
         control_mode = choose_from_options(options=CONTROL_MODES, name="control mode")
 
@@ -106,17 +119,29 @@ def main(random_selection=False, headless=False, short_exec=False):
     controller_config = {component: {"name": name} for component, name in controller_choices.items()}
     robot.reload_controllers(controller_config=controller_config)
 
+    # Because the controllers have been updated, we need to update the initial state so the correct controller state
+    # is preserved
+    env.scene.update_initial_state()
+
     # Update the simulator's viewer camera's pose so it points towards the robot
     og.sim.viewer_camera.set_position_orientation(
         position=np.array([1.46949, -3.97358, 2.21529]),
         orientation=np.array([0.56829048, 0.09569975, 0.13571846, 0.80589577]),
     )
 
-    # Reset environment
+    # Reset environment and robot
     env.reset()
+    robot.reset()
 
     # Create teleop controller
     action_generator = KeyboardRobotController(robot=robot)
+
+    # Register custom binding to reset the environment
+    action_generator.register_custom_keymapping(
+        key=lazy.carb.input.KeyboardInput.R,
+        description="Reset the robot",
+        callback_fn=lambda: env.reset(),
+    )
 
     # Print out relevant keyboard info if using keyboard teleop
     if control_mode == "teleop":
@@ -129,15 +154,27 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Loop control until user quits
     max_steps = -1 if not short_exec else 100
     step = 0
+
     while step != max_steps:
-        action = action_generator.get_random_action() if control_mode == "random" else action_generator.get_teleop_action()
-        for _ in range(10):
-            env.step(action=action)
-            step += 1
+        action = (
+            action_generator.get_random_action() if control_mode == "random" else action_generator.get_teleop_action()
+        )
+        env.step(action=action)
+        step += 1
 
     # Always shut down the environment cleanly at the end
     env.close()
 
 
 if __name__ == "__main__":
-    main()
+    import argparse
+
+    parser = argparse.ArgumentParser(description="Teleoperate a robot in a BEHAVIOR scene.")
+
+    parser.add_argument(
+        "--quickstart",
+        action="store_true",
+        help="Whether the example should be loaded with default settings for a quick start.",
+    )
+    args = parser.parse_args()
+    main(quickstart=args.quickstart)

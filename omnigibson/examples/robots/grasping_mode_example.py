@@ -1,15 +1,17 @@
 """
 Example script demo'ing robot manipulation control with grasping.
 """
+
 import numpy as np
 
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.sensors import VisionSensor
-from omnigibson.utils.ui_utils import choose_from_options, KeyboardRobotController
+from omnigibson.utils.ui_utils import KeyboardRobotController, choose_from_options
 
 GRASPING_MODES = dict(
     sticky="Sticky Mitten - Objects are magnetized when they touch the fingers and a CLOSE command is given",
+    assisted="Assisted Grasping - Objects are magnetized when they touch the fingers, are within the hand, and a CLOSE command is given",
     physical="Physical Grasping - No additional grasping assistance applied",
 )
 
@@ -32,7 +34,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     scene_cfg = dict(type="Scene")
     robot0_cfg = dict(
         type="Fetch",
-        obs_modalities=["rgb"],     # we're just doing a grasping demo so we don't need all observation modalities
+        obs_modalities=["rgb"],  # we're just doing a grasping demo so we don't need all observation modalities
         action_type="continuous",
         action_normalize=True,
         grasping_mode=grasping_mode,
@@ -45,7 +47,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         category="breakfast_table",
         model="lcsizg",
         bounding_box=[0.5, 0.5, 0.8],
-        fit_avg_dim_volume=False,
         fixed_base=True,
         position=[0.7, -0.1, 0.6],
         orientation=[0, 0, 0.707, 0.707],
@@ -57,7 +58,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         category="straight_chair",
         model="amgwaw",
         bounding_box=None,
-        fit_avg_dim_volume=True,
         fixed_base=False,
         position=[0.45, 0.65, 0.425],
         orientation=[0, 0, -0.9990215, -0.0442276],
@@ -76,7 +76,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     cfg = dict(scene=scene_cfg, robots=[robot0_cfg], objects=[table_cfg, chair_cfg, box_cfg])
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Reset the robot
     robot = env.robots[0]
@@ -92,8 +92,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Update the simulator's viewer camera's pose so it points towards the robot
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([-2.39951,  2.26469,  2.66227]),
-        orientation=np.array([-0.23898481,  0.48475231,  0.75464013, -0.37204802]),
+        position=np.array([-2.39951, 2.26469, 2.66227]),
+        orientation=np.array([-0.23898481, 0.48475231, 0.75464013, -0.37204802]),
     )
 
     # Create teleop controller

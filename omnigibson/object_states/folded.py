@@ -1,10 +1,11 @@
-import numpy as np
 from collections import namedtuple
-from scipy.spatial import ConvexHull, distance_matrix
+
+import numpy as np
+from scipy.spatial import ConvexHull, QhullError, distance_matrix
 
 from omnigibson.macros import create_module_macros
-from omnigibson.object_states.object_state_base import BooleanState, AbsoluteObjectState
-from omnigibson.object_states.cloth import ClothState
+from omnigibson.object_states.cloth_mixin import ClothStateMixin
+from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanStateMixin
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -34,11 +35,13 @@ FoldedLevelData contains the following fields:
 """
 FoldedLevelData = namedtuple("FoldedLevelData", ("smoothness", "area", "diagonal"))
 
-class FoldedLevel(AbsoluteObjectState, ClothState):
+
+class FoldedLevel(AbsoluteObjectState, ClothStateMixin):
     """
     State representing the object's folded level.
     Value is a FoldedLevelData object.
     """
+
     def _initialize(self):
         super()._initialize()
         # Assume the initial state is unfolded
@@ -49,27 +52,15 @@ class FoldedLevel(AbsoluteObjectState, ClothState):
         area, diagonal = self.calculate_projection_area_and_diagonal([0, 1])
         return FoldedLevelData(smoothness, area / self.area_unfolded, diagonal / self.diagonal_unfolded)
 
-    def _set_value(self, new_value):
-        raise NotImplementedError("FoldedLevel state currently does not support setting.")
-
     def calculate_smoothness(self):
         """
         Calculate the percantage of surface normals that are sufficiently close to the z-axis.
         """
         cloth = self.obj.root_link
-        points = cloth.particle_positions[cloth.keyfaces]
-
-        # Shape [F, 3]
-        v1 = points[:, 2, :] - points[:, 0, :]
-        v2 = points[:, 1, :] - points[:, 0, :]
-        normals = np.cross(v1, v2)
-        normals_norm = np.linalg.norm(normals, axis=1)
-
-        valid_normals = normals[normals_norm.nonzero()] / np.expand_dims(normals_norm[normals_norm.nonzero()], axis=1)
-        assert valid_normals.shape[0] > 0
+        normals = cloth.compute_face_normals(face_ids=cloth.keyface_idx)
 
         # projection onto the z-axis
-        proj = np.abs(np.dot(valid_normals, np.array([0.0, 0.0, 1.0])))
+        proj = np.abs(np.dot(normals, np.array([0.0, 0.0, 1.0])))
         percentage = np.mean(proj > np.cos(m.NORMAL_Z_ANGLE_DIFF))
         return percentage
 
@@ -109,7 +100,13 @@ class FoldedLevel(AbsoluteObjectState, ClothState):
         """
         cloth = self.obj.root_link
         points = cloth.keypoint_particle_positions[:, dims]
-        hull = ConvexHull(points)
+        try:
+            hull = ConvexHull(points)
+
+        # The points may be 2D-degenerate, so catch the error and return 0 if so
+        except QhullError:
+            # This is a degenerate hull, so return 0 area and diagonal
+            return 0.0, 0.0
 
         # When input points are 2-dimensional, this is the area of the convex hull.
         # Ref: https://docs.scipy.org/doc/scipy/reference/generated/scipy.spatial.ConvexHull.html
@@ -118,29 +115,35 @@ class FoldedLevel(AbsoluteObjectState, ClothState):
 
         if m.DEBUG_CLOTH_PROJ_VIS:
             import matplotlib.pyplot as plt
-            ax = plt.gca()
-            ax.set_aspect('equal')
 
-            plt.plot(points[:, dims[0]], points[:, dims[1]], 'o')
+            ax = plt.gca()
+            ax.set_aspect("equal")
+
+            plt.plot(points[:, dims[0]], points[:, dims[1]], "o")
             for simplex in hull.simplices:
-                plt.plot(points[simplex, dims[0]], points[simplex, dims[1]], 'k-')
-            plt.plot(points[hull.vertices, dims[0]], points[hull.vertices, dims[1]], 'r--', lw=2)
-            plt.plot(points[hull.vertices[0], dims[0]], points[hull.vertices[0], dims[1]], 'ro')
+                plt.plot(points[simplex, dims[0]], points[simplex, dims[1]], "k-")
+            plt.plot(points[hull.vertices, dims[0]], points[hull.vertices, dims[1]], "r--", lw=2)
+            plt.plot(points[hull.vertices[0], dims[0]], points[hull.vertices[0], dims[1]], "ro")
             plt.show()
 
         return area, diagonal
 
-class Folded(AbsoluteObjectState, BooleanState, ClothState):
-    @staticmethod
-    def get_dependencies():
-        return AbsoluteObjectState.get_dependencies() + [FoldedLevel]
+
+class Folded(AbsoluteObjectState, BooleanStateMixin, ClothStateMixin):
+    @classmethod
+    def get_dependencies(cls):
+        deps = super().get_dependencies()
+        deps.add(FoldedLevel)
+        return deps
 
     def _get_value(self):
         # Check the smoothness of the cloth
         folded_level = self.obj.states[FoldedLevel].get_value()
-        return folded_level.smoothness >= m.NORMAL_Z_PERCENTAGE and \
-            folded_level.area < m.FOLDED_AREA_THRESHOLD and \
-            folded_level.diagonal < m.FOLDED_DIAGONAL_THRESHOLD
+        return (
+            folded_level.smoothness >= m.NORMAL_Z_PERCENTAGE
+            and folded_level.area < m.FOLDED_AREA_THRESHOLD
+            and folded_level.diagonal < m.FOLDED_DIAGONAL_THRESHOLD
+        )
 
     def _set_value(self, new_value):
         if not new_value:
@@ -151,18 +154,29 @@ class Folded(AbsoluteObjectState, BooleanState, ClothState):
 
     # We don't need to dump / load anything since the cloth objects should handle it themselves
 
-class Unfolded(AbsoluteObjectState, BooleanState, ClothState):
+
+class Unfolded(AbsoluteObjectState, BooleanStateMixin, ClothStateMixin):
+    @classmethod
+    def get_dependencies(cls):
+        deps = super().get_dependencies()
+        deps.add(FoldedLevel)
+        return deps
+
     def _get_value(self):
         # Check the smoothness of the cloth
         folded_level = self.obj.states[FoldedLevel].get_value()
-        return folded_level.smoothness >= m.NORMAL_Z_PERCENTAGE and \
-            folded_level.area >= m.UNFOLDED_AREA_THRESHOLD and \
-            folded_level.diagonal >= m.UNFOLDED_DIAGONAL_THRESHOLD
+        return (
+            folded_level.smoothness >= m.NORMAL_Z_PERCENTAGE
+            and folded_level.area >= m.UNFOLDED_AREA_THRESHOLD
+            and folded_level.diagonal >= m.UNFOLDED_DIAGONAL_THRESHOLD
+        )
 
     def _set_value(self, new_value):
         if not new_value:
             raise NotImplementedError("Unfolded does not support set_value(False)")
 
         self.obj.root_link.reset()
+
+        return True
 
     # We don't need to dump / load anything since the cloth objects should handle it themselves

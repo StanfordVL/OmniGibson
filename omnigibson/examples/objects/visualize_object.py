@@ -1,13 +1,11 @@
 import argparse
+
 import numpy as np
 
 import omnigibson as og
-from omnigibson.utils.asset_utils import (
-    get_all_object_categories,
-    get_all_object_category_models,
-)
-from omnigibson.utils.ui_utils import choose_from_options
 import omnigibson.utils.transform_utils as T
+from omnigibson.utils.asset_utils import get_all_object_categories, get_all_object_category_models
+from omnigibson.utils.ui_utils import choose_from_options
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -53,13 +51,15 @@ def main(random_selection=False, headless=False, short_exec=False):
     if usd_path is None:
         # Select a category to load
         available_obj_categories = get_all_object_categories()
-        obj_category = choose_from_options(options=available_obj_categories, name="object category",
-                                           random_selection=random_selection)
+        obj_category = choose_from_options(
+            options=available_obj_categories, name="object category", random_selection=random_selection
+        )
 
         # Select a model to load
         available_obj_models = get_all_object_category_models(obj_category)
-        obj_model = choose_from_options(options=available_obj_models, name="object model",
-                                        random_selection=random_selection)
+        obj_model = choose_from_options(
+            options=available_obj_models, name="object model", random_selection=random_selection
+        )
 
         kwargs = {
             "type": "DatasetObject",
@@ -94,8 +94,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Set camera to appropriate viewing pose
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([-0.00913503, -1.95750906,  1.36407314]),
-        orientation=np.array([0.6350064 , 0.        , 0.        , 0.77250687]),
+        position=np.array([-0.00913503, -1.95750906, 1.36407314]),
+        orientation=np.array([0.6350064, 0.0, 0.0, 0.77250687]),
     )
 
     # Grab the object references
@@ -121,7 +121,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     steps_per_joint = steps_per_rotate / 10
     max_steps = 100 if short_exec else 10000
     for i in range(max_steps):
-        z_angle = (2 * np.pi * (i % steps_per_rotate) / steps_per_rotate)
+        z_angle = 2 * np.pi * (i % steps_per_rotate) / steps_per_rotate
         quat = T.euler2quat(np.array([0, 0, z_angle]))
         pos = T.quat2mat(quat) @ center_offset
         if obj.n_dof > 0:

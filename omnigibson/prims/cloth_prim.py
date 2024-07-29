@@ -6,32 +6,26 @@
 # distribution of this software and related documentation without an express
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 #
-from pxr import UsdPhysics, Gf, Vt, PhysxSchema
-from pxr.Sdf import ValueTypeNames as VT
 
-from omni.physx.scripts import particleUtils
-
-from omnigibson.macros import create_module_macros, gm
-from omnigibson.prims.geom_prim import GeomPrim
-from omnigibson.systems import get_system
-import omnigibson.utils.transform_utils as T
-from omnigibson.utils.sim_utils import CsRawData
-from omnigibson.utils.usd_utils import array_to_vtarray, mesh_prim_to_trimesh_mesh, sample_mesh_keypoints
-from omnigibson.utils.constants import GEOM_TYPES
-from omnigibson.utils.python_utils import classproperty
-import omnigibson as og
+from collections.abc import Iterable
 
 import numpy as np
 
+import omnigibson as og
+import omnigibson.lazy as lazy
+import omnigibson.utils.transform_utils as T
+from omnigibson.macros import create_module_macros, gm
+from omnigibson.prims.geom_prim import GeomPrim
+from omnigibson.utils.sim_utils import CsRawData
+from omnigibson.utils.usd_utils import array_to_vtarray, mesh_prim_to_trimesh_mesh, sample_mesh_keypoints
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
 
 # Subsample cloth particle points to boost performance
 m.N_CLOTH_KEYPOINTS = 1000
-m.KEYPOINT_COVERAGE_THRESHOLD = 0.80
+m.KEYPOINT_COVERAGE_THRESHOLD = 0.75
 m.N_CLOTH_KEYFACES = 500
-
 
 
 class ClothPrim(GeomPrim):
@@ -44,11 +38,11 @@ class ClothPrim(GeomPrim):
         it will apply it.
 
     Args:
-        prim_path (str): prim path of the Prim to encapsulate or create.
+        relative_prim_path (str): Scene-local prim path of the Prim to encapsulate or create.
         name (str): Name for the object. Names need to be unique per scene.
         load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
             loading this prim at runtime. Note that this is only needed if the prim does not already exist at
-            @prim_path -- it will be ignored if it already exists. For this joint prim, the below values can be
+            @relative_prim_path -- it will be ignored if it already exists. For this joint prim, the below values can be
             specified:
 
             scale (None or float or 3-array): If specified, sets the scale for this object. A single number corresponds
@@ -58,17 +52,18 @@ class ClothPrim(GeomPrim):
 
     def __init__(
         self,
-        prim_path,
+        relative_prim_path,
         name,
         load_config=None,
     ):
         # Internal vars stored
+        self._centroid_idx = None
         self._keypoint_idx = None
         self._keyface_idx = None
 
         # Run super init
         super().__init__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             name=name,
             load_config=load_config,
         )
@@ -81,18 +76,21 @@ class ClothPrim(GeomPrim):
         # (such as R/W to specific particle states) when flatcache is enabled
         assert not gm.ENABLE_FLATCACHE, "Cannot use flatcache with ClothPrim!"
 
-        self._mass_api = UsdPhysics.MassAPI(self._prim) if self._prim.HasAPI(UsdPhysics.MassAPI) else \
-            UsdPhysics.MassAPI.Apply(self._prim)
+        self._mass_api = (
+            lazy.pxr.UsdPhysics.MassAPI(self._prim)
+            if self._prim.HasAPI(lazy.pxr.UsdPhysics.MassAPI)
+            else lazy.pxr.UsdPhysics.MassAPI.Apply(self._prim)
+        )
 
         # Possibly set the mass / density
         if "mass" in self._load_config and self._load_config["mass"] is not None:
             self.mass = self._load_config["mass"]
 
         # Clothify this prim, which is assumed to be a mesh
-        ClothPrim.cloth_system.clothify_mesh_prim(mesh_prim=self._prim)
+        self.cloth_system.clothify_mesh_prim(mesh_prim=self._prim, remesh=self._load_config.get("remesh", True))
 
         # Track generated particle count
-        positions = self.particle_positions
+        positions = self.compute_particle_positions()
         self._n_particles = len(positions)
 
         # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
@@ -108,27 +106,47 @@ class ClothPrim(GeomPrim):
             keypoint_positions = positions[self._keypoint_idx]
             keypoint_aabb = keypoint_positions.min(axis=0), keypoint_positions.max(axis=0)
             true_aabb = positions.min(axis=0), positions.max(axis=0)
-            overlap_vol = max(min(true_aabb[1][0], keypoint_aabb[1][0]) - max(true_aabb[0][0], keypoint_aabb[0][0]), 0) * \
-                max(min(true_aabb[1][1], keypoint_aabb[1][1]) - max(true_aabb[0][1], keypoint_aabb[0][1]), 0) * \
-                max(min(true_aabb[1][2], keypoint_aabb[1][2]) - max(true_aabb[0][2], keypoint_aabb[0][2]), 0)
-            true_vol = np.product(true_aabb[1] - true_aabb[0])
-            if overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD:
+            overlap_vol = (
+                max(min(true_aabb[1][0], keypoint_aabb[1][0]) - max(true_aabb[0][0], keypoint_aabb[0][0]), 0)
+                * max(min(true_aabb[1][1], keypoint_aabb[1][1]) - max(true_aabb[0][1], keypoint_aabb[0][1]), 0)
+                * max(min(true_aabb[1][2], keypoint_aabb[1][2]) - max(true_aabb[0][2], keypoint_aabb[0][2]), 0)
+            )
+            true_vol = np.prod(true_aabb[1] - true_aabb[0])
+            if true_vol == 0.0 or overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD:
                 success = True
                 break
         assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
 
+        # Compute centroid particle idx based on AABB
+        aabb_min, aabb_max = np.min(positions, axis=0), np.max(positions, axis=0)
+        aabb_center = (aabb_min + aabb_max) / 2.0
+        dists = np.linalg.norm(positions - aabb_center.reshape(1, 3), axis=-1)
+        self._centroid_idx = np.argmin(dists)
+
     def _initialize(self):
         super()._initialize()
         # TODO (eric): hacky way to get cloth rendering to work (otherwise, there exist some rendering artifacts).
-        self._prim.CreateAttribute("primvars:isVolume", VT.Bool, False).Set(True)
+        self._prim.CreateAttribute("primvars:isVolume", lazy.pxr.Sdf.ValueTypeNames.Bool, False).Set(True)
         self._prim.GetAttribute("primvars:isVolume").Set(False)
 
         # Store the default position of the points in the local frame
         self._default_positions = np.array(self.get_attribute(attr="points"))
 
-    @classproperty
-    def cloth_system(cls):
-        return get_system("cloth")
+    @property
+    def visual_aabb(self):
+        return self.aabb
+
+    @property
+    def visual_aabb_extent(self):
+        return self.aabb_extent
+
+    @property
+    def visual_aabb_center(self):
+        return self.aabb_center
+
+    @property
+    def cloth_system(self):
+        return self.scene.get_system("cloth")
 
     @property
     def n_particles(self):
@@ -146,26 +164,54 @@ class ClothPrim(GeomPrim):
         """
         return False
 
-    def _compute_particle_positions(self, keypoints_only=False):
+    def compute_particle_positions(self, idxs=None):
         """
         Compute individual particle positions for this cloth prim
 
         Args:
-            keypoints_only (bool): If True, will only return the keypoint particle state
+            idxs (n-array or None): If set, will only calculate the requested indexed particle state
 
         Returns:
             np.array: (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        r = T.quat2mat(self.get_orientation())
-        t = self.get_position()
+        t, r = self.get_position_orientation()
+        r = T.quat2mat(r)
         s = self.scale
 
-        p_local = np.array(self.get_attribute(attr="points"))
-        p_local = p_local[self._keypoint_idx] if keypoints_only else p_local
+        # Don't copy to save compute, since we won't be returning a reference to the underlying object anyways
+        p_local = np.array(self.get_attribute(attr="points"), copy=False)
+        p_local = p_local[idxs] if idxs is not None else p_local
         p_world = (r @ (p_local * s).T).T + t
 
         return p_world
+
+    def set_particle_positions(self, positions, idxs=None):
+        """
+        Sets individual particle positions for this cloth prim
+
+        Args:
+            positions (n-array): (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
+                cartesian coordinates relative to the world frame
+            idxs (n-array or None): If set, will only set the requested indexed particle state
+        """
+        n_expected = self._n_particles if idxs is None else len(idxs)
+        assert (
+            len(positions) == n_expected
+        ), f"Got mismatch in particle setting size: {len(positions)}, vs. number of expected particles {n_expected}!"
+
+        r = T.quat2mat(self.get_orientation())
+        t = self.get_position()
+        s = self.scale
+        p_local = (r.T @ (positions - t).T).T / s
+
+        # Fill the idxs if requested
+        if idxs is not None:
+            p_local_old = np.array(self.get_attribute(attr="points"))
+            p_local_old[idxs] = p_local
+            p_local = p_local_old
+
+        self.set_attribute(attr="points", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(p_local))
 
     @property
     def keypoint_idx(self):
@@ -216,37 +262,17 @@ class ClothPrim(GeomPrim):
             np.array: (N, 3) numpy array, where each of the N keypoint particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        return self._compute_particle_positions(keypoints_only=True)
+        return self.compute_particle_positions(idxs=self._keypoint_idx)
 
     @property
-    def particle_positions(self):
+    def centroid_particle_position(self):
         """
-        Grabs individual particle positions for this cloth prim
+        Grabs the individual particle that was pre-computed to be the closest to the centroid of this cloth prim.
 
         Returns:
-            np.array: (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
-                cartesian coordinates relative to the world frame
+            np.array: centroid particle's (x,y,z) cartesian coordinates relative to the world frame
         """
-        return self._compute_particle_positions(keypoints_only=False)
-
-    @particle_positions.setter
-    def particle_positions(self, pos):
-        """
-        Set the particle positions of this cloth
-
-        Args:
-            np.array: (N, 3) numpy array, where each of the N particles' desired positions are expressed in (x,y,z)
-                cartesian coordinates relative to the world frame
-        """
-        assert pos.shape[0] == self._n_particles, \
-            f"Got mismatch in particle setting size: {pos.shape[0]}, vs. number of particles {self._n_particles}!"
-
-        r = T.quat2mat(self.get_orientation())
-        t = self.get_position()
-        s = self.scale
-        p_local = (r.T @ (pos - t).T).T / s
-
-        self.set_attribute(attr="points", val=Vt.Vec3fArray.FromNumpy(p_local))
+        return self.compute_particle_positions(idxs=[self._centroid_idx])[0]
 
     @property
     def particle_velocities(self):
@@ -269,11 +295,12 @@ class ClothPrim(GeomPrim):
             np.array: (N, 3) numpy array, where each of the N particles' velocities are expressed in (x,y,z)
                 cartesian coordinates with respect to the world frame
         """
-        assert vel.shape[0] == self._n_particles, \
-            f"Got mismatch in particle setting size: {vel.shape[0]}, vs. number of particles {self._n_particles}!"
+        assert (
+            vel.shape[0] == self._n_particles
+        ), f"Got mismatch in particle setting size: {vel.shape[0]}, vs. number of particles {self._n_particles}!"
 
         # the velocities attribute is w.r.t the world frame already
-        self.set_attribute(attr="velocities", val=Vt.Vec3fArray.FromNumpy(vel))
+        self.set_attribute(attr="velocities", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(vel))
 
     def compute_face_normals(self, face_ids=None):
         """
@@ -288,11 +315,23 @@ class ClothPrim(GeomPrim):
                 cartesian coordinates with respect to the world frame.
         """
         faces = self.faces if face_ids is None else self.faces[face_ids]
-        points = self.particle_positions[faces]
+        points = self.compute_particle_positions(idxs=faces.flatten()).reshape(-1, 3, 3)
+        return self.compute_face_normals_from_particle_positions(positions=points)
 
+    def compute_face_normals_from_particle_positions(self, positions):
+        """
+        Grabs individual face normals for this cloth prim
+
+        Args:
+            positions (n-array): (N, 3, 3) array specifying the per-face particle positions
+
+        Returns:
+            np.array: (N, 3) numpy array, where each of the N faces' normals are expressed in (x,y,z)
+                cartesian coordinates with respect to the world frame.
+        """
         # Shape [F, 3]
-        v1 = points[:, 2, :] - points[:, 0, :]
-        v2 = points[:, 1, :] - points[:, 0, :]
+        v1 = positions[:, 2, :] - positions[:, 0, :]
+        v2 = positions[:, 1, :] - positions[:, 0, :]
         normals = np.cross(v1, v2)
         return normals / np.linalg.norm(normals, axis=1).reshape(-1, 1)
 
@@ -307,21 +346,24 @@ class ClothPrim(GeomPrim):
             list of CsRawData: raw contact info for this cloth body
         """
         contacts = []
+
         def report_hit(hit):
-            contacts.append(CsRawData(
-                time=0.0,  # dummy value
-                dt=0.0,  # dummy value
-                body0=self.prim_path,
-                body1=hit.rigid_body,
-                position=pos,
-                normal=np.zeros(3),  # dummy value
-                impulse=np.zeros(3),  # dummy value
-            ))
+            contacts.append(
+                CsRawData(
+                    time=0.0,  # dummy value
+                    dt=0.0,  # dummy value
+                    body0=self.prim_path,
+                    body1=hit.rigid_body,
+                    position=pos,
+                    normal=np.zeros(3),  # dummy value
+                    impulse=np.zeros(3),  # dummy value
+                )
+            )
             return True
 
-        positions = self.keypoint_particle_positions if keypoints_only else self.particle_positions
+        positions = self.keypoint_particle_positions if keypoints_only else self.compute_particle_positions()
         for pos in positions:
-            og.sim.psqi.overlap_sphere(ClothPrim.cloth_system.particle_contact_offset, pos, report_hit, False)
+            og.sim.psqi.overlap_sphere(self.cloth_system.particle_contact_offset, pos, report_hit, False)
 
         return contacts
 
@@ -331,26 +373,8 @@ class ClothPrim(GeomPrim):
 
     @property
     def volume(self):
-        mesh = self.prim
-        mesh_type = mesh.GetPrimTypeInfo().GetTypeName()
-        assert mesh_type in GEOM_TYPES, f"Invalid collision mesh type: {mesh_type}"
-        if mesh_type == "Mesh":
-            # We construct a trimesh object from this mesh in order to infer its volume
-            trimesh_mesh = mesh_prim_to_trimesh_mesh(mesh)
-            mesh_volume = trimesh_mesh.volume if trimesh_mesh.is_volume else trimesh_mesh.convex_hull.volume
-        elif mesh_type == "Sphere":
-            mesh_volume = 4 / 3 * np.pi * (mesh.GetAttribute("radius").Get() ** 3)
-        elif mesh_type == "Cube":
-            mesh_volume = mesh.GetAttribute("size").Get() ** 3
-        elif mesh_type == "Cone":
-            mesh_volume = np.pi * (mesh.GetAttribute("radius").Get() ** 2) * mesh.GetAttribute("height").Get() / 3
-        elif mesh_type == "Cylinder":
-            mesh_volume = np.pi * (mesh.GetAttribute("radius").Get() ** 2) * mesh.GetAttribute("height").Get()
-        else:
-            raise ValueError(f"Cannot compute volume for mesh of type: {mesh_type}")
-
-        mesh_volume *= np.product(self.get_world_scale())
-        return mesh_volume
+        mesh = mesh_prim_to_trimesh_mesh(self.prim, include_normals=False, include_texcoord=False, world_frame=True)
+        return mesh.volume if mesh.is_volume else mesh.convex_hull.volume
 
     @volume.setter
     def volume(self, volume):
@@ -405,7 +429,6 @@ class ClothPrim(GeomPrim):
         return np.zeros(3)
 
     def set_linear_velocity(self, velocity):
-
         """
         Sets the linear velocity of all the particles of the cloth prim.
 
@@ -507,14 +530,14 @@ class ClothPrim(GeomPrim):
         Args:
             group (int): Particle group this instancer belongs to
         """
-        return self.set_attribute(attr="physxParticle:particleGroup", val=group)
+        self.set_attribute(attr="physxParticle:particleGroup", val=group)
 
     def _dump_state(self):
         # Run super first
         state = super()._dump_state()
         state["particle_group"] = self.particle_group
         state["n_particles"] = self.n_particles
-        state["particle_positions"] = self.particle_positions
+        state["particle_positions"] = self.compute_particle_positions()
         state["particle_velocities"] = self.particle_velocities
         return state
 
@@ -522,39 +545,53 @@ class ClothPrim(GeomPrim):
         # Run super first
         super()._load_state(state=state)
         # Sanity check the identification number and particle group
-        assert self.particle_group == state["particle_group"], f"Got mismatch in particle group for this cloth " \
+        assert self.particle_group == state["particle_group"], (
+            f"Got mismatch in particle group for this cloth "
             f"when loading state! Should be: {self.particle_group}, got: {state['particle_group']}."
+        )
 
         # Set values appropriately
         self._n_particles = state["n_particles"]
-        for attr in ("positions", "velocities"):
-            attr_name = f"particle_{attr}"
-            # Make sure the loaded state is a numpy array, it could have been accidentally casted into a list during
-            # JSON-serialization
-            attr_val = np.array(state[attr_name]) if not isinstance(attr_name, np.ndarray) else state[attr_name]
-            setattr(self, attr_name, attr_val)
+        # Make sure the loaded state is a numpy array, it could have been accidentally casted into a list during
+        # JSON-serialization
+        self.particle_velocities = (
+            np.array(state["particle_velocities"])
+            if not isinstance(state["particle_velocities"], np.ndarray)
+            else state["particle_velocities"]
+        )
+        self.set_particle_positions(
+            positions=(
+                np.array(state["particle_positions"])
+                if not isinstance(state["particle_positions"], np.ndarray)
+                else state["particle_positions"]
+            )
+        )
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Run super first
-        state_flat = super()._serialize(state=state)
+        state_flat = super().serialize(state=state)
 
-        return np.concatenate([
-            state_flat,
-            [state["particle_group"], state["n_particles"]],
-            state["particle_positions"].reshape(-1),
-            state["particle_velocities"].reshape(-1),
-        ]).astype(float)
+        return np.concatenate(
+            [
+                state_flat,
+                [state["particle_group"], state["n_particles"]],
+                state["particle_positions"].reshape(-1),
+                state["particle_velocities"].reshape(-1),
+            ]
+        ).astype(float)
 
-    def _deserialize(self, state):
+    def deserialize(self, state):
         # Run super first
-        state_dict, idx = super()._deserialize(state=state)
+        state_dict, idx = super().deserialize(state=state)
 
         particle_group = int(state[idx])
         n_particles = int(state[idx + 1])
 
         # Sanity check the identification number
-        assert self.particle_group == particle_group, f"Got mismatch in particle group for this particle " \
+        assert self.particle_group == particle_group, (
+            f"Got mismatch in particle group for this particle "
             f"instancer when deserializing state! Should be: {self.particle_group}, got: {particle_group}."
+        )
 
         # De-compress from 1D array
         state_dict["particle_group"] = particle_group
@@ -566,15 +603,16 @@ class ClothPrim(GeomPrim):
 
         idx += 2
         for key, size in zip(keys, sizes):
-            length = np.product(size)
-            state_dict[key] = state[idx: idx + length].reshape(size)
+            length = np.prod(size)
+            state_dict[key] = state[idx : idx + length].reshape(size)
             idx += length
 
         return state_dict, idx
 
     def reset(self):
         """
-        Reset the points to their default positions in the local frame
+        Reset the points to their default positions in the local frame, and also zeroes out velocities
         """
         if self.initialized:
-            self.set_attribute(attr="points", val=Vt.Vec3fArray.FromNumpy(self._default_positions))
+            self.set_attribute(attr="points", val=lazy.pxr.Vt.Vec3fArray.FromNumpy(self._default_positions))
+            self.particle_velocities = np.zeros((self._n_particles, 3))

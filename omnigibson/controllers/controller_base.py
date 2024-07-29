@@ -1,9 +1,9 @@
-from collections import Iterable
+from collections.abc import Iterable
 from enum import IntEnum
 
 import numpy as np
 
-from omnigibson.utils.python_utils import classproperty, assert_valid_key, Serializable, Registerable, Recreatable
+from omnigibson.utils.python_utils import Recreatable, Registerable, Serializable, assert_valid_key, classproperty
 
 # Global dicts that will contain mappings
 REGISTERED_CONTROLLERS = dict()
@@ -113,21 +113,29 @@ class BaseController(Serializable, Registerable, Recreatable):
         self._dof_has_limits = control_limits["has_limit"]
         self._dof_idx = np.array(dof_idx, dtype=int)
 
+        # Generate goal information
+        self._goal_shapes = self._get_goal_shapes()
+        self._goal_dim = int(np.sum([np.prod(shape) for shape in self._goal_shapes.values()]))
+
         # Initialize some other variables that will be filled in during runtime
         self._control = None
-        self._command = None
+        self._goal = None
         self._command_scale_factor = None
         self._command_output_transform = None
         self._command_input_transform = None
 
         # Standardize command input / output limits to be (min_array, max_array)
-        command_input_limits = (-1.0, 1.0) if command_input_limits == "default" else command_input_limits
+        command_input_limits = (
+            (-1.0, 1.0)
+            if type(command_input_limits) == str and command_input_limits == "default"
+            else command_input_limits
+        )
         command_output_limits = (
             (
                 np.array(self._control_limits[self.control_type][0])[self.dof_idx],
                 np.array(self._control_limits[self.control_type][1])[self.dof_idx],
             )
-            if command_output_limits == "default"
+            if type(command_output_limits) == str and command_output_limits == "default"
             else command_output_limits
         )
         self._command_input_limits = (
@@ -174,7 +182,9 @@ class BaseController(Serializable, Registerable, Recreatable):
                     self._command_output_transform = (
                         self._command_output_limits[1] + self._command_output_limits[0]
                     ) / 2.0
-                    self._command_input_transform = (self._command_input_limits[1] + self._command_input_limits[0]) / 2.0
+                    self._command_input_transform = (
+                        self._command_input_limits[1] + self._command_input_limits[0]
+                    ) / 2.0
                 # Scale command
                 command = (
                     command - self._command_input_transform
@@ -183,19 +193,52 @@ class BaseController(Serializable, Registerable, Recreatable):
         # Return processed command
         return command
 
-    def update_command(self, command):
+    def update_goal(self, command, control_dict):
         """
-        Updates inputted @command internally.
+        Updates inputted @command internally, writing any necessary internal variables as needed.
 
         Args:
-            command (Array[float]): inputted command to store internally in this controller
+            command (Array[float]): inputted command to preprocess and extract relevant goal(s) to store
+                internally in this controller
+            control_dict (dict): Current state
         """
         # Sanity check the command
-        assert len(command) == self.command_dim, "Commands must be dimension {}, got dim {} instead.".format(
-            self.command_dim, len(command)
-        )
-        # Preprocess and store inputted command
-        self._command = self._preprocess_command(np.array(command))
+        assert (
+            len(command) == self.command_dim
+        ), f"Commands must be dimension {self.command_dim}, got dim {len(command)} instead."
+
+        # Preprocess and run internal command
+        self._goal = self._update_goal(command=self._preprocess_command(np.array(command)), control_dict=control_dict)
+
+    def _update_goal(self, command, control_dict):
+        """
+        Updates inputted @command internally, writing any necessary internal variables as needed.
+
+        Args:
+            command (Array[float]): inputted (preprocessed!) command and extract relevant goal(s) to store
+                internally in this controller
+            control_dict (dict): Current state
+
+        Returns:
+            dict: Keyword-mapped goals to store internally in this controller
+        """
+        raise NotImplementedError
+
+    def compute_control(self, goal_dict, control_dict):
+        """
+        Converts the (already preprocessed) inputted @command into deployable (non-clipped!) control signal.
+        Should be implemented by subclass.
+
+        Args:
+            goal_dict (Dict[str, Any]): dictionary that should include any relevant keyword-mapped
+                goals necessary for controller computation
+            control_dict (Dict[str, Any]): dictionary that should include any relevant keyword-mapped
+                states necessary for controller computation
+
+        Returns:
+            Array[float]: outputted (non-clipped!) control signal to deploy
+        """
+        raise NotImplementedError
 
     def clip_control(self, control):
         """
@@ -230,44 +273,91 @@ class BaseController(Serializable, Registerable, Recreatable):
         Returns:
             Array[float]: numpy array of outputted control signals
         """
-        control = self._command_to_control(command=self._command, control_dict=control_dict)
+        # Generate no-op goal if not specified
+        if self._goal is None:
+            self._goal = self.compute_no_op_goal(control_dict=control_dict)
+
+        # Compute control, then clip and return
+        control = self.compute_control(goal_dict=self._goal, control_dict=control_dict)
+        assert (
+            len(control) == self.control_dim
+        ), f"Control signal must be of length {self.control_dim}, got {len(control)} instead."
         self._control = self.clip_control(control=control)
         return self._control
 
     def reset(self):
         """
-        Resets this controller. Should be implemented by subclass.
+        Resets this controller. Can be extended by subclass
+        """
+        self._goal = None
+
+    def compute_no_op_goal(self, control_dict):
+        """
+        Compute no-op goal given the current state @control_dict
+
+        Args:
+            control_dict (dict): Current state
+
+        Returns:
+            dict: Maps relevant goal keys (from self._goal_shapes.keys()) to relevant goal data to be used
+                in controller computations
         """
         raise NotImplementedError
 
     def _dump_state(self):
-        # Default is no state (empty dict)
-        return dict()
+        # Default is just the command
+        return dict(
+            goal_is_valid=self._goal is not None,
+            goal=self._goal,
+        )
 
     def _load_state(self, state):
-        # Default is no state (empty dict), so this is a no-op
-        pass
+        # Make sure every entry in goal is a numpy array
+        # Load goal
+        self._goal = (
+            None
+            if state["goal"] is None
+            else {name: np.array(goal_state) for name, goal_state in state["goal"].items()}
+        )
 
-    def _serialize(self, state):
-        # Default is no state, so do nothing
-        return np.array([])
+    def serialize(self, state):
+        # Make sure size of the state is consistent, even if we have no goal
+        goal_state_flattened = (
+            np.concatenate([goal_state.flatten() for goal_state in self._goal.values()])
+            if (state)["goal_is_valid"]
+            else np.zeros(self.goal_dim)
+        )
 
-    def _deserialize(self, state):
-        # Default is no state, so do nothing
-        return dict(), 0
+        return np.concatenate(
+            [
+                [state["goal_is_valid"]],
+                goal_state_flattened,
+            ]
+        )
 
-    def _command_to_control(self, command, control_dict):
+    def deserialize(self, state):
+        goal_is_valid = bool(state[0])
+        if goal_is_valid:
+            # Un-flatten all the keys
+            idx = 1
+            goal = dict()
+            for key, shape in self._goal_shapes.items():
+                length = np.prod(shape)
+                goal[key] = state[idx : idx + length].reshape(shape)
+                idx += length
+        else:
+            goal = None
+        state_dict = dict(
+            goal_is_valid=goal_is_valid,
+            goal=goal,
+        )
+        return state_dict, self.goal_dim + 1
+
+    def _get_goal_shapes(self):
         """
-        Converts the (already preprocessed) inputted @command into deployable (non-clipped!) control signal.
-        Should be implemented by subclass.
-
-        Args:
-            command (Array[float]): desired (already preprocessed) command to convert into control signals
-            control_dict (Dict[str, Any]): dictionary that should include any relevant keyword-mapped
-                states necessary for controller computation
-
         Returns:
-            Array[float]: outputted (non-clipped!) control signal to deploy
+            dict: Maps keyword in @self.goal to its corresponding numerical shape. This should be static
+                and analytically computed prior to any controller steps being taken
         """
         raise NotImplementedError
 
@@ -294,8 +384,25 @@ class BaseController(Serializable, Registerable, Recreatable):
 
     @property
     def state_size(self):
-        # Default is no state, so return 0
-        return 0
+        # Default is goal dim + 1 (for whether the goal is valid or not)
+        return self.goal_dim + 1
+
+    @property
+    def goal(self):
+        """
+        Returns:
+            dict: Current goal for this controller. Maps relevant goal keys to goal values to be
+                used during controller step computations
+        """
+        return self._goal
+
+    @property
+    def goal_dim(self):
+        """
+        Returns:
+            int: Expected size of flattened, internal goals
+        """
+        return self._goal_dim
 
     @property
     def control(self):

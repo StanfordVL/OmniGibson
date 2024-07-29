@@ -1,21 +1,66 @@
-from abc import ABC, abstractmethod
 import inspect
-import omnigibson as og
-from omnigibson.utils.python_utils import classproperty, Serializable, Registerable, Recreatable
+from abc import ABC
 
+import omnigibson as og
+from omnigibson.utils.python_utils import Recreatable, Registerable, Serializable, classproperty
 
 # Global dicts that will contain mappings
 REGISTERED_OBJECT_STATES = dict()
 
 
-class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
+class BaseObjectRequirement:
+    """
+    Base ObjectRequirement class. This allows for sanity checking a given asset / BaseObject to check whether a set
+    of conditions are met or not. This can be useful for sanity checking dependencies for properties such as requested
+    abilities or object states.
+    """
+
+    @classmethod
+    def is_compatible(cls, obj, **kwargs):
+        """
+        Determines whether this requirement is compatible with object @obj or not (i.e.: whether this requirement is
+        satisfied by @obj given other constructor arguments **kwargs).
+
+        NOTE: Must be implemented by subclass.
+
+        Args:
+            obj (StatefulObject): Object whose compatibility with this state should be checked
+
+        Returns:
+            2-tuple:
+                - bool: Whether the given object is compatible with this requirement or not
+                - None or str: If not compatible, the reason why it is not compatible. Otherwise, None
+        """
+        raise NotImplementedError
+
+    @classmethod
+    def is_compatible_asset(cls, prim, **kwargs):
+        """
+        Determines whether this requirement is compatible with prim @prim or not (i.e.: whether this requirement is
+        satisfied by @prim given other constructor arguments **kwargs).
+        This is a useful check to evaluate an object's USD that hasn't been explicitly imported into OmniGibson yet.
+
+        NOTE: Must be implemented by subclass
+
+        Args:
+            prim (Usd.Prim): Object prim whose compatibility with this requirement should be checked
+
+        Returns:
+            2-tuple:
+                - bool: Whether the given prim is compatible with this requirement or not
+                - None or str: If not compatible, the reason why it is not compatible. Otherwise, None
+        """
+        raise NotImplementedError
+
+
+class BaseObjectState(BaseObjectRequirement, Serializable, Registerable, Recreatable, ABC):
     """
     Base ObjectState class. Do NOT inherit from this class directly - use either AbsoluteObjectState or
     RelativeObjectState.
     """
 
-    @staticmethod
-    def get_dependencies():
+    @classmethod
+    def get_dependencies(cls):
         """
         Get the dependency states for this state, e.g. states that need to be explicitly enabled on the current object
         before the current state is usable. States listed here will be enabled for all objects that have this current
@@ -23,12 +68,12 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         *any* object.
 
         Returns:
-            list of str: List of strings corresponding to state keys.
+            set of str: Set of strings corresponding to state keys.
         """
-        return []
+        return set()
 
-    @staticmethod
-    def get_optional_dependencies():
+    @classmethod
+    def get_optional_dependencies(cls):
         """
         Get states that should be processed prior to this state if they are already enabled. These states will not be
         enabled because of this state's dependency on them, but if they are already enabled for another reason (e.g.
@@ -36,9 +81,9 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         state being processed on *any* object.
 
         Returns:
-            list of str: List of strings corresponding to state keys.
+            set of str: Set of strings corresponding to state keys.
         """
-        return []
+        return set()
 
     def __init__(self, obj):
         super().__init__()
@@ -46,24 +91,24 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         self._initialized = False
         self._cache = None
         self._changed = None
-        self._last_t_updated = -1               # Last timestep when this state was updated
+        self._last_t_updated = -1  # Last timestep when this state was updated
 
     @classmethod
     def is_compatible(cls, obj, **kwargs):
-        """
-        Determines whether this object state is compatible with object @obj or not (i.e.: whether the state can be
-        successfully instantiated with @self.obj given other constructor arguments **kwargs.
+        # Make sure all required dependencies are included in this object's state dictionary
+        for dep in cls.get_dependencies():
+            if dep not in obj.states:
+                return False, f"Missing required dependency state {dep.__name__}"
+        # Make sure all required kwargs are specified
+        default_kwargs = inspect.signature(cls.__init__).parameters
+        for kwarg, val in default_kwargs.items():
+            if val.default == inspect._empty and kwarg not in kwargs and kwarg not in {"obj", "self", "args", "kwargs"}:
+                return False, f"Missing required kwarg '{kwarg}'"
+        # Default is True if all kwargs are met
+        return True, None
 
-        NOTE: Can be further extended by subclass
-
-        Args:
-            obj (StatefulObject): Object whose compatibility with this state should be checked
-
-        Returns:
-            2-tuple:
-                - bool: Whether the given object is compatible with this object state or not
-                - None or str: If not compatible, the reason why it is not compatible. Otherwise, None
-        """
+    @classmethod
+    def is_compatible_asset(cls, prim, **kwargs):
         # Make sure all required kwargs are specified
         default_kwargs = inspect.signature(cls.__init__).parameters
         for kwarg, val in default_kwargs.items():
@@ -71,6 +116,13 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
                 return False, f"Missing required kwarg '{kwarg}'"
         # Default is True if all kwargs are met
         return True, None
+
+    @classmethod
+    def postprocess_ability_params(cls, params, scene):
+        """
+        Post-processes ability parameters if needed. The default implementation is a simple passthrough.
+        """
+        return params
 
     @property
     def stateful(self):
@@ -110,8 +162,9 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
 
         # Validate compatibility with the created object
         init_args = {k: v for k, v in self.get_init_info()["args"].items() if k != "obj"}
-        assert self.is_compatible(obj=self.obj, **init_args), \
-            f"ObjectState {self.__class__.__name__} is not compatible with object {self.obj.name}."
+        assert self.is_compatible(
+            obj=self.obj, **init_args
+        ), f"ObjectState {self.__class__.__name__} is not compatible with object {self.obj.name}."
 
         # Clear cache
         self.clear_cache()
@@ -145,7 +198,7 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
     def cache_info(self, get_value_args):
         """
         Helper function to cache relevant information at the current timestep.
-        Stores it under @self._cache[<KEY>]["info"]
+        Stores it under @self._cache [<KEY>]["info"]
 
         Args:
             get_value_args (tuple): Specific argument combinations (usually tuple of objects) passed into
@@ -170,8 +223,11 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
             bool: True if the cache is valid, else False
         """
         # If t == the current timestep, then our cache is obviously valid otherwise we assume it isn't
-        return True if self._cache[get_value_args]["t"] == og.sim.current_time_step_index else \
-            self._cache_is_valid(get_value_args=get_value_args)
+        return (
+            True
+            if self._cache[get_value_args]["t"] == og.sim.current_time_step_index
+            else self._cache_is_valid(get_value_args=get_value_args)
+        )
 
     def _cache_is_valid(self, get_value_args):
         """
@@ -274,7 +330,7 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         return val
 
     def _get_value(self, *args, **kwargs):
-        raise NotImplementedError
+        raise NotImplementedError(f"_get_value not implemented for {self.__class__.__name__} state.")
 
     def set_value(self, *args, **kwargs):
         """
@@ -291,7 +347,7 @@ class BaseObjectState(Serializable, Registerable, Recreatable, ABC):
         return val
 
     def _set_value(self, *args, **kwargs):
-        raise NotImplementedError
+        raise NotImplementedError(f"_set_value not implemented for {self.__class__.__name__} state.")
 
     def remove(self):
         """
@@ -324,13 +380,11 @@ class AbsoluteObjectState(BaseObjectState):
     the value.
     """
 
-    @abstractmethod
     def _get_value(self):
-        raise NotImplementedError()
+        raise NotImplementedError(f"_get_value not implemented for {self.__class__.__name__} state.")
 
-    @abstractmethod
     def _set_value(self, new_value):
-        raise NotImplementedError()
+        raise NotImplementedError(f"_set_value not implemented for {self.__class__.__name__} state.")
 
     @classproperty
     def _do_not_register_classes(cls):
@@ -346,13 +400,11 @@ class RelativeObjectState(BaseObjectState):
     Note that subclasses will typically compute values on-the-fly.
     """
 
-    @abstractmethod
     def _get_value(self, other):
-        raise NotImplementedError()
+        raise NotImplementedError(f"_get_value not implemented for {self.__class__.__name__} state.")
 
-    @abstractmethod
     def _set_value(self, other, new_value):
-        raise NotImplementedError()
+        raise NotImplementedError(f"_set_value not implemented for {self.__class__.__name__} state.")
 
     @classproperty
     def _do_not_register_classes(cls):
@@ -362,7 +414,31 @@ class RelativeObjectState(BaseObjectState):
         return classes
 
 
-class BooleanState:
+class IntrinsicObjectState(BaseObjectState):
+    """
+    This class is used to track object states that should NOT have getters / setters implemented, since the associated
+    ability / state is intrinsic to the state
+    """
+
+    def _get_value(self):
+        raise NotImplementedError(
+            f"_get_value not implemented for IntrinsicObjectState {self.__class__.__name__} state."
+        )
+
+    def _set_value(self, new_value):
+        raise NotImplementedError(
+            f"_set_value not implemented for IntrinsicObjectState {self.__class__.__name__} state."
+        )
+
+    @classproperty
+    def _do_not_register_classes(cls):
+        # Don't register this class since it's an abstract template
+        classes = super()._do_not_register_classes
+        classes.add("IntrinsicObjectState")
+        return classes
+
+
+class BooleanStateMixin(BaseObjectState):
     """
     This class is a mixin used to indicate that a state has a boolean value.
     """

@@ -1,5 +1,5 @@
-from omnigibson.reward_functions.reward_function_base import BaseRewardFunction
 import omnigibson.utils.transform_utils as T
+from omnigibson.reward_functions.reward_function_base import BaseRewardFunction
 
 
 class ReachingGoalReward(BaseRewardFunction):
@@ -26,8 +26,7 @@ class ReachingGoalReward(BaseRewardFunction):
 
     def _step(self, task, env, action):
         # Sparse reward is received if distance between robot_idn robot's eef and goal is below the distance threshold
-        success = T.l2_distance(env.robots[self._robot_idn].get_eef_position(), task.goal_pos) < \
-            self._distance_tol
+        success = T.l2_distance(env.robots[self._robot_idn].get_eef_position(), task.goal_pos) < self._distance_tol
         reward = self._r_reach if success else 0.0
 
         return reward, {}

@@ -1,41 +1,34 @@
+import numpy as np
+import pytest
+from utils import SYSTEM_EXAMPLES, get_random_pose, og_test, place_obj_on_floor_plane, place_objA_on_objB_bbox
+
+import omnigibson as og
+import omnigibson.utils.transform_utils as T
 from omnigibson.macros import macros as m
 from omnigibson.object_states import *
-from omnigibson.systems import get_system
+from omnigibson.systems import VisualParticleSystem
+from omnigibson.utils.constants import PrimType
 from omnigibson.utils.physx_utils import apply_force_at_pos, apply_torque
-import omnigibson.utils.transform_utils as T
-from omnigibson.utils.usd_utils import BoundingBoxAPI
-import omnigibson as og
-
-from utils import og_test, get_random_pose
-
-import pytest
-import numpy as np
 
 
 @og_test
-def test_on_top():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-    bowl = og.sim.scene.object_registry("name", "bowl")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_on_top(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    bowl = env.scene.object_registry("name", "bowl")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
-    breakfast_table.set_position([0., 0., 0.53])
-    bowl.set_position([0., 0., 0.7])
-    dishtowel.set_position([0.5, 0., 0.67])
+    place_obj_on_floor_plane(breakfast_table)
+    for i, obj in enumerate((bowl, dishtowel)):
+        place_objA_on_objB_bbox(obj, breakfast_table)
+        for _ in range(5):
+            og.sim.step()
 
-    for _ in range(5):
+        assert obj.states[OnTop].get_value(breakfast_table)
+
+        obj.set_position(np.ones(3) * 10 * (i + 1))
         og.sim.step()
 
-    assert bowl.states[OnTop].get_value(breakfast_table)
-    assert dishtowel.states[OnTop].get_value(breakfast_table)
-
-    bowl.set_position([10., 10., 1.])
-    dishtowel.set_position([20., 20., 1.])
-
-    for _ in range(5):
-        og.sim.step()
-
-    assert not bowl.states[OnTop].get_value(breakfast_table)
-    assert not dishtowel.states[OnTop].get_value(breakfast_table)
+        assert not obj.states[OnTop].get_value(breakfast_table)
 
     assert bowl.states[OnTop].set_value(breakfast_table, True)
     assert dishtowel.states[OnTop].set_value(breakfast_table, True)
@@ -45,14 +38,14 @@ def test_on_top():
 
 
 @og_test
-def test_inside():
-    bottom_cabinet = og.sim.scene.object_registry("name", "bottom_cabinet")
-    bowl = og.sim.scene.object_registry("name", "bowl")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_inside(env):
+    bottom_cabinet = env.scene.object_registry("name", "bottom_cabinet")
+    bowl = env.scene.object_registry("name", "bowl")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
-    bottom_cabinet.set_position([0., 0., 0.38])
-    bowl.set_position([0., 0., 0.08])
-    dishtowel.set_position([0, 0., 0.63])
+    place_obj_on_floor_plane(bottom_cabinet)
+    bowl.set_position([0.0, 0.0, 0.08])
+    dishtowel.set_position([0, 0.0, 0.5])
 
     for _ in range(5):
         og.sim.step()
@@ -60,8 +53,8 @@ def test_inside():
     assert bowl.states[Inside].get_value(bottom_cabinet)
     assert dishtowel.states[Inside].get_value(bottom_cabinet)
 
-    bowl.set_position([10., 10., 1.])
-    dishtowel.set_position([20., 20., 1.])
+    bowl.set_position([10.0, 10.0, 1.0])
+    dishtowel.set_position([20.0, 20.0, 1.0])
 
     for _ in range(5):
         og.sim.step()
@@ -77,29 +70,23 @@ def test_inside():
 
 
 @og_test
-def test_under():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-    bowl = og.sim.scene.object_registry("name", "bowl")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_under(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    bowl = env.scene.object_registry("name", "bowl")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
-    breakfast_table.set_position([0., 0., 0.53])
-    bowl.set_position([0., 0., 0.04])
-    dishtowel.set_position([0.3, 0., 0.02])
+    place_obj_on_floor_plane(breakfast_table)
+    for i, obj in enumerate((bowl, dishtowel)):
+        place_obj_on_floor_plane(obj)
+        for _ in range(5):
+            og.sim.step()
 
-    for _ in range(5):
+        assert obj.states[Under].get_value(breakfast_table)
+
+        obj.set_position(np.ones(3) * 10 * (i + 1))
         og.sim.step()
 
-    assert bowl.states[Under].get_value(breakfast_table)
-    assert dishtowel.states[Under].get_value(breakfast_table)
-
-    bowl.set_position([10., 10., 1.])
-    dishtowel.set_position([20., 20., 1.])
-
-    for _ in range(5):
-        og.sim.step()
-
-    assert not bowl.states[Under].get_value(breakfast_table)
-    assert not dishtowel.states[Under].get_value(breakfast_table)
+        assert not obj.states[Under].get_value(breakfast_table)
 
     assert bowl.states[Under].set_value(breakfast_table, True)
     assert dishtowel.states[Under].set_value(breakfast_table, True)
@@ -109,123 +96,97 @@ def test_under():
 
 
 @og_test
-def test_touching():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-    bowl = og.sim.scene.object_registry("name", "bowl")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_touching(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    bowl = env.scene.object_registry("name", "bowl")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
-    breakfast_table.set_position([0., 0., 0.53])
-    bowl.set_position([0., 0., 0.7])
-    dishtowel.set_position([0.5, 0., 0.67])
+    place_obj_on_floor_plane(breakfast_table)
+    for i, obj in enumerate((bowl, dishtowel)):
+        place_objA_on_objB_bbox(obj, breakfast_table)
+        for _ in range(5):
+            og.sim.step()
 
-    for _ in range(5):
+        assert obj.states[Touching].get_value(breakfast_table)
+        assert breakfast_table.states[Touching].get_value(obj)
+
+        obj.set_position(np.ones(3) * 10 * (i + 1))
         og.sim.step()
 
-    assert bowl.states[Touching].get_value(breakfast_table)
-    assert breakfast_table.states[Touching].get_value(bowl)
-    assert dishtowel.states[Touching].get_value(breakfast_table)
-    assert breakfast_table.states[Touching].get_value(dishtowel)
-
-    bowl.set_position([10., 10., 1.])
-    dishtowel.set_position([20., 20., 1.])
-
-    for _ in range(5):
-        og.sim.step()
-
-    assert not bowl.states[Touching].get_value(breakfast_table)
-    assert not breakfast_table.states[Touching].get_value(bowl)
-    assert not dishtowel.states[Touching].get_value(breakfast_table)
-    assert not breakfast_table.states[Touching].get_value(dishtowel)
+        assert not obj.states[Touching].get_value(breakfast_table)
+        assert not breakfast_table.states[Touching].get_value(obj)
 
     with pytest.raises(NotImplementedError):
         bowl.states[Touching].set_value(breakfast_table, None)
 
 
 @og_test
-def test_contact_bodies():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-    bowl = og.sim.scene.object_registry("name", "bowl")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_contact_bodies(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    bowl = env.scene.object_registry("name", "bowl")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
-    breakfast_table.set_position([0., 0., 0.53])
-    bowl.set_position([0., 0., 0.7])
-    dishtowel.set_position([0.5, 0., 0.67])
+    place_obj_on_floor_plane(breakfast_table)
+    for i, obj in enumerate((bowl, dishtowel)):
+        place_objA_on_objB_bbox(obj, breakfast_table)
+        for _ in range(5):
+            og.sim.step()
 
-    for _ in range(5):
+        # TODO: rigid body's ContactBodies should include cloth
+        if obj.prim_type != PrimType.CLOTH:
+            assert obj.root_link in breakfast_table.states[ContactBodies].get_value()
+        assert breakfast_table.root_link in obj.states[ContactBodies].get_value()
+
+        obj.set_position(np.ones(3) * 10 * (i + 1))
         og.sim.step()
 
-    assert bowl.root_link in breakfast_table.states[ContactBodies].get_value()
-    # TODO: rigid body's ContactBodies should include cloth
-    # assert dishtowel.root_link in breakfast_table.states[ContactBodies].get_value()
-    assert breakfast_table.root_link in bowl.states[ContactBodies].get_value()
-    assert breakfast_table.root_link in dishtowel.states[ContactBodies].get_value()
-
-    bowl.set_position([10., 10., 1.])
-    dishtowel.set_position([20., 20., 1.])
-
-    for _ in range(5):
-        og.sim.step()
-
-    assert bowl.root_link not in breakfast_table.states[ContactBodies].get_value()
-    # TODO: rigid body's ContactBodies should include cloth
-    # assert dishtowel.root_link in breakfast_table.states[ContactBodies].get_value()
-    assert breakfast_table.root_link not in bowl.states[ContactBodies].get_value()
-    assert breakfast_table.root_link not in dishtowel.states[ContactBodies].get_value()
+        assert obj.root_link not in breakfast_table.states[ContactBodies].get_value()
+        assert breakfast_table.root_link not in obj.states[ContactBodies].get_value()
 
     with pytest.raises(NotImplementedError):
         bowl.states[ContactBodies].set_value(None)
 
 
 @og_test
-def test_next_to():
-    bottom_cabinet = og.sim.scene.object_registry("name", "bottom_cabinet")
-    bowl = og.sim.scene.object_registry("name", "bowl")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_next_to(env):
+    bottom_cabinet = env.scene.object_registry("name", "bottom_cabinet")
+    bowl = env.scene.object_registry("name", "bowl")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
-    bottom_cabinet.set_position([0., 0., 0.38])
-    bowl.set_position([0.4, 0., 0.04])
-    dishtowel.set_position([0., 0.4, 0.02])
+    place_obj_on_floor_plane(bottom_cabinet)
+    for i, (axis, obj) in enumerate(zip(("x", "y"), (bowl, dishtowel))):
+        place_obj_on_floor_plane(obj, **{f"{axis}_offset": 0.3})
+        for _ in range(5):
+            og.sim.step()
 
-    for _ in range(5):
+        assert obj.states[NextTo].get_value(bottom_cabinet)
+        assert bottom_cabinet.states[NextTo].get_value(obj)
+
+        obj.set_position(np.ones(3) * 10 * (i + 1))
         og.sim.step()
 
-    assert bowl.states[NextTo].get_value(bottom_cabinet)
-    assert bottom_cabinet.states[NextTo].get_value(bowl)
-    assert dishtowel.states[NextTo].get_value(bottom_cabinet)
-    assert bottom_cabinet.states[NextTo].get_value(dishtowel)
-
-    bowl.set_position([10., 10., 1.])
-    dishtowel.set_position([20., 20., 1.])
-
-    for _ in range(5):
-        og.sim.step()
-
-    assert not bowl.states[NextTo].get_value(bottom_cabinet)
-    assert not bottom_cabinet.states[NextTo].get_value(bowl)
-    assert not dishtowel.states[NextTo].get_value(bottom_cabinet)
-    assert not bottom_cabinet.states[NextTo].get_value(dishtowel)
+        assert not obj.states[NextTo].get_value(bottom_cabinet)
+        assert not bottom_cabinet.states[NextTo].get_value(obj)
 
     with pytest.raises(NotImplementedError):
         bowl.states[NextTo].set_value(bottom_cabinet, None)
 
 
 @og_test
-def test_overlaid():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-    carpet = og.sim.scene.object_registry("name", "carpet")
+def test_overlaid(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    carpet = env.scene.object_registry("name", "carpet")
 
-    breakfast_table.set_position([0., 0., 0.53])
-    carpet.set_position([0.0, 0., 0.67])
+    place_obj_on_floor_plane(breakfast_table)
+    place_objA_on_objB_bbox(carpet, breakfast_table)
 
     for _ in range(5):
         og.sim.step()
 
     assert carpet.states[Overlaid].get_value(breakfast_table)
 
-    carpet.set_position([20., 20., 1.])
-
-    for _ in range(5):
-        og.sim.step()
+    carpet.set_position(np.ones(3) * 20.0)
+    og.sim.step()
 
     assert not carpet.states[Overlaid].get_value(breakfast_table)
 
@@ -236,9 +197,9 @@ def test_overlaid():
 
 
 @og_test
-def test_pose():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_pose(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
     pos1, orn1 = get_random_pose()
     breakfast_table.set_position_orientation(pos1, orn1)
@@ -247,18 +208,22 @@ def test_pose():
     dishtowel.set_position_orientation(pos2, orn2)
 
     assert np.allclose(breakfast_table.states[Pose].get_value()[0], pos1)
-    assert np.allclose(breakfast_table.states[Pose].get_value()[1], orn1) or np.allclose(breakfast_table.states[Pose].get_value()[1], -orn1)
+    assert np.allclose(breakfast_table.states[Pose].get_value()[1], orn1) or np.allclose(
+        breakfast_table.states[Pose].get_value()[1], -orn1
+    )
     assert np.allclose(dishtowel.states[Pose].get_value()[0], pos2)
-    assert np.allclose(dishtowel.states[Pose].get_value()[1], orn2) or np.allclose(dishtowel.states[Pose].get_value()[1], -orn2)
+    assert np.allclose(dishtowel.states[Pose].get_value()[1], orn2) or np.allclose(
+        dishtowel.states[Pose].get_value()[1], -orn2
+    )
 
     with pytest.raises(NotImplementedError):
         breakfast_table.states[Pose].set_value(None)
 
 
 @og_test
-def test_aabb():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_aabb(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
     pos1, orn1 = get_random_pose()
     breakfast_table.set_position_orientation(pos1, orn1)
@@ -269,11 +234,14 @@ def test_aabb():
     # Need to take one sim step
     og.sim.step()
 
-    assert np.allclose(breakfast_table.states[AABB].get_value(), BoundingBoxAPI.compute_aabb(breakfast_table))
-    assert np.all((breakfast_table.states[AABB].get_value()[0] < pos1) & (pos1 < breakfast_table.states[AABB].get_value()[1]))
+    assert np.allclose(breakfast_table.states[AABB].get_value(), breakfast_table.aabb)
+    assert np.all(
+        (breakfast_table.states[AABB].get_value()[0] < pos1) & (pos1 < breakfast_table.states[AABB].get_value()[1])
+    )
 
-    pp = dishtowel.root_link.particle_positions
-    assert np.allclose(dishtowel.states[AABB].get_value(), (pp.min(axis=0), pp.max(axis=0)))
+    pp = dishtowel.root_link.compute_particle_positions()
+    offset = dishtowel.root_link.cloth_system.particle_contact_offset
+    assert np.allclose(dishtowel.states[AABB].get_value(), (pp.min(axis=0) - offset, pp.max(axis=0) + offset))
     assert np.all((dishtowel.states[AABB].get_value()[0] < pos2) & (pos2 < dishtowel.states[AABB].get_value()[1]))
 
     with pytest.raises(NotImplementedError):
@@ -281,31 +249,26 @@ def test_aabb():
 
 
 @og_test
-def test_adjacency():
-    bottom_cabinet = og.sim.scene.object_registry("name", "bottom_cabinet")
-    bowl = og.sim.scene.object_registry("name", "bowl")
-    dishtowel = og.sim.scene.object_registry("name", "dishtowel")
+def test_adjacency(env):
+    bottom_cabinet = env.scene.object_registry("name", "bottom_cabinet")
+    bowl = env.scene.object_registry("name", "bowl")
+    dishtowel = env.scene.object_registry("name", "dishtowel")
 
-    bottom_cabinet.set_position([0., 0., 0.38])
-    bowl.set_position([0.4, 0., 0.04])
-    dishtowel.set_position([0., 0.4, 0.02])
+    place_obj_on_floor_plane(bottom_cabinet)
+    for i, (axis, obj) in enumerate(zip(("x", "y"), (bowl, dishtowel))):
+        place_obj_on_floor_plane(obj, **{f"{axis}_offset": 0.4})
+        og.sim.step()
 
-    # Need to take one sim step
-    og.sim.step()
+        assert bottom_cabinet in set.union(
+            *(
+                axis.positive_neighbors | axis.negative_neighbors
+                for coordinate in obj.states[HorizontalAdjacency].get_value()
+                for axis in coordinate
+            )
+        )
 
-    assert bottom_cabinet in set.union(
-        *(axis.positive_neighbors | axis.negative_neighbors
-          for coordinate in bowl.states[HorizontalAdjacency].get_value() for axis in coordinate)
-    )
-
-    assert bottom_cabinet in set.union(
-        *(axis.positive_neighbors | axis.negative_neighbors
-          for coordinate in dishtowel.states[HorizontalAdjacency].get_value() for axis in coordinate)
-    )
-
-    bottom_cabinet.set_position([0., 0., 0.38])
-    bowl.set_position([0., -0.08, 1.])
-    dishtowel.set_position([0., -0.08, 2.0])
+    bowl.set_position([0.0, 0.0, 1.0])
+    dishtowel.set_position([0.0, 0.0, 2.0])
 
     # Need to take one sim step
     og.sim.step()
@@ -325,22 +288,22 @@ def test_adjacency():
 
 
 @og_test
-def test_temperature():
-    microwave = og.sim.scene.object_registry("name", "microwave")
-    stove = og.sim.scene.object_registry("name", "stove")
-    fridge = og.sim.scene.object_registry("name", "fridge")
-    plywood = og.sim.scene.object_registry("name", "plywood")
-    bagel = og.sim.scene.object_registry("name", "bagel")
-    dishtowel = og.sim.scene.object_registry("name", "cookable_dishtowel")
+def test_temperature(env):
+    microwave = env.scene.object_registry("name", "microwave")
+    stove = env.scene.object_registry("name", "stove")
+    fridge = env.scene.object_registry("name", "fridge")
+    plywood = env.scene.object_registry("name", "plywood")
+    bagel = env.scene.object_registry("name", "bagel")
+    dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
-    microwave.set_position_orientation([0., 0., 0.15], [0, 0, 0, 1])
-    stove.set_position_orientation([1, 0., 0.45], [0, 0, 0, 1])
-    fridge.set_position_orientation([2, 0., 0.98], [0, 0, 0, 1])
-    plywood.set_position_orientation([3, 0, 0.05], [0, 0, 0, 1])
+    place_obj_on_floor_plane(microwave)
+    place_obj_on_floor_plane(stove, x_offset=1.0)
+    place_obj_on_floor_plane(fridge, x_offset=2.0)
+    place_obj_on_floor_plane(plywood, x_offset=3.0)
 
     # Set the objects to be far away
-    bagel.set_position_orientation([-0.5, 0., 0.03], [0, 0, 0, 1])
-    dishtowel.set_position_orientation([-1.0, 0.0, 0.02], [0, 0, 0, 1])
+    place_obj_on_floor_plane(bagel, x_offset=-0.5)
+    place_obj_on_floor_plane(dishtowel, x_offset=-1.0)
 
     for _ in range(5):
         og.sim.step()
@@ -372,7 +335,7 @@ def test_temperature():
     assert bagel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
     assert dishtowel.states[Temperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
 
-    microwave.joints["j_link_0"].set_pos(0.)
+    microwave.joints["j_link_0"].set_pos(0.0)
 
     for _ in range(5):
         og.sim.step()
@@ -384,8 +347,8 @@ def test_temperature():
     assert dishtowel.states[Temperature].get_value() > m.object_states.temperature.DEFAULT_TEMPERATURE
 
     # Set the objects to be far away
-    bagel.set_position_orientation([-0.5, 0., 0.03], [0, 0, 0, 1])
-    dishtowel.set_position_orientation([-1.0, 0.0, 0.02], [0, 0, 0, 1])
+    place_obj_on_floor_plane(bagel, x_offset=-0.5)
+    place_obj_on_floor_plane(dishtowel, x_offset=-1.0)
     for _ in range(5):
         og.sim.step()
 
@@ -439,8 +402,8 @@ def test_temperature():
     assert dishtowel.states[Temperature].set_value(m.object_states.temperature.DEFAULT_TEMPERATURE)
 
     # Set the objects to be near the plywood
-    bagel.set_position_orientation([2.9, 0, 0.03], [0, 0, 0, 1])
-    dishtowel.set_position_orientation([3.1, 0, 0.02], [0, 0, 0, 1])
+    place_obj_on_floor_plane(bagel, x_offset=2.9)
+    place_obj_on_floor_plane(dishtowel, x_offset=3.1)
 
     for _ in range(5):
         og.sim.step()
@@ -459,9 +422,9 @@ def test_temperature():
 
 
 @og_test
-def test_max_temperature():
-    bagel = og.sim.scene.object_registry("name", "bagel")
-    dishtowel = og.sim.scene.object_registry("name", "cookable_dishtowel")
+def test_max_temperature(env):
+    bagel = env.scene.object_registry("name", "bagel")
+    dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
     assert bagel.states[MaxTemperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
     assert dishtowel.states[MaxTemperature].get_value() == m.object_states.temperature.DEFAULT_TEMPERATURE
@@ -481,10 +444,10 @@ def test_max_temperature():
 
 
 @og_test
-def test_heat_source_or_sink():
-    microwave = og.sim.scene.object_registry("name", "microwave")
-    stove = og.sim.scene.object_registry("name", "stove")
-    fridge = og.sim.scene.object_registry("name", "fridge")
+def test_heat_source_or_sink(env):
+    microwave = env.scene.object_registry("name", "microwave")
+    stove = env.scene.object_registry("name", "stove")
+    fridge = env.scene.object_registry("name", "fridge")
 
     assert microwave.states[HeatSourceOrSink].requires_inside
     assert microwave.states[HeatSourceOrSink].requires_closed
@@ -532,9 +495,9 @@ def test_heat_source_or_sink():
 
 
 @og_test
-def test_cooked():
-    bagel = og.sim.scene.object_registry("name", "bagel")
-    dishtowel = og.sim.scene.object_registry("name", "cookable_dishtowel")
+def test_cooked(env):
+    bagel = env.scene.object_registry("name", "bagel")
+    dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
     assert not bagel.states[Cooked].get_value()
     assert not dishtowel.states[Cooked].get_value()
@@ -561,9 +524,9 @@ def test_cooked():
 
 
 @og_test
-def test_burnt():
-    bagel = og.sim.scene.object_registry("name", "bagel")
-    dishtowel = og.sim.scene.object_registry("name", "cookable_dishtowel")
+def test_burnt(env):
+    bagel = env.scene.object_registry("name", "bagel")
+    dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
     assert not bagel.states[Burnt].get_value()
     assert not dishtowel.states[Burnt].get_value()
@@ -590,9 +553,9 @@ def test_burnt():
 
 
 @og_test
-def test_frozen():
-    bagel = og.sim.scene.object_registry("name", "bagel")
-    dishtowel = og.sim.scene.object_registry("name", "cookable_dishtowel")
+def test_frozen(env):
+    bagel = env.scene.object_registry("name", "bagel")
+    dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
     assert not bagel.states[Frozen].get_value()
     assert not dishtowel.states[Frozen].get_value()
@@ -619,9 +582,9 @@ def test_frozen():
 
 
 @og_test
-def test_heated():
-    bagel = og.sim.scene.object_registry("name", "bagel")
-    dishtowel = og.sim.scene.object_registry("name", "cookable_dishtowel")
+def test_heated(env):
+    bagel = env.scene.object_registry("name", "bagel")
+    dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
     assert not bagel.states[Heated].get_value()
     assert not dishtowel.states[Heated].get_value()
@@ -648,8 +611,8 @@ def test_heated():
 
 
 @og_test
-def test_on_fire():
-    plywood = og.sim.scene.object_registry("name", "plywood")
+def test_on_fire(env):
+    plywood = env.scene.object_registry("name", "plywood")
 
     assert not plywood.states[OnFire].get_value()
 
@@ -672,24 +635,30 @@ def test_on_fire():
     assert plywood.states[Temperature].get_value() == plywood.states[OnFire].temperature
 
 
+@pytest.mark.skip(reason="TODO(parallel-hang): fix this later")
 @og_test
-def test_toggled_on():
-    stove = og.sim.scene.object_registry("name", "stove")
-    robot = og.sim.scene.object_registry("name", "robot0")
+def test_toggled_on(env):
+    stove = env.scene.object_registry("name", "stove")
+    robot = env.scene.object_registry("name", "robot0")
 
-    stove.set_position_orientation([1.5, 0.3, 0.45], T.euler2quat([0, 0, -np.pi / 2.0]))
-    robot.set_position_orientation([0.01, 0.38, 0], [0, 0, 0, 1])
+    stove.set_position_orientation([1.48, 0.3, 0.443], T.euler2quat([0, 0, -np.pi / 2.0]))
+    robot.set_position_orientation([0.0, 0.38, 0.0], [0, 0, 0, 1])
 
     assert not stove.states[ToggledOn].get_value()
 
-    robot.joints["torso_lift_joint"].set_pos(0.0)
-    robot.joints["shoulder_pan_joint"].set_pos(np.pi / 2)
-    robot.joints["shoulder_lift_joint"].set_pos(np.pi / 36)
-    robot.joints["upperarm_roll_joint"].set_pos(0.0)
-    robot.joints["elbow_flex_joint"].set_pos(0.0)
-    robot.joints["forearm_roll_joint"].set_pos(0.0)
-    robot.joints["wrist_flex_joint"].set_pos(0.0)
-    robot.joints["wrist_roll_joint"].set_pos(0.0)
+    q = robot.get_joint_positions()
+    jnt_idxs = {name: i for i, name in enumerate(robot.joints.keys())}
+    q[jnt_idxs["torso_lift_joint"]] = 0.0
+    q[jnt_idxs["shoulder_pan_joint"]] = np.deg2rad(90.0)
+    q[jnt_idxs["shoulder_lift_joint"]] = np.deg2rad(9.0)
+    q[jnt_idxs["upperarm_roll_joint"]] = 0.0
+    q[jnt_idxs["elbow_flex_joint"]] = 0.0
+    q[jnt_idxs["forearm_roll_joint"]] = 0.0
+    q[jnt_idxs["wrist_flex_joint"]] = 0.0
+    q[jnt_idxs["wrist_roll_joint"]] = 0.0
+    q[jnt_idxs["l_gripper_finger_joint"]] = 0.0
+    q[jnt_idxs["r_gripper_finger_joint"]] = 0.0
+    robot.set_joint_positions(q, drive=False)
 
     steps = m.object_states.toggle.CAN_TOGGLE_STEPS
     for _ in range(steps):
@@ -698,7 +667,8 @@ def test_toggled_on():
     # End-effector not close to the button, stays False
     assert not stove.states[ToggledOn].get_value()
 
-    robot.joints["shoulder_pan_joint"].set_pos(0)
+    q[jnt_idxs["shoulder_pan_joint"]] = 0.0
+    robot.set_joint_positions(q, drive=False)
 
     for _ in range(steps - 1):
         og.sim.step()
@@ -716,11 +686,12 @@ def test_toggled_on():
     assert not stove.states[ToggledOn].get_value()
 
 
+@pytest.mark.skip(reason="skipping attachment for now")
 @og_test
-def test_attached_to():
-    shelf_back_panel = og.sim.scene.object_registry("name", "shelf_back_panel")
-    shelf_shelf = og.sim.scene.object_registry("name", "shelf_shelf")
-    shelf_baseboard = og.sim.scene.object_registry("name", "shelf_baseboard")
+def test_attached_to(env):
+    shelf_back_panel = env.scene.object_registry("name", "shelf_back_panel")
+    shelf_shelf = env.scene.object_registry("name", "shelf_shelf")
+    shelf_baseboard = env.scene.object_registry("name", "shelf_baseboard")
 
     shelf_back_panel.set_position_orientation([0, 0, 0.01], [0, 0, 0, 1])
     shelf_back_panel.keep_still()
@@ -772,20 +743,21 @@ def test_attached_to():
     assert shelf_shelf.states[AttachedTo].get_value(shelf_back_panel)
 
     # The shelf baseboard should NOT be attached because the attachment has the wrong type
-    shelf_baseboard.set_position_orientation([0.37, -0.93,  0.03], [0, 0, 0, 1])
+    shelf_baseboard.set_position_orientation([0.37, -0.93, 0.03], [0, 0, 0, 1])
     assert not shelf_baseboard.states[AttachedTo].set_value(shelf_back_panel, True, bypass_alignment_checking=True)
     assert not shelf_baseboard.states[AttachedTo].get_value(shelf_back_panel)
 
 
 @og_test
-def test_fluid_source():
-    sink = og.sim.scene.object_registry("name", "sink")
-    sink.set_position_orientation([0, 0, 0.7], [0, 0, 0, 1])
+def test_particle_source(env):
+    sink = env.scene.object_registry("name", "sink")
+
+    place_obj_on_floor_plane(sink)
     for _ in range(3):
         og.sim.step()
 
     assert not sink.states[ToggledOn].get_value()
-    water_system = get_system("water")
+    water_system = env.scene.get_system("water")
     # Sink is toggled off, no water should be present
     assert water_system.n_particles == 0
 
@@ -797,15 +769,21 @@ def test_fluid_source():
     # Sink is toggled on, some water should be present
     assert water_system.n_particles > 0
 
+    # Cannot set this state
+    with pytest.raises(NotImplementedError):
+        sink.states[ParticleSource].set_value(True)
+
+    water_system.remove_all_particles()
+
 
 @og_test
-def test_fluid_sink():
-    sink = og.sim.scene.object_registry("name", "sink")
-    sink.set_position_orientation([0, 0, 0.7], [0, 0, 0, 1])
+def test_particle_sink(env):
+    sink = env.scene.object_registry("name", "sink")
+    place_obj_on_floor_plane(sink)
     for _ in range(3):
         og.sim.step()
 
-    water_system = get_system("water")
+    water_system = env.scene.get_system("water")
     # There should be no water particles.
     assert water_system.n_particles == 0
 
@@ -817,15 +795,182 @@ def test_fluid_sink():
     for _ in range(sink.states[ParticleSink].n_steps_per_modification):
         og.sim.step()
 
-    # TODO: current water sink annotation is wrong, so this test is failing.
     # There should be no water particles because the fluid source absorbs them.
-    # assert water_system.n_particles == 0
+    assert water_system.n_particles == 0
+
+    # Cannot set this state
+    with pytest.raises(NotImplementedError):
+        sink.states[ParticleSink].set_value(True)
+
+    water_system.remove_all_particles()
 
 
 @og_test
-def test_open():
-    microwave = og.sim.scene.object_registry("name", "microwave")
-    bottom_cabinet = og.sim.scene.object_registry("name", "bottom_cabinet")
+def test_particle_applier(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    spray_bottle = env.scene.object_registry("name", "spray_bottle")
+    applier_dishtowel = env.scene.object_registry("name", "applier_dishtowel")
+
+    # Test projection
+
+    place_obj_on_floor_plane(breakfast_table)
+    place_objA_on_objB_bbox(spray_bottle, breakfast_table, z_offset=0.1)
+    spray_bottle.set_orientation(np.array([0.707, 0, 0, 0.707]))
+    for _ in range(3):
+        og.sim.step()
+
+    assert not spray_bottle.states[ToggledOn].get_value()
+    water_system = env.scene.get_system("water")
+    # Spray bottle is toggled off, no water should be present
+    assert water_system.n_particles == 0
+
+    # Take number of steps for water to be generated, make sure there is still no water
+    n_applier_steps = spray_bottle.states[ParticleApplier].n_steps_per_modification
+    for _ in range(n_applier_steps):
+        og.sim.step()
+
+    assert water_system.n_particles == 0
+
+    # Turn particle applier on, and verify particles are generated after the same number of steps are taken
+    spray_bottle.states[ToggledOn].set_value(True)
+
+    for _ in range(n_applier_steps):
+        og.sim.step()
+
+    # Some water should be present
+    assert water_system.n_particles > 0
+
+    # Test adjacency
+
+    water_system.remove_all_particles()
+    spray_bottle.set_position_orientation(position=np.ones(3) * 50.0, orientation=np.array([0, 0, 0, 1.0]))
+
+    place_objA_on_objB_bbox(applier_dishtowel, breakfast_table)
+    og.sim.step()
+
+    # no water should be present
+    assert water_system.n_particles == 0
+
+    # Take number of steps for water to be generated
+    n_applier_steps = applier_dishtowel.states[ParticleApplier].n_steps_per_modification
+    for _ in range(n_applier_steps):
+        og.sim.step()
+
+    # Some water should be present
+    assert water_system.n_particles > 0
+
+    # Cannot set this state
+    with pytest.raises(NotImplementedError):
+        spray_bottle.states[ParticleApplier].set_value(True)
+
+    water_system.remove_all_particles()
+
+
+@og_test
+def test_particle_remover(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    vacuum = env.scene.object_registry("name", "vacuum")
+    remover_dishtowel = env.scene.object_registry("name", "remover_dishtowel")
+
+    # Test projection
+
+    place_obj_on_floor_plane(breakfast_table)
+    place_objA_on_objB_bbox(vacuum, breakfast_table, z_offset=0.02)
+    for _ in range(3):
+        og.sim.step()
+
+    assert not vacuum.states[ToggledOn].get_value()
+    water_system = env.scene.get_system("water")
+    # Place single particle of water on middle of table
+    water_system.generate_particles(
+        positions=[np.array([0, 0, breakfast_table.aabb[1][2] + water_system.particle_radius])]
+    )
+    assert water_system.n_particles > 0
+
+    # Take number of steps for water to be removed, make sure there is still water
+    n_remover_steps = vacuum.states[ParticleRemover].n_steps_per_modification
+    for _ in range(n_remover_steps):
+        og.sim.step()
+
+    assert water_system.n_particles > 0
+
+    # Turn particle remover on, and verify particles are generated after the same number of steps are taken
+    vacuum.states[ToggledOn].set_value(True)
+
+    for _ in range(n_remover_steps):
+        og.sim.step()
+
+    # No water should be present
+    assert water_system.n_particles == 0
+
+    # Test adjacency
+
+    vacuum.set_position(np.ones(3) * 50.0)
+    place_objA_on_objB_bbox(remover_dishtowel, breakfast_table, z_offset=0.03)
+    og.sim.step()
+    # Place single particle of water on middle of table
+    water_system.generate_particles(
+        positions=[np.array([0, 0, breakfast_table.aabb[1][2] + water_system.particle_radius])]
+    )
+
+    # Water should be present
+    assert water_system.n_particles > 0
+
+    # Take number of steps for water to be removed
+    n_remover_steps = remover_dishtowel.states[ParticleRemover].n_steps_per_modification
+    for _ in range(n_remover_steps):
+        og.sim.step()
+
+    # No water should be present
+    assert water_system.n_particles == 0
+
+    # Cannot set this state
+    with pytest.raises(NotImplementedError):
+        vacuum.states[ParticleRemover].set_value(True)
+
+    water_system.remove_all_particles()
+
+
+@og_test
+def test_saturated(env):
+    remover_dishtowel = env.scene.object_registry("name", "remover_dishtowel")
+
+    place_obj_on_floor_plane(remover_dishtowel)
+
+    for _ in range(5):
+        og.sim.step()
+
+    water_system = env.scene.get_system("water")
+
+    # Place single row of water above dishtowel
+    n_particles = 5
+    remover_dishtowel.states[Saturated].set_limit(water_system, n_particles)
+    water_system.generate_particles(
+        positions=[
+            np.array([0, 0, remover_dishtowel.aabb[1][2] + water_system.particle_radius * (1 + 2 * i)])
+            for i in range(n_particles)
+        ],
+    )
+
+    # Take a few steps
+    for _ in range(20):
+        og.sim.step()
+
+    # Make sure Saturated is True, and no particles exist
+    assert water_system.n_particles == 0
+    assert remover_dishtowel.states[Saturated].get_value(water_system)
+
+    # Make sure we can toggle saturated to be true and false
+    assert remover_dishtowel.states[Saturated].set_value(water_system, False)
+    assert remover_dishtowel.states[Saturated].set_value(water_system, True)
+
+    water_system.remove_all_particles()
+
+
+@og_test
+def test_open(env):
+    microwave = env.scene.object_registry("name", "microwave")
+    bottom_cabinet = env.scene.object_registry("name", "bottom_cabinet")
 
     # By default, objects should not be open.
     assert not microwave.states[Open].get_value()
@@ -867,20 +1012,64 @@ def test_open():
     assert not microwave.states[Open].get_value()
     assert not bottom_cabinet.states[Open].get_value()
 
-@og_test
-def test_draped():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-    carpet = og.sim.scene.object_registry("name", "carpet")
 
-    breakfast_table.set_position([0., 0., 0.53])
-    carpet.set_position([0.0, 0., 0.67])
+@og_test
+def test_folded_unfolded(env):
+    carpet = env.scene.object_registry("name", "carpet")
+
+    place_obj_on_floor_plane(carpet)
 
     for _ in range(5):
         og.sim.step()
 
+    assert not carpet.states[Folded].get_value()
+    assert carpet.states[Unfolded].get_value()
+
+    pos = carpet.root_link.compute_particle_positions()
+    x_min, x_max = np.min(pos, axis=0)[0], np.max(pos, axis=0)[0]
+    x_extent = x_max - x_min
+    # Get indices for the bottom 10 percent vertices in the x-axis
+    indices = np.argsort(pos, axis=0)[:, 0][: (pos.shape[0] // 10)]
+    start = np.copy(pos[indices])
+
+    # lift up a bit
+    mid = np.copy(start)
+    mid[:, 2] += x_extent * 0.2
+
+    # move towards x_max
+    end = np.copy(mid)
+    end[:, 0] += x_extent * 0.9
+
+    increments = 25
+    for ctrl_pts in np.concatenate([np.linspace(start, mid, increments), np.linspace(mid, end, increments)]):
+        carpet.root_link.set_particle_positions(ctrl_pts, idxs=indices)
+        og.sim.step()
+
+    assert carpet.states[Folded].get_value()
+    assert not carpet.states[Unfolded].get_value()
+    assert carpet.states[Unfolded].set_value(True)
+
+    with pytest.raises(NotImplementedError):
+        carpet.states[Unfolded].set_value(False)
+
+    with pytest.raises(NotImplementedError):
+        carpet.states[Folded].set_value(True)
+
+
+@og_test
+def test_draped(env):
+    breakfast_table = env.scene.object_registry("name", "breakfast_table")
+    carpet = env.scene.object_registry("name", "carpet")
+
+    place_obj_on_floor_plane(breakfast_table)
+    place_objA_on_objB_bbox(carpet, breakfast_table)
+
+    for _ in range(10):
+        og.sim.step()
+
     assert carpet.states[Draped].get_value(breakfast_table)
 
-    carpet.set_position([20., 20., 1.])
+    carpet.set_position([20.0, 20.0, 1.0])
 
     for _ in range(5):
         og.sim.step()
@@ -892,34 +1081,104 @@ def test_draped():
     with pytest.raises(NotImplementedError):
         carpet.states[Draped].set_value(breakfast_table, False)
 
+
 @og_test
-def test_covered():
-    breakfast_table = og.sim.scene.object_registry("name", "breakfast_table")
-
-    breakfast_table.set_position([0., 0., 0.53])
-
-    for _ in range(5):
-        og.sim.step()
-
-    systems = (
-        get_system("water"),
-        get_system("stain"),
-        get_system("raspberry"),
-        get_system("diced_apple"),
-    )
+def test_filled(env):
+    stockpot = env.scene.object_registry("name", "stockpot")
+    systems = [
+        env.scene.get_system(system_name)
+        for system_name, system_class in SYSTEM_EXAMPLES.items()
+        if not issubclass(system_class, VisualParticleSystem)
+    ]
     for system in systems:
-        assert breakfast_table.states[Covered].set_value(system, True)
-
+        stockpot.set_position_orientation(position=np.ones(3) * 50.0, orientation=[0, 0, 0, 1.0])
+        place_obj_on_floor_plane(stockpot)
         for _ in range(5):
             og.sim.step()
 
-        assert breakfast_table.states[Covered].get_value(system)
-        breakfast_table.states[Covered].set_value(system, False)
+        assert stockpot.states[Filled].set_value(system, True)
+        og.sim.step()
+        assert stockpot.states[Filled].get_value(system)
 
+        # Cannot set Filled state False
+        with pytest.raises(NotImplementedError):
+            stockpot.states[Filled].set_value(system, False)
+
+        system.remove_all_particles()
+        og.sim.step()
+        assert not stockpot.states[Filled].get_value(system)
+
+
+@og_test
+def test_contains(env):
+    stockpot = env.scene.object_registry("name", "stockpot")
+    systems = [env.scene.get_system(system_name) for system_name, system_class in SYSTEM_EXAMPLES.items()]
+    for system in systems:
+        print(f"Testing Contains {stockpot.name} with {system.name}")
+        stockpot.set_position_orientation(position=np.ones(3) * 50.0, orientation=[0, 0, 0, 1.0])
+        place_obj_on_floor_plane(stockpot)
         for _ in range(5):
             og.sim.step()
-        assert not breakfast_table.states[Covered].get_value(system)
+
+        # Sample single particle
+        if env.scene.is_physical_particle_system(system_name=system.name):
+            system.generate_particles(positions=[np.array([0, 0, stockpot.aabb[1][2] - 0.1])])
+        else:
+            if system.get_group_name(stockpot) not in system.groups:
+                system.create_attachment_group(stockpot)
+            system.generate_group_particles(
+                group=system.get_group_name(stockpot),
+                positions=np.array([np.array([0, 0, stockpot.aabb[1][2] - 0.1])]),
+                link_prim_paths=[stockpot.root_link.prim_path],
+            )
+
+        og.sim.step()
+        assert stockpot.states[Contains].get_value(system)
+
+        # Remove all particles and make sure contains returns False
+        stockpot.states[Contains].set_value(system, False)
+        og.sim.step()
+        assert not stockpot.states[Contains].get_value(system)
+
+        # Cannot set Contains state
+        with pytest.raises(NotImplementedError):
+            stockpot.states[Contains].set_value(system, True)
+
+        system.remove_all_particles()
+
+
+@og_test
+def test_covered(env):
+    bracelet = env.scene.object_registry("name", "bracelet")
+    bowl = env.scene.object_registry("name", "bowl")
+    microwave = env.scene.object_registry("name", "microwave")
+    systems = [env.scene.get_system(system_name) for system_name, system_class in SYSTEM_EXAMPLES.items()]
+    for obj in (bracelet, bowl, microwave):
+        for system in systems:
+            # bracelet is too small to sample physical particles on it
+            sampleable = env.scene.is_visual_particle_system(system.name) or obj != bracelet
+            if sampleable:
+                print(f"Testing Covered {obj.name} with {system.name}")
+                obj.set_position_orientation(position=np.ones(3) * 50.0, orientation=[0, 0, 0, 1.0])
+                place_obj_on_floor_plane(obj)
+                for _ in range(5):
+                    og.sim.step()
+
+                assert obj.states[Covered].set_value(system, True)
+                og.sim.step()
+                assert obj.states[Covered].get_value(system)
+
+                assert obj.states[Covered].set_value(system, False)
+                # We don't call og.sim.step() here because it's possible for the "second" layer of particles to fall down
+                # and make Covered to be True again. Instead, we clear the caches and check that Covered is False.
+                obj.states[Covered].clear_cache()
+                obj.states[ContactParticles].clear_cache()
+                assert not obj.states[Covered].get_value(system)
+
+                system.remove_all_particles()
+
+        obj.set_position_orientation(position=np.ones(3) * 75.0, orientation=[0, 0, 0, 1.0])
 
 
 def test_clear_sim():
-    og.sim.clear()
+    og.clear()

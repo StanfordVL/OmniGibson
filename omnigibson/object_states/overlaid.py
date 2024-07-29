@@ -1,18 +1,17 @@
-from omnigibson.object_states.kinematics import KinematicsMixin
-from omnigibson.object_states.object_state_base import BooleanState, RelativeObjectState
-from omnigibson.object_states.touching import Touching
-from omnigibson.utils.constants import PrimType
-import omnigibson.utils.transform_utils as T
-from omnigibson.utils.object_state_utils import sample_cloth_on_rigid
-from omnigibson.macros import create_module_macros
+import itertools
 
-import omnigibson as og
-
-from scipy.spatial import ConvexHull, HalfspaceIntersection
-from scipy.spatial.qhull import QhullError
 import numpy as np
 import trimesh
-import itertools
+from scipy.spatial import ConvexHull, HalfspaceIntersection, QhullError
+
+import omnigibson as og
+import omnigibson.utils.transform_utils as T
+from omnigibson.macros import create_module_macros
+from omnigibson.object_states.kinematics_mixin import KinematicsMixin
+from omnigibson.object_states.object_state_base import BooleanStateMixin, RelativeObjectState
+from omnigibson.object_states.touching import Touching
+from omnigibson.utils.constants import PrimType
+from omnigibson.utils.object_state_utils import sample_cloth_on_rigid
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -24,21 +23,23 @@ m.OVERLAP_AREA_PERCENTAGE = 0.5
 m.SAMPLING_Z_OFFSET = 0.01
 
 
-class Overlaid(KinematicsMixin, RelativeObjectState, BooleanState):
-    @staticmethod
-    def get_dependencies():
-        return KinematicsMixin.get_dependencies() + RelativeObjectState.get_dependencies() + [Touching]
+class Overlaid(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
+
+    @classmethod
+    def get_dependencies(cls):
+        deps = super().get_dependencies()
+        deps.add(Touching)
+        return deps
 
     def _set_value(self, other, new_value):
         if not new_value:
             raise NotImplementedError("Overlaid does not support set_value(False)")
         state = og.sim.dump_state(serialized=False)
 
-        for _ in range(10):
-            if sample_cloth_on_rigid(self.obj, other, randomize_xy=False) and self.get_value(other):
-                return True
-            else:
-                og.sim.load_state(state, serialized=False)
+        if sample_cloth_on_rigid(self.obj, other, randomize_xy=False) and self.get_value(other):
+            return True
+        else:
+            og.sim.load_state(state, serialized=False)
 
         return False
 

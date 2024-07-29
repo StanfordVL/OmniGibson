@@ -1,8 +1,8 @@
 from abc import ABCMeta
 
-import carb
 import numpy as np
-from omni.kit.widget.settings import SettingType
+
+import omnigibson.lazy as lazy
 
 
 class SettingsBase(metaclass=ABCMeta):
@@ -19,15 +19,15 @@ class SubSettingsBase(metaclass=ABCMeta):
     """
 
     def __init__(self):
-        self._carb_settings = carb.settings.get_settings()
+        self._carb_settings = lazy.carb.settings.get_settings()
 
     @property
     def enabled_setting_path(self):
         """
         The path of "enabled" setting for this sub-settings class.
 
-        Subclass with "enabled" mode needs to overwrite this method. 
-        
+        Subclass with "enabled" mode needs to overwrite this method.
+
         Returns:
             str or None: The path of "enabled" mode for this sub-setting class.
                 Defaults to None, which means this sub-setting group cannot be enabled/disabled.
@@ -37,7 +37,7 @@ class SubSettingsBase(metaclass=ABCMeta):
     def is_enabled(self):
         """
         Get the enabled status for this sub-setting class.
-        
+
         Returns:
             bool: Whether this sub-setting group is enabled.
                 Returns true if this sub-setting group has no "enabled" mode.
@@ -83,7 +83,7 @@ class SettingItem:
     def __init__(
         self,
         owner,
-        setting_type: SettingType,
+        setting_type,
         name,
         path,
         range_from=-float("inf"),
@@ -91,7 +91,7 @@ class SettingItem:
         range_list=None,
         range_dict=None,
     ):
-        self._carb_settings = carb.settings.get_settings()
+        self._carb_settings = lazy.carb.settings.get_settings()
         self.owner = owner
         self.setting_type = setting_type
         self.name = name
@@ -106,7 +106,7 @@ class SettingItem:
     def value(self):
         """
         Get the current setting value.
-        
+
         Returns:
             any: The current setting value.
         """
@@ -115,7 +115,7 @@ class SettingItem:
     def get(self):
         """
         Get the current setting value.
-        
+
         Returns:
             any: The current setting value.
         """
@@ -130,7 +130,7 @@ class SettingItem:
     def set(self, value):
         """
         Set the current setting to @value.
-        
+
         Args:
             value (any): Value to set for the current setting value.
         """
@@ -147,21 +147,21 @@ class SettingItem:
                 value in self.range_dict.values()
             ), f"Setting {self.path} must be chosen from a value (not key) in {self.range_dict}."
 
-        if self.setting_type == SettingType.FLOAT:
+        if self.setting_type == lazy.omni.kit.widget.settings.SettingType.FLOAT:
             assert isinstance(value, (int, float)), f"Setting {self.path} must be of type float."
             assert (
                 value >= self.range_from and value <= self.range_to
             ), f"Setting {self.path} must be within range ({self.range_from}, {self.range_to})."
             self._carb_settings.set_float(self.path, value)
 
-        elif self.setting_type == SettingType.INT:
+        elif self.setting_type == lazy.omni.kit.widget.settings.SettingType.INT:
             assert isinstance(value, int), f"Setting {self.path} must be of type int."
             assert (
                 value >= self.range_from and value <= self.range_to
             ), f"Setting {self.path} must be within range ({self.range_from}, {self.range_to})."
             self._carb_settings.set_int(self.path, value)
 
-        elif self.setting_type == SettingType.COLOR3:
+        elif self.setting_type == lazy.omni.kit.widget.settings.SettingType.COLOR3:
             assert (
                 isinstance(value, (list, tuple, np.ndarray)) and len(value) == 3
             ), f"Setting {self.path} must be a list of 3 numbers within range [0,1]."
@@ -171,15 +171,15 @@ class SettingItem:
                 ), f"Setting {self.path} must be a list of 3 numbers within range [0,1]."
             self._carb_settings.set_float_array(self.path, value)
 
-        elif self.setting_type == SettingType.BOOL:
+        elif self.setting_type == lazy.omni.kit.widget.settings.SettingType.BOOL:
             assert isinstance(value, bool), f"Setting {self.path} must be of type bool."
             self._carb_settings.set_bool(self.path, value)
 
-        elif self.setting_type == SettingType.STRING:
+        elif self.setting_type == lazy.omni.kit.widget.settings.SettingType.STRING:
             assert isinstance(value, str), f"Setting {self.path} must be of type str."
             self._carb_settings.set_string(self.path, value)
 
-        elif self.setting_type == SettingType.DOUBLE3:
+        elif self.setting_type == lazy.omni.kit.widget.settings.SettingType.DOUBLE3:
             assert (
                 isinstance(value, (list, tuple, np.ndarray)) and len(value) == 3
             ), f"Setting {self.path} must be a list of 3 floats."
@@ -187,7 +187,7 @@ class SettingItem:
                 assert isinstance(v, (int, float)), f"Setting {self.path} must be a list of 3 floats."
             self._carb_settings.set_float_array(self.path, value)
 
-        elif self.setting_type == SettingType.INT2:
+        elif self.setting_type == lazy.omni.kit.widget.settings.SettingType.INT2:
             assert (
                 isinstance(value, (list, tuple, np.ndarray)) and len(value) == 2
             ), f"Setting {self.path} must be a list of 2 ints."
@@ -195,7 +195,7 @@ class SettingItem:
                 assert isinstance(v, int), f"Setting {self.path} must be a list of 2 ints."
             self._carb_settings.set_int_array(self.path, value)
 
-        elif self.setting_type == SettingType.DOUBLE2:
+        elif self.setting_type == lazy.omni.kit.widget.settings.SettingType.DOUBLE2:
             assert (
                 isinstance(value, (list, tuple, np.ndarray)) and len(value) == 2
             ), f"Setting {self.path} must be a list of 2 floats."

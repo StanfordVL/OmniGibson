@@ -13,5 +13,5 @@ class WallTimeMetric(BaseRewardFunction):
         self._reward = 0
 
     def _step(self, task, env, action):
-        self._reward += env.wall_time_step
+        self._reward += env.last_step_wall_time
         return self._reward, {}

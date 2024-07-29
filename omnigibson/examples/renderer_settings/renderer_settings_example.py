@@ -1,4 +1,5 @@
 import numpy as np
+
 import omnigibson as og
 from omnigibson.renderer_settings.renderer_settings import RendererSettings
 
@@ -16,8 +17,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         category="banana",
         model="vvyyyv",
         scale=[3.0, 5.0, 2.0],
-        position=[-0.906661, -0.545106,  0.136824],
-        orientation=[0, 0, 0.76040583, -0.6494482 ],
+        position=[-0.906661, -0.545106, 0.136824],
+        orientation=[0, 0, 0.76040583, -0.6494482],
     )
 
     door_cfg = dict(
@@ -26,7 +27,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         category="door",
         model="ohagsq",
         position=[-2.0, 0, 0.70000001],
-        orientation=[0, 0, -0.38268343,  0.92387953],
+        orientation=[0, 0, -0.38268343, 0.92387953],
     )
 
     # Create the scene config to load -- empty scene with a few objects
@@ -38,13 +39,13 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Set camera to appropriate viewing pose
     cam = og.sim.viewer_camera
     cam.set_position_orientation(
-        position=np.array([-4.62785 , -0.418575,  0.933943]),
-        orientation=np.array([ 0.52196595, -0.4231939 , -0.46640436,  0.5752612 ]),
+        position=np.array([-4.62785, -0.418575, 0.933943]),
+        orientation=np.array([0.52196595, -0.4231939, -0.46640436, 0.5752612]),
     )
 
     def steps(n):
@@ -75,8 +76,10 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Get all available settings.
     print(renderer_setting.settings.keys())
 
-    input("Showcasing how to use RendererSetting APIs. Please see example script for more information. "
-          "Press [ENTER] to continue.")
+    input(
+        "Showcasing how to use RendererSetting APIs. Please see example script for more information. "
+        "Press [ENTER] to continue."
+    )
 
     # Set setting (2 lines below are equivalent).
     renderer_setting.set_setting(path="/app/renderer/skipMaterialLoading", value=True)
@@ -118,6 +121,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Shutdown sim
     input("Completed demo. Press [ENTER] to shutdown simulation.")
     og.shutdown()
+
 
 if __name__ == "__main__":
     main()

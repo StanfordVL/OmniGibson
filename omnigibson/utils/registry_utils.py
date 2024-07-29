@@ -1,11 +1,14 @@
 """
 A set of utility functions for registering and tracking objects
 """
+
+from collections.abc import Iterable
 from inspect import isclass
+
 import numpy as np
-from collections import Iterable
+
 from omnigibson.macros import create_module_macros
-from omnigibson.utils.python_utils import Serializable, SerializableNonInstance, UniquelyNamed
+from omnigibson.utils.python_utils import Serializable, SerializableNonInstance
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -18,7 +21,7 @@ m = create_module_macros(module_path=__file__)
 m.DOES_NOT_EXIST = "DOES_NOT_EXIST"
 
 
-class Registry(UniquelyNamed):
+class Registry:
     """
     Simple class for easily registering and tracking arbitrary objects of the same (or very similar) class types.
 
@@ -44,14 +47,15 @@ class Registry(UniquelyNamed):
 
         If the latter, note that default_key attribute will automatically be used to search for the object
     """
+
     def __init__(
-            self,
-            name,
-            class_types=object,
-            default_key="name",
-            unique_keys=None,
-            group_keys=None,
-            default_value=m.DOES_NOT_EXIST,
+        self,
+        name,
+        class_types=object,
+        default_key="name",
+        unique_keys=None,
+        group_keys=None,
+        default_value=None,
     ):
         """
         Args:
@@ -87,9 +91,10 @@ class Registry(UniquelyNamed):
         self.unique_keys.add(self.default_key)
 
         # Make sure there's no overlap between the unique and group keys
-        assert len(self.unique_keys.intersection(self.group_keys)) == 0,\
-            f"Cannot create registry with unique and group object keys that are the same! " \
+        assert len(self.unique_keys.intersection(self.group_keys)) == 0, (
+            f"Cannot create registry with unique and group object keys that are the same! "
             f"Unique keys: {self.unique_keys}, group keys: {self.group_keys}"
+        )
 
         # Create the dicts programmatically
         for k in self.unique_keys.union(self.group_keys):
@@ -110,8 +115,9 @@ class Registry(UniquelyNamed):
             obj (any): Instance to add to this registry
         """
         # Make sure that obj is of the correct class type
-        assert any([isinstance(obj, class_type) or issubclass(obj, class_type) for class_type in self.class_types]), \
-            f"Added object must be either an instance or subclass of one of the following classes: {self.class_types}!"
+        assert any(
+            [isinstance(obj, class_type) or issubclass(obj, class_type) for class_type in self.class_types]
+        ), f"Added object must be either an instance or subclass of one of the following classes: {self.class_types}!"
         self._add(obj=obj, keys=self.all_keys)
 
     def _add(self, obj, keys=None):
@@ -125,11 +131,16 @@ class Registry(UniquelyNamed):
                 None is default, which corresponds to all keys
         """
         keys = self.all_keys if keys is None else keys
+        # If this is a system object, we don't need to store its prim_path
+        from omnigibson.systems.system_base import BaseSystem
+
+        if isinstance(obj, BaseSystem):
+            # At this point, the system is not yet loaded, which means it does not have its global prim path yet
+            keys = [k for k in keys if k != "prim_path"]
         for k in keys:
             obj_attr = self._get_obj_attr(obj=obj, attr=k)
             # Standardize input as a list
-            obj_attr = obj_attr if \
-                isinstance(obj_attr, Iterable) and not isinstance(obj_attr, str) else [obj_attr]
+            obj_attr = obj_attr if isinstance(obj_attr, Iterable) and not isinstance(obj_attr, str) else [obj_attr]
 
             # Loop over all values in this attribute and add to all mappings
             for attr in obj_attr:
@@ -137,11 +148,11 @@ class Registry(UniquelyNamed):
                 if k in self.unique_keys:
                     # Handle unique case
                     if attr in mapping:
-                        log.warning(f"Instance identifier '{k}' should be unique for adding to this registry mapping! Existing {k}: {attr}")
+                        log.warning(
+                            f"Instance identifier '{k}' should be unique for adding to this registry mapping! Existing {k}: {attr}"
+                        )
                         # Special case for "name" attribute, which should ALWAYS be unique
-                        if k == "name":
-                            log.error(f"For name attribute, objects MUST be unique. Exiting.")
-                            exit(-1)
+                        assert k != "name", "For name attribute, objects MUST be unique."
                     mapping[attr] = obj
                 else:
                     # Not unique case
@@ -162,8 +173,7 @@ class Registry(UniquelyNamed):
             # Grab the attribute from the object
             obj_attr = self._get_obj_attr(obj=obj, attr=k)
             # Standardize input as a list
-            obj_attr = obj_attr if \
-                isinstance(obj_attr, Iterable) and not isinstance(obj_attr, str) else [obj_attr]
+            obj_attr = obj_attr if isinstance(obj_attr, Iterable) and not isinstance(obj_attr, str) else [obj_attr]
 
             # Loop over all values in this attribute and remove them from all mappings
             for attr in obj_attr:
@@ -193,8 +203,7 @@ class Registry(UniquelyNamed):
                 to all keys
         """
         objects = self.objects
-        keys = self.all_keys if keys is None else \
-            (keys if type(keys) in {tuple, list} else [keys])
+        keys = self.all_keys if keys is None else (keys if type(keys) in {tuple, list} else [keys])
 
         # Delete and re-create all keys mappings
         for k in keys:
@@ -256,7 +265,7 @@ class Registry(UniquelyNamed):
             val = getattr(obj, attr)
 
         except:
-            val = self.default_value
+            val = self.default_value if self.default_value is not None else m.DOES_NOT_EXIST
 
         return val
 
@@ -269,6 +278,16 @@ class Registry(UniquelyNamed):
             list of any: Instances owned by this registry
         """
         return list(self.get_dict(self.default_key).values())
+
+    @property
+    def object_names(self):
+        """
+        Get the names of the objects in this registry
+
+        Returns:
+            set of str: Names of the instances owned by this registry
+        """
+        return {obj.name for obj in self.objects}
 
     @property
     def all_keys(self):
@@ -292,8 +311,7 @@ class Registry(UniquelyNamed):
             any or set of any: requested unique object if @key is one of unique_keys, else a set if
                 @key is one of group_keys
         """
-        assert key in self.all_keys,\
-            f"Invalid key requested! Valid options are: {self.all_keys}, got: {key}"
+        assert key in self.all_keys, f"Invalid key requested! Valid options are: {self.all_keys}, got: {key}"
 
         return self.get_dict(key).get(value, default_val)
 
@@ -314,14 +332,11 @@ class SerializableRegistry(Registry, Serializable):
     def add(self, obj):
         # In addition to any other class types, we make sure that the object is a serializable instance / class
         validate_class = issubclass if isclass(obj) else isinstance
-        assert any([validate_class(obj, class_type) for class_type in (Serializable, SerializableNonInstance)]), \
-            f"Added object must be either an instance or subclass of Serializable or SerializableNonInstance!"
+        assert any(
+            [validate_class(obj, class_type) for class_type in (Serializable, SerializableNonInstance)]
+        ), f"Added object must be either an instance or subclass of Serializable or SerializableNonInstance!"
         # Run super like normal
         super().add(obj=obj)
-
-    @property
-    def state_size(self):
-        return sum(obj.state_size for obj in self.objects)
 
     def _dump_state(self):
         # Iterate over all objects and grab their states
@@ -341,21 +356,23 @@ class SerializableRegistry(Registry, Serializable):
                 continue
             obj.load_state(state[obj.name], serialized=False)
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Iterate over the entire dict and flatten
-        return np.concatenate([obj.serialize(state[obj.name]) for obj in self.objects]) if \
-            len(self.objects) > 0 else np.array([])
+        return (
+            np.concatenate([obj.serialize(state[obj.name]) for obj in self.objects])
+            if len(self.objects) > 0
+            else np.array([])
+        )
 
-    def _deserialize(self, state):
+    def deserialize(self, state):
         state_dict = dict()
         # Iterate over all the objects and deserialize their individual states, incrementing the index counter
         # along the way
         idx = 0
         for obj in self.objects:
-            log.debug(f"obj: {obj.name}, state size: {obj.state_size}, idx: {idx}, passing in state length: {len(state[idx:])}")
+            log.debug(f"obj: {obj.name}, idx: {idx}, passing in state length: {len(state[idx:])}")
             # We pass in the entire remaining state vector, assuming the object only parses the relevant states
             # at the beginning
-            state_dict[obj.name] = obj.deserialize(state[idx:])
-            idx += obj.state_size
+            state_dict[obj.name], deserialized_items = obj.deserialize(state[idx:])
+            idx += deserialized_items
         return state_dict, idx
-

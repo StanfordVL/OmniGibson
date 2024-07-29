@@ -2,9 +2,8 @@ import numpy as np
 
 import omnigibson as og
 from omnigibson.macros import gm
-from omnigibson.utils.constants import PrimType
 from omnigibson.object_states import Overlaid
-
+from omnigibson.utils.constants import PrimType
 
 # Make sure object states and GPU dynamics are enabled (GPU dynamics needed for cloth)
 gm.ENABLE_OBJECT_STATES = True
@@ -31,25 +30,25 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "name": "carpet",
                 "category": "carpet",
                 "model": "ctclvd",
+                "bounding_box": [1.346, 0.852, 0.017],
                 "prim_type": PrimType.CLOTH,
                 "abilities": {"cloth": {}},
                 "position": [0, 0, 1.0],
-                "scale": [1.5] * 3,
             },
             {
                 "type": "DatasetObject",
                 "name": "breakfast_table",
                 "category": "breakfast_table",
                 "model": "rjgmmy",
+                "bounding_box": [1.36, 1.081, 0.84],
                 "prim_type": PrimType.RIGID,
-                "scale": 0.9,
                 "position": [0, 0, 0.58],
             },
         ],
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
 
     # Grab object references
     carpet = env.scene.object_registry("name", "carpet")
@@ -57,7 +56,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Set camera pose
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([ 0.88215526, -1.40086216,  2.00311063]),
+        position=np.array([0.88215526, -1.40086216, 2.00311063]),
         orientation=np.array([0.42013364, 0.12342107, 0.25339685, 0.86258043]),
     )
 

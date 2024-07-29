@@ -1,33 +1,36 @@
 name: Tests
 
-on: [pull_request]
+on: 
+  pull_request: 
+  push: 
+    branches: 
+      - og-develop
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.head_ref || github.sha }}
   cancel-in-progress: true
 
 jobs:
-  test:
-    runs-on: [self-hosted, linux, gpu]
-    container:
-      image: stanfordvl/omnigibson-dev:latest
-      options: --gpus=all --privileged --user=root
-      env:
-        DISPLAY: ""
-        OMNIGIBSON_HEADLESS: 1
-      volumes:
-        - /scr/omni-data/datasets:/data
-        - /usr/share/vulkan/icd.d/nvidia_icd.json:/etc/vulkan/icd.d/nvidia_icd.json
-        - /usr/share/vulkan/icd.d/nvidia_layers.json:/etc/vulkan/implicit_layer.d/nvidia_layers.json
-        - /usr/share/glvnd/egl_vendor.d/10_nvidia.json:/usr/share/glvnd/egl_vendor.d/10_nvidia.json
-        - /scr/omni-data/isaac-sim/cache/ov:/root/.cache/ov:rw
-        - /scr/omni-data/isaac-sim/cache/pip:/root/.cache/pip:rw
-        - /scr/omni-data/isaac-sim/cache/glcache:/root/.cache/nvidia/GLCache:rw
-        - /scr/omni-data/isaac-sim/cache/computecache:/root/.nv/ComputeCache:rw
-        - /scr/omni-data/isaac-sim/logs:/root/.nvidia-omniverse/logs:rw
-        - /scr/omni-data/isaac-sim/config:/root/.nvidia-omniverse/config:rw
-        - /scr/omni-data/isaac-sim/data:/root/.local/share/ov/data:rw
-        - /scr/omni-data/isaac-sim/documents:/root/Documents:rw
+  run_test:
+    name: Run Tests
+    runs-on: [self-hosted, linux, gpu, dataset-enabled]
+
+    strategy:
+      matrix:
+        test_file:
+          - test_dump_load_states
+          - test_envs
+          - test_object_removal
+          - test_object_states
+          - test_primitives
+          - test_robot_states_flatcache
+          - test_robot_states_no_flatcache
+          - test_robot_teleoperation
+          - test_sensors
+          - test_symbolic_primitives
+          - test_systems
+          - test_transition_rules
 
     defaults:
       run:
@@ -53,7 +56,40 @@ jobs:
 
       - name: Run tests
         working-directory: omnigibson-src
-        run: source /isaac-sim/setup_conda_env.sh && pytest
+        run: pytest -s tests/${{ matrix.test_file }}.py --junitxml=${{ matrix.test_file }}.xml && cp ${{ matrix.test_file }}.xml ${GITHUB_WORKSPACE}/
+
+      - name: Deploy artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: ${{ github.run_id }}-tests-${{ matrix.test_file }}
+          path: ${{ matrix.test_file }}.xml
+
+  upload_report:
+    name: Compile Report
+    runs-on: [self-hosted, linux]
+    defaults:
+      run:
+        shell: micromamba run -n omnigibson /bin/bash -leo pipefail {0}
+    needs: [run_test]
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v2
+        with:
+          submodules: true
+          path: omnigibson-src
+      - name: Pull reports
+        uses: actions/download-artifact@v3
+        with:
+          path: omnigibson-src
+      - name: Test Report0
+        uses: dorny/test-reporter@v1
+        with:
+          name: Test Results
+          working-directory: omnigibson-src
+          path: ${{ github.run_id }}-tests-*/test_*.xml
+          reporter: java-junit
+          fail-on-error: 'true'
+          fail-on-empty: 'true'
 
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v2.1.0

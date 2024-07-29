@@ -1,6 +1,4 @@
-import carb
-from omni.rtx.window.settings import RendererSettingsFactory
-
+import omnigibson.lazy as lazy
 from omnigibson.renderer_settings.common_settings import CommonSettings
 from omnigibson.renderer_settings.path_tracing_settings import PathTracingSettings
 from omnigibson.renderer_settings.post_processing_settings import PostProcessingSettings
@@ -9,10 +7,12 @@ from omnigibson.renderer_settings.real_time_settings import RealTimeSettings
 
 def singleton(cls):
     instances = {}
+
     def getinstance():
         if cls not in instances:
             instances[cls] = cls()
         return instances[cls]
+
     return getinstance
 
 
@@ -23,7 +23,7 @@ class RendererSettings:
     """
 
     def __init__(self):
-        self._carb_settings = carb.settings.get_settings()
+        self._carb_settings = lazy.carb.settings.get_settings()
         self.common_settings = CommonSettings()
         self.path_tracing_settings = PathTracingSettings()
         self.post_processing_settings = PostProcessingSettings()
@@ -74,29 +74,29 @@ class RendererSettings:
         Returns:
             str: the current renderer.
         """
-        return RendererSettingsFactory.get_current_renderer()
+        return lazy.omni.rtx.window.settings.RendererSettingsFactory.get_current_renderer()
 
     def set_current_renderer(self, renderer):
         """
         Set the current renderer to @renderer.
-        
+
         Args:
             renderer (str): The renderer to set as current (e.g. Real-Time, Path-Traced).
         """
         assert (
-            renderer in RendererSettingsFactory.get_registered_renderers()
-        ), f"renderer must be one of {RendererSettingsFactory.get_registered_renderers()}"
+            renderer in lazy.omni.rtx.window.settings.RendererSettingsFactory.get_registered_renderers()
+        ), f"renderer must be one of {lazy.omni.rtx.window.settings.RendererSettingsFactory.get_registered_renderers()}"
         print(f"Set current renderer to {renderer}.")
-        RendererSettingsFactory.set_current_renderer(renderer)
+        lazy.omni.rtx.window.settings.RendererSettingsFactory.set_current_renderer(renderer)
 
     @property
     def settings(self):
         """
         Get all available settings.
-        
+
         Returns:
             dict: A dictionary of all available settings.
-                Keys are setting paths and values are setting item objects. 
+                Keys are setting paths and values are setting item objects.
         """
         settings = {}
         settings.update(self.common_settings.settings)

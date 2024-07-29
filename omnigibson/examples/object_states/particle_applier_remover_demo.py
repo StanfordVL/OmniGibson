@@ -1,13 +1,12 @@
 import numpy as np
+
 import omnigibson as og
+from omnigibson.macros import gm, macros
 from omnigibson.object_states import Covered
 from omnigibson.objects import DatasetObject
-from omnigibson.macros import gm, macros
-from omnigibson.systems import get_system
-from omnigibson.utils.usd_utils import create_joint
-from omnigibson.utils.ui_utils import choose_from_options
 from omnigibson.utils.constants import ParticleModifyMethod
-from pxr import Gf
+from omnigibson.utils.ui_utils import choose_from_options
+from omnigibson.utils.usd_utils import create_joint
 
 # Set macros for this example
 macros.object_states.particle_modifier.VISUAL_PARTICLES_REMOVAL_LIMIT = 1000
@@ -51,7 +50,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     )
 
     modification_metalink = {
-        "particleApplier": "particleapplication_link",
+        "particleApplier": "particleapplier_link",
         "particleRemover": "particleremover_link",
     }
 
@@ -101,22 +100,12 @@ def main(random_selection=False, headless=False, short_exec=False):
         }
     }
 
-    # Define objects to load: a light, table, and cloth
-    light_cfg = dict(
-        type="LightObject",
-        name="light",
-        light_type="Sphere",
-        radius=0.01,
-        intensity=1e8,
-        position=[-2.0, -2.0, 2.0],
-    )
-
     table_cfg = dict(
         type="DatasetObject",
         name="table",
         category="breakfast_table",
         model="kwmfdg",
-        scale=[4.0, 4.0, 4.0],
+        bounding_box=[3.402, 1.745, 1.175],
         position=[0, 0, 0.98],
     )
 
@@ -125,14 +114,14 @@ def main(random_selection=False, headless=False, short_exec=False):
         "scene": {
             "type": "Scene",
         },
-        "objects": [light_cfg, table_cfg],
+        "objects": [table_cfg],
     }
 
     # Sanity check inputs: Remover + Adjacency + Fluid will not work because we are using a visual_only
     # object, so contacts will not be triggered with this object
 
     # Load the environment, then immediately stop the simulator since we need to add in the modifier object
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
     og.sim.stop()
 
     # Grab references to table
@@ -140,8 +129,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Set the viewer camera appropriately
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([-1.61340969, -1.79803028,  2.53167412]),
-        orientation=np.array([ 0.46291845, -0.12381886, -0.22679218,  0.84790371]),
+        position=np.array([-1.61340969, -1.79803028, 2.53167412]),
+        orientation=np.array([0.46291845, -0.12381886, -0.22679218, 0.84790371]),
     )
 
     # If we're using a projection volume, we manually add in the required metalink required in order to use the volume
@@ -149,12 +138,17 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="modifier",
         category="dishtowel",
         model="dtfspn",
-        scale=np.ones(3) * 2.0,
-        visual_only=method_type == "Projection",  # Non-fluid adjacency requires the object to have collision geoms active
+        bounding_box=[0.34245, 0.46798, 0.07],
+        visual_only=method_type
+        == "Projection",  # Non-fluid adjacency requires the object to have collision geoms active
         abilities=abilities,
     )
-    modifier_root_link_path = f"{modifier.prim_path}/base_link"
+    # Note: the following is a hacky trick done only for this specific demo that mutates the way the object applies particles;
+    # the following trick should not be followed ever
+    modifier._scene = env.scene
+    modifier._scene_assigned = True
     modifier._prim = modifier._load()
+    modifier_root_link_path = f"{modifier.prim_path}/base_link"
     if method_type == "Projection":
         metalink_path = f"{modifier.prim_path}/{modification_metalink[modifier_type]}"
         og.sim.stage.DefinePrim(metalink_path, "Xform")
@@ -165,9 +159,10 @@ def main(random_selection=False, headless=False, short_exec=False):
             joint_type="FixedJoint",
             enabled=True,
         )
-    modifier._post_load()
     modifier._loaded = True
-    og.sim.import_object(modifier)
+    modifier._post_load()
+    env.scene.object_registry.add(modifier)
+    og.sim.post_import_object(modifier)
     modifier.set_position(np.array([0, 0, 5.0]))
 
     # Play the simulator and take some environment steps to let the objects settle
@@ -177,7 +172,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # If we're removing particles, set the table's covered state to be True
     if modifier_type == "particleRemover":
-        table.states[Covered].set_value(get_system(particle_type), True)
+        table.states[Covered].set_value(env.scene.get_system(particle_type), True)
 
         # Take a few steps to let particles settle
         for _ in range(25):
@@ -204,9 +199,9 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Move object in square around table
     deltas = [
-        [150, np.array([-0.01, 0, 0])],
+        [130, np.array([-0.01, 0, 0])],
         [60, np.array([0, -0.01, 0])],
-        [150, np.array([0.01, 0, 0])],
+        [130, np.array([0.01, 0, 0])],
         [60, np.array([0, 0.01, 0])],
     ]
     for t, delta in deltas:
@@ -220,4 +215,3 @@ def main(random_selection=False, headless=False, short_exec=False):
 
 if __name__ == "__main__":
     main()
-

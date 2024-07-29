@@ -371,7 +371,6 @@ def mat2pose(hmat):
 
     Returns:
         2-tuple:
-
             - (np.array) (x,y,z) position array in cartesian coordinates
             - (np.array) (x,y,z,w) orientation array in quaternion form
     """
@@ -404,10 +403,10 @@ def vec2quat(vec, up=(0, 0, 1.0)):
     # See https://stackoverflow.com/questions/15873996/converting-a-direction-vector-to-a-quaternion-rotation
     # Take cross product of @up and @vec to get @s_n, and then cross @vec and @s_n to get @u_n
     # Then compose 3x3 rotation matrix and convert into quaternion
-    vec_n = vec / np.linalg.norm(vec)       # x
+    vec_n = vec / np.linalg.norm(vec)  # x
     up_n = up / np.linalg.norm(up)
-    s_n = np.cross(up_n, vec_n)             # y
-    u_n = np.cross(vec_n, s_n)              # z
+    s_n = np.cross(up_n, vec_n)  # y
+    u_n = np.cross(vec_n, s_n)  # z
     return mat2quat(np.array([vec_n, s_n, u_n]).T)
 
 
@@ -500,14 +499,6 @@ def axisangle2quat(vec):
     Returns:
         np.array: (x,y,z,w) vec4 float angles
     """
-    # Grab angle
-    angle = np.linalg.norm(vec)
-
-    # handle zero-rotation case
-    if math.isclose(angle, 0.0):
-        return np.array([0.0, 0.0, 0.0, 1.0])
-
-    # otherwise convert like normal
     return R.from_rotvec(vec).as_quat()
 
 
@@ -542,8 +533,6 @@ def quat2euler(quat):
     """
     return R.from_quat(quat).as_euler("xyz")
 
-def wrap_angle(theta, lower=-np.pi):  # [-np.pi, np.pi)
-    return (theta - lower) % (2 * np.pi) + lower
 
 def pose_in_A_to_pose_in_B(pose_A, pose_A_in_B):
     """
@@ -606,6 +595,11 @@ def pose_transform(pos1, quat1, pos0, quat0):
         quat1: (x,y,z,w) orientation to transform
         pos0: (x,y,z) initial position
         quat0: (x,y,z,w) initial orientation
+
+    Returns:
+        2-tuple:
+            - (np.array) (x,y,z) position array in cartesian coordinates
+            - (np.array) (x,y,z,w) orientation array in quaternion form
     """
     # Get poses
     mat0 = pose2mat((pos0, quat0))
@@ -613,6 +607,26 @@ def pose_transform(pos1, quat1, pos0, quat0):
 
     # Multiply and convert back to pos, quat
     return mat2pose(mat1 @ mat0)
+
+
+def invert_pose_transform(pos, quat):
+    """
+    Inverts a pose transform
+
+    Args:
+        pos: (x,y,z) position to transform
+        quat: (x,y,z,w) orientation to transform
+
+    Returns:
+        2-tuple:
+            - (np.array) (x,y,z) position array in cartesian coordinates
+            - (np.array) (x,y,z,w) orientation array in quaternion form
+    """
+    # Get pose
+    mat = pose2mat((pos, quat))
+
+    # Invert pose and convert back to pos, quat
+    return mat2pose(pose_inv(mat))
 
 
 def relative_pose_transform(pos1, quat1, pos0, quat0):
@@ -626,6 +640,11 @@ def relative_pose_transform(pos1, quat1, pos0, quat0):
         quat1: (x,y,z,w) orientation to transform
         pos0: (x,y,z) initial position
         quat0: (x,y,z,w) initial orientation
+
+    Returns:
+        2-tuple:
+            - (np.array) (x,y,z) position array in cartesian coordinates
+            - (np.array) (x,y,z,w) orientation array in quaternion form
     """
     # Get poses
     mat0 = pose2mat((pos0, quat0))
@@ -998,15 +1017,38 @@ def vecs2axisangle(vec0, vec1):
     Converts the angle from unnormalized 3D vectors @vec0 to @vec1 into an axis-angle representation of the angle
 
     Args:
-        vec0 (3-array): (x,y,z) 3D vector, possibly unnormalized
-        vec1 (3-array): (x,y,z) 3D vector, possibly unnormalized
+        vec0 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        vec1 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
     """
     # Normalize vectors
-    vec0 = normalize(vec0)
-    vec1 = normalize(vec1)
+    vec0 = normalize(vec0, axis=-1)
+    vec1 = normalize(vec1, axis=-1)
 
     # Get cross product for direction of angle, and multiply by arcos of the dot product which is the angle
-    return np.cross(vec0, vec1) * np.arccos(np.dot(vec0, vec1))
+    return np.cross(vec0, vec1) * np.arccos((vec0 * vec1).sum(-1, keepdims=True))
+
+
+def vecs2quat(vec0, vec1, normalized=False):
+    """
+    Converts the angle from unnormalized 3D vectors @vec0 to @vec1 into a quaternion representation of the angle
+
+    Args:
+        vec0 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        vec1 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        normalized (bool): If True, @vec0 and @vec1 are assumed to already be normalized and we will skip the
+            normalization step (more efficient)
+    """
+    # Normalize vectors if requested
+    if not normalized:
+        vec0 = normalize(vec0, axis=-1)
+        vec1 = normalize(vec1, axis=-1)
+
+    # Half-way Quaternion Solution -- see https://stackoverflow.com/a/11741520
+    cos_theta = np.sum(vec0 * vec1, axis=-1, keepdims=True)
+    quat_unnormalized = np.where(
+        cos_theta == -1, np.array([1.0, 0, 0, 0]), np.concatenate([np.cross(vec0, vec1), 1 + cos_theta], axis=-1)
+    )
+    return quat_unnormalized / np.linalg.norm(quat_unnormalized, axis=-1, keepdims=True)
 
 
 def l2_distance(v1, v2):
@@ -1066,25 +1108,26 @@ def anorm(x, axis=None, keepdims=False):
 
 def normalize(v, axis=None, eps=1e-10):
     """L2 Normalize along specified axes."""
-    return v / max(anorm(v, axis=axis, keepdims=True), eps)
+    norm = anorm(v, axis=axis, keepdims=True)
+    return v / np.where(norm < eps, eps, norm)
 
 
 def cartesian_to_polar(x, y):
     """Convert cartesian coordinate to polar coordinate"""
-    rho = np.sqrt(x ** 2 + y ** 2)
+    rho = np.sqrt(x**2 + y**2)
     phi = np.arctan2(y, x)
     return rho, phi
 
 
 def deg2rad(deg):
-    return deg * np.pi / 180.
+    return deg * np.pi / 180.0
 
 
 def rad2deg(rad):
-    return rad * 180. / np.pi
+    return rad * 180.0 / np.pi
 
 
-def check_quat_right_angle(quat, atol=1e-2):
+def check_quat_right_angle(quat, atol=5e-2):
     """
     Check by making sure the quaternion is some permutation of +/- (1, 0, 0, 0),
     +/- (0.707, 0.707, 0, 0), or +/- (0.5, 0.5, 0.5, 0.5)
@@ -1099,3 +1142,49 @@ def check_quat_right_angle(quat, atol=1e-2):
         bool: Whether the quaternion is a right angle or not
     """
     return np.any(np.isclose(np.abs(quat).sum(), np.array([1.0, 1.414, 2.0]), atol=atol))
+
+
+def z_angle_from_quat(quat):
+    """Get the angle around the Z axis produced by the quaternion."""
+    rotated_X_axis = R.from_quat(quat).apply([1, 0, 0])
+    return np.arctan2(rotated_X_axis[1], rotated_X_axis[0])
+
+
+def z_rotation_from_quat(quat):
+    """Get the quaternion for the rotation around the Z axis produced by the quaternion."""
+    return R.from_euler("z", z_angle_from_quat(quat)).as_quat()
+
+
+def integer_spiral_coordinates(n):
+    """A function to map integers to 2D coordinates in a spiral pattern around the origin."""
+    # Map integers from Z to Z^2 in a spiral pattern around the origin.
+    # Sources:
+    # https://www.reddit.com/r/askmath/comments/18vqorf/find_the_nth_coordinate_of_a_square_spiral/
+    # https://oeis.org/A174344
+    m = np.floor(np.sqrt(n))
+    x = ((-1) ** m) * ((n - m * (m + 1)) * (np.floor(2 * np.sqrt(n)) % 2) - np.ceil(m / 2))
+    y = ((-1) ** (m + 1)) * ((n - m * (m + 1)) * (np.floor(2 * np.sqrt(n) + 1) % 2) + np.ceil(m / 2))
+    return int(x), int(y)
+
+
+def calculate_xy_plane_angle(quaternion):
+    """
+    Compute the 2D orientation angle from a quaternion assuming the initial forward vector is along the x-axis.
+
+    Parameters:
+    quaternion : array_like
+        The quaternion (w, x, y, z) representing the rotation.
+
+    Returns:
+    float
+        The angle (in radians) of the projection of the forward vector onto the XY plane.
+        Returns 0.0 if the projected vector's magnitude is negligibly small.
+    """
+    fwd = R.from_quat(quaternion).apply([1, 0, 0])
+    fwd[2] = 0.0
+
+    if np.linalg.norm(fwd) < 1e-4:
+        return 0.0
+
+    fwd /= np.linalg.norm(fwd)
+    return np.arctan2(fwd[1], fwd[0])

@@ -1,8 +1,8 @@
 import numpy as np
 
 import omnigibson as og
-from omnigibson.macros import gm
 import omnigibson.utils.transform_utils as T
+from omnigibson.macros import gm
 
 # Make sure object states and transition rules are enabled
 gm.ENABLE_OBJECT_STATES = True
@@ -21,7 +21,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="table",
         category="breakfast_table",
         model="rjgmmy",
-        scale=0.9,
+        bounding_box=[1.36, 1.081, 0.84],
         position=[0, 0, 0.58],
     )
 
@@ -30,8 +30,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="apple",
         category="apple",
         model="agveuv",
-        scale=1.5,
-        position=[0.085, 0,  0.92],
+        bounding_box=[0.098, 0.098, 0.115],
+        position=[0.085, 0, 0.92],
     )
 
     knife_cfg = dict(
@@ -39,8 +39,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="knife",
         category="table_knife",
         model="lrdmpf",
-        scale=2.5,
-        position=[0, 0, 10.0],
+        bounding_box=[0.401, 0.044, 0.009],
+        position=[0, 0, 20.0],
     )
 
     light0_cfg = dict(
@@ -65,11 +65,11 @@ def main(random_selection=False, headless=False, short_exec=False):
         "scene": {
             "type": "Scene",
         },
-        "objects": [table_cfg, apple_cfg, knife_cfg, light0_cfg, light1_cfg]
+        "objects": [table_cfg, apple_cfg, knife_cfg, light0_cfg, light1_cfg],
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Grab reference to apple and knife
     apple = env.scene.object_registry("name", "apple")
@@ -77,7 +77,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Update the simulator's viewer camera's pose so it points towards the table
     og.sim.viewer_camera.set_position_orientation(
-        position=np.array([ 0.544888, -0.412084,  1.11569 ]),
+        position=np.array([0.544888, -0.412084, 1.11569]),
         orientation=np.array([0.54757518, 0.27792802, 0.35721896, 0.70378409]),
     )
 

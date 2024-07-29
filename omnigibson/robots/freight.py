@@ -1,4 +1,5 @@
 import os
+
 import numpy as np
 
 from omnigibson.macros import gm
@@ -13,10 +14,6 @@ class Freight(TwoWheelRobot):
     """
 
     @property
-    def model_name(self):
-        return "Freight"
-
-    @property
     def wheel_radius(self):
         return 0.0613
 
@@ -25,15 +22,11 @@ class Freight(TwoWheelRobot):
         return 0.372
 
     @property
-    def base_control_idx(self):
-        """
-        Returns:
-            n-array: Indices in low-level control vector corresponding to [Left, Right] wheel joints.
-        """
-        return np.array([0, 1])
+    def base_joint_names(self):
+        return ["r_wheel_joint", "l_wheel_joint"]
 
     @property
-    def default_joint_pos(self):
+    def _default_joint_pos(self):
         return np.zeros(self.n_joints)
 
     @property

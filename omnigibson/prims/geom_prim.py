@@ -1,10 +1,15 @@
-from pxr import UsdShade, UsdPhysics, PhysxSchema
+from functools import cached_property
+
 import numpy as np
-from omni.isaac.core.materials import PhysicsMaterial
+import trimesh
+
 import omnigibson as og
+import omnigibson.lazy as lazy
+import omnigibson.utils.transform_utils as T
 from omnigibson.macros import gm
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.utils.python_utils import assert_valid_key
+from omnigibson.utils.usd_utils import PoseAPI, mesh_prim_shape_to_trimesh_mesh
 
 
 class GeomPrim(XFormPrim):
@@ -14,7 +19,7 @@ class GeomPrim(XFormPrim):
     created from scratch.at
 
     Args:
-        prim_path (str): prim path of the Prim to encapsulate or create.
+        relative_prim_path (str): Scene-local prim path of the Prim to encapsulate or create.
         name (str): Name for the object. Names need to be unique per scene.
         load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
             loading this prim at runtime. For this mesh prim, the below values can be specified:
@@ -22,14 +27,14 @@ class GeomPrim(XFormPrim):
 
     def __init__(
         self,
-        prim_path,
+        relative_prim_path,
         name,
         load_config=None,
     ):
 
         # Run super method
         super().__init__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             name=name,
             load_config=load_config,
         )
@@ -44,10 +49,6 @@ class GeomPrim(XFormPrim):
 
         # By default, GeomPrim shows up in the rendering.
         self.purpose = "default"
-
-    def duplicate(self, prim_path):
-        # Cannot directly duplicate a mesh prim
-        raise NotImplementedError("Cannot directly duplicate a geom prim!")
 
     @property
     def purpose(self):
@@ -117,12 +118,84 @@ class GeomPrim(XFormPrim):
         else:
             self.set_attribute("primvars:displayOpacity", np.array([opacity]))
 
+    @property
+    def points(self):
+        """
+        Returns:
+            np.ndarray: Local poses of all points
+        """
+        # If the geom is a mesh we can directly return its points.
+        mesh = self.prim
+        mesh_type = mesh.GetPrimTypeInfo().GetTypeName()
+        if mesh_type == "Mesh":
+            # If the geom is a mesh we can directly return its points.
+            return np.array(self.prim.GetAttribute("points").Get())
+        else:
+            # Return the vertices of the trimesh
+            return np.array(mesh_prim_shape_to_trimesh_mesh(mesh).vertices)
+
+    @property
+    def points_in_parent_frame(self):
+        points = self.points
+        if points is None:
+            return None
+        position, orientation = self.get_local_pose()
+        scale = self.scale
+        points_scaled = points * scale
+        points_rotated = np.dot(T.quat2mat(orientation), points_scaled.T).T
+        points_transformed = points_rotated + position
+        return points_transformed
+
+    @property
+    def aabb(self):
+        world_pose_w_scale = PoseAPI.get_world_pose_with_scale(self.prim_path)
+
+        # transform self.points into world frame
+        points = self.points
+        points_homogeneous = np.hstack((points, np.ones((points.shape[0], 1))))
+        points_transformed = (points_homogeneous @ world_pose_w_scale.T)[:, :3]
+
+        aabb_lo = np.min(points_transformed, axis=0)
+        aabb_hi = np.max(points_transformed, axis=0)
+        return aabb_lo, aabb_hi
+
+    @property
+    def aabb_extent(self):
+        """
+        Bounding box extent of this geom prim
+
+        Returns:
+            3-array: (x,y,z) bounding box
+        """
+        min_corner, max_corner = self.aabb
+        return max_corner - min_corner
+
+    @property
+    def aabb_center(self):
+        """
+        Bounding box center of this geom prim
+
+        Returns:
+            3-array: (x,y,z) bounding box center
+        """
+        min_corner, max_corner = self.aabb
+        return (max_corner + min_corner) / 2.0
+
+    @cached_property
+    def extent(self):
+        """
+        Returns:
+            np.ndarray: The unscaled 3d extent of the mesh in its local frame.
+        """
+        points = self.points
+        return np.max(points, axis=0) - np.min(points, axis=0)
+
 
 class CollisionGeomPrim(GeomPrim):
 
     def __init__(
         self,
-        prim_path,
+        relative_prim_path,
         name,
         load_config=None,
     ):
@@ -134,7 +207,7 @@ class CollisionGeomPrim(GeomPrim):
 
         # Run super method
         super().__init__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             name=name,
             load_config=load_config,
         )
@@ -147,18 +220,26 @@ class CollisionGeomPrim(GeomPrim):
         self.purpose = "guide"
 
         # Create API references
-        self._collision_api = UsdPhysics.CollisionAPI(self._prim) if \
-            self._prim.HasAPI(UsdPhysics.CollisionAPI) else UsdPhysics.CollisionAPI.Apply(self._prim)
-        self._physx_collision_api = PhysxSchema.PhysxCollisionAPI(self._prim) if \
-            self._prim.HasAPI(PhysxSchema.PhysxCollisionAPI) else PhysxSchema.PhysxCollisionAPI.Apply(self._prim)
+        self._collision_api = (
+            lazy.pxr.UsdPhysics.CollisionAPI(self._prim)
+            if self._prim.HasAPI(lazy.pxr.UsdPhysics.CollisionAPI)
+            else lazy.pxr.UsdPhysics.CollisionAPI.Apply(self._prim)
+        )
+        self._physx_collision_api = (
+            lazy.pxr.PhysxSchema.PhysxCollisionAPI(self._prim)
+            if self._prim.HasAPI(lazy.pxr.PhysxSchema.PhysxCollisionAPI)
+            else lazy.pxr.PhysxSchema.PhysxCollisionAPI.Apply(self._prim)
+        )
 
         # Optionally add mesh collision API if this is a mesh
         if self._prim.GetPrimTypeInfo().GetTypeName() == "Mesh":
-            self._mesh_collision_api = UsdPhysics.MeshCollisionAPI(self._prim) if \
-                self._prim.HasAPI(UsdPhysics.MeshCollisionAPI) else UsdPhysics.MeshCollisionAPI.Apply(self._prim)
+            self._mesh_collision_api = (
+                lazy.pxr.UsdPhysics.MeshCollisionAPI(self._prim)
+                if self._prim.HasAPI(lazy.pxr.UsdPhysics.MeshCollisionAPI)
+                else lazy.pxr.UsdPhysics.MeshCollisionAPI.Apply(self._prim)
+            )
             # Set the approximation to be convex hull by default
-            if self.get_collision_approximation() != "boundingSphere":
-                self.set_collision_approximation(approximation_type="convexHull")
+            self.set_collision_approximation(approximation_type="convexHull")
 
     @property
     def collision_enabled(self):
@@ -256,24 +337,38 @@ class CollisionGeomPrim(GeomPrim):
         assert self._mesh_collision_api is not None, "collision_approximation only applicable for meshes!"
         assert_valid_key(
             key=approximation_type,
-            valid_keys={"none", "convexHull", "convexDecomposition", "meshSimplification", "sdf", "boundingSphere", "boundingCube"},
+            valid_keys={
+                "none",
+                "convexHull",
+                "convexDecomposition",
+                "meshSimplification",
+                "sdf",
+                "boundingSphere",
+                "boundingCube",
+            },
             name="collision approximation type",
         )
 
         # Make sure to add the appropriate API if we're setting certain values
-        if approximation_type == "convexHull" and not self._prim.HasAPI(PhysxSchema.PhysxConvexHullCollisionAPI):
-            PhysxSchema.PhysxConvexHullCollisionAPI.Apply(self._prim)
-        elif approximation_type == "convexDecomposition" and not self._prim.HasAPI(PhysxSchema.PhysxConvexDecompositionCollisionAPI):
-            PhysxSchema.PhysxConvexDecompositionCollisionAPI.Apply(self._prim)
-        elif approximation_type == "meshSimplification" and not self._prim.HasAPI(PhysxSchema.PhysxTriangleMeshSimplificationCollisionAPI):
-            PhysxSchema.PhysxTriangleMeshSimplificationCollisionAPI.Apply(self._prim)
-        elif approximation_type == "sdf" and not self._prim.HasAPI(PhysxSchema.PhysxSDFMeshCollisionAPI):
-            PhysxSchema.PhysxSDFMeshCollisionAPI.Apply(self._prim)
-        elif approximation_type == "none" and not self._prim.HasAPI(PhysxSchema.PhysxTriangleMeshCollisionAPI):
-            PhysxSchema.PhysxTriangleMeshCollisionAPI.Apply(self._prim)
+        if approximation_type == "convexHull" and not self._prim.HasAPI(
+            lazy.pxr.PhysxSchema.PhysxConvexHullCollisionAPI
+        ):
+            lazy.pxr.PhysxSchema.PhysxConvexHullCollisionAPI.Apply(self._prim)
+        elif approximation_type == "convexDecomposition" and not self._prim.HasAPI(
+            lazy.pxr.PhysxSchema.PhysxConvexDecompositionCollisionAPI
+        ):
+            lazy.pxr.PhysxSchema.PhysxConvexDecompositionCollisionAPI.Apply(self._prim)
+        elif approximation_type == "meshSimplification" and not self._prim.HasAPI(
+            lazy.pxr.PhysxSchema.PhysxTriangleMeshSimplificationCollisionAPI
+        ):
+            lazy.pxr.PhysxSchema.PhysxTriangleMeshSimplificationCollisionAPI.Apply(self._prim)
+        elif approximation_type == "sdf" and not self._prim.HasAPI(lazy.pxr.PhysxSchema.PhysxSDFMeshCollisionAPI):
+            lazy.pxr.PhysxSchema.PhysxSDFMeshCollisionAPI.Apply(self._prim)
+        elif approximation_type == "none" and not self._prim.HasAPI(lazy.pxr.PhysxSchema.PhysxTriangleMeshCollisionAPI):
+            lazy.pxr.PhysxSchema.PhysxTriangleMeshCollisionAPI.Apply(self._prim)
 
         if approximation_type == "convexHull":
-            pch_api = PhysxSchema.PhysxConvexHullCollisionAPI(self._prim)
+            pch_api = lazy.pxr.PhysxSchema.PhysxConvexHullCollisionAPI(self._prim)
             # Also make sure the maximum vertex count is 60 (max number compatible with GPU)
             # https://docs.omniverse.nvidia.com/app_create/prod_extensions/ext_physics/rigid-bodies.html#collision-settings
             if pch_api.GetHullVertexLimitAttr().Get() is None:
@@ -301,21 +396,16 @@ class CollisionGeomPrim(GeomPrim):
             weaker_than_descendants (bool, optional): True if the material shouldn't override the descendants
                                                       materials, otherwise False. Defaults to False.
         """
-        if self._binding_api is None:
-            if self._prim.HasAPI(UsdShade.MaterialBindingAPI):
-                self._binding_api = UsdShade.MaterialBindingAPI(self.prim)
-            else:
-                self._binding_api = UsdShade.MaterialBindingAPI.Apply(self.prim)
         if weaker_than_descendants:
             self._binding_api.Bind(
                 physics_material.material,
-                bindingStrength=UsdShade.Tokens.weakerThanDescendants,
+                bindingStrength=lazy.pxr.UsdShade.Tokens.weakerThanDescendants,
                 materialPurpose="physics",
             )
         else:
             self._binding_api.Bind(
                 physics_material.material,
-                bindingStrength=UsdShade.Tokens.strongerThanDescendants,
+                bindingStrength=lazy.pxr.UsdShade.Tokens.strongerThanDescendants,
                 materialPurpose="physics",
             )
         self._applied_physics_material = physics_material
@@ -328,11 +418,6 @@ class CollisionGeomPrim(GeomPrim):
         Returns:
             PhysicsMaterial: the current applied physics material.
         """
-        if self._binding_api is None:
-            if self._prim.HasAPI(UsdShade.MaterialBindingAPI):
-                self._binding_api = UsdShade.MaterialBindingAPI(self.prim)
-            else:
-                self._binding_api = UsdShade.MaterialBindingAPI.Apply(self.prim)
         if self._applied_physics_material is not None:
             return self._applied_physics_material
         else:
@@ -341,7 +426,7 @@ class CollisionGeomPrim(GeomPrim):
             if path == "":
                 return None
             else:
-                self._applied_physics_material = PhysicsMaterial(prim_path=path)
+                self._applied_physics_material = lazy.omni.isaac.core.materials.PhysicsMaterial(prim_path=path)
                 return self._applied_physics_material
 
 

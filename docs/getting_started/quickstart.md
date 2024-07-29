@@ -44,8 +44,8 @@ cfg["objects"] = [ # (1)!
         "usd_path": f"{gm.ASSET_PATH}/models/stain/stain.usd",
         "category": "stain", # (4)!
         "visual_only": True, # (5)!
-        "scale": [2.0, 1.0, 2.0], # (6)!
-        "position": [3.0, 0, 2.0], # (7)!
+        "scale": [1.0, 1.0, 1.0], # (6)!
+        "position": [1.0, 2.0, 0.001], # (7)!
         "orientation": [0, 0, 0, 1.0], # (8)!
     },
     {
@@ -113,10 +113,7 @@ cfg["robots"] = [ # (1)!
 3. Execute `print(og.ALL_SENSOR_MODALITIES)` for a list of all available observation modalities!
 
 ## 📋 **Defining a task**
-Lastly, we can optionally define a task to load into our scene. Since we're just getting started, let's load a "Dummy" task: (1)
-{ .annotate }
-
-1. Note: this is the task that is loaded anyways even if we don't explicitly define a task in our config!
+Lastly, we can optionally define a task to load into our scene. Since we're just getting started, let's load a "Dummy" task (which is the task that is loaded anyways even if we don't explicitly define a task in our config): 
 
 ```{.python .annotate}
 cfg["task"] = {
@@ -140,7 +137,7 @@ env = og.Environment(cfg)
 Once the environment loads, we can interface with our environment similar to OpenAI's Gym interface:
 
 ```{.python .annotate}
-obs, rew, done, info = env.step(env.action_space.sample())
+obs, rew, terminated, truncated, info = env.step(env.action_space.sample())
 ```
 
 ??? question "What happens if we have no robot loaded?"
@@ -151,6 +148,7 @@ obs, rew, done, info = env.step(env.action_space.sample())
 
     ``` py linenums="1"
     import omnigibson as og
+    from omnigibson.macros import gm
     
     cfg = dict()
     
@@ -168,8 +166,8 @@ obs, rew, done, info = env.step(env.action_space.sample())
             "usd_path": f"{gm.ASSET_PATH}/models/stain/stain.usd",
             "category": "stain",
             "visual_only": True,
-            "scale": [2.0, 1.0, 2.0],
-            "position": [3.0, 0, 2.0],
+            "scale": [1.0, 1.0, 1.0],
+            "position": [1.0, 2.0, 0.001],
             "orientation": [0, 0, 0, 1.0],
         },
         {
@@ -223,7 +221,9 @@ obs, rew, done, info = env.step(env.action_space.sample())
     
     # Step!
     for _ in range(10000):
-        obs, rew, done, info = env.step(env.action_space.sample())
+        obs, rew, terminated, truncated, info = env.step(env.action_space.sample())
+
+    og.shutdown()
     ```
 
 
@@ -253,4 +253,4 @@ og.sim.viewer_camera.set_position_orientation(<POSITION>, <ORIENTATION>)
 
 ***
 
-**Next:** Check out some of **`OmniGibson`**'s breadth of features from our [Building Block](./building_blocks.md) examples!
+**Next:** Check out some of **`OmniGibson`**'s breadth of features from our [Modules](../modules/overview.md) pages!

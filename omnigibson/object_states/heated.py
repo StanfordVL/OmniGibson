@@ -1,9 +1,8 @@
 import numpy as np
 
 from omnigibson.macros import create_module_macros
-from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanState
+from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanStateMixin
 from omnigibson.object_states.temperature import Temperature
-
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -16,14 +15,16 @@ m.HEATED_SAMPLING_RANGE_MIN = 10.0
 m.HEATED_SAMPLING_RANGE_MAX = 20.0
 
 
-class Heated(AbsoluteObjectState, BooleanState):
-    def __init__(self, obj, heat_temperature=m.DEFAULT_HEAT_TEMPERATURE):
+class Heated(AbsoluteObjectState, BooleanStateMixin):
+    def __init__(self, obj, heat_temperature=None):
         super(Heated, self).__init__(obj)
-        self.heat_temperature = heat_temperature
+        self.heat_temperature = heat_temperature if heat_temperature is not None else m.DEFAULT_HEAT_TEMPERATURE
 
-    @staticmethod
-    def get_dependencies():
-        return AbsoluteObjectState.get_dependencies() + [Temperature]
+    @classmethod
+    def get_dependencies(cls):
+        deps = super().get_dependencies()
+        deps.add(Temperature)
+        return deps
 
     def _set_value(self, new_value):
         if new_value:

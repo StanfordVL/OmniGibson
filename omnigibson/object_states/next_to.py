@@ -2,17 +2,17 @@ import numpy as np
 
 from omnigibson.object_states.aabb import AABB
 from omnigibson.object_states.adjacency import HorizontalAdjacency, flatten_planes
-from omnigibson.object_states.kinematics import KinematicsMixin
-from omnigibson.object_states.object_state_base import BooleanState, RelativeObjectState
+from omnigibson.object_states.kinematics_mixin import KinematicsMixin
+from omnigibson.object_states.object_state_base import BooleanStateMixin, RelativeObjectState
 
 
-class NextTo(KinematicsMixin, RelativeObjectState, BooleanState):
-    @staticmethod
-    def get_dependencies():
-        return KinematicsMixin.get_dependencies() + [HorizontalAdjacency]
+class NextTo(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
 
-    def _set_value(self, other, new_value):
-        raise NotImplementedError()
+    @classmethod
+    def get_dependencies(cls):
+        deps = super().get_dependencies()
+        deps.add(HorizontalAdjacency)
+        return deps
 
     def _get_value(self, other):
         objA_states = self.obj.states
@@ -43,10 +43,7 @@ class NextTo(KinematicsMixin, RelativeObjectState, BooleanState):
         # Otherwise, check if the other object shows up in the adjacency list.
         adjacency_this = self.obj.states[HorizontalAdjacency].get_value()
         in_any_horizontal_adjacency_of_this = any(
-            (
-                other in adjacency_list.positive_neighbors or
-                other in adjacency_list.negative_neighbors
-            )
+            (other in adjacency_list.positive_neighbors or other in adjacency_list.negative_neighbors)
             for adjacency_list in flatten_planes(adjacency_this)
         )
         if in_any_horizontal_adjacency_of_this:
@@ -55,10 +52,7 @@ class NextTo(KinematicsMixin, RelativeObjectState, BooleanState):
         # If not, check in the adjacency lists of `other`. Maybe it's shorter than us etc.
         adjacency_other = other.states[HorizontalAdjacency].get_value()
         in_any_horizontal_adjacency_of_other = any(
-            (
-                self.obj in adjacency_list.positive_neighbors or
-                self.obj in adjacency_list.negative_neighbors
-            )
+            (self.obj in adjacency_list.positive_neighbors or self.obj in adjacency_list.negative_neighbors)
             for adjacency_list in flatten_planes(adjacency_other)
         )
 

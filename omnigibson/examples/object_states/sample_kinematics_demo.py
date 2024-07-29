@@ -7,7 +7,6 @@ from omnigibson import object_states
 from omnigibson.macros import gm
 from omnigibson.objects import DatasetObject
 
-
 # Make sure object states are enabled
 gm.ENABLE_OBJECT_STATES = True
 
@@ -29,51 +28,61 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Define objects we want to sample at runtime
     microwave_cfg = dict(
-            type="DatasetObject",
-            name="microwave",
-            category="microwave",
-            model="hjjxmi",
-            scale=0.5,
+        type="DatasetObject",
+        name="microwave",
+        category="microwave",
+        model="hjjxmi",
+        bounding_box=[0.768, 0.512, 0.392],
     )
 
     cabinet_cfg = dict(
-            type="DatasetObject",
-            name="cabinet",
-            category="bottom_cabinet",
-            model="bamfsz",
+        type="DatasetObject",
+        name="cabinet",
+        category="bottom_cabinet",
+        model="bamfsz",
+        bounding_box=[1.075, 1.131, 1.355],
     )
 
-    plate_cfgs = [dict(
+    plate_cfgs = [
+        dict(
             type="DatasetObject",
             name=f"plate{i}",
             category="plate",
             model="iawoof",
-            bounding_box=np.array([0.25, 0.25, 0.05]),
-    ) for i in range(2)]
+            bounding_box=np.array([0.20, 0.20, 0.05]),
+        )
+        for i in range(2)
+    ]
 
-    apple_cfgs = [dict(
+    apple_cfgs = [
+        dict(
             type="DatasetObject",
             name=f"apple{i}",
             category="apple",
             model="agveuv",
-    ) for i in range(4)]
+            bounding_box=[0.065, 0.065, 0.077],
+        )
+        for i in range(4)
+    ]
 
     shelf_cfg = dict(
-            type="DatasetObject",
-            name=f"shelf",
-            category="shelf",
-            model="pkgbcp",
-            bounding_box=np.array([1.0, 0.4, 2.0]),
+        type="DatasetObject",
+        name=f"shelf",
+        category="shelf",
+        model="pkgbcp",
+        bounding_box=np.array([1.0, 0.4, 2.0]),
     )
 
-    box_cfgs = [dict(
+    box_cfgs = [
+        dict(
             type="DatasetObject",
             name=f"box{i}",
-            category="cracker_box",
+            category="box_of_crackers",
             model="cmdigf",
             bounding_box=np.array([0.2, 0.05, 0.3]),
-    ) for i in range(5)]
-
+        )
+        for i in range(5)
+    ]
 
     # Compose objects cfg
     objects_cfg = [
@@ -92,7 +101,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     cfg["objects"] = objects_cfg
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
     env.step([])
 
     # Sample microwave and boxes
@@ -158,7 +167,7 @@ def sample_microwave_plates_apples(env):
 
 def sample_boxes_on_shelf(env):
     shelf = env.scene.object_registry("name", "shelf")
-    boxes = list(env.scene.object_registry("category", "cracker_box"))
+    boxes = list(env.scene.object_registry("category", "box_of_crackers"))
     # Place the shelf at a pre-determined location on the floor
     og.log.info("Placing shelf on the floor...")
     shelf.set_orientation([0, 0, 0, 1.0])

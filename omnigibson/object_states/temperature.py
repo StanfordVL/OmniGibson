@@ -1,11 +1,11 @@
 import numpy as np
-from omnigibson.macros import create_module_macros
-from omnigibson.object_states.heat_source_or_sink import HeatSourceOrSink
-from omnigibson.object_states.object_state_base import AbsoluteObjectState
-from omnigibson.object_states.aabb import AABB
-from omnigibson.object_states.update_state_mixin import UpdateStateMixin
-import omnigibson as og
 
+import omnigibson as og
+from omnigibson.macros import create_module_macros
+from omnigibson.object_states.aabb import AABB
+from omnigibson.object_states.heat_source_or_sink import HeatSourceOrSink
+from omnigibson.object_states.tensorized_value_state import TensorizedValueState
+from omnigibson.utils.python_utils import classproperty
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -18,73 +18,46 @@ m.DEFAULT_TEMPERATURE = 23.0  # degrees Celsius
 m.TEMPERATURE_DECAY_SPEED = 0.02  # per second. We'll do the conversion to steps later.
 
 
-class Temperature(AbsoluteObjectState, UpdateStateMixin):
-    @staticmethod
-    def get_dependencies():
-        return AbsoluteObjectState.get_dependencies() + [AABB]
-
-    @staticmethod
-    def get_optional_dependencies():
-        # Note that we don't include OnFire as the optional dependency because OnFire also depends on Temperature.
-        # As a result, the temperature effect of objects that are on fire will have one step delay.
-        return AbsoluteObjectState.get_optional_dependencies() + [HeatSourceOrSink]
+class Temperature(TensorizedValueState):
 
     def __init__(self, obj):
+        # Run super first
         super(Temperature, self).__init__(obj)
 
-        self.value = m.DEFAULT_TEMPERATURE
+        # Set value to be default
+        self._set_value(m.DEFAULT_TEMPERATURE)
 
-    def _get_value(self):
-        return self.value
+    @classmethod
+    def update_temperature_from_heatsource_or_sink(cls, objs, temperature, rate):
+        """
+        Updates @objs' internal temperatures based on @temperature and @rate
 
-    def _set_value(self, new_value):
-        self.value = new_value
-        return True
+        Args:
+            objs (Iterable of StatefulObject): Objects whose temperatures should be updated
+            temperature (float): Heat source / sink temperature
+            rate (float): Heating rate of the source / sink
+        """
+        # Get idxs for objs
+        idxs = [cls.OBJ_IDXS[obj] for obj in objs]
+        cls.VALUES[idxs] += (temperature - cls.VALUES[idxs]) * rate * og.sim.get_rendering_dt()
 
-    def _update(self):
-        # Avoid circular import
-        from omnigibson.object_states.on_fire import OnFire
+    @classmethod
+    def get_dependencies(cls):
+        deps = super().get_dependencies()
+        deps.add(AABB)
+        return deps
 
-        # Start at the current temperature.
-        new_temperature = self.value
+    @classmethod
+    def get_optional_dependencies(cls):
+        deps = super().get_optional_dependencies()
+        deps.add(HeatSourceOrSink)
+        return deps
 
-        # Find all heat source objects.
-        affected_by_heat_source = False
-        heat_source_objs = og.sim.scene.get_objects_with_state_recursive(HeatSourceOrSink)
-        for obj2 in heat_source_objs:
-            # Only external heat sources will affect the temperature.
-            if obj2 == self.obj:
-                continue
+    @classmethod
+    def _update_values(cls, values):
+        # Apply temperature decay
+        return values + (m.DEFAULT_TEMPERATURE - values) * m.TEMPERATURE_DECAY_SPEED * og.sim.get_rendering_dt()
 
-            heat_source = obj2.states.get(OnFire, obj2.states.get(HeatSourceOrSink, None))
-            assert heat_source is not None, "Unknown HeatSourceOrSink subclass"
-
-            # Compute delta to apply if the heat source is actively affecting this object
-            if heat_source.affects_obj(obj=self.obj):
-                new_temperature += (heat_source.temperature - self.value) * heat_source.heating_rate * og.sim.get_rendering_dt()
-                affected_by_heat_source = True
-
-        # Apply temperature decay if not affected by any heat source.
-        if not affected_by_heat_source:
-            new_temperature += (
-                (m.DEFAULT_TEMPERATURE - self.value) * m.TEMPERATURE_DECAY_SPEED * og.sim.get_rendering_dt()
-            )
-
-        self.value = new_temperature
-
-    @property
-    def state_size(self):
-        return 1
-
-    # For this state, we simply store its value.
-    def _dump_state(self):
-        return dict(temperature=self.value)
-
-    def _load_state(self, state):
-        self.value = state["temperature"]
-
-    def _serialize(self, state):
-        return np.array([state["temperature"]], dtype=float)
-
-    def _deserialize(self, state):
-        return dict(temperature=state[0]), 1
+    @classproperty
+    def value_name(cls):
+        return "temperature"

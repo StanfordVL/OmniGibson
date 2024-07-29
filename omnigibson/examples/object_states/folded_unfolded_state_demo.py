@@ -1,9 +1,9 @@
-from omnigibson.utils.constants import PrimType
-from omnigibson.object_states import Folded, Unfolded
-from omnigibson.macros import gm
 import numpy as np
 
 import omnigibson as og
+from omnigibson.macros import gm
+from omnigibson.object_states import Folded, Unfolded
+from omnigibson.utils.constants import PrimType
 
 # Make sure object states and GPU dynamics are enabled (GPU dynamics needed for cloth)
 gm.ENABLE_OBJECT_STATES = True
@@ -27,6 +27,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "name": "carpet",
                 "category": "carpet",
                 "model": "ctclvd",
+                "bounding_box": [0.897, 0.568, 0.012],
                 "prim_type": PrimType.CLOTH,
                 "abilities": {"cloth": {}},
                 "position": [0, 0, 0.5],
@@ -36,8 +37,8 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "name": "dishtowel",
                 "category": "dishtowel",
                 "model": "dtfspn",
+                "bounding_box": [0.852, 1.1165, 0.174],
                 "prim_type": PrimType.CLOTH,
-                "scale": 5.0,
                 "abilities": {"cloth": {}},
                 "position": [1, 1, 0.5],
             },
@@ -46,17 +47,17 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "name": "shirt",
                 "category": "t_shirt",
                 "model": "kvidcx",
+                "bounding_box": [0.472, 1.243, 1.158],
                 "prim_type": PrimType.CLOTH,
-                "scale": 0.05,
                 "abilities": {"cloth": {}},
                 "position": [-1, 1, 0.5],
-                "orientation": [0.7071, 0., 0.7071, 0.],
+                "orientation": [0.7071, 0.0, 0.7071, 0.0],
             },
         ],
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1 / 60., physics_timestep=1 / 60.)
+    env = og.Environment(configs=cfg)
 
     # Grab object references
     carpet = env.scene.object_registry("name", "carpet")
@@ -94,11 +95,11 @@ def main(random_selection=False, headless=False, short_exec=False):
         # Fold all three cloths along the x-axis
         for i in range(3):
             obj = objs[i]
-            pos = obj.root_link.particle_positions
+            pos = obj.root_link.compute_particle_positions()
             x_min, x_max = np.min(pos, axis=0)[0], np.max(pos, axis=0)[0]
             x_extent = x_max - x_min
             # Get indices for the bottom 10 percent vertices in the x-axis
-            indices = np.argsort(pos, axis=0)[:, 0][:(pos.shape[0] // 10)]
+            indices = np.argsort(pos, axis=0)[:, 0][: (pos.shape[0] // 10)]
             start = np.copy(pos[indices])
 
             # lift up a bit
@@ -111,22 +112,20 @@ def main(random_selection=False, headless=False, short_exec=False):
 
             increments = 25
             for ctrl_pts in np.concatenate([np.linspace(start, mid, increments), np.linspace(mid, end, increments)]):
-                pos = obj.root_link.particle_positions
-                pos[indices] = ctrl_pts
-                obj.root_link.particle_positions = pos
+                obj.root_link.set_particle_positions(ctrl_pts, idxs=indices)
                 og.sim.step()
                 print_state()
 
         # Fold the t-shirt twice again along the y-axis
         for direction in [-1, 1]:
             obj = shirt
-            pos = obj.root_link.particle_positions
+            pos = obj.root_link.compute_particle_positions()
             y_min, y_max = np.min(pos, axis=0)[1], np.max(pos, axis=0)[1]
             y_extent = y_max - y_min
             if direction == 1:
-                indices = np.argsort(pos, axis=0)[:, 1][:(pos.shape[0] // 20)]
+                indices = np.argsort(pos, axis=0)[:, 1][: (pos.shape[0] // 20)]
             else:
-                indices = np.argsort(pos, axis=0)[:, 1][-(pos.shape[0] // 20):]
+                indices = np.argsort(pos, axis=0)[:, 1][-(pos.shape[0] // 20) :]
             start = np.copy(pos[indices])
 
             # lift up a bit
@@ -139,9 +138,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
             increments = 25
             for ctrl_pts in np.concatenate([np.linspace(start, mid, increments), np.linspace(mid, end, increments)]):
-                pos = obj.root_link.particle_positions
-                pos[indices] = ctrl_pts
-                obj.root_link.particle_positions = pos
+                obj.root_link.set_particle_positions(ctrl_pts, idxs=indices)
                 env.step(np.array([]))
                 print_state()
 

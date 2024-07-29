@@ -1,56 +1,23 @@
+import collections
+import itertools
 import math
-from collections import Iterable
 import os
+import re
+from collections.abc import Iterable
 
-import omni.usd
-from omni.isaac.core.utils.prims import get_prim_at_path, get_prim_path, is_prim_path_valid, get_prim_children
-from omni.isaac.core.utils.stage import get_current_stage, get_stage_units, traverse_stage, add_reference_to_stage
-from omni.isaac.core.utils.bounds import compute_aabb, create_bbox_cache, compute_combined_aabb
-from omni.syntheticdata import helpers
-from omni.kit.primitive.mesh.evaluators.sphere import SphereEvaluator
-from omni.kit.primitive.mesh.evaluators.disk import DiskEvaluator
-from omni.kit.primitive.mesh.evaluators.plane import PlaneEvaluator
-from omni.kit.primitive.mesh.evaluators.cylinder import CylinderEvaluator
-from omni.kit.primitive.mesh.evaluators.torus import TorusEvaluator
-from omni.kit.primitive.mesh.evaluators.cone import ConeEvaluator
-from omni.kit.primitive.mesh.evaluators.cube import CubeEvaluator
-
-from pxr import Gf, Vt, Usd, Sdf, UsdGeom, UsdShade, UsdPhysics, PhysxSchema
-import carb
 import numpy as np
 import trimesh
 
 import omnigibson as og
-from omnigibson.macros import gm
-from omnigibson.utils.constants import JointType, PRIMITIVE_MESH_TYPES, PrimType, GEOM_TYPES
-from omnigibson.utils.python_utils import assert_valid_key
-from omnigibson.utils.ui_utils import suppress_omni_log
-
+import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
+from omnigibson.macros import gm
+from omnigibson.utils.constants import PRIMITIVE_MESH_TYPES, JointType, PrimType
+from omnigibson.utils.python_utils import assert_valid_key
+from omnigibson.utils.ui_utils import create_module_logger, suppress_omni_log
 
-GF_TO_VT_MAPPING = {
-    Gf.Vec3d: Vt.Vec3dArray,
-    Gf.Vec3f: Vt.Vec3fArray,
-    Gf.Vec3h: Vt.Vec3hArray,
-    Gf.Quatd: Vt.QuatdArray,
-    Gf.Quatf: Vt.QuatfArray,
-    Gf.Quath: Vt.QuathArray,
-    int: Vt.IntArray,
-    float: Vt.FloatArray,
-    bool: Vt.BoolArray,
-    str: Vt.StringArray,
-    chr: Vt.CharArray,
-}
-
-MESH_PRIM_TYPE_TO_EVALUATOR_MAPPING = {
-    "Sphere": SphereEvaluator,
-    "Disk": DiskEvaluator,
-    "Plane": PlaneEvaluator,
-    "Cylinder": CylinderEvaluator,
-    "Torus": TorusEvaluator,
-    "Cone": ConeEvaluator,
-    "Cube": CubeEvaluator,
-}
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 def array_to_vtarray(arr, element_type):
@@ -65,6 +32,20 @@ def array_to_vtarray(arr, element_type):
     Returns:
         Vt.Array: Vt-typed array, of specified type corresponding to @element_type
     """
+    GF_TO_VT_MAPPING = {
+        lazy.pxr.Gf.Vec3d: lazy.pxr.Vt.Vec3dArray,
+        lazy.pxr.Gf.Vec3f: lazy.pxr.Vt.Vec3fArray,
+        lazy.pxr.Gf.Vec3h: lazy.pxr.Vt.Vec3hArray,
+        lazy.pxr.Gf.Quatd: lazy.pxr.Vt.QuatdArray,
+        lazy.pxr.Gf.Quatf: lazy.pxr.Vt.QuatfArray,
+        lazy.pxr.Gf.Quath: lazy.pxr.Vt.QuathArray,
+        int: lazy.pxr.Vt.IntArray,
+        float: lazy.pxr.Vt.FloatArray,
+        bool: lazy.pxr.Vt.BoolArray,
+        str: lazy.pxr.Vt.StringArray,
+        chr: lazy.pxr.Vt.CharArray,
+    }
+
     # Make sure array type is valid
     assert_valid_key(key=element_type, valid_keys=GF_TO_VT_MAPPING, name="array element type")
 
@@ -93,71 +74,32 @@ def get_prim_nested_children(prim):
         list of Usd.Prim: nested prims
     """
     prims = []
-    for child in get_prim_children(prim):
+    for child in lazy.omni.isaac.core.utils.prims.get_prim_children(prim):
         prims.append(child)
         prims += get_prim_nested_children(prim=child)
 
     return prims
 
 
-def get_camera_params(viewport):
-    """
-    Get active camera intrinsic and extrinsic parameters.
-
-    Returns:
-        dict: Keyword-mapped values of the active camera's parameters:
-
-            pose (numpy.ndarray): camera position in world coordinates,
-            fov (float): horizontal field of view in radians
-            focal_length (float)
-            horizontal_aperture (float)
-            view_projection_matrix (numpy.ndarray(dtype=float64, shape=(4, 4)))
-            resolution (dict): resolution as a dict with 'width' and 'height'.
-            clipping_range (tuple(float, float)): Near and Far clipping values.
-    """
-    stage = omni.usd.get_context().get_stage()
-    prim = stage.GetPrimAtPath(viewport.get_active_camera())
-    prim_tf = omni.usd.get_world_transform_matrix(prim)
-    view_params = helpers.get_view_params(viewport)
-    fov = 2 * math.atan(view_params["horizontal_aperture"] / (2 * view_params["focal_length"]))
-    view_proj_mat = helpers.get_view_proj_mat(view_params)
-
-    return {
-        "pose": np.array(prim_tf),
-        "fov": fov,
-        "focal_length": view_params["focal_length"],
-        "horizontal_aperture": view_params["horizontal_aperture"],
-        "view_projection_matrix": view_proj_mat,
-        "resolution": {"width": view_params["width"], "height": view_params["height"]},
-        "clipping_range": view_params["clipping_range"],
-    }
-
-
-def get_semantic_objects_pose():
-    """
-    Get pose of all objects with a semantic label.
-    """
-    stage = omni.usd.get_context().get_stage()
-    mappings = helpers.get_instance_mappings()
-    pose = []
-    for m in mappings:
-        prim_path = m[1]
-        prim = stage.GetPrimAtPath(prim_path)
-        prim_tf = omni.usd.get_world_transform_matrix(prim)
-        pose.append((str(prim_path), m[2], str(m[3]), np.array(prim_tf)))
-    return pose
-
-
-def create_joint(prim_path, joint_type, body0=None, body1=None, enabled=True,
-                 joint_frame_in_parent_frame_pos=None, joint_frame_in_parent_frame_quat=None,
-                 joint_frame_in_child_frame_pos=None, joint_frame_in_child_frame_quat=None,
-                 break_force=None, break_torque=None):
+def create_joint(
+    prim_path,
+    joint_type,
+    body0=None,
+    body1=None,
+    enabled=True,
+    joint_frame_in_parent_frame_pos=None,
+    joint_frame_in_parent_frame_quat=None,
+    joint_frame_in_child_frame_pos=None,
+    joint_frame_in_child_frame_quat=None,
+    break_force=None,
+    break_torque=None,
+):
     """
     Creates a joint between @body0 and @body1 of specified type @joint_type
 
     Args:
         prim_path (str): absolute path to where the joint will be created
-        joint_type (str): type of joint to create. Valid options are:
+        joint_type (str or JointType): type of joint to create. Valid options are:
             "FixedJoint", "Joint", "PrismaticJoint", "RevoluteJoint", "SphericalJoint"
                         (equivalently, one of JointType)
         body0 (str or None): absolute path to the first body's prim. At least @body0 or @body1 must be specified.
@@ -174,29 +116,29 @@ def create_joint(prim_path, joint_type, body0=None, body1=None, enabled=True,
         Usd.Prim: Created joint prim
     """
     # Make sure we have valid joint_type
-    assert JointType.is_valid(joint_type=joint_type), \
-        f"Invalid joint specified for creation: {joint_type}"
+    assert JointType.is_valid(joint_type=joint_type), f"Invalid joint specified for creation: {joint_type}"
 
     # Make sure at least body0 or body1 is specified
-    assert body0 is not None or body1 is not None, \
-        f"At least either body0 or body1 must be specified when creating a joint!"
+    assert (
+        body0 is not None or body1 is not None
+    ), f"At least either body0 or body1 must be specified when creating a joint!"
 
     # Create the joint
-    joint = UsdPhysics.__dict__[joint_type].Define(og.sim.stage, prim_path)
+    joint = getattr(lazy.pxr.UsdPhysics, joint_type).Define(og.sim.stage, prim_path)
 
     # Possibly add body0, body1 targets
     if body0 is not None:
-        assert is_prim_path_valid(body0), f"Invalid body0 path specified: {body0}"
-        joint.GetBody0Rel().SetTargets([Sdf.Path(body0)])
+        assert lazy.omni.isaac.core.utils.prims.is_prim_path_valid(body0), f"Invalid body0 path specified: {body0}"
+        joint.GetBody0Rel().SetTargets([lazy.pxr.Sdf.Path(body0)])
     if body1 is not None:
-        assert is_prim_path_valid(body1), f"Invalid body1 path specified: {body1}"
-        joint.GetBody1Rel().SetTargets([Sdf.Path(body1)])
+        assert lazy.omni.isaac.core.utils.prims.is_prim_path_valid(body1), f"Invalid body1 path specified: {body1}"
+        joint.GetBody1Rel().SetTargets([lazy.pxr.Sdf.Path(body1)])
 
     # Get the prim pointed to at this path
-    joint_prim = get_prim_at_path(prim_path)
+    joint_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path)
 
     # Apply joint API interface
-    PhysxSchema.PhysxJointAPI.Apply(joint_prim)
+    lazy.pxr.PhysxSchema.PhysxJointAPI.Apply(joint_prim)
 
     # We need to step rendering once to auto-fill the local pose before overwriting it.
     # Note that for some reason, if multi_gpu is used, this line will crash if create_joint is called during on_contact
@@ -204,13 +146,17 @@ def create_joint(prim_path, joint_type, body0=None, body1=None, enabled=True,
     og.sim.render()
 
     if joint_frame_in_parent_frame_pos is not None:
-        joint_prim.GetAttribute("physics:localPos0").Set(Gf.Vec3f(*joint_frame_in_parent_frame_pos))
+        joint_prim.GetAttribute("physics:localPos0").Set(lazy.pxr.Gf.Vec3f(*joint_frame_in_parent_frame_pos))
     if joint_frame_in_parent_frame_quat is not None:
-        joint_prim.GetAttribute("physics:localRot0").Set(Gf.Quatf(*joint_frame_in_parent_frame_quat[[3, 0, 1, 2]]))
+        joint_prim.GetAttribute("physics:localRot0").Set(
+            lazy.pxr.Gf.Quatf(*joint_frame_in_parent_frame_quat[[3, 0, 1, 2]])
+        )
     if joint_frame_in_child_frame_pos is not None:
-        joint_prim.GetAttribute("physics:localPos1").Set(Gf.Vec3f(*joint_frame_in_child_frame_pos))
+        joint_prim.GetAttribute("physics:localPos1").Set(lazy.pxr.Gf.Vec3f(*joint_frame_in_child_frame_pos))
     if joint_frame_in_child_frame_quat is not None:
-        joint_prim.GetAttribute("physics:localRot1").Set(Gf.Quatf(*joint_frame_in_child_frame_quat[[3, 0, 1, 2]]))
+        joint_prim.GetAttribute("physics:localRot1").Set(
+            lazy.pxr.Gf.Quatf(*joint_frame_in_child_frame_quat[[3, 0, 1, 2]])
+        )
 
     if break_force is not None:
         joint_prim.GetAttribute("physics:breakForce").Set(break_force)
@@ -229,24 +175,57 @@ def create_joint(prim_path, joint_type, body0=None, body1=None, enabled=True,
     return joint_prim
 
 
-class RigidContactAPI:
+class RigidContactAPIImpl:
     """
     Class containing class methods to aggregate rigid body contacts across all rigid bodies in the simulator
     """
-    # Dictionary mapping rigid body prim path to corresponding index in the contact view matrix
-    _PATH_TO_IDX = None
 
-    # Contact view for generating contact matrices at each timestep
-    _CONTACT_VIEW = None
+    def __init__(self):
+        self._PATH_TO_SCENE_IDX = dict()
 
-    # Current aggregated contacts over all rigid bodies at the current timestep. Shape: (N, N, 3)
-    _CONTACT_MATRIX = None
+        # Dictionary mapping rigid body prim path to corresponding index in the contact view matrix
+        self._PATH_TO_ROW_IDX = dict()
+        self._PATH_TO_COL_IDX = dict()
 
-    # Current cache, mapping 2-tuple (prim_paths_a, prim_paths_b) to contact values
-    _CONTACT_CACHE = None
+        # Numpy array of rigid body prim paths where its array index directly corresponds to the corresponding
+        # index in the contact view matrix
+        self._ROW_IDX_TO_PATH = dict()
+        self._COL_IDX_TO_PATH = dict()
+
+        # Contact view for generating contact matrices at each timestep
+        self._CONTACT_VIEW = dict()
+
+        # Current aggregated contacts over all rigid bodies at the current timestep. Shape: (N, N, 3)
+        self._CONTACT_MATRIX = dict()
+
+        # Current contact data cache containing forces, points, normals, separations, contact_counts, start_indices
+        self._CONTACT_DATA = dict()
+
+        # Current cache, mapping 2-tuple (prim_paths_a, prim_paths_b) to contact values
+        self._CONTACT_CACHE = None
 
     @classmethod
-    def initialize_view(cls):
+    def get_row_filters(cls):
+        return [f"/World/scene_{i}/*/*" for i in range(len(og.sim.scenes))]
+
+    @classmethod
+    def get_column_filters(cls):
+        filters = dict()
+        for scene_idx, scene in enumerate(og.sim.scenes):
+            filters[scene_idx] = []
+            for obj in scene.objects:
+                if obj.prim_type == PrimType.RIGID:
+                    for link in obj.links.values():
+                        if not link.kinematic_only:
+                            filters[scene_idx].append(link.prim_path)
+
+        return filters
+
+    @classmethod
+    def get_max_contact_data_count(cls):
+        return 0
+
+    def initialize_view(self):
         """
         Initializes the rigid contact view. Note: Can only be done when sim is playing!
         """
@@ -256,62 +235,103 @@ class RigidContactAPI:
         # Note that omni's ordering is based on the top-down object ordering path on the USD stage, which coincidentally
         # matches the same ordering we store objects in our registry. So the mapping we generate from our registry
         # mapping aligns with omni's ordering!
-        i = 0
-        cls._PATH_TO_IDX = dict()
-        for obj in og.sim.scene.objects:
-            if obj.prim_type == PrimType.RIGID:
-                for link in obj.links.values():
-                    if not link.kinematic_only:
-                        cls._PATH_TO_IDX[link.prim_path] = i
-                        i += 1
+        column_filters = self.get_column_filters()
+        for scene_idx, filters in column_filters.items():
+            self._PATH_TO_COL_IDX[scene_idx] = dict()
+            for i, link_path in enumerate(filters):
+                self._PATH_TO_COL_IDX[scene_idx][link_path] = i
+                self._PATH_TO_SCENE_IDX[link_path] = scene_idx
 
         # If there are no valid objects, clear the view and terminate early
-        if i == 0:
-            cls._CONTACT_VIEW = None
+        if len(column_filters) == 0:
+            self._CONTACT_VIEW = dict()
             return
+
+        # Get the row filters too
+        row_filters = self.get_row_filters()
 
         # Generate rigid body view, making sure to update the simulation first (without physics) so that the physx
         # backend is synchronized with any newly added objects
         # We also suppress the omni tensor plugin from giving warnings we expect
         og.sim.pi.update_simulation(elapsedStep=0, currentTime=og.sim.current_time)
         with suppress_omni_log(channels=["omni.physx.tensors.plugin"]):
-            cls._CONTACT_VIEW = og.sim.physics_sim_view.create_rigid_contact_view(
-                pattern="/World/*/*",
-                filter_patterns=list(cls._PATH_TO_IDX.keys()),
-            )
+            for scene_idx, _ in enumerate(og.sim.scenes):
+                # TODO: How to make this work with the floor plane?
+                # If there are no collidable objects in the scene, skip.
+                if len(column_filters[scene_idx]) == 0:
+                    continue
+
+                self._CONTACT_VIEW[scene_idx] = og.sim.physics_sim_view.create_rigid_contact_view(
+                    pattern=row_filters[scene_idx],
+                    filter_patterns=column_filters[scene_idx],
+                    max_contact_data_count=self.get_max_contact_data_count(),
+                )
+
+                self._PATH_TO_ROW_IDX[scene_idx] = {
+                    path: i for i, path in enumerate(self._CONTACT_VIEW[scene_idx].sensor_paths)
+                }
+
+                self._ROW_IDX_TO_PATH[scene_idx] = np.array(list(self._PATH_TO_ROW_IDX[scene_idx].keys()))
+                self._COL_IDX_TO_PATH[scene_idx] = np.array(list(self._PATH_TO_COL_IDX[scene_idx].keys()))
 
         # Sanity check generated view -- this should generate square matrices of shape (N, N, 3)
-        n_bodies = len(cls._PATH_TO_IDX)
-        # from IPython import embed; embed()
-        assert cls._CONTACT_VIEW.sensor_count == n_bodies and cls._CONTACT_VIEW.filter_count == n_bodies, \
-            f"Got unexpected contact view shape. Expected: ({n_bodies}, {n_bodies}); " \
-            f"got: ({cls._CONTACT_VIEW.sensor_count}, {cls._CONTACT_VIEW.filter_count})"
+        # n_bodies = len(cls._PATH_TO_COL_IDX)
+        # assert cls._CONTACT_VIEW.filter_count == n_bodies, \
+        #     f"Got unexpected contact view shape. Expected: (N, {n_bodies}); " \
+        #     f"got: (N, {cls._CONTACT_VIEW.filter_count})"
 
-    @classmethod
-    def get_body_idx(cls, prim_path):
+    def get_scene_idx(self, prim_path):
         """
         Returns:
-            int: idx assigned to the rigid body defined by @prim_path
+            int: scene idx for the rigid body defined by @prim_path
         """
-        return cls._PATH_TO_IDX[prim_path]
+        return self._PATH_TO_SCENE_IDX[prim_path]
 
-    @classmethod
-    def get_all_impulses(cls):
+    def get_body_row_idx(self, prim_path):
+        """
+        Returns:
+            int: row idx assigned to the rigid body defined by @prim_path
+        """
+        scene_idx = self._PATH_TO_SCENE_IDX[prim_path]
+        return scene_idx, self._PATH_TO_ROW_IDX[scene_idx][prim_path]
+
+    def get_body_col_idx(self, prim_path):
+        """
+        Returns:
+            int: col idx assigned to the rigid body defined by @prim_path
+        """
+        scene_idx = self._PATH_TO_SCENE_IDX[prim_path]
+        return scene_idx, self._PATH_TO_COL_IDX[scene_idx][prim_path]
+
+    def get_row_idx_prim_path(self, scene_idx, idx):
+        """
+        Returns:
+            str: @prim_path corresponding to the row idx @idx in the contact matrix
+        """
+        return self._ROW_IDX_TO_PATH[scene_idx][idx]
+
+    def get_col_idx_prim_path(self, scene_idx, idx):
+        """
+        Returns:
+            str: @prim_path corresponding to the column idx @idx in the contact matrix
+        """
+        return self._COL_IDX_TO_PATH[scene_idx][idx]
+
+    def get_all_impulses(self, scene_idx):
         """
         Grab all impulses at the current timestep
 
         Returns:
-            n-array: (N, N, 3) impulse array defining current impulses between all N contact-sensor enabled rigid bodies
-                in the simulator
+            n-array: (N, M, 3) impulse array defining current impulses between all N contact-sensor enabled rigid bodies
+                in the simulator and M tracked rigid bodies
         """
         # Generate the contact matrix if it doesn't already exist
-        if cls._CONTACT_MATRIX is None:
-            cls._CONTACT_MATRIX = cls._CONTACT_VIEW.get_contact_force_matrix(dt=1.0)
+        if scene_idx not in self._CONTACT_MATRIX:
+            self._CONTACT_MATRIX[scene_idx] = self._CONTACT_VIEW[scene_idx].get_contact_force_matrix(dt=1.0)
 
-        return cls._CONTACT_MATRIX
+        return self._CONTACT_MATRIX[scene_idx]
 
-    @classmethod
-    def get_impulses(cls, prim_paths_a, prim_paths_b):
+    def get_impulses(self, prim_paths_a, prim_paths_b):
         """
         Grabs the matrix representing all impulse forces between rigid prims from @prim_paths_a and
         rigid prims from @prim_paths_b
@@ -327,12 +347,114 @@ class RigidContactAPI:
                 from @prim_paths_b
         """
         # Compute subset of matrix and return
-        idxs_a = [cls._PATH_TO_IDX[path] for path in prim_paths_a]
-        idxs_b = [cls._PATH_TO_IDX[path] for path in prim_paths_b]
-        return cls.get_all_impulses()[idxs_a][:, idxs_b]
+        scene_idx = self._PATH_TO_SCENE_IDX[prim_paths_a[0]]
+        idxs_a = [self._PATH_TO_ROW_IDX[scene_idx][path] for path in prim_paths_a]
+        idxs_b = [self._PATH_TO_COL_IDX[scene_idx][path] for path in prim_paths_b]
+        return self.get_all_impulses(scene_idx)[idxs_a][:, idxs_b]
 
-    @classmethod
-    def in_contact(cls, prim_paths_a, prim_paths_b):
+    def get_contact_pairs(self, scene_idx, row_prim_paths=None, column_prim_paths=None):
+        """Get pairs of prim paths that are in contact."""
+        impulses = np.linalg.norm(self.get_all_impulses(scene_idx), axis=-1)
+        assert impulses.ndim == 2, f"Impulse matrix should be 2D, found shape {impulses.shape}"
+        interesting_col_paths = [
+            p for p in self._PATH_TO_COL_IDX[scene_idx].keys() if column_prim_paths is None or p in column_prim_paths
+        ]
+        interesting_columns = [list(GripperRigidContactAPI.get_body_col_idx(pp))[1] for pp in interesting_col_paths]
+
+        # Get the interesting-columns from the impulse matrix
+        interesting_impulse_columns = impulses[:, interesting_columns]
+        assert (
+            interesting_impulse_columns.ndim == 2
+        ), f"Impulse matrix should be 2D, found shape {interesting_impulse_columns.shape}"
+        interesting_row_idxes = np.nonzero(np.any(interesting_impulse_columns > 0, axis=1))[0]
+        interesting_row_paths = [
+            GripperRigidContactAPI.get_row_idx_prim_path(scene_idx, i) for i in interesting_row_idxes
+        ]
+
+        # Filter out idxes by whether or not the row path is in the row prim paths list
+        if row_prim_paths is not None:
+            interesting_row_idxes, interesting_row_paths = zip(
+                *[(i, p) for i, p in zip(interesting_row_idxes, interesting_row_paths) if p in row_prim_paths]
+            )
+            interesting_row_idxes = np.array(list(interesting_row_idxes))
+
+        # Get the full interesting section of the impulse matrix
+        interesting_impulses = interesting_impulse_columns[interesting_row_idxes]
+        assert interesting_impulses.ndim == 2, f"Impulse matrix should be 2D, found shape {interesting_impulses.shape}"
+
+        # Early return if not in contact.
+        if not np.any(interesting_impulses > 0):
+            return set()
+
+        # Get all of the (row, col) pairs where the impulse is greater than 0
+        return {
+            (interesting_row_paths[row], interesting_col_paths[col])
+            for row, col in np.argwhere(interesting_impulses > 0)
+        }
+
+    def get_contact_data(self, scene_idx, row_prim_paths=None, column_prim_paths=None):
+        # First check if the object has any contacts
+        impulses = self.get_all_impulses(scene_idx)
+        row_idx = (
+            list(range(impulses.shape[0]))
+            if row_prim_paths is None
+            else [self.get_body_row_idx(path)[1] for path in row_prim_paths]
+        )
+        col_idx = (
+            list(range(impulses.shape[1]))
+            if column_prim_paths is None
+            else [self.get_body_col_idx(path)[1] for path in column_prim_paths]
+        )
+        relevant_impulses = impulses[row_idx][:, col_idx]
+        if not np.any(relevant_impulses > 0):
+            return []
+
+        # Get the contact data
+        if scene_idx not in self._CONTACT_DATA:
+            self._CONTACT_DATA[scene_idx] = self._CONTACT_VIEW[scene_idx].get_contact_data(dt=1.0)
+
+        # Get the contact data for this prim
+        forces, points, normals, separations, contact_counts, start_indices = self._CONTACT_DATA[scene_idx]
+
+        # Assert that one of two things is true: either the prim count and contact count are equal,
+        # in which case we can zip them together, or the prim count is 1, in which case we can just
+        # repeat the single prim data for all contacts. Otherwise, it is not clear which contacts are
+        # happening between which two objects, so we return no contacts while printing an error.
+        contacts = []
+        for row in row_idx:
+            row_prim_path = self.get_row_idx_prim_path(scene_idx, row)
+            for col in col_idx:
+                if contact_counts[row, col] == 0:
+                    continue
+                col_prim_path = self.get_col_idx_prim_path(scene_idx, col)
+                start_idx = start_indices[row, col]
+                end_idx = start_idx + contact_counts[row, col]
+                if start_idx >= len(forces):
+                    log.warning(
+                        f"Contact data for prim {row_prim_path} and "
+                        f"{col_prim_path} is missing because there are too many contacts!"
+                    )
+                    continue
+                if end_idx > len(forces):
+                    log.warning(
+                        f"Contact data for prim {row_prim_path} and "
+                        f"{col_prim_path} is partial because there are too many contacts!"
+                    )
+                    continue
+                contacts.extend(
+                    zip(
+                        itertools.repeat(row_prim_path),
+                        itertools.repeat(col_prim_path),
+                        forces[start_idx:end_idx],
+                        points[start_idx:end_idx],
+                        normals[start_idx:end_idx],
+                        separations[start_idx:end_idx],
+                    )
+                )
+
+        return contacts
+
+    def in_contact(self, prim_paths_a, prim_paths_b):
         """
         Check if any rigid prim from @prim_paths_a is in contact with any rigid prim from @prim_paths_b
 
@@ -347,214 +469,141 @@ class RigidContactAPI:
         """
         # Check if the contact tuple already exists in the cache; if so, return the value
         key = (tuple(prim_paths_a), tuple(prim_paths_b))
-        if key not in cls._CONTACT_CACHE:
+        if key not in self._CONTACT_CACHE:
             # In contact if any of the matrix values representing the interaction between the two groups is non-zero
-            cls._CONTACT_CACHE[key] = np.any(cls.get_impulses(prim_paths_a=prim_paths_a, prim_paths_b=prim_paths_b))
-        return cls._CONTACT_CACHE[key]
+            self._CONTACT_CACHE[key] = np.any(self.get_impulses(prim_paths_a=prim_paths_a, prim_paths_b=prim_paths_b))
+        return self._CONTACT_CACHE[key]
 
-    @classmethod
-    def clear(cls):
+    def clear(self):
         """
         Clears the internal contact matrix and cache
         """
-        cls._CONTACT_MATRIX = None
-        cls._CONTACT_CACHE = dict()
+        self._CONTACT_MATRIX = dict()
+        self._CONTACT_DATA = dict()
+        self._CONTACT_CACHE = dict()
+
+
+# Instantiate the RigidContactAPI
+RigidContactAPI = RigidContactAPIImpl()
+
+
+class GripperRigidContactAPIImpl(RigidContactAPIImpl):
+    @classmethod
+    def get_column_filters(cls):
+        from omnigibson.robots.manipulation_robot import ManipulationRobot
+
+        filters = dict()
+        for scene_idx, scene in enumerate(og.sim.scenes):
+            filters[scene_idx] = []
+            for robot in scene.robots:
+                if isinstance(robot, ManipulationRobot):
+                    filters[scene_idx].extend(link.prim_path for links in robot.finger_links.values() for link in links)
+
+        return filters
+
+    @classmethod
+    def get_max_contact_data_count(cls):
+        # 2x per finger link, to be safe.
+        # 2 here is not the finger count, it's the number of items we will record contacts with, per finger.
+        # e.g. it's N such that if the finger is touching more than N items at once, only the first N are recorded.
+        # This number should very rarely go above 2.
+        return len(cls.get_column_filters()[0]) * 2
+
+
+# Instantiate the GripperRigidContactAPI
+GripperRigidContactAPI = GripperRigidContactAPIImpl()
 
 
 class CollisionAPI:
     """
     Class containing class methods to facilitate collision handling, e.g. collision groups
     """
-    ACTIVE_COLLISION_GROUPS = {}
+
+    ACTIVE_COLLISION_GROUPS = dict()
 
     @classmethod
-    def add_to_collision_group(cls, col_group, prim_path, create_if_not_exist=False):
+    def create_collision_group(cls, col_group, filter_self_collisions=False):
+        """
+        Creates a new collision group with name @col_group
+
+        Args:
+            col_group (str): Name of the collision group to create
+            filter_self_collisions (bool): Whether to ignore self-collisions within the group. Default is False
+        """
+        # Can only be done when sim is stopped
+        assert og.sim is None or og.sim.is_stopped(), "Cannot create a collision group unless og.sim is stopped!"
+
+        # Make sure the group doesn't already exist
+        assert (
+            col_group not in cls.ACTIVE_COLLISION_GROUPS
+        ), f"Cannot create collision group {col_group} because it already exists!"
+
+        # Create the group
+        col_group_prim_path = f"/World/collision_groups/{col_group}"
+        group = lazy.pxr.UsdPhysics.CollisionGroup.Define(og.sim.stage, col_group_prim_path)
+        if filter_self_collisions:
+            # Do not collide with self
+            group.GetFilteredGroupsRel().AddTarget(col_group_prim_path)
+        cls.ACTIVE_COLLISION_GROUPS[col_group] = group
+
+    @classmethod
+    def add_to_collision_group(cls, col_group, prim_path):
         """
         Adds the prim and all nested prims specified by @prim_path to the global collision group @col_group. If @col_group
         does not exist, then it will either be created if @create_if_not_exist is True, otherwise will raise an Error.
         Args:
             col_group (str): Name of the collision group to assign the prim at @prim_path to
             prim_path (str): Prim (and all nested prims) to assign to this @col_group
-            create_if_not_exist (bool): True if @col_group should be created if it does not already exist, otherwise an
-                error will be raised
         """
-        # TODO: This slows things down and / or crashes the sim with large number of objects. Skipping this for now, look into this later
-        pass
-        # # Check if collision group exists or not
-        # if col_group not in cls.ACTIVE_COLLISION_GROUPS:
-        #     # Raise error if we don't explicitly want to create a new group
-        #     if not create_if_not_exist:
-        #         raise ValueError(f"Collision group {col_group} not found in current registry, and create_if_not_exist"
-        #                          f"was set to False!")
-        #     # Otherwise, create the new group
-        #     col_group_name = f"/World/collisionGroup_{col_group}"
-        #     group = UsdPhysics.CollisionGroup.Define(get_current_stage(), col_group_name)
-        #     group.GetFilteredGroupsRel().AddTarget(col_group_name)  # Make sure that we can collide within our own group
-        #     cls.ACTIVE_COLLISION_GROUPS[col_group] = group
-        #
-        # # Add this prim to the collision group
-        # cls.ACTIVE_COLLISION_GROUPS[col_group].GetCollidersCollectionAPI().GetIncludesRel().AddTarget(prim_path)
+        # Make sure collision group exists
+        assert (
+            col_group in cls.ACTIVE_COLLISION_GROUPS
+        ), f"Cannot add to collision group {col_group} because it does not exist!"
+
+        # Add this prim to the collision group
+        cls.ACTIVE_COLLISION_GROUPS[col_group].GetCollidersCollectionAPI().GetIncludesRel().AddTarget(prim_path)
+
+    @classmethod
+    def add_group_filter(cls, col_group, filter_group):
+        """
+        Adds a new group filter for group @col_group, filtering all collision with group @filter_group
+        Args:
+            col_group (str): Name of the collision group which will have a new filter group added
+            filter_group (str): Name of the group that should be filtered
+        """
+        # Make sure the group doesn't already exist
+        for group_name in (col_group, filter_group):
+            assert group_name in cls.ACTIVE_COLLISION_GROUPS, (
+                f"Cannot add group filter {filter_group} to collision group {col_group} because at least one group "
+                f"does not exist!"
+            )
+
+        # Grab the group, and add the filter
+        filter_group_prim_path = f"/World/collision_groups/{filter_group}"
+        group = cls.ACTIVE_COLLISION_GROUPS[col_group]
+        group.GetFilteredGroupsRel().AddTarget(filter_group_prim_path)
 
     @classmethod
     def clear(cls):
         """
         Clears the internal state of this CollisionAPI
         """
+        # Remove all the collision group prims
+        for col_group_prim in cls.ACTIVE_COLLISION_GROUPS.values():
+            og.sim.stage.RemovePrim(col_group_prim.GetPath().pathString)
+
+        # Remove the collision groups tree
+        og.sim.stage.RemovePrim("/World/collision_groups")
+
+        # Clear the dictionary
         cls.ACTIVE_COLLISION_GROUPS = {}
-
-
-class BoundingBoxAPI:
-    """
-    Class containing class methods to facilitate bounding box handling
-    """
-    # Non-flatcache-compatible cache -- this is a direct omni API-based object
-    CACHE_NON_FLATCACHE = None
-
-    # Flatcache-compatible cache -- this is a dictionary mapping prim paths to corresponding AABBs
-    CACHE_FLATCACHE = dict()
-
-    @classmethod
-    def compute_aabb(cls, prim):
-        """
-        Computes the AABB (world-frame oriented) for @prim.
-
-        NOTE: If @prim is an EntityPrim (i.e.: owns multiple links), then the computed bounding box will be
-        the subsequent aggregate over all the links.
-
-        Args:
-            prim (XFormPrim): Prim to calculate AABB for
-
-        Returns:
-            2-tuple:
-                - 3-array: start (x,y,z) corner of world-coordinate frame aligned bounding box
-                - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
-        """
-        # Use the correct API to calculate AABB based on whether flatcache is enabled or not
-        return cls._compute_flatcache_aabb(prim=prim) if gm.ENABLE_FLATCACHE else \
-            cls._compute_non_flatcache_aabb(prim_path=prim.prim_path)
-
-    @classmethod
-    def _compute_flatcache_aabb(cls, prim):
-        """
-        Computes the AABB (world-frame oriented) for @prim. This an API compatible with flatcache, which manually
-        updates the @prim's transforms on the USD stage before computing its AABB
-
-        Args:
-            prim (XFormPrim): Prim to calculate AABB for
-
-        Returns:
-            2-tuple:
-                - 3-array: start (x,y,z) corner of world-coordinate frame aligned bounding box
-                - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
-        """
-        # Run imports here to avoid circular imports
-        from omnigibson.prims import EntityPrim, RigidPrim, XFormPrim
-
-        # Simply grab the AABB if it's already been cached
-        if prim in cls.CACHE_FLATCACHE:
-            return cls.CACHE_FLATCACHE[prim]
-
-        # Next, process the AABB depending on the type of prim it is
-        if isinstance(prim, EntityPrim):
-            obj = prim
-        elif isinstance(prim, RigidPrim):
-            # Find the obj owning this link
-            obj = og.sim.scene.object_registry("prim_path", "/".join(prim.prim_path.split("/")[:-1]))
-        elif isinstance(prim, XFormPrim):
-            # See if this XForm belongs to any object
-            obj = og.sim.scene.object_registry("prim_path", "/".join(prim.prim_path.split("/")[:2]), None)
-        else:
-            raise ValueError(f"Inputted prim must be an instance of EntityPrim, RigidPrim, or XFormPrim "
-                             f"in order to calculate AABB!")
-
-        # Update tfs for the object that owns this prim
-        if obj is not None:
-            FlatcacheAPI.sync_raw_object_transforms_in_usd(prim=obj)
-
-        # Compute the AABB and cache it internally
-        val = cls._compute_non_flatcache_aabb(prim_path=prim.prim_path)
-        cls.CACHE_FLATCACHE[prim] = val
-
-        return val
-
-    @classmethod
-    def _compute_non_flatcache_aabb(cls, prim_path):
-        """
-        Computes the AABB (world-frame oriented) for the prim specified at @prim_path using the underlying omniverse
-        API.
-
-        NOTE: This is NOT compatible with flatcache and will result in incorrect values if flatcache is enabled!! See:
-        https://docs.omniverse.nvidia.com/app_code/prod_extensions/ext_physics.html#physx-short-flatcache-also-known-as-fabric-rename-in-next-release
-
-        Args:
-            prim_path (str): Path to the prim to calculate AABB for
-
-        Returns:
-            2-tuple:
-                - 3-array: start (x,y,z) corner of world-coordinate frame aligned bounding box
-                - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
-        """
-        # Create cache if it doesn't already exist
-        if cls.CACHE_NON_FLATCACHE is None:
-            og.sim.psi.fetch_results()
-            cls.CACHE_NON_FLATCACHE = create_bbox_cache(use_extents_hint=False)
-
-        # Grab aabb
-        aabb = compute_aabb(bbox_cache=cls.CACHE_NON_FLATCACHE, prim_path=prim_path)
-
-        # Sanity check values
-        if np.any(aabb[3:] < aabb[:3]):
-            raise ValueError(f"Got invalid aabb values: low={aabb[:3]}, high={aabb[3:]}")
-
-        return aabb[:3], aabb[3:]
-
-    @classmethod
-    def compute_center_extent(cls, prim):
-        """
-        Computes the AABB (world-frame oriented) for @prim, and convert it into the center and extent values
-
-        Args:
-            prim (XFormPrim): Prim to calculate AABB for
-
-        Returns:
-            2-tuple:
-                - 3-array: center position (x,y,z) of world-coordinate frame aligned bounding box
-                - 3-array: end-to-end extent size (x,y,z) of world-coordinate frame aligned bounding box
-        """
-        low, high = cls.compute_aabb(prim=prim)
-
-        return (low + high) / 2.0, high - low
-
-    @classmethod
-    def clear(cls):
-        """
-        Clears the internal state of this BoundingBoxAPI. This should occur at least once per sim step.
-        """
-        cls.CACHE_NON_FLATCACHE = None
-        cls.CACHE_FLATCACHE = dict()
-
-    @classmethod
-    def aabb_contains_point(cls, point, container):
-        """
-        Returns true if the point is contained in the container AABB
-
-        Args:
-            point (tuple): (x,y,z) position in world-coordinates
-            container (tuple):
-                - 3-array: start (x,y,z) corner of world-coordinate frame aligned bounding box
-                - 3-array: end (x,y,z) corner of world-coordinate frame aligned bounding box
-
-        Returns:
-            bool: True if AABB contains @point, otherwise False
-        """
-        lower, upper = container
-        return np.less_equal(lower, point).all() and np.less_equal(point, upper).all()
 
 
 class FlatcacheAPI:
     """
     Monolithic class for leveraging functionality meant to be used EXCLUSIVELY with flatcache.
     """
+
     # Modified prims since transition from sim being stopped to sim being played occurred
     # This should get cleared every time og.sim.stop() gets called
     MODIFIED_PRIMS = set()
@@ -592,7 +641,9 @@ class FlatcacheAPI:
                 joints_pos = prim.get_joint_positions()
                 for joint, joint_pos in zip(prim.joints.values(), joints_pos):
                     state_name = "linear" if joint.joint_type == JointType.JOINT_PRISMATIC else "angular"
-                    joint_pos = joint_pos if joint.joint_type == JointType.JOINT_PRISMATIC else joint_pos * 180.0 / np.pi
+                    joint_pos = (
+                        joint_pos if joint.joint_type == JointType.JOINT_PRISMATIC else joint_pos * 180.0 / np.pi
+                    )
                     joint.set_attribute(f"state:{state_name}:physics:position", float(joint_pos))
 
             # Update the simulation without taking any time
@@ -653,15 +704,521 @@ class FlatcacheAPI:
         cls.MODIFIED_PRIMS = set()
 
 
+class PoseAPI:
+    """
+    This is a singleton class for getting world poses.
+    Whenever we directly set the pose of a prim, we should call PoseAPI.invalidate().
+    After that, if we need to access the pose of a prim without stepping physics,
+    this class will refresh the poses by syncing across USD-fabric-PhysX depending on the flatcache setting.
+    """
+
+    VALID = False
+
+    @classmethod
+    def invalidate(cls):
+        cls.VALID = False
+
+    @classmethod
+    def mark_valid(cls):
+        cls.VALID = True
+
+    @classmethod
+    def _refresh(cls):
+        if og.sim is not None and not cls.VALID:
+            # when flatcache is on
+            if og.sim._physx_fabric_interface:
+                # no time step is taken here
+                og.sim._physx_fabric_interface.update(og.sim.get_physics_dt(), og.sim.current_time)
+            # when flatcache is off
+            else:
+                # no time step is taken here
+                og.sim.psi.fetch_results()
+            cls.mark_valid()
+
+    @classmethod
+    def get_world_pose(cls, prim_path):
+        cls._refresh()
+        position, orientation = lazy.omni.isaac.core.utils.xforms.get_world_pose(prim_path)
+        return np.array(position), np.array(orientation)[[1, 2, 3, 0]]
+
+    @classmethod
+    def get_world_pose_with_scale(cls, prim_path):
+        """
+        This is used when information about the prim's global scale is needed,
+        e.g. when converting points in the prim frame to the world frame.
+        """
+        cls._refresh()
+        return np.array(lazy.omni.isaac.core.utils.xforms._get_world_pose_transform_w_scale(prim_path)).T
+
+
+class BatchControlViewAPIImpl:
+    """
+    A centralized view that allows for reading and writing to an ArticulationView that covers multiple
+    controllable objects in the scene. This is used to avoid the overhead of reading from many views
+    for each robot in each physics step, a source of significant overhead.
+    """
+
+    def __init__(self, pattern):
+        # The prim path pattern that will be passed into the view
+        self._pattern = pattern
+
+        # The unified ArticulationView used to access all of the controllable objects in the scene.
+        self._view = None
+
+        # Cache for all of the view functions' return values within the same simulation step.
+        # Keyed by function name without get_, the value is the return value of the function.
+        self._read_cache = {}
+
+        # Cache for all of the view functions' write values within the same simulation step.
+        # Keyed by the function name without set_, the value is the set of indices that need to be updated.
+        self._write_idx_cache = collections.defaultdict(set)
+
+        # Mapping from prim path to index in the view.
+        self._idx = {}
+
+        # Mapping from prim idx to a dict that maps link name to link index in the view.
+        self._link_idx = {}
+
+    def clear(self):
+        self._read_cache = {}
+        self._write_idx_cache = collections.defaultdict(set)
+
+    def flush_control(self):
+        if "dof_position_targets" in self._write_idx_cache:
+            pos_indices = np.array(sorted(self._write_idx_cache["dof_position_targets"]))
+            pos_targets = self._read_cache["dof_position_targets"]
+            self._view.set_dof_position_targets(pos_targets, np.array(pos_indices))
+
+        if "dof_velocity_targets" in self._write_idx_cache:
+            vel_indices = np.array(sorted(self._write_idx_cache["dof_velocity_targets"]))
+            vel_targets = self._read_cache["dof_velocity_targets"]
+            self._view.set_dof_velocity_targets(vel_targets, np.array(vel_indices))
+
+        if "dof_actuation_forces" in self._write_idx_cache:
+            eff_indices = np.array(sorted(self._write_idx_cache["dof_actuation_forces"]))
+            eff_targets = self._read_cache["dof_actuation_forces"]
+            self._view.set_dof_actuation_forces(eff_targets, np.array(eff_indices))
+
+    def initialize_view(self):
+        # First, get all of the controllable objects in the scene (avoiding circular import)
+        from omnigibson.objects.controllable_object import ControllableObject
+
+        controllable_objects = [
+            obj for scene in og.sim.scenes for obj in scene.objects if isinstance(obj, ControllableObject)
+        ]
+
+        # Get their corresponding prim paths
+        expected_regular_prim_paths = {obj.articulation_root_path for obj in controllable_objects}
+        expected_dummy_prim_paths = {
+            obj._dummy.articulation_root_path
+            for obj in controllable_objects
+            if hasattr(obj, "_dummy") and obj._dummy is not None
+        }
+        expected_prim_paths = expected_regular_prim_paths | expected_dummy_prim_paths
+
+        # Apply the pattern to find the expected prim paths
+        expected_prim_paths = {
+            prim_path for prim_path in expected_prim_paths if re.fullmatch(self._pattern.replace("*", ".*"), prim_path)
+        }
+
+        # Make sure we have at least one controllable object
+        if len(expected_prim_paths) == 0:
+            return
+
+        # Create the actual articulation view. Note that even though we search for base_link here,
+        # the returned things will not necessarily be the base_link prim paths, but the appropriate
+        # articulation root path for every object (base_link for non-fixed, parent for fixed objects)
+        self._view = og.sim.physics_sim_view.create_articulation_view(self._pattern)
+        view_prim_paths = self._view.prim_paths
+        assert (
+            set(view_prim_paths) == expected_prim_paths
+        ), f"ControllableObjectViewAPI expected prim paths {expected_prim_paths} but got {view_prim_paths}"
+
+        # Create the mapping from prim path to index
+        self._idx = {prim_path: i for i, prim_path in enumerate(view_prim_paths)}
+        self._link_idx = [
+            {link_path.split("/")[-1]: j for j, link_path in enumerate(articulation_link_paths)}
+            for articulation_link_paths in self._view.link_paths
+        ]
+
+    def set_joint_position_targets(self, prim_path, positions, indices):
+        assert len(indices) == len(positions), "Indices and values must have the same length"
+        idx = self._idx[prim_path]
+
+        # Load the current targets.
+        if "dof_position_targets" not in self._read_cache:
+            self._read_cache["dof_position_targets"] = self._view.get_dof_position_targets()
+
+        # Update the target
+        self._read_cache["dof_position_targets"][idx][indices] = positions
+
+        # Add this index to the write cache
+        self._write_idx_cache["dof_position_targets"].add(idx)
+
+    def set_joint_velocity_targets(self, prim_path, velocities, indices):
+        assert len(indices) == len(velocities), "Indices and values must have the same length"
+        idx = self._idx[prim_path]
+
+        # Load the current targets.
+        if "dof_velocity_targets" not in self._read_cache:
+            self._read_cache["dof_velocity_targets"] = self._view.get_dof_velocity_targets()
+
+        # Update the target
+        self._read_cache["dof_velocity_targets"][idx][indices] = velocities
+
+        # Add this index to the write cache
+        self._write_idx_cache["dof_velocity_targets"].add(idx)
+
+    def set_joint_efforts(self, prim_path, efforts, indices):
+        assert len(indices) == len(efforts), "Indices and values must have the same length"
+        idx = self._idx[prim_path]
+
+        # Load the current targets.
+        if "dof_actuation_forces" not in self._read_cache:
+            self._read_cache["dof_actuation_forces"] = self._view.get_dof_actuation_forces()
+
+        # Update the target
+        self._read_cache["dof_actuation_forces"][idx][indices] = efforts
+
+        # Add this index to the write cache
+        self._write_idx_cache["dof_actuation_forces"].add(idx)
+
+    def get_position_orientation(self, prim_path):
+        if "root_transforms" not in self._read_cache:
+            self._read_cache["root_transforms"] = self._view.get_root_transforms()
+
+        idx = self._idx[prim_path]
+        pose = self._read_cache["root_transforms"][idx]
+        return pose[:3], pose[3:]
+
+    def get_linear_velocity(self, prim_path):
+        if "root_velocities" not in self._read_cache:
+            self._read_cache["root_velocities"] = self._view.get_root_velocities()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["root_velocities"][idx][:3]
+
+    def get_angular_velocity(self, prim_path):
+        if "root_velocities" not in self._read_cache:
+            self._read_cache["root_velocities"] = self._view.get_root_velocities()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["root_velocities"][idx][3:]
+
+    def get_relative_linear_velocity(self, prim_path):
+        orn = self.get_position_orientation(prim_path)[1]
+        linvel = self.get_linear_velocity(prim_path)
+        return T.quat2mat(orn).T @ linvel
+
+    def get_relative_angular_velocity(self, prim_path):
+        orn = self.get_position_orientation(prim_path)[1]
+        angvel = self.get_angular_velocity(prim_path)
+        return T.mat2euler(T.quat2mat(orn).T @ T.euler2mat(angvel))
+
+    def get_joint_positions(self, prim_path):
+        if "dof_positions" not in self._read_cache:
+            self._read_cache["dof_positions"] = self._view.get_dof_positions()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["dof_positions"][idx]
+
+    def get_joint_velocities(self, prim_path):
+        if "dof_velocities" not in self._read_cache:
+            self._read_cache["dof_velocities"] = self._view.get_dof_velocities()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["dof_velocities"][idx]
+
+    def get_joint_efforts(self, prim_path):
+        if "dof_projected_joint_forces" not in self._read_cache:
+            self._read_cache["dof_projected_joint_forces"] = self._view.get_dof_projected_joint_forces()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["dof_projected_joint_forces"][idx]
+
+    def get_mass_matrix(self, prim_path):
+        if "mass_matrices" not in self._read_cache:
+            self._read_cache["mass_matrices"] = self._view.get_mass_matrices()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["mass_matrices"][idx]
+
+    def get_generalized_gravity_forces(self, prim_path):
+        if "generalized_gravity_forces" not in self._read_cache:
+            self._read_cache["generalized_gravity_forces"] = self._view.get_generalized_gravity_forces()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["generalized_gravity_forces"][idx]
+
+    def get_coriolis_and_centrifugal_forces(self, prim_path):
+        if "coriolis_and_centrifugal_forces" not in self._read_cache:
+            self._read_cache["coriolis_and_centrifugal_forces"] = self._view.get_coriolis_and_centrifugal_forces()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["coriolis_and_centrifugal_forces"][idx]
+
+    def get_link_relative_position_orientation(self, prim_path, link_name):
+        if "link_transforms" not in self._read_cache:
+            self._read_cache["link_transforms"] = self._view.get_link_transforms()
+
+        idx = self._idx[prim_path]
+        link_idx = self._link_idx[idx][link_name]
+        pose = self._read_cache["link_transforms"][idx][link_idx]
+        pos, orn = pose[:3], pose[3:]
+
+        # Get the root world transform too
+        world_pos, world_orn = self.get_position_orientation(prim_path)
+
+        # Compute the relative position and orientation
+        return T.relative_pose_transform(pos, orn, world_pos, world_orn)
+
+    def get_link_relative_linear_velocity(self, prim_path, link_name):
+        if "link_velocities" not in self._read_cache:
+            self._read_cache["link_velocities"] = self._view.get_link_velocities()
+
+        idx = self._idx[prim_path]
+        link_idx = self._link_idx[idx][link_name]
+        vel = self._read_cache["link_velocities"][idx][link_idx]
+        linvel = vel[:3]
+
+        # Get the root world transform too
+        _, world_orn = self.get_position_orientation(prim_path)
+
+        # Compute the relative position and orientation
+        return T.quat2mat(world_orn).T @ linvel
+
+    def get_link_relative_angular_velocity(self, prim_path, link_name):
+        if "link_velocities" not in self._read_cache:
+            self._read_cache["link_velocities"] = self._view.get_link_velocities()
+
+        idx = self._idx[prim_path]
+        link_idx = self._link_idx[idx][link_name]
+        vel = self._read_cache["link_velocities"][idx][link_idx]
+        angvel = vel[3:]
+
+        # Get the root world transform too
+        _, world_orn = self.get_position_orientation(prim_path)
+
+        # Compute the relative position and orientation
+        return T.mat2euler(T.quat2mat(world_orn).T @ T.euler2mat(angvel))
+
+    def get_jacobian(self, prim_path):
+        if "jacobians" not in self._read_cache:
+            self._read_cache["jacobians"] = self._view.get_jacobians()
+
+        idx = self._idx[prim_path]
+        return self._read_cache["jacobians"][idx]
+
+    def get_relative_jacobian(self, prim_path):
+        jacobian = self.get_jacobian(prim_path)
+        ori_t = T.quat2mat(self.get_position_orientation(prim_path)[1]).T.astype(np.float32)
+        tf = np.zeros((1, 6, 6), dtype=np.float32)
+        tf[:, :3, :3] = ori_t
+        tf[:, 3:, 3:] = ori_t
+        return tf @ jacobian
+
+
+class ControllableObjectViewAPI:
+    """
+    An interface that creates BatchControlViewAPIImpl instances for each robot type in the scene.
+
+    This is done to avoid the overhead of reading from many views for each robot in each physics step,
+    providing major speed improvements in vector env use cases.
+
+    This class is a singleton, and should be used to access the BatchControlViewAPIImpl instances.
+
+    The pattern used to group the robots is based on the robot prim paths, which is assumed to be in the format
+    /World/scene_*/controllable__robottype__robotname or /World/scene_*/dummy__robottype__robotname.
+
+    The patterns used by the subviews are generated by replacing the robot name with a wildcard, so that all robots
+    of the same type are grouped together. If there are fixed base robots, they will be grouped separately from
+    non-fixed base robots even within the same robot type, by virtue of their different articulation root paths.
+    """
+
+    # Dictionary mapping from pattern to BatchControlViewAPIImpl
+    _VIEWS_BY_PATTERN = {}
+
+    @classmethod
+    def clear(cls):
+        for view in cls._VIEWS_BY_PATTERN.values():
+            view.clear()
+
+    @classmethod
+    def flush_control(cls):
+        for view in cls._VIEWS_BY_PATTERN.values():
+            view.flush_control()
+
+    @classmethod
+    def initialize_view(cls):
+        cls._VIEWS_BY_PATTERN = {}
+
+        # First, get all of the controllable objects in the scene (avoiding circular import)
+        from omnigibson.objects.controllable_object import ControllableObject
+
+        controllable_objects = [
+            obj for scene in og.sim.scenes for obj in scene.objects if isinstance(obj, ControllableObject)
+        ]
+
+        # Get their corresponding prim paths
+        expected_regular_prim_paths = {obj.articulation_root_path for obj in controllable_objects}
+        expected_dummy_prim_paths = {
+            obj._dummy.articulation_root_path
+            for obj in controllable_objects
+            if hasattr(obj, "_dummy") and obj._dummy is not None
+        }
+        expected_prim_paths = expected_regular_prim_paths | expected_dummy_prim_paths
+
+        # Group the prim paths by robot type
+        patterns = {cls._get_pattern_from_prim_path(prim_path) for prim_path in expected_prim_paths}
+
+        # Create the view for each robot type / fixedness combo
+        for pattern in patterns:
+            if pattern not in cls._VIEWS_BY_PATTERN:
+                cls._VIEWS_BY_PATTERN[pattern] = BatchControlViewAPIImpl(pattern)
+
+        # Initialize the views
+        for view in cls._VIEWS_BY_PATTERN.values():
+            view.initialize_view()
+
+        # Assert that the views' prim paths are disjoint
+        all_prim_paths = []
+        for view in cls._VIEWS_BY_PATTERN.values():
+            all_prim_paths.extend(view._idx.keys())
+        counts = collections.Counter(all_prim_paths)
+
+        missing = set(expected_prim_paths) - set(all_prim_paths)
+        assert len(missing) == 0, f"Prim paths {missing} are missing from the views!"
+
+        more_than_once = {prim_path: count for prim_path, count in counts.items() if count > 1}
+        assert len(more_than_once) == 0, f"Prim paths {more_than_once} are present in multiple views!"
+
+    @classmethod
+    def _get_pattern_from_prim_path(cls, prim_path):
+        """
+        Returns which of the regexes this prim path should be found in.
+
+        Note that since the prim path will be an articulation root path, this works for both fixed base and
+        non-fixed base robots. Fixed and non-fixed versions of the same robot will be mapped to different
+        patterns since they have different articulation root paths (object prim vs base link prim).
+        """
+        scene_id, robot_name = prim_path.split("/")[2:4]
+        assert scene_id.startswith("scene_"), f"Prim path 2nd component {prim_path} does not start with scene_"
+        components = robot_name.split("__")
+        assert (
+            len(components) == 3
+        ), f"Robot prim path's 3rd component {robot_name} does not match expected format of prefix__robottype__robotname."
+        assert components[0] in (
+            "controllable",
+            "dummy",
+        ), f"Prim path {prim_path} 3rd component does not start with prefix {cls._prefix}__"
+        robot_name_pattern = prim_path.replace(f"/{scene_id}/", "/scene_*/").replace(
+            f"/{robot_name}", f"/{components[0]}__{components[1]}__*"
+        )
+        return robot_name_pattern
+
+    @classmethod
+    def set_joint_position_targets(cls, prim_path, positions, indices):
+        cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].set_joint_position_targets(
+            prim_path, positions, indices
+        )
+
+    @classmethod
+    def set_joint_velocity_targets(cls, prim_path, velocities, indices):
+        cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].set_joint_velocity_targets(
+            prim_path, velocities, indices
+        )
+
+    @classmethod
+    def set_joint_efforts(cls, prim_path, efforts, indices):
+        cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].set_joint_efforts(prim_path, efforts, indices)
+
+    @classmethod
+    def get_position_orientation(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_position_orientation(prim_path)
+
+    @classmethod
+    def get_linear_velocity(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_linear_velocity(prim_path)
+
+    @classmethod
+    def get_angular_velocity(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_angular_velocity(prim_path)
+
+    @classmethod
+    def get_relative_linear_velocity(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_relative_linear_velocity(prim_path)
+
+    @classmethod
+    def get_relative_angular_velocity(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_relative_angular_velocity(
+            prim_path
+        )
+
+    @classmethod
+    def get_joint_positions(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_joint_positions(prim_path)
+
+    @classmethod
+    def get_joint_velocities(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_joint_velocities(prim_path)
+
+    @classmethod
+    def get_joint_efforts(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_joint_efforts(prim_path)
+
+    @classmethod
+    def get_mass_matrix(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_mass_matrix(prim_path)
+
+    @classmethod
+    def get_generalized_gravity_forces(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_generalized_gravity_forces(
+            prim_path
+        )
+
+    @classmethod
+    def get_coriolis_and_centrifugal_forces(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_coriolis_and_centrifugal_forces(
+            prim_path
+        )
+
+    @classmethod
+    def get_link_relative_position_orientation(cls, prim_path, link_name):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_link_relative_position_orientation(
+            prim_path, link_name
+        )
+
+    @classmethod
+    def get_link_relative_linear_velocity(cls, prim_path, link_name):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_link_relative_linear_velocity(
+            prim_path, link_name
+        )
+
+    @classmethod
+    def get_link_relative_angular_velocity(cls, prim_path, link_name):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_link_relative_angular_velocity(
+            prim_path, link_name
+        )
+
+    @classmethod
+    def get_jacobian(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_jacobian(prim_path)
+
+    @classmethod
+    def get_relative_jacobian(cls, prim_path):
+        return cls._VIEWS_BY_PATTERN[cls._get_pattern_from_prim_path(prim_path)].get_relative_jacobian(prim_path)
+
+
 def clear():
     """
     Clear state tied to singleton classes
     """
+    PoseAPI.invalidate()
     CollisionAPI.clear()
-    BoundingBoxAPI.clear()
+    ControllableObjectViewAPI.clear()
 
 
-def create_mesh_prim_with_default_xform(primitive_type, prim_path, u_patches=None, v_patches=None):
+def create_mesh_prim_with_default_xform(primitive_type, prim_path, u_patches=None, v_patches=None, stage=None):
     """
     Creates a mesh prim of the specified @primitive_type at the specified @prim_path
 
@@ -673,43 +1230,50 @@ def create_mesh_prim_with_default_xform(primitive_type, prim_path, u_patches=Non
         v_patches (int or None): If specified, should be an integer that represents how many segments to create in the
             v-direction. E.g. 10 means 10 segments (and therefore 11 vertices) will be created.
             Both u_patches and v_patches need to be specified for them to be effective.
+        stage (None or Usd.Stage): If specified, stage on which the primitive mesh should be generated. If None, will
+            use og.sim.stage
     """
+    MESH_PRIM_TYPE_TO_EVALUATOR_MAPPING = {
+        "Sphere": lazy.omni.kit.primitive.mesh.evaluators.sphere.SphereEvaluator,
+        "Disk": lazy.omni.kit.primitive.mesh.evaluators.disk.DiskEvaluator,
+        "Plane": lazy.omni.kit.primitive.mesh.evaluators.plane.PlaneEvaluator,
+        "Cylinder": lazy.omni.kit.primitive.mesh.evaluators.cylinder.CylinderEvaluator,
+        "Torus": lazy.omni.kit.primitive.mesh.evaluators.torus.TorusEvaluator,
+        "Cone": lazy.omni.kit.primitive.mesh.evaluators.cone.ConeEvaluator,
+        "Cube": lazy.omni.kit.primitive.mesh.evaluators.cube.CubeEvaluator,
+    }
 
     assert primitive_type in PRIMITIVE_MESH_TYPES, "Invalid primitive mesh type: {primitive_type}"
     evaluator = MESH_PRIM_TYPE_TO_EVALUATOR_MAPPING[primitive_type]
-    u_backup = carb.settings.get_settings().get(evaluator.SETTING_U_SCALE)
-    v_backup = carb.settings.get_settings().get(evaluator.SETTING_V_SCALE)
-    hs_backup = carb.settings.get_settings().get(evaluator.SETTING_OBJECT_HALF_SCALE)
-    carb.settings.get_settings().set(evaluator.SETTING_U_SCALE, 1)
-    carb.settings.get_settings().set(evaluator.SETTING_V_SCALE, 1)
+    u_backup = lazy.carb.settings.get_settings().get(evaluator.SETTING_U_SCALE)
+    v_backup = lazy.carb.settings.get_settings().get(evaluator.SETTING_V_SCALE)
+    hs_backup = lazy.carb.settings.get_settings().get(evaluator.SETTING_OBJECT_HALF_SCALE)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_U_SCALE, 1)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_V_SCALE, 1)
+    stage = og.sim.stage if stage is None else stage
 
     # Default half_scale (i.e. half-extent, half_height, radius) is 1.
     # TODO (eric): change it to 0.5 once the mesh generator API accepts floating-number HALF_SCALE
     #  (currently it only accepts integer-number and floors 0.5 into 0).
-    carb.settings.get_settings().set(evaluator.SETTING_OBJECT_HALF_SCALE, 1)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_OBJECT_HALF_SCALE, 1)
+    kwargs = dict(prim_type=primitive_type, prim_path=prim_path, stage=stage)
     if u_patches is not None and v_patches is not None:
-        omni.kit.commands.execute(
-            "CreateMeshPrimWithDefaultXform",
-            prim_type=primitive_type,
-            prim_path=prim_path,
-            u_patches=u_patches,
-            v_patches=v_patches,
-        )
-    else:
-        omni.kit.commands.execute(
-            "CreateMeshPrimWithDefaultXform",
-            prim_type=primitive_type,
-            prim_path=prim_path,
-        )
+        kwargs["u_patches"] = u_patches
+        kwargs["v_patches"] = v_patches
 
-    carb.settings.get_settings().set(evaluator.SETTING_U_SCALE, u_backup)
-    carb.settings.get_settings().set(evaluator.SETTING_V_SCALE, v_backup)
-    carb.settings.get_settings().set(evaluator.SETTING_OBJECT_HALF_SCALE, hs_backup)
+    # Import now to avoid too-eager load of Omni classes due to inheritance
+    from omnigibson.utils.deprecated_utils import CreateMeshPrimWithDefaultXformCommand
+
+    CreateMeshPrimWithDefaultXformCommand(**kwargs).do()
+
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_U_SCALE, u_backup)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_V_SCALE, v_backup)
+    lazy.carb.settings.get_settings().set(evaluator.SETTING_OBJECT_HALF_SCALE, hs_backup)
 
 
-def mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=True):
+def mesh_prim_mesh_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=True):
     """
-    Generates trimesh mesh from @mesh_prim
+    Generates trimesh mesh from @mesh_prim if mesh_type is "Mesh"
 
     Args:
         mesh_prim (Usd.Prim): Mesh prim to convert into trimesh mesh
@@ -720,6 +1284,8 @@ def mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=
     Returns:
         trimesh.Trimesh: Generated trimesh mesh
     """
+    mesh_type = mesh_prim.GetPrimTypeInfo().GetTypeName()
+    assert mesh_type == "Mesh", f"Expected mesh prim to have type Mesh, got {mesh_type}"
     face_vertex_counts = np.array(mesh_prim.GetAttribute("faceVertexCounts").Get())
     vertices = np.array(mesh_prim.GetAttribute("points").Get())
     face_indices = np.array(mesh_prim.GetAttribute("faceVertexIndices").Get())
@@ -737,9 +1303,71 @@ def mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=
         kwargs["vertex_normals"] = np.array(mesh_prim.GetAttribute("normals").Get())
 
     if include_texcoord:
-        kwargs["visual"] = trimesh.visual.TextureVisuals(uv=np.array(mesh_prim.GetAttribute("primvars:st").Get()))
+        raw_texture = mesh_prim.GetAttribute("primvars:st").Get()
+        if raw_texture is not None:
+            kwargs["visual"] = trimesh.visual.TextureVisuals(uv=np.array(raw_texture))
 
     return trimesh.Trimesh(**kwargs)
+
+
+def mesh_prim_shape_to_trimesh_mesh(mesh_prim):
+    """
+    Generates trimesh mesh from @mesh_prim if mesh_type is "Sphere", "Cube", "Cone" or "Cylinder"
+
+    Args:
+        mesh_prim (Usd.Prim): Mesh prim to convert into trimesh mesh
+
+    Returns:
+        trimesh.Trimesh: Generated trimesh mesh
+    """
+    mesh_type = mesh_prim.GetPrimTypeInfo().GetTypeName()
+    if mesh_type == "Sphere":
+        radius = mesh_prim.GetAttribute("radius").Get()
+        trimesh_mesh = trimesh.creation.icosphere(subdivision=3, radius=radius)
+    elif mesh_type == "Cube":
+        extent = mesh_prim.GetAttribute("size").Get()
+        trimesh_mesh = trimesh.creation.box([extent] * 3)
+    elif mesh_type == "Cone":
+        radius = mesh_prim.GetAttribute("radius").Get()
+        height = mesh_prim.GetAttribute("height").Get()
+        trimesh_mesh = trimesh.creation.cone(radius=radius, height=height)
+        # Trimesh cones are centered at the base. We'll move them down by half the height.
+        transform = trimesh.transformations.translation_matrix([0, 0, -height / 2])
+        trimesh_mesh.apply_transform(transform)
+    elif mesh_type == "Cylinder":
+        radius = mesh_prim.GetAttribute("radius").Get()
+        height = mesh_prim.GetAttribute("height").Get()
+        trimesh_mesh = trimesh.creation.cylinder(radius=radius, height=height)
+    else:
+        raise ValueError(f"Expected mesh prim to have type Sphere, Cube, Cone or Cylinder, got {mesh_type}")
+
+    return trimesh_mesh
+
+
+def mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=True, world_frame=False):
+    """
+    Generates trimesh mesh from @mesh_prim
+
+    Args:
+        mesh_prim (Usd.Prim): Mesh prim to convert into trimesh mesh
+        include_normals (bool): Whether to include the normals in the resulting trimesh or not
+        include_texcoord (bool): Whether to include the corresponding 2D-texture coordinates in the resulting
+            trimesh or not
+        world_frame (bool): Whether to convert the mesh to the world frame or not
+
+    Returns:
+        trimesh.Trimesh: Generated trimesh mesh
+    """
+    mesh_type = mesh_prim.GetTypeName()
+    if mesh_type == "Mesh":
+        trimesh_mesh = mesh_prim_mesh_to_trimesh_mesh(mesh_prim, include_normals, include_texcoord)
+    else:
+        trimesh_mesh = mesh_prim_shape_to_trimesh_mesh(mesh_prim)
+
+    if world_frame:
+        trimesh_mesh.apply_transform(PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString))
+
+    return trimesh_mesh
 
 
 def sample_mesh_keypoints(mesh_prim, n_keypoints, n_keyfaces, seed=None):
@@ -766,70 +1394,96 @@ def sample_mesh_keypoints(mesh_prim, n_keypoints, n_keyfaces, seed=None):
         np.random.seed(seed)
 
     # Generate trimesh mesh from which to aggregate points
-    tm = mesh_prim_to_trimesh_mesh(mesh_prim=mesh_prim, include_normals=False, include_texcoord=False)
+    tm = mesh_prim_mesh_to_trimesh_mesh(mesh_prim=mesh_prim, include_normals=False, include_texcoord=False)
     n_unique_vertices, n_unique_faces = len(tm.vertices), len(tm.faces)
     faces_flat = tm.faces.flatten()
     n_vertices = len(faces_flat)
 
     # Sample vertices
-    unique_vertices = np.unique(faces_flat, return_index=True)[1]
+    unique_vertices = np.unique(faces_flat)
     assert len(unique_vertices) == n_unique_vertices
-    keypoint_idx = np.random.choice(unique_vertices, size=n_keypoints, replace=False) if \
-        n_unique_vertices > n_keypoints else unique_vertices
+    keypoint_idx = (
+        np.random.choice(unique_vertices, size=n_keypoints, replace=False)
+        if n_unique_vertices > n_keypoints
+        else unique_vertices
+    )
 
     # Sample faces
-    keyface_idx = np.random.choice(n_unique_faces, size=n_keyfaces, replace=False) if \
-        n_unique_faces > n_keyfaces else np.arange(n_unique_faces)
+    keyface_idx = (
+        np.random.choice(n_unique_faces, size=n_keyfaces, replace=False)
+        if n_unique_faces > n_keyfaces
+        else np.arange(n_unique_faces)
+    )
 
     return keypoint_idx, keyface_idx
 
 
-def get_mesh_volume_and_com(mesh_prim):
+def get_mesh_volume_and_com(mesh_prim, world_frame=False):
     """
     Computes the volume and center of mass for @mesh_prim
 
     Args:
         mesh_prim (Usd.Prim): Mesh prim to compute volume and center of mass for
+        world_frame (bool): Whether to return the volume and CoM in the world frame
 
     Returns:
-        Tuple[float, np.array]: Tuple containing the volume and center of mass in the mesh frame of @mesh_prim
+        Tuple[float, np.array]: Tuple containing the (volume, center_of_mass) in the mesh frame or the world frame
     """
-    mesh_type = mesh_prim.GetPrimTypeInfo().GetTypeName()
-    assert mesh_type in GEOM_TYPES, f"Invalid mesh type: {mesh_type}"
-    # Default volume and com
-    volume = 0.0
-    com = np.zeros(3)
-    if mesh_type == "Mesh":
-        # We construct a trimesh object from this mesh in order to infer its volume
-        trimesh_mesh = mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=False, include_texcoord=False)
-        if trimesh_mesh.is_volume:
-            volume = trimesh_mesh.volume
-            com = trimesh_mesh.center_mass
-        else:
-            # If the mesh is not a volume, we compute its convex hull and use that instead
-            try:
-                trimesh_mesh_convex = trimesh_mesh.convex_hull
-                volume = trimesh_mesh_convex.volume
-                com = trimesh_mesh_convex.center_mass
-            except:
-                # if convex hull computation fails, it usually means the mesh is degenerated. We just skip it.
-                pass
-    elif mesh_type == "Sphere":
-        volume = 4 / 3 * np.pi * (mesh_prim.GetAttribute("radius").Get() ** 3)
-    elif mesh_type == "Cube":
-        volume = mesh_prim.GetAttribute("size").Get() ** 3
-    elif mesh_type == "Cone":
-        volume = np.pi * (mesh_prim.GetAttribute("radius").Get() ** 2) * mesh_prim.GetAttribute("height").Get() / 3
-        com = np.array([0, 0, mesh_prim.GetAttribute("height").Get() / 4])
-    elif mesh_type == "Cylinder":
-        volume = np.pi * (mesh_prim.GetAttribute("radius").Get() ** 2) * mesh_prim.GetAttribute("height").Get()
+
+    trimesh_mesh = mesh_prim_to_trimesh_mesh(
+        mesh_prim, include_normals=False, include_texcoord=False, world_frame=world_frame
+    )
+    if trimesh_mesh.is_volume:
+        volume = trimesh_mesh.volume
+        com = trimesh_mesh.center_mass
     else:
-        raise ValueError(f"Cannot compute volume for mesh of type: {mesh_type}")
+        # If the mesh is not a volume, we compute its convex hull and use that instead
+        try:
+            trimesh_mesh_convex = trimesh_mesh.convex_hull
+            volume = trimesh_mesh_convex.volume
+            com = trimesh_mesh_convex.center_mass
+        except:
+            # if convex hull computation fails, it usually means the mesh is degenerated: use trivial values.
+            volume = 0.0
+            com = np.zeros(3)
 
     return volume, com
 
 
-def create_primitive_mesh(prim_path, primitive_type, extents=1.0, u_patches=None, v_patches=None):
+def check_extent_radius_ratio(geom_prim, com):
+    """
+    Checks if the min extent in world frame and the extent radius ratio in local frame of @geom_prim is within the
+    acceptable range for PhysX GPU acceleration (not too thin, and not too oblong)
+
+    Ref: https://github.com/NVIDIA-Omniverse/PhysX/blob/561a0df858d7e48879cdf7eeb54cfe208f660f18/physx/source/geomutils/src/convex/GuConvexMeshData.h#L183-L190
+
+    Args:
+        geom_prim (GeomPrim): Geom prim to check
+        com (np.array): Center of mass of the mesh. Obtained from get_mesh_volume_and_com
+
+    Returns:
+        bool: True if the min extent (world) and the extent radius ratio (local frame) is acceptable, False otherwise
+    """
+    mesh_type = geom_prim.prim.GetPrimTypeInfo().GetTypeName()
+    # Non-mesh prims are always considered to be within the acceptable range
+    if mesh_type != "Mesh":
+        return True
+
+    extent = geom_prim.extent
+    min_extent = extent.min()
+    # If the mesh is too flat in the world frame, omniverse cannot create convex mesh for it
+    if min_extent < 1e-5:
+        return False
+
+    max_radius = extent.max() / 2.0
+    min_radius = np.min(np.linalg.norm(geom_prim.points - com, axis=-1), axis=0)
+    ratio = max_radius / min_radius
+
+    # PhysX requires ratio to be < 100.0. We use 95.0 to be safe.
+    return ratio < 95.0
+
+
+def create_primitive_mesh(prim_path, primitive_type, extents=1.0, u_patches=None, v_patches=None, stage=None):
     """
     Helper function that generates a UsdGeom.Mesh prim at specified @prim_path of type @primitive_type.
 
@@ -846,13 +1500,17 @@ def create_primitive_mesh(prim_path, primitive_type, extents=1.0, u_patches=None
         v_patches (int or None): If specified, should be an integer that represents how many segments to create in the
             v-direction. E.g. 10 means 10 segments (and therefore 11 vertices) will be created.
             Both u_patches and v_patches need to be specified for them to be effective.
+        stage (None or Usd.Stage): If specified, stage on which the primitive mesh should be generated. If None, will
+            use og.sim.stage
 
     Returns:
         UsdGeom.Mesh: Generated primitive mesh as a prim on the active stage
     """
     assert_valid_key(key=primitive_type, valid_keys=PRIMITIVE_MESH_TYPES, name="primitive mesh type")
-    create_mesh_prim_with_default_xform(primitive_type, prim_path, u_patches=u_patches, v_patches=v_patches)
-    mesh = UsdGeom.Mesh.Define(og.sim.stage, prim_path)
+    create_mesh_prim_with_default_xform(
+        primitive_type, prim_path, u_patches=u_patches, v_patches=v_patches, stage=stage
+    )
+    mesh = lazy.pxr.UsdGeom.Mesh.Define(og.sim.stage if stage is None else stage, prim_path)
 
     # Modify the points and normals attributes so that total extents is the desired
     # This means multiplying omni's default by extents * 50.0, as the native mesh generated has extents [-0.01, 0.01]
@@ -860,8 +1518,10 @@ def create_primitive_mesh(prim_path, primitive_type, extents=1.0, u_patches=None
     extents = np.ones(3) * extents if isinstance(extents, float) else np.array(extents)
     for attr in (mesh.GetPointsAttr(), mesh.GetNormalsAttr()):
         vals = np.array(attr.Get()).astype(np.float64)
-        attr.Set(Vt.Vec3fArray([Gf.Vec3f(*(val * extents * 50.0)) for val in vals]))
-    mesh.GetExtentAttr().Set(Vt.Vec3fArray([Gf.Vec3f(*(-extents / 2.0)), Gf.Vec3f(*(extents / 2.0))]))
+        attr.Set(lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*(val * extents * 50.0)) for val in vals]))
+    mesh.GetExtentAttr().Set(
+        lazy.pxr.Vt.Vec3fArray([lazy.pxr.Gf.Vec3f(*(-extents / 2.0)), lazy.pxr.Gf.Vec3f(*(extents / 2.0))])
+    )
 
     return mesh
 
@@ -885,8 +1545,8 @@ def add_asset_to_stage(asset_path, prim_path):
     assert os.path.exists(asset_path), f"Cannot load {asset_type.upper()} file {asset_path} because it does not exist!"
 
     # Add reference to stage and grab prim
-    add_reference_to_stage(usd_path=asset_path, prim_path=prim_path)
-    prim = get_prim_at_path(prim_path)
+    lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=asset_path, prim_path=prim_path)
+    prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path)
 
     # Make sure prim was loaded correctly
     assert prim, f"Failed to load {asset_type.upper()} object from path: {asset_path}"
@@ -899,4 +1559,98 @@ def get_world_prim():
     Returns:
         Usd.Prim: Active world prim in the current stage
     """
-    return get_prim_at_path("/World")
+    return lazy.omni.isaac.core.utils.prims.get_prim_at_path("/World")
+
+
+def scene_relative_prim_path_to_absolute(scene, relative_prim_path):
+    """
+    Converts a scene-relative prim path to an absolute prim path.
+
+    Args:
+        scene (Scene or None): Scene object that the prim is in. None if it's global.
+        relative_prim_path (str): Relative prim path in the scene
+
+    Returns:
+        str: Absolute prim path in the stage
+    """
+    # Special case for OmniGraph prims
+    if relative_prim_path.startswith("/OmniGraph"):
+        return relative_prim_path
+
+    # Make sure the relative path is actually relative
+    assert not relative_prim_path.startswith("/World"), f"Expected relative prim path, got {relative_prim_path}"
+
+    # When the scene is set to None, this prim is not in a scene but is global e.g. like the
+    # viewer camera or one of the scene prims.
+    if scene is None:
+        return "/World" + relative_prim_path
+
+    return scene.prim_path + relative_prim_path
+
+
+def absolute_prim_path_to_scene_relative(scene, absolute_prim_path):
+    """
+    Converts an absolute prim path to a scene-relative prim path.
+
+    Args:
+        scene (Scene): Scene object that the prim is in. None if it's global.
+        absolute_prim_path (str): Absolute prim path in the stage
+
+    Returns:
+        str: Relative prim path in the scene
+    """
+    # Special case for OmniGraph prims
+    if absolute_prim_path.startswith("/OmniGraph"):
+        return absolute_prim_path
+
+    assert absolute_prim_path.startswith("/World"), f"Expected absolute prim path, got {absolute_prim_path}"
+
+    # When the scene is set to None, this prim is not in a scene but is global e.g. like the
+    # viewer camera or one of the scene prims.
+    if scene is None:
+        assert not absolute_prim_path.startswith(
+            "/World/scene_"
+        ), f"Expected global prim path, got {absolute_prim_path}"
+        return absolute_prim_path[len("/World") :]
+
+    return absolute_prim_path[len(scene.prim_path) :]
+
+
+def deep_copy_prim(source_root_prim, dest_stage, dest_root_path):
+    queue = [(source_root_prim, dest_root_path)]
+
+    while queue:
+        source_prim, dest_path = queue.pop(0)
+
+        # Create a new prim in the destination stage with the same type as the source
+        if source_prim.GetTypeName():
+            dest_prim = dest_stage.DefinePrim(dest_path, source_prim.GetTypeName())
+        else:
+            dest_prim = dest_stage.OverridePrim(dest_path)
+
+        # Copy attributes
+        for attr in source_prim.GetAttributes():
+            # Create a new attribute with the same specifications
+            dest_attr = dest_prim.CreateAttribute(
+                attr.GetName(), attr.GetTypeName(), attr.IsCustom(), attr.GetVariability()
+            )
+
+            # Check if the source attribute has a value
+            if attr.HasValue():
+                # Copy the value
+                dest_attr.Set(attr.Get())
+
+        # Copy relationships
+        for rel in source_prim.GetRelationships():
+            dest_rel = dest_prim.CreateRelationship(rel.GetName(), rel.IsCustom())
+            targets = rel.GetTargets()
+            updated_targets = [
+                x.ReplacePrefix(source_root_prim.GetPath(), lazy.pxr.Sdf.Path(dest_root_path)) for x in targets
+            ]
+            if targets:
+                dest_rel.SetTargets(updated_targets)
+
+        # Copy child prims breadth-first
+        for child in source_prim.GetAllChildren():
+            new_dest_path = dest_path + "/" + child.GetName()
+            queue.append((child, new_dest_path))

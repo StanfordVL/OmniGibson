@@ -1,12 +1,13 @@
 """
 A set of utility functions for general python usage
 """
+
 import inspect
 import re
 from abc import ABCMeta
+from collections.abc import Iterable
 from copy import deepcopy
-from collections import Iterable
-from functools import wraps
+from functools import cache, wraps
 from importlib import import_module
 
 import numpy as np
@@ -59,7 +60,7 @@ def save_init_info(func):
     """
     sig = inspect.signature(func)
 
-    @wraps(func) # preserve func name, docstring, arguments list, etc.
+    @wraps(func)  # preserve func name, docstring, arguments list, etc.
     def wrapper(self, *args, **kwargs):
         values = sig.bind(self, *args, **kwargs)
 
@@ -76,7 +77,7 @@ def save_init_info(func):
 
         # Populate class's self._init_info.
         for k, p in sig.parameters.items():
-            if k == 'self':
+            if k == "self":
                 continue
             if k in values.arguments:
                 val = values.arguments[k]
@@ -245,7 +246,8 @@ def assert_valid_key(key, valid_keys, name=None):
     if name is None:
         name = "value"
     assert key in valid_keys, "Invalid {} received! Valid options are: {}, got: {}".format(
-        name, valid_keys.keys() if isinstance(valid_keys, dict) else valid_keys, key)
+        name, valid_keys.keys() if isinstance(valid_keys, dict) else valid_keys, key
+    )
 
 
 def create_class_from_registry_and_config(cls_name, cls_registry, cfg, cls_type_descriptor):
@@ -286,134 +288,34 @@ def get_uuid(name, n_digits=8):
     Returns:
         int: uuid
     """
-    return abs(hash(name)) % (10 ** n_digits)
+    return abs(hash(name)) % (10**n_digits)
 
 
-def camel_case_to_snake_case(camel_case_text):
+def meets_minimum_version(test_version, minimum_version):
     """
-    Helper function to convert a camel case text to snake case, e.g. "StrawberrySmoothie" -> "strawberry_smoothie"
+    Verify that @test_version meets the @minimum_version
 
     Args:
-        camel_case_text (str): Text in camel case
+        test_version (str): Python package version. Should be, e.g., 0.26.1
+        minimum_version (str): Python package version to test against. Should be, e.g., 0.27.2
 
     Returns:
-        str: snake case text
+        bool: Whether @test_version meets @minimum_version
     """
-    return re.sub(r'(?<!^)(?=[A-Z])', '_', camel_case_text).lower()
+    test_nums = [int(num) for num in test_version.split(".")]
+    minimum_nums = [int(num) for num in minimum_version.split(".")]
+    assert len(test_nums) == 3
+    assert len(minimum_nums) == 3
 
+    for test_num, minimum_num in zip(test_nums, minimum_nums):
+        if test_num > minimum_num:
+            return True
+        elif test_num < minimum_num:
+            return False
+        # Otherwise, we continue through all sub-versions
 
-def snake_case_to_camel_case(snake_case_text):
-    """
-    Helper function to convert a snake case text to camel case, e.g. "strawberry_smoothie" -> "StrawberrySmoothie"
-
-    Args:
-        snake_case_text (str): Text in snake case
-
-    Returns:
-        str: camel case text
-    """
-    return ''.join(item.title() for item in snake_case_text.split('_'))
-
-
-class UniquelyNamed:
-    """
-    Simple class that implements a name property, that must be implemented by a subclass. Note that any @Named
-    entity must be UNIQUE!
-    """
-    def __init__(self, *args, **kwargs):
-        global NAMES
-        # Register this object, making sure it's name is unique
-        assert self.name not in NAMES, \
-            f"UniquelyNamed object with name {self.name} already exists!"
-        NAMES.add(self.name)
-
-    # def __del__(self):
-    #     # Remove this object name from the registry if it's still there
-    #     self.remove_names(include_all_owned=True)
-
-    def remove_names(self, include_all_owned=True, skip_ids=None):
-        """
-        Checks if self.name exists in the global NAMES registry, and deletes it if so. Possibly also iterates through
-        all owned member variables and checks for their corresponding names if @include_all_owned is True.
-
-        Args:
-            include_all_owned (bool): If True, will iterate through all owned members of this instance and remove their
-                names as well, if they are UniquelyNamed
-
-            skip_ids (None or set of int): If specified, will skip over any ids in the specified set that are matched
-                to any attributes found (this compares id(attr) to @skip_ids).
-        """
-        # Make sure skip_ids is a set so we can pass this into the method, and add the dictionary so we don't
-        # get infinite recursive loops
-        skip_ids = set() if skip_ids is None else skip_ids
-        skip_ids.add(id(self))
-
-        # Check for this name, possibly remove it if it exists
-        if self.name in NAMES:
-            NAMES.remove(self.name)
-            
-        # Also possibly iterate through all owned members and check if those are instances of UniquelyNamed
-        if include_all_owned:
-            self._remove_names_recursively_from_dict(dic=self.__dict__, skip_ids=skip_ids)
-
-    def _remove_names_recursively_from_dict(self, dic, skip_ids=None):
-        """
-        Checks if self.name exists in the global NAMES registry, and deletes it if so
-
-        Args:
-            skip_ids (None or set): If specified, will skip over any objects in the specified set that are matched
-                to any attributes found.
-        """
-        # Make sure skip_ids is a set so we can pass this into the method, and add the dictionary so we don't
-        # get infinite recursive loops
-        skip_ids = set() if skip_ids is None else skip_ids
-        skip_ids.add(id(dic))
-
-        # Loop through all values in the inputted dictionary, and check if any of the values are UniquelyNamed
-        for name, val in dic.items():
-            if id(val) not in skip_ids:
-                # No need to explicitly add val to skip objects because the methods below handle adding it
-                if isinstance(val, UniquelyNamed):
-                    val.remove_names(include_all_owned=True, skip_ids=skip_ids)
-                elif isinstance(val, dict):
-                    # Recursively iterate
-                    self._remove_names_recursively_from_dict(dic=val, skip_ids=skip_ids)
-                elif hasattr(val, "__dict__"):
-                    # Add the attribute and recursively iterate
-                    skip_ids.add(id(val))
-                    self._remove_names_recursively_from_dict(dic=val.__dict__, skip_ids=skip_ids)
-                else:
-                    # Otherwise we just add the value to skip_ids so we don't check it again
-                    skip_ids.add(id(val))
-
-    @property
-    def name(self):
-        """
-        Returns:
-            str: Name of this instance. Must be unique!
-        """
-        raise NotImplementedError
-
-
-class UniquelyNamedNonInstance:
-    """
-    Identical to UniquelyNamed, but intended for non-instanceable classes
-    """
-
-    def __init_subclass__(cls, **kwargs):
-        global CLASS_NAMES
-        # Register this object, making sure it's name is unique
-        assert cls.name not in CLASS_NAMES, \
-            f"UniquelyNamed class with name {cls.name} already exists!"
-        CLASS_NAMES.add(cls.name)
-
-    @classproperty
-    def name(cls):
-        """
-        Returns:
-            str: Name of this instance. Must be unique!
-        """
-        raise NotImplementedError
+    # If we get here, that means test_version == threshold_version, so this is a success
+    return True
 
 
 class Registerable:
@@ -467,13 +369,6 @@ class Serializable:
     Simple class that provides an abstract interface to dump / load states, optionally with serialized functionality
     as well.
     """
-    @property
-    def state_size(self):
-        """
-        Returns:
-            int: Size of this object's serialized state
-        """
-        raise NotImplementedError()
 
     def _dump_state(self):
         """
@@ -495,7 +390,7 @@ class Serializable:
         Returns:
             dict or n-array: Either:
                 - Keyword-mapped states of this object, or
-                - encoded + serialized, 1D numerical np.array capturing this object's state, where n is @self.state_size
+                - encoded + serialized, 1D numerical np.array capturing this object's state
         """
         state = self._dump_state()
         return self.serialize(state=state) if serialized else state
@@ -516,26 +411,18 @@ class Serializable:
         Args:
             state (dict or n-array): Either:
                 - Keyword-mapped states of this object, or
-                - encoded + serialized, 1D numerical np.array capturing this object's state, where n is @self.state_size
+                - encoded + serialized, 1D numerical np.array capturing this object's state.
             serialized (bool): If True, will interpret @state as a 1D numpy array. Otherewise, will assume the input is
                 a (potentially nested) dictionary of states for this object
         """
-        state = self.deserialize(state=state) if serialized else state
+        if serialized:
+            orig_state_len = len(state)
+            state, deserialized_items = self.deserialize(state=state)
+            assert deserialized_items == orig_state_len, (
+                f"Invalid state deserialization occurred! Expected {orig_state_len} total "
+                f"values to be deserialized, only {deserialized_items} were."
+            )
         self._load_state(state=state)
-
-    def _serialize(self, state):
-        """
-        Serializes nested dictionary state @state into a flattened 1D numpy array for encoding efficiency.
-        Should be implemented by subclass.
-
-        Args:
-            state (dict): Keyword-mapped states of this object to encode. Should match structure of output from
-                self._dump_state()
-
-        Returns:
-            n-array: encoded + serialized, 1D numerical np.array capturing this object's state
-        """
-        raise NotImplementedError()
 
     def serialize(self, state):
         """
@@ -549,10 +436,9 @@ class Serializable:
         Returns:
             n-array: encoded + serialized, 1D numerical np.array capturing this object's state
         """
-        # Simply returns self._serialize() for now. this is for future proofing
-        return self._serialize(state=state)
+        raise NotImplementedError()
 
-    def _deserialize(self, state):
+    def deserialize(self, state):
         """
         De-serializes flattened 1D numpy array @state into nested dictionary state.
         Should be implemented by subclass.
@@ -570,37 +456,11 @@ class Serializable:
         """
         raise NotImplementedError
 
-    def deserialize(self, state):
-        """
-        De-serializes flattened 1D numpy array @state into nested dictionary state.
-        Should be implemented by subclass.
-
-        Args:
-            state (n-array): encoded + serialized, 1D numerical np.array capturing this object's state
-
-        Returns:
-            dict: Keyword-mapped states of this object. Should match structure of output from
-                self._dump_state()
-        """
-        # Sanity check the idx with the expected state size
-        state_dict, idx = self._deserialize(state=state)
-        assert idx == self.state_size, f"Invalid state deserialization occurred! Expected {self.state_size} total " \
-                                           f"values to be deserialized, only {idx} were."
-
-        return state_dict
-
 
 class SerializableNonInstance:
     """
     Identical to Serializable, but intended for non-instanceable classes
     """
-    @classproperty
-    def state_size(cls):
-        """
-        Returns:
-            int: Size of this object's serialized state
-        """
-        raise NotImplementedError()
 
     @classmethod
     def _dump_state(cls):
@@ -624,7 +484,7 @@ class SerializableNonInstance:
         Returns:
             dict or n-array: Either:
                 - Keyword-mapped states of this object, or
-                - encoded + serialized, 1D numerical np.array capturing this object's state, where n is @self.state_size
+                - encoded + serialized, 1D numerical np.array capturing this object's state.
         """
         state = cls._dump_state()
         return cls.serialize(state=state) if serialized else state
@@ -647,27 +507,18 @@ class SerializableNonInstance:
         Args:
             state (dict or n-array): Either:
                 - Keyword-mapped states of this object, or
-                - encoded + serialized, 1D numerical np.array capturing this object's state, where n is @self.state_size
+                - encoded + serialized, 1D numerical np.array capturing this object's state.
             serialized (bool): If True, will interpret @state as a 1D numpy array. Otherewise, will assume the input is
                 a (potentially nested) dictionary of states for this object
         """
-        state = cls.deserialize(state=state) if serialized else state
+        if serialized:
+            orig_state_len = len(state)
+            state, deserialized_items = cls.deserialize(state=state)
+            assert deserialized_items == orig_state_len, (
+                f"Invalid state deserialization occurred! Expected {orig_state_len} total "
+                f"values to be deserialized, only {deserialized_items} were."
+            )
         cls._load_state(state=state)
-
-    @classmethod
-    def _serialize(cls, state):
-        """
-        Serializes nested dictionary state @state into a flattened 1D numpy array for encoding efficiency.
-        Should be implemented by subclass.
-
-        Args:
-            state (dict): Keyword-mapped states of this object to encode. Should match structure of output from
-                self._dump_state()
-
-        Returns:
-            n-array: encoded + serialized, 1D numerical np.array capturing this object's state
-        """
-        raise NotImplementedError()
 
     @classmethod
     def serialize(cls, state):
@@ -682,11 +533,11 @@ class SerializableNonInstance:
         Returns:
             n-array: encoded + serialized, 1D numerical np.array capturing this object's state
         """
-        # Simply returns self._serialize() for now. this is for future proofing
-        return cls._serialize(state=state)
+        # Simply returns self.serialize() for now. this is for future proofing
+        return NotImplementedError()
 
     @classmethod
-    def _deserialize(cls, state):
+    def deserialize(cls, state):
         """
         De-serializes flattened 1D numpy array @state into nested dictionary state.
         Should be implemented by subclass.
@@ -704,25 +555,75 @@ class SerializableNonInstance:
         """
         raise NotImplementedError
 
-    @classmethod
-    def deserialize(cls, state):
+
+class CachedFunctions:
+    """
+    Thin object which owns a dictionary in which each entry should be a function -- when a key is queried via get()
+    and it exists, it will call the function exactly once, and cache the value so that subsequent calls will refer
+    to the cached value.
+
+    This allows the dictionary to be created with potentially expensive operations, but only queried up to exaclty once
+    as needed.
+    """
+
+    def __init__(self, **kwargs):
+        # Create internal dict to store functions
+        self._fcns = dict()
+        for kwarg in kwargs:
+            self._fcns[kwarg] = kwargs[kwarg]
+
+    def __getitem__(self, item):
+        return self.get(name=item)
+
+    def __setitem__(self, key, value):
+        self.add_fcn(name=key, fcn=value)
+
+    def get(self, name, *args, **kwargs):
         """
-        De-serializes flattened 1D numpy array @state into nested dictionary state.
-        Should be implemented by subclass.
+        Computes the function referenced by @name with the corresponding @args and @kwargs. Note that for a unique
+        set of arguments, this value will be internally cached
 
         Args:
-            state (n-array): encoded + serialized, 1D numerical np.array capturing this object's state
+            name (str): The name of the function to call
+            *args (tuple): Positional arguments to pass into the function call
+            **kwargs (tuple): Keyword arguments to pass into the function call
 
         Returns:
-            dict: Keyword-mapped states of this object. Should match structure of output from
-                self._dump_state()
+            any: Output of the function referenced by @name
         """
-        # Sanity check the idx with the expected state size
-        state_dict, idx = cls._deserialize(state=state)
-        assert idx == cls.state_size, f"Invalid state deserialization occurred! Expected {cls.state_size} total " \
-                                      f"values to be deserialized, only {idx} were."
+        return self._fcns[name](*args, **kwargs)
 
-        return state_dict
+    def get_fcn(self, name):
+        """
+        Gets the raw stored function referenced by @name
+
+        Args:
+            name (str): The name of the function to grab
+
+        Returns:
+            function: The stored function
+        """
+        return self._fcns[name]
+
+    def get_fcn_names(self):
+        """
+        Get all stored function names
+
+        Returns:
+            tuple of str: Names of stored functions
+        """
+        return tuple(self._fcns.keys())
+
+    def add_fcn(self, name, fcn):
+        """
+        Adds a function to the internal registry.
+
+        Args:
+            name (str): Name of the function. This is the name that should be queried with self.get()
+            fcn (function): Function to add. Can be an arbitrary signature
+        """
+        assert callable(fcn), "Only functions can be added via add_fcn!"
+        self._fcns[name] = fcn
 
 
 class Wrapper:
@@ -768,19 +669,55 @@ class Wrapper:
 
     # this method is a fallback option on any methods the original env might support
     def __getattr__(self, attr):
+        # If we're querying wrapped_obj, raise an error
+        if attr == "wrapped_obj":
+            raise AttributeError("wrapped_obj attribute not initialized yet!")
+
+        # Sanity check to make sure wrapped obj is not None -- if so, raise error
+        assert self.wrapped_obj is not None, f"Cannot access attribute {attr} since wrapped_obj is None!"
+
         # using getattr ensures that both __getattribute__ and __getattr__ (fallback) get called
         # (see https://stackoverflow.com/questions/3278077/difference-between-getattr-vs-getattribute)
         orig_attr = getattr(self.wrapped_obj, attr)
         if callable(orig_attr):
+
             def hooked(*args, **kwargs):
                 result = orig_attr(*args, **kwargs)
                 # prevent wrapped_class from becoming unwrapped
                 if id(result) == id(self.wrapped_obj):
                     return self
                 return result
+
             return hooked
         else:
             return orig_attr
+
+    def __setattr__(self, key, value):
+        # Call setattr on wrapped obj if it has the attribute, otherwise, operate on this object
+        if hasattr(self, "wrapped_obj") and self.wrapped_obj is not None and hasattr(self.wrapped_obj, key):
+            setattr(self.wrapped_obj, key, value)
+        else:
+            super().__setattr__(key, value)
+
+
+def nums2array(nums, dim, dtype=float):
+    """
+    Converts input @nums into numpy array of length @dim. If @nums is a single number, broadcasts input to
+    corresponding dimension size @dim before converting into numpy array
+
+    Args:
+        nums (float or array): Numbers to map to numpy array
+        dim (int): Size of array to broadcast input to
+
+    Returns:
+        torch.Tensor: Mapped input numbers
+    """
+    # Make sure the inputted nums isn't a string
+    assert not isinstance(nums, str), "Only numeric types are supported for this operation!"
+
+    out = np.array(nums, dtype=dtype) if isinstance(nums, Iterable) else np.ones(dim, dtype=dtype) * nums
+
+    return out
 
 
 def clear():
@@ -788,3 +725,4 @@ def clear():
     Clear state tied to singleton classes
     """
     NAMES.clear()
+    CLASS_NAMES.clear()

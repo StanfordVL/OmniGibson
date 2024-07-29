@@ -1,8 +1,7 @@
 import matplotlib.pyplot as plt
-
 import numpy as np
+
 import omnigibson as og
-from omni.isaac.synthetic_utils.visualization import colorize_bboxes
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -24,9 +23,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="banana",
         category="banana",
         model="vvyyyv",
-        scale=[3.0, 5.0, 2.0],
-        position=[-0.906661, -0.545106,  0.136824],
-        orientation=[0, 0, 0.76040583, -0.6494482 ],
+        bounding_box=[0.643, 0.224, 0.269],
+        position=[-0.906661, -0.545106, 0.136824],
+        orientation=[0, 0, 0.76040583, -0.6494482],
     )
 
     door_cfg = dict(
@@ -34,8 +33,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="door",
         category="door",
         model="ohagsq",
+        bounding_box=[1.528, 0.064, 1.299],
         position=[-2.0, 0, 0.70000001],
-        orientation=[0, 0, -0.38268343,  0.92387953],
+        orientation=[0, 0, -0.38268343, 0.92387953],
     )
 
     # Create the scene config to load -- empty scene with a few objects
@@ -47,13 +47,13 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
 
     # Create the environment
-    env = og.Environment(configs=cfg, action_timestep=1/60., physics_timestep=1/60.)
+    env = og.Environment(configs=cfg)
 
     # Set camera to appropriate viewing pose
     cam = og.sim.viewer_camera
     cam.set_position_orientation(
-        position=np.array([-4.62785 , -0.418575,  0.933943]),
-        orientation=np.array([ 0.52196595, -0.4231939 , -0.46640436,  0.5752612 ]),
+        position=np.array([-4.62785, -0.418575, 0.933943]),
+        orientation=np.array([0.52196595, -0.4231939, -0.46640436, 0.5752612]),
     )
 
     # Add bounding boxes to camera sensor
@@ -66,7 +66,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         env.step(np.array([]))
 
     # Grab observations from viewer camera and write them to disk
-    obs = cam.get_obs()
+    obs, _ = cam.get_obs()
 
     for bbox_modality in bbox_modalities:
         # Print out each of the modalities
@@ -74,6 +74,8 @@ def main(random_selection=False, headless=False, short_exec=False):
 
         # Also write the 2d loose bounding box to disk
         if "3d" not in bbox_modality:
+            from omnigibson.utils.deprecated_utils import colorize_bboxes
+
             colorized_img = colorize_bboxes(bboxes_2d_data=obs[bbox_modality], bboxes_2d_rgb=obs["rgb"], num_channels=4)
             fpath = f"{bbox_modality}_img.png"
             plt.imsave(fpath, colorized_img)

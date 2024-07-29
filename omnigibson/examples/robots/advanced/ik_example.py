@@ -4,13 +4,11 @@ import time
 import numpy as np
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.objects import PrimitiveObject
 from omnigibson.robots import Fetch
 from omnigibson.scenes import Scene
 from omnigibson.utils.control_utils import IKSolver
-
-import carb
-import omni
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -40,8 +38,24 @@ def main(random_selection=False, headless=False, short_exec=False):
         programmatic_pos = True
 
     # Import scene and robot (Fetch)
-    scene = Scene()
-    og.sim.import_scene(scene)
+    scene_cfg = {"type": "Scene"}
+    # Create Fetch robot
+    # Note that since we only care about IK functionality, we fix the base (this also makes the robot more stable)
+    # (any object can also have its fixed_base attribute set to True!)
+    # Note that since we're going to be setting joint position targets, we also need to make sure the robot's arm joints
+    # (which includes the trunk) are being controlled using joint positions
+    robot_cfg = {
+        "type": "Fetch",
+        "fixed_base": True,
+        "controller_config": {
+            "arm_0": {
+                "name": "NullJointController",
+                "motor_type": "position",
+            }
+        },
+    }
+    cfg = dict(scene=scene_cfg, robots=[robot_cfg])
+    env = og.Environment(configs=cfg)
 
     # Update the viewer camera's pose so that it points towards the robot
     og.sim.viewer_camera.set_position_orientation(
@@ -49,23 +63,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         orientation=np.array([0.39592, 0.13485, 0.29286, 0.85982]),
     )
 
-    # Create Fetch robot
-    # Note that since we only care about IK functionality, we fix the base (this also makes the robot more stable)
-    # (any object can also have its fixed_base attribute set to True!)
-    # Note that since we're going to be setting joint position targets, we also need to make sure the robot's arm joints
-    # (which includes the trunk) are being controlled using joint positions
-    robot = Fetch(
-        prim_path="/World/robot",
-        name="robot",
-        fixed_base=True,
-        controller_config={
-            "arm_0": {
-                "name": "JointController",
-                "motor_type": "position",
-            }
-        }
-    )
-    og.sim.import_object(robot)
+    robot = env.robots[0]
 
     # Set robot base at the origin
     robot.set_position_orientation(np.array([0, 0, 0]), np.array([0, 0, 0, 1]))
@@ -75,6 +73,9 @@ def main(random_selection=False, headless=False, short_exec=False):
     og.sim.step()
     # Make sure none of the joints are moving
     robot.keep_still()
+    # Since this demo aims to showcase how users can directly control the robot with IK,
+    # we will need to disable the built-in controllers in OmniGibson
+    robot.control_enabled = False
 
     # Create the IK solver -- note that we are controlling both the trunk and the arm since both are part of the
     # controllable kinematic chain for the end-effector!
@@ -82,7 +83,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     ik_solver = IKSolver(
         robot_description_path=robot.robot_arm_descriptor_yamls[robot.default_arm],
         robot_urdf_path=robot.urdf_path,
-        default_joint_pos=robot.get_joint_positions()[control_idx],
+        reset_joint_pos=robot.get_joint_positions()[control_idx],
         eef_name=robot.eef_link_names[robot.default_arm],
     )
 
@@ -93,7 +94,12 @@ def main(random_selection=False, headless=False, short_exec=False):
         joint_pos = ik_solver.solve(
             target_pos=pos,
             target_quat=quat,
+            tolerance_pos=0.002,
+            tolerance_quat=0.01,
+            weight_pos=20.0,
+            weight_quat=0.05,
             max_iterations=max_iter,
+            initial_joint_pos=robot.get_joint_positions()[control_idx],
         )
         if joint_pos is not None:
             og.log.info("Solution found. Setting new arm configuration.")
@@ -111,14 +117,14 @@ def main(random_selection=False, headless=False, short_exec=False):
     else:
         # Create a visual marker to be moved by the user, representing desired end-effector position
         marker = PrimitiveObject(
-            prim_path=f"/World/marker",
+            relative_prim_path=f"/marker",
             name="marker",
             primitive_type="Sphere",
             radius=0.03,
             visual_only=True,
             rgba=[1.0, 0, 0, 1.0],
         )
-        og.sim.import_object(marker)
+        env.scene.add_object(marker)
 
         # Get initial EE position and set marker to that location
         command = robot.get_eef_position()
@@ -131,12 +137,14 @@ def main(random_selection=False, headless=False, short_exec=False):
         def keyboard_event_handler(event, *args, **kwargs):
             nonlocal command, exit_now
             # Check if we've received a key press or repeat
-            if event.type == carb.input.KeyboardEventType.KEY_PRESS \
-                    or event.type == carb.input.KeyboardEventType.KEY_REPEAT:
-                if event.input == carb.input.KeyboardInput.ENTER:
+            if (
+                event.type == lazy.carb.input.KeyboardEventType.KEY_PRESS
+                or event.type == lazy.carb.input.KeyboardEventType.KEY_REPEAT
+            ):
+                if event.input == lazy.carb.input.KeyboardInput.ENTER:
                     # Execute the command
                     execute_ik(pos=command)
-                elif event.input == carb.input.KeyboardInput.ESCAPE:
+                elif event.input == lazy.carb.input.KeyboardInput.ESCAPE:
                     # Quit
                     og.log.info("Quit.")
                     exit_now = True
@@ -153,8 +161,8 @@ def main(random_selection=False, headless=False, short_exec=False):
             return True
 
         # Hook up the callback function with omni's user interface
-        appwindow = omni.appwindow.get_default_app_window()
-        input_interface = carb.input.acquire_input_interface()
+        appwindow = lazy.omni.appwindow.get_default_app_window()
+        input_interface = lazy.carb.input.acquire_input_interface()
         keyboard = appwindow.get_keyboard()
         sub_keyboard = input_interface.subscribe_to_keyboard_events(keyboard, keyboard_event_handler)
 
@@ -164,7 +172,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         # Loop until the user requests an exit
         while not exit_now:
             og.sim.step()
-            print("running")
 
     # Always shut the simulation down cleanly at the end
     og.app.close()
@@ -172,12 +179,12 @@ def main(random_selection=False, headless=False, short_exec=False):
 
 def input_to_xyz_delta_command(inp, delta=0.01):
     mapping = {
-        carb.input.KeyboardInput.W: np.array([delta, 0, 0]),
-        carb.input.KeyboardInput.S: np.array([-delta, 0, 0]),
-        carb.input.KeyboardInput.DOWN: np.array([0, 0, -delta]),
-        carb.input.KeyboardInput.UP: np.array([0, 0, delta]),
-        carb.input.KeyboardInput.A: np.array([0, delta, 0]),
-        carb.input.KeyboardInput.D: np.array([0, -delta, 0]),
+        lazy.carb.input.KeyboardInput.W: np.array([delta, 0, 0]),
+        lazy.carb.input.KeyboardInput.S: np.array([-delta, 0, 0]),
+        lazy.carb.input.KeyboardInput.DOWN: np.array([0, 0, -delta]),
+        lazy.carb.input.KeyboardInput.UP: np.array([0, 0, delta]),
+        lazy.carb.input.KeyboardInput.A: np.array([0, delta, 0]),
+        lazy.carb.input.KeyboardInput.D: np.array([0, -delta, 0]),
     }
 
     return mapping.get(inp)
@@ -188,7 +195,7 @@ def print_message():
     print("Move the marker to a desired position to query IK and press ENTER")
     print("W/S: move marker further away or closer to the robot")
     print("A/D: move marker to the left or the right of the robot")
-    print("T/G: move marker up and down")
+    print("UP/DOWN: move marker up and down")
     print("ESC: quit")
 
 

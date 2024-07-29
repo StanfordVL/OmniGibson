@@ -1,12 +1,10 @@
+from collections.abc import Iterable
+
 import cv2
 import numpy as np
-from collections import Iterable
-
 from transforms3d.quaternions import quat2mat
 
-from omni.kit.commands import execute
-from omni.isaac.range_sensor import _range_sensor
-
+import omnigibson.lazy as lazy
 from omnigibson.sensors.sensor_base import BaseSensor
 from omnigibson.utils.constants import OccupancyGridState
 from omnigibson.utils.python_utils import classproperty
@@ -17,7 +15,7 @@ class ScanSensor(BaseSensor):
     General 2D LiDAR range sensor and occupancy grid sensor.
 
     Args:
-        prim_path (str): prim path of the Prim to encapsulate or create.
+        relative_prim_path (str): Scene-local prim path of the Sensor to encapsulate or create.
         name (str): Name for the object. Names need to be unique per scene.
         modalities (str or list of str): Modality(s) supported by this sensor. Default is "all", which corresponds
             to all modalities being used. Otherwise, valid options should be part of cls.all_modalities.
@@ -48,15 +46,15 @@ class ScanSensor(BaseSensor):
             occupancy grid, e.g.: if this scan sensor is attached to a robot, then this should possibly be the base link
             for that robot. If None is specified, then this will default to this own sensor's frame as the origin.
     """
+
     def __init__(
         self,
-        prim_path,
+        relative_prim_path,
         name,
         modalities="all",
         enabled=True,
         noise=None,
         load_config=None,
-
         # Basic LIDAR kwargs
         min_range=0.05,
         max_range=10.0,
@@ -68,7 +66,6 @@ class ScanSensor(BaseSensor):
         rotation_rate=0.0,
         draw_points=False,
         draw_lines=False,
-
         # Occupancy Grid kwargs
         occupancy_grid_resolution=128,
         occupancy_grid_range=5.0,
@@ -78,12 +75,13 @@ class ScanSensor(BaseSensor):
         # Store settings
         self.occupancy_grid_resolution = occupancy_grid_resolution
         self.occupancy_grid_range = occupancy_grid_range
-        self.occupancy_grid_inner_radius = int(occupancy_grid_inner_radius * occupancy_grid_resolution
-                                                / occupancy_grid_range)
+        self.occupancy_grid_inner_radius = int(
+            occupancy_grid_inner_radius * occupancy_grid_resolution / occupancy_grid_range
+        )
         self.occupancy_grid_local_link = self if occupancy_grid_local_link is None else occupancy_grid_local_link
 
         # Create variables that will be filled in at runtime
-        self._rs = None                 # Range sensor interface, analagous to others, e.g.: dynamic control interface
+        self._rs = None  # Range sensor interface, analagous to others, e.g.: dynamic control interface
 
         # Create load config from inputs
         load_config = dict() if load_config is None else load_config
@@ -104,7 +102,7 @@ class ScanSensor(BaseSensor):
 
         # Run super method
         super().__init__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             name=name,
             modalities=modalities,
             enabled=enabled,
@@ -114,7 +112,7 @@ class ScanSensor(BaseSensor):
 
     def _load(self):
         # Define a LIDAR prim at the current stage
-        result, lidar = execute("RangeSensorCreateLidar", path=self._prim_path)
+        result, lidar = lazy.omni.kit.commands.execute("RangeSensorCreateLidar", path=self.prim_path)
 
         return lidar.GetPrim()
 
@@ -139,7 +137,7 @@ class ScanSensor(BaseSensor):
         super()._initialize()
 
         # Initialize lidar sensor interface
-        self._rs = _range_sensor.acquire_lidar_sensor_interface()
+        self._rs = lazy.omni.isaac.range_sensor._range_sensor.acquire_lidar_sensor_interface()
 
     @property
     def _obs_space_mapping(self):
@@ -199,8 +197,9 @@ class ScanSensor(BaseSensor):
 
         # Convert local scans into the corresponding OG square it should belong to (note now all values are > 0, since
         # OG ranges from [0, resolution] x [0, resolution])
-        scan_local_in_map = scan_local / self.occupancy_grid_range * self.occupancy_grid_resolution + \
-                            (self.occupancy_grid_resolution / 2)
+        scan_local_in_map = scan_local / self.occupancy_grid_range * self.occupancy_grid_resolution + (
+            self.occupancy_grid_resolution / 2
+        )
         scan_local_in_map = scan_local_in_map.reshape((1, -1, 1, 2)).astype(np.int32)
 
         # For each scan hit,
@@ -227,11 +226,11 @@ class ScanSensor(BaseSensor):
 
     def _get_obs(self):
         # Run super first to grab any upstream obs
-        obs = super()._get_obs()
+        obs, info = super()._get_obs()
 
         # Add scan info (normalized to [0.0, 1.0])
         if "scan" in self._modalities:
-            raw_scan = self._rs.get_linear_depth_data(self._prim_path)
+            raw_scan = self._rs.get_linear_depth_data(self.prim_path)
             # Sometimes get_linear_depth_data will return values that are slightly out of range, needs clipping
             raw_scan = np.clip(raw_scan, self.min_range, self.max_range)
             obs["scan"] = (raw_scan - self.min_range) / (self.max_range - self.min_range)
@@ -240,7 +239,7 @@ class ScanSensor(BaseSensor):
             if "occupancy_grid" in self._modalities:
                 obs["occupancy_grid"] = self.get_local_occupancy_grid(scan=obs["scan"])
 
-        return obs
+        return obs, info
 
     @property
     def n_horizontal_rays(self):

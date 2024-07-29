@@ -1,10 +1,9 @@
-import collections
+import collections.abc
 import json
 import os
+
 import numpy as np
 import yaml
-
-from omnigibson import example_config_path
 
 # File I/O related
 
@@ -19,7 +18,7 @@ def parse_config(config):
     Returns:
         dict: Parsed config
     """
-    if isinstance(config, collections.Mapping):
+    if isinstance(config, collections.abc.Mapping):
         return config
     else:
         assert isinstance(config, str)
@@ -68,6 +67,8 @@ def load_default_config():
     Returns:
         dict: Loaded default configuration file
     """
+    from omnigibson import example_config_path
+
     return parse_config(f"{example_config_path}/default_cfg.yaml")
 
 

@@ -1,10 +1,10 @@
 import numpy as np
-import carb.input
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import gm
 from omnigibson.utils.asset_utils import get_available_g_scenes, get_available_og_scenes
-from omnigibson.utils.ui_utils import choose_from_options, KeyboardEventHandler
+from omnigibson.utils.ui_utils import KeyboardEventHandler, choose_from_options
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -58,6 +58,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Create a keyboard event handler for generating waypoints
     waypoints = []
+
     def add_waypoint():
         nonlocal waypoints
         pos = cam_mover.cam.get_position()
@@ -71,25 +72,25 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     KeyboardEventHandler.initialize()
     KeyboardEventHandler.add_keyboard_callback(
-        key=carb.input.KeyboardInput.X,
+        key=lazy.carb.input.KeyboardInput.X,
         callback_fn=add_waypoint,
     )
     KeyboardEventHandler.add_keyboard_callback(
-        key=carb.input.KeyboardInput.C,
+        key=lazy.carb.input.KeyboardInput.C,
         callback_fn=clear_waypoints,
     )
     KeyboardEventHandler.add_keyboard_callback(
-        key=carb.input.KeyboardInput.J,
+        key=lazy.carb.input.KeyboardInput.J,
         callback_fn=lambda: cam_mover.record_trajectory_from_waypoints(
             waypoints=np.array(waypoints),
             per_step_distance=0.02,
             fps=30,
             steps_per_frame=1,
-            fpath=None,             # This corresponds to the default path inferred from cam_mover.save_dir
+            fpath=None,  # This corresponds to the default path inferred from cam_mover.save_dir
         ),
     )
     KeyboardEventHandler.add_keyboard_callback(
-        key=carb.input.KeyboardInput.ESCAPE,
+        key=lazy.carb.input.KeyboardInput.ESCAPE,
         callback_fn=lambda: env.close(),
     )
 
@@ -102,6 +103,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Loop indefinitely
     while True:
         env.step([])
+
 
 if __name__ == "__main__":
     main()

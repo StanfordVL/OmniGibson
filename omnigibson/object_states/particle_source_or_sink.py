@@ -3,7 +3,6 @@ import numpy as np
 import omnigibson as og
 from omnigibson.macros import create_module_macros
 from omnigibson.object_states.particle_modifier import ParticleApplier, ParticleRemover
-from omnigibson.systems.system_base import is_physical_particle_system
 from omnigibson.utils.constants import ParticleModifyMethod
 from omnigibson.utils.python_utils import classproperty
 
@@ -40,7 +39,7 @@ class ParticleSource(ParticleApplier):
     Args:
         obj (StatefulObject): Object to which this state will be applied
         conditions (dict): Dictionary mapping the names of ParticleSystem (str) to None or list of 2-tuples, where
-            None represents no conditions, or each 2-tuple is interpreted as a single condition in the form of
+            None represents "never", empty list represents "always", or each 2-tuple is interpreted as a single condition in the form of
             (ParticleModifyCondition, value) necessary in order for this particle modifier to be
             able to modify particles belonging to @ParticleSystem. Expected types of val are as follows:
 
@@ -65,6 +64,7 @@ class ParticleSource(ParticleApplier):
         initial_speed (float): The initial speed for generated particles. Note that the
             direction of the velocity is inferred from the particle sampling process
     """
+
     def __init__(
         self,
         obj,
@@ -83,7 +83,7 @@ class ParticleSource(ParticleApplier):
             projection_mesh_params = {
                 "type": "Cylinder",
                 "extents": [source_radius * 2, source_radius * 2, source_height],
-            },
+            }
         else:
             projection_mesh_params = None
 
@@ -105,13 +105,17 @@ class ParticleSource(ParticleApplier):
         # This is equivalent to the time it takes for a generated particle to travel @source_height distance
         # Note that object state steps are discretized by og.sim.render_step
         # Note: t derived from quadratic formula: height = 0.5 g t^2 + v0 t
-        t = (-self._initial_speed + np.sqrt(self._initial_speed ** 2 + 2 * og.sim.gravity * self._projection_mesh_params["extents"][2])) / og.sim.gravity
+        # Note: height must be considered in the world frame, so we convert the distance from local into world frame
+        # Extents are in local frame, so we need to convert to world frame using link scale
+        distance = self.link.scale[2] * self._projection_mesh_params["extents"][2]
+        t = (-self._initial_speed + np.sqrt(self._initial_speed**2 + 2 * og.sim.gravity * distance)) / og.sim.gravity
         self._n_steps_per_modification = np.ceil(1 + t / og.sim.get_rendering_dt()).astype(int)
 
     def _get_max_particles_limit_per_step(self, system):
         # Check the system
-        assert is_physical_particle_system(system_name=system.name), \
-            "ParticleSource only supports PhysicalParticleSystem"
+        assert self.obj.scene.is_physical_particle_system(
+            system_name=system.name
+        ), "ParticleSource only supports PhysicalParticleSystem"
         return m.MAX_SOURCE_PARTICLES_PER_STEP
 
     @classmethod
@@ -119,8 +123,8 @@ class ParticleSource(ParticleApplier):
         # Always requires metalink since projection is used
         return True
 
-    @classproperty
-    def visualize(cls):
+    @property
+    def visualize(self):
         # Don't visualize this source
         return False
 
@@ -145,7 +149,7 @@ class ParticleSink(ParticleRemover):
     Args:
         obj (StatefulObject): Object to which this state will be applied
         conditions (dict): Dictionary mapping the names of ParticleSystem (str) to None or list of 2-tuples, where
-            None represents no conditions, or each 2-tuple is interpreted as a single condition in the form of
+            None represents "never", empty list represents "always", or each 2-tuple is interpreted as a single condition in the form of
             (ParticleModifyCondition, value) necessary in order for this particle modifier to be
             able to modify particles belonging to @ParticleSystem. Expected types of val are as follows:
 
@@ -167,23 +171,28 @@ class ParticleSink(ParticleRemover):
         sink_height (None or float): Height of the cylinder representing particles' sinking volume, if specified.
             If both @sink_radius and @sink_height are None, values will be inferred directly from the underlying
             object asset, otherwise, it will be set to a default value
-
-        default_physical_conditions (None or list): Condition(s) needed to remove any physical particles not explicitly
+        default_fluid_conditions (None or list): Condition(s) needed to remove any fluid particles not explicitly
             specified in @conditions. If None, then it is assumed that no other physical particles can be removed. If
             not None, should be in same format as an entry in @conditions, i.e.: list of (ParticleModifyCondition, val)
             2-tuples
+        default_non_fluid_conditions (None or list): Condition(s) needed to remove any physical (excluding fluid)
+            particles not explicitly specified in @conditions. If None, then it is assumed that no other physical
+            particles can be removed. If not None, should be in same format as an entry in @conditions, i.e.: list of
+            (ParticleModifyCondition, val) 2-tuples
         default_visual_conditions (None or list): Condition(s) needed to remove any visual particles not explicitly
             specified in @conditions. If None, then it is assumed that no other visual particles can be removed. If
             not None, should be in same format as an entry in @conditions, i.e.: list of (ParticleModifyCondition, val)
             2-tuples
-        """
+    """
+
     def __init__(
         self,
         obj,
         conditions,
         sink_radius=None,
         sink_height=None,
-        default_physical_conditions=None,
+        default_fluid_conditions=None,
+        default_non_fluid_conditions=None,
         default_visual_conditions=None,
     ):
         # Initialize variables that will be filled in at runtime
@@ -196,7 +205,7 @@ class ParticleSink(ParticleRemover):
             projection_mesh_params = {
                 "type": "Cylinder",
                 "extents": [sink_radius * 2, sink_radius * 2, sink_height],
-            },
+            }
         else:
             projection_mesh_params = None
 
@@ -206,23 +215,22 @@ class ParticleSink(ParticleRemover):
             conditions=conditions,
             method=ParticleModifyMethod.PROJECTION,
             projection_mesh_params=projection_mesh_params,
-            default_physical_conditions=default_physical_conditions,
+            default_fluid_conditions=default_fluid_conditions,
+            default_non_fluid_conditions=default_non_fluid_conditions,
             default_visual_conditions=default_visual_conditions,
         )
 
-    def _initialize(self):
-        # Run super first
-        super()._initialize()
-
-        # Override check overlap such that it always returns True (since we are ignoring overlaps and directly
-        # removing particles
-        self._check_overlap = lambda: True
-
     def _get_max_particles_limit_per_step(self, system):
         # Check the system
-        assert is_physical_particle_system(system_name=system.name), \
-            "ParticleSink only supports PhysicalParticleSystem"
+        assert self.obj.scene.is_physical_particle_system(
+            system_name=system.name
+        ), "ParticleSink only supports PhysicalParticleSystem"
         return m.MAX_PHYSICAL_PARTICLES_SOURCED_PER_STEP
+
+    @property
+    def requires_overlap(self):
+        # Not required, always sink particles
+        return False
 
     @classmethod
     def requires_metalink(cls, **kwargs):
