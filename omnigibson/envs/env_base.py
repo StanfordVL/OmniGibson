@@ -1,4 +1,3 @@
-import time
 from copy import deepcopy
 
 import gymnasium as gym
@@ -26,6 +25,12 @@ from omnigibson.utils.python_utils import (
     merge_nested_dicts,
 )
 from omnigibson.utils.ui_utils import create_module_logger
+from omnigibson.utils.python_utils import assert_valid_key, merge_nested_dicts, create_class_from_registry_and_config,\
+    Recreatable
+
+
+import time
+
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -50,22 +55,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Required render mode metadata for gymnasium
         self.render_mode = "rgb_array"
         self.metadata = {"render.modes": ["rgb_array"]}
-
-        # Initialize other placeholders that will be filled in later
-        self._initial_pos_z_offset = (
-            None  # how high to offset object placement to account for one action step of dropping
-        )
-        self._task = None
-        self._loaded = None
-        self._current_episode = 0
-
-        self._prev_sim_end_ts = 0
-        self._cur_sim_start_ts = 0
-
-        # Variables reset at the beginning of each episode
-        self._current_step = 0
-        # Store if we are part of a vec env
-        self.in_vec_env = in_vec_env
 
         # Convert config file(s) into a single parsed dict
         configs = configs if isinstance(configs, list) or isinstance(configs, tuple) else [configs]
@@ -136,7 +125,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self.load()
 
         # If we are not in a vec env, we can play ourselves. Otherwise we wait for the vec env to play.
-        if not self.in_vec_env:
+        if not in_vec_env:
             og.sim.play()
             self.post_play_load()
 
@@ -545,13 +534,13 @@ class Environment(gym.Env, GymObservable, Recreatable):
         if self._scene_graph_builder is not None:
             info["scene_graph"] = self.get_scene_graph()
 
-    def _pre_step(self, action, time_step=False):
+    def _pre_step(self, action):
         """Apply the pre-sim-step part of an environment step, i.e. apply the robot actions."""
 
         # record the start time
-        if time_step:
-            self._cur_sim_start_ts = time.clock()
-
+        # record the start time of the simulation step in the beginning of the step
+        self. _cur_sim_start_ts = time.clock()
+        
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()
@@ -568,7 +557,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         for robot in self.robots:
             robot.apply_action(action_dict[robot.name])
 
-    def _post_step(self, action, time_step=False):
+    def _post_step(self, action):
         """Apply the post-sim-step part of an environment step, i.e. grab observations and return the step results."""
         # Grab observations
         obs, obs_info = self.get_obs()
@@ -603,12 +592,12 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._current_step += 1
 
         # record end time
-        if time_step:
-            self._prev_sim_end_ts = time.clock()
+        # record the end time of the simulation step in the end of the step
+        self._prev_sim_end_ts = time.clock()
 
         return obs, reward, terminated, truncated, info
 
-    def step(self, action, time_step=False):
+    def step(self, action):
         """
         Apply robot's action and return the next state, reward, done and info,
         following OpenAI Gym's convention
@@ -626,9 +615,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 - bool: truncated, i.e. whether this episode ended due to a time limit etc.
                 - dict: info, i.e. dictionary with any useful information
         """
-        self._pre_step(action, time_step=time_step)
+        self._pre_step(action)
         og.sim.step()
-        return self._post_step(action, time_step=time_step)
+        return self._post_step(action)
 
     def render(self):
         """Render the environment for debug viewing."""
@@ -656,10 +645,14 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         Reset bookkeeping variables for the next new episode.
         """
+
         self._current_episode += 1
         self._current_step = 0
-        self._prev_sim_end_ts = 0
-        self._cur_sim_start_ts = 0
+
+        # reset the start and end time of the simulation step
+        self._prev_sim_end_ts = None
+        self._cur_sim_start_ts = None
+
 
     def reset(self, get_obs=True, **kwargs):
         """
@@ -723,8 +716,11 @@ class Environment(gym.Env, GymObservable, Recreatable):
         Returns:
             int: return the amount of wall time the last simulation step took
         """
-        if self._prev_sim_end_ts == 0 or self._cur_sim_start_ts == 0:
-            return 0
+
+        assert self._prev_sim_end_ts < self._cur_sim_start_ts, "end time from the previous iteration must be less than the start time of the current iteration"
+        # return 0 if the simulation has not started yet
+        if not self._prev_sim_end_ts or not self._cur_sim_start_ts:
+            return 0 
         return self._cur_sim_start_ts - self._prev_sim_end_ts
 
     @property

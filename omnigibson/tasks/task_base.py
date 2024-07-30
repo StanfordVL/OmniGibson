@@ -3,7 +3,7 @@ from copy import deepcopy
 
 import numpy as np
 
-from omnigibson.reward_functions import EnergyMetric, StepMetric, TaskSuccessMetric, WallTimeMetric
+from omnigibson.metrics import EnergyMetric, StepMetric, TaskSuccessMetric, WallTimeMetric
 from omnigibson.utils.gym_utils import GymObservable
 from omnigibson.utils.python_utils import Registerable, classproperty
 
@@ -54,6 +54,7 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         # Store other internal vars that will be populated at runtime
         self._loaded = False
         self._reward = None
+        self._metrics = 0
         self._done = None
         self._success = None
         self._info = None
@@ -191,6 +192,7 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         """
         # By default, reset reward, done, and info
         self._reward = None
+        self._metrics = 0
         self._done = False
         self._success = False
         self._info = None
@@ -214,7 +216,6 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
             reward_function.reset(self, env)
         for metric_function in self._metric_functions.values():
             metric_function.reset(self, env)
-            metric_function._reward = 0.0
 
     def _step_termination(self, env, action, info=None):
         """
@@ -299,10 +300,12 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         breakdown_dict = dict()
 
         for metric_name, metric_function in self._metric_functions.items():
-            metric, _ = metric_function.step(self, env, action)
+            metric = metric_function.step(self, env, action)
             breakdown_dict[metric_name] = metric
 
-        return breakdown_dict
+        # TODO: metric score is currently summed, work on the global coefficients
+        metric_score = sum(breakdown_dict.values())
+        return metric_score, breakdown_dict
 
     @abstractmethod
     def _get_obs(self, env):

@@ -1,7 +1,7 @@
-from omnigibson.reward_functions.reward_function_base import BaseRewardFunction
+from omnigibson.metrics.metrics_base import BaseMetric
 
 
-class TaskSuccessMetric(BaseRewardFunction):
+class TaskSuccessMetric(BaseMetric):
     """
     TaskSuccessMetric
     Metric for partial or full task success
@@ -10,7 +10,6 @@ class TaskSuccessMetric(BaseRewardFunction):
     def __init__(self):
         # Run super
         super().__init__()
-        self._reward = 0
 
     def _step(self, task, env, action):
         successes = []
@@ -22,10 +21,13 @@ class TaskSuccessMetric(BaseRewardFunction):
             # success <=> done and non failure
             successes.append(success)
         if sum(successes) > 0:
-            self._reward = 1.0
+            self._metric = 1.0
         elif partial_successes:
-            self._reward = sum(partial_successes) / len(partial_successes)
+            self._metric = sum(partial_successes) / len(partial_successes)
         else:
-            self._reward = 0.0
+            self._metric = 0.0
         # Populate info
-        return self._reward, {}
+        return self._metric
+    
+    def reset(self, task, env):
+        super().reset(task, env)

@@ -1,9 +1,9 @@
 import numpy as np
 
-from omnigibson.reward_functions.reward_function_base import BaseRewardFunction
+from omnigibson.metrics.metrics_base import BaseMetric
 
 
-class EnergyMetric(BaseRewardFunction):
+class EnergyMetric(BaseMetric):
     """
     Energy Metric
 
@@ -14,46 +14,47 @@ class EnergyMetric(BaseRewardFunction):
     """
 
     def __init__(self, measure_work=False):
+
         # Run super
         super().__init__()
-        self._reward = 0
-        self.initialized = False
-        self.state_cache = {}
+        self.state_cache = None
         self.link_masses = {}
+
+        # parameter for checking if this is a work or energy metric. If true, measure work done, else measure energy
         self.measure_work = measure_work
 
-    def calculate_displacement(self, posrot, posrot2):
-        return np.linalg.norm(posrot[0] - posrot2[0])
-
     def _step(self, task, env, action):
+
+        # calculate the current pose of all object links
         new_state_cache = {}
         for obj in env.scene.objects:
             for link_name, link in obj._links.items():
                 pos, rot = link.get_position_orientation()
                 new_state_cache[link_name] = (pos, rot)
 
-        if not self.initialized:
-            self.initialized = True
+        if not self.state_cache:
             self.state_cache = new_state_cache
 
             for obj in env.scene.objects:
                 for link_name, link in obj._links.items():
                     self.link_masses[link_name] = link.mass
-            return 0.0, {}
+            
+            return 0.0
 
         work_metric = 0.0
         for linkname, posrot in new_state_cache.items():
-            work_metric += self.calculate_displacement(posrot, self.state_cache[linkname]) * self.link_masses[linkname]
 
-        if self.measure_work:
-            self._reward = 0
+            # TODO: this computation is very slow, consider using a more efficient method
+            # TODO: this method needs to be updated to account for object addition and removal
+            posrot2 = self.state_cache[linkname]
+            work_metric += np.linalg.norm(posrot[0], posrot2[0]) * self.link_masses[linkname]
+
         if not self.measure_work:
             self.state_cache = new_state_cache
-
-        self._reward += work_metric
-        return self._reward, {}
+        
+        self._metric = work_metric if not self.measure_work else (self._metric + work_metric)
+        return self._metric
 
     def reset(self, task, env):
         super().reset(task, env)
-        self.state_cache = {}
-        self.initialized = False
+        self.state_cache = None
