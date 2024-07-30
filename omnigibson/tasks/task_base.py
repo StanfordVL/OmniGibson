@@ -3,10 +3,9 @@ from copy import deepcopy
 
 import numpy as np
 
+from omnigibson.reward_functions import EnergyMetric, StepMetric, TaskSuccessMetric, WallTimeMetric
 from omnigibson.utils.gym_utils import GymObservable
 from omnigibson.utils.python_utils import Registerable, classproperty
-
-from omnigibson.reward_functions import StepMetric, TaskSuccessMetric, WallTimeMetric, EnergyMetric
 
 REGISTERED_TASKS = dict()
 
@@ -156,11 +155,11 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         """
         metrics = dict()
 
-        metrics['steps'] = StepMetric()
-        metrics['task_success'] = TaskSuccessMetric()
-        metrics['wall_time'] = WallTimeMetric()
-        metrics['energy'] = EnergyMetric()
-        metrics['work'] = EnergyMetric(measure_work=True)
+        metrics["steps"] = StepMetric()
+        metrics["task_success"] = TaskSuccessMetric()
+        metrics["wall_time"] = WallTimeMetric()
+        metrics["energy"] = EnergyMetric()
+        metrics["work"] = EnergyMetric(measure_work=True)
 
         return metrics
 
@@ -216,7 +215,6 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         for metric_function in self._metric_functions.values():
             metric_function.reset(self, env)
             metric_function._reward = 0.0
-
 
     def _step_termination(self, env, action, info=None):
         """
@@ -305,7 +303,6 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
             breakdown_dict[metric_name] = metric
 
         return breakdown_dict
-
 
     @abstractmethod
     def _get_obs(self, env):

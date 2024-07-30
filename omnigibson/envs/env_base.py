@@ -1,3 +1,4 @@
+import time
 from copy import deepcopy
 
 import gymnasium as gym
@@ -25,12 +26,6 @@ from omnigibson.utils.python_utils import (
     merge_nested_dicts,
 )
 from omnigibson.utils.ui_utils import create_module_logger
-from omnigibson.utils.python_utils import assert_valid_key, merge_nested_dicts, create_class_from_registry_and_config,\
-    Recreatable
-
-
-import time
-
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -57,7 +52,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self.metadata = {"render.modes": ["rgb_array"]}
 
         # Initialize other placeholders that will be filled in later
-        self._initial_pos_z_offset = None                   # how high to offset object placement to account for one action step of dropping
+        self._initial_pos_z_offset = (
+            None  # how high to offset object placement to account for one action step of dropping
+        )
         self._task = None
         self._loaded = None
         self._current_episode = 0
@@ -554,7 +551,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # record the start time
         if time_step:
             self._cur_sim_start_ts = time.clock()
-        
+
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()
@@ -664,7 +661,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._prev_sim_end_ts = 0
         self._cur_sim_start_ts = 0
 
-
     def reset(self, get_obs=True, **kwargs):
         """
         Reset episode.
@@ -728,7 +724,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
             int: return the amount of wall time the last simulation step took
         """
         if self._prev_sim_end_ts == 0 or self._cur_sim_start_ts == 0:
-            return 0 
+            return 0
         return self._cur_sim_start_ts - self._prev_sim_end_ts
 
     @property

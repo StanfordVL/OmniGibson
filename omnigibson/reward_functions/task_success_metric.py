@@ -1,9 +1,10 @@
 from omnigibson.reward_functions.reward_function_base import BaseRewardFunction
 
+
 class TaskSuccessMetric(BaseRewardFunction):
     """
     TaskSuccessMetric
-    Metric for partial or full task success 
+    Metric for partial or full task success
     """
 
     def __init__(self):
