@@ -1,5 +1,6 @@
-from omnigibson.reward_functions.reward_function_base import BaseRewardFunction
 import numpy as np
+
+from omnigibson.reward_functions.reward_function_base import BaseRewardFunction
 
 
 class EnergyMetric(BaseRewardFunction):
@@ -19,7 +20,7 @@ class EnergyMetric(BaseRewardFunction):
         self.initialized = False
         self.state_cache = {}
         self.link_masses = {}
-        self.measure_work = measure_work 
+        self.measure_work = measure_work
 
     def calculate_displacement(self, posrot, posrot2):
         return np.linalg.norm(posrot[0] - posrot2[0])
