@@ -50,7 +50,7 @@ class PredicateGoal(SuccessCondition):
     def partial_success(self):
         """
         Returns:
-            float: partial success if supposed, -1.0 otherwise 
+            float: partial success if supported, -1.0 otherwise 
         """
         assert self._done is not None, "At least one step() must occur before partial_success can be calculated!"
         return len(satisfied) / (len(satisfied) + len(unsatisfied))

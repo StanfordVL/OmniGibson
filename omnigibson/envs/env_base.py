@@ -548,8 +548,13 @@ class Environment(gym.Env, GymObservable, Recreatable):
         if self._scene_graph_builder is not None:
             info["scene_graph"] = self.get_scene_graph()
 
-    def _pre_step(self, action):
+    def _pre_step(self, action, time_step=False):
         """Apply the pre-sim-step part of an environment step, i.e. apply the robot actions."""
+
+        # record the start time
+        if time_step:
+            self._cur_sim_start_ts = time.clock()
+        
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()
@@ -575,14 +580,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
         if self._scene_graph_builder is not None:
             self._scene_graph_builder.step(self.scene)
 
-        if time_step:
-            self._cur_sim_start_ts = time.clock()
-
         # Grab reward, done, and info, and populate with internal info
         reward, done, info = self.task.step(self, action)
-
-        if time_step:
-            self._prev_sim_end_ts = time.clock()
 
         self._populate_info(info)
         info["obs_info"] = obs_info
@@ -605,6 +604,11 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Increment step
         self._current_step += 1
+
+        # record end time
+        if time_step:
+            self._prev_sim_end_ts = time.clock()
+
         return obs, reward, terminated, truncated, info
 
     def step(self, action, time_step=False):
@@ -625,7 +629,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 - bool: truncated, i.e. whether this episode ended due to a time limit etc.
                 - dict: info, i.e. dictionary with any useful information
         """
-        self._pre_step(action)
+        self._pre_step(action, time_step=time_step)
         og.sim.step()
         return self._post_step(action, time_step=time_step)
 
