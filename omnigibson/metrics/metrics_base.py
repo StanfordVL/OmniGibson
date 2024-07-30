@@ -57,4 +57,4 @@ class BaseMetric(Registerable, metaclass=ABCMeta):
         """
 
         # Reset internal vars
-        self._metric = None
+        self._metric = 0
