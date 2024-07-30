@@ -28,6 +28,6 @@ class TaskSuccessMetric(BaseMetric):
             self._metric = 0.0
         # Populate info
         return self._metric
-    
+
     def reset(self, task, env):
         super().reset(task, env)

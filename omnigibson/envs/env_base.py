@@ -1,3 +1,4 @@
+import time
 from copy import deepcopy
 
 import gymnasium as gym
@@ -25,12 +26,6 @@ from omnigibson.utils.python_utils import (
     merge_nested_dicts,
 )
 from omnigibson.utils.ui_utils import create_module_logger
-from omnigibson.utils.python_utils import assert_valid_key, merge_nested_dicts, create_class_from_registry_and_config,\
-    Recreatable
-
-
-import time
-
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -539,8 +534,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # record the start time
         # record the start time of the simulation step in the beginning of the step
-        self. _cur_sim_start_ts = time.clock()
-        
+        self._cur_sim_start_ts = time.clock()
+
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()
@@ -653,7 +648,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._prev_sim_end_ts = None
         self._cur_sim_start_ts = None
 
-
     def reset(self, get_obs=True, **kwargs):
         """
         Reset episode.
@@ -717,10 +711,12 @@ class Environment(gym.Env, GymObservable, Recreatable):
             int: return the amount of wall time the last simulation step took
         """
 
-        assert self._prev_sim_end_ts < self._cur_sim_start_ts, "end time from the previous iteration must be less than the start time of the current iteration"
+        assert (
+            self._prev_sim_end_ts < self._cur_sim_start_ts
+        ), "end time from the previous iteration must be less than the start time of the current iteration"
         # return 0 if the simulation has not started yet
         if not self._prev_sim_end_ts or not self._cur_sim_start_ts:
-            return 0 
+            return 0
         return self._cur_sim_start_ts - self._prev_sim_end_ts
 
     @property

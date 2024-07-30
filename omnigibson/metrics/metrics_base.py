@@ -3,6 +3,7 @@ from copy import deepcopy
 
 from omnigibson.utils.python_utils import Registerable, classproperty
 
+
 class BaseMetric(Registerable, metaclass=ABCMeta):
     """
     Base Metric class

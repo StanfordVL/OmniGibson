@@ -39,7 +39,7 @@ class EnergyMetric(BaseMetric):
             for obj in env.scene.objects:
                 for link_name, link in obj._links.items():
                     self.link_masses[link_name] = link.mass
-            
+
             return 0.0
 
         # calculate the energy spent from the previous state to the current state

@@ -14,6 +14,6 @@ class WallTimeMetric(BaseMetric):
     def _step(self, task, env, action):
         self._metric += env.last_step_wall_time
         return self._metric
-    
+
     def reset(self, task, env):
         super().reset(task, env)
