@@ -32,6 +32,7 @@ class EnergyMetric(BaseMetric):
                 pos, rot = link.get_position_orientation()
                 new_state_cache[link_name] = (pos, rot)
 
+        # if the state cache is empty, set it to the current state and return 0
         if not self.state_cache:
             self.state_cache = new_state_cache
 
@@ -41,6 +42,7 @@ class EnergyMetric(BaseMetric):
             
             return 0.0
 
+        # calculate the energy spent from the previous state to the current state
         work_metric = 0.0
         for linkname, posrot in new_state_cache.items():
 
@@ -49,10 +51,12 @@ class EnergyMetric(BaseMetric):
             posrot2 = self.state_cache[linkname]
             work_metric += np.linalg.norm(posrot[0], posrot2[0]) * self.link_masses[linkname]
 
+        # if measuring energy, update the state cache
         if not self.measure_work:
             self.state_cache = new_state_cache
-        
-        self._metric = work_metric if not self.measure_work else (self._metric + work_metric)
+
+        # update the metric accordingly, either set the work done (measuring work) or add it to previous energy spent (measuring energy)
+        self._metric = work_metric if self.measure_work else (self._metric + work_metric)
         return self._metric
 
     def reset(self, task, env):
