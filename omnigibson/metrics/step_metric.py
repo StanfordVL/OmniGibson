@@ -14,6 +14,6 @@ class StepMetric(BaseMetric):
     def _step(self, task, env, action):
         self._metric += 1
         return self._metric
-    
+
     def reset(self, task, env):
         super().reset(task, env)

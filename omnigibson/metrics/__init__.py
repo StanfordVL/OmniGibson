@@ -1,5 +1,5 @@
+from omnigibson.metrics.energy_metric import EnergyMetric
+from omnigibson.metrics.metrics_base import BaseMetric
 from omnigibson.metrics.step_metric import StepMetric
 from omnigibson.metrics.task_success_metric import TaskSuccessMetric
 from omnigibson.metrics.wall_time_metric import WallTimeMetric
-from omnigibson.metrics.energy_metric import EnergyMetric
-from omnigibson.metrics.metrics_base import BaseMetric

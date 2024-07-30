@@ -38,7 +38,7 @@ class EnergyMetric(BaseMetric):
             for obj in env.scene.objects:
                 for link_name, link in obj._links.items():
                     self.link_masses[link_name] = link.mass
-            
+
             return 0.0
 
         work_metric = 0.0
@@ -51,7 +51,7 @@ class EnergyMetric(BaseMetric):
 
         if not self.measure_work:
             self.state_cache = new_state_cache
-        
+
         self._metric = work_metric if not self.measure_work else (self._metric + work_metric)
         return self._metric
 
