@@ -714,7 +714,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # return 0 if the simulation has not started yet
         if not self._prev_sim_end_ts or not self._cur_sim_start_ts:
             return 0
-        
+
         assert (
             self._prev_sim_end_ts < self._cur_sim_start_ts
         ), "end time from the previous iteration must be less than the start time of the current iteration"

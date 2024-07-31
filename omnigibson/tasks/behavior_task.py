@@ -10,7 +10,7 @@ from bddl.activity import (
     get_natural_goal_conditions,
     get_natural_initial_conditions,
     get_object_scope,
-    get_reward
+    get_reward,
 )
 
 import omnigibson as og
