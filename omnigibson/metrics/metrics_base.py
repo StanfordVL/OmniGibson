@@ -1,10 +1,8 @@
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 
-from omnigibson.utils.python_utils import Registerable, classproperty
-
-
-class BaseMetric(Registerable, metaclass=ABCMeta):
+# from omnigibson.utils.python_utils import Registerable, classproperty
+class BaseMetric():
     """
     Base Metric class
     Metric-specific reset and step methods are implemented in subclasses

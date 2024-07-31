@@ -10,6 +10,7 @@ from bddl.activity import (
     get_natural_goal_conditions,
     get_natural_initial_conditions,
     get_object_scope,
+    get_reward
 )
 
 import omnigibson as og
@@ -285,12 +286,8 @@ class BehaviorTask(BaseTask):
         Returns:
             float: Computed potential
         """
-        # Evaluate the first ground goal state option as the potential
-        _, satisfied_predicates = evaluate_goal_conditions(self.ground_goal_state_options[0])
-        success_score = len(satisfied_predicates["satisfied"]) / (
-            len(satisfied_predicates["satisfied"]) + len(satisfied_predicates["unsatisfied"])
-        )
-        return -success_score
+        self.success_score = get_reward(self.ground_goal_state_options)
+        return -self.success_score
 
     def initialize_activity(self, env):
         """

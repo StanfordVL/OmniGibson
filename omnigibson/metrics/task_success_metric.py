@@ -13,20 +13,26 @@ class TaskSuccessMetric(BaseMetric):
 
     def _step(self, task, env, action):
         successes = []
-        partial_successes = []
+        partial_success = 0
+
+        # Evaluate termination conditions
         for termination_condition in task._termination_conditions.values():
-            if termination_condition.partial_success >= 0.0:
-                partial_successes.append(termination_condition.partial_success)
+
+            # Check if partial success is supported, and if so, store the score (e.g. Behavior Task)
+            if termination_condition.partial_success:
+                partial_success = task.success_score
+            
             done, success = termination_condition.step(task, env, action)
-            # success <=> done and non failure
             successes.append(success)
-        if sum(successes) > 0:
+
+        # Calculate metric
+        if any(successes):
             self._metric = 1.0
-        elif partial_successes:
-            self._metric = sum(partial_successes) / len(partial_successes)
+        elif partial_success > 0:
+            self._metric = partial_success
         else:
             self._metric = 0.0
-        # Populate info
+
         return self._metric
 
     def reset(self, task, env):

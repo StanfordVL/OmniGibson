@@ -49,7 +49,7 @@ class EnergyMetric(BaseMetric):
             # TODO: this computation is very slow, consider using a more efficient method
             # TODO: this method needs to be updated to account for object addition and removal
             posrot2 = self.state_cache[linkname]
-            work_metric += np.linalg.norm(posrot[0], posrot2[0]) * self.link_masses[linkname]
+            work_metric += np.linalg.norm(posrot[0] - posrot2[0]) * self.link_masses[linkname]
 
         # if measuring energy, update the state cache
         if not self.measure_work:
