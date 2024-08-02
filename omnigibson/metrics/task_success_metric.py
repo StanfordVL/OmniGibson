@@ -21,7 +21,7 @@ class TaskSuccessMetric(BaseMetric):
             # Check if partial success is supported, and if so, store the score (e.g. Behavior Task)
             if termination_condition.partial_success:
                 partial_success = task.success_score
-            
+
             done, success = termination_condition.step(task, env, action)
             successes.append(success)
 
