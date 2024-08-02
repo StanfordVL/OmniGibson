@@ -576,7 +576,7 @@ class ControllableObject(BaseObject):
         # TODO: Move gravity force computation dummy to this class instead of BaseRobot
         fcns["gravity_force"] = lambda: (
             ControllableObjectViewAPI.get_generalized_gravity_forces(self.articulation_root_path)
-            if self.fixed_base
+            if self.fixed_base or self._dummy is None
             else ControllableObjectViewAPI.get_generalized_gravity_forces(self._dummy.articulation_root_path)
         )
         fcns["cc_force"] = lambda: ControllableObjectViewAPI.get_coriolis_and_centrifugal_forces(
