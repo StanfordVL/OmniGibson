@@ -4,7 +4,6 @@ import yaml
 
 import omnigibson as og
 from omnigibson.macros import gm
-from omnigibson.tasks.behavior_task import BehaviorTask
 from omnigibson.utils.ui_utils import choose_from_options
 
 # Make sure object states are enabled
