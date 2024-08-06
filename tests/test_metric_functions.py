@@ -1,17 +1,18 @@
 import os
 from typing import OrderedDict
 
-import yaml
 import numpy as np
+import yaml
+from bddl.condition_evaluation import evaluate_state
 
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.tasks.behavior_task import BehaviorTask
-from bddl.condition_evaluation import evaluate_state
 
 # Make sure object states are enabled
 gm.ENABLE_OBJECT_STATES = True
 gm.USE_GPU_DYNAMICS = True
+
 
 def setup_env():
 
@@ -29,6 +30,7 @@ def setup_env():
 
     return env
 
+
 def test_behavior_reset():
 
     env = setup_env()
@@ -42,7 +44,7 @@ def test_behavior_reset():
     env.reset()
 
     # perform a step with no action
-    action = OrderedDict([('robot0', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])])
+    action = OrderedDict([("robot0", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])])
     state, reward, terminated, truncated, info = env.step(action)
 
     metrics = info["metrics"]
@@ -53,16 +55,17 @@ def test_behavior_reset():
     assert metrics["energy"] == 0, "Energy metric was not reset"
     assert metrics["work"] == 0, "Work metric was not reset"
 
+
 def test_behavior_task_work_metric():
 
     env = setup_env()
 
     # perform a step with no action
-    action = OrderedDict([('robot0', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])])
+    action = OrderedDict([("robot0", [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])])
     state, reward, terminated, truncated, info = env.step(action)
 
     metrics = info["metrics"]
-    
+
     assert isinstance(metrics, dict)
 
     # assert that one step is taken
@@ -90,5 +93,3 @@ def test_behavior_task_work_metric():
 
     # Always close the environment at the end
     env.close()
-
-
