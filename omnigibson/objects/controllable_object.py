@@ -577,7 +577,7 @@ class ControllableObject(BaseObject):
         breakpoint()
         fcns["gravity_force"] = lambda: (
             ControllableObjectViewAPI.get_generalized_gravity_forces(self.articulation_root_path)
-            if self.fixed_base 
+            if self.fixed_base
             # or self._dummy is None
             else ControllableObjectViewAPI.get_generalized_gravity_forces(self._dummy.articulation_root_path)
         )

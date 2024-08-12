@@ -535,7 +535,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # record the start time of the simulation step in the beginning of the step
         self._cur_sim_start_ts = time.perf_counter()
 
-        
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()

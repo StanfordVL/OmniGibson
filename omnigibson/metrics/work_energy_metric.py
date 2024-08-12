@@ -1,6 +1,8 @@
 import numpy as np
 
 from omnigibson.metrics.metrics_base import BaseMetric
+
+
 class WorkEnergyMetric(BaseMetric):
     """
     Work and Energy Metric

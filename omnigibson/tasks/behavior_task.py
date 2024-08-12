@@ -16,9 +16,9 @@ from bddl.activity import (
 import omnigibson as og
 import omnigibson.utils.transform_utils as T
 from omnigibson.macros import gm
+from omnigibson.metrics import StepMetric, TaskSuccessMetric, WallTimeMetric, WorkEnergyMetric
 from omnigibson.object_states import Pose
 from omnigibson.reward_functions.potential_reward import PotentialReward
-from omnigibson.metrics import WorkEnergyMetric, StepMetric, TaskSuccessMetric, WallTimeMetric
 from omnigibson.robots.robot_base import BaseRobot
 from omnigibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
 from omnigibson.scenes.scene_base import Scene
@@ -123,7 +123,9 @@ class BehaviorTask(BaseTask):
         )
 
         # Run super init
-        super().__init__(termination_config=termination_config, reward_config=reward_config, metric_config=metric_config)
+        super().__init__(
+            termination_config=termination_config, reward_config=reward_config, metric_config=metric_config
+        )
 
     @classmethod
     def get_cached_activity_scene_filename(
@@ -197,9 +199,8 @@ class BehaviorTask(BaseTask):
         )
 
         return rewards
-    
+
     def _create_metric_functions(self):
-        
         """
         Creates the metric functions in the environment
 
@@ -396,7 +397,9 @@ class BehaviorTask(BaseTask):
 
         # Batch rpy calculations for much better efficiency
         objs_exist = {
-            obj: obj.exists for obj in self.object_scope.values() if not obj.is_system
+            obj: obj.exists
+            for obj in self.object_scope.values()
+            if not obj.is_system
             # and obj.states[Pose]._initialized
         }
         objs_rpy = T.quat2euler(
@@ -588,7 +591,7 @@ class BehaviorTask(BaseTask):
         return {
             "r_potential": 1.0,
         }
-    
+
     @classproperty
     def default_metric_config(cls):
         return {

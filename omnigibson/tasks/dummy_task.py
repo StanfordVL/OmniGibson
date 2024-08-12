@@ -22,7 +22,7 @@ class DummyTask(BaseTask):
     def _create_reward_functions(self):
         # Do nothing
         return dict()
-    
+
     def _create_metric_functions(self):
         # Do nothing
         return dict()

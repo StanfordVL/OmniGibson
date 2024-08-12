@@ -36,7 +36,7 @@ def test_behavior_reset():
     env = setup_env()
 
     action = env.action_space.sample()
-    action['robot0'] = np.zeros_like(action['robot0'])
+    action["robot0"] = np.zeros_like(action["robot0"])
     state, reward, terminated, truncated, info = env.step(action)
     metrics = info["metrics"]
 
@@ -45,7 +45,7 @@ def test_behavior_reset():
     env.reset()
 
     # perform a step with no action
-    action = OrderedDict([('robot0', np.zeros_like(env.action_space.sample()))])
+    action = OrderedDict([("robot0", np.zeros_like(env.action_space.sample()))])
     state, reward, terminated, truncated, info = env.step(action)
 
     metrics = info["metrics"]
@@ -58,13 +58,14 @@ def test_behavior_reset():
 
     og.clear()
 
+
 def test_behavior_task_work_metric():
 
     env = setup_env()
 
     # perform a step with no action
     action = env.action_space.sample()
-    action['robot0'] = np.zeros_like(action['robot0'])
+    action["robot0"] = np.zeros_like(action["robot0"])
 
     state, reward, terminated, truncated, info = env.step(action)
 
@@ -98,6 +99,6 @@ def test_behavior_task_work_metric():
     # Always close the environment at the end
     og.clear()
 
+
 if __name__ == "__main__":
     test_behavior_task_work_metric()
-
