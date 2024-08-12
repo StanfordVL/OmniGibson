@@ -1,17 +1,18 @@
 import os
 from typing import OrderedDict
 
-import yaml
 import numpy as np
+import yaml
+from bddl.condition_evaluation import evaluate_state
 
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.tasks.behavior_task import BehaviorTask
-from bddl.condition_evaluation import evaluate_state
 
 # Make sure object states are enabled
 gm.ENABLE_OBJECT_STATES = True
 gm.USE_GPU_DYNAMICS = True
+
 
 def setup_env():
 
@@ -28,6 +29,7 @@ def setup_env():
     env = og.Environment(configs=cfg)
 
     return env
+
 
 def test_behavior_reset():
 
@@ -67,7 +69,7 @@ def test_behavior_task_work_metric():
     state, reward, terminated, truncated, info = env.step(action)
 
     metrics = info["metrics"]
-    
+
     assert isinstance(metrics, dict)
 
     # assert that one step is taken
