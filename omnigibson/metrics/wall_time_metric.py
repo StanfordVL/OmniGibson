@@ -8,12 +8,12 @@ class WallTimeMetric(BaseMetric):
     """
 
     def __init__(self):
-        # Run super
-        super().__init__()
+        # initialize wall time metric
+        self._metric = 0
 
     def _step(self, task, env, action):
         self._metric += env.last_step_wall_time
-        return self._metric
+        return {"wall_time": self._metric}
 
     def reset(self, task, env):
-        super().reset(task, env)
+        self._metric = 0

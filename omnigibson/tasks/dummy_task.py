@@ -22,6 +22,10 @@ class DummyTask(BaseTask):
     def _create_reward_functions(self):
         # Do nothing
         return dict()
+    
+    def _create_metric_functions(self):
+        # Do nothing
+        return dict()
 
     def _get_obs(self, env):
         # No task-specific obs of any kind

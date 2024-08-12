@@ -8,12 +8,12 @@ class StepMetric(BaseMetric):
     """
 
     def __init__(self):
-        # Run super
-        super().__init__()
+        #initialize step
+        self._metric = 0
 
     def _step(self, task, env, action):
         self._metric += 1
-        return self._metric
+        return {"step": self._metric}
 
     def reset(self, task, env):
-        super().reset(task, env)
+        self._metric = 0

@@ -3,7 +3,6 @@ from copy import deepcopy
 
 import numpy as np
 
-from omnigibson.metrics import EnergyMetric, StepMetric, TaskSuccessMetric, WallTimeMetric
 from omnigibson.utils.gym_utils import GymObservable
 from omnigibson.utils.python_utils import Registerable, classproperty
 
@@ -26,7 +25,7 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
             in with the default config. See cls.default_reward_config for default values used
     """
 
-    def __init__(self, termination_config=None, reward_config=None):
+    def __init__(self, termination_config=None, reward_config=None, metric_config=None):
         # Make sure configs are dictionaries
         termination_config = dict() if termination_config is None else termination_config
         reward_config = dict() if reward_config is None else reward_config
@@ -45,6 +44,8 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         self._termination_config.update(termination_config)
         self._reward_config = self.default_reward_config
         self._reward_config.update(reward_config)
+
+        self._metric_config = metric_config
 
         # Generate reward and termination functions
         self._termination_conditions = self._create_termination_conditions()
@@ -154,15 +155,9 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         Returns:
             dict of BaseRewardFunction: Metric functions created for this task
         """
-        metrics = dict()
-
-        metrics["steps"] = StepMetric()
-        metrics["task_success"] = TaskSuccessMetric()
-        metrics["wall_time"] = WallTimeMetric()
-        metrics["energy"] = EnergyMetric()
-        metrics["work"] = EnergyMetric(measure_work=True)
-
-        return metrics
+        
+        # The metric functions are individually configured in the task class
+        raise NotImplementedError()
 
     def _reset_scene(self, env):
         """
@@ -296,15 +291,17 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
             - the break down of the metric scores and the metric info
         """
 
-        # We'll also store individual reward split
+        # We'll also store individual metric split
         breakdown_dict = dict()
+        metric_score = 0
 
-        for metric_name, metric_function in self._metric_functions.items():
+        for metric_function in self._metric_functions.values():
             metric = metric_function.step(self, env, action)
-            breakdown_dict[metric_name] = metric
+            breakdown_dict.update(metric)
 
-        # TODO: metric score is currently summed, work on the global coefficients
-        metric_score = sum(breakdown_dict.values())
+        for metric_name, metric_score in breakdown_dict.items():
+            metric_score += metric_score * self._metric_config[metric_name]
+
         return metric_score, breakdown_dict
 
     @abstractmethod
@@ -456,6 +453,16 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
                 any of the termination classes generated in self._create_terminations(). Note: this default config
                 should be fully verbose -- any keys inputted in the constructor but NOT found in this default config
                 will raise an error!
+        """
+        raise NotImplementedError()
+    
+    @classproperty
+    def default_metric_config(cls):
+        """
+        Returns:
+            dict: Default metric configuration for this class. Should include any kwargs necessary for
+                any of the metric classes. Note: this default config should be fully verbose -- any keys 
+                inputted in the constructor but NOT found in this default config will raise an error!
         """
         raise NotImplementedError()
 

@@ -18,6 +18,7 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.macros import gm
 from omnigibson.object_states import Pose
 from omnigibson.reward_functions.potential_reward import PotentialReward
+from omnigibson.metrics import WorkEnergyMetric, StepMetric, TaskSuccessMetric, WallTimeMetric
 from omnigibson.robots.robot_base import BaseRobot
 from omnigibson.scenes.interactive_traversable_scene import InteractiveTraversableScene
 from omnigibson.scenes.scene_base import Scene
@@ -67,6 +68,7 @@ class BehaviorTask(BaseTask):
         highlight_task_relevant_objects=False,
         termination_config=None,
         reward_config=None,
+        metric_config=None,
     ):
         # Make sure object states are enabled
         assert gm.ENABLE_OBJECT_STATES, "Must set gm.ENABLE_OBJECT_STATES=True in order to use BehaviorTask!"
@@ -121,7 +123,7 @@ class BehaviorTask(BaseTask):
         )
 
         # Run super init
-        super().__init__(termination_config=termination_config, reward_config=reward_config)
+        super().__init__(termination_config=termination_config, reward_config=reward_config, metric_config=metric_config)
 
     @classmethod
     def get_cached_activity_scene_filename(
@@ -195,6 +197,22 @@ class BehaviorTask(BaseTask):
         )
 
         return rewards
+    
+    def _create_metric_functions(self):
+        
+        """
+        Creates the metric functions in the environment
+
+        Returns:
+            dict of BaseRewardFunction: Metric functions created for Behavior task
+        """
+        metrics = dict()
+
+        metrics["steps"] = StepMetric()
+        metrics["task_success"] = TaskSuccessMetric()
+        metrics["wall_time"] = WallTimeMetric()
+        metrics["energy_work"] = WorkEnergyMetric()
+        return metrics
 
     def _load(self, env):
         # Initialize the current activity
@@ -378,7 +396,8 @@ class BehaviorTask(BaseTask):
 
         # Batch rpy calculations for much better efficiency
         objs_exist = {
-            obj: obj.exists for obj in self.object_scope.values() if not obj.is_system and obj.states[Pose]._initialized
+            obj: obj.exists for obj in self.object_scope.values() if not obj.is_system
+            # and obj.states[Pose]._initialized
         }
         objs_rpy = T.quat2euler(
             np.array(
@@ -568,4 +587,14 @@ class BehaviorTask(BaseTask):
     def default_reward_config(cls):
         return {
             "r_potential": 1.0,
+        }
+    
+    @classproperty
+    def default_metric_config(cls):
+        return {
+            "step": 0.05,
+            "task_success": 0.6,
+            "wall_time": 0.05,
+            "work": 0.2,
+            "energy": 0.2,
         }

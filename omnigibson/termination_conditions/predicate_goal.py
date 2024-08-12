@@ -51,5 +51,4 @@ class PredicateGoal(SuccessCondition):
         Returns:
             bool: returns true if partial success is supported, false otherwise
         """
-        assert self._done is not None, "At least one step() must occur before partial_success can be calculated!"
         return True

@@ -34,6 +34,7 @@ def test_behavior_reset():
     env = setup_env()
 
     action = env.action_space.sample()
+    action['robot0'] = np.zeros_like(action['robot0'])
     state, reward, terminated, truncated, info = env.step(action)
     metrics = info["metrics"]
 
@@ -42,23 +43,27 @@ def test_behavior_reset():
     env.reset()
 
     # perform a step with no action
-    action = OrderedDict([('robot0', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])])
+    action = OrderedDict([('robot0', np.zeros_like(env.action_space.sample()))])
     state, reward, terminated, truncated, info = env.step(action)
 
     metrics = info["metrics"]
 
-    assert metrics["steps"] == 0, "Step metric was not reset"
+    assert metrics["step"] == 0, "Step metric was not reset"
     assert metrics["task_success"] == 0, "Task success metric was not reset"
     assert metrics["wall_time"] == 0, "Wall time metric was not reset"
     assert metrics["energy"] == 0, "Energy metric was not reset"
     assert metrics["work"] == 0, "Work metric was not reset"
+
+    og.clear()
 
 def test_behavior_task_work_metric():
 
     env = setup_env()
 
     # perform a step with no action
-    action = OrderedDict([('robot0', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0])])
+    action = env.action_space.sample()
+    action['robot0'] = np.zeros_like(action['robot0'])
+
     state, reward, terminated, truncated, info = env.step(action)
 
     metrics = info["metrics"]
@@ -66,7 +71,7 @@ def test_behavior_task_work_metric():
     assert isinstance(metrics, dict)
 
     # assert that one step is taken
-    assert metrics["steps"] == 1
+    assert metrics["step"] == 1
 
     # cache the initial position and orientation of the robot
     position, orientation = env.robots[0].get_position_orientation()
@@ -89,6 +94,8 @@ def test_behavior_task_work_metric():
     assert np.allclose(metrics["work"] / robot_mass, 0, atol=1e-3)
 
     # Always close the environment at the end
-    env.close()
+    og.clear()
 
+if __name__ == "__main__":
+    test_behavior_task_work_metric()
 

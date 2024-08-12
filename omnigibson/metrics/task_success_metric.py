@@ -8,8 +8,8 @@ class TaskSuccessMetric(BaseMetric):
     """
 
     def __init__(self):
-        # Run super
-        super().__init__()
+        # initialize task success metric
+        self._metric = 0
 
     def _step(self, task, env, action):
         successes = []
@@ -33,7 +33,7 @@ class TaskSuccessMetric(BaseMetric):
         else:
             self._metric = 0.0
 
-        return self._metric
+        return {"task_success": self._metric}
 
     def reset(self, task, env):
-        super().reset(task, env)
+        self._metric = 0

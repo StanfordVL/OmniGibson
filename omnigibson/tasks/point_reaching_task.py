@@ -104,6 +104,10 @@ class PointReachingTask(PointNavigationTask):
 
         return terminations
 
+    def _create_metric_functions(self):
+        # No metrics for this task
+        return dict()
+    
     def _sample_initial_pose_and_goal_pos(self, env, max_trials=100):
         # Run super first
         initial_pos, initial_ori, goal_pos = super()._sample_initial_pose_and_goal_pos(env=env, max_trials=max_trials)

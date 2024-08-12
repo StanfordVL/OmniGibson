@@ -145,7 +145,11 @@ class PointNavigationTask(BaseTask):
         )
 
         return rewards
-
+    
+    def _create_metric_functions(self):
+        # No metrics for this task
+        return dict()
+    
     def _load(self, env):
         # Load visualization
         self._load_visualization_markers(env=env)

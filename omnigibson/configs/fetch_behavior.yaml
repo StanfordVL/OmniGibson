@@ -84,3 +84,10 @@ task:
     max_steps: 500
   reward_config:
     r_potential: 1.0
+  metric_config:
+    step: 0.05
+    task_success: 0.6
+    wall_time: 0.05
+    work: 0.2
+    energy: 0.2
+

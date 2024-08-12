@@ -10,8 +10,9 @@ class BaseMetric:
     """
 
     def __init__(self):
-        # Store internal vars that will be filled in at runtime
-        self._metric = 0
+
+        # Store internal vars that will be filled in at runtime. The is a metric dictionary computed metric subclasses
+        self.metric = None
 
     @abstractmethod
     def _step(self, task, env, action):
@@ -44,11 +45,12 @@ class BaseMetric:
                 - bool: computed metric
                 - dict: any metric-related information for this specific metric
         """
+
         # Step internally and store output
-        self._metric = self._step(task=task, env=env, action=action)
+        self.metric = self._step(task=task, env=env, action=action)
 
         # Return metric
-        return self._metric
+        return self.metric
 
     def reset(self, task, env):
         """
@@ -56,4 +58,4 @@ class BaseMetric:
         """
 
         # Reset internal vars
-        self._metric = 0
+        self.metric = None

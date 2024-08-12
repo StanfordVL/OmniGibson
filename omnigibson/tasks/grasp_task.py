@@ -78,6 +78,10 @@ class GraspTask(BaseTask):
         rewards = dict()
         rewards["grasp"] = GraspReward(self.obj_name, **self._reward_config)
         return rewards
+    
+    def _create_metric_functions(self):
+        # No metric functions
+        return dict()
 
     def _reset_agent(self, env):
         robot = env.robots[0]
