@@ -194,10 +194,10 @@ class ControllableObject(BaseObject):
             ), "Stored control frequency does not match environment's render timestep."
 
         return prim
-    
+
     def _load(self):
         # Run super first
-        
+
         prim = super()._load()
 
         # Also import dummy object if this robot is not fixed base AND it has a controller that
@@ -602,7 +602,6 @@ class ControllableObject(BaseObject):
         fcns["mass_matrix"] = lambda: ControllableObjectViewAPI.get_mass_matrix(self.articulation_root_path)
         fcns["gravity_force"] = lambda: (
             ControllableObjectViewAPI.get_generalized_gravity_forces(self.articulation_root_path)
-
             # check if dummy is None to account for the fact that the dummy may not be loaded yet
             if self.fixed_base or self._dummy is None
             else ControllableObjectViewAPI.get_generalized_gravity_forces(self._dummy.articulation_root_path)

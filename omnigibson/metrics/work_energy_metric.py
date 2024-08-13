@@ -1,7 +1,7 @@
 import numpy as np
 
-from omnigibson.metrics.metrics_base import BaseMetric
 import omnigibson.utils.transform_utils as T
+from omnigibson.metrics.metrics_base import BaseMetric
 
 
 class WorkEnergyMetric(BaseMetric):
@@ -66,10 +66,14 @@ class WorkEnergyMetric(BaseMetric):
             if self.prev_state_cache is not None:
                 prev_posrot = self.prev_state_cache[linkname]
                 position, orientation = T.relative_pose_transform(posrot[0], posrot[1], prev_posrot[0], prev_posrot[1])
-                energy_metric += np.linalg.norm(position) * self.link_masses[linkname] * self.metric_config["translation"]
+                energy_metric += (
+                    np.linalg.norm(position) * self.link_masses[linkname] * self.metric_config["translation"]
+                )
 
                 # calculate the energy spent in rotation. TODO: this is a very rough approximation, consider using a more accurate method
-                energy_metric += np.linalg.norm(orientation) * self.link_masses[linkname] * self.metric_config["rotation"]
+                energy_metric += (
+                    np.linalg.norm(orientation) * self.link_masses[linkname] * self.metric_config["rotation"]
+                )
 
         # update the prev_state cache for energy measurement
         self.prev_state_cache = new_state_cache

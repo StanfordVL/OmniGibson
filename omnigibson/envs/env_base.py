@@ -534,7 +534,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # record the start time of the simulation step in the beginning of the step
         self._cur_sim_start_ts = og.sim.current_time
-        
+
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()
@@ -713,7 +713,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # return 0 if the simulation has not started yet
         if not self._prev_sim_end_ts or not self._cur_sim_start_ts:
             return 0
-        
+
         assert (
             self._prev_sim_end_ts <= self._cur_sim_start_ts
         ), "end time from the previous iteration must be less than the start time of the current iteration"
