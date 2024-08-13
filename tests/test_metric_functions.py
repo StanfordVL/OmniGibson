@@ -4,12 +4,12 @@ from typing import OrderedDict
 import numpy as np
 import yaml
 from bddl.condition_evaluation import evaluate_state
-from omnigibson.objects import DatasetObject
 
 import omnigibson as og
-from omnigibson.macros import gm
-from omnigibson.tasks.behavior_task import BehaviorTask
 import omnigibson.utils.transform_utils as T
+from omnigibson.macros import gm
+from omnigibson.objects import DatasetObject
+from omnigibson.tasks.behavior_task import BehaviorTask
 
 # Make sure object states are enabled
 gm.ENABLE_OBJECT_STATES = True
@@ -32,13 +32,15 @@ def setup_env():
     env.reset()
     return env
 
+
 env = setup_env()
+
 
 def test_behavior_task_work_metric():
 
     # perform a step with no action
     action = env.action_space.sample()
-    action['robot0'] = np.zeros_like(action['robot0'])
+    action["robot0"] = np.zeros_like(action["robot0"])
 
     state, reward, terminated, truncated, info = env.step(action)
 
@@ -70,11 +72,12 @@ def test_behavior_task_work_metric():
     assert np.allclose(metrics["work"] / robot_mass, 0, atol=1e-1)
     env.reset()
 
+
 def test_behavior_task_energy_metric():
 
     # perform a step with no action
     action = env.action_space.sample()
-    action['robot0'] = np.zeros_like(action['robot0'])
+    action["robot0"] = np.zeros_like(action["robot0"])
     env.step(action)
 
     # cache the initial position and orientation of the robot
@@ -98,17 +101,16 @@ def test_behavior_task_energy_metric():
     for link in env.robots[0].links.values():
         robot_mass += link.mass
 
-    # assert that the total energy spent is twice as much as the energy spent applying the shift 
+    # assert that the total energy spent is twice as much as the energy spent applying the shift
     assert np.allclose((2 * energy - new_energy) / robot_mass, 0, atol=1e-3)
     env.reset()
-
 
 
 def test_behavior_task_object_addition_removal():
 
     # perform a step with no action
     action = env.action_space.sample()
-    action['robot0'] = np.zeros_like(action['robot0'])
+    action["robot0"] = np.zeros_like(action["robot0"])
     env.step(action)
 
     env.robots[0].set_position_orientation([10, 10, 0])
@@ -116,7 +118,6 @@ def test_behavior_task_object_addition_removal():
     metrics = info["metrics"]
 
     work, energy = metrics["work"], metrics["energy"]
-
 
     # add another apple to the environment
     apple = DatasetObject(
@@ -145,9 +146,8 @@ def test_behavior_task_object_addition_removal():
     metrics = info["metrics"]
 
     remove_work, remove_energy = metrics["work"], metrics["energy"]
-    
+
     assert np.allclose((add_work - remove_work) / robot_mass, 0, atol=1e-1)
     assert np.allclose((add_energy - remove_energy) / robot_mass, 0, atol=1e-1)
 
     env.reset()
-

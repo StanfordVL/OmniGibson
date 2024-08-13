@@ -49,7 +49,7 @@ class DummyTask(BaseTask):
     def default_reward_config(cls):
         # Empty dict
         return {}
-    
+
     @classproperty
     def default_metric_config(cls):
         # Empty dict
