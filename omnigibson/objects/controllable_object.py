@@ -602,14 +602,9 @@ class ControllableObject(BaseObject):
         fcns["mass_matrix"] = lambda: ControllableObjectViewAPI.get_mass_matrix(self.articulation_root_path)
         fcns["gravity_force"] = lambda: (
             ControllableObjectViewAPI.get_generalized_gravity_forces(self.articulation_root_path)
-<<<<<<< HEAD
 
             # check if dummy is None to account for the fact that the dummy may not be loaded yet
             if self.fixed_base or self._dummy is None
-=======
-            if self.fixed_base
-            # or self._dummy is None
->>>>>>> b6fc0eac3180abd5cd47cc1c0b9b9928e50492ca
             else ControllableObjectViewAPI.get_generalized_gravity_forces(self._dummy.articulation_root_path)
         )
         fcns["cc_force"] = lambda: ControllableObjectViewAPI.get_coriolis_and_centrifugal_forces(

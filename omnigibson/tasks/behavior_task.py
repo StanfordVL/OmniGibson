@@ -397,14 +397,7 @@ class BehaviorTask(BaseTask):
 
         # Batch rpy calculations for much better efficiency
         objs_exist = {
-<<<<<<< HEAD
             obj: obj.exists for obj in self.object_scope.values() if not obj.is_system
-=======
-            obj: obj.exists
-            for obj in self.object_scope.values()
-            if not obj.is_system
-            # and obj.states[Pose]._initialized
->>>>>>> b6fc0eac3180abd5cd47cc1c0b9b9928e50492ca
         }
         objs_rpy = T.quat2euler(
             np.array(
