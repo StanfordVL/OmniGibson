@@ -533,8 +533,13 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """Apply the pre-sim-step part of an environment step, i.e. apply the robot actions."""
 
         # record the start time of the simulation step in the beginning of the step
+<<<<<<< HEAD
         self._cur_sim_start_ts = og.sim.current_time
         
+=======
+        self._cur_sim_start_ts = time.perf_counter()
+
+>>>>>>> b6fc0eac3180abd5cd47cc1c0b9b9928e50492ca
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()

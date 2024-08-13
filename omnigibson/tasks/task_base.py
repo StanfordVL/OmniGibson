@@ -158,7 +158,7 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         Returns:
             dict of BaseRewardFunction: Metric functions created for this task
         """
-        
+
         # The metric functions are individually configured in the task class
         raise NotImplementedError()
 
@@ -458,13 +458,13 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
                 will raise an error!
         """
         raise NotImplementedError()
-    
+
     @classproperty
     def default_metric_config(cls):
         """
         Returns:
             dict: Default metric configuration for this class. Should include any kwargs necessary for
-                any of the metric classes. Note: this default config should be fully verbose -- any keys 
+                any of the metric classes. Note: this default config should be fully verbose -- any keys
                 inputted in the constructor but NOT found in this default config will raise an error!
         """
         raise NotImplementedError()

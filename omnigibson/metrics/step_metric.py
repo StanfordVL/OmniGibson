@@ -8,7 +8,7 @@ class StepMetric(BaseMetric):
     """
 
     def __init__(self):
-        #initialize step
+        # initialize step
         self._metric = 0
 
     def _step(self, task, env, action):
