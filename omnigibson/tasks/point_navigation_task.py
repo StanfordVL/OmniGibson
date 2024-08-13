@@ -499,3 +499,8 @@ class PointNavigationTask(BaseTask):
             "r_collision": 0.1,
             "r_pointgoal": 10.0,
         }
+    
+    @classproperty
+    def default_metric_config(cls):
+        # Empty dict
+        return {}

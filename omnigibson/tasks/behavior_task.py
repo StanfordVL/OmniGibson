@@ -211,7 +211,7 @@ class BehaviorTask(BaseTask):
         metrics["steps"] = StepMetric()
         metrics["task_success"] = TaskSuccessMetric()
         metrics["wall_time"] = WallTimeMetric()
-        metrics["energy_work"] = WorkEnergyMetric()
+        metrics["energy_work"] = WorkEnergyMetric(metric_config=self._metric_config)
         return metrics
 
     def _load(self, env):
@@ -397,7 +397,6 @@ class BehaviorTask(BaseTask):
         # Batch rpy calculations for much better efficiency
         objs_exist = {
             obj: obj.exists for obj in self.object_scope.values() if not obj.is_system
-            # and obj.states[Pose]._initialized
         }
         objs_rpy = T.quat2euler(
             np.array(
@@ -597,4 +596,6 @@ class BehaviorTask(BaseTask):
             "wall_time": 0.05,
             "work": 0.2,
             "energy": 0.2,
+            "rotation": 0.1,
+            "translation": 0.9
         }

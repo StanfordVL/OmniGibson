@@ -533,8 +533,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """Apply the pre-sim-step part of an environment step, i.e. apply the robot actions."""
 
         # record the start time of the simulation step in the beginning of the step
-        self._cur_sim_start_ts = time.perf_counter()
-
+        self._cur_sim_start_ts = og.sim.current_time
         
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
@@ -588,7 +587,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # record end time
         # record the end time of the simulation step in the end of the step
-        self._prev_sim_end_ts = time.perf_counter()
+        self._prev_sim_end_ts = og.sim.current_time
 
         return obs, reward, terminated, truncated, info
 
@@ -714,9 +713,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # return 0 if the simulation has not started yet
         if not self._prev_sim_end_ts or not self._cur_sim_start_ts:
             return 0
-
+        
         assert (
-            self._prev_sim_end_ts < self._cur_sim_start_ts
+            self._prev_sim_end_ts <= self._cur_sim_start_ts
         ), "end time from the previous iteration must be less than the start time of the current iteration"
         return self._cur_sim_start_ts - self._prev_sim_end_ts
 

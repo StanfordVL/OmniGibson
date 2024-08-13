@@ -1,6 +1,7 @@
 import numpy as np
 
 from omnigibson.metrics.metrics_base import BaseMetric
+import omnigibson.utils.transform_utils as T
 class WorkEnergyMetric(BaseMetric):
     """
     Work and Energy Metric
@@ -9,7 +10,7 @@ class WorkEnergyMetric(BaseMetric):
 
     """
 
-    def __init__(self):
+    def __init__(self, metric_config=None):
 
         # Run work and energy metric initialization
         self._work_metric = 0
@@ -17,6 +18,7 @@ class WorkEnergyMetric(BaseMetric):
         self.state_cache = None
         self.prev_state_cache = None
         self.link_masses = {}
+        self.metric_config = metric_config
 
     def _step(self, task, env, action):
 
@@ -27,29 +29,45 @@ class WorkEnergyMetric(BaseMetric):
                 pos, rot = link.get_position_orientation()
                 new_state_cache[link_name] = (pos, rot)
 
+                # compute this every step to account for object addition and removal
+                self.link_masses[link_name] = link.mass
+
         # if the state cache is empty, set it to the current state and return 0
         if not self.state_cache:
             self.state_cache = new_state_cache
-
-            for obj in env.scene.objects:
-                for link_name, link in obj._links.items():
-                    self.link_masses[link_name] = link.mass
-
+            self.prev_state_cache = new_state_cache
             return {"work": 0, "energy": 0}
 
         # calculate the energy spent from the previous state to the current state
         work_metric = 0.0
         energy_metric = 0.0
+
         for linkname, posrot in new_state_cache.items():
 
             # TODO: this computation is very slow, consider using a more efficient method
-            # TODO: this method needs to be updated to account for object addition and removal
+
+            # check if the link is originally in the state cache, if not, skip it to account for object addition and removal
+            if linkname not in self.state_cache:
+                continue
+
             init_posrot = self.state_cache[linkname]
-            work_metric += np.linalg.norm(posrot[0] - init_posrot[0]) * self.link_masses[linkname]
+            position, orientation = T.relative_pose_transform(posrot[0], posrot[1], init_posrot[0], init_posrot[1])
+            work_metric += np.linalg.norm(position) * self.link_masses[linkname] * self.metric_config["translation"]
+
+            # calculate the energy spent in rotation. TODO: this is a very rough approximation, consider using a more accurate method
+            work_metric += np.linalg.norm(orientation) * self.link_masses[linkname] * self.metric_config["rotation"]
+
+            # check if the link is in the prev_state_cache, if not, skip it to account for object addition and removal
+            if linkname not in self.prev_state_cache:
+                continue
 
             if self.prev_state_cache is not None:
                 prev_posrot = self.prev_state_cache[linkname]
-                energy_metric += np.linalg.norm(posrot[0] - prev_posrot[0]) * self.link_masses[linkname]
+                position, orientation = T.relative_pose_transform(posrot[0], posrot[1], prev_posrot[0], prev_posrot[1])
+                energy_metric += np.linalg.norm(position) * self.link_masses[linkname] * self.metric_config["translation"]
+
+                # calculate the energy spent in rotation. TODO: this is a very rough approximation, consider using a more accurate method
+                energy_metric += np.linalg.norm(orientation) * self.link_masses[linkname] * self.metric_config["rotation"]
 
         # update the prev_state cache for energy measurement
         self.prev_state_cache = new_state_cache

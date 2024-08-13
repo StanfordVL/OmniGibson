@@ -29,8 +29,9 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         # Make sure configs are dictionaries
         termination_config = dict() if termination_config is None else termination_config
         reward_config = dict() if reward_config is None else reward_config
+        metric_config = dict() if metric_config is None else metric_config
 
-        # Sanity check termination and reward conditions -- any keys found in the inputted config but NOT
+        # Sanity check termination, reward, and metric conditions -- any keys found in the inputted config but NOT
         # found in the default config should raise an error
         unknown_termination_keys = set(termination_config.keys()) - set(self.default_termination_config.keys())
         assert (
@@ -38,14 +39,16 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         ), f"Got unknown termination config keys inputted: {unknown_termination_keys}"
         unknown_reward_keys = set(reward_config.keys()) - set(self.default_reward_config.keys())
         assert len(unknown_reward_keys) == 0, f"Got unknown reward config keys inputted: {unknown_reward_keys}"
+        unknown_metric_keys = set(metric_config.keys()) - set(self.default_metric_config.keys())
+        assert len(unknown_metric_keys) == 0, f"Got unknown metric config keys inputted: {unknown_metric_keys}"
 
         # Combine with defaults and store internally
         self._termination_config = self.default_termination_config
         self._termination_config.update(termination_config)
         self._reward_config = self.default_reward_config
         self._reward_config.update(reward_config)
-
-        self._metric_config = metric_config
+        self._metric_config = self.default_metric_config
+        self._metric_config.update(metric_config)
 
         # Generate reward and termination functions
         self._termination_conditions = self._create_termination_conditions()

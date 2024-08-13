@@ -12,7 +12,11 @@ from omnigibson.objects.object_base import BaseObject
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.python_utils import CachedFunctions, assert_valid_key, merge_nested_dicts
 from omnigibson.utils.ui_utils import create_module_logger
-from omnigibson.utils.usd_utils import ControllableObjectViewAPI
+from omnigibson.utils.usd_utils import (
+    ControllableObjectViewAPI,
+    absolute_prim_path_to_scene_relative,
+    add_asset_to_stage,
+)
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -188,6 +192,29 @@ class ControllableObject(BaseObject):
             assert np.isclose(
                 expected_control_freq, self._control_freq
             ), "Stored control frequency does not match environment's render timestep."
+
+        return prim
+    
+    def _load(self):
+        # Run super first
+        
+        prim = super()._load()
+
+        # Also import dummy object if this robot is not fixed base AND it has a controller that
+        # requires generalized gravity forces. We incur a relatively heavy cost at every step if we
+        # have to move the dummy. So we only do this if we absolutely need to.
+        if not self.fixed_base:
+            dummy_path = self.prim_path.replace("controllable__", "dummy__")
+            dummy_prim = add_asset_to_stage(asset_path=self._dummy_usd_path, prim_path=dummy_path)
+            self._dummy = BaseObject(
+                name=f"{self.name}_dummy",
+                relative_prim_path=absolute_prim_path_to_scene_relative(self.scene, dummy_path),
+                scale=self._load_config.get("scale", None),
+                visible=False,
+                fixed_base=True,
+                visual_only=True,
+            )
+            self._dummy.load(self.scene)
 
         return prim
 
@@ -573,12 +600,11 @@ class ControllableObject(BaseObject):
         fcns["joint_velocity"] = lambda: ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
         fcns["joint_effort"] = lambda: ControllableObjectViewAPI.get_joint_efforts(self.articulation_root_path)
         fcns["mass_matrix"] = lambda: ControllableObjectViewAPI.get_mass_matrix(self.articulation_root_path)
-        # TODO: Move gravity force computation dummy to this class instead of BaseRobot
-        breakpoint()
         fcns["gravity_force"] = lambda: (
             ControllableObjectViewAPI.get_generalized_gravity_forces(self.articulation_root_path)
-            if self.fixed_base 
-            # or self._dummy is None
+
+            # check if dummy is None to account for the fact that the dummy may not be loaded yet
+            if self.fixed_base or self._dummy is None
             else ControllableObjectViewAPI.get_generalized_gravity_forces(self._dummy.articulation_root_path)
         )
         fcns["cc_force"] = lambda: ControllableObjectViewAPI.get_coriolis_and_centrifugal_forces(

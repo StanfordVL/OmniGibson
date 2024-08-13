@@ -45,3 +45,6 @@ def test_dump_load_serialized(env):
     for system_name, system_class in SYSTEM_EXAMPLES.items():
         system = env.scene.get_system(system_name)
         system.clear()
+
+if __name__ == "__main__":
+    test_dump_load()

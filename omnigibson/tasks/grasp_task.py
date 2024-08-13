@@ -243,3 +243,8 @@ class GraspTask(BaseTask):
             "eef_orientation_penalty_coef": 0.001,
             "regularization_coef": 0.01,
         }
+    
+    @classproperty
+    def default_metric_config(cls):
+        # Empty dict
+        return {}

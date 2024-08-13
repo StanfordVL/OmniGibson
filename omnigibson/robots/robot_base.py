@@ -172,22 +172,6 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # Run super first
         prim = super()._load()
 
-        # Also import dummy object if this robot is not fixed base AND it has a controller that
-        # requires generalized gravity forces. We incur a relatively heavy cost at every step if we
-        # have to move the dummy. So we only do this if we absolutely need to.
-        if not self.fixed_base:
-            dummy_path = self.prim_path.replace("controllable__", "dummy__")
-            dummy_prim = add_asset_to_stage(asset_path=self._dummy_usd_path, prim_path=dummy_path)
-            self._dummy = BaseObject(
-                name=f"{self.name}_dummy",
-                relative_prim_path=absolute_prim_path_to_scene_relative(self.scene, dummy_path),
-                scale=self._load_config.get("scale", None),
-                visible=False,
-                fixed_base=True,
-                visual_only=True,
-            )
-            self._dummy.load(self.scene)
-
         return prim
 
     def _post_load(self):
