@@ -46,5 +46,6 @@ def test_dump_load_serialized(env):
         system = env.scene.get_system(system_name)
         system.clear()
 
+
 if __name__ == "__main__":
     test_dump_load()
