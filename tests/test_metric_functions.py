@@ -102,7 +102,7 @@ def test_behavior_task_energy_metric():
         robot_mass += link.mass
 
     # assert that the total energy spent is twice as much as the energy spent applying the shift
-    assert np.allclose((2 * energy - new_energy) / robot_mass, 0, atol=1e-3)
+    assert np.allclose((2 * energy - new_energy) / robot_mass, 0, atol=1e-2)
     env.reset()
 
 

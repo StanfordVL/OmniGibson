@@ -12,7 +12,7 @@ class WallTimeMetric(BaseMetric):
         self._metric = 0
 
     def _step(self, task, env, action):
-        self._metric += env.last_step_wall_time
+        self._metric += task.last_step_wall_time
         return {"wall_time": self._metric}
 
     def reset(self, task, env):

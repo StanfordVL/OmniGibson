@@ -597,6 +597,6 @@ class BehaviorTask(BaseTask):
             "wall_time": 0.05,
             "work": 0.2,
             "energy": 0.2,
-            "rotation": 0.1,
-            "translation": 0.9
+            "rotation": 1,
+            "translation": 1
         }

@@ -1,4 +1,3 @@
-import time
 from copy import deepcopy
 
 import gymnasium as gym
@@ -532,8 +531,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
     def _pre_step(self, action):
         """Apply the pre-sim-step part of an environment step, i.e. apply the robot actions."""
 
-        # record the start time of the simulation step in the beginning of the step
-        self._cur_sim_start_ts = og.sim.current_time
+        # perform necessary pre-step actions for the task
+        self.task.pre_step(action)
         
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
@@ -586,8 +585,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._current_step += 1
 
         # record end time
-        # record the end time of the simulation step in the end of the step
-        self._prev_sim_end_ts = og.sim.current_time
+        # perform necessary post-step actions for the task
+        self.task.post_step(action)
 
         return obs, reward, terminated, truncated, info
 
@@ -642,10 +641,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         self._current_episode += 1
         self._current_step = 0
-
-        # reset the start and end time of the simulation step
-        self._prev_sim_end_ts = None
-        self._cur_sim_start_ts = None
 
     def reset(self, get_obs=True, **kwargs):
         """
@@ -702,22 +697,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
                     raise ValueError("Observation space does not match returned observations!")
 
             return obs, {}
-
-    @property
-    def last_step_wall_time(self):
-        """
-        Returns:
-            int: return the amount of wall time the last simulation step took
-        """
-
-        # return 0 if the simulation has not started yet
-        if not self._prev_sim_end_ts or not self._cur_sim_start_ts:
-            return 0
-        
-        assert (
-            self._prev_sim_end_ts <= self._cur_sim_start_ts
-        ), "end time from the previous iteration must be less than the start time of the current iteration"
-        return self._cur_sim_start_ts - self._prev_sim_end_ts
 
     @property
     def episode_steps(self):
