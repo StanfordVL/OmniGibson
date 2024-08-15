@@ -175,7 +175,7 @@ def create_joint(
     return joint_prim
 
 
-class RigidContactAPIImpl:
+class _RigidContactAPIImpl:
     """
     Class containing class methods to aggregate rigid body contacts across all rigid bodies in the simulator
     """
@@ -484,10 +484,10 @@ class RigidContactAPIImpl:
 
 
 # Instantiate the RigidContactAPI
-RigidContactAPI = RigidContactAPIImpl()
+RigidContactAPI = _RigidContactAPIImpl()
 
 
-class GripperRigidContactAPIImpl(RigidContactAPIImpl):
+class _GripperRigidContactAPIImpl(_RigidContactAPIImpl):
     @classmethod
     def get_column_filters(cls):
         from omnigibson.robots.manipulation_robot import ManipulationRobot
@@ -511,7 +511,7 @@ class GripperRigidContactAPIImpl(RigidContactAPIImpl):
 
 
 # Instantiate the GripperRigidContactAPI
-GripperRigidContactAPI = GripperRigidContactAPIImpl()
+GripperRigidContactAPI = _GripperRigidContactAPIImpl()
 
 
 class CollisionAPI:

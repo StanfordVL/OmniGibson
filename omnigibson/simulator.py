@@ -278,6 +278,12 @@ def _launch_simulator(*args, **kwargs):
             # This makes that possible (and also introduces possible issues around circular dependencies)
             assert og.sim is None, "Only one Simulator instance can be created at a time!"
             og.sim = self
+            self.collision_api = CollisionAPI
+            self.controlable_object_view_api = ControllableObjectViewAPI
+            self.flatcache_api = FlatcacheAPI
+            self.gripper_rigid_contact_api = GripperRigidContactAPI
+            self.pose_api = PoseAPI
+            self.rigid_contact_api = RigidContactAPI
 
             # Store vars needed for initialization
             self.gravity = gravity
@@ -742,7 +748,8 @@ def _launch_simulator(*args, **kwargs):
         def render(self):
             super().render()
             # During rendering, the Fabric API is updated, so we can mark it as clean
-            PoseAPI.mark_valid()
+            # PoseAPI.mark_valid()
+            og.sim.pose_api.mark_valid()
 
         def update_handles(self):
             # Handles are only relevant when physx is running
@@ -765,9 +772,12 @@ def _launch_simulator(*args, **kwargs):
                             system.refresh_particles_view()
 
             # Finally update any unified views
-            RigidContactAPI.initialize_view()
-            GripperRigidContactAPI.initialize_view()
-            ControllableObjectViewAPI.initialize_view()
+            # RigidContactAPI.initialize_view()
+            # GripperRigidContactAPI.initialize_view()
+            # ControllableObjectViewAPI.initialize_view()
+            og.sim.rigid_contact_api.initialize_view()
+            og.sim.gripper_rigid_contact_api.initialize_view()
+            og.sim.controlable_object_view_api.initialize_view()
 
         def _non_physics_step(self):
             """
@@ -846,9 +856,12 @@ def _launch_simulator(*args, **kwargs):
             Step any omni-related things
             """
             # Clear the bounding box and contact caches so that they get updated during the next time they're called
-            RigidContactAPI.clear()
-            GripperRigidContactAPI.clear()
-            ControllableObjectViewAPI.clear()
+            # RigidContactAPI.clear()
+            # GripperRigidContactAPI.clear()
+            # ControllableObjectViewAPI.clear()
+            og.sim.rigid_contact_api.clear()
+            og.sim.gripper_rigid_contact_api.clear()
+            og.sim.controlable_object_view_api.clear()
 
         def play(self):
             if not self.is_playing():
@@ -912,7 +925,8 @@ def _launch_simulator(*args, **kwargs):
 
             # If we're using flatcache, we also need to reset its API
             if gm.ENABLE_FLATCACHE:
-                FlatcacheAPI.reset()
+                # FlatcacheAPI.reset()
+                og.sim.flatcache_api.reset()
 
             # Run all callbacks
             for callback in self._callbacks_on_stop.values():
@@ -967,11 +981,13 @@ def _launch_simulator(*args, **kwargs):
 
             # Update all APIs
             self._omni_update_step()
-            PoseAPI.invalidate()
+            # PoseAPI.invalidate()
+            og.sim.pose_api.invalidate()
 
         def _on_physics_step(self):
             # Make the controllable object view API refresh
-            ControllableObjectViewAPI.clear()
+            # ControllableObjectViewAPI.clear()
+            og.sim.controlable_object_view_api.clear()
 
             # Run the controller step on every controllable object
             for scene in self.scenes:
@@ -980,7 +996,8 @@ def _launch_simulator(*args, **kwargs):
                         obj.step()
 
             # Flush the controls from the ControllableObjectViewAPI
-            ControllableObjectViewAPI.flush_control()
+            # ControllableObjectViewAPI.flush_control()
+            og.sim.controlable_object_view_api.flush_control()
 
         def _on_contact(self, contact_headers, contact_data):
             """
