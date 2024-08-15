@@ -55,7 +55,7 @@ class BaseSystem(Serializable):
         self._uuid = get_uuid(self.name)
         UUID_TO_SYSTEM_NAME[self._uuid] = self.name
 
-        self._scene = None
+        self._scene_idx = None
 
     @property
     def name(self):
@@ -72,8 +72,12 @@ class BaseSystem(Serializable):
         Returns:
             str: Path to this system's prim in the scene stage
         """
-        assert self._scene is not None, "Scene not set for system {self.name}!".format(self=self)
-        return scene_relative_prim_path_to_absolute(self._scene, self.relative_prim_path)
+        # assert self._scene_idx is not None, "Scene not set for system {self.name}!".format(self=self)
+
+        scene = None
+        if self._scene_idx is not None:
+            scene = og.sim.scenes[self._scene_idx]
+        return scene_relative_prim_path_to_absolute(scene, self.relative_prim_path)
 
     @property
     def relative_prim_path(self):
@@ -122,7 +126,10 @@ class BaseSystem(Serializable):
         Initializes this system
         """
         assert not self.initialized, f"Already initialized system {self.name}!"
-        self._scene = scene
+        # assert scene is not None, "Scene should not be None for system {self.name}!".format(self=self)
+
+        if scene is not None:
+            self._scene_idx = scene.idx
         self.initialized = True
 
         og.sim.stage.DefinePrim(self.prim_path, "Scope")
@@ -140,8 +147,12 @@ class BaseSystem(Serializable):
         Returns:
             Scene or None: Scene object that this prim is loaded into
         """
-        assert self.initialized, f"System {self.name} has not been initialized yet!"
-        return self._scene
+        # assert self.initialized, f"System {self.name} has not been initialized yet!"
+
+        scene = None
+        if self._scene_idx is not None:
+            scene = og.sim.scenes[self._scene_idx]
+        return scene
 
     def update(self):
         """
@@ -209,7 +220,7 @@ class BaseSystem(Serializable):
             self.scene.transition_rule_api.prune_active_rules()
 
         self.initialized = False
-        self._scene = None
+        self._scene_idx = None
 
     def reset(self):
         """
