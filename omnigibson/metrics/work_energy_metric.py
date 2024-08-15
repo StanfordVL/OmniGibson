@@ -1,7 +1,7 @@
 import numpy as np
 
-from omnigibson.metrics.metrics_base import BaseMetric
 import omnigibson.utils.transform_utils as T
+from omnigibson.metrics.metrics_base import BaseMetric
 
 
 class WorkEnergyMetric(BaseMetric):

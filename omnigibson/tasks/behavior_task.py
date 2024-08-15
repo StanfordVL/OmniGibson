@@ -396,9 +396,7 @@ class BehaviorTask(BaseTask):
         low_dim_obs = dict()
 
         # Batch rpy calculations for much better efficiency
-        objs_exist = {
-            obj: obj.exists for obj in self.object_scope.values() if not obj.is_system
-        }
+        objs_exist = {obj: obj.exists for obj in self.object_scope.values() if not obj.is_system}
         objs_rpy = T.quat2euler(
             np.array(
                 [
