@@ -533,7 +533,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # perform necessary pre-step actions for the task
         self.task.pre_step(action)
-        
+
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()

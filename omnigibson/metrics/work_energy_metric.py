@@ -38,7 +38,12 @@ class WorkEnergyMetric(BaseMetric):
                 # compute link aabb and rototaional inertia, assuming ellipsoid shape and uniform density
                 aabb = link.aabb[1] - link.aabb[0]
                 mass = link.mass
-                inertia = 1 / 5 * mass * np.array([aabb[0] ** 2 + aabb[1] ** 2, aabb[1] ** 2 + aabb[2] ** 2, aabb[2] ** 2 + aabb[0] ** 2])
+                inertia = (
+                    1
+                    / 5
+                    * mass
+                    * np.array([aabb[0] ** 2 + aabb[1] ** 2, aabb[1] ** 2 + aabb[2] ** 2, aabb[2] ** 2 + aabb[0] ** 2])
+                )
                 self.link_info[link_name] = (mass, inertia)
 
         # if the state cache is empty, set it to the current state and return 0
@@ -64,9 +69,9 @@ class WorkEnergyMetric(BaseMetric):
             position, orientation = T.relative_pose_transform(posrot[0], posrot[1], init_posrot[0], init_posrot[1])
             orientation = T.quat2axisangle(orientation)
             work_metric += np.linalg.norm(position) * mass * self.metric_config["translation"]
-            
+
             # calculate the energy spent in rotation
-            work_metric += 0.5 * np.dot(inertia, orientation ** 2) * self.metric_config["rotation"]
+            work_metric += 0.5 * np.dot(inertia, orientation**2) * self.metric_config["rotation"]
 
             # check if the link is in the prev_state_cache, if not, skip it to account for object addition and removal
             if linkname not in self.prev_state_cache:
@@ -79,7 +84,7 @@ class WorkEnergyMetric(BaseMetric):
                 energy_metric += np.linalg.norm(position) * mass * self.metric_config["translation"]
 
                 # calculate the energy spent in rotation
-                energy_metric += 0.5 * np.dot(inertia, orientation ** 2) * self.metric_config["rotation"]
+                energy_metric += 0.5 * np.dot(inertia, orientation**2) * self.metric_config["rotation"]
 
         # update the prev_state cache for energy measurement
         self.prev_state_cache = new_state_cache

@@ -596,5 +596,5 @@ class BehaviorTask(BaseTask):
             "work": 0.2,
             "energy": 0.2,
             "rotation": 1,
-            "translation": 1
+            "translation": 1,
         }

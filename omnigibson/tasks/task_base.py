@@ -1,7 +1,7 @@
+import time
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 
-import time
 import numpy as np
 
 from omnigibson.utils.gym_utils import GymObservable
@@ -388,7 +388,7 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         }
 
         return self._reward, self._done, deepcopy(self._info)
-    
+
     def pre_step(self, action):
 
         # record the real start time of the simulation step
@@ -441,7 +441,7 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         """
         assert self._info is not None, "At least one step() must occur before info can be calculated!"
         return self._info
-    
+
     @property
     def last_step_wall_time(self):
         """
@@ -452,12 +452,11 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         # return 0 if the simulation has not started yet
         if not self._prev_sim_end_ts or not self._cur_sim_start_ts:
             return 0
-        
+
         assert (
             self._prev_sim_end_ts < self._cur_sim_start_ts
         ), "end time from the previous iteration must be less than the start time of the current iteration"
         return self._cur_sim_start_ts - self._prev_sim_end_ts
-
 
     @classproperty
     def valid_scene_types(cls):
