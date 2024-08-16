@@ -1436,7 +1436,9 @@ class FluidSystem(MicroPhysicalParticleSystem):
 
     def _create_particle_prototypes(self):
         # Simulate particles with simple spheres
-        prototype_prim_path = f"{scene_relative_prim_path_to_absolute(self._scene.idx, self.relative_prim_path)}/prototype0"
+        prototype_prim_path = (
+            f"{scene_relative_prim_path_to_absolute(self._scene.idx, self.relative_prim_path)}/prototype0"
+        )
         prototype = lazy.pxr.UsdGeom.Sphere.Define(og.sim.stage, prototype_prim_path)
         prototype.CreateRadiusAttr().Set(self.particle_radius)
         relative_prototype_prim_path = absolute_prim_path_to_scene_relative(self._scene, prototype_prim_path)

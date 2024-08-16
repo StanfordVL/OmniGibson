@@ -145,7 +145,7 @@ class BaseSystem(Serializable):
             Scene index or None: Index of scene object that this prim is loaded into
         """
         assert self.initialized, f"System {self.name} has not been initialized yet!"
-        
+
         if self._scene_idx is None:
             return None
         return og.sim.scenes[self._scene_idx]
