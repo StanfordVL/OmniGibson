@@ -746,14 +746,14 @@ class MicroPhysicalParticleSystem(MicroParticleSystem, PhysicalParticleSystem):
             for instancer in self.particle_instancers.values():
                 instancer.particle_prototype_ids = np.zeros(instancer.n_particles, dtype=np.int32)
 
-    def initialize(self, scene):
-        self._scene = scene
+    def initialize(self, scene_idx):
+        self._scene_idx = scene_idx
 
         # Create prototype before running super!
         self.particle_prototypes = self._create_particle_prototypes()
 
         # Run super
-        super().initialize(scene)
+        super().initialize(scene_idx)
 
         # Potentially set system prim's max velocity value
         if m.MICRO_PARTICLE_SYSTEM_MAX_VELOCITY is not None:
@@ -1437,13 +1437,13 @@ class FluidSystem(MicroPhysicalParticleSystem):
     def _create_particle_prototypes(self):
         # Simulate particles with simple spheres
         prototype_prim_path = (
-            f"{scene_relative_prim_path_to_absolute(self._scene.idx, self.relative_prim_path)}/prototype0"
+            f"{scene_relative_prim_path_to_absolute(self._scene_idx, self.relative_prim_path)}/prototype0"
         )
         prototype = lazy.pxr.UsdGeom.Sphere.Define(og.sim.stage, prototype_prim_path)
         prototype.CreateRadiusAttr().Set(self.particle_radius)
-        relative_prototype_prim_path = absolute_prim_path_to_scene_relative(self._scene, prototype_prim_path)
+        relative_prototype_prim_path = absolute_prim_path_to_scene_relative(self._scene_idx, prototype_prim_path)
         prototype = VisualGeomPrim(relative_prim_path=relative_prototype_prim_path, name=f"{self.name}_prototype0")
-        prototype.load(self._scene)
+        prototype.load(self._scene_idx)
         prototype.visible = False
         lazy.omni.isaac.core.utils.semantics.add_update_semantics(
             prim=prototype.prim,
@@ -1543,7 +1543,7 @@ class GranularSystem(MicroPhysicalParticleSystem):
     def _create_particle_prototypes(self):
         # Load the particle template
         particle_template = self._create_particle_template()
-        particle_template.load(self._scene)
+        particle_template.load(self._scene_idx)
         og.sim.post_import_object(particle_template)
         self._particle_template = particle_template
         # Make sure there is no ambiguity about which mesh to use as the particle from this template
@@ -1563,9 +1563,9 @@ class GranularSystem(MicroPhysicalParticleSystem):
         lazy.omni.kit.commands.execute("CopyPrim", path_from=visual_geom.prim_path, path_to=prototype_path)
 
         # Wrap it with VisualGeomPrim with the correct scale
-        relative_prototype_path = absolute_prim_path_to_scene_relative(self._scene, prototype_path)
+        relative_prototype_path = absolute_prim_path_to_scene_relative(self._scene_idx, prototype_path)
         prototype = VisualGeomPrim(relative_prim_path=relative_prototype_path, name=prototype_path)
-        prototype.load(self._scene)
+        prototype.load(self._scene_idx)
         prototype.scale *= self.max_scale
         prototype.visible = False
         lazy.omni.isaac.core.utils.semantics.add_update_semantics(
