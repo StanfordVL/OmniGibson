@@ -389,12 +389,12 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
 
         return self._reward, self._done, deepcopy(self._info)
     
-    def pre_step(self, action):
+    def pre_step(self):
 
         # record the real start time of the simulation step
         self._cur_sim_start_ts = time.perf_counter()
 
-    def post_step(self, action):
+    def post_step(self):
         # record the real end time of the simulation step
         self._prev_sim_end_ts = time.perf_counter()
 

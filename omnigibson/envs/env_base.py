@@ -532,7 +532,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """Apply the pre-sim-step part of an environment step, i.e. apply the robot actions."""
 
         # perform necessary pre-step actions for the task
-        self.task.pre_step(action)
+        self.task.pre_step()
         
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
@@ -586,7 +586,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # record end time
         # perform necessary post-step actions for the task
-        self.task.post_step(action)
+        self.task.post_step()
 
         return obs, reward, terminated, truncated, info
 

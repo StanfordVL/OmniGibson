@@ -7,9 +7,7 @@ from omnigibson.metrics.metrics_base import BaseMetric
 class WorkEnergyMetric(BaseMetric):
     """
     Work and Energy Metric
-
     Measures displacement * mass for every link
-
     """
 
     def __init__(self, metric_config=None):
@@ -35,10 +33,9 @@ class WorkEnergyMetric(BaseMetric):
                 new_state_cache[link_name] = (pos, rot)
 
                 # compute this every step to account for object addition and removal
-                # compute link aabb and rototaional inertia, assuming ellipsoid shape and uniform density
-                aabb = link.aabb[1] - link.aabb[0]
+                # store link mass and inertia for energy calculation
                 mass = link.mass
-                inertia = 1 / 5 * mass * np.array([aabb[0] ** 2 + aabb[1] ** 2, aabb[1] ** 2 + aabb[2] ** 2, aabb[2] ** 2 + aabb[0] ** 2])
+                inertia = link.inertia
                 self.link_info[link_name] = (mass, inertia)
 
         # if the state cache is empty, set it to the current state and return 0
@@ -51,7 +48,7 @@ class WorkEnergyMetric(BaseMetric):
         work_metric = 0.0
         energy_metric = 0.0
 
-        for linkname, posrot in new_state_cache.items():
+        for linkname, new_posrot in new_state_cache.items():
 
             # TODO: this computation is very slow, consider using a more efficient method
 
@@ -61,12 +58,7 @@ class WorkEnergyMetric(BaseMetric):
 
             init_posrot = self.state_cache[linkname]
             mass, inertia = self.link_info[linkname]
-            position, orientation = T.relative_pose_transform(posrot[0], posrot[1], init_posrot[0], init_posrot[1])
-            orientation = T.quat2axisangle(orientation)
-            work_metric += np.linalg.norm(position) * mass * self.metric_config["translation"]
-            
-            # calculate the energy spent in rotation
-            work_metric += 0.5 * np.dot(inertia, orientation ** 2) * self.metric_config["rotation"]
+            work_metric = self.calculate_work_energy(init_posrot, new_posrot, mass, inertia)
 
             # check if the link is in the prev_state_cache, if not, skip it to account for object addition and removal
             if linkname not in self.prev_state_cache:
@@ -74,12 +66,7 @@ class WorkEnergyMetric(BaseMetric):
 
             if self.prev_state_cache is not None:
                 prev_posrot = self.prev_state_cache[linkname]
-                position, orientation = T.relative_pose_transform(posrot[0], posrot[1], prev_posrot[0], prev_posrot[1])
-                orientation = T.quat2axisangle(orientation)
-                energy_metric += np.linalg.norm(position) * mass * self.metric_config["translation"]
-
-                # calculate the energy spent in rotation
-                energy_metric += 0.5 * np.dot(inertia, orientation ** 2) * self.metric_config["rotation"]
+                energy_metric = self.calculate_work_energy(prev_posrot, new_posrot, mass, inertia)
 
         # update the prev_state cache for energy measurement
         self.prev_state_cache = new_state_cache
@@ -88,6 +75,33 @@ class WorkEnergyMetric(BaseMetric):
         self._work_metric = work_metric
         self._energy_metric += energy_metric
         return {"work": self._work_metric, "energy": self._energy_metric}
+    
+    def calculate_work_energy(self, new_posrot, curr_posrot, mass, inertia):
+
+        """
+        Calculate the work done and energy spent in a single step
+
+        Args:
+            new_posrot (tuple): new position and orientation of the link  
+            curr_posrot (tuple): current position and orientation of the link. 
+                                 use initial posrot for work metric, and previous posrot for energy metric
+            mass (float): mass of the link
+            inertia (np.array): rotational inertia of the link
+        
+        Returns:
+            float: work/energy spent in a single step between two states
+        """
+
+        position, orientation = T.relative_pose_transform(new_posrot[0], new_posrot[1], curr_posrot[0], curr_posrot[1])
+        orientation = T.quat2axisangle(orientation)
+
+        # formula for translational work metric: displacement * mass * translation weight coefficient
+        work_metric = np.linalg.norm(position) * mass * self.metric_config["translation"]
+
+        # formula for rotational work metric: rotation * moment of inertia * rotation weight coefficient
+        work_metric += np.dot(orientation, inertia) * self.metric_config["rotation"]
+
+        return work_metric
 
     def reset(self, task, env):
 

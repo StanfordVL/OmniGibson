@@ -470,6 +470,21 @@ class RigidPrim(XFormPrim):
             return self.volume * self.density
 
         return mass
+    
+    @property
+    def inertia(self):
+        """
+        Returns:
+            np.ndarray: inertia tensor of the rigid body in kg m^2.
+        """
+        
+        inertia = self._rigid_prim_view.get_inertias()
+
+        # if no inertia is set, return a zero array
+        if inertia is None:
+            return np.zeros((3, 3))
+        
+        return inertia.reshape(3, 3)
 
     @mass.setter
     def mass(self, mass):
