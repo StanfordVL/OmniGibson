@@ -55,7 +55,7 @@ class BaseSystem(Serializable):
         self._uuid = get_uuid(self.name)
         UUID_TO_SYSTEM_NAME[self._uuid] = self.name
 
-        self._scene = None
+        self._scene_idx = None
 
     @property
     def name(self):
@@ -72,8 +72,8 @@ class BaseSystem(Serializable):
         Returns:
             str: Path to this system's prim in the scene stage
         """
-        assert self._scene is not None, "Scene not set for system {self.name}!".format(self=self)
-        return scene_relative_prim_path_to_absolute(self._scene, self.relative_prim_path)
+
+        return scene_relative_prim_path_to_absolute(self._scene_idx, self.relative_prim_path)
 
     @property
     def relative_prim_path(self):
@@ -117,17 +117,19 @@ class BaseSystem(Serializable):
         """
         return False
 
-    def initialize(self, scene):
+    def initialize(self, scene_idx):
         """
         Initializes this system
         """
         assert not self.initialized, f"Already initialized system {self.name}!"
-        self._scene = scene
+
+        self._scene_idx = scene_idx
         self.initialized = True
 
         og.sim.stage.DefinePrim(self.prim_path, "Scope")
 
         if og.sim.is_playing() and gm.ENABLE_TRANSITION_RULES:
+            scene = og.sim.scenes[self._scene_idx]
             scene.transition_rule_api.refresh_all_rules()
 
         # Run any callbacks
@@ -138,10 +140,13 @@ class BaseSystem(Serializable):
     def scene(self):
         """
         Returns:
-            Scene or None: Scene object that this prim is loaded into
+            Scene index or None: Index of scene object that this prim is loaded into
         """
         assert self.initialized, f"System {self.name} has not been initialized yet!"
-        return self._scene
+
+        if self._scene_idx is None:
+            return None
+        return og.sim.scenes[self._scene_idx]
 
     def update(self):
         """
@@ -206,10 +211,11 @@ class BaseSystem(Serializable):
         lazy.omni.isaac.core.utils.prims.delete_prim(self.prim_path)
 
         if og.sim.is_playing() and gm.ENABLE_TRANSITION_RULES:
-            self.scene.transition_rule_api.prune_active_rules()
+            scene = og.sim.scenes[self._scene_idx]
+            scene.transition_rule_api.prune_active_rules()
 
         self.initialized = False
-        self._scene = None
+        self._scene_idx = None
 
     def reset(self):
         """
@@ -404,9 +410,9 @@ class VisualParticleSystem(BaseSystem):
         # This is an ordered dict of ordered dict (nested ordered dict maps particle names to particle instance)
         self._group_particles = {}
 
-    def initialize(self, scene):
+    def initialize(self, scene_idx):
         # Run super method first
-        super().initialize(scene)
+        super().initialize(scene_idx)
 
         # Maps group name to the parent object (the object with particles attached to it) of the group
         self._group_objects = {}
@@ -757,9 +763,9 @@ class PhysicalParticleSystem(BaseSystem):
     System whose generated particles are subject to physics
     """
 
-    def initialize(self, scene):
+    def initialize(self, scene_idx):
         # Run super first
-        super().initialize(scene)
+        super().initialize(scene_idx)
 
         # Make sure min and max scale are identical
         assert np.all(

@@ -46,7 +46,7 @@ class BasePrim(Serializable, Recreatable, ABC):
         self._load_config = dict() if load_config is None else load_config
 
         # Other values that will be filled in at runtime
-        self._scene = None
+        self._scene_idx = None
         self._scene_assigned = False
         self._applied_visual_material = None
         self._loaded = False  # Whether this prim exists in the stage or not
@@ -85,7 +85,7 @@ class BasePrim(Serializable, Recreatable, ABC):
         # dump_state asserts that the prim is initialized for some prims).
         self._state_size = len(self.dump_state(serialized=True))
 
-    def load(self, scene):
+    def load(self, scene_idx):
         """
         Load this prim into omniverse, and return loaded prim reference.
 
@@ -97,8 +97,8 @@ class BasePrim(Serializable, Recreatable, ABC):
             not self._loaded
         ), f"Prim {self.name} at prim_path {self.prim_path} can only be loaded once! (It is already loaded)"
 
-        # Assign the scene first.
-        self._scene = scene
+        # Assign the scene index first.
+        self._scene_idx = scene_idx
         self._scene_assigned = True
 
         # Then check if the prim is already loaded
@@ -158,7 +158,10 @@ class BasePrim(Serializable, Recreatable, ABC):
             Scene or None: Scene object that this prim is loaded into
         """
         assert self._scene_assigned, "Scene has not been assigned to this prim yet!"
-        return self._scene
+
+        if self._scene_idx is None:
+            return None
+        return og.sim.scenes[self._scene_idx]
 
     @property
     def state_size(self):
@@ -171,7 +174,8 @@ class BasePrim(Serializable, Recreatable, ABC):
         Returns:
             str: prim path in the stage.
         """
-        return scene_relative_prim_path_to_absolute(self.scene, self._relative_prim_path)
+
+        return scene_relative_prim_path_to_absolute(self._scene_idx, self._relative_prim_path)
 
     @property
     def name(self):
