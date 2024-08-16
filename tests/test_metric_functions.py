@@ -151,6 +151,3 @@ def test_behavior_task_object_addition_removal():
     assert np.allclose((add_energy - remove_energy) / robot_mass, 0, atol=1e-1)
 
     env.reset()
-
-if __name__ == "__main__":
-    test_behavior_task_work_metric()
