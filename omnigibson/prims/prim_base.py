@@ -85,7 +85,7 @@ class BasePrim(Serializable, Recreatable, ABC):
         # dump_state asserts that the prim is initialized for some prims).
         self._state_size = len(self.dump_state(serialized=True))
 
-    def load(self, scene):
+    def load(self, scene_idx):
         """
         Load this prim into omniverse, and return loaded prim reference.
 
@@ -99,9 +99,7 @@ class BasePrim(Serializable, Recreatable, ABC):
         # assert scene is not None, "Scene should not be None for prim {self.name}!".format(self=self)
 
         # Assign the scene index first.
-        if scene is not None:
-            self._scene_idx = scene.idx
-            self._scene_assigned = True
+        self._scene_idx = scene_idx
 
         # Then check if the prim is already loaded
         if lazy.omni.isaac.core.utils.prims.is_prim_path_valid(prim_path=self.prim_path):
@@ -161,10 +159,9 @@ class BasePrim(Serializable, Recreatable, ABC):
         """
         # assert self._scene_assigned, "Scene has not been assigned to this prim yet!"
 
-        scene = None
-        if self._scene_idx is not None:
-            scene = og.sim.scenes[self._scene_idx]
-        return scene
+        if self._scene_idx is None:
+            return None
+        return og.sim.scenes[self._scene_idx]
 
     @property
     def state_size(self):
@@ -179,10 +176,7 @@ class BasePrim(Serializable, Recreatable, ABC):
         """
         # assert self._scene_idx is not None, "Scene not set for system {self.name}!".format(self=self)
 
-        scene = None
-        if self._scene_idx is not None:
-            scene = og.sim.scenes[self._scene_idx]
-        return scene_relative_prim_path_to_absolute(scene, self._relative_prim_path)
+        return scene_relative_prim_path_to_absolute(self._scene_idx, self._relative_prim_path)
 
     @property
     def name(self):

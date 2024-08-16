@@ -1562,12 +1562,12 @@ def get_world_prim():
     return lazy.omni.isaac.core.utils.prims.get_prim_at_path("/World")
 
 
-def scene_relative_prim_path_to_absolute(scene, relative_prim_path):
+def scene_relative_prim_path_to_absolute(scene_idx, relative_prim_path):
     """
     Converts a scene-relative prim path to an absolute prim path.
 
     Args:
-        scene (Scene or None): Scene object that the prim is in. None if it's global.
+        scene_idx (Scene index or None): Index of scene object that the prim is in. None if it's global.
         relative_prim_path (str): Relative prim path in the scene
 
     Returns:
@@ -1580,20 +1580,21 @@ def scene_relative_prim_path_to_absolute(scene, relative_prim_path):
     # Make sure the relative path is actually relative
     assert not relative_prim_path.startswith("/World"), f"Expected relative prim path, got {relative_prim_path}"
 
-    # When the scene is set to None, this prim is not in a scene but is global e.g. like the
+    # When the scene_idx is set to None, this prim is not in a scene but is global e.g. like the
     # viewer camera or one of the scene prims.
-    if scene is None:
+    if scene_idx is None:
         return "/World" + relative_prim_path
 
+    scene = og.sim.scenes[scene_idx]
     return scene.prim_path + relative_prim_path
 
 
-def absolute_prim_path_to_scene_relative(scene, absolute_prim_path):
+def absolute_prim_path_to_scene_relative(scene_idx, absolute_prim_path):
     """
     Converts an absolute prim path to a scene-relative prim path.
 
     Args:
-        scene (Scene): Scene object that the prim is in. None if it's global.
+        scene_idx (Scene index or None): Index of scene object that the prim is in. None if it's global.
         absolute_prim_path (str): Absolute prim path in the stage
 
     Returns:
@@ -1605,14 +1606,15 @@ def absolute_prim_path_to_scene_relative(scene, absolute_prim_path):
 
     assert absolute_prim_path.startswith("/World"), f"Expected absolute prim path, got {absolute_prim_path}"
 
-    # When the scene is set to None, this prim is not in a scene but is global e.g. like the
+    # When the scene_idx is set to None, this prim is not in a scene but is global e.g. like the
     # viewer camera or one of the scene prims.
-    if scene is None:
+    if scene_idx is None:
         assert not absolute_prim_path.startswith(
             "/World/scene_"
         ), f"Expected global prim path, got {absolute_prim_path}"
         return absolute_prim_path[len("/World") :]
 
+    scene = og.sim.scenes[scene_idx]
     return absolute_prim_path[len(scene.prim_path) :]
 
 

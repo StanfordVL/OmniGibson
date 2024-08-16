@@ -66,10 +66,8 @@ class TransitionRuleAPI:
     Containing methods to check and execute arbitrary discrete state transitions within the simulator
     """
 
-    def __init__(self, scene):
-        self._scene_idx = None
-        if scene is not None:
-            self._scene_idx = scene.idx
+    def __init__(self, scene_idx):
+        self._scene_idx = scene_idx
 
         # Set of active rules
         self.active_rules = set()
@@ -79,7 +77,7 @@ class TransitionRuleAPI:
         # "callback": None or function to execute when the object is initialized
         self.obj_init_info = dict()
 
-        self.all_rules = set([rule(scene) for rule in RULES_REGISTRY.objects])
+        self.all_rules = set([rule(self.scene) for rule in RULES_REGISTRY.objects])
 
     @property
     def scene(self):
@@ -88,10 +86,9 @@ class TransitionRuleAPI:
             Scene or None: Scene object that this transition rule is loaded into
         """
 
-        scene = None
-        if self._scene_idx is not None:
-            scene = og.sim.scenes[self._scene_idx]
-        return scene
+        if self._scene_idx is None:
+            return None
+        return og.sim.scenes[self._scene_idx]
 
     def get_rule_candidates(self, rule, objects):
         """
@@ -630,11 +627,8 @@ class BaseTransitionRule(Registerable):
                 len(cls.candidate_filters) > 0
             ), "At least one of individual_filters or group_filters must be specified!"
 
-    def __init__(self, scene):
-
-        self._scene_idx = None
-        if scene is not None:
-            self._scene_idx = scene.idx
+    def __init__(self, scene_idx):
+        self._scene_idx = scene_idx
 
         self.candidates = None
         # Delay condition generation until the first time it's accessed
@@ -647,10 +641,9 @@ class BaseTransitionRule(Registerable):
             Scene or None: Scene object that this transition rule is loaded into
         """
 
-        scene = None
-        if self._scene_idx is not None:
-            scene = og.sim.scenes[self._scene_idx]
-        return scene
+        if self._scene_idx is None:
+            return None
+        return og.sim.scenes[self._scene_idx]
 
     @classproperty
     def candidate_filters(cls):
