@@ -1,3 +1,5 @@
+import os
+import tempfile
 from abc import ABCMeta
 from collections.abc import Iterable
 from functools import cached_property
@@ -128,78 +130,12 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         log.info(f"Removed {self.name} from {self.prim_path}")
 
     def _post_load(self):
-        # Add fixed joint or make object kinematic only if we're fixing the base
-        kinematic_only = False
-        if self.fixed_base:
-            # For optimization purposes, if we only have a single rigid body that has either
-            # (no custom scaling OR no fixed joints), we assume this is not an articulated object so we
-            # merely set this to be a static collider, i.e.: kinematic-only
-            # The custom scaling / fixed joints requirement is needed because omniverse complains about scaling that
-            # occurs with respect to fixed joints, as omni will "snap" bodies together otherwise
-            scale = np.ones(3) if self._load_config["scale"] is None else np.array(self._load_config["scale"])
-            if (
-                self.n_joints == 0
-                and (np.all(np.isclose(scale, 1.0, atol=1e-3)) or self.n_fixed_joints == 0)
-                and (self._load_config["kinematic_only"] != False)
-                and not self.has_attachment_points
-            ):
-                kinematic_only = True
-
-        # Validate that we didn't make a kinematic-only decision that does not match
-        assert (
-            self._load_config["kinematic_only"] is None or kinematic_only == self._load_config["kinematic_only"]
-        ), f"Kinematic only decision does not match! Got: {kinematic_only}, expected: {self._load_config['kinematic_only']}"
-
-        # Actually apply the kinematic-only decision
-        self._load_config["kinematic_only"] = kinematic_only
-
         # Run super first
         super()._post_load()
-
-        # If the object is fixed_base but kinematic only is false, create the joint
-        if self.fixed_base and not self.kinematic_only:
-            # Create fixed joint, and set Body0 to be this object's root prim
-            # This renders, which causes a material lookup error since we're creating a temp file, so we suppress
-            # the error explicitly here
-            with suppress_omni_log(channels=["omni.hydra"]):
-                create_joint(
-                    prim_path=f"{self.prim_path}/rootJoint",
-                    joint_type="FixedJoint",
-                    body1=f"{self.prim_path}/{self._root_link_name}",
-                )
-
-            # Delete n_fixed_joints cached property if it exists since the number of fixed joints has now changed
-            # See https://stackoverflow.com/questions/59899732/python-cached-property-how-to-delete and
-            # https://docs.python.org/3/library/functools.html#functools.cached_property
-            if "n_fixed_joints" in self.__dict__:
-                del self.n_fixed_joints
 
         # Set visibility
         if "visible" in self._load_config and self._load_config["visible"] is not None:
             self.visible = self._load_config["visible"]
-
-        # First, remove any articulation root API that already exists at the object-level or root link level prim
-        if self._prim.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
-            self._prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
-            self._prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
-
-        if self.root_prim.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
-            self.root_prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
-            self.root_prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
-
-        if og.sim.is_playing:
-            log.warning("Cannot set articulation root API while simulation is playing!")
-
-        # Potentially add articulation root APIs and also set self collisions
-        root_prim = (
-            None
-            if self.articulation_root_path is None
-            else lazy.omni.isaac.core.utils.prims.get_prim_at_path(self.articulation_root_path)
-        )
-        if root_prim is not None:
-            lazy.pxr.UsdPhysics.ArticulationRootAPI.Apply(root_prim)
-            lazy.pxr.PhysxSchema.PhysxArticulationAPI.Apply(root_prim)
-            self.self_collisions = self._load_config["self_collisions"]
 
         # Set position / velocity solver iterations if we're not cloth
         if self._prim_type != PrimType.CLOTH:

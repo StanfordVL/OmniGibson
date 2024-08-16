@@ -3,6 +3,7 @@ import itertools
 import math
 import os
 import re
+import tempfile
 from collections.abc import Iterable
 
 import numpy as np
@@ -79,6 +80,112 @@ def get_prim_nested_children(prim):
         prims += get_prim_nested_children(prim=child)
 
     return prims
+
+
+def build_layered_usd(usd_file_path, fixed_base, kinematic_only, root_link_name):
+    """Builds the layered USD file for this object that uses the given base USD file but applies
+    necessary modifications on articulation root APIs and joints and self collisions."""
+
+    # Create an empty USD stage
+    decrypted_fd, usd_path = tempfile.mkstemp(os.path.basename(usd_file_path), dir=og.tempdir)
+    os.close(decrypted_fd)
+    stage = lazy.pxr.Usd.Stage.CreateNew(usd_path)
+
+    # Create the world prim, make it a reference to the USD file, and make it the default
+    object_prim = stage.DefinePrim("/Object", "Xform")
+    object_prim.GetReferences().AddReference(usd_file_path)
+    stage.SetDefaultPrim(object_prim)
+
+    # If the object is fixed_base but kinematic only is false, create the joint
+    if fixed_base and not kinematic_only:
+        # Create fixed joint, and set Body0 to be this object's root prim
+        # This renders, which causes a material lookup error since we're creating a temp file, so we suppress
+        # the error explicitly here
+        with suppress_omni_log(channels=["omni.hydra"]):
+            create_joint(
+                prim_path=f"/Object/rootJoint",
+                joint_type="FixedJoint",
+                body1=f"/Object/root_link_name",
+            )
+
+    # First, remove any articulation root API that already exists at the object-level or root link level prim
+    if object_prim.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
+        object_prim.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
+    if object_prim.HasAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI):
+        object_prim.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
+
+    # Go over all direct children and remove any articulation root APIs
+    for child in object_prim.GetChildren():
+        if child.HasAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI):
+            child.RemoveAPI(lazy.pxr.UsdPhysics.ArticulationRootAPI)
+        if child.HasAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI):
+            child.RemoveAPI(lazy.pxr.PhysxSchema.PhysxArticulationAPI)
+
+    # Potentially add articulation root APIs and also set self collisions
+    root_prim = None if self.articulation_root_path is None else stage.GetPrimAtPath(self.articulation_root_path)
+    if root_prim is not None:
+        lazy.pxr.UsdPhysics.ArticulationRootAPI.Apply(root_prim)
+        articulation_api = lazy.pxr.PhysxSchema.PhysxArticulationAPI.Apply(root_prim)
+        articulation_api.CreateEnabledSelfCollisionsAttr().Set(self._load_config["self_collisions"])
+
+    # Save the stage to the USD file and return the path for loading
+    stage.Save()
+    return usd_path
+
+
+def compute_articulation_information(object_prim, fixed_base, kinematic_only_request):
+    # Find the root link and the number of joints and fixed joints.
+    # To find the root link, we track all links and how many incoming joints each has.
+    # The root link is the only link with no incoming joints.
+    link_names = set()
+    n_joints = 0
+    n_non_fixed_joints = 0
+    joint_children = set()
+    links_to_create = {}
+    for prim in object_prim.GetChildren():
+        link_names.add(prim.GetName())
+        if prim.GetPrimTypeInfo().GetTypeName() == "Xform":
+            # Also iterate through all children to infer joints and determine the children of those joints
+            # We will use this info to infer which link is the base link!
+            for child_prim in prim.GetChildren():
+                if "joint" in child_prim.GetPrimTypeInfo().GetTypeName().lower():
+                    n_joints += 1
+                    relationships = {r.GetName(): r for r in child_prim.GetRelationships()}
+                    # Only record if this is NOT a fixed link tying us to the world (i.e.: no target for body0)
+                    if len(relationships["physics:body0"].GetTargets()) > 0:
+                        n_non_fixed_joints += 1
+                        joint_children.add(relationships["physics:body1"].GetTargets()[0].pathString.split("/")[-1])
+
+    # Infer the correct root link name -- this corresponds to whatever link does not have any joint existing
+    # in the children joints
+    valid_root_links = list(set(links_to_create.keys()) - joint_children)
+    assert len(valid_root_links) == 1, (
+        f"Only a single root link should have been found for object," f"but found multiple instead: {valid_root_links}"
+    )
+    (root_link_name,) = valid_root_links
+
+    # Compute the number of fixed joints too
+    n_fixed_joints = n_joints - n_non_fixed_joints
+
+    # TODO: First, compute kinematic only status
+    kinematic_only = kinematic_only_request
+
+    has_articulated_joints, has_fixed_joints = n_joints > 0, n_fixed_joints > 0
+    if kinematic_only or ((not has_articulated_joints) and (not has_fixed_joints)):
+        # Kinematic only, or non-jointed single body objects
+        articulation_root_path = None
+    elif not fixed_base and has_articulated_joints:
+        # This is all remaining non-fixed objects
+        # This is a bit hacky because omniverse is buggy
+        # Articulation roots mess up the joint order if it's on a non-fixed base robot, e.g. a
+        # mobile manipulator. So if we have to move it to the actual root link of the robot instead.
+        # See https://forums.developer.nvidia.com/t/inconsistent-values-from-isaacsims-dc-get-joint-parent-child-body/201452/2
+        # for more info
+        articulation_root_path = f"{str(object_prim.GetPath())}/{root_link_name}"
+    else:
+        # Fixed objects that are not kinematic only, or non-fixed objects that have no articulated joints but do
+        # have fixed joints
+        articulation_root_path = str(object_prim.GetPath())
 
 
 def create_joint(
