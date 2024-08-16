@@ -96,10 +96,10 @@ class BasePrim(Serializable, Recreatable, ABC):
         assert (
             not self._loaded
         ), f"Prim {self.name} at prim_path {self.prim_path} can only be loaded once! (It is already loaded)"
-        # assert scene is not None, "Scene should not be None for prim {self.name}!".format(self=self)
 
         # Assign the scene index first.
         self._scene_idx = scene_idx
+        self._scene_assigned = True
 
         # Then check if the prim is already loaded
         if lazy.omni.isaac.core.utils.prims.is_prim_path_valid(prim_path=self.prim_path):
@@ -157,7 +157,7 @@ class BasePrim(Serializable, Recreatable, ABC):
         Returns:
             Scene or None: Scene object that this prim is loaded into
         """
-        # assert self._scene_assigned, "Scene has not been assigned to this prim yet!"
+        assert self._scene_assigned, "Scene has not been assigned to this prim yet!"
 
         if self._scene_idx is None:
             return None
@@ -174,7 +174,6 @@ class BasePrim(Serializable, Recreatable, ABC):
         Returns:
             str: prim path in the stage.
         """
-        # assert self._scene_idx is not None, "Scene not set for system {self.name}!".format(self=self)
 
         return scene_relative_prim_path_to_absolute(self._scene_idx, self._relative_prim_path)
 

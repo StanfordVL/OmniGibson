@@ -72,7 +72,6 @@ class BaseSystem(Serializable):
         Returns:
             str: Path to this system's prim in the scene stage
         """
-        # assert self._scene_idx is not None, "Scene not set for system {self.name}!".format(self=self)
 
         return scene_relative_prim_path_to_absolute(self._scene_idx, self.relative_prim_path)
 
@@ -123,7 +122,6 @@ class BaseSystem(Serializable):
         Initializes this system
         """
         assert not self.initialized, f"Already initialized system {self.name}!"
-        # assert scene is not None, "Scene should not be None for system {self.name}!".format(self=self)
 
         self._scene_idx = scene_idx
         self.initialized = True
