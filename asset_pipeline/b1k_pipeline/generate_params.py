@@ -84,6 +84,9 @@ APPROVED_SCENES = {
 
 REJECTED_SCENES = {
     "gates_bedroom",
+    "Rs_garden",
+    "grocery_store_cafe",
+    "hotel_gym_spa",
 }
 
 VERIFIED_SCENES = {
