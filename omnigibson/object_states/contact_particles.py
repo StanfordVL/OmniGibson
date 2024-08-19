@@ -1,9 +1,8 @@
 import omnigibson as og
 from omnigibson.macros import create_module_macros
-from omnigibson.object_states.object_state_base import RelativeObjectState
 from omnigibson.object_states.aabb import AABB
 from omnigibson.object_states.kinematics_mixin import KinematicsMixin
-from omnigibson.systems.system_base import PhysicalParticleSystem, is_physical_particle_system
+from omnigibson.object_states.object_state_base import RelativeObjectState
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -17,6 +16,7 @@ class ContactParticles(RelativeObjectState, KinematicsMixin):
     """
     Object state that handles contact checking between rigid bodies and individual particles.
     """
+
     def _get_value(self, system, link=None):
         """
         Args:
@@ -27,8 +27,9 @@ class ContactParticles(RelativeObjectState, KinematicsMixin):
             set of int: Set of particle IDs in contact
         """
         # Make sure system is valid
-        assert is_physical_particle_system(system_name=system.name), \
-            "Can only get ContactParticles for a PhysicalParticleSystem!"
+        assert self.obj.scene.is_physical_particle_system(
+            system_name=system.name
+        ), "Can only get ContactParticles for a PhysicalParticleSystem!"
 
         # Variables to update mid-iteration
         contacts = set()

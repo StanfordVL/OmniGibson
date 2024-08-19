@@ -1,12 +1,12 @@
-from omnigibson.utils.sim_utils import meets_minimum_isaac_version
+import numpy as np
+
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.prims.xform_prim import XFormPrim
-from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.constants import PrimType
+from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.ui_utils import create_module_logger
-import numpy as np
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -16,6 +16,7 @@ class LightObject(StatefulObject):
     """
     LightObjects are objects that generate light in the simulation
     """
+
     LIGHT_TYPES = {
         "Cylinder",
         "Disk",
@@ -30,10 +31,8 @@ class LightObject(StatefulObject):
         self,
         name,
         light_type,
-        prim_path=None,
+        relative_prim_path=None,
         category="light",
-        class_id=None,
-        uuid=None,
         scale=None,
         fixed_base=False,
         load_config=None,
@@ -43,18 +42,12 @@ class LightObject(StatefulObject):
         intensity=50000.0,
         **kwargs,
     ):
-
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
             light_type (str): Type of light to create. Valid options are LIGHT_TYPES
-            prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
-                created at /World/<name>
+            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
             category (str): Category for the object. Defaults to "object".
-            class_id (None or int): What class ID the object should be assigned in semantic segmentation rendering mode.
-                If None, the ID will be inferred from this object's category.
-            uuid (None or int): Unique unsigned-integer identifier to assign to this object (max 8-numbers).
-                If None is specified, then it will be auto-generated
             scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
                 for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
                 3-array specifies per-axis scaling.
@@ -85,11 +78,9 @@ class LightObject(StatefulObject):
 
         # Run super method
         super().__init__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             name=name,
             category=category,
-            class_id=class_id,
-            uuid=uuid,
             scale=scale,
             visible=True,
             fixed_base=fixed_base,
@@ -104,11 +95,15 @@ class LightObject(StatefulObject):
 
     def _load(self):
         # Define XForm and base link for this light
-        prim = og.sim.stage.DefinePrim(self._prim_path, "Xform")
-        base_link = og.sim.stage.DefinePrim(f"{self._prim_path}/base_link", "Xform")
+        prim = og.sim.stage.DefinePrim(self.prim_path, "Xform")
+        base_link = og.sim.stage.DefinePrim(f"{self.prim_path}/base_link", "Xform")
 
         # Define the actual light link
-        light_prim = getattr(lazy.pxr.UsdLux, f"{self.light_type}Light").Define(og.sim.stage, f"{self._prim_path}/base_link/light").GetPrim()
+        light_prim = (
+            getattr(lazy.pxr.UsdLux, f"{self.light_type}Light")
+            .Define(og.sim.stage, f"{self.prim_path}/base_link/light")
+            .GetPrim()
+        )
 
         return prim
 
@@ -117,7 +112,10 @@ class LightObject(StatefulObject):
         super()._post_load()
 
         # Grab reference to light link
-        self._light_link = XFormPrim(prim_path=f"{self._prim_path}/base_link/light", name=f"{self.name}:light_link")
+        self._light_link = XFormPrim(
+            relative_prim_path=f"{self._relative_prim_path}/base_link/light", name=f"{self.name}:light_link"
+        )
+        self._light_link.load(self.scene)
 
         # Apply Shaping API and set default cone angle attribute
         shaping_api = lazy.pxr.UsdLux.ShapingAPI.Apply(self._light_link.prim).GetShapingConeAngleAttr().Set(180.0)
@@ -143,7 +141,6 @@ class LightObject(StatefulObject):
         # Therefore we instead return a hardcoded small value
         return np.ones(3) * -0.001, np.ones(3) * 0.001
 
-
     @property
     def light_link(self):
         """
@@ -160,7 +157,7 @@ class LightObject(StatefulObject):
         Returns:
             float: radius for this light
         """
-        return self._light_link.get_attribute("inputs:radius" if meets_minimum_isaac_version("2023.0.0") else "radius")
+        return self._light_link.get_attribute("inputs:radius")
 
     @radius.setter
     def radius(self, radius):
@@ -170,7 +167,7 @@ class LightObject(StatefulObject):
         Args:
             radius (float): radius to set
         """
-        self._light_link.set_attribute("inputs:radius" if meets_minimum_isaac_version("2023.0.0") else "radius", radius)
+        self._light_link.set_attribute("inputs:radius", radius)
 
     @property
     def intensity(self):
@@ -180,8 +177,7 @@ class LightObject(StatefulObject):
         Returns:
             float: intensity for this light
         """
-        return self._light_link.get_attribute(
-            "inputs:intensity" if meets_minimum_isaac_version("2023.0.0") else "intensity")
+        return self._light_link.get_attribute("inputs:intensity")
 
     @intensity.setter
     def intensity(self, intensity):
@@ -191,10 +187,8 @@ class LightObject(StatefulObject):
         Args:
             intensity (float): intensity to set
         """
-        self._light_link.set_attribute(
-            "inputs:intensity" if meets_minimum_isaac_version("2023.0.0") else "intensity",
-            intensity)
-        
+        self._light_link.set_attribute("inputs:intensity", intensity)
+
     @property
     def color(self):
         """
@@ -203,8 +197,7 @@ class LightObject(StatefulObject):
         Returns:
             float: color for this light
         """
-        return tuple(float(x) for x in self._light_link.get_attribute(
-            "inputs:color" if meets_minimum_isaac_version("2023.0.0") else "color"))
+        return tuple(float(x) for x in self._light_link.get_attribute("inputs:color"))
 
     @color.setter
     def color(self, color):
@@ -214,9 +207,7 @@ class LightObject(StatefulObject):
         Args:
             color ([float, float, float]): color to set, each value in range [0, 1]
         """
-        self._light_link.set_attribute(
-            "inputs:color" if meets_minimum_isaac_version("2023.0.0") else "color",
-            lazy.pxr.Gf.Vec3f(color))
+        self._light_link.set_attribute("inputs:color", lazy.pxr.Gf.Vec3f(color))
 
     @property
     def texture_file_path(self):
@@ -226,8 +217,7 @@ class LightObject(StatefulObject):
         Returns:
             str: texture file path for this light
         """
-        return str(self._light_link.get_attribute(
-            "inputs:texture:file" if meets_minimum_isaac_version("2023.0.0") else "texture:file"))
+        return str(self._light_link.get_attribute("inputs:texture:file"))
 
     @texture_file_path.setter
     def texture_file_path(self, texture_file_path):
@@ -237,15 +227,12 @@ class LightObject(StatefulObject):
         Args:
             texture_file_path (str): path of texture file that should be used for this light
         """
-        self._light_link.set_attribute(
-            "inputs:texture:file" if meets_minimum_isaac_version("2023.0.0") else "texture:file",
-            lazy.pxr.Sdf.AssetPath(texture_file_path))
+        self._light_link.set_attribute("inputs:texture:file", lazy.pxr.Sdf.AssetPath(texture_file_path))
 
-
-    def _create_prim_with_same_kwargs(self, prim_path, name, load_config):
+    def _create_prim_with_same_kwargs(self, relative_prim_path, name, load_config):
         # Add additional kwargs (bounding_box is already captured in load_config)
         return self.__class__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             light_type=self.light_type,
             name=name,
             intensity=self.intensity,

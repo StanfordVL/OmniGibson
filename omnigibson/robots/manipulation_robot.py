@@ -1,27 +1,29 @@
 from abc import abstractmethod
 from collections import namedtuple
-import numpy as np
+
 import networkx as nx
+import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
-from omnigibson.controllers import InverseKinematicsController, MultiFingerGripperController, OperationalSpaceController
-from omnigibson.macros import gm, create_module_macros
-from omnigibson.object_states import ContactBodies
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import (
-    IsGraspingState,
     ControlType,
-    ManipulationController,
     GripperController,
+    InverseKinematicsController,
+    IsGraspingState,
+    ManipulationController,
+    MultiFingerGripperController,
+    OperationalSpaceController,
 )
+from omnigibson.macros import create_module_macros, gm
+from omnigibson.object_states import ContactBodies
 from omnigibson.robots.robot_base import BaseRobot
-from omnigibson.utils.python_utils import classproperty, assert_valid_key
-from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function
 from omnigibson.utils.constants import JointType, PrimType
-from omnigibson.utils.usd_utils import create_joint
-from omnigibson.utils.teleop_utils import TeleopData
+from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function
+from omnigibson.utils.python_utils import assert_valid_key, classproperty
 from omnigibson.utils.sampling_utils import raytest_batch
+from omnigibson.utils.usd_utils import ControllableObjectViewAPI, GripperRigidContactAPI, RigidContactAPI, create_joint
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -32,7 +34,6 @@ m.ASSIST_GRASP_MASS_THRESHOLD = 10.0
 m.ARTICULATED_ASSIST_FRACTION = 0.7
 m.MIN_ASSIST_FORCE = 0
 m.MAX_ASSIST_FORCE = 100
-m.ASSIST_FORCE = m.MIN_ASSIST_FORCE + (m.MAX_ASSIST_FORCE - m.MIN_ASSIST_FORCE) * m.ASSIST_FRACTION
 m.CONSTRAINT_VIOLATION_THRESHOLD = 0.1
 m.RELEASE_WINDOW = 1 / 30.0  # release window in seconds
 
@@ -62,36 +63,29 @@ class ManipulationRobot(BaseRobot):
         self,
         # Shared kwargs in hierarchy
         name,
-        prim_path=None,
-        class_id=None,
-        uuid=None,
+        relative_prim_path=None,
         scale=None,
         visible=True,
         fixed_base=False,
         visual_only=False,
         self_collisions=False,
         load_config=None,
-
         # Unique to USDObject hierarchy
         abilities=None,
-
         # Unique to ControllableObject hierarchy
         control_freq=None,
         controller_config=None,
         action_type="continuous",
         action_normalize=True,
         reset_joint_pos=None,
-
         # Unique to BaseRobot
-        obs_modalities="all",
+        obs_modalities=("rgb", "proprio"),
         proprio_obs="default",
         sensor_config=None,
-
         # Unique to ManipulationRobot
         grasping_mode="physical",
         grasping_direction="lower",
         disable_grasp_handling=False,
-
         **kwargs,
     ):
         """
@@ -99,10 +93,6 @@ class ManipulationRobot(BaseRobot):
             name (str): Name for the object. Names need to be unique per scene
             prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
                 created at /World/<name>
-            class_id (None or int): What class ID the object should be assigned in semantic segmentation rendering mode.
-                If None, the ID will be inferred from this object's category.
-            uuid (None or int): Unique unsigned-integer identifier to assign to this object (max 8-numbers).
-                If None is specified, then it will be auto-generated
             scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
                 for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
                 3-array specifies per-axis scaling.
@@ -116,7 +106,7 @@ class ManipulationRobot(BaseRobot):
                 a dict in the form of {ability: {param: value}} containing object abilities and parameters to pass to
                 the object state instance constructor.
             control_freq (float): control frequency (in Hz) at which to control the object. If set to be None,
-                simulator.import_object will automatically set the control frequency to be at the render frequency by default.
+                we will automatically set the control frequency to be at the render frequency by default.
             controller_config (None or dict): nested dictionary mapping controller name(s) to specific controller
                 configurations for this object. This will override any default values specified by this class.
             action_type (str): one of {discrete, continuous} - what type of action space to use
@@ -141,7 +131,7 @@ class ManipulationRobot(BaseRobot):
                     at least two "fingers" need to touch the object.
                 If "sticky", will magnetize any object touching the gripper's fingers. In this mode, only one finger
                     needs to touch the object.
-            grasping_direction (str): One of {"lower", "upper"}. If "lower", lower limit represents a closed grasp, 
+            grasping_direction (str): One of {"lower", "upper"}. If "lower", lower limit represents a closed grasp,
                 otherwise upper limit represents a closed grasp.
             disable_grasp_handling (bool): If True, the robot will not automatically handle assisted or sticky grasps.
                 Instead, you will need to call the grasp handling methods yourself.
@@ -169,10 +159,8 @@ class ManipulationRobot(BaseRobot):
 
         # Call super() method
         super().__init__(
-            prim_path=prim_path,
+            relative_prim_path=relative_prim_path,
             name=name,
-            class_id=class_id,
-            uuid=uuid,
             scale=scale,
             visible=visible,
             fixed_base=fixed_base,
@@ -222,8 +210,11 @@ class ManipulationRobot(BaseRobot):
 
         if gm.AG_CLOTH:
             for arm in self.arm_names:
-                self._ag_check_in_volume[arm], self._ag_calculate_volume[arm] = \
-                    generate_points_in_volume_checker_function(obj=self, volume_link=self.eef_links[arm], mesh_name_prefixes="container")
+                self._ag_check_in_volume[arm], self._ag_calculate_volume[arm] = (
+                    generate_points_in_volume_checker_function(
+                        obj=self, volume_link=self.eef_links[arm], mesh_name_prefixes="container"
+                    )
+                )
 
     def is_grasping(self, arm="default", candidate_obj=None):
         """
@@ -267,12 +258,10 @@ class ManipulationRobot(BaseRobot):
         """
         For arm @arm, calculate any body IDs and corresponding link IDs that are not part of the robot
         itself that are in contact with any of this arm's gripper's fingers
-
         Args:
             arm (str): specific arm whose gripper will be checked for contact. Default is "default" which
                 corresponds to the first entry in self.arm_names
             return_contact_positions (bool): if True, will additionally return the contact (x,y,z) position
-
         Returns:
             2-tuple:
                 - set: set of unique contact prim_paths that are not the robot self-collisions.
@@ -283,26 +272,35 @@ class ManipulationRobot(BaseRobot):
                     set of unique robot link prim_paths that it is in contact with
         """
         arm = self.default_arm if arm == "default" else arm
-        robot_contact_links = dict()
-        contact_data = set()
-        # Find all objects in contact with all finger joints for this arm
-        con_results = [con for link in self.finger_links[arm] for con in link.contact_list()]
-
         # Get robot contact links
         link_paths = set(self.link_prim_paths)
 
-        for con_res in con_results:
-            # Only add this contact if it's not a robot self-collision
-            other_contact_set = {con_res.body0, con_res.body1} - link_paths
-            if len(other_contact_set) == 1:
-                link_contact, other_contact = (con_res.body0, con_res.body1) if \
-                    list(other_contact_set)[0] == con_res.body1 else (con_res.body1, con_res.body0)
-                # Add to contact data
-                contact_data.add((other_contact, tuple(con_res.position)) if return_contact_positions else other_contact)
-                # Also add robot contact link info
+        if not return_contact_positions:
+            raw_contact_data = {
+                (row, col)
+                for row, col in GripperRigidContactAPI.get_contact_pairs(self.scene.idx, column_prim_paths=link_paths)
+                if row not in link_paths
+            }
+
+            # Translate that to robot contact data
+            robot_contact_links = {}
+            for con_data in raw_contact_data:
+                other_contact, link_contact = con_data
                 if other_contact not in robot_contact_links:
                     robot_contact_links[other_contact] = set()
                 robot_contact_links[other_contact].add(link_contact)
+
+            return {other for other, _ in raw_contact_data}, robot_contact_links
+
+        # Otherwise, we rely on the simpler, but more costly, get_contact_data API.
+        contacts = GripperRigidContactAPI.get_contact_data(self.scene.idx, column_prim_paths=link_paths)
+        contact_data = {(contact[0], contact[3]) for contact in contacts}
+        robot_contact_links = {}
+        for con_data in contacts:
+            other_contact, link_contact = con_data[:2]
+            if other_contact not in robot_contact_links:
+                robot_contact_links[other_contact] = set()
+            robot_contact_links[other_contact].add(link_contact)
 
         return contact_data, robot_contact_links
 
@@ -327,14 +325,17 @@ class ManipulationRobot(BaseRobot):
                 new_obj_pose = new_eef_pose @ inv_original_eef_pose @ original_obj_pose
                 self._ag_obj_in_hand[arm].set_position_orientation(*T.mat2pose(hmat=new_obj_pose))
 
-    def deploy_control(self, control, control_type, indices=None, normalized=False):
+    def deploy_control(self, control, control_type):
         # We intercept the gripper control and replace it with the current joint position if we're freezing our gripper
         for arm in self.arm_names:
             if self._ag_freeze_gripper[arm]:
-                control[self.gripper_control_idx[arm]] = self._ag_obj_constraint_params[arm]["gripper_pos"] if \
-                    self.controllers[f"gripper_{arm}"].control_type == ControlType.POSITION else 0.0
+                control[self.gripper_control_idx[arm]] = (
+                    self._ag_obj_constraint_params[arm]["gripper_pos"]
+                    if self.controllers[f"gripper_{arm}"].control_type == ControlType.POSITION
+                    else 0.0
+                )
 
-        super().deploy_control(control=control, control_type=control_type, indices=indices, normalized=normalized)
+        super().deploy_control(control=control, control_type=control_type)
 
         # Then run assisted grasping
         if self.grasping_mode != "physical" and not self._disable_grasp_handling:
@@ -365,12 +366,12 @@ class ManipulationRobot(BaseRobot):
     def release_grasp_immediately(self):
         """
         Magic action to release this robot's grasp for all arms at once.
-        As opposed to @_release_grasp, this method would byupass the release window mechanism and immediately release.
+        As opposed to @_release_grasp, this method would bypass the release window mechanism and immediately release.
         """
         for arm in self.arm_names:
-            if self._ag_obj_in_hand[arm] is not None:
+            if self._ag_obj_constraints[arm] is not None:
                 self._release_grasp(arm=arm)
-                self._ag_release_counter[arm] = int(np.ceil(m.RELEASE_WINDOW / og.sim.get_rendering_dt()))
+                self._ag_release_counter[arm] = int(np.ceil(m.RELEASE_WINDOW / og.sim.get_sim_step_dt()))
                 self._handle_release_window(arm=arm)
                 assert not self._ag_obj_in_hand[arm], "Object still in ag list after release!"
                 # TODO: Verify not needed!
@@ -395,23 +396,34 @@ class ManipulationRobot(BaseRobot):
             fcns (CachedFunctions): Keyword-mapped control values for this object, mapping names to n-arrays.
             arm (str): specific arm to generate necessary control dict entries for
         """
-        fcns[f"_eef_{arm}_pos_quat_relative"] = lambda: self.get_relative_eef_pose(arm)
+        fcns[f"_eef_{arm}_pos_quat_relative"] = (
+            lambda: ControllableObjectViewAPI.get_link_relative_position_orientation(
+                self.articulation_root_path, self.eef_link_names[arm]
+            )
+        )
         fcns[f"eef_{arm}_pos_relative"] = lambda: fcns[f"_eef_{arm}_pos_quat_relative"][0]
         fcns[f"eef_{arm}_quat_relative"] = lambda: fcns[f"_eef_{arm}_pos_quat_relative"][1]
-        fcns[f"eef_{arm}_lin_vel_relative"] = lambda: self.get_relative_eef_lin_vel(arm)
-        fcns[f"eef_{arm}_ang_vel_relative"] = lambda: self.get_relative_eef_ang_vel(arm)
+        fcns[f"eef_{arm}_lin_vel_relative"] = lambda: ControllableObjectViewAPI.get_link_relative_linear_velocity(
+            self.articulation_root_path, self.eef_link_names[arm]
+        )
+        fcns[f"eef_{arm}_ang_vel_relative"] = lambda: ControllableObjectViewAPI.get_link_relative_angular_velocity(
+            self.articulation_root_path, self.eef_link_names[arm]
+        )
         # -n_joints because there may be an additional 6 entries at the beginning of the array, if this robot does
         # not have a fixed base (i.e.: the 6DOF --> "floating" joint)
         # see self.get_relative_jacobian() for more info
+        start_idx = 6 if self.fixed_base else 0
         eef_link_idx = self._articulation_view.get_body_index(self.eef_links[arm].body_name)
-        fcns[f"eef_{arm}_jacobian_relative"] = lambda: self.get_relative_jacobian(clone=False)[eef_link_idx, :, -self.n_joints:]
+        fcns[f"eef_{arm}_jacobian_relative"] = lambda: ControllableObjectViewAPI.get_relative_jacobian(
+            self.articulation_root_path
+        )[eef_link_idx, :, start_idx : start_idx + self.n_joints]
 
     def _get_proprioception_dict(self):
         dic = super()._get_proprioception_dict()
 
         # Loop over all arms to grab proprio info
-        joint_positions = self.get_joint_positions(normalized=False)
-        joint_velocities = self.get_joint_velocities(normalized=False)
+        joint_positions = ControllableObjectViewAPI.get_joint_positions(self.articulation_root_path)
+        joint_velocities = ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
         for arm in self.arm_names:
             # Add arm info
             dic["arm_{}_qpos".format(arm)] = joint_positions[self.arm_control_idx[arm]]
@@ -420,10 +432,11 @@ class ManipulationRobot(BaseRobot):
             dic["arm_{}_qvel".format(arm)] = joint_velocities[self.arm_control_idx[arm]]
 
             # Add eef and grasping info
-            dic["eef_{}_pos_global".format(arm)] = self.get_eef_position(arm)
-            dic["eef_{}_quat_global".format(arm)] = self.get_eef_orientation(arm)
-            dic["eef_{}_pos".format(arm)] = self.get_relative_eef_position(arm)
-            dic["eef_{}_quat".format(arm)] = self.get_relative_eef_orientation(arm)
+            dic["eef_{}_pos".format(arm)], dic["eef_{}_quat".format(arm)] = (
+                ControllableObjectViewAPI.get_link_relative_position_orientation(
+                    self.articulation_root_path, self.eef_link_names[arm]
+                )
+            )
             dic["grasp_{}".format(arm)] = np.array([self.is_grasping(arm)])
             dic["gripper_{}_qpos".format(arm)] = joint_positions[self.gripper_control_idx[arm]]
             dic["gripper_{}_qvel".format(arm)] = joint_velocities[self.gripper_control_idx[arm]]
@@ -475,23 +488,23 @@ class ManipulationRobot(BaseRobot):
 
         return controllers
 
-    @property
-    def n_arms(self):
+    @classproperty
+    def n_arms(cls):
         """
         Returns:
             int: Number of arms this robot has. Returns 1 by default
         """
         return 1
 
-    @property
-    def arm_names(self):
+    @classproperty
+    def arm_names(cls):
         """
         Returns:
             list of str: List of arm names for this robot. Should correspond to the keys used to index into
                 arm- and gripper-related dictionaries, e.g.: eef_link_names, finger_link_names, etc.
                 Default is string enumeration based on @self.n_arms.
         """
-        return [str(i) for i in range(self.n_arms)]
+        return [str(i) for i in range(cls.n_arms)]
 
     @property
     def default_arm(self):
@@ -506,8 +519,12 @@ class ManipulationRobot(BaseRobot):
         arm_action_idx = {}
         for arm_name in self.arm_names:
             controller_idx = self.controller_order.index(f"arm_{arm_name}")
-            action_start_idx = sum([self.controllers[self.controller_order[i]].command_dim for i in range(controller_idx)])
-            arm_action_idx[arm_name] = np.arange(action_start_idx, action_start_idx + self.controllers[f"arm_{arm_name}"].command_dim)
+            action_start_idx = sum(
+                [self.controllers[self.controller_order[i]].command_dim for i in range(controller_idx)]
+            )
+            arm_action_idx[arm_name] = np.arange(
+                action_start_idx, action_start_idx + self.controllers[f"arm_{arm_name}"].command_dim
+            )
         return arm_action_idx
 
     @property
@@ -515,8 +532,12 @@ class ManipulationRobot(BaseRobot):
         gripper_action_idx = {}
         for arm_name in self.arm_names:
             controller_idx = self.controller_order.index(f"gripper_{arm_name}")
-            action_start_idx = sum([self.controllers[self.controller_order[i]].command_dim for i in range(controller_idx)])
-            gripper_action_idx[arm_name] = np.arange(action_start_idx, action_start_idx + self.controllers[f"gripper_{arm_name}"].command_dim)
+            action_start_idx = sum(
+                [self.controllers[self.controller_order[i]].command_dim for i in range(controller_idx)]
+            )
+            gripper_action_idx[arm_name] = np.arange(
+                action_start_idx, action_start_idx + self.controllers[f"gripper_{arm_name}"].command_dim
+            )
         return gripper_action_idx
 
     @property
@@ -526,6 +547,9 @@ class ManipulationRobot(BaseRobot):
         Returns:
             dict: Dictionary mapping arm appendage name to corresponding arm link names,
                 should correspond to specific link names in this robot's underlying model file
+
+                Note: the ordering within the dictionary is assumed to be intentional, and is
+                directly used to define the set of corresponding idxs.
         """
         raise NotImplementedError
 
@@ -536,6 +560,9 @@ class ManipulationRobot(BaseRobot):
         Returns:
             dict: Dictionary mapping arm appendage name to corresponding arm joint names,
                 should correspond to specific joint names in this robot's underlying model file
+
+                Note: the ordering within the dictionary is assumed to be intentional, and is
+                directly used to define the set of corresponding control idxs.
         """
         raise NotImplementedError
 
@@ -556,6 +583,9 @@ class ManipulationRobot(BaseRobot):
         Returns:
             dict: Dictionary mapping arm appendage name to array of link names corresponding to
                 this robot's fingers
+
+                Note: the ordering within the dictionary is assumed to be intentional, and is
+                directly used to define the set of corresponding idxs.
         """
         raise NotImplementedError
 
@@ -565,29 +595,36 @@ class ManipulationRobot(BaseRobot):
         """
         Returns:
             dict: Dictionary mapping arm appendage name to array of joint names corresponding to
-                this robot's fingers
+                this robot's fingers.
+
+                Note: the ordering within the dictionary is assumed to be intentional, and is
+                directly used to define the set of corresponding control idxs.
         """
         raise NotImplementedError
 
     @property
-    @abstractmethod
     def arm_control_idx(self):
         """
         Returns:
             dict: Dictionary mapping arm appendage name to indices in low-level control
                 vector corresponding to arm joints.
         """
-        raise NotImplementedError
+        return {
+            arm: np.array([list(self.joints.keys()).index(name) for name in self.arm_joint_names[arm]])
+            for arm in self.arm_names
+        }
 
     @property
-    @abstractmethod
     def gripper_control_idx(self):
         """
         Returns:
             dict: Dictionary mapping arm appendage name to indices in low-level control
                 vector corresponding to gripper joints.
         """
-        raise NotImplementedError
+        return {
+            arm: np.array([list(self.joints.keys()).index(name) for name in self.finger_joint_names[arm]])
+            for arm in self.arm_names
+        }
 
     @property
     def arm_links(self):
@@ -808,7 +845,7 @@ class ManipulationRobot(BaseRobot):
         for prim_path in candidates_set:
             # Calculate position of the object link. Only allow this for objects currently.
             obj_prim_path, link_name = prim_path.rsplit("/", 1)
-            candidate_obj = og.sim.scene.object_registry("prim_path", obj_prim_path, None)
+            candidate_obj = self.scene.object_registry("prim_path", obj_prim_path, None)
             if candidate_obj is None or link_name not in candidate_obj.links:
                 continue
             candidate_link = candidate_obj.links[link_name]
@@ -826,17 +863,21 @@ class ManipulationRobot(BaseRobot):
 
         # Make sure at least two fingers are in contact with this object
         robot_contacts = robot_contact_links[ag_prim_path]
-        touching_at_least_two_fingers = True if self.grasping_mode == "sticky" else len({link.prim_path for link in self.finger_links[arm]}.intersection(robot_contacts)) >= 2
+        touching_at_least_two_fingers = (
+            True
+            if self.grasping_mode == "sticky"
+            else len({link.prim_path for link in self.finger_links[arm]}.intersection(robot_contacts)) >= 2
+        )
 
         # TODO: Better heuristic, hacky, we assume the parent object prim path is the prim_path minus the last "/" item
         ag_obj_prim_path = "/".join(ag_prim_path.split("/")[:-1])
         ag_obj_link_name = ag_prim_path.split("/")[-1]
-        ag_obj = og.sim.scene.object_registry("prim_path", ag_obj_prim_path)
+        ag_obj = self.scene.object_registry("prim_path", ag_obj_prim_path)
 
         # Return None if object cannot be assisted grasped or not touching at least two fingers
         if ag_obj is None or not touching_at_least_two_fingers:
             return None
-        
+
         # Get object and its contacted link
         return ag_obj, ag_obj.links[ag_obj_link_name]
 
@@ -897,7 +938,6 @@ class ManipulationRobot(BaseRobot):
                     ray_data.add(result["rigidBody"])
         return ray_data
 
-
     def _handle_release_window(self, arm="default"):
         """
         Handles releasing an object from arm @arm
@@ -908,7 +948,7 @@ class ManipulationRobot(BaseRobot):
         """
         arm = self.default_arm if arm == "default" else arm
         self._ag_release_counter[arm] += 1
-        time_since_release = self._ag_release_counter[arm] * og.sim.get_rendering_dt()
+        time_since_release = self._ag_release_counter[arm] * og.sim.get_sim_step_dt()
         if time_since_release >= m.RELEASE_WINDOW:
             self._ag_obj_in_hand[arm] = None
             self._ag_release_counter[arm] = None
@@ -1139,13 +1179,13 @@ class ManipulationRobot(BaseRobot):
         mass = ag_link.mass
         if mass > m.ASSIST_GRASP_MASS_THRESHOLD and not (ag_obj.fixed_base and ag_link != ag_obj.root_link):
             return None
-        
+
         # Otherwise, compute the joint type. We use a fixed joint unless the link is a non-fixed link.
         # A link is non-fixed if it has any non-fixed parent joints.
         joint_type = "FixedJoint"
         for edge in nx.edge_dfs(ag_obj.articulation_tree, ag_link.body_name, orientation="reverse"):
-            joint = ag_obj.articulation_tree.edges[edge]["joint"]
-            if joint.joint_type != JointType.JOINT_FIXED:
+            joint = ag_obj.articulation_tree.edges[edge[:2]]
+            if joint["joint_type"] != JointType.JOINT_FIXED:
                 joint_type = "SphericalJoint"
                 break
 
@@ -1187,9 +1227,13 @@ class ManipulationRobot(BaseRobot):
         joint_frame_pos = contact_pos
         joint_frame_orn = np.array([0, 0, 0, 1.0])
         eef_link_pos, eef_link_orn = self.eef_links[arm].get_position_orientation()
-        parent_frame_pos, parent_frame_orn = T.relative_pose_transform(joint_frame_pos, joint_frame_orn, eef_link_pos, eef_link_orn)
+        parent_frame_pos, parent_frame_orn = T.relative_pose_transform(
+            joint_frame_pos, joint_frame_orn, eef_link_pos, eef_link_orn
+        )
         obj_link_pos, obj_link_orn = ag_link.get_position_orientation()
-        child_frame_pos, child_frame_orn = T.relative_pose_transform(joint_frame_pos, joint_frame_orn, obj_link_pos, obj_link_orn)
+        child_frame_pos, child_frame_orn = T.relative_pose_transform(
+            joint_frame_pos, joint_frame_orn, obj_link_pos, obj_link_orn
+        )
 
         # Create the joint
         joint_prim_path = f"{self.eef_links[arm].prim_path}/ag_constraint"
@@ -1210,7 +1254,8 @@ class ManipulationRobot(BaseRobot):
 
         # Modify max force based on user-determined assist parameters
         # TODO
-        max_force = m.ASSIST_FORCE if joint_type == "FixedJoint" else m.ASSIST_FORCE * m.ARTICULATED_ASSIST_FRACTION
+        assist_force = m.MIN_ASSIST_FORCE + (m.MAX_ASSIST_FORCE - m.MIN_ASSIST_FORCE) * m.ASSIST_FRACTION
+        max_force = assist_force if joint_type == "FixedJoint" else assist_force * m.ARTICULATED_ASSIST_FRACTION
         # joint_prim.GetAttribute("physics:breakForce").Set(max_force)
 
         self._ag_obj_constraint_params[arm] = {
@@ -1239,7 +1284,9 @@ class ManipulationRobot(BaseRobot):
             # a zero action will actually keep the AG setting where it already is.
             controller = self._controllers[f"gripper_{arm}"]
             controlled_joints = controller.dof_idx
-            threshold = np.mean([self.joint_lower_limits[controlled_joints], self.joint_upper_limits[controlled_joints]], axis=0)
+            threshold = np.mean(
+                [self.joint_lower_limits[controlled_joints], self.joint_upper_limits[controlled_joints]], axis=0
+            )
             if controller.control is None:
                 applying_grasp = False
             elif self._grasping_direction == "lower":
@@ -1317,7 +1364,7 @@ class ManipulationRobot(BaseRobot):
         if not gripper_finger_close:
             return None
 
-        cloth_objs = og.sim.scene.object_registry("prim_type", PrimType.CLOTH)
+        cloth_objs = self.scene.object_registry("prim_type", PrimType.CLOTH)
         if cloth_objs is None:
             return None
 
@@ -1362,8 +1409,9 @@ class ManipulationRobot(BaseRobot):
 
         # Find the attachment point position in the eef frame
         eef_link_pos, eef_link_orn = self.eef_links[arm].get_position_orientation()
-        attachment_point_pos_local, _ = \
-            T.relative_pose_transform(attachment_point_pos, [0, 0, 0, 1], eef_link_pos, eef_link_orn)
+        attachment_point_pos_local, _ = T.relative_pose_transform(
+            attachment_point_pos, [0, 0, 0, 1], eef_link_pos, eef_link_orn
+        )
 
         # Create the joint
         joint_prim_path = f"{ag_link.prim_path}/ag_constraint"
@@ -1382,7 +1430,7 @@ class ManipulationRobot(BaseRobot):
 
         # Modify max force based on user-determined assist parameters
         # TODO
-        max_force = m.ASSIST_FORCE
+        max_force = m.MIN_ASSIST_FORCE + (m.MAX_ASSIST_FORCE - m.MIN_ASSIST_FORCE) * m.ASSIST_FRACTION
         # joint_prim.GetAttribute("physics:breakForce").Set(max_force)
 
         self._ag_obj_constraint_params[arm] = {
@@ -1410,7 +1458,13 @@ class ManipulationRobot(BaseRobot):
             return state
 
         # Include AG_state
-        state["ag_obj_constraint_params"] = self._ag_obj_constraint_params.copy()
+        ag_params = self._ag_obj_constraint_params.copy()
+        for arm in ag_params.keys():
+            if len(ag_params[arm]) > 0 and self.scene is not None:
+                ag_params[arm]["contact_pos"], _ = T.relative_pose_transform(
+                    ag_params[arm]["contact_pos"], [0, 0, 0, 1], *self.scene.prim.get_position_orientation()
+                )
+        state["ag_obj_constraint_params"] = ag_params
         return state
 
     def _load_state(self, state):
@@ -1429,13 +1483,18 @@ class ManipulationRobot(BaseRobot):
         for arm in state["ag_obj_constraint_params"].keys():
             if len(state["ag_obj_constraint_params"][arm]) > 0:
                 data = state["ag_obj_constraint_params"][arm]
-                obj = og.sim.scene.object_registry("prim_path", data["ag_obj_prim_path"])
+                obj = self.scene.object_registry("prim_path", data["ag_obj_prim_path"])
                 link = obj.links[data["ag_link_prim_path"].split("/")[-1]]
-                self._establish_grasp(arm=arm, ag_data=(obj, link), contact_pos=data["contact_pos"])
+                contact_pos_global = data["contact_pos"]
+                if self.scene is not None:
+                    contact_pos_global, _ = T.pose_transform(
+                        *self.scene.prim.get_position_orientation(), contact_pos_global, [0, 0, 0, 1]
+                    )
+                self._establish_grasp(arm=arm, ag_data=(obj, link), contact_pos=contact_pos_global)
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Call super first
-        state_flat = super()._serialize(state=state)
+        state_flat = super().serialize(state=state)
 
         # No additional serialization needed if we're using physical grasping
         if self.grasping_mode == "physical":
@@ -1444,9 +1503,9 @@ class ManipulationRobot(BaseRobot):
         # TODO AG
         return state_flat
 
-    def _deserialize(self, state):
+    def deserialize(self, state):
         # Call super first
-        state_dict, idx = super()._deserialize(state=state)
+        state_dict, idx = super().deserialize(state=state)
 
         # No additional deserialization needed if we're using physical grasping
         if self.grasping_mode == "physical":
@@ -1461,7 +1520,7 @@ class ManipulationRobot(BaseRobot):
         classes = super()._do_not_register_classes
         classes.add("ManipulationRobot")
         return classes
-    
+
     @property
     def eef_usd_path(self):
         """
@@ -1478,38 +1537,30 @@ class ManipulationRobot(BaseRobot):
         """
         return {arm: np.array([0, 0, 0, 1]) for arm in self.arm_names}
 
-    def teleop_data_to_action(self, teleop_data: TeleopData) -> np.ndarray:
+    def teleop_data_to_action(self, teleop_action) -> np.ndarray:
         """
-        Generate action data from teleoperation data
-        NOTE: This implementation only supports IK/OSC controller for arm and MultiFingerGripperController for gripper. 
+        Generate action data from teleoperation action data
+        NOTE: This implementation only supports IK/OSC controller for arm and MultiFingerGripperController for gripper.
         Overwrite this function if the robot is using a different controller.
         Args:
-            teleop_data (TeleopData): teleoperation data
+            teleop_action (TeleopAction): teleoperation action data
         Returns:
             np.ndarray: array of action data for arm and gripper
         """
-        action = super().teleop_data_to_action(teleop_data)
+        action = super().teleop_data_to_action(teleop_action)
         hands = ["left", "right"] if self.n_arms == 2 else ["right"]
         for i, hand in enumerate(hands):
             arm_name = self.arm_names[i]
-            if teleop_data.is_valid[hand]:
-                # arm action
-                assert \
-                    isinstance(self._controllers[f"arm_{arm_name}"], InverseKinematicsController) or \
-                    isinstance(self._controllers[f"arm_{arm_name}"], OperationalSpaceController), \
-                    f"Only IK and OSC controllers are supported for arm {arm_name}!"
-                cur_eef_pos, cur_eef_orn = self.links[self.eef_link_names[arm_name]].get_position_orientation()
-                if teleop_data.robot_attached:
-                    target_pos, target_orn = teleop_data.transforms[hand]
-                else:
-                    target_pos, target_orn = cur_eef_pos, cur_eef_orn
-                # get orientation relative to robot base
-                base_pos, base_orn = self.get_position_orientation()
-                rel_des_pos, rel_des_orn = T.relative_pose_transform(target_pos, target_orn, base_pos, base_orn)
-                rel_cur_pos, _ = T.relative_pose_transform(cur_eef_pos, cur_eef_orn, base_pos, base_orn)
-                action[self.arm_action_idx[arm_name]] = np.r_[rel_des_pos - rel_cur_pos, T.quat2axisangle(rel_des_orn)]
-                # gripper action
-                assert isinstance(self._controllers[f"gripper_{arm_name}"], MultiFingerGripperController), \
-                    f"Only MultiFingerGripperController is supported for gripper {arm_name}!"
-                action[self.gripper_action_idx[arm_name]] = teleop_data.grippers[hand]
+            arm_action = teleop_action[hand]
+            # arm action
+            assert isinstance(self._controllers[f"arm_{arm_name}"], InverseKinematicsController) or isinstance(
+                self._controllers[f"arm_{arm_name}"], OperationalSpaceController
+            ), f"Only IK and OSC controllers are supported for arm {arm_name}!"
+            target_pos, target_orn = arm_action[:3], T.quat2axisangle(T.euler2quat(arm_action[3:6]))
+            action[self.arm_action_idx[arm_name]] = np.r_[target_pos, target_orn]
+            # gripper action
+            assert isinstance(
+                self._controllers[f"gripper_{arm_name}"], MultiFingerGripperController
+            ), f"Only MultiFingerGripperController is supported for gripper {arm_name}!"
+            action[self.gripper_action_idx[arm_name]] = arm_action[6]
         return action

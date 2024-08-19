@@ -1,12 +1,13 @@
-import numpy as np
 from collections import namedtuple
 from collections.abc import Iterable
 
+import numpy as np
+
 import omnigibson as og
+import omnigibson.lazy as lazy
+import omnigibson.utils.transform_utils as T
 from omnigibson.macros import gm
 from omnigibson.utils import python_utils
-import omnigibson.utils.transform_utils as T
-import omnigibson.lazy as lazy
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -102,9 +103,27 @@ def prims_to_rigid_prim_set(inp_prims):
         elif isinstance(prim, RigidPrim):
             out.add(prim)
         else:
-            raise ValueError(f"Inputted prims must be either EntityPrim or RigidPrim instances "
-                             f"when getting collisions! Type: {type(prim)}")
+            raise ValueError(
+                f"Inputted prims must be either EntityPrim or RigidPrim instances "
+                f"when getting collisions! Type: {type(prim)}"
+            )
     return out
+
+
+def prim_paths_to_rigid_prims(prim_paths, scene):
+    """
+    Given a set of rigid body prim paths @body_prim_paths, return a list of (BaseObject, RigidPrim) tuples.
+    """
+    rigid_prims = set()
+    for body in prim_paths:
+        tokens = body.split("/")
+        obj_prim_path = "/".join(tokens[:-1])
+        link_name = tokens[-1]
+        obj = scene.object_registry("prim_path", obj_prim_path)
+        if obj is not None:
+            rigid_prims.add((obj, obj.links[link_name]))
+
+    return rigid_prims
 
 
 def get_collisions(prims=None, prims_check=None, prims_exclude=None, step_physics=False):
@@ -132,9 +151,14 @@ def get_collisions(prims=None, prims_check=None, prims_exclude=None, step_physic
         og.sim.step_physics()
 
     # Standardize inputs
-    prims = og.sim.scene.objects if prims is None else prims if isinstance(prims, Iterable) else [prims]
+    if prims is not None:
+        prims = prims if isinstance(prims, Iterable) else [prims]
+    else:
+        prims = [x for scene in og.sim.scenes for x in scene.objects]
     prims_check = [] if prims_check is None else prims_check if isinstance(prims_check, Iterable) else [prims_check]
-    prims_exclude = [] if prims_exclude is None else prims_exclude if isinstance(prims_exclude, Iterable) else [prims_exclude]
+    prims_exclude = (
+        [] if prims_exclude is None else prims_exclude if isinstance(prims_exclude, Iterable) else [prims_exclude]
+    )
 
     # Convert into prim paths to check for collision
     def get_paths_from_rigid_prims(inp_prims):
@@ -152,9 +176,10 @@ def get_collisions(prims=None, prims_check=None, prims_exclude=None, step_physic
     paths_exclude = get_paths_from_rigid_prims(rprims_exclude)
 
     # Run sanity checks
-    assert paths_check.isdisjoint(paths_exclude), \
-        f"Paths to check and paths to ignore collisions for should be mutually exclusive! " \
+    assert paths_check.isdisjoint(paths_exclude), (
+        f"Paths to check and paths to ignore collisions for should be mutually exclusive! "
         f"paths_check: {paths_check}, paths_exclude: {paths_exclude}"
+    )
 
     # Determine whether we're checking / filtering any collision from collision set A
     should_check_collisions = len(paths_check) > 0
@@ -203,7 +228,9 @@ def get_collisions(prims=None, prims_check=None, prims_exclude=None, step_physic
             # Lastly, we only keep the intersection of this resulting set with the original collision set, so that
             # any previously filtered collisions are respected
             check_intersect_collisions = get_contacts(rprims_check_intersect)
-            valid_intersect_collisions = collisions.intersection({pair for pair in check_intersect_collisions if paths.issuperset(set(pair))})
+            valid_intersect_collisions = collisions.intersection(
+                {pair for pair in check_intersect_collisions if paths.issuperset(set(pair))}
+            )
 
             # Collisions is union of valid other and valid self collisions
             collisions = valid_other_collisions.union(valid_intersect_collisions)
@@ -232,11 +259,12 @@ def check_collision(prims=None, prims_check=None, prims_exclude=None, step_physi
     Returns:
         bool: True if a valid collision has occurred, else False
     """
-    return len(get_collisions(
-        prims=prims,
-        prims_check=prims_check,
-        prims_exclude=prims_exclude,
-        step_physics=step_physics)) > 0
+    return (
+        len(
+            get_collisions(prims=prims, prims_check=prims_check, prims_exclude=prims_exclude, step_physics=step_physics)
+        )
+        > 0
+    )
 
 
 def filter_collisions(collisions, filter_prims):
@@ -300,7 +328,7 @@ def test_valid_pose(obj, pos, quat=None, z_offset=None):
     assert og.sim.is_playing(), "Cannot test valid pose while sim is not playing!"
 
     # Store state before checking object position
-    state = og.sim.scene.dump_state(serialized=False)
+    state = og.sim.dump_state()
 
     # Set the pose of the object
     place_base_pose(obj, pos, quat, z_offset)
@@ -310,7 +338,7 @@ def test_valid_pose(obj, pos, quat=None, z_offset=None):
     in_collision = check_collision(prims=obj, step_physics=True)
 
     # Restore state after checking the collision
-    og.sim.load_state(state, serialized=False)
+    og.sim.load_state(state)
 
     # Valid if there are no collisions
     return not in_collision
@@ -338,7 +366,7 @@ def land_object(obj, pos, quat=None, z_offset=None):
     # Check to make sure we landed successfully
     # land for maximum 1 second, should fall down ~5 meters
     land_success = False
-    max_simulator_step = int(1.0 / og.sim.get_rendering_dt())
+    max_simulator_step = int(1.0 / og.sim.get_sim_step_dt())
     for _ in range(max_simulator_step):
         # Run a sim step and see if we have any contacts
         og.sim.step()
@@ -355,5 +383,17 @@ def land_object(obj, pos, quat=None, z_offset=None):
     obj.keep_still()
 
 
-def meets_minimum_isaac_version(minimum_version):
-    return python_utils.meets_minimum_version(lazy.omni.isaac.version.get_version()[0], minimum_version)
+def meets_minimum_isaac_version(minimum_version, current_version=None):
+    def _transform_isaac_version(str):
+        # In order to avoid issues with the version scheme change from 202X.X.X to X.X.X,
+        # transform Isaac Sim versions to all not be 202x-based e.g. 2021.2.3 -> 1.2.3
+        return str[3:] if str.startswith("202") else str
+
+    # If the user has not provided the current Isaac version, get it from the system.
+    if current_version is None:
+        current_version = lazy.omni.isaac.version.get_version()[0]
+
+    # Transform and compare.
+    return python_utils.meets_minimum_version(
+        _transform_isaac_version(current_version), _transform_isaac_version(minimum_version)
+    )

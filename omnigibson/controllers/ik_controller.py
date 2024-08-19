@@ -1,11 +1,11 @@
 import numpy as np
-from omnigibson.macros import gm, create_module_macros
 
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import ControlType, ManipulationController
 from omnigibson.controllers.joint_controller import JointController
-from omnigibson.utils.processing_utils import MovingAverageFilter
+from omnigibson.macros import create_module_macros, gm
 from omnigibson.utils.control_utils import IKSolver
+from omnigibson.utils.processing_utils import MovingAverageFilter
 from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.ui_utils import create_module_logger
 
@@ -15,18 +15,18 @@ log = create_module_logger(module_name=__name__)
 # Set some macros
 m = create_module_macros(module_path=__file__)
 m.IK_POS_TOLERANCE = 0.002
-m.IK_POS_WEIGHT = 20.0
+m.IK_POS_WEIGHT = 1.0
 m.IK_ORN_TOLERANCE = 0.01
 m.IK_ORN_WEIGHT = 0.05
-m.IK_MAX_ITERATIONS = 100
+m.IK_MAX_ITERATIONS = 10
 
 # Different modes
 IK_MODE_COMMAND_DIMS = {
-    "absolute_pose": 6,             # 6DOF (x,y,z,ax,ay,az) control of pose, whether both position and orientation is given in absolute coordinates
-    "pose_absolute_ori": 6,         # 6DOF (dx,dy,dz,ax,ay,az) control over pose, where the orientation is given in absolute axis-angle coordinates
-    "pose_delta_ori": 6,            # 6DOF (dx,dy,dz,dax,day,daz) control over pose
-    "position_fixed_ori": 3,        # 3DOF (dx,dy,dz) control over position, with orientation commands being kept as fixed initial absolute orientation
-    "position_compliant_ori": 3,    # 3DOF (dx,dy,dz) control over position, with orientation commands automatically being sent as 0s (so can drift over time)
+    "absolute_pose": 6,  # 6DOF (x,y,z,ax,ay,az) control of pose, whether both position and orientation is given in absolute coordinates
+    "pose_absolute_ori": 6,  # 6DOF (dx,dy,dz,ax,ay,az) control over pose, where the orientation is given in absolute axis-angle coordinates
+    "pose_delta_ori": 6,  # 6DOF (dx,dy,dz,dax,day,daz) control over pose
+    "position_fixed_ori": 3,  # 3DOF (dx,dy,dz) control over position, with orientation commands being kept as fixed initial absolute orientation
+    "position_compliant_ori": 3,  # 3DOF (dx,dy,dz) control over position, with orientation commands automatically being sent as 0s (so can drift over time)
 }
 IK_MODES = set(IK_MODE_COMMAND_DIMS.keys())
 
@@ -48,7 +48,7 @@ class InverseKinematicsController(JointController, ManipulationController):
         robot_urdf_path,
         eef_name,
         control_freq,
-        reset_joint_pos, 
+        reset_joint_pos,
         control_limits,
         dof_idx,
         command_input_limits="default",
@@ -153,7 +153,7 @@ class InverseKinematicsController(JointController, ManipulationController):
         # The output orientation limits are also set to be values assuming delta commands, so those are updated too
         if self.mode == "pose_absolute_ori":
             if command_input_limits is not None:
-                if command_input_limits == "default":
+                if type(command_input_limits) == str and command_input_limits == "default":
                     command_input_limits = [
                         [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
                         [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
@@ -162,7 +162,7 @@ class InverseKinematicsController(JointController, ManipulationController):
                     command_input_limits[0][3:] = -np.pi
                     command_input_limits[1][3:] = np.pi
             if command_output_limits is not None:
-                if command_output_limits == "default":
+                if type(command_output_limits) == str and command_output_limits == "default":
                     command_output_limits = [
                         [-1.0, -1.0, -1.0, -np.pi, -np.pi, -np.pi],
                         [1.0, 1.0, 1.0, np.pi, np.pi, np.pi],
@@ -219,24 +219,26 @@ class InverseKinematicsController(JointController, ManipulationController):
         # Load relevant info for this controller
         self.control_filter.load_state(state["control_filter"], serialized=False)
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Run super first
-        state_flat = super()._serialize(state=state)
+        state_flat = super().serialize(state=state)
 
         # Serialize state for this controller
-        return np.concatenate([
-            state_flat,
-            self.control_filter.serialize(state=state["control_filter"]),
-        ]).astype(float)
+        return np.concatenate(
+            [
+                state_flat,
+                self.control_filter.serialize(state=state["control_filter"]),
+            ]
+        ).astype(float)
 
-    def _deserialize(self, state):
+    def deserialize(self, state):
         # Run super first
-        state_dict, idx = super()._deserialize(state=state)
+        state_dict, idx = super().deserialize(state=state)
 
         # Deserialize state for this controller
-        state_dict["control_filter"] = self.control_filter.deserialize(state=state[idx: idx + self.control_filter.state_size])
+        state_dict["control_filter"], deserialized_items = self.control_filter.deserialize(state=state[idx:])
 
-        return state_dict, idx + self.control_filter.state_size
+        return state_dict, idx + deserialized_items
 
     def _update_goal(self, command, control_dict):
         # Grab important info from control dict
@@ -254,8 +256,9 @@ class InverseKinematicsController(JointController, ManipulationController):
         if self.mode == "position_fixed_ori":
             # We need to grab the current robot orientation as the commanded orientation if there is none saved
             if self._fixed_quat_target is None:
-                self._fixed_quat_target = quat_relative.astype(np.float32) \
-                    if (self._goal is None) else self._goal["target_quat"]
+                self._fixed_quat_target = (
+                    quat_relative.astype(np.float32) if (self._goal is None) else self._goal["target_quat"]
+                )
             target_quat = self._fixed_quat_target
         elif self.mode == "position_compliant_ori":
             # Target quat is simply the current robot orientation

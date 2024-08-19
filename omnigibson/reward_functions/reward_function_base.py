@@ -1,6 +1,7 @@
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
-from omnigibson.utils.python_utils import classproperty, Registerable
+
+from omnigibson.utils.python_utils import Registerable, classproperty
 
 REGISTERED_REWARD_FUNCTIONS = dict()
 
@@ -10,6 +11,7 @@ class BaseRewardFunction(Registerable, metaclass=ABCMeta):
     Base RewardFunction class
     Reward-specific reset and get_reward methods are implemented in subclasses
     """
+
     def __init__(self):
         # Store internal vars that will be filled in at runtime
         self._reward = None

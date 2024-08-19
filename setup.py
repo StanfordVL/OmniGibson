@@ -13,7 +13,7 @@ long_description = "".join(lines)
 
 setup(
     name="omnigibson",
-    version="0.2.1",
+    version="1.0.0",
     author="Stanford University",
     long_description_content_type="text/markdown",
     long_description=long_description,
@@ -21,8 +21,9 @@ setup(
     zip_safe=False,
     packages=find_packages(),
     install_requires=[
-        "gym~=0.26.2",
+        "gymnasium>=0.28.1",
         "numpy~=1.23.5",
+        "scipy~=1.10.1",
         "GitPython~=3.1.40",
         "transforms3d~=0.4.1",
         "networkx~=3.2.1",
@@ -33,7 +34,7 @@ setup(
         "trimesh~=4.0.8",
         "h5py~=3.10.0",
         "cryptography~=41.0.7",
-        "bddl~=3.4.0b4",
+        "bddl~=3.5.0",
         "opencv-python~=4.8.1",
         "nest_asyncio~=1.5.8",
         "imageio~=2.33.1",
@@ -41,12 +42,16 @@ setup(
         "termcolor~=2.4.0",
         "progressbar~=2.5",
         "pymeshlab~=2022.2",
-        "click~=8.1.7",
+        "click~=8.1.3",
         "aenum~=3.1.15",
-        "rtree~=1.2.0"
+        "rtree~=1.2.0",
+        "graphviz~=0.20",
+        "numba~=0.60.0",
     ],
+    extras_require={
+        "isaac": ["isaacsim-for-omnigibson>=4.1.0"],
+    },
     tests_require=[],
     python_requires=">=3",
-    package_data={"": ["omnigibson/global_config.yaml"]},
     include_package_data=True,
 )  # yapf: disable

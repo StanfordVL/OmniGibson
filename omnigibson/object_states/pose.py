@@ -7,14 +7,13 @@ from omnigibson.object_states.object_state_base import AbsoluteObjectState
 m = create_module_macros(module_path=__file__)
 
 m.POSITIONAL_VALIDATION_EPSILON = 1e-10
-m.ORIENTATION_VALIDATION_EPSILON = 0.003        # ~5 degrees error tolerance
+m.ORIENTATION_VALIDATION_EPSILON = 0.003  # ~5 degrees error tolerance
 
 
 class Pose(AbsoluteObjectState):
 
     def _get_value(self):
-        pos = self.obj.get_position()
-        orn = self.obj.get_orientation()
+        pos, orn = self.obj.get_position_orientation()
         return np.array(pos), np.array(orn)
 
     def _has_changed(self, get_value_args, value, info):

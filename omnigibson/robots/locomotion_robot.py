@@ -1,12 +1,12 @@
 from abc import abstractmethod
 
 import numpy as np
-from transforms3d.euler import euler2quat
-from transforms3d.quaternions import qmult, quat2mat
 
 from omnigibson.controllers import LocomotionController
 from omnigibson.robots.robot_base import BaseRobot
 from omnigibson.utils.python_utils import classproperty
+from omnigibson.utils.transform_utils import euler2quat, quat2mat, quat_multiply
+from omnigibson.utils.usd_utils import ControllableObjectViewAPI
 
 
 class LocomotionRobot(BaseRobot):
@@ -39,8 +39,8 @@ class LocomotionRobot(BaseRobot):
     def _get_proprioception_dict(self):
         dic = super()._get_proprioception_dict()
 
-        joint_positions = self.get_joint_positions(normalized=False)
-        joint_velocities = self.get_joint_velocities(normalized=False)
+        joint_positions = ControllableObjectViewAPI.get_joint_positions(self.articulation_root_path)
+        joint_velocities = ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
 
         # Add base info
         dic["base_qpos"] = joint_positions[self.base_control_idx]
@@ -170,7 +170,7 @@ class LocomotionRobot(BaseRobot):
             delta (float): delta angle to rotate the base left
         """
         quat = self.get_orientation()
-        quat = qmult((euler2quat(-delta, 0, 0)), quat)
+        quat = quat_multiply((euler2quat(-delta, 0, 0)), quat)
         self.set_orientation(quat)
 
     def turn_right(self, delta=0.03):
@@ -181,7 +181,7 @@ class LocomotionRobot(BaseRobot):
             delta (float): angle to rotate the base right
         """
         quat = self.get_orientation()
-        quat = qmult((euler2quat(delta, 0, 0)), quat)
+        quat = quat_multiply((euler2quat(delta, 0, 0)), quat)
         self.set_orientation(quat)
 
     @property
@@ -192,12 +192,23 @@ class LocomotionRobot(BaseRobot):
 
     @property
     @abstractmethod
+    def base_joint_names(self):
+        """
+        Returns:
+            list: Array of joint names corresponding to this robot's base joints (e.g.: wheels).
+
+                Note: the ordering within the list is assumed to be intentional, and is
+                directly used to define the set of corresponding control idxs.
+        """
+        raise NotImplementedError
+
+    @property
     def base_control_idx(self):
         """
         Returns:
             n-array: Indices in low-level control vector corresponding to base joints.
         """
-        raise NotImplementedError
+        return np.array([list(self.joints.keys()).index(name) for name in self.base_joint_names])
 
     @classproperty
     def _do_not_register_classes(cls):

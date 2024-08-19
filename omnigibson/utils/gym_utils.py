@@ -1,5 +1,6 @@
-import gym
 from abc import ABCMeta, abstractmethod
+
+import gymnasium as gym
 import numpy as np
 
 from omnigibson.utils.ui_utils import create_module_logger
@@ -54,7 +55,7 @@ def recursively_generate_compatible_dict(dic):
             out[k] = recursively_generate_compatible_dict(dic=v)
         elif isinstance(v, np.ndarray) and len(v.dtype) > 0:
             # Map to list of tuples
-            out[k] = list(map(tuple, v))
+            out[k] = tuple(map(tuple, v))
         else:
             # Preserve the key-value pair
             out[k] = v
@@ -70,6 +71,7 @@ class GymObservable(metaclass=ABCMeta):
     Args:
         kwargs: dict, does nothing, used to sink any extraneous arguments during initialization
     """
+
     def __init__(self, *args, **kwargs):
         # Initialize variables that we will fill in later
         self.observation_space = None
@@ -87,7 +89,9 @@ class GymObservable(metaclass=ABCMeta):
             kwargs (dict): Any keyword args necessary for grabbing observations
 
         Returns:
-            dict: Keyword-mapped observations mapping observation names to nested observations
+            2-tuple:
+                dict: Keyword-mapped observations mapping observation names to nested observations
+                dict: Additional information about the observations
         """
         raise NotImplementedError()
 
@@ -128,3 +132,23 @@ class GymObservable(metaclass=ABCMeta):
         log.debug(f"Loaded obs space dictionary for: {self.__class__.__name__}")
 
         return self.observation_space
+
+
+def maxdim(space):
+    """
+    Helper function to get the maximum dimension of a gym space
+
+    Args:
+        space (gym.spaces.Space): Gym space to get the maximum dimension of
+
+    Returns:
+        int: Maximum dimension of the gym space
+    """
+    if isinstance(space, (gym.spaces.Dict, gym.spaces.Tuple)):
+        return sum([maxdim(s) for s in space.spaces.values()])
+    elif isinstance(space, (gym.spaces.Box, gym.spaces.Discrete, gym.spaces.MultiDiscrete, gym.spaces.MultiBinary)):
+        return gym.spaces.utils.flatdim(space)
+    elif isinstance(space, (gym.spaces.Sequence, gym.spaces.Graph)):
+        return float("inf")
+    else:
+        raise ValueError(f"Unsupported gym space type: {type(space)}")

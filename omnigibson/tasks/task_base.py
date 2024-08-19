@@ -1,9 +1,11 @@
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
-import numpy as np
-from omnigibson.utils.python_utils import classproperty, Registerable
-from omnigibson.utils.gym_utils import GymObservable
 
+import numpy as np
+
+import omnigibson as og
+from omnigibson.utils.gym_utils import GymObservable
+from omnigibson.utils.python_utils import Registerable, classproperty
 
 REGISTERED_TASKS = dict()
 
@@ -23,6 +25,7 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
             any keyword required by a specific task class but not specified in the config will automatically be filled
             in with the default config. See cls.default_reward_config for default values used
     """
+
     def __init__(self, termination_config=None, reward_config=None):
         # Make sure configs are dictionaries
         termination_config = dict() if termination_config is None else termination_config
@@ -31,8 +34,9 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         # Sanity check termination and reward conditions -- any keys found in the inputted config but NOT
         # found in the default config should raise an error
         unknown_termination_keys = set(termination_config.keys()) - set(self.default_termination_config.keys())
-        assert len(unknown_termination_keys) == 0, \
-            f"Got unknown termination config keys inputted: {unknown_termination_keys}"
+        assert (
+            len(unknown_termination_keys) == 0
+        ), f"Got unknown termination config keys inputted: {unknown_termination_keys}"
         unknown_reward_keys = set(reward_config.keys()) - set(self.default_reward_config.keys())
         assert len(unknown_reward_keys) == 0, f"Got unknown reward config keys inputted: {unknown_reward_keys}"
 
@@ -93,7 +97,10 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         obs_space = self._load_non_low_dim_observation_space()
 
         # Create the low dim obs space and add to the main obs space dict -- make sure we're flattening low dim obs
-        obs_space["low_dim"] = self._build_obs_box_space(shape=(self._low_dim_obs_dim,), low=-np.inf, high=np.inf, dtype=np.float64)
+        if self._low_dim_obs_dim > 0:
+            obs_space["low_dim"] = self._build_obs_box_space(
+                shape=(self._low_dim_obs_dim,), low=-np.inf, high=np.inf, dtype=np.float64
+            )
 
         return obs_space
 
@@ -102,16 +109,54 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         Load this task
         """
         # Make sure the scene is of the correct type!
-        assert any([issubclass(env.scene.__class__, valid_cls) for valid_cls in self.valid_scene_types]), \
-            f"Got incompatible scene type {env.scene.__class__.__name__} for task {self.__class__.__name__}! " \
-            f"Scene class must be a subclass of at least one of: " \
+        assert any([issubclass(env.scene.__class__, valid_cls) for valid_cls in self.valid_scene_types]), (
+            f"Got incompatible scene type {env.scene.__class__.__name__} for task {self.__class__.__name__}! "
+            f"Scene class must be a subclass of at least one of: "
             f"{[cls_type.__name__ for cls_type in self.valid_scene_types]}"
+        )
 
         # Run internal method
         self._load(env=env)
 
         # We're now initialized
         self._loaded = True
+
+    def post_play_load(self, env):
+        """
+        Complete any loading tasks that require the simulator to be playing
+
+        Args:
+            env (Environment): environment instance
+        """
+        # Compute the low dimensional observation dimension
+        obs = self.get_obs(env=env, flatten_low_dim=True)
+        self._low_dim_obs_dim = len(obs["low_dim"]) if "low_dim" in obs else 0
+
+    @property
+    def task_metadata(self):
+        """
+        Returns:
+            dict: Relevant metadata for the current task
+        """
+        # Default is empty dictionary
+        return dict()
+
+    def write_task_metadata(self):
+        """
+        Store any relevant task metadata that should be written when the simulation state is saved
+        """
+        # Write to sim
+        og.sim.write_metadata(key="task", data=self.task_metadata)
+
+    def load_task_metadata(self):
+        """
+        Load relevant task metadata stored in the simulator
+
+        Returns:
+            dict: Relevant metadata for the ucrrent task
+        """
+        # Load from sim
+        return og.sim.get_metadata(key="task")
 
     @abstractmethod
     def _create_termination_conditions(self):
@@ -183,9 +228,6 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         for reward_function in self._reward_functions.values():
             reward_function.reset(self, env)
 
-        # Fill in low dim obs dim so we can use this to create the observation space later
-        self._low_dim_obs_dim = len(self.get_obs(env=env, flatten_low_dim=True)["low_dim"])
-
     def _step_termination(self, env, action, info=None):
         """
         Step and aggregate termination conditions
@@ -203,16 +245,22 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         # Get all dones and successes from individual termination conditions
         dones = []
         successes = []
-        for termination_condition in self._termination_conditions.values():
+        info = dict() if info is None else info
+        if "termination_conditions" not in info:
+            info["termination_conditions"] = dict()
+        for name, termination_condition in self._termination_conditions.items():
             d, s = termination_condition.step(self, env, action)
             dones.append(d)
             successes.append(s)
+            info["termination_conditions"][name] = {
+                "done": d,
+                "success": s,
+            }
         # Any True found corresponds to a done / success
         done = sum(dones) > 0
         success = sum(successes) > 0
 
         # Populate info
-        info = dict() if info is None else info
         info["success"] = success
         return done, info
 
@@ -284,7 +332,8 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         low_dim_obs, obs = self._get_obs(env=env)
 
         # Possibly flatten low dim and add to main observation dictionary
-        obs["low_dim"] = self._flatten_low_dim_obs(obs=low_dim_obs) if flatten_low_dim else low_dim_obs
+        if low_dim_obs:
+            obs["low_dim"] = self._flatten_low_dim_obs(obs=low_dim_obs) if flatten_low_dim else low_dim_obs
 
         return obs
 

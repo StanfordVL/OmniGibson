@@ -44,8 +44,8 @@ cfg["objects"] = [ # (1)!
         "usd_path": f"{gm.ASSET_PATH}/models/stain/stain.usd",
         "category": "stain", # (4)!
         "visual_only": True, # (5)!
-        "scale": [2.0, 1.0, 2.0], # (6)!
-        "position": [3.0, 0, 2.0], # (7)!
+        "scale": [1.0, 1.0, 1.0], # (6)!
+        "position": [1.0, 2.0, 0.001], # (7)!
         "orientation": [0, 0, 0, 1.0], # (8)!
     },
     {
@@ -137,7 +137,7 @@ env = og.Environment(cfg)
 Once the environment loads, we can interface with our environment similar to OpenAI's Gym interface:
 
 ```{.python .annotate}
-obs, rew, done, info = env.step(env.action_space.sample())
+obs, rew, terminated, truncated, info = env.step(env.action_space.sample())
 ```
 
 ??? question "What happens if we have no robot loaded?"
@@ -166,8 +166,8 @@ obs, rew, done, info = env.step(env.action_space.sample())
             "usd_path": f"{gm.ASSET_PATH}/models/stain/stain.usd",
             "category": "stain",
             "visual_only": True,
-            "scale": [2.0, 1.0, 2.0],
-            "position": [3.0, 0, 2.0],
+            "scale": [1.0, 1.0, 1.0],
+            "position": [1.0, 2.0, 0.001],
             "orientation": [0, 0, 0, 1.0],
         },
         {
@@ -221,7 +221,9 @@ obs, rew, done, info = env.step(env.action_space.sample())
     
     # Step!
     for _ in range(10000):
-        obs, rew, done, info = env.step(env.action_space.sample())
+        obs, rew, terminated, truncated, info = env.step(env.action_space.sample())
+
+    og.shutdown()
     ```
 
 
@@ -251,4 +253,4 @@ og.sim.viewer_camera.set_position_orientation(<POSITION>, <ORIENTATION>)
 
 ***
 
-**Next:** Check out some of **`OmniGibson`**'s breadth of features from our [Building Block](./building_blocks.md) examples!
+**Next:** Check out some of **`OmniGibson`**'s breadth of features from our [Modules](../modules/overview.md) pages!

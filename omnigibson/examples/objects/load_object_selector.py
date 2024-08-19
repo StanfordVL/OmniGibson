@@ -1,9 +1,10 @@
 import numpy as np
+
 import omnigibson as og
 from omnigibson.utils.asset_utils import (
     get_all_object_categories,
-    get_og_avg_category_specs,
     get_all_object_category_models,
+    get_og_avg_category_specs,
 )
 from omnigibson.utils.ui_utils import choose_from_options
 
@@ -24,11 +25,15 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Select a category to load
     available_obj_categories = get_all_object_categories()
-    obj_category = choose_from_options(options=available_obj_categories, name="object category", random_selection=random_selection)
+    obj_category = choose_from_options(
+        options=available_obj_categories, name="object category", random_selection=random_selection
+    )
 
     # Select a model to load
     available_obj_models = get_all_object_category_models(obj_category)
-    obj_model = choose_from_options(options=available_obj_models, name="object model", random_selection=random_selection)
+    obj_model = choose_from_options(
+        options=available_obj_models, name="object model", random_selection=random_selection
+    )
 
     # Load the specs of the object categories, e.g., common scaling factor
     avg_category_spec = get_og_avg_category_specs()
@@ -39,7 +44,6 @@ def main(random_selection=False, headless=False, short_exec=False):
         name="obj",
         category=obj_category,
         model=obj_model,
-        bounding_box=avg_category_spec.get(obj_category),
         position=[0, 0, 50.0],
     )
 

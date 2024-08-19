@@ -3,7 +3,7 @@ from enum import IntEnum
 
 import numpy as np
 
-from omnigibson.utils.python_utils import classproperty, assert_valid_key, Serializable, Registerable, Recreatable
+from omnigibson.utils.python_utils import Recreatable, Registerable, Serializable, assert_valid_key, classproperty
 
 # Global dicts that will contain mappings
 REGISTERED_CONTROLLERS = dict()
@@ -115,7 +115,7 @@ class BaseController(Serializable, Registerable, Recreatable):
 
         # Generate goal information
         self._goal_shapes = self._get_goal_shapes()
-        self._goal_dim = int(np.sum([np.product(shape) for shape in self._goal_shapes.values()]))
+        self._goal_dim = int(np.sum([np.prod(shape) for shape in self._goal_shapes.values()]))
 
         # Initialize some other variables that will be filled in during runtime
         self._control = None
@@ -125,13 +125,17 @@ class BaseController(Serializable, Registerable, Recreatable):
         self._command_input_transform = None
 
         # Standardize command input / output limits to be (min_array, max_array)
-        command_input_limits = (-1.0, 1.0) if command_input_limits == "default" else command_input_limits
+        command_input_limits = (
+            (-1.0, 1.0)
+            if type(command_input_limits) == str and command_input_limits == "default"
+            else command_input_limits
+        )
         command_output_limits = (
             (
                 np.array(self._control_limits[self.control_type][0])[self.dof_idx],
                 np.array(self._control_limits[self.control_type][1])[self.dof_idx],
             )
-            if command_output_limits == "default"
+            if type(command_output_limits) == str and command_output_limits == "default"
             else command_output_limits
         )
         self._command_input_limits = (
@@ -178,7 +182,9 @@ class BaseController(Serializable, Registerable, Recreatable):
                     self._command_output_transform = (
                         self._command_output_limits[1] + self._command_output_limits[0]
                     ) / 2.0
-                    self._command_input_transform = (self._command_input_limits[1] + self._command_input_limits[0]) / 2.0
+                    self._command_input_transform = (
+                        self._command_input_limits[1] + self._command_input_limits[0]
+                    ) / 2.0
                 # Scale command
                 command = (
                     command - self._command_input_transform
@@ -197,8 +203,9 @@ class BaseController(Serializable, Registerable, Recreatable):
             control_dict (dict): Current state
         """
         # Sanity check the command
-        assert len(command) == self.command_dim, \
-            f"Commands must be dimension {self.command_dim}, got dim {len(command)} instead."
+        assert (
+            len(command) == self.command_dim
+        ), f"Commands must be dimension {self.command_dim}, got dim {len(command)} instead."
 
         # Preprocess and run internal command
         self._goal = self._update_goal(command=self._preprocess_command(np.array(command)), control_dict=control_dict)
@@ -272,6 +279,9 @@ class BaseController(Serializable, Registerable, Recreatable):
 
         # Compute control, then clip and return
         control = self.compute_control(goal_dict=self._goal, control_dict=control_dict)
+        assert (
+            len(control) == self.control_dim
+        ), f"Control signal must be of length {self.control_dim}, got {len(control)} instead."
         self._control = self.clip_control(control=control)
         return self._control
 
@@ -302,28 +312,38 @@ class BaseController(Serializable, Registerable, Recreatable):
         )
 
     def _load_state(self, state):
+        # Make sure every entry in goal is a numpy array
         # Load goal
-        self._goal = state["goal"]
+        self._goal = (
+            None
+            if state["goal"] is None
+            else {name: np.array(goal_state) for name, goal_state in state["goal"].items()}
+        )
 
-    def _serialize(self, state):
+    def serialize(self, state):
         # Make sure size of the state is consistent, even if we have no goal
-        goal_state_flattened = np.concatenate([goal_state.flatten() for goal_state in self._goal.values()]) if (
-            state)["goal_is_valid"] else np.zeros(self.goal_dim)
+        goal_state_flattened = (
+            np.concatenate([goal_state.flatten() for goal_state in self._goal.values()])
+            if (state)["goal_is_valid"]
+            else np.zeros(self.goal_dim)
+        )
 
-        return np.concatenate([
-            [state["goal_is_valid"]],
-            goal_state_flattened,
-        ])
+        return np.concatenate(
+            [
+                [state["goal_is_valid"]],
+                goal_state_flattened,
+            ]
+        )
 
-    def _deserialize(self, state):
+    def deserialize(self, state):
         goal_is_valid = bool(state[0])
         if goal_is_valid:
             # Un-flatten all the keys
             idx = 1
             goal = dict()
             for key, shape in self._goal_shapes.items():
-                length = np.product(shape)
-                goal[key] = state[idx:idx+length].reshape(shape)
+                length = np.prod(shape)
+                goal[key] = state[idx : idx + length].reshape(shape)
                 idx += length
         else:
             goal = None

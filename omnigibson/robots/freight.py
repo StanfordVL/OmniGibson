@@ -1,8 +1,12 @@
 import os
+
 import numpy as np
 
 from omnigibson.macros import gm
 from omnigibson.robots.two_wheel_robot import TwoWheelRobot
+from omnigibson.utils.ui_utils import create_module_logger
+
+log = create_module_logger(module_name=__name__)
 
 
 class Freight(TwoWheelRobot):
@@ -12,9 +16,18 @@ class Freight(TwoWheelRobot):
     Uses joint velocity control
     """
 
-    @property
-    def model_name(self):
-        return "Freight"
+    def _post_load(self):
+        super()._post_load()
+
+        # Set the wheels back to using sphere approximations
+        for wheel_name in ["l_wheel_link", "r_wheel_link"]:
+            log.warning(
+                "Freight wheel links are post-processed to use sphere approximation collision meshes. "
+                "Please ignore any previous errors about these collision meshes."
+            )
+            wheel_link = self.links[wheel_name]
+            assert set(wheel_link.collision_meshes) == {"collisions"}, "Wheel link should only have 1 collision!"
+            wheel_link.collision_meshes["collisions"].set_collision_approximation("boundingSphere")
 
     @property
     def wheel_radius(self):
@@ -25,12 +38,8 @@ class Freight(TwoWheelRobot):
         return 0.372
 
     @property
-    def base_control_idx(self):
-        """
-        Returns:
-            n-array: Indices in low-level control vector corresponding to [Left, Right] wheel joints.
-        """
-        return np.array([0, 1])
+    def base_joint_names(self):
+        return ["r_wheel_joint", "l_wheel_joint"]
 
     @property
     def _default_joint_pos(self):

@@ -25,7 +25,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         False: "Use a pre-sampled cached BEHAVIOR activity scene",
         True: "Sample the BEHAVIOR activity in an online fashion",
     }
-    should_sample = choose_from_options(options=sampling_options, name="online object sampling", random_selection=random_selection)
+    should_sample = choose_from_options(
+        options=sampling_options, name="online object sampling", random_selection=random_selection
+    )
 
     # Load the pre-selected configuration and set the online_sampling flag
     config_filename = os.path.join(og.example_config_path, "fetch_behavior.yaml")
@@ -45,8 +47,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         env.reset()
         for i in range(100):
             action = env.action_space.sample()
-            state, reward, done, info = env.step(action)
-            if done:
+            state, reward, terminated, truncated, info = env.step(action)
+            if terminated or truncated:
                 og.log.info("Episode finished after {} timesteps".format(i + 1))
                 break
 
