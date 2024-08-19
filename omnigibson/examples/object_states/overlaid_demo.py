@@ -67,7 +67,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     print("\nTry dragging cloth around with CTRL + Left-Click to see the Overlaid state change:\n")
 
     while steps != max_steps:
-        print(f"Overlaid {carpet.states[Overlaid].get_value(breakfast_table)}    ", end="\r")
+        print(f"Overlaid {carpet.states[Overlaid].get_value(breakfast_table)}. Avg keypoint pos {np.mean(carpet.root_link.keypoint_particle_positions, axis=0)}    ", end="\r")
         env.step(np.array([]))
 
     # Shut down env at the end
