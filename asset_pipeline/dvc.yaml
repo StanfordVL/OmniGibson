@@ -82,7 +82,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/max_object_images.zip
     - cad/scenes/office_cubicles_right/artifacts/max_object_images.zip
     - cad/scenes/office_large/artifacts/max_object_images.zip
-    - cad/scenes/office_vendor_machine/artifacts/max_object_images.zip
     - cad/scenes/public_restroom_blue/artifacts/max_object_images.zip
     - cad/scenes/public_restroom_brown/artifacts/max_object_images.zip
     - cad/scenes/public_restroom_futuristic/artifacts/max_object_images.zip
@@ -198,7 +197,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/meshes.zip
     - cad/scenes/office_cubicles_right/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
-    - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
     - cad/scenes/public_restroom_brown/artifacts/meshes.zip
     - cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
@@ -285,7 +283,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
@@ -372,7 +369,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
     - cad/scenes/office_cubicles_right/artifacts/collision_meshes.zip
     - cad/scenes/office_large/artifacts/collision_meshes.zip
-    - cad/scenes/office_vendor_machine/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_brown/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_futuristic/artifacts/collision_meshes.zip
@@ -459,7 +455,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/collision_selection.json
     - cad/scenes/office_cubicles_right/artifacts/collision_selection.json
     - cad/scenes/office_large/artifacts/collision_selection.json
-    - cad/scenes/office_vendor_machine/artifacts/collision_selection.json
     - cad/scenes/public_restroom_blue/artifacts/collision_selection.json
     - cad/scenes/public_restroom_brown/artifacts/collision_selection.json
     - cad/scenes/public_restroom_futuristic/artifacts/collision_selection.json
@@ -561,7 +556,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/meshes.zip
     - cad/scenes/office_cubicles_right/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
-    - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
     - cad/scenes/public_restroom_brown/artifacts/meshes.zip
     - cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
@@ -648,7 +642,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
@@ -735,7 +728,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
     - cad/scenes/office_cubicles_right/artifacts/collision_meshes.zip
     - cad/scenes/office_large/artifacts/collision_meshes.zip
-    - cad/scenes/office_vendor_machine/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_brown/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_futuristic/artifacts/collision_meshes.zip
@@ -822,7 +814,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/collision_selection.json
     - cad/scenes/office_cubicles_right/artifacts/collision_selection.json
     - cad/scenes/office_large/artifacts/collision_selection.json
-    - cad/scenes/office_vendor_machine/artifacts/collision_selection.json
     - cad/scenes/public_restroom_blue/artifacts/collision_selection.json
     - cad/scenes/public_restroom_brown/artifacts/collision_selection.json
     - cad/scenes/public_restroom_futuristic/artifacts/collision_selection.json
@@ -889,7 +880,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.json
     - cad/scenes/office_cubicles_right/artifacts/room_object_list.json
     - cad/scenes/office_large/artifacts/room_object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/room_object_list.json
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.json
     - cad/scenes/public_restroom_brown/artifacts/room_object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/room_object_list.json
@@ -1065,7 +1055,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/export_meshes.json
     - cad/scenes/office_cubicles_right/artifacts/export_meshes.json
     - cad/scenes/office_large/artifacts/export_meshes.json
-    - cad/scenes/office_vendor_machine/artifacts/export_meshes.json
     - cad/scenes/public_restroom_blue/artifacts/export_meshes.json
     - cad/scenes/public_restroom_brown/artifacts/export_meshes.json
     - cad/scenes/public_restroom_futuristic/artifacts/export_meshes.json
@@ -1158,7 +1147,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/meshes.zip
     - cad/scenes/office_cubicles_right/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
-    - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
     - cad/scenes/public_restroom_brown/artifacts/meshes.zip
     - cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
@@ -1245,7 +1233,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
     - cad/scenes/office_cubicles_right/artifacts/collision_meshes.zip
     - cad/scenes/office_large/artifacts/collision_meshes.zip
-    - cad/scenes/office_vendor_machine/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_brown/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_futuristic/artifacts/collision_meshes.zip
@@ -1332,7 +1319,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/collision_selection.json
     - cad/scenes/office_cubicles_right/artifacts/collision_selection.json
     - cad/scenes/office_large/artifacts/collision_selection.json
-    - cad/scenes/office_vendor_machine/artifacts/collision_selection.json
     - cad/scenes/public_restroom_blue/artifacts/collision_selection.json
     - cad/scenes/public_restroom_brown/artifacts/collision_selection.json
     - cad/scenes/public_restroom_futuristic/artifacts/collision_selection.json
@@ -1419,7 +1405,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
@@ -1496,7 +1481,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/meshes.zip
     - cad/scenes/office_cubicles_right/artifacts/meshes.zip
     - cad/scenes/office_large/artifacts/meshes.zip
-    - cad/scenes/office_vendor_machine/artifacts/meshes.zip
     - cad/scenes/public_restroom_blue/artifacts/meshes.zip
     - cad/scenes/public_restroom_brown/artifacts/meshes.zip
     - cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
@@ -1550,7 +1534,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.json
     - cad/scenes/office_cubicles_right/artifacts/room_object_list.json
     - cad/scenes/office_large/artifacts/room_object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/room_object_list.json
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.json
     - cad/scenes/public_restroom_brown/artifacts/room_object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/room_object_list.json
@@ -1604,7 +1587,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/room_object_list.success
     - cad/scenes/office_cubicles_right/artifacts/room_object_list.success
     - cad/scenes/office_large/artifacts/room_object_list.success
-    - cad/scenes/office_vendor_machine/artifacts/room_object_list.success
     - cad/scenes/public_restroom_blue/artifacts/room_object_list.success
     - cad/scenes/public_restroom_brown/artifacts/room_object_list.success
     - cad/scenes/public_restroom_futuristic/artifacts/room_object_list.success
@@ -1721,7 +1703,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/generate_max_object_images.json
     - cad/scenes/office_cubicles_right/artifacts/generate_max_object_images.json
     - cad/scenes/office_large/artifacts/generate_max_object_images.json
-    - cad/scenes/office_vendor_machine/artifacts/generate_max_object_images.json
     - cad/scenes/public_restroom_blue/artifacts/generate_max_object_images.json
     - cad/scenes/public_restroom_brown/artifacts/generate_max_object_images.json
     - cad/scenes/public_restroom_futuristic/artifacts/generate_max_object_images.json
@@ -1832,7 +1813,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
@@ -2044,7 +2024,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
@@ -2210,7 +2189,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
     - cad/scenes/office_cubicles_right/artifacts/sanitycheck.json
     - cad/scenes/office_large/artifacts/sanitycheck.json
-    - cad/scenes/office_vendor_machine/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_blue/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_brown/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.json
@@ -2315,7 +2293,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
     - cad/scenes/office_cubicles_right/artifacts/sanitycheck.json
     - cad/scenes/office_large/artifacts/sanitycheck.json
-    - cad/scenes/office_vendor_machine/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_blue/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_brown/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.json
@@ -2456,7 +2433,6 @@ stages:
     - cad/scenes/office_cubicles_left/artifacts/object_list.json
     - cad/scenes/office_cubicles_right/artifacts/object_list.json
     - cad/scenes/office_large/artifacts/object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/object_list.json
     - cad/scenes/public_restroom_blue/artifacts/object_list.json
     - cad/scenes/public_restroom_brown/artifacts/object_list.json
     - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
