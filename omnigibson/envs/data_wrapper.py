@@ -5,7 +5,7 @@ from copy import deepcopy
 from pathlib import Path
 
 import h5py
-import numpy as np
+import torch as th
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -13,8 +13,8 @@ from omnigibson.envs.env_wrapper import EnvironmentWrapper
 from omnigibson.macros import gm
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.sensors.vision_sensor import VisionSensor
-from omnigibson.utils.config_utils import NumpyEncoder
-from omnigibson.utils.python_utils import create_object_from_init_info
+from omnigibson.utils.config_utils import TorchEncoder
+from omnigibson.utils.python_utils import create_object_from_init_info, h5py_group_to_torch
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -68,7 +68,7 @@ class DataWrapper(EnvironmentWrapper):
         Run the environment step() function and collect data
 
         Args:
-            action (np.array): action to take in environment
+            action (th.Tensor): action to take in environment
 
         Returns:
             5-tuple:
@@ -79,6 +79,10 @@ class DataWrapper(EnvironmentWrapper):
                 - bool: truncated, i.e. whether this episode ended due to a time limit etc.
                 - dict: info, i.e. dictionary with any useful information
         """
+        # Make sure actions are always flattened numpy arrays
+        if isinstance(action, dict):
+            action = th.cat([act for act in action.values()])
+
         next_obs, reward, terminated, truncated, info = self.env.step(action)
         self.step_count += 1
 
@@ -96,7 +100,7 @@ class DataWrapper(EnvironmentWrapper):
         Parse the output from the internal self.env.step() call and write relevant data to record to a dictionary
 
         Args:
-            action (np.array): action deployed resulting in @obs
+            action (th.Tensor): action deployed resulting in @obs
             obs (dict): state, i.e. observation
             reward (float): reward, i.e. reward at this current timestep
             terminated (bool): terminated, i.e. whether this episode ended due to a failure or success
@@ -133,7 +137,7 @@ class DataWrapper(EnvironmentWrapper):
         """
         return self.env.observation_spec()
 
-    def process_traj_to_hdf5(self, traj_data, traj_grp_name, obs_key="obs"):
+    def process_traj_to_hdf5(self, traj_data, traj_grp_name, nested_keys=("obs",)):
         """
         Processes trajectory data @traj_data and stores them as a new group under @traj_grp_name.
 
@@ -141,13 +145,14 @@ class DataWrapper(EnvironmentWrapper):
             traj_data (list of dict): Trajectory data, where each entry is a keyword-mapped set of data for a single
                 sim step
             traj_grp_name (str): Name of the trajectory group to store
-            obs_key (str): Name of key corresponding to observation data in @traj_data. This specific data is
-                assumed to be its own keyword-mapped dictionary of observations, and will be parsed differently from
-                the rest of the data
+            nested_keys (list of str): Name of key(s) corresponding to nested data in @traj_data. This specific data
+                is assumed to be its own keyword-mapped dictionary of numpy array values, and will be parsed
+                differently from the rest of the data
 
         Returns:
             hdf5.Group: Generated hdf5 group storing the recorded trajectory data
         """
+        nested_keys = set(nested_keys)
         data_grp = self.hdf5_file.require_group("data")
         traj_grp = data_grp.create_group(traj_grp_name)
         traj_grp.attrs["num_samples"] = len(traj_data)
@@ -156,11 +161,12 @@ class DataWrapper(EnvironmentWrapper):
         # We need to do this because we're not guaranteed to have a full set of keys at every trajectory step; e.g.
         # if the first step only has state or observations but no actions
         data = defaultdict(list)
-        data[obs_key] = defaultdict(list)
+        for key in nested_keys:
+            data[key] = defaultdict(list)
 
         for step_data in traj_data:
             for k, v in step_data.items():
-                if k == obs_key:
+                if k in nested_keys:
                     for mod, step_mod_data in v.items():
                         data[k][mod].append(step_mod_data)
                 else:
@@ -172,12 +178,13 @@ class DataWrapper(EnvironmentWrapper):
                 continue
 
             # Create datasets for all keys with valid data
-            if k == obs_key:
+            if k in nested_keys:
                 obs_grp = traj_grp.create_group(k)
                 for mod, traj_mod_data in dat.items():
-                    obs_grp.create_dataset(mod, data=np.stack(traj_mod_data, axis=0))
+                    obs_grp.create_dataset(mod, data=th.stack(traj_mod_data, dim=0).cpu())
             else:
-                traj_grp.create_dataset(k, data=np.stack(dat, axis=0))
+                traj_data = th.stack(dat, dim=0) if isinstance(dat[0], th.Tensor) else th.tensor(dat)
+                traj_grp.create_dataset(k, data=traj_data)
 
         return traj_grp
 
@@ -189,7 +196,7 @@ class DataWrapper(EnvironmentWrapper):
         success = self.env.task.success or not self.only_successes
         if success and self.hdf5_file is not None:
             traj_grp_name = f"demo_{self.traj_count}"
-            traj_grp = self.process_traj_to_hdf5(self.current_traj_history, traj_grp_name, obs_key="obs")
+            traj_grp = self.process_traj_to_hdf5(self.current_traj_history, traj_grp_name, nested_keys=["obs"])
             self.traj_count += 1
         else:
             # Remove this demo
@@ -213,9 +220,9 @@ class DataWrapper(EnvironmentWrapper):
             group (hdf5.File or hdf5.Group): HDF5 object to add an attribute to
             name (str): Name to assign to the data
             data (str or dict): Data to add. Note that this only supports relatively primitive data types --
-                if the data is a dictionary it will be converted into a string-json format using NumpyEncoder
+                if the data is a dictionary it will be converted into a string-json format using TorchEncoder
         """
-        group.attrs[name] = json.dumps(data, cls=NumpyEncoder) if isinstance(data, dict) else data
+        group.attrs[name] = json.dumps(data, cls=TorchEncoder) if isinstance(data, dict) else data
 
     def save_data(self):
         """
@@ -345,16 +352,16 @@ class DataCollectionWrapper(DataWrapper):
 
         return step_data
 
-    def process_traj_to_hdf5(self, traj_data, traj_grp_name, obs_key="obs"):
+    def process_traj_to_hdf5(self, traj_data, traj_grp_name, nested_keys=("obs",)):
         # First pad all state values to be the same max (uniform) size
         for step_data in traj_data:
             state = step_data["state"]
-            padded_state = np.zeros(self.max_state_size, dtype=np.float32)
+            padded_state = th.zeros(self.max_state_size, dtype=th.float32)
             padded_state[: len(state)] = state
             step_data["state"] = padded_state
 
         # Call super
-        traj_grp = super().process_traj_to_hdf5(traj_data, traj_grp_name, obs_key)
+        traj_grp = super().process_traj_to_hdf5(traj_data, traj_grp_name, nested_keys)
 
         # Add in transition info
         self.add_metadata(group=traj_grp, name="transitions", data=self.current_transitions)
@@ -523,6 +530,7 @@ class DataPlaybackWrapper(DataWrapper):
 
         # Grab episode data
         transitions = json.loads(traj_grp.attrs["transitions"])
+        traj_grp = h5py_group_to_torch(traj_grp)
         action = traj_grp["action"]
         state = traj_grp["state"]
         state_size = traj_grp["state_size"]
@@ -557,7 +565,7 @@ class DataPlaybackWrapper(DataWrapper):
                 for j, add_obj_info in enumerate(cur_transitions["objects"]["add"]):
                     obj = create_object_from_init_info(add_obj_info)
                     scene.add_object(obj)
-                    obj.set_position(np.ones(3) * 100.0 + np.ones(3) * 5 * j)
+                    obj.set_position(th.ones(3) * 100.0 + th.ones(3) * 5 * j)
                 for remove_obj_name in cur_transitions["objects"]["remove"]:
                     obj = scene.object_registry("name", remove_obj_name)
                     scene.remove_object(obj)
