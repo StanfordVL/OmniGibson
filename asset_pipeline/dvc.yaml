@@ -88,7 +88,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/max_object_images.zip
     - cad/scenes/public_restroom_white/artifacts/max_object_images.zip
     - cad/scenes/restaurant_asian/artifacts/max_object_images.zip
-    - cad/scenes/restaurant_brunch/artifacts/max_object_images.zip
     - cad/scenes/restaurant_cafeteria/artifacts/max_object_images.zip
     - cad/scenes/restaurant_diner/artifacts/max_object_images.zip
     - cad/scenes/restaurant_hotel/artifacts/max_object_images.zip
@@ -203,7 +202,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/meshes.zip
     - cad/scenes/public_restroom_white/artifacts/meshes.zip
     - cad/scenes/restaurant_asian/artifacts/meshes.zip
-    - cad/scenes/restaurant_brunch/artifacts/meshes.zip
     - cad/scenes/restaurant_cafeteria/artifacts/meshes.zip
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
@@ -289,7 +287,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
@@ -375,7 +372,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_white/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_asian/artifacts/collision_meshes.zip
-    - cad/scenes/restaurant_brunch/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_cafeteria/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/collision_meshes.zip
@@ -461,7 +457,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/collision_selection.json
     - cad/scenes/public_restroom_white/artifacts/collision_selection.json
     - cad/scenes/restaurant_asian/artifacts/collision_selection.json
-    - cad/scenes/restaurant_brunch/artifacts/collision_selection.json
     - cad/scenes/restaurant_cafeteria/artifacts/collision_selection.json
     - cad/scenes/restaurant_diner/artifacts/collision_selection.json
     - cad/scenes/restaurant_hotel/artifacts/collision_selection.json
@@ -562,7 +557,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/meshes.zip
     - cad/scenes/public_restroom_white/artifacts/meshes.zip
     - cad/scenes/restaurant_asian/artifacts/meshes.zip
-    - cad/scenes/restaurant_brunch/artifacts/meshes.zip
     - cad/scenes/restaurant_cafeteria/artifacts/meshes.zip
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
@@ -648,7 +642,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
@@ -734,7 +727,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_white/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_asian/artifacts/collision_meshes.zip
-    - cad/scenes/restaurant_brunch/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_cafeteria/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/collision_meshes.zip
@@ -820,7 +812,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/collision_selection.json
     - cad/scenes/public_restroom_white/artifacts/collision_selection.json
     - cad/scenes/restaurant_asian/artifacts/collision_selection.json
-    - cad/scenes/restaurant_brunch/artifacts/collision_selection.json
     - cad/scenes/restaurant_cafeteria/artifacts/collision_selection.json
     - cad/scenes/restaurant_diner/artifacts/collision_selection.json
     - cad/scenes/restaurant_hotel/artifacts/collision_selection.json
@@ -886,7 +877,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/room_object_list.json
     - cad/scenes/public_restroom_white/artifacts/room_object_list.json
     - cad/scenes/restaurant_asian/artifacts/room_object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/room_object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/room_object_list.json
     - cad/scenes/restaurant_diner/artifacts/room_object_list.json
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.json
@@ -1061,7 +1051,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/export_meshes.json
     - cad/scenes/public_restroom_white/artifacts/export_meshes.json
     - cad/scenes/restaurant_asian/artifacts/export_meshes.json
-    - cad/scenes/restaurant_brunch/artifacts/export_meshes.json
     - cad/scenes/restaurant_cafeteria/artifacts/export_meshes.json
     - cad/scenes/restaurant_diner/artifacts/export_meshes.json
     - cad/scenes/restaurant_hotel/artifacts/export_meshes.json
@@ -1153,7 +1142,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/meshes.zip
     - cad/scenes/public_restroom_white/artifacts/meshes.zip
     - cad/scenes/restaurant_asian/artifacts/meshes.zip
-    - cad/scenes/restaurant_brunch/artifacts/meshes.zip
     - cad/scenes/restaurant_cafeteria/artifacts/meshes.zip
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
@@ -1239,7 +1227,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/collision_meshes.zip
     - cad/scenes/public_restroom_white/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_asian/artifacts/collision_meshes.zip
-    - cad/scenes/restaurant_brunch/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_cafeteria/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/collision_meshes.zip
@@ -1325,7 +1312,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/collision_selection.json
     - cad/scenes/public_restroom_white/artifacts/collision_selection.json
     - cad/scenes/restaurant_asian/artifacts/collision_selection.json
-    - cad/scenes/restaurant_brunch/artifacts/collision_selection.json
     - cad/scenes/restaurant_cafeteria/artifacts/collision_selection.json
     - cad/scenes/restaurant_diner/artifacts/collision_selection.json
     - cad/scenes/restaurant_hotel/artifacts/collision_selection.json
@@ -1411,7 +1397,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
@@ -1487,7 +1472,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/meshes.zip
     - cad/scenes/public_restroom_white/artifacts/meshes.zip
     - cad/scenes/restaurant_asian/artifacts/meshes.zip
-    - cad/scenes/restaurant_brunch/artifacts/meshes.zip
     - cad/scenes/restaurant_cafeteria/artifacts/meshes.zip
     - cad/scenes/restaurant_diner/artifacts/meshes.zip
     - cad/scenes/restaurant_hotel/artifacts/meshes.zip
@@ -1540,7 +1524,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/room_object_list.json
     - cad/scenes/public_restroom_white/artifacts/room_object_list.json
     - cad/scenes/restaurant_asian/artifacts/room_object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/room_object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/room_object_list.json
     - cad/scenes/restaurant_diner/artifacts/room_object_list.json
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.json
@@ -1593,7 +1576,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/room_object_list.success
     - cad/scenes/public_restroom_white/artifacts/room_object_list.success
     - cad/scenes/restaurant_asian/artifacts/room_object_list.success
-    - cad/scenes/restaurant_brunch/artifacts/room_object_list.success
     - cad/scenes/restaurant_cafeteria/artifacts/room_object_list.success
     - cad/scenes/restaurant_diner/artifacts/room_object_list.success
     - cad/scenes/restaurant_hotel/artifacts/room_object_list.success
@@ -1709,7 +1691,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/generate_max_object_images.json
     - cad/scenes/public_restroom_white/artifacts/generate_max_object_images.json
     - cad/scenes/restaurant_asian/artifacts/generate_max_object_images.json
-    - cad/scenes/restaurant_brunch/artifacts/generate_max_object_images.json
     - cad/scenes/restaurant_cafeteria/artifacts/generate_max_object_images.json
     - cad/scenes/restaurant_diner/artifacts/generate_max_object_images.json
     - cad/scenes/restaurant_hotel/artifacts/generate_max_object_images.json
@@ -1819,7 +1800,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
@@ -2030,7 +2010,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
@@ -2195,7 +2174,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_white/artifacts/sanitycheck.json
     - cad/scenes/restaurant_asian/artifacts/sanitycheck.json
-    - cad/scenes/restaurant_brunch/artifacts/sanitycheck.json
     - cad/scenes/restaurant_cafeteria/artifacts/sanitycheck.json
     - cad/scenes/restaurant_diner/artifacts/sanitycheck.json
     - cad/scenes/restaurant_hotel/artifacts/sanitycheck.json
@@ -2299,7 +2277,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/sanitycheck.json
     - cad/scenes/public_restroom_white/artifacts/sanitycheck.json
     - cad/scenes/restaurant_asian/artifacts/sanitycheck.json
-    - cad/scenes/restaurant_brunch/artifacts/sanitycheck.json
     - cad/scenes/restaurant_cafeteria/artifacts/sanitycheck.json
     - cad/scenes/restaurant_diner/artifacts/sanitycheck.json
     - cad/scenes/restaurant_hotel/artifacts/sanitycheck.json
@@ -2439,7 +2416,6 @@ stages:
     - cad/scenes/public_restroom_marble/artifacts/object_list.json
     - cad/scenes/public_restroom_white/artifacts/object_list.json
     - cad/scenes/restaurant_asian/artifacts/object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/object_list.json
     - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
     - cad/scenes/restaurant_diner/artifacts/object_list.json
     - cad/scenes/restaurant_hotel/artifacts/object_list.json
