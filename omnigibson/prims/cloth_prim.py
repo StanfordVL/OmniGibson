@@ -96,7 +96,7 @@ class ClothPrim(GeomPrim):
         self._n_particles = len(self._prim.GetAttribute("points").Get())
 
         # Load the cloth prim view
-        self._cloth_prim_view = RetensorClothPrimView(self._prim_path)
+        self._cloth_prim_view = lazy.omni.isaac.core.prims.ClothPrimView(self.prim_path)
 
         # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
         success = False
