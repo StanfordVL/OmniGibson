@@ -1746,7 +1746,7 @@ class Cloth(MicroParticleSystem):
                 vertex_normals=new_normals,
             )
             # Apply the inverse of the world transform to get the mesh back into its local frame
-            tm.apply_transform(th.linalg.inv_ex(scaled_world_transform).inverse)
+            tm.apply_transform(th.linalg.inv_ex(scaled_world_transform).inverse.cpu())
 
         # Update the mesh prim
         face_vertex_counts = th.tensor([len(face) for face in tm.faces], dtype=int).cpu().numpy()

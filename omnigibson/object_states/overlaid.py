@@ -56,7 +56,7 @@ class Overlaid(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
             return False
 
         # Compute the convex hull of the particles of the cloth object.
-        points = self.obj.root_link.keypoint_particle_positions[:, :2]
+        points = self.obj.root_link.keypoint_particle_positions[:, :2].cpu()
         cloth_hull = ConvexHull(points)
 
         # Compute the base aligned bounding box of the rigid object.
@@ -66,7 +66,7 @@ class Overlaid(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
             T.transform_points(vertices_local, T.pose2mat((bbox_center, bbox_orn))),
             dtype=th.float32,
         )
-        rigid_hull = ConvexHull(vertices[:, :2])
+        rigid_hull = ConvexHull(vertices[:, :2].cpu())
 
         # The goal is to find the intersection of the convex hull and the bounding box.
         # We can do so with HalfspaceIntersection, which takes as input a list of equations that define the half spaces,
@@ -74,7 +74,7 @@ class Overlaid(KinematicsMixin, RelativeObjectState, BooleanStateMixin):
         interior_pt = th.mean(vertices, dim=0)[:2]
         half_spaces = th.vstack((th.tensor(cloth_hull.equations), th.tensor(rigid_hull.equations)))
         try:
-            half_space_intersection = HalfspaceIntersection(half_spaces, interior_pt)
+            half_space_intersection = HalfspaceIntersection(half_spaces.cpu(), interior_pt.cpu())
         except QhullError:
             # The bbox center of the rigid body does not lie in the intersection, return False.
             return False

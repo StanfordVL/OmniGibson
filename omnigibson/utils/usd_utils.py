@@ -1309,8 +1309,8 @@ def mesh_prim_mesh_to_trimesh_mesh(mesh_prim, include_normals=True, include_texc
     mesh_type = mesh_prim.GetPrimTypeInfo().GetTypeName()
     assert mesh_type == "Mesh", f"Expected mesh prim to have type Mesh, got {mesh_type}"
     face_vertex_counts = th.tensor(mesh_prim.GetAttribute("faceVertexCounts").Get())
-    vertices = th.tensor(mesh_prim.GetAttribute("points").Get())
-    face_indices = th.tensor(mesh_prim.GetAttribute("faceVertexIndices").Get())
+    vertices = th.tensor(mesh_prim.GetAttribute("points").Get()).cpu()
+    face_indices = th.tensor(mesh_prim.GetAttribute("faceVertexIndices").Get()).cpu()
 
     faces = []
     i = 0
@@ -1322,12 +1322,12 @@ def mesh_prim_mesh_to_trimesh_mesh(mesh_prim, include_normals=True, include_texc
     kwargs = dict(vertices=vertices, faces=faces)
 
     if include_normals:
-        kwargs["vertex_normals"] = th.tensor(mesh_prim.GetAttribute("normals").Get())
+        kwargs["vertex_normals"] = th.tensor(mesh_prim.GetAttribute("normals").Get()).cpu()
 
     if include_texcoord:
         raw_texture = mesh_prim.GetAttribute("primvars:st").Get()
         if raw_texture is not None:
-            kwargs["visual"] = trimesh.visual.TextureVisuals(uv=th.tensor(raw_texture))
+            kwargs["visual"] = trimesh.visual.TextureVisuals(uv=raw_texture)
 
     return trimesh.Trimesh(**kwargs)
 
@@ -1387,7 +1387,7 @@ def mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=
         trimesh_mesh = mesh_prim_shape_to_trimesh_mesh(mesh_prim)
 
     if world_frame:
-        trimesh_mesh.apply_transform(PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString))
+        trimesh_mesh.apply_transform(PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString).cpu())
 
     return trimesh_mesh
 

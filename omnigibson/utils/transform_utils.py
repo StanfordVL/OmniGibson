@@ -636,7 +636,7 @@ def pose2mat(pose: Tuple[th.Tensor, th.Tensor]) -> th.Tensor:
     pos = pos.to(dtype=th.float32).reshape(3)
     orn = orn.to(dtype=th.float32).reshape(4)
 
-    homo_pose_mat = th.eye(4, dtype=th.float32)
+    homo_pose_mat = th.eye(4, dtype=th.float32, device=pos.device)
     homo_pose_mat[:3, :3] = quat2mat(orn)
     homo_pose_mat[:3, 3] = pos
 
@@ -761,7 +761,7 @@ def pose_inv(pose_mat):
     # -t in the original frame, which is -R-1*t in the new frame, and then rotate back by
     # R-1 to align the axis again.
 
-    pose_inv = th.zeros((4, 4))
+    pose_inv = th.zeros((4, 4), dtype=pose_mat.dtype, device=pose_mat.device)
     pose_inv[:3, :3] = pose_mat[:3, :3].T
     pose_inv[:3, 3] = -pose_inv[:3, :3] @ pose_mat[:3, 3]
     pose_inv[3, 3] = 1.0
