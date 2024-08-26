@@ -209,7 +209,7 @@ class JointController(LocomotionController, ManipulationController, GripperContr
             target = control_dict[f"joint_{self._motor_type}"][self.dof_idx]
         else:
             # For velocity / effort, directly set to 0
-            target = th.zeros(self.control_dim)
+            target = th.zeros(self.control_dim, device="cuda")
 
         return dict(target=target)
 

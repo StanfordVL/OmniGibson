@@ -400,9 +400,9 @@ class ControllableObject(BaseObject):
             idx += controller.command_dim
 
         # Compose controls
-        u_vec = th.zeros(self.n_dof)
+        u_vec = th.zeros(self.n_dof, device="cuda")
         # By default, the control type is None and the control value is 0 (th.zeros) - i.e. no control applied
-        u_type_vec = th.tensor([ControlType.NONE] * self.n_dof)
+        u_type_vec = th.tensor([ControlType.NONE] * self.n_dof, device="cuda")
         for group, ctrl in control.items():
             idx = self._controllers[group].dof_idx
             u_vec[idx] = ctrl["value"]
@@ -533,15 +533,21 @@ class ControllableObject(BaseObject):
         # set the targets for joints
         if using_pos:
             ControllableObjectViewAPI.set_joint_position_targets(
-                self.articulation_root_path, positions=th.tensor(pos_vec), indices=th.tensor(pos_idxs)
+                self.articulation_root_path,
+                positions=th.tensor(pos_vec, device="cuda"),
+                indices=th.tensor(pos_idxs, device="cuda"),
             )
         if using_vel:
             ControllableObjectViewAPI.set_joint_velocity_targets(
-                self.articulation_root_path, velocities=th.tensor(vel_vec), indices=th.tensor(vel_idxs)
+                self.articulation_root_path,
+                velocities=th.tensor(vel_vec, device="cuda"),
+                indices=th.tensor(vel_idxs, device="cuda"),
             )
         if using_eff:
             ControllableObjectViewAPI.set_joint_efforts(
-                self.articulation_root_path, efforts=th.tensor(eff_vec), indices=th.tensor(eff_idxs)
+                self.articulation_root_path,
+                efforts=th.tensor(eff_vec, device="cuda"),
+                indices=th.tensor(eff_idxs, device="cuda"),
             )
 
     def get_control_dict(self):

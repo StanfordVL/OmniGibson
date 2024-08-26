@@ -1615,9 +1615,9 @@ class EntityPrim(XFormPrim):
         state_flat = [self.root_link.serialize(state=state["root_link"])]
         if self.n_joints > 0:
             state_flat += [
-                state["joint_pos"],
-                state["joint_vel"],
-                state["joint_eff"],
+                state["joint_pos"].to(device="cpu"),
+                state["joint_vel"].to(device="cpu"),
+                state["joint_eff"].to(device="cpu"),
             ]
 
         return th.cat(state_flat)

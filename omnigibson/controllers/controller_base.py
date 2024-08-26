@@ -107,8 +107,8 @@ class BaseController(Serializable, Registerable, Recreatable):
                 continue
 
             self._control_limits[ControlType.get_type(motor_type)] = [
-                control_limits[motor_type][0],
-                control_limits[motor_type][1],
+                control_limits[motor_type][0].to(device="cuda"),
+                control_limits[motor_type][1].to(device="cuda"),
             ]
         assert "has_limit" in control_limits, "Expected has_limit specified in control_limits, but does not exist."
         self._dof_has_limits = control_limits["has_limit"]
@@ -133,8 +133,8 @@ class BaseController(Serializable, Registerable, Recreatable):
         )
         command_output_limits = (
             (
-                th.tensor(self._control_limits[self.control_type][0])[self.dof_idx],
-                th.tensor(self._control_limits[self.control_type][1])[self.dof_idx],
+                th.tensor(self._control_limits[self.control_type][0], device="cuda")[self.dof_idx],
+                th.tensor(self._control_limits[self.control_type][1], device="cuda")[self.dof_idx],
             )
             if type(command_output_limits) == str and command_output_limits == "default"
             else command_output_limits
@@ -209,7 +209,9 @@ class BaseController(Serializable, Registerable, Recreatable):
         ), f"Commands must be dimension {self.command_dim}, got dim {len(command)} instead."
 
         # Preprocess and run internal command
-        self._goal = self._update_goal(command=self._preprocess_command(command), control_dict=control_dict)
+        self._goal = self._update_goal(
+            command=self._preprocess_command(command.to(device="cuda")), control_dict=control_dict
+        )
 
     def _update_goal(self, command, control_dict):
         """
@@ -373,12 +375,12 @@ class BaseController(Serializable, Registerable, Recreatable):
         # Check if input is an Iterable, if so, we simply convert the input to th.tensor and return
         # Else, input is a single value, so we map to a numpy array of correct size and return
         return (
-            nums
+            nums.to(device="cuda")
             if isinstance(nums, th.Tensor)
             else (
-                th.tensor(nums, dtype=th.float32)
+                th.tensor(nums, dtype=th.float32, device="cuda")
                 if isinstance(nums, Iterable)
-                else th.ones(dim, dtype=th.float32) * nums
+                else th.ones(dim, dtype=th.float32, device="cuda") * nums
             )
         )
 
