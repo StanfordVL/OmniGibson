@@ -123,6 +123,7 @@ class EntityPrim(XFormPrim):
             lazy.omni.kit.commands.execute("DeletePrims", paths=[old_link_prim.GetPath()], destructive=False)
 
         self.update_links()
+        self._compute_articulation_tree()
 
         # Prepare the articulation view.
         if self.n_joints > 0:
@@ -293,7 +294,6 @@ class EntityPrim(XFormPrim):
         )
 
         self._update_joint_limits()
-        self._compute_articulation_tree()
 
     def _update_joint_limits(self):
         """
