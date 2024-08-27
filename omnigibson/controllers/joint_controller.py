@@ -105,8 +105,8 @@ class JointController(LocomotionController, ManipulationController, GripperContr
         else:  # effort
             assert kp is None, "Cannot set kp for JointController with motor_type=effort!"
             assert damping_ratio is None, "Cannot set damping_ratio for JointController with motor_type=effort!"
-        self.kp = kp
-        self.kd = None if damping_ratio is None else 2 * math.sqrt(self.kp) * damping_ratio
+        self.kp = th.tensor(kp, device="cuda")
+        self.kd = None if damping_ratio is None else th.tensor(2 * math.sqrt(kp) * damping_ratio, device="cuda")
         self._use_impedances = use_impedances
         self._use_gravity_compensation = use_gravity_compensation
         self._use_cc_compensation = use_cc_compensation
@@ -153,7 +153,10 @@ class JointController(LocomotionController, ManipulationController, GripperContr
 
                 # Compute the final rotations in the quaternion space.
                 _, end_quat = T.pose_transform(
-                    th.zeros(3), T.euler2quat(delta_rots), th.zeros(3), T.euler2quat(start_rots)
+                    th.zeros(3, dtype=th.float32, device="cuda"),
+                    T.euler2quat(delta_rots),
+                    th.zeros(3, dtype=th.float32, device="cuda"),
+                    T.euler2quat(start_rots),
                 )
                 end_rots = T.quat2euler(end_quat)
 
@@ -166,8 +169,8 @@ class JointController(LocomotionController, ManipulationController, GripperContr
 
         # Clip the command based on the limits
         target = target.clip(
-            self._control_limits[ControlType.get_type(self._motor_type)][0][self.dof_idx],
-            self._control_limits[ControlType.get_type(self._motor_type)][1][self.dof_idx],
+            self._control_limits[ControlType.get_type(self._motor_type)][0],
+            self._control_limits[ControlType.get_type(self._motor_type)][1],
         )
 
         return dict(target=target)

@@ -100,19 +100,19 @@ class BaseController(Serializable, Registerable, Recreatable):
                 to the @control_limits entry corresponding to self.control_type
         """
         # Store arguments
-        self._control_freq = control_freq
-        self._control_limits = {}
-        for motor_type in {"position", "velocity", "effort"}:
-            if motor_type not in control_limits:
-                continue
-
-            self._control_limits[ControlType.get_type(motor_type)] = [
-                control_limits[motor_type][0].to(device="cuda"),
-                control_limits[motor_type][1].to(device="cuda"),
-            ]
         assert "has_limit" in control_limits, "Expected has_limit specified in control_limits, but does not exist."
-        self._dof_has_limits = control_limits["has_limit"]
-        self._dof_idx = dof_idx.int()
+        self._dof_has_limits = control_limits["has_limit"].to(device="cuda")
+        self._dof_idx = dof_idx.int().to(device="cuda")
+        self._control_freq = control_freq
+        # Store control limits as a 3 x 2 x n tensor: [control_type][min/max][dof_idx]
+        self._control_limits = th.zeros((3, 2, len(dof_idx)), device="cuda")
+        for motor_type in {"position", "velocity", "effort"}:
+            self._control_limits[ControlType.get_type(motor_type)][0] = control_limits[motor_type][0][dof_idx].to(
+                device="cuda"
+            )
+            self._control_limits[ControlType.get_type(motor_type)][1] = control_limits[motor_type][1][dof_idx].to(
+                device="cuda"
+            )
 
         # Generate goal information
         self._goal_shapes = self._get_goal_shapes()
@@ -133,8 +133,8 @@ class BaseController(Serializable, Registerable, Recreatable):
         )
         command_output_limits = (
             (
-                th.tensor(self._control_limits[self.control_type][0], device="cuda")[self.dof_idx],
-                th.tensor(self._control_limits[self.control_type][1], device="cuda")[self.dof_idx],
+                self._control_limits[self.control_type][0],
+                self._control_limits[self.control_type][1],
             )
             if type(command_output_limits) == str and command_output_limits == "default"
             else command_output_limits
@@ -169,7 +169,7 @@ class BaseController(Serializable, Registerable, Recreatable):
             Array[float]: Processed command vector
         """
         # Make sure command is a th.tensor
-        command = th.tensor([command]) if type(command) in {int, float} else command
+        command = th.tensor([command], device="cuda") if type(command) in {int, float} else command
         # We only clip and / or scale if self.command_input_limits exists
         if self._command_input_limits is not None:
             # Clip
@@ -254,15 +254,14 @@ class BaseController(Serializable, Registerable, Recreatable):
             Array[float]: Clipped control signal
         """
         clipped_control = control.clip(
-            self._control_limits[self.control_type][0][self.dof_idx],
-            self._control_limits[self.control_type][1][self.dof_idx],
+            self._control_limits[self.control_type][0],
+            self._control_limits[self.control_type][1],
         )
-        idx = (
-            self._dof_has_limits[self.dof_idx]
-            if self.control_type == ControlType.POSITION
-            else [True] * self.control_dim
-        )
-        control[idx] = clipped_control[idx]
+        if self.control_type == ControlType.POSITION:
+            idx = self._dof_has_limits[self.dof_idx]
+            control[idx] = clipped_control[idx]
+        else:
+            control = clipped_control
         return control
 
     def step(self, control_dict):

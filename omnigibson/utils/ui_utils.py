@@ -583,14 +583,15 @@ class KeyboardRobotController:
         self.joint_idx_to_controller = dict()
         idx = 0
         for name, controller in robot._controllers.items():
+            dof_idx = controller.dof_idx.tolist()
             self.controller_info[name] = {
                 "name": type(controller).__name__,
                 "start_idx": idx,
-                "dofs": controller.dof_idx,
+                "dofs": dof_idx,
                 "command_dim": controller.command_dim,
             }
             idx += controller.command_dim
-            for i in controller.dof_idx.tolist():
+            for i in dof_idx:
                 self.joint_idx_to_controller[i] = controller
 
         # Other persistent variables we need to keep track of
@@ -727,7 +728,7 @@ class KeyboardRobotController:
                 for i in range(info["command_dim"]):
                     cmd_idx = info["start_idx"] + i
                     self.joint_command_idx.append(cmd_idx)
-                self.joint_control_idx += info["dofs"].tolist()
+                self.joint_control_idx += info["dofs"]
             elif info["name"] == "DifferentialDriveController":
                 self.keypress_mapping[lazy.carb.input.KeyboardInput.I] = {"idx": info["start_idx"] + 0, "val": 0.4}
                 self.keypress_mapping[lazy.carb.input.KeyboardInput.K] = {"idx": info["start_idx"] + 0, "val": -0.4}
@@ -744,7 +745,7 @@ class KeyboardRobotController:
                     for i in range(info["command_dim"]):
                         cmd_idx = info["start_idx"] + i
                         self.joint_command_idx.append(cmd_idx)
-                    self.joint_control_idx += info["dofs"].tolist()
+                    self.joint_control_idx += info["dofs"]
                 else:
                     self.keypress_mapping[lazy.carb.input.KeyboardInput.T] = {"idx": info["start_idx"], "val": 1.0}
                     self.gripper_direction[component] = 1.0

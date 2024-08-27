@@ -50,8 +50,8 @@ class DifferentialDriveController(LocomotionController):
                 @control_limits velocity limits entry
         """
         # Store internal variables
-        self._wheel_radius = wheel_radius
-        self._wheel_axle_halflength = wheel_axle_length / 2.0
+        self._wheel_radius = th.tensor(wheel_radius, device="cuda")
+        self._wheel_axle_halflength = th.tensor(wheel_axle_length / 2.0, device="cuda")
 
         # If we're using default command output limits, map this to maximum linear / angular velocities
         if type(command_output_limits) == str and command_output_limits == "default":
@@ -107,7 +107,7 @@ class DifferentialDriveController(LocomotionController):
         right_wheel_joint_vel = (lin_vel + ang_vel * self._wheel_axle_halflength) / self._wheel_radius
 
         # Return desired velocities
-        return th.tensor([left_wheel_joint_vel, right_wheel_joint_vel], device="cuda")
+        return th.stack([left_wheel_joint_vel, right_wheel_joint_vel])
 
     def compute_no_op_goal(self, control_dict):
         # This is zero-vector, since we want zero linear / angular velocity
