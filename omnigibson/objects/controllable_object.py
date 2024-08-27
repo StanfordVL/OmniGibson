@@ -1,5 +1,4 @@
 import math
-import time
 from abc import abstractmethod
 from copy import deepcopy
 from functools import cached_property
@@ -20,16 +19,6 @@ from omnigibson.utils.usd_utils import ControllableObjectViewAPI
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
-
-PROFILED_AVG_TIME = {}
-
-
-def record_time(operation, start):
-    """Helper function to record execution time."""
-    elapsed_time = time.time() - start
-    if operation not in PROFILED_AVG_TIME:
-        PROFILED_AVG_TIME[operation] = []
-    PROFILED_AVG_TIME[operation].append(elapsed_time)
 
 
 class ControllableObject(BaseObject):
@@ -415,7 +404,6 @@ class ControllableObject(BaseObject):
         """
         Takes a controller step across all controllers and deploys the computed control signals onto the object.
         """
-        step_start = time.time()
         # Skip if we don't have control enabled
         if not self.control_enabled:
             return
@@ -428,42 +416,31 @@ class ControllableObject(BaseObject):
         control = dict()
         idx = 0
 
-        start = time.time()
         # Compose control_dict
         control_dict = self.get_control_dict()
-        record_time("get_control_dict", start)
 
         for name, controller in self._controllers.items():
-            start = time.time()
             control[name] = {
                 "value": controller.step(control_dict=control_dict),
                 "type": controller.control_type,
             }
             # Update idx
             idx += controller.command_dim
-            record_time(name, start)
 
         # Compose controls
         u_vec = th.zeros(self.n_dof, device="cuda")
         # By default, the control type is None and the control value is 0 (th.zeros) - i.e. no control applied
         u_type_vec = th.tensor([ControlType.NONE] * self.n_dof)
         for group, ctrl in control.items():
-            start = time.time()
             idx = self._controllers[group].dof_idx
             u_vec[idx] = ctrl["value"]
             # TODO: u_type_vec is on cpu but idx is on gpu.
             u_type_vec[idx] = ctrl["type"]
-            record_time("compose " + group, start)
 
-        start = time.time()
         u_vec, u_type_vec = self._postprocess_control(control=u_vec, control_type=u_type_vec)
-        record_time("postprocess_control", start)
 
-        start = time.time()
         # Deploy control signals
         self.deploy_control(control=u_vec, control_type=u_type_vec)
-        record_time("deploy_control", start)
-        record_time("total_step", step_start)
 
     def _postprocess_control(self, control, control_type):
         """
