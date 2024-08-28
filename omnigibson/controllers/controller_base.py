@@ -101,8 +101,11 @@ class BaseController(Serializable, Registerable, Recreatable):
         """
         # Store arguments
         assert "has_limit" in control_limits, "Expected has_limit specified in control_limits, but does not exist."
-        self._dof_has_limits = control_limits["has_limit"].to(device="cuda")
         self._dof_idx = dof_idx.int().to(device="cuda")
+        # Store the indices in self.dof_idx that have control limits
+        self._limited_dof_indices = th.tensor(
+            [i for i, idx in enumerate(self.dof_idx) if control_limits["has_limit"][idx]], dtype=th.long, device="cuda"
+        )
         self._control_freq = control_freq
         # Store control limits as a 3 x 2 x n tensor: [control_type][min/max][dof_idx]
         self._control_limits = th.zeros((3, 2, len(dof_idx)), device="cuda")
@@ -258,8 +261,7 @@ class BaseController(Serializable, Registerable, Recreatable):
             self._control_limits[self.control_type][1],
         )
         if self.control_type == ControlType.POSITION:
-            idx = self._dof_has_limits[self.dof_idx]
-            control[idx] = clipped_control[idx]
+            control[self._limited_dof_indices] = clipped_control[self._limited_dof_indices]
         else:
             control = clipped_control
         return control
