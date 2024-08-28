@@ -432,10 +432,10 @@ class ControllableObject(BaseObject):
         # By default, the control type is None and the control value is 0 (th.zeros) - i.e. no control applied
         u_type_vec = th.tensor([ControlType.NONE] * self.n_dof)
         for group, ctrl in control.items():
-            idx = self._controllers[group].dof_idx
-            u_vec[idx] = ctrl["value"]
-            # TODO: u_type_vec is on cpu but idx is on gpu.
-            u_type_vec[idx] = ctrl["type"]
+            idx_gpu = self._controllers[group].dof_idx
+            idx_cpu = self._controllers[group].dof_idx_cpu
+            u_vec[idx_gpu] = ctrl["value"]
+            u_type_vec[idx_cpu] = ctrl["type"]
 
         u_vec, u_type_vec = self._postprocess_control(control=u_vec, control_type=u_type_vec)
 
@@ -488,6 +488,7 @@ class ControllableObject(BaseObject):
             normalized (bool): Whether the inputted joint controls should be interpreted as normalized
                 values. Expects a single bool for the entire @control. Default is False.
         """
+        # th.cuda.set_sync_debug_mode("error")
         # Run sanity check
         assert len(control) == len(control_type) == self.n_dof, (
             "Control signals, control types, and number of DOF should all be the same!"
@@ -563,21 +564,22 @@ class ControllableObject(BaseObject):
         if using_pos:
             ControllableObjectViewAPI.set_joint_position_targets(
                 self.articulation_root_path,
-                positions=th.tensor(pos_vec, device="cuda"),
+                positions=th.stack(pos_vec),
                 indices=pos_idxs,
             )
         if using_vel:
             ControllableObjectViewAPI.set_joint_velocity_targets(
                 self.articulation_root_path,
-                velocities=th.tensor(vel_vec, device="cuda"),
+                velocities=th.stack(vel_vec),
                 indices=vel_idxs,
             )
         if using_eff:
             ControllableObjectViewAPI.set_joint_efforts(
                 self.articulation_root_path,
-                efforts=th.tensor(eff_vec, device="cuda"),
+                efforts=th.stack(eff_vec),
                 indices=eff_idxs,
             )
+        # th.cuda.set_sync_debug_mode("default")
 
     def get_control_dict(self):
         """

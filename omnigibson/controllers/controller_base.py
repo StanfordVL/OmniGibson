@@ -101,7 +101,8 @@ class BaseController(Serializable, Registerable, Recreatable):
         """
         # Store arguments
         assert "has_limit" in control_limits, "Expected has_limit specified in control_limits, but does not exist."
-        self._dof_idx = dof_idx.int().to(device="cuda")
+        self._dof_idx_cpu = dof_idx.int()
+        self._dof_idx_gpu = dof_idx.int().to(device="cuda")
         # Store the indices in self.dof_idx that have control limits
         self._limited_dof_indices = th.tensor(
             [i for i, idx in enumerate(self.dof_idx) if control_limits["has_limit"][idx]], dtype=th.long, device="cuda"
@@ -469,9 +470,17 @@ class BaseController(Serializable, Registerable, Recreatable):
     def dof_idx(self):
         """
         Returns:
-            Array[int]: DOF indices corresponding to the specific DOFs being controlled by this robot
+            th.Tensor[int]: DOF indices corresponding to the specific DOFs being controlled by this robot, on GPU
         """
-        return self._dof_idx
+        return self._dof_idx_gpu
+
+    @property
+    def dof_idx_cpu(self):
+        """
+        Returns:
+            th.Tensor[int]: DOF indices corresponding to the specific DOFs being controlled by this robot, on CPU
+        """
+        return self._dof_idx_cpu
 
     @classproperty
     def _do_not_register_classes(cls):
