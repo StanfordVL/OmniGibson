@@ -488,7 +488,6 @@ class ControllableObject(BaseObject):
             normalized (bool): Whether the inputted joint controls should be interpreted as normalized
                 values. Expects a single bool for the entire @control. Default is False.
         """
-        # th.cuda.set_sync_debug_mode("error")
         # Run sanity check
         assert len(control) == len(control_type) == self.n_dof, (
             "Control signals, control types, and number of DOF should all be the same!"
@@ -579,7 +578,6 @@ class ControllableObject(BaseObject):
                 efforts=th.stack(eff_vec),
                 indices=eff_idxs,
             )
-        # th.cuda.set_sync_debug_mode("default")
 
     def get_control_dict(self):
         """
