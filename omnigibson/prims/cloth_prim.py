@@ -548,7 +548,7 @@ class ClothPrim(GeomPrim):
         state = super()._dump_state()
         state["particle_group"] = self.particle_group
         state["n_particles"] = self.n_particles
-        state["particle_positions"] = self.compute_particle_positions()
+        state["particle_positions"] = self.compute_particle_positions().cpu()
         state["particle_velocities"] = self.particle_velocities
         return state
 
