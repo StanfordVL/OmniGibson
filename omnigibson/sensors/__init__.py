@@ -2,6 +2,7 @@ from omnigibson.sensors.dropout_sensor_noise import DropoutSensorNoise
 from omnigibson.sensors.scan_sensor import ScanSensor
 from omnigibson.sensors.sensor_base import ALL_SENSOR_MODALITIES, REGISTERED_SENSORS, BaseSensor
 from omnigibson.sensors.sensor_noise_base import REGISTERED_SENSOR_NOISES, BaseSensorNoise
+from omnigibson.sensors.tiled_camera import TiledCamera
 from omnigibson.sensors.vision_sensor import VisionSensor
 from omnigibson.utils.python_utils import assert_valid_key
 
