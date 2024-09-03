@@ -252,7 +252,9 @@ class DataCollectionWrapper(DataWrapper):
     dataset!
     """
 
-    def __init__(self, env, output_path, viewport_camera_path="/World/viewer_camera", only_successes=True):
+    def __init__(
+        self, env, output_path, viewport_camera_path="/World/viewer_camera", only_successes=True, optimize_sim=True
+    ):
         """
         Args:
             env (Environment): The environment to wrap
@@ -288,7 +290,12 @@ class DataCollectionWrapper(DataWrapper):
         super().__init__(env=env, output_path=output_path, only_successes=only_successes)
 
         # Configure the simulator to optimize for data collection
-        self._optimize_sim_for_data_collection(viewport_camera_path=viewport_camera_path)
+        if optimize_sim:
+            self._optimize_sim_for_data_collection(viewport_camera_path=viewport_camera_path)
+
+        # Set the dump filter for better performance
+        # TODO: Possibly remove this feature once we have fully tensorized state saving, which may be more efficient
+        self.env.scene.object_registry.set_dump_filter(dump_filter=lambda obj: obj.is_active)
 
     def _optimize_sim_for_data_collection(self, viewport_camera_path):
         """
@@ -314,10 +321,6 @@ class DataCollectionWrapper(DataWrapper):
         lazy.carb.settings.get_settings().set_bool("/physics/mouseGrab", False)
         lazy.carb.settings.get_settings().set_bool("/physics/forceGrab", False)
         lazy.carb.settings.get_settings().set_bool("/physics/suppressReadback", True)
-
-        # Set the dump filter for better performance
-        # TODO: Possibly remove this feature once we have fully tensorized state saving, which may be more efficient
-        self.env.scene.object_registry.set_dump_filter(dump_filter=lambda obj: obj.is_active)
 
     def reset(self):
         # Call super first
@@ -414,6 +417,7 @@ class DataPlaybackWrapper(DataWrapper):
         external_sensors_config=None,
         n_render_iterations=5,
         only_successes=False,
+        replay_state=True,
     ):
         """
         Create a DataPlaybackWrapper environment instance form the recorded demonstration info
@@ -439,6 +443,7 @@ class DataPlaybackWrapper(DataWrapper):
                 the physical state changes. Increasing this number will improve the rendered quality at the expense of
                 speed.
             only_successes (bool): Whether to only save successful episodes
+            replay_state (bool): Whether to replay the state from the collected data directly
 
         Returns:
             DataPlaybackWrapper: Generated playback environment
@@ -450,9 +455,10 @@ class DataPlaybackWrapper(DataWrapper):
         # Hot swap in additional info for playing back data
 
         # Minimize physics leakage during playback (we need to take an env step when loading state)
-        config["env"]["action_frequency"] = 1000.0
-        config["env"]["rendering_frequency"] = 1000.0
-        config["env"]["physics_frequency"] = 1000.0
+        if replay_state:
+            config["env"]["action_frequency"] = 1000.0
+            config["env"]["rendering_frequency"] = 1000.0
+            config["env"]["physics_frequency"] = 1000.0
 
         # Make sure obs space is flattened for recording
         config["env"]["flatten_obs_space"] = True
@@ -482,7 +488,7 @@ class DataPlaybackWrapper(DataWrapper):
             only_successes=only_successes,
         )
 
-    def __init__(self, env, input_path, output_path, n_render_iterations=5, only_successes=False):
+    def __init__(self, env, input_path, output_path, n_render_iterations=5, only_successes=False, replay_state=True):
         """
         Args:
             env (Environment): The environment to wrap
@@ -491,9 +497,11 @@ class DataPlaybackWrapper(DataWrapper):
             n_render_iterations (int): Number of rendering iterations to use when loading each stored frame from the
                 recorded data
             only_successes (bool): Whether to only save successful episodes
+            replay_state (bool): Whether to replay the state from the collected data directly
         """
         # Make sure transition rules are DISABLED for playback since we manually propagate transitions
-        assert not gm.ENABLE_TRANSITION_RULES, "Transition rules must be disabled for DataPlaybackWrapper env!"
+        if replay_state:
+            assert not gm.ENABLE_TRANSITION_RULES, "Transition rules must be disabled for DataPlaybackWrapper env!"
 
         # Store scene file so we can restore the data upon each episode reset
         self.input_hdf5 = h5py.File(input_path, "r")
@@ -501,6 +509,7 @@ class DataPlaybackWrapper(DataWrapper):
 
         # Store additional variables
         self.n_render_iterations = n_render_iterations
+        self.replay_state = replay_state
 
         # Run super
         super().__init__(env=env, output_path=output_path, only_successes=only_successes)
@@ -554,27 +563,29 @@ class DataPlaybackWrapper(DataWrapper):
         for i, (a, s, ss, r, te, tr) in enumerate(
             zip(action, state[1:], state_size[1:], reward, terminated, truncated)
         ):
-            # Execute any transitions that should occur at this current step
-            if str(i) in transitions:
-                cur_transitions = transitions[str(i)]
-                scene = og.sim.scenes[0]
-                for add_sys_name in cur_transitions["systems"]["add"]:
-                    scene.get_system(add_sys_name, force_init=True)
-                for remove_sys_name in cur_transitions["systems"]["remove"]:
-                    scene.clear_system(remove_sys_name)
-                for j, add_obj_info in enumerate(cur_transitions["objects"]["add"]):
-                    obj = create_object_from_init_info(add_obj_info)
-                    scene.add_object(obj)
-                    obj.set_position(th.ones(3) * 100.0 + th.ones(3) * 5 * j)
-                for remove_obj_name in cur_transitions["objects"]["remove"]:
-                    obj = scene.object_registry("name", remove_obj_name)
-                    scene.remove_object(obj)
-                # Step physics to initialize any new objects
-                og.sim.step()
+            if self.replay_state:
+                # Execute any transitions that should occur at this current step
+                if str(i) in transitions:
+                    cur_transitions = transitions[str(i)]
+                    scene = og.sim.scenes[0]
+                    for add_sys_name in cur_transitions["systems"]["add"]:
+                        scene.get_system(add_sys_name, force_init=True)
+                    for remove_sys_name in cur_transitions["systems"]["remove"]:
+                        scene.clear_system(remove_sys_name)
+                    for j, add_obj_info in enumerate(cur_transitions["objects"]["add"]):
+                        obj = create_object_from_init_info(add_obj_info)
+                        scene.add_object(obj)
+                        obj.set_position(th.ones(3) * 100.0 + th.ones(3) * 5 * j)
+                    for remove_obj_name in cur_transitions["objects"]["remove"]:
+                        obj = scene.object_registry("name", remove_obj_name)
+                        scene.remove_object(obj)
+                    # Step physics to initialize any new objects
+                    og.sim.step()
 
-            # Restore the sim state, and take a very small step with the action to make sure physics are
-            # properly propagated after the sim state update
-            og.sim.load_state(s[: int(ss)], serialized=True)
+                # Restore the sim state, and take a very small step with the action to make sure physics are
+                # properly propagated after the sim state update
+                og.sim.load_state(s[: int(ss)], serialized=True)
+
             self.current_obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
 
             # If recording, record data
