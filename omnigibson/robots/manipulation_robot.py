@@ -1,6 +1,7 @@
 import math
 from abc import abstractmethod
 from collections import namedtuple
+from functools import cached_property
 
 import networkx as nx
 import torch as th
@@ -636,7 +637,7 @@ class ManipulationRobot(BaseRobot):
         """
         return {arm: [self._links[link] for link in self.arm_link_names[arm]] for arm in self.arm_names}
 
-    @property
+    @cached_property
     def eef_links(self):
         """
         Returns:
