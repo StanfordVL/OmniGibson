@@ -1,6 +1,5 @@
 from concurrent import futures
 import os
-import pathlib
 import random
 import subprocess
 import sys
@@ -202,13 +201,38 @@ def process_object_with_option(m, out_fs, option_name, option_fn, dask_client):
         save_mesh(submesh, out_fs, f"{option_name}-{i}.obj")
 
 
-def process_target(target, link_executor, dask_client):
-    mesh_list = [x.parent.name for x in pathlib.Path(target).glob("*/*.obj")]
+def process_target(target, pipeline_fs, link_executor, dask_client):
+    with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
+        mesh_list = json.load(f)["meshes"]
 
-    target_fs = OSFS("/scr/ig_pipeline/obj_out")
+    target_fs = pipeline_fs.target_output(target)
 
-    with target_fs.open("collision_meshes.zip", "wb") as out_zip:
-        with OSFS(target) as mesh_archive_fs, ZipFS(out_zip, write=True) as collision_mesh_archive_fs:
+    # Compute the in-fs hash.
+    script_hash = OSFS(os.path.dirname(__file__)).hash(os.path.basename(__file__), "md5")
+    in_hash = target_fs.hash("meshes.zip", "md5")
+
+    # Compare it to the saved hash if one exists.
+    try:
+        if target_fs.exists("collision_meshes.zip"):
+            with target_fs.open("collision_meshes.zip", "rb") as out_zip, \
+                ZipFS(out_zip) as collision_mesh_archive_fs:
+                if collision_mesh_archive_fs.exists("hash.txt"):
+                    with collision_mesh_archive_fs.open("hash.txt", "r") as f:
+                        out_hash = f.read()
+                    
+                    # Return if the hash has not changed.
+                    # if in_hash + script_hash == out_hash:
+                    if out_hash.startswith(in_hash):
+                        print(target, "already processed, skipping.")
+                        return
+    except:
+        pass
+                
+    print(f"Reprocessing {target} due to hash mismatch or missing file.")
+
+    with target_fs.open("meshes.zip", "rb") as in_zip, \
+         target_fs.open("collision_meshes.zip", "wb") as out_zip:
+        with ZipFS(in_zip) as mesh_archive_fs, ZipFS(out_zip, write=True) as collision_mesh_archive_fs:
             # Go through each object.
             object_futures = {}
             for mesh_name in mesh_list:
@@ -228,22 +252,22 @@ def process_target(target, link_executor, dask_client):
                 
                 # Check if we have already selected a processing option for this mesh
                 processing_options = PROCESSING_OPTIONS
-                # if GENERATE_SELECTED_ONLY and target_fs.exists("collision_selection.json"):
-                #     with target_fs.open("collision_selection.json", "r") as f:
-                #         selection = json.load(f)
-                #     # Here we currently match the model ID and the link name
-                #     matching_key = (parsed_name.group('model_id'), parsed_name.group('link_name'))
-                #     for k, v in selection.items():
-                #         vs = {v}
-                #         if v == "bbox":
-                #             vs.add("chull")
-                #         parsed_key = parse_name(k)
-                #         if not parsed_key:
-                #             continue
-                #         if (parsed_key.group('model_id'), parsed_key.group('link_name')) == matching_key:
-                #             # Get a list containing only the selected option
-                #             processing_options = [(option_name, option_fn) for option_name, option_fn in processing_options if option_name in vs]
-                #             break
+                if GENERATE_SELECTED_ONLY and target_fs.exists("collision_selection.json"):
+                    with target_fs.open("collision_selection.json", "r") as f:
+                        selection = json.load(f)
+                    # Here we currently match the model ID and the link name
+                    matching_key = (parsed_name.group('model_id'), parsed_name.group('link_name'))
+                    for k, v in selection.items():
+                        vs = {v}
+                        if v == "bbox":
+                            vs.add("chull")
+                        parsed_key = parse_name(k)
+                        if not parsed_key:
+                            continue
+                        if (parsed_key.group('model_id'), parsed_key.group('link_name')) == matching_key:
+                            # Get a list containing only the selected option
+                            processing_options = [(option_name, option_fn) for option_name, option_fn in processing_options if option_name in vs]
+                            break
 
                 # Now queue a target for each of the processing options
                 mesh_dir = collision_mesh_archive_fs.makedir(mesh_name)
@@ -254,9 +278,9 @@ def process_target(target, link_executor, dask_client):
             # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
             futures.wait(object_futures.keys())
 
-            # # Save the hash
-            # with collision_mesh_archive_fs.open("hash.txt", "w") as f:
-            #     f.write(in_hash + script_hash)
+            # Save the hash
+            with collision_mesh_archive_fs.open("hash.txt", "w") as f:
+                f.write(in_hash + script_hash)
 
             # Accumulate the errors
             error_msg = ""
@@ -275,15 +299,28 @@ def main():
         # dask_client = Client(sys.argv[1]) # + ":35423")
         dask_client = launch_cluster(16)
         
-        with futures.ThreadPoolExecutor(max_workers=200) as mesh_executor:                    
-            try:
-                process_target("/scr/ig_pipeline/obj", mesh_executor, dask_client)
-            except:
-                errors["all"] = traceback.format_exc()
+        with futures.ThreadPoolExecutor(max_workers=8) as target_executor, futures.ThreadPoolExecutor(max_workers=200) as mesh_executor:
+            targets = get_targets("combined")
+            for target in tqdm.tqdm(targets):
+                target_futures[target_executor.submit(process_target, target, pipeline_fs, mesh_executor, dask_client)] = target
+                    
+            with tqdm.tqdm(total=len(target_futures)) as object_pbar:
+                for future in futures.as_completed(target_futures.keys()):
+                    try:
+                        future.result()
+                    except:
+                        name = target_futures[future]
+                        errors[name] = traceback.format_exc()
+    
+                    object_pbar.update(1)
+    
+                    remaining_targets = [v for k, v in target_futures.items() if not k.done()]
+                    if len(remaining_targets) < 10:
+                        print("Remaining:", remaining_targets)
        
         print("Finished processing")
 
-        with OSFS("/scr/ig_pipeline/obj").open("export_collision_meshes.json", "w") as f:
+        with pipeline_fs.pipeline_output().open("export_collision_meshes.json", "w") as f:
             json.dump({"success": not errors, "errors": errors}, f)
 
 
