@@ -395,6 +395,9 @@ class RigidContactAPIImpl:
     def get_contact_data(self, scene_idx, row_prim_paths=None, column_prim_paths=None):
         # First check if the object has any contacts
         impulses = self.get_all_impulses(scene_idx)
+        impulses = np.linalg.norm(impulses, axis=-1)
+        assert len(impulses.shape) == 2, f"Impulse matrix should be 2D, found shape {impulses.shape}"
+
         row_idx = (
             list(range(impulses.shape[0]))
             if row_prim_paths is None
