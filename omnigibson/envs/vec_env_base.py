@@ -20,7 +20,7 @@ class VectorEnvironment:
             for _ in trange(num_envs, desc="Loading environments")
         ]
 
-        self.tiled_camera = TiledCamera(modalities=["rgb"])
+        self.tiled_camera = TiledCamera(modalities=["rgb", "depth"])
 
         # Play, and finish loading all the envs
         og.sim.play()
@@ -33,7 +33,9 @@ class VectorEnvironment:
             self.envs[i]._pre_step(action)
         og.sim.step()
 
-        tiled_image = self.tiled_camera.get_obs()
+        tiled_buffer = self.tiled_camera.get_obs()
+        rgb_tile = tiled_buffer["rgb"]
+        depth_tile = tiled_buffer["depth"]
 
         for i, action in enumerate(actions):
             # TODO: ignore camera observation here

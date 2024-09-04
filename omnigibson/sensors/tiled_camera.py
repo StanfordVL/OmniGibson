@@ -17,6 +17,7 @@ class TiledCamera:
         self,
         modalities=["rgb"],
     ):
+        self.modalities = modalities
         self._camera_resolution = None
         camera_prim_paths = []
         for sensor in VisionSensor.SENSORS.values():
@@ -37,7 +38,7 @@ class TiledCamera:
             cameras=camera_prim_paths,
             camera_resolution=self._camera_resolution,
             tiled_resolution=self._tiled_img_shape(),
-            output_types=modalities,
+            output_types=self.modalities,
         )
         self._render_product_path = lazy.omni.replicator.core.create.render_product(
             camera=tiled_camera, resolution=self._tiled_img_shape()
@@ -48,10 +49,14 @@ class TiledCamera:
         self._annotator.attach([self._render_product_path])
 
         self._output_buffer = dict()
-        # TODO: make this work for depth
-        self._output_buffer["rgb"] = th.zeros(
-            (self._camera_count(), self._camera_resolution[1], self._camera_resolution[0], 3), device="cuda:0"
-        ).contiguous()
+        if "rgb" in self.modalities:
+            self._output_buffer["rgb"] = th.zeros(
+                (self._camera_count(), self._camera_resolution[1], self._camera_resolution[0], 3), device="cuda:0"
+            ).contiguous()
+        if "depth" in self.modalities:
+            self._output_buffer["depth"] = th.zeros(
+                (self._camera_count(), self._camera_resolution[1], self._camera_resolution[0], 1), device="cuda:0"
+            ).contiguous()
 
         super().__init__()
 
@@ -72,16 +77,19 @@ class TiledCamera:
         tiled_data = self._annotator.get_data()
         from omnigibson.utils.deprecated_utils import reshape_tiled_image
 
-        lazy.warp.launch(
-            kernel=reshape_tiled_image,
-            dim=(self._camera_count(), self._camera_resolution[1], self._camera_resolution[0]),
-            inputs=[
-                tiled_data,
-                lazy.warp.from_torch(self._output_buffer["rgb"]),  # zero-copy alias
-                *list(self._output_buffer["rgb"].shape[1:]),  # height, width, num_channels
-                self._tiled_grid_shape()[0],  # num_tiles_x
-                0,  # TODO: make this work for depth
-            ],
-            device="cuda:0",
-        )
-        return self._output_buffer["rgb"]
+        for modality in self.modalities:
+            lazy.warp.launch(
+                kernel=reshape_tiled_image,
+                dim=(self._camera_count(), self._camera_resolution[1], self._camera_resolution[0]),
+                inputs=[
+                    tiled_data,
+                    lazy.warp.from_torch(self._output_buffer[modality]),  # zero-copy alias
+                    *list(self._output_buffer[modality].shape[1:]),  # height, width, num_channels
+                    self._tiled_grid_shape()[0],  # num_tiles_x
+                    (
+                        self._output_buffer["rgb"].numel() if modality == "depth" else 0
+                    ),  # rgb always comes first; needs an offset for depth
+                ],
+                device="cuda:0",
+            )
+        return self._output_buffer
