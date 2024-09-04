@@ -177,6 +177,17 @@ class SanityCheck:
             len(row.object.modifiers) == 0, f"{row.object_name} has modifiers attached."
         )
 
+        # Unwrap OBJ for below cases.
+        obj = row.object._obj
+
+        # Check that there are no dead elements
+        self.expect(rt.polyop.GetHasDeadStructs(obj) == 0, f"{row.object_name} has dead structs. Apply the Triangulate script.")
+        
+        # Get vertices and faces into numpy arrays for conversion
+        faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
+        faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
+        self.expect(all(len(f) == 3 for f in faces), f"{row.object_name} has non-triangular faces. Apply the Triangulate script.")
+
         # Check that object satisfies the scale condition.
         scale = np.array(row.object.scale)
         self.expect(
@@ -261,7 +272,7 @@ class SanityCheck:
     def validate_link_set(self, rows):
         # The rows here should correspond to individual positions of the same link.
         base = rows.iloc[0]
-        # TODO: Assert that these exist, they are instances, named correctly, etc.
+        # TODO: Expect that these exist, they are instances, named correctly, etc.
 
     def validate_group_of_instances(self, rows):
         # Pick an object as the base instance
@@ -336,34 +347,33 @@ class SanityCheck:
             # For this case, unwrap the object
             obj = obj._obj
 
-            # Assert that collision meshes do not share instances in the scene
-            assert not [x for x in rt.objects if x.baseObject == obj.baseObject and x != obj], f"{obj.name} should not have instances."
+            # Expect that collision meshes do not share instances in the scene
+            self.expect(not [x for x in rt.objects if x.baseObject == obj.baseObject and x != obj], f"{obj.name} should not have instances.")
             
-            # Triangulate the faces
-            rt.polyop.setVertSelection(obj, rt.name('all'))
-            obj.connectVertices()
-            rt.polyop.setVertSelection(obj, rt.name('none'))
+            # Check that there are no dead elements
+            self.expect(rt.polyop.GetHasDeadStructs(obj) == 0, f"{obj.name} has dead structs. Apply the Triangulate script.")
             
             # Get vertices and faces into numpy arrays for conversion
             verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
-            faces = np.array([rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]) - 1
-            assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
+            faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
+            faces = np.array([[int(v) - 1 for v in f] for f in faces_maxscript if f is not None])
+            self.expect(all(len(f) == 3 for f in faces), f"{obj.name} has non-triangular faces. Apply the Triangulate script.")
 
             # Split the faces into elements
             elems = {tuple(rt.polyop.GetElementsUsingFace(obj, i + 1)) for i in range(rt.polyop.GetNumFaces(obj))}
-            assert len(elems) <= 32, f"{obj.name} should not have more than 32 elements. Has {len(elems)} elements."
+            self.expect(len(elems) <= 32, f"{obj.name} should not have more than 32 elements. Has {len(elems)} elements.")
             elems = np.array(list(elems))
-            assert not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements"
+            self.expect(not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements")
             
             # Iterate through the elements
             for i, elem in enumerate(elems):
-                # Load the mesh into trimesh and assert convexity
+                # Load the mesh into trimesh and expect convexity
                 relevant_faces = faces[elem]
                 m = trimesh.Trimesh(vertices=verts, faces=relevant_faces)
                 m.remove_unreferenced_vertices()
-                assert m.is_volume, f"{obj.name} element {i} is not a volume"
-                # assert m.is_convex, f"{obj.name} element {i} is not convex"
-                assert len(m.split()) == 1, f"{obj.name} element {i} has elements trimesh still finds splittable"
+                self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
+                # self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
+                self.expect(len(m.split()) == 1, f"{obj.name} element {i} has elements trimesh still finds splittable")
         except Exception as e:
             self.expect(False, str(e))
 
@@ -375,7 +385,7 @@ class SanityCheck:
         # Get the children using the parent rows
         children = [ObjectWrapper(x) for x in row.object.children]
 
-        # Assert that all of the children are valid meta-links / lights
+        # Expect that all of the children are valid meta-links / lights
         found_ml_types = set()
         found_ml_subids_for_id = collections.defaultdict(lambda: collections.defaultdict(list))
         for child in children:
@@ -444,7 +454,7 @@ class SanityCheck:
                 # self.expect(np.all(size > 0), f"Volumetric {meta_link_type} meta link {child.name} should have positive size/scale combo.")
                     
             elif ALLOWED_META_TYPES[meta_link_type] == "convexmesh":
-                # TODO: Assert that each element is a convex mesh
+                # TODO: Expect that each element is a convex mesh
                 self.expect(classOf(child) == rt.Editable_Poly, f"Convex mesh {meta_link_type} meta link {child.name} should be of Editable Poly instead of {classOf(child)}")
             else:
                 raise ValueError("Don't know how to process meta type " + ALLOWED_META_TYPES[meta_link_type])

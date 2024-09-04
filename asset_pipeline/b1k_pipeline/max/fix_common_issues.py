@@ -27,26 +27,27 @@ def processed_fn(orig_fn: pathlib.Path):
 
 def processFile(filename: pathlib.Path):
     # Load file, fixing the units
-    assert rt.loadMaxFile(str(filename), useFileUnits=False)
+    print(f"\n\nProcessing {filename}")
+    assert rt.loadMaxFile(str(filename), useFileUnits=False, quiet=True)
     # assert rt.units.systemScale == 1, "System scale not set to 1mm."
     # assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
 
     # Switch to Vray
-    preset_categories = rt.renderpresets.LoadCategories(RENDER_PRESET_FILENAME)
-    assert rt.renderpresets.Load(0, RENDER_PRESET_FILENAME, preset_categories)
+    # preset_categories = rt.renderpresets.LoadCategories(RENDER_PRESET_FILENAME)
+    # assert rt.renderpresets.Load(0, RENDER_PRESET_FILENAME, preset_categories)
 
     # Fix any bad materials
     # rt.select(rt.objects)
     # rt.convertToVRay(True)
 
-    # Fix layers called hallway
-    existing_layer_names = {rt.LayerManager.getLayer(x).name for x in range(rt.LayerManager.count)}
-    for layer_id in range(rt.LayerManager.count):
-        layer = rt.LayerManager.getLayer(layer_id)
-        if "hallway_" in layer.name:
-            to_name = layer.name.replace("hallway_", "corridor_")
-            assert to_name not in existing_layer_names, f"Layer {to_name} already exists"
-            layer.setName(to_name)
+    # # Fix layers called hallway
+    # existing_layer_names = {rt.LayerManager.getLayer(x).name for x in range(rt.LayerManager.count)}
+    # for layer_id in range(rt.LayerManager.count):
+    #     layer = rt.LayerManager.getLayer(layer_id)
+    #     if "hallway_" in layer.name:
+    #         to_name = layer.name.replace("hallway_", "corridor_")
+    #         assert to_name not in existing_layer_names, f"Layer {to_name} already exists"
+    #         layer.setName(to_name)
 
 
     # Fix any old names
@@ -71,6 +72,34 @@ def processFile(filename: pathlib.Path):
     #         old_str = "-".join([category, model_id])
     #         new_str = "-".join([category, random_str])
     #         obj.name = obj.name.replace(old_str, new_str)
+
+    # Get all editable polies
+    for obj in tqdm.tqdm(list(rt.objects)):
+        if rt.classOf(obj) != rt.Editable_Poly:
+            continue
+       
+        # Check all faces are triangular
+        faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
+        faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
+        if not all(len(f) == 3 for f in faces):
+            # print("Need to triangulate", obj.name)
+
+            # Turn to mesh first
+            ttm = rt.Turn_To_Mesh()
+            rt.addmodifier(obj, ttm)
+
+            # Triangulate
+            ttp = rt.Turn_To_Poly()
+            ttp.limitPolySize = True
+            ttp.maxPolySize = 3
+            rt.addmodifier(obj, ttp)
+            rt.maxOps.collapseNodeTo(obj, 1, True)
+
+        # Check that there are no dead elements
+        if rt.polyop.GetHasDeadStructs(obj) != 0:
+            # Remove dead structs
+            # print("Need to collapse", obj.name)
+            rt.polyop.CollapseDeadStructs(obj)
 
     # Save again.
     new_filename = processed_fn(filename)

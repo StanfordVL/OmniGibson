@@ -82,14 +82,7 @@ APPROVED_SCENES = {
     ".*",
 }
 
-REJECTED_SCENES = {
-    "gates_bedroom",
-    "Rs_garden",
-    "grocery_store_cafe",
-    "hotel_gym_spa",
-    "office_vendor_machine",
-    "restaurant_brunch",
-}
+REJECTED_SCENES = set()
 
 VERIFIED_SCENES = {
     ".*",

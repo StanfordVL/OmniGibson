@@ -22,7 +22,9 @@ import fs.copy
 
 btt = rt.BakeToTexture
 
+EXPORT_TEXTURES = False
 USE_UNWRELLA = True
+USE_NATIVE_EXPORT = False
 IMG_SIZE = 1024
 HQ_IMG_SIZE = 4096
 HQ_IMG_CATEGORIES = {"floors"}
@@ -73,12 +75,7 @@ def unlight_all_mats():
 def save_collision_mesh(obj, output_fs):
     # Assert that collision meshes do not share instances in the scene
     assert not [x for x in rt.objects if x.baseObject == obj.baseObject and x != obj], f"{obj.name} should not have instances."
-    
-    # Triangulate the faces
-    rt.polyop.setVertSelection(obj, rt.name('all'))
-    obj.connectVertices()
-    rt.polyop.setVertSelection(obj, rt.name('none'))
-    
+
     # Get vertices and faces into numpy arrays for conversion
     verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
     faces = np.array([rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]) - 1
@@ -103,6 +100,20 @@ def save_collision_mesh(obj, output_fs):
         # Save the mesh into an obj file
         assert b1k_pipeline.utils.save_mesh(m, output_fs, obj.name + f"-{i}.obj"), f"{obj.name} element {i} could not be saved"
 
+def save_mesh(obj, output_path):  
+    # Get vertices and faces into numpy arrays for conversion
+    verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
+    faces = np.array([rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]) - 1
+    assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
+    
+    # Convert to Trimesh
+    m = trimesh.Trimesh(vertices=verts, faces=faces)
+    m.remove_unreferenced_vertices()
+        
+    # Save the mesh into an obj file
+    dirname = os.path.dirname(output_path)
+    basename = os.path.basename(output_path)
+    assert b1k_pipeline.utils.save_mesh(m, OSFS(dirname), basename), f"{obj.name} could not be saved"
 
 class ObjectExporter:
     def __init__(self, bakery, obj_out_dir, export_textures=True):
@@ -300,20 +311,26 @@ class ObjectExporter:
         print("export_meshes", obj.name)
         start_time = time.time()
 
-        rt.select(obj)
         obj_dir = os.path.join(self.obj_out_dir, obj.name)
         os.makedirs(obj_dir, exist_ok=True)
 
         # WARNING: we don't know how to set fine-grained setting of OBJ export. It always inherits the setting of the last export. 
         obj_path = os.path.join(obj_dir, obj.name + ".obj")
-        # rt.ObjExp.setIniName(os.path.join(os.path.parent(__file__), "gw_objexp.ini"))
-        assert rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "UseMapPath") == "1", "Map path not used."
-        assert rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "MapPath") == "./material/", "Wrong material path."
-        assert rt.getIniSetting(rt.ObjExp.getIniName(), "Geometry", "FlipZyAxis") == "0", "Should not flip axes when exporting."
-        assert rt.units.systemScale == 1, "System scale not set to 1mm."
-        assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
 
-        rt.exportFile(obj_path, rt.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
+        if USE_NATIVE_EXPORT:
+            rt.select(obj)
+
+            # rt.ObjExp.setIniName(os.path.join(os.path.parent(__file__), "gw_objexp.ini"))
+            assert rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "UseMapPath") == "1", "Map path not used."
+            assert rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "MapPath") == "./material/", "Wrong material path."
+            assert rt.getIniSetting(rt.ObjExp.getIniName(), "Geometry", "FlipZyAxis") == "0", "Should not flip axes when exporting."
+            assert rt.units.systemScale == 1, "System scale not set to 1mm."
+            assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
+
+            rt.exportFile(obj_path, rt.Name("noPrompt"), selectedOnly=True, using=rt.ObjExp)
+        else:
+            save_mesh(obj, obj_path)
+
         assert os.path.exists(obj_path), f"Could not export object {obj.name}"
         if self.should_bake_texture(obj):
             assert os.path.exists(os.path.join(obj_dir, "material")), f"Could not export materials for object {obj.name}"
@@ -469,25 +486,19 @@ class ObjectExporter:
 
                 if self.should_bake_texture(obj):
                     should_bake_current += 1
+            
+                    # Only need to select and isolate if we are rendering
+                    rt.select([obj])
+                    rt.IsolateSelection.EnterIsolateSelectionMode()
 
                 print(f"{should_bake_current} / {should_bake_count} baking")
-
-                rt.select([obj])
-                rt.IsolateSelection.EnterIsolateSelectionMode()
-
-                # Make sure it's a triangle mesh
-                ttp = rt.Turn_To_Poly()
-                ttp.limitPolySize = True
-                ttp.maxPolySize = 3
-                rt.addmodifier(obj, ttp)
-                rt.maxOps.collapseNodeTo(obj, 1, True)
 
                 obj.isHidden = False
                 for child in obj.children:
                     child.isHidden = False
                 self.uv_unwrapping(obj)
                 self.texture_baking(obj)
-                self.export_obj(obj)
+                self.export_obj(obj)   
                 self.fix_mtl_files(obj)
             except Exception as e:
                 failures[obj.name] = traceback.format_exc()
@@ -502,10 +513,11 @@ def main():
     rt.setvraysilentmode(True)
     out_dir = os.path.join(rt.maxFilePath, "artifacts")
 
-    export_textures = True
+    export_textures = EXPORT_TEXTURES
     property_idx = rt.fileProperties.findProperty(rt.Name("custom"), "disableTextures")
     if property_idx != 0:
-        export_textures = not rt.fileProperties.getPropertyValue(rt.Name("custom"), property_idx)
+        file_disables_textures = rt.fileProperties.getPropertyValue(rt.Name("custom"), property_idx)
+        export_textures = export_textures and not file_disables_textures
 
     success = True
     error_msg = ""
