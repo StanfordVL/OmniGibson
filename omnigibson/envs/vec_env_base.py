@@ -34,8 +34,9 @@ class VectorEnvironment:
         og.sim.step()
 
         tiled_buffer = self.tiled_camera.get_obs()
-        rgb_tile = tiled_buffer["rgb"]
-        depth_tile = tiled_buffer["depth"]
+
+        rgb_tile = tiled_buffer["rgb"].cpu().numpy()
+        depth_tile = tiled_buffer["depth"].cpu().numpy()
 
         for i, action in enumerate(actions):
             # TODO: ignore camera observation here

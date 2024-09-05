@@ -9,7 +9,6 @@ from omnigibson.sensors.vision_sensor import VisionSensor
 class TiledCamera:
     """
     Args:
-        camera_prim_paths (list of str): List of camera prim paths.
         modalities (list of str): Modality(s) supported by this sensor. Default is "rgb", can also include "depth".
     """
 
@@ -74,7 +73,9 @@ class TiledCamera:
         return (width * cols, height * rows)
 
     def get_obs(self):
-        tiled_data = self._annotator.get_data()
+        # TODO: somehow isaac 4.1.0 introduced a bug: this always return a warp array on cpu instead of gpu, even when explicitly specifying device="cuda:0"
+        tiled_data = self._annotator.get_data().to(device="cuda:0")
+        breakpoint()
         from omnigibson.utils.deprecated_utils import reshape_tiled_image
 
         for modality in self.modalities:
@@ -87,7 +88,7 @@ class TiledCamera:
                     *list(self._output_buffer[modality].shape[1:]),  # height, width, num_channels
                     self._tiled_grid_shape()[0],  # num_tiles_x
                     (
-                        self._output_buffer["rgb"].numel() if modality == "depth" else 0
+                        self._output_buffer["rgb"].numel() if "depth" in self.modalities else 0
                     ),  # rgb always comes first; needs an offset for depth
                 ],
                 device="cuda:0",
