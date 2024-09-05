@@ -7,7 +7,6 @@ from omnigibson.utils.constants import ParticleModifyMethod
 
 # Make sure object states are enabled, we're using GPU dynamics, and HQ rendering is enabled
 gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_HQ_RENDERING = True
 
 
@@ -40,7 +39,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                             # In this case, we only allow our cabinet to absorb water, with no conditions needed.
                             # This is needed for the Saturated ("saturable") state so that we can modify the texture
                             # according to the water.
-                            # NOTE: This will only change color if gm.ENABLE_HQ_RENDERING and gm.USE_GPU_DYNAMICS is
+                            # NOTE: This will only change color if gm.ENABLE_HQ_RENDERING is
                             # enabled!
                             "water": [],
                         },

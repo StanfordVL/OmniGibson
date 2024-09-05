@@ -8,7 +8,6 @@ from omnigibson.macros import gm
 
 # Make sure object states, GPU dynamics, and transition rules are enabled
 gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_TRANSITION_RULES = True
 
 

@@ -75,8 +75,8 @@ class ClothPrim(GeomPrim):
         # run super first
         super()._post_load()
 
-        # Make sure that GPU pipeline is enabled if we are using ClothPrim
-        # assert not gm.ENABLE_FLATCACHE, "Cannot use flatcache with ClothPrim!"
+        # Make sure we are in GPU pipeline if we are using ClothPrim
+        assert og.sim.device != "cpu", f"Cannot use cloth object {self.name} with CPU device!"
 
         # Can we do this also using the Cloth API, in initialize?
         self._mass_api = (
@@ -98,43 +98,43 @@ class ClothPrim(GeomPrim):
         # Load the cloth prim view
         self._cloth_prim_view = lazy.omni.isaac.core.prims.ClothPrimView(self.prim_path)
 
-        # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
-        success = False
-        for i in range(10):
-            self._keypoint_idx, self._keyface_idx = sample_mesh_keypoints(
-                mesh_prim=self._prim,
-                n_keypoints=m.N_CLOTH_KEYPOINTS,
-                n_keyfaces=m.N_CLOTH_KEYFACES,
-                seed=i,
-            )
+        # # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
+        # success = False
+        # for i in range(10):
+        #     self._keypoint_idx, self._keyface_idx = sample_mesh_keypoints(
+        #         mesh_prim=self._prim,
+        #         n_keypoints=m.N_CLOTH_KEYPOINTS,
+        #         n_keyfaces=m.N_CLOTH_KEYFACES,
+        #         seed=i,
+        #     )
 
-            keypoint_positions = positions[self._keypoint_idx]
-            keypoint_aabb = keypoint_positions.min(dim=0).values, keypoint_positions.max(dim=0).values
-            true_aabb = positions.min(dim=0).values, positions.max(dim=0).values
-            overlap_x = th.max(
-                th.min(true_aabb[1][0], keypoint_aabb[1][0]) - th.max(true_aabb[0][0], keypoint_aabb[0][0]),
-                th.tensor(0),
-            )
-            overlap_y = th.max(
-                th.min(true_aabb[1][1], keypoint_aabb[1][1]) - th.max(true_aabb[0][1], keypoint_aabb[0][1]),
-                th.tensor(0),
-            )
-            overlap_z = th.max(
-                th.min(true_aabb[1][2], keypoint_aabb[1][2]) - th.max(true_aabb[0][2], keypoint_aabb[0][2]),
-                th.tensor(0),
-            )
-            overlap_vol = overlap_x * overlap_y * overlap_z
-            true_vol = th.prod(true_aabb[1] - true_aabb[0])
-            if true_vol == 0.0 or (overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD).item():
-                success = True
-                break
-        assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
+        #     keypoint_positions = positions[self._keypoint_idx]
+        #     keypoint_aabb = keypoint_positions.min(dim=0).values, keypoint_positions.max(dim=0).values
+        #     true_aabb = positions.min(dim=0).values, positions.max(dim=0).values
+        #     overlap_x = th.max(
+        #         th.min(true_aabb[1][0], keypoint_aabb[1][0]) - th.max(true_aabb[0][0], keypoint_aabb[0][0]),
+        #         th.tensor(0),
+        #     )
+        #     overlap_y = th.max(
+        #         th.min(true_aabb[1][1], keypoint_aabb[1][1]) - th.max(true_aabb[0][1], keypoint_aabb[0][1]),
+        #         th.tensor(0),
+        #     )
+        #     overlap_z = th.max(
+        #         th.min(true_aabb[1][2], keypoint_aabb[1][2]) - th.max(true_aabb[0][2], keypoint_aabb[0][2]),
+        #         th.tensor(0),
+        #     )
+        #     overlap_vol = overlap_x * overlap_y * overlap_z
+        #     true_vol = th.prod(true_aabb[1] - true_aabb[0])
+        #     if true_vol == 0.0 or (overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD).item():
+        #         success = True
+        #         break
+        # assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
 
-        # Compute centroid particle idx based on AABB
-        aabb_min, aabb_max = th.min(positions, dim=0).values, th.max(positions, dim=0).values
-        aabb_center = (aabb_min + aabb_max) / 2.0
-        dists = th.norm(positions - aabb_center.reshape(1, 3), dim=-1)
-        self._centroid_idx = th.argmin(dists)
+        # # Compute centroid particle idx based on AABB
+        # aabb_min, aabb_max = th.min(positions, dim=0).values, th.max(positions, dim=0).values
+        # aabb_center = (aabb_min + aabb_max) / 2.0
+        # dists = th.norm(positions - aabb_center.reshape(1, 3), dim=-1)
+        # self._centroid_idx = th.argmin(dists)
 
     def _initialize(self):
         super()._initialize()

@@ -91,15 +91,8 @@ gm.DEBUG = os.getenv("OMNIGIBSON_DEBUG", "False").lower() in ("true", "1", "t")
 # Whether to print out disclaimers (i.e.: known failure cases resulting from Omniverse's current bugs / limitations)
 gm.SHOW_DISCLAIMERS = False
 
-# Whether to use omni's GPU dynamics
-# This is necessary for certain features; e.g. particles (fluids / cloth)
-gm.USE_GPU_DYNAMICS = False
-
 # Whether to use high-fidelity rendering (this includes, e.g., isosurfaces)
 gm.ENABLE_HQ_RENDERING = False
-
-# Whether to use omni's flatcache feature or not (can speed up simulation)
-gm.ENABLE_FLATCACHE = False
 
 # Whether to use continuous collision detection or not (slower simulation, but can prevent
 # objects from tunneling through each other)

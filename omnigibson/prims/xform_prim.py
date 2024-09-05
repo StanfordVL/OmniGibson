@@ -318,17 +318,16 @@ class XFormPrim(BasePrim):
                 rotq = lazy.pxr.Gf.Quatd(*orientation)
             xform_op.Set(rotq)
         PoseAPI.invalidate()
-        if gm.ENABLE_FLATCACHE:
-            # If flatcache is on, make sure the USD local pose is synced to the fabric local pose.
-            # Ideally we should call usdrt's set local pose directly, but there is no such API.
-            # The only available API is SetLocalXformFromUsd, so we update USD first, and then sync to fabric.
-            xformable_prim = lazy.usdrt.Rt.Xformable(
-                lazy.omni.isaac.core.utils.prims.get_prim_at_path(self.prim_path, fabric=True)
-            )
-            assert (
-                not xformable_prim.HasWorldXform()
-            ), "Fabric's world pose is set for a non-rigid prim which is unexpected. Please report this."
-            xformable_prim.SetLocalXformFromUsd()
+        # Make sure the USD local pose is synced to the fabric local pose.
+        # Ideally we should call usdrt's set local pose directly, but there is no such API.
+        # The only available API is SetLocalXformFromUsd, so we update USD first, and then sync to fabric.
+        xformable_prim = lazy.usdrt.Rt.Xformable(
+            lazy.omni.isaac.core.utils.prims.get_prim_at_path(self.prim_path, fabric=True)
+        )
+        assert (
+            not xformable_prim.HasWorldXform()
+        ), "Fabric's world pose is set for a non-rigid prim which is unexpected. Please report this."
+        xformable_prim.SetLocalXformFromUsd()
         return
 
     def get_world_scale(self):

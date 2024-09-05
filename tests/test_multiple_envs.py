@@ -24,11 +24,8 @@ def setup_multi_environment(num_of_envs, additional_objects_cfg=[]):
     cfg["objects"] = additional_objects_cfg
 
     if og.sim is None:
-        # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth)
         gm.RENDER_VIEWER_CAMERA = False
         gm.ENABLE_OBJECT_STATES = True
-        gm.USE_GPU_DYNAMICS = True
-        gm.ENABLE_FLATCACHE = False
         gm.ENABLE_TRANSITION_RULES = False
     else:
         # Make sure sim is stopped

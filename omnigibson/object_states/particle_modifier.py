@@ -639,15 +639,10 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
         return all(condition(self.obj) for condition in self.conditions[system_name])
 
     def _update(self):
-        # If we're using projection method and flatcache, we need to manually update this object's transforms on the USD
+        # If we're using projection method, we need to manually update this object's transforms on the USD
         # so the corresponding visualization and overlap meshes are updated properly
         # This is expensive, so only do it if the object is not a fixed object and we have an active projection
-        if (
-            self.method == ParticleModifyMethod.PROJECTION
-            and gm.ENABLE_FLATCACHE
-            and not self.obj.fixed_base
-            and self.projection_is_active
-        ):
+        if self.method == ParticleModifyMethod.PROJECTION and not self.obj.fixed_base and self.projection_is_active:
             FlatcacheAPI.sync_raw_object_transforms_in_usd(prim=self.obj)
 
         # Check if there's any overlap and if we're at the correct step
@@ -1506,8 +1501,8 @@ class ParticleApplier(ParticleModifier):
             return compatible, reason
 
         # Check whether GPU dynamics are enabled (necessary for this object state)
-        if not gm.USE_GPU_DYNAMICS:
-            return False, f"gm.USE_GPU_DYNAMICS must be True in order to use object state {cls.__name__}."
+        if og.sim.device == "cpu":
+            return False, f"Must be using GPU pipeline in order to use object state {cls.__name__}."
 
         return True, None
 

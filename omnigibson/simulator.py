@@ -441,15 +441,9 @@ def _launch_simulator(*args, **kwargs):
             # default collide with each other, and modify settings for speed optimization
             self._physics_context.set_invert_collision_group_filter(False)
             self._physics_context.enable_ccd(gm.ENABLE_CCD)
-            self._physics_context.enable_fabric(gm.ENABLE_FLATCACHE)
-
-            # Enable GPU dynamics based on whether we need omni particles feature
-            if gm.USE_GPU_DYNAMICS:
-                self._physics_context.enable_gpu_dynamics(True)
-                self._physics_context.set_broadphase_type("GPU")
-            else:
-                self._physics_context.enable_gpu_dynamics(False)
-                self._physics_context.set_broadphase_type("MBP")
+            self._physics_context.enable_fabric(True)
+            self._physics_context.enable_gpu_dynamics(True)
+            self._physics_context.set_broadphase_type("GPU")
 
             # Set GPU Pairs capacity and other GPU settings
             self._physics_context.set_gpu_found_lost_pairs_capacity(gm.GPU_PAIRS_CAPACITY)
@@ -477,7 +471,7 @@ def _launch_simulator(*args, **kwargs):
             lazy.carb.settings.get_settings().set_bool("/app/renderer/skipMaterialLoading", False)
 
             # Below settings are for improving performance: we use the USD / Fabric only for poses.
-            lazy.carb.settings.get_settings().set_bool("/physics/updateToUsd", not gm.ENABLE_FLATCACHE)
+            lazy.carb.settings.get_settings().set_bool("/physics/updateToUsd", False)
             lazy.carb.settings.get_settings().set_bool("/physics/updateParticlesToUsd", False)
             lazy.carb.settings.get_settings().set_bool("/physics/updateVelocitiesToUsd", False)
             lazy.carb.settings.get_settings().set_bool("/physics/updateForceSensorsToUsd", False)
@@ -998,8 +992,7 @@ def _launch_simulator(*args, **kwargs):
                 # We also need to suppress the following error when flat cache is used:
                 # [omni.physx.plugin] Transformation change on non-root links is not supported.
                 channels = ["omni.usd", "omni.physicsschema.plugin"]
-                if gm.ENABLE_FLATCACHE:
-                    channels.append("omni.physx.plugin")
+                channels.append("omni.physx.plugin")
                 with suppress_omni_log(channels=channels):
                     super().play()
 
@@ -1042,9 +1035,7 @@ def _launch_simulator(*args, **kwargs):
             if not self.is_stopped():
                 super().stop()
 
-            # If we're using flatcache, we also need to reset its API
-            if gm.ENABLE_FLATCACHE:
-                FlatcacheAPI.reset()
+            FlatcacheAPI.reset()
 
             # Run all callbacks
             for callback in self._callbacks_on_stop.values():

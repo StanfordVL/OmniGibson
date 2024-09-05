@@ -258,8 +258,8 @@ class CollisionGeomPrim(GeomPrim):
         """
         # Currently, trying to toggle while simulator is playing while using GPU dynamics results in a crash, so we
         # assert that the sim is stopped here
-        if self._initialized and gm.USE_GPU_DYNAMICS:
-            assert og.sim.is_stopped(), "Cannot toggle collisions while using GPU dynamics unless simulator is stopped!"
+        if self._initialized:
+            assert og.sim.is_stopped(), "Cannot toggle collisions unless simulator is stopped!"
         self.set_attribute("physics:collisionEnabled", enabled)
 
     # TODO: Maybe this should all be added to RigidPrim instead?

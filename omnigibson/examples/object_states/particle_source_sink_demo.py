@@ -7,7 +7,6 @@ from omnigibson.utils.constants import ParticleModifyCondition
 
 # Make sure object states are enabled and GPU dynamics are used
 gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_HQ_RENDERING = True
 
 
