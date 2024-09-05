@@ -4,6 +4,7 @@ import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.object_states import Folded, Unfolded
 from omnigibson.utils.constants import PrimType
+from omnigibson.utils.python_utils import multi_dim_linspace
 
 # Make sure object states and GPU dynamics are enabled (GPU dynamics needed for cloth)
 gm.ENABLE_OBJECT_STATES = True
@@ -18,6 +19,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Create the scene config to load -- empty scene + custom cloth object
     cfg = {
+        "env": {"device": "cuda:0"},
         "scene": {
             "type": "Scene",
         },
@@ -111,7 +113,9 @@ def main(random_selection=False, headless=False, short_exec=False):
             end[:, 0] += x_extent * 0.9
 
             increments = 25
-            for ctrl_pts in th.cat([th.linspace(start, mid, increments), th.linspace(mid, end, increments)]):
+            for ctrl_pts in th.cat(
+                [multi_dim_linspace(start, mid, increments), multi_dim_linspace(mid, end, increments)]
+            ):
                 obj.root_link.set_particle_positions(ctrl_pts, idxs=indices)
                 og.sim.step()
                 print_state()
@@ -137,7 +141,9 @@ def main(random_selection=False, headless=False, short_exec=False):
             end[:, 1] += direction * y_extent * 0.4
 
             increments = 25
-            for ctrl_pts in th.cat([th.linspace(start, mid, increments), th.linspace(mid, end, increments)]):
+            for ctrl_pts in th.cat(
+                [multi_dim_linspace(start, mid, increments), multi_dim_linspace(mid, end, increments)]
+            ):
                 obj.root_link.set_particle_positions(ctrl_pts, idxs=indices)
                 env.step(th.empty(0))
                 print_state()
