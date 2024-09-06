@@ -1,5 +1,6 @@
 import torch as th
 
+import omnigibson as og
 from omnigibson.utils.python_utils import Serializable
 
 
@@ -59,7 +60,7 @@ class MovingAverageFilter(Filter):
         self.obs_dim = obs_dim
         assert filter_width > 0, f"MovingAverageFilter must have a non-zero size! Got: {filter_width}"
         self.filter_width = filter_width
-        self.past_samples = th.zeros((filter_width, obs_dim))
+        self.past_samples = th.zeros((filter_width, obs_dim), device=og.sim.device)
         self.current_idx = 0
         self.fully_filled = False  # Whether the entire filter buffer is filled or not
 
@@ -103,7 +104,7 @@ class MovingAverageFilter(Filter):
         state = super()._dump_state()
 
         # Add info from this filter
-        state["past_samples"] = self.past_samples
+        state["past_samples"] = self.past_samples.cpu()
         state["current_idx"] = self.current_idx
         state["fully_filled"] = self.fully_filled
 

@@ -428,14 +428,12 @@ class ControllableObject(BaseObject):
             idx += controller.command_dim
 
         # Compose controls
-        u_vec = th.zeros(self.n_dof, device="cuda")
+        u_vec = th.zeros(self.n_dof, device=og.sim.device)
         # By default, the control type is None and the control value is 0 (th.zeros) - i.e. no control applied
         u_type_vec = th.tensor([ControlType.NONE] * self.n_dof)
         for group, ctrl in control.items():
-            idx_gpu = self._controllers[group].dof_idx
-            idx_cpu = self._controllers[group].dof_idx_cpu
-            u_vec[idx_gpu] = ctrl["value"]
-            u_type_vec[idx_cpu] = ctrl["type"]
+            u_vec[self._controllers[group].dof_idx] = ctrl["value"]
+            u_type_vec[self._controllers[group].dof_idx] = ctrl["type"]
 
         u_vec, u_type_vec = self._postprocess_control(control=u_vec, control_type=u_type_vec)
 

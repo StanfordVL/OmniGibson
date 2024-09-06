@@ -804,17 +804,17 @@ class BatchControlViewAPIImpl:
 
     def flush_control(self):
         if "dof_position_targets" in self._write_idx_cache:
-            pos_indices = th.tensor(sorted(self._write_idx_cache["dof_position_targets"]), device="cuda")
+            pos_indices = th.tensor(sorted(self._write_idx_cache["dof_position_targets"]), device=og.sim.device)
             pos_targets = self._read_cache["dof_position_targets"]
             self._view.set_dof_position_targets(pos_targets, pos_indices)
 
         if "dof_velocity_targets" in self._write_idx_cache:
-            vel_indices = th.tensor(sorted(self._write_idx_cache["dof_velocity_targets"]), device="cuda")
+            vel_indices = th.tensor(sorted(self._write_idx_cache["dof_velocity_targets"]), device=og.sim.device)
             vel_targets = self._read_cache["dof_velocity_targets"]
             self._view.set_dof_velocity_targets(vel_targets, vel_indices)
 
         if "dof_actuation_forces" in self._write_idx_cache:
-            eff_indices = th.tensor(sorted(self._write_idx_cache["dof_actuation_forces"]), device="cuda")
+            eff_indices = th.tensor(sorted(self._write_idx_cache["dof_actuation_forces"]), device=og.sim.device)
             eff_targets = self._read_cache["dof_actuation_forces"]
             self._view.set_dof_actuation_forces(eff_targets, eff_indices)
 

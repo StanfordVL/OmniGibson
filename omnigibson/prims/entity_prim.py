@@ -1042,7 +1042,7 @@ class EntityPrim(XFormPrim):
         # Sim is running and articulation view exists, so use that physx API backend
         else:
             positions, orientations = self._articulation_view.get_world_poses(clone=clone)
-            return positions[0], orientations[0][[1, 2, 3, 0]]
+            return positions[0].cpu(), orientations[0][[1, 2, 3, 0]].cpu()
 
     def set_local_pose(self, position=None, orientation=None):
         # If kinematic only, clear cache for the root link
@@ -1073,7 +1073,7 @@ class EntityPrim(XFormPrim):
         # Sim is running and articulation view exists, so use that physx API backend
         else:
             positions, orientations = self._articulation_view.get_local_poses()
-            return positions[0], orientations[0][[1, 2, 3, 0]]
+            return positions[0].cpu(), orientations[0][[1, 2, 3, 0]].cpu()
 
     # TODO: Is the omni joint damping (used for driving motors) same as dissipative joint damping (what we had in pb)?
     @property

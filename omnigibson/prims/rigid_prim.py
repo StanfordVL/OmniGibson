@@ -294,7 +294,7 @@ class RigidPrim(XFormPrim):
         Returns:
             th.tensor: current linear velocity of the the rigid prim. Shape (3,).
         """
-        return self._rigid_prim_view.get_linear_velocities(clone=clone)[0]
+        return self._rigid_prim_view.get_linear_velocities(clone=clone)[0].cpu()
 
     def set_angular_velocity(self, velocity):
         """
@@ -313,7 +313,7 @@ class RigidPrim(XFormPrim):
         Returns:
             th.tensor: current angular velocity of the the rigid prim. Shape (3,).
         """
-        return self._rigid_prim_view.get_angular_velocities(clone=clone)[0]
+        return self._rigid_prim_view.get_angular_velocities(clone=clone)[0].cpu()
 
     def set_position_orientation(self, position=None, orientation=None):
         # Invalidate kinematic-only object pose caches when new pose is set

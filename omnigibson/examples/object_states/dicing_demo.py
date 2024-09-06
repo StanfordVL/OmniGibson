@@ -6,7 +6,7 @@ import omnigibson as og
 import omnigibson.utils.transform_utils as T
 from omnigibson.macros import gm
 
-# Make sure object states, GPU dynamics, and transition rules are enabled
+# Make sure object states and transition rules are enabled
 gm.ENABLE_OBJECT_STATES = True
 gm.ENABLE_TRANSITION_RULES = True
 

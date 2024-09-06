@@ -2,6 +2,7 @@ import math
 
 import torch as th
 
+import omnigibson as og
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import ControlType, ManipulationController
 from omnigibson.controllers.joint_controller import JointController
@@ -340,8 +341,8 @@ class InverseKinematicsController(JointController, ManipulationController):
                     weight_pos=m.IK_POS_WEIGHT,
                     weight_quat=m.IK_ORN_WEIGHT,
                     max_iterations=m.IK_MAX_ITERATIONS,
-                    initial_joint_pos=current_joint_pos,
-                )
+                    initial_joint_pos=current_joint_pos.cpu(),
+                ).to(device=og.sim.device)
             else:
                 target_joint_pos = self.solver.solve(
                     target_pos=target_pos,
@@ -351,7 +352,7 @@ class InverseKinematicsController(JointController, ManipulationController):
                     weight_pos=m.IK_POS_WEIGHT,
                     weight_quat=m.IK_ORN_WEIGHT,
                     max_iterations=m.IK_MAX_ITERATIONS,
-                )
+                ).to(device=og.sim.device)
 
             if target_joint_pos is None:
                 # Print warning that we couldn't find a valid solution, and return the current joint configuration

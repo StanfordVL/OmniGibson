@@ -4,6 +4,7 @@ from enum import IntEnum
 
 import torch as th
 
+import omnigibson as og
 from omnigibson.utils.python_utils import Recreatable, Registerable, Serializable, assert_valid_key, classproperty
 
 # Global dicts that will contain mappings
@@ -101,21 +102,22 @@ class BaseController(Serializable, Registerable, Recreatable):
         """
         # Store arguments
         assert "has_limit" in control_limits, "Expected has_limit specified in control_limits, but does not exist."
-        self._dof_idx_cpu = dof_idx.int()
-        self._dof_idx_gpu = dof_idx.int().to(device="cuda")
+        self._dof_idx = dof_idx.int().to(device=og.sim.device)
         # Store the indices in self.dof_idx that have control limits
         self._limited_dof_indices = th.tensor(
-            [i for i, idx in enumerate(self.dof_idx) if control_limits["has_limit"][idx]], dtype=th.long, device="cuda"
+            [i for i, idx in enumerate(self.dof_idx) if control_limits["has_limit"][idx]],
+            dtype=th.long,
+            device=og.sim.device,
         )
         self._control_freq = control_freq
         # Store control limits as a 3 x 2 x n tensor: [control_type][min/max][dof_idx]
-        self._control_limits = th.zeros((3, 2, len(dof_idx)), device="cuda")
+        self._control_limits = th.zeros((3, 2, len(dof_idx)), device=og.sim.device)
         for motor_type in {"position", "velocity", "effort"}:
             self._control_limits[ControlType.get_type(motor_type)][0] = control_limits[motor_type][0][dof_idx].to(
-                device="cuda"
+                device=og.sim.device
             )
             self._control_limits[ControlType.get_type(motor_type)][1] = control_limits[motor_type][1][dof_idx].to(
-                device="cuda"
+                device=og.sim.device
             )
 
         # Generate goal information
@@ -173,7 +175,11 @@ class BaseController(Serializable, Registerable, Recreatable):
             Array[float]: Processed command vector
         """
         # Make sure command is a th.tensor
-        command = th.tensor([command], device="cuda") if type(command) in {int, float} else command
+        command = (
+            th.tensor([command], device=og.sim.device)
+            if type(command) in {int, float}
+            else command.to(device=og.sim.device)
+        )
         # We only clip and / or scale if self.command_input_limits exists
         if self._command_input_limits is not None:
             # Clip
@@ -214,7 +220,7 @@ class BaseController(Serializable, Registerable, Recreatable):
 
         # Preprocess and run internal command
         self._goal = self._update_goal(
-            command=self._preprocess_command(command.to(device="cuda")), control_dict=control_dict
+            command=self._preprocess_command(command.to(device=og.sim.device)), control_dict=control_dict
         )
 
     def _update_goal(self, command, control_dict):
@@ -377,12 +383,12 @@ class BaseController(Serializable, Registerable, Recreatable):
         # Check if input is an Iterable, if so, we simply convert the input to th.tensor and return
         # Else, input is a single value, so we map to a numpy array of correct size and return
         return (
-            nums.to(device="cuda")
+            nums.to(device=og.sim.device)
             if isinstance(nums, th.Tensor)
             else (
-                th.tensor(nums, dtype=th.float32, device="cuda")
+                th.tensor(nums, dtype=th.float32, device=og.sim.device)
                 if isinstance(nums, Iterable)
-                else th.ones(dim, dtype=th.float32, device="cuda") * nums
+                else th.ones(dim, dtype=th.float32, device=og.sim.device) * nums
             )
         )
 
@@ -470,17 +476,9 @@ class BaseController(Serializable, Registerable, Recreatable):
     def dof_idx(self):
         """
         Returns:
-            th.Tensor[int]: DOF indices corresponding to the specific DOFs being controlled by this robot, on GPU
+            th.Tensor[int]: DOF indices corresponding to the specific DOFs being controlled by this robot
         """
-        return self._dof_idx_gpu
-
-    @property
-    def dof_idx_cpu(self):
-        """
-        Returns:
-            th.Tensor[int]: DOF indices corresponding to the specific DOFs being controlled by this robot, on CPU
-        """
-        return self._dof_idx_cpu
+        return self._dof_idx
 
     @classproperty
     def _do_not_register_classes(cls):

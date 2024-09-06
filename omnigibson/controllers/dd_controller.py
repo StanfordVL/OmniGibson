@@ -1,5 +1,6 @@
 import torch as th
 
+import omnigibson as og
 from omnigibson.controllers import ControlType, LocomotionController
 
 
@@ -50,8 +51,8 @@ class DifferentialDriveController(LocomotionController):
                 @control_limits velocity limits entry
         """
         # Store internal variables
-        self._wheel_radius = th.tensor(wheel_radius, device="cuda")
-        self._wheel_axle_halflength = th.tensor(wheel_axle_length / 2.0, device="cuda")
+        self._wheel_radius = th.tensor(wheel_radius, device=og.sim.device)
+        self._wheel_axle_halflength = th.tensor(wheel_axle_length / 2.0, device=og.sim.device)
 
         # If we're using default command output limits, map this to maximum linear / angular velocities
         if type(command_output_limits) == str and command_output_limits == "default":
@@ -111,7 +112,7 @@ class DifferentialDriveController(LocomotionController):
 
     def compute_no_op_goal(self, control_dict):
         # This is zero-vector, since we want zero linear / angular velocity
-        return dict(vel=th.zeros(2, device="cuda"))
+        return dict(vel=th.zeros(2, device=og.sim.device))
 
     def _get_goal_shapes(self):
         # Add (2, )-array representing linear, angular velocity

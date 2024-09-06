@@ -1,4 +1,5 @@
 import pytest
+import torch as th
 
 import omnigibson as og
 from omnigibson.macros import gm
@@ -6,6 +7,7 @@ from omnigibson.macros import gm
 
 def task_tester(task_type):
     cfg = {
+        "env": {"device": "cuda:0"},
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
@@ -38,7 +40,7 @@ def task_tester(task_type):
 
     env.reset()
     for _ in range(5):
-        env.step(env.robots[0].action_space.sample())
+        env.step(th.tensor(env.robots[0].action_space.sample(), dtype=th.float32))
 
     # Clear the sim
     og.clear()
@@ -62,6 +64,7 @@ def test_behavior_task():
 
 def test_rs_int_full_load():
     cfg = {
+        "env": {"device": "cuda:0"},
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
@@ -87,7 +90,7 @@ def test_rs_int_full_load():
 
     env.reset()
     for _ in range(5):
-        env.step(env.robots[0].action_space.sample())
+        env.step(th.tensor(env.robots[0].action_space.sample(), dtype=th.float32))
 
     # Clear the sim
     og.clear()

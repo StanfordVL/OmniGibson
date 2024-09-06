@@ -1,3 +1,5 @@
+import torch as th
+
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.utils.asset_utils import get_available_g_scenes, get_available_og_scenes
@@ -65,7 +67,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         og.log.info("Resetting environment")
         env.reset()
         for i in range(100):
-            action = env.action_space.sample()
+            action = th.tensor(env.action_space.sample(), dtype=th.float32)
             state, reward, terminated, truncated, info = env.step(action)
             if terminated or truncated:
                 og.log.info("Episode finished after {} timesteps".format(i + 1))

@@ -122,7 +122,7 @@ class IKSolver:
                 if isinstance(target_quat, th.Tensor)
                 else th.tensor(target_quat, dtype=th.float64)
             )
-        ik_target_pose = lazy.lula.Pose3(lazy.lula.Rotation3(rot), pos)
+        ik_target_pose = lazy.lula.Pose3(lazy.lula.Rotation3(rot.cpu()), pos.cpu())
 
         # Set the cspace seed and tolerance
         initial_joint_pos = self.reset_joint_pos if initial_joint_pos is None else initial_joint_pos
