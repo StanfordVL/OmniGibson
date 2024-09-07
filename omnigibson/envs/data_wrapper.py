@@ -293,10 +293,6 @@ class DataCollectionWrapper(DataWrapper):
         if optimize_sim:
             self._optimize_sim_for_data_collection(viewport_camera_path=viewport_camera_path)
 
-        # Set the dump filter for better performance
-        # TODO: Possibly remove this feature once we have fully tensorized state saving, which may be more efficient
-        self.env.scene.object_registry.set_dump_filter(dump_filter=lambda obj: obj.is_active)
-
     def _optimize_sim_for_data_collection(self, viewport_camera_path):
         """
         Configures the simulator to optimize for data collection
@@ -321,6 +317,10 @@ class DataCollectionWrapper(DataWrapper):
         lazy.carb.settings.get_settings().set_bool("/physics/mouseGrab", False)
         lazy.carb.settings.get_settings().set_bool("/physics/forceGrab", False)
         lazy.carb.settings.get_settings().set_bool("/physics/suppressReadback", True)
+
+        # Set the dump filter for better performance
+        # TODO: Possibly remove this feature once we have fully tensorized state saving, which may be more efficient
+        self.env.scene.object_registry.set_dump_filter(dump_filter=lambda obj: obj.is_active)
 
     def reset(self):
         # Call super first
