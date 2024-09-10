@@ -569,7 +569,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Grab reward, done, and info, and populate with internal info
         reward, done, info = self.task.step(self, action)
-
         self._populate_info(info)
         info["obs_info"] = obs_info
 
@@ -656,7 +655,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         Reset bookkeeping variables for the next new episode.
         """
-
         self._current_episode += 1
         self._current_step = 0
 
