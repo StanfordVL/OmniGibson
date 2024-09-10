@@ -1,8 +1,9 @@
 import os
 from typing import OrderedDict
 
-import numpy as np
+import math
 import yaml
+import torch as th
 from bddl.condition_evaluation import evaluate_state
 
 import omnigibson as og
@@ -40,7 +41,7 @@ def test_behavior_task_work_metric():
 
     # perform a step with no action
     action = env.action_space.sample()
-    action["robot0"] = np.zeros_like(action["robot0"])
+    action["robot0"] = th.zeros_like(th.tensor(action["robot0"]))
 
     state, reward, terminated, truncated, info = env.step(action)
 
@@ -69,7 +70,7 @@ def test_behavior_task_work_metric():
     for link in env.robots[0].links.values():
         robot_mass += link.mass
 
-    assert np.allclose(metrics["work"] / robot_mass, 0, atol=1e-1)
+    assert math.isclose(metrics["work"] / robot_mass, 0, abs_tol=1e-1)
     env.reset()
 
 
@@ -77,14 +78,14 @@ def test_behavior_task_energy_metric():
 
     # perform a step with no action
     action = env.action_space.sample()
-    action["robot0"] = np.zeros_like(action["robot0"])
+    action["robot0"] = th.zeros_like(th.tensor(action["robot0"]))
     env.step(action)
 
     # cache the initial position and orientation of the robot
     position, orientation = env.robots[0].get_position_orientation()
 
     # apply shift to the robot
-    shift_position, shift_orientation = np.array([10, 10, 0]), np.array([0.05, 0, 0, 0.1])
+    shift_position, shift_orientation = th.tensor([10, 10, 0], dtype=th.float32), th.tensor([0.05, 0, 0, 0.1], dtype=th.float32)
     env.robots[0].set_position_orientation(shift_position, shift_orientation)
     state, reward, terminated, truncated, info = env.step(action)
     energy = info["metrics"]["energy"]
@@ -102,7 +103,7 @@ def test_behavior_task_energy_metric():
         robot_mass += link.mass
 
     # assert that the total energy spent is twice as much as the energy spent applying the shift
-    assert np.allclose((2 * energy - new_energy) / robot_mass, 0, atol=1e-2)
+    assert math.isclose((2 * energy - new_energy) / robot_mass, 0, abs_tol=1e-2)
     env.reset()
 
 
@@ -110,7 +111,7 @@ def test_behavior_task_object_addition_removal():
 
     # perform a step with no action
     action = env.action_space.sample()
-    action["robot0"] = np.zeros_like(action["robot0"])
+    action["robot0"] = th.zeros_like(th.tensor(action["robot0"]))
     env.step(action)
 
     env.robots[0].set_position_orientation([10, 10, 0])
@@ -138,16 +139,16 @@ def test_behavior_task_object_addition_removal():
     for link in env.robots[0].links.values():
         robot_mass += link.mass
 
-    assert np.allclose((work - add_work) / robot_mass, 0, atol=1e-1)
-    assert np.allclose((energy - add_energy) / robot_mass, 0, atol=1e-1)
+    assert math.isclose((work - add_work) / robot_mass, 0, abs_tol=1e-1)
+    assert math.isclose((energy - add_energy) / robot_mass, 0, abs_tol=1e-1)
 
-    og.sim.remove_object(obj=apple)
+    env.scene.remove_object(obj=apple)
     state, reward, terminated, truncated, info = env.step(action)
     metrics = info["metrics"]
 
     remove_work, remove_energy = metrics["work"], metrics["energy"]
 
-    assert np.allclose((add_work - remove_work) / robot_mass, 0, atol=1e-1)
-    assert np.allclose((add_energy - remove_energy) / robot_mass, 0, atol=1e-1)
+    assert math.isclose((add_work - remove_work) / robot_mass, 0, abs_tol=1e-1)
+    assert math.isclose((add_energy - remove_energy) / robot_mass, 0, abs_tol=1e-1)
 
     env.reset()

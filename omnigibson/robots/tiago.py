@@ -1,6 +1,7 @@
+import math
 import os
 
-import numpy as np
+import torch as th
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -30,7 +31,7 @@ RESET_JOINT_OPTIONS = {
 }
 
 m.MAX_LINEAR_VELOCITY = 1.5  # linear velocity in meters/second
-m.MAX_ANGULAR_VELOCITY = np.pi  # angular velocity in radians/second
+m.MAX_ANGULAR_VELOCITY = math.pi  # angular velocity in radians/second
 
 
 class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
@@ -48,7 +49,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # Shared kwargs in hierarchy
         name,
         relative_prim_path=None,
-        uuid=None,
         scale=None,
         visible=True,
         visual_only=False,
@@ -72,9 +72,9 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         # Unique to Tiago
         variant="default",
         rigid_trunk=False,
-        default_trunk_offset=0.365,
+        default_trunk_offset=0.2,
         default_reset_mode="untuck",
-        default_arm_pose="vertical",
+        default_arm_pose="diagonal15",
         **kwargs,
     ):
         """
@@ -83,8 +83,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
                 created at /World/<name>
             category (str): Category for the object. Defaults to "object".
-            uuid (None or int): Unique unsigned-integer identifier to assign to this object (max 8-numbers).
-                If None is specified, then it will be auto-generated
             scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
                 for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
                 3-array specifies per-axis scaling.
@@ -153,7 +151,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         super().__init__(
             relative_prim_path=relative_prim_path,
             name=name,
-            uuid=uuid,
             scale=scale,
             visible=visible,
             fixed_base=True,
@@ -191,44 +188,44 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
     @property
     def tucked_default_joint_pos(self):
-        pos = np.zeros(self.n_dof)
+        pos = th.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
         pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
         pos[self.trunk_control_idx] = 0
-        pos[self.camera_control_idx] = np.array([0.0, 0.0])
+        pos[self.camera_control_idx] = th.tensor([0.0, 0.0])
         for arm in self.arm_names:
-            pos[self.gripper_control_idx[arm]] = np.array([0.045, 0.045])  # open gripper
-            pos[self.arm_control_idx[arm]] = np.array([-1.10, 1.47, 2.71, 1.71, -1.57, 1.39, 0])
+            pos[self.gripper_control_idx[arm]] = th.tensor([0.045, 0.045])  # open gripper
+            pos[self.arm_control_idx[arm]] = th.tensor([-1.10, 1.47, 2.71, 1.71, -1.57, 1.39, 0])
         return pos
 
     @property
     def untucked_default_joint_pos(self):
-        pos = np.zeros(self.n_dof)
+        pos = th.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
         pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
         pos[self.trunk_control_idx] = 0.02 + self.default_trunk_offset
-        pos[self.camera_control_idx] = np.array([0.0, -0.45])
+        pos[self.camera_control_idx] = th.tensor([0.0, -0.45])
         # Choose arm joint pos based on setting
         for arm in self.arm_names:
-            pos[self.gripper_control_idx[arm]] = np.array([0.045, 0.045])  # open gripper
+            pos[self.gripper_control_idx[arm]] = th.tensor([0.045, 0.045])  # open gripper
             if self.default_arm_pose == "vertical":
-                pos[self.arm_control_idx[arm]] = np.array(
+                pos[self.arm_control_idx[arm]] = th.tensor(
                     [0.85846, -0.14852, 1.81008, 1.63368, 0.13764, -1.32488, -0.68415]
                 )
             elif self.default_arm_pose == "diagonal15":
-                pos[self.arm_control_idx[arm]] = np.array(
-                    [0.90522, -0.42811, 2.23505, 1.64627, 0.76867, -0.79464, 2.05251]
+                pos[self.arm_control_idx[arm]] = th.tensor(
+                    [0.90522, -0.42811, 2.23505, 1.64627, 0.76867, -0.79464, -1.08908]
                 )
             elif self.default_arm_pose == "diagonal30":
-                pos[self.arm_control_idx[arm]] = np.array(
-                    [0.71883, -0.02787, 1.86002, 1.52897, 0.52204, -0.99741, 2.03113]
+                pos[self.arm_control_idx[arm]] = th.tensor(
+                    [0.71883, -0.02787, 1.86002, 1.52897, 0.52204, -0.99741, -1.11046]
                 )
             elif self.default_arm_pose == "diagonal45":
-                pos[self.arm_control_idx[arm]] = np.array(
-                    [0.66058, -0.14251, 1.77547, 1.43345, 0.65988, -1.02741, 1.81302]
+                pos[self.arm_control_idx[arm]] = th.tensor(
+                    [0.66058, -0.14251, 1.77547, 1.43345, 0.65988, -1.02741, -1.32857]
                 )
             elif self.default_arm_pose == "horizontal":
-                pos[self.arm_control_idx[arm]] = np.array(
+                pos[self.arm_control_idx[arm]] = th.tensor(
                     [0.61511, 0.49229, 1.46306, 1.24919, 1.08282, -1.28865, 1.50910]
                 )
             else:
@@ -289,14 +286,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     def base_footprint_link_name(self):
         return "base_footprint"
 
-    @property
-    def base_footprint_link(self):
-        """
-        Returns:
-            RigidPrim: base footprint link of this object prim
-        """
-        return self._links[self.base_footprint_link_name]
-
     def _postprocess_control(self, control, control_type):
         # Run super method first
         u_vec, u_type_vec = super()._postprocess_control(control=control, control_type=control_type)
@@ -308,10 +297,20 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         cur_orn = T.mat2quat(T.quat2mat(root_link_orn).T @ T.quat2mat(base_orn))
 
         # Rotate the linear and angular velocity to the desired frame
-        lin_vel_global, _ = T.pose_transform([0, 0, 0], cur_orn, u_vec[self.base_idx[:3]], [0, 0, 0, 1])
-        ang_vel_global, _ = T.pose_transform([0, 0, 0], cur_orn, u_vec[self.base_idx[3:]], [0, 0, 0, 1])
+        lin_vel_global, _ = T.pose_transform(
+            th.tensor([0, 0, 0], dtype=th.float32),
+            cur_orn,
+            u_vec[self.base_idx[:3]],
+            th.tensor([0, 0, 0, 1], dtype=th.float32),
+        )
+        ang_vel_global, _ = T.pose_transform(
+            th.tensor([0, 0, 0], dtype=th.float32),
+            cur_orn,
+            u_vec[self.base_idx[3:]],
+            th.tensor([0, 0, 0, 1], dtype=th.float32),
+        )
 
-        u_vec[self.base_control_idx] = np.array([lin_vel_global[0], lin_vel_global[1], ang_vel_global[2]])
+        u_vec[self.base_control_idx] = th.tensor([lin_vel_global[0], lin_vel_global[1], ang_vel_global[2]])
         return u_vec, u_type_vec
 
     def _get_proprioception_dict(self):
@@ -337,18 +336,6 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         limits["velocity"][0][self.base_idx[3:]] = -m.MAX_ANGULAR_VELOCITY
         limits["velocity"][1][self.base_idx[3:]] = m.MAX_ANGULAR_VELOCITY
         return limits
-
-    def get_control_dict(self):
-        # Modify the right hand's pos_relative in the z-direction based on the trunk's value
-        # We do this so we decouple the trunk's dynamic value from influencing the IK controller solution for the right
-        # hand, which does not control the trunk
-        fcns = super().get_control_dict()
-        native_fcn = fcns.get_fcn("eef_right_pos_relative")
-        fcns["eef_right_pos_relative"] = lambda: (
-            native_fcn() + np.array([0, 0, -self.get_joint_positions()[self.trunk_control_idx[0]]])
-        )
-
-        return fcns
 
     @property
     def default_proprio_obs(self):
@@ -402,7 +389,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
                 if arm == "left":
                     # Need to override joint idx being controlled to include trunk in default arm controller configs
-                    arm_control_idx = np.concatenate([self.trunk_control_idx, self.arm_control_idx[arm]])
+                    arm_control_idx = th.cat([self.trunk_control_idx, self.arm_control_idx[arm]])
                     arm_cfg["dof_idx"] = arm_control_idx
 
                     # Need to modify the default joint positions also if this is a null joint controller
@@ -453,7 +440,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             n-array: Indices in low-level control vector corresponding to the six 1DoF base joints
         """
         joints = list(self.joints.keys())
-        return np.array(
+        return th.tensor(
             [joints.index(f"base_footprint_{component}_joint") for component in ["x", "y", "z", "rx", "ry", "rz"]]
         )
 
@@ -463,13 +450,13 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         Returns:
             n-array: Indices in low-level control vector corresponding to trunk joints.
         """
-        return np.array([list(self.joints.keys()).index(name) for name in self.trunk_joint_names])
+        return th.tensor([list(self.joints.keys()).index(name) for name in self.trunk_joint_names])
 
     @property
     def arm_control_idx(self):
         # Add combined entry
         idxs = super().arm_control_idx
-        idxs["combined"] = np.sort(np.concatenate([val for val in idxs.values()]))
+        idxs["combined"] = th.sort(th.cat([val for val in idxs.values()]))
         return idxs
 
     @property
@@ -674,13 +661,13 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
     @property
     def arm_workspace_range(self):
         return {
-            "left": [np.deg2rad(15), np.deg2rad(75)],
-            "right": [np.deg2rad(-75), np.deg2rad(-15)],
+            "left": [th.deg2rad(th.tensor([15])).item(), th.deg2rad(th.tensor([75])).item()],
+            "right": [th.deg2rad(th.tensor([-75])).item(), th.deg2rad(th.tensor([-15])).item()],
         }
 
-    def get_position_orientation(self):
+    def get_position_orientation(self, clone=True):
         # TODO: Investigate the need for this custom behavior.
-        return self.base_footprint_link.get_position_orientation()
+        return self.base_footprint_link.get_position_orientation(clone=clone)
 
     def set_position_orientation(self, position=None, orientation=None):
         current_position, current_orientation = self.get_position_orientation()
@@ -688,9 +675,9 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             position = current_position
         if orientation is None:
             orientation = current_orientation
-        position, orientation = np.array(position), np.array(orientation)
-        assert np.isclose(
-            np.linalg.norm(orientation), 1, atol=1e-3
+        position, orientation = th.tensor(position), th.tensor(orientation)
+        assert math.isclose(
+            th.norm(orientation), 1, abs_tol=1e-3
         ), f"{self.name} desired orientation {orientation} is not a unit quaternion."
 
         # TODO: Reconsider the need for this. Why can't these behaviors be unified? Does the joint really need to move?
@@ -722,7 +709,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                     lazy.pxr.Gf.Quatf(*orientation[[3, 0, 1, 2]].tolist())
                 )
 
-    def set_linear_velocity(self, velocity: np.ndarray):
+    def set_linear_velocity(self, velocity: th.tensor):
         # Transform the desired linear velocity from the world frame to the root_link ("base_footprint_x") frame
         # Note that this will also set the target to be the desired linear velocity (i.e. the robot will try to maintain
         # such velocity), which is different from the default behavior of set_linear_velocity for all other objects.
@@ -732,11 +719,11 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.joints["base_footprint_y_joint"].set_vel(velocity_in_root_link[1], drive=False)
         self.joints["base_footprint_z_joint"].set_vel(velocity_in_root_link[2], drive=False)
 
-    def get_linear_velocity(self) -> np.ndarray:
+    def get_linear_velocity(self) -> th.Tensor:
         # Note that the link we are interested in is self.base_footprint_link, not self.root_link
         return self.base_footprint_link.get_linear_velocity()
 
-    def set_angular_velocity(self, velocity: np.ndarray) -> None:
+    def set_angular_velocity(self, velocity: th.tensor) -> None:
         # See comments of self.set_linear_velocity
         orn = self.root_link.get_orientation()
         velocity_in_root_link = T.quat2mat(orn).T @ velocity
@@ -744,7 +731,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         self.joints["base_footprint_ry_joint"].set_vel(velocity_in_root_link[1], drive=False)
         self.joints["base_footprint_rz_joint"].set_vel(velocity_in_root_link[2], drive=False)
 
-    def get_angular_velocity(self) -> np.ndarray:
+    def get_angular_velocity(self) -> th.Tensor:
         # Note that the link we are interested in is self.base_footprint_link, not self.root_link
         return self.base_footprint_link.get_angular_velocity()
 
@@ -755,7 +742,7 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
             for arm in self.arm_names
         }
 
-    def teleop_data_to_action(self, teleop_action) -> np.ndarray:
+    def teleop_data_to_action(self, teleop_action) -> th.Tensor:
         action = ManipulationRobot.teleop_data_to_action(self, teleop_action)
         action[self.base_action_idx] = teleop_action.base * 0.1
         return action

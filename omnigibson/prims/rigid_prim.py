@@ -1,6 +1,7 @@
+import math
 from functools import cached_property
 
-import numpy as np
+import torch as th
 from scipy.spatial import ConvexHull, QhullError
 
 import omnigibson as og
@@ -212,7 +213,7 @@ class RigidPrim(XFormPrim):
                     volume, com = get_mesh_volume_and_com(mesh_prim)
                     # We need to transform the volume and CoM from the mesh's local frame to the link's local frame
                     local_pos, local_orn = mesh.get_local_pose()
-                    vols.append(volume * np.prod(mesh.scale))
+                    vols.append(volume * th.prod(mesh.scale))
                     coms.append(T.quat2mat(local_orn) @ (com * mesh.scale) + local_pos)
                     # If the ratio between the max extent and min radius is too large (i.e. shape too oblong), use
                     # boundingCube approximation for the underlying collision approximation for GPU compatibility
@@ -226,8 +227,10 @@ class RigidPrim(XFormPrim):
         # If we have any collision meshes, we aggregate their center of mass and volume values to set the center of mass
         # for this link
         if len(coms) > 0:
-            com = (np.array(coms) * np.array(vols).reshape(-1, 1)).sum(axis=0) / np.sum(vols)
-            self.set_attribute("physics:centerOfMass", lazy.pxr.Gf.Vec3f(*com))
+            coms_tensor = th.stack(coms)
+            vols_tensor = th.tensor(vols).unsqueeze(1)
+            com = th.sum(coms_tensor * vols_tensor, dim=0) / th.sum(vols_tensor)
+            self.set_attribute("physics:centerOfMass", lazy.pxr.Gf.Vec3f(*com.tolist()))
 
     def enable_collisions(self):
         """
@@ -279,57 +282,73 @@ class RigidPrim(XFormPrim):
         Sets the linear velocity of the prim in stage.
 
         Args:
-            velocity (np.ndarray): linear velocity to set the rigid prim to. Shape (3,).
+            velocity (th.tensor): linear velocity to set the rigid prim to. Shape (3,).
         """
         self._rigid_prim_view.set_linear_velocities(velocity[None, :])
 
-    def get_linear_velocity(self):
+    def get_linear_velocity(self, clone=True):
         """
+        Args:
+            clone (bool): Whether to clone the internal buffer or not when grabbing data
+
         Returns:
-            np.ndarray: current linear velocity of the the rigid prim. Shape (3,).
+            th.tensor: current linear velocity of the the rigid prim. Shape (3,).
         """
-        return self._rigid_prim_view.get_linear_velocities()[0]
+        return self._rigid_prim_view.get_linear_velocities(clone=clone)[0]
 
     def set_angular_velocity(self, velocity):
         """
         Sets the angular velocity of the prim in stage.
 
         Args:
-            velocity (np.ndarray): angular velocity to set the rigid prim to. Shape (3,).
+            velocity (th.tensor): angular velocity to set the rigid prim to. Shape (3,).
         """
         self._rigid_prim_view.set_angular_velocities(velocity[None, :])
 
-    def get_angular_velocity(self):
+    def get_angular_velocity(self, clone=True):
         """
+        Args:
+            clone (bool): Whether to clone the internal buffer or not when grabbing data
+
         Returns:
-            np.ndarray: current angular velocity of the the rigid prim. Shape (3,).
+            th.tensor: current angular velocity of the the rigid prim. Shape (3,).
         """
-        return self._rigid_prim_view.get_angular_velocities()[0]
+        return self._rigid_prim_view.get_angular_velocities(clone=clone)[0]
 
     def set_position_orientation(self, position=None, orientation=None):
         # Invalidate kinematic-only object pose caches when new pose is set
         if self.kinematic_only:
             self.clear_kinematic_only_cache()
         if position is not None:
-            position = np.asarray(position)[None, :]
+            position = th.asarray(position)[None, :]
         if orientation is not None:
-            assert np.isclose(
-                np.linalg.norm(orientation), 1, atol=1e-3
+            assert math.isclose(
+                th.norm(orientation), 1, abs_tol=1e-3
             ), f"{self.prim_path} desired orientation {orientation} is not a unit quaternion."
-            orientation = np.asarray(orientation)[None, [3, 0, 1, 2]]
+            orientation = th.asarray(orientation)[None, [3, 0, 1, 2]]
         self._rigid_prim_view.set_world_poses(positions=position, orientations=orientation)
         PoseAPI.invalidate()
 
-    def get_position_orientation(self):
+    def get_position_orientation(self, clone=True):
+        """
+        Gets prim's pose with respect to the world's frame.
+
+        Args:
+            clone (bool): Whether to clone the internal buffer or not when grabbing data
+
+        Returns:
+            2-tuple:
+                - 3-array: (x,y,z) position in the world frame
+                - 4-array: (x,y,z,w) quaternion orientation in the world frame
+        """
         # Return cached pose if we're kinematic-only
         if self.kinematic_only and self._kinematic_world_pose_cache is not None:
             return self._kinematic_world_pose_cache
 
-        pos, ori = self._rigid_prim_view.get_world_poses()
+        pos, ori = self._rigid_prim_view.get_world_poses(clone=clone)
 
-        assert np.isclose(
-            np.linalg.norm(ori), 1, atol=1e-3
-        ), f"{self.prim_path} orientation {ori} is not a unit quaternion."
+        # Make sure we have a valid orientation
+        assert -1e-3 < (th.sum(ori * ori) - 1) < 1e-3, f"{self.prim_path} orientation {ori} is not a unit quaternion."
 
         pos = pos[0]
         ori = ori[0][[1, 2, 3, 0]]
@@ -342,9 +361,9 @@ class RigidPrim(XFormPrim):
         if self.kinematic_only:
             self.clear_kinematic_only_cache()
         if position is not None:
-            position = np.asarray(position)[None, :]
+            position = th.asarray(position)[None, :]
         if orientation is not None:
-            orientation = np.asarray(orientation)[None, [3, 0, 1, 2]]
+            orientation = th.asarray(orientation)[None, [3, 0, 1, 2]]
         self._rigid_prim_view.set_local_poses(position, orientation)
         PoseAPI.invalidate()
 
@@ -482,7 +501,7 @@ class RigidPrim(XFormPrim):
 
         # if no inertia is set, return a zero array
         if inertia is None:
-            return np.zeros((3, 3))
+            return th.zeros((3, 3))
         
         return inertia.reshape(3, 3)
 
@@ -492,7 +511,7 @@ class RigidPrim(XFormPrim):
         Args:
             mass (float): mass of the rigid body in kg.
         """
-        self._rigid_prim_view.set_masses([mass])
+        self._rigid_prim_view.set_masses(th.tensor([mass]))
 
     @property
     def density(self):
@@ -519,7 +538,7 @@ class RigidPrim(XFormPrim):
         Args:
             density (float): density of the rigid body in kg / m^3.
         """
-        self._rigid_prim_view.set_densities([density])
+        self._rigid_prim_view.set_densities(th.tensor([density]))
 
     @cached_property
     def kinematic_only(self):
@@ -644,7 +663,7 @@ class RigidPrim(XFormPrim):
     def _compute_points_on_convex_hull(self, visual):
         """
         Returns:
-            np.ndarray or None: points on the convex hull of all points from child geom prims
+            th.tensor or None: points on the convex hull of all points from child geom prims
         """
         meshes = self._visual_meshes if visual else self._collision_meshes
         points = []
@@ -657,7 +676,7 @@ class RigidPrim(XFormPrim):
         if not points:
             return None
 
-        points = np.concatenate(points, axis=0)
+        points = th.cat(points, dim=0)
 
         try:
             hull = ConvexHull(points)
@@ -671,7 +690,7 @@ class RigidPrim(XFormPrim):
     def visual_boundary_points_local(self):
         """
         Returns:
-            np.ndarray: local coords of points on the convex hull of all points from child geom prims
+            th.tensor: local coords of points on the convex hull of all points from child geom prims
         """
         return self._compute_points_on_convex_hull(visual=True)
 
@@ -679,7 +698,7 @@ class RigidPrim(XFormPrim):
     def visual_boundary_points_world(self):
         """
         Returns:
-            np.ndarray: world coords of points on the convex hull of all points from child geom prims
+            th.tensor: world coords of points on the convex hull of all points from child geom prims
         """
         local_points = self.visual_boundary_points_local
         if local_points is None:
@@ -690,7 +709,7 @@ class RigidPrim(XFormPrim):
     def collision_boundary_points_local(self):
         """
         Returns:
-            np.ndarray: local coords of points on the convex hull of all points from child geom prims
+            th.tensor: local coords of points on the convex hull of all points from child geom prims
         """
         return self._compute_points_on_convex_hull(visual=False)
 
@@ -698,7 +717,7 @@ class RigidPrim(XFormPrim):
     def collision_boundary_points_world(self):
         """
         Returns:
-            np.ndarray: world coords of points on the convex hull of all points from child geom prims
+            th.tensor: world coords of points on the convex hull of all points from child geom prims
         """
         local_points = self.collision_boundary_points_local
         if local_points is None:
@@ -714,8 +733,8 @@ class RigidPrim(XFormPrim):
             # When there's no points on the collision meshes
             return position, position
 
-        aabb_lo = np.min(hull_points, axis=0)
-        aabb_hi = np.max(hull_points, axis=0)
+        aabb_lo = th.min(hull_points, dim=0).values
+        aabb_hi = th.max(hull_points, dim=0).values
         return aabb_lo, aabb_hi
 
     @property
@@ -746,8 +765,8 @@ class RigidPrim(XFormPrim):
         assert hull_points is not None, "No visual boundary points found for this rigid prim"
 
         # Calculate and return the AABB
-        aabb_lo = np.min(hull_points, axis=0)
-        aabb_hi = np.max(hull_points, axis=0)
+        aabb_lo = th.min(hull_points, dim=0).values
+        aabb_hi = th.max(hull_points, dim=0).values
 
         return aabb_lo, aabb_hi
 
@@ -811,8 +830,8 @@ class RigidPrim(XFormPrim):
     def _dump_state(self):
         # Grab pose from super class
         state = super()._dump_state()
-        state["lin_vel"] = self.get_linear_velocity()
-        state["ang_vel"] = self.get_angular_velocity()
+        state["lin_vel"] = self.get_linear_velocity(clone=False)
+        state["ang_vel"] = self.get_angular_velocity(clone=False)
 
         return state
 
@@ -826,20 +845,24 @@ class RigidPrim(XFormPrim):
         super()._load_state(state=state)
 
         # Set velocities if not kinematic
-        self.set_linear_velocity(np.array(state["lin_vel"]))
-        self.set_angular_velocity(np.array(state["ang_vel"]))
+        self.set_linear_velocity(
+            state["lin_vel"] if isinstance(state["lin_vel"], th.Tensor) else th.tensor(state["lin_vel"])
+        )
+        self.set_angular_velocity(
+            state["ang_vel"] if isinstance(state["ang_vel"], th.Tensor) else th.tensor(state["ang_vel"])
+        )
 
     def serialize(self, state):
         # Run super first
         state_flat = super().serialize(state=state)
 
-        return np.concatenate(
+        return th.cat(
             [
                 state_flat,
                 state["lin_vel"],
                 state["ang_vel"],
             ]
-        ).astype(float)
+        )
 
     def deserialize(self, state):
         # Call supermethod first

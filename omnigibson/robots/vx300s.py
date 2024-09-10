@@ -1,6 +1,7 @@
+import math
 import os
 
-import numpy as np
+import torch as th
 
 from omnigibson.macros import gm
 from omnigibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
@@ -18,7 +19,6 @@ class VX300S(ManipulationRobot):
         # Shared kwargs in hierarchy
         name,
         relative_prim_path=None,
-        uuid=None,
         scale=None,
         visible=True,
         visual_only=False,
@@ -46,8 +46,6 @@ class VX300S(ManipulationRobot):
             name (str): Name for the object. Names need to be unique per scene
             prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
                 created at /World/<name>
-            uuid (None or int): Unique unsigned-integer identifier to assign to this object (max 8-numbers).
-                If None is specified, then it will be auto-generated
             scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
                 for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
                 3-array specifies per-axis scaling.
@@ -91,7 +89,6 @@ class VX300S(ManipulationRobot):
         super().__init__(
             relative_prim_path=relative_prim_path,
             name=name,
-            uuid=uuid,
             scale=scale,
             visible=visible,
             fixed_base=fixed_base,
@@ -133,7 +130,7 @@ class VX300S(ManipulationRobot):
 
     @property
     def _default_joint_pos(self):
-        return np.array([0.0, -0.849879, 0.258767, 0.0, 1.2831712, 0.0, 0.057, 0.057])
+        return th.tensor([0.0, -0.849879, 0.258767, 0.0, 1.2831712, 0.0, 0.057, 0.057])
 
     @property
     def finger_lengths(self):
@@ -206,7 +203,7 @@ class VX300S(ManipulationRobot):
 
     @property
     def teleop_rotation_offset(self):
-        return {self.default_arm: euler2quat([-np.pi, 0, 0])}
+        return {self.default_arm: euler2quat([-math.pi, 0, 0])}
 
     @property
     def assisted_grasp_start_points(self):

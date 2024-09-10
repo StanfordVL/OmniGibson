@@ -1,4 +1,4 @@
-import numpy as np
+import torch as th
 
 import omnigibson.utils.transform_utils as T
 from omnigibson.metrics.metrics_base import BaseMetric
@@ -86,7 +86,7 @@ class WorkEnergyMetric(BaseMetric):
             curr_posrot (tuple): current position and orientation of the link. 
                                  use initial posrot for work metric, and previous posrot for energy metric
             mass (float): mass of the link
-            inertia (np.array): rotational inertia of the link
+            inertia (th.Tensor): rotational inertia of the link
         
         Returns:
             float: work/energy spent in a single step between two states
@@ -96,10 +96,10 @@ class WorkEnergyMetric(BaseMetric):
         orientation = T.quat2axisangle(orientation)
 
         # formula for translational work metric: displacement * mass * translation weight coefficient
-        work_metric = np.linalg.norm(position) * mass * self.metric_config["translation"]
+        work_metric = th.norm(position) * mass * self.metric_config["translation"]
 
         # formula for rotational work metric: rotation * moment of inertia * rotation weight coefficient
-        work_metric += np.dot(orientation, inertia) * self.metric_config["rotation"]
+        work_metric += sum(th.matmul(orientation, inertia)) * self.metric_config["rotation"]
 
         return work_metric
 
