@@ -279,7 +279,7 @@ def _launch_simulator(*args, **kwargs):
             ), "Stage should not exist when creating a new Simulator instance"
 
             # Here we assign self as the Simulator instance and as og.sim, because certain functions
-        # called downstream during the initialization of this object will try to access og.sim.
+            # called downstream during the initialization of this object will try to access og.sim.
             # This makes that possible (and also introduces possible issues around circular dependencies)
             assert og.sim is None, "Only one Simulator instance can be created at a time!"
             og.sim = self

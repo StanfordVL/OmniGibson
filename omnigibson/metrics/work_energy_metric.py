@@ -75,19 +75,18 @@ class WorkEnergyMetric(BaseMetric):
         self._work_metric = work_metric
         self._energy_metric += energy_metric
         return {"work": self._work_metric, "energy": self._energy_metric}
-    
-    def calculate_work_energy(self, new_posrot, curr_posrot, mass, inertia):
 
+    def calculate_work_energy(self, new_posrot, curr_posrot, mass, inertia):
         """
         Calculate the work done and energy spent in a single step
 
         Args:
-            new_posrot (tuple): new position and orientation of the link  
-            curr_posrot (tuple): current position and orientation of the link. 
+            new_posrot (tuple): new position and orientation of the link
+            curr_posrot (tuple): current position and orientation of the link.
                                  use initial posrot for work metric, and previous posrot for energy metric
             mass (float): mass of the link
             inertia (th.Tensor): rotational inertia of the link
-        
+
         Returns:
             float: work/energy spent in a single step between two states
         """

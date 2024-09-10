@@ -1,9 +1,9 @@
+import math
 import os
 from typing import OrderedDict
 
-import math
-import yaml
 import torch as th
+import yaml
 from bddl.condition_evaluation import evaluate_state
 
 import omnigibson as og
@@ -85,7 +85,9 @@ def test_behavior_task_energy_metric():
     position, orientation = env.robots[0].get_position_orientation()
 
     # apply shift to the robot
-    shift_position, shift_orientation = th.tensor([10, 10, 0], dtype=th.float32), th.tensor([0.05, 0, 0, 0.1], dtype=th.float32)
+    shift_position, shift_orientation = th.tensor([10, 10, 0], dtype=th.float32), th.tensor(
+        [0.05, 0, 0, 0.1], dtype=th.float32
+    )
     env.robots[0].set_position_orientation(shift_position, shift_orientation)
     state, reward, terminated, truncated, info = env.step(action)
     energy = info["metrics"]["energy"]
