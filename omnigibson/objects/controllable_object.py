@@ -4,13 +4,14 @@ from copy import deepcopy
 from functools import cached_property
 
 import gymnasium as gym
+import networkx as nx
 import torch as th
 
 import omnigibson as og
 from omnigibson.controllers import create_controller
 from omnigibson.controllers.controller_base import ControlType
 from omnigibson.objects.object_base import BaseObject
-from omnigibson.utils.constants import PrimType
+from omnigibson.utils.constants import JointType, PrimType
 from omnigibson.utils.numpy_utils import NumpyTypes
 from omnigibson.utils.python_utils import CachedFunctions, assert_valid_key, merge_nested_dicts
 from omnigibson.utils.ui_utils import create_module_logger
@@ -135,10 +136,9 @@ class ControllableObject(BaseObject):
         assert (
             len(robot_name_components) == 3
         ), "Third component of articulation root path (robot name) must have 3 components separated by '__'"
-        assert robot_name_components[0] in (
-            "controllable",
-            "dummy",
-        ), "Third component of articulation root path (robot name) must start with 'controllable' or 'dummy'"
+        assert (
+            robot_name_components[0] == "controllable"
+        ), "Third component of articulation root path (robot name) must start with 'controllable'"
         assert (
             robot_name_components[1] == self.__class__.__name__.lower()
         ), "Third component of articulation root path (robot name) must contain the class name as the second part"
@@ -189,6 +189,34 @@ class ControllableObject(BaseObject):
 
         return prim
 
+    def _post_load(self):
+        # Call super first
+        super()._post_load()
+
+        # For controllable objects, we disable gravity of all links that are not fixed to the base link.
+        # This is because we cannot accurately apply gravity compensation in the absence of a working
+        # generalized gravity force computation. This may have some side effects on the measured
+        # torque on each of these links, but it provides a greatly improved joint control behavior.
+        # Note that we do NOT disable gravity for links that are fixed to the base link, as these links
+        # are typically where most of the downward force on the robot is applied. Disabling gravity
+        # for these links would result in the robot floating in the air easily. Also note that here
+        # we use the base link footprint which takes into account the presence of virtual joints.
+
+        # Find all the links that are accessible from the base link footprint via a chain of fixed
+        # joints. We will disable gravity for all links that are not in this set.
+        articulation_tree = self.articulation_tree
+        base_footprint = self.base_footprint_link_name
+        is_edge_fixed = lambda f, t: articulation_tree[f][t]["joint_type"] == JointType.JOINT_FIXED
+        only_fixed_joints = nx.subgraph_view(articulation_tree, filter_edge=is_edge_fixed)
+        fixed_link_names = nx.descendants(only_fixed_joints, base_footprint) | {base_footprint}
+
+        # Find the links that are NOT fixed.
+        other_link_names = set(self.links.keys()) - fixed_link_names
+
+        # Disable gravity for those links.
+        for link_name in other_link_names:
+            self.links[link_name].disable_gravity()
+
     def _load_controllers(self):
         """
         Loads controller(s) to map inputted actions into executable (pos, vel, and / or effort) signals on this object.
@@ -232,7 +260,11 @@ class ControllableObject(BaseObject):
                 self._joints[self.dof_names_ordered[dof]].set_control_type(
                     control_type=control_type,
                     kp=self.default_kp if control_type == ControlType.POSITION else None,
-                    kd=self.default_kd if control_type == ControlType.VELOCITY else None,
+                    kd=(
+                        self.default_kd
+                        if control_type == ControlType.POSITION or control_type == ControlType.VELOCITY
+                        else None
+                    ),
                 )
 
     def _generate_controller_config(self, custom_config=None):
@@ -533,15 +565,15 @@ class ControllableObject(BaseObject):
         # set the targets for joints
         if using_pos:
             ControllableObjectViewAPI.set_joint_position_targets(
-                self.articulation_root_path, positions=th.tensor(pos_vec), indices=th.tensor(pos_idxs)
+                self.articulation_root_path, positions=th.tensor(pos_vec, dtype=th.float), indices=th.tensor(pos_idxs)
             )
         if using_vel:
             ControllableObjectViewAPI.set_joint_velocity_targets(
-                self.articulation_root_path, velocities=th.tensor(vel_vec), indices=th.tensor(vel_idxs)
+                self.articulation_root_path, velocities=th.tensor(vel_vec, dtype=th.float), indices=th.tensor(vel_idxs)
             )
         if using_eff:
             ControllableObjectViewAPI.set_joint_efforts(
-                self.articulation_root_path, efforts=th.tensor(eff_vec), indices=th.tensor(eff_idxs)
+                self.articulation_root_path, efforts=th.tensor(eff_vec, dtype=th.float), indices=th.tensor(eff_idxs)
             )
 
     def get_control_dict(self):
@@ -582,11 +614,8 @@ class ControllableObject(BaseObject):
         fcns["joint_velocity"] = lambda: ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
         fcns["joint_effort"] = lambda: ControllableObjectViewAPI.get_joint_efforts(self.articulation_root_path)
         fcns["mass_matrix"] = lambda: ControllableObjectViewAPI.get_mass_matrix(self.articulation_root_path)
-        # TODO: Move gravity force computation dummy to this class instead of BaseRobot
-        fcns["gravity_force"] = lambda: (
-            ControllableObjectViewAPI.get_generalized_gravity_forces(self.articulation_root_path)
-            if self.fixed_base
-            else ControllableObjectViewAPI.get_generalized_gravity_forces(self._dummy.articulation_root_path)
+        fcns["gravity_force"] = lambda: ControllableObjectViewAPI.get_generalized_gravity_forces(
+            self.articulation_root_path
         )
         fcns["cc_force"] = lambda: ControllableObjectViewAPI.get_coriolis_and_centrifugal_forces(
             self.articulation_root_path
@@ -655,6 +684,36 @@ class ControllableObject(BaseObject):
         state_dict["controllers"] = controller_states
 
         return state_dict, idx
+
+    @property
+    def base_footprint_link_name(self):
+        """
+        Get the base footprint link name for the controllable object.
+
+        The base footprint link is the link that should be considered the base link for the object
+        even in the presence of virtual joints that may be present in the object's articulation. For
+        robots without virtual joints, this is the same as the root link. For robots with virtual joints,
+        this is the link that is the child of the last virtual joint in the robot's articulation.
+
+        Returns:
+            str: Name of the base footprint link for this object
+        """
+        return self.root_link_name
+
+    @property
+    def base_footprint_link(self):
+        """
+        Get the base footprint link for the controllable object.
+
+        The base footprint link is the link that should be considered the base link for the object
+        even in the presence of virtual joints that may be present in the object's articulation. For
+        robots without virtual joints, this is the same as the root link. For robots with virtual joints,
+        this is the link that is the child of the last virtual joint in the robot's articulation.
+
+        Returns:
+            RigidPrim: Base footprint link for this object
+        """
+        return self.links[self.base_footprint_link_name]
 
     @property
     def action_dim(self):

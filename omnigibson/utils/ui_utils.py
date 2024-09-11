@@ -590,7 +590,7 @@ class KeyboardRobotController:
                 "command_dim": controller.command_dim,
             }
             idx += controller.command_dim
-            for i in controller.dof_idx:
+            for i in controller.dof_idx.tolist():
                 self.joint_idx_to_controller[i] = controller
 
         # Other persistent variables we need to keep track of
@@ -790,7 +790,7 @@ class KeyboardRobotController:
                 )
                 new_arm = self.ik_arms[self.active_arm_idx]
                 self.keypress_mapping.update(self.generate_ik_keypress_mapping(self.controller_info[new_arm]))
-                print(f"Now controlling arm {new_arm} with IK")
+                print(f"Now controlling arm {new_arm} EEF")
 
             elif (
                 event.input in {lazy.carb.input.KeyboardInput.KEY_5, lazy.carb.input.KeyboardInput.KEY_6}
@@ -905,7 +905,7 @@ class KeyboardRobotController:
         # Print out the user what is being pressed / controlled
         sys.stdout.write("\033[K")
         keypress_str = self.current_keypress.__str__().split(".")[-1]
-        print("Pressed {}. Action: {}".format(keypress_str, action))
+        print("Pressed {}. Action: {}".format(keypress_str, action.tolist()))
         sys.stdout.write("\033[F")
 
         # Return action
