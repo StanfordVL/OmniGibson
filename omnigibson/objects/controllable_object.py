@@ -260,7 +260,11 @@ class ControllableObject(BaseObject):
                 self._joints[self.dof_names_ordered[dof]].set_control_type(
                     control_type=control_type,
                     kp=self.default_kp if control_type == ControlType.POSITION else None,
-                    kd=self.default_kd if control_type == ControlType.VELOCITY else None,
+                    kd=(
+                        self.default_kd
+                        if control_type == ControlType.POSITION or control_type == ControlType.VELOCITY
+                        else None
+                    ),
                 )
 
     def _generate_controller_config(self, custom_config=None):
@@ -560,21 +564,15 @@ class ControllableObject(BaseObject):
         # set the targets for joints
         if using_pos:
             ControllableObjectViewAPI.set_joint_position_targets(
-                self.articulation_root_path,
-                positions=th.stack(pos_vec),
-                indices=pos_idxs,
+                self.articulation_root_path, positions=th.stack(pos_vec), indices=pos_idxs
             )
         if using_vel:
             ControllableObjectViewAPI.set_joint_velocity_targets(
-                self.articulation_root_path,
-                velocities=th.stack(vel_vec),
-                indices=vel_idxs,
+                self.articulation_root_path, velocities=th.stack(vel_vec), indices=vel_idxs
             )
         if using_eff:
             ControllableObjectViewAPI.set_joint_efforts(
-                self.articulation_root_path,
-                efforts=th.stack(eff_vec),
-                indices=eff_idxs,
+                self.articulation_root_path, efforts=th.stack(eff_vec), indices=eff_idxs
             )
 
     def get_control_dict(self):
