@@ -64,6 +64,7 @@ class ClothPrim(GeomPrim):
         self._keypoint_idx = None
         self._keyface_idx = None
         self._cloth_prim_view = None
+        self._cloth_view_initialized = False
 
         # Run super init
         super().__init__(
@@ -368,6 +369,7 @@ class ClothPrim(GeomPrim):
     def update_handles(self):
         assert og.sim._physics_sim_view._backend is not None, "Physics sim backend not initialized!"
         self._cloth_prim_view.initialize(og.sim.physics_sim_view)
+        self._cloth_view_initialized = True
         assert self._n_particles <= self._cloth_prim_view.max_particles_per_cloth, (
             f"Got more particles than the maximum allowed for this cloth! Got {self._n_particles}, max is "
             f"{self._cloth_prim_view.max_particles_per_cloth}!"
@@ -539,7 +541,9 @@ class ClothPrim(GeomPrim):
         state = super()._dump_state()
         state["particle_group"] = self.particle_group
         state["n_particles"] = self.n_particles
-        state["particle_positions"] = self.compute_particle_positions().cpu()
+        state["particle_positions"] = (
+            self.compute_particle_positions().cpu() if self._cloth_view_initialized else th.zeros(self._n_particles, 3)
+        )
         state["particle_velocities"] = self.particle_velocities
         return state
 
