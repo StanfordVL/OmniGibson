@@ -369,7 +369,7 @@ class SanityCheck:
             for i, elem in enumerate(elems):
                 # Load the mesh into trimesh and expect convexity
                 relevant_faces = faces[elem]
-                m = trimesh.Trimesh(vertices=verts, faces=relevant_faces)
+                m = trimesh.Trimesh(vertices=verts, faces=relevant_faces, process=False)
                 m.remove_unreferenced_vertices()
                 self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
                 # self.expect(m.is_convex, f"{obj.name} element {i} is not convex")

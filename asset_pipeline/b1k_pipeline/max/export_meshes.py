@@ -91,7 +91,7 @@ def save_collision_mesh(obj, output_fs):
     for i, elem in enumerate(elems):
         # Load the mesh into trimesh and assert convexity
         relevant_faces = faces[elem]
-        m = trimesh.Trimesh(vertices=verts, faces=relevant_faces)
+        m = trimesh.Trimesh(vertices=verts, faces=relevant_faces, process=False)
         m.remove_unreferenced_vertices()
         assert m.is_volume, f"{obj.name} element {i} is not a volume"
         # assert m.is_convex, f"{obj.name} element {i} is not convex"
@@ -107,7 +107,7 @@ def save_mesh(obj, output_path):
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
     
     # Convert to Trimesh
-    m = trimesh.Trimesh(vertices=verts, faces=faces)
+    m = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
     m.remove_unreferenced_vertices()
         
     # Save the mesh into an obj file
