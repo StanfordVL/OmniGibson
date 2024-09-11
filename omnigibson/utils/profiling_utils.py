@@ -1,7 +1,7 @@
 import os
 from time import time
 
-import gym
+import gymnasium as gym
 import psutil
 from pynvml.smi import nvidia_smi
 
