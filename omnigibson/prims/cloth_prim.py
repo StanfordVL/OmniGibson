@@ -20,7 +20,11 @@ from omnigibson.prims.geom_prim import GeomPrim
 from omnigibson.utils.geometry_utils import get_particle_positions_from_frame, get_particle_positions_in_frame
 from omnigibson.utils.numpy_utils import vtarray_to_torch
 from omnigibson.utils.sim_utils import CsRawData
+from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.utils.usd_utils import array_to_vtarray, mesh_prim_to_trimesh_mesh, sample_mesh_keypoints
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -77,9 +81,6 @@ class ClothPrim(GeomPrim):
         # run super first
         super()._post_load()
 
-        # Make sure we are in GPU pipeline if we are using ClothPrim
-        assert og.sim.device != "cpu", f"Cannot use cloth object {self.name} with CPU device!"
-
         # Can we do this also using the Cloth API, in initialize?
         self._mass_api = (
             lazy.pxr.UsdPhysics.MassAPI(self._prim)
@@ -97,8 +98,9 @@ class ClothPrim(GeomPrim):
         # Track generated particle count. This is the only time we use the USD API.
         self._n_particles = len(self._prim.GetAttribute("points").Get())
 
-        # Load the cloth prim view
-        self._cloth_prim_view = lazy.omni.isaac.core.prims.ClothPrimView(self.prim_path)
+        # Load the cloth prim view if using gpu pipeline
+        if og.sim.device.startswith("cuda"):
+            self._cloth_prim_view = lazy.omni.isaac.core.prims.ClothPrimView(self.prim_path)
 
         # # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
         # success = False
@@ -186,8 +188,23 @@ class ClothPrim(GeomPrim):
             th.tensor: (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        all_particle_positions = self._cloth_prim_view.get_world_positions(clone=False)[0, :, :]
-        return all_particle_positions[: self._n_particles] if idxs is None else all_particle_positions[idxs]
+        if og.sim.device.startswith("cuda"):
+            all_particle_positions = self._cloth_prim_view.get_world_positions(clone=False)[0, :, :]
+            return all_particle_positions[: self._n_particles] if idxs is None else all_particle_positions[idxs]
+        else:
+            log.warning(
+                "CPU pipeline used for particle position computation, this is not supported. Cloth particle positions will not update."
+            )
+            pos, ori = self.get_position_orientation()
+            ori = T.quat2mat(ori)
+            scale = self.scale
+
+            # Don't copy to save compute, since we won't be returning a reference to the underlying object anyways
+            p_local = th.as_tensor(self.get_attribute(attr="points"), dtype=th.float32)
+            p_local = p_local[idxs] if idxs is not None else p_local
+            p_world = (ori @ (p_local * scale).T).T + pos
+
+            return p_world
 
     def set_particle_positions(self, positions, idxs=None):
         """
@@ -198,19 +215,24 @@ class ClothPrim(GeomPrim):
                 cartesian coordinates relative to the world frame
             idxs (n-array or None): If set, will only set the requested indexed particle state
         """
-        n_expected = self._n_particles if idxs is None else len(idxs)
-        assert (
-            len(positions) == n_expected
-        ), f"Got mismatch in particle setting size: {len(positions)}, vs. number of expected particles {n_expected}!"
+        if og.sim.device.startswith("cuda"):
+            n_expected = self._n_particles if idxs is None else len(idxs)
+            assert (
+                len(positions) == n_expected
+            ), f"Got mismatch in particle setting size: {len(positions)}, vs. number of expected particles {n_expected}!"
 
-        # First, get the particle positions.
-        cur_pos = self._cloth_prim_view.get_world_positions()
+            # First, get the particle positions.
+            cur_pos = self._cloth_prim_view.get_world_positions()
 
-        # Then apply the new positions at the appropriate indices
-        cur_pos[0, idxs] = positions
+            # Then apply the new positions at the appropriate indices
+            cur_pos[0, idxs] = positions
 
-        # Then set to that position
-        self._cloth_prim_view.set_world_positions(cur_pos)
+            # Then set to that position
+            self._cloth_prim_view.set_world_positions(cur_pos)
+        else:
+            log.warning(
+                "CPU pipeline used for particle position setting, this is not supported. Cloth particle positions will not update."
+            )
 
     @property
     def keypoint_idx(self):
@@ -367,13 +389,14 @@ class ClothPrim(GeomPrim):
         return contacts
 
     def update_handles(self):
-        assert og.sim._physics_sim_view._backend is not None, "Physics sim backend not initialized!"
-        self._cloth_prim_view.initialize(og.sim.physics_sim_view)
-        self._cloth_view_initialized = True
-        assert self._n_particles <= self._cloth_prim_view.max_particles_per_cloth, (
-            f"Got more particles than the maximum allowed for this cloth! Got {self._n_particles}, max is "
-            f"{self._cloth_prim_view.max_particles_per_cloth}!"
-        )
+        if og.sim.device.startswith("cuda"):
+            assert og.sim._physics_sim_view._backend is not None, "Physics sim backend not initialized!"
+            self._cloth_prim_view.initialize(og.sim.physics_sim_view)
+            self._cloth_view_initialized = True
+            assert self._n_particles <= self._cloth_prim_view.max_particles_per_cloth, (
+                f"Got more particles than the maximum allowed for this cloth! Got {self._n_particles}, max is "
+                f"{self._cloth_prim_view.max_particles_per_cloth}!"
+            )
 
     @property
     def volume(self):

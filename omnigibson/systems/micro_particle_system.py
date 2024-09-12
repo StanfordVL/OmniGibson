@@ -481,10 +481,6 @@ class MicroParticleSystem(BaseSystem):
         # Run super first
         super().initialize(scene)
 
-        # Run sanity checks
-        if og.sim.device == "cpu":
-            raise ValueError(f"Failed to initialize {self.name} system. Please use gpu pipeline.")
-
         self.system_prim = self._create_particle_system()
         # Get material
         material = self._get_particle_material_template()
