@@ -334,8 +334,8 @@ class InverseKinematicsController(JointController, ManipulationController):
 
             # Clip values to be within the joint limits
             target_joint_pos = target_joint_pos.clamp(
-                min=self._control_limits[ControlType.get_type("position")][0][self.dof_idx],
-                max=self._control_limits[ControlType.get_type("position")][1][self.dof_idx],
+                min=self._control_limits[ControlType.get_type("position")][0],
+                max=self._control_limits[ControlType.get_type("position")][1],
             )
 
         # Optionally pass through smoothing filter for better stability

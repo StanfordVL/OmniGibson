@@ -553,7 +553,7 @@ class ControllableObject(BaseObject):
                 using_pos = True
             elif ctrl_type == ControlType.NONE:
                 # Set zero efforts
-                eff_vec.append(0)
+                eff_vec.append(th.tensor(0, dtype=th.float32))
                 eff_idxs.append(cur_ctrl_idx)
                 using_eff = True
             else:
