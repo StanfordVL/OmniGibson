@@ -141,9 +141,7 @@ class ClothPrim(GeomPrim):
         # self._centroid_idx = th.argmin(dists)
 
         # Store the default position of the points in the local frame
-        # self._default_positions = get_particle_positions_in_frame(
-        #     *self.get_position_orientation(), self.scale, self.compute_particle_positions()
-        # )
+        self._default_positions = th.tensor(self.get_attribute(attr="points"), dtype=th.float32)
 
     @property
     def visual_aabb(self):
@@ -177,6 +175,14 @@ class ClothPrim(GeomPrim):
         """
         return False
 
+    def _compute_usd_particle_positions(self, idxs=None):
+        # Don't copy to save compute, since we won't be returning a reference to the underlying object anyways
+        p_local = th.as_tensor(self.get_attribute(attr="points"), dtype=th.float32)
+
+        return get_particle_positions_in_frame(
+            *self.get_position_orientation(), self.scale, p_local[idxs] if idxs is not None else p_local
+        )
+
     def compute_particle_positions(self, idxs=None):
         """
         Compute individual particle positions for this cloth prim
@@ -195,16 +201,7 @@ class ClothPrim(GeomPrim):
             log.warning(
                 "CPU pipeline used for particle position computation, this is not supported. Cloth particle positions will not update."
             )
-            pos, ori = self.get_position_orientation()
-            ori = T.quat2mat(ori)
-            scale = self.scale
-
-            # Don't copy to save compute, since we won't be returning a reference to the underlying object anyways
-            p_local = th.as_tensor(self.get_attribute(attr="points"), dtype=th.float32)
-            p_local = p_local[idxs] if idxs is not None else p_local
-            p_world = (ori @ (p_local * scale).T).T + pos
-
-            return p_world
+            return self._compute_usd_particle_positions(idxs=idxs)
 
     def set_particle_positions(self, positions, idxs=None):
         """
@@ -565,7 +562,9 @@ class ClothPrim(GeomPrim):
         state["particle_group"] = self.particle_group
         state["n_particles"] = self.n_particles
         state["particle_positions"] = (
-            self.compute_particle_positions().cpu() if self._cloth_view_initialized else th.zeros(self._n_particles, 3)
+            self.compute_particle_positions().cpu()
+            if self._cloth_view_initialized
+            else self._compute_usd_particle_positions()
         )
         state["particle_velocities"] = self.particle_velocities
         return state
@@ -638,6 +637,6 @@ class ClothPrim(GeomPrim):
         """
         if self.initialized:
             self.set_particle_positions(
-                get_particle_positions_from_frame(*self.get_position_orientation(), self.scale, self._default_positions)
+                get_particle_positions_in_frame(*self.get_position_orientation(), self.scale, self._default_positions)
             )
             self.particle_velocities = th.zeros((self._n_particles, 3))
