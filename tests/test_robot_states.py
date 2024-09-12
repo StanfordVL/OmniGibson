@@ -4,21 +4,21 @@ import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 from omnigibson.macros import gm
+from omnigibson.object_states import ObjectsInFOVOfRobot
 from omnigibson.robots import *
 from omnigibson.sensors import VisionSensor
+from omnigibson.utils.constants import semantic_class_name_to_id
 from omnigibson.utils.transform_utils import mat2pose, pose2mat, quaternions_close, relative_pose_transform
 from omnigibson.utils.usd_utils import PoseAPI
 
 
-def setup_environment(flatcache):
+def setup_environment():
     """
-    Sets up the environment with or without flatcache based on the flatcache parameter.
+    Sets up the environment.
     """
     if og.sim is None:
         # Set global flags
         gm.ENABLE_OBJECT_STATES = True
-        gm.USE_GPU_DYNAMICS = True
-        gm.ENABLE_FLATCACHE = flatcache  # Set based on function parameter
         gm.ENABLE_TRANSITION_RULES = False
     else:
         # Make sure sim is stopped
@@ -43,8 +43,8 @@ def setup_environment(flatcache):
     return env
 
 
-def camera_pose_test(flatcache):
-    env = setup_environment(flatcache)
+def test_camera_pose():
+    env = setup_environment()
     robot = env.robots[0]
     env.reset()
     og.sim.step()
@@ -118,15 +118,43 @@ def camera_pose_test(flatcache):
     og.clear()
 
 
-def test_camera_pose_flatcache_on():
-    camera_pose_test(True)
+def test_camera_semantic_segmentation():
+    env = setup_environment()
+    robot = env.robots[0]
+    env.reset()
+    sensors = [s for s in robot.sensors.values() if isinstance(s, VisionSensor)]
+    assert len(sensors) > 0
+    vision_sensor = sensors[0]
+    env.reset()
+    all_observation, all_info = vision_sensor.get_obs()
+    seg_semantic = all_observation["seg_semantic"]
+    seg_semantic_info = all_info["seg_semantic"]
+    agent_label = semantic_class_name_to_id()["agent"]
+    background_label = semantic_class_name_to_id()["background"]
+    assert th.all(th.isin(seg_semantic, th.tensor([agent_label, background_label], device=seg_semantic.device)))
+    assert set(seg_semantic_info.keys()) == {agent_label, background_label}
+    og.clear()
+
+
+def test_object_in_FOV_of_robot():
+    env = setup_environment()
+    robot = env.robots[0]
+    env.reset()
+    assert robot.states[ObjectsInFOVOfRobot].get_value() == [robot]
+    sensors = [s for s in robot.sensors.values() if isinstance(s, VisionSensor)]
+    assert len(sensors) > 0
+    vision_sensor = sensors[0]
+    vision_sensor.set_position_orientation(position=[100, 150, 100])
+    og.sim.step()
+    og.sim.step()
+    assert robot.states[ObjectsInFOVOfRobot].get_value() == [robot]
+    og.clear()
 
 
 def test_robot_load_drive():
     if og.sim is None:
         # Set global flags
         gm.ENABLE_OBJECT_STATES = True
-        gm.USE_GPU_DYNAMICS = True
         gm.ENABLE_TRANSITION_RULES = False
     else:
         # Make sure sim is stopped

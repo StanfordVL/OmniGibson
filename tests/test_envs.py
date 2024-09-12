@@ -7,7 +7,6 @@ from omnigibson.macros import gm
 
 def task_tester(task_type):
     cfg = {
-        "env": {"device": "cuda:0"},
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
@@ -64,7 +63,6 @@ def test_behavior_task():
 
 def test_rs_int_full_load():
     cfg = {
-        "env": {"device": "cuda:0"},
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
