@@ -57,7 +57,7 @@ def test_data_collect_and_playback():
     for i in range(2):
         env.reset()
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
         # Manually add a random object, e.g.: a banana, and place on the floor
         obj = DatasetObject(name="banana", category="banana")
@@ -66,14 +66,14 @@ def test_data_collect_and_playback():
 
         # Take a few more steps
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
         # Manually remove the added object
         env.scene.remove_object(obj)
 
         # Take a few more steps
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
         # Add water particles
         water = env.scene.get_system("water")
@@ -82,14 +82,14 @@ def test_data_collect_and_playback():
 
         # Take a few more steps
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
         # Clear the system
         env.scene.clear_system("water")
 
         # Take a few more steps
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
     # Save this data
     env.save_data()
