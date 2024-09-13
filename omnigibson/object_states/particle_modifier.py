@@ -1483,7 +1483,7 @@ class ParticleApplier(ParticleModifier):
     @property
     def projection_is_active(self):
         # Only active if the projection mesh is enabled
-        return self.projection_emitter.GetProperty("inputs:active").Get()
+        return self.projection_emitter.GetProperty("inputs:active").Get() if self.visualize else False
 
     @classproperty
     def metalink_prefix(cls):
@@ -1493,19 +1493,6 @@ class ParticleApplier(ParticleModifier):
     def requires_metalink(cls, **kwargs):
         # No metalink required for adjacency
         return kwargs.get("method", ParticleModifyMethod.ADJACENCY) != ParticleModifyMethod.ADJACENCY
-
-    @classmethod
-    def is_compatible(cls, obj, **kwargs):
-        # Run super first
-        compatible, reason = super().is_compatible(obj, **kwargs)
-        if not compatible:
-            return compatible, reason
-
-        # Check whether GPU dynamics are enabled (necessary for this object state)
-        if og.sim.device == "cpu":
-            return False, f"Must be using GPU pipeline in order to use object state {cls.__name__}."
-
-        return True, None
 
     @property
     def _default_link(self):
