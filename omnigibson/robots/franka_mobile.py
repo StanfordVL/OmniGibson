@@ -4,6 +4,7 @@ import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
+from omnigibson.robots.locomotion_robot import LocomotionRobot
 import omnigibson.utils.transform_utils as T
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.robots.manipulation_robot import GraspingPoint, ManipulationRobot
@@ -18,7 +19,7 @@ m.MAX_LINEAR_VELOCITY = 1.5  # linear velocity in meters/second
 m.MAX_ANGULAR_VELOCITY = np.pi  # angular velocity in radians/second
 
 
-class FrankaMobile(ManipulationRobot):
+class FrankaMobile(ManipulationRobot, LocomotionRobot):
     """
     The Franka Emika Panda robot
     """
@@ -101,92 +102,21 @@ class FrankaMobile(ManipulationRobot):
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
         # store end effector information
+        assert end_effector == "gripper", "Only gripper end effector is supported for FrankaMobile robot"
         self.end_effector = end_effector
-        if end_effector == "gripper":
-            self._model_name = "franka_panda"
-            self._gripper_control_idx = np.arange(7, 9)
-            self._eef_link_names = "panda_hand"
-            self._finger_link_names = ["panda_leftfinger", "panda_rightfinger"]
-            self._finger_joint_names = ["panda_finger_joint1", "panda_finger_joint2"]
-            self._default_robot_model_joint_pos = np.array([0.00, -1.3, 0.00, -2.87, 0.00, 2.00, 0.75, 0.00, 0.00])
-            self._teleop_rotation_offset = np.array([-1, 0, 0, 0])
-            self._ag_start_points = [
-                GraspingPoint(link_name="panda_rightfinger", position=[0.0, 0.001, 0.045]),
-            ]
-            self._ag_end_points = [
-                GraspingPoint(link_name="panda_leftfinger", position=[0.0, 0.001, 0.045]),
-            ]
-        elif end_effector == "allegro":
-            self._model_name = "franka_allegro"
-            self._eef_link_names = "base_link"
-            # thumb.proximal, ..., thumb.tip, ..., ring.tip
-            self._finger_link_names = [f"link_{i}_0" for i in range(16)]
-            self._finger_joint_names = [f"joint_{i}_0" for i in [12, 13, 14, 15, 8, 9, 10, 11, 4, 5, 6, 7, 0, 1, 2, 3]]
-            # position where the hand is parallel to the ground
-            self._default_robot_model_joint_pos = np.concatenate(
-                ([0.86, -0.27, -0.68, -1.52, -0.18, 1.29, 1.72], np.zeros(16))
-            )
-            self._teleop_rotation_offset = np.array([0, 0.7071, 0, 0.7071])
-            self._ag_start_points = [
-                GraspingPoint(link_name=f"base_link", position=[0.015, 0, -0.03]),
-                GraspingPoint(link_name=f"base_link", position=[0.015, 0, -0.08]),
-                GraspingPoint(link_name=f"link_15_0_tip", position=[0, 0.015, 0.007]),
-            ]
-            self._ag_end_points = [
-                GraspingPoint(link_name=f"link_3_0_tip", position=[0.012, 0, 0.007]),
-                GraspingPoint(link_name=f"link_7_0_tip", position=[0.012, 0, 0.007]),
-                GraspingPoint(link_name=f"link_11_0_tip", position=[0.012, 0, 0.007]),
-            ]
-        elif "leap" in end_effector:
-            self._model_name = f"franka_{end_effector}"
-            self._eef_link_names = "palm_center"
-            # thumb.proximal, ..., thumb.tip, ..., ring.tip
-            self._finger_link_names = [
-                f"{link}_{i}" for i in range(1, 5) for link in ["mcp_joint", "pip", "dip", "fingertip", "realtip"]
-            ]
-            self._finger_joint_names = [
-                f"finger_joint_{i}" for i in [12, 13, 14, 15, 1, 0, 2, 3, 5, 4, 6, 7, 9, 8, 10, 11]
-            ]
-            # position where the hand is parallel to the ground
-            self._default_robot_model_joint_pos = np.concatenate(
-                ([0.86, -0.27, -0.68, -1.52, -0.18, 1.29, 1.72], np.zeros(16))
-            )
-            self._teleop_rotation_offset = np.array([-0.7071, 0.7071, 0, 0])
-            self._ag_start_points = [
-                GraspingPoint(link_name=f"palm_center", position=[0, -0.025, 0.035]),
-                GraspingPoint(link_name=f"palm_center", position=[0, 0.03, 0.035]),
-                GraspingPoint(link_name=f"fingertip_4", position=[-0.0115, -0.07, -0.015]),
-            ]
-            self._ag_end_points = [
-                GraspingPoint(link_name=f"fingertip_1", position=[-0.0115, -0.06, 0.015]),
-                GraspingPoint(link_name=f"fingertip_2", position=[-0.0115, -0.06, 0.015]),
-                GraspingPoint(link_name=f"fingertip_3", position=[-0.0115, -0.06, 0.015]),
-            ]
-        elif end_effector == "inspire":
-            self._model_name = f"franka_{end_effector}"
-            self._eef_link_names = "palm_center"
-            # thumb.proximal, ..., thumb.tip, ..., ring.tip
-            hand_part_names = [11, 12, 13, 14, 21, 22, 31, 32, 41, 42, 51, 52]
-            self._finger_link_names = [f"link{i}" for i in hand_part_names]
-            self._finger_joint_names = [f"joint{i}" for i in hand_part_names]
-            # position where the hand is parallel to the ground
-            self._default_robot_model_joint_pos = np.concatenate(
-                ([0.86, -0.27, -0.68, -1.52, -0.18, 1.29, 1.72], np.zeros(12))
-            )
-            self._teleop_rotation_offset = np.array([0, 0, 0.707, 0.707])
-            self._ag_start_points = [
-                GraspingPoint(link_name=f"base_link", position=[-0.025, -0.07, 0.012]),
-                GraspingPoint(link_name=f"base_link", position=[-0.015, -0.11, 0.012]),
-                GraspingPoint(link_name=f"link14", position=[-0.01, 0.015, 0.004]),
-            ]
-            self._ag_end_points = [
-                GraspingPoint(link_name=f"link22", position=[0.006, 0.04, 0.003]),
-                GraspingPoint(link_name=f"link32", position=[0.006, 0.045, 0.003]),
-                GraspingPoint(link_name=f"link42", position=[0.006, 0.04, 0.003]),
-                GraspingPoint(link_name=f"link52", position=[0.006, 0.04, 0.003]),
-            ]
-        else:
-            raise ValueError(f"End effector {end_effector} not supported for FrankaMobile")
+        self._model_name = "franka_mobile"
+        self._gripper_control_idx = np.arange(7, 9)
+        self._eef_link_names = "panda_hand"
+        self._finger_link_names = ["panda_leftfinger", "panda_rightfinger"]
+        self._finger_joint_names = ["panda_finger_joint1", "panda_finger_joint2"]
+        self._default_robot_model_joint_pos = np.array([0.00, -1.3, 0.00, -2.87, 0.00, 2.00, 0.75, 0.00, 0.00])
+        self._teleop_rotation_offset = np.array([-1, 0, 0, 0])
+        self._ag_start_points = [
+            GraspingPoint(link_name="panda_rightfinger", position=[0.0, 0.001, 0.045]),
+        ]
+        self._ag_end_points = [
+            GraspingPoint(link_name="panda_leftfinger", position=[0.0, 0.001, 0.045]),
+        ]
 
         # Run super init
         super().__init__(
@@ -240,9 +170,8 @@ class FrankaMobile(ManipulationRobot):
     @property
     def _default_controllers(self):
         controllers = super()._default_controllers
-        controllers["arm_{}".format(self.default_arm)] = "InverseKinematicsController"
+        controllers["arm_{}".format(self.default_arm)] = "JointController"
         controllers["gripper_{}".format(self.default_arm)] = "MultiFingerGripperController"
-        # Get default base controller for omnidirectional Tiago
         controllers["base"] = "JointController"
         return controllers
 

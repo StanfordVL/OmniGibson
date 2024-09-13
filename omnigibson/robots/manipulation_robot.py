@@ -1551,8 +1551,9 @@ class ManipulationRobot(BaseRobot):
         Returns:
             np.ndarray: array of action data for arm and gripper
         """
+        print(teleop_action)
         action = super().teleop_data_to_action(teleop_action)
-        hands = ["left", "right"] if self.n_arms == 2 else ["right"]
+        hands = ["left", "right"] if self.n_arms == 2 else ["left"]
         for i, hand in enumerate(hands):
             arm_name = self.arm_names[i]
             arm_action = teleop_action[hand]

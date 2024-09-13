@@ -39,7 +39,7 @@ class TeleopSystem(TeleopPolicy):
         self.teleop_action: TeleopAction = TeleopAction()
         self.robot_obs: TeleopObservation = TeleopObservation()
         self.robot = robot
-        self.robot_arms = ["left", "right"] if self.robot.n_arms == 2 else ["right"]
+        self.robot_arms = ["left", "right"] if self.robot.n_arms == 2 else ["left"]
         # robot parameters
         self.movement_speed = m.movement_speed
         self.show_control_marker = show_control_marker

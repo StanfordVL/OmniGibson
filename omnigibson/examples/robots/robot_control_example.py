@@ -65,12 +65,12 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
 
     # Choose scene to load
-    scene_model = "Rs_int"
+    scene_model = "empty"
     if not quickstart:
         scene_model = choose_from_options(options=SCENES, name="scene", random_selection=random_selection)
 
     # Choose robot to create
-    robot_name = "Fetch"
+    robot_name = "FrankaMobile"
     if not quickstart:
         robot_name = choose_from_options(
             options=list(sorted(REGISTERED_ROBOTS.keys())), name="robot", random_selection=random_selection
@@ -99,10 +99,9 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     # Choose robot controller to use
     robot = env.robots[0]
     controller_choices = {
-        "base": "DifferentialDriveController",
-        "arm_0": "InverseKinematicsController",
+        "base": "JointController",
+        "arm_0": "JointController",
         "gripper_0": "MultiFingerGripperController",
-        "camera": "JointController",
     }
     if not quickstart:
         controller_choices = choose_controllers(robot=robot, random_selection=random_selection)
