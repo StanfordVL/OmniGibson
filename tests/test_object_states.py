@@ -649,26 +649,12 @@ def test_toggled_on(env, pipeline_mode):
     stove = env.scene.object_registry("name", "stove")
     robot = env.scene.object_registry("name", "robot0")
 
-    stove.set_position_orientation(
-        [1.48, 0.3, 0.443], T.euler2quat(th.tensor([0, 0, -math.pi / 2.0], dtype=th.float32))
-    )
     robot.set_position_orientation([0.0, 0.38, 0.0], [0, 0, 0, 1])
+    reset_joint_pos = robot.reset_joint_pos
+    robot.set_joint_positions(reset_joint_pos, drive=False)
 
+    stove.set_position_orientation([1.3, 0.3, 0.443], T.euler2quat(th.tensor([0, 0, -math.pi / 2.0], dtype=th.float32)))
     assert not stove.states[ToggledOn].get_value()
-
-    q = robot.get_joint_positions()
-    jnt_idxs = {name: i for i, name in enumerate(robot.joints.keys())}
-    q[jnt_idxs["torso_lift_joint"]] = 0.0
-    q[jnt_idxs["shoulder_pan_joint"]] = th.deg2rad(th.tensor([90.0])).item()
-    q[jnt_idxs["shoulder_lift_joint"]] = th.deg2rad(th.tensor([9.0])).item()
-    q[jnt_idxs["upperarm_roll_joint"]] = 0.0
-    q[jnt_idxs["elbow_flex_joint"]] = 0.0
-    q[jnt_idxs["forearm_roll_joint"]] = 0.0
-    q[jnt_idxs["wrist_flex_joint"]] = 0.0
-    q[jnt_idxs["wrist_roll_joint"]] = 0.0
-    q[jnt_idxs["l_gripper_finger_joint"]] = 0.0
-    q[jnt_idxs["r_gripper_finger_joint"]] = 0.0
-    robot.set_joint_positions(q, drive=False)
 
     steps = m.object_states.toggle.CAN_TOGGLE_STEPS
     for _ in range(steps):
@@ -677,16 +663,26 @@ def test_toggled_on(env, pipeline_mode):
     # End-effector not close to the button, stays False
     assert not stove.states[ToggledOn].get_value()
 
-    # Settle robot
-    for _ in range(10):
-        og.sim.step()
+    # load IK controller
+    controller_config = {
+        f"arm_{robot.default_arm}": {"name": "InverseKinematicsController", "mode": "pose_absolute_ori"}
+    }
+    robot.reload_controllers(controller_config=controller_config)
 
-    q[jnt_idxs["shoulder_pan_joint"]] = 0.0
-    robot.set_joint_positions(q, drive=False)
+    action_primitives = StarterSemanticActionPrimitives(env)
+
+    target_eef_pos = stove.links["togglebutton_fifth_0_link"].get_position() + th.tensor(
+        [-0.02, 0.06, 0.0], dtype=th.float32
+    )
+    target_orn = T.quat_multiply(
+        robot.get_eef_orientation(), T.euler2quat(th.tensor([-math.pi / 2.0, 0.0, math.pi / 4.0]))
+    )
+
+    for action in action_primitives._move_hand_direct_ik((target_eef_pos, target_orn), pos_thresh=0.035):
+        env.step(action)
 
     for _ in range(steps - 1):
         og.sim.step()
-        robot.keep_still()
 
     # End-effector close to the button, but not enough time has passed, still False
     assert not stove.states[ToggledOn].get_value()
