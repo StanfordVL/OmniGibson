@@ -214,13 +214,13 @@ def assert_test_env(pipeline):
         env = og.Environment(configs=cfg)
 
         # Additional processing for the tests to pass more deterministically
-        # og.sim.stop()
-        # bounding_box_object_names = ["bagel_dough", "raw_egg"]
-        # for name in bounding_box_object_names:
-        #     obj = env.scene.object_registry("name", name)
-        #     for collision_mesh in obj.root_link.collision_meshes.values():
-        #         collision_mesh.set_collision_approximation("boundingCube")
-        # og.sim.play()
+        og.sim.stop()
+        bounding_box_object_names = ["bagel_dough", "raw_egg"]
+        for name in bounding_box_object_names:
+            obj = env.scene.object_registry("name", name)
+            for collision_mesh in obj.root_link.collision_meshes.values():
+                collision_mesh.set_collision_approximation("boundingCube")
+        og.sim.play()
 
     assert env is not None, "Environment not created"
 
