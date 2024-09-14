@@ -1,5 +1,6 @@
 import math
 
+import pytest
 import torch as th
 
 import omnigibson as og
@@ -22,10 +23,11 @@ env = None
 
 
 def og_test(func):
-    def wrapper():
-        assert_test_env()
+    @pytest.mark.parametrize("pipeline_mode", ["cpu", "cuda"], indirect=True)
+    def wrapper(pipeline_mode):
+        assert_test_env(pipeline=pipeline_mode)
         try:
-            func(env)
+            func(env, pipeline_mode)
         finally:
             env.scene.reset()
 
@@ -68,26 +70,48 @@ def get_obj_cfg(
     }
 
 
-def assert_test_env():
+def assert_test_env(pipeline):
     global env
     if env is None:
         cfg = {
+            "env": {
+                "device": pipeline,
+            },
             "scene": {
                 "type": "Scene",
             },
             "objects": [
                 get_obj_cfg("breakfast_table", "breakfast_table", "skczfi"),
                 get_obj_cfg("bottom_cabinet", "bottom_cabinet", "immwzb"),
-                get_obj_cfg("dishtowel", "dishtowel", "dtfspn", prim_type=PrimType.CLOTH, abilities={"cloth": {}}),
-                get_obj_cfg("carpet", "carpet", "ctclvd", prim_type=PrimType.CLOTH, abilities={"cloth": {}}),
+                (
+                    get_obj_cfg("dishtowel", "dishtowel", "dtfspn")
+                    if pipeline == "cpu"
+                    else get_obj_cfg(
+                        "dishtowel", "dishtowel", "dtfspn", prim_type=PrimType.CLOTH, abilities={"cloth": {}}
+                    )
+                ),
+                (
+                    get_obj_cfg("carpet", "carpet", "ctclvd")
+                    if pipeline == "cpu"
+                    else get_obj_cfg("carpet", "carpet", "ctclvd", prim_type=PrimType.CLOTH, abilities={"cloth": {}})
+                ),
                 get_obj_cfg("bowl", "bowl", "ajzltc"),
                 get_obj_cfg("bagel", "bagel", "zlxkry", abilities=TEMP_RELATED_ABILITIES),
-                get_obj_cfg(
-                    "cookable_dishtowel",
-                    "dishtowel",
-                    "dtfspn",
-                    prim_type=PrimType.CLOTH,
-                    abilities={**TEMP_RELATED_ABILITIES, **{"cloth": {}}},
+                (
+                    get_obj_cfg(
+                        "cookable_dishtowel",
+                        "dishtowel",
+                        "dtfspn",
+                        abilities={**TEMP_RELATED_ABILITIES},
+                    )
+                    if pipeline == "cpu"
+                    else get_obj_cfg(
+                        "cookable_dishtowel",
+                        "dishtowel",
+                        "dtfspn",
+                        prim_type=PrimType.CLOTH,
+                        abilities={**TEMP_RELATED_ABILITIES, **{"cloth": {}}},
+                    )
                 ),
                 get_obj_cfg("microwave", "microwave", "hjjxmi"),
                 get_obj_cfg("stove", "stove", "yhjzwg"),
@@ -190,13 +214,13 @@ def assert_test_env():
         env = og.Environment(configs=cfg)
 
         # Additional processing for the tests to pass more deterministically
-        og.sim.stop()
-        bounding_box_object_names = ["bagel_dough", "raw_egg"]
-        for name in bounding_box_object_names:
-            obj = env.scene.object_registry("name", name)
-            for collision_mesh in obj.root_link.collision_meshes.values():
-                collision_mesh.set_collision_approximation("boundingCube")
-        og.sim.play()
+        # og.sim.stop()
+        # bounding_box_object_names = ["bagel_dough", "raw_egg"]
+        # for name in bounding_box_object_names:
+        #     obj = env.scene.object_registry("name", name)
+        #     for collision_mesh in obj.root_link.collision_meshes.values():
+        #         collision_mesh.set_collision_approximation("boundingCube")
+        # og.sim.play()
 
     assert env is not None, "Environment not created"
 

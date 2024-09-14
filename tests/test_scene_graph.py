@@ -1,5 +1,6 @@
 import math
 
+import pytest
 import torch as th
 from utils import place_obj_on_floor_plane
 
@@ -10,7 +11,8 @@ from omnigibson.scene_graphs.graph_builder import SceneGraphBuilder, visualize_s
 from omnigibson.utils.constants import PrimType
 
 
-def test_scene_graph():
+@pytest.mark.parametrize("pipeline_mode", ["cpu", "cuda"], indirect=True)
+def test_scene_graph(pipeline_mode):
 
     if og.sim is None:
         # Set global flags
@@ -38,6 +40,9 @@ def test_scene_graph():
     robot_positions = [[0, 0.8, 0], [1, 0.8, 0], [2, 0.8, 0]]
 
     config = {
+        "env": {
+            "device": pipeline_mode,
+        },
         "scene": {
             "type": "Scene",
         },

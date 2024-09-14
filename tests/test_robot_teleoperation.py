@@ -8,9 +8,10 @@ from omnigibson.utils.transform_utils import quat2euler
 
 
 @pytest.mark.skip(reason="test hangs on CI")
-def test_teleop():
+@pytest.mark.parametrize("pipeline_mode", ["cpu", "cuda"], indirect=True)
+def test_teleop(pipeline_mode):
     cfg = {
-        "env": {"action_timestep": 1 / 60.0, "physics_timestep": 1 / 120.0},
+        "env": {"action_timestep": 1 / 60.0, "physics_timestep": 1 / 120.0, "device": pipeline_mode},
         "scene": {"type": "Scene"},
         "robots": [
             {

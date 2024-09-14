@@ -7,7 +7,7 @@ from omnigibson.utils.python_utils import NAMES
 
 
 @og_test
-def test_removal_and_readdition(env):
+def test_removal_and_readdition(env, pipeline_mode):
     # Add an apple
     apple = DatasetObject(
         name="apple_unique",
@@ -45,7 +45,7 @@ def test_removal_and_readdition(env):
 
 
 @og_test
-def test_readdition(env):
+def test_readdition(env, pipeline_mode):
     # Add an apple
     apple = DatasetObject(
         name="apple_unique",

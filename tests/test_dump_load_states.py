@@ -7,7 +7,7 @@ from omnigibson.systems import *
 
 
 @og_test
-def test_dump_load(env):
+def test_dump_load(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     for system_name, system_class in SYSTEM_EXAMPLES.items():
         system = env.scene.get_system(system_name)
@@ -27,7 +27,7 @@ def test_dump_load(env):
 
 
 @og_test
-def test_dump_load_serialized(env):
+def test_dump_load_serialized(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     for system_name, system_class in SYSTEM_EXAMPLES.items():
         system = env.scene.get_system(system_name)
@@ -46,7 +46,7 @@ def test_dump_load_serialized(env):
 
 
 @og_test
-def test_save_restore_partial(env):
+def test_save_restore_partial(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
 
     decrypted_fd, tmp_json_path = tempfile.mkstemp("test_save_restore.json", dir=og.tempdir)
@@ -65,7 +65,7 @@ def test_save_restore_partial(env):
 
 
 @og_test
-def test_save_restore_full(env):
+def test_save_restore_full(env, pipeline_mode):
     decrypted_fd, tmp_json_path = tempfile.mkstemp("test_save_restore.json", dir=og.tempdir)
     og.sim.save([tmp_json_path])
 

@@ -7,9 +7,13 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.robots import LocomotionRobot
 
 
-def test_arm_control():
+@pytest.mark.parametrize("pipeline_mode", ["cpu", "cuda"], indirect=True)
+def test_arm_control(pipeline_mode):
     # Create env
     cfg = {
+        "env": {
+            "device": pipeline_mode,
+        },
         "scene": {
             "type": "Scene",
         },

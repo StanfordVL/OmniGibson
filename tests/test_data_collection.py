@@ -9,10 +9,12 @@ from omnigibson.macros import gm
 from omnigibson.objects import DatasetObject
 
 
-def test_data_collect_and_playback():
+@pytest.mark.parametrize("pipeline_mode", ["cpu", "cuda"], indirect=True)
+def test_data_collect_and_playback(pipeline_mode):
     cfg = {
         "env": {
             "external_sensors": [],
+            "device": pipeline_mode,
         },
         "scene": {
             "type": "InteractiveTraversableScene",

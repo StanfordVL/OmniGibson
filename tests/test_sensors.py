@@ -10,7 +10,7 @@ from omnigibson.utils.constants import semantic_class_id_to_name
 
 
 @og_test
-def test_segmentation_modalities(env):
+def test_segmentation_modalities(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     dishtowel = env.scene.object_registry("name", "dishtowel")
     robot = env.scene.robots[0]
@@ -103,7 +103,7 @@ def test_segmentation_modalities(env):
 
 
 @og_test
-def test_bbox_modalities(env):
+def test_bbox_modalities(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     dishtowel = env.scene.object_registry("name", "dishtowel")
     robot = env.scene.robots[0]
