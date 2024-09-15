@@ -203,7 +203,13 @@ def process_object_with_option(m, out_fs, option_name, option_fn, dask_client):
 
 def process_target(target, pipeline_fs, link_executor, dask_client):
     with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
-        mesh_list = json.load(f)["meshes"]
+        object_list = json.load(f)
+        mesh_list = object_list["meshes"]
+        manual_collision_list = {
+            parent
+            for obj, objtype, parent in object_list["max_tree"]
+            if "Mcollision" in obj
+        }
 
     target_fs = pipeline_fs.target_output(target)
 
@@ -242,7 +248,8 @@ def process_target(target, pipeline_fs, link_executor, dask_client):
                     int(parsed_name.group("instance_id")) == 0 and
                     not parsed_name.group("bad") and
                     parsed_name.group("joint_side") != "upper")
-                if not should_convert:
+                has_existing_collision_mesh = mesh_name in manual_collision_list
+                if not should_convert or has_existing_collision_mesh:
                     continue
                 assert mesh_archive_fs.exists(mesh_name), f"Mesh {mesh_name} does not exist in the archive."
                 # print(f"Start {mesh_name} from {target}")
