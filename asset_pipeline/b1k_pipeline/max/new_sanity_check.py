@@ -357,6 +357,7 @@ class SanityCheck:
             verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
             faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
             faces = np.array([[int(v) - 1 for v in f] for f in faces_maxscript if f is not None])
+            self.expect(len(faces) > 0, f"{obj.name} has no faces.")
             self.expect(all(len(f) == 3 for f in faces), f"{obj.name} has non-triangular faces. Apply the Triangulate script.")
 
             # Split the faces into elements
