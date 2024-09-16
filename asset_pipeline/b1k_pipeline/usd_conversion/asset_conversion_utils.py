@@ -9,13 +9,12 @@ from os.path import exists
 from pathlib import Path
 
 import numpy as np
+from scipy.spatial.transform import Rotation as R
 import omnigibson as og
 import omnigibson.lazy as lazy
-import omnigibson.utils.transform_utils as T
 import trimesh
 from omnigibson.objects import DatasetObject
 from omnigibson.scenes import Scene
-from omnigibson.utils.config_utils import NumpyEncoder
 from omnigibson.utils.usd_utils import create_primitive_mesh
 
 LIGHT_MAPPING = {
@@ -30,17 +29,6 @@ OBJECT_STATE_TEXTURES = {
     "frozen",
     "soaked",
     "toggledon",
-}
-
-RENDERING_CHANNEL_MAPPINGS = {
-    "diffuse": set_mtl_albedo,
-    "albedo": set_mtl_albedo,
-    "normal": set_mtl_normal,
-    "ao": set_mtl_ao,
-    "roughness": set_mtl_roughness,
-    "metalness": set_mtl_metalness,
-    "opacity": set_mtl_opacity,
-    "emission": set_mtl_emission,
 }
 
 MTL_MAP_TYPE_MAPPINGS = {
@@ -75,6 +63,13 @@ ALLOWED_META_TYPES = {
     "collision": "convexmesh",
     "lights": "light",
 }
+
+
+class NumpyEncoder(json.JSONEncoder):
+    def default(self, obj):
+        if isinstance(obj, np.ndarray):
+            return obj.tolist()
+        return json.JSONEncoder.default(self, obj)
 
 
 def string_to_array(string, num_type):
@@ -274,6 +269,18 @@ def set_mtl_emission(mtl_prim, texture):
     print(f"mtl {mtl}: {shade.GetInput(mtl).Get()}")
 
 
+RENDERING_CHANNEL_MAPPINGS = {
+    "diffuse": set_mtl_albedo,
+    "albedo": set_mtl_albedo,
+    "normal": set_mtl_normal,
+    "ao": set_mtl_ao,
+    "roughness": set_mtl_roughness,
+    "metalness": set_mtl_metalness,
+    "opacity": set_mtl_opacity,
+    "emission": set_mtl_emission,
+}
+
+
 def string_to_array(string):
     """
     Converts a array string in mujoco xml to np.array.
@@ -291,9 +298,7 @@ def get_joint_info(joint_element):
     child, pos, quat = None, None, None
     for ele in joint_element:
         if ele.tag == "origin":
-            quat = T.convert_quat(
-                T.mat2quat(T.euler2mat(string_to_array(ele.get("rpy")))), "wxyz"
-            )
+            quat = R.from_euler(string_to_array(ele.get("rpy")), "xyz").as_quat()[[3, 0, 1, 2]]
             pos = string_to_array(ele.get("xyz"))
         elif ele.tag == "child":
             child = ele.get("link")
@@ -732,9 +737,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
         # because the cone is pointing in the wrong direction. This is already done in update_obj_urdf_with_metalinks;
         # we just need to make sure meta_link_in_parent_link_orn is updated correctly.
         if meta_link_type == "particleapplier" and mesh_info_list[0]["type"] == "cone":
-            meta_link_in_parent_link_orn = T.quat_multiply(
-                meta_link_in_parent_link_orn, T.axisangle2quat([np.pi, 0.0, 0.0])
-            )
+            meta_link_in_parent_link_orn = (R.from_quat(meta_link_in_parent_link_orn) * R.from_rotvec([np.pi, 0.0, 0.0])).as_quat()
 
         for i, mesh_info in enumerate(mesh_info_list):
             is_mesh = False
@@ -791,12 +794,14 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
             ), np.array(mesh_info["orientation"])
 
             # Get the mesh/light pose in the meta link frame
-            mesh_in_meta_link_pos, mesh_in_meta_link_orn = T.relative_pose_transform(
-                mesh_in_parent_link_pos,
-                mesh_in_parent_link_orn,
-                meta_link_in_parent_link_pos,
-                meta_link_in_parent_link_orn,
-            )
+            mesh_in_parent_link_tf = np.eye(4)
+            mesh_in_parent_link_tf[:3, :3] = R.from_quat(mesh_in_parent_link_orn).as_matrix()
+            mesh_in_parent_link_tf[:3, 3] = mesh_in_parent_link_pos
+            meta_link_in_parent_link_tf = np.eye(4)
+            meta_link_in_parent_link_tf[:3, :3] = R.from_quat(meta_link_in_parent_link_orn).as_matrix()
+            meta_link_in_parent_link_tf[:3, 3] = meta_link_in_parent_link_pos
+            mesh_in_meta_link_tf = np.linalg.inv(meta_link_in_parent_link_tf) @ mesh_in_parent_link_tf
+            mesh_in_meta_link_pos, mesh_in_meta_link_orn = mesh_in_meta_link_tf[:3, 3], R.from_matrix(mesh_in_meta_link_tf[:3, :3]).as_quat()
 
             if is_light:
                 xform_prim.prim.GetAttribute("inputs:color").Set(
@@ -841,9 +846,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                         )
                     )
                     # Offset the position by half the height because in 3dsmax the origin of the cylinder is at the center of the base
-                    mesh_in_meta_link_pos += T.quat2mat(
-                        mesh_in_meta_link_orn
-                    ) @ np.array([0.0, 0.0, height_offset])
+                    mesh_in_meta_link_pos += R.from_quat(mesh_in_meta_link_orn).apply(np.array([0.0, 0.0, height_offset]))
                 elif mesh_type == "Cone":
                     if not is_mesh:
                         xform_prim.prim.GetAttribute("radius").Set(0.5)
@@ -857,13 +860,9 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                         )
                     )
                     # Flip the orientation of the z-axis because in 3dsmax the cone is pointing in the opposite direction
-                    mesh_in_meta_link_orn = T.quat_multiply(
-                        mesh_in_meta_link_orn, T.axisangle2quat([np.pi, 0.0, 0.0])
-                    )
+                    mesh_in_meta_link_orn = (R.from_quat(mesh_in_meta_link_orn) * R.from_rotvec([np.pi, 0.0, 0.0])).as_quat()
                     # Offset the position by half the height because in 3dsmax the origin of the cone is at the center of the base
-                    mesh_in_meta_link_pos += T.quat2mat(
-                        mesh_in_meta_link_orn
-                    ) @ np.array([0.0, 0.0, height_offset])
+                    mesh_in_meta_link_pos += R.from_quat(mesh_in_meta_link_orn).apply(np.array([0.0, 0.0, height_offset]))
                 elif mesh_type == "Cube":
                     if not is_mesh:
                         xform_prim.prim.GetAttribute("size").Set(1.0)
@@ -871,9 +870,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
                         lazy.pxr.Gf.Vec3f(*mesh_info["size"])
                     )
                     height_offset = mesh_info["size"][2] / 2.0
-                    mesh_in_meta_link_pos += T.quat2mat(
-                        mesh_in_meta_link_orn
-                    ) @ np.array([0.0, 0.0, height_offset])
+                    mesh_in_meta_link_pos += R.from_quat(mesh_in_meta_link_orn).apply(np.array([0.0, 0.0, height_offset]))
                 elif mesh_type == "Sphere":
                     if not is_mesh:
                         xform_prim.prim.GetAttribute("radius").Set(0.5)
@@ -891,7 +888,7 @@ def process_meta_link(stage, obj_model, meta_link_type, meta_link_infos):
 
             xform_prim.set_local_pose(
                 translation=mesh_in_meta_link_pos,
-                orientation=T.convert_quat(mesh_in_meta_link_orn, to="wxyz"),
+                orientation=mesh_in_meta_link_orn[[3, 0, 1, 2]],
             )
 
 
@@ -1028,7 +1025,7 @@ def import_obj_metadata(
     #                     add_xform_properties(prim=link_prim)
     #                     link_prim.GetAttribute("xformOp:translate").Set(lazy.pxr.Gf.Vec3f(*atrr["xyz"]))
     #                     if atrr["rpy"] is not None:
-    #                         link_prim.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatf(*(T.euler2quat(atrr["rpy"])[[3, 0, 1, 2]])))
+    #                         link_prim.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatf(*(R.from_euler(atrr["rpy"], "xyz").as_quat()[[3, 0, 1, 2]])))
     #
     #                     link_prim.CreateAttribute("ig:orientation", lazy.pxr.Sdf.ValueTypeNames.Quatf)
     #                     link_prim.GetAttribute("ig:orientation").Set(lazy.pxr.Gf.Quatf(*atrr["rpy"]))
@@ -1571,9 +1568,7 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model, dataset_root):
                                 assert (
                                     len(attrs_list) == 1
                                 ), f"Expected only one instance for meta_link {meta_link_name}_{ml_id}, but found {len(attrs_list)}"
-                                quat = T.quat_multiply(
-                                    quat, T.axisangle2quat([np.pi, 0.0, 0.0])
-                                )
+                                quat = (R.from_quat(quat) * R.from_rotvec([np.pi, 0.0, 0.0])).as_quat()
 
                             # Create metalink
                             create_metalink(
@@ -1581,7 +1576,7 @@ def update_obj_urdf_with_metalinks(obj_category, obj_model, dataset_root):
                                 metalink_name=f"{meta_link_name}_{ml_id}_{i}",
                                 parent_link_name=parent_link_name,
                                 pos=pos,
-                                rpy=T.quat2euler(quat),
+                                rpy=R.from_quat(quat).as_euler("xyz"),
                             )
 
     # Export this URDF
@@ -1721,7 +1716,7 @@ def get_joint_info(joint_element):
     fixed_jnt = joint_element.get("type") == "fixed"
     for ele in joint_element:
         if ele.tag == "origin":
-            quat = T.mat2quat(T.euler2mat(string_to_array(ele.get("rpy"))))
+            quat = R.from_euler(string_to_array(ele.get("rpy")), "xyz").as_quat()
             pos = string_to_array(ele.get("xyz"))
         elif ele.tag == "child":
             child = ele.get("link")

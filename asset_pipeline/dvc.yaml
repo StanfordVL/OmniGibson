@@ -2436,11 +2436,7 @@ stages:
     - artifacts/parallels/metadata.zip
     - artifacts/pipeline/export_objs.success
     - artifacts/pipeline/aggregate_metadata.success
-    - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
-    - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
-    - b1k_pipeline/usd_conversion/import_metadata.py
-    - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
-    - b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
+    - b1k_pipeline/usd_conversion/asset_conversion_utils.py
     - b1k_pipeline/usd_conversion/usdify_objects.py
     - b1k_pipeline/usd_conversion/usdify_objects_process.py
     outs:
@@ -2463,12 +2459,7 @@ stages:
     - artifacts/pipeline/export_objs.success
     - artifacts/pipeline/export_scenes.success
     - artifacts/pipeline/aggregate_metadata.success
-    - b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
-    - b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
-    - b1k_pipeline/usd_conversion/import_metadata.py
-    - b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
-    - b1k_pipeline/usd_conversion/make_maps.py
-    - b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
+    - b1k_pipeline/usd_conversion/asset_conversion_utils.py
     - b1k_pipeline/usd_conversion/usdify_scenes.py
     - b1k_pipeline/usd_conversion/usdify_scenes_process.py
     outs:
