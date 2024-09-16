@@ -241,39 +241,40 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         obj_relative_path = f"{obj_name}-{link_name}.obj"
         save_mesh(canonical_mesh, tfs, obj_relative_path)
 
-        # Check that a material got exported.
-        material_files = [x for x in tfs.listdir("/") if x.endswith(".mtl")]
-        assert len(material_files) == 1, f"Something's wrong: there's more than 1 material file in {tfs.listdir('/')}"
-        original_material_filename = material_files[0]
-
         # Move the mesh to the correct path
         obj_link_mesh_folder_fs = output_fs.makedir("shape", recreate=True)
         obj_link_visual_mesh_folder_fs = obj_link_mesh_folder_fs.makedir("visual", recreate=True)
         obj_link_collision_mesh_folder_fs = obj_link_mesh_folder_fs.makedir("collision", recreate=True)
         obj_link_material_folder_fs = output_fs.makedir("material", recreate=True)
 
-        # Fix texture file paths if necessary.
-        original_material_fs = G.nodes[link_node]["material_dir"]
-        if original_material_fs:
-            for src_texture_file in original_material_fs.listdir("/"):
-                fname = src_texture_file
-                # fname is in the same format as room_light-0-0_VRayAOMap.png
-                vray_name = fname[fname.index("VRay") : -4] if "VRay" in fname else None
-                if vray_name in VRAY_MAPPING:
-                    dst_fname = VRAY_MAPPING[vray_name]
-                else:
-                    raise ValueError(f"Unknown texture map: {fname}")
+        # Check if a material got exported.
+        material_files = [x for x in tfs.listdir("/") if x.endswith(".mtl")]
+        if material_files:
+            assert len(material_files) == 1, f"Something's wrong: there's more than 1 material file in {tfs.listdir('/')}"
+            original_material_filename = material_files[0]
 
-                dst_texture_file = f"{obj_name}-{link_name}-{dst_fname}.png"
+            # Fix texture file paths if necessary.
+            original_material_fs = G.nodes[link_node]["material_dir"]
+            if original_material_fs:
+                for src_texture_file in original_material_fs.listdir("/"):
+                    fname = src_texture_file
+                    # fname is in the same format as room_light-0-0_VRayAOMap.png
+                    vray_name = fname[fname.index("VRay") : -4] if "VRay" in fname else None
+                    if vray_name in VRAY_MAPPING:
+                        dst_fname = VRAY_MAPPING[vray_name]
+                    else:
+                        raise ValueError(f"Unknown texture map: {fname}")
 
-                # Load the image
-                # TODO: Re-enable this after tuning it.
-                # texture = Image.open(original_material_fs.open(src_texture_file, "rb"), formats=("png",))
-                # existing_texture_res = texture.size[0]
-                # if existing_texture_res > texture_res:
-                #     texture = texture.resize((texture_res, texture_res), Image.BILINEAR)
-                # texture.save(obj_link_material_folder_fs.open(dst_texture_file, "wb"), format="png")
-                fs.copy.copy_file(original_material_fs, src_texture_file, obj_link_material_folder_fs, dst_texture_file)
+                    dst_texture_file = f"{obj_name}-{link_name}-{dst_fname}.png"
+
+                    # Load the image
+                    # TODO: Re-enable this after tuning it.
+                    # texture = Image.open(original_material_fs.open(src_texture_file, "rb"), formats=("png",))
+                    # existing_texture_res = texture.size[0]
+                    # if existing_texture_res > texture_res:
+                    #     texture = texture.resize((texture_res, texture_res), Image.BILINEAR)
+                    # texture.save(obj_link_material_folder_fs.open(dst_texture_file, "wb"), format="png")
+                    fs.copy.copy_file(original_material_fs, src_texture_file, obj_link_material_folder_fs, dst_texture_file)
 
         # Copy the OBJ into the right spot
         fs.copy.copy_file(tfs, obj_relative_path, obj_link_visual_mesh_folder_fs, obj_relative_path)
@@ -293,32 +294,33 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
         G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
         G.nodes[link_node]["canonical_collision_mesh"] = trimesh.util.concatenate(canonical_collision_meshes)
 
-        # Modify MTL reference in OBJ file
-        mtl_name = f"{obj_name}-{link_name}.mtl"
-        with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "r") as f:
-            new_lines = []
-            for line in f.readlines():
-                if f"mtllib {original_material_filename}" in line:
-                    line = f"mtllib {mtl_name}\n"
-                new_lines.append(line)
+        if material_files:
+            # Modify MTL reference in OBJ file
+            mtl_name = f"{obj_name}-{link_name}.mtl"
+            with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "r") as f:
+                new_lines = []
+                for line in f.readlines():
+                    if f"mtllib {original_material_filename}" in line:
+                        line = f"mtllib {mtl_name}\n"
+                    new_lines.append(line)
 
-        with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "w") as f:
-            for line in new_lines:
-                f.write(line)
+            with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "w") as f:
+                for line in new_lines:
+                    f.write(line)
 
-        # Modify texture reference in MTL file
-        with tfs.open(original_material_filename, "r") as f:
-            new_lines = []
-            for line in f.readlines():
-                if "map_Kd material_0.png" in line:
-                    line = ""
-                    for key in MTL_MAPPING:
-                        line += f"{key} ../../material/{obj_name}-{link_name}-{MTL_MAPPING[key]}.png\n"
-                new_lines.append(line)
+            # Modify texture reference in MTL file
+            with tfs.open(original_material_filename, "r") as f:
+                new_lines = []
+                for line in f.readlines():
+                    if "map_Kd material_0.png" in line:
+                        line = ""
+                        for key in MTL_MAPPING:
+                            line += f"{key} ../../material/{obj_name}-{link_name}-{MTL_MAPPING[key]}.png\n"
+                    new_lines.append(line)
 
-        with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:
-            for line in new_lines:
-                f.write(line)
+            with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:
+                for line in new_lines:
+                    f.write(line)
 
     # Create the link in URDF
     link_xml = ET.SubElement(tree_root, "link")
