@@ -8037,34 +8037,22 @@ stages:
     - path: artifacts/pipeline/export_objs.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
-    - path: b1k_pipeline/usd_conversion/convert_scene_urdfs_to_json_templates.py
-      md5: 7b6fa69e6a0acde76c2e948b0460dec6
-      size: 4962
-    - path: b1k_pipeline/usd_conversion/expand_collision_obj_and_urdf.py
-      md5: 3a697ffec67cfa78eebde7eda87edd9a
-      size: 4038
-    - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: 9ab447505d1a12756dcddac66179192f
-      size: 45393
-    - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
-      md5: 3415e42a56e2179997faa8e7af512ecc
-      size: 2312
-    - path: b1k_pipeline/usd_conversion/preprocess_urdf_for_metalinks.py
-      md5: 2941590742764369a634a2300957b555
-      size: 12525
+    - path: b1k_pipeline/usd_conversion/asset_conversion_utils.py
+      md5: 828020b8dfda6c428dda0e0f36516621
+      size: 70958
     - path: b1k_pipeline/usd_conversion/usdify_objects.py
-      md5: a276ad074748c02f98bf855ca2ef8c8e
-      size: 6706
+      md5: 934e52125dba62af30b75c1e6409d865
+      size: 6702
     - path: b1k_pipeline/usd_conversion/usdify_objects_process.py
-      md5: 7c22b79b0f3e1f301d4b1d2978b49d39
-      size: 2101
+      md5: 663136a7929f41443c72edd2fefdf9cd
+      size: 2046
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 07cc17cb67828d704e5004e7d4241230
-      size: 1958496
+      md5: c549bcd0d3ef17413a91c1de35e8e58a
+      size: 3184315883
     - path: artifacts/pipeline/usdify_objects.json
-      md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
-      size: 51
+      md5: d2d157511b450640576a2468bdc2081c
+      size: 2383
   export_scene@scenes/Beechwood_1_int:
     cmd: python -m b1k_pipeline.export_scene scenes/Beechwood_1_int
     deps:
