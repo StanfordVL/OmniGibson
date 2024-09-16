@@ -16,19 +16,17 @@ gm.USE_ENCRYPTED_ASSETS = True
 gm.FORCE_LIGHT_INTENSITY = None
 
 import omnigibson as og
-from omnigibson.simulator import launch_simulator
 from omnigibson.utils.asset_utils import encrypt_file
 
-from b1k_pipeline.usd_conversion.import_metadata import import_obj_metadata
-from b1k_pipeline.usd_conversion.import_urdfs_from_scene import import_obj_urdf
-from b1k_pipeline.usd_conversion.convert_cloth import postprocess_cloth
+from b1k_pipeline.usd_conversion.asset_conversion_utils import import_obj_metadata, import_obj_urdf
+
 
 IMPORT_RENDER_CHANNELS = True
 CLOTH_CATEGORIES = ["t_shirt", "dishtowel", "carpet"]
 
 
 if __name__ == "__main__":
-    launch_simulator()
+    og.launch()
 
     dataset_root = str(pathlib.Path(sys.argv[1]))
     batch = sys.argv[2:]

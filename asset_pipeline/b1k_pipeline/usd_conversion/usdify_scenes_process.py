@@ -13,7 +13,6 @@ gm.USE_GPU_DYNAMICS = False
 gm.USE_ENCRYPTED_ASSETS = True
 
 import omnigibson as og
-from omnigibson.simulator import launch_simulator
 from omnigibson.systems import REGISTERED_SYSTEMS, FluidSystem
 
 from b1k_pipeline.usd_conversion.convert_scene_urdfs_to_json_templates import (
@@ -25,7 +24,7 @@ IMPORT_RENDER_CHANNELS = True
 
 
 if __name__ == "__main__":
-    launch_simulator()
+    og.launch()
 
     dataset_root = sys.argv[1]
     gm.DATASET_PATH = str(dataset_root)

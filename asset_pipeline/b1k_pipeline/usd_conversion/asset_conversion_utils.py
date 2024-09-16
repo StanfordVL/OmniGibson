@@ -430,36 +430,38 @@ def import_rendering_channels(
                     for line in f.readlines():
                         if "mtllib" in line and line[0] != "#":
                             mtls.append(line.split("mtllib ")[-1].split("\n")[0])
+
+                if mtls:
                     assert (
                         len(mtls) == 1
                     ), f"Only one mtl is supported per obj file in omniverse -- found {len(mtls)}!"
-                mtl = mtls[0]
-                # TODO: Make name unique
-                mtl_name = (
-                    ".".join(os.path.basename(mtl).split(".")[:-1])
-                    .replace("-", "_")
-                    .replace(".", "_")
-                )
-                mtl_old_dir = f"{'/'.join(obj_path.split('/')[:-1])}"
-                link_mtl_files[link_name][mesh_name] = mtl_name
-                mtl_infos[mtl_name] = OrderedDict()
-                mtl_old_dirs[mtl_name] = mtl_old_dir
-                mat_files[mtl_name] = []
-                mat_old_paths[mtl_name] = []
-                # Open the mtl file
-                mtl_path = f"{mtl_old_dir}/{mtl}"
-                with open(mtl_path, "r") as f:
-                    # Read any lines beginning with map that aren't commented out
-                    for line in f.readlines():
-                        if line[:4] == "map_":
-                            map_type, map_file = line.split(" ")
-                            map_file = map_file.split("\n")[0]
-                            map_filename = os.path.basename(map_file)
-                            mat_files[mtl_name].append(map_filename)
-                            mat_old_paths[mtl_name].append(map_file)
-                            mtl_infos[mtl_name][
-                                MTL_MAP_TYPE_MAPPINGS[map_type.lower()]
-                            ] = map_filename
+                    mtl = mtls[0]
+                    # TODO: Make name unique
+                    mtl_name = (
+                        ".".join(os.path.basename(mtl).split(".")[:-1])
+                        .replace("-", "_")
+                        .replace(".", "_")
+                    )
+                    mtl_old_dir = f"{'/'.join(obj_path.split('/')[:-1])}"
+                    link_mtl_files[link_name][mesh_name] = mtl_name
+                    mtl_infos[mtl_name] = OrderedDict()
+                    mtl_old_dirs[mtl_name] = mtl_old_dir
+                    mat_files[mtl_name] = []
+                    mat_old_paths[mtl_name] = []
+                    # Open the mtl file
+                    mtl_path = f"{mtl_old_dir}/{mtl}"
+                    with open(mtl_path, "r") as f:
+                        # Read any lines beginning with map that aren't commented out
+                        for line in f.readlines():
+                            if line[:4] == "map_":
+                                map_type, map_file = line.split(" ")
+                                map_file = map_file.split("\n")[0]
+                                map_filename = os.path.basename(map_file)
+                                mat_files[mtl_name].append(map_filename)
+                                mat_old_paths[mtl_name].append(map_file)
+                                mtl_infos[mtl_name][
+                                    MTL_MAP_TYPE_MAPPINGS[map_type.lower()]
+                                ] = map_filename
 
     # Next, for each material information, we create a new material and port the material files to the USD directory
     mat_new_fpath = os.path.join(usd_dir, "materials")

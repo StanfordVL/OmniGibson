@@ -9,7 +9,6 @@ import omnigibson as og
 from omnigibson.macros import gm, macros
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.prims.xform_prim import XFormPrim
-from omnigibson.simulator import launch_simulator
 from omnigibson.systems.system_base import get_system
 from omnigibson.utils.asset_utils import decrypted
 from omnigibson.utils.sampling_utils import raytest_batch, raytest
@@ -112,7 +111,7 @@ def process_object(cat, mdl, out_path):
     if og.sim:
         og.sim.clear()
     else:
-        launch_simulator()
+        og.launch()
 
     # First get the native bounding box of the object
     usd_path = DatasetObject.get_usd_path(category=cat, model=mdl)

@@ -28,7 +28,6 @@ def main():
     with PipelineFS() as pipeline_fs, \
          ParallelZipFS("objects.zip") as objects_fs, \
          ParallelZipFS("metadata.zip") as metadata_fs, \
-         ParallelZipFS("fillable_volumes.zip") as fillable_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs:
         with ParallelZipFS("objects_usd.zip", write=True) as out_fs:
             # Copy everything over to the dataset FS
@@ -39,9 +38,9 @@ def main():
                 if objects_fs.opendir(item.path).glob("*.urdf").count().files == 0:
                     continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path, recreate=True))
-                fillable_path = fs.path.join(item.path, "fillable.obj")
-                if fillable_fs.exists(fillable_path):
-                    fs.copy.copy_file(fillable_fs, fillable_path, dataset_fs, fillable_path)
+                # fillable_path = fs.path.join(item.path, "fillable.obj")
+                #  if fillable_fs.exists(fillable_path):
+                #     fs.copy.copy_file(fillable_fs, fillable_path, dataset_fs, fillable_path)
 
             print("Launching cluster...")
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
