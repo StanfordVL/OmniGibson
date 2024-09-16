@@ -6866,30 +6866,1111 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/export_objs_global.py
-      md5: 5695a2b0c4b1de79fd32042f7354eed1
-      size: 31596
+      md5: c745f541438244cb521f452f22afdd35
+      size: 31828
     - path: b1k_pipeline/mesh_tree.py
       md5: 7ed516b18128f96cb05dfea5974e193c
       size: 14897
+    - path: cad/objects/batch-00/artifacts/collision_meshes.zip
+      md5: 42d8ec2443d182d1a08f362a9da0f04f
+      size: 165
+    - path: cad/objects/batch-00/artifacts/collision_selection.json
+      md5: 16fffdbe4daa7ec81bd0e5d393301bc7
+      size: 7928
+    - path: cad/objects/batch-00/artifacts/meshes.zip
+      md5: a4456d0d7f7b7c4cdbb394bbaa70b199
+      size: 22414291
+    - path: cad/objects/batch-00/artifacts/object_list.json
+      md5: 2e61a88852befc4accfd210091ea28fe
+      size: 69956
+    - path: cad/objects/batch-01/artifacts/collision_meshes.zip
+      md5: dc3fafcbfa3e86eac548db3276e7e17e
+      size: 165
+    - path: cad/objects/batch-01/artifacts/collision_selection.json
+      md5: 16c6754a5a3ea390d16c0f921ec37363
+      size: 7551
+    - path: cad/objects/batch-01/artifacts/meshes.zip
+      md5: 2e7a405943212806def08e398c2a2d89
+      size: 21448229
+    - path: cad/objects/batch-01/artifacts/object_list.json
+      md5: 002ca883aa1421eb5e1c1a7858377526
+      size: 61030
+    - path: cad/objects/batch-02/artifacts/collision_meshes.zip
+      md5: c89e970c756a58865a33716a4e5850c5
+      size: 81181
+    - path: cad/objects/batch-02/artifacts/collision_selection.json
+      md5: 7998bf654d0aab1e553602755d31d96f
+      size: 13025
+    - path: cad/objects/batch-02/artifacts/meshes.zip
+      md5: b9edc7d81c02a64be4da7ebce1028c53
+      size: 23872342
+    - path: cad/objects/batch-02/artifacts/object_list.json
+      md5: 8c6544f2290508e12dd544a626a6c350
+      size: 111066
+    - path: cad/objects/batch-03/artifacts/collision_meshes.zip
+      md5: 24be181b4a4a21dd904698e2663cc5a7
+      size: 165
+    - path: cad/objects/batch-03/artifacts/collision_selection.json
+      md5: 15e93315aa698755784d2a24b8199289
+      size: 5310
+    - path: cad/objects/batch-03/artifacts/meshes.zip
+      md5: 6371a000bc75324d20d1b0dc42e4de26
+      size: 13524863
+    - path: cad/objects/batch-03/artifacts/object_list.json
+      md5: 600c4cd15531cbd3243ff437b19d4d01
+      size: 46892
+    - path: cad/objects/batch-04/artifacts/collision_meshes.zip
+      md5: 786a30251baaa9764181457fa4635af3
+      size: 167
+    - path: cad/objects/batch-04/artifacts/collision_selection.json
+      md5: 2486a5bdae70b146d1a4d24b460a9de0
+      size: 7459
+    - path: cad/objects/batch-04/artifacts/meshes.zip
+      md5: d1185fe93aba9a09c5ab9b6ab7879de3
+      size: 16136733
+    - path: cad/objects/batch-04/artifacts/object_list.json
+      md5: 6d9b6ad226e0c152338ffd16894a1b31
+      size: 65029
+    - path: cad/objects/batch-05/artifacts/collision_meshes.zip
+      md5: b13bfbfd6b382a2eb08b005dd3624166
+      size: 167
+    - path: cad/objects/batch-05/artifacts/collision_selection.json
+      md5: e592e9155e7e6abcada14d47663e86cc
+      size: 7615
+    - path: cad/objects/batch-05/artifacts/meshes.zip
+      md5: 3a1487b06f79f9f32b341a487516e693
+      size: 16408795
+    - path: cad/objects/batch-05/artifacts/object_list.json
+      md5: 24b25f316b16beed7a30c6deace32d57
+      size: 66329
+    - path: cad/objects/batch-06/artifacts/collision_meshes.zip
+      md5: ca1f7bce9858969c79aa4f15aa6dd977
+      size: 165
+    - path: cad/objects/batch-06/artifacts/collision_selection.json
+      md5: 7011ba6f929cc5e931a2169870772578
+      size: 7725
+    - path: cad/objects/batch-06/artifacts/meshes.zip
+      md5: 6a5811d8cd3309edab94e6e3a2008298
+      size: 18085836
+    - path: cad/objects/batch-06/artifacts/object_list.json
+      md5: ccaf84c126d41c47326c67c6e85e7bfb
+      size: 61909
+    - path: cad/objects/batch-07/artifacts/collision_meshes.zip
+      md5: 27fae137d419fc7f32bdbc107cb145a6
+      size: 166
+    - path: cad/objects/batch-07/artifacts/collision_selection.json
+      md5: aef2b9da982051e6256bafb76148e36d
+      size: 8288
+    - path: cad/objects/batch-07/artifacts/meshes.zip
+      md5: db330976ca83462b0706562408509636
+      size: 18366156
+    - path: cad/objects/batch-07/artifacts/object_list.json
+      md5: ff1a992f4e27e56f5cf123fd8c2dcbfc
+      size: 75805
+    - path: cad/objects/batch-08/artifacts/collision_meshes.zip
+      md5: 9b3f3362ae108acbf241424f38d7581e
+      size: 323188
+    - path: cad/objects/batch-08/artifacts/collision_selection.json
+      md5: 5139bc69ef8b5031a69b4e9087f9bf2a
+      size: 7351
+    - path: cad/objects/batch-08/artifacts/meshes.zip
+      md5: 959d2e902fd7a2145cdb17e6af573f98
+      size: 24386263
+    - path: cad/objects/batch-08/artifacts/object_list.json
+      md5: ce4d7ba4b6f2ac232300a17a927b2a16
+      size: 59912
+    - path: cad/objects/batch-09/artifacts/collision_meshes.zip
+      md5: c970558a60a8da87a26ad4fc4f33845c
+      size: 165
+    - path: cad/objects/batch-09/artifacts/collision_selection.json
+      md5: aef40540c634c33227f0f0661f8818a5
+      size: 8143
+    - path: cad/objects/batch-09/artifacts/meshes.zip
+      md5: 17b2c75078d52d2ae928f60733aff877
+      size: 14853565
+    - path: cad/objects/batch-09/artifacts/object_list.json
+      md5: be15542baff166ddcf5c1775947cc53a
+      size: 70019
+    - path: cad/objects/batch-10/artifacts/collision_meshes.zip
+      md5: ef24d888f44b916f6440a78ca53cca0d
+      size: 166
+    - path: cad/objects/batch-10/artifacts/collision_selection.json
+      md5: e6b21ce9e9b5c7534d9db762769a4041
+      size: 6895
+    - path: cad/objects/batch-10/artifacts/meshes.zip
+      md5: 3dff07d7903fe510bc513746b5e90774
+      size: 19004213
+    - path: cad/objects/batch-10/artifacts/object_list.json
+      md5: 6becc9b13535cfb7317ba79733e8826c
+      size: 61439
+    - path: cad/objects/batch-11/artifacts/collision_meshes.zip
+      md5: 8fc9535c048485e1778aee933a8d79ff
+      size: 166
+    - path: cad/objects/batch-11/artifacts/collision_selection.json
+      md5: 637541ecc80b8dfdd737706bf54704cd
+      size: 7150
+    - path: cad/objects/batch-11/artifacts/meshes.zip
+      md5: 7af14d4a4c6ee74914716e12fbedbb59
+      size: 18715432
+    - path: cad/objects/batch-11/artifacts/object_list.json
+      md5: 78a4a14e03c0f05e03292ddb6c10a86b
+      size: 59649
+    - path: cad/objects/batch-12/artifacts/collision_meshes.zip
+      md5: 73574d5caa129d732237ca2bfe403096
+      size: 167
+    - path: cad/objects/batch-12/artifacts/collision_selection.json
+      md5: b1d08d331ccb5d05049fcd0039c5f128
+      size: 7973
+    - path: cad/objects/batch-12/artifacts/meshes.zip
+      md5: b2ef7ffcc42f7ed4fc496766ce733f0b
+      size: 15401689
+    - path: cad/objects/batch-12/artifacts/object_list.json
+      md5: f4eb6c9a801221060af7b6ddc416f665
+      size: 74102
+    - path: cad/objects/batch-13/artifacts/collision_meshes.zip
+      md5: ce8505f401862ee7c0f118a296766657
+      size: 166
+    - path: cad/objects/batch-13/artifacts/collision_selection.json
+      md5: c85924616aa0de48a2bea6180b41c8a5
+      size: 5182
+    - path: cad/objects/batch-13/artifacts/meshes.zip
+      md5: 745735d831ad626e5b23bfcf2bc6663a
+      size: 14506301
+    - path: cad/objects/batch-13/artifacts/object_list.json
+      md5: fb5e8285372d6ea5e5fd5057f9c97a49
+      size: 42086
     - path: cad/objects/custom-aa/artifacts/collision_meshes.zip
-      md5: 6b1f5858456269440a993e8ff4439626
-      size: 832224
+      md5: 7eb200ce1ed5552d1b8d9b49fca6e609
+      size: 166
     - path: cad/objects/custom-aa/artifacts/collision_selection.json
-      md5: cb804d83dcfffe7b6b8fb7ca6e2fb558
-      size: 1422
+      md5: b65536e18a0eb77831ecf193d94e3fa4
+      size: 1392
     - path: cad/objects/custom-aa/artifacts/meshes.zip
-      md5: b6133e6d897c1876b91f0c10993a973c
-      size: 10120885
+      md5: e73cf41975cfe472e6d699c011315d6d
+      size: 941862
     - path: cad/objects/custom-aa/artifacts/object_list.json
-      md5: b76af0630d35bcfd4ffba6556e7601f3
-      size: 5838
+      md5: 75ddb8c0e1e09e5050cb3679198a57fb
+      size: 7413
+    - path: cad/objects/legacy_batch-00/artifacts/collision_meshes.zip
+      md5: 65da94555d6acee6664edbd7e27c49ec
+      size: 67876
+    - path: cad/objects/legacy_batch-00/artifacts/collision_selection.json
+      md5: c2be13ad257b6331aa93209fb825912e
+      size: 23027
+    - path: cad/objects/legacy_batch-00/artifacts/meshes.zip
+      md5: 22fa8b37aae8995c22ce5b31b7d12162
+      size: 5338663
+    - path: cad/objects/legacy_batch-00/artifacts/object_list.json
+      md5: 821b202b77a08c630f40ba6be8761f02
+      size: 154722
+    - path: cad/objects/legacy_batch-01/artifacts/collision_meshes.zip
+      md5: 664ea278a5d2d861620d21c67d0e9760
+      size: 55542
+    - path: cad/objects/legacy_batch-01/artifacts/collision_selection.json
+      md5: dbcce8e1a44d6553c8d287563af459e7
+      size: 6646
+    - path: cad/objects/legacy_batch-01/artifacts/meshes.zip
+      md5: 4df99167fc441d79ec4d25a463f5b4be
+      size: 14097607
+    - path: cad/objects/legacy_batch-01/artifacts/object_list.json
+      md5: 4778db8c33f48c40901889f01fc724c8
+      size: 49523
+    - path: cad/objects/legacy_batch-02/artifacts/collision_meshes.zip
+      md5: 1c9478cd1cd6ee91bba2de9975019cc5
+      size: 21516
+    - path: cad/objects/legacy_batch-02/artifacts/collision_selection.json
+      md5: e1a21656dac061f82dc07bd3bce469fc
+      size: 11167
+    - path: cad/objects/legacy_batch-02/artifacts/meshes.zip
+      md5: 4e0f6b06cf3dcd58a778e09b90bbfd3e
+      size: 14410241
+    - path: cad/objects/legacy_batch-02/artifacts/object_list.json
+      md5: c0d6efe3fe5686fb435d3fe97de043f2
+      size: 84128
+    - path: cad/objects/legacy_batch-03/artifacts/collision_meshes.zip
+      md5: 474c50e22fcca91c0d3f2f9f8ff23ea8
+      size: 35221
+    - path: cad/objects/legacy_batch-03/artifacts/collision_selection.json
+      md5: d102f5e0756bef825e65a41126832bef
+      size: 12658
+    - path: cad/objects/legacy_batch-03/artifacts/meshes.zip
+      md5: c6ba1f3d9fac8d4f7727e647fa6942e8
+      size: 23324235
+    - path: cad/objects/legacy_batch-03/artifacts/object_list.json
+      md5: 8aaae210720073f9bbf6a3664127e0db
+      size: 94163
+    - path: cad/objects/legacy_batch-04/artifacts/collision_meshes.zip
+      md5: 2ea561e7a234a6b13defe3aa58305a17
+      size: 100117
+    - path: cad/objects/legacy_batch-04/artifacts/collision_selection.json
+      md5: c218005fbf1ceb45b39da004fb1baff7
+      size: 17260
+    - path: cad/objects/legacy_batch-04/artifacts/meshes.zip
+      md5: 3bd5bea2a7028ea711c1ecf97746e824
+      size: 12130268
+    - path: cad/objects/legacy_batch-04/artifacts/object_list.json
+      md5: 59c1c9d9bbaa1214d30addf2dfd94155
+      size: 126459
+    - path: cad/objects/legacy_batch-05/artifacts/collision_meshes.zip
+      md5: 13adece3f3317afe572dae900732adbf
+      size: 165
+    - path: cad/objects/legacy_batch-05/artifacts/collision_selection.json
+      md5: 26679ea516009bf5c89a68528425b8db
+      size: 14558
+    - path: cad/objects/legacy_batch-05/artifacts/meshes.zip
+      md5: 1fe63975bd449689e404d4d3003f07fe
+      size: 12339527
+    - path: cad/objects/legacy_batch-05/artifacts/object_list.json
+      md5: eff940e0a33b0f1a1c84fc5056bab712
+      size: 107341
+    - path: cad/objects/legacy_batch-06/artifacts/collision_meshes.zip
+      md5: 64c63eda55f44f01ef8e77041290fbad
+      size: 165
+    - path: cad/objects/legacy_batch-06/artifacts/collision_selection.json
+      md5: b79769c80140001a48404525a1320fab
+      size: 11793
+    - path: cad/objects/legacy_batch-06/artifacts/meshes.zip
+      md5: cebad69c4470baca0a5ff321ad474811
+      size: 16764392
+    - path: cad/objects/legacy_batch-06/artifacts/object_list.json
+      md5: e394afd0878ee80280e60cb615a3e84d
+      size: 102283
+    - path: cad/objects/legacy_batch-07/artifacts/collision_meshes.zip
+      md5: 80bc722066bc44d032ec963597611322
+      size: 165
+    - path: cad/objects/legacy_batch-07/artifacts/collision_selection.json
+      md5: 2ec1521633966cf7eb4efe9f6da9d1bd
+      size: 9102
+    - path: cad/objects/legacy_batch-07/artifacts/meshes.zip
+      md5: ec423a1f71be116c165ca85b82481d02
+      size: 12411093
+    - path: cad/objects/legacy_batch-07/artifacts/object_list.json
+      md5: dce4097cf28bdc65565f33b95e7ee61a
+      size: 69366
+    - path: cad/objects/legacy_batch-08/artifacts/collision_meshes.zip
+      md5: ca5ffc9de9bf846171df43cd9923d52a
+      size: 166
+    - path: cad/objects/legacy_batch-08/artifacts/collision_selection.json
+      md5: e2c8bbf68e058693397fef4d69c4e344
+      size: 8428
+    - path: cad/objects/legacy_batch-08/artifacts/meshes.zip
+      md5: 7b360a8ae0607c149ed652feab613cca
+      size: 14269110
+    - path: cad/objects/legacy_batch-08/artifacts/object_list.json
+      md5: 10559829995f3f18fc9e7c8ce1f532bc
+      size: 69882
+    - path: cad/objects/legacy_batch-09/artifacts/collision_meshes.zip
+      md5: 645353aa0018b17a5c75a3824cbe991c
+      size: 79572
+    - path: cad/objects/legacy_batch-09/artifacts/collision_selection.json
+      md5: 4e21171c751589a44e161364c132f3ed
+      size: 7649
+    - path: cad/objects/legacy_batch-09/artifacts/meshes.zip
+      md5: af0f91609c8471566dbf3357011c2623
+      size: 12221012
+    - path: cad/objects/legacy_batch-09/artifacts/object_list.json
+      md5: 3d2bf0300f7a59d5e43a50dbe45e875d
+      size: 63622
+    - path: cad/objects/legacy_batch-10/artifacts/collision_meshes.zip
+      md5: e33619bda28d7b6cc04cf750dc09c715
+      size: 165
+    - path: cad/objects/legacy_batch-10/artifacts/collision_selection.json
+      md5: ea9b8b42e3fd8ed4510bafa9de7b50b7
+      size: 10679
+    - path: cad/objects/legacy_batch-10/artifacts/meshes.zip
+      md5: 96d2e2965970c319cdac0b249c18594d
+      size: 25464140
+    - path: cad/objects/legacy_batch-10/artifacts/object_list.json
+      md5: 06461905d8c243303da9f3aeda18f158
+      size: 82567
+    - path: cad/objects/legacy_batch-11/artifacts/collision_meshes.zip
+      md5: 1af29399f8edbcfb407bb8c2756ec11c
+      size: 165
+    - path: cad/objects/legacy_batch-11/artifacts/collision_selection.json
+      md5: 4562379792d529d78aadcee7dc5e11c5
+      size: 7927
+    - path: cad/objects/legacy_batch-11/artifacts/meshes.zip
+      md5: 2e9f2f5f66efa1e9d654077b22842dcb
+      size: 15572717
+    - path: cad/objects/legacy_batch-11/artifacts/object_list.json
+      md5: d09d94cc5a6fcbcfca7c29118ce31db7
+      size: 65983
+    - path: cad/objects/legacy_batch-12/artifacts/collision_meshes.zip
+      md5: 9e0819221beb689da71b71810c17dd7f
+      size: 166
+    - path: cad/objects/legacy_batch-12/artifacts/collision_selection.json
+      md5: 88ed27ee260ee2fcf6bed78ad19130a8
+      size: 1176
+    - path: cad/objects/legacy_batch-12/artifacts/meshes.zip
+      md5: 797b309bc0a53908e66f5d2603ad0599
+      size: 1405679
+    - path: cad/objects/legacy_batch-12/artifacts/object_list.json
+      md5: b2a4943f7909ec6b26938999253583e9
+      size: 8564
+    - path: cad/objects/procedural-aa/artifacts/collision_meshes.zip
+      md5: 73a3f38ab532a9b429f62edb0afbe594
+      size: 165
+    - path: cad/objects/procedural-aa/artifacts/collision_selection.json
+      md5: 5c7c9a83246337465a728b322f3a4fbc
+      size: 27706
+    - path: cad/objects/procedural-aa/artifacts/meshes.zip
+      md5: adfb5bbb8cf7fd01f1595609c3e1ced7
+      size: 42263735
+    - path: cad/objects/procedural-aa/artifacts/object_list.json
+      md5: a0de5d72ffd104648f996a6ccb10708d
+      size: 207983
+    - path: cad/objects/substances-01/artifacts/collision_meshes.zip
+      md5: 1f23b78aca59624ed581cac08f44092f
+      size: 167
+    - path: cad/objects/substances-01/artifacts/collision_selection.json
+      md5: dbb02a680e6a044233d3f1c65ba9bd30
+      size: 6147
+    - path: cad/objects/substances-01/artifacts/meshes.zip
+      md5: a72c8275ef2aba9a5d71e01019075e40
+      size: 10929245
+    - path: cad/objects/substances-01/artifacts/object_list.json
+      md5: 8784467591a3e945f996316ebf92960a
+      size: 81065
+    - path: cad/objects/substances-02/artifacts/collision_meshes.zip
+      md5: 57ba85e9556259533af71b28e287420f
+      size: 167
+    - path: cad/objects/substances-02/artifacts/collision_selection.json
+      md5: ca4c90371ba5abb8c2dc44db7706aa3b
+      size: 2605
+    - path: cad/objects/substances-02/artifacts/meshes.zip
+      md5: c9c8c8a09caaee361893fce07041599d
+      size: 244300
+    - path: cad/objects/substances-02/artifacts/object_list.json
+      md5: 49637931a9dd991b8907babb518b91f6
+      size: 33383
+    - path: cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
+      md5: 719c52322a796287035c9f331a243794
+      size: 166
+    - path: cad/objects/task_relavant-ab/artifacts/collision_selection.json
+      md5: 6b25c8b4b89deff02f2332cfcb054be7
+      size: 13586
+    - path: cad/objects/task_relavant-ab/artifacts/meshes.zip
+      md5: 2536a0c0215093ab20d69e79844ab7f7
+      size: 17451044
+    - path: cad/objects/task_relavant-ab/artifacts/object_list.json
+      md5: 0434fc2ec561c131339226080e4ce85f
+      size: 100030
+    - path: cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
+      md5: b1d23a4978501dadf77b8f4162c4c3bb
+      size: 166
+    - path: cad/objects/task_relevant-xy/artifacts/collision_selection.json
+      md5: 030f7c201d4d6c6257d4e6ca83d99982
+      size: 11885
+    - path: cad/objects/task_relevant-xy/artifacts/meshes.zip
+      md5: d1616a40a2a653993c718ddcdd5598b5
+      size: 29087592
+    - path: cad/objects/task_relevant-xy/artifacts/object_list.json
+      md5: 6005cc097c89a7a203d3a1d2bab4c5d2
+      size: 96614
+    - path: cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
+      md5: 32aa4960b42ced0474fbfbd3cfc6e428
+      size: 165
+    - path: cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
+      md5: a920f62c5b60d08d95731c3cad5a53ec
+      size: 2933
+    - path: cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
+      md5: c1233af31e3c84a167a07c89223216f9
+      size: 39980718
+    - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
+      md5: 88210483a5f754fef49cb9084f3f7ebb
+      size: 123851
+    - path: cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
+      md5: 33b56f4515898bf4b64fd85fbed3fbd4
+      size: 165
+    - path: cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
+      md5: 9a5c6a4d57aee2b6245d932d5f982522
+      size: 2899
+    - path: cad/scenes/Beechwood_0_int/artifacts/meshes.zip
+      md5: ba63deb5dfa512f156f4a754bf67e80f
+      size: 9634670
+    - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
+      md5: 51e2d44c6fe1ccc7f6401734cf7ecb06
+      size: 80232
+    - path: cad/scenes/Beechwood_1_int/artifacts/collision_meshes.zip
+      md5: 5210c10d3ca49f7a8607f8aa7a59ff82
+      size: 167
+    - path: cad/scenes/Beechwood_1_int/artifacts/collision_selection.json
+      md5: 4ba58a47d5d5f42cc2840f9af1cd4e59
+      size: 3047
+    - path: cad/scenes/Beechwood_1_int/artifacts/meshes.zip
+      md5: d4dd141aaa64a316dc0ba958df49446f
+      size: 5132011
+    - path: cad/scenes/Beechwood_1_int/artifacts/object_list.json
+      md5: ecd39f8bf5acec6443af1feb9ba201ab
+      size: 72731
+    - path: cad/scenes/Benevolence_0_int/artifacts/collision_meshes.zip
+      md5: 88e1ac3883ff9b17f4ae9351e727e91c
+      size: 164
+    - path: cad/scenes/Benevolence_0_int/artifacts/collision_selection.json
+      md5: 660d6f388678ef5b7bb511d5db97a455
+      size: 744
+    - path: cad/scenes/Benevolence_0_int/artifacts/meshes.zip
+      md5: 7af82abcf5c76a78bb5b875b1558722b
+      size: 922465
+    - path: cad/scenes/Benevolence_0_int/artifacts/object_list.json
+      md5: e719b5cfce179fee08d1aa78d56b7450
+      size: 13771
+    - path: cad/scenes/Benevolence_1_int/artifacts/collision_meshes.zip
+      md5: 6bacf7bf250d0547db0dfd2bb39470d8
+      size: 166
+    - path: cad/scenes/Benevolence_1_int/artifacts/collision_selection.json
+      md5: c6d77295eb07648e573e9fe6a9effa48
+      size: 1094
+    - path: cad/scenes/Benevolence_1_int/artifacts/meshes.zip
+      md5: aa5f14c33b6c23bcc025401dbf696c66
+      size: 2572500
+    - path: cad/scenes/Benevolence_1_int/artifacts/object_list.json
+      md5: 933f8269abd59af286ef8c271ec2eba5
+      size: 36106
+    - path: cad/scenes/Benevolence_2_int/artifacts/collision_meshes.zip
+      md5: 5dd00fe3500fec07fce72703d636af4e
+      size: 165
+    - path: cad/scenes/Benevolence_2_int/artifacts/collision_selection.json
+      md5: 7e03ece9ef7b8fcade9fa6dbad9a3479
+      size: 1329
+    - path: cad/scenes/Benevolence_2_int/artifacts/meshes.zip
+      md5: c9ce07b57ae907965df2da9ad8d61c1c
+      size: 3402518
+    - path: cad/scenes/Benevolence_2_int/artifacts/object_list.json
+      md5: 78a036d30240cb36c3d7b1e740f687ad
+      size: 35093
+    - path: cad/scenes/Ihlen_0_int/artifacts/collision_meshes.zip
+      md5: 923ebe1082189b64fe669f084b9d1fff
+      size: 166
+    - path: cad/scenes/Ihlen_0_int/artifacts/collision_selection.json
+      md5: 6f215e00f8d32aa791be0038d431b920
+      size: 1376
+    - path: cad/scenes/Ihlen_0_int/artifacts/meshes.zip
+      md5: 805ccd7712ea960ee379f6032e763205
+      size: 4368143
+    - path: cad/scenes/Ihlen_0_int/artifacts/object_list.json
+      md5: 99fa2468a6e8b9e37f629dddd1f630ec
+      size: 33683
+    - path: cad/scenes/Ihlen_1_int/artifacts/collision_meshes.zip
+      md5: dcb1a1a3ddacb9fa4ec7a04c0ac18ec2
+      size: 165
+    - path: cad/scenes/Ihlen_1_int/artifacts/collision_selection.json
+      md5: 2e73b37016a4d540bcec9c0b0479388c
+      size: 2113
+    - path: cad/scenes/Ihlen_1_int/artifacts/meshes.zip
+      md5: acbd62f036d4db472e9d79988e066975
+      size: 7237929
+    - path: cad/scenes/Ihlen_1_int/artifacts/object_list.json
+      md5: ef61b5cd3715b6ea18c51733104065d2
+      size: 65140
+    - path: cad/scenes/Merom_0_garden/artifacts/collision_meshes.zip
+      md5: 6a8b8e4ae9c8ee81120be39a5a5dd4f8
+      size: 166
+    - path: cad/scenes/Merom_0_garden/artifacts/collision_selection.json
+      md5: 471c874df40025688e6d922558f69415
+      size: 3015
+    - path: cad/scenes/Merom_0_garden/artifacts/meshes.zip
+      md5: a60589e91be21a90cd18be1bca93f467
+      size: 18089924
+    - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
+      md5: 6dd2542d9938155011c27b46449a568b
+      size: 74301
+    - path: cad/scenes/Merom_0_int/artifacts/collision_meshes.zip
+      md5: c48ecaa8fb3137b465e4f9a0ed8b014f
+      size: 166
+    - path: cad/scenes/Merom_0_int/artifacts/collision_selection.json
+      md5: fe28da20236f18bfb1369c6a0a4d6119
+      size: 1356
+    - path: cad/scenes/Merom_0_int/artifacts/meshes.zip
+      md5: b26172dbf94d659dc3eb75f9c33a2863
+      size: 4882076
+    - path: cad/scenes/Merom_0_int/artifacts/object_list.json
+      md5: 84bd2ab203d1476ca6e5a5b2af09437e
+      size: 39583
+    - path: cad/scenes/Merom_1_int/artifacts/collision_meshes.zip
+      md5: 0b4dc4aed4cee7675f9846d83c233cec
+      size: 165
+    - path: cad/scenes/Merom_1_int/artifacts/collision_selection.json
+      md5: 99f3a6d4d837ed2e6db5c07fa5765afc
+      size: 1879
+    - path: cad/scenes/Merom_1_int/artifacts/meshes.zip
+      md5: 89c1232e15780aec4afac4379624da81
+      size: 6670869
+    - path: cad/scenes/Merom_1_int/artifacts/object_list.json
+      md5: 8f9886ef3f0b6b1633cb670a31dd12de
+      size: 60613
+    - path: cad/scenes/Pomaria_0_garden/artifacts/collision_meshes.zip
+      md5: 21570537c965ac11f5609c1e267294fd
+      size: 164
+    - path: cad/scenes/Pomaria_0_garden/artifacts/collision_selection.json
+      md5: b2535df79bb71d0fbe8286193eceae90
+      size: 7575
+    - path: cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
+      md5: 3104f1368dad800dd4ea08272dc2e08c
+      size: 31455516
+    - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
+      md5: 2e3d724657c8576b1c0f7367c8c9f600
+      size: 107147
+    - path: cad/scenes/Pomaria_0_int/artifacts/collision_meshes.zip
+      md5: b6a09e0d8974f7aadaeaf75629ccd8ee
+      size: 165
+    - path: cad/scenes/Pomaria_0_int/artifacts/collision_selection.json
+      md5: 94bca3f2e315cf7d710d4052efe38c23
+      size: 2023
+    - path: cad/scenes/Pomaria_0_int/artifacts/meshes.zip
+      md5: 2baa1d9025be723bb19aacb475ba70ea
+      size: 2834983
+    - path: cad/scenes/Pomaria_0_int/artifacts/object_list.json
+      md5: fd41cf6e77064fd8d13780060ee4a34a
+      size: 39012
+    - path: cad/scenes/Pomaria_1_int/artifacts/collision_meshes.zip
+      md5: 704576a87f56e824e50a9b69819dc529
+      size: 167
+    - path: cad/scenes/Pomaria_1_int/artifacts/collision_selection.json
+      md5: cff1238d781e48b38725e72d656514f3
+      size: 1545
+    - path: cad/scenes/Pomaria_1_int/artifacts/meshes.zip
+      md5: 2f4c1cc7928efd23c9228e1a458fd560
+      size: 4913332
+    - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
+      md5: 2f39cd885ab079219d67943393be85ff
+      size: 54688
+    - path: cad/scenes/Pomaria_2_int/artifacts/collision_meshes.zip
+      md5: df5738e492293da8736e88557273ada1
+      size: 167
+    - path: cad/scenes/Pomaria_2_int/artifacts/collision_selection.json
+      md5: d599a8832566158b58f5d42a3c6095e2
+      size: 1617
+    - path: cad/scenes/Pomaria_2_int/artifacts/meshes.zip
+      md5: dc34fb160f903f3fb18aa6564da5d48f
+      size: 2800806
+    - path: cad/scenes/Pomaria_2_int/artifacts/object_list.json
+      md5: 35c97c48686329e31ea86e7c99685b70
+      size: 30147
+    - path: cad/scenes/Rs_garden/artifacts/collision_meshes.zip
+      md5: 6e83b58d0e6ab9666f09cfea75cdd11c
+      size: 165
+    - path: cad/scenes/Rs_garden/artifacts/collision_selection.json
+      md5: 53f7630ae1163ff133056948d682f758
+      size: 1558
+    - path: cad/scenes/Rs_garden/artifacts/meshes.zip
+      md5: 66eb14a97277b3cda17d70479c126800
+      size: 17155064
+    - path: cad/scenes/Rs_garden/artifacts/object_list.json
+      md5: 572a2ab6a1f948e247e388cc781d1168
+      size: 62460
+    - path: cad/scenes/Rs_int/artifacts/collision_meshes.zip
+      md5: 4e9639ca7576fb817dd510ad1069fab1
+      size: 166
+    - path: cad/scenes/Rs_int/artifacts/collision_selection.json
+      md5: 0f98a9cdd028897b49c1b875ce374a66
+      size: 620
+    - path: cad/scenes/Rs_int/artifacts/meshes.zip
+      md5: 53a071f13271fa8356a009d0481557a3
+      size: 4532858
+    - path: cad/scenes/Rs_int/artifacts/object_list.json
+      md5: c37ece9b237e356f94b933a4678e685c
+      size: 35844
+    - path: cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
+      md5: 3e0a67623b8e1853167643e94a838470
+      size: 165
+    - path: cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
+      md5: 1f086953f80346a865f75ef157963cae
+      size: 5262
+    - path: cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
+      md5: 7358e5452e720af7351e9b6698881586
+      size: 55436748
+    - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
+      md5: 355e1e148c093cb01c3522fd1150081c
+      size: 166306
+    - path: cad/scenes/Wainscott_0_int/artifacts/collision_meshes.zip
+      md5: 3bc5821e538b53314ede9f5233404462
+      size: 165
+    - path: cad/scenes/Wainscott_0_int/artifacts/collision_selection.json
+      md5: ffd557942a58904ea519e3f6079d382a
+      size: 2560
+    - path: cad/scenes/Wainscott_0_int/artifacts/meshes.zip
+      md5: 3ed42f68035a00a868be87010760748d
+      size: 9976421
+    - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
+      md5: 0564ff886e2519956a684bd52111f72e
+      size: 82083
+    - path: cad/scenes/Wainscott_1_int/artifacts/collision_meshes.zip
+      md5: ac7a37520e74d9c77f99f942994dcbda
+      size: 165
+    - path: cad/scenes/Wainscott_1_int/artifacts/collision_selection.json
+      md5: 82c5eb98846e81283caf2be84b616c51
+      size: 3010
+    - path: cad/scenes/Wainscott_1_int/artifacts/meshes.zip
+      md5: f3d808b4a1fd54d44c206123e86dce6a
+      size: 7801141
+    - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
+      md5: 1e0ef353a207aa4de3ccd6e6b16e8f8f
+      size: 78293
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
+      md5: bbd3682fa467a624f477a0cf73d7ddea
+      size: 89307
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+      md5: 3b8a88205adfce34dbb53a846b73112c
+      size: 10135
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
+      md5: b6735a284fabcdc42a2f5028cff9fcc0
+      size: 13754465
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
+      md5: 1e2827f9d6446eb5ce1972892e6caf63
+      size: 113798
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/collision_meshes.zip
+      md5: 8da0302ed4cf0e825c157673f08ef506
+      size: 165
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/collision_selection.json
+      md5: ebeb8b92f853a3be2e5ce518ef80e765
+      size: 3571
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
+      md5: b1f0bc8b40a56e3937b175c63351cf32
+      size: 34566959
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
+      md5: 365f98ce18335d9820e1693c9c556e79
+      size: 120739
+    - path: cad/scenes/gates_bedroom/artifacts/collision_meshes.zip
+      md5: 98dc6f191303c842d1c0c4f81fe19882
+      size: 165
+    - path: cad/scenes/gates_bedroom/artifacts/collision_selection.json
+      md5: 672dbbfb1d342e7be924ab2abb48f26b
+      size: 1237
+    - path: cad/scenes/gates_bedroom/artifacts/meshes.zip
+      md5: aa57e36485b898ad725d062887ed6d88
+      size: 1812501
+    - path: cad/scenes/gates_bedroom/artifacts/object_list.json
+      md5: e25bb7926b1a3354e9e22ea9db24e871
+      size: 12934
+    - path: cad/scenes/grocery_store_asian/artifacts/collision_meshes.zip
+      md5: 67fc9332a8f3554b60cec15489c543c5
+      size: 165
+    - path: cad/scenes/grocery_store_asian/artifacts/collision_selection.json
+      md5: c994bd96e22e1d339892d57b415685b7
+      size: 11383
+    - path: cad/scenes/grocery_store_asian/artifacts/meshes.zip
+      md5: 24dc303bd434b3decbc35d813bbf0d9e
+      size: 172845655
+    - path: cad/scenes/grocery_store_asian/artifacts/object_list.json
+      md5: 2a723a04faa6cdcf85f4d8a220027d49
+      size: 578387
+    - path: cad/scenes/grocery_store_cafe/artifacts/collision_meshes.zip
+      md5: e501d6e398bc46990f75a0c3a075e466
+      size: 167
+    - path: cad/scenes/grocery_store_cafe/artifacts/collision_selection.json
+      md5: a32a53f399767e8d77c129f1af759946
+      size: 6848
+    - path: cad/scenes/grocery_store_cafe/artifacts/meshes.zip
+      md5: 5506cf8945787b53eeacc16d1a457e41
+      size: 222805922
+    - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
+      md5: b2ba048430d201f2952b00bdf070788d
+      size: 1096327
+    - path: cad/scenes/grocery_store_convenience/artifacts/collision_meshes.zip
+      md5: 53e6d51e39039505d3dd5a3ae1da774d
+      size: 167
+    - path: cad/scenes/grocery_store_convenience/artifacts/collision_selection.json
+      md5: d7e093609889b51148c272d3f37f32ca
+      size: 10578
+    - path: cad/scenes/grocery_store_convenience/artifacts/meshes.zip
+      md5: 0ecf52e34af814be5a40d41d90fc32c3
+      size: 6220933
+    - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
+      md5: a09d47e2826155c55be04604959872a6
+      size: 338347
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_meshes.zip
+      md5: 75467d7400ba56baa1cf5becd5cdeb2b
+      size: 165
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_selection.json
+      md5: 7cf8259f692643ff7909858c3f914756
+      size: 8923
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/meshes.zip
+      md5: e83579e4cdc5cc03442ffa4ef38c87ee
+      size: 6411229
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
+      md5: 118b1f379bf804db7ece399cabaa66b5
+      size: 534898
+    - path: cad/scenes/hall_arch_wood/artifacts/collision_meshes.zip
+      md5: fb7b7a7cdc231ee989a26d8e942f382e
+      size: 165
+    - path: cad/scenes/hall_arch_wood/artifacts/collision_selection.json
+      md5: 0c5f2342b864e7a9d4bba9b99e2f9d42
+      size: 955
+    - path: cad/scenes/hall_arch_wood/artifacts/meshes.zip
+      md5: 4220e09ecb3bccbfdbc59e1bc05207ab
+      size: 1157636
+    - path: cad/scenes/hall_arch_wood/artifacts/object_list.json
+      md5: cfeafbee59ab132291befd704500b10c
+      size: 13197
+    - path: cad/scenes/hall_conference_large/artifacts/collision_meshes.zip
+      md5: ff294462766a1ef37e84a3be73c8e239
+      size: 165
+    - path: cad/scenes/hall_conference_large/artifacts/collision_selection.json
+      md5: 3d4c757be3f557ad7c2dec2f2a26ef66
+      size: 1540
+    - path: cad/scenes/hall_conference_large/artifacts/meshes.zip
+      md5: b15ecfd975761df6451c7f8ac232abee
+      size: 147922681
+    - path: cad/scenes/hall_conference_large/artifacts/object_list.json
+      md5: 209ac53f264d4d207d45db9d43bd4746
+      size: 546624
+    - path: cad/scenes/hall_glass_ceiling/artifacts/collision_meshes.zip
+      md5: 43e284ac8cb418154ca87df19d28d87b
+      size: 165
+    - path: cad/scenes/hall_glass_ceiling/artifacts/collision_selection.json
+      md5: ec801e018b009588ee8655cab2b6fbe3
+      size: 662
+    - path: cad/scenes/hall_glass_ceiling/artifacts/meshes.zip
+      md5: 11f142fa82dcc33d0b73fe93b21c6123
+      size: 2765324
+    - path: cad/scenes/hall_glass_ceiling/artifacts/object_list.json
+      md5: 30d7d9d85f4e609ca82d3b00c07d22a9
+      size: 16592
+    - path: cad/scenes/hall_train_station/artifacts/collision_meshes.zip
+      md5: cf65b940e2c46ade950457cad9cc3480
+      size: 166
+    - path: cad/scenes/hall_train_station/artifacts/collision_selection.json
+      md5: 9c6eb3acbc43c79c3e44aaf2a62eb623
+      size: 1411
+    - path: cad/scenes/hall_train_station/artifacts/meshes.zip
+      md5: 62db4a172ab51957c4eff6b6474d12d6
+      size: 6011978
+    - path: cad/scenes/hall_train_station/artifacts/object_list.json
+      md5: 25b07620fbda7e8734651c8a913f43d2
+      size: 25490
+    - path: cad/scenes/hotel_gym_spa/artifacts/collision_meshes.zip
+      md5: 1a92aa4677eb24961a8491f0779f1345
+      size: 166
+    - path: cad/scenes/hotel_gym_spa/artifacts/collision_selection.json
+      md5: 3b287c4ab8f5b7e135502338a3e21275
+      size: 10277
+    - path: cad/scenes/hotel_gym_spa/artifacts/meshes.zip
+      md5: 9cb91a2f5f2aa98c8210e22836a9ee31
+      size: 28173139
+    - path: cad/scenes/hotel_gym_spa/artifacts/object_list.json
+      md5: f6c9f88a09e72c8d4eb6a308d37fb3ba
+      size: 149866
+    - path: cad/scenes/hotel_suite_large/artifacts/collision_meshes.zip
+      md5: 454be24e7dc50160ad93029025794732
+      size: 166
+    - path: cad/scenes/hotel_suite_large/artifacts/collision_selection.json
+      md5: d4a6e1ed84173a78c57d2ca751919a05
+      size: 8836
+    - path: cad/scenes/hotel_suite_large/artifacts/meshes.zip
+      md5: 115868897b1383752c1dc4db9b2d65be
+      size: 18520122
+    - path: cad/scenes/hotel_suite_large/artifacts/object_list.json
+      md5: 1a81fab461505165dbf581de21229205
+      size: 94533
+    - path: cad/scenes/hotel_suite_small/artifacts/collision_meshes.zip
+      md5: 43ecdb6df87e268e68663d4eac3fce45
+      size: 165
+    - path: cad/scenes/hotel_suite_small/artifacts/collision_selection.json
+      md5: e6b2977f60893f9fe7509e36358aeb4c
+      size: 2495
+    - path: cad/scenes/hotel_suite_small/artifacts/meshes.zip
+      md5: a21f804034d5926a62faa8f31ecdd4e8
+      size: 3627589
+    - path: cad/scenes/hotel_suite_small/artifacts/object_list.json
+      md5: 2f764c92d0c19ca22a21a733fadaca4c
+      size: 23815
+    - path: cad/scenes/house_double_floor_lower/artifacts/collision_meshes.zip
+      md5: 5ce08db46a0515c61c3810e7ec2f44d2
+      size: 166
+    - path: cad/scenes/house_double_floor_lower/artifacts/collision_selection.json
+      md5: fa7ba57e09cec9014ca6d5363c5b2cde
+      size: 12232
+    - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
+      md5: 5ab289dc6c7b303df120df73415513c5
+      size: 63194243
+    - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
+      md5: db154c3a5b64524ca3fcbb05c1ac85d7
+      size: 148131
+    - path: cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
+      md5: ee5d7cc73a27e6dc0669752f708f5e80
+      size: 166
+    - path: cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
+      md5: e0946433145fc2d08e73f703f2c0503a
+      size: 13268
+    - path: cad/scenes/house_double_floor_upper/artifacts/meshes.zip
+      md5: 6cdf822fd1913d1756a2ae39d9576b82
+      size: 33830184
+    - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
+      md5: 8ddd2c332047d565d185538e5808d8d4
+      size: 148267
+    - path: cad/scenes/house_single_floor/artifacts/collision_meshes.zip
+      md5: 29af09ef22d9e264a8105a253488ef42
+      size: 19033
+    - path: cad/scenes/house_single_floor/artifacts/collision_selection.json
+      md5: d0d76367c48b0c51fc7ad8a5e07a682a
+      size: 44400
+    - path: cad/scenes/house_single_floor/artifacts/meshes.zip
+      md5: 192f82018c3bae3f6f55e473f9f32f24
+      size: 94219461
+    - path: cad/scenes/house_single_floor/artifacts/object_list.json
+      md5: 0bbd54a3480062929102784ef02bec7d
+      size: 458068
+    - path: cad/scenes/office_bike/artifacts/collision_meshes.zip
+      md5: 8c55406d2c5bfcc46ef482efec65c8a2
+      size: 165
+    - path: cad/scenes/office_bike/artifacts/collision_selection.json
+      md5: 4b56d48311cfbab29463765a198497fa
+      size: 3615
+    - path: cad/scenes/office_bike/artifacts/meshes.zip
+      md5: 0de55991a4dd476d4d18edef335564c4
+      size: 69446255
+    - path: cad/scenes/office_bike/artifacts/object_list.json
+      md5: 85df5ca80b97a857a720f079a6483197
+      size: 89149
+    - path: cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
+      md5: a8bcd7a0aa240e85e730804da9ec397f
+      size: 165
+    - path: cad/scenes/office_cubicles_left/artifacts/collision_selection.json
+      md5: 307129e21d35297f25013f39da2fdb71
+      size: 6045
+    - path: cad/scenes/office_cubicles_left/artifacts/meshes.zip
+      md5: 880d898624f6982e481211337a54ee2e
+      size: 105104980
+    - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
+      md5: 72fce6f6ea0aea6c4d0ed94c87bf2f72
+      size: 184527
+    - path: cad/scenes/office_cubicles_right/artifacts/collision_meshes.zip
+      md5: 215792332cda661a5648322d37bb3ea7
+      size: 167
+    - path: cad/scenes/office_cubicles_right/artifacts/collision_selection.json
+      md5: 951372444413e8ab2f3e066df8f7cfd4
+      size: 6273
+    - path: cad/scenes/office_cubicles_right/artifacts/meshes.zip
+      md5: 273a30b90c4a7ccbf5e3ee80d0ded73d
+      size: 40592531
+    - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
+      md5: b4d1387e4c6531342b3e2e71fdb449df
+      size: 117776
+    - path: cad/scenes/office_large/artifacts/collision_meshes.zip
+      md5: 78678aaec6e49074c49930edbd4cc692
+      size: 165
+    - path: cad/scenes/office_large/artifacts/collision_selection.json
+      md5: 1e38523f2bc7a9d74f6eaf330d1172a5
+      size: 10379
+    - path: cad/scenes/office_large/artifacts/meshes.zip
+      md5: c5740019773c3547e51e329f5ec1b13a
+      size: 80747915
+    - path: cad/scenes/office_large/artifacts/object_list.json
+      md5: 4bc31b5b73edd57fdfc25262e0cb1a8b
+      size: 267187
+    - path: cad/scenes/office_vendor_machine/artifacts/collision_meshes.zip
+      md5: c6b0c9715e76ce0ab506d548d8f5582b
+      size: 165
+    - path: cad/scenes/office_vendor_machine/artifacts/collision_selection.json
+      md5: c8d37de369f818c10fa832cf5fad5693
+      size: 4848
+    - path: cad/scenes/office_vendor_machine/artifacts/meshes.zip
+      md5: 34463f9226401a7a8e57ae1848b8f07a
+      size: 35315142
+    - path: cad/scenes/office_vendor_machine/artifacts/object_list.json
+      md5: 8c0d2925aff94cfe73ade0b80b35c6f7
+      size: 65900
+    - path: cad/scenes/public_restroom_blue/artifacts/collision_meshes.zip
+      md5: 1e896bb9f92e3e72174b888d5495e1e1
+      size: 165
+    - path: cad/scenes/public_restroom_blue/artifacts/collision_selection.json
+      md5: 105cc5d1f93f40c1eea79ca57c440ee4
+      size: 1310
+    - path: cad/scenes/public_restroom_blue/artifacts/meshes.zip
+      md5: 917229601eba5008f90d497977531448
+      size: 1660045
+    - path: cad/scenes/public_restroom_blue/artifacts/object_list.json
+      md5: a160a6410c0aaecfdb36253caf69c198
+      size: 21793
+    - path: cad/scenes/public_restroom_brown/artifacts/collision_meshes.zip
+      md5: c6f43429623902237fdd9f9b8f77b171
+      size: 167
+    - path: cad/scenes/public_restroom_brown/artifacts/collision_selection.json
+      md5: a0c4b9a3acfc2c4538b63828ec225e68
+      size: 1640
+    - path: cad/scenes/public_restroom_brown/artifacts/meshes.zip
+      md5: 2a5c9580c3092ab0bc0a471691d86e5f
+      size: 1436966
+    - path: cad/scenes/public_restroom_brown/artifacts/object_list.json
+      md5: 88cd9257c1ee8338584e670334434ecd
+      size: 22525
+    - path: cad/scenes/public_restroom_futuristic/artifacts/collision_meshes.zip
+      md5: aa6449f2f4cedb18e48c6e5f0e6c8c3c
+      size: 166
+    - path: cad/scenes/public_restroom_futuristic/artifacts/collision_selection.json
+      md5: 15b1efc5c5fdedb4c29fc2084ba28e81
+      size: 1765
+    - path: cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
+      md5: 386eb0b9bd06a90cf03f3f7cbd648e76
+      size: 2625006
+    - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.json
+      md5: ee7b4bc212654e770db0193f37ede39b
+      size: 31709
+    - path: cad/scenes/public_restroom_marble/artifacts/collision_meshes.zip
+      md5: 113c51e1846236cab93d987acc050516
+      size: 166
+    - path: cad/scenes/public_restroom_marble/artifacts/collision_selection.json
+      md5: 19908572fd5c660aefff44c6fc284fff
+      size: 1034
+    - path: cad/scenes/public_restroom_marble/artifacts/meshes.zip
+      md5: 15056cdea6fddf01b8394f07d3348b62
+      size: 3420824
+    - path: cad/scenes/public_restroom_marble/artifacts/object_list.json
+      md5: c95d241356ff0353114716653566c0a8
+      size: 18252
+    - path: cad/scenes/public_restroom_white/artifacts/collision_meshes.zip
+      md5: fa6b3e4e540becd1aff76a249877c683
+      size: 166
+    - path: cad/scenes/public_restroom_white/artifacts/collision_selection.json
+      md5: 033a7e8067b2a8e26baf25059d536227
+      size: 1366
+    - path: cad/scenes/public_restroom_white/artifacts/meshes.zip
+      md5: 7fd96a183baae691ea57fada912ebc33
+      size: 8487517
+    - path: cad/scenes/public_restroom_white/artifacts/object_list.json
+      md5: ed2b6f5817b398bb9f29c96a6c4642a6
+      size: 25006
+    - path: cad/scenes/restaurant_asian/artifacts/collision_meshes.zip
+      md5: 4fca500646a022137ccbc0966b085b57
+      size: 33898
+    - path: cad/scenes/restaurant_asian/artifacts/collision_selection.json
+      md5: 1f3df90cfaa8c966e975b670d6672f74
+      size: 6217
+    - path: cad/scenes/restaurant_asian/artifacts/meshes.zip
+      md5: 5fba8782491cf01e6529d0774972cfab
+      size: 30451866
+    - path: cad/scenes/restaurant_asian/artifacts/object_list.json
+      md5: 79cb1d60a95721a65836207783f38ef4
+      size: 119554
+    - path: cad/scenes/restaurant_brunch/artifacts/collision_meshes.zip
+      md5: c1fa2fc8938151cbfa670c1ffe90fa97
+      size: 165
+    - path: cad/scenes/restaurant_brunch/artifacts/collision_selection.json
+      md5: b79ebe20c65ab86a07a2e56aaf2714b2
+      size: 8916
+    - path: cad/scenes/restaurant_brunch/artifacts/meshes.zip
+      md5: ae4b4fe2c55df5b1a084500fd642b579
+      size: 48539109
+    - path: cad/scenes/restaurant_brunch/artifacts/object_list.json
+      md5: 3282929665c77a3d2d0c06bf546800d5
+      size: 114897
+    - path: cad/scenes/restaurant_cafeteria/artifacts/collision_meshes.zip
+      md5: b70fe203ce1691e8f53da8450c3a43b0
+      size: 167
+    - path: cad/scenes/restaurant_cafeteria/artifacts/collision_selection.json
+      md5: 7d6a543f655ba40084c40bdb94310377
+      size: 6769
+    - path: cad/scenes/restaurant_cafeteria/artifacts/meshes.zip
+      md5: f00f24999dc581da151034bee0499ec7
+      size: 27639683
+    - path: cad/scenes/restaurant_cafeteria/artifacts/object_list.json
+      md5: bfd0115fe1f6f2dadc79d81505e7774a
+      size: 88052
+    - path: cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
+      md5: 54473912db43657705372d9d7b542d19
+      size: 165
+    - path: cad/scenes/restaurant_diner/artifacts/collision_selection.json
+      md5: 2d209e60d2a19e2fc5fb84eb41c9654f
+      size: 4848
+    - path: cad/scenes/restaurant_diner/artifacts/meshes.zip
+      md5: 327c00322d79f2a84ed149bf6efe087f
+      size: 5464443
+    - path: cad/scenes/restaurant_diner/artifacts/object_list.json
+      md5: bc6b5ae64b95707f85929c38360f7c1f
+      size: 56799
+    - path: cad/scenes/restaurant_hotel/artifacts/collision_meshes.zip
+      md5: 305f01fe8ddc1f81a812795144ec67ea
+      size: 165
+    - path: cad/scenes/restaurant_hotel/artifacts/collision_selection.json
+      md5: 6aa6e43a8eb0ccdaa2c241d7d3157c2a
+      size: 4735
+    - path: cad/scenes/restaurant_hotel/artifacts/meshes.zip
+      md5: 66a5171613e78d12e49a5b9bb5aea2c6
+      size: 54360827
+    - path: cad/scenes/restaurant_hotel/artifacts/object_list.json
+      md5: c3cf18dee4b398168bf1442b474c7e50
+      size: 136367
+    - path: cad/scenes/restaurant_urban/artifacts/collision_meshes.zip
+      md5: 90bbcafd1b63c876ad6f59c8cbd97d95
+      size: 167
+    - path: cad/scenes/restaurant_urban/artifacts/collision_selection.json
+      md5: 2abb0a2b50370ba3e6747e96ae5dc400
+      size: 7064
+    - path: cad/scenes/restaurant_urban/artifacts/meshes.zip
+      md5: 77289f9028fa418da989b1cbc1392914
+      size: 153509688
+    - path: cad/scenes/restaurant_urban/artifacts/object_list.json
+      md5: ea2de3080edf789a0cd0623bfa4a529a
+      size: 203066
+    - path: cad/scenes/school_biology/artifacts/collision_meshes.zip
+      md5: 1186c716ea1a3bfb645d11b0e39d885d
+      size: 167
+    - path: cad/scenes/school_biology/artifacts/collision_selection.json
+      md5: 5fa900d36d1132cc3f87f1d12eae7a89
+      size: 5987
+    - path: cad/scenes/school_biology/artifacts/meshes.zip
+      md5: 8035adca803e1a0d5a9e29b69a526f2c
+      size: 42490211
+    - path: cad/scenes/school_biology/artifacts/object_list.json
+      md5: 6f9c49bed059b05e60547ca595b38f64
+      size: 270008
+    - path: cad/scenes/school_chemistry/artifacts/collision_meshes.zip
+      md5: 72af3167dc5f5821a9f1f0c9e59ed2f2
+      size: 167
+    - path: cad/scenes/school_chemistry/artifacts/collision_selection.json
+      md5: 67ec39cfcadd85d21c7af1a876fbb1c9
+      size: 9957
+    - path: cad/scenes/school_chemistry/artifacts/meshes.zip
+      md5: 39ea961664319576f5c3b81b72e6e19e
+      size: 39276112
+    - path: cad/scenes/school_chemistry/artifacts/object_list.json
+      md5: 4e60bbc83320e3076317c9b99fd80dc6
+      size: 322968
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/collision_meshes.zip
+      md5: 465f589c2c53d89345332f378f0c6792
+      size: 165
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/collision_selection.json
+      md5: 11019f2ef9f9cb3e9136c49c8116d112
+      size: 4248
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/meshes.zip
+      md5: 43b921f0c3ce7a82d9236d6229b075e8
+      size: 47718238
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
+      md5: 992c1989732d592d0ede5c974a5d77b6
+      size: 258794
+    - path: cad/scenes/school_geography/artifacts/collision_meshes.zip
+      md5: 91dac9756ae3324db1d1221f04012f93
+      size: 165
+    - path: cad/scenes/school_geography/artifacts/collision_selection.json
+      md5: 6c01c2de60ab1e549296ef79ef9d2246
+      size: 4084
+    - path: cad/scenes/school_geography/artifacts/meshes.zip
+      md5: f6b2307a0dd1167d88259eed342ae9a4
+      size: 44427420
+    - path: cad/scenes/school_geography/artifacts/object_list.json
+      md5: 6f89a6fdda913bf26d7f93469f9e8d66
+      size: 339978
+    - path: cad/scenes/school_gym/artifacts/collision_meshes.zip
+      md5: 0fd8cedc146718d28d4a6bd3225f267b
+      size: 165
+    - path: cad/scenes/school_gym/artifacts/collision_selection.json
+      md5: 44e0986f8390d02a616e256fa94e58af
+      size: 10577
+    - path: cad/scenes/school_gym/artifacts/meshes.zip
+      md5: 343267df0735f010cd3699b7b5e06005
+      size: 41078581
+    - path: cad/scenes/school_gym/artifacts/object_list.json
+      md5: 5cb625a945692e6a8ce01455434dfb7f
+      size: 360013
     - path: metadata/orientation_edits.zip
       md5: f59d5127ab6339749c9b97a3b7d7884c
       size: 201675
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: 59c605fb2ef3897381299c201dfb1fa3
-      size: 10410358
+      md5: ff4fd1ecd4721d6791ea7247b3b7a256
+      size: 1593145590
     - path: artifacts/pipeline/export_objs.json
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
       size: 31
@@ -6897,14 +7978,14 @@ stages:
     cmd: python -m b1k_pipeline.aggregate_metadata
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 6cb26bd728bd8e78702e2aff5b340958
-      size: 276
+      md5: 6f1621a334e83da5668d0b9449fc6c21
+      size: 91590
     - path: artifacts/pipeline/collision_average_volumes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: artifacts/pipeline/object_inventory.json
-      md5: 8f103b18479a65297a3090f06c0ba4ea
-      size: 963
+      md5: 922a779ed1b4663bfd98c5120afa30d1
+      size: 1957152
     - path: artifacts/pipeline/object_inventory.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -6915,25 +7996,25 @@ stages:
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: metadata/category_mapping.csv
-      md5: 5e59c1fd3c466715c4325c61a80eacbb
-      size: 182299
+      md5: 141ed6c754b9782a1bb6ddcbe9df20b6
+      size: 184602
     - path: metadata/non_sampleable_categories.csv
       md5: 1fdd0762be41ba03ee7a15db19b16c6b
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: 94c4fd09b03e967ad3144183e63fc11c
-      size: 31112
+      md5: 26f166d4cd0a03ac30de06a33f783fa3
+      size: 77958
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: c799175a14927f1c791a859f71bdd6b9
-      size: 133834
+      md5: e3e9300b8ec72313b5233ec200b8e345
+      size: 14518
   aggregate_metadata_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/aggregate_metadata.json
       artifacts/pipeline/aggregate_metadata.success
     deps:
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: c799175a14927f1c791a859f71bdd6b9
-      size: 133834
+      md5: e3e9300b8ec72313b5233ec200b8e345
+      size: 14518
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707
@@ -6944,15 +8025,12 @@ stages:
   usdify_objects:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
-    - path: artifacts/parallels/fillable_volumes.zip
-      md5: 76cdb2bad9582d23c1f6f4d868218d6c
-      size: 22
     - path: artifacts/parallels/metadata.zip
-      md5: 94c4fd09b03e967ad3144183e63fc11c
-      size: 31112
+      md5: 26f166d4cd0a03ac30de06a33f783fa3
+      size: 77958
     - path: artifacts/parallels/objects.zip
-      md5: 59c605fb2ef3897381299c201dfb1fa3
-      size: 10410358
+      md5: ff4fd1ecd4721d6791ea7247b3b7a256
+      size: 1593145590
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -6966,8 +8044,8 @@ stages:
       md5: 3a697ffec67cfa78eebde7eda87edd9a
       size: 4038
     - path: b1k_pipeline/usd_conversion/import_metadata.py
-      md5: 20733b8b2c0bcf6ade770a7efeea2cb9
-      size: 45259
+      md5: 9ab447505d1a12756dcddac66179192f
+      size: 45393
     - path: b1k_pipeline/usd_conversion/import_urdfs_from_scene.py
       md5: 3415e42a56e2179997faa8e7af512ecc
       size: 2312
@@ -6975,15 +8053,15 @@ stages:
       md5: 2941590742764369a634a2300957b555
       size: 12525
     - path: b1k_pipeline/usd_conversion/usdify_objects.py
-      md5: fc83c277ededb7354e71fba84a560f54
-      size: 6760
+      md5: a276ad074748c02f98bf855ca2ef8c8e
+      size: 6706
     - path: b1k_pipeline/usd_conversion/usdify_objects_process.py
-      md5: 815120f473a24c6529c5b8612dfbb4fa
-      size: 2230
+      md5: 7c22b79b0f3e1f301d4b1d2978b49d39
+      size: 2101
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 8a76ca89372d8d6438e56ec8c8f7ad39
-      size: 13809130
+      md5: 07cc17cb67828d704e5004e7d4241230
+      size: 1958496
     - path: artifacts/pipeline/usdify_objects.json
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
       size: 51
@@ -9310,29 +10388,1110 @@ stages:
     - path: b1k_pipeline/collision_average_volumes.py
       md5: a116c685621225b157d98a7eed116e47
       size: 2712
+    - path: cad/objects/batch-00/artifacts/collision_meshes.zip
+      md5: 42d8ec2443d182d1a08f362a9da0f04f
+      size: 165
+    - path: cad/objects/batch-00/artifacts/collision_selection.json
+      md5: 16fffdbe4daa7ec81bd0e5d393301bc7
+      size: 7928
+    - path: cad/objects/batch-00/artifacts/meshes.zip
+      md5: a4456d0d7f7b7c4cdbb394bbaa70b199
+      size: 22414291
+    - path: cad/objects/batch-00/artifacts/object_list.json
+      md5: 2e61a88852befc4accfd210091ea28fe
+      size: 69956
+    - path: cad/objects/batch-01/artifacts/collision_meshes.zip
+      md5: dc3fafcbfa3e86eac548db3276e7e17e
+      size: 165
+    - path: cad/objects/batch-01/artifacts/collision_selection.json
+      md5: 16c6754a5a3ea390d16c0f921ec37363
+      size: 7551
+    - path: cad/objects/batch-01/artifacts/meshes.zip
+      md5: 2e7a405943212806def08e398c2a2d89
+      size: 21448229
+    - path: cad/objects/batch-01/artifacts/object_list.json
+      md5: 002ca883aa1421eb5e1c1a7858377526
+      size: 61030
+    - path: cad/objects/batch-02/artifacts/collision_meshes.zip
+      md5: c89e970c756a58865a33716a4e5850c5
+      size: 81181
+    - path: cad/objects/batch-02/artifacts/collision_selection.json
+      md5: 7998bf654d0aab1e553602755d31d96f
+      size: 13025
+    - path: cad/objects/batch-02/artifacts/meshes.zip
+      md5: b9edc7d81c02a64be4da7ebce1028c53
+      size: 23872342
+    - path: cad/objects/batch-02/artifacts/object_list.json
+      md5: 8c6544f2290508e12dd544a626a6c350
+      size: 111066
+    - path: cad/objects/batch-03/artifacts/collision_meshes.zip
+      md5: 24be181b4a4a21dd904698e2663cc5a7
+      size: 165
+    - path: cad/objects/batch-03/artifacts/collision_selection.json
+      md5: 15e93315aa698755784d2a24b8199289
+      size: 5310
+    - path: cad/objects/batch-03/artifacts/meshes.zip
+      md5: 6371a000bc75324d20d1b0dc42e4de26
+      size: 13524863
+    - path: cad/objects/batch-03/artifacts/object_list.json
+      md5: 600c4cd15531cbd3243ff437b19d4d01
+      size: 46892
+    - path: cad/objects/batch-04/artifacts/collision_meshes.zip
+      md5: 786a30251baaa9764181457fa4635af3
+      size: 167
+    - path: cad/objects/batch-04/artifacts/collision_selection.json
+      md5: 2486a5bdae70b146d1a4d24b460a9de0
+      size: 7459
+    - path: cad/objects/batch-04/artifacts/meshes.zip
+      md5: d1185fe93aba9a09c5ab9b6ab7879de3
+      size: 16136733
+    - path: cad/objects/batch-04/artifacts/object_list.json
+      md5: 6d9b6ad226e0c152338ffd16894a1b31
+      size: 65029
+    - path: cad/objects/batch-05/artifacts/collision_meshes.zip
+      md5: b13bfbfd6b382a2eb08b005dd3624166
+      size: 167
+    - path: cad/objects/batch-05/artifacts/collision_selection.json
+      md5: e592e9155e7e6abcada14d47663e86cc
+      size: 7615
+    - path: cad/objects/batch-05/artifacts/meshes.zip
+      md5: 3a1487b06f79f9f32b341a487516e693
+      size: 16408795
+    - path: cad/objects/batch-05/artifacts/object_list.json
+      md5: 24b25f316b16beed7a30c6deace32d57
+      size: 66329
+    - path: cad/objects/batch-06/artifacts/collision_meshes.zip
+      md5: ca1f7bce9858969c79aa4f15aa6dd977
+      size: 165
+    - path: cad/objects/batch-06/artifacts/collision_selection.json
+      md5: 7011ba6f929cc5e931a2169870772578
+      size: 7725
+    - path: cad/objects/batch-06/artifacts/meshes.zip
+      md5: 6a5811d8cd3309edab94e6e3a2008298
+      size: 18085836
+    - path: cad/objects/batch-06/artifacts/object_list.json
+      md5: ccaf84c126d41c47326c67c6e85e7bfb
+      size: 61909
+    - path: cad/objects/batch-07/artifacts/collision_meshes.zip
+      md5: 27fae137d419fc7f32bdbc107cb145a6
+      size: 166
+    - path: cad/objects/batch-07/artifacts/collision_selection.json
+      md5: aef2b9da982051e6256bafb76148e36d
+      size: 8288
+    - path: cad/objects/batch-07/artifacts/meshes.zip
+      md5: db330976ca83462b0706562408509636
+      size: 18366156
+    - path: cad/objects/batch-07/artifacts/object_list.json
+      md5: ff1a992f4e27e56f5cf123fd8c2dcbfc
+      size: 75805
+    - path: cad/objects/batch-08/artifacts/collision_meshes.zip
+      md5: 9b3f3362ae108acbf241424f38d7581e
+      size: 323188
+    - path: cad/objects/batch-08/artifacts/collision_selection.json
+      md5: 5139bc69ef8b5031a69b4e9087f9bf2a
+      size: 7351
+    - path: cad/objects/batch-08/artifacts/meshes.zip
+      md5: 959d2e902fd7a2145cdb17e6af573f98
+      size: 24386263
+    - path: cad/objects/batch-08/artifacts/object_list.json
+      md5: ce4d7ba4b6f2ac232300a17a927b2a16
+      size: 59912
+    - path: cad/objects/batch-09/artifacts/collision_meshes.zip
+      md5: c970558a60a8da87a26ad4fc4f33845c
+      size: 165
+    - path: cad/objects/batch-09/artifacts/collision_selection.json
+      md5: aef40540c634c33227f0f0661f8818a5
+      size: 8143
+    - path: cad/objects/batch-09/artifacts/meshes.zip
+      md5: 17b2c75078d52d2ae928f60733aff877
+      size: 14853565
+    - path: cad/objects/batch-09/artifacts/object_list.json
+      md5: be15542baff166ddcf5c1775947cc53a
+      size: 70019
+    - path: cad/objects/batch-10/artifacts/collision_meshes.zip
+      md5: ef24d888f44b916f6440a78ca53cca0d
+      size: 166
+    - path: cad/objects/batch-10/artifacts/collision_selection.json
+      md5: e6b21ce9e9b5c7534d9db762769a4041
+      size: 6895
+    - path: cad/objects/batch-10/artifacts/meshes.zip
+      md5: 3dff07d7903fe510bc513746b5e90774
+      size: 19004213
+    - path: cad/objects/batch-10/artifacts/object_list.json
+      md5: 6becc9b13535cfb7317ba79733e8826c
+      size: 61439
+    - path: cad/objects/batch-11/artifacts/collision_meshes.zip
+      md5: 8fc9535c048485e1778aee933a8d79ff
+      size: 166
+    - path: cad/objects/batch-11/artifacts/collision_selection.json
+      md5: 637541ecc80b8dfdd737706bf54704cd
+      size: 7150
+    - path: cad/objects/batch-11/artifacts/meshes.zip
+      md5: 7af14d4a4c6ee74914716e12fbedbb59
+      size: 18715432
+    - path: cad/objects/batch-11/artifacts/object_list.json
+      md5: 78a4a14e03c0f05e03292ddb6c10a86b
+      size: 59649
+    - path: cad/objects/batch-12/artifacts/collision_meshes.zip
+      md5: 73574d5caa129d732237ca2bfe403096
+      size: 167
+    - path: cad/objects/batch-12/artifacts/collision_selection.json
+      md5: b1d08d331ccb5d05049fcd0039c5f128
+      size: 7973
+    - path: cad/objects/batch-12/artifacts/meshes.zip
+      md5: b2ef7ffcc42f7ed4fc496766ce733f0b
+      size: 15401689
+    - path: cad/objects/batch-12/artifacts/object_list.json
+      md5: f4eb6c9a801221060af7b6ddc416f665
+      size: 74102
+    - path: cad/objects/batch-13/artifacts/collision_meshes.zip
+      md5: ce8505f401862ee7c0f118a296766657
+      size: 166
+    - path: cad/objects/batch-13/artifacts/collision_selection.json
+      md5: c85924616aa0de48a2bea6180b41c8a5
+      size: 5182
+    - path: cad/objects/batch-13/artifacts/meshes.zip
+      md5: 745735d831ad626e5b23bfcf2bc6663a
+      size: 14506301
+    - path: cad/objects/batch-13/artifacts/object_list.json
+      md5: fb5e8285372d6ea5e5fd5057f9c97a49
+      size: 42086
     - path: cad/objects/custom-aa/artifacts/collision_meshes.zip
-      md5: 6b1f5858456269440a993e8ff4439626
-      size: 832224
+      md5: 7eb200ce1ed5552d1b8d9b49fca6e609
+      size: 166
     - path: cad/objects/custom-aa/artifacts/collision_selection.json
-      md5: cb804d83dcfffe7b6b8fb7ca6e2fb558
-      size: 1422
+      md5: b65536e18a0eb77831ecf193d94e3fa4
+      size: 1392
     - path: cad/objects/custom-aa/artifacts/meshes.zip
-      md5: b6133e6d897c1876b91f0c10993a973c
-      size: 10120885
+      md5: e73cf41975cfe472e6d699c011315d6d
+      size: 941862
     - path: cad/objects/custom-aa/artifacts/object_list.json
-      md5: b76af0630d35bcfd4ffba6556e7601f3
-      size: 5838
+      md5: 75ddb8c0e1e09e5050cb3679198a57fb
+      size: 7413
+    - path: cad/objects/legacy_batch-00/artifacts/collision_meshes.zip
+      md5: 65da94555d6acee6664edbd7e27c49ec
+      size: 67876
+    - path: cad/objects/legacy_batch-00/artifacts/collision_selection.json
+      md5: c2be13ad257b6331aa93209fb825912e
+      size: 23027
+    - path: cad/objects/legacy_batch-00/artifacts/meshes.zip
+      md5: 22fa8b37aae8995c22ce5b31b7d12162
+      size: 5338663
+    - path: cad/objects/legacy_batch-00/artifacts/object_list.json
+      md5: 821b202b77a08c630f40ba6be8761f02
+      size: 154722
+    - path: cad/objects/legacy_batch-01/artifacts/collision_meshes.zip
+      md5: 664ea278a5d2d861620d21c67d0e9760
+      size: 55542
+    - path: cad/objects/legacy_batch-01/artifacts/collision_selection.json
+      md5: dbcce8e1a44d6553c8d287563af459e7
+      size: 6646
+    - path: cad/objects/legacy_batch-01/artifacts/meshes.zip
+      md5: 4df99167fc441d79ec4d25a463f5b4be
+      size: 14097607
+    - path: cad/objects/legacy_batch-01/artifacts/object_list.json
+      md5: 4778db8c33f48c40901889f01fc724c8
+      size: 49523
+    - path: cad/objects/legacy_batch-02/artifacts/collision_meshes.zip
+      md5: 1c9478cd1cd6ee91bba2de9975019cc5
+      size: 21516
+    - path: cad/objects/legacy_batch-02/artifacts/collision_selection.json
+      md5: e1a21656dac061f82dc07bd3bce469fc
+      size: 11167
+    - path: cad/objects/legacy_batch-02/artifacts/meshes.zip
+      md5: 4e0f6b06cf3dcd58a778e09b90bbfd3e
+      size: 14410241
+    - path: cad/objects/legacy_batch-02/artifacts/object_list.json
+      md5: c0d6efe3fe5686fb435d3fe97de043f2
+      size: 84128
+    - path: cad/objects/legacy_batch-03/artifacts/collision_meshes.zip
+      md5: 474c50e22fcca91c0d3f2f9f8ff23ea8
+      size: 35221
+    - path: cad/objects/legacy_batch-03/artifacts/collision_selection.json
+      md5: d102f5e0756bef825e65a41126832bef
+      size: 12658
+    - path: cad/objects/legacy_batch-03/artifacts/meshes.zip
+      md5: c6ba1f3d9fac8d4f7727e647fa6942e8
+      size: 23324235
+    - path: cad/objects/legacy_batch-03/artifacts/object_list.json
+      md5: 8aaae210720073f9bbf6a3664127e0db
+      size: 94163
+    - path: cad/objects/legacy_batch-04/artifacts/collision_meshes.zip
+      md5: 2ea561e7a234a6b13defe3aa58305a17
+      size: 100117
+    - path: cad/objects/legacy_batch-04/artifacts/collision_selection.json
+      md5: c218005fbf1ceb45b39da004fb1baff7
+      size: 17260
+    - path: cad/objects/legacy_batch-04/artifacts/meshes.zip
+      md5: 3bd5bea2a7028ea711c1ecf97746e824
+      size: 12130268
+    - path: cad/objects/legacy_batch-04/artifacts/object_list.json
+      md5: 59c1c9d9bbaa1214d30addf2dfd94155
+      size: 126459
+    - path: cad/objects/legacy_batch-05/artifacts/collision_meshes.zip
+      md5: 13adece3f3317afe572dae900732adbf
+      size: 165
+    - path: cad/objects/legacy_batch-05/artifacts/collision_selection.json
+      md5: 26679ea516009bf5c89a68528425b8db
+      size: 14558
+    - path: cad/objects/legacy_batch-05/artifacts/meshes.zip
+      md5: 1fe63975bd449689e404d4d3003f07fe
+      size: 12339527
+    - path: cad/objects/legacy_batch-05/artifacts/object_list.json
+      md5: eff940e0a33b0f1a1c84fc5056bab712
+      size: 107341
+    - path: cad/objects/legacy_batch-06/artifacts/collision_meshes.zip
+      md5: 64c63eda55f44f01ef8e77041290fbad
+      size: 165
+    - path: cad/objects/legacy_batch-06/artifacts/collision_selection.json
+      md5: b79769c80140001a48404525a1320fab
+      size: 11793
+    - path: cad/objects/legacy_batch-06/artifacts/meshes.zip
+      md5: cebad69c4470baca0a5ff321ad474811
+      size: 16764392
+    - path: cad/objects/legacy_batch-06/artifacts/object_list.json
+      md5: e394afd0878ee80280e60cb615a3e84d
+      size: 102283
+    - path: cad/objects/legacy_batch-07/artifacts/collision_meshes.zip
+      md5: 80bc722066bc44d032ec963597611322
+      size: 165
+    - path: cad/objects/legacy_batch-07/artifacts/collision_selection.json
+      md5: 2ec1521633966cf7eb4efe9f6da9d1bd
+      size: 9102
+    - path: cad/objects/legacy_batch-07/artifacts/meshes.zip
+      md5: ec423a1f71be116c165ca85b82481d02
+      size: 12411093
+    - path: cad/objects/legacy_batch-07/artifacts/object_list.json
+      md5: dce4097cf28bdc65565f33b95e7ee61a
+      size: 69366
+    - path: cad/objects/legacy_batch-08/artifacts/collision_meshes.zip
+      md5: ca5ffc9de9bf846171df43cd9923d52a
+      size: 166
+    - path: cad/objects/legacy_batch-08/artifacts/collision_selection.json
+      md5: e2c8bbf68e058693397fef4d69c4e344
+      size: 8428
+    - path: cad/objects/legacy_batch-08/artifacts/meshes.zip
+      md5: 7b360a8ae0607c149ed652feab613cca
+      size: 14269110
+    - path: cad/objects/legacy_batch-08/artifacts/object_list.json
+      md5: 10559829995f3f18fc9e7c8ce1f532bc
+      size: 69882
+    - path: cad/objects/legacy_batch-09/artifacts/collision_meshes.zip
+      md5: 645353aa0018b17a5c75a3824cbe991c
+      size: 79572
+    - path: cad/objects/legacy_batch-09/artifacts/collision_selection.json
+      md5: 4e21171c751589a44e161364c132f3ed
+      size: 7649
+    - path: cad/objects/legacy_batch-09/artifacts/meshes.zip
+      md5: af0f91609c8471566dbf3357011c2623
+      size: 12221012
+    - path: cad/objects/legacy_batch-09/artifacts/object_list.json
+      md5: 3d2bf0300f7a59d5e43a50dbe45e875d
+      size: 63622
+    - path: cad/objects/legacy_batch-10/artifacts/collision_meshes.zip
+      md5: e33619bda28d7b6cc04cf750dc09c715
+      size: 165
+    - path: cad/objects/legacy_batch-10/artifacts/collision_selection.json
+      md5: ea9b8b42e3fd8ed4510bafa9de7b50b7
+      size: 10679
+    - path: cad/objects/legacy_batch-10/artifacts/meshes.zip
+      md5: 96d2e2965970c319cdac0b249c18594d
+      size: 25464140
+    - path: cad/objects/legacy_batch-10/artifacts/object_list.json
+      md5: 06461905d8c243303da9f3aeda18f158
+      size: 82567
+    - path: cad/objects/legacy_batch-11/artifacts/collision_meshes.zip
+      md5: 1af29399f8edbcfb407bb8c2756ec11c
+      size: 165
+    - path: cad/objects/legacy_batch-11/artifacts/collision_selection.json
+      md5: 4562379792d529d78aadcee7dc5e11c5
+      size: 7927
+    - path: cad/objects/legacy_batch-11/artifacts/meshes.zip
+      md5: 2e9f2f5f66efa1e9d654077b22842dcb
+      size: 15572717
+    - path: cad/objects/legacy_batch-11/artifacts/object_list.json
+      md5: d09d94cc5a6fcbcfca7c29118ce31db7
+      size: 65983
+    - path: cad/objects/legacy_batch-12/artifacts/collision_meshes.zip
+      md5: 9e0819221beb689da71b71810c17dd7f
+      size: 166
+    - path: cad/objects/legacy_batch-12/artifacts/collision_selection.json
+      md5: 88ed27ee260ee2fcf6bed78ad19130a8
+      size: 1176
+    - path: cad/objects/legacy_batch-12/artifacts/meshes.zip
+      md5: 797b309bc0a53908e66f5d2603ad0599
+      size: 1405679
+    - path: cad/objects/legacy_batch-12/artifacts/object_list.json
+      md5: b2a4943f7909ec6b26938999253583e9
+      size: 8564
+    - path: cad/objects/procedural-aa/artifacts/collision_meshes.zip
+      md5: 73a3f38ab532a9b429f62edb0afbe594
+      size: 165
+    - path: cad/objects/procedural-aa/artifacts/collision_selection.json
+      md5: 5c7c9a83246337465a728b322f3a4fbc
+      size: 27706
+    - path: cad/objects/procedural-aa/artifacts/meshes.zip
+      md5: adfb5bbb8cf7fd01f1595609c3e1ced7
+      size: 42263735
+    - path: cad/objects/procedural-aa/artifacts/object_list.json
+      md5: a0de5d72ffd104648f996a6ccb10708d
+      size: 207983
+    - path: cad/objects/substances-01/artifacts/collision_meshes.zip
+      md5: 1f23b78aca59624ed581cac08f44092f
+      size: 167
+    - path: cad/objects/substances-01/artifacts/collision_selection.json
+      md5: dbb02a680e6a044233d3f1c65ba9bd30
+      size: 6147
+    - path: cad/objects/substances-01/artifacts/meshes.zip
+      md5: a72c8275ef2aba9a5d71e01019075e40
+      size: 10929245
+    - path: cad/objects/substances-01/artifacts/object_list.json
+      md5: 8784467591a3e945f996316ebf92960a
+      size: 81065
+    - path: cad/objects/substances-02/artifacts/collision_meshes.zip
+      md5: 57ba85e9556259533af71b28e287420f
+      size: 167
+    - path: cad/objects/substances-02/artifacts/collision_selection.json
+      md5: ca4c90371ba5abb8c2dc44db7706aa3b
+      size: 2605
+    - path: cad/objects/substances-02/artifacts/meshes.zip
+      md5: c9c8c8a09caaee361893fce07041599d
+      size: 244300
+    - path: cad/objects/substances-02/artifacts/object_list.json
+      md5: 49637931a9dd991b8907babb518b91f6
+      size: 33383
+    - path: cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
+      md5: 719c52322a796287035c9f331a243794
+      size: 166
+    - path: cad/objects/task_relavant-ab/artifacts/collision_selection.json
+      md5: 6b25c8b4b89deff02f2332cfcb054be7
+      size: 13586
+    - path: cad/objects/task_relavant-ab/artifacts/meshes.zip
+      md5: 2536a0c0215093ab20d69e79844ab7f7
+      size: 17451044
+    - path: cad/objects/task_relavant-ab/artifacts/object_list.json
+      md5: 0434fc2ec561c131339226080e4ce85f
+      size: 100030
+    - path: cad/objects/task_relevant-xy/artifacts/collision_meshes.zip
+      md5: b1d23a4978501dadf77b8f4162c4c3bb
+      size: 166
+    - path: cad/objects/task_relevant-xy/artifacts/collision_selection.json
+      md5: 030f7c201d4d6c6257d4e6ca83d99982
+      size: 11885
+    - path: cad/objects/task_relevant-xy/artifacts/meshes.zip
+      md5: d1616a40a2a653993c718ddcdd5598b5
+      size: 29087592
+    - path: cad/objects/task_relevant-xy/artifacts/object_list.json
+      md5: 6005cc097c89a7a203d3a1d2bab4c5d2
+      size: 96614
+    - path: cad/scenes/Beechwood_0_garden/artifacts/collision_meshes.zip
+      md5: 32aa4960b42ced0474fbfbd3cfc6e428
+      size: 165
+    - path: cad/scenes/Beechwood_0_garden/artifacts/collision_selection.json
+      md5: a920f62c5b60d08d95731c3cad5a53ec
+      size: 2933
+    - path: cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
+      md5: c1233af31e3c84a167a07c89223216f9
+      size: 39980718
+    - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
+      md5: 88210483a5f754fef49cb9084f3f7ebb
+      size: 123851
+    - path: cad/scenes/Beechwood_0_int/artifacts/collision_meshes.zip
+      md5: 33b56f4515898bf4b64fd85fbed3fbd4
+      size: 165
+    - path: cad/scenes/Beechwood_0_int/artifacts/collision_selection.json
+      md5: 9a5c6a4d57aee2b6245d932d5f982522
+      size: 2899
+    - path: cad/scenes/Beechwood_0_int/artifacts/meshes.zip
+      md5: ba63deb5dfa512f156f4a754bf67e80f
+      size: 9634670
+    - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
+      md5: 51e2d44c6fe1ccc7f6401734cf7ecb06
+      size: 80232
+    - path: cad/scenes/Beechwood_1_int/artifacts/collision_meshes.zip
+      md5: 5210c10d3ca49f7a8607f8aa7a59ff82
+      size: 167
+    - path: cad/scenes/Beechwood_1_int/artifacts/collision_selection.json
+      md5: 4ba58a47d5d5f42cc2840f9af1cd4e59
+      size: 3047
+    - path: cad/scenes/Beechwood_1_int/artifacts/meshes.zip
+      md5: d4dd141aaa64a316dc0ba958df49446f
+      size: 5132011
+    - path: cad/scenes/Beechwood_1_int/artifacts/object_list.json
+      md5: ecd39f8bf5acec6443af1feb9ba201ab
+      size: 72731
+    - path: cad/scenes/Benevolence_0_int/artifacts/collision_meshes.zip
+      md5: 88e1ac3883ff9b17f4ae9351e727e91c
+      size: 164
+    - path: cad/scenes/Benevolence_0_int/artifacts/collision_selection.json
+      md5: 660d6f388678ef5b7bb511d5db97a455
+      size: 744
+    - path: cad/scenes/Benevolence_0_int/artifacts/meshes.zip
+      md5: 7af82abcf5c76a78bb5b875b1558722b
+      size: 922465
+    - path: cad/scenes/Benevolence_0_int/artifacts/object_list.json
+      md5: e719b5cfce179fee08d1aa78d56b7450
+      size: 13771
+    - path: cad/scenes/Benevolence_1_int/artifacts/collision_meshes.zip
+      md5: 6bacf7bf250d0547db0dfd2bb39470d8
+      size: 166
+    - path: cad/scenes/Benevolence_1_int/artifacts/collision_selection.json
+      md5: c6d77295eb07648e573e9fe6a9effa48
+      size: 1094
+    - path: cad/scenes/Benevolence_1_int/artifacts/meshes.zip
+      md5: aa5f14c33b6c23bcc025401dbf696c66
+      size: 2572500
+    - path: cad/scenes/Benevolence_1_int/artifacts/object_list.json
+      md5: 933f8269abd59af286ef8c271ec2eba5
+      size: 36106
+    - path: cad/scenes/Benevolence_2_int/artifacts/collision_meshes.zip
+      md5: 5dd00fe3500fec07fce72703d636af4e
+      size: 165
+    - path: cad/scenes/Benevolence_2_int/artifacts/collision_selection.json
+      md5: 7e03ece9ef7b8fcade9fa6dbad9a3479
+      size: 1329
+    - path: cad/scenes/Benevolence_2_int/artifacts/meshes.zip
+      md5: c9ce07b57ae907965df2da9ad8d61c1c
+      size: 3402518
+    - path: cad/scenes/Benevolence_2_int/artifacts/object_list.json
+      md5: 78a036d30240cb36c3d7b1e740f687ad
+      size: 35093
+    - path: cad/scenes/Ihlen_0_int/artifacts/collision_meshes.zip
+      md5: 923ebe1082189b64fe669f084b9d1fff
+      size: 166
+    - path: cad/scenes/Ihlen_0_int/artifacts/collision_selection.json
+      md5: 6f215e00f8d32aa791be0038d431b920
+      size: 1376
+    - path: cad/scenes/Ihlen_0_int/artifacts/meshes.zip
+      md5: 805ccd7712ea960ee379f6032e763205
+      size: 4368143
+    - path: cad/scenes/Ihlen_0_int/artifacts/object_list.json
+      md5: 99fa2468a6e8b9e37f629dddd1f630ec
+      size: 33683
+    - path: cad/scenes/Ihlen_1_int/artifacts/collision_meshes.zip
+      md5: dcb1a1a3ddacb9fa4ec7a04c0ac18ec2
+      size: 165
+    - path: cad/scenes/Ihlen_1_int/artifacts/collision_selection.json
+      md5: 2e73b37016a4d540bcec9c0b0479388c
+      size: 2113
+    - path: cad/scenes/Ihlen_1_int/artifacts/meshes.zip
+      md5: acbd62f036d4db472e9d79988e066975
+      size: 7237929
+    - path: cad/scenes/Ihlen_1_int/artifacts/object_list.json
+      md5: ef61b5cd3715b6ea18c51733104065d2
+      size: 65140
+    - path: cad/scenes/Merom_0_garden/artifacts/collision_meshes.zip
+      md5: 6a8b8e4ae9c8ee81120be39a5a5dd4f8
+      size: 166
+    - path: cad/scenes/Merom_0_garden/artifacts/collision_selection.json
+      md5: 471c874df40025688e6d922558f69415
+      size: 3015
+    - path: cad/scenes/Merom_0_garden/artifacts/meshes.zip
+      md5: a60589e91be21a90cd18be1bca93f467
+      size: 18089924
+    - path: cad/scenes/Merom_0_garden/artifacts/object_list.json
+      md5: 6dd2542d9938155011c27b46449a568b
+      size: 74301
+    - path: cad/scenes/Merom_0_int/artifacts/collision_meshes.zip
+      md5: c48ecaa8fb3137b465e4f9a0ed8b014f
+      size: 166
+    - path: cad/scenes/Merom_0_int/artifacts/collision_selection.json
+      md5: fe28da20236f18bfb1369c6a0a4d6119
+      size: 1356
+    - path: cad/scenes/Merom_0_int/artifacts/meshes.zip
+      md5: b26172dbf94d659dc3eb75f9c33a2863
+      size: 4882076
+    - path: cad/scenes/Merom_0_int/artifacts/object_list.json
+      md5: 84bd2ab203d1476ca6e5a5b2af09437e
+      size: 39583
+    - path: cad/scenes/Merom_1_int/artifacts/collision_meshes.zip
+      md5: 0b4dc4aed4cee7675f9846d83c233cec
+      size: 165
+    - path: cad/scenes/Merom_1_int/artifacts/collision_selection.json
+      md5: 99f3a6d4d837ed2e6db5c07fa5765afc
+      size: 1879
+    - path: cad/scenes/Merom_1_int/artifacts/meshes.zip
+      md5: 89c1232e15780aec4afac4379624da81
+      size: 6670869
+    - path: cad/scenes/Merom_1_int/artifacts/object_list.json
+      md5: 8f9886ef3f0b6b1633cb670a31dd12de
+      size: 60613
+    - path: cad/scenes/Pomaria_0_garden/artifacts/collision_meshes.zip
+      md5: 21570537c965ac11f5609c1e267294fd
+      size: 164
+    - path: cad/scenes/Pomaria_0_garden/artifacts/collision_selection.json
+      md5: b2535df79bb71d0fbe8286193eceae90
+      size: 7575
+    - path: cad/scenes/Pomaria_0_garden/artifacts/meshes.zip
+      md5: 3104f1368dad800dd4ea08272dc2e08c
+      size: 31455516
+    - path: cad/scenes/Pomaria_0_garden/artifacts/object_list.json
+      md5: 2e3d724657c8576b1c0f7367c8c9f600
+      size: 107147
+    - path: cad/scenes/Pomaria_0_int/artifacts/collision_meshes.zip
+      md5: b6a09e0d8974f7aadaeaf75629ccd8ee
+      size: 165
+    - path: cad/scenes/Pomaria_0_int/artifacts/collision_selection.json
+      md5: 94bca3f2e315cf7d710d4052efe38c23
+      size: 2023
+    - path: cad/scenes/Pomaria_0_int/artifacts/meshes.zip
+      md5: 2baa1d9025be723bb19aacb475ba70ea
+      size: 2834983
+    - path: cad/scenes/Pomaria_0_int/artifacts/object_list.json
+      md5: fd41cf6e77064fd8d13780060ee4a34a
+      size: 39012
+    - path: cad/scenes/Pomaria_1_int/artifacts/collision_meshes.zip
+      md5: 704576a87f56e824e50a9b69819dc529
+      size: 167
+    - path: cad/scenes/Pomaria_1_int/artifacts/collision_selection.json
+      md5: cff1238d781e48b38725e72d656514f3
+      size: 1545
+    - path: cad/scenes/Pomaria_1_int/artifacts/meshes.zip
+      md5: 2f4c1cc7928efd23c9228e1a458fd560
+      size: 4913332
+    - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
+      md5: 2f39cd885ab079219d67943393be85ff
+      size: 54688
+    - path: cad/scenes/Pomaria_2_int/artifacts/collision_meshes.zip
+      md5: df5738e492293da8736e88557273ada1
+      size: 167
+    - path: cad/scenes/Pomaria_2_int/artifacts/collision_selection.json
+      md5: d599a8832566158b58f5d42a3c6095e2
+      size: 1617
+    - path: cad/scenes/Pomaria_2_int/artifacts/meshes.zip
+      md5: dc34fb160f903f3fb18aa6564da5d48f
+      size: 2800806
+    - path: cad/scenes/Pomaria_2_int/artifacts/object_list.json
+      md5: 35c97c48686329e31ea86e7c99685b70
+      size: 30147
+    - path: cad/scenes/Rs_garden/artifacts/collision_meshes.zip
+      md5: 6e83b58d0e6ab9666f09cfea75cdd11c
+      size: 165
+    - path: cad/scenes/Rs_garden/artifacts/collision_selection.json
+      md5: 53f7630ae1163ff133056948d682f758
+      size: 1558
+    - path: cad/scenes/Rs_garden/artifacts/meshes.zip
+      md5: 66eb14a97277b3cda17d70479c126800
+      size: 17155064
+    - path: cad/scenes/Rs_garden/artifacts/object_list.json
+      md5: 572a2ab6a1f948e247e388cc781d1168
+      size: 62460
+    - path: cad/scenes/Rs_int/artifacts/collision_meshes.zip
+      md5: 4e9639ca7576fb817dd510ad1069fab1
+      size: 166
+    - path: cad/scenes/Rs_int/artifacts/collision_selection.json
+      md5: 0f98a9cdd028897b49c1b875ce374a66
+      size: 620
+    - path: cad/scenes/Rs_int/artifacts/meshes.zip
+      md5: 53a071f13271fa8356a009d0481557a3
+      size: 4532858
+    - path: cad/scenes/Rs_int/artifacts/object_list.json
+      md5: c37ece9b237e356f94b933a4678e685c
+      size: 35844
+    - path: cad/scenes/Wainscott_0_garden/artifacts/collision_meshes.zip
+      md5: 3e0a67623b8e1853167643e94a838470
+      size: 165
+    - path: cad/scenes/Wainscott_0_garden/artifacts/collision_selection.json
+      md5: 1f086953f80346a865f75ef157963cae
+      size: 5262
+    - path: cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
+      md5: 7358e5452e720af7351e9b6698881586
+      size: 55436748
+    - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
+      md5: 355e1e148c093cb01c3522fd1150081c
+      size: 166306
+    - path: cad/scenes/Wainscott_0_int/artifacts/collision_meshes.zip
+      md5: 3bc5821e538b53314ede9f5233404462
+      size: 165
+    - path: cad/scenes/Wainscott_0_int/artifacts/collision_selection.json
+      md5: ffd557942a58904ea519e3f6079d382a
+      size: 2560
+    - path: cad/scenes/Wainscott_0_int/artifacts/meshes.zip
+      md5: 3ed42f68035a00a868be87010760748d
+      size: 9976421
+    - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
+      md5: 0564ff886e2519956a684bd52111f72e
+      size: 82083
+    - path: cad/scenes/Wainscott_1_int/artifacts/collision_meshes.zip
+      md5: ac7a37520e74d9c77f99f942994dcbda
+      size: 165
+    - path: cad/scenes/Wainscott_1_int/artifacts/collision_selection.json
+      md5: 82c5eb98846e81283caf2be84b616c51
+      size: 3010
+    - path: cad/scenes/Wainscott_1_int/artifacts/meshes.zip
+      md5: f3d808b4a1fd54d44c206123e86dce6a
+      size: 7801141
+    - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
+      md5: 1e0ef353a207aa4de3ccd6e6b16e8f8f
+      size: 78293
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
+      md5: bbd3682fa467a624f477a0cf73d7ddea
+      size: 89307
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+      md5: 3b8a88205adfce34dbb53a846b73112c
+      size: 10135
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
+      md5: b6735a284fabcdc42a2f5028cff9fcc0
+      size: 13754465
+    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
+      md5: 1e2827f9d6446eb5ce1972892e6caf63
+      size: 113798
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/collision_meshes.zip
+      md5: 8da0302ed4cf0e825c157673f08ef506
+      size: 165
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/collision_selection.json
+      md5: ebeb8b92f853a3be2e5ce518ef80e765
+      size: 3571
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/meshes.zip
+      md5: b1f0bc8b40a56e3937b175c63351cf32
+      size: 34566959
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
+      md5: 365f98ce18335d9820e1693c9c556e79
+      size: 120739
+    - path: cad/scenes/gates_bedroom/artifacts/collision_meshes.zip
+      md5: 98dc6f191303c842d1c0c4f81fe19882
+      size: 165
+    - path: cad/scenes/gates_bedroom/artifacts/collision_selection.json
+      md5: 672dbbfb1d342e7be924ab2abb48f26b
+      size: 1237
+    - path: cad/scenes/gates_bedroom/artifacts/meshes.zip
+      md5: aa57e36485b898ad725d062887ed6d88
+      size: 1812501
+    - path: cad/scenes/gates_bedroom/artifacts/object_list.json
+      md5: e25bb7926b1a3354e9e22ea9db24e871
+      size: 12934
+    - path: cad/scenes/grocery_store_asian/artifacts/collision_meshes.zip
+      md5: 67fc9332a8f3554b60cec15489c543c5
+      size: 165
+    - path: cad/scenes/grocery_store_asian/artifacts/collision_selection.json
+      md5: c994bd96e22e1d339892d57b415685b7
+      size: 11383
+    - path: cad/scenes/grocery_store_asian/artifacts/meshes.zip
+      md5: 24dc303bd434b3decbc35d813bbf0d9e
+      size: 172845655
+    - path: cad/scenes/grocery_store_asian/artifacts/object_list.json
+      md5: 2a723a04faa6cdcf85f4d8a220027d49
+      size: 578387
+    - path: cad/scenes/grocery_store_cafe/artifacts/collision_meshes.zip
+      md5: e501d6e398bc46990f75a0c3a075e466
+      size: 167
+    - path: cad/scenes/grocery_store_cafe/artifacts/collision_selection.json
+      md5: a32a53f399767e8d77c129f1af759946
+      size: 6848
+    - path: cad/scenes/grocery_store_cafe/artifacts/meshes.zip
+      md5: 5506cf8945787b53eeacc16d1a457e41
+      size: 222805922
+    - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
+      md5: b2ba048430d201f2952b00bdf070788d
+      size: 1096327
+    - path: cad/scenes/grocery_store_convenience/artifacts/collision_meshes.zip
+      md5: 53e6d51e39039505d3dd5a3ae1da774d
+      size: 167
+    - path: cad/scenes/grocery_store_convenience/artifacts/collision_selection.json
+      md5: d7e093609889b51148c272d3f37f32ca
+      size: 10578
+    - path: cad/scenes/grocery_store_convenience/artifacts/meshes.zip
+      md5: 0ecf52e34af814be5a40d41d90fc32c3
+      size: 6220933
+    - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
+      md5: a09d47e2826155c55be04604959872a6
+      size: 338347
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_meshes.zip
+      md5: 75467d7400ba56baa1cf5becd5cdeb2b
+      size: 165
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/collision_selection.json
+      md5: 7cf8259f692643ff7909858c3f914756
+      size: 8923
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/meshes.zip
+      md5: e83579e4cdc5cc03442ffa4ef38c87ee
+      size: 6411229
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
+      md5: 118b1f379bf804db7ece399cabaa66b5
+      size: 534898
+    - path: cad/scenes/hall_arch_wood/artifacts/collision_meshes.zip
+      md5: fb7b7a7cdc231ee989a26d8e942f382e
+      size: 165
+    - path: cad/scenes/hall_arch_wood/artifacts/collision_selection.json
+      md5: 0c5f2342b864e7a9d4bba9b99e2f9d42
+      size: 955
+    - path: cad/scenes/hall_arch_wood/artifacts/meshes.zip
+      md5: 4220e09ecb3bccbfdbc59e1bc05207ab
+      size: 1157636
+    - path: cad/scenes/hall_arch_wood/artifacts/object_list.json
+      md5: cfeafbee59ab132291befd704500b10c
+      size: 13197
+    - path: cad/scenes/hall_conference_large/artifacts/collision_meshes.zip
+      md5: ff294462766a1ef37e84a3be73c8e239
+      size: 165
+    - path: cad/scenes/hall_conference_large/artifacts/collision_selection.json
+      md5: 3d4c757be3f557ad7c2dec2f2a26ef66
+      size: 1540
+    - path: cad/scenes/hall_conference_large/artifacts/meshes.zip
+      md5: b15ecfd975761df6451c7f8ac232abee
+      size: 147922681
+    - path: cad/scenes/hall_conference_large/artifacts/object_list.json
+      md5: 209ac53f264d4d207d45db9d43bd4746
+      size: 546624
+    - path: cad/scenes/hall_glass_ceiling/artifacts/collision_meshes.zip
+      md5: 43e284ac8cb418154ca87df19d28d87b
+      size: 165
+    - path: cad/scenes/hall_glass_ceiling/artifacts/collision_selection.json
+      md5: ec801e018b009588ee8655cab2b6fbe3
+      size: 662
+    - path: cad/scenes/hall_glass_ceiling/artifacts/meshes.zip
+      md5: 11f142fa82dcc33d0b73fe93b21c6123
+      size: 2765324
+    - path: cad/scenes/hall_glass_ceiling/artifacts/object_list.json
+      md5: 30d7d9d85f4e609ca82d3b00c07d22a9
+      size: 16592
+    - path: cad/scenes/hall_train_station/artifacts/collision_meshes.zip
+      md5: cf65b940e2c46ade950457cad9cc3480
+      size: 166
+    - path: cad/scenes/hall_train_station/artifacts/collision_selection.json
+      md5: 9c6eb3acbc43c79c3e44aaf2a62eb623
+      size: 1411
+    - path: cad/scenes/hall_train_station/artifacts/meshes.zip
+      md5: 62db4a172ab51957c4eff6b6474d12d6
+      size: 6011978
+    - path: cad/scenes/hall_train_station/artifacts/object_list.json
+      md5: 25b07620fbda7e8734651c8a913f43d2
+      size: 25490
+    - path: cad/scenes/hotel_gym_spa/artifacts/collision_meshes.zip
+      md5: 1a92aa4677eb24961a8491f0779f1345
+      size: 166
+    - path: cad/scenes/hotel_gym_spa/artifacts/collision_selection.json
+      md5: 3b287c4ab8f5b7e135502338a3e21275
+      size: 10277
+    - path: cad/scenes/hotel_gym_spa/artifacts/meshes.zip
+      md5: 9cb91a2f5f2aa98c8210e22836a9ee31
+      size: 28173139
+    - path: cad/scenes/hotel_gym_spa/artifacts/object_list.json
+      md5: f6c9f88a09e72c8d4eb6a308d37fb3ba
+      size: 149866
+    - path: cad/scenes/hotel_suite_large/artifacts/collision_meshes.zip
+      md5: 454be24e7dc50160ad93029025794732
+      size: 166
+    - path: cad/scenes/hotel_suite_large/artifacts/collision_selection.json
+      md5: d4a6e1ed84173a78c57d2ca751919a05
+      size: 8836
+    - path: cad/scenes/hotel_suite_large/artifacts/meshes.zip
+      md5: 115868897b1383752c1dc4db9b2d65be
+      size: 18520122
+    - path: cad/scenes/hotel_suite_large/artifacts/object_list.json
+      md5: 1a81fab461505165dbf581de21229205
+      size: 94533
+    - path: cad/scenes/hotel_suite_small/artifacts/collision_meshes.zip
+      md5: 43ecdb6df87e268e68663d4eac3fce45
+      size: 165
+    - path: cad/scenes/hotel_suite_small/artifacts/collision_selection.json
+      md5: e6b2977f60893f9fe7509e36358aeb4c
+      size: 2495
+    - path: cad/scenes/hotel_suite_small/artifacts/meshes.zip
+      md5: a21f804034d5926a62faa8f31ecdd4e8
+      size: 3627589
+    - path: cad/scenes/hotel_suite_small/artifacts/object_list.json
+      md5: 2f764c92d0c19ca22a21a733fadaca4c
+      size: 23815
+    - path: cad/scenes/house_double_floor_lower/artifacts/collision_meshes.zip
+      md5: 5ce08db46a0515c61c3810e7ec2f44d2
+      size: 166
+    - path: cad/scenes/house_double_floor_lower/artifacts/collision_selection.json
+      md5: fa7ba57e09cec9014ca6d5363c5b2cde
+      size: 12232
+    - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
+      md5: 5ab289dc6c7b303df120df73415513c5
+      size: 63194243
+    - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
+      md5: db154c3a5b64524ca3fcbb05c1ac85d7
+      size: 148131
+    - path: cad/scenes/house_double_floor_upper/artifacts/collision_meshes.zip
+      md5: ee5d7cc73a27e6dc0669752f708f5e80
+      size: 166
+    - path: cad/scenes/house_double_floor_upper/artifacts/collision_selection.json
+      md5: e0946433145fc2d08e73f703f2c0503a
+      size: 13268
+    - path: cad/scenes/house_double_floor_upper/artifacts/meshes.zip
+      md5: 6cdf822fd1913d1756a2ae39d9576b82
+      size: 33830184
+    - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
+      md5: 8ddd2c332047d565d185538e5808d8d4
+      size: 148267
+    - path: cad/scenes/house_single_floor/artifacts/collision_meshes.zip
+      md5: 29af09ef22d9e264a8105a253488ef42
+      size: 19033
+    - path: cad/scenes/house_single_floor/artifacts/collision_selection.json
+      md5: d0d76367c48b0c51fc7ad8a5e07a682a
+      size: 44400
+    - path: cad/scenes/house_single_floor/artifacts/meshes.zip
+      md5: 192f82018c3bae3f6f55e473f9f32f24
+      size: 94219461
+    - path: cad/scenes/house_single_floor/artifacts/object_list.json
+      md5: 0bbd54a3480062929102784ef02bec7d
+      size: 458068
+    - path: cad/scenes/office_bike/artifacts/collision_meshes.zip
+      md5: 8c55406d2c5bfcc46ef482efec65c8a2
+      size: 165
+    - path: cad/scenes/office_bike/artifacts/collision_selection.json
+      md5: 4b56d48311cfbab29463765a198497fa
+      size: 3615
+    - path: cad/scenes/office_bike/artifacts/meshes.zip
+      md5: 0de55991a4dd476d4d18edef335564c4
+      size: 69446255
+    - path: cad/scenes/office_bike/artifacts/object_list.json
+      md5: 85df5ca80b97a857a720f079a6483197
+      size: 89149
+    - path: cad/scenes/office_cubicles_left/artifacts/collision_meshes.zip
+      md5: a8bcd7a0aa240e85e730804da9ec397f
+      size: 165
+    - path: cad/scenes/office_cubicles_left/artifacts/collision_selection.json
+      md5: 307129e21d35297f25013f39da2fdb71
+      size: 6045
+    - path: cad/scenes/office_cubicles_left/artifacts/meshes.zip
+      md5: 880d898624f6982e481211337a54ee2e
+      size: 105104980
+    - path: cad/scenes/office_cubicles_left/artifacts/object_list.json
+      md5: 72fce6f6ea0aea6c4d0ed94c87bf2f72
+      size: 184527
+    - path: cad/scenes/office_cubicles_right/artifacts/collision_meshes.zip
+      md5: 215792332cda661a5648322d37bb3ea7
+      size: 167
+    - path: cad/scenes/office_cubicles_right/artifacts/collision_selection.json
+      md5: 951372444413e8ab2f3e066df8f7cfd4
+      size: 6273
+    - path: cad/scenes/office_cubicles_right/artifacts/meshes.zip
+      md5: 273a30b90c4a7ccbf5e3ee80d0ded73d
+      size: 40592531
+    - path: cad/scenes/office_cubicles_right/artifacts/object_list.json
+      md5: b4d1387e4c6531342b3e2e71fdb449df
+      size: 117776
+    - path: cad/scenes/office_large/artifacts/collision_meshes.zip
+      md5: 78678aaec6e49074c49930edbd4cc692
+      size: 165
+    - path: cad/scenes/office_large/artifacts/collision_selection.json
+      md5: 1e38523f2bc7a9d74f6eaf330d1172a5
+      size: 10379
+    - path: cad/scenes/office_large/artifacts/meshes.zip
+      md5: c5740019773c3547e51e329f5ec1b13a
+      size: 80747915
+    - path: cad/scenes/office_large/artifacts/object_list.json
+      md5: 4bc31b5b73edd57fdfc25262e0cb1a8b
+      size: 267187
+    - path: cad/scenes/office_vendor_machine/artifacts/collision_meshes.zip
+      md5: c6b0c9715e76ce0ab506d548d8f5582b
+      size: 165
+    - path: cad/scenes/office_vendor_machine/artifacts/collision_selection.json
+      md5: c8d37de369f818c10fa832cf5fad5693
+      size: 4848
+    - path: cad/scenes/office_vendor_machine/artifacts/meshes.zip
+      md5: 34463f9226401a7a8e57ae1848b8f07a
+      size: 35315142
+    - path: cad/scenes/office_vendor_machine/artifacts/object_list.json
+      md5: 8c0d2925aff94cfe73ade0b80b35c6f7
+      size: 65900
+    - path: cad/scenes/public_restroom_blue/artifacts/collision_meshes.zip
+      md5: 1e896bb9f92e3e72174b888d5495e1e1
+      size: 165
+    - path: cad/scenes/public_restroom_blue/artifacts/collision_selection.json
+      md5: 105cc5d1f93f40c1eea79ca57c440ee4
+      size: 1310
+    - path: cad/scenes/public_restroom_blue/artifacts/meshes.zip
+      md5: 917229601eba5008f90d497977531448
+      size: 1660045
+    - path: cad/scenes/public_restroom_blue/artifacts/object_list.json
+      md5: a160a6410c0aaecfdb36253caf69c198
+      size: 21793
+    - path: cad/scenes/public_restroom_brown/artifacts/collision_meshes.zip
+      md5: c6f43429623902237fdd9f9b8f77b171
+      size: 167
+    - path: cad/scenes/public_restroom_brown/artifacts/collision_selection.json
+      md5: a0c4b9a3acfc2c4538b63828ec225e68
+      size: 1640
+    - path: cad/scenes/public_restroom_brown/artifacts/meshes.zip
+      md5: 2a5c9580c3092ab0bc0a471691d86e5f
+      size: 1436966
+    - path: cad/scenes/public_restroom_brown/artifacts/object_list.json
+      md5: 88cd9257c1ee8338584e670334434ecd
+      size: 22525
+    - path: cad/scenes/public_restroom_futuristic/artifacts/collision_meshes.zip
+      md5: aa6449f2f4cedb18e48c6e5f0e6c8c3c
+      size: 166
+    - path: cad/scenes/public_restroom_futuristic/artifacts/collision_selection.json
+      md5: 15b1efc5c5fdedb4c29fc2084ba28e81
+      size: 1765
+    - path: cad/scenes/public_restroom_futuristic/artifacts/meshes.zip
+      md5: 386eb0b9bd06a90cf03f3f7cbd648e76
+      size: 2625006
+    - path: cad/scenes/public_restroom_futuristic/artifacts/object_list.json
+      md5: ee7b4bc212654e770db0193f37ede39b
+      size: 31709
+    - path: cad/scenes/public_restroom_marble/artifacts/collision_meshes.zip
+      md5: 113c51e1846236cab93d987acc050516
+      size: 166
+    - path: cad/scenes/public_restroom_marble/artifacts/collision_selection.json
+      md5: 19908572fd5c660aefff44c6fc284fff
+      size: 1034
+    - path: cad/scenes/public_restroom_marble/artifacts/meshes.zip
+      md5: 15056cdea6fddf01b8394f07d3348b62
+      size: 3420824
+    - path: cad/scenes/public_restroom_marble/artifacts/object_list.json
+      md5: c95d241356ff0353114716653566c0a8
+      size: 18252
+    - path: cad/scenes/public_restroom_white/artifacts/collision_meshes.zip
+      md5: fa6b3e4e540becd1aff76a249877c683
+      size: 166
+    - path: cad/scenes/public_restroom_white/artifacts/collision_selection.json
+      md5: 033a7e8067b2a8e26baf25059d536227
+      size: 1366
+    - path: cad/scenes/public_restroom_white/artifacts/meshes.zip
+      md5: 7fd96a183baae691ea57fada912ebc33
+      size: 8487517
+    - path: cad/scenes/public_restroom_white/artifacts/object_list.json
+      md5: ed2b6f5817b398bb9f29c96a6c4642a6
+      size: 25006
+    - path: cad/scenes/restaurant_asian/artifacts/collision_meshes.zip
+      md5: 4fca500646a022137ccbc0966b085b57
+      size: 33898
+    - path: cad/scenes/restaurant_asian/artifacts/collision_selection.json
+      md5: 1f3df90cfaa8c966e975b670d6672f74
+      size: 6217
+    - path: cad/scenes/restaurant_asian/artifacts/meshes.zip
+      md5: 5fba8782491cf01e6529d0774972cfab
+      size: 30451866
+    - path: cad/scenes/restaurant_asian/artifacts/object_list.json
+      md5: 79cb1d60a95721a65836207783f38ef4
+      size: 119554
+    - path: cad/scenes/restaurant_brunch/artifacts/collision_meshes.zip
+      md5: c1fa2fc8938151cbfa670c1ffe90fa97
+      size: 165
+    - path: cad/scenes/restaurant_brunch/artifacts/collision_selection.json
+      md5: b79ebe20c65ab86a07a2e56aaf2714b2
+      size: 8916
+    - path: cad/scenes/restaurant_brunch/artifacts/meshes.zip
+      md5: ae4b4fe2c55df5b1a084500fd642b579
+      size: 48539109
+    - path: cad/scenes/restaurant_brunch/artifacts/object_list.json
+      md5: 3282929665c77a3d2d0c06bf546800d5
+      size: 114897
+    - path: cad/scenes/restaurant_cafeteria/artifacts/collision_meshes.zip
+      md5: b70fe203ce1691e8f53da8450c3a43b0
+      size: 167
+    - path: cad/scenes/restaurant_cafeteria/artifacts/collision_selection.json
+      md5: 7d6a543f655ba40084c40bdb94310377
+      size: 6769
+    - path: cad/scenes/restaurant_cafeteria/artifacts/meshes.zip
+      md5: f00f24999dc581da151034bee0499ec7
+      size: 27639683
+    - path: cad/scenes/restaurant_cafeteria/artifacts/object_list.json
+      md5: bfd0115fe1f6f2dadc79d81505e7774a
+      size: 88052
+    - path: cad/scenes/restaurant_diner/artifacts/collision_meshes.zip
+      md5: 54473912db43657705372d9d7b542d19
+      size: 165
+    - path: cad/scenes/restaurant_diner/artifacts/collision_selection.json
+      md5: 2d209e60d2a19e2fc5fb84eb41c9654f
+      size: 4848
+    - path: cad/scenes/restaurant_diner/artifacts/meshes.zip
+      md5: 327c00322d79f2a84ed149bf6efe087f
+      size: 5464443
+    - path: cad/scenes/restaurant_diner/artifacts/object_list.json
+      md5: bc6b5ae64b95707f85929c38360f7c1f
+      size: 56799
+    - path: cad/scenes/restaurant_hotel/artifacts/collision_meshes.zip
+      md5: 305f01fe8ddc1f81a812795144ec67ea
+      size: 165
+    - path: cad/scenes/restaurant_hotel/artifacts/collision_selection.json
+      md5: 6aa6e43a8eb0ccdaa2c241d7d3157c2a
+      size: 4735
+    - path: cad/scenes/restaurant_hotel/artifacts/meshes.zip
+      md5: 66a5171613e78d12e49a5b9bb5aea2c6
+      size: 54360827
+    - path: cad/scenes/restaurant_hotel/artifacts/object_list.json
+      md5: c3cf18dee4b398168bf1442b474c7e50
+      size: 136367
+    - path: cad/scenes/restaurant_urban/artifacts/collision_meshes.zip
+      md5: 90bbcafd1b63c876ad6f59c8cbd97d95
+      size: 167
+    - path: cad/scenes/restaurant_urban/artifacts/collision_selection.json
+      md5: 2abb0a2b50370ba3e6747e96ae5dc400
+      size: 7064
+    - path: cad/scenes/restaurant_urban/artifacts/meshes.zip
+      md5: 77289f9028fa418da989b1cbc1392914
+      size: 153509688
+    - path: cad/scenes/restaurant_urban/artifacts/object_list.json
+      md5: ea2de3080edf789a0cd0623bfa4a529a
+      size: 203066
+    - path: cad/scenes/school_biology/artifacts/collision_meshes.zip
+      md5: 1186c716ea1a3bfb645d11b0e39d885d
+      size: 167
+    - path: cad/scenes/school_biology/artifacts/collision_selection.json
+      md5: 5fa900d36d1132cc3f87f1d12eae7a89
+      size: 5987
+    - path: cad/scenes/school_biology/artifacts/meshes.zip
+      md5: 8035adca803e1a0d5a9e29b69a526f2c
+      size: 42490211
+    - path: cad/scenes/school_biology/artifacts/object_list.json
+      md5: 6f9c49bed059b05e60547ca595b38f64
+      size: 270008
+    - path: cad/scenes/school_chemistry/artifacts/collision_meshes.zip
+      md5: 72af3167dc5f5821a9f1f0c9e59ed2f2
+      size: 167
+    - path: cad/scenes/school_chemistry/artifacts/collision_selection.json
+      md5: 67ec39cfcadd85d21c7af1a876fbb1c9
+      size: 9957
+    - path: cad/scenes/school_chemistry/artifacts/meshes.zip
+      md5: 39ea961664319576f5c3b81b72e6e19e
+      size: 39276112
+    - path: cad/scenes/school_chemistry/artifacts/object_list.json
+      md5: 4e60bbc83320e3076317c9b99fd80dc6
+      size: 322968
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/collision_meshes.zip
+      md5: 465f589c2c53d89345332f378f0c6792
+      size: 165
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/collision_selection.json
+      md5: 11019f2ef9f9cb3e9136c49c8116d112
+      size: 4248
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/meshes.zip
+      md5: 43b921f0c3ce7a82d9236d6229b075e8
+      size: 47718238
+    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
+      md5: 992c1989732d592d0ede5c974a5d77b6
+      size: 258794
+    - path: cad/scenes/school_geography/artifacts/collision_meshes.zip
+      md5: 91dac9756ae3324db1d1221f04012f93
+      size: 165
+    - path: cad/scenes/school_geography/artifacts/collision_selection.json
+      md5: 6c01c2de60ab1e549296ef79ef9d2246
+      size: 4084
+    - path: cad/scenes/school_geography/artifacts/meshes.zip
+      md5: f6b2307a0dd1167d88259eed342ae9a4
+      size: 44427420
+    - path: cad/scenes/school_geography/artifacts/object_list.json
+      md5: 6f89a6fdda913bf26d7f93469f9e8d66
+      size: 339978
+    - path: cad/scenes/school_gym/artifacts/collision_meshes.zip
+      md5: 0fd8cedc146718d28d4a6bd3225f267b
+      size: 165
+    - path: cad/scenes/school_gym/artifacts/collision_selection.json
+      md5: 44e0986f8390d02a616e256fa94e58af
+      size: 10577
+    - path: cad/scenes/school_gym/artifacts/meshes.zip
+      md5: 343267df0735f010cd3699b7b5e06005
+      size: 41078581
+    - path: cad/scenes/school_gym/artifacts/object_list.json
+      md5: 5cb625a945692e6a8ce01455434dfb7f
+      size: 360013
     outs:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 6cb26bd728bd8e78702e2aff5b340958
-      size: 276
+      md5: 6f1621a334e83da5668d0b9449fc6c21
+      size: 91590
   collision_average_volumes_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_average_volumes.json
       artifacts/pipeline/collision_average_volumes.success
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
-      md5: 6cb26bd728bd8e78702e2aff5b340958
-      size: 276
+      md5: 6f1621a334e83da5668d0b9449fc6c21
+      size: 91590
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707
