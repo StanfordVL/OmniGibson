@@ -474,7 +474,7 @@ def process_link(G, link_node, base_link_center, canonical_orientation, obj_name
     com = [0., 0., 0.]
     if "com" in meta_links:
         assert len(meta_links["com"]) == 1, f"Something's wrong: there's more than 1 CoM in {link_node}"
-        com_links = meta_links["com"]
+        com_links = list(meta_links["com"].values())[0]
         assert len(com_links) == 1, f"Something's wrong: there's more than 1 CoM in {link_node}"
         com = com_links[0]["position"]
         del meta_links["com"]
