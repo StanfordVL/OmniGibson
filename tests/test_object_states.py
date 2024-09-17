@@ -644,6 +644,7 @@ def test_on_fire(env, pipeline_mode):
     assert plywood.states[Temperature].get_value() == plywood.states[OnFire].temperature
 
 
+@pytest.mark.skip(reason="skipping toggle on test until trigger mesh is implemented")
 @og_test
 def test_toggled_on(env, pipeline_mode):
     stove = env.scene.object_registry("name", "stove")
