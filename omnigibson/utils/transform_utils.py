@@ -613,7 +613,7 @@ def pose2mat(pose: Tuple[th.Tensor, th.Tensor]) -> th.Tensor:
     pos = pos.to(dtype=th.float32).reshape(3)
     orn = orn.to(dtype=th.float32).reshape(4)
 
-    homo_pose_mat = th.eye(4, dtype=th.float32)
+    homo_pose_mat = th.eye(4, dtype=th.float32, device=pos.device)
     homo_pose_mat[:3, :3] = quat2mat(orn)
     homo_pose_mat[:3, 3] = pos
 
@@ -655,7 +655,7 @@ def quat2axisangle(quat):
 
 
 @th.jit.script
-def axisangle2quat(vec, eps=1e-6):
+def axisangle2quat(vec: th.Tensor, eps: float = 1e-6) -> th.Tensor:
     """
     Converts scaled axis-angle to quat.
     Args:
@@ -671,17 +671,17 @@ def axisangle2quat(vec, eps=1e-6):
     vec = vec.reshape(-1, 3)
 
     # Grab angle
-    angle = th.norm(vec, dim=-1, keepdim=True)
+    angle = th.norm(vec, dim=-1, keepdim=True, dtype=th.float32)
 
     # Create return array
-    quat = th.zeros(th.prod(th.tensor(input_shape, dtype=th.int)), 4, device=vec.device)
+    quat = th.zeros(th.prod(th.tensor(input_shape, dtype=th.int)), 4, device=vec.device, dtype=th.float32)
     quat[:, 3] = 1.0
 
     # Grab indexes where angle is not zero an convert the input to its quaternion form
     idx = angle.reshape(-1) > eps  # th.nonzero(angle).reshape(-1)
     quat[idx, :] = th.cat(
         [vec[idx, :] * th.sin(angle[idx, :] / 2.0) / angle[idx, :], th.cos(angle[idx, :] / 2.0)], dim=-1
-    )
+    ).float()
 
     # Reshape and return output
     quat = quat.reshape(
@@ -738,7 +738,7 @@ def pose_inv(pose_mat):
     # -t in the original frame, which is -R-1*t in the new frame, and then rotate back by
     # R-1 to align the axis again.
 
-    pose_inv = th.zeros((4, 4))
+    pose_inv = th.zeros((4, 4), dtype=pose_mat.dtype, device=pose_mat.device)
     pose_inv[:3, :3] = pose_mat[:3, :3].T
     pose_inv[:3, 3] = -pose_inv[:3, :3] @ pose_mat[:3, 3]
     pose_inv[3, 3] = 1.0

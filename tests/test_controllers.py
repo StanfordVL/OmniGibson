@@ -7,9 +7,13 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.robots import LocomotionRobot
 
 
-def test_arm_control():
+@pytest.mark.parametrize("pipeline_mode", ["cpu", "cuda"], indirect=True)
+def test_arm_control(pipeline_mode):
     # Create env
     cfg = {
+        "env": {
+            "device": pipeline_mode,
+        },
         "scene": {
             "type": "Scene",
         },
@@ -269,12 +273,12 @@ def test_arm_control():
                         curr_pos, curr_quat = robot.get_relative_eef_pose(arm=arm)
                         arm_controller = robot.controllers[f"arm_{arm}"]
                         arm_goal = arm_controller.goal
-                        target_pos = arm_goal["target_pos"]
+                        target_pos = arm_goal["target_pos"].cpu()
                         target_quat = (
                             arm_goal["target_quat"]
                             if controller == "InverseKinematicsController"
                             else T.mat2quat(arm_goal["target_ori_mat"])
-                        )
+                        ).cpu()
                         pos_check = err_checks[controller_mode][action_name]["pos"]
                         if pos_check is not None:
                             is_valid_pos = pos_check(target_pos, curr_pos, init_pos)

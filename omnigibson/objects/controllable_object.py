@@ -242,7 +242,7 @@ class ControllableObject(BaseObject):
             # Create the controller
             controller = create_controller(**cfg)
             # Verify the controller's DOFs can all be driven
-            for idx in controller.dof_idx:
+            for idx in controller.dof_idx.tolist():
                 assert self._joints[
                     self.dof_names_ordered[idx]
                 ].driven, "Controllers should only control driveable joints!"
@@ -255,7 +255,7 @@ class ControllableObject(BaseObject):
         """
         # Update the control modes of each joint based on the outputted control from the controllers
         for name in self._controllers:
-            for dof in self._controllers[name].dof_idx:
+            for dof in self._controllers[name].dof_idx.tolist():
                 control_type = self._controllers[name].control_type
                 self._joints[self.dof_names_ordered[dof]].set_control_type(
                     control_type=control_type,
@@ -348,13 +348,13 @@ class ControllableObject(BaseObject):
         low, high = [], []
         for controller in self._controllers.values():
             limits = controller.command_input_limits
-            low.append(th.tensor([-float("inf")] * controller.command_dim) if limits is None else limits[0])
-            high.append(th.tensor([float("inf")] * controller.command_dim) if limits is None else limits[1])
+            low.append(th.tensor([-float("inf")] * controller.command_dim) if limits is None else limits[0].cpu())
+            high.append(th.tensor([float("inf")] * controller.command_dim) if limits is None else limits[1].cpu())
 
         return gym.spaces.Box(
             shape=(self.action_dim,),
-            low=th.cat(low).cpu().numpy(),
-            high=th.cat(high).cpu().numpy(),
+            low=th.cat(low).numpy(),
+            high=th.cat(high).numpy(),
             dtype=NumpyTypes.FLOAT32,
         )
 
@@ -432,13 +432,12 @@ class ControllableObject(BaseObject):
             idx += controller.command_dim
 
         # Compose controls
-        u_vec = th.zeros(self.n_dof)
+        u_vec = th.zeros(self.n_dof, device=og.sim.device)
         # By default, the control type is None and the control value is 0 (th.zeros) - i.e. no control applied
         u_type_vec = th.tensor([ControlType.NONE] * self.n_dof)
         for group, ctrl in control.items():
-            idx = self._controllers[group].dof_idx
-            u_vec[idx] = ctrl["value"]
-            u_type_vec[idx] = ctrl["type"]
+            u_vec[self._controllers[group].dof_idx] = ctrl["value"]
+            u_type_vec[self._controllers[group].dof_idx] = ctrl["type"]
 
         u_vec, u_type_vec = self._postprocess_control(control=u_vec, control_type=u_type_vec)
 
@@ -554,7 +553,7 @@ class ControllableObject(BaseObject):
                 using_pos = True
             elif ctrl_type == ControlType.NONE:
                 # Set zero efforts
-                eff_vec.append(0)
+                eff_vec.append(th.tensor(0, dtype=th.float32, device=og.sim.device))
                 eff_idxs.append(cur_ctrl_idx)
                 using_eff = True
             else:
@@ -565,15 +564,15 @@ class ControllableObject(BaseObject):
         # set the targets for joints
         if using_pos:
             ControllableObjectViewAPI.set_joint_position_targets(
-                self.articulation_root_path, positions=th.tensor(pos_vec, dtype=th.float), indices=th.tensor(pos_idxs)
+                self.articulation_root_path, positions=th.stack(pos_vec), indices=pos_idxs
             )
         if using_vel:
             ControllableObjectViewAPI.set_joint_velocity_targets(
-                self.articulation_root_path, velocities=th.tensor(vel_vec, dtype=th.float), indices=th.tensor(vel_idxs)
+                self.articulation_root_path, velocities=th.stack(vel_vec), indices=vel_idxs
             )
         if using_eff:
             ControllableObjectViewAPI.set_joint_efforts(
-                self.articulation_root_path, efforts=th.tensor(eff_vec, dtype=th.float), indices=th.tensor(eff_idxs)
+                self.articulation_root_path, efforts=th.stack(eff_vec), indices=eff_idxs
             )
 
     def get_control_dict(self):
@@ -790,7 +789,7 @@ class ControllableObject(BaseObject):
         """
         dic = {}
         for controller in self.controller_order:
-            dic[controller] = self._controllers[controller].dof_idx
+            dic[controller] = self._controllers[controller].dof_idx.tolist()
 
         return dic
 

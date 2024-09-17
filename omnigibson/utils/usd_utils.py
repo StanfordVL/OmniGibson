@@ -623,9 +623,6 @@ class FlatcacheAPI:
             prim (EntityPrim): prim whose owned links and joints should have their raw local states updated to match the
                 "true" values found from the dynamic control interface
         """
-        # Make sure flatcache is enabled -- this should NEVER be called otherwise!!
-        assert gm.ENABLE_FLATCACHE, "Syncing raw object transforms should only occur if flatcache is being used!"
-
         # We're somewhat abusing low-level dynamic control - physx - usd integration, but we (supposedly) know
         # what we're doing so we suppress logging so we don't see any error messages :D
         with suppress_omni_log(["omni.physx.plugin"]):
@@ -669,9 +666,6 @@ class FlatcacheAPI:
         Args:
             prim (EntityPrim): prim whose owned links and joints should have their local values reset to be zero
         """
-        # Make sure flatcache is enabled -- this should NEVER be called otherwise!!
-        assert gm.ENABLE_FLATCACHE, "Resetting raw object transforms should only occur if flatcache is being used!"
-
         # We're somewhat abusing low-level dynamic control - physx - usd integration, but we (supposedly) know
         # what we're doing so we suppress logging so we don't see any error messages :D
         with suppress_omni_log(["omni.physx.plugin"]):
@@ -841,17 +835,17 @@ class BatchControlViewAPIImpl:
 
     def flush_control(self):
         if "dof_position_targets" in self._write_idx_cache:
-            pos_indices = th.tensor(sorted(self._write_idx_cache["dof_position_targets"]))
+            pos_indices = th.tensor(sorted(self._write_idx_cache["dof_position_targets"]), device=og.sim.device)
             pos_targets = self._read_cache["dof_position_targets"]
             self._view.set_dof_position_targets(pos_targets, pos_indices)
 
         if "dof_velocity_targets" in self._write_idx_cache:
-            vel_indices = th.tensor(sorted(self._write_idx_cache["dof_velocity_targets"]))
+            vel_indices = th.tensor(sorted(self._write_idx_cache["dof_velocity_targets"]), device=og.sim.device)
             vel_targets = self._read_cache["dof_velocity_targets"]
             self._view.set_dof_velocity_targets(vel_targets, vel_indices)
 
         if "dof_actuation_forces" in self._write_idx_cache:
-            eff_indices = th.tensor(sorted(self._write_idx_cache["dof_actuation_forces"]))
+            eff_indices = th.tensor(sorted(self._write_idx_cache["dof_actuation_forces"]), device=og.sim.device)
             eff_targets = self._read_cache["dof_actuation_forces"]
             self._view.set_dof_actuation_forces(eff_targets, eff_indices)
 
@@ -1106,7 +1100,7 @@ class BatchControlViewAPIImpl:
     def get_relative_jacobian(self, prim_path):
         jacobian = self.get_jacobian(prim_path)
         ori_t = T.quat2mat(self.get_position_orientation(prim_path)[1]).T
-        tf = th.zeros((1, 6, 6), dtype=th.float32)
+        tf = th.zeros((1, 6, 6), dtype=th.float32, device=og.sim.device)
         tf[:, :3, :3] = ori_t
         tf[:, 3:, 3:] = ori_t
         return tf @ jacobian
@@ -1374,8 +1368,8 @@ def mesh_prim_mesh_to_trimesh_mesh(mesh_prim, include_normals=True, include_texc
     mesh_type = mesh_prim.GetPrimTypeInfo().GetTypeName()
     assert mesh_type == "Mesh", f"Expected mesh prim to have type Mesh, got {mesh_type}"
     face_vertex_counts = vtarray_to_torch(mesh_prim.GetAttribute("faceVertexCounts").Get(), dtype=th.int)
-    vertices = vtarray_to_torch(mesh_prim.GetAttribute("points").Get())
-    face_indices = vtarray_to_torch(mesh_prim.GetAttribute("faceVertexIndices").Get(), dtype=th.int)
+    vertices = vtarray_to_torch(mesh_prim.GetAttribute("points").Get()).cpu()
+    face_indices = vtarray_to_torch(mesh_prim.GetAttribute("faceVertexIndices").Get(), dtype=th.int).cpu()
 
     faces = []
     i = 0
@@ -1387,7 +1381,7 @@ def mesh_prim_mesh_to_trimesh_mesh(mesh_prim, include_normals=True, include_texc
     kwargs = dict(vertices=vertices, faces=faces)
 
     if include_normals:
-        kwargs["vertex_normals"] = vtarray_to_torch(mesh_prim.GetAttribute("normals").Get())
+        kwargs["vertex_normals"] = vtarray_to_torch(mesh_prim.GetAttribute("normals").Get()).cpu()
 
     if include_texcoord:
         raw_texture = mesh_prim.GetAttribute("primvars:st").Get()
@@ -1452,7 +1446,7 @@ def mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=
         trimesh_mesh = mesh_prim_shape_to_trimesh_mesh(mesh_prim)
 
     if world_frame:
-        trimesh_mesh.apply_transform(PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString))
+        trimesh_mesh.apply_transform(PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString).cpu())
 
     return trimesh_mesh
 

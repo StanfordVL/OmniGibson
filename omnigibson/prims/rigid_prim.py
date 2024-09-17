@@ -277,14 +277,25 @@ class RigidPrim(XFormPrim):
                 contacts.append(CsRawData(*c))
         return contacts
 
-    def set_linear_velocity(self, velocity):
+    def set_velocity(self, velocity):
+        """
+        Sets the linear and angular velocity of the prim in stage.
+        Args:
+            velocity (th.Tensor): linear and angular velocity to set the rigid prim to. Shape (6,).
+        """
+        assert velocity.shape == (6,), f"Velocity must be a 6-array, got {velocity.shape}"
+        self._rigid_prim_view.set_velocities(velocity[None, :])
+
+    def set_linear_velocity(self, linear_velocity):
         """
         Sets the linear velocity of the prim in stage.
 
         Args:
-            velocity (th.tensor): linear velocity to set the rigid prim to. Shape (3,).
+            linear_velocity (th.tensor): linear velocity to set the rigid prim to. Shape (3,).
         """
-        self._rigid_prim_view.set_linear_velocities(velocity[None, :])
+        ang_vel = self.get_angular_velocity()
+        vel = th.cat([linear_velocity, ang_vel])
+        self.set_velocity(vel)
 
     def get_linear_velocity(self, clone=True):
         """
@@ -294,16 +305,18 @@ class RigidPrim(XFormPrim):
         Returns:
             th.tensor: current linear velocity of the the rigid prim. Shape (3,).
         """
-        return self._rigid_prim_view.get_linear_velocities(clone=clone)[0]
+        return self._rigid_prim_view.get_linear_velocities(clone=clone)[0].cpu()
 
-    def set_angular_velocity(self, velocity):
+    def set_angular_velocity(self, angular_velocity):
         """
         Sets the angular velocity of the prim in stage.
 
         Args:
             velocity (th.tensor): angular velocity to set the rigid prim to. Shape (3,).
         """
-        self._rigid_prim_view.set_angular_velocities(velocity[None, :])
+        lin_vel = self.get_linear_velocity()
+        vel = th.cat([lin_vel, angular_velocity])
+        self.set_velocity(vel)
 
     def get_angular_velocity(self, clone=True):
         """
@@ -313,7 +326,7 @@ class RigidPrim(XFormPrim):
         Returns:
             th.tensor: current angular velocity of the the rigid prim. Shape (3,).
         """
-        return self._rigid_prim_view.get_angular_velocities(clone=clone)[0]
+        return self._rigid_prim_view.get_angular_velocities(clone=clone)[0].cpu()
 
     def set_position_orientation(self, position=None, orientation=None, frame: Literal["world", "scene"] = "world"):
         """
@@ -381,8 +394,8 @@ class RigidPrim(XFormPrim):
 
         # Otherwise, get the pose from the rigid prim view and convert to our format
         positions, orientations = self._rigid_prim_view.get_world_poses(clone=clone)
-        position = positions[0]
-        orientation = orientations[0][[1, 2, 3, 0]]
+        position = positions[0].cpu()
+        orientation = orientations[0].cpu()[[1, 2, 3, 0]]
 
         # Assert that the orientation is a unit quaternion
         assert math.isclose(
@@ -835,8 +848,8 @@ class RigidPrim(XFormPrim):
     def _dump_state(self):
         # Grab pose from super class
         state = super()._dump_state()
-        state["lin_vel"] = self.get_linear_velocity(clone=False)
-        state["ang_vel"] = self.get_angular_velocity(clone=False)
+        state["lin_vel"] = self.get_linear_velocity(clone=False).to("cpu")
+        state["ang_vel"] = self.get_angular_velocity(clone=False).to("cpu")
 
         return state
 

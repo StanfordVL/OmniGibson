@@ -40,10 +40,9 @@ except ModuleNotFoundError:
 
 assert meets_minimum_version(gym.__version__, "0.28.1"), "Please install/update gymnasium to version >= 0.28.1"
 
-# We don't need object states nor transitions rules, so we disable them now, and also enable flatcache for maximum speed
+# We don't need object states nor transitions rules, so we disable them now
 gm.ENABLE_OBJECT_STATES = False
 gm.ENABLE_TRANSITION_RULES = False
-gm.ENABLE_FLATCACHE = True
 
 
 class CustomCombinedExtractor(BaseFeaturesExtractor):
@@ -170,7 +169,7 @@ def main():
             policy_kwargs=policy_kwargs,
             n_steps=20 * 10,
             batch_size=8,
-            device="cuda",
+            device=og.sim.device,
         )
         checkpoint_callback = CheckpointCallback(save_freq=1000, save_path=tensorboard_log_dir, name_prefix=prefix)
         eval_callback = EvalCallback(eval_env=env, eval_freq=1000, n_eval_episodes=20)

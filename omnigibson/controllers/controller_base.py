@@ -4,6 +4,7 @@ from enum import IntEnum
 
 import torch as th
 
+import omnigibson as og
 from omnigibson.utils.python_utils import Recreatable, Registerable, Serializable, assert_valid_key, classproperty
 
 # Global dicts that will contain mappings
@@ -100,19 +101,24 @@ class BaseController(Serializable, Registerable, Recreatable):
                 to the @control_limits entry corresponding to self.control_type
         """
         # Store arguments
-        self._control_freq = control_freq
-        self._control_limits = {}
-        for motor_type in {"position", "velocity", "effort"}:
-            if motor_type not in control_limits:
-                continue
-
-            self._control_limits[ControlType.get_type(motor_type)] = [
-                control_limits[motor_type][0],
-                control_limits[motor_type][1],
-            ]
         assert "has_limit" in control_limits, "Expected has_limit specified in control_limits, but does not exist."
-        self._dof_has_limits = control_limits["has_limit"]
-        self._dof_idx = dof_idx.int()
+        self._dof_idx = dof_idx.int().to(device=og.sim.device)
+        # Store the indices in self.dof_idx that have control limits
+        self._limited_dof_indices = th.tensor(
+            [i for i, idx in enumerate(self.dof_idx) if control_limits["has_limit"][idx]],
+            dtype=th.long,
+            device=og.sim.device,
+        )
+        self._control_freq = control_freq
+        # Store control limits as a 3 x 2 x n tensor: [control_type][min/max][dof_idx]
+        self._control_limits = th.zeros((3, 2, len(dof_idx)), device=og.sim.device)
+        for motor_type in {"position", "velocity", "effort"}:
+            self._control_limits[ControlType.get_type(motor_type)][0] = control_limits[motor_type][0][dof_idx].to(
+                device=og.sim.device
+            )
+            self._control_limits[ControlType.get_type(motor_type)][1] = control_limits[motor_type][1][dof_idx].to(
+                device=og.sim.device
+            )
 
         # Generate goal information
         self._goal_shapes = self._get_goal_shapes()
@@ -133,8 +139,8 @@ class BaseController(Serializable, Registerable, Recreatable):
         )
         command_output_limits = (
             (
-                self._control_limits[self.control_type][0][self.dof_idx],
-                self._control_limits[self.control_type][1][self.dof_idx],
+                self._control_limits[self.control_type][0],
+                self._control_limits[self.control_type][1],
             )
             if type(command_output_limits) == str and command_output_limits == "default"
             else command_output_limits
@@ -169,7 +175,11 @@ class BaseController(Serializable, Registerable, Recreatable):
             Array[float]: Processed command vector
         """
         # Make sure command is a th.tensor
-        command = th.tensor([command]) if type(command) in {int, float} else command
+        command = (
+            th.tensor([command], device=og.sim.device)
+            if type(command) in {int, float}
+            else command.to(device=og.sim.device)
+        )
         # We only clip and / or scale if self.command_input_limits exists
         if self._command_input_limits is not None:
             # Clip
@@ -238,7 +248,9 @@ class BaseController(Serializable, Registerable, Recreatable):
         ), f"Commands must be dimension {self.command_dim}, got dim {len(command)} instead."
 
         # Preprocess and run internal command
-        self._goal = self._update_goal(command=self._preprocess_command(command), control_dict=control_dict)
+        self._goal = self._update_goal(
+            command=self._preprocess_command(command.to(device=og.sim.device)), control_dict=control_dict
+        )
 
     def _update_goal(self, command, control_dict):
         """
@@ -281,15 +293,13 @@ class BaseController(Serializable, Registerable, Recreatable):
             Array[float]: Clipped control signal
         """
         clipped_control = control.clip(
-            self._control_limits[self.control_type][0][self.dof_idx],
-            self._control_limits[self.control_type][1][self.dof_idx],
+            self._control_limits[self.control_type][0],
+            self._control_limits[self.control_type][1],
         )
-        idx = (
-            self._dof_has_limits[self.dof_idx]
-            if self.control_type == ControlType.POSITION
-            else [True] * self.control_dim
-        )
-        control[idx] = clipped_control[idx]
+        if self.control_type == ControlType.POSITION:
+            control[self._limited_dof_indices] = clipped_control[self._limited_dof_indices]
+        else:
+            control = clipped_control
         return control
 
     def step(self, control_dict):
@@ -417,12 +427,12 @@ class BaseController(Serializable, Registerable, Recreatable):
         # Check if input is an Iterable, if so, we simply convert the input to th.tensor and return
         # Else, input is a single value, so we map to a numpy array of correct size and return
         return (
-            nums
+            nums.to(device=og.sim.device)
             if isinstance(nums, th.Tensor)
             else (
-                th.tensor(nums, dtype=th.float32)
+                th.tensor(nums, dtype=th.float32, device=og.sim.device)
                 if isinstance(nums, Iterable)
-                else th.ones(dim, dtype=th.float32) * nums
+                else th.ones(dim, dtype=th.float32, device=og.sim.device) * nums
             )
         )
 
@@ -510,7 +520,7 @@ class BaseController(Serializable, Registerable, Recreatable):
     def dof_idx(self):
         """
         Returns:
-            Array[int]: DOF indices corresponding to the specific DOFs being controlled by this robot
+            th.Tensor[int]: DOF indices corresponding to the specific DOFs being controlled by this robot
         """
         return self._dof_idx
 

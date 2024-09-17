@@ -299,19 +299,19 @@ class Tiago(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
 
         # Rotate the linear and angular velocity to the desired frame
         lin_vel_global, _ = T.pose_transform(
-            th.tensor([0, 0, 0], dtype=th.float32),
+            th.tensor([0, 0, 0], dtype=th.float32, device=og.sim.device),
             cur_orn,
             u_vec[self.base_idx[:3]],
-            th.tensor([0, 0, 0, 1], dtype=th.float32),
+            th.tensor([0, 0, 0, 1], dtype=th.float32, device=og.sim.device),
         )
         ang_vel_global, _ = T.pose_transform(
-            th.tensor([0, 0, 0], dtype=th.float32),
+            th.tensor([0, 0, 0], dtype=th.float32, device=og.sim.device),
             cur_orn,
             u_vec[self.base_idx[3:]],
-            th.tensor([0, 0, 0, 1], dtype=th.float32),
+            th.tensor([0, 0, 0, 1], dtype=th.float32, device=og.sim.device),
         )
 
-        u_vec[self.base_control_idx] = th.tensor([lin_vel_global[0], lin_vel_global[1], ang_vel_global[2]])
+        u_vec[self.base_control_idx] = th.stack([lin_vel_global[0], lin_vel_global[1], ang_vel_global[2]])
         return u_vec, u_type_vec
 
     def _get_proprioception_dict(self):

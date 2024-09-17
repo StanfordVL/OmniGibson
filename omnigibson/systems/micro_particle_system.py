@@ -482,16 +482,6 @@ class MicroParticleSystem(BaseSystem):
         # Run super first
         super().initialize(scene)
 
-        # Run sanity checks
-        if not gm.USE_GPU_DYNAMICS:
-            raise ValueError(f"Failed to initialize {self.name} system. Please set gm.USE_GPU_DYNAMICS to be True.")
-
-        # Make sure flatcache is not being used OR isosurface is enabled -- otherwise, raise an error, since
-        # non-isosurface particles don't get rendered properly when flatcache is enabled
-        assert (
-            self.use_isosurface or not gm.ENABLE_FLATCACHE
-        ), f"Cannot use flatcache with MicroParticleSystem {self.name} when no isosurface is used!"
-
         self.system_prim = self._create_particle_system()
         # Get material
         material = self._get_particle_material_template()
@@ -1750,7 +1740,7 @@ class Cloth(MicroParticleSystem):
                 vertex_normals=new_normals,
             )
             # Apply the inverse of the world transform to get the mesh back into its local frame
-            tm.apply_transform(th.linalg.inv_ex(scaled_world_transform).inverse)
+            tm.apply_transform(th.linalg.inv_ex(scaled_world_transform).inverse.cpu())
 
         # Update the mesh prim
         face_vertex_counts = th.tensor([len(face) for face in tm.faces], dtype=int).cpu().numpy()

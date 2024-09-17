@@ -22,7 +22,7 @@ from omnigibson.utils.physx_utils import apply_force_at_pos, apply_torque
 
 
 @og_test
-def test_dryer_rule(env):
+def test_dryer_rule(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     clothes_dryer = env.scene.object_registry("name", "clothes_dryer")
     remover_dishtowel = env.scene.object_registry("name", "remover_dishtowel")
@@ -78,7 +78,7 @@ def test_dryer_rule(env):
 
 
 @og_test
-def test_washer_rule(env):
+def test_washer_rule(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     baking_sheet = env.scene.object_registry("name", "baking_sheet")
     washer = env.scene.object_registry("name", "washer")
@@ -149,7 +149,7 @@ def test_washer_rule(env):
 
 
 @og_test
-def test_slicing_rule(env):
+def test_slicing_rule(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     apple = env.scene.object_registry("name", "apple")
     table_knife = env.scene.object_registry("name", "table_knife")
@@ -202,7 +202,7 @@ def test_slicing_rule(env):
 
 
 @og_test
-def test_dicing_rule_cooked(env):
+def test_dicing_rule_cooked(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     half_apple = env.scene.object_registry("name", "half_apple")
     table_knife = env.scene.object_registry("name", "table_knife")
@@ -254,7 +254,7 @@ def test_dicing_rule_cooked(env):
 
 
 @og_test
-def test_dicing_rule_uncooked(env):
+def test_dicing_rule_uncooked(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     half_apple = env.scene.object_registry("name", "half_apple")
     table_knife = env.scene.object_registry("name", "table_knife")
@@ -304,7 +304,7 @@ def test_dicing_rule_uncooked(env):
 
 
 @og_test
-def test_melting_rule(env):
+def test_melting_rule(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     stove = env.scene.object_registry("name", "stove")
     stockpot = env.scene.object_registry("name", "stockpot")
@@ -354,7 +354,7 @@ def test_melting_rule(env):
 
 
 @og_test
-def test_cooking_physical_particle_rule_failure_recipe_systems(env):
+def test_cooking_physical_particle_rule_failure_recipe_systems(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     stove = env.scene.object_registry("name", "stove")
     stockpot = env.scene.object_registry("name", "stockpot")
@@ -394,7 +394,7 @@ def test_cooking_physical_particle_rule_failure_recipe_systems(env):
 
 
 @og_test
-def test_cooking_physical_particle_rule_success(env):
+def test_cooking_physical_particle_rule_success(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     stove = env.scene.object_registry("name", "stove")
     stockpot = env.scene.object_registry("name", "stockpot")
@@ -441,7 +441,7 @@ def test_cooking_physical_particle_rule_success(env):
 
 
 @og_test
-def test_mixing_rule_failure_recipe_systems(env):
+def test_mixing_rule_failure_recipe_systems(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     bowl = env.scene.object_registry("name", "bowl")
     tablespoon = env.scene.object_registry("name", "tablespoon")
@@ -482,7 +482,7 @@ def test_mixing_rule_failure_recipe_systems(env):
 
 
 @og_test
-def test_mixing_rule_failure_nonrecipe_systems(env):
+def test_mixing_rule_failure_nonrecipe_systems(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     bowl = env.scene.object_registry("name", "bowl")
     tablespoon = env.scene.object_registry("name", "tablespoon")
@@ -528,7 +528,7 @@ def test_mixing_rule_failure_nonrecipe_systems(env):
 
 
 @og_test
-def test_mixing_rule_success(env):
+def test_mixing_rule_success(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     bowl = env.scene.object_registry("name", "bowl")
     tablespoon = env.scene.object_registry("name", "tablespoon")
@@ -566,7 +566,7 @@ def test_mixing_rule_success(env):
 
 
 @og_test
-def test_cooking_system_rule_failure_recipe_systems(env):
+def test_cooking_system_rule_failure_recipe_systems(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     stove = env.scene.object_registry("name", "stove")
     stockpot = env.scene.object_registry("name", "stockpot")
@@ -621,7 +621,7 @@ def test_cooking_system_rule_failure_recipe_systems(env):
 
 
 @og_test
-def test_cooking_system_rule_failure_nonrecipe_systems(env):
+def test_cooking_system_rule_failure_nonrecipe_systems(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     stove = env.scene.object_registry("name", "stove")
     stockpot = env.scene.object_registry("name", "stockpot")
@@ -680,7 +680,7 @@ def test_cooking_system_rule_failure_nonrecipe_systems(env):
 
 
 @og_test
-def test_cooking_system_rule_failure_nonrecipe_objects(env):
+def test_cooking_system_rule_failure_nonrecipe_objects(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     stove = env.scene.object_registry("name", "stove")
     stockpot = env.scene.object_registry("name", "stockpot")
@@ -739,7 +739,7 @@ def test_cooking_system_rule_failure_nonrecipe_objects(env):
 
 
 @og_test
-def test_cooking_system_rule_success(env):
+def test_cooking_system_rule_success(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     stove = env.scene.object_registry("name", "stove")
     stockpot = env.scene.object_registry("name", "stockpot")
@@ -803,7 +803,7 @@ def test_cooking_system_rule_success(env):
 
 
 @og_test
-def test_cooking_object_rule_failure_wrong_container(env):
+def test_cooking_object_rule_failure_wrong_container(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
 
     oven = env.scene.object_registry("name", "oven")
@@ -846,7 +846,7 @@ def test_cooking_object_rule_failure_wrong_container(env):
 
 
 @og_test
-def test_cooking_object_rule_failure_recipe_objects(env):
+def test_cooking_object_rule_failure_recipe_objects(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
 
     oven = env.scene.object_registry("name", "oven")
@@ -888,7 +888,7 @@ def test_cooking_object_rule_failure_recipe_objects(env):
 
 
 @og_test
-def test_cooking_object_rule_failure_unary_states(env):
+def test_cooking_object_rule_failure_unary_states(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
 
     oven = env.scene.object_registry("name", "oven")
@@ -931,7 +931,7 @@ def test_cooking_object_rule_failure_unary_states(env):
 
 
 @og_test
-def test_cooking_object_rule_failure_binary_system_states(env):
+def test_cooking_object_rule_failure_binary_system_states(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
 
     oven = env.scene.object_registry("name", "oven")
@@ -974,7 +974,7 @@ def test_cooking_object_rule_failure_binary_system_states(env):
 
 
 @og_test
-def test_cooking_object_rule_failure_binary_object_states(env):
+def test_cooking_object_rule_failure_binary_object_states(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
 
     oven = env.scene.object_registry("name", "oven")
@@ -1017,7 +1017,7 @@ def test_cooking_object_rule_failure_binary_object_states(env):
 
 
 @og_test
-def test_cooking_object_rule_failure_wrong_heat_source(env):
+def test_cooking_object_rule_failure_wrong_heat_source(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
 
     stove = env.scene.object_registry("name", "stove")
@@ -1063,7 +1063,7 @@ def test_cooking_object_rule_failure_wrong_heat_source(env):
 
 
 @og_test
-def test_cooking_object_rule_success(env):
+def test_cooking_object_rule_success(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
 
     oven = env.scene.object_registry("name", "oven")
@@ -1133,7 +1133,7 @@ def test_cooking_object_rule_success(env):
 
 
 @og_test
-def test_single_toggleable_machine_rule_output_system_failure_wrong_container(env):
+def test_single_toggleable_machine_rule_output_system_failure_wrong_container(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     food_processor = env.scene.object_registry("name", "food_processor")
     ice_cream = env.scene.object_registry("name", "scoop_of_ice_cream")
@@ -1183,7 +1183,7 @@ def test_single_toggleable_machine_rule_output_system_failure_wrong_container(en
 
 
 @og_test
-def test_single_toggleable_machine_rule_output_system_failure_recipe_systems(env):
+def test_single_toggleable_machine_rule_output_system_failure_recipe_systems(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     blender = env.scene.object_registry("name", "blender")
     ice_cream = env.scene.object_registry("name", "scoop_of_ice_cream")
@@ -1231,7 +1231,7 @@ def test_single_toggleable_machine_rule_output_system_failure_recipe_systems(env
 
 
 @og_test
-def test_single_toggleable_machine_rule_output_system_failure_recipe_objects(env):
+def test_single_toggleable_machine_rule_output_system_failure_recipe_objects(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     blender = env.scene.object_registry("name", "blender")
     ice_cream = env.scene.object_registry("name", "scoop_of_ice_cream")
@@ -1271,7 +1271,7 @@ def test_single_toggleable_machine_rule_output_system_failure_recipe_objects(env
 
 
 @og_test
-def test_single_toggleable_machine_rule_output_system_failure_nonrecipe_systems(env):
+def test_single_toggleable_machine_rule_output_system_failure_nonrecipe_systems(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     blender = env.scene.object_registry("name", "blender")
     ice_cream = env.scene.object_registry("name", "scoop_of_ice_cream")
@@ -1322,7 +1322,7 @@ def test_single_toggleable_machine_rule_output_system_failure_nonrecipe_systems(
 
 
 @og_test
-def test_single_toggleable_machine_rule_output_system_failure_nonrecipe_objects(env):
+def test_single_toggleable_machine_rule_output_system_failure_nonrecipe_objects(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     blender = env.scene.object_registry("name", "blender")
     ice_cream = env.scene.object_registry("name", "scoop_of_ice_cream")
@@ -1372,7 +1372,7 @@ def test_single_toggleable_machine_rule_output_system_failure_nonrecipe_objects(
 
 
 @og_test
-def test_single_toggleable_machine_rule_output_system_success(env):
+def test_single_toggleable_machine_rule_output_system_success(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     blender = env.scene.object_registry("name", "blender")
     ice_cream = env.scene.object_registry("name", "scoop_of_ice_cream")
@@ -1421,7 +1421,7 @@ def test_single_toggleable_machine_rule_output_system_success(env):
 
 
 @og_test
-def test_single_toggleable_machine_rule_output_object_failure_unary_states(env):
+def test_single_toggleable_machine_rule_output_object_failure_unary_states(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     electric_mixer = env.scene.object_registry("name", "electric_mixer")
     raw_egg = env.scene.object_registry("name", "raw_egg")
@@ -1495,7 +1495,7 @@ def test_single_toggleable_machine_rule_output_object_failure_unary_states(env):
 
 
 @og_test
-def test_single_toggleable_machine_rule_output_object_success(env):
+def test_single_toggleable_machine_rule_output_object_success(env, pipeline_mode):
     assert len(REGISTERED_RULES) > 0, "No rules registered!"
     electric_mixer = env.scene.object_registry("name", "electric_mixer")
     raw_egg = env.scene.object_registry("name", "raw_egg")

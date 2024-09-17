@@ -348,10 +348,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
 
         # Create desired systems
         for system_name in self._init_systems:
-            if gm.USE_GPU_DYNAMICS:
-                self.get_system(system_name)
-            else:
-                log.warning(f"System {system_name} is not supported without GPU dynamics! Skipping...")
+            self.get_system(system_name)
 
         # Position the scene prim initially at a z offset to avoid collision
         self._scene_prim.set_position_orientation(

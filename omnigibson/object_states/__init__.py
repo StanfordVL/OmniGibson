@@ -21,7 +21,6 @@ from omnigibson.object_states.on_fire import OnFire
 from omnigibson.object_states.on_top import OnTop
 from omnigibson.object_states.open_state import Open
 from omnigibson.object_states.overlaid import Overlaid
-from omnigibson.object_states.particle import ParticleRequirement
 from omnigibson.object_states.particle_modifier import ParticleApplier, ParticleRemover
 from omnigibson.object_states.particle_source_or_sink import ParticleSink, ParticleSource
 from omnigibson.object_states.pose import Pose

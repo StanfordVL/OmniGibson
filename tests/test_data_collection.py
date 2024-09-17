@@ -9,10 +9,12 @@ from omnigibson.macros import gm
 from omnigibson.objects import DatasetObject
 
 
-def test_data_collect_and_playback():
+@pytest.mark.parametrize("pipeline_mode", ["cpu", "cuda"], indirect=True)
+def test_data_collect_and_playback(pipeline_mode):
     cfg = {
         "env": {
             "external_sensors": [],
+            "device": pipeline_mode,
         },
         "scene": {
             "type": "InteractiveTraversableScene",
@@ -35,10 +37,7 @@ def test_data_collect_and_playback():
     }
 
     if og.sim is None:
-        # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
         gm.ENABLE_OBJECT_STATES = True
-        gm.USE_GPU_DYNAMICS = True
-        gm.ENABLE_FLATCACHE = True
         gm.ENABLE_TRANSITION_RULES = False
     else:
         # Make sure sim is stopped
@@ -60,7 +59,7 @@ def test_data_collect_and_playback():
     for i in range(2):
         env.reset()
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
         # Manually add a random object, e.g.: a banana, and place on the floor
         obj = DatasetObject(name="banana", category="banana")
@@ -69,14 +68,14 @@ def test_data_collect_and_playback():
 
         # Take a few more steps
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
         # Manually remove the added object
         env.scene.remove_object(obj)
 
         # Take a few more steps
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
         # Add water particles
         water = env.scene.get_system("water")
@@ -85,14 +84,14 @@ def test_data_collect_and_playback():
 
         # Take a few more steps
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
         # Clear the system
         env.scene.clear_system("water")
 
         # Take a few more steps
         for _ in range(5):
-            env.step(env.robots[0].action_space.sample())
+            env.step(th.tensor(env.robots[0].action_space.sample()))
 
     # Save this data
     env.save_data()

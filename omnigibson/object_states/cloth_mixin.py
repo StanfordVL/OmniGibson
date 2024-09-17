@@ -1,3 +1,4 @@
+import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.object_states.object_state_base import BaseObjectState
 from omnigibson.utils.constants import PrimType
@@ -24,9 +25,9 @@ class ClothStateMixin(BaseObjectState):
                 f"with prim_type=PrimType.CLOTH!",
             )
 
-        # Check for GPU dynamics
-        if not gm.USE_GPU_DYNAMICS:
-            return False, f"gm.USE_GPU_DYNAMICS must be True in order to use object state {cls.__name__}."
+        # Check for GPU pipeline
+        if og.sim.device == "cpu":
+            return False, f"Must be using GPU dynamics in order to use object state {cls.__name__}."
 
         return True, None
 

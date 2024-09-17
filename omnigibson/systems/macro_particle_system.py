@@ -542,9 +542,8 @@ class MacroVisualParticleSystem(MacroParticleSystem, VisualParticleSystem):
 
         bbox_extents_local = [(self.particle_object.aabb_extent * scale).tolist() for scale in scales]
 
-        # If we're using flatcache, we need to update the object's pose on the USD manually
-        if gm.ENABLE_FLATCACHE:
-            FlatcacheAPI.sync_raw_object_transforms_in_usd(prim=obj)
+        # Update the object's pose on the USD manually
+        FlatcacheAPI.sync_raw_object_transforms_in_usd(prim=obj)
 
         # Generate particles
         z_up = th.zeros((3, 1))

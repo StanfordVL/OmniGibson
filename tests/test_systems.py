@@ -7,7 +7,7 @@ from omnigibson.systems import *
 
 
 @og_test
-def test_system_clear(env):
+def test_system_clear(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     for system_name, system_class in SYSTEM_EXAMPLES.items():
         for _ in range(3):

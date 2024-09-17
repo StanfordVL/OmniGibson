@@ -91,7 +91,6 @@ def start_env():
         ],
     }
 
-    gm.USE_GPU_DYNAMICS = True
     gm.ENABLE_TRANSITION_RULES = False
 
     env = og.Environment(configs=config)

@@ -17,7 +17,6 @@ macros.object_states.covered.MAX_VISUAL_PARTICLES = 300
 
 # Make sure object states and GPU dynamics are enabled (GPU dynamics needed for fluids)
 gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_HQ_RENDERING = True
 
 

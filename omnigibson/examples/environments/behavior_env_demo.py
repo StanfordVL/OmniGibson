@@ -1,5 +1,6 @@
 import os
 
+import torch as th
 import yaml
 
 import omnigibson as og
@@ -8,7 +9,6 @@ from omnigibson.utils.ui_utils import choose_from_options
 
 # Make sure object states are enabled
 gm.ENABLE_OBJECT_STATES = True
-gm.USE_GPU_DYNAMICS = True
 
 
 def main(random_selection=False, headless=False, short_exec=False):
@@ -46,7 +46,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         og.log.info("Resetting environment")
         env.reset()
         for i in range(100):
-            action = env.action_space.sample()
+            action = th.tensor(env.action_space.sample(), dtype=th.float32)
             state, reward, terminated, truncated, info = env.step(action)
             if terminated or truncated:
                 og.log.info("Episode finished after {} timesteps".format(i + 1))

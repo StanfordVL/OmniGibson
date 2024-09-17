@@ -2,6 +2,7 @@ import math
 
 import torch as th
 
+import omnigibson as og
 import omnigibson.utils.transform_utils as T
 from omnigibson.controllers import ControlType, ManipulationController
 from omnigibson.utils.control_utils import orientation_error
@@ -144,9 +145,13 @@ class OperationalSpaceController(ManipulationController):
             )
 
         # Store gains
-        self.kp = nums2array(nums=kp, dim=6, dtype=th.float32) if kp is not None else None
+        self.kp = nums2array(nums=kp, dim=6, dtype=th.float32).to(og.sim.device) if kp is not None else None
         self.damping_ratio = damping_ratio
-        self.kp_null = nums2array(nums=kp_null, dim=control_dim, dtype=th.float32) if kp_null is not None else None
+        self.kp_null = (
+            nums2array(nums=kp_null, dim=control_dim, dtype=th.float32).to(og.sim.device)
+            if kp_null is not None
+            else None
+        )
         self.kd_null = 2 * th.sqrt(self.kp_null) if kp_null is not None else None  # critically damped
         self.kp_limits = th.tensor(kp_limits, dtype=th.float32)
         self.damping_ratio_limits = th.tensor(damping_ratio_limits, dtype=th.float32)
@@ -235,7 +240,8 @@ class OperationalSpaceController(ManipulationController):
         self.decouple_pos_ori = decouple_pos_ori
         self.workspace_pose_limiter = workspace_pose_limiter
         self.task_name = task_name
-        self.reset_joint_pos = reset_joint_pos[dof_idx]
+        self.reset_joint_pos = reset_joint_pos[dof_idx].to(og.sim.device)
+        self._null_space_identity = th.eye(control_dim, dtype=th.float32, device=og.sim.device)
 
         # Other variables that will be filled in at runtime
         self._fixed_quat_target = None
@@ -425,6 +431,7 @@ class OperationalSpaceController(ManipulationController):
             decouple_pos_ori=self.decouple_pos_ori,
             base_lin_vel=base_lin_vel,
             base_ang_vel=base_ang_vel,
+            null_space_identity=self._null_space_identity,
         ).flatten()
 
         # Add gravity compensation
@@ -515,6 +522,7 @@ def _compute_osc_torques(
     decouple_pos_ori: bool,
     base_lin_vel: th.Tensor,
     base_ang_vel: th.Tensor,
+    null_space_identity: th.Tensor,
 ):
     # Compute the inverse
     mm_inv = th.linalg.inv(mm)
@@ -563,8 +571,9 @@ def _compute_osc_torques(
     # roboticsproceedings.org/rss07/p31.pdf
     if rest_qpos is not None:
         j_eef_inv = m_eef @ j_eef @ mm_inv
+        q_vec = q
         u_null = kd_null * -qd + kp_null * ((rest_qpos - q + math.pi) % (2 * math.pi) - math.pi)
         u_null = mm @ th.unsqueeze(u_null, dim=-1)
-        u += (th.eye(control_dim, dtype=th.float32) - j_eef.T @ j_eef_inv) @ u_null
+        u += (null_space_identity - j_eef.T @ j_eef_inv) @ u_null
 
     return u

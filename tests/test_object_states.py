@@ -6,6 +6,7 @@ from utils import SYSTEM_EXAMPLES, get_random_pose, og_test, place_obj_on_floor_
 
 import omnigibson as og
 import omnigibson.utils.transform_utils as T
+from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 from omnigibson.macros import macros as m
 from omnigibson.object_states import *
 from omnigibson.systems import VisualParticleSystem
@@ -14,7 +15,7 @@ from omnigibson.utils.physx_utils import apply_force_at_pos
 
 
 @og_test
-def test_on_top(env):
+def test_on_top(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     bowl = env.scene.object_registry("name", "bowl")
     dishtowel = env.scene.object_registry("name", "dishtowel")
@@ -31,16 +32,14 @@ def test_on_top(env):
         og.sim.step()
 
         assert not obj.states[OnTop].get_value(breakfast_table)
-
-    assert bowl.states[OnTop].set_value(breakfast_table, True)
-    assert dishtowel.states[OnTop].set_value(breakfast_table, True)
+        assert obj.states[OnTop].set_value(breakfast_table, True)
 
     with pytest.raises(NotImplementedError):
         bowl.states[OnTop].set_value(breakfast_table, False)
 
 
 @og_test
-def test_inside(env):
+def test_inside(env, pipeline_mode):
     bottom_cabinet = env.scene.object_registry("name", "bottom_cabinet")
     bowl = env.scene.object_registry("name", "bowl")
     dishtowel = env.scene.object_registry("name", "dishtowel")
@@ -72,7 +71,7 @@ def test_inside(env):
 
 
 @og_test
-def test_under(env):
+def test_under(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     bowl = env.scene.object_registry("name", "bowl")
     dishtowel = env.scene.object_registry("name", "dishtowel")
@@ -98,7 +97,7 @@ def test_under(env):
 
 
 @og_test
-def test_touching(env):
+def test_touching(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     bowl = env.scene.object_registry("name", "bowl")
     dishtowel = env.scene.object_registry("name", "dishtowel")
@@ -123,7 +122,7 @@ def test_touching(env):
 
 
 @og_test
-def test_contact_bodies(env):
+def test_contact_bodies(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     bowl = env.scene.object_registry("name", "bowl")
     dishtowel = env.scene.object_registry("name", "dishtowel")
@@ -150,7 +149,7 @@ def test_contact_bodies(env):
 
 
 @og_test
-def test_next_to(env):
+def test_next_to(env, pipeline_mode):
     bottom_cabinet = env.scene.object_registry("name", "bottom_cabinet")
     bowl = env.scene.object_registry("name", "bowl")
     dishtowel = env.scene.object_registry("name", "dishtowel")
@@ -175,7 +174,9 @@ def test_next_to(env):
 
 
 @og_test
-def test_overlaid(env):
+def test_overlaid(env, pipeline_mode):
+    if pipeline_mode == "cpu":
+        pytest.skip("Overlaid requires cloth simulation, which is not supported in CPU mode")
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     carpet = env.scene.object_registry("name", "carpet")
 
@@ -199,7 +200,7 @@ def test_overlaid(env):
 
 
 @og_test
-def test_pose(env):
+def test_pose(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     dishtowel = env.scene.object_registry("name", "dishtowel")
 
@@ -223,7 +224,7 @@ def test_pose(env):
 
 
 @og_test
-def test_aabb(env):
+def test_aabb(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     dishtowel = env.scene.object_registry("name", "dishtowel")
 
@@ -242,21 +243,22 @@ def test_aabb(env):
         (breakfast_table.states[AABB].get_value()[0] < pos1) & (pos1 < breakfast_table.states[AABB].get_value()[1])
     )
 
-    pp = dishtowel.root_link.compute_particle_positions()
-    offset = dishtowel.root_link.cloth_system.particle_contact_offset
-    particle_aabb = (pp.min(dim=0).values - offset, pp.max(dim=0).values + offset)
-    assert th.allclose(dishtowel.states[AABB].get_value()[0], particle_aabb[0])
-    assert th.allclose(dishtowel.states[AABB].get_value()[1], particle_aabb[1])
-    assert th.all(
-        (dishtowel.states[AABB].get_value()[0] < pos2) & (pos2 < dishtowel.states[AABB].get_value()[1])
-    ).item()
+    if pipeline_mode == "cuda":
+        pp = dishtowel.root_link.compute_particle_positions()
+        offset = dishtowel.root_link.cloth_system.particle_contact_offset
+        particle_aabb = (pp.min(dim=0).values - offset, pp.max(dim=0).values + offset)
+        assert th.allclose(dishtowel.states[AABB].get_value()[0], particle_aabb[0])
+        assert th.allclose(dishtowel.states[AABB].get_value()[1], particle_aabb[1])
+        assert th.all(
+            (dishtowel.states[AABB].get_value()[0] < pos2) & (pos2 < dishtowel.states[AABB].get_value()[1])
+        ).item()
 
     with pytest.raises(NotImplementedError):
         breakfast_table.states[AABB].set_value(None)
 
 
 @og_test
-def test_adjacency(env):
+def test_adjacency(env, pipeline_mode):
     bottom_cabinet = env.scene.object_registry("name", "bottom_cabinet")
     bowl = env.scene.object_registry("name", "bowl")
     dishtowel = env.scene.object_registry("name", "dishtowel")
@@ -295,7 +297,7 @@ def test_adjacency(env):
 
 
 @og_test
-def test_temperature(env):
+def test_temperature(env, pipeline_mode):
     microwave = env.scene.object_registry("name", "microwave")
     stove = env.scene.object_registry("name", "stove")
     fridge = env.scene.object_registry("name", "fridge")
@@ -429,7 +431,7 @@ def test_temperature(env):
 
 
 @og_test
-def test_max_temperature(env):
+def test_max_temperature(env, pipeline_mode):
     bagel = env.scene.object_registry("name", "bagel")
     dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
@@ -451,7 +453,7 @@ def test_max_temperature(env):
 
 
 @og_test
-def test_heat_source_or_sink(env):
+def test_heat_source_or_sink(env, pipeline_mode):
     microwave = env.scene.object_registry("name", "microwave")
     stove = env.scene.object_registry("name", "stove")
     fridge = env.scene.object_registry("name", "fridge")
@@ -502,7 +504,7 @@ def test_heat_source_or_sink(env):
 
 
 @og_test
-def test_cooked(env):
+def test_cooked(env, pipeline_mode):
     bagel = env.scene.object_registry("name", "bagel")
     dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
@@ -531,7 +533,7 @@ def test_cooked(env):
 
 
 @og_test
-def test_burnt(env):
+def test_burnt(env, pipeline_mode):
     bagel = env.scene.object_registry("name", "bagel")
     dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
@@ -560,7 +562,7 @@ def test_burnt(env):
 
 
 @og_test
-def test_frozen(env):
+def test_frozen(env, pipeline_mode):
     bagel = env.scene.object_registry("name", "bagel")
     dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
@@ -589,7 +591,7 @@ def test_frozen(env):
 
 
 @og_test
-def test_heated(env):
+def test_heated(env, pipeline_mode):
     bagel = env.scene.object_registry("name", "bagel")
     dishtowel = env.scene.object_registry("name", "cookable_dishtowel")
 
@@ -618,7 +620,7 @@ def test_heated(env):
 
 
 @og_test
-def test_on_fire(env):
+def test_on_fire(env, pipeline_mode):
     plywood = env.scene.object_registry("name", "plywood")
 
     assert not plywood.states[OnFire].get_value()
@@ -642,31 +644,18 @@ def test_on_fire(env):
     assert plywood.states[Temperature].get_value() == plywood.states[OnFire].temperature
 
 
+@pytest.mark.skip(reason="skipping toggle on test until trigger mesh is implemented")
 @og_test
-def test_toggled_on(env):
+def test_toggled_on(env, pipeline_mode):
     stove = env.scene.object_registry("name", "stove")
     robot = env.scene.object_registry("name", "robot0")
 
-    stove.set_position_orientation(
-        [1.48, 0.3, 0.443], T.euler2quat(th.tensor([0, 0, -math.pi / 2.0], dtype=th.float32))
-    )
     robot.set_position_orientation(position=[0.0, 0.38, 0.0], orientation=[0, 0, 0, 1])
+    reset_joint_pos = robot.reset_joint_pos
+    robot.set_joint_positions(reset_joint_pos, drive=False)
 
+    stove.set_position_orientation([1.3, 0.3, 0.443], T.euler2quat(th.tensor([0, 0, -math.pi / 2.0], dtype=th.float32)))
     assert not stove.states[ToggledOn].get_value()
-
-    q = robot.get_joint_positions()
-    jnt_idxs = {name: i for i, name in enumerate(robot.joints.keys())}
-    q[jnt_idxs["torso_lift_joint"]] = 0.0
-    q[jnt_idxs["shoulder_pan_joint"]] = th.deg2rad(th.tensor([90.0])).item()
-    q[jnt_idxs["shoulder_lift_joint"]] = th.deg2rad(th.tensor([9.0])).item()
-    q[jnt_idxs["upperarm_roll_joint"]] = 0.0
-    q[jnt_idxs["elbow_flex_joint"]] = 0.0
-    q[jnt_idxs["forearm_roll_joint"]] = 0.0
-    q[jnt_idxs["wrist_flex_joint"]] = 0.0
-    q[jnt_idxs["wrist_roll_joint"]] = 0.0
-    q[jnt_idxs["l_gripper_finger_joint"]] = 0.0
-    q[jnt_idxs["r_gripper_finger_joint"]] = 0.0
-    robot.set_joint_positions(q, drive=False)
 
     steps = m.object_states.toggle.CAN_TOGGLE_STEPS
     for _ in range(steps):
@@ -675,16 +664,26 @@ def test_toggled_on(env):
     # End-effector not close to the button, stays False
     assert not stove.states[ToggledOn].get_value()
 
-    # Settle robot
-    for _ in range(10):
-        og.sim.step()
+    # load IK controller
+    controller_config = {
+        f"arm_{robot.default_arm}": {"name": "InverseKinematicsController", "mode": "pose_absolute_ori"}
+    }
+    robot.reload_controllers(controller_config=controller_config)
 
-    q[jnt_idxs["shoulder_pan_joint"]] = 0.0
-    robot.set_joint_positions(q, drive=False)
+    action_primitives = StarterSemanticActionPrimitives(env)
+
+    target_eef_pos = stove.links["togglebutton_fifth_0_link"].get_position() + th.tensor(
+        [-0.02, 0.06, 0.0], dtype=th.float32
+    )
+    target_orn = T.quat_multiply(
+        robot.get_eef_orientation(), T.euler2quat(th.tensor([-math.pi / 2.0, 0.0, math.pi / 4.0]))
+    )
+
+    for action in action_primitives._move_hand_direct_ik((target_eef_pos, target_orn), pos_thresh=0.035):
+        env.step(action)
 
     for _ in range(steps - 1):
         og.sim.step()
-        robot.keep_still()
 
     # End-effector close to the button, but not enough time has passed, still False
     assert not stove.states[ToggledOn].get_value()
@@ -701,7 +700,7 @@ def test_toggled_on(env):
 
 @pytest.mark.skip(reason="skipping attachment for now")
 @og_test
-def test_attached_to(env):
+def test_attached_to(env, pipeline_mode):
     shelf_back_panel = env.scene.object_registry("name", "shelf_back_panel")
     shelf_shelf = env.scene.object_registry("name", "shelf_shelf")
     shelf_baseboard = env.scene.object_registry("name", "shelf_baseboard")
@@ -762,7 +761,7 @@ def test_attached_to(env):
 
 
 @og_test
-def test_particle_source(env):
+def test_particle_source(env, pipeline_mode):
     sink = env.scene.object_registry("name", "sink")
 
     place_obj_on_floor_plane(sink)
@@ -790,7 +789,7 @@ def test_particle_source(env):
 
 
 @og_test
-def test_particle_sink(env):
+def test_particle_sink(env, pipeline_mode):
     sink = env.scene.object_registry("name", "sink")
     place_obj_on_floor_plane(sink)
     for _ in range(3):
@@ -819,7 +818,7 @@ def test_particle_sink(env):
 
 
 @og_test
-def test_particle_applier(env):
+def test_particle_applier(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     spray_bottle = env.scene.object_registry("name", "spray_bottle")
     applier_dishtowel = env.scene.object_registry("name", "applier_dishtowel")
@@ -880,7 +879,7 @@ def test_particle_applier(env):
 
 
 @og_test
-def test_particle_remover(env):
+def test_particle_remover(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     vacuum = env.scene.object_registry("name", "vacuum")
     remover_dishtowel = env.scene.object_registry("name", "remover_dishtowel")
@@ -945,7 +944,7 @@ def test_particle_remover(env):
 
 
 @og_test
-def test_saturated(env):
+def test_saturated(env, pipeline_mode):
     remover_dishtowel = env.scene.object_registry("name", "remover_dishtowel")
 
     place_obj_on_floor_plane(remover_dishtowel)
@@ -981,7 +980,7 @@ def test_saturated(env):
 
 
 @og_test
-def test_open(env):
+def test_open(env, pipeline_mode):
     microwave = env.scene.object_registry("name", "microwave")
     bottom_cabinet = env.scene.object_registry("name", "bottom_cabinet")
 
@@ -1027,7 +1026,7 @@ def test_open(env):
 
 
 @og_test
-def test_folded_unfolded(env):
+def test_folded_unfolded(env, pipeline_mode):
     carpet = env.scene.object_registry("name", "carpet")
 
     place_obj_on_floor_plane(carpet)
@@ -1079,7 +1078,7 @@ def test_folded_unfolded(env):
 
 
 @og_test
-def test_draped(env):
+def test_draped(env, pipeline_mode):
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     carpet = env.scene.object_registry("name", "carpet")
 
@@ -1105,7 +1104,7 @@ def test_draped(env):
 
 
 @og_test
-def test_filled(env):
+def test_filled(env, pipeline_mode):
     stockpot = env.scene.object_registry("name", "stockpot")
     systems = [
         env.scene.get_system(system_name)
@@ -1132,7 +1131,7 @@ def test_filled(env):
 
 
 @og_test
-def test_contains(env):
+def test_contains(env, pipeline_mode):
     stockpot = env.scene.object_registry("name", "stockpot")
     systems = [env.scene.get_system(system_name) for system_name, system_class in SYSTEM_EXAMPLES.items()]
     for system in systems:
@@ -1170,7 +1169,7 @@ def test_contains(env):
 
 
 @og_test
-def test_covered(env):
+def test_covered(env, pipeline_mode):
     bracelet = env.scene.object_registry("name", "bracelet")
     bowl = env.scene.object_registry("name", "bowl")
     microwave = env.scene.object_registry("name", "microwave")

@@ -165,13 +165,13 @@ class MultiFingerGripperController(GripperController):
             # Use max control signal
             if target[0] >= 0.0:
                 u = (
-                    self._control_limits[ControlType.get_type(self._motor_type)][1][self.dof_idx]
+                    self._control_limits[ControlType.get_type(self._motor_type)][1]
                     if self._open_qpos is None
                     else self._open_qpos
                 )
             else:
                 u = (
-                    self._control_limits[ControlType.get_type(self._motor_type)][0][self.dof_idx]
+                    self._control_limits[ControlType.get_type(self._motor_type)][0]
                     if self._closed_qpos is None
                     else self._closed_qpos
                 )
@@ -181,12 +181,8 @@ class MultiFingerGripperController(GripperController):
 
         # If we're near the joint limits and we're using velocity / torque control, we zero out the action
         if self._motor_type in {"velocity", "torque"}:
-            violate_upper_limit = (
-                joint_pos > self._control_limits[ControlType.POSITION][1][self.dof_idx] - self._limit_tolerance
-            )
-            violate_lower_limit = (
-                joint_pos < self._control_limits[ControlType.POSITION][0][self.dof_idx] + self._limit_tolerance
-            )
+            violate_upper_limit = joint_pos > self._control_limits[ControlType.POSITION][1] - self._limit_tolerance
+            violate_lower_limit = joint_pos < self._control_limits[ControlType.POSITION][0] + self._limit_tolerance
             violation = th.logical_or(violate_upper_limit * (u > 0), violate_lower_limit * (u < 0))
             u *= ~violation
 
@@ -239,8 +235,8 @@ class MultiFingerGripperController(GripperController):
             # Otherwise, the last control signal intends to "move" the gripper
             else:
                 finger_vel = control_dict["joint_velocity"][self.dof_idx]
-                min_pos = self._control_limits[ControlType.POSITION][0][self.dof_idx]
-                max_pos = self._control_limits[ControlType.POSITION][1][self.dof_idx]
+                min_pos = self._control_limits[ControlType.POSITION][0]
+                max_pos = self._control_limits[ControlType.POSITION][1]
 
                 # Make sure we don't have any invalid values (i.e.: fingers should be within the limits)
                 finger_pos = th.clip(finger_pos, min_pos, max_pos)

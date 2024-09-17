@@ -61,7 +61,7 @@ class FoldedLevel(AbsoluteObjectState, ClothStateMixin):
         normals = cloth.compute_face_normals(face_ids=cloth.keyface_idx)
 
         # projection onto the z-axis
-        proj = th.abs(normals @ th.tensor([0.0, 0.0, 1.0], dtype=th.float32))
+        proj = th.abs(normals @ th.tensor([0.0, 0.0, 1.0], dtype=th.float32, device=normals.device))
         percentage = th.mean((proj > math.cos(m.NORMAL_Z_ANGLE_DIFF)).float()).item()
         return percentage
 
@@ -100,7 +100,7 @@ class FoldedLevel(AbsoluteObjectState, ClothStateMixin):
             diagonal (float): diagonal of the convex hull of the projected points
         """
         cloth = self.obj.root_link
-        points = cloth.keypoint_particle_positions[:, dims]
+        points = cloth.keypoint_particle_positions[:, dims].cpu()
         try:
             hull = ConvexHull(points)
 
