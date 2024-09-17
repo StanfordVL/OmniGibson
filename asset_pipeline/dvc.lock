@@ -6866,8 +6866,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/export_objs_global.py
-      md5: c745f541438244cb521f452f22afdd35
-      size: 31828
+      md5: 0e465a407130d2f78ce6a03e3e5503ef
+      size: 32477
     - path: b1k_pipeline/mesh_tree.py
       md5: 7ed516b18128f96cb05dfea5974e193c
       size: 14897
@@ -7969,8 +7969,8 @@ stages:
       size: 201675
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: ff4fd1ecd4721d6791ea7247b3b7a256
-      size: 1593145590
+      md5: b865b3de6fb579272e60e34ba7cb4310
+      size: 20428184
     - path: artifacts/pipeline/export_objs.json
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
       size: 31
@@ -8029,8 +8029,8 @@ stages:
       md5: 26f166d4cd0a03ac30de06a33f783fa3
       size: 77958
     - path: artifacts/parallels/objects.zip
-      md5: ff4fd1ecd4721d6791ea7247b3b7a256
-      size: 1593145590
+      md5: b865b3de6fb579272e60e34ba7cb4310
+      size: 20428184
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8048,11 +8048,11 @@ stages:
       size: 2046
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: c549bcd0d3ef17413a91c1de35e8e58a
-      size: 3184315883
+      md5: a6b9b7a94a8abeb04cacac6c20bb64fc
+      size: 44707871
     - path: artifacts/pipeline/usdify_objects.json
-      md5: d2d157511b450640576a2468bdc2081c
-      size: 2383
+      md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
+      size: 51
   export_scene@scenes/Beechwood_1_int:
     cmd: python -m b1k_pipeline.export_scene scenes/Beechwood_1_int
     deps:
