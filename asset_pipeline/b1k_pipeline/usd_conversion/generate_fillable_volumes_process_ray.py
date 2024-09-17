@@ -1,10 +1,5 @@
 import traceback
-import json
 import numpy as np
-from scipy.spatial import KDTree
-from scipy.spatial.transform import Rotation as R
-from scipy.sparse.csgraph import connected_components
-from scipy.sparse import csr_matrix
 import omnigibson as og
 from omnigibson.macros import gm, macros
 from omnigibson.objects.dataset_object import DatasetObject
