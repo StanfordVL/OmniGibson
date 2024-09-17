@@ -381,8 +381,8 @@ class RigidPrim(XFormPrim):
 
         # Otherwise, get the pose from the rigid prim view and convert to our format
         positions, orientations = self._rigid_prim_view.get_world_poses(clone=clone)
-        position = positions[0]
-        orientation = orientations[0][[1, 2, 3, 0]]
+        position = positions[0].cpu()
+        orientation = orientations[0].cpu()[[1, 2, 3, 0]]
 
         # Assert that the orientation is a unit quaternion
         assert math.isclose(

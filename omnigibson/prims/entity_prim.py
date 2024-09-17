@@ -876,7 +876,7 @@ class EntityPrim(XFormPrim):
         # Run sanity checks -- make sure we are articulated
         assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
-        joint_positions = self._articulation_view.get_joint_positions().view(self.n_dof)
+        joint_positions = self._articulation_view.get_joint_positions().view(self.n_dof).cpu()
 
         # Possibly normalize values when returning
         return self._normalize_positions(positions=joint_positions) if normalized else joint_positions
@@ -894,7 +894,7 @@ class EntityPrim(XFormPrim):
         # Run sanity checks -- make sure we are articulated
         assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
-        joint_velocities = self._articulation_view.get_joint_velocities().view(self.n_dof)
+        joint_velocities = self._articulation_view.get_joint_velocities().view(self.n_dof).cpu()
 
         # Possibly normalize values when returning
         return self._normalize_velocities(velocities=joint_velocities) if normalized else joint_velocities
@@ -912,7 +912,7 @@ class EntityPrim(XFormPrim):
         # Run sanity checks -- make sure we are articulated
         assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
-        joint_efforts = self._articulation_view.get_measured_joint_efforts().view(self.n_dof)
+        joint_efforts = self._articulation_view.get_measured_joint_efforts().view(self.n_dof).cpu()
 
         # Possibly normalize values when returning
         return self._normalize_efforts(efforts=joint_efforts) if normalized else joint_efforts
@@ -930,7 +930,7 @@ class EntityPrim(XFormPrim):
         # Run sanity checks -- make sure we are articulated
         assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
-        joint_positions = self._articulation_view.get_joint_position_targets().view(self.n_dof)
+        joint_positions = self._articulation_view.get_joint_position_targets().view(self.n_dof).cpu()
 
         # Possibly normalize values when returning
         return self._normalize_positions(positions=joint_positions) if normalized else joint_positions
@@ -948,7 +948,7 @@ class EntityPrim(XFormPrim):
         # Run sanity checks -- make sure we are articulated
         assert self.n_joints > 0, "Tried to call method not intended for entity prim with no joints!"
 
-        joint_velocities = self._articulation_view.get_joint_velocity_targets().view(self.n_dof)
+        joint_velocities = self._articulation_view.get_joint_velocity_targets().view(self.n_dof).cpu()
 
         # Possibly normalize values when returning
         return self._normalize_velocities(velocities=joint_velocities) if normalized else joint_velocities

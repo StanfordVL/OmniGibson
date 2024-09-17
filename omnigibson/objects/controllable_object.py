@@ -348,13 +348,13 @@ class ControllableObject(BaseObject):
         low, high = [], []
         for controller in self._controllers.values():
             limits = controller.command_input_limits
-            low.append(th.tensor([-float("inf")] * controller.command_dim) if limits is None else limits[0])
-            high.append(th.tensor([float("inf")] * controller.command_dim) if limits is None else limits[1])
+            low.append(th.tensor([-float("inf")] * controller.command_dim) if limits is None else limits[0].cpu())
+            high.append(th.tensor([float("inf")] * controller.command_dim) if limits is None else limits[1].cpu())
 
         return gym.spaces.Box(
             shape=(self.action_dim,),
-            low=th.cat(low).cpu().numpy(),
-            high=th.cat(high).cpu().numpy(),
+            low=th.cat(low).numpy(),
+            high=th.cat(high).numpy(),
             dtype=NumpyTypes.FLOAT32,
         )
 
@@ -553,7 +553,7 @@ class ControllableObject(BaseObject):
                 using_pos = True
             elif ctrl_type == ControlType.NONE:
                 # Set zero efforts
-                eff_vec.append(th.tensor(0, dtype=th.float32))
+                eff_vec.append(th.tensor(0, dtype=th.float32, device=og.sim.device))
                 eff_idxs.append(cur_ctrl_idx)
                 using_eff = True
             else:

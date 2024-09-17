@@ -720,7 +720,10 @@ def nums2array(nums, dim, dtype=th.float32):
     # Make sure the inputted nums isn't a string
     assert not isinstance(nums, str), "Only numeric types are supported for this operation!"
 
-    out = th.tensor(nums, dtype=dtype) if isinstance(nums, Iterable) else th.ones(dim, dtype=dtype) * nums
+    if isinstance(nums, th.Tensor):
+        out = nums.to(dtype=dtype)
+    else:
+        out = th.tensor(nums, dtype=dtype) if isinstance(nums, Iterable) else th.ones(dim, dtype=dtype) * nums
 
     return out
 

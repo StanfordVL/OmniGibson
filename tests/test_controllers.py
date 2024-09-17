@@ -273,12 +273,12 @@ def test_arm_control(pipeline_mode):
                         curr_pos, curr_quat = robot.get_relative_eef_pose(arm=arm)
                         arm_controller = robot.controllers[f"arm_{arm}"]
                         arm_goal = arm_controller.goal
-                        target_pos = arm_goal["target_pos"]
+                        target_pos = arm_goal["target_pos"].cpu()
                         target_quat = (
                             arm_goal["target_quat"]
                             if controller == "InverseKinematicsController"
                             else T.mat2quat(arm_goal["target_ori_mat"])
-                        )
+                        ).cpu()
                         pos_check = err_checks[controller_mode][action_name]["pos"]
                         if pos_check is not None:
                             is_valid_pos = pos_check(target_pos, curr_pos, init_pos)

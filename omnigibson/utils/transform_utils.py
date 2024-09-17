@@ -655,7 +655,7 @@ def quat2axisangle(quat):
 
 
 @th.jit.script
-def axisangle2quat(vec, eps=1e-6):
+def axisangle2quat(vec: th.Tensor, eps: float = 1e-6) -> th.Tensor:
     """
     Converts scaled axis-angle to quat.
     Args:
@@ -671,17 +671,17 @@ def axisangle2quat(vec, eps=1e-6):
     vec = vec.reshape(-1, 3)
 
     # Grab angle
-    angle = th.norm(vec, dim=-1, keepdim=True)
+    angle = th.norm(vec, dim=-1, keepdim=True, dtype=th.float32)
 
     # Create return array
-    quat = th.zeros(th.prod(th.tensor(input_shape, dtype=th.int)), 4, device=vec.device)
+    quat = th.zeros(th.prod(th.tensor(input_shape, dtype=th.int)), 4, device=vec.device, dtype=th.float32)
     quat[:, 3] = 1.0
 
     # Grab indexes where angle is not zero an convert the input to its quaternion form
     idx = angle.reshape(-1) > eps  # th.nonzero(angle).reshape(-1)
     quat[idx, :] = th.cat(
         [vec[idx, :] * th.sin(angle[idx, :] / 2.0) / angle[idx, :], th.cos(angle[idx, :] / 2.0)], dim=-1
-    )
+    ).float()
 
     # Reshape and return output
     quat = quat.reshape(

@@ -115,7 +115,7 @@ class MovingAverageFilter(Filter):
         super()._load_state(state=state)
 
         # Load relevant info for this filter
-        self.past_samples = state["past_samples"]
+        self.past_samples = state["past_samples"].to(og.sim.device)
         self.current_idx = state["current_idx"]
         self.fully_filled = state["fully_filled"]
 
