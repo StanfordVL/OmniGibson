@@ -63,8 +63,11 @@ class TestTasks:
 
 
 @pytest.mark.parametrize("pipeline_mode", ["cpu", "cuda"], indirect=True)
-def test_rs_int_full_load():
+def test_rs_int_full_load(pipeline_mode):
     cfg = {
+        "env": {
+            "device": pipeline_mode,
+        },
         "scene": {
             "type": "InteractiveTraversableScene",
             "scene_model": "Rs_int",
