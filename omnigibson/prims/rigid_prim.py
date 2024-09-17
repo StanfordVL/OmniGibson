@@ -277,14 +277,25 @@ class RigidPrim(XFormPrim):
                 contacts.append(CsRawData(*c))
         return contacts
 
-    def set_linear_velocity(self, velocity):
+    def set_velocity(self, velocity):
+        """
+        Sets the linear and angular velocity of the prim in stage.
+        Args:
+            velocity (th.Tensor): linear and angular velocity to set the rigid prim to. Shape (6,).
+        """
+        assert velocity.shape == (6,), f"Velocity must be a 6-array, got {velocity.shape}"
+        self._rigid_prim_view.set_velocities(velocity[None, :])
+
+    def set_linear_velocity(self, linear_velocity):
         """
         Sets the linear velocity of the prim in stage.
 
         Args:
-            velocity (th.tensor): linear velocity to set the rigid prim to. Shape (3,).
+            linear_velocity (th.tensor): linear velocity to set the rigid prim to. Shape (3,).
         """
-        self._rigid_prim_view.set_linear_velocities(velocity[None, :])
+        ang_vel = self.get_angular_velocity()
+        vel = th.cat([linear_velocity, ang_vel])
+        self.set_velocity(vel)
 
     def get_linear_velocity(self, clone=True):
         """
@@ -296,14 +307,16 @@ class RigidPrim(XFormPrim):
         """
         return self._rigid_prim_view.get_linear_velocities(clone=clone)[0].cpu()
 
-    def set_angular_velocity(self, velocity):
+    def set_angular_velocity(self, angular_velocity):
         """
         Sets the angular velocity of the prim in stage.
 
         Args:
             velocity (th.tensor): angular velocity to set the rigid prim to. Shape (3,).
         """
-        self._rigid_prim_view.set_angular_velocities(velocity[None, :])
+        lin_vel = self.get_linear_velocity()
+        vel = th.cat([lin_vel, angular_velocity])
+        self.set_velocity(vel)
 
     def get_angular_velocity(self, clone=True):
         """
