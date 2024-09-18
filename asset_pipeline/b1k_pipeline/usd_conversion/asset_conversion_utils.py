@@ -1625,7 +1625,6 @@ def load_scene_from_urdf(urdf):
                 print("Missing object", obj_name)
                 continue
             obj = DatasetObject(
-                prim_path=f"/World/{obj_name}",
                 name=obj_name,
                 **obj_info["cfg"],
             )

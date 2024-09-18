@@ -1,7 +1,6 @@
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.objects.dataset_object import DatasetObject
-from omnigibson.systems import import_og_systems
 
 gm.HEADLESS = True
 gm.USE_ENCRYPTED_ASSETS = True
@@ -38,10 +37,6 @@ def main():
 
     dataset_root = str(pathlib.Path(sys.argv[1]))
     gm.DATASET_PATH = str(dataset_root)
-
-    # This is a hacky fix for systems not being loaded because of the dataset
-    # path being changed later.
-    import_og_systems()
 
     path = sys.argv[2]
     obj_category, obj_model = pathlib.Path(path).parts[-2:]

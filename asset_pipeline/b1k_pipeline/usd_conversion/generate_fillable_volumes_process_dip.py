@@ -1,20 +1,18 @@
 import traceback
-import json
+import torch as th
 import numpy as np
 from scipy.spatial import KDTree
-from scipy.spatial.transform import Rotation as R
 from scipy.sparse.csgraph import connected_components
 from scipy.sparse import csr_matrix
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.objects.dataset_object import DatasetObject
 from omnigibson.prims.xform_prim import XFormPrim
-from omnigibson.systems.system_base import get_system
 from omnigibson.utils.asset_utils import decrypted
+import omnigibson.utils.transform_utils as T
 import omnigibson.lazy as lazy
 import trimesh
 import tqdm
-from omnigibson.systems import import_og_systems
 
 gm.HEADLESS = True
 gm.USE_ENCRYPTED_ASSETS = True
@@ -25,7 +23,8 @@ MAX_BBOX = 0.3
 
 def find_largest_connected_component(points, d):
     # Create a KDTree for efficient nearest neighbor search
-    tree = KDTree(points)
+    points_np = points.numpy().copy()
+    tree = KDTree(points_np)
     
     # Find pairs of points within distance d
     pairs = tree.query_pairs(r=d, output_type='ndarray')
@@ -41,8 +40,8 @@ def find_largest_connected_component(points, d):
     _, labels = connected_components(csgraph=adjacency_matrix, directed=False, return_labels=True)
     
     # Find the largest connected component
-    largest_component_label = np.argmax(np.bincount(labels))
-    largest_component_indices = np.where(labels == largest_component_label)[0]
+    largest_component_label = th.argmax(th.bincount(th.tensor(labels)))
+    largest_component_indices = th.where(th.tensor(labels) == largest_component_label)[0]
     
     # Return the points belonging to the largest connected component
     return points[largest_component_indices]
@@ -50,7 +49,7 @@ def find_largest_connected_component(points, d):
 def generate_box(box_half_extent):
     # The floor plane already exists
     # We just need to generate the side planes
-    plane_centers = np.array([
+    plane_centers = th.tensor([
         [1, 0, 1],
         [0, 1, 1],
         [-1, 0, 1],
@@ -61,7 +60,7 @@ def generate_box(box_half_extent):
             prim_path=f"/World/plane_{i}",
             name=f"plane_{i}",
             z_position=0,
-            size=box_half_extent[2],
+            size=box_half_extent[2].item(),
             color=None,
             visible=False,
 
@@ -72,38 +71,38 @@ def generate_box(box_half_extent):
         )
 
         plane_as_prim = XFormPrim(
-            prim_path=plane.prim_path,
+            relative_prim_path=f"/plane_{i}",
             name=plane.name,
         )
+        plane_as_prim.load(None)
         
         # Build the plane orientation from the plane normal
-        horiz_dir = pc - np.array([0, 0, box_half_extent[2]])
-        plane_z = -1 * horiz_dir / np.linalg.norm(horiz_dir)
-        plane_x = np.array([0, 0, 1])
-        plane_y = np.cross(plane_z, plane_x)
-        plane_mat = np.array([plane_x, plane_y, plane_z]).T
-        plane_quat = R.from_matrix(plane_mat).as_quat()
+        horiz_dir = pc - th.tensor([0, 0, box_half_extent[2]])
+        plane_z = -1 * horiz_dir / th.norm(horiz_dir)
+        plane_x = th.tensor([0, 0, 1], dtype=th.float32)
+        plane_y = th.cross(plane_z, plane_x)
+        plane_mat = th.stack([plane_x, plane_y, plane_z], dim=1)
+        plane_quat = T.mat2quat(plane_mat)
         plane_as_prim.set_position_orientation(pc, plane_quat)
 
-def generate_particles_in_box(box_half_extent):
-    water = get_system("water")
+def generate_particles_in_box(water, box_half_extent):
     particle_radius = water.particle_radius
 
     # Grab the link's AABB (or fallback to obj AABB if link does not have a valid AABB),
     # and generate a grid of points based on the sampling distance
-    low = np.array([-1, -1, 0]) * box_half_extent
-    high = np.array([1, 1, 4]) * box_half_extent + np.array([0, 0, 0.05])
+    low = th.tensor([-1, -1, 0]) * box_half_extent
+    high = th.tensor([1, 1, 4]) * box_half_extent + th.tensor([0, 0, 0.05])
     extent = high - low
     # We sample the range of each extent minus
     sampling_distance = 2 * particle_radius
-    n_particles_per_axis = (extent / sampling_distance).astype(int)
-    assert np.all(n_particles_per_axis), f"box is too small to sample any particle of radius {particle_radius}."
+    n_particles_per_axis = (extent / sampling_distance).long()
+    assert th.all(n_particles_per_axis > 0), f"box is too small to sample any particle of radius {particle_radius}."
 
     # 1e-10 is added because the extent might be an exact multiple of particle radius
-    arrs = [np.arange(l + particle_radius, h - particle_radius + 1e-10, particle_radius * 2)
+    arrs = [th.arange(l + particle_radius, h - particle_radius + 1e-10, particle_radius * 2)
             for l, h, n in zip(low, high, n_particles_per_axis)]
     # Generate 3D-rectangular grid of points
-    particle_positions = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T
+    particle_positions = th.stack(th.meshgrid(*arrs, indexing='ij')).view(3, -1).t()
 
     water.generate_particles(
         positions=particle_positions,
@@ -115,8 +114,8 @@ def draw_mesh(mesh, parent_pos):
     N = len(edge_vert_idxes)
     colors = [(1., 0., 0., 1.) for _ in range(N)]
     sizes = [1. for _ in range(N)]
-    points1 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 0]] + parent_pos).tolist()]
-    points2 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 1]] + parent_pos).tolist()]
+    points1 = [tuple(x) for x in (th.tensor(mesh.vertices[edge_vert_idxes[:, 0]]) + parent_pos).tolist()]
+    points2 = [tuple(x) for x in (th.tensor(mesh.vertices[edge_vert_idxes[:, 1]]) + parent_pos).tolist()]
     draw.draw_lines(points1, points2, colors, sizes)
 
 def check_in_contact(system, positions):
@@ -124,14 +123,14 @@ def check_in_contact(system, positions):
     Checks whether each particle specified by @particle_positions are in contact with any rigid body.
 
     Args:
-        positions (np.array): (n_particles, 3) shaped array specifying per-particle (x,y,z) positions
+        positions (th.Tensor): (n_particles, 3) shaped array specifying per-particle (x,y,z) positions
 
     Returns:
         n-array: (n_particles,) boolean array, True if in contact, otherwise False
     """
-    in_contact = np.zeros(len(positions), dtype=bool)
+    in_contact = th.zeros(len(positions), dtype=bool)
     for idx, pos in enumerate(positions):
-        in_contact[idx] = og.sim.psqi.overlap_sphere_any(system.particle_contact_radius * 0.8, pos)
+        in_contact[idx] = og.sim.psqi.overlap_sphere_any(system.particle_contact_radius * 0.8, pos.numpy().copy())
     return in_contact
 
 def process_object(cat, mdl, out_path):
@@ -146,11 +145,11 @@ def process_object(cat, mdl, out_path):
     with decrypted(usd_path) as fpath:
         stage = lazy.pxr.Usd.Stage.Open(fpath)
         prim = stage.GetDefaultPrim()
-        bounding_box = np.array(prim.GetAttribute("ig:nativeBB").Get())
+        bounding_box = th.tensor(prim.GetAttribute("ig:nativeBB").Get())
 
     # Then get the appropriate bounding box such that the object fits in a
     # MAX_BBOX cube.
-    scale = MAX_BBOX / np.max(bounding_box)
+    scale = MAX_BBOX / th.max(bounding_box)
 
     if scale > 1:
         print("The object won't be scaled because it's smaller than the requested bounding box.")
@@ -188,24 +187,24 @@ def process_object(cat, mdl, out_path):
     og.sim.update_handles()
 
     # Now move it into position
-    aabb_extent = fillable.aabb_extent
+    aabb_extent = th.tensor(fillable.aabb_extent)
     obj_bbox_height = aabb_extent[2]
-    obj_bbox_center = fillable.aabb_center
-    obj_bbox_bottom = obj_bbox_center - np.array([0, 0, obj_bbox_height / 2])
-    obj_current_pos = fillable.get_position()
+    obj_bbox_center = th.tensor(fillable.aabb_center)
+    obj_bbox_bottom = obj_bbox_center - th.tensor([0, 0, obj_bbox_height / 2])
+    obj_current_pos = th.tensor(fillable.get_position_orientation()[0])
     obj_pos_wrt_bbox = obj_current_pos - obj_bbox_bottom
     obj_dipped_pos = obj_pos_wrt_bbox
-    obj_free_pos = obj_pos_wrt_bbox + np.array([0, 0, 2 * aabb_extent[2] + 0.2])
-    fillable.set_position_orientation(obj_free_pos, np.array([0, 0, 0, 1]))
+    obj_free_pos = obj_pos_wrt_bbox + th.tensor([0, 0, 2 * aabb_extent[2] + 0.2])
+    fillable.set_position_orientation(obj_free_pos, th.tensor([0, 0, 0, 1]))
     og.sim.step()
 
     # Now generate the box and the particles
-    water = get_system("water")
-    box_half_extent = aabb_extent * 0.55  # 1.5 times the space
-    box_half_extent = np.maximum(box_half_extent, aabb_extent / 2 + 2.1 * water.particle_radius)
+    water = env.scene.get_system("water")
+    box_half_extent = aabb_extent * 0.55
+    box_half_extent = th.maximum(box_half_extent, aabb_extent / 2 + 2.1 * water.particle_radius)
     generate_box(box_half_extent)
     og.sim.step()
-    generate_particles_in_box(box_half_extent)
+    generate_particles_in_box(water, box_half_extent)
     for _ in range(100):
         og.sim.step()
 
@@ -213,13 +212,13 @@ def process_object(cat, mdl, out_path):
     # lin_vel = 0.2
     # while True:
     #     delta_z = -lin_vel * og.sim.get_rendering_dt()
-    #     cur_pos = fillable.get_position()
+    #     cur_pos = fillable.get_position_orientation()[0]
     #     new_pos = cur_pos + np.array([0, 0, delta_z])
-    #     fillable.set_position(new_pos)
+    #     fillable.set_position_orientation(position=new_pos)
     #     og.sim.step()
-    #     if fillable.get_position()[2] < obj_dipped_pos[2]:
+    #     if fillable.get_position_orientation()[0][2] < obj_dipped_pos[2]:
     #         break
-    fillable.set_position(obj_dipped_pos)
+    fillable.set_position_orientation(position=obj_dipped_pos)
 
     # Let the particles settle
     for _ in range(100):
@@ -246,11 +245,11 @@ def process_object(cat, mdl, out_path):
     lin_vel = 0.01
     while True:
         delta_z = lin_vel * og.sim.get_rendering_dt()
-        cur_pos = fillable.get_position()
-        new_pos = cur_pos + np.array([0, 0, delta_z])
-        fillable.set_position(new_pos)
+        cur_pos = th.tensor(fillable.get_position_orientation()[0])
+        new_pos = cur_pos + th.tensor([0, 0, delta_z])
+        fillable.set_position_orientation(position=new_pos)
         og.sim.step()
-        if fillable.get_position()[2] > obj_free_pos[2]:
+        if fillable.get_position_orientation()[0][2] > obj_free_pos[2]:
             break
 
     for _ in range(180):
@@ -289,27 +288,28 @@ def process_object(cat, mdl, out_path):
 
     # Get the particles whose center is within the object's AABB
     aabb_min, aabb_max = fillable.aabb
-    particles = water.get_particles_position_orientation()[0]
-    particles = particles[np.where(check_in_contact(water, particles) == 0)[0]]
-    particle_point_offsets = np.array([e * side * water.particle_radius for e in np.eye(3) for side in [-1, 1]] + [np.zeros(3)])
-    points = np.repeat(particles, len(particle_point_offsets), axis=0) + np.tile(particle_point_offsets, (len(particles), 1))
-    points = points[np.all(points <= (aabb_max + np.array([0, 0, water.particle_radius])) , axis=1)]
-    points = points[np.all(points >= aabb_min, axis=1)]
+    particles = th.tensor(water.get_particles_position_orientation()[0])
+    particles = particles[th.where(check_in_contact(water, particles) == 0)[0]]
+    particle_point_offsets = th.stack([e * side * water.particle_radius for e in th.eye(3) for side in [-1, 1]] + [th.zeros(3)])
+    points = particles.unsqueeze(1).repeat(1, len(particle_point_offsets), 1) + particle_point_offsets.unsqueeze(0)
+    points = points.reshape(-1, 3)
+    points = points[th.all(points <= (aabb_max + th.tensor([0, 0, water.particle_radius])), dim=1)]
+    points = points[th.all(points >= aabb_min, dim=1)]
     assert len(points) > 0, "No points found in the AABB of the object."
 
     # Get the points that belong to the largest connected component
     points = find_largest_connected_component(points, 2 * water.particle_radius)
 
     # Get the particles in the frame of the object
-    points -= fillable.get_position()
+    points -= fillable.get_position_orientation()[0]
 
     # Get the convex hull of the particles
-    hull = trimesh.convex.convex_hull(points)
+    hull = trimesh.convex.convex_hull(points.numpy().copy())
 
     # Save it somewhere
     hull.export(out_path, file_type="obj", include_normals=False, include_color=False, include_texture=False)
 
-    # draw_mesh(hull, fillable.get_position())
+    # draw_mesh(hull, fillable.get_position_orientation()[0])
     # while True:
     #     og.sim.render()
 
@@ -324,10 +324,6 @@ def main():
 
     dataset_root = str(pathlib.Path(sys.argv[1]))
     gm.DATASET_PATH = str(dataset_root)
-
-    # This is a hacky fix for systems not being loaded because of the dataset
-    # path being changed later.
-    import_og_systems()
 
     batch = sys.argv[2:]
     for path in batch:
