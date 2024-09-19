@@ -10,12 +10,15 @@ from omnigibson.macros import gm
 from omnigibson.utils.ui_utils import KeyboardRobotController, choose_from_options
 
 gm.USE_GPU_DYNAMICS = True
+gm.ENABLE_FLATCACHE = False
 
 
 def main():
     config_filename = os.path.join(og.example_config_path, "fetch_behavior.yaml")
     cfg = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
-    cfg["task"]["activity_name"] = "test_pen_book"
+
+    activity_name = "test_pen_book"
+    cfg["task"]["activity_name"] = activity_name
     cfg["task"]["online_object_sampling"] = False
     cfg["env"]["flatten_obs_space"] = True
     cfg["env"]["action_frequency"] = 30
@@ -23,7 +26,7 @@ def main():
     cfg["env"]["physics_frequency"] = 120
     cfg["robots"][0]["default_reset_mode"] = "untuck"
 
-    collect_hdf5_path = "test_pen_book.hdf5"
+    collect_hdf5_path = f"{activity_name}.hdf5"
 
     # Load the environment
     env = og.Environment(configs=cfg)
