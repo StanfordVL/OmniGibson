@@ -1,5 +1,6 @@
 from abc import abstractmethod
 from copy import deepcopy
+from typing import Iterable
 
 import matplotlib.pyplot as plt
 import torch as th
@@ -128,6 +129,13 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
 
         # Initialize internal attributes that will be loaded later
         self._sensors = None  # e.g.: scan sensor, vision sensor
+
+        # Make sure scale is torch tensor or scalar
+        scale = (
+            scale
+            if isinstance(scale, th.Tensor)
+            else th.tensor(scale, dtype=th.float32) if isinstance(scale, Iterable) else scale
+        )
 
         # If specified, make sure scale is uniform -- this is because non-uniform scale can result in non-matching
         # collision representations for parts of the robot that were optimized (e.g.: bounding sphere for wheels)
