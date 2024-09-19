@@ -70,6 +70,8 @@ def main():
     print("Data saved")
     env.save_data()
 
+    og.shutdown()
+
 
 if __name__ == "__main__":
     main()
