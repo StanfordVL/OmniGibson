@@ -312,10 +312,6 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
         # Update init info for scale
         self._init_info["args"]["scale"] = scale
 
-    @cached_property
-    def link_prim_paths(self):
-        return [link.prim_path for link in self._links.values()]
-
     @property
     def highlighted(self):
         """
@@ -397,7 +393,7 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
             desired_frame_to_world = xy_aligned_base_com_to_world
         else:
             # Default desired frame is base CoM frame.
-            desired_frame_to_world = th.tensor(base_frame_to_world, dtype=th.float32)
+            desired_frame_to_world = base_frame_to_world
 
         # Compute the world-to-base frame transform.
         world_to_desired_frame = th.linalg.inv_ex(desired_frame_to_world).inverse

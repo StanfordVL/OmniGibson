@@ -61,6 +61,7 @@ m.KP_LIN_VEL = {
     Freight: 0.05,
     Locobot: 1.5,
     BehaviorRobot: 0.3,
+    R1: 0.3,
 }
 m.KP_ANGLE_VEL = {
     Tiago: 0.2,
@@ -71,6 +72,7 @@ m.KP_ANGLE_VEL = {
     Freight: 0.05,
     Locobot: 1.5,
     BehaviorRobot: 0.2,
+    R1: 0.2,
 }
 
 m.MAX_STEPS_FOR_SETTLING = 500
@@ -796,7 +798,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         toggle_position = toggle_state.get_link_position()
         yield from self._navigate_if_needed(obj, toggle_position)
 
-        hand_orientation = self.robot.eef_links[self.arm].get_orientation()  # Just keep the current hand orientation.
+        # Just keep the current hand orientation.
+        hand_orientation = self.robot.eef_links[self.arm].get_position_orientation()[1]
         desired_hand_pose = (toggle_position, hand_orientation)
 
         yield from self._move_hand(desired_hand_pose)
@@ -1112,7 +1115,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         target_pose,
         stop_on_contact=False,
         ignore_failure=False,
-        pos_thresh=0.04,
+        pos_thresh=0.02,
         ori_thresh=0.4,
         in_world_frame=True,
         stop_if_stuck=False,
@@ -1430,16 +1433,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action = th.zeros(self.robot.action_dim)
         for name, controller in self.robot._controllers.items():
             action_idx = self.robot.controller_action_idx[name]
-            no_op_goal = controller.compute_no_op_goal(self.robot.get_control_dict())
-
-            if self.robot._controller_config[name]["name"] == "InverseKinematicsController":
-                assert (
-                    self.robot._controller_config["arm_" + self.arm]["mode"] == "pose_absolute_ori"
-                ), "Controller must be in pose_absolute_ori mode"
-                # convert quaternion to axis-angle representation for control input
-                no_op_goal["target_quat"] = T.quat2axisangle(no_op_goal["target_quat"])
-
-            action[action_idx] = th.cat(list(no_op_goal.values()))
+            no_op_action = controller.compute_no_op_action(self.robot.get_control_dict())
+            action[action_idx] = no_op_action
         return action
 
     def _reset_hand(self):
@@ -1649,7 +1644,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if th.norm(body_target_pose[0][:2]) < dist_threshold:
                 break
 
-            diff_pos = end_pose[0] - self.robot.get_position()
+            diff_pos = end_pose[0] - self.robot.get_position_orientation()[0]
             intermediate_pose = (
                 end_pose[0],
                 T.euler2quat(th.tensor([0, 0, math.atan2(diff_pos[1], diff_pos[0])], dtype=th.float32)),
@@ -1717,11 +1712,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             base_action = action[self.robot.controller_action_idx["base"]]
 
             if not self._base_controller_is_joint:
+                base_action[0] = 0.0
                 base_action[1] = ang_vel
             else:
                 assert (
                     base_action.numel() == 3
                 ), "Currently, the action primitives only support [x, y, theta] joint controller"
+                base_action[0] = 0.0
+                base_action[1] = 0.0
                 base_action[2] = ang_vel
 
             action[self.robot.controller_action_idx["base"]] = base_action
@@ -1788,7 +1786,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.SAMPLING_ERROR,
                 "Could not find valid position near object.",
-                {"target object": obj.name, "target pos": obj.get_position(), "pose on target": pose_on_obj},
+                {
+                    "target object": obj.name,
+                    "target pos": obj.get_position_orientation()[0],
+                    "pose on target": pose_on_obj,
+                },
             )
 
     @staticmethod
