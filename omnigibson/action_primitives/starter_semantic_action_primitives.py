@@ -14,9 +14,11 @@ from functools import cached_property
 
 import cv2
 import gymnasium as gym
+import numpy as np
 import torch as th
 from aenum import IntEnum, auto
 from matplotlib import pyplot as plt
+from scipy.spatial.transform import Rotation, Slerp
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -329,6 +331,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self._tracking_object = None
 
         self.robot_copy = self._load_robot_copy()
+
+        self.m = m  # create a pointer so subclasses can maybe update macros
+        self._update_macros()
+
+    def _update_macros(self):
+        """Subclasses use this to update m if needed"""
+        pass
 
     @property
     def arm(self):
@@ -724,7 +733,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         indented_print("Navigating to grasp pose if needed")
         yield from self._navigate_if_needed(obj, pose_on_obj=grasp_pose)
 
-        indented_print("Moving hand to grasp pose")
+        indented_print(f"Moving to grasp pose {grasp_pose}")
         yield from self._move_hand(grasp_pose)
 
         # We can pre-grasp in sticky grasping mode.
@@ -733,7 +742,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         # Since the grasp pose is slightly off the object, we want to move towards the object, around 5cm.
         # It's okay if we can't go all the way because we run into the object.
-        indented_print("Performing grasp approach")
+        indented_print(f"Move to grasp approach pose {approach_pose}")
         yield from self._move_hand_linearly_cartesian(approach_pose, stop_on_contact=True)
 
         # Step once to update
@@ -1005,7 +1014,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # Follow the plan to navigate.
         indented_print("Plan has %d steps", len(plan))
         for i, joint_pos in enumerate(plan):
-            indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
+            indented_print(f"Executing grasp plan step {i + 1}/{len(plan)}")
             yield from self._move_hand_direct_joint(joint_pos, ignore_failure=True)
 
     def _move_hand_ik(self, eef_pose, stop_if_stuck=False):
@@ -1108,7 +1117,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if not ignore_failure:
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.EXECUTION_ERROR,
-                "Your hand was obstructed from moving to the desired joint position",
+                "[_move_hand_direct_joint]: Your hand was obstructed from moving to the desired joint position",
             )
 
     def _move_hand_direct_ik(
@@ -1144,7 +1153,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         assert (
             controller_config["name"] == "InverseKinematicsController"
         ), "Controller must be InverseKinematicsController"
-        assert controller_config["mode"] == "pose_absolute_ori", "Controller must be in pose_absolute_ori mode"
+        assert controller_config["mode"] in ["pose_absolute_ori", "pose_delta_ori"], (
+            "Controller must be in pose_absolute_ori or pose_delta_ori mode")
         if in_world_frame:
             target_pose = self._get_pose_in_robot_frame(target_pose)
         else:
@@ -1165,6 +1175,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
             delta_pos = target_pos - current_pos
             target_pos_diff = th.norm(delta_pos)
+            if target_pos_diff < 5 * pos_thresh:
+                delta_pos *= 5 * (pos_thresh / target_pos_diff)
+
+            delta_ori = Rotation.from_quat(target_orn) * Rotation.from_quat(current_orn).inv()
+            delta_ori = th.tensor(delta_ori.as_rotvec()).float()
             target_orn_diff = T.get_orientation_diff_in_radian(current_orn, target_orn)
             reached_goal = target_pos_diff < pos_thresh and target_orn_diff < ori_thresh
             if reached_goal:
@@ -1183,17 +1198,27 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             prev_pos = current_pos
             prev_orn = current_orn
 
-            action[control_idx] = th.cat([delta_pos, target_orn_axisangle])
+            if self.robot._controller_config["arm_" + self.arm]["mode"] == 'pose_absolute_ori':
+                action[control_idx] = th.cat([delta_pos, target_orn_axisangle])
+            elif self.robot._controller_config["arm_" + self.arm]["mode"] == 'pose_delta_ori':
+                action[control_idx] = th.cat([delta_pos, delta_ori])
+
             yield self._postprocess_action(action)
 
         if not ignore_failure:
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.EXECUTION_ERROR,
-                "Your hand was obstructed from moving to the desired joint position",
+                "[_move_hand_direct_ik] Your hand was obstructed from moving to the desired joint position",
             )
 
     def _move_hand_linearly_cartesian(
-        self, target_pose, stop_on_contact=False, ignore_failure=False, stop_if_stuck=False
+        self,
+        target_pose,
+        stop_on_contact=False,
+        ignore_failure=False,
+        stop_if_stuck=False,
+        gripper_closed=False,
+        move_hand_pos_thresh=0.01,
     ):
         """
         Yields action for the robot to move its arm to reach the specified target pose by moving the eef along a line in cartesian
@@ -1211,12 +1236,17 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # into 1cm-long pieces
         start_pos, start_orn = self.robot.eef_links[self.arm].get_position_orientation()
         travel_distance = th.norm(target_pose[0] - start_pos)
-        num_poses = th.max([2, int(travel_distance / m.MAX_CARTESIAN_HAND_STEP) + 1]).item()
-        pos_waypoints = th.linspace(start_pos, target_pose[0], num_poses)
+        print(f"start_pos, target_pos: {start_pos}, {target_pose[0]}")
+        num_poses = th.max(th.tensor([2, int(travel_distance / m.MAX_CARTESIAN_HAND_STEP) + 1])).item()
+        pos_waypoints = th.tensor(np.linspace(start_pos, target_pose[0], num_poses))
 
         # Also interpolate the rotations
         t_values = th.linspace(0, 1, num_poses)
         quat_waypoints = [T.quat_slerp(start_orn, target_pose[1], t) for t in t_values]
+
+        # remove the first waypoint as it is the starting pose
+        pos_waypoints = pos_waypoints[1:]
+        quat_waypoints = quat_waypoints[1:]
 
         controller_config = self.robot._controller_config["arm_" + self.arm]
         if controller_config["name"] == "InverseKinematicsController":
@@ -1233,7 +1263,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 else:
                     yield from self._move_hand_direct_ik(
                         waypoints[-1],
-                        pos_thresh=0.01,
+                        pos_thresh=move_hand_pos_thresh,
                         ori_thresh=0.1,
                         stop_on_contact=stop_on_contact,
                         ignore_failure=ignore_failure,

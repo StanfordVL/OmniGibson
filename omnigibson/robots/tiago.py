@@ -57,6 +57,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         default_arm_pose="diagonal15",
         # Unique to Tiago
         variant="default",
+        default_arm_side="left",
         **kwargs,
     ):
         """
@@ -109,6 +110,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
                 {"vertical", "diagonal15", "diagonal30", "diagonal45", "horizontal"}
                 If either reset_joint_pos is not None or default_reset_mode is "tuck", this will be ignored.
                 Otherwise the reset_joint_pos will be initialized to the precomputed joint positions that represents default_arm_pose.
+            default_arm_side (str): One of {"left", "right"}. Used to set self.default_arm attribute.
             variant (str): Which variant of the robot should be loaded. One of "default", "wrist_cam"
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
@@ -116,6 +118,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         # Store args
         assert variant in ("default", "wrist_cam"), f"Invalid Tiago variant specified {variant}!"
         self._variant = variant
+        self.default_arm_side = default_arm_side
 
         # Run super init
         super().__init__(
@@ -161,6 +164,15 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         return ["left", "right"]
 
     @property
+    def default_arm(self):
+        if self.default_arm_side == "left":
+            return self.arm_names[0]
+        elif self.default_arm_side == "right":
+            return self.arm_names[1]
+        else:
+            raise NotImplementedError
+
+    @property
     def tucked_default_joint_pos(self):
         pos = th.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
@@ -200,6 +212,23 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
     def _create_discrete_action_space(self):
         raise ValueError("Tiago does not support discrete actions!")
 
+    def reset(self, right_hand_joints_pos=None, head_joints_pos=None):
+        """
+        Reset should not change the robot base pose.
+        We need to cache and restore the base joints to the world.
+        """
+        base_joint_positions = self.get_joint_positions()[self.base_idx]
+        super().reset()
+        self.set_joint_positions(base_joint_positions, indices=self.base_idx)
+
+        # set the head pose
+        if head_joints_pos is not None:
+            self.set_joint_positions(head_joints_pos, indices=self.camera_control_idx)
+
+        # reset the hand joints to a specific position
+        if right_hand_joints_pos is not None:
+            self.set_joint_positions(right_hand_joints_pos, indices=self.arm_control_idx['right'])
+
     def _post_load(self):
         super()._post_load()
         # The eef gripper links should be visual-only. They only contain a "ghost" box volume for detecting objects
@@ -213,6 +242,18 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
     @property
     def base_footprint_link_name(self):
         return "base_footprint"
+
+
+    def _get_proprioception_dict(self):
+        dic = super()._get_proprioception_dict()
+
+        # Add trunk info
+        joint_positions = ControllableObjectViewAPI.get_joint_positions(self.articulation_root_path)
+        joint_velocities = ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
+        dic["trunk_qpos"] = joint_positions[self.trunk_control_idx]
+        dic["trunk_qvel"] = joint_velocities[self.trunk_control_idx]
+
+        return dic
 
     @property
     def controller_order(self):
@@ -234,6 +275,52 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
             controllers["arm_{}".format(arm)] = "InverseKinematicsController"
             controllers["gripper_{}".format(arm)] = "MultiFingerGripperController"
         return controllers
+
+    @property
+    def _default_base_controller_configs(self):
+        dic = {
+            "name": "JointController",
+            "control_freq": self._control_freq,
+            "control_limits": self.control_limits,
+            "use_delta_commands": False,
+            "use_impedances": False,
+            "motor_type": "velocity",
+            "dof_idx": self.base_control_idx,
+        }
+        return dic
+
+    @property
+    def _default_controller_config(self):
+        # Grab defaults from super method first
+        cfg = super()._default_controller_config
+
+        # Get default base controller for omnidirectional Tiago
+        cfg["base"] = {"JointController": self._default_base_controller_configs}
+
+        for arm in self.arm_names:
+            for arm_cfg in cfg["arm_{}".format(arm)].values():
+
+                if arm == "left":
+                    # Need to override joint idx being controlled to include trunk in default arm controller configs
+                    arm_control_idx = th.cat([self.trunk_control_idx, self.arm_control_idx[arm]])
+                    arm_cfg["dof_idx"] = arm_control_idx
+
+                    # Need to modify the default joint positions also if this is a null joint controller
+                    if arm_cfg["name"] == "NullJointController":
+                        arm_cfg["default_command"] = self.reset_joint_pos[arm_control_idx]
+
+                # If using rigid trunk, we also clamp its limits
+                # TODO: How to handle for right arm which has a fixed trunk internally even though the trunk is moving
+                # via the left arm??
+                if self.rigid_trunk:
+                    arm_cfg["control_limits"]["position"][0][self.trunk_control_idx] = self.untucked_default_joint_pos[
+                        self.trunk_control_idx
+                    ]
+                    arm_cfg["control_limits"]["position"][1][self.trunk_control_idx] = self.untucked_default_joint_pos[
+                        self.trunk_control_idx
+                    ]
+
+        return cfg
 
     @property
     def assisted_grasp_start_points(self):
