@@ -1,14 +1,12 @@
-from aenum import IntEnum, auto
 import numpy as np
 import torch as th
+from aenum import IntEnum, auto
 
 import omnigibson as og
-from omnigibson.action_primitives.starter_semantic_action_primitives import (
-    StarterSemanticActionPrimitives)
+import omnigibson.utils.transform_utils as T
+from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 from omnigibson.controllers.controller_base import ControlType
 from omnigibson.macros import create_module_macros
-import omnigibson.utils.transform_utils as T
-
 
 m = create_module_macros(module_path=__file__)
 
@@ -49,32 +47,30 @@ class PickPlaceSemanticActionPrimitives(StarterSemanticActionPrimitives):
     def _grasp(self, obj_name):
         # Set grasp pose
         # quat is hardcoded (a somewhat top-down pose)
-        org_quat = th.tensor([ 0.79082719, -0.20438075, -0.55453328, -0.15910284])
+        org_quat = th.tensor([0.79082719, -0.20438075, -0.55453328, -0.15910284])
         obj = self.env.scene.object_registry("name", obj_name)
         org_pos = obj.get_position_orientation()[0]
         print("pos, ori:", org_pos, org_quat)
 
-        im = og.sim.viewer_camera._get_obs()[0]['rgb'][:, :, :3]
+        im = og.sim.viewer_camera._get_obs()[0]["rgb"][:, :, :3]
         obs, obs_info = self.env.get_obs()
-        im_robot_view = obs['robot0']['robot0:eyes:Camera:0']['rgb'][:, :, :3]
+        im_robot_view = obs["robot0"]["robot0:eyes:Camera:0"]["rgb"][:, :, :3]
 
         # If want to keep the original target pose
         new_pos, new_quat = org_pos, org_quat
         print("obj pos", obj.get_position_orientation()[0])
 
         # 1. Move to pregrasp pose
-        pre_grasp_pose = (
-            th.tensor(new_pos) + th.tensor([0.0, 0.0, 0.2]),
-            th.tensor(new_quat))
-        self.state_info['gripper_closed'] = self.execute_controller(
+        pre_grasp_pose = (th.tensor(new_pos) + th.tensor([0.0, 0.0, 0.2]), th.tensor(new_quat))
+        self.state_info["gripper_closed"] = self.execute_controller(
             self._move_hand_linearly_cartesian(
                 pre_grasp_pose,
                 stop_if_stuck=False,
                 ignore_failure=True,
-                gripper_closed=self.state_info['gripper_closed'],
+                gripper_closed=self.state_info["gripper_closed"],
                 move_hand_pos_thresh=m.MOVE_HAND_POS_THRESHOLD,
             ),
-            self.state_info['gripper_closed'],
+            self.state_info["gripper_closed"],
             self.vid_logger,
         )
 
@@ -82,25 +78,25 @@ class PickPlaceSemanticActionPrimitives(StarterSemanticActionPrimitives):
 
         # 2. Move to grasp pose
         grasp_pose = (th.tensor(new_pos), th.tensor(new_quat))
-        self.state_info['gripper_closed'] = self.execute_controller(
+        self.state_info["gripper_closed"] = self.execute_controller(
             self._move_hand_linearly_cartesian(
                 grasp_pose,
                 stop_if_stuck=False,
                 ignore_failure=True,
-                gripper_closed=self.state_info['gripper_closed'],
+                gripper_closed=self.state_info["gripper_closed"],
                 move_hand_pos_thresh=m.MOVE_HAND_POS_THRESHOLD,
             ),
-            self.state_info['gripper_closed'],
+            self.state_info["gripper_closed"],
             self.vid_logger,
         )
 
         # 3. Perform grasp
-        self.state_info['gripper_closed'] = True
+        self.state_info["gripper_closed"] = True
         action = self._empty_action()
         action[20] = -1
         _ = self.execute_controller(
             [action],
-            self.state_info['gripper_closed'],
+            self.state_info["gripper_closed"],
             self.vid_logger,
         )
 
@@ -109,21 +105,21 @@ class PickPlaceSemanticActionPrimitives(StarterSemanticActionPrimitives):
             og.sim.step()
             self.vid_logger.save_im_text()
 
-        action_to_add = np.concatenate((np.array([0.0, 0.0, 0.0]), np.array(action[12:19])))     
+        action_to_add = np.concatenate((np.array([0.0, 0.0, 0.0]), np.array(action[12:19])))
 
         # 4. Move to a random pose in a neighbourhood
         x, y = org_pos[:2]
         z = org_pos[2] + 0.15
         neighbourhood_pose = (th.tensor([x, y, z]), grasp_pose[1])
-        self.state_info['gripper_closed'] = self.execute_controller(
+        self.state_info["gripper_closed"] = self.execute_controller(
             self._move_hand_linearly_cartesian(
                 neighbourhood_pose,
                 stop_if_stuck=False,
                 ignore_failure=True,
-                gripper_closed=self.state_info['gripper_closed'],
+                gripper_closed=self.state_info["gripper_closed"],
                 move_hand_pos_thresh=m.MOVE_HAND_POS_THRESHOLD,
             ),
-            self.state_info['gripper_closed'],
+            self.state_info["gripper_closed"],
             self.vid_logger,
         )
 
@@ -144,27 +140,27 @@ class PickPlaceSemanticActionPrimitives(StarterSemanticActionPrimitives):
         # 1. Move to a drop point
         obj_place_loc = dest_obj.get_position_orientation()[0]
         xyz_pos = th.tensor(obj_place_loc + np.array([0.0, 0.0, 0.2]))
-        quat = th.tensor([ 0.79082719, -0.20438075, -0.55453328, -0.15910284])
+        quat = th.tensor([0.79082719, -0.20438075, -0.55453328, -0.15910284])
         open_gripper_pose = (xyz_pos, quat)
-        self.state_info['gripper_closed'] = self.execute_controller(
+        self.state_info["gripper_closed"] = self.execute_controller(
             self._move_hand_linearly_cartesian(
                 open_gripper_pose,
                 stop_if_stuck=False,
                 ignore_failure=True,
-                gripper_closed=self.state_info['gripper_closed'],
+                gripper_closed=self.state_info["gripper_closed"],
                 move_hand_pos_thresh=m.MOVE_HAND_POS_THRESHOLD,
             ),
-            self.state_info['gripper_closed'],
+            self.state_info["gripper_closed"],
             self.vid_logger,
         )
 
         # 2. Open Gripper
-        self.state_info['gripper_closed'] = False
+        self.state_info["gripper_closed"] = False
         action = self._empty_action()
         # action[20] = 1
         _ = self.execute_controller(
             [action],
-            self.state_info['gripper_closed'],
+            self.state_info["gripper_closed"],
             self.vid_logger,
         )
 
@@ -182,23 +178,18 @@ class PickPlaceSemanticActionPrimitives(StarterSemanticActionPrimitives):
         success = bool((obj_z_dist <= 0.07).item() and (obj_xy_dist <= 0.06).item())
         return success
 
-    def execute_controller(
-            self,
-            ctrl_gen,
-            gripper_closed,
-            arr=None
-    ):
+    def execute_controller(self, ctrl_gen, gripper_closed, arr=None):
         actions = []
         counter = 0
         for action in ctrl_gen:
-            if action == 'Done':
+            if action == "Done":
                 obs, obs_info = self.env.get_obs()
 
                 proprio = self.robot._get_proprioception_dict()
                 # add eef pose and base pose to proprio
-                proprio['left_eef_pos'], proprio['left_eef_orn'] = self.robot.get_relative_eef_pose(arm='left')
-                proprio['right_eef_pos'], proprio['right_eef_orn'] = self.robot.get_relative_eef_pose(arm='right')
-                proprio['base_pos'], proprio['base_orn'] = self.robot.get_position_orientation()
+                proprio["left_eef_pos"], proprio["left_eef_orn"] = self.robot.get_relative_eef_pose(arm="left")
+                proprio["right_eef_pos"], proprio["right_eef_orn"] = self.robot.get_relative_eef_pose(arm="right")
+                proprio["base_pos"], proprio["base_orn"] = self.robot.get_position_orientation()
 
                 is_contact = detect_robot_collision_in_sim(self.robot)
 
@@ -208,7 +199,7 @@ class PickPlaceSemanticActionPrimitives(StarterSemanticActionPrimitives):
 
             if gripper_closed:
                 action[20] = -1
-            else: 
+            else:
                 action[20] = 1
 
             o, r, te, tr, info = self.env.step(action)
@@ -217,9 +208,9 @@ class PickPlaceSemanticActionPrimitives(StarterSemanticActionPrimitives):
             if wait:
                 for _ in range(60):
                     og.sim.step()
-        
+
             counter += 1
-        
+
         print("total steps: ", counter)
         return gripper_closed
 
@@ -234,7 +225,11 @@ class PickPlaceSemanticActionPrimitives(StarterSemanticActionPrimitives):
         for name, controller in self.robot._controllers.items():
             joint_idx = controller.dof_idx.long()
             action_idx = self.robot.controller_action_idx[name]
-            if controller.control_type == ControlType.POSITION and len(joint_idx) == len(action_idx) and not controller.use_delta_commands:
+            if (
+                controller.control_type == ControlType.POSITION
+                and len(joint_idx) == len(action_idx)
+                and not controller.use_delta_commands
+            ):
                 action[action_idx] = self.robot.get_joint_positions()[joint_idx]
             elif self.robot._controller_config[name]["name"] == "InverseKinematicsController":
                 if self.robot._controller_config["arm_" + self.arm]["mode"] == "pose_absolute_ori":

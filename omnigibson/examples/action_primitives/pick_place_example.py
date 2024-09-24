@@ -1,16 +1,15 @@
+import os
+import time
 from argparse import ArgumentParser
 from collections import Counter
-import os
 
 import numpy as np
-from scipy.spatial.transform import Rotation as R
-import time
 import torch as th
 import yaml
+from scipy.spatial.transform import Rotation as R
 
 import omnigibson as og
-from omnigibson.action_primitives.pick_place_semantic_action_primitives import (
-    PickPlaceSemanticActionPrimitives)
+from omnigibson.action_primitives.pick_place_semantic_action_primitives import PickPlaceSemanticActionPrimitives
 from omnigibson.utils.motion_planning_utils import detect_robot_collision_in_sim
 from omnigibson.utils.video_logging_utils import VideoLogger
 
@@ -18,8 +17,7 @@ from omnigibson.utils.video_logging_utils import VideoLogger
 def custom_reset(env, robot, args, vid_logger):
     proprio = robot._get_proprioception_dict()
     # curr_right_arm_joints = th.tensor(proprio['arm_right_qpos'])
-    reset_right_arm_joints = th.tensor(
-        [0.85846, -0.44852, 1.81008, 1.63368, 0.43764, -1.32488, -0.68415])
+    reset_right_arm_joints = th.tensor([0.85846, -0.44852, 1.81008, 1.63368, 0.43764, -1.32488, -0.68415])
 
     noise_1 = np.random.uniform(-0.2, 0.2, 3)
     noise_2 = np.random.uniform(-0.01, 0.01, 4)
@@ -33,15 +31,15 @@ def custom_reset(env, robot, args, vid_logger):
     base_x_noise = np.random.uniform(-0.15, 0.15)
     base_y_noise = np.random.uniform(-0.15, 0.15)
     base_noise = np.array([base_x_noise, base_y_noise, 0.0])
-    base_pos += base_noise 
-    scene_initial_state['object_registry']['robot0']['root_link']['pos'] = base_pos
-    
+    base_pos += base_noise
+    scene_initial_state["object_registry"]["robot0"]["root_link"]["pos"] = base_pos
+
     base_yaw = -120
     base_yaw_noise = np.random.uniform(-15, 15)
     base_yaw += base_yaw_noise
-    r_euler = R.from_euler('z', base_yaw, degrees=True) # or -120
+    r_euler = R.from_euler("z", base_yaw, degrees=True)  # or -120
     r_quat = R.as_quat(r_euler)
-    scene_initial_state['object_registry']['robot0']['root_link']['ori'] = r_quat
+    scene_initial_state["object_registry"]["robot0"]["root_link"]["ori"] = r_quat
 
     default_head_joints = th.tensor([-0.5031718015670776, -0.9972541332244873])
     noise_1 = np.random.uniform(-0.1, 0.1, 1)
@@ -61,9 +59,9 @@ def custom_reset(env, robot, args, vid_logger):
 
     proprio = robot._get_proprioception_dict()
     # add eef pose and base pose to proprio
-    proprio['left_eef_pos'], proprio['left_eef_orn'] = robot.get_relative_eef_pose(arm='left')
-    proprio['right_eef_pos'], proprio['right_eef_orn'] = robot.get_relative_eef_pose(arm='right')
-    proprio['base_pos'], proprio['base_orn'] = robot.get_position_orientation()
+    proprio["left_eef_pos"], proprio["left_eef_orn"] = robot.get_relative_eef_pose(arm="left")
+    proprio["right_eef_pos"], proprio["right_eef_orn"] = robot.get_relative_eef_pose(arm="right")
+    proprio["base_pos"], proprio["base_orn"] = robot.get_position_orientation()
 
     is_contact = detect_robot_collision_in_sim(robot)
 
@@ -77,7 +75,7 @@ def main(args):
     # Update it to create a custom environment and run some actions
     config["scene"]["scene_model"] = "Rs_int"
     config["scene"]["load_object_categories"] = ["floors", "ceilings", "walls", "coffee_table"]
- 
+
     config["objects"] = [
         {
             "type": "PrimitiveObject",
@@ -90,11 +88,7 @@ def main(args):
             "scale": [0.1, 0.05, 0.1],
             # "size": 0.05,
             "position": [-0.5, -0.7, 0.5],
-            "orientation": [
-                0.0004835024010390043,
-                -0.00029672126402147114,
-                -0.11094563454389572,
-                0.9938263297080994],
+            "orientation": [0.0004835024010390043, -0.00029672126402147114, -0.11094563454389572, 0.9938263297080994],
         },
         {
             "type": "DatasetObject",
@@ -104,7 +98,7 @@ def main(args):
             "manipulable": False,
             "scale": [0.3, 0.3, 0.3],
             "position": [-0.7, 0.5, 0.2],
-            "orientation": [0, 0, 0, 1]
+            "orientation": [0, 0, 0, 1],
         },
         {
             "type": "PrimitiveObject",

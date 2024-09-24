@@ -2,12 +2,13 @@ import datetime
 import os
 
 import cv2
-from matplotlib import font_manager
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
 import torch as th
+from matplotlib import font_manager
+from PIL import Image, ImageDraw, ImageFont
 
 import omnigibson as og
+
 
 class VideoLogger:
     def __init__(self, args, env=None):
@@ -24,11 +25,11 @@ class VideoLogger:
         # Text settings
         self.text_font_size = 36
         self.line_spacing = 1.2
-        self.num_frames_to_show_text = 45 * args.vid_speedup # num frames to keep text on for the video
+        self.num_frames_to_show_text = 45 * args.vid_speedup  # num frames to keep text on for the video
         self.text_to_num_frames_remaining_map = {}
-        font = font_manager.FontProperties(family='Ubuntu', style="italic")
+        font = font_manager.FontProperties(family="Ubuntu", style="italic")
         italics = ImageFont.truetype(font_manager.findfont(font), self.text_font_size)
-        font = font_manager.FontProperties(family='Ubuntu')
+        font = font_manager.FontProperties(family="Ubuntu")
         non_italics = ImageFont.truetype(font_manager.findfont(font), self.text_font_size)
         self.fonts = dict(
             italics=italics,
@@ -37,22 +38,15 @@ class VideoLogger:
         self.text_align = "top-left"
 
     def save_im_text(self, text=""):
-        im = og.sim.viewer_camera._get_obs()[0]['rgb'][:, :, :3]
+        im = og.sim.viewer_camera._get_obs()[0]["rgb"][:, :, :3]
         obs, obs_info = self.env.get_obs()
-        im_robot_view = obs['robot0']['robot0:eyes:Camera:0']['rgb'][:, :, :3]
+        im_robot_view = obs["robot0"]["robot0:eyes:Camera:0"]["rgb"][:, :, :3]
         self.save_obs(im, im_robot_view, text)
-
 
     def save_obs(self, im_arr, im_arr_robot_view, text=""):
         def resize_im_arr(im_arr, downscale_factor=1):
             # assumes im_arr is (H, W, 3)
-            im_arr = cv2.resize(
-                im_arr,
-                tuple([
-                    int(x)
-                    for x in (
-                        np.array(im_arr.shape[:2][::-1])
-                        // downscale_factor)]))
+            im_arr = cv2.resize(im_arr, tuple([int(x) for x in (np.array(im_arr.shape[:2][::-1]) // downscale_factor)]))
             return im_arr
 
         if th.is_tensor(im_arr):
@@ -60,8 +54,7 @@ class VideoLogger:
         if th.is_tensor(im_arr_robot_view):
             im_arr_robot_view = im_arr_robot_view.cpu().numpy()
 
-        im_arr = resize_im_arr(
-            im_arr, self.vid_downscale_factor)
+        im_arr = resize_im_arr(im_arr, self.vid_downscale_factor)
         im_arr_robot_view = resize_im_arr(im_arr_robot_view)
         im_arr_w_robot_view = self.overlay_robot_view_on_imgs(im_arr, im_arr_robot_view)
         im_arr_w_robot_view = self.maybe_add_text(im_arr_w_robot_view, text)
@@ -78,14 +71,12 @@ class VideoLogger:
         # Get image text size on dummy image
         im_dummy = Image.new(mode="P", size=(0, 0))
         draw_dummy = ImageDraw.Draw(im_dummy)
-        _, _, text_w, text_h = draw_dummy.textbbox(
-            (0, 0), text=text, font=self.fonts['italics'])
+        _, _, text_w, text_h = draw_dummy.textbbox((0, 0), text=text, font=self.fonts["italics"])
         return text_w, text_h
 
     def maybe_add_text(self, im_arr, new_text=""):
         if new_text:
-            self.text_to_num_frames_remaining_map[new_text] = (
-                self.num_frames_to_show_text)
+            self.text_to_num_frames_remaining_map[new_text] = self.num_frames_to_show_text
 
         im = Image.fromarray(im_arr)
         im_w, im_h = im.size
@@ -93,22 +84,24 @@ class VideoLogger:
 
         # Draw speedup
         speedup_text = f"{self.vid_speedup}x"
-        text_w, text_h = self.get_textbox_size(speedup_text, self.fonts['non_italics'])
+        text_w, text_h = self.get_textbox_size(speedup_text, self.fonts["non_italics"])
         draw.text(
-            (0.98 * (im_w - text_w), 0.98 * (im_h - text_h)),
-            speedup_text, font=self.fonts['non_italics'], fill="white")
+            (0.98 * (im_w - text_w), 0.98 * (im_h - text_h)), speedup_text, font=self.fonts["non_italics"], fill="white"
+        )
 
         # Refresh counters at the end
         keys_to_remove = []
-        num_active_texts = len([
-            (text, num_frames_left)
-            for text, num_frames_left in self.text_to_num_frames_remaining_map.items()
-            if num_frames_left > 0])
+        num_active_texts = len(
+            [
+                (text, num_frames_left)
+                for text, num_frames_left in self.text_to_num_frames_remaining_map.items()
+                if num_frames_left > 0
+            ]
+        )
 
         texts_to_draw = []
         active_text_idx = 0
-        for text, num_frames_left in (
-                self.text_to_num_frames_remaining_map.items()):
+        for text, num_frames_left in self.text_to_num_frames_remaining_map.items():
 
             # No longer an active word; was placed on enough frames already.
             if num_frames_left <= 0:
@@ -117,22 +110,19 @@ class VideoLogger:
 
             # Center the text
             # Get image text size on dummy image
-            text_w, text_h = self.get_textbox_size(text, self.fonts['italics'])
+            text_w, text_h = self.get_textbox_size(text, self.fonts["italics"])
             if self.text_align == "center":
                 x = 0.5 * (im_w - text_w)
-                y = 0.5 * (im_h - (
-                    num_active_texts - active_text_idx) * self.line_spacing * text_h)
+                y = 0.5 * (im_h - (num_active_texts - active_text_idx) * self.line_spacing * text_h)
             elif self.text_align == "top-left":
                 x = 0.05 * im_w
                 y = 0.05 * im_h + active_text_idx * self.line_spacing * text_h
             else:
                 raise NotImplementedError
 
-            color = (
-                (0xf4, 0xe5, 0xbb) if "robot" in text.lower()
-                else (0xbb, 0xca, 0xf4))
+            color = (0xF4, 0xE5, 0xBB) if "robot" in text.lower() else (0xBB, 0xCA, 0xF4)
             # draw.text((x, y), text, font=self.fonts['italics'], fill=color)
-            texts_to_draw.append((text, (x, y), (text_w, text_h), self.fonts['italics'], color))
+            texts_to_draw.append((text, (x, y), (text_w, text_h), self.fonts["italics"], color))
 
             active_text_idx += 1
             self.text_to_num_frames_remaining_map[text] -= 1
@@ -145,8 +135,8 @@ class VideoLogger:
             top_text_xy_pos = texts_to_draw[0][1]
             bottom_text_xy_pos = texts_to_draw[-1][1]
             largest_width_text_pos_box_size = max(
-                [(pos, box_size) for _, pos, box_size, _, _ in texts_to_draw],
-                key=lambda pos_size: pos_size[1][0])
+                [(pos, box_size) for _, pos, box_size, _, _ in texts_to_draw], key=lambda pos_size: pos_size[1][0]
+            )
             largest_width_text_xy_pos, largest_width_text_xy_size = largest_width_text_pos_box_size
 
             bottom_text_xy_size = texts_to_draw[-1][2]
@@ -177,23 +167,20 @@ class VideoLogger:
         self.robot_view_ims = []
         self.ims_w_robot_view = []
 
-
     def make_video(self, prefix):
         imgs = np.array(self.ims_w_robot_view)
         self.save_video(imgs, prefix)
         self.clear_ims()
 
     def save_video(self, imgs, prefix):
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        fourcc = cv2.VideoWriter_fourcc(*"mp4v")
         frame_height, frame_width = imgs[0].shape[:2]
         now = datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         out_dir = os.path.join(self.out_dir, prefix)
         if not os.path.exists(out_dir):
             os.makedirs(out_dir)
         out_path = os.path.join(out_dir, f"{prefix}_{now}.mp4")
-        out = cv2.VideoWriter(
-            out_path,
-            fourcc, 30.0, (frame_width, frame_height))
+        out = cv2.VideoWriter(out_path, fourcc, 30.0, (frame_width, frame_height))
         for i, frame in enumerate(imgs):
             if i % self.vid_speedup != 0:
                 # Drop the frames to cause speedup.

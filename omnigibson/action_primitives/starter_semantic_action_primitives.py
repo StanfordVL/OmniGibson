@@ -1153,8 +1153,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         assert (
             controller_config["name"] == "InverseKinematicsController"
         ), "Controller must be InverseKinematicsController"
-        assert controller_config["mode"] in ["pose_absolute_ori", "pose_delta_ori"], (
-            "Controller must be in pose_absolute_ori or pose_delta_ori mode")
+        assert controller_config["mode"] in [
+            "pose_absolute_ori",
+            "pose_delta_ori",
+        ], "Controller must be in pose_absolute_ori or pose_delta_ori mode"
         if in_world_frame:
             target_pose = self._get_pose_in_robot_frame(target_pose)
         else:
@@ -1198,9 +1200,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             prev_pos = current_pos
             prev_orn = current_orn
 
-            if self.robot._controller_config["arm_" + self.arm]["mode"] == 'pose_absolute_ori':
+            if self.robot._controller_config["arm_" + self.arm]["mode"] == "pose_absolute_ori":
                 action[control_idx] = th.cat([delta_pos, target_orn_axisangle])
-            elif self.robot._controller_config["arm_" + self.arm]["mode"] == 'pose_delta_ori':
+            elif self.robot._controller_config["arm_" + self.arm]["mode"] == "pose_delta_ori":
                 action[control_idx] = th.cat([delta_pos, delta_ori])
 
             yield self._postprocess_action(action)

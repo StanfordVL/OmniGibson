@@ -227,7 +227,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
 
         # reset the hand joints to a specific position
         if right_hand_joints_pos is not None:
-            self.set_joint_positions(right_hand_joints_pos, indices=self.arm_control_idx['right'])
+            self.set_joint_positions(right_hand_joints_pos, indices=self.arm_control_idx["right"])
 
     def _post_load(self):
         super()._post_load()
@@ -242,7 +242,6 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
     @property
     def base_footprint_link_name(self):
         return "base_footprint"
-
 
     def _get_proprioception_dict(self):
         dic = super()._get_proprioception_dict()
