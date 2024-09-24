@@ -436,7 +436,7 @@ class ControllableObject(BaseObject):
         # By default, the control type is None and the control value is 0 (th.zeros) - i.e. no control applied
         u_type_vec = th.tensor([ControlType.NONE] * self.n_dof)
         for group, ctrl in control.items():
-            idx = self._controllers[group].dof_idx
+            idx = self._controllers[group].dof_idx.long()
             u_vec[idx] = ctrl["value"]
             u_type_vec[idx] = ctrl["type"]
 

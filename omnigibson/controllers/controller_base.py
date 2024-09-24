@@ -133,8 +133,8 @@ class BaseController(Serializable, Registerable, Recreatable):
         )
         command_output_limits = (
             (
-                self._control_limits[self.control_type][0][self.dof_idx],
-                self._control_limits[self.control_type][1][self.dof_idx],
+                th.tensor(self._control_limits[self.control_type][0])[self.dof_idx.long()],
+                th.tensor(self._control_limits[self.control_type][1])[self.dof_idx.long()],
             )
             if type(command_output_limits) == str and command_output_limits == "default"
             else command_output_limits
@@ -281,11 +281,11 @@ class BaseController(Serializable, Registerable, Recreatable):
             Array[float]: Clipped control signal
         """
         clipped_control = control.clip(
-            self._control_limits[self.control_type][0][self.dof_idx],
-            self._control_limits[self.control_type][1][self.dof_idx],
+            self._control_limits[self.control_type][0][self.dof_idx.long()],
+            self._control_limits[self.control_type][1][self.dof_idx.long()],
         )
         idx = (
-            self._dof_has_limits[self.dof_idx]
+            self._dof_has_limits[self.dof_idx.long()]
             if self.control_type == ControlType.POSITION
             else [True] * self.control_dim
         )

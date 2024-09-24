@@ -1018,7 +1018,7 @@ class EntityPrim(XFormPrim):
             frame (Literal): The frame in which to set the position and orientation. Defaults to world.
                 scene frame sets position relative to the scene.
         """
-        assert frame in ["world", "scene"], f"Invalid frame '{frame}'. Must be 'world', or 'scene'."
+        assert frame in ["world", "scene", "parent"], f"Invalid frame '{frame}'. Must be 'world', 'scene', or 'parent'"
 
         # If kinematic only, clear cache for the root link
         if self.kinematic_only:
