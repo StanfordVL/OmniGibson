@@ -187,6 +187,7 @@ class PlanningContext(object):
                     if link_name in arm_links
                     else self.robot_copy.links_relative_poses[self.robot_copy_type][link_name]
                 )
+                link_pose = [th.tensor(arr) for arr in link_pose]
                 mesh_copy_pose = T.pose_transform(
                     *link_pose, *self.robot_copy.relative_poses[self.robot_copy_type][link_name][mesh_name]
                 )
@@ -1040,7 +1041,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         indented_print("Plan has %d steps", len(plan))
         for i, target_pose in enumerate(plan):
             target_pos = target_pose[:3]
-            target_quat = T.axisangle2quat(target_pose[3:])
+            target_quat = T.axisangle2quat(th.tensor(target_pose[3:]))
             indented_print("Executing grasp plan step %d/%d", i + 1, len(plan))
             yield from self._move_hand_direct_ik(
                 (target_pos, target_quat), ignore_failure=True, in_world_frame=False, stop_if_stuck=stop_if_stuck
@@ -1146,6 +1147,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         assert controller_config["mode"] == "pose_absolute_ori", "Controller must be in pose_absolute_ori mode"
         if in_world_frame:
             target_pose = self._get_pose_in_robot_frame(target_pose)
+        else:
+            target_pose = [th.tensor(arr) for arr in target_pose]
         target_pos = target_pose[0]
         target_orn = target_pose[1]
         target_orn_axisangle = T.quat2axisangle(target_pose[1])
@@ -1759,8 +1762,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 distance_lo, distance_hi = 0.0, 5.0
                 distance = (th.rand(1) * (distance_hi - distance_lo) + distance_lo).item()
                 yaw_lo, yaw_hi = -math.pi, math.pi
-                yaw = (th.rand(1) * (yaw_hi - yaw_lo) + yaw_lo).item()
-                avg_arm_workspace_range = th.mean(self.robot.arm_workspace_range[self.arm])
+                yaw = th.rand(1) * (yaw_hi - yaw_lo) + yaw_lo
+                avg_arm_workspace_range = th.mean(th.tensor(self.robot.arm_workspace_range[self.arm]))
                 pose_2d = th.tensor(
                     [
                         pose_on_obj[0][0] + distance * th.cos(yaw),

@@ -129,7 +129,7 @@ class Remapper:
                 self.key_array[key] = new_key
 
         # Apply remapping
-        remapped_img = self.key_array[image]
+        remapped_img = self.key_array[image.long()]
         # Make sure all values are correctly remapped and not equal to the default value
         assert th.all(remapped_img != th.iinfo(th.int32).max), "Not all keys in the image are in the key array!"
         remapped_labels = {}

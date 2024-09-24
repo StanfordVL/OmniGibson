@@ -1306,7 +1306,7 @@ class ManipulationRobot(BaseRobot):
             # stays the same across different controllers and control modes (absolute / delta). This way,
             # a zero action will actually keep the AG setting where it already is.
             controller = self._controllers[f"gripper_{arm}"]
-            controlled_joints = controller.dof_idx
+            controlled_joints = controller.dof_idx.long()
             threshold = th.mean(
                 th.stack([self.joint_lower_limits[controlled_joints], self.joint_upper_limits[controlled_joints]]),
                 dim=0,

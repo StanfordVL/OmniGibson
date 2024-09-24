@@ -312,7 +312,7 @@ class InverseKinematicsController(JointController, ManipulationController):
         target_quat = goal_dict["target_quat"]
 
         # Calculate and return IK-backed out joint angles
-        current_joint_pos = control_dict["joint_position"][self.dof_idx]
+        current_joint_pos = control_dict["joint_position"][self.dof_idx.long()]
 
         # If the delta is really small, we just keep the current joint position. This avoids joint
         # drift caused by IK solver inaccuracy even when zero delta actions are provided.
@@ -326,15 +326,15 @@ class InverseKinematicsController(JointController, ManipulationController):
             err = th.cat([pos_err, ori_err])
 
             # Use the jacobian to compute a local approximation
-            j_eef = control_dict[f"{self.task_name}_jacobian_relative"][:, self.dof_idx]
+            j_eef = control_dict[f"{self.task_name}_jacobian_relative"][:, self.dof_idx.long()]
             j_eef_pinv = th.linalg.pinv(j_eef)
             delta_j = j_eef_pinv @ err
             target_joint_pos = current_joint_pos + delta_j
 
             # Clip values to be within the joint limits
             target_joint_pos = target_joint_pos.clamp(
-                min=self._control_limits[ControlType.get_type("position")][0][self.dof_idx],
-                max=self._control_limits[ControlType.get_type("position")][1][self.dof_idx],
+                min=self._control_limits[ControlType.get_type("position")][0][self.dof_idx.long()],
+                max=self._control_limits[ControlType.get_type("position")][1][self.dof_idx.long()],
             )
 
         # Optionally pass through smoothing filter for better stability

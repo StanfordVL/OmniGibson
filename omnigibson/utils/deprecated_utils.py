@@ -529,9 +529,10 @@ class ArticulationView(_ArticulationView):
             carb.log_warn("ArticulationView needs to be initialized.")
             return
         if not omni.timeline.get_timeline_interface().is_stopped() and self._physics_view is not None:
+            positions = positions.float()
             indices = self._backend_utils.resolve_indices(indices, self.count, self._device)
             joint_indices = self._backend_utils.resolve_indices(joint_indices, self.num_dof, self._device)
-            new_dof_pos = self._physics_view.get_dof_positions()
+            new_dof_pos = self._physics_view.get_dof_positions().float()
             new_dof_pos = self._backend_utils.assign(
                 self._backend_utils.move_data(positions, device=self._device),
                 new_dof_pos,
