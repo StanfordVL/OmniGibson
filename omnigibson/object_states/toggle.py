@@ -127,30 +127,40 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
         self.visual_marker.initialize()
         self.visual_marker.visible = True
 
-        # Store the projection mesh's IDs
-        projection_mesh_ids = lazy.pxr.PhysicsSchemaTools.encodeSdfPath(self.visual_marker.prim_path)
+        # # Store the projection mesh's IDs
+        # projection_mesh_ids = lazy.pxr.PhysicsSchemaTools.encodeSdfPath(self.visual_marker.prim_path)
+        from pxr import PhysicsSchemaTools, PhysxSchema, UsdPhysics
 
-        # Define function for checking overlap
-        valid_hit = False
+        # TODO: make fabric = True
+        trigger_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(self.visual_marker.prim_path, fabric=False)
+        lazy.pxr.UsdPhysics.CollisionAPI.Apply(trigger_prim)
+        lazy.pxr.PhysxSchema.PhysxTriggerAPI.Apply(trigger_prim)
+        self.triggerStateAPI = PhysxSchema.PhysxTriggerStateAPI.Apply(trigger_prim)
 
-        def overlap_callback(hit):
-            nonlocal valid_hit
-            all_finger_paths = {path for path_set in self._robot_finger_paths for path in path_set}
-            valid_hit = hit.rigid_body in all_finger_paths
-            # Continue traversal only if we don't have a valid hit yet
-            return not valid_hit
+        # # Define function for checking overlap
+        # valid_hit = False
+
+        # def overlap_callback(hit):
+        #     nonlocal valid_hit
+        #     all_finger_paths = {path for path_set in self._robot_finger_paths for path in path_set}
+        #     valid_hit = hit.rigid_body in all_finger_paths
+        #     # Continue traversal only if we don't have a valid hit yet
+        #     return not valid_hit
 
         # Set this value to be False by default
         self._set_value(False)
 
         def check_overlap():
-            nonlocal valid_hit
-            valid_hit = False
-            if self.visual_marker.prim.GetTypeName() == "Mesh":
-                og.sim.psqi.overlap_mesh(*projection_mesh_ids, reportFn=overlap_callback)
-            else:
-                og.sim.psqi.overlap_shape(*projection_mesh_ids, reportFn=overlap_callback)
-            return valid_hit
+            # nonlocal valid_hit
+            # valid_hit = False
+            # if self.visual_marker.prim.GetTypeName() == "Mesh":
+            #     og.sim.psqi.overlap_mesh(*projection_mesh_ids, reportFn=overlap_callback)
+            # else:
+            #     og.sim.psqi.overlap_shape(*projection_mesh_ids, reportFn=overlap_callback)
+            # return valid_hit
+            triggerColliders = self.triggerStateAPI.GetTriggeredCollisionsRel().GetTargets()
+            all_finger_paths = {path for path_set in self._robot_finger_paths for path in path_set}
+            breakpoint()
 
         self._check_overlap = check_overlap
 
