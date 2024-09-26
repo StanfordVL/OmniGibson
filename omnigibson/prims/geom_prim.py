@@ -443,3 +443,17 @@ class CollisionVisualGeomPrim(CollisionGeomPrim, VisualGeomPrim):
         # The purpose should be default, not guide as set by CollisionGeomPrim
         # this is to make sure the geom is visualized, even though it's also collidable
         self.purpose = "default"
+
+
+class TriggerGeomPrim(GeomPrim):
+    def _post_load(self):
+        # run super first
+        super()._post_load()
+
+        lazy.pxr.UsdPhysics.CollisionAPI.Apply(self._prim)
+        lazy.pxr.PhysxSchema.PhysxTriggerAPI.Apply(self._prim)
+        self._trigger_state_api = lazy.pxr.PhysxSchema.PhysxTriggerStateAPI.Apply(self._prim)
+
+    def trigger_colliders(self):
+        targets = self._trigger_state_api.GetTriggeredCollisionsRel().GetTargets()
+        return {str(path).rsplit("/collisions", 1)[0] for path in targets}
