@@ -6,7 +6,7 @@ from omnigibson.macros import create_module_macros
 from omnigibson.object_states.link_based_state_mixin import LinkBasedStateMixin
 from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanStateMixin
 from omnigibson.object_states.update_state_mixin import GlobalUpdateStateMixin, UpdateStateMixin
-from omnigibson.prims.geom_prim import VisualGeomPrim
+from omnigibson.prims.geom_prim import TriggerGeomPrim
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.numpy_utils import vtarray_to_torch
 from omnigibson.utils.python_utils import classproperty
@@ -33,9 +33,6 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
         self.value = False
         self.robot_can_toggle_steps = 0
         self.visual_marker = None
-
-        # We also generate the function for checking overlaps at runtime
-        self._check_overlap = None
 
         super().__init__(obj)
 
@@ -119,7 +116,7 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
 
         # Create the visual geom instance referencing the generated mesh prim
         relative_prim_path = absolute_prim_path_to_scene_relative(self.obj.scene, mesh_prim_path)
-        self.visual_marker = VisualGeomPrim(
+        self.visual_marker = TriggerGeomPrim(
             relative_prim_path=relative_prim_path, name=f"{self.obj.name}_visual_marker"
         )
         self.visual_marker.load(self.obj.scene)
@@ -127,50 +124,15 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
         self.visual_marker.initialize()
         self.visual_marker.visible = True
 
-        # # Store the projection mesh's IDs
-        # projection_mesh_ids = lazy.pxr.PhysicsSchemaTools.encodeSdfPath(self.visual_marker.prim_path)
-        from pxr import PhysicsSchemaTools, PhysxSchema, UsdPhysics
-
-        # TODO: make fabric = True
-        trigger_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(self.visual_marker.prim_path, fabric=False)
-        lazy.pxr.UsdPhysics.CollisionAPI.Apply(trigger_prim)
-        lazy.pxr.PhysxSchema.PhysxTriggerAPI.Apply(trigger_prim)
-        self.triggerStateAPI = PhysxSchema.PhysxTriggerStateAPI.Apply(trigger_prim)
-
-        # # Define function for checking overlap
-        # valid_hit = False
-
-        # def overlap_callback(hit):
-        #     nonlocal valid_hit
-        #     all_finger_paths = {path for path_set in self._robot_finger_paths for path in path_set}
-        #     valid_hit = hit.rigid_body in all_finger_paths
-        #     # Continue traversal only if we don't have a valid hit yet
-        #     return not valid_hit
-
-        # Set this value to be False by default
-        self._set_value(False)
-
-        def check_overlap():
-            # nonlocal valid_hit
-            # valid_hit = False
-            # if self.visual_marker.prim.GetTypeName() == "Mesh":
-            #     og.sim.psqi.overlap_mesh(*projection_mesh_ids, reportFn=overlap_callback)
-            # else:
-            #     og.sim.psqi.overlap_shape(*projection_mesh_ids, reportFn=overlap_callback)
-            # return valid_hit
-            triggerColliders = self.triggerStateAPI.GetTriggeredCollisionsRel().GetTargets()
-            all_finger_paths = {path for path_set in self._robot_finger_paths for path in path_set}
-            breakpoint()
-
-        self._check_overlap = check_overlap
-
     def _update(self):
         # If we're not nearby any fingers, we automatically can't toggle
         if self.obj not in self._finger_contact_objs:
             robot_can_toggle = False
         else:
             # Check to make sure fingers are actually overlapping the toggle button mesh
-            robot_can_toggle = self._check_overlap()
+            trigger_colliders = self.visual_marker.trigger_colliders()
+            all_finger_paths = {path for path_set in self._robot_finger_paths for path in path_set}
+            robot_can_toggle = bool(trigger_colliders & all_finger_paths)
 
         previous_step = self.robot_can_toggle_steps
         if robot_can_toggle:
