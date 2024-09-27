@@ -44,3 +44,11 @@ class PredicateGoal(SuccessCondition):
                 of the predicates matching either of those conditions
         """
         return self._goal_status
+
+    @property
+    def partial_success(self):
+        """
+        Returns:
+            bool: returns true if partial success is supported, false otherwise
+        """
+        return True

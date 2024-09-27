@@ -51,9 +51,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self.render_mode = "rgb_array"
         self.metadata = {"render.modes": ["rgb_array"]}
 
-        # Store if we are part of a vec env
-        self.in_vec_env = in_vec_env
-
         # Convert config file(s) into a single parsed dict
         configs = configs if isinstance(configs, list) or isinstance(configs, tuple) else [configs]
 
@@ -124,7 +121,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self.load()
 
         # If we are not in a vec env, we can play ourselves. Otherwise we wait for the vec env to play.
-        if not self.in_vec_env:
+        if not in_vec_env:
             og.sim.play()
             self.post_play_load()
 
@@ -547,6 +544,10 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
     def _pre_step(self, action):
         """Apply the pre-sim-step part of an environment step, i.e. apply the robot actions."""
+
+        # perform necessary pre-step actions for the task
+        self.task.pre_step()
+
         # If the action is not a dictionary, convert into a dictionary
         if not isinstance(action, dict) and not isinstance(action, gym.spaces.Dict):
             action_dict = dict()
@@ -595,6 +596,11 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Increment step
         self._current_step += 1
+
+        # record end time
+        # perform necessary post-step actions for the task
+        self.task.post_step()
+
         return obs, reward, terminated, truncated, info
 
     def step(self, action, n_render_iterations=1):

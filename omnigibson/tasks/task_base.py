@@ -1,3 +1,4 @@
+import time
 from abc import ABCMeta, abstractmethod
 from copy import deepcopy
 
@@ -27,12 +28,13 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
             in with the default config. See cls.default_reward_config for default values used
     """
 
-    def __init__(self, termination_config=None, reward_config=None):
+    def __init__(self, termination_config=None, reward_config=None, metric_config=None):
         # Make sure configs are dictionaries
         termination_config = dict() if termination_config is None else termination_config
         reward_config = dict() if reward_config is None else reward_config
+        metric_config = dict() if metric_config is None else metric_config
 
-        # Sanity check termination and reward conditions -- any keys found in the inputted config but NOT
+        # Sanity check termination, reward, and metric conditions -- any keys found in the inputted config but NOT
         # found in the default config should raise an error
         unknown_termination_keys = set(termination_config.keys()) - set(self.default_termination_config.keys())
         assert (
@@ -40,20 +42,26 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         ), f"Got unknown termination config keys inputted: {unknown_termination_keys}"
         unknown_reward_keys = set(reward_config.keys()) - set(self.default_reward_config.keys())
         assert len(unknown_reward_keys) == 0, f"Got unknown reward config keys inputted: {unknown_reward_keys}"
+        unknown_metric_keys = set(metric_config.keys()) - set(self.default_metric_config.keys())
+        assert len(unknown_metric_keys) == 0, f"Got unknown metric config keys inputted: {unknown_metric_keys}"
 
         # Combine with defaults and store internally
         self._termination_config = self.default_termination_config
         self._termination_config.update(termination_config)
         self._reward_config = self.default_reward_config
         self._reward_config.update(reward_config)
+        self._metric_config = self.default_metric_config
+        self._metric_config.update(metric_config)
 
         # Generate reward and termination functions
         self._termination_conditions = self._create_termination_conditions()
         self._reward_functions = self._create_reward_functions()
+        self._metric_functions = self._create_metric_functions()
 
         # Store other internal vars that will be populated at runtime
         self._loaded = False
         self._reward = None
+        self._metrics = 0
         self._done = None
         self._success = None
         self._info = None
@@ -179,6 +187,17 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         """
         raise NotImplementedError()
 
+    def _create_metric_functions(self):
+        """
+        Creates the metric functions in the environment
+
+        Returns:
+            dict of BaseRewardFunction: Metric functions created for this task
+        """
+
+        # The metric functions are individually configured in the task class
+        raise NotImplementedError()
+
     def _reset_scene(self, env):
         """
         Task-specific scene reset. Default is the normal scene reset
@@ -207,9 +226,14 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         """
         # By default, reset reward, done, and info
         self._reward = None
+        self._metrics = 0
         self._done = False
         self._success = False
         self._info = None
+
+        # reset the start and end time of the simulation step
+        self._prev_sim_end_ts = None
+        self._cur_sim_start_ts = None
 
     def reset(self, env):
         """
@@ -228,6 +252,8 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
             termination_condition.reset(self, env)
         for reward_function in self._reward_functions.values():
             reward_function.reset(self, env)
+        for metric_function in self._metric_functions.values():
+            metric_function.reset(self, env)
 
     def _step_termination(self, env, action, info=None):
         """
@@ -296,6 +322,31 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
 
         return total_reward, total_info
 
+    def _step_metrics(self, env, action):
+        """
+        Step and aggregate metric functions
+
+        Args:
+            env (Environment): Environment instance
+            action (n-array): 1D flattened array of actions executed by all agents in the environment
+
+        Returns:
+            - the break down of the metric scores and the metric info
+        """
+
+        # We'll also store individual metric split
+        breakdown_dict = dict()
+        metric_score = 0
+
+        for metric_function in self._metric_functions.values():
+            metric = metric_function.step(self, env, action)
+            breakdown_dict.update(metric)
+
+        for metric_name, metric_score in breakdown_dict.items():
+            metric_score += metric_score * self._metric_config[metric_name]
+
+        return metric_score, breakdown_dict
+
     @abstractmethod
     def _get_obs(self, env):
         """
@@ -355,21 +406,32 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         # Make sure we're initialized
         assert self._loaded, "Task must be loaded using load() before calling step()!"
 
-        # We calculate termination conditions first and then rewards
         # (since some rewards can rely on termination conditions to update)
         done, done_info = self._step_termination(env=env, action=action)
         reward, reward_info = self._step_reward(env=env, action=action)
+        metric_score, metrics_info = self._step_metrics(env=env, action=action)
 
         # Update the internal state of this task
         self._reward = reward
+        self._metrics = metric_score
         self._done = done
         self._success = done_info["success"]
         self._info = {
+            "metrics": metrics_info,
             "reward": reward_info,
             "done": done_info,
         }
 
         return self._reward, self._done, deepcopy(self._info)
+
+    def pre_step(self):
+
+        # record the real start time of the simulation step
+        self._cur_sim_start_ts = time.perf_counter()
+
+    def post_step(self):
+        # record the real end time of the simulation step
+        self._prev_sim_end_ts = time.perf_counter()
 
     @property
     def name(self):
@@ -415,6 +477,22 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         assert self._info is not None, "At least one step() must occur before info can be calculated!"
         return self._info
 
+    @property
+    def last_step_wall_time(self):
+        """
+        Returns:
+            int: return the amount of wall time the last simulation step took
+        """
+
+        # return 0 if the simulation has not started yet
+        if not self._prev_sim_end_ts or not self._cur_sim_start_ts:
+            return 0
+
+        assert (
+            self._prev_sim_end_ts < self._cur_sim_start_ts
+        ), "end time from the previous iteration must be less than the start time of the current iteration"
+        return self._cur_sim_start_ts - self._prev_sim_end_ts
+
     @classproperty
     def valid_scene_types(cls):
         """
@@ -443,6 +521,16 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
                 any of the termination classes generated in self._create_terminations(). Note: this default config
                 should be fully verbose -- any keys inputted in the constructor but NOT found in this default config
                 will raise an error!
+        """
+        raise NotImplementedError()
+
+    @classproperty
+    def default_metric_config(cls):
+        """
+        Returns:
+            dict: Default metric configuration for this class. Should include any kwargs necessary for
+                any of the metric classes. Note: this default config should be fully verbose -- any keys
+                inputted in the constructor but NOT found in this default config will raise an error!
         """
         raise NotImplementedError()
 

@@ -93,6 +93,14 @@ class BaseTerminationCondition(Registerable, metaclass=ABCMeta):
         assert self._done is not None, "At least one step() must occur before success can be calculated!"
         return self._done and self._terminate_is_success
 
+    @property
+    def partial_success(self):
+        """
+        Returns:
+            bool: returns true if partial success is supported, false otherwise
+        """
+        return False
+
     @classproperty
     def _terminate_is_success(cls):
         """

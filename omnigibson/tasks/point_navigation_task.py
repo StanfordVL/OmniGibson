@@ -148,6 +148,10 @@ class PointNavigationTask(BaseTask):
 
         return rewards
 
+    def _create_metric_functions(self):
+        # No metrics for this task
+        return dict()
+
     def _load(self, env):
         # Load visualization
         self._load_visualization_markers(env=env)
@@ -498,3 +502,8 @@ class PointNavigationTask(BaseTask):
             "r_collision": 0.1,
             "r_pointgoal": 10.0,
         }
+
+    @classproperty
+    def default_metric_config(cls):
+        # Empty dict
+        return {}

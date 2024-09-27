@@ -21,6 +21,10 @@ class DummyTask(BaseTask):
         # Do nothing
         return dict()
 
+    def _create_metric_functions(self):
+        # Do nothing
+        return dict()
+
     def _get_obs(self, env):
         # No task-specific obs of any kind
         return dict(), dict()
@@ -41,5 +45,10 @@ class DummyTask(BaseTask):
 
     @classproperty
     def default_reward_config(cls):
+        # Empty dict
+        return {}
+
+    @classproperty
+    def default_metric_config(cls):
         # Empty dict
         return {}

@@ -15,7 +15,11 @@ from omnigibson.utils.constants import JointType, PrimType
 from omnigibson.utils.numpy_utils import NumpyTypes
 from omnigibson.utils.python_utils import CachedFunctions, assert_valid_key, merge_nested_dicts
 from omnigibson.utils.ui_utils import create_module_logger
-from omnigibson.utils.usd_utils import ControllableObjectViewAPI
+from omnigibson.utils.usd_utils import (
+    ControllableObjectViewAPI,
+    absolute_prim_path_to_scene_relative,
+    add_asset_to_stage,
+)
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
