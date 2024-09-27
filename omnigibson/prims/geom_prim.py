@@ -445,14 +445,15 @@ class CollisionVisualGeomPrim(CollisionGeomPrim, VisualGeomPrim):
         self.purpose = "default"
 
 
-class TriggerGeomPrim(GeomPrim):
+class TriggerGeomPrim(CollisionGeomPrim):
     def _post_load(self):
         # run super first
         super()._post_load()
 
-        lazy.pxr.UsdPhysics.CollisionAPI.Apply(self._prim)
         lazy.pxr.PhysxSchema.PhysxTriggerAPI.Apply(self._prim)
         self._trigger_state_api = lazy.pxr.PhysxSchema.PhysxTriggerStateAPI.Apply(self._prim)
+        # TODO: figure out whether this needs to stay
+        # self.collision_enabled = False
 
     def trigger_colliders(self):
         targets = self._trigger_state_api.GetTriggeredCollisionsRel().GetTargets()

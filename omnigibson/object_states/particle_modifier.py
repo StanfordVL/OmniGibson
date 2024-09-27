@@ -17,7 +17,7 @@ from omnigibson.object_states.object_state_base import IntrinsicObjectState
 from omnigibson.object_states.saturated import ModifiedParticles, Saturated
 from omnigibson.object_states.toggle import ToggledOn
 from omnigibson.object_states.update_state_mixin import UpdateStateMixin
-from omnigibson.prims.geom_prim import VisualGeomPrim
+from omnigibson.prims.geom_prim import TriggerGeomPrim, VisualGeomPrim
 from omnigibson.prims.prim_base import BasePrim
 from omnigibson.systems.system_base import PhysicalParticleSystem, VisualParticleSystem
 from omnigibson.utils.constants import ParticleModifyCondition, ParticleModifyMethod, PrimType
@@ -385,7 +385,7 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
                     )
 
             # Create the visual geom instance referencing the generated mesh prim, and then hide it
-            self.projection_mesh = VisualGeomPrim(
+            self.projection_mesh = TriggerGeomPrim(
                 relative_prim_path=absolute_prim_path_to_scene_relative(self.obj.scene, mesh_prim_path),
                 name=f"{name_prefix}_projection_mesh",
             )
@@ -428,14 +428,13 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
             # Generate the function for checking whether points are within the projection mesh
             self._check_in_mesh, _ = generate_points_in_volume_checker_function(obj=self.obj, volume_link=self.link)
 
-            # Store the projection mesh's IDs
-            projection_mesh_ids = lazy.pxr.PhysicsSchemaTools.encodeSdfPath(self.projection_mesh.prim_path)
-
             # We also generate the function for checking overlaps at runtime
             def check_overlap():
                 nonlocal valid_hit
                 valid_hit = False
-                og.sim.psqi.overlap_shape(*projection_mesh_ids, reportFn=overlap_callback)
+                colliders = self.projection_mesh.trigger_colliders()
+                for collider in colliders:
+                    valid_hit = not collider in self._link_prim_paths
                 return valid_hit
 
         elif self.method == ParticleModifyMethod.ADJACENCY:
