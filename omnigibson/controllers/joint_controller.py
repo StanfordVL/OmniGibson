@@ -135,7 +135,7 @@ class JointController(LocomotionController, ManipulationController, GripperContr
 
     def _update_goal(self, command, control_dict):
         # Compute the base value for the command
-        base_value = control_dict[f"joint_{self._motor_type}"][self.dof_idx]
+        base_value = control_dict[f"joint_{self._motor_type}"][self.dof_idx.long()]
 
         # If we're using delta commands, add this value
         if self._use_delta_commands:
@@ -166,8 +166,8 @@ class JointController(LocomotionController, ManipulationController, GripperContr
 
         # Clip the command based on the limits
         target = target.clip(
-            self._control_limits[ControlType.get_type(self._motor_type)][0][self.dof_idx],
-            self._control_limits[ControlType.get_type(self._motor_type)][1][self.dof_idx],
+            self._control_limits[ControlType.get_type(self._motor_type)][0][self.dof_idx.long()],
+            self._control_limits[ControlType.get_type(self._motor_type)][1][self.dof_idx.long()],
         )
 
         return dict(target=target)
@@ -189,7 +189,7 @@ class JointController(LocomotionController, ManipulationController, GripperContr
         Returns:
             Array[float]: outputted (non-clipped!) control signal to deploy
         """
-        base_value = control_dict[f"joint_{self._motor_type}"][self.dof_idx]
+        base_value = control_dict[f"joint_{self._motor_type}"][self.dof_idx.long()]
         target = goal_dict["target"]
 
         # Convert control into efforts
@@ -197,7 +197,7 @@ class JointController(LocomotionController, ManipulationController, GripperContr
             if self._motor_type == "position":
                 # Run impedance controller -- effort = pos_err * kp + vel_err * kd
                 position_error = target - base_value
-                vel_pos_error = -control_dict[f"joint_velocity"][self.dof_idx]
+                vel_pos_error = -control_dict[f"joint_velocity"][self.dof_idx.long()]
                 u = position_error * self.kp + vel_pos_error * self.kd
             elif self._motor_type == "velocity":
                 # Compute command torques via PI velocity controller plus gravity compensation torques
@@ -207,16 +207,17 @@ class JointController(LocomotionController, ManipulationController, GripperContr
                 u = target
 
             dof_idxs_mat = th.meshgrid(self.dof_idx, self.dof_idx, indexing="xy")
+            dof_idxs_mat = tuple(x.long() for x in dof_idxs_mat)
             mm = control_dict["mass_matrix"][dof_idxs_mat]
             u = mm @ u
 
             # Add gravity compensation
             if self._use_gravity_compensation:
-                u += control_dict["gravity_force"][self.dof_idx]
+                u += control_dict["gravity_force"][self.dof_idx.long()]
 
             # Add Coriolis / centrifugal compensation
             if self._use_cc_compensation:
-                u += control_dict["cc_force"][self.dof_idx]
+                u += control_dict["cc_force"][self.dof_idx.long()]
 
         else:
             # Desired is the exact goal
@@ -229,7 +230,7 @@ class JointController(LocomotionController, ManipulationController, GripperContr
         # Compute based on mode
         if self._motor_type == "position":
             # Maintain current qpos
-            target = control_dict[f"joint_{self._motor_type}"][self.dof_idx]
+            target = control_dict[f"joint_{self._motor_type}"][self.dof_idx.long()]
         else:
             # For velocity / effort, directly set to 0
             target = th.zeros(self.control_dim)

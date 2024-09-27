@@ -106,6 +106,7 @@ def plan_base_motion(
             segment = []
             segment.append(p2[0] - p1[0])
             segment.append(p2[1] - p1[1])
+            segment = th.tensor(segment)
             return th.arctan2(segment[1], segment[0])
 
     def create_state(space, x, y, yaw):
@@ -122,7 +123,7 @@ def plan_base_motion(
         x = q.getX()
         y = q.getY()
         yaw = q.getYaw()
-        pose = ([x, y, 0.0], T.euler2quat((0, 0, yaw)))
+        pose = ([x, y, 0.0], T.euler2quat(th.tensor([0, 0, yaw])))
         return not set_base_and_detect_collision(context, pose)
 
     def remove_unnecessary_rotations(path):
@@ -364,7 +365,7 @@ def plan_arm_motion_ik(
         eef_pose = [q[i] for i in range(6)]
         control_joint_pos = ik_solver.solve(
             target_pos=eef_pose[:3],
-            target_quat=T.axisangle2quat(eef_pose[3:]),
+            target_quat=T.axisangle2quat(th.tensor(eef_pose[3:])),
             max_iterations=1000,
         )
 
@@ -479,6 +480,7 @@ def set_arm_and_detect_collision(context, joint_pos):
         if link in robot_copy.meshes[robot_copy_type].keys():
             for mesh_name, mesh in robot_copy.meshes[robot_copy_type][link].items():
                 relative_pose = robot_copy.relative_poses[robot_copy_type][link][mesh_name]
+                pose = [th.tensor(arr) for arr in pose]
                 mesh_pose = T.pose_transform(*pose, *relative_pose)
                 translation = lazy.pxr.Gf.Vec3d(*th.tensor(mesh_pose[0], dtype=th.float32).tolist())
                 mesh.GetAttribute("xformOp:translate").Set(translation)

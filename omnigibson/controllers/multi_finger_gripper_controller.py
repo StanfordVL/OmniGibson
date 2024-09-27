@@ -159,20 +159,20 @@ class MultiFingerGripperController(GripperController):
             Array[float]: outputted (non-clipped!) control signal to deploy
         """
         target = goal_dict["target"]
-        joint_pos = control_dict["joint_position"][self.dof_idx]
+        joint_pos = control_dict["joint_position"][self.dof_idx.long()]
         # Choose what to do based on control mode
         if self._mode == "binary":
             # Use max control signal
             should_open = target[0] >= 0.0 if not self._inverted else target[0] > 0.0
             if should_open:
                 u = (
-                    self._control_limits[ControlType.get_type(self._motor_type)][1][self.dof_idx]
+                    self._control_limits[ControlType.get_type(self._motor_type)][1][self.dof_idx.long()]
                     if self._open_qpos is None
                     else self._open_qpos
                 )
             else:
                 u = (
-                    self._control_limits[ControlType.get_type(self._motor_type)][0][self.dof_idx]
+                    self._control_limits[ControlType.get_type(self._motor_type)][0][self.dof_idx.long()]
                     if self._closed_qpos is None
                     else self._closed_qpos
                 )
@@ -183,10 +183,10 @@ class MultiFingerGripperController(GripperController):
         # If we're near the joint limits and we're using velocity / torque control, we zero out the action
         if self._motor_type in {"velocity", "torque"}:
             violate_upper_limit = (
-                joint_pos > self._control_limits[ControlType.POSITION][1][self.dof_idx] - self._limit_tolerance
+                joint_pos > self._control_limits[ControlType.POSITION][1][self.dof_idx.long()] - self._limit_tolerance
             )
             violate_lower_limit = (
-                joint_pos < self._control_limits[ControlType.POSITION][0][self.dof_idx] + self._limit_tolerance
+                joint_pos < self._control_limits[ControlType.POSITION][0][self.dof_idx.long()] + self._limit_tolerance
             )
             violation = th.logical_or(violate_upper_limit * (u > 0), violate_lower_limit * (u < 0))
             u *= ~violation
@@ -228,7 +228,7 @@ class MultiFingerGripperController(GripperController):
             is_grasping = IsGraspingState.UNKNOWN
 
         else:
-            finger_pos = control_dict["joint_position"][self.dof_idx]
+            finger_pos = control_dict["joint_position"][self.dof_idx.long()]
 
             # For joint position control, if the desired positions are the same as the current positions, is_grasping unknown
             if self._motor_type == "position" and th.mean(th.abs(finger_pos - self._control)) < m.POS_TOLERANCE:
@@ -240,9 +240,9 @@ class MultiFingerGripperController(GripperController):
 
             # Otherwise, the last control signal intends to "move" the gripper
             else:
-                finger_vel = control_dict["joint_velocity"][self.dof_idx]
-                min_pos = self._control_limits[ControlType.POSITION][0][self.dof_idx]
-                max_pos = self._control_limits[ControlType.POSITION][1][self.dof_idx]
+                finger_vel = control_dict["joint_velocity"][self.dof_idx.long()]
+                min_pos = self._control_limits[ControlType.POSITION][0][self.dof_idx.long()]
+                max_pos = self._control_limits[ControlType.POSITION][1][self.dof_idx.long()]
 
                 # Make sure we don't have any invalid values (i.e.: fingers should be within the limits)
                 finger_pos = th.clip(finger_pos, min_pos, max_pos)
