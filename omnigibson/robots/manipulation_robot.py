@@ -634,10 +634,12 @@ class ManipulationRobot(BaseRobot):
             dict: Dictionary mapping arm appendage name to indices in low-level control
                 vector corresponding to arm joints.
         """
-        return {
+        idxs = {
             arm: th.tensor([list(self.joints.keys()).index(name) for name in self.arm_joint_names[arm]])
             for arm in self.arm_names
         }
+        idxs["combined"] = th.sort(th.cat([val for val in idxs.values()]))[0]
+        return idxs
 
     @property
     def gripper_control_idx(self):

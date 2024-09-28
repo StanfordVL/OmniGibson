@@ -171,6 +171,17 @@ class ArticulatedTrunkRobot(ManipulationRobot):
         dic["trunk_qvel"] = joint_velocities[self.trunk_control_idx]
 
         return dic
+    
+    @property
+    def arm_control_idx(self):
+        # Add combined entry
+        idxs = super().arm_control_idx
+
+        # Concatenate trunk into arm values and sort them
+        idxs[self.default_arm] = th.sort(th.cat([idxs[self.default_arm], self.trunk_control_idx]))[0]
+        idxs["combined"] = th.sort(th.cat([idxs["combined"], self.trunk_control_idx]))[0]
+
+        return idxs
 
     @property
     def default_proprio_obs(self):

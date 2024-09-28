@@ -241,10 +241,10 @@ def plan_arm_motion(robot, end_conf, context, planning_time=15.0, torso_fixed=Tr
         initial_joint_pos = robot.get_joint_positions()[joint_control_idx]
         control_idx_in_joint_pos = th.arange(dim)
     else:
-        joint_control_idx = th.cat([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+        joint_control_idx = robot.arm_control_idx[robot.default_arm]
         dim = len(joint_control_idx)
         if "combined" in robot.robot_arm_descriptor_yamls:
-            joint_combined_idx = th.cat([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
+            joint_combined_idx = robot.arm_control_idx["combined"]
             initial_joint_pos = th.tensor(robot.get_joint_positions()[joint_combined_idx])
             control_idx_in_joint_pos = th.where(th.isin(joint_combined_idx, joint_control_idx))[0]
         else:
@@ -336,10 +336,10 @@ def plan_arm_motion_ik(robot, end_conf, context, planning_time=15.0, torso_fixed
         control_idx_in_joint_pos = th.arange(dim)
         robot_description_path = robot.robot_arm_descriptor_yamls["left_fixed"]
     else:
-        joint_control_idx = th.cat([robot.trunk_control_idx, robot.arm_control_idx[robot.default_arm]])
+        joint_control_idx = robot.arm_control_idx[robot.default_arm]
         dim = len(joint_control_idx)
         if "combined" in robot.robot_arm_descriptor_yamls:
-            joint_combined_idx = th.cat([robot.trunk_control_idx, robot.arm_control_idx["combined"]])
+            joint_combined_idx = robot.arm_control_idx["combined"]
             initial_joint_pos = th.tensor(robot.get_joint_positions()[joint_combined_idx])
             control_idx_in_joint_pos = th.where(th.isin(joint_combined_idx, joint_control_idx))[0]
         else:
