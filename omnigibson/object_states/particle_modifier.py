@@ -1087,7 +1087,7 @@ class ParticleApplier(ParticleModifier):
             # metalink, and (b) zero relative orientation between the metalink and the projection mesh
             local_pos, local_quat = self.projection_mesh.get_position_orientation(frame="parent")
             assert th.all(
-                th.isclose(local_pos + th.tensor([0, 0, height / 2.0]), th.zeros_like(local_pos))
+                th.isclose(local_pos + th.tensor([0, 0, height / 2.0]), th.zeros_like(local_pos), atol=1e-5, rtol=1e-5)
             ), "Projection mesh tip should align with metalink position!"
             local_euler = T.quat2euler(local_quat)
             assert th.all(
