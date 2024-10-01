@@ -6,7 +6,6 @@ from omnigibson.macros import create_module_macros
 from omnigibson.object_states.link_based_state_mixin import LinkBasedStateMixin
 from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanStateMixin
 from omnigibson.object_states.update_state_mixin import GlobalUpdateStateMixin, UpdateStateMixin
-from omnigibson.prims.geom_prim import TriggerGeomPrim
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.numpy_utils import vtarray_to_torch
 from omnigibson.utils.python_utils import classproperty
@@ -97,7 +96,8 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
         # Make sure this object is not cloth
         assert self.obj.prim_type != PrimType.CLOTH, f"Cannot create ToggledOn state for cloth object {self.obj.name}!"
 
-        mesh_prim_path = f"{self.link.prim_path}/mesh_0"
+        mesh_name = "mesh_0"
+        mesh_prim_path = f"{self.link.prim_path}/{mesh_name}"
         pre_existing_mesh = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mesh_prim_path)
         # Create a primitive mesh if it doesn't already exist
         if not pre_existing_mesh:
@@ -114,15 +114,10 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
             lazy.omni.isaac.core.utils.bounds.recompute_extents(prim=pre_existing_mesh)
             self.scale = vtarray_to_torch(pre_existing_mesh.GetAttribute("xformOp:scale").Get())
 
-        # Create the visual geom instance referencing the generated mesh prim
-        relative_prim_path = absolute_prim_path_to_scene_relative(self.obj.scene, mesh_prim_path)
-        self.visual_marker = TriggerGeomPrim(
-            relative_prim_path=relative_prim_path, name=f"{self.obj.name}_visual_marker"
-        )
-        self.visual_marker.load(self.obj.scene)
-        self.visual_marker.scale = self.scale
-        self.visual_marker.initialize()
-        self.visual_marker.visible = True
+        # Make sure the object updates its meshes, and assert that there's only a single visual mesh
+        self.link.update_meshes(trigger_mesh_paths=[mesh_prim_path])
+        assert len(self.link.visual_meshes) == 1, "Toggle button must have exactly one visual mesh"
+        self.visual_marker = self.link.visual_meshes[mesh_name]
 
     def _update(self):
         # If we're not nearby any fingers, we automatically can't toggle
@@ -130,7 +125,7 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
             robot_can_toggle = False
         else:
             # Check to make sure fingers are actually overlapping the toggle button mesh
-            trigger_colliders = self.visual_marker.trigger_colliders()
+            trigger_colliders = self.visual_marker.get_colliding_prim_paths()
             all_finger_paths = {path for path_set in self._robot_finger_paths for path in path_set}
             robot_can_toggle = bool(trigger_colliders & all_finger_paths)
 

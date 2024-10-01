@@ -179,7 +179,7 @@ class RigidPrim(XFormPrim):
         # Then self
         super().remove()
 
-    def update_meshes(self):
+    def update_meshes(self, trigger_mesh_paths=[]):
         """
         Helper function to refresh owned visual and collision meshes. Useful for synchronizing internal data if
         additional bodies are added manually
@@ -196,13 +196,13 @@ class RigidPrim(XFormPrim):
             if mesh_type in GEOM_TYPES:
                 mesh_name, mesh_path = prim.GetName(), prim.GetPrimPath().__str__()
                 mesh_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path=mesh_path)
-                is_trigger = mesh_prim.HasAPI(lazy.pxr.PhysxSchema.PhysxTriggerStateAPI)
                 is_collision = mesh_prim.HasAPI(lazy.pxr.UsdPhysics.CollisionAPI)
+                is_trigger = mesh_path in trigger_mesh_paths
                 mesh_kwargs = {
                     "relative_prim_path": absolute_prim_path_to_scene_relative(self.scene, mesh_path),
                     "name": f"{self._name}:{'collision' if is_collision and not is_trigger else 'visual'}_{mesh_name}",
                 }
-                if is_collision and not is_trigger:
+                if is_collision:
                     mesh = CollisionGeomPrim(**mesh_kwargs)
                     mesh.load(self.scene)
                     # We also modify the collision mesh's contact and rest offsets, since omni's default values result

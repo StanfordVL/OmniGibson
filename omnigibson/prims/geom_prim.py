@@ -446,15 +446,39 @@ class CollisionVisualGeomPrim(CollisionGeomPrim, VisualGeomPrim):
 
 
 class TriggerGeomPrim(CollisionGeomPrim):
+    def __init__(
+        self,
+        relative_prim_path,
+        name,
+        load_config=None,
+    ):
+        # Store values created at runtime
+        self._trigger_api = None
+        self._trigger_state_api = None
+
+        # Run super method
+        super().__init__(
+            relative_prim_path=relative_prim_path,
+            name=name,
+            load_config=load_config,
+        )
+
     def _post_load(self):
         # run super first
         super()._post_load()
 
-        lazy.pxr.PhysxSchema.PhysxTriggerAPI.Apply(self._prim)
-        self._trigger_state_api = lazy.pxr.PhysxSchema.PhysxTriggerStateAPI.Apply(self._prim)
-        # TODO: figure out whether this needs to stay
-        # self.collision_enabled = False
+        # Create API references
+        self._trigger_api = (
+            lazy.pxr.PhysxSchema.PhysxTriggerAPI(self._prim)
+            if self._prim.HasAPI(lazy.pxr.PhysxSchema.PhysxTriggerAPI)
+            else lazy.pxr.PhysxSchema.PhysxTriggerAPI.Apply(self._prim)
+        )
+        self._trigger_state_api = (
+            lazy.pxr.PhysxSchema.PhysxTriggerStateAPI(self._prim)
+            if self._prim.HasAPI(lazy.pxr.PhysxSchema.PhysxTriggerStateAPI)
+            else lazy.pxr.PhysxSchema.PhysxTriggerStateAPI.Apply(self._prim)
+        )
 
-    def trigger_colliders(self):
+    def get_colliding_prim_paths(self):
         targets = self._trigger_state_api.GetTriggeredCollisionsRel().GetTargets()
         return {str(path).rsplit("/collisions", 1)[0] for path in targets}
