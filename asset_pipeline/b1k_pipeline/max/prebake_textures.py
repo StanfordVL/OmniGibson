@@ -1,26 +1,31 @@
 import pathlib
 import sys
 import traceback
+import hashlib
 
 sys.path.append(r"D:\ig_pipeline")
 
 import os
-import tempfile
 import traceback
-import cv2
 import numpy as np
 from pymxs import runtime as rt
-import json
 import time
 import re
-from collections import defaultdict
 import b1k_pipeline.utils
 
-import trimesh
-from fs.zipfs import ZipFS
-from fs.osfs import OSFS
-from fs.tempfs import TempFS
-import fs.copy
+_prebake_data_str = """attributes "prebakeData"
+(
+    parameters main rollout:params
+    (
+        hashDigest type:#string ui:hashDigest default:""
+    )
+
+    rollout params "Prebake Data"
+    (
+        edittext hashDigest "Mesh hash digest from last unwrap:" fieldWidth:300 labelOnTop:true
+    )
+)"""
+PrebakeDataAttr = rt.execute(_prebake_data_str)
 
 btt = rt.BakeToTexture
 
@@ -77,9 +82,50 @@ def unlight_all_mats():
         unlight_mats_recursively(mat)
 
 
+def hash_object(obj):
+    # Create a numpy array containing the vertex positions and the faces
+    # Notice by getting this from the baseObject we get them in the object's local space
+    # which is NOT the pivot space.
+    vertex_count = rt.polyop.GetNumVerts(obj.baseObject)
+    vertex_idxes = list(range(1, vertex_count + 1))
+    verts = np.array(rt.polyop.getVerts(obj.baseObject, vertex_idxes))
+    faces = (
+        np.array(
+            [
+                rt.polyop.getFaceVerts(obj.baseObject, i + 1)
+                for i in range(rt.polyop.GetNumFaces(obj.baseObject))
+            ]
+        )
+        - 1
+    )
+    assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
+
+    # Hash the vertices and faces
+    return hashlib.sha256(verts.tobytes() + faces.tobytes()).hexdigest()
+
+
+def get_recorded_uv_unwrapping_hash(obj):
+    prebake_data_attr = rt.custAttributes.get(obj, PrebakeDataAttr)
+    if not prebake_data_attr:
+        return None
+
+    hash_digest = prebake_data_attr.hashDigest
+    if not hash_digest:
+        return None
+
+    return hash_digest
+
+
+def set_recorded_uv_unwrapping_hash(obj, hash_digest):
+    if not rt.custAttributes.get(obj, PrebakeDataAttr):
+        rt.custAttributes.add(obj, PrebakeDataAttr)
+
+    prebake_data_attr = rt.custAttributes.get(obj, PrebakeDataAttr)
+    prebake_data_attr.hashDigest = hash_digest
+
+
 class TextureBaker:
     def __init__(self, bakery):
-        self.unwrapped_objs = set()
         self.MAP_NAME_TO_IDS = self.get_map_name_to_ids()
 
         self.unwrap_times = {}
@@ -159,31 +205,63 @@ class TextureBaker:
         modifier.unwrap2.flattenMapNoParams()
 
     def uv_unwrapping(self, obj):
-        # Within the same object (e.g. window-0-0), there might be instances (e.g. window-0-0-leaf1-base_link-R-upper and window-0-0-leaf1-base_link-R-lower). We only want to unwrap once.
-        if obj.baseObject in self.unwrapped_objs:
+        # Check if the object is already unwrapped with the same geometry
+        current_hash = hash_object(obj)
+        recorded_hash = get_recorded_uv_unwrapping_hash(obj)
+        if recorded_hash == current_hash:
+            print(f"Skipping unwrapping for {obj.name} as it has not changed.")
             return
 
         start_time = time.time()
 
         print("uv_unwrapping", obj.name)
-        self.unwrapped_objs.add(obj.baseObject)
 
         if USE_UNWRELLA:
             self.uv_unwrapping_unwrella(obj)
         else:
             self.uv_unwrapping_native(obj)
 
-        # TODO: Record metadata about the hash at the time of the unwrapping.
-        # TODO: If it's assigned to a baked material, switch back to the unbaked material.
+        # Flatten the modifier stack
+        rt.maxOps.collapseNodeTo(obj, 1, True)
+
+        # Record metadata about the hash at the time of the unwrapping.
+        post_unwrap_hash = hash_object(obj)
+        assert (
+            post_unwrap_hash == current_hash
+        ), f"Hash mismatch before and after unwrapping: {post_unwrap_hash} != {current_hash}"
+        set_recorded_uv_unwrapping_hash(obj, current_hash)
+
+        # If it's assigned to a baked material, switch back to the unbaked material.
+        if rt.classOf(obj.material) == rt.Shell_Material:
+            obj.material = obj.material.originalMaterial
 
         rt.update(obj)
-        rt.forceCompleteRedraw()
-        rt.windows.processPostedMessages()
 
         end_time = time.time()
         self.unwrap_times[obj.name] = end_time - start_time
 
     def texture_baking(self, obj):
+        # If the object is already connected to a baked material, skip the baking process
+        if (
+            rt.classOf(obj.material) == rt.Shell_Material
+            and obj.material.renderMtlIndex == 1
+        ):
+            print(f"Skipping baking for {obj.name} as it is already baked.")
+            return
+
+        # Get the existing baseobject children that use the same material as this one
+        siblings = []
+        for candidate in rt.objects:
+            if (
+                candidate.baseObject == obj.baseObject
+                and candidate.material == obj.material
+            ):
+                siblings.append(candidate)
+
+        # Disconnect the existing baked material
+        if rt.classOf(obj.material) == rt.Shell_Material:
+            obj.material = obj.material.originalMaterial
+
         # vray = rt.renderers.current
         # vray.camera_autoExposure = False
         # vray.options_lights = False
@@ -235,19 +313,26 @@ class TextureBaker:
         btt.showFrameBuffer = False
         btt.alwaysOverwriteExistingFiles = True
 
+        # Do the actual baking
         print("start baking")
         assert btt.bake(), "baking failed"
         print("finish baking")
         end_time = time.time()
         self.baking_times[obj.name] = end_time - start_time
 
-        # This will clear all the shell material and assign the newly created baked materials to the objects (in place of the original material)
-        # TODO: Don't do this! We want to keep the original material.
-        btt.clearShellKeepBaked()
+        # Clear the baking list first.
+        btt.deleteAllMaps()
+
+        # Set the object to render the baked material
+        obj.material.renderMtlIndex = 1
+
+        # Update everything that has the same baseobject to use the same material
+        for sibling in siblings:
+            sibling.material = obj.material
+
+        # TODO: Do any additional necessary work on the material.
 
         rt.update(obj)
-        rt.forceCompleteRedraw()
-        rt.windows.processPostedMessages()
 
     def run(self):
         # assert rt.classOf(rt.renderers.current) == rt.V_Ray_5__update_2_3, f"Renderer should be set to V-Ray 5.2.3 CPU instead of {rt.classOf(rt.renderers.current)}"
@@ -279,17 +364,18 @@ class TextureBaker:
         assert len(failures) == 0, f"Some objects could not be exported:\n{failure_msg}"
 
 
-def process_file(filename):
+def process_open_file():
     preset_categories = rt.renderpresets.LoadCategories(RENDER_PRESET_FILENAME)
     assert rt.renderpresets.Load(0, RENDER_PRESET_FILENAME, preset_categories)
 
     rt.setvraysilentmode(True)
 
-    # TODO: Assert that the bakery path is valid
-    bakery_path = pathlib.Path(filename).parent / "bakery"
+    # TODO: Assert that the bakery path is unprotected
+    bakery_path = pathlib.Path(rt.maxFilePath) / "bakery"
+    bakery_path.mkdir(exist_ok=True)
     exp = TextureBaker(str(bakery_path))
     exp.run()
 
 
 if __name__ == "__main__":
-    main()
+    process_open_file()
