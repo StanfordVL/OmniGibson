@@ -426,12 +426,8 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
 
             # We also generate the function for checking overlaps at runtime
             def check_overlap():
-                nonlocal valid_hit
-                valid_hit = False
                 colliders = self.projection_mesh.get_colliding_prim_paths()
-                for collider in colliders:
-                    valid_hit = not collider in self._link_prim_paths
-                return valid_hit
+                return any(collider not in self._link_prim_paths for collider in colliders)
 
         elif self.method == ParticleModifyMethod.ADJACENCY:
             # Define the function for checking whether points are within the adjacency mesh
