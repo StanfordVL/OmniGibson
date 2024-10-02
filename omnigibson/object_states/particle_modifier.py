@@ -1485,7 +1485,9 @@ class ParticleApplier(ParticleModifier):
     @property
     def projection_is_active(self):
         # Only active if the projection mesh is enabled
-        return self.projection_emitter.GetProperty("inputs:active").Get()
+        return (
+            self.projection_emitter.GetProperty("inputs:active").Get() if self.projection_emitter is not None else False
+        )
 
     @classproperty
     def metalink_prefix(cls):
