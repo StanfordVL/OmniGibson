@@ -1,5 +1,8 @@
 import os
+import random
 
+import numpy as np
+import torch as th
 import yaml
 from pytest_rerunfailures import pytest
 
@@ -38,6 +41,14 @@ def setup_environment(load_object_categories, robot="Fetch"):
         "robots": [robots],
     }
 
+    seed = 40
+    random.seed(seed)
+    np.random.seed(seed)
+    th.manual_seed(seed)
+    th.cuda.manual_seed(seed)
+    th.backends.cudnn.benchmark = False
+    th.backends.cudnn.deterministic = True
+
     if og.sim is None:
         # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth) and no flatcache
         gm.ENABLE_OBJECT_STATES = True
@@ -67,20 +78,13 @@ def primitive_tester(env, objects, primitives, primitives_args):
 
     controller = StarterSemanticActionPrimitives(env, enable_head_tracking=False)
     try:
-
         for primitive, args in zip(primitives, primitives_args):
-            try:
-                execute_controller(controller.apply_ref(primitive, *args, attempts=1), env)
-            except Exception as e:
-                return False
+            execute_controller(controller.apply_ref(primitive, *args, attempts=1), env)
     finally:
         # Clear the sim
         og.clear()
 
-    return True
 
-
-@pytest.mark.flaky(reruns=5)
 @pytest.mark.parametrize("robot", ["Tiago", "Fetch"])
 class TestPrimitives:
     def test_navigate(self, robot):
@@ -98,7 +102,7 @@ class TestPrimitives:
         primitives = [StarterSemanticActionPrimitiveSet.NAVIGATE_TO]
         primitives_args = [(obj_1["object"],)]
 
-        assert primitive_tester(env, objects, primitives, primitives_args)
+        primitive_tester(env, objects, primitives, primitives_args)
 
     def test_grasp(self, robot):
         categories = ["floors", "ceilings", "walls", "coffee_table"]
@@ -115,7 +119,7 @@ class TestPrimitives:
         primitives = [StarterSemanticActionPrimitiveSet.GRASP]
         primitives_args = [(obj_1["object"],)]
 
-        assert primitive_tester(env, objects, primitives, primitives_args)
+        primitive_tester(env, objects, primitives, primitives_args)
 
     def test_place(self, robot):
         categories = ["floors", "ceilings", "walls", "coffee_table"]
@@ -138,7 +142,7 @@ class TestPrimitives:
         primitives = [StarterSemanticActionPrimitiveSet.GRASP, StarterSemanticActionPrimitiveSet.PLACE_ON_TOP]
         primitives_args = [(obj_2["object"],), (obj_1["object"],)]
 
-        assert primitive_tester(env, objects, primitives, primitives_args)
+        primitive_tester(env, objects, primitives, primitives_args)
 
     @pytest.mark.skip(reason="primitives are broken")
     def test_open_prismatic(self, robot):
@@ -158,7 +162,7 @@ class TestPrimitives:
         primitives = [StarterSemanticActionPrimitiveSet.OPEN]
         primitives_args = [(obj_1["object"],)]
 
-        assert primitive_tester(env, objects, primitives, primitives_args)
+        primitive_tester(env, objects, primitives, primitives_args)
 
     @pytest.mark.skip(reason="primitives are broken")
     def test_open_revolute(self, robot):
@@ -176,4 +180,4 @@ class TestPrimitives:
         primitives = [StarterSemanticActionPrimitiveSet.OPEN]
         primitives_args = [(obj_1["object"],)]
 
-        assert primitive_tester(env, objects, primitives, primitives_args)
+        primitive_tester(env, objects, primitives, primitives_args)
