@@ -2,7 +2,7 @@ name: Sync Google Sheets data
 
 on:
   schedule:
-    - cron: "50 * * * *"  # 50 past every hour
+    - cron: "0 10 * * *"  # Every day at 10am
   workflow_dispatch:
   push:
     branches:
@@ -11,7 +11,7 @@ on:
 jobs:
   pull-sheets:
     name: Sync Google Sheets data
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
 
     steps:
     - name: Checkout code
