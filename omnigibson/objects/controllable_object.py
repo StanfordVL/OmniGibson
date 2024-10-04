@@ -572,8 +572,9 @@ class ControllableObject(BaseObject):
                 self.articulation_root_path, velocities=th.tensor(vel_vec, dtype=th.float), indices=th.tensor(vel_idxs)
             )
         if using_eff:
+            compensation = self._articulation_view.get_measured_joint_efforts().flatten()
             ControllableObjectViewAPI.set_joint_efforts(
-                self.articulation_root_path, efforts=th.tensor(eff_vec, dtype=th.float), indices=th.tensor(eff_idxs)
+                self.articulation_root_path, efforts=th.tensor(eff_vec, dtype=th.float) + compensation[eff_idxs], indices=th.tensor(eff_idxs)
             )
 
     def get_control_dict(self):
