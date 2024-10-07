@@ -166,13 +166,9 @@ class PlanningContext(object):
         # TODO: Remove the need for this after refactoring the FK / descriptors / etc.
         arm_links = self.robot.manipulation_link_names
 
-        if m.TIAGO_TORSO_FIXED:
-            assert self.arm == "left", "Fixed torso mode only supports left arm!"
-            joint_control_idx = self.robot.arm_control_idx["left"]
-            joint_pos = self.robot.get_joint_positions()[joint_control_idx]
-        else:
-            joint_combined_idx = th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[fk_descriptor]])
-            joint_pos = self.robot.get_joint_positions()[joint_combined_idx]
+        joint_control_idx = self.robot.arm_control_idx["left"]
+        joint_pos = self.robot.get_joint_positions()[joint_control_idx]
+
         link_poses = self.fk_solver.get_link_poses(joint_pos, arm_links)
 
         # Assemble robot meshes
@@ -926,16 +922,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     @property
     def _manipulation_control_idx(self):
         """The appropriate manipulation control idx for the current settings."""
-        if isinstance(self.robot, Tiago):
-            if m.TIAGO_TORSO_FIXED:
-                assert self.arm == "left", "Fixed torso mode only supports left arm!"
-                return self.robot.arm_control_idx["left"]
-            else:
-                return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
-        elif isinstance(self.robot, Fetch):
-            return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
-
-        # Otherwise just return the default arm control idx
         return self.robot.arm_control_idx[self.arm]
 
     @property

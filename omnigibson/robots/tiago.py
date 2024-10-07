@@ -264,14 +264,6 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         }
 
     @property
-    def arm_control_idx(self):
-        # Add combined entry
-        idxs = super().arm_control_idx
-        # Concatenate all values and sort them
-        idxs["combined"] = th.sort(th.cat([val for val in idxs.values()]))[0]
-        return idxs
-
-    @property
     def finger_lengths(self):
         return {arm: 0.12 for arm in self.arm_names}
 
