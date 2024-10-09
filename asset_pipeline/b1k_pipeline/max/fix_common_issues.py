@@ -109,8 +109,15 @@ def processFile(filename: pathlib.Path):
 
 
 def fix_common_issues_in_all_files():
+    left_files = [
+        "house_single_floor",
+        "restaurant_asian",
+        "restaurant_brunch",
+    ]
     candidates = [
-        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        pathlib.Path(x)
+        for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        if pathlib.Path(x).parts[-2] in left_files
     ]
     # has_matching_processed = [processed_fn(x).exists() for x in candidates]
     for i, f in enumerate(tqdm.tqdm(candidates)):

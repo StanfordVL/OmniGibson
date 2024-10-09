@@ -320,7 +320,7 @@ class TextureBaker:
         end_time = time.time()
         self.baking_times[obj.name] = end_time - start_time
 
-        # Clear the baking list first.
+        # Clear the baking list again.
         btt.deleteAllMaps()
 
         # Set the object to render the baked material
