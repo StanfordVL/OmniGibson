@@ -1,7 +1,6 @@
 """
 WARNING!
 The StarterSemanticActionPrimitive is a work-in-progress and is only provided as an example.
-It currently only works with Fetch and Tiago with their JointControllers set to delta mode.
 See provided tiago_primitives.yaml config file for an example. See examples/action_primitives for
 runnable examples.
 """
@@ -99,7 +98,7 @@ m.DEFAULT_ANGLE_THRESHOLD = 0.05
 m.LOW_PRECISION_DIST_THRESHOLD = 0.1
 m.LOW_PRECISION_ANGLE_THRESHOLD = 0.2
 
-m.TIAGO_TORSO_FIXED = False
+m.TORSO_FIXED = False
 m.JOINT_POS_DIFF_THRESHOLD = 0.01
 m.JOINT_CONTROL_MIN_ACTION = 0.0
 m.MAX_ALLOWED_JOINT_ERROR_FOR_LINEAR_MOTION = math.radians(45)
@@ -131,15 +130,16 @@ class PlanningContext(object):
     A context manager that sets up a robot copy for collision checking in planning.
     """
 
-    def __init__(self, env, robot, robot_copy, robot_copy_type="original"):
+    def __init__(self, env, robot, robot_copy, arm, robot_copy_type="original"):
         self.env = env
         self.robot = robot
         self.robot_copy = robot_copy
+        self.arm = arm
         self.robot_copy_type = robot_copy_type if robot_copy_type in robot_copy.prims.keys() else "original"
         self.disabled_collision_pairs_dict = {}
 
-        # For now, the planning context only works with Fetch and Tiago
-        assert isinstance(self.robot, (Fetch, Tiago)), "PlanningContext only works with Fetch and Tiago."
+        # For now, the planning context only works with Fetch, Tiago, and R1
+        assert isinstance(self.robot, (Fetch, Tiago, R1)), "PlanningContext only works with Fetch, Tiago, and R1"
 
     def __enter__(self):
         self._assemble_robot_copy()
@@ -152,8 +152,11 @@ class PlanningContext(object):
         )
 
     def _assemble_robot_copy(self):
-        if m.TIAGO_TORSO_FIXED:
-            fk_descriptor = "left_fixed"
+        if m.TORSO_FIXED:
+            assert isinstance(self.robot, (Tiago, R1)), "Fixed torso mode only works with Tiago and R1!"
+            fk_descriptor = (
+                "left_fixed" if "left_fixed" in self.robot.robot_arm_descriptor_yamls else "left"
+            )
         else:
             fk_descriptor = (
                 "combined" if "combined" in self.robot.robot_arm_descriptor_yamls else self.robot.default_arm
@@ -166,7 +169,7 @@ class PlanningContext(object):
         # TODO: Remove the need for this after refactoring the FK / descriptors / etc.
         arm_links = self.robot.manipulation_link_names
 
-        if m.TIAGO_TORSO_FIXED:
+        if m.TORSO_FIXED:
             assert self.arm == "left", "Fixed torso mode only supports left arm!"
             joint_control_idx = self.robot.arm_control_idx["left"]
             joint_pos = self.robot.get_joint_positions()[joint_control_idx]
@@ -292,7 +295,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         """
         log.warning(
             "The StarterSemanticActionPrimitive is a work-in-progress and is only provided as an example. "
-            "It currently only works with Fetch and Tiago with their JointControllers set to delta mode."
         )
         super().__init__(env)
         self.controller_functions = {
@@ -341,8 +343,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     quat_relative_axis_angle = T.quat2axisangle(quat_relative)
                     self._arm_targets[arm] = (pos_relative, quat_relative_axis_angle)
                 else:
-
-                    arm_target = control_dict["joint_position"][arm_ctrl.dof_idx]
+                    if m.TORSO_FIXED:
+                        arm_target = control_dict["joint_position"][self.robot.arm_control_idx[arm_name]]
+                    else:
+                        arm_target = control_dict["joint_position"][arm_ctrl.dof_idx]
                     self._arm_targets[arm] = arm_target
 
         self.robot_copy = self._load_robot_copy()
@@ -926,23 +930,24 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     @property
     def _manipulation_control_idx(self):
         """The appropriate manipulation control idx for the current settings."""
-        if isinstance(self.robot, Tiago):
-            if m.TIAGO_TORSO_FIXED:
-                assert self.arm == "left", "Fixed torso mode only supports left arm!"
-                return self.robot.arm_control_idx["left"]
-            else:
-                return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
-        elif isinstance(self.robot, Fetch):
+        if m.TORSO_FIXED:
+            assert isinstance(self.robot, (Tiago, R1)) and self.arm == "left", "Fixed torso mode only supports left arm for Tiago and R1!"
+            return self.robot.arm_control_idx["left"]
+        
+        # if the robot has trunk control idx, append that to the manipulation control idx
+        if hasattr(self.robot, 'trunk_control_idx'):
             return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
+        else:
+            # Otherwise just return the default arm control idx
+            return self.robot.arm_control_idx[self.arm]
 
-        # Otherwise just return the default arm control idx
-        return self.robot.arm_control_idx[self.arm]
 
+        
     @property
     def _manipulation_descriptor_path(self):
         """The appropriate manipulation descriptor for the current settings."""
-        if isinstance(self.robot, Tiago) and m.TIAGO_TORSO_FIXED:
-            assert self.arm == "left", "Fixed torso mode only supports left arm!"
+        if isinstance(self.robot, (Tiago, R1)) and m.TORSO_FIXED:
+            assert self.arm == "left", "Fixed torso mode only supports left arm for Tiago and R1!"
             return self.robot.robot_arm_descriptor_yamls["left_fixed"]
 
         # Otherwise just return the default arm control idx
@@ -1004,12 +1009,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             th.tensor or None: Action array for one step for the robot to move arm or None if its at the joint positions
         """
-        with PlanningContext(self.env, self.robot, self.robot_copy, "original") as context:
+        with PlanningContext(self.env, self.robot, self.robot_copy, self.arm, "original") as context:
             plan = plan_arm_motion(
                 robot=self.robot,
                 end_conf=joint_pos,
                 context=context,
-                torso_fixed=m.TIAGO_TORSO_FIXED,
+                torso_fixed=m.TORSO_FIXED,
             )
 
         # plan = self._add_linearly_interpolated_waypoints(plan, 0.1)
@@ -1039,12 +1044,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         eef_ori = T.quat2axisangle(eef_pose[1])
         end_conf = th.cat((eef_pos, eef_ori))
 
-        with PlanningContext(self.env, self.robot, self.robot_copy, "original") as context:
+        with PlanningContext(self.env, self.robot, self.robot_copy, self.arm, "original") as context:
             plan = plan_arm_motion_ik(
                 robot=self.robot,
                 end_conf=end_conf,
                 context=context,
-                torso_fixed=m.TIAGO_TORSO_FIXED,
+                torso_fixed=m.TORSO_FIXED,
             )
 
         # plan = self._add_linearly_interpolated_waypoints(plan, 0.1)
@@ -1459,10 +1464,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         """
         action = th.zeros(self.robot.action_dim)
         for name, controller in self.robot._controllers.items():
+            action_idx = self.robot.controller_action_idx[name]
             # if desired arm targets are available, generate an action that moves the arms to the saved pose targets
             if name in self._arm_targets:
+                arm = name.replace("arm_", "")
+                if m.TORSO_FIXED:
+                    action_idx = self.robot.arm_control_idx[arm]
                 if isinstance(controller, InverseKinematicsController):
-                    arm = name.replace("arm_", "")
                     target_pos, target_orn_axisangle = self._arm_targets[name]
                     current_pos, current_orn = self._get_pose_in_robot_frame(
                         (self.robot.get_eef_position(arm), self.robot.get_eef_orientation(arm))
@@ -1488,7 +1496,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                         partial_action = target_joint_pos
             else:
                 partial_action = controller.compute_no_op_action(self.robot.get_control_dict())
-            action_idx = self.robot.controller_action_idx[name]
             action[action_idx] = partial_action
         return action
 
@@ -1531,60 +1538,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             raise ValueError(f"Unsupported robot model: {self.robot_model}")
 
     def _get_reset_joint_pos(self):
-        reset_pose_fetch = th.tensor(
-            [
-                0.0,
-                0.0,  # wheels
-                0.0,  # trunk
-                0.0,
-                -1.0,
-                0.0,  # head
-                -1.0,
-                1.53448,
-                2.2,
-                0.0,
-                1.36904,
-                1.90996,  # arm
-                0.05,
-                0.05,  # gripper
-            ]
-        )
-
-        reset_pose_tiago = th.tensor(
-            [
-                -1.78029833e-04,
-                3.20231302e-05,
-                -1.85759447e-07,
-                0.0,
-                -0.2,
-                0.0,
-                0.1,
-                -6.10000000e-01,
-                -1.10000000e00,
-                0.00000000e00,
-                -1.10000000e00,
-                1.47000000e00,
-                0.00000000e00,
-                8.70000000e-01,
-                2.71000000e00,
-                1.50000000e00,
-                1.71000000e00,
-                -1.50000000e00,
-                -1.57000000e00,
-                4.50000000e-01,
-                1.39000000e00,
-                0.00000000e00,
-                0.00000000e00,
-                4.50000000e-02,
-                4.50000000e-02,
-                4.50000000e-02,
-                4.50000000e-02,
-            ]
-        )
-        if self.robot_model == "Fetch":
-            return reset_pose_fetch
-        elif self.robot_model == "Tiago":
-            return reset_pose_tiago
+        if self.robot_model in ["Fetch", "Tiago", "R1"]:
+            return self.robot.untucked_default_joint_pos
         else:
             raise ValueError(f"Unsupported robot model: {self.robot_model}")
 
@@ -1598,7 +1553,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             th.tensor or None: Action array for one step for the robot to navigate or None if it is done navigating
         """
-        with PlanningContext(self.env, self.robot, self.robot_copy, "simplified") as context:
+        with PlanningContext(self.env, self.robot, self.robot_copy, self.arm, "simplified") as context:
             plan = plan_base_motion(
                 robot=self.robot,
                 end_conf=pose_2d,
@@ -1805,7 +1760,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 - 3-array: (x,y,z) Position in the world frame
                 - 4-array: (x,y,z,w) Quaternion orientation in the world frame
         """
-        with PlanningContext(self.env, self.robot, self.robot_copy, "simplified") as context:
+        with PlanningContext(self.env, self.robot, self.robot_copy, self.arm, "simplified") as context:
             for _ in range(m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT):
                 if pose_on_obj is None:
                     pos_on_obj = self._sample_position_on_aabb_side(obj)
