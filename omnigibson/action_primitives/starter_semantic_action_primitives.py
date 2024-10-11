@@ -154,9 +154,7 @@ class PlanningContext(object):
     def _assemble_robot_copy(self):
         if m.TORSO_FIXED:
             assert isinstance(self.robot, (Tiago, R1)), "Fixed torso mode only works with Tiago and R1!"
-            fk_descriptor = (
-                "left_fixed" if "left_fixed" in self.robot.robot_arm_descriptor_yamls else "left"
-            )
+            fk_descriptor = "left_fixed" if "left_fixed" in self.robot.robot_arm_descriptor_yamls else "left"
         else:
             fk_descriptor = (
                 "combined" if "combined" in self.robot.robot_arm_descriptor_yamls else self.robot.default_arm
@@ -293,9 +291,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             task_relevant_objects_only (bool): Whether to only consider objects relevant to the task
               when computing the action space. Defaults to False.
         """
-        log.warning(
-            "The StarterSemanticActionPrimitive is a work-in-progress and is only provided as an example. "
-        )
+        log.warning("The StarterSemanticActionPrimitive is a work-in-progress and is only provided as an example. ")
         super().__init__(env)
         self.controller_functions = {
             StarterSemanticActionPrimitiveSet.GRASP: self._grasp,
@@ -931,18 +927,18 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     def _manipulation_control_idx(self):
         """The appropriate manipulation control idx for the current settings."""
         if m.TORSO_FIXED:
-            assert isinstance(self.robot, (Tiago, R1)) and self.arm == "left", "Fixed torso mode only supports left arm for Tiago and R1!"
+            assert (
+                isinstance(self.robot, (Tiago, R1)) and self.arm == "left"
+            ), "Fixed torso mode only supports left arm for Tiago and R1!"
             return self.robot.arm_control_idx["left"]
-        
+
         # if the robot has trunk control idx, append that to the manipulation control idx
-        if hasattr(self.robot, 'trunk_control_idx'):
+        if hasattr(self.robot, "trunk_control_idx"):
             return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
         else:
             # Otherwise just return the default arm control idx
             return self.robot.arm_control_idx[self.arm]
 
-
-        
     @property
     def _manipulation_descriptor_path(self):
         """The appropriate manipulation descriptor for the current settings."""

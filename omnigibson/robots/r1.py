@@ -199,7 +199,7 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
     @property
     def trunk_joint_names(self):
         return [f"torso_joint{i}" for i in range(1, 5)]
-    
+
     @property
     def manipulation_link_names(self):
         return [
@@ -224,7 +224,7 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
             "right_arm_link6",
             "right_gripper_link1",
             "right_gripper_link2",
-            "right_hand"
+            "right_hand",
         ]
 
     @classproperty
