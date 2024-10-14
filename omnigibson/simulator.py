@@ -72,6 +72,7 @@ m.INITIAL_SCENE_PRIM_Z_OFFSET = -100.0
 m.KIT_FILES = {
     (4, 0, 0): "omnigibson_4_0_0.kit",
     (4, 1, 0): "omnigibson_4_1_0.kit",
+    (4, 2, 0): "omnigibson_4_2_0.kit",
 }
 
 
@@ -157,7 +158,6 @@ def _launch_app():
 
     # Enable additional extensions we need
     lazy.omni.isaac.core.utils.extensions.enable_extension("omni.flowusd")
-    lazy.omni.isaac.core.utils.extensions.enable_extension("omni.particle.system.bundle")
 
     # Additional import for windows
     if os.name == "nt":
