@@ -101,7 +101,48 @@ def processFile(filename: pathlib.Path):
     #         # print("Need to collapse", obj.name)
     #         rt.polyop.CollapseDeadStructs(obj)
 
-    b1k_pipeline.max.prebake_textures.process_open_file()
+    # Prebake textures
+    # b1k_pipeline.max.prebake_textures.process_open_file()
+
+    # Update UV unwrap to use correct attribute
+    for obj in rt.objects:
+        # Get the attribute that's currently on there
+        defs = rt.custAttributes.getDefs(obj)
+        if defs is None:
+            continue
+        prebake_data_attrs = [x for x in defs if x.name == "prebakeData"]
+        assert (
+            len(prebake_data_attrs) <= 1
+        ), f"Multiple prebakeData attributes found on {obj.name}"
+        if not prebake_data_attrs:
+            continue
+
+        # Get the hash
+        (prebake_data_attr,) = prebake_data_attrs
+        on_obj = rt.custAttributes.get(obj, prebake_data_attr)
+        if not on_obj:
+            continue
+        hash_digest = on_obj.hashDigest
+
+        # Remove the attr
+        rt.custAttributes.delete(obj, prebake_data_attr)
+
+        # Add the new attr
+        b1k_pipeline.max.prebake_textures.set_recorded_uv_unwrapping_hash(
+            obj, hash_digest
+        )
+
+    # Exit isolate mode
+    rt.IsolateSelection.ExitIsolateSelectionMode()
+
+    # Unhide everything
+    for obj in rt.objects:
+        obj.isHidden = False
+
+    # Hide collision meshes
+    for obj in rt.objects:
+        if "Mcollision" in obj.name:
+            obj.isHidden = True
 
     # Save again.
     new_filename = processed_fn(filename)
@@ -109,15 +150,8 @@ def processFile(filename: pathlib.Path):
 
 
 def fix_common_issues_in_all_files():
-    left_files = [
-        "house_single_floor",
-        "restaurant_asian",
-        "restaurant_brunch",
-    ]
     candidates = [
-        pathlib.Path(x)
-        for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
-        if pathlib.Path(x).parts[-2] in left_files
+        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
     # has_matching_processed = [processed_fn(x).exists() for x in candidates]
     for i, f in enumerate(tqdm.tqdm(candidates)):

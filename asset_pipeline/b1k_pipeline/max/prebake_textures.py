@@ -13,7 +13,7 @@ import time
 import re
 import b1k_pipeline.utils
 
-_prebake_data_str = """attributes "prebakeData"
+_prebake_data_str = """attributes "prebakeData" attribID:#(0x6c7ac544, 0x36f63a5f) version:1
 (
     parameters main rollout:params
     (

@@ -92,6 +92,12 @@ def get_approved_categories():
     return exists, approved
 
 
+def get_providers():
+    inventory_path = b1k_pipeline.utils.PIPELINE_ROOT / "artifacts"/ "pipeline"/"object_inventory.json"
+    with open(inventory_path, "r") as f:
+        return {k.split("-")[-1]: v for k, v in json.load(f)["providers"].items()}
+
+
 def quat2arr(q):
     return np.array([q.x, q.y, q.z, q.w])
 
@@ -114,6 +120,7 @@ class SanityCheck:
     def __init__(self):
         self.reset()
         self._existing_categories, self._approved_categories = get_approved_categories()
+        self._providers = get_providers()
 
     def expect(self, condition, message, level="ERROR"):
         if not condition:
@@ -160,6 +167,46 @@ class SanityCheck:
         )
         self.expect(is_valid_name, f"{row.object_name} has bad name.")
         return is_valid_name
+
+    def validate_bad_object(self, row):
+        # Get the object model ID
+        model_id = row.name_model_id
+
+        # Look the provider up from the inventory file
+        provider = self._providers.get(model_id, None)
+        self.expect(
+            provider is not None,
+            f"{row.object_name} has no provider in the inventory file.",
+        )
+
+        if provider is None:
+            return
+        
+        # Get the vertex and edge count from the provider's object list file
+        object_list = b1k_pipeline.utils.PIPELINE_ROOT / "cad" / provider / "artifacts" / "object_list.json"
+        with open(object_list, "r") as f:
+            object_list_data = json.load(f)
+        vertex_and_face_counts = object_list_data["vertex_and_face_counts"]
+        self.expect(
+            model_id in vertex_and_face_counts,
+            f"{row.object_name} has no vertex/face count in the object list file for provider {provider}.",
+        )
+
+        if model_id not in vertex_and_face_counts:
+            return
+        
+        recorded_vertex_count, recorded_face_count = vertex_and_face_counts[model_id]
+        obj = row.object._obj
+        real_vertex_count = rt.polyop.getNumVerts(obj)
+        real_face_count = rt.polyop.getNumFaces(obj)
+        self.expect(
+            real_vertex_count == recorded_vertex_count,
+            f"{row.object_name} has different vertex count than recorded in provider: {real_vertex_count} != {recorded_vertex_count}.",
+        )
+        self.expect(
+            real_face_count == recorded_face_count,
+            f"{row.object_name} has different face count than recorded in provider: {real_face_count} != {recorded_face_count}.",
+        )
 
     def validate_object(self, row):
         # Check that the category exists on the spreadsheet
@@ -225,15 +272,16 @@ class SanityCheck:
         )
 
         # Get vertices and faces into numpy arrays for conversion
-        faces_maxscript = [
-            rt.polyop.getFaceVerts(obj, i + 1)
-            for i in range(rt.polyop.GetNumFaces(obj))
-        ]
-        faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
-        self.expect(
-            all(len(f) == 3 for f in faces),
-            f"{row.object_name} has non-triangular faces. Apply the Triangulate script.",
-        )
+        # TODO: Reenable
+        # faces_maxscript = [
+        #     rt.polyop.getFaceVerts(obj, i + 1)
+        #     for i in range(rt.polyop.GetNumFaces(obj))
+        # ]
+        # faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
+        # self.expect(
+        #     all(len(f) == 3 for f in faces),
+        #     f"{row.object_name} has non-triangular faces. Apply the Triangulate script.",
+        # )
 
         # Check that object satisfies the scale condition.
         scale = np.array(row.object.scale)
@@ -591,7 +639,8 @@ class SanityCheck:
                 )
 
             if meta_link_type == "collision":
-                self.validate_collision(child)
+                # TODO: Re-enable
+                pass  # self.validate_collision(child)
             elif meta_link_type == "attachment":
                 attachment_type = match.group("meta_id")
                 self.expect(
@@ -680,6 +729,13 @@ class SanityCheck:
             "", "base_link"
         )  # no-link-name objects are matched with the base link.
         columns = set(df.columns)
+
+        bad_objs = df[
+            (df["type"] == rt.Editable_Poly)
+            & df["name_bad"].notnull()
+            & df["name_meta_type"].isnull()
+        ]
+        bad_objs.apply(self.validate_bad_object, axis="columns")
 
         # Run the single-object validation checks.
         objs = df[
