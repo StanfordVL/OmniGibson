@@ -2874,813 +2874,813 @@ stages:
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/public_restroom_blue/processed.max
       md5: f50440f4e34141a0d363dd0865cbaad0
       size: 11037742
     outs:
     - path: cad/scenes/public_restroom_blue/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/grocery_store_half_stocked:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_half_stocked/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/grocery_store_half_stocked/processed.max
       md5: 8bd82b676475d97339eaf23f1b1b6152
       size: 23619572
     outs:
     - path: cad/scenes/grocery_store_half_stocked/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/commercial_kitchen_pans:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/commercial_kitchen_pans/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/commercial_kitchen_pans/processed.max
       md5: 2861ad6e4ae82a6143299309f191f880
       size: 86498372
     outs:
     - path: cad/scenes/commercial_kitchen_pans/artifacts/sanitycheck.json
-      md5: 10d9bf4187eac5c4ddccae3f12e8055d
-      size: 2118
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Wainscott_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_1_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Wainscott_1_int/processed.max
       md5: 6abbd13583991ee80f0c5291b9f897c6
       size: 73824458
     outs:
     - path: cad/scenes/Wainscott_1_int/artifacts/sanitycheck.json
-      md5: 874da3e33373ba69e2cf803584d8d372
-      size: 51048
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/house_double_floor_upper:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_double_floor_upper/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/house_double_floor_upper/processed.max
       md5: 6e70013ff8e3f9d741832a49dd67104e
       size: 225437582
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
-      md5: 2bcd4c3abe21dc0f698099eca38faae7
-      size: 491
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/office_vendor_machine:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_vendor_machine/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/office_vendor_machine/processed.max
       md5: 6c790f409aad761923fec8d69c34f172
       size: 85387172
     outs:
     - path: cad/scenes/office_vendor_machine/artifacts/sanitycheck.json
-      md5: f8de6bde79a06f064c2c412e205aa9b6
-      size: 2416
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Rs_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Rs_int/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Rs_int/processed.max
       md5: 90eae26cca735e5ab1e0dced62cf7222
       size: 42464590
     outs:
     - path: cad/scenes/Rs_int/artifacts/sanitycheck.json
-      md5: d832ad6bb4cb281c638df8a7657f0e99
-      size: 28849
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Beechwood_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_1_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Beechwood_1_int/processed.max
       md5: d4b88e725d0751fc0d4058e7e9078a67
       size: 50481268
     outs:
     - path: cad/scenes/Beechwood_1_int/artifacts/sanitycheck.json
-      md5: d2b6f02704da28fb9a0f9e9a6f2a1d79
-      size: 42143
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Merom_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Merom_0_int/processed.max
       md5: d0c86a2006c73b9d5f98af47841bfaf3
       size: 45343478
     outs:
     - path: cad/scenes/Merom_0_int/artifacts/sanitycheck.json
-      md5: 5f47934a068006647cffb17be4349a82
-      size: 25607
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/hotel_suite_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hotel_suite_large/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/hotel_suite_large/processed.max
       md5: f650cd7ea214f6ec2be9a43d9e1b6b41
       size: 134073128
     outs:
     - path: cad/scenes/hotel_suite_large/artifacts/sanitycheck.json
-      md5: 93e00e586789c82e4bbd311a406dad2f
-      size: 267
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Beechwood_0_int/processed.max
       md5: f3c4f25e941270f6d83994eb33db1cfe
       size: 96766396
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
-      md5: 0243c8f9488130d326264b3c7d708c2c
-      size: 55588
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/office_cubicles_left:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_cubicles_left/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/office_cubicles_left/processed.max
       md5: 952f150928988405865bd72497aefbb2
       size: 85474752
     outs:
     - path: cad/scenes/office_cubicles_left/artifacts/sanitycheck.json
-      md5: 12376679ca8212712d325e35a338cc62
-      size: 43690
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/gates_bedroom:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/gates_bedroom/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/gates_bedroom/processed.max
       md5: d74decd431b7bc7ca45783e4da92a709
       size: 20267386
     outs:
     - path: cad/scenes/gates_bedroom/artifacts/sanitycheck.json
-      md5: d6ad9fca4a737cb730ac481636af58d3
-      size: 634
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/grocery_store_asian:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_asian/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/grocery_store_asian/processed.max
       md5: 82cf4f41cf6c16aee511a13d569f7af9
       size: 172006958
     outs:
     - path: cad/scenes/grocery_store_asian/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Pomaria_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Pomaria_0_int/processed.max
       md5: e606eff70a8d2974b9cb193cdfbd11ce
       size: 26178142
     outs:
     - path: cad/scenes/Pomaria_0_int/artifacts/sanitycheck.json
-      md5: 37b0bf783015b3c6efd68f2fcf159cee
-      size: 19827
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/grocery_store_cafe:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_cafe/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/grocery_store_cafe/processed.max
       md5: 20daa15f3a797de35f565fba249073d9
       size: 151406076
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/house_double_floor_lower:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_double_floor_lower/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/house_double_floor_lower/processed.max
       md5: 32f4d9cb81440de39f84443fee52007e
       size: 383655998
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
-      md5: 3ffa201263e496345e437cc5e8352406
-      size: 458
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/restaurant_hotel:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_hotel/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/restaurant_hotel/processed.max
       md5: 8f88a9dc0fbfc1c117b0cece125cd967
       size: 86111536
     outs:
     - path: cad/scenes/restaurant_hotel/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/office_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_large/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/office_large/processed.max
       md5: 7b86420b6cf969cc9c484e728b6815e6
       size: 131657506
     outs:
     - path: cad/scenes/office_large/artifacts/sanitycheck.json
-      md5: f3f25655f62b4051a932612a044d2627
-      size: 21600
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/hall_glass_ceiling:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_glass_ceiling/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/hall_glass_ceiling/processed.max
       md5: ef4f4100352a7d935419ef1bab12d667
       size: 22205584
     outs:
     - path: cad/scenes/hall_glass_ceiling/artifacts/sanitycheck.json
-      md5: 6623dc8f3927d487a721e55e6c864cd9
-      size: 137
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Pomaria_2_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_2_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Pomaria_2_int/processed.max
       md5: 814b2da2c8db2e1b071398c1034dae46
       size: 25880946
     outs:
     - path: cad/scenes/Pomaria_2_int/artifacts/sanitycheck.json
-      md5: 7eebff38cc9485c18fa487e45d9abced
-      size: 14349
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/restaurant_brunch:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_brunch/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/restaurant_brunch/processed.max
       md5: 4f47d07c9a6ee85812ce06c8b3a49fe4
       size: 195209876
     outs:
     - path: cad/scenes/restaurant_brunch/artifacts/sanitycheck.json
-      md5: 5fdb49afd37bc81e3c2deac69463b236
-      size: 342
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/office_bike:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_bike/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/office_bike/processed.max
       md5: 9e2d99a83fd3b1eacff624b0be7d2904
       size: 168688774
     outs:
     - path: cad/scenes/office_bike/artifacts/sanitycheck.json
-      md5: 22636bb7a054d89a03414627dff41b7e
-      size: 1691
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/school_biology:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_biology/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/school_biology/processed.max
       md5: 7aa1694ada6a42801fa848e09aeeca1d
       size: 153092036
     outs:
     - path: cad/scenes/school_biology/artifacts/sanitycheck.json
-      md5: a60ca12cc8361cba72ab92a42b313798
-      size: 205847
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/public_restroom_white:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_white/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/public_restroom_white/processed.max
       md5: b35398512fa6561f8fe01b825ac7077a
       size: 23158568
     outs:
     - path: cad/scenes/public_restroom_white/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/house_single_floor/processed.max
-      md5: 23fe47e717b4b7b47a779571b9181278
-      size: 666187740
+      md5: 0e6480588346d0c7a82ef4757851f321
+      size: 665546066
     outs:
     - path: cad/scenes/house_single_floor/artifacts/sanitycheck.json
-      md5: 093d08cd71ba6ce1dc6f4fe6d407a5ae
-      size: 4174
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/hall_arch_wood:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_arch_wood/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/hall_arch_wood/processed.max
       md5: 485fffcedb6116f46a7a72ce60a07142
       size: 12676228
     outs:
     - path: cad/scenes/hall_arch_wood/artifacts/sanitycheck.json
-      md5: 9a860268173b551a09fef3665a8882c2
-      size: 137
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/public_restroom_futuristic:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_futuristic/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/public_restroom_futuristic/processed.max
       md5: c454f1b3d4f6ba80e8df25d3dc6ed346
       size: 13049700
     outs:
     - path: cad/scenes/public_restroom_futuristic/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Benevolence_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_1_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Benevolence_1_int/processed.max
       md5: dbe9a64eceac877f1fd99bc44dd3c842
       size: 27564424
     outs:
     - path: cad/scenes/Benevolence_1_int/artifacts/sanitycheck.json
-      md5: 6c6cfbeb1912dedee260b2a5729403d0
-      size: 25411
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Benevolence_2_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_2_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Benevolence_2_int/processed.max
       md5: aa880a0b211120a9decb1c9ef9cc1825
       size: 31451446
     outs:
     - path: cad/scenes/Benevolence_2_int/artifacts/sanitycheck.json
-      md5: fa8b16d308354da79bbc953c9feacd33
-      size: 21568
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/public_restroom_marble:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_marble/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/public_restroom_marble/processed.max
       md5: 2caac4b5a49f9e6df836fcabaa42d7bd
       size: 12000004
     outs:
     - path: cad/scenes/public_restroom_marble/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/hotel_suite_small:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hotel_suite_small/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/hotel_suite_small/processed.max
       md5: 283fc50c22614e1a5880bb8249c5a05c
       size: 30234936
     outs:
     - path: cad/scenes/hotel_suite_small/artifacts/sanitycheck.json
-      md5: a56429281eb3c7c89f6e16c9538c7ba9
-      size: 737
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/restaurant_diner:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_diner/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/restaurant_diner/processed.max
       md5: 10dbd6844fc0b82975809e6e058ab59a
       size: 32229544
     outs:
     - path: cad/scenes/restaurant_diner/artifacts/sanitycheck.json
-      md5: 1e3c1c35c076de2659fa3532df8ef2ea
-      size: 477
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/grocery_store_convenience:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_convenience/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/grocery_store_convenience/processed.max
       md5: 8f19d275148dd306083caf049a406405
       size: 29480418
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Benevolence_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_0_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Benevolence_0_int/processed.max
       md5: 06fa02d40d3b1c26e4dc14902eb99266
       size: 9179742
     outs:
     - path: cad/scenes/Benevolence_0_int/artifacts/sanitycheck.json
-      md5: 3b0881e7c84b35735c0a38be959d732a
-      size: 5225
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/commercial_kitchen_fire_extinguisher:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/commercial_kitchen_fire_extinguisher/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/processed.max
       md5: 98b1a9e03ba733f7e41f28eb6f73439d
       size: 102206588
     outs:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/sanitycheck.json
-      md5: 99eeecdd7c60da206f2e34238f1177a3
-      size: 1093
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Rs_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Rs_garden/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Rs_garden/processed.max
       md5: 927a1c5a649f26410229ea9e07c9c8c1
       size: 104760342
     outs:
     - path: cad/scenes/Rs_garden/artifacts/sanitycheck.json
-      md5: b586f10ed972376ce348c089a570d532
-      size: 28945
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/hall_train_station:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_train_station/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/hall_train_station/processed.max
       md5: 9209b054f4c383a3fbe51267897b7b2a
       size: 60564242
     outs:
     - path: cad/scenes/hall_train_station/artifacts/sanitycheck.json
-      md5: fa3293301695a0362ca1399d6264f0e9
-      size: 138
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Ihlen_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Ihlen_1_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Ihlen_1_int/processed.max
       md5: 8dadac88a691f03a3869775e74956f4d
       size: 71102210
     outs:
     - path: cad/scenes/Ihlen_1_int/artifacts/sanitycheck.json
-      md5: e1850ed13dc2f91c0a91eea68917d3f8
-      size: 44853
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Wainscott_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_garden/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Wainscott_0_garden/processed.max
       md5: c0667338fb082fc61a25aef8cc5fe402
       size: 255172926
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
-      md5: 637c7405422f2d87f6eedd0fcd643c92
-      size: 50048
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/school_gym:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_gym/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/school_gym/processed.max
       md5: 2850f9294eaff8fc5de896dffde8dc0d
       size: 128564196
     outs:
     - path: cad/scenes/school_gym/artifacts/sanitycheck.json
-      md5: d8dd8cba1c449be3c31b9fb77170dd62
-      size: 143299
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Merom_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_garden/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Merom_0_garden/processed.max
       md5: c1c09d7d0c68d3aa5a262f55f65ed461
       size: 115785252
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/sanitycheck.json
-      md5: 168914718a1858b892f7c3f43ba9acaf
-      size: 26180
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/hotel_gym_spa:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hotel_gym_spa/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/hotel_gym_spa/processed.max
       md5: 4c51103d6afbb5d3a7ad7dbb962917ac
       size: 167064970
     outs:
     - path: cad/scenes/hotel_gym_spa/artifacts/sanitycheck.json
-      md5: 25ff371202ba27e9869888d8fcd50465
-      size: 1402
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Ihlen_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Ihlen_0_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Ihlen_0_int/processed.max
       md5: 99c7f81af0179ef9778b0ec7f5a0313c
       size: 39060058
     outs:
     - path: cad/scenes/Ihlen_0_int/artifacts/sanitycheck.json
-      md5: d1c198b21f3cee7d3ddd73a815e5e8c0
-      size: 18180
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/office_cubicles_right:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_cubicles_right/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/office_cubicles_right/processed.max
       md5: 8c426866fc462cb66727efbb89041d96
       size: 61772922
     outs:
     - path: cad/scenes/office_cubicles_right/artifacts/sanitycheck.json
-      md5: 1206fc3ca69666d905d0d3697a91675d
-      size: 44641
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Pomaria_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_garden/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Pomaria_0_garden/processed.max
       md5: 7297e628bb563c429df84e65c82a0532
       size: 196178974
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/sanitycheck.json
-      md5: b4aaa06ce6f45ddef194dbbd602aa70d
-      size: 13936
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Wainscott_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Wainscott_0_int/processed.max
       md5: a3d1a993662375680087b17491acc4c0
       size: 94624650
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/sanitycheck.json
-      md5: 584e375f67f18e924a0c1b21f331bc00
-      size: 62484
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Beechwood_0_garden/processed.max
       md5: bea496cce10e7570c18f5f467d7a5d84
       size: 252497182
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/sanitycheck.json
-      md5: df387f21de7bdc879d9dedbbc5ef52fb
-      size: 53809
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/restaurant_urban:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_urban/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/restaurant_urban/processed.max
       md5: 7fb30d1fc323ef06feb78e272970a5a9
       size: 204327962
     outs:
     - path: cad/scenes/restaurant_urban/artifacts/sanitycheck.json
-      md5: 16de93fde54d046b3e898a1ac830042f
-      size: 551
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/school_geography:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_geography/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/school_geography/processed.max
       md5: 151393a7f19f8b13dcb808c877e5bca2
       size: 103043682
     outs:
     - path: cad/scenes/school_geography/artifacts/sanitycheck.json
-      md5: 3f63757bf3db0c2b7ac018bf12ce2f74
-      size: 288782
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/restaurant_asian:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_asian/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/restaurant_asian/processed.max
       md5: 408ee4ac9f1be1df127885764264718f
       size: 91648078
     outs:
     - path: cad/scenes/restaurant_asian/artifacts/sanitycheck.json
-      md5: b74a1b2ec12e691c38a2da0138a82da7
-      size: 212
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/hall_conference_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_conference_large/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/hall_conference_large/processed.max
       md5: c7b22f51ad24075be261a0e9af361eab
       size: 32273640
     outs:
     - path: cad/scenes/hall_conference_large/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/restaurant_cafeteria:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_cafeteria/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/restaurant_cafeteria/processed.max
       md5: ea7683e278ac405c26ddad40e0d73ede
       size: 128212484
     outs:
     - path: cad/scenes/restaurant_cafeteria/artifacts/sanitycheck.json
-      md5: d6c99d60ddee4bd905704f472038d0a4
-      size: 668
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Merom_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_1_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Merom_1_int/processed.max
       md5: 27d348b7b506bbc8ca2bf6489117cb14
       size: 67882764
     outs:
     - path: cad/scenes/Merom_1_int/artifacts/sanitycheck.json
-      md5: e1a574b02d0c18084dc978eb13ccb0c2
-      size: 42045
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/public_restroom_brown:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_brown/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/public_restroom_brown/processed.max
       md5: b3b834d41d785a84db7573845871587f
       size: 6766564
     outs:
     - path: cad/scenes/public_restroom_brown/artifacts/sanitycheck.json
-      md5: b08ad50ab8d1cde732883e5f4a5eeb46
-      size: 1036
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/school_chemistry:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_chemistry/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/school_chemistry/processed.max
       md5: 7c92123897b357e10095f355ef9e1565
       size: 144941568
     outs:
     - path: cad/scenes/school_chemistry/artifacts/sanitycheck.json
-      md5: d667f0df5857b0be3fb360733e30ce09
-      size: 117537
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/school_computer_lab_and_infirmary:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_computer_lab_and_infirmary/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/school_computer_lab_and_infirmary/processed.max
       md5: e7dbffacbc05f6c07ac3008e9a38415d
       size: 125548358
     outs:
     - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/sanitycheck.json
-      md5: e47f10c0cd93ffac1aeb28697cd629b9
-      size: 198006
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@scenes/Pomaria_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_1_int/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/scenes/Pomaria_1_int/processed.max
       md5: 1d0d897662a6e0741a3bf7b5d78c09ae
       size: 50427482
     outs:
     - path: cad/scenes/Pomaria_1_int/artifacts/sanitycheck.json
-      md5: f9f76a21eaac91d7e6cf0c8d5e4ff9b1
-      size: 41605
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck_success:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/sanitycheck.json
       artifacts/pipeline/sanitycheck.success
@@ -4684,183 +4684,183 @@ stages:
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-00/processed.max
       md5: d89274359b876d3b4273a45f6ecd532e
       size: 61222100
     outs:
     - path: cad/objects/legacy_batch-00/artifacts/sanitycheck.json
-      md5: 04c43bc44f2e2bd7bd255de310842fa3
-      size: 502
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-01:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-01/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-01/processed.max
       md5: 46458697a98264c392e62cfc80d425cd
       size: 211350576
     outs:
     - path: cad/objects/legacy_batch-01/artifacts/sanitycheck.json
-      md5: 9cc1b5c904d6a5541dadf2406f3d47cc
-      size: 1871
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-02:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-02/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-02/processed.max
       md5: a95e2aae1873d9ae9096943ac070adb5
       size: 176870102
     outs:
     - path: cad/objects/legacy_batch-02/artifacts/sanitycheck.json
-      md5: af05bce9709eed3c4e3c7fc0616540d9
-      size: 2369
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-03:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-03/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-03/processed.max
       md5: 361c41dedb937004473ef1987c9f3b55
       size: 301274086
     outs:
     - path: cad/objects/legacy_batch-03/artifacts/sanitycheck.json
-      md5: ec672203e496392fb3ab1447c8c223d1
-      size: 1307
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-04:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-04/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-04/processed.max
       md5: 92f197869e2bca8896831e988afa6bd1
       size: 162725810
     outs:
     - path: cad/objects/legacy_batch-04/artifacts/sanitycheck.json
-      md5: a2b5ed85c7761b8bf76eadc2bec50bfa
-      size: 1811
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-05:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-05/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-05/processed.max
       md5: 27cd671a59433f54835b043ad79c644f
       size: 160357678
     outs:
     - path: cad/objects/legacy_batch-05/artifacts/sanitycheck.json
-      md5: 0a77224fbabcde8a9bb8e8f7c9fa4b09
-      size: 878
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-06:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-06/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-06/processed.max
       md5: 2638a0e9747303f81e938813bcdc2efa
       size: 249964302
     outs:
     - path: cad/objects/legacy_batch-06/artifacts/sanitycheck.json
-      md5: 134c9cfb1c52be6b89b470138667aafd
-      size: 2644
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-07:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-07/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-07/processed.max
       md5: a6cad82cee913ca4e81621fe9e47d33c
       size: 166166878
     outs:
     - path: cad/objects/legacy_batch-07/artifacts/sanitycheck.json
-      md5: 887344c26b62180353c65c233f3fc690
-      size: 1192
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-08:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-08/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-08/processed.max
       md5: 6a2fbc262c4a0f9f8895fcc972853eed
       size: 205191002
     outs:
     - path: cad/objects/legacy_batch-08/artifacts/sanitycheck.json
-      md5: ee0cfa82bcce97c63f15d29878fb4c4c
-      size: 2027
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-09:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-09/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-09/processed.max
       md5: 6abd9da78c0c6a38ae20ed76cb2e88f5
       size: 150512450
     outs:
     - path: cad/objects/legacy_batch-09/artifacts/sanitycheck.json
-      md5: 20abfa287934b4093f70d72770ab0b77
-      size: 1441
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-10:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-10/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-10/processed.max
       md5: 44939dcea8088113a26226f802a52fd2
       size: 282572234
     outs:
     - path: cad/objects/legacy_batch-10/artifacts/sanitycheck.json
-      md5: df55373c53c41158a84b5592ec7d97ce
-      size: 3660
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-11:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-11/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-11/processed.max
       md5: 890db8c8597cafb97fef6debf442da98
       size: 225202234
     outs:
     - path: cad/objects/legacy_batch-11/artifacts/sanitycheck.json
-      md5: 431861c303f05c068a43ec46ca215b32
-      size: 2825
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/legacy_batch-12:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-12/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/legacy_batch-12/processed.max
       md5: 48a8bed6141b26f4ababd6325c167ef7
       size: 19865930
     outs:
     - path: cad/objects/legacy_batch-12/artifacts/sanitycheck.json
-      md5: 4e9b14929195350c35f9cb5fb8f6de0f
-      size: 598
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   export_meshes@scenes/public_restroom_marble:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_marble/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -5462,197 +5462,197 @@ stages:
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-00/processed.max
-      md5: 6e9650d9cccf941853c690c0d3d07ad5
+      md5: b119848362c9f2ce555cb819ea9a19da
       size: 211749190
     outs:
     - path: cad/objects/batch-00/artifacts/sanitycheck.json
-      md5: 5ac70321abaed113ac8f0f9fefdc73ea
-      size: 205
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-01:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-01/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-01/processed.max
-      md5: 560b26cce6a8a25b889118437f0b9c5a
+      md5: 0267dace4105e109727169b1cbbab12d
       size: 189093962
     outs:
     - path: cad/objects/batch-01/artifacts/sanitycheck.json
-      md5: 4c2ccf50653f3ae2a3f019cb52e6795a
-      size: 140
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-02:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-02/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-02/processed.max
       md5: a94bb96c95457c23654d2812603363c1
       size: 240654948
     outs:
     - path: cad/objects/batch-02/artifacts/sanitycheck.json
-      md5: f6e7d5bd57572fa84f83d4ca77abd14e
-      size: 440
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-03:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-03/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-03/processed.max
       md5: b5d7a37b3d499781a140881af36a13b6
       size: 145117608
     outs:
     - path: cad/objects/batch-03/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-04:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-04/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-04/processed.max
       md5: cab05c56e4674b7f18f93d60162f6c28
       size: 165183746
     outs:
     - path: cad/objects/batch-04/artifacts/sanitycheck.json
-      md5: d27c5743954c0065fd8488558adf281f
-      size: 207
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-05:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-05/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-05/processed.max
       md5: 53bcf996eccdc445eb9fdb988b37140a
       size: 164801654
     outs:
     - path: cad/objects/batch-05/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-06:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-06/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-06/processed.max
       md5: ab08ab2713f6a90c0f84a24c779a8408
       size: 190243264
     outs:
     - path: cad/objects/batch-06/artifacts/sanitycheck.json
-      md5: 57a69a1f434b40bb03e30d89cbd22939
-      size: 135
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-07:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-07/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-07/processed.max
       md5: 1cc948208a5ce360b8b8c6f75d6c2880
       size: 190833522
     outs:
     - path: cad/objects/batch-07/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-08:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-08/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-08/processed.max
       md5: 2f72c013c012fd038712c2dc9e97eb5a
       size: 220969116
     outs:
     - path: cad/objects/batch-08/artifacts/sanitycheck.json
-      md5: f28333b8f701349497a6bae2f06324b1
-      size: 279
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-09:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-09/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-09/processed.max
       md5: c2369f800112095005ae1148c6c2c3e2
       size: 143507338
     outs:
     - path: cad/objects/batch-09/artifacts/sanitycheck.json
-      md5: ab51f93803c6a8b5574a05d1bb1427f5
-      size: 170
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-10:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-10/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-10/processed.max
       md5: 251bc640d1b50ecaab1fe2a218b45511
       size: 185322872
     outs:
     - path: cad/objects/batch-10/artifacts/sanitycheck.json
-      md5: ba317159be061e1b71766f6b60529101
-      size: 162
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-11:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-11/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-11/processed.max
       md5: 62b3daffa67b90fc95794ad1ae07c86b
       size: 178708264
     outs:
     - path: cad/objects/batch-11/artifacts/sanitycheck.json
-      md5: f9153f222b02b3516e3be03dcb58ff43
-      size: 255
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-12:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-12/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-12/processed.max
       md5: dab8340d9413f410eedd750271d0bbe9
       size: 153560006
     outs:
     - path: cad/objects/batch-12/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/batch-13:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-13/processed.max b1k_pipeline/max/new_sanity_check.py
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/batch-13/processed.max
       md5: 601fed00a5a58fcefadbc27c8e93f1c6
       size: 186753470
     outs:
     - path: cad/objects/batch-13/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   object_list@objects/batch-00:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-00/processed.max b1k_pipeline/max/object_list.py
     deps:
@@ -6056,15 +6056,15 @@ stages:
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/task_relevant-xy/processed.max
       md5: febf016a4e023765b88c6f84f3958a6f
       size: 296688990
     outs:
     - path: cad/objects/task_relevant-xy/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   export_meshes@objects/batch-08:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-08/processed.max b1k_pipeline/max/export_meshes.py
     deps:
@@ -6667,29 +6667,29 @@ stages:
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/substances-01/processed.max
       md5: 6f77032702153098bcacaf8367cea9e2
       size: 128899064
     outs:
     - path: cad/objects/substances-01/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/task_relavant-ab:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/task_relavant-ab/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/task_relavant-ab/processed.max
       md5: 0c99144b12f586835377686e565d7464
       size: 176201690
     outs:
     - path: cad/objects/task_relavant-ab/artifacts/sanitycheck.json
-      md5: 5cf7a8dd3b2dd1b06aec55ebc3f58803
-      size: 472
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   object_list@objects/substances-01:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/substances-01/processed.max
       b1k_pipeline/max/object_list.py
@@ -8849,29 +8849,29 @@ stages:
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/procedural-aa/processed.max
       md5: 6b1700a27b6c5dd738fd3cdbb1a2d3df
       size: 357879190
     outs:
     - path: cad/objects/procedural-aa/artifacts/sanitycheck.json
-      md5: 19f0a6843a2ae4fd80ed056179f3ac4a
-      size: 1044
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   sanitycheck@objects/substances-02:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/substances-02/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/substances-02/processed.max
       md5: 940d94334637fe427f80ac3836cdfb90
       size: 5326624
     outs:
     - path: cad/objects/substances-02/artifacts/sanitycheck.json
-      md5: d43f5c742c8056071450ffc514e3ace8
-      size: 65
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   export_meshes@objects/substances-02:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/substances-02/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -15919,15 +15919,15 @@ stages:
       batch=true
     deps:
     - path: b1k_pipeline/max/new_sanity_check.py
-      md5: 02bf3c2a018d76d396a4476657166c0a
-      size: 32276
+      md5: eac8a61d24ddb18fa6e0ba84cee3b9ef
+      size: 33486
     - path: cad/objects/custom-aa/processed.max
       md5: 1dce12d2d04c40c9b0e1e180c16eefb6
       size: 10931470
     outs:
     - path: cad/objects/custom-aa/artifacts/sanitycheck.json
-      md5: 45823b220d6116083848c03fb9b90cd8
-      size: 257
+      md5: a83225368c83239a6cee9ef01cfbe6cb
+      size: 4463
   object_list@objects/custom-aa:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/custom-aa/processed.max b1k_pipeline/max/object_list.py
     deps:
@@ -15968,8 +15968,8 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Ihlen_1_int/processed.max
       md5: 8dadac88a691f03a3869775e74956f4d
       size: 71102210
@@ -15982,78 +15982,78 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/office_cubicles_right/processed.max
       md5: 8c426866fc462cb66727efbb89041d96
       size: 61772922
     outs:
     - path: cad/scenes/office_cubicles_right/artifacts/check_collisions.json
-      md5: e78e7e27678814c66109533ea2d7f522
-      size: 925
+      md5: f2225fdaed746a4da666dd9a8c4cc97e
+      size: 4540
   check_collisions@scenes/grocery_store_cafe:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_cafe/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/grocery_store_cafe/processed.max
       md5: 20daa15f3a797de35f565fba249073d9
       size: 151406076
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/check_collisions.json
-      md5: 3021d7a5282370898bd7de382d166c55
+      md5: cbbaeeacdbb4fcecece431e362e19913
       size: 286
   check_collisions@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Beechwood_0_garden/processed.max
       md5: bea496cce10e7570c18f5f467d7a5d84
       size: 252497182
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/check_collisions.json
-      md5: 4f7da0cfb983534ef93b928b34173e3a
-      size: 85
+      md5: e3fd4ea3ed4d25d4ce84b8b0fca0f71d
+      size: 5590
   check_collisions@scenes/public_restroom_futuristic:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_futuristic/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/public_restroom_futuristic/processed.max
       md5: c454f1b3d4f6ba80e8df25d3dc6ed346
       size: 13049700
     outs:
     - path: cad/scenes/public_restroom_futuristic/artifacts/check_collisions.json
-      md5: a42bd0fa5ac3e001b17458098b50c793
-      size: 288
+      md5: 44b6fc829253e718d28ed79b9e475142
+      size: 68
   check_collisions@scenes/restaurant_urban:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_urban/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/restaurant_urban/processed.max
       md5: 7fb30d1fc323ef06feb78e272970a5a9
       size: 204327962
     outs:
     - path: cad/scenes/restaurant_urban/artifacts/check_collisions.json
-      md5: 57b8e2969ab70e9b17f2e7ce2b20d7f1
-      size: 287
+      md5: f88975793efcc921e949a738acac9ad9
+      size: 2405
   check_collisions@scenes/Wainscott_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Wainscott_0_int/processed.max
       md5: a3d1a993662375680087b17491acc4c0
       size: 94624650
@@ -16066,8 +16066,8 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Benevolence_2_int/processed.max
       md5: aa880a0b211120a9decb1c9ef9cc1825
       size: 31451446
@@ -16080,22 +16080,22 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/school_chemistry/processed.max
       md5: 7c92123897b357e10095f355ef9e1565
       size: 144941568
     outs:
     - path: cad/scenes/school_chemistry/artifacts/check_collisions.json
-      md5: bb9120dde8c3259fd5d47930c20803c4
-      size: 500
+      md5: 44b6fc829253e718d28ed79b9e475142
+      size: 68
   check_collisions@scenes/public_restroom_brown:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_brown/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/public_restroom_brown/processed.max
       md5: b3b834d41d785a84db7573845871587f
       size: 6766564
@@ -16108,36 +16108,36 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/hotel_suite_large/processed.max
       md5: f650cd7ea214f6ec2be9a43d9e1b6b41
       size: 134073128
     outs:
     - path: cad/scenes/hotel_suite_large/artifacts/check_collisions.json
-      md5: 98ef4696ab687cae52ea056ee53e75cf
-      size: 286
+      md5: aa9de342679b0b6925c9e7953b8b648b
+      size: 1134
   check_collisions@scenes/restaurant_asian:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_asian/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/restaurant_asian/processed.max
       md5: 408ee4ac9f1be1df127885764264718f
       size: 91648078
     outs:
     - path: cad/scenes/restaurant_asian/artifacts/check_collisions.json
-      md5: 41c3aad01dadb54d4d81bb2e04ca400a
-      size: 140
+      md5: a6c2fc134046aefc7e1a597ef1838e34
+      size: 4743
   check_collisions@scenes/Pomaria_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Pomaria_0_int/processed.max
       md5: e606eff70a8d2974b9cb193cdfbd11ce
       size: 26178142
@@ -16150,148 +16150,148 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/grocery_store_asian/processed.max
       md5: 82cf4f41cf6c16aee511a13d569f7af9
       size: 172006958
     outs:
     - path: cad/scenes/grocery_store_asian/artifacts/check_collisions.json
-      md5: 33a0e4becfccafdc7bcda2db9a791c24
-      size: 285
+      md5: 44b6fc829253e718d28ed79b9e475142
+      size: 68
   check_collisions@scenes/office_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_large/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/office_large/processed.max
       md5: 7b86420b6cf969cc9c484e728b6815e6
       size: 131657506
     outs:
     - path: cad/scenes/office_large/artifacts/check_collisions.json
-      md5: a017f116e857e8f969fc58f3f800ae69
-      size: 3046
+      md5: 259fabef6606a85d16fae7cf332c0202
+      size: 499
   check_collisions@scenes/restaurant_diner:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_diner/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/restaurant_diner/processed.max
       md5: 10dbd6844fc0b82975809e6e058ab59a
       size: 32229544
     outs:
     - path: cad/scenes/restaurant_diner/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: f961936bfc7b6fca9369f2c8613c0937
+      size: 1983
   check_collisions@scenes/school_biology:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_biology/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/school_biology/processed.max
       md5: 7aa1694ada6a42801fa848e09aeeca1d
       size: 153092036
     outs:
     - path: cad/scenes/school_biology/artifacts/check_collisions.json
-      md5: bed356820fac0046cdaa73126fd382bd
-      size: 3269
+      md5: e0e58762795c039d1d35f40f95dc11cc
+      size: 921
   check_collisions@scenes/hotel_gym_spa:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hotel_gym_spa/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/hotel_gym_spa/processed.max
       md5: 4c51103d6afbb5d3a7ad7dbb962917ac
       size: 167064970
     outs:
     - path: cad/scenes/hotel_gym_spa/artifacts/check_collisions.json
-      md5: 5124a5615ba068788fdecc1af2f14a0f
-      size: 285
+      md5: 61118618278ac147d281dffddbf63764
+      size: 2622
   check_collisions@scenes/Wainscott_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Wainscott_0_garden/processed.max
       md5: c0667338fb082fc61a25aef8cc5fe402
       size: 255172926
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/check_collisions.json
-      md5: c102bfd80bc28fe8dd26f5868cb83f64
-      size: 1139
+      md5: 70ca7090626153d0dc9afd3b066ae0e3
+      size: 4540
   check_collisions@scenes/office_vendor_machine:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_vendor_machine/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/office_vendor_machine/processed.max
       md5: 6c790f409aad761923fec8d69c34f172
       size: 85387172
     outs:
     - path: cad/scenes/office_vendor_machine/artifacts/check_collisions.json
-      md5: 299a31d43a99b3860d44178d6a6f2bd5
-      size: 705
+      md5: ec979c18fbb052700ed19e20ec5237b5
+      size: 3440
   check_collisions@scenes/commercial_kitchen_fire_extinguisher:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/commercial_kitchen_fire_extinguisher/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/processed.max
       md5: 98b1a9e03ba733f7e41f28eb6f73439d
       size: 102206588
     outs:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/check_collisions.json
-      md5: da09b0865a440ddb0bd354f4ad78f0b0
-      size: 287
+      md5: 8d9679338c503630bd479747f3f163ce
+      size: 2621
   check_collisions@scenes/grocery_store_convenience:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_convenience/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/grocery_store_convenience/processed.max
       md5: 8f19d275148dd306083caf049a406405
       size: 29480418
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/check_collisions.json
-      md5: b663353871c660d0a1eef7da8109510f
-      size: 2834
+      md5: 05cd2252650eaae98223010ad1ef7010
+      size: 1980
   check_collisions@scenes/office_bike:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_bike/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/office_bike/processed.max
       md5: 9e2d99a83fd3b1eacff624b0be7d2904
       size: 168688774
     outs:
     - path: cad/scenes/office_bike/artifacts/check_collisions.json
-      md5: ae5d6498b476d433fa5108b7517d4001
-      size: 4346
+      md5: b29a0229fda12f1099e97c64bdc22351
+      size: 929
   check_collisions@scenes/hall_arch_wood:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_arch_wood/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/hall_arch_wood/processed.max
       md5: 485fffcedb6116f46a7a72ce60a07142
       size: 12676228
@@ -16304,35 +16304,35 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/hotel_suite_small/processed.max
       md5: 283fc50c22614e1a5880bb8249c5a05c
       size: 30234936
     outs:
     - path: cad/scenes/hotel_suite_small/artifacts/check_collisions.json
-      md5: 7c9b1ef74d4f41fb121b9c654dcbbb6b
-      size: 288
+      md5: 32d831b9d98ea3e5ee0bf3c8f7cc148d
+      size: 285
   check_collisions@scenes/gates_bedroom:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/gates_bedroom/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/gates_bedroom/processed.max
       md5: d74decd431b7bc7ca45783e4da92a709
       size: 20267386
     outs:
     - path: cad/scenes/gates_bedroom/artifacts/check_collisions.json
-      md5: 7617f50fdb433befc232421cca3d2345
-      size: 710
+      md5: a2dcc7d9f57e4ba31a0fd296c152d74a
+      size: 286
   check_collisions@scenes/Rs_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Rs_int/processed.max b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Rs_int/processed.max
       md5: 90eae26cca735e5ab1e0dced62cf7222
       size: 42464590
@@ -16344,77 +16344,77 @@ stages:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_gym/processed.max b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/school_gym/processed.max
       md5: 2850f9294eaff8fc5de896dffde8dc0d
       size: 128564196
     outs:
     - path: cad/scenes/school_gym/artifacts/check_collisions.json
-      md5: 168d5f4fa9ecc72fd2e1f0ecfca8d3eb
-      size: 6061
+      md5: 24f0f8c746a31279955e548adac8a8e9
+      size: 287
   check_collisions@scenes/house_double_floor_lower:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_double_floor_lower/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/house_double_floor_lower/processed.max
       md5: 32f4d9cb81440de39f84443fee52007e
       size: 383655998
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/check_collisions.json
-      md5: 3b3225fd01c3c687c1632540ebf09483
-      size: 924
+      md5: fd12350e9bae033a918ce92041227f09
+      size: 3472
   check_collisions@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/house_single_floor/processed.max
-      md5: 23fe47e717b4b7b47a779571b9181278
-      size: 666187740
+      md5: 0e6480588346d0c7a82ef4757851f321
+      size: 665546066
     outs:
     - path: cad/scenes/house_single_floor/artifacts/check_collisions.json
-      md5: bfd6aecf0d1b2f66f9ad1f3784271855
-      size: 85
+      md5: af56d6c9a6d8f74b4868b02f1fcb4a4e
+      size: 2838
   check_collisions@scenes/restaurant_brunch:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_brunch/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/restaurant_brunch/processed.max
       md5: 4f47d07c9a6ee85812ce06c8b3a49fe4
       size: 195209876
     outs:
     - path: cad/scenes/restaurant_brunch/artifacts/check_collisions.json
-      md5: f2147d68be60be44e7e26b2e333f9c95
-      size: 912
+      md5: f7c36462abd88995441b4a2e43adc02a
+      size: 2407
   check_collisions@scenes/Rs_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Rs_garden/processed.max b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Rs_garden/processed.max
       md5: 927a1c5a649f26410229ea9e07c9c8c1
       size: 104760342
     outs:
     - path: cad/scenes/Rs_garden/artifacts/check_collisions.json
-      md5: dbd6ba0d6b7d320a4430ac0e81db689c
-      size: 500
+      md5: 7417a5574b070f6c139e0f5a4d86e6b2
+      size: 4964
   check_collisions@scenes/Ihlen_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Ihlen_0_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Ihlen_0_int/processed.max
       md5: 99c7f81af0179ef9778b0ec7f5a0313c
       size: 39060058
@@ -16427,22 +16427,22 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Beechwood_0_int/processed.max
       md5: f3c4f25e941270f6d83994eb33db1cfe
       size: 96766396
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/check_collisions.json
-      md5: b95a4b0f8d7f0fa0ca6d0ee48e213995
-      size: 85
+      md5: 44b6fc829253e718d28ed79b9e475142
+      size: 68
   check_collisions@scenes/Benevolence_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_1_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Benevolence_1_int/processed.max
       md5: dbe9a64eceac877f1fd99bc44dd3c842
       size: 27564424
@@ -16455,36 +16455,36 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/school_computer_lab_and_infirmary/processed.max
       md5: e7dbffacbc05f6c07ac3008e9a38415d
       size: 125548358
     outs:
     - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/check_collisions.json
-      md5: 6cb7c9c7c2b85f056d96a69a6f98e878
-      size: 1136
+      md5: 30cf7dce335713f1256c56cc69b3575c
+      size: 2201
   check_collisions@scenes/school_geography:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_geography/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/school_geography/processed.max
       md5: 151393a7f19f8b13dcb808c877e5bca2
       size: 103043682
     outs:
     - path: cad/scenes/school_geography/artifacts/check_collisions.json
-      md5: 1a379f60a2fef5b02e6582205334e960
-      size: 1988
+      md5: 3fd8a0d24eec73d51ea30a2d6a1d1849
+      size: 714
   check_collisions@scenes/Beechwood_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_1_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Beechwood_1_int/processed.max
       md5: d4b88e725d0751fc0d4058e7e9078a67
       size: 50481268
@@ -16497,36 +16497,36 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/hall_conference_large/processed.max
       md5: c7b22f51ad24075be261a0e9af361eab
       size: 32273640
     outs:
     - path: cad/scenes/hall_conference_large/artifacts/check_collisions.json
-      md5: ef5084fbacd69b39105a3c19ddb02e53
-      size: 36477
+      md5: 8ce814ab005e3a511ed3e43d8402ca52
+      size: 2880
   check_collisions@scenes/restaurant_cafeteria:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_cafeteria/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/restaurant_cafeteria/processed.max
       md5: ea7683e278ac405c26ddad40e0d73ede
       size: 128212484
     outs:
     - path: cad/scenes/restaurant_cafeteria/artifacts/check_collisions.json
-      md5: f60e8d40b1e349af378b4691988d1142
-      size: 926
+      md5: 75b357fa17ec57611f91bb6fb89ebb12
+      size: 2625
   check_collisions@scenes/Pomaria_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_1_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Pomaria_1_int/processed.max
       md5: 1d0d897662a6e0741a3bf7b5d78c09ae
       size: 50427482
@@ -16539,8 +16539,8 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Merom_1_int/processed.max
       md5: 27d348b7b506bbc8ca2bf6489117cb14
       size: 67882764
@@ -16553,36 +16553,36 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/public_restroom_blue/processed.max
       md5: f50440f4e34141a0d363dd0865cbaad0
       size: 11037742
     outs:
     - path: cad/scenes/public_restroom_blue/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: a9b1005b61a3eb7ceecc499b7d0bdc62
+      size: 922
   check_collisions@scenes/commercial_kitchen_pans:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/commercial_kitchen_pans/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/commercial_kitchen_pans/processed.max
       md5: 2861ad6e4ae82a6143299309f191f880
       size: 86498372
     outs:
     - path: cad/scenes/commercial_kitchen_pans/artifacts/check_collisions.json
-      md5: 6f39cf0f18ce3a42a858f0821f26dd66
-      size: 287
+      md5: dc71d950000e6ed738ac8edc6e6a60cf
+      size: 712
   check_collisions@scenes/hall_glass_ceiling:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_glass_ceiling/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/hall_glass_ceiling/processed.max
       md5: ef4f4100352a7d935419ef1bab12d667
       size: 22205584
@@ -16595,8 +16595,8 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Pomaria_2_int/processed.max
       md5: 814b2da2c8db2e1b071398c1034dae46
       size: 25880946
@@ -16609,8 +16609,8 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Benevolence_0_int/processed.max
       md5: 06fa02d40d3b1c26e4dc14902eb99266
       size: 9179742
@@ -16623,36 +16623,36 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/house_double_floor_upper/processed.max
       md5: 6e70013ff8e3f9d741832a49dd67104e
       size: 225437582
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/check_collisions.json
-      md5: 202e577fc5adb4069e40a1f5e3c6aa4f
-      size: 85
+      md5: ac1a34d0c322f08317ecb62e5d3ae264
+      size: 5172
   check_collisions@scenes/Pomaria_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Pomaria_0_garden/processed.max
       md5: 7297e628bb563c429df84e65c82a0532
       size: 196178974
     outs:
     - path: cad/scenes/Pomaria_0_garden/artifacts/check_collisions.json
-      md5: 179ec63b7d19c59bf5de5702408f21d3
-      size: 3465
+      md5: f1ba40037e22876fe64e127ba1c1c66e
+      size: 1562
   check_collisions@scenes/Wainscott_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_1_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Wainscott_1_int/processed.max
       md5: 6abbd13583991ee80f0c5291b9f897c6
       size: 73824458
@@ -16665,50 +16665,50 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/office_cubicles_left/processed.max
       md5: 952f150928988405865bd72497aefbb2
       size: 85474752
     outs:
     - path: cad/scenes/office_cubicles_left/artifacts/check_collisions.json
-      md5: 4a20ae822abe5b8afe3bd3aa51bd86d6
-      size: 6888
+      md5: 368f5763b4c7a6ab2dc80cda4315097f
+      size: 812
   check_collisions@scenes/public_restroom_white:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_white/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/public_restroom_white/processed.max
       md5: b35398512fa6561f8fe01b825ac7077a
       size: 23158568
     outs:
     - path: cad/scenes/public_restroom_white/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: 7be19cb4077869096465a35b85b21ae7
+      size: 1138
   check_collisions@scenes/Merom_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Merom_0_garden/processed.max
       md5: c1c09d7d0c68d3aa5a262f55f65ed461
       size: 115785252
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/check_collisions.json
-      md5: 445690c96ddb14ecd48f21634a5e0ac2
-      size: 711
+      md5: 1f37700628ea623f66dfff07bed90211
+      size: 712
   check_collisions@scenes/public_restroom_marble:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_marble/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/public_restroom_marble/processed.max
       md5: 2caac4b5a49f9e6df836fcabaa42d7bd
       size: 12000004
@@ -16721,8 +16721,8 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/hall_train_station/processed.max
       md5: 9209b054f4c383a3fbe51267897b7b2a
       size: 60564242
@@ -16735,22 +16735,22 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/grocery_store_half_stocked/processed.max
       md5: 8bd82b676475d97339eaf23f1b1b6152
       size: 23619572
     outs:
     - path: cad/scenes/grocery_store_half_stocked/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: 240a08c152866721c027805fac1c2149
+      size: 287
   check_collisions@scenes/Merom_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/Merom_0_int/processed.max
       md5: d0c86a2006c73b9d5f98af47841bfaf3
       size: 45343478
@@ -16763,12 +16763,12 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: d90a3b2d70abf2fb6364055037b3c39e
-      size: 8455
+      md5: 9eaa7d711f01a5b3b6e82cba5017030b
+      size: 13223
     - path: cad/scenes/restaurant_hotel/processed.max
       md5: 8f88a9dc0fbfc1c117b0cece125cd967
       size: 86111536
     outs:
     - path: cad/scenes/restaurant_hotel/artifacts/check_collisions.json
-      md5: 063322f4c61c37eaac9f8a8e3a19f284
-      size: 13037
+      md5: 2e9bbe370e2a35d3b12126dbc07fa505
+      size: 4966

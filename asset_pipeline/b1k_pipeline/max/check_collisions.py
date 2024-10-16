@@ -116,12 +116,9 @@ def import_bad_model_originals(model_id):
         else:
             visual_objects[link_name] = obj
 
-    assert set(visual_objects.keys()) == set(collision_objects.keys()), (
-        "Visual and collision objects should match. Currently: "
-        + str(visual_objects.keys())
-        + " vs "
-        + str(collision_objects.keys())
-    )
+    assert set(visual_objects.keys()) == set(
+        collision_objects.keys()
+    ), f"Visual and collision objects should match in source for {model_id}. Currently: {visual_objects.keys()} vs {collision_objects.keys()}"
 
     objects_to_import = sorted(
         set(visual_objects.values()) | set(collision_objects.values())
@@ -363,7 +360,7 @@ def main():
         for left, right, depth in collisions:
             print(f"Collision between {left} and {right}: {depth} mm")
     except Exception as e:
-        error = str(e) + "\n\n" + traceback.format_exc()
+        error = traceback.format_exc()
         traceback.print_exc()
 
     output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
