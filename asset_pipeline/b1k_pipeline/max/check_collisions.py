@@ -147,7 +147,6 @@ def import_bad_model_originals(model_id):
     )
 
     # Make sure the objects all have the right parents
-    meshes_by_link_name = {}
     for link_name in visual_objects.keys():
         visual_obj = imported_objs_by_name[visual_objects[link_name]]
         collision_obj = imported_objs_by_name[collision_objects[link_name]]
@@ -163,9 +162,12 @@ def prepare_scene():
     # Get all the collision meshes in the scene that belong to lower, instance-zero meshes
     scene = trimesh.Scene()
 
+    # Get a list of all exportable objects
+    all_objects = list(rt.objects)
+
     # Pre-import meshes for all bad objects
     bad_object_model_ids = set()
-    for obj in rt.objects:
+    for obj in all_objects:
         parsed_name = parse_name(obj.name)
         if not parsed_name or not parsed_name.group("bad"):
             continue
@@ -176,12 +178,15 @@ def prepare_scene():
 
     # Get the base link frame for each model
     base_link_frames = {}
-    for obj in tqdm.tqdm(list(rt.objects), desc="Getting base link frames"):
+    for obj in tqdm.tqdm(all_objects, desc="Getting base link frames"):
         parsed_name = parse_name(obj.name)
         if not parsed_name:
             continue
 
         if int(parsed_name.group("instance_id")) != 0:
+            continue
+
+        if parsed_name.group("bad"):
             continue
 
         if (
@@ -190,12 +195,19 @@ def prepare_scene():
         ):
             continue
 
+        if parsed_name.group("meta_type"):
+            continue
+
+        if rt.classOf(obj) != rt.Editable_Poly:
+            continue
+
         model_id = parsed_name.group("model_id")
+        assert model_id not in base_link_frames, f"{model_id} already exists"
         base_link_frames[model_id] = obj.transform
 
     # Process the collision meshes into a base-relative dictionary
     meshes = defaultdict(dict)  # meshes[model_id][link_name] = [trimesh.Trimesh]
-    collision_objs = [x for x in rt.objects if "Mcollision" in x.name]
+    collision_objs = [x for x in all_objects if "Mcollision" in x.name]
     for obj in tqdm.tqdm(collision_objs, desc="Processing collision meshes"):
         if "Mcollision" not in obj.name:
             continue
@@ -231,7 +243,7 @@ def prepare_scene():
         rt.delete(obj)
 
     # Then go through every other object in the scene and add it onto the physics scene
-    for obj in tqdm.tqdm(list(rt.objects), desc="Building physics scene"):
+    for obj in tqdm.tqdm(all_objects, desc="Building physics scene"):
         if rt.classOf(obj) != rt.Editable_Poly:
             continue
 
@@ -260,9 +272,12 @@ def prepare_scene():
         obj_transform = np.hstack([mat2arr(obj.transform), [[0], [0], [0], [1]]]).T
 
         # Actually add the meshes
-        for link_name, link_mesh in meshes[model_id].items():
-            node_key = f"{is_loose}-{model_id}-{instance_id}-{link_name}"
-            scene.add_geometry(link_mesh, node_name=node_key, transform=obj_transform)
+        for link_name, link_meshes in meshes[model_id].items():
+            for mesh_idx, link_mesh in enumerate(link_meshes):
+                node_key = f"{is_loose}-{model_id}-{instance_id}-{link_name}-{mesh_idx}"
+                scene.add_geometry(
+                    link_mesh, node_name=node_key, transform=obj_transform
+                )
 
     return scene
 
@@ -301,11 +316,13 @@ def check_collisions(scene):
     }
 
     pairs_collision = {}
-    for collision in collision_data:
+    for collision in tqdm.tqdm(collision_data, desc="Filtering collisions"):
         left, right = tuple(collision.names)
-        left_loose, left_model, left_instance, left_link = left.split("-")
+        left_loose, left_model, left_instance, left_link, left_body = left.split("-")
         left_loose = left_loose == "true"
-        right_loose, right_model, right_instance, right_link = right.split("-")
+        right_loose, right_model, right_instance, right_link, right_body = right.split(
+            "-"
+        )
         right_loose = right_loose == "true"
 
         # Exclude self-collisions
@@ -336,15 +353,17 @@ def check_collisions(scene):
 
 
 def main():
+    scene = None
     error = None
     collisions = []
     try:
         scene = prepare_scene()
+        scene.export(r"D:\physics.ply")
         collisions = check_collisions(scene)
         for left, right, depth in collisions:
             print(f"Collision between {left} and {right}: {depth} mm")
     except Exception as e:
-        error = str(e)
+        error = str(e) + "\n\n" + traceback.format_exc()
         traceback.print_exc()
 
     output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
@@ -359,6 +378,8 @@ def main():
     with open(filename, "w") as f:
         json.dump(results, f, indent=4)
 
+    return scene
+
 
 if __name__ == "__main__":
-    main()
+    scene = main()
