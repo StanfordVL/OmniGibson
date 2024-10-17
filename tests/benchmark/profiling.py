@@ -19,7 +19,7 @@ parser.add_argument("-r", "--robot", type=int, default=0)
 parser.add_argument("-s", "--scene", default="")
 parser.add_argument("-c", "--cloth", action="store_true")
 parser.add_argument("-w", "--fluids", action="store_true")
-parser.add_argument("-g", "--gpu_denamics", action="store_true")
+parser.add_argument("-g", "--gpu_dynamics", action="store_true")
 parser.add_argument("-p", "--macro_particle_system", action="store_true")
 
 PROFILING_FIELDS = ["FPS", "Omni step time", "Non-omni step time", "Memory usage", "Vram usage"]
@@ -42,8 +42,8 @@ def main():
     gm.ENABLE_HQ_RENDERING = args.fluids
     gm.ENABLE_OBJECT_STATES = True
     gm.ENABLE_TRANSITION_RULES = True
-    gm.ENABLE_FLATCACHE = not args.cloth
-    gm.USE_GPU_DYNAMICS = args.gpu_denamics
+    gm.ENABLE_FLATCACHE = False  # Alaways disable flatcache for now; will try this when isaac is ready
+    gm.USE_GPU_DYNAMICS = args.gpu_dynamics
 
     cfg = {
         "env": {
@@ -56,8 +56,8 @@ def main():
         for i in range(args.robot):
             cfg["robots"].append(
                 {
-                    "type": "Fetch",
-                    "obs_modalities": ["rgb"],
+                    "type": "R1",
+                    "obs_modalities": ["rgb", "depth"],
                     "position": [-1.3 + 0.75 * i + SCENE_OFFSET[args.scene][0], 0.5 + SCENE_OFFSET[args.scene][1], 0],
                     "orientation": [0.0, 0.0, 0.7071, -0.7071],
                 }

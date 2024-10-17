@@ -2,10 +2,10 @@
 python tests/benchmark/profiling.py -s Rs_int -g
 rm output.json
 # 1st batch: baselines
-python tests/benchmark/profiling.py -g                      # baseline
-python tests/benchmark/profiling.py -g -s Rs_int            # for vision research
+# python tests/benchmark/profiling.py -g                      # baseline
+# python tests/benchmark/profiling.py -g -s Rs_int            # for vision research
 python tests/benchmark/profiling.py -g -s Rs_int -r 1       # for robotics research
-python tests/benchmark/profiling.py -g -s Rs_int -r 3       # for multi-agent research
+# python tests/benchmark/profiling.py -g -s Rs_int -r 3       # for multi-agent research
 
 # 2nd batch: compare different scenes
 python tests/benchmark/profiling.py -r 1 -s Ihlen_0_int
