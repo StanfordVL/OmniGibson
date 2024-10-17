@@ -39,7 +39,7 @@ SCENE_OFFSET = {
 def main():
     args = parser.parse_args()
     # Modify macros settings
-    gm.ENABLE_HQ_RENDERING = args.fluids
+    gm.ENABLE_HQ_RENDERING = False  # Should be args.fluids; disable for now
     gm.ENABLE_OBJECT_STATES = True
     gm.ENABLE_TRANSITION_RULES = True
     gm.ENABLE_FLATCACHE = False  # Alaways disable flatcache for now; will try this when isaac is ready
@@ -173,7 +173,7 @@ def main():
 
     field = f"{args.scene}" if args.scene else "Empty scene"
     if args.robot:
-        field += f", with {args.robot} Fetch"
+        field += f", with {args.robot} R1"
     if args.cloth:
         field += ", cloth"
     if args.fluids:
