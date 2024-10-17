@@ -20,4 +20,4 @@ python tests/benchmark/profiling.py -g -r 1 -p             # macro particle syst
 python tests/benchmark/profiling.py -g -r 1 -w -c -p       # everything
 
 # 4th batch: low action and rendering frequency
-python tests/benchmark/profiling.py -r 1 -s -l Ihlen_0_int
+python tests/benchmark/profiling.py -r 1 -s Ihlen_0_int -l

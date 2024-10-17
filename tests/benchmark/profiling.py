@@ -49,6 +49,7 @@ def main():
     cfg = {
         "env": {
             "action_frequency": 30 if not args.low_freq else 10,
+            "rendering_frequency": 30 if not args.low_freq else 10,
             "physics_frequency": 120,
         }
     }
