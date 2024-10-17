@@ -21,6 +21,7 @@ parser.add_argument("-c", "--cloth", action="store_true")
 parser.add_argument("-w", "--fluids", action="store_true")
 parser.add_argument("-g", "--gpu_dynamics", action="store_true")
 parser.add_argument("-p", "--macro_particle_system", action="store_true")
+parser.add_argument("-l", "--low_freq", action="store_true")
 
 PROFILING_FIELDS = ["FPS", "Omni step time", "Non-omni step time", "Memory usage", "Vram usage"]
 NUM_CLOTH = 5
@@ -47,7 +48,7 @@ def main():
 
     cfg = {
         "env": {
-            "action_frequency": 30,
+            "action_frequency": 30 if not args.low_freq else 10,
             "physics_frequency": 120,
         }
     }
