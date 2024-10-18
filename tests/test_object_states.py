@@ -914,17 +914,22 @@ def test_particle_remover(env):
     # Test projection
 
     place_obj_on_floor_plane(breakfast_table)
-    place_objA_on_objB_bbox(vacuum, breakfast_table, z_offset=0.02)
     for _ in range(3):
         og.sim.step()
 
-    assert not vacuum.states[ToggledOn].get_value()
     water_system = env.scene.get_system("water")
     # Place single particle of water on middle of table
     water_system.generate_particles(
-        positions=[[0, 0, breakfast_table.aabb[1][2].item() + water_system.particle_radius]]
+        positions=[[0, 0, breakfast_table.aabb[1][2].item() + water_system.particle_radius + 0.01]]
     )
     assert water_system.n_particles > 0
+    for _ in range(3):
+        og.sim.step()
+
+    place_objA_on_objB_bbox(vacuum, breakfast_table, z_offset=0.012)
+    for _ in range(3):
+        og.sim.step()
+    assert not vacuum.states[ToggledOn].get_value()
 
     # Take number of steps for water to be removed, make sure there is still water
     n_remover_steps = vacuum.states[ParticleRemover].n_steps_per_modification

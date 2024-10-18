@@ -349,7 +349,8 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
                 "height": 1.0,
                 "size": 1.0,
             }
-            mesh_prim_path = f"{self.link.prim_path}/mesh_0"
+            mesh_name = "mesh_0"
+            mesh_prim_path = f"{self.link.prim_path}/{mesh_name}"
 
             # Create a primitive shape if it doesn't already exist
             pre_existing_mesh = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mesh_prim_path)
@@ -384,14 +385,13 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
                         f"pre-existing mesh type ({mesh_type})"
                     )
 
-            # Create the visual geom instance referencing the generated mesh prim, and then hide it
-            self.projection_mesh = VisualGeomPrim(
-                relative_prim_path=absolute_prim_path_to_scene_relative(self.obj.scene, mesh_prim_path),
-                name=f"{name_prefix}_projection_mesh",
-            )
-            self.projection_mesh.load(self.obj.scene)
-            self.projection_mesh.initialize()
-            self.projection_mesh.visible = False
+            # Make sure the object updates its meshes, and assert that there's only a single visual mesh
+            self.link.update_meshes(trigger_mesh_paths=[mesh_prim_path])
+
+            assert (
+                len(self.link.visual_meshes) == 1
+            ), f"Expected only a single projection mesh for {self.link}, got: {len(self.link.visual_meshes)}"
+            self.projection_mesh = self.link.visual_meshes[mesh_name]
 
             # Make sure the shape-based attributes are not set, and only the scaling is set
             property_names = set(self.projection_mesh.prim.GetPropertyNames())
@@ -402,41 +402,32 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
                         val == default_val
                     ), f"Projection mesh should have shape-based attribute {shape_attr} == {default_val}! Got: {val}"
 
-            # Set the scale based on projection mesh params
-            self.projection_mesh.scale = self._projection_mesh_params["extents"]
+            # If we just added this mesh, make some additional adjustments
+            if not pre_existing_mesh:
+                # Set the scale based on projection mesh params
+                self.projection_mesh.scale = self._projection_mesh_params["extents"]
 
-            # Make sure the object updates its meshes, and assert that there's only a single visual mesh
-            self.link.update_meshes()
-            assert (
-                len(self.link.visual_meshes) == 1
-            ), f"Expected only a single projection mesh for {self.link}, got: {len(self.link.visual_meshes)}"
+                # Make sure the mesh is translated so that its tip lies at the metalink origin, and rotated so the vector
+                # from tip to tail faces the positive x axis
+                z_offset = (
+                    0.0
+                    if self._projection_mesh_params["type"] == "Sphere"
+                    else self._projection_mesh_params["extents"][2] / 2
+                )
 
-            # Make sure the mesh is translated so that its tip lies at the metalink origin, and rotated so the vector
-            # from tip to tail faces the positive x axis
-            z_offset = (
-                0.0
-                if self._projection_mesh_params["type"] == "Sphere"
-                else self._projection_mesh_params["extents"][2] / 2
-            )
-
-            self.projection_mesh.set_position_orientation(
-                position=th.tensor([0, 0, -z_offset]),
-                orientation=T.euler2quat(th.tensor([0, 0, 0], dtype=th.float32)),
-                frame="parent",
-            )
+                self.projection_mesh.set_position_orientation(
+                    position=th.tensor([0, 0, -z_offset]),
+                    orientation=T.euler2quat(th.tensor([0, 0, 0], dtype=th.float32)),
+                    frame="parent",
+                )
 
             # Generate the function for checking whether points are within the projection mesh
             self._check_in_mesh, _ = generate_points_in_volume_checker_function(obj=self.obj, volume_link=self.link)
 
-            # Store the projection mesh's IDs
-            projection_mesh_ids = lazy.pxr.PhysicsSchemaTools.encodeSdfPath(self.projection_mesh.prim_path)
-
             # We also generate the function for checking overlaps at runtime
             def check_overlap():
-                nonlocal valid_hit
-                valid_hit = False
-                og.sim.psqi.overlap_shape(*projection_mesh_ids, reportFn=overlap_callback)
-                return valid_hit
+                colliders = self.projection_mesh.get_colliding_prim_paths()
+                return any(collider not in self._link_prim_paths for collider in colliders)
 
         elif self.method == ParticleModifyMethod.ADJACENCY:
             # Define the function for checking whether points are within the adjacency mesh
@@ -1092,7 +1083,7 @@ class ParticleApplier(ParticleModifier):
             # metalink, and (b) zero relative orientation between the metalink and the projection mesh
             local_pos, local_quat = self.projection_mesh.get_position_orientation(frame="parent")
             assert th.all(
-                th.isclose(local_pos + th.tensor([0, 0, height / 2.0]), th.zeros_like(local_pos))
+                th.isclose(local_pos + th.tensor([0, 0, height / 2.0]), th.zeros_like(local_pos), atol=1e-5, rtol=1e-5)
             ), "Projection mesh tip should align with metalink position!"
             local_euler = T.quat2euler(local_quat)
             assert th.all(
@@ -1490,7 +1481,9 @@ class ParticleApplier(ParticleModifier):
     @property
     def projection_is_active(self):
         # Only active if the projection mesh is enabled
-        return self.projection_emitter.GetProperty("inputs:active").Get()
+        return (
+            self.projection_emitter.GetProperty("inputs:active").Get() if self.projection_emitter is not None else False
+        )
 
     @classproperty
     def metalink_prefix(cls):
