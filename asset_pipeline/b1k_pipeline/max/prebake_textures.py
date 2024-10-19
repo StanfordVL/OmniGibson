@@ -100,6 +100,12 @@ def hash_object(obj):
     )
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
 
+    # Save both arrays into a file for checking later
+    target = pathlib.Path(r"D:\hash_test") / obj.name
+    target.mkdir(exist_ok=True, parents=True)
+    np.save(target / "verts.npy", verts)
+    np.save(target / "faces.npy", faces)
+
     # Hash the vertices and faces
     return hashlib.sha256(verts.tobytes() + faces.tobytes()).hexdigest()
 

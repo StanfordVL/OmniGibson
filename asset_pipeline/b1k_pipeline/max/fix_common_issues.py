@@ -104,45 +104,70 @@ def processFile(filename: pathlib.Path):
     # Prebake textures
     # b1k_pipeline.max.prebake_textures.process_open_file()
 
+    # Delete meta links from non-zero instances
+    for obj in rt.objects:
+        match = b1k_pipeline.utils.parse_name(obj.name)
+        if not match:
+            continue
+        if match.group("instance_id") == "0":
+            continue
+        if not match.group("meta_type"):
+            continue
+        rt.delete(obj)
+
+    # Delete upper links from non-zero instances
+    for obj in rt.objects:
+        match = b1k_pipeline.utils.parse_name(obj.name)
+        if not match:
+            continue
+        if match.group("instance_id") == "0":
+            continue
+        if match.group("joint_side") != "upper":
+            continue
+        rt.delete(obj)
+
+    # Delete parts from non-zero instances
+    for obj in rt.objects:
+        if not obj.parent:
+            continue
+        tags = {"subpart", "extrapart", "connectedpart"}
+        if not any("T" + tag in obj.name for tag in tags):
+            continue
+        match = b1k_pipeline.utils.parse_name(obj.parent.name)
+        if not match:
+            continue
+        if match.group("instance_id") == "0":
+            continue
+        rt.delete(obj)
+
     # Update UV unwrap to use correct attribute
     for obj in rt.objects:
         # Get the attribute that's currently on there
-        defs = rt.custAttributes.getDefs(obj)
-        if defs is None:
-            continue
-        prebake_data_attrs = [x for x in defs if x.name == "prebakeData"]
-        assert (
-            len(prebake_data_attrs) <= 1
-        ), f"Multiple prebakeData attributes found on {obj.name}"
-        if not prebake_data_attrs:
+        saved_hash = b1k_pipeline.max.prebake_textures.get_recorded_uv_unwrapping_hash(
+            obj
+        )
+        if saved_hash is None:
             continue
 
-        # Get the hash
-        (prebake_data_attr,) = prebake_data_attrs
-        on_obj = rt.custAttributes.get(obj, prebake_data_attr)
-        if not on_obj:
-            continue
-        hash_digest = on_obj.hashDigest
-
-        # Remove the attr
-        rt.custAttributes.delete(obj, prebake_data_attr)
+        # Otherwise generate the new hash and save it
+        hash_digest = b1k_pipeline.max.prebake_textures.hash_object(obj)
 
         # Add the new attr
         b1k_pipeline.max.prebake_textures.set_recorded_uv_unwrapping_hash(
             obj, hash_digest
         )
 
-    # Exit isolate mode
-    rt.IsolateSelection.ExitIsolateSelectionMode()
+    # # Exit isolate mode
+    # rt.IsolateSelection.ExitIsolateSelectionMode()
 
-    # Unhide everything
-    for obj in rt.objects:
-        obj.isHidden = False
+    # # Unhide everything
+    # for obj in rt.objects:
+    #     obj.isHidden = False
 
-    # Hide collision meshes
-    for obj in rt.objects:
-        if "Mcollision" in obj.name:
-            obj.isHidden = True
+    # # Hide collision meshes
+    # for obj in rt.objects:
+    #     if "Mcollision" in obj.name:
+    #         obj.isHidden = True
 
     # Save again.
     new_filename = processed_fn(filename)

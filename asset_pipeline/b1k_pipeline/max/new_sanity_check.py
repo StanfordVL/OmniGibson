@@ -173,15 +173,12 @@ class SanityCheck:
         self.expect(is_valid_name, f"{row.object_name} has bad name.")
         return is_valid_name
 
-    def validate_bad_object(self, row):
-        # Get the object model ID
-        model_id = row.name_model_id
-
+    def get_recorded_vertex_and_face_count(self, model_id):
         # Look the provider up from the inventory file
         provider = self._providers.get(model_id, None)
         self.expect(
             provider is not None,
-            f"{row.object_name} has no provider in the inventory file.",
+            f"{model_id} has no provider in the inventory file.",
         )
 
         if provider is None:
@@ -200,24 +197,14 @@ class SanityCheck:
         vertex_and_face_counts = object_list_data["vertex_and_face_counts"]
         self.expect(
             model_id in vertex_and_face_counts,
-            f"{row.object_name} has no vertex/face count in the object list file for provider {provider}.",
+            f"{model_id} has no vertex/face count in the object list file for provider {provider}.",
         )
 
         if model_id not in vertex_and_face_counts:
             return
 
         recorded_vertex_count, recorded_face_count = vertex_and_face_counts[model_id]
-        obj = row.object._obj
-        real_vertex_count = rt.polyop.getNumVerts(obj)
-        real_face_count = rt.polyop.getNumFaces(obj)
-        self.expect(
-            real_vertex_count == recorded_vertex_count,
-            f"{row.object_name} has different vertex count than recorded in provider: {real_vertex_count} != {recorded_vertex_count}.",
-        )
-        self.expect(
-            real_face_count == recorded_face_count,
-            f"{row.object_name} has different face count than recorded in provider: {real_face_count} != {recorded_face_count}.",
-        )
+        return recorded_vertex_count, recorded_face_count
 
     def validate_object(self, row):
         # Check that the category exists on the spreadsheet
@@ -269,13 +256,12 @@ class SanityCheck:
             f"{row.object_name} is not rendering the baked material in the viewport. Select the baked material for viewport.",
         )
 
-        # TODO: Reenable after finding out why this is failing.
-        # current_hash = hash_object(obj)
-        # recorded_hash = get_recorded_uv_unwrapping_hash(obj)
-        # self.expect(
-        #     recorded_hash == current_hash,
-        #     f"{row.object_name} has different UV unwrapping than recorded. Reunwrap the object.",
-        # )
+        current_hash = hash_object(obj)
+        recorded_hash = get_recorded_uv_unwrapping_hash(obj)
+        self.expect(
+            recorded_hash == current_hash,
+            f"{row.object_name} has different UV unwrapping than recorded. Reunwrap the object.",
+        )
 
         # Check that there are no dead elements
         self.expect(
@@ -692,6 +678,64 @@ class SanityCheck:
                     f"{row.name_mesh_basename} meta type {meta_type} ID {meta_id} has non-continuous subids {sorted(meta_subids)}",
                 )
 
+    def validate_model_instance_group(self, group):
+        # Check that the model instance group has a base link.
+        self.expect(
+            "base_link" in group["name_link_name"].unique(),
+            f"Model ID {group['name_model_id'].iloc[0]} is missing 'base_link'.",
+        )
+
+        # Get the model and instance ID
+        assert group["name_model_id"].nunique() == 1
+        model_id = group["name_model_id"].iloc[0]
+        assert group["name_instance_id"].nunique() == 1
+        instance_id = group["name_instance_id"].iloc[0]
+
+        # First assert that the group has exactly one value for name_bad
+        self.expect(
+            group["name_bad"].nunique() <= 1,
+            f"Model ID {group['name_model_id'].iloc[0]} has inconsistent bad values: {group['name_bad'].unique()}.",
+        )
+
+        # If the instance group belongs to a bad object, validate the bad object matches the
+        # total vertex and face count from the other file.
+        if group["name_bad"].iloc[0]:
+            # Compute the total vertex and face count for the model instance group
+            real_vertex_count = group["vertex_count"].sum()
+            real_face_count = group["face_count"].sum()
+            # Get the recorded vertex and face count for the model ID
+            recorded_vertex_count, recorded_face_count = (
+                self.get_recorded_vertex_and_face_count(model_id)
+            )
+            # Check that the total vertex and face count matches the recorded vertex and face count
+            print(
+                model_id,
+                real_vertex_count,
+                recorded_vertex_count,
+                real_vertex_count == recorded_vertex_count,
+            )
+            self.expect(
+                real_vertex_count == recorded_vertex_count,
+                f"{model_id}-{instance_id} has different vertex count than recorded in provider: {real_vertex_count} != {recorded_vertex_count}.",
+            )
+            self.expect(
+                real_face_count == recorded_face_count,
+                f"{model_id}-{instance_id} has different face count than recorded in provider: {real_face_count} != {recorded_face_count}.",
+            )
+
+    def validate_model_group(self, group):
+        # Check that every instance of this model group has the same set of links.
+        self.expect(
+            group.groupby("name_instance_id")["name_link_name"]
+            .apply(frozenset)
+            .nunique()
+            == 1,
+            f"Inconsistent link sets within model ID {group['name_model_id'].iloc[0]}.",
+        )
+
+        # Then individually validate each of the model instances
+        group.groupby("name_instance_id").apply(self.validate_model_instance_group)
+
     def run(self):
         self.reset()
 
@@ -708,7 +752,6 @@ class SanityCheck:
         # Add some helpful data
         df["object_name"] = df["object"].map(lambda x: x.name)
         df["base_object"] = df["object"].map(lambda x: x.baseObject)
-        df["vertex_count"] = df["object"].map(lambda x: len(x.vertices))
         df["type"] = df["object"].map(lambda x: classOf(x))
 
         # Complain about and remove objects that are the wrong type.
@@ -745,41 +788,25 @@ class SanityCheck:
         df = pd.concat([df, applied_df], axis="columns")
         # no-link-name objects are matched with the base link.
         df["name_link_name"] = df["name_link_name"].fillna("base_link")
-        columns = set(df.columns)
 
-        bad_objs = df[
-            (df["type"] == rt.Editable_Poly)
-            & df["name_bad"].notnull()
-            & df["name_meta_type"].isnull()
+        non_meta_polies = df[
+            (df["type"] == rt.Editable_Poly) & df["name_meta_type"].isnull()
         ]
-        bad_objs.apply(self.validate_bad_object, axis="columns")
-
-        # Run the single-object validation checks.
-        objs = df[
-            (df["type"] == rt.Editable_Poly)
-            & df["name_bad"].isnull()
-            & df["name_meta_type"].isnull()
-        ]
-        objs.apply(self.validate_object, axis="columns")
+        non_meta_polies["vertex_count"] = non_meta_polies["object"].map(
+            lambda x: rt.polyop.getNumVerts(x._obj)
+        )
+        non_meta_polies["face_count"] = non_meta_polies["object"].map(
+            lambda x: rt.polyop.getNumFaces(x._obj)
+        )
 
         # Check that when grouped by model ID, the instances all have the same set
         # of links, and that "base_link"  is included.
-        grouped_by_model = df.groupby("name_model_id")
-        grouped_by_model.apply(
-            lambda group: self.expect(
-                "base_link" in group["name_link_name"].unique(),
-                f"Model ID {group['name_model_id'].iloc[0]} is missing 'base_link'.",
-            )
-        )
-        grouped_by_model.apply(
-            lambda group: self.expect(
-                group.groupby("name_instance_id")["name_link_name"]
-                .apply(frozenset)
-                .nunique()
-                == 1,
-                f"Inconsistent link sets within model ID {group['name_model_id'].iloc[0]}.",
-            )
-        )
+        grouped_by_model = non_meta_polies.groupby("name_model_id")
+        grouped_by_model.apply(self.validate_model_group)
+
+        # Run the single-object validation checks.
+        objs = non_meta_polies[non_meta_polies["name_bad"].isnull()]
+        objs.apply(self.validate_object, axis="columns")
 
         # Check that instance name-based grouping is equal to instance-based grouping.
         groups_by_base_object = objs.groupby(["base_object"], sort=False, dropna=False)
