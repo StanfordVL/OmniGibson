@@ -13,6 +13,7 @@ import pymxs
 import tqdm
 
 import b1k_pipeline.utils
+import b1k_pipeline.max.prebake_textures
 
 rt = pymxs.runtime
 RENDER_PRESET_FILENAME = str(
@@ -49,7 +50,6 @@ def processFile(filename: pathlib.Path):
     #         assert to_name not in existing_layer_names, f"Layer {to_name} already exists"
     #         layer.setName(to_name)
 
-
     # Fix any old names
     # objs_by_model = defaultdict(list)
     # for obj in rt.objects:
@@ -74,32 +74,34 @@ def processFile(filename: pathlib.Path):
     #         obj.name = obj.name.replace(old_str, new_str)
 
     # Get all editable polies
-    for obj in tqdm.tqdm(list(rt.objects)):
-        if rt.classOf(obj) != rt.Editable_Poly:
-            continue
-       
-        # Check all faces are triangular
-        faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
-        faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
-        if not all(len(f) == 3 for f in faces):
-            # print("Need to triangulate", obj.name)
+    # for obj in tqdm.tqdm(list(rt.objects)):
+    #     if rt.classOf(obj) != rt.Editable_Poly:
+    #         continue
 
-            # Turn to mesh first
-            ttm = rt.Turn_To_Mesh()
-            rt.addmodifier(obj, ttm)
+    #     # Check all faces are triangular
+    #     faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
+    #     faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
+    #     if not all(len(f) == 3 for f in faces):
+    #         # print("Need to triangulate", obj.name)
 
-            # Triangulate
-            ttp = rt.Turn_To_Poly()
-            ttp.limitPolySize = True
-            ttp.maxPolySize = 3
-            rt.addmodifier(obj, ttp)
-            rt.maxOps.collapseNodeTo(obj, 1, True)
+    #         # Turn to mesh first
+    #         ttm = rt.Turn_To_Mesh()
+    #         rt.addmodifier(obj, ttm)
 
-        # Check that there are no dead elements
-        if rt.polyop.GetHasDeadStructs(obj) != 0:
-            # Remove dead structs
-            # print("Need to collapse", obj.name)
-            rt.polyop.CollapseDeadStructs(obj)
+    #         # Triangulate
+    #         ttp = rt.Turn_To_Poly()
+    #         ttp.limitPolySize = True
+    #         ttp.maxPolySize = 3
+    #         rt.addmodifier(obj, ttp)
+    #         rt.maxOps.collapseNodeTo(obj, 1, True)
+
+    #     # Check that there are no dead elements
+    #     if rt.polyop.GetHasDeadStructs(obj) != 0:
+    #         # Remove dead structs
+    #         # print("Need to collapse", obj.name)
+    #         rt.polyop.CollapseDeadStructs(obj)
+
+    b1k_pipeline.max.prebake_textures.process_open_file()
 
     # Save again.
     new_filename = processed_fn(filename)
@@ -107,9 +109,15 @@ def processFile(filename: pathlib.Path):
 
 
 def fix_common_issues_in_all_files():
+    left_files = [
+        "house_single_floor",
+        "restaurant_asian",
+        "restaurant_brunch",
+    ]
     candidates = [
         pathlib.Path(x)
-        for x in glob.glob(r"D:\ig_pipeline\cad\scenes\*\processed.max")
+        for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        if pathlib.Path(x).parts[-2] in left_files
     ]
     # has_matching_processed = [processed_fn(x).exists() for x in candidates]
     for i, f in enumerate(tqdm.tqdm(candidates)):

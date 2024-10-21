@@ -15,6 +15,10 @@ import trimesh.transformations
 from scipy.spatial.transform import Rotation
 
 import b1k_pipeline.utils
+from b1k_pipeline.max.prebake_textures import (
+    get_recorded_uv_unwrapping_hash,
+    hash_object,
+)
 
 rt = pymxs.runtime
 
@@ -39,19 +43,21 @@ ALLOWED_PART_TAGS = {
 
 
 ALLOWED_META_TYPES = {
-    'fluidsource': "dimensionless",
-    'togglebutton': "primitive",
-    'attachment': "dimensionless",
-    'heatsource': "dimensionless",
-    'com': "dimensionless",
-    'particleapplier': "primitive",
-    'particleremover': "primitive",
-    'fluidsink': "primitive",
-    'slicer': "primitive",
-    'fillable': "primitive",
-    'collision': "convexmesh",
+    "fluidsource": "dimensionless",
+    "togglebutton": "primitive",
+    "attachment": "dimensionless",
+    "heatsource": "dimensionless",
+    "com": "dimensionless",
+    "particleapplier": "primitive",
+    "particleremover": "primitive",
+    "fluidsink": "primitive",
+    "slicer": "primitive",
+    "fillable": "primitive",
+    "collision": "convexmesh",
 }
-assert not (set(ALLOWED_META_TYPES.values()) - {"dimensionless", "primitive", "convexmesh"}), "Found invalid meta type mapping"
+assert not (
+    set(ALLOWED_META_TYPES.values()) - {"dimensionless", "primitive", "convexmesh"}
+), "Found invalid meta type mapping"
 
 
 def get_required_meta_links(category):
@@ -62,12 +68,15 @@ def is_light_required(category):
     # TODO: Make this more robust.
     return "light" in category or "lamp" in category
 
+
 def compute_shear(obj):
     # Check that object satisfies no-shear rule.
     object_transform = np.hstack(
         [b1k_pipeline.utils.mat2arr(obj.objecttransform), [[0], [0], [0], [1]]]
     ).T
-    transform = np.hstack([b1k_pipeline.utils.mat2arr(obj.transform), [[0], [0], [0], [1]]]).T
+    transform = np.hstack(
+        [b1k_pipeline.utils.mat2arr(obj.transform), [[0], [0], [0], [1]]]
+    ).T
     obj_to_pivot = np.linalg.inv(transform) @ object_transform
     shear = trimesh.transformations.decompose_matrix(np.linalg.inv(obj_to_pivot))[1]
     return shear
@@ -96,8 +105,10 @@ class ObjectWrapper(object):
             raise AttributeError()
         return getattr(self._obj, attr)
 
+
 def classOf(obj_wrapper):
     return rt.classOf(obj_wrapper._obj)
+
 
 class SanityCheck:
     def __init__(self):
@@ -136,7 +147,10 @@ class SanityCheck:
                 rt.FreeCamera,
                 rt.Plane,
             ]
-            self.expect(is_valid_root, f"Root-level object {row.object_name} has disallowed type {row.type}.")
+            self.expect(
+                is_valid_root,
+                f"Root-level object {row.object_name} has disallowed type {row.type}.",
+            )
         return is_valid_type
 
     def is_valid_name(self, row):
@@ -180,13 +194,46 @@ class SanityCheck:
         # Unwrap OBJ for below cases.
         obj = row.object._obj
 
+        self.expect(
+            rt.classOf(obj.material) == rt.Shell_Material,
+            f"{row.object_name} has non-shell material. Run texture baking.",
+        )
+
+        self.expect(
+            rt.classOf(obj.material) == rt.Shell_Material
+            and obj.material.renderMtlIndex == 1,
+            f"{row.object_name} is not rendering the baked material. Select the baked material for rendering or rebake.",
+        )
+
+        self.expect(
+            rt.classOf(obj.material) == rt.Shell_Material
+            and obj.material.viewportMtlIndex == 1,
+            f"{row.object_name} is not rendering the baked material in the viewport. Select the baked material for viewport.",
+        )
+
+        current_hash = hash_object(obj)
+        recorded_hash = get_recorded_uv_unwrapping_hash(obj)
+        self.expect(
+            recorded_hash == current_hash,
+            f"{row.object_name} has different UV unwrapping than recorded. Reunwrap the object.",
+        )
+
         # Check that there are no dead elements
-        self.expect(rt.polyop.GetHasDeadStructs(obj) == 0, f"{row.object_name} has dead structs. Apply the Triangulate script.")
-        
+        self.expect(
+            rt.polyop.GetHasDeadStructs(obj) == 0,
+            f"{row.object_name} has dead structs. Apply the Triangulate script.",
+        )
+
         # Get vertices and faces into numpy arrays for conversion
-        faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
+        faces_maxscript = [
+            rt.polyop.getFaceVerts(obj, i + 1)
+            for i in range(rt.polyop.GetNumFaces(obj))
+        ]
         faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
-        self.expect(all(len(f) == 3 for f in faces), f"{row.object_name} has non-triangular faces. Apply the Triangulate script.")
+        self.expect(
+            all(len(f) == 3 for f in faces),
+            f"{row.object_name} has non-triangular faces. Apply the Triangulate script.",
+        )
 
         # Check that object satisfies the scale condition.
         scale = np.array(row.object.scale)
@@ -226,13 +273,21 @@ class SanityCheck:
         if tags_str:
             tags = set([x[1:] for x in tags_str.split("-") if x])
         invalid_tags = tags - (ALLOWED_TAGS | ALLOWED_PART_TAGS)
-        self.expect(not invalid_tags, f"{row.object_name} has invalid tags {invalid_tags}.")
+        self.expect(
+            not invalid_tags, f"{row.object_name} has invalid tags {invalid_tags}."
+        )
 
         part_tags = tags & ALLOWED_PART_TAGS
         if row.object.parent is None:
-            self.expect(not part_tags, f"{row.object_name} is not under another object but contains part tags {part_tags}.")
+            self.expect(
+                not part_tags,
+                f"{row.object_name} is not under another object but contains part tags {part_tags}.",
+            )
         else:
-            self.expect(part_tags, f"Part object {row.object_name} should be marked with a part tag, one of: {ALLOWED_PART_TAGS}.")
+            self.expect(
+                part_tags,
+                f"Part object {row.object_name} should be marked with a part tag, one of: {ALLOWED_PART_TAGS}.",
+            )
 
         # Validate meta stuff
         if int(row.name_instance_id) == 0:
@@ -348,24 +403,54 @@ class SanityCheck:
             obj = obj._obj
 
             # Expect that collision meshes do not share instances in the scene
-            self.expect(not [x for x in rt.objects if x.baseObject == obj.baseObject and x != obj], f"{obj.name} should not have instances.")
-            
+            self.expect(
+                not [
+                    x for x in rt.objects if x.baseObject == obj.baseObject and x != obj
+                ],
+                f"{obj.name} should not have instances.",
+            )
+
             # Check that there are no dead elements
-            self.expect(rt.polyop.GetHasDeadStructs(obj) == 0, f"{obj.name} has dead structs. Apply the Triangulate script.")
-            
+            self.expect(
+                rt.polyop.GetHasDeadStructs(obj) == 0,
+                f"{obj.name} has dead structs. Apply the Triangulate script.",
+            )
+
             # Get vertices and faces into numpy arrays for conversion
-            verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
-            faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
-            faces = np.array([[int(v) - 1 for v in f] for f in faces_maxscript if f is not None])
+            verts = np.array(
+                [
+                    rt.polyop.getVert(obj, i + 1)
+                    for i in range(rt.polyop.GetNumVerts(obj))
+                ]
+            )
+            faces_maxscript = [
+                rt.polyop.getFaceVerts(obj, i + 1)
+                for i in range(rt.polyop.GetNumFaces(obj))
+            ]
+            faces = np.array(
+                [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
+            )
             self.expect(len(faces) > 0, f"{obj.name} has no faces.")
-            self.expect(all(len(f) == 3 for f in faces), f"{obj.name} has non-triangular faces. Apply the Triangulate script.")
+            self.expect(
+                all(len(f) == 3 for f in faces),
+                f"{obj.name} has non-triangular faces. Apply the Triangulate script.",
+            )
 
             # Split the faces into elements
-            elems = {tuple(rt.polyop.GetElementsUsingFace(obj, i + 1)) for i in range(rt.polyop.GetNumFaces(obj))}
-            self.expect(len(elems) <= 32, f"{obj.name} should not have more than 32 elements. Has {len(elems)} elements.")
+            elems = {
+                tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
+                for i in range(rt.polyop.GetNumFaces(obj))
+            }
+            self.expect(
+                len(elems) <= 32,
+                f"{obj.name} should not have more than 32 elements. Has {len(elems)} elements.",
+            )
             elems = np.array(list(elems))
-            self.expect(not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements")
-            
+            self.expect(
+                not np.any(np.sum(elems, axis=0) > 1),
+                f"{obj.name} has same face appear in multiple elements",
+            )
+
             # Iterate through the elements
             for i, elem in enumerate(elems):
                 # Load the mesh into trimesh and expect convexity
@@ -374,7 +459,10 @@ class SanityCheck:
                 m.remove_unreferenced_vertices()
                 self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
                 # self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
-                self.expect(len(m.split()) == 1, f"{obj.name} element {i} has elements trimesh still finds splittable")
+                self.expect(
+                    len(m.split()) == 1,
+                    f"{obj.name} element {i} has elements trimesh still finds splittable",
+                )
         except Exception as e:
             self.expect(False, str(e))
 
@@ -388,27 +476,41 @@ class SanityCheck:
 
         # Expect that all of the children are valid meta-links / lights
         found_ml_types = set()
-        found_ml_subids_for_id = collections.defaultdict(lambda: collections.defaultdict(list))
+        found_ml_subids_for_id = collections.defaultdict(
+            lambda: collections.defaultdict(list)
+        )
         for child in children:
             # Otherwise, we can validate the individual meta link
             match = b1k_pipeline.utils.parse_name(child.name)
             if match is None:
-                self.expect(False, f"{child.name} is an invalid meta link under {row.object_name}.")
+                self.expect(
+                    False,
+                    f"{child.name} is an invalid meta link under {row.object_name}.",
+                )
                 continue
 
             # If it's an EditablePoly with no meta tag, then it will be processed as a root object too. Safe to skip.
             if classOf(child) == rt.Editable_Poly and not match.group("meta_type"):
                 continue
 
-            self.expect(match.group("mesh_basename") == row.name_mesh_basename, f"Meta link {child.name} base name doesnt match parent {row.object_name}")
+            self.expect(
+                match.group("mesh_basename") == row.name_mesh_basename,
+                f"Meta link {child.name} base name doesnt match parent {row.object_name}",
+            )
 
             # Keep track of the meta links we have
-            self.expect(match.group("meta_type"), f"Meta object {child.name} should have a meta link type in its name.")
+            self.expect(
+                match.group("meta_type"),
+                f"Meta object {child.name} should have a meta link type in its name.",
+            )
             meta_link_type = match.group("meta_type")
             if meta_link_type not in ALLOWED_META_TYPES:
-                self.expect(False, f"Meta link type {meta_link_type} not in list of allowed meta link types: {ALLOWED_META_TYPES.keys()}")
+                self.expect(
+                    False,
+                    f"Meta link type {meta_link_type} not in list of allowed meta link types: {ALLOWED_META_TYPES.keys()}",
+                )
                 continue
-            
+
             found_ml_types.add(meta_link_type)
 
             # Keep track of subids for this meta ID
@@ -421,16 +523,27 @@ class SanityCheck:
             found_ml_subids_for_id[meta_link_type][meta_id].append(meta_subid)
 
             if ALLOWED_META_TYPES[meta_link_type] == "dimensionless":
-                self.expect(classOf(child) == rt.Point, f"Dimensionless {meta_link_type} meta link {child.name} should be of Point instead of {classOf(child)}")
+                self.expect(
+                    classOf(child) == rt.Point,
+                    f"Dimensionless {meta_link_type} meta link {child.name} should be of Point instead of {classOf(child)}",
+                )
 
                 # Check that the position and orientation are essentially identical between the transform and the objecttransform
                 transform_pos = child.transform.position
                 transform_rot = Rotation.from_quat(quat2arr(child.transform.rotation))
                 object_transform_pos = child.objecttransform.position
-                object_transform_rot = Rotation.from_quat(quat2arr(child.objecttransform.rotation))
-                self.expect(np.allclose(transform_pos, object_transform_pos, atol=1e-3), f"Dimensionless {meta_link_type} meta link {child.name} has nonzero object offset position.")
+                object_transform_rot = Rotation.from_quat(
+                    quat2arr(child.objecttransform.rotation)
+                )
+                self.expect(
+                    np.allclose(transform_pos, object_transform_pos, atol=1e-3),
+                    f"Dimensionless {meta_link_type} meta link {child.name} has nonzero object offset position.",
+                )
                 delta_rot = (transform_rot * object_transform_rot.inv()).magnitude()
-                self.expect(np.isclose(delta_rot, 0, atol=1e-3), f"Dimensionless {meta_link_type} meta link {child.name} has nonzero object offset rotation.")
+                self.expect(
+                    np.isclose(delta_rot, 0, atol=1e-3),
+                    f"Dimensionless {meta_link_type} meta link {child.name} has nonzero object offset rotation.",
+                )
             elif ALLOWED_META_TYPES[meta_link_type] == "primitive":
                 volumetric_allowed_types = {
                     rt.Box,
@@ -438,7 +551,10 @@ class SanityCheck:
                     rt.Sphere,
                     rt.Cone,
                 }
-                self.expect(classOf(child) in volumetric_allowed_types, f"Volumetric {meta_link_type} meta link {child.name} should be one of {volumetric_allowed_types} instead of {classOf(child)}")
+                self.expect(
+                    classOf(child) in volumetric_allowed_types,
+                    f"Volumetric {meta_link_type} meta link {child.name} should be one of {volumetric_allowed_types} instead of {classOf(child)}",
+                )
 
                 scale = np.array(list(child.objecttransform.scale))
                 if classOf(child) == rt.Sphere:
@@ -449,36 +565,65 @@ class SanityCheck:
                     size = np.array([child.radius, child.radius, child.height]) * scale
                 elif classOf(child) == rt.Cone:
                     # Cones should have radius1 as 0 and radius2 nonzero
-                    self.expect(np.isclose(child.radius1, 0), f"Cone {child.name} radius1 should be zero.")
-                    self.expect(not np.isclose(child.radius2, 0) and child.radius2 > 0, f"Cone {child.name} radius2 should be nonzero.")
-                    size = np.array([child.radius2, child.radius2, child.height]) * scale
+                    self.expect(
+                        np.isclose(child.radius1, 0),
+                        f"Cone {child.name} radius1 should be zero.",
+                    )
+                    self.expect(
+                        not np.isclose(child.radius2, 0) and child.radius2 > 0,
+                        f"Cone {child.name} radius2 should be nonzero.",
+                    )
+                    size = (
+                        np.array([child.radius2, child.radius2, child.height]) * scale
+                    )
                 # self.expect(np.all(size > 0), f"Volumetric {meta_link_type} meta link {child.name} should have positive size/scale combo.")
-                    
+
             elif ALLOWED_META_TYPES[meta_link_type] == "convexmesh":
                 # TODO: Expect that each element is a convex mesh
-                self.expect(classOf(child) == rt.Editable_Poly, f"Convex mesh {meta_link_type} meta link {child.name} should be of Editable Poly instead of {classOf(child)}")
+                self.expect(
+                    classOf(child) == rt.Editable_Poly,
+                    f"Convex mesh {meta_link_type} meta link {child.name} should be of Editable Poly instead of {classOf(child)}",
+                )
             else:
-                raise ValueError("Don't know how to process meta type " + ALLOWED_META_TYPES[meta_link_type])
-            
+                raise ValueError(
+                    "Don't know how to process meta type "
+                    + ALLOWED_META_TYPES[meta_link_type]
+                )
+
             if meta_link_type == "collision":
                 self.validate_collision(child)
             elif meta_link_type == "attachment":
                 attachment_type = match.group("meta_id")
-                self.expect(len(attachment_type) > 0, f"Missing attachment type on object {row.object_name}")
-                self.expect(attachment_type[-1] in "MF", f"Invalid attachment gender {attachment_type} on object {row.object_name}")
+                self.expect(
+                    len(attachment_type) > 0,
+                    f"Missing attachment type on object {row.object_name}",
+                )
+                self.expect(
+                    attachment_type[-1] in "MF",
+                    f"Invalid attachment gender {attachment_type} on object {row.object_name}",
+                )
                 attachment_type = attachment_type[:-1]
-                self.expect(len(attachment_type) > 0, f"Missing attachment type on object {row.object_name}")
+                self.expect(
+                    len(attachment_type) > 0,
+                    f"Missing attachment type on object {row.object_name}",
+                )
 
         # Check that the meta links match what's needed
         required_meta_types = get_required_meta_links(row.name_category)
         missing_meta_types = required_meta_types - found_ml_types
-        self.expect(not missing_meta_types, f"Expected meta types for {row.object_name} are missing: {missing_meta_types}")
+        self.expect(
+            not missing_meta_types,
+            f"Expected meta types for {row.object_name} are missing: {missing_meta_types}",
+        )
 
         # Check that meta subids are correct:
         for meta_type, meta_ids_to_subids in found_ml_subids_for_id.items():
             for meta_id, meta_subids in meta_ids_to_subids.items():
                 expected_subids = {str(x) for x in range(len(meta_subids))}
-                self.expect(set(meta_subids) == expected_subids, f"{row.name_mesh_basename} meta type {meta_type} ID {meta_id} has non-continuous subids {sorted(meta_subids)}")
+                self.expect(
+                    set(meta_subids) == expected_subids,
+                    f"{row.name_mesh_basename} meta type {meta_type} ID {meta_id} has non-continuous subids {sorted(meta_subids)}",
+                )
 
     def run(self):
         self.reset()
@@ -537,7 +682,11 @@ class SanityCheck:
         columns = set(df.columns)
 
         # Run the single-object validation checks.
-        objs = df[(df["type"] == rt.Editable_Poly) & df["name_bad"].isnull() & df["name_meta_type"].isnull()]
+        objs = df[
+            (df["type"] == rt.Editable_Poly)
+            & df["name_bad"].isnull()
+            & df["name_meta_type"].isnull()
+        ]
         objs.apply(self.validate_object, axis="columns")
 
         # Check that instance name-based grouping is equal to instance-based grouping.
