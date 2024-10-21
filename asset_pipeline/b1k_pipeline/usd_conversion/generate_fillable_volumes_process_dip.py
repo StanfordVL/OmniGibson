@@ -135,9 +135,12 @@ def check_in_contact(system, positions):
 
 def process_object(cat, mdl, out_path):
     if og.sim:
-        og.sim.clear()
+        og.clear()
     else:
         og.launch()
+
+    if og.sim.is_playing():
+        og.sim.stop()
 
     # First get the native bounding box of the object
     usd_path = DatasetObject.get_usd_path(category=cat, model=mdl)

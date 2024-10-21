@@ -101,9 +101,12 @@ def sample_fillable_point_from_top(obj, n_rays, prop_successful):
 
 def process_object(cat, mdl, out_path):
     if og.sim:
-        og.sim.clear()
+        og.clear()
     else:
         og.launch()
+
+    if og.sim.is_playing():
+        og.sim.stop()
 
     # First get the native bounding box of the object
     usd_path = DatasetObject.get_usd_path(category=cat, model=mdl)
@@ -291,7 +294,8 @@ def process_object(cat, mdl, out_path):
             additional_points.append(th.tensor(down_ray["position"]))
 
     # Append all additional points to our existing set of points
-    mesh_points = th.cat([mesh_points, th.stack(additional_points)], dim=0)
+    if additional_points:
+        mesh_points = th.cat([mesh_points, th.stack(additional_points)], dim=0)
 
     # Denormalize the mesh points based on the objects' scale
     scale = 1.0 / th.tensor(fillable.scale)

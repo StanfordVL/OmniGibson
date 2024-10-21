@@ -12,8 +12,8 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR, launch_cluster
 
-WORKER_COUNT = 4
-BATCH_SIZE = 1
+WORKER_COUNT = 1
+BATCH_SIZE = 32
 
 
 def run_on_batch(dataset_path, batch, mode):
@@ -41,6 +41,13 @@ def main():
         with pipeline_fs.open("metadata/fillables.json") as f:
             ids = {x.split("-")[1] for x in json.load(f)}
 
+        with pipeline_fs.open("metadata/fillable_assignments.json") as f:
+            assignments = json.load(f)
+
+        has_dip_log = {obj for obj in ids if os.path.exists("/scr/ig_pipeline/logs/{obj}-dip.err")}
+        no_need_dip = {k for k, v in assignments.items() if v == "ray"} # | has_dip_log
+        no_need_ray = {k for k, v in assignments.items() if v == "dip"}
+
         # with ParallelZipFS("fillable_volumes.zip", write=True) as out_fs:
         with pipeline_fs.makedirs("artifacts/parallels/fillable_volumes", recreate=True) as out_fs:
             # Copy everything over to the dataset FS
@@ -61,39 +68,49 @@ def main():
             print("Queueing batches.")
             print("Total count: ", len(object_glob))
 
-            # Make sure workers don't idle by reducing batch size when possible.
-            batch_size = min(BATCH_SIZE, math.ceil(len(object_glob) / WORKER_COUNT))
+            # First the logic for the ray method
+            ray_outputs = [fs.path.join(x, "fillable_ray.obj") for x in object_glob]
+            ray_remaining = [(x, y) for x, y in zip(object_glob, ray_outputs) if fs.path.parts(x)[-2] not in no_need_ray and not out_fs.exists(y)]
+            random.shuffle(ray_remaining)
+            ray_batch_size = min(BATCH_SIZE, math.ceil(len(ray_remaining) / WORKER_COUNT))
+
+            # Then the dip method.
+            dip_outputs = [fs.path.join(x, "fillable_dip.obj") for x in object_glob]
+            dip_remaining = [(x, y) for x, y in zip(object_glob, dip_outputs) if fs.path.parts(x)[-2] not in no_need_dip and not out_fs.exists(y)]
+            random.shuffle(dip_remaining)
+            dip_batch_size = min(BATCH_SIZE, math.ceil(len(dip_remaining) / WORKER_COUNT))
 
             futures = {}
-            for start in range(0, len(object_glob), batch_size):
-                end = start + batch_size
-                batch = object_glob[start:end]
 
-                # First the logic for the ray method
-                ray_outputs = [fs.path.join(x, "fillable_ray.obj") for x in batch]
-                ray_remaining = list(zip(*[(x, y) for x, y in zip(batch, ray_outputs) if not out_fs.exists(y)]))
-                if ray_remaining:
-                    ray_batch, ray_outputs = ray_remaining
-                    worker_future = dask_client.submit(
-                        run_on_batch,
-                        dataset_fs.getsyspath("/"),
-                        list(ray_batch),
-                        "ray",
-                        pure=False)
-                    futures[worker_future] = list(ray_outputs)
+            if ray_remaining:
+                for start in range(0, len(ray_remaining), ray_batch_size):
+                    end = start + ray_batch_size
+                    batch = ray_remaining[start:end]
 
-                # Then the dip method.
-                dip_outputs = [fs.path.join(x, "fillable_dip.obj") for x in batch]
-                dip_remaining = list(zip(*[(x, y) for x, y in zip(batch, dip_outputs) if not out_fs.exists(y)]))
-                if dip_remaining:
-                    dip_batch, dip_outputs = dip_remaining
-                    worker_future = dask_client.submit(
-                        run_on_batch,
-                        dataset_fs.getsyspath("/"),
-                        list(dip_batch),
-                        "dip",
-                        pure=False)
-                    futures[worker_future] = list(dip_outputs)
+                    if batch:
+                        ray_batch, ray_outputs = zip(*batch)
+                        worker_future = dask_client.submit(
+                            run_on_batch,
+                            dataset_fs.getsyspath("/"),
+                            list(ray_batch),
+                            "ray",
+                            pure=False)
+                        futures[worker_future] = list(ray_outputs)
+
+            if dip_remaining:
+                for start in range(0, len(dip_remaining), dip_batch_size):
+                    end = start + dip_batch_size
+                    batch = dip_remaining[start:end]
+
+                    if batch:
+                        dip_batch, dip_outputs = zip(*batch)
+                        worker_future = dask_client.submit(
+                            run_on_batch,
+                            dataset_fs.getsyspath("/"),
+                            list(dip_batch),
+                            "dip",
+                            pure=False)
+                        futures[worker_future] = list(dip_outputs)
 
             # Wait for all the workers to finish
             print("Queued all batches. Waiting for them to finish...")
