@@ -69,9 +69,10 @@ def main():
         if not match:
             continue
 
-        # Check if this is a lower mesh and not a meta link and not bad
+        # Check if this is the 0th instance and the lower mesh and not a meta link and not bad
         if (
-            match.group("joint_side") == "upper"
+            match.group("instance_id") != "0"
+            or match.group("joint_side") == "upper"
             or match.group("meta_type")
             or match.group("bad")
         ):
