@@ -19,6 +19,7 @@ import tqdm
 from scipy.spatial.transform import Rotation as R
 from scipy.spatial import ConvexHull
 import torch as th
+import networkx as nx
 from collections import defaultdict
 
 gm.HEADLESS = False
@@ -347,11 +348,14 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     # Return the convex hull of this mesh
     return tm_fillable.convex_hull
 
-def generate_fillable_mesh_for_object(obj, start_point):
+def generate_fillable_mesh_for_object(obj, selected_link_name, start_point):
+    # Walk through the link hierarchy to select the stuff below this one
+    links_to_include = set(nx.descendants(obj.articulation_tree, selected_link_name)) | {selected_link_name}
+
     tm = trimesh.util.concatenate([
         mesh_prim_to_trimesh_mesh(cm.prim, world_frame=True)
-        for link in obj.links.values()
-        for cm in link.collision_meshes.values()
+        for link_name in links_to_include
+        for cm in obj.links[link_name].collision_meshes.values()
     ])
     ray_dir = np.array([0, -1.0, 0])  # front points towards -y
 
@@ -400,14 +404,6 @@ def view_object(cat, mdl):
     fillable.set_position([0, 0, fillable.aabb_extent[2]])
     og.sim.step()
 
-    # Add a seed prim
-    aabb_extent = fillable.aabb_extent.cpu().numpy()
-    aabb_center = fillable.aabb_center.cpu().numpy()
-    start_point = aabb_center + np.array([0, 0, aabb_extent[2] * 0.125])
-    seed_prim = XFormPrim(name="seed", relative_prim_path="/seed")
-    seed_prim.load(env.scene)
-    seed_prim.set_position_orientation(th.as_tensor(start_point), th.as_tensor([0, 0, 0, 1]))
-
     # Reset keyboard bindings
     KeyboardEventHandler.KEYBOARD_CALLBACKS = {}
 
@@ -418,11 +414,12 @@ def view_object(cat, mdl):
     def stop_rendering():
         nonlocal keep_rendering
         keep_rendering = False
-    def save_assignment_and_stop(assignment, mesh=None):
+    def save_assignment_and_stop(assignment, meshes=None):
         print(f"Chose option {assignment} for {cat}/{mdl}")
-        add_assignment(mdl, assignment, mesh=mesh)
-        if mesh:
-            mesh.export(f"{gm.DATASET_PATH}/objects/{cat}/{mdl}/fillable_picked.obj")
+        add_assignment(mdl, assignment)
+        if meshes:
+            for link_name, mesh in meshes.items():
+                mesh.export(f"{gm.DATASET_PATH}/objects/{cat}/{mdl}/fillable_{link_name}.obj")
         stop_rendering()
     
     # Skip without any assignment
@@ -455,7 +452,7 @@ def view_object(cat, mdl):
         # Add the dip option chooser
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.X,
-            callback_fn=lambda: save_assignment_and_stop("dip", mesh=dip_mesh),
+            callback_fn=lambda: save_assignment_and_stop("dip", meshes={fillable.root_link_name: dip_mesh}),
         )
         print("Press X to choose the dip (red) option.")
 
@@ -469,7 +466,7 @@ def view_object(cat, mdl):
         # Add the ray option chooser
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.S,
-            callback_fn=lambda: save_assignment_and_stop("ray", mesh=ray_mesh),
+            callback_fn=lambda: save_assignment_and_stop("ray", meshes={fillable.root_link_name: ray_mesh}),
         )
         print("Press S to choose the ray (blue) option.")
 
@@ -484,61 +481,106 @@ def view_object(cat, mdl):
             # Add the combined option chooser
             KeyboardEventHandler.add_keyboard_callback(
                 key=lazy.carb.input.KeyboardInput.W,
-                callback_fn=lambda: save_assignment_and_stop("combined", mesh=combined_mesh),
+                callback_fn=lambda: save_assignment_and_stop("combined", meshes={fillable.root_link_name: combined_mesh}),
             )
             print("Press W to choose the combined (purple) option.")
 
-    # Add the GENERATE NOW option next
-    generated_meshes = []
-    generated_mesh_draw_idxes = []
+    # Add the features for the GENERATE NOW option next
+    selected_link = fillable.root_link_name
 
-    def _generate_mesh():
-        generated_mesh = generate_fillable_mesh_for_object(fillable, seed_prim.get_position_orientation()[0].numpy().copy())
-        generated_meshes.append(generated_mesh)
-        generated_mesh_draw_idxes.append(draw_mesh(generated_mesh, fillable.get_position_orientation()[0], color=(0., 1., 0., 1.)))
-        print(f"Generated mesh {len(generated_meshes)}")
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.Z,
-        callback_fn=_generate_mesh,
-    )
-    print("Press Z to generate a fillable mesh from the current seed point.")
+    # Add a seed prim
+    seed_prim = XFormPrim(name="seed", relative_prim_path="/seed")
+    seed_prim.load(env.scene)
+    def _move_seed():
+        descendants = nx.descendants(fillable.articulation_tree, selected_link) | {selected_link}
+        aabbs = th.cat([th.stack(list(fillable.links[link].aabb), dim=0) for link in descendants], dim=0)
+        aabb_low = th.min(aabbs, dim=0)
+        aabb_high = th.max(aabbs, dim=0)
+        aabb_extent = aabb_high - aabb_low
+        aabb_center = (aabb_high + aabb_low) / 2
+        start_point = aabb_center + th.as_tensor([0, 0, aabb_extent[2] * 0.125])
+        seed_prim.set_position_orientation(start_point, th.as_tensor([0, 0, 0, 1]))
+    _move_seed()
 
-    def _remove_last_generated():
-        if len(generated_meshes) == 0:
-            return
-        erase_mesh(generated_mesh_draw_idxes.pop())
-        generated_meshes.pop()
-        print(f"Removed last generated mesh")
+    def _increment_selection(inc):
+        nonlocal selected_link
+        available_links = [k for k, v in fillable.links.items() if k.collision_meshes]  # only pick links with meshes
+        selected_idx = available_links.index(selected_link)
+        new_selected_idx = (selected_idx + inc) % len(available_links)
+        selected_link = available_links[new_selected_idx]
+        _move_seed()
+        print(f"Selected link: {selected_link}")
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.A,
+        callback_fn=lambda: _increment_selection(1),
+    )
+    print("Press A to select the next link.")
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.Q,
+        callback_fn=lambda: _increment_selection(-1),
+    )
+    print("Press Q to select the previous link.")
+
+    generated_meshes = defaultdict(list)
+
+    def _generate_mesh():
+        # First check that no parent or child already has a generated mesh
+        ancestors = nx.ancestors(fillable.articulation_tree, selected_link)
+        descendants = nx.descendants(fillable.articulation_tree, selected_link)
+        if any(ancestors & set(generated_meshes)) or any(descendants & set(generated_meshes)):
+            print(f"Cannot generate mesh for {selected_link} because a parent or child already has a generated mesh.")
+            return
+
+        generated_mesh = generate_fillable_mesh_for_object(fillable, selected_link, seed_prim.get_position_orientation()[0].numpy().copy())
+        draw_idx = draw_mesh(generated_mesh, fillable.get_position_orientation()[0], color=(0., 1., 0., 1.))
+        generated_meshes[selected_link].append((generated_mesh, draw_idx))
+        print(f"Generated mesh {len(generated_meshes[selected_link])} for selected link {selected_link}")
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.K,
+        callback_fn=_generate_mesh,
+    )
+    print("Press K to generate a fillable mesh from the current seed point.")
+
+    def _remove_last_generated():
+        if len(generated_meshes[selected_link]) == 0:
+            return
+        generated_mesh, draw_idx = generated_meshes[selected_link].pop()
+        erase_mesh(draw_idx)
+        print(f"Removed last generated mesh")
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.L,
         callback_fn=_remove_last_generated,
     )
-    print("Press A to remove the last generated mesh.")
+    print("Press L to remove the last generated mesh.")
 
-    # def _clear_generated_meshes():
-    #     for idx in generated_mesh_draw_idxes:
-    #         erase_mesh(idx)
-    #     generated_mesh_draw_idxes.clear()
-    #     generated_meshes.clear()
-    #     print(f"Cleared all generated meshes.")
-    # KeyboardEventHandler.add_keyboard_callback(
-    #     key=lazy.carb.input.KeyboardInput.P,
-    #     callback_fn=_clear_generated_meshes,
-    # )
-    # print("Press P to clear all generated meshes.")
+    def _clear_generated_meshes():
+        for link, meshes in generated_meshes.items():
+            while meshes:
+                mesh, idx = meshes.pop()
+                erase_mesh(idx)
+        print(f"Cleared all generated meshes.")
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.P,
+        callback_fn=_clear_generated_meshes,
+    )
+    print("Press P to clear all generated meshes.")
 
     # Add the generated option chooser
     def _pick_generated():
-        if len(generated_meshes) == 0:
-            print("You currently do NOT have a generated mesh.")
+        if sum(len(meshes) for meshes in generated_meshes.values()) == 0:
+            print("You currently do NOT have any generated meshes.")
             return
-        generated_concat = trimesh.util.concatenate(generated_meshes)
-        save_assignment_and_stop("generated", mesh=generated_concat)
+        generated_concat = {
+            link: trimesh.util.concatenate(meshes)
+            for link, meshes in generated_meshes.items()
+            if len(meshes) > 0
+        }
+        save_assignment_and_stop("generated", meshes=generated_concat)
     KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.Q,
+        key=lazy.carb.input.KeyboardInput.Z,
         callback_fn=_pick_generated,
     )
-    print("Press Q to pick the generated option.")
+    print("Press Z to pick the generated option.")
 
     while keep_rendering:
         og.sim.step()
