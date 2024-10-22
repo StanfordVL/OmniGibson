@@ -502,12 +502,26 @@ def view_object(cat, mdl):
         seed_prim.set_position_orientation(start_point, th.as_tensor([0, 0, 0, 1]))
     _move_seed()
 
+    # Store the original hiddenness of prims
+    original_hiddenness = {
+        geom: geom.visible
+        for link in fillable.links
+        for geom in link.visual_meshes.values()
+    }
+
     def _increment_selection(inc):
         nonlocal selected_link
         available_links = [k for k, v in fillable.links.items() if k.collision_meshes]  # only pick links with meshes
         selected_idx = available_links.index(selected_link)
         new_selected_idx = (selected_idx + inc) % len(available_links)
         selected_link = available_links[new_selected_idx]
+
+        # Hide links that are not descendants of the selected link
+        descendants = nx.descendants(fillable.articulation_tree, selected_link) | {selected_link}
+        for link_name, link in fillable.links.items():
+            for geom in link.visual_meshes.values():
+                geom.visible = False if link_name not in descendants else original_hiddenness[geom]
+
         _move_seed()
         print(f"Selected link: {selected_link}")
     KeyboardEventHandler.add_keyboard_callback(
