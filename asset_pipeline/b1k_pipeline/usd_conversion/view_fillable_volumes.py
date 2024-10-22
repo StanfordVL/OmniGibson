@@ -25,7 +25,7 @@ from collections import defaultdict
 gm.HEADLESS = False
 gm.USE_ENCRYPTED_ASSETS = True
 gm.ENABLE_FLATCACHE = False
-gm.DATASET_PATH = r"D:\fillable-10-21"
+gm.DATASET_PATH = r"/scr/fillable-10-21"
 
 ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments_2.json")
 
@@ -299,13 +299,13 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     n_dim_samples = 10
     x_range = np.linspace(bbox_min_rot[0], bbox_max_rot[0], n_dim_samples)
     y_range = np.linspace(bbox_min_rot[1], bbox_max_rot[1], n_dim_samples)
-    ray_grid = np.stack(np.meshgrid(x_range, y_range, indexing="ij"), dim=-1)
+    ray_grid = np.stack(np.meshgrid(x_range, y_range, indexing="ij"), axis=-1)
     ray_grid_flattened = ray_grid.reshape(-1, 2)
 
     # Check which rays are within the polygon
     # Each inequality is of the form Ax + By + C <= 0
     # We need to check if the point satisfies all inequalities
-    is_within = np.all((ray_grid_flattened @ equations[:, :-1].T) + equations[:, -1] <= 0, dim=1)
+    is_within = np.all((ray_grid_flattened @ equations[:, :-1].T) + equations[:, -1] <= 0, axis=1)
     xy_ray_positions = ray_grid_flattened[is_within]
 
     # Shoot these rays downwards and record their poses -- add them to the point set
@@ -494,8 +494,8 @@ def view_object(cat, mdl):
     def _move_seed():
         descendants = nx.descendants(fillable.articulation_tree, selected_link) | {selected_link}
         aabbs = th.cat([th.stack(list(fillable.links[link].aabb), dim=0) for link in descendants], dim=0)
-        aabb_low = th.min(aabbs, dim=0)
-        aabb_high = th.max(aabbs, dim=0)
+        aabb_low = th.min(aabbs, dim=0).values
+        aabb_high = th.max(aabbs, dim=0).values
         aabb_extent = aabb_high - aabb_low
         aabb_center = (aabb_high + aabb_low) / 2
         start_point = aabb_center + th.as_tensor([0, 0, aabb_extent[2] * 0.125])
@@ -505,13 +505,13 @@ def view_object(cat, mdl):
     # Store the original hiddenness of prims
     original_hiddenness = {
         geom: geom.visible
-        for link in fillable.links
+        for link in fillable.links.values()
         for geom in link.visual_meshes.values()
     }
 
     def _increment_selection(inc):
         nonlocal selected_link
-        available_links = [k for k, v in fillable.links.items() if k.collision_meshes]  # only pick links with meshes
+        available_links = [k for k, v in fillable.links.items() if v.collision_meshes]  # only pick links with meshes
         selected_idx = available_links.index(selected_link)
         new_selected_idx = (selected_idx + inc) % len(available_links)
         selected_link = available_links[new_selected_idx]
@@ -609,6 +609,8 @@ def main():
     from bddl.knowledge_base import Object
     fillables = sorted(o.name.split("-") for o in Object.all_objects() if any(p.name == "fillable" for p in o.category.synset.properties))
 
+    # TODO: Assert this number for sanitychecking
+
     # Get the ones that don't have a fillable assignment
     assignments = get_assignments()
     redo_labels = {"fix", "manual", "changecollision", "fixorn"}
@@ -618,7 +620,7 @@ def main():
     fillables = [
         (cat, mdl)
         for cat, mdl in fillables
-        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx and cat == "shelf"
+        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx and mdl == "bamfsz"
     ]
     random.shuffle(fillables)
 
