@@ -7,22 +7,28 @@ import numpy as np
 import omnigibson as og
 from omnigibson.objects import DatasetObject
 from omnigibson.macros import gm
-from omnigibson.systems.system_base import get_system
+from omnigibson.prims import XFormPrim
 from omnigibson.utils.ui_utils import KeyboardEventHandler
+from omnigibson.utils.usd_utils import mesh_prim_to_trimesh_mesh
+import omnigibson.utils.transform_utils as T
 import omnigibson.lazy as lazy
 import trimesh
 import json
 import tqdm
-import random
+from scipy.spatial.transform import Rotation as R
+import torch as th
+from collections import defaultdict
 
 gm.HEADLESS = False
 gm.USE_ENCRYPTED_ASSETS = True
-gm.USE_GPU_DYNAMICS = True
-gm.ENABLE_FLATCACHE = True
+gm.ENABLE_FLATCACHE = False
+gm.DATASET_PATH = r"D:\fillable-10-21"
 
 ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments.json")
 
 MAX_BBOX = 0.3
+
+DRAWING_MESHES = []
 
 def get_assignments():
     if not os.path.exists(ASSIGNMENT_FILE):
@@ -37,51 +43,326 @@ def add_assignment(mdl, assignment):
     with open(ASSIGNMENT_FILE, "w") as f:
         json.dump(assignments, f)
 
-def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.), size=1.):
+def _draw_meshes():
     draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
-    edge_vert_idxes = mesh.edges_unique
-    N = len(edge_vert_idxes)
-    colors = [color for _ in range(N)]
-    sizes = [1. for _ in range(N)]
-    points1 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 0]] + parent_pos).tolist()]
-    points2 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 1]] + parent_pos).tolist()]
-    draw.draw_lines(points1, points2, colors, sizes)
+    draw.clear_lines()
+    for mesh, parent_pos, color, size in DRAWING_MESHES:
+        edge_vert_idxes = mesh.edges_unique
+        N = len(edge_vert_idxes)
+        colors = [color for _ in range(N)]
+        sizes = [1. for _ in range(N)]
+        points1 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 0]] + parent_pos).tolist()]
+        points2 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 1]] + parent_pos).tolist()]
+        draw.draw_lines(points1, points2, colors, sizes)
 
-def generate_particles_in_mesh(mesh, parent_pos):
-    water = get_system("water")
-    particle_radius = water.particle_radius
+def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.), size=1.):
+    DRAWING_MESHES.append((mesh, parent_pos, color, size))
+    _draw_meshes()
+    return len(DRAWING_MESHES)
 
-    # Grab the link's AABB (or fallback to obj AABB if link does not have a valid AABB),
-    # and generate a grid of points based on the sampling distance
-    
-    low, high = mesh.bounds
-    extent = high - low
-    # We sample the range of each extent minus
-    sampling_distance = 2 * particle_radius
-    n_particles_per_axis = (extent / sampling_distance).astype(int)
-    assert np.all(n_particles_per_axis), f"box is too small to sample any particle of radius {particle_radius}."
+def erase_mesh(idx):
+    DRAWING_MESHES.pop(idx)
+    _draw_meshes()
 
-    # 1e-10 is added because the extent might be an exact multiple of particle radius
-    arrs = [np.arange(l + particle_radius, h - particle_radius + 1e-10, particle_radius * 2)
-            for l, h, n in zip(low, high, n_particles_per_axis)]
-    
-    # Generate 3D-rectangular grid of points at mesh pos
-    particle_positions = np.stack([arr.flatten() for arr in np.meshgrid(*arrs)]).T
+def clear_meshes():
+    DRAWING_MESHES.clear()
+    _draw_meshes()
 
-    # Remove the particles that are outside
-    particle_positions = particle_positions[mesh.contains(particle_positions)]
+def anorm(x, axis=None, keepdims=False):
+    """Compute L2 norms alogn specified axes."""
+    return np.linalg.norm(x, axis=axis, keepdims=keepdims)
 
-    # Move the particle positions to the parent position
-    particle_positions += parent_pos[None, :]
 
-    # Remove the particles that are colliding with the object
-    particle_positions = particle_positions[np.where(water.check_in_contact(particle_positions) == 0)[0]]
+def normalize(v, axis=None, eps=1e-10):
+    """L2 Normalize along specified axes."""
+    norm = anorm(v, axis=axis, keepdims=True)
+    return v / np.where(norm < eps, eps, norm)
 
-    water.generate_particles(
-        positions=particle_positions,
+
+def vecs2quat(vec0, vec1, normalized=False):
+    """
+    Converts the angle from unnormalized 3D vectors @vec0 to @vec1 into a quaternion representation of the angle
+
+    Args:
+        vec0 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        vec1 (np.array): (..., 3) (x,y,z) 3D vector, possibly unnormalized
+        normalized (bool): If True, @vec0 and @vec1 are assumed to already be normalized and we will skip the
+            normalization step (more efficient)
+    """
+    # Normalize vectors if requested
+    if not normalized:
+        vec0 = normalize(vec0, axis=-1)
+        vec1 = normalize(vec1, axis=-1)
+
+    # Half-way Quaternion Solution -- see https://stackoverflow.com/a/11741520
+    cos_theta = np.sum(vec0 * vec1, axis=-1, keepdims=True)
+    quat_unnormalized = np.where(cos_theta == -1, np.array([1.0, 0, 0, 0]), np.concatenate([np.cross(vec0, vec1), 1 + cos_theta], axis=-1))
+    return quat_unnormalized / np.linalg.norm(quat_unnormalized, axis=-1, keepdims=True)
+
+
+def sample_radial_rays(tm, point, normal, n=40, dist=4.0):
+    """
+    Shoots @n rays radially from @point in directions orthogonal to @normal, returning any hits with @tm within @dist
+
+    Args:
+        tm (Trimesh): mesh used to sample rays
+        point (3-array): (x,y,z) origin point of rays
+        normal (3-array): normal direction of the plane for sampling radial rays
+        n (int): number of rays to shoot
+        dist (float): max distance of rays
+
+    Returns:
+        2-tuple:
+            - float: Proportion of rays cast that returned a valid hit
+            - dict: Index-mapped hit (x,y,z) locations
+    """
+    angles = np.arange(n) * 2 * np.pi / n
+    x = np.cos(angles)
+    y = np.sin(angles)
+    start_points = np.ones((n, 3)) * point.reshape(1, 3)
+    directions = np.array([x, y, np.zeros(n)]).T
+
+    # Rotate points appropriately
+    rot = R.from_quat(vecs2quat(np.array([0, 0, 1.0]), np.array(normal))).as_matrix()
+    directions = directions @ rot.T
+
+    # Run raytest
+    locations, index_ray, index_tri = tm.ray.intersects_location(
+        ray_origins=start_points,
+        ray_directions=directions,
     )
 
-    return water
+    results = defaultdict(list)
+
+    # Loop through all hits, and add to results
+    for location, idx in zip(locations, index_ray):
+        results[idx].append(location)
+
+    # Filter out for closest
+    pruned_results = dict()
+    for i in range(n):
+        if i in results:
+            result = results[i]
+            dist = np.linalg.norm(np.array(result) - point.reshape(1, 3), axis=-1)
+            min_idx = np.argmin(dist)
+            pruned_results[i] = result[min_idx]
+
+    # Return pruned results
+    return len(pruned_results) / n, pruned_results
+
+
+def shoot_ray(tm, point, direction):
+    """
+    Shoots a single ray from @start_point in direction @direction
+
+    Args:
+        tm (Trimesh): mesh used to shoot ray
+        point (3-array): (x,y,z) origin point of ray
+        direction (3-array): direction to shoot ray
+
+    Returns:
+        None or np.ndarray: None if no hit, else (x,y,z) location of nearest hit
+    """
+    # Run raytest
+    locations, index_ray, index_tri = tm.ray.intersects_location(
+        ray_origins=point.reshape(1, 3),
+        ray_directions=direction.reshape(1, 3),
+    )
+
+    if len(locations) == 0:
+        hit = None
+    else:
+        # Only keep closest
+        dists = np.linalg.norm(np.array(locations) - point.reshape(1, 3), axis=-1)
+        min_idx = np.argmin(dists)
+        hit = locations[min_idx]
+
+    return hit
+
+
+def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold=0.75, n_rays=100, scale=(1.0, 1.0, 1.0)):
+    """
+    Samples fillable volume within a given mesh @tm's cavity using raycasting
+
+    Args:
+        tm (Trimesh): Trimesh mesh to within which to sample fillable
+        start_point (3-array): (x,y,z) value used as seed starting point within the mesh
+        direction (3-array): (x,y,z) direction vector determining which direction raycasting should occur
+        hit_threshold (float): Proportion of rays that should hit each iteration of the fillable volume generation
+            for generation to continue
+        n_rays (int): Number of radial rays to shoot during each iteration. Must be divisible by 4!
+        scale (3-array): (x,y,z) scale of the object. Default is (1, 1, 1)
+
+    Returns:
+        Trimesh: The sampled trimesh fillable volume
+    """
+    n_rays_half = int(n_rays / 2)
+    n_rays_quarter = int(n_rays / 4)
+
+    # Make sure n_rays is divisible by 4
+    assert n_rays_half == n_rays / 2.0
+    assert n_rays_quarter == n_rays / 4.0
+
+    # Shoot rays at the initial start point
+    direction = np.array(direction)
+    prop_hit, hits = sample_radial_rays(tm=tm, point=start_point, normal=direction, n=n_rays)
+    assert prop_hit >= hit_threshold, f"Expected at least {hit_threshold} raycast hits, got {prop_hit} instead."
+
+    # Move point to centroid of all points of circle
+    all_points = np.array([hit for hit in hits.values()])
+    center = all_points.mean(axis=0)
+
+    # Shoot ray in downwards direction, make sure we hit some surface
+    bottom_hit = shoot_ray(tm=tm, point=center, direction=-direction)
+    assert bottom_hit is not None, "Got no valid hit when trying to shoot ray towards opposite direction!"
+
+    # Find top hit by taking convex hull of mesh and shooting ray in positive @direction
+    tm_convex = tm.convex_hull
+    top_hit = shoot_ray(tm=tm_convex, point=center, direction=direction)
+    assert top_hit is not None, "Got no valid hit within convex hull when trying to shoot ray towards positive direction!"
+
+    # Transform mesh to such that z points in @direction, and compute average diameter in this direction
+    tf = np.eye(4)
+    rot = R.from_quat(vecs2quat(np.array([0, 0, 1.0]), np.array(direction))).as_matrix()
+    tf[:3, :3] = rot
+    tm.apply_transform(tf)
+    bbox_min_rot, bbox_max_rot = tm.bounding_box.bounds
+    bbox_extent_rot = bbox_max_rot - bbox_min_rot
+    avg_diameter = np.mean(bbox_extent_rot[:2])
+    min_diameter = avg_diameter / 5.0
+    offset = avg_diameter / 20.0
+
+    # Make sure to rotate trimesh mesh back
+    tf_inv = np.eye(4)
+    tf_inv[:3, :3] = rot.T
+    tm.apply_transform(tf_inv)
+
+    # Starting at the bottom, sample points radially and iteratively move in @direction
+    mesh_points = np.array([]).reshape(0, 3)
+
+    total_distance = np.linalg.norm(top_hit - bottom_hit)
+    delta = 0.005
+    # delta = np.clip(total_distance / 8.0, 0.001, 0.05)
+    i = 0
+
+    cur_distance = (offset / 2.0)
+
+    while cur_distance <= total_distance:
+        point = bottom_hit + cur_distance * direction
+        prop_hit, hits = sample_radial_rays(tm=tm, point=point, normal=direction, n=n_rays)
+        if prop_hit < hit_threshold:
+            if i == 0:
+                # Failed to sample at all, probably a degenerate mesh, so raise an error
+                raise ValueError("Failed to sample any valid points!")
+            # Terminate, this is assumed to be the end of a valid sampleable volume
+            break
+
+        # Get all hit positions transformed into rotated direction
+        positions = np.array([hit for hit in hits.values()])
+        positions_rot = positions @ rot.T
+        # If the distance between points is less than a threshold, also break
+        if len(mesh_points) > 0 and np.any((positions_rot.max(axis=0)[:2] - positions_rot.min(axis=0)[:2]) < min_diameter):
+            break
+
+        # Compute points -- slightly offset them by @offset so they don't directly collide with edge
+        layer_rays = positions - point.reshape(1, 3)
+        layer_points = positions - offset * layer_rays / np.linalg.norm(layer_rays)
+        mesh_points = np.concatenate([mesh_points, layer_points], axis=0)
+        cur_distance += delta
+        i += 1
+
+    # Prune previous layer
+    mesh_points = mesh_points[:-len(layer_points)]
+
+    # Make sure we have nonzero set of points
+    assert len(mesh_points) > 0, "Got no valid mesh points for generating fillable mesh!"
+
+    # 5. Create fillable trimesh
+    tm_fillable_tmp = trimesh.Trimesh(vertices=np.array(mesh_points))
+
+    # Rotate it so that the z-axis points in @direction
+    tm_fillable_tmp.apply_transform(tf)
+
+    # 6. Create convex hull
+    ctm_rot = tm_fillable_tmp.convex_hull
+    ctm_rot.unmerge_vertices()
+
+    # 7. Take the projection of the convex hull with normal @direction (which, since already rotated, is simply
+    # [0, 0, 1]), and then sample rays shooting against that normal to compensate for the original offset
+    # We know the bounding box is [1, 1, 1], so sample points uniformly in XY plane
+    proj = trimesh.path.polygons.projected(ctm_rot, normal=[0, 0, 1.0])
+    n_dim_samples = 10
+    x_range = np.linspace(bbox_min_rot[0], bbox_max_rot[0], n_dim_samples)
+    y_range = np.linspace(bbox_min_rot[1], bbox_max_rot[1], n_dim_samples)
+    ray_grid = np.dstack(np.meshgrid(x_range, y_range, indexing="ij"))
+    ray_grid_flattened = ray_grid.reshape(-1, 2)
+
+    # Check which rays are within the polygon
+    is_within = proj.contains(shapely.points(ray_grid_flattened))
+    xy_ray_positions = ray_grid_flattened[is_within]
+
+    # Shoot these rays downwards and record their poses -- add them to the point set
+    z_range = np.linspace(bbox_min_rot[2], bbox_max_rot[2], n_dim_samples)
+    additional_points_rot = []
+    for xy_ray_pos in xy_ray_positions:
+        # Find a corresponding z value within the convex hull to use as the start raycasting point
+        start_samples = np.zeros((n_dim_samples, 3))
+        start_samples[:, :2] = xy_ray_pos
+        start_samples[:, 2] = z_range
+        is_contained = ctm_rot.contains(start_samples)
+        if not np.any(is_contained):
+            # Just skip this sample
+            continue
+        # Use the lowest point (i.e.: the first idx that is True) as the raycasting start point
+        z = z_range[np.where(is_contained)[0][0]]
+
+        # Raycast downwards and record the hit point
+        start = np.array([*xy_ray_pos, z])
+        hit = shoot_ray(tm=ctm_rot, point=start, direction=np.array([0, 0, -1.0]))
+
+        # If we have a valid hit, record this point
+        if hit is not None:
+            additional_points_rot.append(hit)
+
+    # Rotate the points back into the original frame
+    # Note: forward transform is points @ rot.T so inverse is points @ rot
+    additional_points = np.array(additional_points_rot) @ rot
+
+    # Append all additional points to our existing set of points
+    mesh_points = np.concatenate([mesh_points, additional_points], axis=0)
+
+    # Denormalize the mesh points based on the objects' scale
+    scale = 1.0 / np.array(scale)
+    mesh_points = mesh_points * scale.reshape(1, 3)
+
+    # Re-write to trimesh and take the finalized convex hull
+    tm_fillable = trimesh.Trimesh(vertices=np.array(mesh_points))
+
+    # Return the convex hull of this mesh
+    return tm_fillable.convex_hull
+
+def generate_fillable_mesh_for_object(obj, start_point):
+    tm = trimesh.util.concatenate([
+        mesh_prim_to_trimesh_mesh(cm.prim, world_frame=True)
+        for link in obj.links.values()
+        for cm in link.collision_meshes.values()
+    ])
+    ray_dir = np.array([0, -1.0, 0])  # front points towards -y
+
+    fillable_hull = sample_fillable_volume(
+        tm=tm,
+        start_point=start_point,
+        direction=ray_dir,
+        hit_threshold=0.75,
+        n_rays=80,
+        scale=obj.scale.cpu().numpy(),
+    )
+
+    # Transform the fillable hull to the object's frame
+    obj_transform = T.pose2mat(obj.get_position_orientation())
+    fillable_hull.apply_transform(T.pose_inv(obj_transform))
+
+    return fillable_hull
 
 def view_object(cat, mdl):
     if og.sim:
@@ -109,22 +390,22 @@ def view_object(cat, mdl):
     env = og.Environment(configs=cfg)
     og.sim.step()
 
-    water = get_system("water")
     fillable = env.scene.object_registry("name", "fillable")
     fillable.set_position([0, 0, fillable.aabb_extent[2]])
     og.sim.step()
+
+    # Add a seed prim
+    aabb_extent = fillable.aabb_extent.cpu().numpy()
+    aabb_center = fillable.aabb_center.cpu().numpy()
+    start_point = aabb_center + np.array([0, 0, aabb_extent[2] * 0.125])
+    seed_prim = XFormPrim(name="seed", relative_prim_path="/seed")
+    seed_prim.load(env.scene)
+    seed_prim.set_position_orientation(start_point, th.as_tensor([0, 0, 0, 1]))
 
     # Reset keyboard bindings
     KeyboardEventHandler.KEYBOARD_CALLBACKS = {}
 
     print("\n\nNow processing:", cat, mdl)
-
-    # Create the water resetter
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.R,
-        callback_fn=lambda: water.remove_all_particles(),
-    )
-    print("Press R to remove all water")
 
     # Create the stopper function
     keep_rendering = True
@@ -143,47 +424,12 @@ def view_object(cat, mdl):
     )
     print("Press J to skip")
 
-    # Skip with assignment that says Benjamin should fix
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.K,
-        callback_fn=lambda: save_assignment_and_stop("fix"),
-    )
-    print("Press K to indicate object needs fixing to make fillable.")
-
-    # Skip with assignment that says we should hand-annotate
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.L,
-        callback_fn=lambda: save_assignment_and_stop("manual"),
-    )
-    print("Press L to indicate neither option works despite object being fillable (hand-annotate).")
-
-    # Skip with assignment that says we should fix object orientation and retry
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.U,
-        callback_fn=lambda: save_assignment_and_stop("changecollision"),
-    )
-    print("Press U to indicate we should change the collision mesh to another automated option.")
-
-    # Skip with assignment that says we should fix object orientation and retry
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.I,
-        callback_fn=lambda: save_assignment_and_stop("fixorn"),
-    )
-    print("Press I to indicate we should retry after fixing object orientation.")
-
     # Skip with assignment that says we should remove the fillable annotation from the object
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.O,
         callback_fn=lambda: save_assignment_and_stop("notfillable"),
     )
     print("Press O to indicate we should remove the fillable annotation from the object.")
-
-    # Skip with assignment that says we should use the human-annotated volume.
-    KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.P,
-        callback_fn=lambda: save_assignment_and_stop("human"),
-    )
-    print("Press P to indicate we should use the human-annotated volume because generation will fail.")
 
     dip_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_dip.obj"
     if dip_path.exists():
@@ -198,17 +444,10 @@ def view_object(cat, mdl):
         # Draw the mesh
         draw_mesh(dip_mesh, fillable.get_position(), color=(1., 0., 0., 1.))
 
-        # Add the dip option filler
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.Z,
-            callback_fn=lambda: generate_particles_in_mesh(dip_mesh, fillable.get_position()),
-        )
-        print("Press Z to fill dip (red) with water")
-
         # Add the dip option chooser
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.X,
-            callback_fn=lambda: save_assignment_and_stop("dip"),
+            callback_fn=lambda: save_assignment_and_stop("dip", mesh=dip_mesh),
         )
         print("Press X to choose the dip (red) option.")
 
@@ -219,17 +458,10 @@ def view_object(cat, mdl):
         # Draw the mesh
         draw_mesh(ray_mesh, fillable.get_position(), color=(0., 0., 1., 1.))
 
-        # Add the ray option filler
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.A,
-            callback_fn=lambda: generate_particles_in_mesh(ray_mesh, fillable.get_position()),
-        )
-        print("Press A to fill ray (blue) with water")
-
         # Add the ray option chooser
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.S,
-            callback_fn=lambda: save_assignment_and_stop("ray"),
+            callback_fn=lambda: save_assignment_and_stop("ray", mesh=ray_mesh),
         )
         print("Press S to choose the ray (blue) option.")
 
@@ -241,20 +473,64 @@ def view_object(cat, mdl):
             # Draw the mesh
             draw_mesh(combined_mesh, fillable.get_position(), color=(1., 0., 1., 1.), size=0.5)
 
-            # Add the combined option filler
-            KeyboardEventHandler.add_keyboard_callback(
-                key=lazy.carb.input.KeyboardInput.Q,
-                callback_fn=lambda: generate_particles_in_mesh(combined_mesh, fillable.get_position()),
-            )
-            print("Press Q to fill combined (purple) with water")
-
             # Add the combined option chooser
             KeyboardEventHandler.add_keyboard_callback(
                 key=lazy.carb.input.KeyboardInput.W,
-                callback_fn=lambda: save_assignment_and_stop("combined"),
+                callback_fn=lambda: save_assignment_and_stop("combined", mesh=combined_mesh),
             )
             print("Press W to choose the combined (purple) option.")
 
+    # Add the GENERATE NOW option next
+    generated_meshes = []
+    generated_mesh_draw_idxes = []
+
+    def _generate_mesh():
+        generated_mesh = generate_fillable_mesh_for_object(fillable, seed_prim.get_position())
+        generated_meshes.append(generated_mesh)
+        generated_mesh_draw_idxes.append(draw_mesh(generated_mesh, fillable.get_position(), color=(0., 1., 0., 1.)))
+        print(f"Generated mesh {len(generated_meshes)}")
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.Z,
+        callback_fn=_generate_mesh,
+    )
+    print("Press Z to generate a fillable mesh from the current seed point.")
+
+    def _remove_last_generated():
+        if len(generated_meshes) == 0:
+            return
+        erase_mesh(generated_mesh_draw_idxes.pop())
+        generated_meshes.pop()
+        print(f"Removed last generated mesh")
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.A,
+        callback_fn=_remove_last_generated,
+    )
+    print("Press A to remove the last generated mesh.")
+
+    # def _clear_generated_meshes():
+    #     for idx in generated_mesh_draw_idxes:
+    #         erase_mesh(idx)
+    #     generated_mesh_draw_idxes.clear()
+    #     generated_meshes.clear()
+    #     print(f"Cleared all generated meshes.")
+    # KeyboardEventHandler.add_keyboard_callback(
+    #     key=lazy.carb.input.KeyboardInput.P,
+    #     callback_fn=_clear_generated_meshes,
+    # )
+    # print("Press P to clear all generated meshes.")
+
+    # Add the generated option chooser
+    def _pick_generated():
+        if len(generated_meshes) == 0:
+            print("You currently do NOT have a generated mesh.")
+            return
+        generated_concat = trimesh.util.concatenate(generated_meshes)
+        save_assignment_and_stop("generated", mesh=generated_concat)
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.Q,
+        callback_fn=_pick_generated,
+    )
+    print("Press Q to pick the generated option.")
 
     while keep_rendering:
         og.sim.step()
