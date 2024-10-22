@@ -608,13 +608,11 @@ def main():
     # Get all the models that are fillable-annotated
     from bddl.knowledge_base import Object
     fillables = sorted(o.name.split("-") for o in Object.all_objects() if any(p.name == "fillable" for p in o.category.synset.properties))
-
-    # TODO: Assert this number for sanitychecking
+    assert len(fillables) == 1031, f"Expected 1031 fillable objects, got {len(fillables)}. Uninstall BDDL and reinstall the develop branch."
 
     # Get the ones that don't have a fillable assignment
     assignments = get_assignments()
-    redo_labels = {"fix", "manual", "changecollision", "fixorn"}
-    fillables = [(cat, mdl) for cat, mdl in fillables if mdl not in assignments or assignments[mdl] in redo_labels]
+    fillables = [(cat, mdl) for cat, mdl in fillables if mdl not in assignments]
 
     # Get the ones whose model hash match our ID
     fillables = [
