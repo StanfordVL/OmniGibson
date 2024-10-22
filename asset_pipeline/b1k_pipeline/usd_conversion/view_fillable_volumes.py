@@ -1,5 +1,6 @@
 import hashlib
 import os
+import random
 import sys
 import glob
 import pathlib
@@ -16,6 +17,7 @@ import trimesh
 import json
 import tqdm
 from scipy.spatial.transform import Rotation as R
+from scipy.spatial import ConvexHull
 import torch as th
 from collections import defaultdict
 
@@ -24,7 +26,7 @@ gm.USE_ENCRYPTED_ASSETS = True
 gm.ENABLE_FLATCACHE = False
 gm.DATASET_PATH = r"D:\fillable-10-21"
 
-ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments.json")
+ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments_2.json")
 
 MAX_BBOX = 0.3
 
@@ -51,8 +53,8 @@ def _draw_meshes():
         N = len(edge_vert_idxes)
         colors = [color for _ in range(N)]
         sizes = [1. for _ in range(N)]
-        points1 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 0]] + parent_pos).tolist()]
-        points2 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 1]] + parent_pos).tolist()]
+        points1 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 0]] + parent_pos.numpy().copy()).tolist()]
+        points2 = [tuple(x) for x in (mesh.vertices[edge_vert_idxes[:, 1]] + parent_pos.numpy().copy()).tolist()]
         draw.draw_lines(points1, points2, colors, sizes)
 
 def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.), size=1.):
@@ -290,15 +292,19 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     # 7. Take the projection of the convex hull with normal @direction (which, since already rotated, is simply
     # [0, 0, 1]), and then sample rays shooting against that normal to compensate for the original offset
     # We know the bounding box is [1, 1, 1], so sample points uniformly in XY plane
-    proj = trimesh.path.polygons.projected(ctm_rot, normal=[0, 0, 1.0])
+    proj = ConvexHull(ctm_rot.vertices[:, :2].copy())
+    equations = np.array(proj.equations, dtype=np.float32)
+
     n_dim_samples = 10
     x_range = np.linspace(bbox_min_rot[0], bbox_max_rot[0], n_dim_samples)
     y_range = np.linspace(bbox_min_rot[1], bbox_max_rot[1], n_dim_samples)
-    ray_grid = np.dstack(np.meshgrid(x_range, y_range, indexing="ij"))
+    ray_grid = np.stack(np.meshgrid(x_range, y_range, indexing="ij"), dim=-1)
     ray_grid_flattened = ray_grid.reshape(-1, 2)
 
     # Check which rays are within the polygon
-    is_within = proj.contains(shapely.points(ray_grid_flattened))
+    # Each inequality is of the form Ax + By + C <= 0
+    # We need to check if the point satisfies all inequalities
+    is_within = np.all((ray_grid_flattened @ equations[:, :-1].T) + equations[:, -1] <= 0, dim=1)
     xy_ray_positions = ray_grid_flattened[is_within]
 
     # Shoot these rays downwards and record their poses -- add them to the point set
@@ -360,7 +366,7 @@ def generate_fillable_mesh_for_object(obj, start_point):
 
     # Transform the fillable hull to the object's frame
     obj_transform = T.pose2mat(obj.get_position_orientation())
-    fillable_hull.apply_transform(T.pose_inv(obj_transform))
+    fillable_hull.apply_transform(T.pose_inv(obj_transform).numpy().copy())
 
     return fillable_hull
 
@@ -400,7 +406,7 @@ def view_object(cat, mdl):
     start_point = aabb_center + np.array([0, 0, aabb_extent[2] * 0.125])
     seed_prim = XFormPrim(name="seed", relative_prim_path="/seed")
     seed_prim.load(env.scene)
-    seed_prim.set_position_orientation(start_point, th.as_tensor([0, 0, 0, 1]))
+    seed_prim.set_position_orientation(th.as_tensor(start_point), th.as_tensor([0, 0, 0, 1]))
 
     # Reset keyboard bindings
     KeyboardEventHandler.KEYBOARD_CALLBACKS = {}
@@ -412,9 +418,11 @@ def view_object(cat, mdl):
     def stop_rendering():
         nonlocal keep_rendering
         keep_rendering = False
-    def save_assignment_and_stop(assignment):
+    def save_assignment_and_stop(assignment, mesh=None):
         print(f"Chose option {assignment} for {cat}/{mdl}")
-        add_assignment(mdl, assignment)
+        add_assignment(mdl, assignment, mesh=mesh)
+        if mesh:
+            mesh.export(f"{gm.DATASET_PATH}/objects/{cat}/{mdl}/fillable_picked.obj")
         stop_rendering()
     
     # Skip without any assignment
@@ -434,7 +442,7 @@ def view_object(cat, mdl):
     dip_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_dip.obj"
     if dip_path.exists():
         # Find the scale the mesh was generated at
-        scale = np.minimum(1, MAX_BBOX / np.max(fillable.native_bbox))
+        scale = np.minimum(1, MAX_BBOX / np.max(np.asarray(fillable.native_bbox)))
 
         dip_mesh = trimesh.load(dip_path, force="mesh")
         inv_scale = 1 / scale
@@ -442,7 +450,7 @@ def view_object(cat, mdl):
         dip_mesh.apply_transform(transform)
 
         # Draw the mesh
-        draw_mesh(dip_mesh, fillable.get_position(), color=(1., 0., 0., 1.))
+        draw_mesh(dip_mesh, fillable.get_position_orientation()[0], color=(1., 0., 0., 1.))
 
         # Add the dip option chooser
         KeyboardEventHandler.add_keyboard_callback(
@@ -456,7 +464,7 @@ def view_object(cat, mdl):
         ray_mesh = trimesh.load(ray_path, force="mesh")
 
         # Draw the mesh
-        draw_mesh(ray_mesh, fillable.get_position(), color=(0., 0., 1., 1.))
+        draw_mesh(ray_mesh, fillable.get_position_orientation()[0], color=(0., 0., 1., 1.))
 
         # Add the ray option chooser
         KeyboardEventHandler.add_keyboard_callback(
@@ -471,7 +479,7 @@ def view_object(cat, mdl):
         combined_mesh = trimesh.convex.convex_hull(np.concatenate([dip_mesh.vertices, ray_mesh.vertices], axis=0))
         if not np.allclose(combined_mesh.volume, dip_mesh.volume, rtol=1e-3) and not np.allclose(combined_mesh.volume, ray_mesh.volume, rtol=1e-3):
             # Draw the mesh
-            draw_mesh(combined_mesh, fillable.get_position(), color=(1., 0., 1., 1.), size=0.5)
+            draw_mesh(combined_mesh, fillable.get_position_orientation()[0], color=(1., 0., 1., 1.), size=0.5)
 
             # Add the combined option chooser
             KeyboardEventHandler.add_keyboard_callback(
@@ -485,9 +493,9 @@ def view_object(cat, mdl):
     generated_mesh_draw_idxes = []
 
     def _generate_mesh():
-        generated_mesh = generate_fillable_mesh_for_object(fillable, seed_prim.get_position())
+        generated_mesh = generate_fillable_mesh_for_object(fillable, seed_prim.get_position_orientation()[0].numpy().copy())
         generated_meshes.append(generated_mesh)
-        generated_mesh_draw_idxes.append(draw_mesh(generated_mesh, fillable.get_position(), color=(0., 1., 0., 1.)))
+        generated_mesh_draw_idxes.append(draw_mesh(generated_mesh, fillable.get_position_orientation()[0], color=(0., 1., 0., 1.)))
         print(f"Generated mesh {len(generated_meshes)}")
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.Z,
@@ -554,8 +562,9 @@ def main():
     fillables = [
         (cat, mdl)
         for cat, mdl in fillables
-        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx
+        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx and cat == "shelf"
     ]
+    random.shuffle(fillables)
 
     for cat, mdl in tqdm.tqdm(fillables):
         if not os.path.exists(DatasetObject.get_usd_path(cat, mdl).replace(".usd", ".encrypted.usd")):
