@@ -64,7 +64,7 @@ def _draw_meshes():
 def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.), size=1.):
     DRAWING_MESHES.append((mesh, parent_pos, color, size))
     _draw_meshes()
-    return len(DRAWING_MESHES)
+    return len(DRAWING_MESHES) - 1
 
 def erase_mesh(idx):
     DRAWING_MESHES[idx] = None
@@ -370,14 +370,18 @@ def generate_fillable_mesh_for_object(obj, selected_link_name, start_point, allo
         tm = trimesh.util.concatenate([tm, tm.convex_hull])
     ray_dir = np.array([0, 0, 1])
     
-    fillable_hull = sample_fillable_volume(
-        tm=tm,
-        start_point=start_point,
-        direction=ray_dir,
-        hit_threshold=0.75,
-        n_rays=100,
-        scale=obj.scale.cpu().numpy(),
-    )
+    try:
+        fillable_hull = sample_fillable_volume(
+            tm=tm,
+            start_point=start_point,
+            direction=ray_dir,
+            hit_threshold=0.75,
+            n_rays=100,
+            scale=obj.scale.cpu().numpy(),
+        )
+    except Exception as e:
+        print(f"Failed to generate fillable volume for {obj.category}/{obj.model} at {start_point}: {e}")
+        return None
 
     # Transform the fillable hull to the object's frame
     obj_transform = T.pose2mat(obj.get_position_orientation())
@@ -588,6 +592,8 @@ def view_object(cat, mdl):
             return
 
         generated_mesh = generate_fillable_mesh_for_object(fillable, selected_link, seed_prim.get_position_orientation()[0].numpy().copy(), allow_convex_hull_hit)
+        if generated_mesh is None:
+            return
         draw_idx = draw_mesh(generated_mesh, fillable.get_position_orientation()[0], color=(0., 1., 0., 1.))
         generated_meshes[selected_link].append((generated_mesh, draw_idx, allow_convex_hull_hit))
         print(f"Generated mesh {len(generated_meshes[selected_link])} for selected link {selected_link}")
@@ -611,10 +617,10 @@ def view_object(cat, mdl):
         erase_mesh(draw_idx)
         print(f"Removed last generated mesh")
     KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.L,
+        key=lazy.carb.input.KeyboardInput.O,
         callback_fn=_remove_last_generated,
     )
-    print("Press L to remove the last generated mesh.")
+    print("Press O to remove the last generated mesh.")
 
     def _clear_generated_meshes():
         for link, meshes in generated_meshes.items():
