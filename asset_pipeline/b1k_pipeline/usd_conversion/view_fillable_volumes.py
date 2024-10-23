@@ -52,7 +52,9 @@ def _draw_meshes():
     for item in DRAWING_MESHES:
         if item is None:
             continue 
-        mesh, parent_pos, color, size = item
+        mesh, parent_pos, color, size, visible = item
+        if not visible:
+            continue
         edge_vert_idxes = mesh.edges_unique
         N = len(edge_vert_idxes)
         colors = [color for _ in range(N)]
@@ -62,9 +64,14 @@ def _draw_meshes():
         draw.draw_lines(points1, points2, colors, sizes)
 
 def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.), size=1.):
-    DRAWING_MESHES.append((mesh, parent_pos, color, size))
+    DRAWING_MESHES.append((mesh, parent_pos, color, size, True))
     _draw_meshes()
     return len(DRAWING_MESHES) - 1
+
+def toggle_draw_visibility(idx):
+    mesh, parent_pos, color, size, visible = DRAWING_MESHES[idx]
+    DRAWING_MESHES[idx] = (mesh, parent_pos, color, size, not visible)
+    _draw_meshes()
 
 def erase_mesh(idx):
     DRAWING_MESHES[idx] = None
@@ -467,7 +474,7 @@ def view_object(cat, mdl):
         dip_mesh.apply_transform(transform)
 
         # Draw the mesh
-        draw_mesh(dip_mesh, fillable.get_position_orientation()[0], color=(1., 0., 0., 1.))
+        dip_viz_idx = draw_mesh(dip_mesh, fillable.get_position_orientation()[0], color=(1., 0., 0., 1.))
 
         # Add the dip option chooser
         KeyboardEventHandler.add_keyboard_callback(
@@ -476,12 +483,19 @@ def view_object(cat, mdl):
         )
         print("Press X to choose the dip (red) option.")
 
+        # Add the dip visibility toggler
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.B,
+            callback_fn=lambda: toggle_draw_visibility(dip_viz_idx),
+        )
+        print("Press B to toggle visibility of the dip (red) mesh.")
+
     ray_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_ray.obj"
     if ray_path.exists():
         ray_mesh = trimesh.load(ray_path, force="mesh")
 
         # Draw the mesh
-        draw_mesh(ray_mesh, fillable.get_position_orientation()[0], color=(0., 0., 1., 1.))
+        ray_viz_idx = draw_mesh(ray_mesh, fillable.get_position_orientation()[0], color=(0., 0., 1., 1.))
 
         # Add the ray option chooser
         KeyboardEventHandler.add_keyboard_callback(
@@ -490,13 +504,20 @@ def view_object(cat, mdl):
         )
         print("Press S to choose the ray (blue) option.")
 
+        # Add the ray visibility toggler
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.N,
+            callback_fn=lambda: toggle_draw_visibility(ray_viz_idx),
+        )
+        print("Press N to toggle visibility of the ray (blue) mesh.")
+
     # Now the combined version
     if dip_path.exists() and ray_path.exists():
         # Check if either mesh contains the entire other mesh
         combined_mesh = trimesh.convex.convex_hull(np.concatenate([dip_mesh.vertices, ray_mesh.vertices], axis=0))
         if not np.allclose(combined_mesh.volume, dip_mesh.volume, rtol=1e-3) and not np.allclose(combined_mesh.volume, ray_mesh.volume, rtol=1e-3):
             # Draw the mesh
-            draw_mesh(combined_mesh, fillable.get_position_orientation()[0], color=(1., 0., 1., 1.), size=0.5)
+            combined_viz_idx = draw_mesh(combined_mesh, fillable.get_position_orientation()[0], color=(1., 0., 1., 1.), size=0.5)
 
             # Add the combined option chooser
             KeyboardEventHandler.add_keyboard_callback(
@@ -504,6 +525,13 @@ def view_object(cat, mdl):
                 callback_fn=lambda: save_assignment_and_stop("combined", meshes={fillable.root_link_name: [(combined_mesh, True)]}),
             )
             print("Press W to choose the combined (purple) option.")
+
+            # Add the combined visibility toggler
+            KeyboardEventHandler.add_keyboard_callback(
+                key=lazy.carb.input.KeyboardInput.M,
+                callback_fn=lambda: toggle_draw_visibility(combined_viz_idx),
+            )
+            print("Press M to toggle visibility of the combined (purple) mesh.")
 
     # Add the features for the GENERATE NOW option next
     selected_link = fillable.root_link_name
