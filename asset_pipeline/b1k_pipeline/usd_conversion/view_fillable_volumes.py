@@ -25,7 +25,7 @@ from collections import defaultdict
 gm.HEADLESS = False
 gm.USE_ENCRYPTED_ASSETS = True
 gm.ENABLE_FLATCACHE = False
-gm.DATASET_PATH = r"/scr/fillable-10-21"
+gm.DATASET_PATH = r"D:\fillable-10-21"
 
 ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments_2.json")
 
@@ -228,9 +228,8 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     bottom_hit = shoot_ray(tm=tm, point=center, direction=-direction)
     assert bottom_hit is not None, "Got no valid hit when trying to shoot ray towards opposite direction!"
 
-    # Find top hit by taking convex hull of mesh and shooting ray in positive @direction
-    tm_convex = tm.convex_hull
-    top_hit = shoot_ray(tm=tm_convex, point=center, direction=direction)
+    # Find top hit by shooting ray in positive @direction
+    top_hit = shoot_ray(tm=tm, point=center, direction=direction)
     assert top_hit is not None, "Got no valid hit within convex hull when trying to shoot ray towards positive direction!"
 
     # Transform mesh to such that z points in @direction, and compute average diameter in this direction
@@ -242,7 +241,7 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     bbox_extent_rot = bbox_max_rot - bbox_min_rot
     avg_diameter = np.mean(bbox_extent_rot[:2])
     min_diameter = avg_diameter / 5.0
-    offset = avg_diameter / 20.0
+    offset = min(0.005, avg_diameter / 20.) # Offset to prevent direct collisions. Defaults to 5mm
 
     # Make sure to rotate trimesh mesh back
     tf_inv = np.eye(4)
@@ -252,9 +251,9 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     # Starting at the bottom, sample points radially and iteratively move in @direction
     mesh_points = np.array([]).reshape(0, 3)
 
-    total_distance = np.linalg.norm(top_hit - bottom_hit)
+    total_distance = np.linalg.norm(top_hit - bottom_hit) - (offset / 2.)
     delta = 0.005
-    # delta = np.clip(total_distance / 8.0, 0.001, 0.05)
+    delta = np.clip(delta, total_distance / 20, total_distance / 3)  # between 3 and 20 entries
     i = 0
 
     cur_distance = (offset / 2.0)
@@ -306,8 +305,9 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     equations = np.array(proj.equations, dtype=np.float32)
 
     n_dim_samples = 10
-    x_range = np.linspace(bbox_min_rot[0], bbox_max_rot[0], n_dim_samples)
-    y_range = np.linspace(bbox_min_rot[1], bbox_max_rot[1], n_dim_samples)
+    ctm_rot_min, ctm_rot_max = ctm_rot.bounding_box.bounds
+    x_range = np.linspace(ctm_rot_min[0], ctm_rot_max[0], n_dim_samples)
+    y_range = np.linspace(ctm_rot_min[1], ctm_rot_max[1], n_dim_samples)
     ray_grid = np.stack(np.meshgrid(x_range, y_range, indexing="ij"), axis=-1)
     ray_grid_flattened = ray_grid.reshape(-1, 2)
 
@@ -524,7 +524,7 @@ def view_object(cat, mdl):
     hide_visuals = True
     hide_collision = False
     original_hiddenness = {
-        geom: geom.visible
+        geom: "default" if geom.visible else "guide"
         for link in fillable.links.values()
         for geom in link.visual_meshes.values()
     }
@@ -534,9 +534,11 @@ def view_object(cat, mdl):
         descendants = nx.descendants(fillable.articulation_tree, selected_link) | {selected_link}
         for link_name, link in fillable.links.items():
             for geom in link.visual_meshes.values():
-                geom.visible = False if hide_visuals or link_name not in descendants else original_hiddenness[geom]
+                geom.purpose = "guide" if hide_visuals or link_name not in descendants else original_hiddenness[geom]
             for geom in link.collision_meshes.values():
-                geom.visible = False if hide_collision or link_name not in descendants else True
+                geom.purpose = "guide" if hide_collision or link_name not in descendants else "default"
+
+    _update_visibility()
 
     def _toggle_visuals_visibility():
         nonlocal hide_visuals
@@ -601,12 +603,12 @@ def view_object(cat, mdl):
         key=lazy.carb.input.KeyboardInput.K,
         callback_fn=lambda: _generate_mesh(allow_convex_hull_hit=False),
     )
-    print("Press K to generate a fillable mesh from the current seed point.")
+    print("Press K to generate an ENCLOSED fillable mesh from the current seed point.")
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.L,
         callback_fn=lambda: _generate_mesh(allow_convex_hull_hit=True),
     )
-    print("Press L to generate a fillable mesh from the current seed point, allowing convex hull hits.")
+    print("Press L to generate an OPEN fillable mesh from the current seed point, allowing convex hull hits.")
     print("    Note that this marks the fillable volume as unenclosed, meaning it provides fewer guarantees with sampling.")
     print("    Use this option if the volume is not fully enclosed, e.g. a shelf.")
 
@@ -662,6 +664,8 @@ def main():
     idxes = int(sys.argv[2])
     salt = sys.argv[3]
 
+    print("Fillable annotator version 10.23.0")
+
     # Get all the models that are fillable-annotated
     from bddl.knowledge_base import Object
     fillables = sorted(o.name.split("-") for o in Object.all_objects() if any(p.name == "fillable" for p in o.category.synset.properties))
@@ -675,9 +679,8 @@ def main():
     fillables = [
         (cat, mdl)
         for cat, mdl in fillables
-        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx and cat == "shelf"
+        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx
     ]
-    random.shuffle(fillables)
 
     for cat, mdl in tqdm.tqdm(fillables):
         if not os.path.exists(DatasetObject.get_usd_path(cat, mdl).replace(".usd", ".encrypted.usd")):
