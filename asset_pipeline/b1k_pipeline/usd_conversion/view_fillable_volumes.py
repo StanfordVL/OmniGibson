@@ -694,7 +694,7 @@ def main():
     idxes = int(sys.argv[2])
     salt = sys.argv[3]
 
-    print("Fillable annotator version 10.23.0")
+    print("Fillable annotator version 10.24.0")
 
     # Get all the models that are fillable-annotated
     from bddl.knowledge_base import Object
