@@ -402,6 +402,8 @@ def view_object(cat, mdl):
     else:
         og.launch()
 
+    clear_meshes()
+
     if og.sim.is_playing():
         og.sim.stop()
 
@@ -458,10 +460,10 @@ def view_object(cat, mdl):
 
     # Skip with assignment that says we should remove the fillable annotation from the object
     KeyboardEventHandler.add_keyboard_callback(
-        key=lazy.carb.input.KeyboardInput.O,
+        key=lazy.carb.input.KeyboardInput.U,
         callback_fn=lambda: save_assignment_and_stop("notfillable"),
     )
-    print("Press O to indicate we should remove the fillable annotation from the object.")
+    print("Press U to indicate we should remove the fillable annotation from the object.")
 
     dip_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_dip.obj"
     if dip_path.exists():
@@ -688,13 +690,15 @@ def view_object(cat, mdl):
     while keep_rendering:
         og.sim.step()
 
+    clear_meshes()
+
 
 def main():
     idx = int(sys.argv[1])
     idxes = int(sys.argv[2])
     salt = sys.argv[3]
 
-    print("Fillable annotator version 10.23.1")
+    print("Fillable annotator version 10.23.2")
 
     # Get all the models that are fillable-annotated
     from bddl.knowledge_base import Object

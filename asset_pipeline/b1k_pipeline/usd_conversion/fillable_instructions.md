@@ -41,7 +41,7 @@ There are two options for generating fillable meshes: the "enclosed" option (by 
 ## Key bindings
 
 * Press J to skip
-* Press O to indicate we should remove the fillable annotation from the object.
+* Press U to indicate we should remove the fillable annotation from the object.
 * Press X to choose the dip (red) option.
 * Press S to choose the ray (blue) option.
 * Press W to choose the combined (purple) option.
