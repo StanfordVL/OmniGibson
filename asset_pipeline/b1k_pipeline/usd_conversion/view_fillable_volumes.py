@@ -49,7 +49,10 @@ def add_assignment(mdl, assignment):
 def _draw_meshes():
     draw = lazy.omni.isaac.debug_draw._debug_draw.acquire_debug_draw_interface()
     draw.clear_lines()
-    for mesh, parent_pos, color, size in DRAWING_MESHES:
+    for item in DRAWING_MESHES:
+        if item is None:
+            continue 
+        mesh, parent_pos, color, size = item
         edge_vert_idxes = mesh.edges_unique
         N = len(edge_vert_idxes)
         colors = [color for _ in range(N)]
@@ -64,7 +67,7 @@ def draw_mesh(mesh, parent_pos, color=(1., 0., 0., 1.), size=1.):
     return len(DRAWING_MESHES)
 
 def erase_mesh(idx):
-    DRAWING_MESHES.pop(idx)
+    DRAWING_MESHES[idx] = None
     _draw_meshes()
 
 def clear_meshes():
@@ -209,10 +212,16 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     # Shoot rays at the initial start point
     direction = np.array(direction)
     prop_hit, hits = sample_radial_rays(tm=tm, point=start_point, normal=direction, n=n_rays)
-    assert prop_hit >= hit_threshold, f"Expected at least {hit_threshold} raycast hits, got {prop_hit} instead."
+    all_points = np.array([hit for hit in hits.values()])
+    if not prop_hit >= hit_threshold:
+        print(f"Expected at least {hit_threshold} raycast hits, got {prop_hit} instead.")
+        # Plot the pruned results
+        sources = np.stack([start_point] * len(hits), axis=0)
+        rays = np.stack([sources, all_points], axis=1)
+        trimesh_path = trimesh.load_path(rays)
+        trimesh.Scene([tm, trimesh_path]).show()
 
     # Move point to centroid of all points of circle
-    all_points = np.array([hit for hit in hits.values()])
     center = all_points.mean(axis=0)
 
     # Shoot ray in downwards direction, make sure we hit some surface
@@ -348,7 +357,7 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     # Return the convex hull of this mesh
     return tm_fillable.convex_hull
 
-def generate_fillable_mesh_for_object(obj, selected_link_name, start_point):
+def generate_fillable_mesh_for_object(obj, selected_link_name, start_point, allow_convex_hull_hit):
     # Walk through the link hierarchy to select the stuff below this one
     links_to_include = set(nx.descendants(obj.articulation_tree, selected_link_name)) | {selected_link_name}
 
@@ -357,14 +366,16 @@ def generate_fillable_mesh_for_object(obj, selected_link_name, start_point):
         for link_name in links_to_include
         for cm in obj.links[link_name].collision_meshes.values()
     ])
-    ray_dir = np.array([0, -1.0, 0])  # front points towards -y
-
+    if allow_convex_hull_hit:
+        tm = trimesh.util.concatenate([tm, tm.convex_hull])
+    ray_dir = np.array([0, 0, 1])
+    
     fillable_hull = sample_fillable_volume(
         tm=tm,
         start_point=start_point,
         direction=ray_dir,
         hit_threshold=0.75,
-        n_rays=80,
+        n_rays=100,
         scale=obj.scale.cpu().numpy(),
     )
 
@@ -415,11 +426,14 @@ def view_object(cat, mdl):
         nonlocal keep_rendering
         keep_rendering = False
     def save_assignment_and_stop(assignment, meshes=None):
+        # meshes should look like {link_name: [(mesh, enclosed)]}
         print(f"Chose option {assignment} for {cat}/{mdl}")
         add_assignment(mdl, assignment)
         if meshes:
-            for link_name, mesh in meshes.items():
-                mesh.export(f"{gm.DATASET_PATH}/objects/{cat}/{mdl}/fillable_{link_name}.obj")
+            for link_name, meshlist in meshes.items():
+                for i, (mesh, enclosed) in enumerate(meshlist):
+                    enclosed = "enclosed" if enclosed else "open"
+                    mesh.export(f"{gm.DATASET_PATH}/objects/{cat}/{mdl}/fillable---{link_name}---{i}---{enclosed}.obj")
         stop_rendering()
     
     # Skip without any assignment
@@ -452,7 +466,7 @@ def view_object(cat, mdl):
         # Add the dip option chooser
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.X,
-            callback_fn=lambda: save_assignment_and_stop("dip", meshes={fillable.root_link_name: dip_mesh}),
+            callback_fn=lambda: save_assignment_and_stop("dip", meshes={fillable.root_link_name: [(dip_mesh, True)]}),
         )
         print("Press X to choose the dip (red) option.")
 
@@ -466,7 +480,7 @@ def view_object(cat, mdl):
         # Add the ray option chooser
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.S,
-            callback_fn=lambda: save_assignment_and_stop("ray", meshes={fillable.root_link_name: ray_mesh}),
+            callback_fn=lambda: save_assignment_and_stop("ray", meshes={fillable.root_link_name: [(ray_mesh, True)]}),
         )
         print("Press S to choose the ray (blue) option.")
 
@@ -481,7 +495,7 @@ def view_object(cat, mdl):
             # Add the combined option chooser
             KeyboardEventHandler.add_keyboard_callback(
                 key=lazy.carb.input.KeyboardInput.W,
-                callback_fn=lambda: save_assignment_and_stop("combined", meshes={fillable.root_link_name: combined_mesh}),
+                callback_fn=lambda: save_assignment_and_stop("combined", meshes={fillable.root_link_name: [(combined_mesh, True)]}),
             )
             print("Press W to choose the combined (purple) option.")
 
@@ -503,11 +517,44 @@ def view_object(cat, mdl):
     _move_seed()
 
     # Store the original hiddenness of prims
+    hide_visuals = True
+    hide_collision = False
     original_hiddenness = {
         geom: geom.visible
         for link in fillable.links.values()
         for geom in link.visual_meshes.values()
     }
+
+    def _update_visibility():
+        # Hide links that are not descendants of the selected link
+        descendants = nx.descendants(fillable.articulation_tree, selected_link) | {selected_link}
+        for link_name, link in fillable.links.items():
+            for geom in link.visual_meshes.values():
+                geom.visible = False if hide_visuals or link_name not in descendants else original_hiddenness[geom]
+            for geom in link.collision_meshes.values():
+                geom.visible = False if hide_collision or link_name not in descendants else True
+
+    def _toggle_visuals_visibility():
+        nonlocal hide_visuals
+        hide_visuals = not hide_visuals
+        _update_visibility()
+    # Add the ability to hide or show visuals
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.V,
+        callback_fn=_toggle_visuals_visibility,
+    )
+    print("Press V to toggle visibility of the object.")
+
+    def _toggle_collision_visibility():
+        nonlocal hide_collision
+        hide_collision = not hide_collision
+        _update_visibility()
+    # Add the ability to hide or show collision meshes
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.C,
+        callback_fn=_toggle_collision_visibility,
+    )
+    print("Press C to toggle visibility of the collision meshes.")
 
     def _increment_selection(inc):
         nonlocal selected_link
@@ -516,12 +563,7 @@ def view_object(cat, mdl):
         new_selected_idx = (selected_idx + inc) % len(available_links)
         selected_link = available_links[new_selected_idx]
 
-        # Hide links that are not descendants of the selected link
-        descendants = nx.descendants(fillable.articulation_tree, selected_link) | {selected_link}
-        for link_name, link in fillable.links.items():
-            for geom in link.visual_meshes.values():
-                geom.visible = False if link_name not in descendants else original_hiddenness[geom]
-
+        _update_visibility()
         _move_seed()
         print(f"Selected link: {selected_link}")
     KeyboardEventHandler.add_keyboard_callback(
@@ -537,7 +579,7 @@ def view_object(cat, mdl):
 
     generated_meshes = defaultdict(list)
 
-    def _generate_mesh():
+    def _generate_mesh(allow_convex_hull_hit):
         # First check that no parent or child already has a generated mesh
         ancestors = nx.ancestors(fillable.articulation_tree, selected_link)
         descendants = nx.descendants(fillable.articulation_tree, selected_link)
@@ -545,20 +587,27 @@ def view_object(cat, mdl):
             print(f"Cannot generate mesh for {selected_link} because a parent or child already has a generated mesh.")
             return
 
-        generated_mesh = generate_fillable_mesh_for_object(fillable, selected_link, seed_prim.get_position_orientation()[0].numpy().copy())
+        generated_mesh = generate_fillable_mesh_for_object(fillable, selected_link, seed_prim.get_position_orientation()[0].numpy().copy(), allow_convex_hull_hit)
         draw_idx = draw_mesh(generated_mesh, fillable.get_position_orientation()[0], color=(0., 1., 0., 1.))
-        generated_meshes[selected_link].append((generated_mesh, draw_idx))
+        generated_meshes[selected_link].append((generated_mesh, draw_idx, allow_convex_hull_hit))
         print(f"Generated mesh {len(generated_meshes[selected_link])} for selected link {selected_link}")
     KeyboardEventHandler.add_keyboard_callback(
         key=lazy.carb.input.KeyboardInput.K,
-        callback_fn=_generate_mesh,
+        callback_fn=lambda: _generate_mesh(allow_convex_hull_hit=False),
     )
     print("Press K to generate a fillable mesh from the current seed point.")
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.L,
+        callback_fn=lambda: _generate_mesh(allow_convex_hull_hit=True),
+    )
+    print("Press L to generate a fillable mesh from the current seed point, allowing convex hull hits.")
+    print("    Note that this marks the fillable volume as unenclosed, meaning it provides fewer guarantees with sampling.")
+    print("    Use this option if the volume is not fully enclosed, e.g. a shelf.")
 
     def _remove_last_generated():
         if len(generated_meshes[selected_link]) == 0:
             return
-        generated_mesh, draw_idx = generated_meshes[selected_link].pop()
+        generated_mesh, draw_idx, allow_convex_hull_hit = generated_meshes[selected_link].pop()
         erase_mesh(draw_idx)
         print(f"Removed last generated mesh")
     KeyboardEventHandler.add_keyboard_callback(
@@ -570,7 +619,7 @@ def view_object(cat, mdl):
     def _clear_generated_meshes():
         for link, meshes in generated_meshes.items():
             while meshes:
-                mesh, idx = meshes.pop()
+                mesh, idx, allow_convex_hull_hit = meshes.pop()
                 erase_mesh(idx)
         print(f"Cleared all generated meshes.")
     KeyboardEventHandler.add_keyboard_callback(
@@ -585,7 +634,8 @@ def view_object(cat, mdl):
             print("You currently do NOT have any generated meshes.")
             return
         generated_concat = {
-            link: trimesh.util.concatenate(meshes)
+            # enclosed = not allow_convex_hull_hit
+            link: [(mesh, not allow_convex_hull_hit) for mesh, idx, allow_convex_hull_hit in meshes]
             for link, meshes in generated_meshes.items()
             if len(meshes) > 0
         }
@@ -595,6 +645,7 @@ def view_object(cat, mdl):
         callback_fn=_pick_generated,
     )
     print("Press Z to pick the generated option.")
+    print()
 
     while keep_rendering:
         og.sim.step()
@@ -618,7 +669,7 @@ def main():
     fillables = [
         (cat, mdl)
         for cat, mdl in fillables
-        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx and mdl == "bamfsz"
+        if int(hashlib.md5((mdl + salt).encode()).hexdigest(), 16) % idxes == idx and cat == "shelf"
     ]
     random.shuffle(fillables)
 
