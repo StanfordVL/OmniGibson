@@ -11,13 +11,20 @@ Hi folks, the data & tools are now ready for the fillable annotation pass! Pleas
 5. Make sure you are on the `develop` branch of BDDL, and make sure that your environment does not use a pip-installed BDDL. The script should warn you if this is the case.
 6. As with before, go to the spreadsheet [HERE](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit?gid=1388270730) and pick a batch and put your name on it. Then run `python view_fillable_volumes.py BATCH_ID 20 potato` (BATCH_ID is the batch number you picked, and yes you need to type potato).
 
-## The Process 
-
-We will be doing QA/selection of pregenerated options and annotation of alternatives in a single pass. With each object, decide if you want to pick one of the three pre-generated meshes, or generate a new one manually.
+## IMPORTANT: HOW TO PICK / Requirements
 
 * You can skip a mesh if you want - you SHOULD do this to skip items that cannot get good fillable meshes with the current tooling, so that we can revisit them.
 
+* These are the requirements of a fillable mesh:
+    * It should cover as much of the object's cavity as possible, and should be in near contact with the bottom. If it is too far from covering the whole cavity, it will cause issues with filledness detection.
+    * **It should **NOT** intersect/go through the object in any way**
+    * It should end near the top of the cavity, but it can be slightly above or slightly below.
+
 * One key part of the fillable annotation is **where** the annotation is, that is, whether the annotation will move with the base link (e.g. in a washing machine) or with one of the links (e.g. in a drawer unit). All of the pre-generated meshes move with the base link, as such, they should NOT be selected for objects where the fillable volume should move with a link, such objects should use a generated mesh.
+
+## The Process 
+
+We will be doing QA/selection of pregenerated options and annotation of alternatives in a single pass. With each object, decide if you want to pick one of the three pre-generated meshes, or generate a new one manually.
 
 * Generating fillable meshes is simple:
   1. You start by picking the link you will add the annotation to using the link selection keys. The display will update to show just that link and its descendants.
