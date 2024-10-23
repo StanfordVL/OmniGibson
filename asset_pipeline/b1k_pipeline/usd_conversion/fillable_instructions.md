@@ -9,6 +9,7 @@ Hi folks, the data & tools are now ready for the fillable annotation pass! Pleas
 3. Open the script and edit the gm.DATASET_PATH line to point at the extraction location from the previous step.
 4. Make sure you are on `og-develop` branch of OmniGibson
 5. Make sure you are on the `develop` branch of BDDL, and make sure that your environment does not use a pip-installed BDDL. The script should warn you if this is the case.
+6. Install pyglet: `pip install "pyglet<2"`
 6. As with before, go to the spreadsheet [HERE](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit?gid=1388270730) and pick a batch and put your name on it. Then run `python view_fillable_volumes.py BATCH_ID 20 potato` (BATCH_ID is the batch number you picked, and yes you need to type potato).
 
 ## IMPORTANT: HOW TO PICK / Requirements
