@@ -391,12 +391,14 @@ def generate_fillable_mesh_for_object(obj, selected_link_name, start_point, allo
 
 def view_object(cat, mdl):
     if og.sim:
-        og.sim.clear()
+        og.clear()
+    else:
+        og.launch()
+
+    if og.sim.is_playing():
+        og.sim.stop()
 
     cfg = {
-        "env": {
-            "physics_frequency": 120,
-        },
         "scene": {
             "type": "Scene",
         },
