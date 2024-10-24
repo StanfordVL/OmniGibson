@@ -237,7 +237,7 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
 
     # Find top hit by shooting ray in positive @direction
     top_hit = shoot_ray(tm=tm, point=center, direction=direction)
-    if not top_hit:
+    if top_hit is None:
         # Only when shooting up, we are OK hitting the convex hull. try that
         top_hit = shoot_ray(tm=tm.convex_hull, point=center, direction=direction)
     assert top_hit is not None, "Got no valid hit within convex hull when trying to shoot ray towards positive direction!"
@@ -702,7 +702,7 @@ def main():
     idxes = int(sys.argv[2])
     salt = sys.argv[3]
 
-    print("Fillable annotator version 10.24.1")
+    print("Fillable annotator version 10.24.2")
 
     # Get all the models that are fillable-annotated
     from bddl.knowledge_base import Object
