@@ -413,6 +413,7 @@ def view_object(cat, mdl):
     cfg = {
         "scene": {
             "type": "Scene",
+            "use_floor_plane": False,
         },
         "objects": [
             {
