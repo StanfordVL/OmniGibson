@@ -9,7 +9,7 @@ import omnigibson as og
 import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
 from omnigibson.macros import create_module_macros, gm
-from omnigibson.prims.geom_prim import CollisionGeomPrim, VisualGeomPrim
+from omnigibson.prims.geom_prim import CollisionGeomPrim, TriggerGeomPrim, VisualGeomPrim
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.utils.constants import GEOM_TYPES
 from omnigibson.utils.sim_utils import CsRawData
@@ -175,7 +175,7 @@ class RigidPrim(XFormPrim):
         # Then self
         super().remove()
 
-    def update_meshes(self):
+    def update_meshes(self, trigger_mesh_paths=[]):
         """
         Helper function to refresh owned visual and collision meshes. Useful for synchronizing internal data if
         additional bodies are added manually
@@ -193,9 +193,10 @@ class RigidPrim(XFormPrim):
                 mesh_name, mesh_path = prim.GetName(), prim.GetPrimPath().__str__()
                 mesh_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path=mesh_path)
                 is_collision = mesh_prim.HasAPI(lazy.pxr.UsdPhysics.CollisionAPI)
+                is_trigger = mesh_path in trigger_mesh_paths
                 mesh_kwargs = {
                     "relative_prim_path": absolute_prim_path_to_scene_relative(self.scene, mesh_path),
-                    "name": f"{self._name}:{'collision' if is_collision else 'visual'}_{mesh_name}",
+                    "name": f"{self._name}:{'collision' if is_collision and not is_trigger else 'visual'}_{mesh_name}",
                 }
                 if is_collision:
                     mesh = CollisionGeomPrim(**mesh_kwargs)
@@ -217,7 +218,9 @@ class RigidPrim(XFormPrim):
                         log.warning(f"Got overly oblong collision mesh: {mesh.name}; use boundingCube approximation")
                         mesh.set_collision_approximation("boundingCube")
                 else:
-                    self._visual_meshes[mesh_name] = VisualGeomPrim(**mesh_kwargs)
+                    self._visual_meshes[mesh_name] = (
+                        TriggerGeomPrim(**mesh_kwargs) if is_trigger else VisualGeomPrim(**mesh_kwargs)
+                    )
                     self._visual_meshes[mesh_name].load(self.scene)
 
         # If we have any collision meshes, we aggregate their center of mass and volume values to set the center of mass
