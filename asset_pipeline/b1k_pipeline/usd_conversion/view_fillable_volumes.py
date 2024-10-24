@@ -237,6 +237,9 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
 
     # Find top hit by shooting ray in positive @direction
     top_hit = shoot_ray(tm=tm, point=center, direction=direction)
+    if not top_hit:
+        # Only when shooting up, we are OK hitting the convex hull. try that
+        top_hit = shoot_ray(tm=tm.convex_hull, point=center, direction=direction)
     assert top_hit is not None, "Got no valid hit within convex hull when trying to shoot ray towards positive direction!"
 
     # Transform mesh to such that z points in @direction, and compute average diameter in this direction
@@ -698,7 +701,7 @@ def main():
     idxes = int(sys.argv[2])
     salt = sys.argv[3]
 
-    print("Fillable annotator version 10.23.2")
+    print("Fillable annotator version 10.24.0")
 
     # Get all the models that are fillable-annotated
     from bddl.knowledge_base import Object
