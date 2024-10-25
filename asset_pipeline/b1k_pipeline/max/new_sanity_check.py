@@ -280,17 +280,13 @@ class SanityCheck:
                     f"{row.object_name} has no collision mesh. Create a collision mesh.",
                 )
 
-        # Get vertices and faces into numpy arrays for conversion
-        # TODO: Reenable
-        # faces_maxscript = [
-        #     rt.polyop.getFaceVerts(obj, i + 1)
-        #     for i in range(rt.polyop.GetNumFaces(obj))
-        # ]
-        # faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
-        # self.expect(
-        #     all(len(f) == 3 for f in faces),
-        #     f"{row.object_name} has non-triangular faces. Apply the Triangulate script.",
-        # )
+        self.expect(
+            all(
+                rt.polyop.getFaceDeg(obj, i + 1) == 3
+                for i in range(rt.polyop.GetNumFaces(obj))
+            ),
+            f"{row.object_name} has non-triangular faces. Apply the Triangulate script.",
+        )
 
         # Check that object satisfies the scale condition.
         scale = np.array(row.object.scale)
@@ -383,7 +379,6 @@ class SanityCheck:
 
     def validate_group_of_instances(self, rows):
         # Pick an object as the base instance
-        # TODO: Do a better job of this.
         rows_with_id_zero = rows[rows["name_instance_id"] == "0"]
         obj_name = rows["object_name"].iloc[0]
         assert (
@@ -502,6 +497,8 @@ class SanityCheck:
                 not np.any(np.sum(elems, axis=0) > 1),
                 f"{obj.name} has same face appear in multiple elements",
             )
+
+            # TODO: Assert vertex count per element
 
             # Iterate through the elements
             for i, elem in enumerate(elems):
@@ -643,8 +640,7 @@ class SanityCheck:
                 )
 
             if meta_link_type == "collision":
-                # TODO: Re-enable
-                pass  # self.validate_collision(child)
+                self.validate_collision(child)
             elif meta_link_type == "attachment":
                 attachment_type = match.group("meta_id")
                 self.expect(
@@ -660,6 +656,8 @@ class SanityCheck:
                     len(attachment_type) > 0,
                     f"Missing attachment type on object {row.object_name}",
                 )
+
+        # TODO: Validate that each object has exactly ONE collision mesh object.
 
         # Check that the meta links match what's needed
         required_meta_types = get_required_meta_links(row.name_category)
@@ -807,6 +805,11 @@ class SanityCheck:
         # Run the single-object validation checks.
         objs = non_meta_polies[non_meta_polies["name_bad"].isnull()]
         objs.apply(self.validate_object, axis="columns")
+
+        # TODO: Validate bad objects to make sure that they do NOT have upper meshes or meta links
+        # or lights.
+
+        # TODO: Validate that TODO is not the name of any object.
 
         # Check that instance name-based grouping is equal to instance-based grouping.
         groups_by_base_object = objs.groupby(["base_object"], sort=False, dropna=False)

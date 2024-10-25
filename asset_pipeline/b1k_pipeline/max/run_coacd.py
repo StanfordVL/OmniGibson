@@ -1,5 +1,7 @@
 import numpy as np
+from scipy.spatial import ConvexHull
 import coacd
+import trimesh
 
 import pymxs
 rt = pymxs.runtime
@@ -12,6 +14,41 @@ from b1k_pipeline.utils import parse_name
 
 HULL_COUNTS = [4, 8, 16, 32]
 
+
+def _create_collision_obj_from_verts_faces(vertices, faces, parent, tag):
+    # print("vertices", vertices.shape)
+    # print("faces", faces.shape)
+    # print("parent", parent.name)
+    # print("tag", tag)
+
+    # Create a new node for the collision mesh
+    collision_obj = rt.Editable_Mesh()
+    rt.ConvertToPoly(collision_obj)
+    parsed_name = parse_name(parent.name)
+    collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision_{tag}"
+    collision_obj.position = parent.position
+    collision_obj.rotation = parent.rotation
+    
+    # Add the vertices
+    for v in vertices:
+        rt.polyop.createVert(collision_obj, rt.Point3(*v.tolist()))
+
+    # Add the faces
+    for f in faces:
+        rt.polyop.createPolygon(collision_obj, (f + 1).tolist())
+
+    # Optionally set its wire color
+    collision_obj.wirecolor = rt.yellow
+
+    # Update the mesh to reflect changes
+    rt.update(collision_obj)
+
+    # Parent the mesh
+    collision_obj.parent = parent
+
+    return collision_obj
+
+
 def generate_collision_mesh(obj):
     if rt.classOf(obj) != rt.Editable_Poly:
         return
@@ -19,13 +56,6 @@ def generate_collision_mesh(obj):
     parsed_name = parse_name(obj.name)
     if not parsed_name:
         return
-
-    category = parsed_name.group("category")
-    model_id = parsed_name.group("model_id")
-    instance_id = parsed_name.group("instance_id")
-    link_name = parsed_name.group("link_name")
-    link_name = link_name if link_name else "base_link"
-    node_key = (category, model_id, instance_id, link_name)
    
     # Does it already have a collision mesh? If so, move on.
     for child in obj.children:
@@ -50,6 +80,12 @@ def generate_collision_mesh(obj):
 
     print("\nGenerating collision meshes for", obj.name)
 
+    # Run the convex hull option
+    tm = trimesh.Trimesh(vertices=verts, faces=faces)
+    chull = tm.convex_hull
+    convex_hull_obj = _create_collision_obj_from_verts_faces(chull.vertices, chull.faces, obj, "chull")
+    print("Generated convex hull", convex_hull_obj.name)
+
     # Run CoACD a number of times
     for hull_count in HULL_COUNTS:
         result = coacd.run_coacd(
@@ -60,36 +96,13 @@ def generate_collision_mesh(obj):
         # Get a flattened list of vertices and faces
         all_vertices = []
         all_faces = []
-        for vs, fs in result:
-            vertices = [rt.Point3(*v.tolist()) for v in vs]
+        for vertices, faces in result:
             # Offsetting here by the past vertex count
-            faces = [[v + len(all_vertices) + 1 for v in f.tolist()] for f in fs]
+            all_faces.extend(faces + len(all_vertices))
             all_vertices.extend(vertices)
-            all_faces.extend(faces)
-
-        # Create a new node for the collision mesh
-        collision_obj = rt.Editable_Mesh()
-        rt.ConvertToPoly(collision_obj)
-        collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision_{hull_count}"
-        collision_obj.position = obj.position
-        collision_obj.rotation = obj.rotation
-        
-        # Add the vertices
-        for v in all_vertices:
-            rt.polyop.createVert(collision_obj, v)
-
-        # Add the faces
-        for f in all_faces:
-            rt.polyop.createPolygon(collision_obj, f)
-
-        # Optionally set its wire color
-        collision_obj.wirecolor = rt.yellow
-
-        # Update the mesh to reflect changes
-        rt.update(collision_obj)
-
-        # Parent the mesh
-        collision_obj.parent = obj
+        all_vertices = np.array(all_vertices)
+        all_faces = np.array(all_faces)
+        collision_obj = _create_collision_obj_from_verts_faces(all_vertices, all_faces, obj, f"coacd{hull_count}")
 
         # Check that the new element count is the same as the split count
         elems = {tuple(rt.polyop.GetElementsUsingFace(collision_obj, i + 1)) for i in range(rt.polyop.GetNumFaces(collision_obj))}
@@ -97,10 +110,9 @@ def generate_collision_mesh(obj):
         elems = np.array(list(elems))
         assert not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements"
 
-        # Hide the mesh
-        collision_obj.isHidden = True
+        print("Generated w/ max hull count", hull_count, ", actual hull count", len(result), "name", collision_obj.name)
 
-        print("Generated w/ max hull count", hull_count, ", actual hull count", len(result))
+    print("Don't forget to make a selection!")
 
 
 def main():
