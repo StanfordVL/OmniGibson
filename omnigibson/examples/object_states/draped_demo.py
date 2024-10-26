@@ -6,6 +6,7 @@ from omnigibson.macros import gm
 from omnigibson.object_states import Draped
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.python_utils import multi_dim_linspace
+from omnigibson.utils.ui_utils import KeyboardRobotController
 
 # Make sure object states and GPU dynamics are enabled (GPU dynamics needed for cloth)
 gm.ENABLE_OBJECT_STATES = True
@@ -20,19 +21,37 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Create the scene config to load -- empty scene + cloth object + hanger + table + rack + robot
     cfg = {
+        "env": {
+            "external_sensors": [
+                {
+                    "sensor_type": "VisionSensor",
+                    "name": "helper_camera",
+                    "relative_prim_path": "/external_sensor0",
+                    "modalities": ["rgb"],
+                    "sensor_kwargs": {
+                        "image_height": 1024,
+                        "image_width": 512,
+                    },
+                    "position": [1.7426, -0.0601, 1.4616],
+                    "orientation": [0.4808, 0.3535, 0.4753, 0.6465],
+                    "pose_frame": "parent",
+                }
+            ],
+        },
         "scene": {
             "type": "Scene",
         },
         "objects": [
             {
                 "type": "DatasetObject",
-                "name": "pillowcase",
-                "category": "pillowcase",
-                "model": "feohwy",
+                "name": "pants",
+                "category": "pants",
+                "model": "tnirgd",
                 "prim_type": PrimType.CLOTH,
                 "abilities": {"cloth": {}},
-                "position": [-0.3, 0, 0.65],
-                "orientation": [0.0, 0.0, 0.7071, 0.7071],
+                "position": [100.0, 100.0, 100.0],
+                "orientation": [-0.5000, -0.5000, 0.5000, 0.5000],
+                "scale": [0.6, 0.6, 0.6],
             },
             {
                 "type": "DatasetObject",
@@ -40,8 +59,8 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "category": "hanger",
                 "model": "agrpio",
                 "prim_type": PrimType.RIGID,
-                "position": [0.35, 0, 0.68],
-                "orientation": [0.1379, 0.1379, 0.6935, 0.6935],
+                "position": [110.0, 100.0, 100.0],
+                "orientation": [0.0000, 0.0000, 0.7071, 0.7071],
                 "scale": [2.0, 2.0, 2.0],
             },
             {
@@ -50,8 +69,9 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "category": "breakfast_table",
                 "model": "skczfi",
                 "prim_type": PrimType.RIGID,
-                "position": [0.0, 0.0, 0.4],
+                "position": [0.0, 0.0, 0.9],
                 "fixed_base": True,
+                "scale": [1.0, 1.5, 2.5],
             },
             {
                 "type": "DatasetObject",
@@ -59,9 +79,8 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "category": "drying_rack",
                 "model": "rygebd",
                 "prim_type": PrimType.RIGID,
-                "position": [0.8, -0.3, 0.55],
+                "position": [1.0, -0.3, 0.75],
                 "orientation": [0.0, 0.0, 0.7071, 0.7071],
-                "scale": [0.8, 0.8, 0.8],
                 "fixed_base": True,
             },
         ],
@@ -71,12 +90,17 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "obs_modalities": [],
                 "position": [-0.15, 0.8, 0.0],
                 "orientation": [0.0, 0.0, -0.7071, 0.7071],
-                # "controller_config": {
-                #     "arm_left": {
-                #         "name": "InverseKinematicsController",
-                #         "mode": "pose_absolute_ori",
-                #     }
-                # },
+                "grasping_mode": "sticky",
+                "controller_config": {
+                    "arm_left": {
+                        "name": "OperationalSpaceController",
+                    },
+                    "arm_right": {
+                        "name": "OperationalSpaceController",
+                    },
+                },
+                "action_type": "continuous",
+                "action_normalize": True,
             }
         ],
     }
@@ -87,54 +111,56 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Grab object references
     breakfast_table = env.scene.object_registry("name", "breakfast_table")
     hanger = env.scene.object_registry("name", "hanger")
-    pillowcase = env.scene.object_registry("name", "pillowcase")
+    pants = env.scene.object_registry("name", "pants")
     rack = env.scene.object_registry("name", "rack")
     R1 = env.scene.robots[0]
 
+    # TODO: fix this when we have a better way to deal with gravity compensation
+    hanger.root_link.density = 1.0
+    pants.root_link.mass = 0.01
+
     # Set camera pose
     og.sim.viewer_camera.set_position_orientation(
-        position=th.tensor([0.7729, 1.6733, 1.4305]),
-        orientation=th.tensor([0.0985, 0.5188, 0.8343, 0.1585]),
+        position=th.tensor([0.8550, 1.5565, 1.8658]),
+        orientation=th.tensor([0.1224, 0.5098, 0.8280, 0.1989]),
     )
 
-    for _ in range(35):
-        og.sim.step()
+    action_generator = KeyboardRobotController(robot=R1)
+    action_generator.print_keyboard_teleop_info()
 
-    # left_eef_target_pos = hanger.get_position_orientation()[0] + th.tensor([0.0, 0.3, 0.0])
-    # # left_eef_target_ori = T.quat2axisangle(th.tensor([0.0, 0.0, 0.0, 1.0]))
-    # # left_eef_target_ori = th.tensor([0.0, 0.0, 0.0, 1.0])
-    # left_eef_target_ori = R1.get_eef_orientation()
+    # open the gripper
+    open_action = action_generator.get_teleop_action()
+    open_action[R1.controller_action_idx["gripper_left"]] = 1.0
 
-    # R1.controllers["arm_left"]._goal = {"target_pos": left_eef_target_pos, "target_quat": left_eef_target_ori}
+    for _ in range(10):
+        pants.keep_still()
+        hanger.keep_still()
+        env.step(open_action)
 
-    # for _ in range(35):
-    #     og.sim.step()
+    # teleport the objects
+    pants.set_position_orientation([0.1861, 0.1940, 1.2226], [-0.5000, -0.5000, 0.5000, 0.5000])
+    hanger.set_position_orientation([0.2579, 0.2352, 1.2843], [0.0000, 0.0000, 0.7071, 0.7071])
 
-    # # Let pillow case settle
-    # for _ in range(35):
-    #     og.sim.step()
+    # close the gripper
+    close_action = action_generator.get_teleop_action()
+    close_action[R1.controller_action_idx["gripper_left"]] = -1.0
 
-    # target_pos = hanger.get_position_orientation()[0] + th.tensor([0.4, 0.0, 0.1])
+    for _ in range(10):
+        env.step(close_action)
 
-    # pos = pillowcase.root_link.compute_particle_positions()
-    # # Get the indices for the top 10 percent vertices in the x-axis
-    # indices = th.argsort(pos, dim=0)[:, 0][-(pos.shape[0] // 10) :]
-    # start = th.clone(pos[indices])
+    print("Running demo, try to put the hanger onto the rack. ")
+    print("Press ESC to quit")
 
-    # start_center = start.mean(dim=0)
-    # offsets = start - start_center
-    # end = target_pos.unsqueeze(0) + offsets
+    # Loop control until user quits
+    max_steps = -1 if not short_exec else 100
+    step = 0
 
-    # # end = target_pos.repeat(len(indices), 1)
-
-    # # Number of increments for smooth movement
-    # increments = 100
-    # # Move the vertices to the target position
-    # for ctrl_pts in multi_dim_linspace(start, end, increments):
-    #     pillowcase.root_link.set_particle_positions(ctrl_pts, idxs=indices)
-    #     og.sim.step()
-
-    breakpoint()
+    while step != max_steps:
+        action = action_generator.get_teleop_action()
+        # Make sure R1 doesn't release the hanger
+        action[R1.controller_action_idx["gripper_left"]] = -1.0
+        env.step(action=action)
+        step += 1
 
     # Shut down env at the end
     og.clear()
