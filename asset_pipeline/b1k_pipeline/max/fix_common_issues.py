@@ -14,6 +14,7 @@ import tqdm
 
 import b1k_pipeline.utils
 import b1k_pipeline.max.prebake_textures
+import b1k_pipeline.max.replace_bad_object
 
 rt = pymxs.runtime
 RENDER_PRESET_FILENAME = str(
@@ -104,58 +105,61 @@ def processFile(filename: pathlib.Path):
     # Prebake textures
     # b1k_pipeline.max.prebake_textures.process_open_file()
 
-    # Delete meta links from non-zero instances
-    for obj in rt.objects:
-        match = b1k_pipeline.utils.parse_name(obj.name)
-        if not match:
-            continue
-        if match.group("instance_id") == "0":
-            continue
-        if not match.group("meta_type"):
-            continue
-        rt.delete(obj)
+    # # Delete meta links from non-zero instances
+    # for obj in rt.objects:
+    #     match = b1k_pipeline.utils.parse_name(obj.name)
+    #     if not match:
+    #         continue
+    #     if match.group("instance_id") == "0":
+    #         continue
+    #     if not match.group("meta_type"):
+    #         continue
+    #     rt.delete(obj)
 
-    # Delete upper links from non-zero instances
-    for obj in rt.objects:
-        match = b1k_pipeline.utils.parse_name(obj.name)
-        if not match:
-            continue
-        if match.group("instance_id") == "0":
-            continue
-        if match.group("joint_side") != "upper":
-            continue
-        rt.delete(obj)
+    # # Delete upper links from non-zero instances
+    # for obj in rt.objects:
+    #     match = b1k_pipeline.utils.parse_name(obj.name)
+    #     if not match:
+    #         continue
+    #     if match.group("instance_id") == "0":
+    #         continue
+    #     if match.group("joint_side") != "upper":
+    #         continue
+    #     rt.delete(obj)
 
-    # Delete parts from non-zero instances
-    for obj in rt.objects:
-        if not obj.parent:
-            continue
-        tags = {"subpart", "extrapart", "connectedpart"}
-        if not any("T" + tag in obj.name for tag in tags):
-            continue
-        match = b1k_pipeline.utils.parse_name(obj.parent.name)
-        if not match:
-            continue
-        if match.group("instance_id") == "0":
-            continue
-        rt.delete(obj)
+    # # Delete parts from non-zero instances
+    # for obj in rt.objects:
+    #     if not obj.parent:
+    #         continue
+    #     tags = {"subpart", "extrapart", "connectedpart"}
+    #     if not any("T" + tag in obj.name for tag in tags):
+    #         continue
+    #     match = b1k_pipeline.utils.parse_name(obj.parent.name)
+    #     if not match:
+    #         continue
+    #     if match.group("instance_id") == "0":
+    #         continue
+    #     rt.delete(obj)
 
-    # Update UV unwrap to use correct attribute
-    for obj in rt.objects:
-        # Get the attribute that's currently on there
-        saved_hash = b1k_pipeline.max.prebake_textures.get_recorded_uv_unwrapping_hash(
-            obj
-        )
-        if saved_hash is None:
-            continue
+    # # Update UV unwrap to use correct attribute
+    # for obj in rt.objects:
+    #     # Get the attribute that's currently on there
+    #     saved_hash = b1k_pipeline.max.prebake_textures.get_recorded_uv_unwrapping_hash(
+    #         obj
+    #     )
+    #     if saved_hash is None:
+    #         continue
 
-        # Otherwise generate the new hash and save it
-        hash_digest = b1k_pipeline.max.prebake_textures.hash_object(obj)
+    #     # Otherwise generate the new hash and save it
+    #     hash_digest = b1k_pipeline.max.prebake_textures.hash_object(obj)
 
-        # Add the new attr
-        b1k_pipeline.max.prebake_textures.set_recorded_uv_unwrapping_hash(
-            obj, hash_digest
-        )
+    #     # Add the new attr
+    #     b1k_pipeline.max.prebake_textures.set_recorded_uv_unwrapping_hash(
+    #         obj, hash_digest
+    #     )
+
+    # Run the bad object replacement system
+    b1k_pipeline.max.replace_bad_object.replace_all_bad_legacy_objects_in_open_file()
 
     # # Exit isolate mode
     # rt.IsolateSelection.ExitIsolateSelectionMode()
@@ -180,6 +184,12 @@ def fix_common_issues_in_all_files():
     ]
     # has_matching_processed = [processed_fn(x).exists() for x in candidates]
     for i, f in enumerate(tqdm.tqdm(candidates)):
+        # TODO: REMOVE THIS!
+        # For this particular task we are only doing this to the legacy-containing scenes
+        target_name = f.parts[-2]
+        if not target_name.endswith("_int") and not target_name.endswith("_garden"):
+            continue
+
         processFile(f)
 
 

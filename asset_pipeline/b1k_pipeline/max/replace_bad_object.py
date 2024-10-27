@@ -2,6 +2,8 @@ from collections import defaultdict
 import json
 import sys
 
+import tqdm
+
 sys.path.append(r"D:\ig_pipeline")
 
 import pymxs
@@ -31,9 +33,7 @@ def node_bounding_box_incl_children(node, transform):
     bb_min = np.array(bb_min)
     bb_max = np.array(bb_max)
     for child in node.children:
-        child_bb_min, child_bb_max = node_bounding_box_incl_children(
-            child, transform
-        )
+        child_bb_min, child_bb_max = node_bounding_box_incl_children(child, transform)
         bb_min = np.minimum(bb_min, child_bb_min)
         bb_max = np.maximum(bb_max, child_bb_max)
     return bb_min, bb_max
@@ -78,7 +78,7 @@ def import_bad_model_originals(model_id):
         if "Mcollision" in obj:
             continue
 
-        visual_objects[(link_name, joint_type)] = obj
+        visual_objects[(link_name, m.group("parent_link_name"), joint_type)] = obj
 
     objects_to_import = sorted(set(visual_objects.values()))
 
@@ -118,10 +118,15 @@ def replace_object_instances(obj):
 
     # Get the model ID
     loose = parsed_name.group("loose")
-    if loose:
-        loose = loose + "-"
+    if not loose:
+        loose = ""
     category = parsed_name.group("category")
     model_id = parsed_name.group("model_id")
+    tags = parsed_name.group("tag")
+    if (
+        not tags
+    ):  # This is for retaining any part tag on the base link. Other tags dont care.
+        tags = ""
 
     # First, find all the instances of this object and validate that their pivots are the same
     all_same_model_id = [
@@ -130,7 +135,8 @@ def replace_object_instances(obj):
         if parse_name(x.name) and parse_name(x.name).group("model_id") == model_id
     ]
     all_base_links = [
-        x for x in all_same_model_id
+        x
+        for x in all_same_model_id
         if parse_name(x.name).group("link_name") == parsed_name.group("link_name")
     ]
     same_model_id_parsed_names = [parse_name(x.name) for x in all_same_model_id]
@@ -186,10 +192,10 @@ def replace_object_instances(obj):
     # Parent all links under their bases for efficient computation of the bounding box
     all_parented = set()
     for instance, links in links_by_instance_id.items():
-        base_link = links.pop("base_link")
+        imported_base_link = links.pop("base_link")
         for link in links.values():
-            link.parent = base_link
-        all_parented.add(base_link)
+            link.parent = imported_base_link
+        all_parented.add(imported_base_link)
     assert all_parented == set(all_base_links), "Not all instances were parented."
 
     # Record the transforms of all of the instances as well as their local and world BBs
@@ -212,49 +218,56 @@ def replace_object_instances(obj):
     print("Imported originals for", model_id)
 
     # Parent all the imported meshes under the base link
-    base_link = imported[("base_link", None)]
-    for (link_name, joint_type), link in imported.items():
+    imported_base_link = imported[("base_link", None, None)]
+    for (link_name, parent_link, joint_type), link in imported.items():
         if link_name == "base_link":
             continue
-        link.parent = base_link
+        link.parent = imported_base_link
+
+    # Set the rotation of the imported base link to be the identity rotation
+    imported_base_link.rotation = rt.Matrix3(1)
 
     # Get the bounding box of the imported mesh. Here we use the local-oriented-world-bb,
     # which means we assume that the imported mesh and the original one have the same
     # orientation relative to their pivots.
     imported_lowbb = node_bounding_box_incl_children(
-        base_link, rotation_only_transform(base_link.transform)
+        imported_base_link, rotation_only_transform(imported_base_link.transform)
     )
     print("Imported object came with bounding box", imported_lowbb)
 
     # Make the imported lowbb match the unit cube size
     imported_lowbb_size = imported_lowbb[1] - imported_lowbb[0]
     imported_lowbb_scale = rt.Point3(*(1000 / imported_lowbb_size).tolist())
-    base_link.scale = base_link.scale * imported_lowbb_scale
+    imported_base_link.scale = imported_base_link.scale * imported_lowbb_scale
     print("Scaled imported mesh for", model_id, "by", imported_lowbb_scale)
 
     # Recompute the imported lowbb and move it to the origin
     imported_lowbb = node_bounding_box_incl_children(
-        base_link, rotation_only_transform(base_link.transform)
+        imported_base_link, rotation_only_transform(imported_base_link.transform)
     )
     imported_lowbb_center = (imported_lowbb[0] + imported_lowbb[1]) / 2
-    base_link.position = base_link.position - (rt.Point3(*imported_lowbb_center.tolist()) * rotation_only_transform(base_link.transform))
+    imported_base_link.position = imported_base_link.position - (
+        rt.Point3(*imported_lowbb_center.tolist())
+        * rotation_only_transform(imported_base_link.transform)
+    )
 
     # Recompute the imported lowbb and assert it is roughly at the unit cube
     imported_lowbb = node_bounding_box_incl_children(
-        base_link, rotation_only_transform(base_link.transform)
+        imported_base_link, rotation_only_transform(imported_base_link.transform)
     )
-    # assert np.allclose(
-    #     imported_lowbb[0], -500
-    # ), f"Imported mesh lowbb min is not at -0.5m: {imported_lowbb[0]}"
-    # assert np.allclose(
-    #     imported_lowbb[1], 500
-    # ), f"Imported mesh lowbb max is not at 0.5m: {imported_lowbb[1]}"
+    assert np.allclose(
+        imported_lowbb[0], -500, atol=10  # 1cm
+    ), f"Imported mesh lowbb min is not at -0.5m: {imported_lowbb[0]}"
+    assert np.allclose(
+        imported_lowbb[1], 500, atol=10  # 1cm
+    ), f"Imported mesh lowbb max is not at 0.5m: {imported_lowbb[1]}"
     print("Normalized imported mesh for", model_id)
 
     # Flatten the copyables into a list
-    copyables = [("base_link", None, base_link)] + [
-        (*k, v) for k, v in imported.items() if k != "base_link"
+    copyables = [("base_link", None, None, imported_base_link)] + [
+        (*k, v) for k, v in imported.items() if k[0] != "base_link"
     ]
+    copyable_meshes = [x[-1] for x in copyables]
 
     # Now for each of the original bozos make a copy of the whole thing, scale it up, rotate it, and shift it into place
     for instance_id, (
@@ -267,11 +280,11 @@ def replace_object_instances(obj):
     ):
         # First copy the object.
         success, child_copy = rt.maxOps.cloneNodes(
-            [x[2] for x in copyables],
+            copyable_meshes,
             cloneType=rt.name("instance"),
             newNodes=pymxs.byref(None),
         )
-        assert success, f"Could not clone {base_link.name}"
+        assert success, f"Could not clone {imported_base_link.name}"
         print("Cloned", model_id, instance_id)
 
         # Find the base link in the child copies. It's the one whose parent is not one of the child copies
@@ -280,7 +293,7 @@ def replace_object_instances(obj):
             base_copy == child_copy[0]
         ), "The base link should be the first element in the list of child"
 
-        # Get the rotation-only transform of the instance
+        # Get the rotation-only transform of the instance and apply it to this object too
         base_copy.transform = base_copy.transform * rotation_only_transform(
             instance_transform
         )
@@ -288,39 +301,118 @@ def replace_object_instances(obj):
         # Scale the imported mesh to match the instance
         instance_lowbb_size = instance_lowbb[1] - instance_lowbb[0]
         instance_lowbb_center = (instance_lowbb[0] + instance_lowbb[1]) / 2
+        print(
+            "Target instance has lowbb size",
+            instance_lowbb_size,
+            "and center",
+            instance_lowbb_center,
+        )
         relative_scale_from_now = instance_lowbb_size / 1000
-        base_copy.scale = base_copy.scale * rt.Point3(*relative_scale_from_now.tolist())
+        scale_transform = rt.Matrix3(1)
+        scale_transform.scale = rt.Point3(*relative_scale_from_now.tolist())
+        print("Applying relative scale", relative_scale_from_now)
+        print("Previous scale was ", base_copy.scale)
+        base_copy.transform = (
+            scale_transform * base_copy.transform
+        )  # this means scale first, then the real transform
+        print("New scale is", base_copy.scale)
 
         # Finally position it to match the center
         base_copy_lowbb = node_bounding_box_incl_children(
-            base_link, rotation_only_transform(base_link.transform)
+            base_copy, rotation_only_transform(base_copy.transform)
         )
+        print("Base copy new lowbb size", base_copy_lowbb[1] - base_copy_lowbb[0])
         base_copy_lowbb_center = (base_copy_lowbb[0] + base_copy_lowbb[1]) / 2
-        move_center_by = rt.Point3(*(instance_lowbb_center - base_copy_lowbb_center).tolist())
-        base_copy.position = base_copy.position + (move_center_by * rotation_only_transform(base_link.transform))
+        move_center_by = rt.Point3(
+            *(instance_lowbb_center - base_copy_lowbb_center).tolist()
+        ) * rotation_only_transform(base_copy.transform)
+        base_copy.position = base_copy.position + (move_center_by)
+        print(
+            "Moving locally by ",
+            move_center_by,
+        )
+
+        base_copy_lowbb = node_bounding_box_incl_children(
+            base_copy, rotation_only_transform(base_copy.transform)
+        )
+        print(
+            "Base copy new lowbb center", (base_copy_lowbb[0] + base_copy_lowbb[1]) / 2
+        )
 
         # Assert the new world bb is the same as the original world bb
         base_copy_world_bb = node_bounding_box_incl_children(base_copy, rt.Matrix3(1))
-        orig_min, orig_max = np.array(instance_world_bb[0]), np.array(instance_world_bb[1])
-        new_min, new_max = np.array(base_copy_world_bb[0]), np.array(base_copy_world_bb[1])
-        # assert np.allclose(
-        #     orig_min, new_min
-        # ), f"World min mismatch: {orig_min} != {new_min} for {model_id} instance {instance_id}"
-        # assert np.allclose(
-        #     orig_max, new_max
-        # ), f"World max mismatch: {orig_max} != {new_max} for {model_id} instance {instance_id}"
+        orig_min, orig_max = np.array(instance_world_bb[0]), np.array(
+            instance_world_bb[1]
+        )
+        new_min, new_max = np.array(base_copy_world_bb[0]), np.array(
+            base_copy_world_bb[1]
+        )
+        assert np.allclose(
+            orig_min, new_min, atol=10  # 1cm
+        ), f"World min mismatch: {orig_min} != {new_min} for {model_id} instance {instance_id}"
+        assert np.allclose(
+            orig_max, new_max, atol=10  # 1cm
+        ), f"World max mismatch: {orig_max} != {new_max} for {model_id} instance {instance_id}"
 
         # Name each of the children correctly, and parent them to the original owner's parents
-        for (link_name, joint_type, _), link in zip(copyables, child_copy):
+        for (link_name, parent_link, joint_type, _), link in zip(copyables, child_copy):
             link.parent = instance_parent
             if link_name == "base_link":
-                link.name = f"B-{loose}{category}-{model_id}-{instance_id}"
+                link.name = (
+                    f"B-{loose}{category}-{model_id}-{instance_id}-{link_name}{tags}"
+                )
             else:
-                link.name = f"B-{loose}{category}-{model_id}-{instance_id}-{link_name}-{joint_type}-lower"
+                link.name = f"B-{loose}{category}-{model_id}-{instance_id}-{link_name}-{parent_link}-{joint_type}-lower"
         print("Replaced", model_id, instance_id)
 
     # Finally, after all is done, remove all of the copyables
-    rt.delete(base_link)
+    rt.delete(copyable_meshes)
+
+
+def replace_all_bad_legacy_objects_in_open_file():
+    bad_objects_to_remove = []
+    for obj in rt.objects:
+        # Check that it's an editable poly
+        if rt.classOf(obj) != rt.Editable_Poly:
+            continue
+
+        # Check that the parsed name contains the B- tag
+        parsed_name = parse_name(obj.name)
+        if not parsed_name or not parsed_name.group("bad"):
+            continue
+
+        # Check that the link is the base link
+        if (
+            parsed_name.group("link_name")
+            and parsed_name.group("link_name") != "base_link"
+        ):
+            continue
+
+        # Check that the instance ID is 0
+        if parsed_name.group("instance_id") != "0":
+            continue
+
+        # Check that the provider is legacy_
+        model_id = parsed_name.group("model_id")
+        provider = providers[model_id]
+        if "legacy_" not in provider:
+            continue
+
+        # Add to the list of bad objects to remove
+        bad_objects_to_remove.append(obj)
+
+    print(
+        "Found",
+        len(bad_objects_to_remove),
+        "bad objects to remove:",
+        ", ".join([x.name for x in bad_objects_to_remove]),
+    )
+
+    # Go through all the bad objects to remove
+    for obj in tqdm.tqdm(bad_objects_to_remove):
+        replace_object_instances(obj)
+
+    print("\nDon't forget to reset scale!")
 
 
 def main():

@@ -194,7 +194,7 @@ class SanityCheck:
         )
         with open(object_list, "r") as f:
             object_list_data = json.load(f)
-        vertex_and_face_counts = object_list_data["vertex_and_face_counts"]
+        vertex_and_face_counts = object_list_data["mesh_fingerprints"]
         self.expect(
             model_id in vertex_and_face_counts,
             f"{model_id} has no vertex/face count in the object list file for provider {provider}.",
@@ -203,7 +203,9 @@ class SanityCheck:
         if model_id not in vertex_and_face_counts:
             return
 
-        recorded_vertex_count, recorded_face_count = vertex_and_face_counts[model_id]
+        recorded_vertex_count, recorded_face_count = vertex_and_face_counts[model_id][
+            :2
+        ]
         return recorded_vertex_count, recorded_face_count
 
     def validate_object(self, row):
@@ -224,43 +226,70 @@ class SanityCheck:
         #   row.vertex_count <= MAX_VERTICES,
         #   f"{row.object_name} has too many vertices: {row.vertex_count} > {MAX_VERTICES}")
 
-        # Warn if it has too many but acceptable vertices.
-        self.expect(
-            row.vertex_count <= WARN_VERTICES,
-            f"{row.object_name} has too many vertices: {row.vertex_count} > {WARN_VERTICES}",
-            level="WARNING",
-        )
-
-        # Check that the object does not have any modifiers
-        self.expect(
-            len(row.object.modifiers) == 0, f"{row.object_name} has modifiers attached."
-        )
-
         # Unwrap OBJ for below cases.
         obj = row.object._obj
 
-        self.expect(
-            rt.classOf(obj.material) == rt.Shell_Material,
-            f"{row.object_name} has non-shell material. Run texture baking.",
-        )
+        # Warn if it has too many but acceptable vertices.
+        if not row["name_bad"]:
+            self.expect(
+                row.vertex_count <= WARN_VERTICES,
+                f"{row.object_name} has too many vertices: {row.vertex_count} > {WARN_VERTICES}",
+                level="WARNING",
+            )
 
-        self.expect(
-            rt.classOf(obj.material) == rt.Shell_Material
-            and obj.material.renderMtlIndex == 1,
-            f"{row.object_name} is not rendering the baked material. Select the baked material for rendering or rebake.",
-        )
+            self.expect(
+                rt.classOf(obj.material) == rt.Shell_Material,
+                f"{row.object_name} has non-shell material. Run texture baking.",
+            )
 
-        self.expect(
-            rt.classOf(obj.material) == rt.Shell_Material
-            and obj.material.viewportMtlIndex == 1,
-            f"{row.object_name} is not rendering the baked material in the viewport. Select the baked material for viewport.",
-        )
+            self.expect(
+                rt.classOf(obj.material) == rt.Shell_Material
+                and obj.material.renderMtlIndex == 1,
+                f"{row.object_name} is not rendering the baked material. Select the baked material for rendering or rebake.",
+            )
 
-        current_hash = hash_object(obj)
-        recorded_hash = get_recorded_uv_unwrapping_hash(obj)
+            self.expect(
+                rt.classOf(obj.material) == rt.Shell_Material
+                and obj.material.viewportMtlIndex == 1,
+                f"{row.object_name} is not rendering the baked material in the viewport. Select the baked material for viewport.",
+            )
+
+            current_hash = hash_object(obj)
+            recorded_hash = get_recorded_uv_unwrapping_hash(obj)
+            self.expect(
+                recorded_hash == current_hash,
+                f"{row.object_name} has different UV unwrapping than recorded. Reunwrap the object.",
+            )
+
+            # Check that each object zeroth instance object actually has a collision mesh
+            if int(row.name_instance_id) == 0 and row.name_joint_side != "upper":
+                for child in obj.children:
+                    if "Mcollision" in child.name:
+                        break
+                else:
+                    self.expect(
+                        False,
+                        f"{row.object_name} has no collision mesh. Create a collision mesh.",
+                    )
+
+        else:
+            # Bad object tasks
+            # Validate bad objects to make sure that they do NOT have upper meshes or meta links
+            # or lights.
+            self.expect(
+                row.name_joint_side != "upper",
+                f"Bad object {row.object_name} should not have upper side.",
+            )
+
+            self.expect(
+                len(row.object.children) == 0,
+                f"Bad object {row.object_name} should not have children.",
+            )
+
+        # Bad - nonbad common tasks.
+        # Check that the object does not have any modifiers
         self.expect(
-            recorded_hash == current_hash,
-            f"{row.object_name} has different UV unwrapping than recorded. Reunwrap the object.",
+            len(row.object.modifiers) == 0, f"{row.object_name} has modifiers attached."
         )
 
         # Check that there are no dead elements
@@ -268,17 +297,6 @@ class SanityCheck:
             rt.polyop.GetHasDeadStructs(obj) == 0,
             f"{row.object_name} has dead structs. Apply the Triangulate script.",
         )
-
-        # Check that each object zeroth instance object actually has a collision mesh
-        if int(row.name_instance_id) == 0 and row.name_joint_side != "upper":
-            for child in obj.children:
-                if "Mcollision" in child.name:
-                    break
-            else:
-                self.expect(
-                    False,
-                    f"{row.object_name} has no collision mesh. Create a collision mesh.",
-                )
 
         self.expect(
             all(
@@ -498,14 +516,16 @@ class SanityCheck:
                 f"{obj.name} has same face appear in multiple elements",
             )
 
-            # TODO: Assert vertex count per element
-
             # Iterate through the elements
             for i, elem in enumerate(elems):
                 # Load the mesh into trimesh and expect convexity
                 relevant_faces = faces[elem]
                 m = trimesh.Trimesh(vertices=verts, faces=relevant_faces, process=False)
                 m.remove_unreferenced_vertices()
+                self.expect(
+                    len(m.vertices) <= 60,
+                    f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > 60)",
+                )
                 self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
                 # self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
                 self.expect(
@@ -528,6 +548,7 @@ class SanityCheck:
         found_ml_subids_for_id = collections.defaultdict(
             lambda: collections.defaultdict(list)
         )
+        found_collision_meshes = []
         for child in children:
             # Otherwise, we can validate the individual meta link
             match = b1k_pipeline.utils.parse_name(child.name)
@@ -641,6 +662,7 @@ class SanityCheck:
 
             if meta_link_type == "collision":
                 self.validate_collision(child)
+                found_collision_meshes.append(child)
             elif meta_link_type == "attachment":
                 attachment_type = match.group("meta_id")
                 self.expect(
@@ -657,7 +679,11 @@ class SanityCheck:
                     f"Missing attachment type on object {row.object_name}",
                 )
 
-        # TODO: Validate that each object has exactly ONE collision mesh object.
+        # Validate that each object has no more than one collision mesh.
+        self.expect(
+            len(found_collision_meshes) <= 1,
+            f"Object {row.object_name} has {len(found_collision_meshes)} collision meshes. Should have no more than one.",
+        )
 
         # Check that the meta links match what's needed
         required_meta_types = get_required_meta_links(row.name_category)
@@ -675,6 +701,37 @@ class SanityCheck:
                     set(meta_subids) == expected_subids,
                     f"{row.name_mesh_basename} meta type {meta_type} ID {meta_id} has non-continuous subids {sorted(meta_subids)}",
                 )
+
+    def validate_model_instance_link_group(self, group):
+        # Check that each link that has is not the base link has a parent and a nonempty joint type
+        model_id = group["name_model_id"].iloc[0]
+        instance_id = group["name_instance_id"].iloc[0]
+        link_name = group["name_link_name"].iloc[0]
+        descriptor = f"{model_id}-{instance_id}-{link_name}"
+        if link_name != "base_link":
+            unique_values_for_joint_type = group["name_joint_type"].unique()
+            self.expect(
+                len(unique_values_for_joint_type) == 1
+                and pd.notnull(unique_values_for_joint_type[0]),
+                f"{descriptor} should have exactly one nonempty joint type: {unique_values_for_joint_type}.",
+            )
+            self.expect(
+                group["name_parent_link_name"].nunique() == 1
+                and pd.notnull(group["name_parent_link_name"].iloc[0]),
+                f"{descriptor} should have exactly one nonempty parent link name: {group['name_parent_link_name'].unique()}.",
+            )
+
+        should_have_upper = link_name != "base_link" and not group["name_bad"].iloc[0]
+        if should_have_upper:
+            self.expect(
+                "upper" in group["name_joint_side"].unique(),
+                f"{descriptor} should have an upper side.",
+            )
+        else:
+            self.expect(
+                "upper" not in group["name_joint_side"].unique(),
+                f"{descriptor} should not have an upper side.",
+            )
 
     def validate_model_instance_group(self, group):
         # Check that the model instance group has a base link.
@@ -695,6 +752,9 @@ class SanityCheck:
             f"Model ID {group['name_model_id'].iloc[0]} has inconsistent bad values: {group['name_bad'].unique()}.",
         )
 
+        # Validate the link groups
+        group.groupby("name_link_name").apply(self.validate_model_instance_link_group)
+
         # If the instance group belongs to a bad object, validate the bad object matches the
         # total vertex and face count from the other file.
         if group["name_bad"].iloc[0]:
@@ -706,12 +766,6 @@ class SanityCheck:
                 self.get_recorded_vertex_and_face_count(model_id)
             )
             # Check that the total vertex and face count matches the recorded vertex and face count
-            print(
-                model_id,
-                real_vertex_count,
-                recorded_vertex_count,
-                real_vertex_count == recorded_vertex_count,
-            )
             self.expect(
                 real_vertex_count == recorded_vertex_count,
                 f"{model_id}-{instance_id} has different vertex count than recorded in provider: {real_vertex_count} != {recorded_vertex_count}.",
@@ -722,6 +776,12 @@ class SanityCheck:
             )
 
     def validate_model_group(self, group):
+        # Check that the group's model ID does not contain the phrase "todo"
+        self.expect(
+            "todo" not in group["name_model_id"].iloc[0],
+            f"Model ID {group['name_model_id'].iloc[0]} contains 'todo'.",
+        )
+
         # Check that every instance of this model group has the same set of links.
         self.expect(
             group.groupby("name_instance_id")["name_link_name"]
@@ -803,16 +863,12 @@ class SanityCheck:
         grouped_by_model.apply(self.validate_model_group)
 
         # Run the single-object validation checks.
-        objs = non_meta_polies[non_meta_polies["name_bad"].isnull()]
-        objs.apply(self.validate_object, axis="columns")
-
-        # TODO: Validate bad objects to make sure that they do NOT have upper meshes or meta links
-        # or lights.
-
-        # TODO: Validate that TODO is not the name of any object.
+        non_meta_polies.apply(self.validate_object, axis="columns")
 
         # Check that instance name-based grouping is equal to instance-based grouping.
-        groups_by_base_object = objs.groupby(["base_object"], sort=False, dropna=False)
+        groups_by_base_object = non_meta_polies.groupby(
+            ["base_object"], sort=False, dropna=False
+        )
         groups_by_base_object.apply(
             lambda group: self.expect(
                 group.groupby(
@@ -821,10 +877,10 @@ class SanityCheck:
                     dropna=False,
                 ).ngroups
                 == 1,
-                f"{group.iloc[0].object_name} has instances that are not numbered as instances. If this is a link, note that different links should not be instances of each other.",
+                f"{group.iloc[0].object_name} has instances that are named differently. If this is a link, note that different links should not be instances of each other.",
             )
         )
-        groups_by_instance_mark = objs.groupby(
+        groups_by_instance_mark = non_meta_polies.groupby(
             ["name_category", "name_model_id", "name_link_name"],
             sort=False,
             dropna=False,
@@ -842,6 +898,7 @@ class SanityCheck:
         lights = df[df["type"] == rt.VRayLight]
         lights.apply(self.validate_light, axis="columns")
 
+        # TODO: Check that the lights are all non-bad
         # TODO: Check that each light object has a valid base.
         # TODO: Check that each light object is numbered consecutively.
         # TODO: Check that light-named objects have lights on them.
