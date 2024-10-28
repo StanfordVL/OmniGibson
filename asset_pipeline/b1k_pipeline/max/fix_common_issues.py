@@ -105,16 +105,16 @@ def processFile(filename: pathlib.Path):
     # Prebake textures
     # b1k_pipeline.max.prebake_textures.process_open_file()
 
-    # # Delete meta links from non-zero instances
-    # for obj in rt.objects:
-    #     match = b1k_pipeline.utils.parse_name(obj.name)
-    #     if not match:
-    #         continue
-    #     if match.group("instance_id") == "0":
-    #         continue
-    #     if not match.group("meta_type"):
-    #         continue
-    #     rt.delete(obj)
+    # Delete meta links from non-zero instances
+    for obj in rt.objects:
+        match = b1k_pipeline.utils.parse_name(obj.name)
+        if not match:
+            continue
+        if not match.group("bad") and match.group("instance_id") == "0":
+            continue
+        if not match.group("meta_type"):
+            continue
+        rt.delete(obj)
 
     # # Delete upper links from non-zero instances
     # for obj in rt.objects:
