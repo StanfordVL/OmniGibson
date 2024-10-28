@@ -10,7 +10,7 @@ import pymxs
 
 rt = pymxs.runtime
 
-from b1k_pipeline.utils import parse_name, PIPELINE_ROOT
+from b1k_pipeline.utils import mat2arr, parse_name, PIPELINE_ROOT
 
 import networkx as nx
 import numpy as np
@@ -28,14 +28,30 @@ def quat2arr(q):
     return np.array([q.x, q.y, q.z, q.w])
 
 
-def node_bounding_box_incl_children(node, transform):
-    bb_min, bb_max = rt.NodeGetBoundingBox(node, transform)
-    bb_min = np.array(bb_min)
-    bb_max = np.array(bb_max)
+def get_vert_sets_including_children(node):
+    vert_sets = [
+        np.array(
+            [rt.polyop.getVert(node, i + 1) for i in range(rt.polyop.GetNumVerts(node))]
+        )
+    ]
     for child in node.children:
-        child_bb_min, child_bb_max = node_bounding_box_incl_children(child, transform)
-        bb_min = np.minimum(bb_min, child_bb_min)
-        bb_max = np.maximum(bb_max, child_bb_max)
+        vert_sets.extend(get_vert_sets_including_children(child))
+    return vert_sets
+
+
+def node_bounding_box_incl_children(node, transform):
+    verts_world = np.concatenate(get_vert_sets_including_children(node), axis=0)
+    transform = np.hstack([mat2arr(transform), [[0], [0], [0], [1]]]).T
+    if np.all(transform == np.eye(4)):
+        verts = verts_world
+    else:
+        inv_transform = np.linalg.inv(transform)
+        verts = np.concatenate(
+            [verts_world, np.ones((verts_world.shape[0], 1))], axis=1
+        )
+        verts = (inv_transform @ verts.T).T[:, :3]
+    bb_min = np.min(verts, axis=0)
+    bb_max = np.max(verts, axis=0)
     return bb_min, bb_max
 
 
