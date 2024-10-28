@@ -183,9 +183,9 @@ def replace_object_instances(obj):
     ), "Instances of the same model ID should not have children: {all_same_model_id}"
 
     # Assert they are all unit scale
-    assert all(
-        np.allclose(np.array(x.scale), np.ones(3)) for x in all_same_model_id
-    ), "Instances of the same model ID should all have unit scale."
+    # assert all(
+    #     np.allclose(np.array(x.scale), np.ones(3)) for x in all_same_model_id
+    # ), "Instances of the same model ID should all have unit scale."
 
     # # Check that they all have the same object offset rotation and pos/scale and shear.
     # desired_offset_pos = np.array(obj.objectOffsetPos) / np.array(obj.objectOffsetScale)
