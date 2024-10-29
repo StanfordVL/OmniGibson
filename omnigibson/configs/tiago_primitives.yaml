@@ -37,10 +37,10 @@ robots:
     self_collisions: true
     action_normalize: false
     action_type: continuous
-    grasping_mode: sticky
+    grasping_mode: physical
     rigid_trunk: false
     default_trunk_offset: 0.15
-    default_arm_pose: vertical
+    default_arm_pose: horizontal
     sensor_config:
       VisionSensor:
         sensor_kwargs:
@@ -50,29 +50,34 @@ robots:
       base:
         name: JointController
       arm_left:
-        name: JointController
-        motor_type: position
-        command_input_limits: null
-        command_output_limits: null
-        use_delta_commands: false
+        name: NullJointController 
+        # name: JointController
+        # motor_type: position
+        # command_input_limits: null
+        # command_output_limits: null
+        # use_delta_commands: false
       arm_right:
-        name: JointController
-        motor_type: position
-        command_input_limits: null
-        command_output_limits: null
-        use_delta_commands: false
+        # name: JointController
+        # motor_type: position
+        # command_input_limits: null
+        # command_output_limits: null
+        # use_delta_commands: false
+        name: InverseKinematicsController
+        # name: OperationalSpaceController
       gripper_left:
-        name: JointController
-        motor_type: position
-        command_input_limits: [-1, 1]
-        command_output_limits: null
-        use_delta_commands: false
+        # name: JointController
+        # motor_type: position
+        # command_input_limits: [-1, 1]
+        # command_output_limits: null
+        # use_delta_commands: false
+        name: MultiFingerGripperController
       gripper_right:
-        name: JointController
-        motor_type: position
-        command_input_limits: [-1, 1]
-        command_output_limits: null
-        use_delta_commands: false
+        # name: JointController
+        # motor_type: position
+        # command_input_limits: [-1, 1]
+        # command_output_limits: null
+        # use_delta_commands: false
+        name: MultiFingerGripperController
       camera:
         name: JointController
 

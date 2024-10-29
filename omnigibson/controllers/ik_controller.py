@@ -138,6 +138,7 @@ class InverseKinematicsController(JointController, ManipulationController):
         self.task_name = task_name
         self.reset_joint_pos = reset_joint_pos[dof_idx]
         self.condition_on_current_position = condition_on_current_position
+        self.singularity = False
 
         # Other variables that will be filled in at runtime
         self._fixed_quat_target = None
@@ -330,6 +331,27 @@ class InverseKinematicsController(JointController, ManipulationController):
             j_eef_pinv = th.linalg.pinv(j_eef)
             delta_j = j_eef_pinv @ err
             target_joint_pos = current_joint_pos + delta_j
+
+            import numpy as np
+            # Compute the rank
+            J = j_eef
+            rank = np.linalg.matrix_rank(J)
+            # Perform Singular Value Decomposition
+            U, S, V = np.linalg.svd(J)
+            # Check the smallest singular value
+            smallest_singular_value = min(S)
+            # Check the condition number
+            condition_number = np.linalg.cond(J)
+            # print(f"Rank of Jacobian: {rank}")
+            # print(f"Smallest singular value: {smallest_singular_value}")
+            # print(f"Condition number: {condition_number}")
+            if condition_number > 100 and smallest_singular_value < 1e-2: 
+                self.singularity = True
+            else: 
+                self.singularity = False
+            # # Threshold for singularity detection (for small singular values)
+            # if smallest_singular_value < 1e-2:
+            #     print("Warning: Robot arm is near a singularity!")
 
             # Clip values to be within the joint limits
             target_joint_pos = target_joint_pos.clamp(

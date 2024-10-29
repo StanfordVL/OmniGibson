@@ -80,7 +80,7 @@ m.MAX_STEPS_FOR_SETTLING = 500
 
 m.MAX_CARTESIAN_HAND_STEP = 0.002
 m.MAX_STEPS_FOR_HAND_MOVE_JOINT = 500
-m.MAX_STEPS_FOR_HAND_MOVE_IK = 1000
+m.MAX_STEPS_FOR_HAND_MOVE_IK = 200
 m.MAX_STEPS_FOR_GRASP_OR_RELEASE = 250
 m.MAX_STEPS_FOR_WAYPOINT_NAVIGATION = 500
 m.MAX_ATTEMPTS_FOR_OPEN_CLOSE = 20
@@ -351,7 +351,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     def arm(self):
         if not isinstance(self.robot, ManipulationRobot):
             raise ValueError("Cannot use arm for non-manipulation robot")
-        return self.robot.default_arm
+        # return self.robot.default_arm
+        return "right"
 
     @property
     def _base_controller_is_joint(self):
@@ -931,7 +932,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 assert self.arm == "left", "Fixed torso mode only supports left arm!"
                 return self.robot.arm_control_idx["left"]
             else:
-                return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
+                # return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
+                return self.robot.arm_control_idx[self.arm]
         elif isinstance(self.robot, Fetch):
             return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
 
@@ -1164,7 +1166,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         assert (
             controller_config["name"] == "InverseKinematicsController"
         ), "Controller must be InverseKinematicsController"
-        assert controller_config["mode"] == "pose_absolute_ori", "Controller must be in pose_absolute_ori mode"
+        assert controller_config["mode"] == "pose_absolute_ori" or controller_config["mode"] == "pose_delta_ori", "Controller must be in pose_absolute_ori mode"
         if in_world_frame:
             target_pose = self._get_pose_in_robot_frame(target_pose)
         target_pos = target_pose[0]
