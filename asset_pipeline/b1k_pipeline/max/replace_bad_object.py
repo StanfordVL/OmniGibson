@@ -281,8 +281,8 @@ def replace_object_instances(obj):
     ]
 
     # Delete all the objects
-    # for same_model_id in all_same_model_id:
-    #     rt.delete(same_model_id)
+    for same_model_id in all_same_model_id:
+        rt.delete(same_model_id)
 
     # Import the original mesh for just the zero instance
     imported = import_bad_model_originals(model_id)
@@ -482,18 +482,16 @@ def replace_object_instances(obj):
         ), "New size is not the same as the original size"
 
         # Record the comparison data
-        comparison_data[instance_id](
-            {
-                "original_transform": mat2transform(instance_transform),
-                "calculated_transform": combined_transform,
-                "current_transform": mat2transform(base_copy.transform),
-                "original_world_bb": instance_world_bb,
-                "computed_world_bb": computed_world_bb,
-                "current_world_bb": base_copy_world_bb,
-                "original_lowbb": instance_lowbb,
-                "current_lowbb": base_copy_lowbb,
-            }
-        )
+        comparison_data[instance_id] = {
+            "original_transform": mat2transform(instance_transform),
+            "calculated_transform": combined_transform,
+            "current_transform": mat2transform(base_copy.transform),
+            "original_world_bb": instance_world_bb,
+            "computed_world_bb": computed_world_bb,
+            "current_world_bb": base_copy_world_bb,
+            "original_lowbb": instance_lowbb,
+            "current_lowbb": base_copy_lowbb,
+        }
 
         # Name each of the children correctly, and parent them to the original owner's parents
         for (link_name, parent_link, joint_type, _), link in zip(copyables, child_copy):
