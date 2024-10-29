@@ -39,12 +39,12 @@ def get_vert_sets_including_children(node):
     return vert_sets
 
 
-def node_bounding_box_incl_children(node, transform):
+def node_bounding_box_incl_children(node, transform=None):
     verts_world = np.concatenate(get_vert_sets_including_children(node), axis=0)
-    transform = np.hstack([mat2arr(transform), [[0], [0], [0], [1]]]).T
-    if np.all(transform == np.eye(4)):
+    if transform is None or transform == rt.Matrix3(1):
         verts = verts_world
     else:
+        transform = np.hstack([mat2arr(transform), [[0], [0], [0], [1]]]).T
         inv_transform = np.linalg.inv(transform)
         verts = np.concatenate(
             [verts_world, np.ones((verts_world.shape[0], 1))], axis=1
@@ -222,7 +222,7 @@ def replace_object_instances(obj):
         for inst in all_base_links
     ]
     instance_world_bbs = [
-        node_bounding_box_incl_children(inst, rt.Matrix3(1)) for inst in all_base_links
+        node_bounding_box_incl_children(inst) for inst in all_base_links
     ]
 
     # Delete all the objects
@@ -325,7 +325,7 @@ def replace_object_instances(obj):
         )
 
         # Assert the new world bb is the same as the original world bb
-        base_copy_world_bb = node_bounding_box_incl_children(base_copy, rt.Matrix3(1))
+        base_copy_world_bb = node_bounding_box_incl_children(base_copy)
         orig_min, orig_max = np.array(instance_world_bb[0]), np.array(
             instance_world_bb[1]
         )
