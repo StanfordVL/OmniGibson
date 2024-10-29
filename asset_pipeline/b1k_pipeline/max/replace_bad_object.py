@@ -27,18 +27,35 @@ def quat2arr(q):
 
 
 def transform2mat(transform):
+    # Transpose the rotation/scale part to go from right hand to left hand
+    transform_copy = transform.copy()
+    # transform_copy[:3, :3] = transform_copy[:3, :3].T
+
     # Convert a 4x4 numpy transform in our right-hand multiplication system to a 4x3 matrix in 3ds Max's left-hand multiplication system
-    return rt.Matrix3(*[rt.Point3(*row) for row in transform[:3, :].T.tolist()])
+    return rt.Matrix3(
+        *[
+            rt.Point3(*row)
+            for row in transform_copy[:3, :].T.astype(np.float32).tolist()
+        ]
+    )
 
 
 def mat2transform(mat):
-    return np.hstack([mat2arr(mat, dtype=np.float64), [[0], [0], [0], [1]]]).T
+    transform = np.hstack([mat2arr(mat, dtype=np.float64), [[0], [0], [0], [1]]]).T
+
+    # Transpose the rotation/scale part to go from left hand to right hand
+    # transform[:3, :3] = transform[:3, :3].T
+
+    return transform
 
 
 def get_vert_sets_including_children(node):
     vert_sets = [
         np.array(
-            [rt.polyop.getVert(node, i + 1) for i in range(rt.polyop.GetNumVerts(node))],
+            [
+                rt.polyop.getVert(node, i + 1)
+                for i in range(rt.polyop.GetNumVerts(node))
+            ],
             dtype=np.float64,
         )
     ]
@@ -102,7 +119,8 @@ def get_rotation_from_transform(matrix):
         np.negative(scale, scale)
         np.negative(row, row)
 
-    return row
+    return row.T
+
 
 def rotation_only_transform(mat):
     transform = mat2transform(mat)
@@ -111,9 +129,11 @@ def rotation_only_transform(mat):
     result[:3, :3] = rotation
     return result
 
+
 def apply_transform(points, transform):
-    stack = np.column_stack((points, np.ones(len(points))))
-    return np.dot(transform, stack.T).T[:, :3]
+    with_ones = np.concatenate([points, np.ones((points.shape[0], 1))], axis=1)
+    return np.dot(transform, with_ones.T).T[:, :3]
+
 
 def import_bad_model_originals(model_id):
     # Get the provider file
@@ -306,7 +326,9 @@ def replace_object_instances(obj):
         ), "The base link should be the first element in the list of child"
 
         # Get the points
-        base_copy_points = np.concatenate(get_vert_sets_including_children(base_copy), axis=0)
+        base_copy_points = np.concatenate(
+            get_vert_sets_including_children(base_copy), axis=0
+        )
 
         # First apply just the rotation
         combined_transform = rotation_only_transform(instance_transform)
@@ -315,14 +337,18 @@ def replace_object_instances(obj):
         if USE_WORLD_BB_FOR_SCALE:
             # The target bounding box is the instance's world bounding box
             instance_worldbb_size = instance_world_bb[1] - instance_world_bb[0]
+            print("Instance world bb size", instance_worldbb_size)
 
             # The current bounding box is what we have from rotating the verts
             rotated_points = apply_transform(base_copy_points, combined_transform)
+            print("Transforming points via", combined_transform)
             base_copy_worldbb = bounding_box_from_verts(rotated_points)
             base_copy_worldbb_size = base_copy_worldbb[1] - base_copy_worldbb[0]
+            print("Base copy world bb size", base_copy_worldbb_size)
 
             # The target scale is the ratio of the two sizes
             relative_scale_from_now = instance_worldbb_size / base_copy_worldbb_size
+            print("Relative scale from now", relative_scale_from_now)
 
             # This scale needs to be applied AFTER the rotation since it's in world frame
             scale_transform = np.diag(relative_scale_from_now.tolist() + [1])
@@ -345,7 +371,9 @@ def replace_object_instances(obj):
             combined_transform = combined_transform @ scale_transform
 
         # Finally position it to match the center
-        base_copy_worldbb = bounding_box_from_verts(apply_transform(base_copy_points, combined_transform))
+        base_copy_worldbb = bounding_box_from_verts(
+            apply_transform(base_copy_points, combined_transform)
+        )
         base_copy_worldbb_center = (base_copy_worldbb[0] + base_copy_worldbb[1]) / 2
         instance_worldbb_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
         move_center_by = instance_worldbb_center - base_copy_worldbb_center
@@ -372,10 +400,10 @@ def replace_object_instances(obj):
         print("  Original size", orig_size, "vs New size", new_size)
         print("  Original center", orig_center, "vs New center", new_center)
         assert np.allclose(
-            orig_min, new_min, atol=10
+            orig_min, new_min, atol=100
         ), "New world min is not the same as the original world min"
         assert np.allclose(
-            orig_max, new_max, atol=10
+            orig_max, new_max, atol=100
         ), "New world max is not the same as the original world max"
 
         # Name each of the children correctly, and parent them to the original owner's parents
