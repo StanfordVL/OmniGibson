@@ -1,24 +1,4 @@
 stages:
-  sanitycheck:
-    # Run a check to ensure .max files match expected format.
-    foreach: ${combined_unfiltered}
-    do:
-      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/new_sanity_check.py batch=true'
-      deps:
-      - cad/${item}/processed.max
-      - b1k_pipeline/max/new_sanity_check.py
-      outs:
-      - cad/${item}/artifacts/sanitycheck.json
-
-  sanitycheck_success:
-    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/sanitycheck.json artifacts/pipeline/sanitycheck.success'
-    deps:
-    - cad/#{combined}/artifacts/sanitycheck.json
-    - b1k_pipeline/check_success_aggregate.py
-    - params.yaml
-    outs:
-    - artifacts/pipeline/sanitycheck.success
-
   object_list:
     # List the objects found in the entry.
     foreach: ${combined_unfiltered}
@@ -27,7 +7,6 @@ stages:
       deps:
       - b1k_pipeline/max/object_list.py
       - cad/${item}/processed.max
-      # - artifacts/pipeline/sanitycheck.success
       outs:
       - cad/${item}/artifacts/object_list.json
 
@@ -39,6 +18,28 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/object_list.success
+
+  sanitycheck:
+    # Run a check to ensure .max files match expected format.
+    foreach: ${combined_unfiltered}
+    do:
+      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/new_sanity_check.py batch=true'
+      deps:
+      - cad/${item}/processed.max
+      - b1k_pipeline/max/new_sanity_check.py
+      - artifacts/pipeline/object_list.
+      - artifacts/pipeline/object_inventory.success
+      outs:
+      - cad/${item}/artifacts/sanitycheck.json
+
+  sanitycheck_success:
+    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/sanitycheck.json artifacts/pipeline/sanitycheck.success'
+    deps:
+    - cad/#{combined}/artifacts/sanitycheck.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/sanitycheck.success
 
   check_collisions:
     # List the objects found in the entry.

@@ -2402,6 +2402,8 @@ stages:
       deps:
       - cad/${item}/processed.max
       - b1k_pipeline/max/new_sanity_check.py
+      - artifacts/pipeline/object_list.
+      - artifacts/pipeline/object_inventory.success
       outs:
       - cad/${item}/artifacts/sanitycheck.json
     foreach: ${combined_unfiltered}
