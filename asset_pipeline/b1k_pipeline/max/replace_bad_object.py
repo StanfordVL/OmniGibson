@@ -15,6 +15,7 @@ from b1k_pipeline.utils import mat2arr, parse_name, PIPELINE_ROOT
 import networkx as nx
 import numpy as np
 from scipy.spatial.transform import Rotation
+import trimesh.transformations
 
 MINIMUM_COLLISION_DEPTH_METERS = 0.01  # 1cm of collision
 
@@ -26,6 +27,15 @@ with open(inventory_path, "r") as f:
 
 def quat2arr(q):
     return np.array([q.x, q.y, q.z, q.w])
+
+
+def transform2mat(transform):
+    # Convert a 4x4 numpy transform in our right-hand multiplication system to a 4x3 matrix in 3ds Max's left-hand multiplication system
+    return rt.Matrix3(*[rt.Point3(*row) for row in transform[:3, :].T.tolist()])
+
+
+def mat2transform(mat):
+    return np.hstack([mat2arr(mat), [[0], [0], [0], [1]]]).T
 
 
 def get_vert_sets_including_children(node):
@@ -41,10 +51,9 @@ def get_vert_sets_including_children(node):
 
 def node_bounding_box_incl_children(node, transform=None):
     verts_world = np.concatenate(get_vert_sets_including_children(node), axis=0)
-    if transform is None or transform == rt.Matrix3(1):
+    if transform is None or np.allclose(transform, np.eye(4)):
         verts = verts_world
     else:
-        transform = np.hstack([mat2arr(transform), [[0], [0], [0], [1]]]).T
         inv_transform = np.linalg.inv(transform)
         verts = np.concatenate(
             [verts_world, np.ones((verts_world.shape[0], 1))], axis=1
@@ -55,10 +64,14 @@ def node_bounding_box_incl_children(node, transform=None):
     return bb_min, bb_max
 
 
-def rotation_only_transform(transform):
-    rot_only = rt.Matrix3(1)
-    rot_only.rotation = transform.rotation
-    return rot_only
+def rotation_only_transform(mat, maxscript=False):
+    transform = mat2transform(mat)
+    quat = trimesh.transformations.quaternion_from_matrix(transform)
+    prod_transform = trimesh.transformations.quaternion_matrix(quat)
+    if maxscript:
+        return transform2mat(prod_transform)
+
+    return prod_transform
 
 
 def import_bad_model_originals(model_id):
@@ -226,8 +239,8 @@ def replace_object_instances(obj):
     ]
 
     # Delete all the objects
-    for same_model_id in all_same_model_id:
-        rt.delete(same_model_id)
+    # for same_model_id in all_same_model_id:
+    #     rt.delete(same_model_id)
 
     # Import the original mesh for just the zero instance
     imported = import_bad_model_originals(model_id)
@@ -242,13 +255,6 @@ def replace_object_instances(obj):
 
     # Set the rotation of the imported base link to be the identity rotation
     imported_base_link.transform = rt.Matrix3(1)
-
-    # Get the bounding box of the imported mesh. Here we use the local-oriented-world-bb,
-    # which means we assume that the imported mesh and the original one have the same
-    # orientation relative to their pivots. Here we can use the world bb because the
-    # imported mesh right now has the identity transform.
-    imported_lowbb = node_bounding_box_incl_children(imported_base_link)
-    imported_lowbb_size = imported_lowbb[1] - imported_lowbb[0]
 
     # Flatten the copyables into a list
     copyables = [("base_link", None, None, imported_base_link)] + [
@@ -280,43 +286,29 @@ def replace_object_instances(obj):
             base_copy == child_copy[0]
         ), "The base link should be the first element in the list of child"
 
+        # First apply just the rotation
+        rotation_transform = rotation_only_transform(instance_transform)
+        base_copy.transform = transform2mat(rotation_transform)
+
         # Scale the imported mesh to match the instance
-        instance_lowbb_size = instance_lowbb[1] - instance_lowbb[0]
-        instance_lowbb_center = (instance_lowbb[0] + instance_lowbb[1]) / 2
-        print(
-            "Target instance has lowbb size",
-            instance_lowbb_size,
-            "and center",
-            instance_lowbb_center,
-        )
-        relative_scale_from_now = instance_lowbb_size / imported_lowbb_size
-        scale_transform = rt.Matrix3(1)
-        scale_transform.scale = rt.Point3(*relative_scale_from_now.tolist())
-        print("Applying scale", relative_scale_from_now)
-        base_copy.transform = scale_transform * rotation_only_transform(
-            instance_transform
-        )  # this means scale first, then the real transform
-        print("New scale is", base_copy.scale)
+        for _ in range(3):
+            instance_worldbb_size = instance_world_bb[1] - instance_world_bb[0]
+            base_copy_worldbb = node_bounding_box_incl_children(base_copy)
+            base_copy_worldbb_size = base_copy_worldbb[1] - base_copy_worldbb[0]
+            relative_scale_from_now = instance_worldbb_size / base_copy_worldbb_size
+            scale_transform = np.diag(relative_scale_from_now.tolist() + [1])
 
-        # Finally position it to match the center
-        base_copy_worldbb = node_bounding_box_incl_children(base_copy)
-        base_copy_worldbb_center = (base_copy_worldbb[0] + base_copy_worldbb[1]) / 2
-        instance_worldbb_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
-        move_center_by = rt.Point3(
-            *(instance_worldbb_center - base_copy_worldbb_center).tolist()
-        )
-        base_copy.position = base_copy.position + move_center_by
-        print(
-            "Moving in world by ",
-            move_center_by,
-        )
+            # This scale is in the world frame and thus needs to be applied last
+            base_copy.transform = transform2mat(scale_transform @ rotation_transform)
 
-        base_copy_lowbb = node_bounding_box_incl_children(
-            base_copy, rotation_only_transform(base_copy.transform)
-        )
-        print(
-            "Base copy new lowbb center", (base_copy_lowbb[0] + base_copy_lowbb[1]) / 2
-        )
+            # Finally position it to match the center
+            base_copy_worldbb = node_bounding_box_incl_children(base_copy)
+            base_copy_worldbb_center = (base_copy_worldbb[0] + base_copy_worldbb[1]) / 2
+            instance_worldbb_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
+            move_center_by = rt.Point3(
+                *(instance_worldbb_center - base_copy_worldbb_center).tolist()
+            )
+            base_copy.position = base_copy.position + move_center_by
 
         # Assert the new world bb is the same as the original world bb
         base_copy_world_bb = node_bounding_box_incl_children(base_copy)
