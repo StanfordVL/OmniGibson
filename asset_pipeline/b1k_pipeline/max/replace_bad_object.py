@@ -280,11 +280,6 @@ def replace_object_instances(obj):
             base_copy == child_copy[0]
         ), "The base link should be the first element in the list of child"
 
-        # Get the rotation-only transform of the instance and apply it to this object too
-        base_copy.transform = base_copy.transform * rotation_only_transform(
-            instance_transform
-        )
-
         # Scale the imported mesh to match the instance
         instance_lowbb_size = instance_lowbb[1] - instance_lowbb[0]
         instance_lowbb_center = (instance_lowbb[0] + instance_lowbb[1]) / 2
@@ -294,13 +289,12 @@ def replace_object_instances(obj):
             "and center",
             instance_lowbb_center,
         )
-        relative_scale_from_now = instance_lowbb_size / 1000
+        relative_scale_from_now = instance_lowbb_size / imported_lowbb_size
         scale_transform = rt.Matrix3(1)
         scale_transform.scale = rt.Point3(*relative_scale_from_now.tolist())
-        print("Applying relative scale", relative_scale_from_now)
-        print("Previous scale was ", base_copy.scale)
-        base_copy.transform = (
-            scale_transform * base_copy.transform
+        print("Applying scale", relative_scale_from_now)
+        base_copy.transform = scale_transform * rotation_only_transform(
+            instance_transform
         )  # this means scale first, then the real transform
         print("New scale is", base_copy.scale)
 
