@@ -241,43 +241,14 @@ def replace_object_instances(obj):
         link.parent = imported_base_link
 
     # Set the rotation of the imported base link to be the identity rotation
-    imported_base_link.rotation = rt.Matrix3(1)
+    imported_base_link.transform = rt.Matrix3(1)
 
     # Get the bounding box of the imported mesh. Here we use the local-oriented-world-bb,
     # which means we assume that the imported mesh and the original one have the same
-    # orientation relative to their pivots.
-    imported_lowbb = node_bounding_box_incl_children(
-        imported_base_link, rotation_only_transform(imported_base_link.transform)
-    )
-    print("Imported object came with bounding box", imported_lowbb)
-
-    # Make the imported lowbb match the unit cube size
+    # orientation relative to their pivots. Here we can use the world bb because the
+    # imported mesh right now has the identity transform.
+    imported_lowbb = node_bounding_box_incl_children(imported_base_link)
     imported_lowbb_size = imported_lowbb[1] - imported_lowbb[0]
-    imported_lowbb_scale = rt.Point3(*(1000 / imported_lowbb_size).tolist())
-    imported_base_link.scale = imported_base_link.scale * imported_lowbb_scale
-    print("Scaled imported mesh for", model_id, "by", imported_lowbb_scale)
-
-    # Recompute the imported lowbb and move it to the origin
-    imported_lowbb = node_bounding_box_incl_children(
-        imported_base_link, rotation_only_transform(imported_base_link.transform)
-    )
-    imported_lowbb_center = (imported_lowbb[0] + imported_lowbb[1]) / 2
-    imported_base_link.position = imported_base_link.position - (
-        rt.Point3(*imported_lowbb_center.tolist())
-        * rotation_only_transform(imported_base_link.transform)
-    )
-
-    # Recompute the imported lowbb and assert it is roughly at the unit cube
-    imported_lowbb = node_bounding_box_incl_children(
-        imported_base_link, rotation_only_transform(imported_base_link.transform)
-    )
-    assert np.allclose(
-        imported_lowbb[0], -500, atol=10  # 1cm
-    ), f"Imported mesh lowbb min is not at -0.5m: {imported_lowbb[0]}"
-    assert np.allclose(
-        imported_lowbb[1], 500, atol=10  # 1cm
-    ), f"Imported mesh lowbb max is not at 0.5m: {imported_lowbb[1]}"
-    print("Normalized imported mesh for", model_id)
 
     # Flatten the copyables into a list
     copyables = [("base_link", None, None, imported_base_link)] + [
