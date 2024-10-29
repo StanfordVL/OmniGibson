@@ -360,15 +360,24 @@ def replace_object_instances(obj):
         orig_min, orig_max = np.array(instance_world_bb[0]), np.array(
             instance_world_bb[1]
         )
+        orig_center = (orig_min + orig_max) / 2
+        orig_size = orig_max - orig_min
         new_min, new_max = np.array(base_copy_world_bb[0]), np.array(
             base_copy_world_bb[1]
         )
+        new_center = (new_min + new_max) / 2
+        new_size = new_max - new_min
+        print("Bounding box info")
+        print("  Original min", orig_min, "vs New min", new_min)
+        print("  Original max", orig_max, "vs New max", new_max)
+        print("  Original size", orig_size, "vs New size", new_size)
+        print("  Original center", orig_center, "vs New center", new_center)
         assert np.allclose(
-            orig_min, new_min, atol=10  # 1cm
-        ), f"World min mismatch: {orig_min} != {new_min} for {model_id} instance {instance_id}"
+            orig_min, new_min, atol=10
+        ), "New world min is not the same as the original world min"
         assert np.allclose(
-            orig_max, new_max, atol=10  # 1cm
-        ), f"World max mismatch: {orig_max} != {new_max} for {model_id} instance {instance_id}"
+            orig_max, new_max, atol=10
+        ), "New world max is not the same as the original world max"
 
         # Name each of the children correctly, and parent them to the original owner's parents
         for (link_name, parent_link, joint_type, _), link in zip(copyables, child_copy):
