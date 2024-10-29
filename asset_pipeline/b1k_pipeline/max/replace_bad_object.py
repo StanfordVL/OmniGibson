@@ -386,7 +386,7 @@ def replace_object_instances(obj):
 
 
 def replace_all_bad_legacy_objects_in_open_file():
-    bad_objects_to_remove = []
+    bad_objects_to_remove = {}
     for obj in rt.objects:
         # Check that it's an editable poly
         if rt.classOf(obj) != rt.Editable_Poly:
@@ -408,25 +408,34 @@ def replace_all_bad_legacy_objects_in_open_file():
         if parsed_name.group("instance_id") != "0":
             continue
 
+        # Check that its not a meta link
+        if parsed_name.group("meta_type"):
+            continue
+
         # Check that the provider is legacy_
         model_id = parsed_name.group("model_id")
         provider = providers[model_id]
         if "legacy_" not in provider:
             continue
 
+        # Check that we havent picked an object for this model ID yet.
+        assert (
+            model_id not in bad_objects_to_remove
+        ), f"Found multiple base objects for {model_id}. First: {bad_objects_to_remove[model_id].name}, Second: {obj.name}"
+
         # Add to the list of bad objects to remove
-        bad_objects_to_remove.append(obj)
+        bad_objects_to_remove[model_id] = obj
 
     print(
         "Found",
         len(bad_objects_to_remove),
         "bad objects to remove:",
-        ", ".join([x.name for x in bad_objects_to_remove]),
+        ", ".join(bad_objects_to_remove.keys()),
     )
 
     # Go through all the bad objects to remove
-    for obj in tqdm.tqdm(bad_objects_to_remove):
-        replace_object_instances(obj)
+    for model_id, example_obj in tqdm.tqdm(bad_objects_to_remove.items()):
+        replace_object_instances(example_obj)
 
     print("\nDon't forget to reset scale!")
 
