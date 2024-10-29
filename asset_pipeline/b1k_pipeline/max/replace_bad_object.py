@@ -13,8 +13,9 @@ rt = pymxs.runtime
 from b1k_pipeline.utils import mat2arr, parse_name, PIPELINE_ROOT
 
 import numpy as np
+from scipy.spatial.transform import Rotation as R
 
-USE_WORLD_BB_FOR_SCALE = True
+USE_WORLD_BB_FOR_SCALE = False
 _EPS = np.finfo(float).eps * 4.0
 
 inventory_path = PIPELINE_ROOT / "artifacts" / "pipeline" / "object_inventory.json"
@@ -119,12 +120,14 @@ def get_rotation_from_transform(matrix):
         np.negative(scale, scale)
         np.negative(row, row)
 
-    return row.T
+    return row.T, scale
 
 
 def rotation_only_transform(mat):
     transform = mat2transform(mat)
-    rotation = get_rotation_from_transform(transform)
+    rotation, _ = get_rotation_from_transform(
+        transform
+    )  # R.from_quat(quat2arr(mat.rotation)).as_matrix()
     result = np.eye(4, dtype=np.float64)
     result[:3, :3] = rotation
     return result
@@ -268,6 +271,7 @@ def replace_object_instances(obj):
     # Record the transforms of all of the instances as well as their local and world BBs
     instance_parents = [inst.parent for inst in all_base_links]
     instance_transforms = [inst.transform for inst in all_base_links]
+    instance_rotations = [inst.rotation for inst in all_base_links]
     instance_lowbbs = [
         node_bounding_box_incl_children(inst, rotation_only_transform(inst.transform))
         for inst in all_base_links
@@ -277,8 +281,8 @@ def replace_object_instances(obj):
     ]
 
     # Delete all the objects
-    for same_model_id in all_same_model_id:
-        rt.delete(same_model_id)
+    # for same_model_id in all_same_model_id:
+    #     rt.delete(same_model_id)
 
     # Import the original mesh for just the zero instance
     imported = import_bad_model_originals(model_id)
@@ -304,10 +308,17 @@ def replace_object_instances(obj):
     for instance_id, (
         instance_parent,
         instance_transform,
+        instance_rotation,
         instance_lowbb,
         instance_world_bb,
     ) in enumerate(
-        zip(instance_parents, instance_transforms, instance_lowbbs, instance_world_bbs)
+        zip(
+            instance_parents,
+            instance_transforms,
+            instance_rotations,
+            instance_lowbbs,
+            instance_world_bbs,
+        )
     ):
         # First copy the object.
         success, child_copy = rt.maxOps.cloneNodes(
@@ -328,9 +339,6 @@ def replace_object_instances(obj):
         base_copy_points = np.concatenate(
             get_vert_sets_including_children(base_copy), axis=0
         )
-
-        # First apply just the rotation
-        combined_transform = rotation_only_transform(instance_transform)
 
         # Scale the imported mesh to match the instance
         if USE_WORLD_BB_FOR_SCALE:
@@ -367,7 +375,29 @@ def replace_object_instances(obj):
 
             # This scale needs to be applied BEFORE the rotation since it's in local frame
             scale_transform = np.diag(relative_scale_from_now.tolist() + [1])
-            combined_transform = combined_transform @ scale_transform
+
+        # First apply just the rotation
+        rotation_transform = rotation_only_transform(instance_transform)
+        combined_transform = rotation_transform @ scale_transform
+        print("Rotation transform", rotation_transform)
+        print("Scale transform", scale_transform)
+        print(
+            "Combined transform components",
+            get_rotation_from_transform(combined_transform),
+        )
+        target_orn = R.from_quat(quat2arr(instance_transform.rotation))
+        current_orn = R.from_matrix(get_rotation_from_transform(combined_transform)[0])
+        delta_orn = target_orn * current_orn
+        delta_mag = delta_orn.magnitude()
+        print("Delta orientation", delta_orn.as_rotvec(), "magnitude", delta_mag)
+
+        # Compute the new bounding box in numpy
+        base_copy_worldbb = bounding_box_from_verts(
+            apply_transform(base_copy_points, combined_transform)
+        )
+        base_copy_worldbb_size = base_copy_worldbb[1] - base_copy_worldbb[0]
+        print("Base copy world bb after transform", base_copy_worldbb)
+        print("Base copy world bb size after transform", base_copy_worldbb_size)
 
         # Finally position it to match the center
         base_copy_worldbb = bounding_box_from_verts(
@@ -376,10 +406,28 @@ def replace_object_instances(obj):
         base_copy_worldbb_center = (base_copy_worldbb[0] + base_copy_worldbb[1]) / 2
         instance_worldbb_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
         move_center_by = instance_worldbb_center - base_copy_worldbb_center
-        combined_transform[:3, 3] += move_center_by
 
         # Convert and apply the transform to the 3ds Max object
-        base_copy.transform = transform2mat(combined_transform)
+        quat = R.from_matrix(rotation_transform[:3, :3]).as_quat()
+        base_copy.scale = rt.Point3(*relative_scale_from_now.tolist())
+        base_copy.rotation = instance_rotation  # rt.Quat(*quat.tolist())
+        base_copy.position = rt.Point3(*move_center_by.tolist())
+
+        # base_copy.transform = transform2mat(combined_transform)
+        max_orn = R.from_quat(quat2arr(base_copy.rotation))
+        numpy_rot, numpy_scale = get_rotation_from_transform(combined_transform)
+        numpy_orn = R.from_matrix(numpy_rot)
+        delta_orn = max_orn.inv() * numpy_orn
+        delta_mag = delta_orn.magnitude()
+        print("Delta orientation", delta_orn.as_rotvec(), "magnitude", delta_mag)
+        print(
+            "Max scale",
+            base_copy.transform.scale,
+            "vs Numpy scale",
+            numpy_scale,
+            "vs Relative scale",
+            relative_scale_from_now,
+        )
 
         # Assert the new world bb is the same as the original world bb
         base_copy_world_bb = node_bounding_box_incl_children(base_copy)
