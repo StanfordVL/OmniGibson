@@ -334,17 +334,15 @@ def replace_object_instances(obj):
         print("New scale is", base_copy.scale)
 
         # Finally position it to match the center
-        base_copy_lowbb = node_bounding_box_incl_children(
-            base_copy, rotation_only_transform(base_copy.transform)
-        )
-        print("Base copy new lowbb size", base_copy_lowbb[1] - base_copy_lowbb[0])
-        base_copy_lowbb_center = (base_copy_lowbb[0] + base_copy_lowbb[1]) / 2
+        base_copy_worldbb = node_bounding_box_incl_children(base_copy)
+        base_copy_worldbb_center = (base_copy_worldbb[0] + base_copy_worldbb[1]) / 2
+        instance_worldbb_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
         move_center_by = rt.Point3(
-            *(instance_lowbb_center - base_copy_lowbb_center).tolist()
-        ) * rotation_only_transform(base_copy.transform)
-        base_copy.position = base_copy.position + (move_center_by)
+            *(instance_worldbb_center - base_copy_worldbb_center).tolist()
+        )
+        base_copy.position = base_copy.position + move_center_by
         print(
-            "Moving locally by ",
+            "Moving in world by ",
             move_center_by,
         )
 
