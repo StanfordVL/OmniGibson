@@ -55,13 +55,13 @@ def ParallelZipFS(name, write=False, temp_fs=None):
         temp_fs = TempFS(temp_dir=str(TMP_DIR))
     return ZipFS(PIPELINE_ROOT / "artifacts/parallels" / name, write=write, temp_fs=temp_fs)
 
-def mat2arr(mat):
+def mat2arr(mat, dtype=np.float32):
     return np.array([
         [mat.row1.x, mat.row1.y, mat.row1.z],
         [mat.row2.x, mat.row2.y, mat.row2.z],
         [mat.row3.x, mat.row3.y, mat.row3.z],
         [mat.row4.x, mat.row4.y, mat.row4.z],
-    ])
+    ], dtype=dtype)
 
 class FSResolver(trimesh.resolvers.Resolver):
     """

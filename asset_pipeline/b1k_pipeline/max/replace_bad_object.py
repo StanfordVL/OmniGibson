@@ -12,13 +12,10 @@ rt = pymxs.runtime
 
 from b1k_pipeline.utils import mat2arr, parse_name, PIPELINE_ROOT
 
-import networkx as nx
 import numpy as np
-from scipy.spatial.transform import Rotation
-import trimesh.transformations
 
-MINIMUM_COLLISION_DEPTH_METERS = 0.01  # 1cm of collision
-
+USE_WORLD_BB_FOR_SCALE = True
+_EPS = np.finfo(float).eps * 4.0
 
 inventory_path = PIPELINE_ROOT / "artifacts" / "pipeline" / "object_inventory.json"
 with open(inventory_path, "r") as f:
@@ -26,7 +23,7 @@ with open(inventory_path, "r") as f:
 
 
 def quat2arr(q):
-    return np.array([q.x, q.y, q.z, q.w])
+    return np.array([q.x, q.y, q.z, q.w], dtype=np.float64)
 
 
 def transform2mat(transform):
@@ -35,18 +32,23 @@ def transform2mat(transform):
 
 
 def mat2transform(mat):
-    return np.hstack([mat2arr(mat), [[0], [0], [0], [1]]]).T
+    return np.hstack([mat2arr(mat, dtype=np.float64), [[0], [0], [0], [1]]]).T
 
 
 def get_vert_sets_including_children(node):
     vert_sets = [
         np.array(
-            [rt.polyop.getVert(node, i + 1) for i in range(rt.polyop.GetNumVerts(node))]
+            [rt.polyop.getVert(node, i + 1) for i in range(rt.polyop.GetNumVerts(node))],
+            dtype=np.float64,
         )
     ]
     for child in node.children:
         vert_sets.extend(get_vert_sets_including_children(child))
     return vert_sets
+
+
+def bounding_box_from_verts(verts):
+    return np.min(verts, axis=0), np.max(verts, axis=0)
 
 
 def node_bounding_box_incl_children(node, transform=None):
@@ -59,20 +61,59 @@ def node_bounding_box_incl_children(node, transform=None):
             [verts_world, np.ones((verts_world.shape[0], 1))], axis=1
         )
         verts = (inv_transform @ verts.T).T[:, :3]
-    bb_min = np.min(verts, axis=0)
-    bb_max = np.max(verts, axis=0)
-    return bb_min, bb_max
+    return bounding_box_from_verts(verts)
 
 
-def rotation_only_transform(mat, maxscript=False):
+def get_rotation_from_transform(matrix):
+    M = np.array(matrix, dtype=np.float64).T
+    if abs(M[3, 3]) < _EPS:
+        raise ValueError("M[3, 3] is zero")
+    M /= M[3, 3]
+    P = M.copy()
+    P[:, 3] = 0.0, 0.0, 0.0, 1.0
+    if not np.linalg.det(P):
+        raise ValueError("matrix is singular")
+
+    scale = np.zeros((3,))
+    shear = [0.0, 0.0, 0.0]
+
+    if any(abs(M[:3, 3]) > _EPS):
+        M[:, 3] = 0.0, 0.0, 0.0, 1.0
+
+    M[3, :3] = 0.0
+
+    row = M[:3, :3].copy()
+    scale[0] = np.linalg.norm(row[0])
+    row[0] /= scale[0]
+    shear[0] = np.dot(row[0], row[1])
+    row[1] -= row[0] * shear[0]
+    scale[1] = np.linalg.norm(row[1])
+    row[1] /= scale[1]
+    shear[0] /= scale[1]
+    shear[1] = np.dot(row[0], row[2])
+    row[2] -= row[0] * shear[1]
+    shear[2] = np.dot(row[1], row[2])
+    row[2] -= row[1] * shear[2]
+    scale[2] = np.linalg.norm(row[2])
+    row[2] /= scale[2]
+    shear[1:] /= scale[2]
+
+    if np.dot(row[0], np.cross(row[1], row[2])) < 0:
+        np.negative(scale, scale)
+        np.negative(row, row)
+
+    return row
+
+def rotation_only_transform(mat):
     transform = mat2transform(mat)
-    quat = trimesh.transformations.quaternion_from_matrix(transform)
-    prod_transform = trimesh.transformations.quaternion_matrix(quat)
-    if maxscript:
-        return transform2mat(prod_transform)
+    rotation = get_rotation_from_transform(transform)
+    result = np.eye(4, dtype=np.float64)
+    result[:3, :3] = rotation
+    return result
 
-    return prod_transform
-
+def apply_transform(points, transform):
+    stack = np.column_stack((points, np.ones(len(points))))
+    return np.dot(transform, stack.T).T[:, :3]
 
 def import_bad_model_originals(model_id):
     # Get the provider file
@@ -195,29 +236,6 @@ def replace_object_instances(obj):
         len(x.children) > 0 for x in all_same_model_id
     ), "Instances of the same model ID should not have children: {all_same_model_id}"
 
-    # Assert they are all unit scale
-    # assert all(
-    #     np.allclose(np.array(x.scale), np.ones(3)) for x in all_same_model_id
-    # ), "Instances of the same model ID should all have unit scale."
-
-    # # Check that they all have the same object offset rotation and pos/scale and shear.
-    # desired_offset_pos = np.array(obj.objectOffsetPos) / np.array(obj.objectOffsetScale)
-    # desired_offset_rot_inv = Rotation.from_quat(quat2arr(obj.objectOffsetRot)).inv()
-    # for inst in all_base_links:
-    #     this_offset_pos = np.array(inst.objectOffsetPos) / np.array(
-    #         inst.objectOffsetScale
-    #     )
-    #     pos_diff = this_offset_pos - desired_offset_pos
-    #     assert np.allclose(
-    #         pos_diff, 0, atol=5e-2
-    #     ), f"{inst.name} has different pivot offset position (by {pos_diff}). Match pivots on each instance."
-
-    #     this_offset_rot = Rotation.from_quat(quat2arr(inst.objectOffsetRot))
-    #     rot_diff = (this_offset_rot * desired_offset_rot_inv).magnitude()
-    #     assert np.allclose(
-    #         rot_diff, 0, atol=1e-3
-    #     ), f"{inst.name} has different pivot offset rotation (by {rot_diff}). Match pivots on each instance."
-
     # Parent all links under their bases for efficient computation of the bounding box
     all_parented = set()
     for instance, links in links_by_instance_id.items():
@@ -239,6 +257,7 @@ def replace_object_instances(obj):
     ]
 
     # Delete all the objects
+    # TODO: Reenable
     # for same_model_id in all_same_model_id:
     #     rt.delete(same_model_id)
 
@@ -286,29 +305,54 @@ def replace_object_instances(obj):
             base_copy == child_copy[0]
         ), "The base link should be the first element in the list of child"
 
+        # Get the points
+        base_copy_points = np.concatenate(get_vert_sets_including_children(base_copy), axis=0)
+
         # First apply just the rotation
-        rotation_transform = rotation_only_transform(instance_transform)
-        base_copy.transform = transform2mat(rotation_transform)
+        combined_transform = rotation_only_transform(instance_transform)
 
         # Scale the imported mesh to match the instance
-        for _ in range(3):
+        if USE_WORLD_BB_FOR_SCALE:
+            # The target bounding box is the instance's world bounding box
             instance_worldbb_size = instance_world_bb[1] - instance_world_bb[0]
-            base_copy_worldbb = node_bounding_box_incl_children(base_copy)
+
+            # The current bounding box is what we have from rotating the verts
+            rotated_points = apply_transform(base_copy_points, combined_transform)
+            base_copy_worldbb = bounding_box_from_verts(rotated_points)
             base_copy_worldbb_size = base_copy_worldbb[1] - base_copy_worldbb[0]
+
+            # The target scale is the ratio of the two sizes
             relative_scale_from_now = instance_worldbb_size / base_copy_worldbb_size
+
+            # This scale needs to be applied AFTER the rotation since it's in world frame
             scale_transform = np.diag(relative_scale_from_now.tolist() + [1])
+            combined_transform = scale_transform @ combined_transform
+        else:
+            # The target bounding box is the instance's local bounding box
+            instance_lowbb_size = instance_lowbb[1] - instance_lowbb[0]
 
-            # This scale is in the world frame and thus needs to be applied last
-            base_copy.transform = transform2mat(scale_transform @ rotation_transform)
+            # The current bounding box is what we already have, since we start
+            # with an identity transform (e.g. the points are the same in world
+            # and local frame)
+            base_copy_lowbb = bounding_box_from_verts(base_copy_points)
+            base_copy_lowbb_size = base_copy_lowbb[1] - base_copy_lowbb[0]
 
-            # Finally position it to match the center
-            base_copy_worldbb = node_bounding_box_incl_children(base_copy)
-            base_copy_worldbb_center = (base_copy_worldbb[0] + base_copy_worldbb[1]) / 2
-            instance_worldbb_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
-            move_center_by = rt.Point3(
-                *(instance_worldbb_center - base_copy_worldbb_center).tolist()
-            )
-            base_copy.position = base_copy.position + move_center_by
+            # The target scale is the ratio of the two sizes
+            relative_scale_from_now = instance_lowbb_size / base_copy_lowbb_size
+
+            # This scale needs to be applied BEFORE the rotation since it's in local frame
+            scale_transform = np.diag(relative_scale_from_now.tolist() + [1])
+            combined_transform = combined_transform @ scale_transform
+
+        # Finally position it to match the center
+        base_copy_worldbb = bounding_box_from_verts(apply_transform(base_copy_points, combined_transform))
+        base_copy_worldbb_center = (base_copy_worldbb[0] + base_copy_worldbb[1]) / 2
+        instance_worldbb_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
+        move_center_by = instance_worldbb_center - base_copy_worldbb_center
+        combined_transform[:3, 3] += move_center_by
+
+        # Convert and apply the transform to the 3ds Max object
+        base_copy.transform = transform2mat(combined_transform)
 
         # Assert the new world bb is the same as the original world bb
         base_copy_world_bb = node_bounding_box_incl_children(base_copy)
