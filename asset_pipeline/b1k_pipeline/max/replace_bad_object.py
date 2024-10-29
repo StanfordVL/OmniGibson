@@ -277,9 +277,8 @@ def replace_object_instances(obj):
     ]
 
     # Delete all the objects
-    # TODO: Reenable
-    # for same_model_id in all_same_model_id:
-    #     rt.delete(same_model_id)
+    for same_model_id in all_same_model_id:
+        rt.delete(same_model_id)
 
     # Import the original mesh for just the zero instance
     imported = import_bad_model_originals(model_id)
