@@ -159,18 +159,18 @@ def processFile(filename: pathlib.Path):
     #         obj, hash_digest
     #     )
 
-    # Run the bad object replacement system for legacy scenes
-    # For this particular task we are only doing this to the legacy-containing scenes
-    target_name = filename.parts[-2]
-    if target_name.endswith("_int") or target_name.endswith("_garden"):
-        comparison_data = (
-            b1k_pipeline.max.replace_bad_object.replace_all_bad_legacy_objects_in_open_file()
-        )
-        print(f"Replaced {len(comparison_data)} bad objects in {filename}")
-        with open(
-            filename.parent / "artifacts" / "replaced_bad_objects.json", "w"
-        ) as f:
-            json.dump(comparison_data, f)
+    # # Run the bad object replacement system for legacy scenes
+    # # For this particular task we are only doing this to the legacy-containing scenes
+    # target_name = filename.parts[-2]
+    # if target_name.endswith("_int") or target_name.endswith("_garden"):
+    #     comparison_data = (
+    #         b1k_pipeline.max.replace_bad_object.replace_all_bad_legacy_objects_in_open_file()
+    #     )
+    #     print(f"Replaced {len(comparison_data)} bad objects in {filename}")
+    #     with open(
+    #         filename.parent / "artifacts" / "replaced_bad_objects.json", "w"
+    #     ) as f:
+    #         json.dump(comparison_data, f)
 
     # # Exit isolate mode
     # rt.IsolateSelection.ExitIsolateSelectionMode()
@@ -192,11 +192,6 @@ def processFile(filename: pathlib.Path):
 def fix_common_issues_in_all_files():
     candidates = [
         pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
-    ]
-    candidates = [
-        f
-        for f in candidates
-        if f.parts[-2].endswith("_int") or f.parts[-2].endswith("_garden")
     ]
     # has_matching_processed = [processed_fn(x).exists() for x in candidates]
     for i, f in enumerate(tqdm.tqdm(candidates)):
