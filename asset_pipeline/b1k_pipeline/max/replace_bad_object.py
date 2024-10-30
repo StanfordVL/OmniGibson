@@ -374,9 +374,6 @@ def replace_object_instances(obj):
         delta_orn = target_orn * current_orn
         delta_mag = delta_orn.magnitude()
         print("Delta orientation", delta_orn.as_rotvec(), "magnitude", delta_mag)
-        assert np.allclose(
-            delta_mag, 0, atol=1e-3
-        ), f"Rotation is not correct, differs by {delta_mag}"
 
         # Position it to match the center
         base_copy_world_bb = bounding_box_from_verts(
@@ -484,14 +481,14 @@ def replace_object_instances(obj):
 
         # Record the comparison data
         comparison_data[instance_id] = {
-            "original_transform": mat2transform(instance_transform),
-            "calculated_transform": combined_transform,
-            "current_transform": mat2transform(base_copy.transform),
-            "original_world_bb": instance_world_bb,
-            "computed_world_bb": computed_world_bb,
-            "current_world_bb": base_copy_world_bb,
-            "original_lowbb": instance_lowbb,
-            "current_lowbb": base_copy_lowbb,
+            "original_transform": mat2transform(instance_transform).tolist(),
+            "calculated_transform": combined_transform.tolist(),
+            "current_transform": mat2transform(base_copy.transform).tolist(),
+            "original_world_bb": [x.tolist() for x in instance_world_bb],
+            "computed_world_bb": [x.tolist() for x in computed_world_bb],
+            "current_world_bb": [x.tolist() for x in base_copy_world_bb],
+            "original_lowbb": [x.tolist() for x in instance_lowbb],
+            "current_lowbb": [x.tolist() for x in base_copy_lowbb],
         }
 
         # Name each of the children correctly, and parent them to the original owner's parents

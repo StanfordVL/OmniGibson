@@ -193,6 +193,11 @@ def fix_common_issues_in_all_files():
     candidates = [
         pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
+    candidates = [
+        f
+        for f in candidates
+        if f.parts[-2].endswith("_int") or f.parts[-2].endswith("_garden")
+    ]
     # has_matching_processed = [processed_fn(x).exists() for x in candidates]
     for i, f in enumerate(tqdm.tqdm(candidates)):
         processFile(f)
