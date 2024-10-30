@@ -728,6 +728,7 @@ class SanityCheck:
 
         should_have_upper = (
             link_name != "base_link"
+            and instance_id == "0"
             and not group["name_bad"].iloc[0]
             and group["name_joint_type"].iloc[0] != "F"
         )
