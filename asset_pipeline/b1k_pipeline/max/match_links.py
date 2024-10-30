@@ -26,18 +26,18 @@ def match_links_between_instances(obj):
     if not loose:
         loose = ""
     model_id = parsed_name.group("model_id")
-    instance_id = parsed_name.group("instance_id")
+    base_instance_id = parsed_name.group("instance_id")
 
     # First, find all the parts of this object's model, across all of its instances.
     all_same_model_id = [
         x
         for x in rt.objects
         if (
-            parse_name(x.name) and
-            parse_name(x.name).group("model_id") == model_id and
-            parse_name(x.name).group("joint_side") != "upper" and
-            not parse_name(x.name).group("meta_type") and
-            rt.classOf(x) == rt.Editable_Poly
+            parse_name(x.name)
+            and parse_name(x.name).group("model_id") == model_id
+            and parse_name(x.name).group("joint_side") != "upper"
+            and not parse_name(x.name).group("meta_type")
+            and rt.classOf(x) == rt.Editable_Poly
         )
     ]
     same_model_id_parsed_names = [parse_name(x.name) for x in all_same_model_id]
@@ -59,19 +59,27 @@ def match_links_between_instances(obj):
         links_by_instance_id[inst_parsed_name.group("instance_id")][link_name] = inst
 
     # Unroll to find all links
-    all_links = frozenset(link for instance_links_to_objs in links_by_instance_id.values() for link in instance_links_to_objs)
+    all_links = frozenset(
+        link
+        for instance_links_to_objs in links_by_instance_id.values()
+        for link in instance_links_to_objs
+    )
+    print("Found links", sorted(all_links))
 
     # Check that the currently selected instance contains all the links
-    assert frozenset(links_by_instance_id[instance_id].keys()) == all_links, \
-        f"Instance {obj.name} does not contain all links some other instances have. Pick the maximal instance."
-    
+    assert (
+        frozenset(links_by_instance_id[base_instance_id].keys()) == all_links
+    ), f"Instance {obj.name} does not contain all links some other instances have. Pick the maximal instance."
+
     # For this instance, store the relative transforms of all the links
     relative_transforms = {}
-    base_link_transform = rt.inverse(base_link_transform)
-    for link_name, link_obj in links_by_instance_id[instance_id].items():
+    inverse_base_link_transform = rt.inverse(obj.transform)
+    for link_name, link_obj in links_by_instance_id[base_instance_id].items():
         if link_name == "base_link":
             continue
-        relative_transforms[link_name] = link_obj.transform * rt.inverse(base_link_transform)
+        relative_transforms[link_name] = (
+            link_obj.transform * inverse_base_link_transform
+        )
 
     # Walk through the instances to find the links that are not present in all instances
     for inst_id, links_to_objs in links_by_instance_id.items():
@@ -80,16 +88,31 @@ def match_links_between_instances(obj):
             continue
 
         # Assert that the base link exists and grab it
-        assert "base_link" in links_to_objs, f"Instance {inst_id} does not have a base link"
+        assert (
+            "base_link" in links_to_objs
+        ), f"Instance {inst_id} does not have a base link"
         instance_base_link = links_to_objs["base_link"]
         instance_base_link_transform = instance_base_link.transform
 
         # Find the object that has all the links
         for link_name in missing_links:
             print(f"Copying link {link_name} for instance {inst_id}")
-            link_obj = links_by_instance_id[instance_id][link_name]
-            link_obj.transform = relative_transforms[link_name] * instance_base_link_transform
-            link_obj.name = link_obj.name.replace(f"-{instance_id}-", f"-{inst_id}-")
+            obj_to_copy = links_by_instance_id[base_instance_id][link_name]
+            copy_name = obj_to_copy.name.replace(
+                f"-{base_instance_id}-", f"-{inst_id}-"
+            )
+            success, copies = rt.maxOps.cloneNodes(
+                [obj_to_copy],
+                cloneType=rt.name("instance"),
+                newNodes=pymxs.byref(None),
+            )
+            assert success, f"Could not clone {link_name} for instance {inst_id}"
+            (link_obj,) = copies
+            link_obj.transform = (
+                relative_transforms[link_name] * instance_base_link_transform
+            )
+            link_obj.name = copy_name
+
 
 def main():
     match_links_between_instances(rt.selection[0])
