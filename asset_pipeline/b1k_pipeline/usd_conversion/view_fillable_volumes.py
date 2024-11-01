@@ -21,6 +21,8 @@ from scipy.spatial import ConvexHull
 import torch as th
 import networkx as nx
 from collections import defaultdict
+from fs.zipfs import ZipFS
+import fs.path
 
 gm.HEADLESS = False
 gm.USE_ENCRYPTED_ASSETS = True
@@ -32,6 +34,21 @@ ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments_2.json")
 MAX_BBOX = 0.3
 
 DRAWING_MESHES = []
+
+def get_orientation_edits():
+    orientation_edits = {}
+    zip_path = pathlib.Path(__file__).parents[2] / "metadata" / "orientation_edits.zip"
+    with ZipFS(zip_path) as orientation_zip_fs:
+        for item in orientation_zip_fs.glob("recorded_orientation/*/*.json"):
+            model = fs.path.splitext(fs.path.basename(item.path))[0]
+            orientation = json.loads(orientation_zip_fs.readtext(item.path))[0]
+            if np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
+                continue
+            orientation_edits[model] = orientation
+
+    return orientation_edits
+
+ORIENTATION_EDITS = get_orientation_edits()
 
 def get_assignments():
     if not os.path.exists(ASSIGNMENT_FILE):
@@ -350,6 +367,8 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
         if hit is not None:
             additional_points_rot.append(hit)
 
+    assert len(additional_points_rot) > 0, "Failed to generate any additional points for the fillable mesh!"
+
     # Rotate the points back into the original frame
     # Note: forward transform is points @ rot.T so inverse is points @ rot
     additional_points = np.array(additional_points_rot) @ rot
@@ -367,7 +386,7 @@ def sample_fillable_volume(tm, start_point, direction=(0, 0, 1.0), hit_threshold
     # Return the convex hull of this mesh
     return tm_fillable.convex_hull
 
-def generate_fillable_mesh_for_object(obj, selected_link_name, start_point, allow_convex_hull_hit):
+def generate_fillable_mesh_for_object(obj, selected_link_name, start_point, up_dir, allow_convex_hull_hit):
     # Walk through the link hierarchy to select the stuff below this one
     links_to_include = set(nx.descendants(obj.articulation_tree, selected_link_name)) | {selected_link_name}
 
@@ -378,24 +397,28 @@ def generate_fillable_mesh_for_object(obj, selected_link_name, start_point, allo
     ])
     if allow_convex_hull_hit:
         tm = trimesh.util.concatenate([tm, tm.convex_hull])
-    ray_dir = np.array([0, 0, 1])
     
     try:
         fillable_hull = sample_fillable_volume(
             tm=tm,
             start_point=start_point,
-            direction=ray_dir,
+            direction=up_dir,
             hit_threshold=0.75,
             n_rays=100,
             scale=obj.scale.cpu().numpy(),
         )
     except Exception as e:
-        print(f"Failed to generate fillable volume for {obj.category}/{obj.model} at {start_point}: {e}")
-        return None
+        raise
+        # print(f"Failed to generate fillable volume for {obj.category}/{obj.model} at {start_point}: {e}")
+        # return None
 
-    # Transform the fillable hull to the object's frame
-    obj_transform = T.pose2mat(obj.get_position_orientation())
-    fillable_hull.apply_transform(T.pose_inv(obj_transform).numpy().copy())
+    # Move the fillable hull to the object's position
+    # note that we don't include the orientation here because it is assumed to be identity (e.g. even
+    # if the object has an orientation, that's just a correction that should be ignored)
+    obj_pos = obj.get_position_orientation()[0].numpy()
+    obj_transform = np.eye(4)
+    obj_transform[:3, 3] = obj_pos
+    fillable_hull.apply_transform(np.linalg.inv(obj_transform))
 
     return fillable_hull
 
@@ -410,6 +433,10 @@ def view_object(cat, mdl):
     if og.sim.is_playing():
         og.sim.stop()
 
+    # Find out if there's an orientation edit for this object
+    # TODO: Remove this after the accidentally twice-rotated objects are fixed
+    orn = [0, 0, 0, 1] if mdl not in ORIENTATION_EDITS else R.from_quat(ORIENTATION_EDITS[mdl]).inv().as_quat().tolist()
+
     cfg = {
         "scene": {
             "type": "Scene",
@@ -421,6 +448,7 @@ def view_object(cat, mdl):
                 "name": "fillable",
                 "category": cat,
                 "model": mdl,
+                "orientation": orn,
                 "kinematic_only": False,
                 "fixed_base": True,
             },
@@ -470,7 +498,7 @@ def view_object(cat, mdl):
     print("Press U to indicate we should remove the fillable annotation from the object.")
 
     dip_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_dip.obj"
-    if dip_path.exists():
+    if dip_path.exists() and mdl not in ORIENTATION_EDITS:
         # Find the scale the mesh was generated at
         scale = np.minimum(1, MAX_BBOX / np.max(np.asarray(fillable.native_bbox)))
 
@@ -497,7 +525,7 @@ def view_object(cat, mdl):
         print("Press B to toggle visibility of the dip (red) mesh.")
 
     ray_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_ray.obj"
-    if ray_path.exists():
+    if ray_path.exists() and mdl not in ORIENTATION_EDITS:
         ray_mesh = trimesh.load(ray_path, force="mesh")
 
         # Draw the mesh
@@ -518,7 +546,7 @@ def view_object(cat, mdl):
         print("Press N to toggle visibility of the ray (blue) mesh.")
 
     # Now the combined version
-    if dip_path.exists() and ray_path.exists():
+    if dip_path.exists() and ray_path.exists() and mdl not in ORIENTATION_EDITS:
         # Check if either mesh contains the entire other mesh
         combined_mesh = trimesh.convex.convex_hull(np.concatenate([dip_mesh.vertices, ray_mesh.vertices], axis=0))
         if not np.allclose(combined_mesh.volume, dip_mesh.volume, rtol=1e-3) and not np.allclose(combined_mesh.volume, ray_mesh.volume, rtol=1e-3):
@@ -629,7 +657,10 @@ def view_object(cat, mdl):
             print(f"Cannot generate mesh for {selected_link} because a parent or child already has a generated mesh.")
             return
 
-        generated_mesh = generate_fillable_mesh_for_object(fillable, selected_link, seed_prim.get_position_orientation()[0].numpy().copy(), allow_convex_hull_hit)
+        seed_pos, seed_orn = seed_prim.get_position_orientation()
+        seed_mat = T.quat2mat(seed_orn).numpy()
+        up_dir = seed_mat @ np.array([0, 0, 1.0])
+        generated_mesh = generate_fillable_mesh_for_object(fillable, selected_link, seed_pos.numpy().copy(), up_dir, allow_convex_hull_hit)
         if generated_mesh is None:
             return
         draw_idx = draw_mesh(generated_mesh, fillable.get_position_orientation()[0], color=(0., 1., 0., 1.))
