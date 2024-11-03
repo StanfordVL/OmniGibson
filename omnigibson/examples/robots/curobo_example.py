@@ -68,8 +68,55 @@ def test_curobo():
             },
         ],
         "robots": [
+            # {
+            #     "type": "R1",
+            #     "obs_modalities": "rgb",
+            #     "position": [0, 0, 0],
+            #     "orientation": [0, 0, 0, 1],
+            #     "self_collisions": True,
+            #     "action_normalize": False,
+            #     "rigid_trunk": False,
+            #     "controller_config": {
+            #         "base": {
+            #             "name": "JointController",
+            #             "motor_type": "position",
+            #             "command_input_limits": None,
+            #             "use_delta_commands": False,
+            #             "use_impedances": True,
+            #         },
+            #         "arm_left": {
+            #             "name": "JointController",
+            #             "motor_type": "position",
+            #             "command_input_limits": None,
+            #             "use_delta_commands": False,
+            #             "use_impedances": True,
+            #         },
+            #         "arm_right": {
+            #             "name": "JointController",
+            #             "motor_type": "position",
+            #             "command_input_limits": None,
+            #             "use_delta_commands": False,
+            #             "use_impedances": True,
+            #         },
+            #         "gripper_left": {
+            #             "name": "JointController",
+            #             "motor_type": "position",
+            #             "command_input_limits": None,
+            #             "use_delta_commands": False,
+            #             "use_impedances": True,
+            #         },
+            #         "gripper_right": {
+            #             "name": "JointController",
+            #             "motor_type": "position",
+            #             "command_input_limits": None,
+            #             "use_delta_commands": False,
+            #             "use_impedances": True,
+            #         },
+            #     },
+            # }
+            # Tiago
             {
-                "type": "R1",
+                "type": "Tiago",
                 "obs_modalities": "rgb",
                 "position": [0, 0, 0],
                 "orientation": [0, 0, 0, 1],
@@ -79,10 +126,6 @@ def test_curobo():
                 "controller_config": {
                     "base": {
                         "name": "JointController",
-                        "motor_type": "position",
-                        "command_input_limits": None,
-                        "use_delta_commands": False,
-                        "use_impedances": True,
                     },
                     "arm_left": {
                         "name": "JointController",
@@ -101,20 +144,21 @@ def test_curobo():
                     "gripper_left": {
                         "name": "JointController",
                         "motor_type": "position",
-                        "command_input_limits": None,
+                        "command_input_limits": [-1, 1],
                         "use_delta_commands": False,
                         "use_impedances": True,
                     },
                     "gripper_right": {
                         "name": "JointController",
                         "motor_type": "position",
-                        "command_input_limits": None,
+                        "command_input_limits": [-1, 1],
                         "use_delta_commands": False,
                         "use_impedances": True,
                     },
                 },
             }
         ],
+
     }
 
     env = og.Environment(configs=cfg)
@@ -145,6 +189,10 @@ def test_curobo():
     for _ in range(2):
         for emb_sel in CuroboEmbodimentSelection:
             print("Embodiment Selection: ", emb_sel)
+
+            # remove later
+            if emb_sel != CuroboEmbodimentSelection.DEFAULT:
+                continue
 
             target_pos, target_quat = dict(), dict()
             target_links = []

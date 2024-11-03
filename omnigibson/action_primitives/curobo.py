@@ -202,9 +202,11 @@ class CuRoboMotionGenerator:
             content_path = lazy.curobo.types.file_path.ContentPath(
                 robot_config_absolute_path=robot_cfg_path, robot_usd_absolute_path=robot_usd_path
             )
+            # print("content_path: ", content_path)
             robot_cfg_dict = lazy.curobo.cuda_robot_model.util.load_robot_yaml(content_path)["robot_cfg"]
             robot_cfg_dict["kinematics"]["use_usd_kinematics"] = True
 
+            # print("robot_cfg_dict: ", robot_cfg_dict)
             robot_cfg_obj = lazy.curobo.types.robot.RobotConfig.from_dict(robot_cfg_dict, self._tensor_args)
 
             if isinstance(robot, HolonomicBaseRobot):
@@ -245,6 +247,7 @@ class CuRoboMotionGenerator:
             self.mg[emb_sel] = lazy.curobo.wrap.reacher.motion_gen.MotionGen(motion_gen_config)
             self.ee_link[emb_sel] = robot_cfg_dict["kinematics"]["ee_link"]
             self.base_link[emb_sel] = robot_cfg_dict["kinematics"]["base_link"]
+            # print("self.ee_link[emb_sel], self.base_link[emb_sel]: ", self.ee_link[emb_sel], self.base_link[emb_sel])
 
         for mg in self.mg.values():
             mg.warmup(enable_graph=False, warmup_js_trajopt=False, batch=batch_size)
@@ -444,6 +447,7 @@ class CuRoboMotionGenerator:
 
         assert target_pos.keys() == target_quat.keys(), "Expected target_pos and target_quat to have the same keys!"
 
+        # print("target_pos.items(): ", target_pos.items())
         # Make sure tensor shapes are (N, 3) and (N, 4)
         target_pos = {k: v if len(v.shape) == 2 else v.unsqueeze(0) for k, v in target_pos.items()}
         target_quat = {k: v if len(v.shape) == 2 else v.unsqueeze(0) for k, v in target_quat.items()}

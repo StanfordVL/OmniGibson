@@ -390,3 +390,5 @@ def test_curobo():
         th.cuda.empty_cache()
 
     og.shutdown()
+
+test_curobo()
