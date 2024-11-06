@@ -30,6 +30,7 @@ gm.ENABLE_FLATCACHE = False
 gm.DATASET_PATH = r"D:\fillable-10-21"
 
 ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments_2.json")
+ORIENTATION_EDITS_FILE = "orientation_edits.zip"
 
 MAX_BBOX = 0.3
 
@@ -37,7 +38,7 @@ DRAWING_MESHES = []
 
 def get_orientation_edits():
     orientation_edits = {}
-    zip_path = pathlib.Path(__file__).parents[2] / "metadata" / "orientation_edits.zip"
+    zip_path = ORIENTATION_EDITS_FILE
     with ZipFS(zip_path) as orientation_zip_fs:
         for item in orientation_zip_fs.glob("recorded_orientation/*/*.json"):
             model = fs.path.splitext(fs.path.basename(item.path))[0]
@@ -733,7 +734,7 @@ def main():
     idxes = int(sys.argv[2])
     salt = sys.argv[3]
 
-    print("Fillable annotator version 10.24.2")
+    print("Fillable annotator version 11.6.0")
 
     # Get all the models that are fillable-annotated
     from bddl.knowledge_base import Object
