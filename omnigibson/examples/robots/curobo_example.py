@@ -15,7 +15,6 @@ from omnigibson.macros import gm, macros
 from omnigibson.object_states import Touching
 from omnigibson.robots.holonomic_base_robot import HolonomicBaseRobot
 
-
 def plan_trajectory(cmg, target_pos, target_quat, emb_sel=CuroboEmbodimentSelection.DEFAULT):
     # Generate collision-free trajectories to the sampled eef poses (including self-collisions)
     successes, traj_paths = cmg.compute_trajectories(
@@ -209,6 +208,7 @@ def test_curobo():
                     target_links.append(robot.eef_link_names[arm])
 
             successes, traj_paths = plan_trajectory(cmg, target_pos, target_quat, emb_sel)
+            # print("traj_paths: ", traj_paths)
             success = successes[0]
             traj_path = traj_paths[0]
 
@@ -221,8 +221,12 @@ def test_curobo():
                 marker.set_position_orientation(position=target_pos[target_link])
 
             q_traj = cmg.path_to_joint_trajectory(traj_path, emb_sel)
+            # # remove later
+            # effective_joint_indices = cmg.get_effective_joint_names(traj_path, emb_sel)
+
             for q in q_traj:
                 robot.set_joint_positions(q)
+                # robot.set_joint_positions(q, indices=effective_joint_indices)
                 robot.keep_still()
                 og.sim.step()
 

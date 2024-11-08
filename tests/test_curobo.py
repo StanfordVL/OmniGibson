@@ -1,6 +1,7 @@
 import gc
 import math
 import os
+import pdb
 from collections import defaultdict
 
 import matplotlib.pyplot as plt
@@ -36,7 +37,7 @@ def test_curobo():
                 "primitive_type": "Cube",
                 "scale": [0.4, 0.4, 0.4],
                 "fixed_base": True,
-                "position": [0.5, -0.1, 0.2],
+                "position": [1.0, -0.1, 0.2],
                 "orientation": [0, 0, 0, 1],
             },
             {
@@ -64,45 +65,87 @@ def test_curobo():
     }
 
     robot_cfgs = [
+        # {
+        #     "type": "FrankaPanda",
+        #     "obs_modalities": "rgb",
+        #     "position": [0.7, -0.55, 0.0],
+        #     "orientation": [0, 0, 0.707, 0.707],
+        #     "self_collisions": True,
+        #     "action_normalize": False,
+        #     "controller_config": {
+        #         "arm_0": {
+        #             "name": "JointController",
+        #             "motor_type": "position",
+        #             "command_input_limits": None,
+        #             "use_delta_commands": False,
+        #             "use_impedances": True,
+        #         },
+        #         "gripper_0": {
+        #             "name": "JointController",
+        #             "motor_type": "position",
+        #             "command_input_limits": None,
+        #             "use_delta_commands": False,
+        #             "use_impedances": True,
+        #         },
+        #     },
+        # },
+        # {
+        #     "type": "R1",
+        #     "obs_modalities": "rgb",
+        #     "position": [0.7, -0.55, 0.0],
+        #     "orientation": [0, 0, 0.707, 0.707],
+        #     "self_collisions": True,
+        #     "action_normalize": False,
+        #     "rigid_trunk": False,
+        #     "controller_config": {
+        #         "base": {
+        #             "name": "JointController",
+        #             "motor_type": "position",
+        #             "command_input_limits": None,
+        #             "use_delta_commands": False,
+        #             "use_impedances": True,
+        #         },
+        #         "arm_left": {
+        #             "name": "JointController",
+        #             "motor_type": "position",
+        #             "command_input_limits": None,
+        #             "use_delta_commands": False,
+        #             "use_impedances": True,
+        #         },
+        #         "arm_right": {
+        #             "name": "JointController",
+        #             "motor_type": "position",
+        #             "command_input_limits": None,
+        #             "use_delta_commands": False,
+        #             "use_impedances": True,
+        #         },
+        #         "gripper_left": {
+        #             "name": "JointController",
+        #             "motor_type": "position",
+        #             "command_input_limits": None,
+        #             "use_delta_commands": False,
+        #             "use_impedances": True,
+        #         },
+        #         "gripper_right": {
+        #             "name": "JointController",
+        #             "motor_type": "position",
+        #             "command_input_limits": None,
+        #             "use_delta_commands": False,
+        #             "use_impedances": True,
+        #         },
+        #     },
+        # },
         {
-            "type": "FrankaPanda",
+            "type": "Tiago",
             "obs_modalities": "rgb",
-            "position": [0.7, -0.55, 0.0],
-            "orientation": [0, 0, 0.707, 0.707],
-            "self_collisions": True,
-            "action_normalize": False,
-            "controller_config": {
-                "arm_0": {
-                    "name": "JointController",
-                    "motor_type": "position",
-                    "command_input_limits": None,
-                    "use_delta_commands": False,
-                    "use_impedances": True,
-                },
-                "gripper_0": {
-                    "name": "JointController",
-                    "motor_type": "position",
-                    "command_input_limits": None,
-                    "use_delta_commands": False,
-                    "use_impedances": True,
-                },
-            },
-        },
-        {
-            "type": "R1",
-            "obs_modalities": "rgb",
-            "position": [0.7, -0.55, 0.0],
-            "orientation": [0, 0, 0.707, 0.707],
+            "position": [0, 0, 0],
+            "orientation": [0, 0, 0, 1],
             "self_collisions": True,
             "action_normalize": False,
             "rigid_trunk": False,
             "controller_config": {
                 "base": {
                     "name": "JointController",
-                    "motor_type": "position",
-                    "command_input_limits": None,
-                    "use_delta_commands": False,
-                    "use_impedances": True,
                 },
                 "arm_left": {
                     "name": "JointController",
@@ -121,19 +164,19 @@ def test_curobo():
                 "gripper_left": {
                     "name": "JointController",
                     "motor_type": "position",
-                    "command_input_limits": None,
+                    "command_input_limits": [-1, 1],
                     "use_delta_commands": False,
                     "use_impedances": True,
                 },
                 "gripper_right": {
                     "name": "JointController",
                     "motor_type": "position",
-                    "command_input_limits": None,
+                    "command_input_limits": [-1, 1],
                     "use_delta_commands": False,
                     "use_impedances": True,
                 },
             },
-        },
+        }
     ]
 
     for robot_cfg in robot_cfgs:
@@ -149,6 +192,11 @@ def test_curobo():
             bottom_links = [
                 os.path.join(robot.prim_path, bottom_link)
                 for bottom_link in ["wheel_link1", "wheel_link2", "wheel_link3"]
+            ]
+        elif robot.model_name == "Tiago":
+            bottom_links = [
+                os.path.join(robot.prim_path, bottom_link)
+                for bottom_link in ["base_link", "wheel_front_left_link", "wheel_front_right_link", "wheel_rear_left_link", "wheel_rear_right_link"]
             ]
         else:
             bottom_links = []
@@ -186,9 +234,11 @@ def test_curobo():
 
         if isinstance(robot, HolonomicBaseRobot):
             lo[0, :2] = -0.1
+            # lo[0, 2] = 0.1
             lo[0, 2:5] = 0.0
             lo[0, 5] = -math.pi
             hi[0, :2] = 0.1
+            # hi[0, 2] = 0.1
             hi[0, 2:5] = 0.0
             hi[0, 5] = math.pi
 
@@ -196,6 +246,7 @@ def test_curobo():
 
         # Test collision with the environment (not including self-collisions)
         collision_results = cmg.check_collisions(q=random_qs)
+        print("collsion_results: ", collision_results)
 
         target_pos, target_quat = defaultdict(list), defaultdict(list)
 
@@ -246,6 +297,13 @@ def test_curobo():
             curobo_has_contact = curobo_has_contact.item()
             physx_has_contact = touching_itself or touching_floor or touching_object
 
+            # remove later
+            cmg.save_visualization(robot.get_joint_positions(), "/home/arpit/Downloads/test.obj")
+
+            print("touching_itself, touching_floor, touching_object: ", touching_itself, touching_floor, touching_object)
+            print("curobo_has_contact, physx_has_contact: ", curobo_has_contact, physx_has_contact)
+            pdb.set_trace()
+
             # cuRobo reports contact, but physx reports no contact
             if curobo_has_contact and not physx_has_contact:
                 false_positive += 1
@@ -271,6 +329,7 @@ def test_curobo():
                         eef_pos, eef_quat = robot.get_relative_eef_pose(arm_name)
 
                     target_pos[robot.eef_link_names[arm_name]].append(eef_pos)
+                    print("target_pos: ", target_pos)
                     target_quat[robot.eef_link_names[arm_name]].append(eef_quat)
 
                     target_pos_in_world_frame[robot.eef_link_names[arm_name]].append(robot.get_eef_position(arm_name))

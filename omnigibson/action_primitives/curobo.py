@@ -338,6 +338,7 @@ class CuRoboMotionGenerator:
         robot_spheres = self.mg[emb_sel].compute_kinematics(cu_js).robot_spheres
         # (N_samples, n_spheres, 4) --> (N_samples, 1, n_spheres, 4)
         robot_spheres = robot_spheres.unsqueeze(dim=1)
+        print("robot_spheres: ", robot_spheres.shape)
 
         with th.no_grad():
             collision_dist = (
@@ -426,6 +427,8 @@ class CuRoboMotionGenerator:
         """
         # Previously, this would silently fail so we explicitly check for out-of-range joint limits here
         # This may be fixed in a recent version of CuRobo? See https://github.com/NVlabs/curobo/discussions/288
+        
+        # This has all relevant joints: self.mg[emb_sel].kinematics.joint_names
         relevant_joint_positions_normalized = (
             lazy.curobo.types.state.JointState(
                 position=self.tensor_args.to_device(self.robot.get_joint_positions(normalized=True)),
@@ -435,6 +438,7 @@ class CuRoboMotionGenerator:
             .position
         )
 
+        # TODO: Test 
         if not th.all(th.abs(relevant_joint_positions_normalized) < 0.99):
             print("Robot is near joint limits! No trajectory will be computed")
             return None, None if not return_full_result else None
@@ -625,7 +629,11 @@ class CuRoboMotionGenerator:
         """
         cmd_plan = self.mg[emb_sel].get_full_js(path)
         joint_names = list(self.robot.joints.keys())
-        return cmd_plan.get_ordered_joint_state(joint_names).position
+
+        effective_joint_names = [i for i in joint_names if i in cmd_plan[0].joint_names]
+        return cmd_plan.get_ordered_joint_state(effective_joint_names).position
+    
+        # return cmd_plan.get_ordered_joint_state(joint_names).position
 
     def convert_q_to_eef_traj(self, traj, return_axisangle=False, emb_sel=CuroboEmbodimentSelection.DEFAULT):
         """
@@ -660,6 +668,24 @@ class CuRoboMotionGenerator:
             orientations = T.quat2axisangle(orientations)
 
         return th.concatenate([positions, orientations], dim=-1)
+    
+    def get_effective_joint_names(self, path, emb_sel=CuroboEmbodimentSelection.DEFAULT):
+        """
+        Converts raw path from motion generator into joint trajectory sequence
+
+        Args:
+            path (JointState): Joint state path to convert into joint trajectory
+            emb_sel (CuroboEmbodimentSelection): Which embodiment to use for the robot
+
+        Returns:
+            torch.tensor: (T, D) tensor representing the interpolated joint trajectory
+                to reach the desired @target_pos, @target_quat configuration, where T is the number of interpolated
+                steps and D is the number of robot joints.
+        """
+        cmd_plan = self.mg[emb_sel].get_full_js(path)
+        joint_names = list(self.robot.joints.keys())
+        return [list(self.robot.joints.keys()).index(i) for i in joint_names if i in cmd_plan[0].joint_names]
+
 
     @property
     def tensor_args(self):
