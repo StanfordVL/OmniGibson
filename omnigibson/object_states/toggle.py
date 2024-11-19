@@ -118,6 +118,11 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
         self.link.update_meshes(trigger_mesh_paths=[mesh_prim_path])
         assert len(self.link.visual_meshes) == 1, "Toggle button must have exactly one visual mesh"
         self.visual_marker = self.link.visual_meshes[mesh_name]
+        self.visual_marker.scale = self.scale
+        self.visual_marker.initialize()
+        self.visual_marker.visible = True
+        # Make sure the toggle button is visible
+        self.visual_marker.purpose = "default"
 
     def _update(self):
         # If we're not nearby any fingers, we automatically can't toggle
