@@ -5,6 +5,7 @@ import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros
 from omnigibson.object_states.link_based_state_mixin import LinkBasedStateMixin
 from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanStateMixin
+from omnigibson.object_states.trigger_volume_colliders import TriggerVolumeColliders
 from omnigibson.object_states.update_state_mixin import GlobalUpdateStateMixin, UpdateStateMixin
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.numpy_utils import vtarray_to_torch
@@ -34,6 +35,12 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
         self.visual_marker = None
 
         super().__init__(obj)
+
+    @classmethod
+    def get_dependencies(cls):
+        deps = super().get_dependencies()
+        deps.add(TriggerVolumeColliders)
+        return deps
 
     @classmethod
     def global_update(cls):
@@ -124,13 +131,15 @@ class ToggledOn(AbsoluteObjectState, BooleanStateMixin, LinkBasedStateMixin, Upd
         # Make sure the toggle button is visible
         self.visual_marker.purpose = "default"
 
+        self.obj.states[TriggerVolumeColliders].assign_trigger_marker(self.visual_marker)
+
     def _update(self):
         # If we're not nearby any fingers, we automatically can't toggle
         if self.obj not in self._finger_contact_objs:
             robot_can_toggle = False
         else:
             # Check to make sure fingers are actually overlapping the toggle button mesh
-            trigger_colliders = self.visual_marker.get_colliding_prim_paths()
+            trigger_colliders = self.obj.states[TriggerVolumeColliders].get_value()
             all_finger_paths = {path for path_set in self._robot_finger_paths for path in path_set}
             robot_can_toggle = bool(trigger_colliders & all_finger_paths)
 

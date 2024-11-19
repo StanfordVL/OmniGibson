@@ -16,6 +16,7 @@ from omnigibson.object_states.link_based_state_mixin import LinkBasedStateMixin
 from omnigibson.object_states.object_state_base import IntrinsicObjectState
 from omnigibson.object_states.saturated import ModifiedParticles, Saturated
 from omnigibson.object_states.toggle import ToggledOn
+from omnigibson.object_states.trigger_volume_colliders import TriggerVolumeColliders
 from omnigibson.object_states.update_state_mixin import UpdateStateMixin
 from omnigibson.prims.geom_prim import VisualGeomPrim
 from omnigibson.prims.prim_base import BasePrim
@@ -424,9 +425,11 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
             # Generate the function for checking whether points are within the projection mesh
             self._check_in_mesh, _ = generate_points_in_volume_checker_function(obj=self.obj, volume_link=self.link)
 
+            self.obj.states[TriggerVolumeColliders].assign_trigger_marker(self.projection_mesh)
+
             # We also generate the function for checking overlaps at runtime
             def check_overlap():
-                colliders = self.projection_mesh.get_colliding_prim_paths()
+                colliders = self.obj.states[TriggerVolumeColliders].get_value()
                 return any(collider not in self._link_prim_paths for collider in colliders)
 
         elif self.method == ParticleModifyMethod.ADJACENCY:
@@ -667,7 +670,7 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
     @classmethod
     def get_dependencies(cls):
         deps = super().get_dependencies()
-        deps.update({AABB, Saturated, ModifiedParticles})
+        deps.update({AABB, Saturated, ModifiedParticles, TriggerVolumeColliders})
         return deps
 
     @classmethod
