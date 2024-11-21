@@ -395,7 +395,7 @@ class SanityCheck:
             f"Light object {row.object_name} should not have object offset rotation. Reset pivot.",
         )
 
-    def validate_group_of_instances(self, rows):
+    def validate_group_of_max_instances(self, rows):
         # Pick an object as the base instance
         rows_with_id_zero = rows[rows["name_instance_id"] == "0"]
         obj_name = rows["object_name"].iloc[0]
@@ -804,6 +804,16 @@ class SanityCheck:
         # Then individually validate each of the model instances
         group.groupby("name_instance_id").apply(self.validate_model_instance_group)
 
+        # Additionally, if the model group has more than one link, check warn if the base links of different instances
+        # have different scale, because this might have broken things during runs of the match links script.
+        if group["name_link_name"].nunique() > 1:
+            one_base_link_scale = np.array(group[group["name_link_name"] == "base_link"].iloc[0].object.scale)
+            self.expect(
+                all(np.allclose(one_base_link_scale, np.array(x.object.scale)) for _, x in group.iterrows()),
+                f"Articulated object {group['name_model_id'].iloc[0]} instances have different scales for base links. This may have broken things during the match links script.",
+                level="WARNING"
+            )
+
     def run(self):
         self.reset()
 
@@ -890,20 +900,22 @@ class SanityCheck:
                 f"{group.iloc[0].object_name} has instances that are named differently. If this is a link, note that different links should not be instances of each other.",
             )
         )
-        groups_by_instance_mark = non_meta_polies.groupby(
+
+        # Here make groups that we EXPECT to all be instances of the same object.
+        groups_by_max_instance_expectation = non_meta_polies.groupby(
             ["name_category", "name_model_id", "name_link_name"],
             sort=False,
             dropna=False,
         )
-        groups_by_instance_mark.apply(
+        groups_by_max_instance_expectation.apply(
             lambda group: self.expect(
                 group.groupby(["base_object"], sort=False, dropna=False).ngroups == 1,
-                f"{group.iloc[0].object_name} has objects that are not actually instances marked as instances.",
+                f"{group.iloc[0].object_name} has objects that are expected to be instances upon looking at their name (e.g. same model ID and link name) but are not actually instances in 3ds Max.",
             )
         )
 
         # Let's use the base-object grouping for the instance group validation:
-        groups_by_base_object.apply(self.validate_group_of_instances)
+        groups_by_base_object.apply(self.validate_group_of_max_instances)
 
         lights = df[df["type"] == rt.VRayLight]
         lights.apply(self.validate_light, axis="columns")
