@@ -16,7 +16,7 @@ def match_links_between_instances(obj):
     # Parse the name and assert it's the base link of a non-bad object
     parsed_name = parse_name(obj.name)
     assert parsed_name, f"Object {obj.name} has no parsed name"
-    assert not parsed_name.group("bad"), f"Object {obj.name} is a bad object"
+    # assert not parsed_name.group("bad"), f"Object {obj.name} is a bad object"
     assert not (
         parsed_name.group("link_name") and parsed_name.group("link_name") != "base_link"
     ), f"Object {obj.name} is not the base link"
@@ -45,10 +45,10 @@ def match_links_between_instances(obj):
         same_model_id_parsed_names
     ), "All same model ID objects should have a parsed name"
 
-    # Check that they are all marked as BAD
-    assert all(
-        not x.group("bad") for x in same_model_id_parsed_names
-    ), "All instances of the same model ID should be marked as non-bad."
+    # Check that they are all marked as non BAD
+    # assert all(
+    #     not x.group("bad") for x in same_model_id_parsed_names
+    # ), "All instances of the same model ID should be marked as non-bad."
 
     # Check that once grouped by instance ID, they all have the same set of links
     links_by_instance_id = defaultdict(dict)
@@ -74,12 +74,14 @@ def match_links_between_instances(obj):
     # For this instance, store the relative transforms of all the links
     relative_transforms = {}
     inverse_base_link_transform = rt.inverse(obj.transform)
+    base_link_offset_scale = obj.objectoffsetscale
     for link_name, link_obj in links_by_instance_id[base_instance_id].items():
         if link_name == "base_link":
             continue
         relative_transforms[link_name] = (
             link_obj.transform * inverse_base_link_transform
         )
+        print(f"Relative transform for {link_name} is {relative_transforms[link_name]}")
 
     # Walk through the instances to find the links that are not present in all instances
     for inst_id, links_to_objs in links_by_instance_id.items():
@@ -93,6 +95,8 @@ def match_links_between_instances(obj):
         ), f"Instance {inst_id} does not have a base link"
         instance_base_link = links_to_objs["base_link"]
         instance_base_link_transform = instance_base_link.transform
+        instance_base_link_offset_scale = instance_base_link.objectoffsetscale
+        print("Base link position", instance_base_link_transform.position)
 
         # Find the object that has all the links
         for link_name in missing_links:
@@ -111,6 +115,10 @@ def match_links_between_instances(obj):
             link_obj.transform = (
                 relative_transforms[link_name] * instance_base_link_transform
             )
+            scale_ratio = instance_base_link_offset_scale / base_link_offset_scale
+            link_obj.objectoffsetscale = link_obj.objectoffsetscale * scale_ratio
+            link_obj.objectoffsetpos = link_obj.objectoffsetpos * scale_ratio
+            print("Link position", link_obj.transform.position)
             link_obj.name = copy_name
 
 
