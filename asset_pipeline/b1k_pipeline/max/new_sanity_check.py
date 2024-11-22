@@ -807,9 +807,9 @@ class SanityCheck:
         # Additionally, if the model group has more than one link, check warn if the base links of different instances
         # have different scale, because this might have broken things during runs of the match links script.
         if group["name_link_name"].nunique() > 1:
-            one_base_link_scale = np.array(group[group["name_link_name"] == "base_link"].iloc[0].object.scale)
+            one_base_link_scale = np.array(group[group["name_link_name"] == "base_link"].iloc[0].object.objectoffsetscale)
             self.expect(
-                all(np.allclose(one_base_link_scale, np.array(x.object.scale)) for _, x in group.iterrows()),
+                all(np.allclose(one_base_link_scale, np.array(x.object.objectoffsetscale)) for _, x in group.iterrows()),
                 f"Articulated object {group['name_model_id'].iloc[0]} instances have different scales for base links. This may have broken things during the match links script.",
                 level="WARNING"
             )
