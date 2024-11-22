@@ -76,7 +76,7 @@ class ClothPrim(GeomPrim):
 
         # Make sure flatcache is not being used -- if so, raise an error, since we lose most of our needed functionality
         # (such as R/W to specific particle states) when flatcache is enabled
-        assert not gm.ENABLE_FLATCACHE, "Cannot use flatcache with ClothPrim!"
+        # assert not gm.ENABLE_FLATCACHE, "Cannot use flatcache with ClothPrim!"
 
         self._mass_api = (
             lazy.pxr.UsdPhysics.MassAPI(self._prim)

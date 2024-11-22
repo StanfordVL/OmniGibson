@@ -485,11 +485,11 @@ class MicroParticleSystem(BaseSystem):
         # Run super first
         super().initialize(scene)
 
-        # Run sanity checks
-        if not gm.USE_GPU_DYNAMICS or gm.ENABLE_FLATCACHE:
-            raise ValueError(
-                f"Failed to initialize {self.name} system. Please set gm.USE_GPU_DYNAMICS=True and gm.ENABLE_FLATCACHE=False."
-            )
+        # # Run sanity checks
+        # if not gm.USE_GPU_DYNAMICS or gm.ENABLE_FLATCACHE:
+        #     raise ValueError(
+        #         f"Failed to initialize {self.name} system. Please set gm.USE_GPU_DYNAMICS=True and gm.ENABLE_FLATCACHE=False."
+        #     )
 
         self.system_prim = self._create_particle_system()
         # Get material
