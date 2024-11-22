@@ -786,10 +786,12 @@ class SanityCheck:
             )
 
     def validate_model_group(self, group):
+        model_id = group["name_model_id"].iloc[0]
+
         # Check that the group's model ID does not contain the phrase "todo"
         self.expect(
-            "todo" not in group["name_model_id"].iloc[0],
-            f"Model ID {group['name_model_id'].iloc[0]} contains 'todo'.",
+            "todo" not in model_id,
+            f"Model ID {model_id} contains 'todo'.",
         )
 
         # Check that every instance of this model group has the same set of links.
@@ -798,16 +800,85 @@ class SanityCheck:
             .apply(frozenset)
             .nunique()
             == 1,
-            f"Inconsistent link sets within model ID {group['name_model_id'].iloc[0]}.",
+            f"Inconsistent link sets within model ID {model_id}.",
         )
 
         # Then individually validate each of the model instances
         group.groupby("name_instance_id").apply(self.validate_model_instance_group)
 
+        # For each instance, record the scale of the base link, and the positional offset of the
+        # child links in the base link's frame. Assert that after scaling these numbers are close.
+        links_relative_transforms = {}
+        def record_links(group):
+            instance_id = group["name_instance_id"].iloc[0]
+            base_link_row = group[group["name_link_name"] == "base_link"].iloc[0]
+            base_link_transform = base_link_row.object.objecttransform
+            inverse_base_link_transform = rt.inverseHighPrecision(base_link_transform)
+
+            links_relative_transforms[instance_id] = {}
+            for _, row in group.iterrows():
+                link_name = row["name_link_name"]
+
+                # Skip the base link
+                if link_name == "base_link":
+                    continue
+
+                # Skip upper sides
+                if row["name_joint_side"] == "upper":
+                    continue
+
+                # Compute the relative transform
+                child_link_transform = row.object.objecttransform
+                relative_transform = child_link_transform * inverse_base_link_transform
+                links_relative_transforms[instance_id][link_name] = relative_transform
+        group.groupby("name_instance_id").apply(record_links)
+
+        # Go through all the available links
+        for link_name in group["name_link_name"].unique():
+            # Skip base link
+            if link_name == "base_link":
+                continue
+
+            # Get the relative transform of the first object
+            if link_name not in links_relative_transforms["0"]:
+                self.expect(False, f"{model_id} link {link_name} is missing in instance 0, so relative transform check cannot be completed. Found zeroth instance links: {links_relative_transforms['0']}.")
+                continue
+            instance_zero_relative_transform = links_relative_transforms["0"].get(link_name)
+            inverse_instance_zero_relative_transform = rt.inverseHighPrecision(instance_zero_relative_transform)
+
+            # For each instance, check that the relative transform is the same
+            for instance_id, link_transforms in links_relative_transforms.items():
+                if link_name not in link_transforms:
+                    self.expect(False, f"{model_id} link {link_name} is missing in instance {instance_id}, so relative transform check cannot be completed.")
+                    continue
+
+                # Check that the relative transform is the same
+                relative_transform = link_transforms[link_name]
+                transform_difference = relative_transform * inverse_instance_zero_relative_transform
+
+                # Decompose the transform difference into position, rotation and scale
+                scale_difference = np.array(transform_difference.scale)
+                position_difference = np.array(transform_difference.position)
+                rotation_difference = Rotation.from_quat(quat2arr(transform_difference.rotation))
+
+                self.expect(
+                    np.allclose(scale_difference, 1),
+                    f"{model_id} link {link_name} has different scale in instance {instance_id} compared to instance 0. Scale difference: {scale_difference}.",
+                )
+                self.expect(
+                    np.allclose(position_difference, 0, atol=1e-3),
+                    f"{model_id} link {link_name} has different position in instance {instance_id} compared to instance 0. Position difference: {position_difference}.",
+                )
+                self.expect(
+                    np.isclose(rotation_difference.magnitude(), 0, atol=1e-3),
+                    f"{model_id} link {link_name} has different rotation in instance {instance_id} compared to instance 0. Rotation difference: {rotation_difference.magnitude()}.",
+                )
+
         # Additionally, if the model group has more than one link, check warn if the base links of different instances
         # have different scale, because this might have broken things during runs of the match links script.
         if group["name_link_name"].nunique() > 1:
             one_base_link_scale = np.array(group[group["name_link_name"] == "base_link"].iloc[0].object.objectoffsetscale)
+
             self.expect(
                 all(np.allclose(one_base_link_scale, np.array(x.object.objectoffsetscale)) for _, x in group.iterrows()),
                 f"Articulated object {group['name_model_id'].iloc[0]} instances have different scales for base links. This may have broken things during the match links script.",
