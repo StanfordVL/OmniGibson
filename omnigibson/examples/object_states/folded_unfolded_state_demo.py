@@ -1,3 +1,4 @@
+import numba.cuda
 import numpy as np
 import torch as th
 
@@ -36,7 +37,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "bounding_box": [0.897, 0.568, 0.012],
                 "prim_type": PrimType.CLOTH,
                 "abilities": {"cloth": {}},
-                "position": [0, 0, 0.5],
+                "position": [0, 0, 5.0],
             },
             # {
             #     "type": "DatasetObject",
@@ -98,10 +99,14 @@ def main(random_selection=False, headless=False, short_exec=False):
         points_attr = prim.GetAttribute("points")
 
         pointsarray = points_attr.Get()
+        pta = numba.cuda.from_cuda_array_interface(pointsarray.__cuda_array_interface__)
+        points = pta.copy_to_host()
+        # breakpoint()
+
         # warparray = lazy.warp.array(pointsarray, dtype=lazy.warp.vec3, device="cuda")
         # nparray = warparray.numpy()
         # points = np.array(points_attr.Get())
-        info = str(pointsarray[0])
+        info = str(points.mean(axis=0))
         print(f"{info}{' ' * (110 - len(info))}", end="\r")
         return
 
