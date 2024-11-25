@@ -2,10 +2,13 @@ import numpy as np
 import torch as th
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import gm
 from omnigibson.object_states import Folded, Unfolded
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.python_utils import multi_dim_linspace
+
+# wp.init()
 
 gm.ENABLE_OBJECT_STATES = False
 gm.USE_GPU_DYNAMICS = True
@@ -35,27 +38,27 @@ def main(random_selection=False, headless=False, short_exec=False):
                 "abilities": {"cloth": {}},
                 "position": [0, 0, 0.5],
             },
-            {
-                "type": "DatasetObject",
-                "name": "dishtowel",
-                "category": "dishtowel",
-                "model": "dtfspn",
-                "bounding_box": [0.852, 1.1165, 0.174],
-                "prim_type": PrimType.CLOTH,
-                "abilities": {"cloth": {}},
-                "position": [1, 1, 0.5],
-            },
-            {
-                "type": "DatasetObject",
-                "name": "shirt",
-                "category": "t_shirt",
-                "model": "kvidcx",
-                "bounding_box": [0.472, 1.243, 1.158],
-                "prim_type": PrimType.CLOTH,
-                "abilities": {"cloth": {}},
-                "position": [-1, 1, 0.5],
-                "orientation": [0.7071, 0.0, 0.7071, 0.0],
-            },
+            # {
+            #     "type": "DatasetObject",
+            #     "name": "dishtowel",
+            #     "category": "dishtowel",
+            #     "model": "dtfspn",
+            #     "bounding_box": [0.852, 1.1165, 0.174],
+            #     "prim_type": PrimType.CLOTH,
+            #     "abilities": {"cloth": {}},
+            #     "position": [1, 1, 0.5],
+            # },
+            # {
+            #     "type": "DatasetObject",
+            #     "name": "shirt",
+            #     "category": "t_shirt",
+            #     "model": "kvidcx",
+            #     "bounding_box": [0.472, 1.243, 1.158],
+            #     "prim_type": PrimType.CLOTH,
+            #     "abilities": {"cloth": {}},
+            #     "position": [-1, 1, 0.5],
+            #     "orientation": [0.7071, 0.0, 0.7071, 0.0],
+            # },
         ],
     }
 
@@ -64,9 +67,9 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Grab object references
     carpet = env.scene.object_registry("name", "carpet")
-    dishtowel = env.scene.object_registry("name", "dishtowel")
-    shirt = env.scene.object_registry("name", "shirt")
-    objs = [carpet, dishtowel, shirt]
+    # dishtowel = env.scene.object_registry("name", "dishtowel")
+    # shirt = env.scene.object_registry("name", "shirt")
+    # objs = [carpet, dishtowel, shirt]
 
     # Set viewer camera
     og.sim.viewer_camera.set_position_orientation(
@@ -93,8 +96,12 @@ def main(random_selection=False, headless=False, short_exec=False):
         stage = Usd.Stage.Attach(og.sim.stage_id)
         prim = stage.GetPrimAtPath(Sdf.Path(cpp))
         points_attr = prim.GetAttribute("points")
-        points = np.array(points_attr.Get())
-        info = str(points.mean(axis=0))
+
+        pointsarray = points_attr.Get()
+        # warparray = lazy.warp.array(pointsarray, dtype=lazy.warp.vec3, device="cuda")
+        # nparray = warparray.numpy()
+        # points = np.array(points_attr.Get())
+        info = str(pointsarray[0])
         print(f"{info}{' ' * (110 - len(info))}", end="\r")
         return
 

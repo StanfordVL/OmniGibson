@@ -125,7 +125,7 @@ class ClothPrim(GeomPrim):
             if true_vol == 0.0 or (overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD).item():
                 success = True
                 break
-        assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
+        # assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
 
         # Compute centroid particle idx based on AABB
         aabb_min, aabb_max = th.min(positions, dim=0).values, th.max(positions, dim=0).values

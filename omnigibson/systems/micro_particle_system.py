@@ -1663,102 +1663,102 @@ class Cloth(MicroParticleSystem):
                 cloth particles are roughly touching each other, given self._particle_contact_offset and
                 @mesh_prim's scale
         """
-        has_uv_mapping = mesh_prim.GetAttribute("primvars:st").Get() is not None
-        if not remesh:
-            # We always load into trimesh to remove redundant particles (since natively omni redundantly represents
-            # the number of vertices as 6x the total unique number of vertices)
-            tm = mesh_prim_to_trimesh_mesh(
-                mesh_prim=mesh_prim, include_normals=True, include_texcoord=True, world_frame=False
-            )
-            texcoord = (
-                vtarray_to_torch(mesh_prim.GetAttribute("primvars:st").Get(), dtype=th.float32)
-                if has_uv_mapping
-                else None
-            )
-        else:
-            # We will remesh in pymeshlab, but it doesn't allow programmatic construction of a mesh with texcoords so
-            # we convert our mesh into a trimesh mesh, then export it to a temp file, then load it into pymeshlab
-            scaled_world_transform = PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString)
-            # Convert to trimesh mesh (in world frame)
-            tm = mesh_prim_to_trimesh_mesh(
-                mesh_prim=mesh_prim, include_normals=True, include_texcoord=True, world_frame=True
-            )
-            # Tmp file written to: {tmp_dir}/{tmp_fname}/{tmp_fname}.obj
-            tmp_name = str(uuid.uuid4())
-            tmp_dir = os.path.join(tempfile.gettempdir(), tmp_name)
-            tmp_fpath = os.path.join(tmp_dir, f"{tmp_name}.obj")
-            Path(tmp_dir).mkdir(parents=True, exist_ok=True)
-            tm.export(tmp_fpath)
+        # has_uv_mapping = mesh_prim.GetAttribute("primvars:st").Get() is not None
+        # if not remesh:
+        #     # We always load into trimesh to remove redundant particles (since natively omni redundantly represents
+        #     # the number of vertices as 6x the total unique number of vertices)
+        #     tm = mesh_prim_to_trimesh_mesh(
+        #         mesh_prim=mesh_prim, include_normals=True, include_texcoord=True, world_frame=False
+        #     )
+        #     texcoord = (
+        #         vtarray_to_torch(mesh_prim.GetAttribute("primvars:st").Get(), dtype=th.float32)
+        #         if has_uv_mapping
+        #         else None
+        #     )
+        # else:
+        #     # We will remesh in pymeshlab, but it doesn't allow programmatic construction of a mesh with texcoords so
+        #     # we convert our mesh into a trimesh mesh, then export it to a temp file, then load it into pymeshlab
+        #     scaled_world_transform = PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString)
+        #     # Convert to trimesh mesh (in world frame)
+        #     tm = mesh_prim_to_trimesh_mesh(
+        #         mesh_prim=mesh_prim, include_normals=True, include_texcoord=True, world_frame=True
+        #     )
+        #     # Tmp file written to: {tmp_dir}/{tmp_fname}/{tmp_fname}.obj
+        #     tmp_name = str(uuid.uuid4())
+        #     tmp_dir = os.path.join(tempfile.gettempdir(), tmp_name)
+        #     tmp_fpath = os.path.join(tmp_dir, f"{tmp_name}.obj")
+        #     Path(tmp_dir).mkdir(parents=True, exist_ok=True)
+        #     tm.export(tmp_fpath)
 
-            # Start with the default particle distance
-            particle_distance = (
-                self._particle_contact_offset * 2 / 1.5 if particle_distance is None else particle_distance
-            )
+        #     # Start with the default particle distance
+        #     particle_distance = (
+        #         self._particle_contact_offset * 2 / 1.5 if particle_distance is None else particle_distance
+        #     )
 
-            # Repetitively re-mesh at lower resolution until we have a mesh that has less than MAX_CLOTH_PARTICLES vertices
-            import pymeshlab  # We import this here because it takes a few seconds to load.
+        #     # Repetitively re-mesh at lower resolution until we have a mesh that has less than MAX_CLOTH_PARTICLES vertices
+        #     import pymeshlab  # We import this here because it takes a few seconds to load.
 
-            for _ in range(10):
-                ms = pymeshlab.MeshSet()
-                ms.load_new_mesh(tmp_fpath)
+        #     for _ in range(10):
+        #         ms = pymeshlab.MeshSet()
+        #         ms.load_new_mesh(tmp_fpath)
 
-                # Re-mesh based on @particle_distance - distance chosen such that at rest particles should be just touching
-                # each other. The 1.5 magic number comes from the particle cloth demo from omni
-                # Note that this means that the particles will overlap with each other, since at dist = 2 * contact_offset
-                # the particles are just touching each other at rest
+        #         # Re-mesh based on @particle_distance - distance chosen such that at rest particles should be just touching
+        #         # each other. The 1.5 magic number comes from the particle cloth demo from omni
+        #         # Note that this means that the particles will overlap with each other, since at dist = 2 * contact_offset
+        #         # the particles are just touching each other at rest
 
-                avg_edge_percentage_mismatch = 1.0
-                # Loop re-meshing until average edge percentage is within error threshold or we reach the max number of tries
-                for _ in range(5):
-                    if avg_edge_percentage_mismatch <= m.CLOTH_REMESHING_ERROR_THRESHOLD:
-                        break
+        #         avg_edge_percentage_mismatch = 1.0
+        #         # Loop re-meshing until average edge percentage is within error threshold or we reach the max number of tries
+        #         for _ in range(5):
+        #             if avg_edge_percentage_mismatch <= m.CLOTH_REMESHING_ERROR_THRESHOLD:
+        #                 break
 
-                    ms.meshing_isotropic_explicit_remeshing(
-                        iterations=5, adaptive=True, targetlen=pymeshlab.AbsoluteValue(particle_distance)
-                    )
-                    avg_edge_percentage_mismatch = abs(
-                        1.0 - particle_distance / ms.get_geometric_measures()["avg_edge_length"]
-                    )
-                else:
-                    # Terminate anyways, but don't fail
-                    log.warning("The generated cloth may not have evenly distributed particles.")
+        #             ms.meshing_isotropic_explicit_remeshing(
+        #                 iterations=5, adaptive=True, targetlen=pymeshlab.AbsoluteValue(particle_distance)
+        #             )
+        #             avg_edge_percentage_mismatch = abs(
+        #                 1.0 - particle_distance / ms.get_geometric_measures()["avg_edge_length"]
+        #             )
+        #         else:
+        #             # Terminate anyways, but don't fail
+        #             log.warning("The generated cloth may not have evenly distributed particles.")
 
-                # Check if we have too many vertices
-                cm = ms.current_mesh()
-                if cm.vertex_number() > m.MAX_CLOTH_PARTICLES:
-                    # We have too many vertices, so we will re-mesh again
-                    particle_distance *= math.sqrt(2)  # halve the number of vertices
-                    log.warning(
-                        f"Too many vertices ({cm.vertex_number()})! Re-meshing with particle distance {particle_distance}..."
-                    )
-                else:
-                    break
-            else:
-                raise ValueError(
-                    f"Could not remesh with less than MAX_CLOTH_PARTICLES ({m.MAX_CLOTH_PARTICLES}) vertices!"
-                )
+        #         # Check if we have too many vertices
+        #         cm = ms.current_mesh()
+        #         if cm.vertex_number() > m.MAX_CLOTH_PARTICLES:
+        #             # We have too many vertices, so we will re-mesh again
+        #             particle_distance *= math.sqrt(2)  # halve the number of vertices
+        #             log.warning(
+        #                 f"Too many vertices ({cm.vertex_number()})! Re-meshing with particle distance {particle_distance}..."
+        #             )
+        #         else:
+        #             break
+        #     else:
+        #         raise ValueError(
+        #             f"Could not remesh with less than MAX_CLOTH_PARTICLES ({m.MAX_CLOTH_PARTICLES}) vertices!"
+        #         )
 
-            # Re-write data to @mesh_prim
-            new_faces = cm.face_matrix()
-            new_vertices = cm.vertex_matrix()
-            new_normals = cm.vertex_normal_matrix()
-            texcoord = cm.wedge_tex_coord_matrix() if has_uv_mapping else None
-            tm = trimesh.Trimesh(
-                vertices=new_vertices,
-                faces=new_faces,
-                vertex_normals=new_normals,
-            )
-            # Apply the inverse of the world transform to get the mesh back into its local frame
-            tm.apply_transform(th.linalg.inv_ex(scaled_world_transform).inverse)
+        #     # Re-write data to @mesh_prim
+        #     new_faces = cm.face_matrix()
+        #     new_vertices = cm.vertex_matrix()
+        #     new_normals = cm.vertex_normal_matrix()
+        #     texcoord = cm.wedge_tex_coord_matrix() if has_uv_mapping else None
+        #     tm = trimesh.Trimesh(
+        #         vertices=new_vertices,
+        #         faces=new_faces,
+        #         vertex_normals=new_normals,
+        #     )
+        #     # Apply the inverse of the world transform to get the mesh back into its local frame
+        #     tm.apply_transform(th.linalg.inv_ex(scaled_world_transform).inverse)
 
-        # Update the mesh prim
-        face_vertex_counts = th.tensor([len(face) for face in tm.faces], dtype=int).cpu().numpy()
-        mesh_prim.GetAttribute("faceVertexCounts").Set(face_vertex_counts)
-        mesh_prim.GetAttribute("points").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertices))
-        mesh_prim.GetAttribute("faceVertexIndices").Set(tm.faces.flatten())
-        mesh_prim.GetAttribute("normals").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertex_normals))
-        if has_uv_mapping:
-            mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(texcoord))
+        # # Update the mesh prim
+        # face_vertex_counts = th.tensor([len(face) for face in tm.faces], dtype=int).cpu().numpy()
+        # mesh_prim.GetAttribute("faceVertexCounts").Set(face_vertex_counts)
+        # mesh_prim.GetAttribute("points").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertices))
+        # mesh_prim.GetAttribute("faceVertexIndices").Set(tm.faces.flatten())
+        # mesh_prim.GetAttribute("normals").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertex_normals))
+        # if has_uv_mapping:
+        #     mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(texcoord))
 
         # Convert into particle cloth
         lazy.omni.physx.scripts.particleUtils.add_physx_particle_cloth(
