@@ -228,7 +228,7 @@ class CuRoboMotionGenerator:
                 num_trajopt_seeds=4,
                 num_graph_seeds=4,
                 interpolation_dt=0.03,
-                collision_activation_distance=0.005,
+                collision_activation_distance=0.05,
                 self_collision_check=True,
                 maximum_trajectory_dt=None,
                 fixed_iters_trajopt=True,
@@ -336,6 +336,7 @@ class CuRoboMotionGenerator:
         self,
         q,
         check_self_collision=True,
+        skip_obstacle_update=False,
     ):
         """
         Checks collisions between the sphere representation of the robot and the rest of the current scene
@@ -353,7 +354,8 @@ class CuRoboMotionGenerator:
         emb_sel = CuroboEmbodimentSelection.DEFAULT
 
         # Update obstacles
-        self.update_obstacles()
+        if not skip_obstacle_update:
+            self.update_obstacles()
 
         q_pos = self.robot.get_joint_positions().unsqueeze(0)
         cu_joint_state = lazy.curobo.types.state.JointState(
@@ -428,7 +430,9 @@ class CuRoboMotionGenerator:
         return_full_result=False,
         success_ratio=None,
         attached_obj=None,
+        motion_constraint=None,
         attached_obj_scale=None,
+        skip_obstacle_update=False,
         emb_sel=CuroboEmbodimentSelection.DEFAULT,
     ):
         """
@@ -509,8 +513,16 @@ class CuRoboMotionGenerator:
             success_ratio=1.0 / self.batch_size if success_ratio is None else success_ratio,
         )
 
-        # Refresh the collision state
-        self.update_obstacles()
+        # Add the pose cost metric
+        if motion_constraint is None:
+            motion_constraint = [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
+        pose_cost_metric = lazy.curobo.wrap.reacher.motion_gen.PoseCostMetric(
+            hold_partial_pose=False, hold_vec_weight=self._tensor_args.to_device(motion_constraint)
+        )
+        plan_cfg.pose_cost_metric = pose_cost_metric
+
+        if not skip_obstacle_update:
+            self.update_obstacles()
 
         for link_name in target_pos.keys():
             target_pos_link = target_pos[link_name]
@@ -581,9 +593,12 @@ class CuRoboMotionGenerator:
                     object_names=obj_paths,
                     ee_pose=ee_pose,
                     link_name=self.robot.curobo_attached_object_link_names[ee_link_name],
-                    scale=0.99 if attached_obj_scale is None else attached_obj_scale[ee_link_name],
+                    scale=1.0 if attached_obj_scale is None else attached_obj_scale[ee_link_name],
                     pitch_scale=1.0,
                     merge_meshes=True,
+                    world_objects_pose_offset=lazy.curobo.types.math.Pose.from_list(
+                        [0, 0, 0.01, 1, 0, 0, 0], self._tensor_args
+                    ),
                 )
 
         all_rollout_fns = [
@@ -751,6 +766,33 @@ class CuRoboMotionGenerator:
             orientations = T.quat2axisangle(orientations)
 
         return th.concatenate([positions, orientations], dim=-1)
+
+    def solve_ik(self, target_pos, target_quat, emb_sel=CuroboEmbodimentSelection.ARM):
+        # # If target_pos and target_quat are torch tensors, it's assumed that they correspond to the default ee_link
+        # if isinstance(target_pos, th.Tensor):
+        #     target_pos = {self.ee_link[emb_sel]: target_pos}
+        # if isinstance(target_quat, th.Tensor):
+        #     target_quat = {self.ee_link[emb_sel]: target_quat}
+
+        # # Refresh the collision state
+        # self.update_obstacles(ignore_paths=None, emb_sel=emb_sel)
+
+        # assert target_pos.keys() == target_quat.keys(), "Expected target_pos and target_quat to have the same keys!"
+
+        # # TODO: fill these in
+        # solve_state = self.mg[emb_sel]._get_solve_state(lazy.curobo.ReacherSolveType.GOALSET, plan_config, goal_pose, start_state)
+
+        # ik_result = self.mg[emb_sel]._solve_ik_from_solve_state(
+        #     goal_pose=,
+        #     solve_state=solve_state,
+        #     start_state=,
+        #     use_nn_seed=False,
+        #     partial_ik_opt=False,
+        #     link_poses=,
+        # )
+
+        # breakpoint()
+        return
 
     @property
     def tensor_args(self):
