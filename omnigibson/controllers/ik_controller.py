@@ -38,9 +38,6 @@ class InverseKinematicsController(JointController, ManipulationController):
     def __init__(
         self,
         task_name,
-        robot_description_path,
-        robot_urdf_path,
-        eef_name,
         control_freq,
         reset_joint_pos,
         control_limits,
@@ -50,8 +47,9 @@ class InverseKinematicsController(JointController, ManipulationController):
             th.tensor([-0.2, -0.2, -0.2, -0.5, -0.5, -0.5], dtype=th.float32),
             th.tensor([0.2, 0.2, 0.2, 0.5, 0.5, 0.5], dtype=th.float32),
         ),
-        kp=None,
-        damping_ratio=None,
+        pos_kp=None,
+        pos_damping_ratio=None,
+        vel_kp=None,
         use_impedances=True,
         mode="pose_delta_ori",
         smoothing_filter_size=None,
@@ -63,9 +61,6 @@ class InverseKinematicsController(JointController, ManipulationController):
             task_name (str): name assigned to this task frame for computing IK control. During control calculations,
                 the inputted control_dict should include entries named <@task_name>_pos_relative and
                 <@task_name>_quat_relative. See self._command_to_control() for what these values should entail.
-            robot_description_path (str): path to robot descriptor yaml file
-            robot_urdf_path (str): path to robot urdf file
-            eef_name (str): end effector frame name
             control_freq (int): controller loop frequency
             reset_joint_pos (Array[float]): reset joint positions, used as part of nullspace controller in IK.
                 Note that this should correspond to ALL the joints; the exact indices will be extracted via @dof_idx
@@ -88,10 +83,12 @@ class InverseKinematicsController(JointController, ManipulationController):
                 then all inputted command values will be scaled from the input range to the output range.
                 If either is None, no scaling will be used. If "default", then this range will automatically be set
                 to the @control_limits entry corresponding to self.control_type
-            kp (None or float): The proportional gain applied to the joint controller. If None, a default value
-                will be used. Only relevant if @use_impedances=True
-            damping_ratio (None or float): The damping ratio applied to the joint controller. If None, a default
-                value will be used. Only relevant if @use_impedances=True
+            pos_kp (None or float): If @motor_type is "position" and @use_impedances=True, this is the
+                proportional gain applied to the joint controller. If None, a default value will be used.
+            pos_damping_ratio (None or float): If @motor_type is "position" and @use_impedances=True, this is the
+                damping ratio applied to the joint controller. If None, a default value will be used.
+            vel_kp (None or float): If @motor_type is "velocity" and @use_impedances=True, this is the
+                proportional gain applied to the joint controller. If None, a default value will be used.
             use_impedances (bool): If True, will use impedances via the mass matrix to modify the desired efforts
                 applied
             mode (str): mode to use when computing IK. In all cases, position commands are 3DOF delta (dx,dy,dz)
@@ -178,8 +175,9 @@ class InverseKinematicsController(JointController, ManipulationController):
             control_freq=control_freq,
             control_limits=control_limits,
             dof_idx=dof_idx,
-            kp=kp,
-            damping_ratio=damping_ratio,
+            pos_kp=pos_kp,
+            pos_damping_ratio=pos_damping_ratio,
+            vel_kp=vel_kp,
             motor_type="position",
             use_delta_commands=False,
             use_impedances=use_impedances,
@@ -352,34 +350,24 @@ class InverseKinematicsController(JointController, ManipulationController):
         )
 
     def _compute_no_op_action(self, control_dict):
-
-        target_pos = self._goal["target_pos"]
-        target_quat = self._goal["target_quat"]
         pos_relative = control_dict[f"{self.task_name}_pos_relative"]
         quat_relative = control_dict[f"{self.task_name}_quat_relative"]
 
-        command = th.zeros(6, dtype=th.float32, device=target_pos.device)
+        command = th.zeros(6, dtype=th.float32, device=pos_relative.device)
 
         # Handle position
         if self.mode == "absolute_pose":
-            command[:3] = target_pos
+            command[:3] = pos_relative
         else:
-            command[:3] = target_pos - pos_relative
+            # We can leave it as zero for delta mode.
+            pass
 
         # Handle orientation
-        if self.mode == "position_fixed_ori" or self.mode == "position_compliant_ori":
+        if self.mode in ("pose_absolute_ori", "absolute_pose"):
+            command[3:] = T.quat2axisangle(quat_relative)
+        else:
             # For these modes, we don't need to add orientation to the command
             pass
-        elif self.mode == "pose_absolute_ori" or self.mode == "absolute_pose":
-            command[3:] = T.quat2axisangle(target_quat)
-        else:  # pose_delta_ori control
-            current_rot = T.quat2mat(quat_relative)
-            target_rot = T.quat2mat(target_quat)
-            delta_rot = target_rot @ (current_rot.T)
-
-            # Convert delta rotation to axis-angle representation
-            delta_axisangle = T.quat2axisangle(T.mat2quat(delta_rot))
-            command[3:] = delta_axisangle
 
         return command
 

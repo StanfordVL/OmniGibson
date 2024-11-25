@@ -2,7 +2,6 @@ from abc import abstractmethod
 from copy import deepcopy
 from typing import Iterable
 
-import matplotlib.pyplot as plt
 import torch as th
 
 import omnigibson.utils.transform_utils as T
@@ -58,7 +57,7 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         visible=True,
         fixed_base=False,
         visual_only=False,
-        self_collisions=False,
+        self_collisions=True,
         load_config=None,
         # Unique to USDObject hierarchy
         abilities=None,
@@ -130,19 +129,6 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         # Initialize internal attributes that will be loaded later
         self._sensors = None  # e.g.: scan sensor, vision sensor
 
-        # Make sure scale is torch tensor or scalar
-        scale = (
-            scale
-            if isinstance(scale, th.Tensor)
-            else th.tensor(scale, dtype=th.float32) if isinstance(scale, Iterable) else scale
-        )
-
-        # If specified, make sure scale is uniform -- this is because non-uniform scale can result in non-matching
-        # collision representations for parts of the robot that were optimized (e.g.: bounding sphere for wheels)
-        assert (
-            scale is None or isinstance(scale, int) or isinstance(scale, float) or th.all(scale == scale[0])
-        ), f"Robot scale must be uniform! Got: {scale}"
-
         # All BaseRobots should have xform properties pre-loaded
         load_config = {} if load_config is None else load_config
         load_config["xform_props_pre_loaded"] = True
@@ -169,6 +155,10 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             reset_joint_pos=reset_joint_pos,
             **kwargs,
         )
+
+        assert not isinstance(self._load_config["scale"], th.Tensor) or th.all(
+            self._load_config["scale"] == self._load_config["scale"][0]
+        ), f"Robot scale must be uniform! Got: {self._load_config['scale']}"
 
     def _post_load(self):
         # Run super post load first
@@ -426,6 +416,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             print(f"Modalities: {remaining_obs_modalities} cannot be visualized, skipping...")
 
         # Write all the frames to a plot
+        import matplotlib.pyplot as plt
+
         for sensor_name, sensor_frames in frames.items():
             n_sensor_frames = len(sensor_frames)
             if n_sensor_frames > 0:
@@ -600,7 +592,16 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
     def curobo_path(self):
         """
         Returns:
-            str: file path to the robot curobo configuration yaml file.
+            str or Dict[CuroboEmbodimentSelection, str]: file path to the robot curobo file or a mapping from
+                CuroboEmbodimentSelection to the file path
+        """
+        raise NotImplementedError
+
+    @property
+    def curobo_attached_object_link_names(self):
+        """
+        Returns:
+            Dict[str, str]: mapping from robot eef link names to the link names of the attached objects
         """
         raise NotImplementedError
 

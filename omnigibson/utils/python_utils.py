@@ -149,6 +149,15 @@ def create_object_from_init_info(init_info):
     return cls(**init_info["args"], **init_info.get("kwargs", {}))
 
 
+def safe_equal(a, b):
+    if isinstance(a, th.Tensor) and isinstance(b, th.Tensor):
+        return a.shape == b.shape and (a == b).all().item()
+    elif isinstance(a, (list, tuple)) and isinstance(b, (list, tuple)):
+        return len(a) == len(b) and all(safe_equal(a_item, b_item) for a_item, b_item in zip(a, b))
+    else:
+        return a == b
+
+
 def merge_nested_dicts(base_dict, extra_dict, inplace=False, verbose=False):
     """
     Iteratively updates @base_dict with values from @extra_dict. Note: This generates a new dictionary!
@@ -171,10 +180,8 @@ def merge_nested_dicts(base_dict, extra_dict, inplace=False, verbose=False):
             if isinstance(v, dict) and isinstance(base_dict[k], dict):
                 base_dict[k] = merge_nested_dicts(base_dict[k], v)
             else:
-                not_equal = base_dict[k] != v
-                if isinstance(not_equal, th.Tensor):
-                    not_equal = not_equal.any()
-                if not_equal and verbose:
+                equal = safe_equal(base_dict[k], v)
+                if not equal and verbose:
                     print(f"Different values for key {k}: {base_dict[k]}, {v}\n")
                 base_dict[k] = v
 
@@ -574,6 +581,7 @@ class CachedFunctions:
     def __init__(self, **kwargs):
         # Create internal dict to store functions
         self._fcns = dict()
+        self._cache = dict()
         for kwarg in kwargs:
             self._fcns[kwarg] = kwargs[kwarg]
 
@@ -583,20 +591,20 @@ class CachedFunctions:
     def __setitem__(self, key, value):
         self.add_fcn(name=key, fcn=value)
 
-    def get(self, name, *args, **kwargs):
+    def get(self, name):
         """
         Computes the function referenced by @name with the corresponding @args and @kwargs. Note that for a unique
         set of arguments, this value will be internally cached
 
         Args:
             name (str): The name of the function to call
-            *args (tuple): Positional arguments to pass into the function call
-            **kwargs (tuple): Keyword arguments to pass into the function call
 
         Returns:
             any: Output of the function referenced by @name
         """
-        return self._fcns[name](*args, **kwargs)
+        if name not in self._cache:
+            self._cache[name] = self._fcns[name]()
+        return self._cache[name]
 
     def get_fcn(self, name):
         """
@@ -783,3 +791,39 @@ def h5py_group_to_torch(group):
         else:
             state[key] = th.tensor(value[()], dtype=th.float32)
     return state
+
+
+@th.jit.script
+def multi_dim_linspace(start: th.Tensor, stop: th.Tensor, num: int) -> th.Tensor:
+    """
+    Generate a tensor with evenly spaced values along multiple dimensions.
+    This function creates a tensor where each slice along the first dimension
+    contains values linearly interpolated between the corresponding elements
+    of 'start' and 'stop'. It's similar to numpy.linspace but works with
+    multi-dimensional inputs in PyTorch.
+    Args:
+        start (th.Tensor): Starting values for each dimension.
+        stop (th.Tensor): Ending values for each dimension.
+        num (int): Number of samples to generate along the interpolated dimension.
+    Returns:
+        th.Tensor: A tensor of shape (num, *start.shape) containing the interpolated values.
+    Example:
+        >>> start = th.tensor([0, 10, 100])
+        >>> stop = th.tensor([1, 20, 200])
+        >>> result = multi_dim_linspace(start, stop, num=5)
+        >>> print(result.shape)
+        torch.Size([5, 3])
+        >>> print(result)
+        tensor([[  0.0000,  10.0000, 100.0000],
+                [  0.2500,  12.5000, 125.0000],
+                [  0.5000,  15.0000, 150.0000],
+                [  0.7500,  17.5000, 175.0000],
+                [  1.0000,  20.0000, 200.0000]])
+    """
+    steps = th.linspace(0, 1, num, dtype=start.dtype, device=start.device)
+
+    # Create a new shape for broadcasting
+    new_shape = [num] + [1] * start.dim()
+    steps = steps.reshape(new_shape)
+
+    return start + steps * (stop - start)

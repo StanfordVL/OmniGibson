@@ -89,6 +89,7 @@ def create_joint(
     body0=None,
     body1=None,
     enabled=True,
+    exclude_from_articulation=False,
     joint_frame_in_parent_frame_pos=None,
     joint_frame_in_parent_frame_quat=None,
     joint_frame_in_child_frame_pos=None,
@@ -107,6 +108,7 @@ def create_joint(
         body0 (str or None): absolute path to the first body's prim. At least @body0 or @body1 must be specified.
         body1 (str or None): absolute path to the second body's prim. At least @body0 or @body1 must be specified.
         enabled (bool): whether to enable this joint or not.
+        exclude_from_articulation (bool): whether to exclude this joint from the articulation or not.
         joint_frame_in_parent_frame_pos (th.tensor or None): relative position of the joint frame to the parent frame (body0).
         joint_frame_in_parent_frame_quat (th.tensor or None): relative orientation of the joint frame to the parent frame (body0).
         joint_frame_in_child_frame_pos (th.tensor or None): relative position of the joint frame to the child frame (body1).
@@ -168,6 +170,9 @@ def create_joint(
     # Possibly (un-/)enable this joint
     joint_prim.GetAttribute("physics:jointEnabled").Set(enabled)
 
+    # Possibly exclude this joint from the articulation
+    joint_prim.GetAttribute("physics:excludeFromArticulation").Set(exclude_from_articulation)
+
     # We update the simulation now without stepping physics if sim is playing so we can bypass the snapping warning from PhysicsUSD
     if og.sim.is_playing():
         with suppress_omni_log(channels=["omni.physx.plugin"]):
@@ -180,6 +185,8 @@ def create_joint(
 class RigidContactAPIImpl:
     """
     Class containing class methods to aggregate rigid body contacts across all rigid bodies in the simulator
+
+    NOTE: The RigidContactAPI only works when the contacting objects are awake. If the objects could be asleep, use ContactBodies instead.
     """
 
     def __init__(self):
@@ -225,7 +232,7 @@ class RigidContactAPIImpl:
 
     @classmethod
     def get_max_contact_data_count(cls):
-        return 0
+        return 256
 
     def initialize_view(self):
         """
@@ -389,12 +396,14 @@ class RigidContactAPIImpl:
         # Get all of the (row, col) pairs where the impulse is greater than 0
         return {
             (interesting_row_paths[row], interesting_col_paths[col])
-            for row, col in th.nonzero(interesting_impulses > 0, as_tuple=True)
+            for row, col in zip(*th.nonzero(interesting_impulses > 0, as_tuple=True))
         }
 
     def get_contact_data(self, scene_idx, row_prim_paths=None, column_prim_paths=None):
         # First check if the object has any contacts
-        impulses = self.get_all_impulses(scene_idx)
+        impulses = th.norm(self.get_all_impulses(scene_idx), dim=-1)
+        assert impulses.ndim == 2, f"Impulse matrix should be 2D, found shape {impulses.shape}"
+
         row_idx = (
             list(range(impulses.shape[0]))
             if row_prim_paths is None
@@ -406,6 +415,8 @@ class RigidContactAPIImpl:
             else [self.get_body_col_idx(path)[1] for path in column_prim_paths]
         )
         relevant_impulses = impulses[row_idx][:, col_idx]
+
+        # Early return if not in contact.
         if not th.any(relevant_impulses > 0):
             return []
 
@@ -503,11 +514,11 @@ class GripperRigidContactAPIImpl(RigidContactAPIImpl):
 
     @classmethod
     def get_max_contact_data_count(cls):
-        # 2x per finger link, to be safe.
-        # 2 here is not the finger count, it's the number of items we will record contacts with, per finger.
+        # 4x per finger link, to be safe.
+        # 4 here is not the finger count, it's the number of items we will record contacts with, per finger.
         # e.g. it's N such that if the finger is touching more than N items at once, only the first N are recorded.
-        # This number should very rarely go above 2.
-        return len(cls.get_column_filters()[0]) * 2
+        # This number should very rarely go above 4.
+        return len(cls.get_column_filters()[0]) * 4
 
 
 # Instantiate the GripperRigidContactAPI
@@ -1604,13 +1615,25 @@ def create_primitive_mesh(prim_path, primitive_type, extents=1.0, u_patches=None
         )
     )
 
-    # Modify values so that all faces are triangular
+    return triangularize_mesh(mesh)
+
+
+def triangularize_mesh(mesh):
+    """
+    Triangulates the mesh @mesh, modification in-place
+    """
     tm = mesh_prim_to_trimesh_mesh(mesh.GetPrim())
+
     face_vertex_counts = np.array([len(face) for face in tm.faces], dtype=int)
     mesh.GetFaceVertexCountsAttr().Set(face_vertex_counts)
     mesh.GetFaceVertexIndicesAttr().Set(tm.faces.flatten())
     mesh.GetNormalsAttr().Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertex_normals[tm.faces.flatten()]))
-    mesh.GetPrim().GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(tm.visual.uv[tm.faces.flatten()]))
+
+    # Modify the UV mapping if it exists
+    if isinstance(tm.visual, trimesh.visual.TextureVisuals):
+        mesh.GetPrim().GetAttribute("primvars:st").Set(
+            lazy.pxr.Vt.Vec2fArray.FromNumpy(tm.visual.uv[tm.faces.flatten()])
+        )
 
     return mesh
 
@@ -1743,3 +1766,39 @@ def deep_copy_prim(source_root_prim, dest_stage, dest_root_path):
         for child in source_prim.GetAllChildren():
             new_dest_path = dest_path + "/" + child.GetName()
             queue.append((child, new_dest_path))
+
+
+def delete_or_deactivate_prim(prim_path):
+    """
+    Attept to delete or deactivate the prim defined at @prim_path.
+
+    Args:
+        prim_path (str): Path defining which prim should be deleted or deactivated
+
+    Returns:
+        bool: Whether the operation was successful or not
+    """
+    if not lazy.omni.isaac.core.utils.prims.is_prim_path_valid(prim_path):
+        return False
+    if lazy.omni.isaac.core.utils.prims.is_prim_no_delete(prim_path):
+        return False
+    if lazy.omni.isaac.core.utils.prims.get_prim_type_name(prim_path=prim_path) == "PhysicsScene":
+        return False
+    if prim_path == "/World":
+        return False
+    if prim_path == "/":
+        return False
+    # Don't remove any /Render prims as that can cause crashes
+    if prim_path.startswith("/Render"):
+        return False
+
+    # If the prim is not ancestral, we can delete it.
+    if not lazy.omni.isaac.core.utils.prims.is_prim_ancestral(prim_path):
+        lazy.omni.usd.commands.DeletePrimsCommand([prim_path], destructive=True).do()
+
+    # Otherwise, we can only deactivate it, which essentially serves the same purpose.
+    # All objects that are originally in the scene are ancestral because we add the pre-build scene to the stage.
+    else:
+        lazy.omni.usd.commands.DeletePrimsCommand([prim_path], destructive=False).do()
+
+    return True

@@ -5,6 +5,7 @@ import torch as th
 import omnigibson as og
 import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
+from omnigibson.action_primitives.curobo import CuroboEmbodimentSelection
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.robots.articulated_trunk_robot import ArticulatedTrunkRobot
 from omnigibson.robots.holonomic_base_robot import HolonomicBaseRobot
@@ -27,7 +28,7 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         scale=None,
         visible=True,
         visual_only=False,
-        self_collisions=False,
+        self_collisions=True,
         load_config=None,
         # Unique to USDObject hierarchy
         abilities=None,
@@ -44,8 +45,6 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         # Unique to ManipulationRobot
         grasping_mode="physical",
         disable_grasp_handling=False,
-        # Unique to ArticulatedTrunkRobot
-        rigid_trunk=True,
         # Unique to MobileManipulationRobot
         default_reset_mode="untuck",
         **kwargs,
@@ -92,7 +91,6 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
                 If "sticky", will magnetize any object touching the gripper's fingers.
             disable_grasp_handling (bool): If True, will disable all grasp handling for this object. This means that
                 sticky and assisted grasp modes will not work unless the connection/release methodsare manually called.
-            rigid_trunk (bool): If True, will prevent the trunk from moving during execution.
             default_reset_mode (str): Default reset mode for the robot. Should be one of: {"tuck", "untuck"}
                 If reset_joint_pos is not None, this will be ignored (since _default_joint_pos won't be used during initialization).
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
@@ -119,8 +117,6 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
             sensor_config=sensor_config,
             grasping_mode=grasping_mode,
             disable_grasp_handling=disable_grasp_handling,
-            rigid_trunk=rigid_trunk,
-            default_trunk_offset=0.0,  # not applicable for R1
             default_reset_mode=default_reset_mode,
             **kwargs,
         )
@@ -139,8 +135,8 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         raise ValueError("R1 does not support discrete actions!")
 
     @property
-    def controller_order(self):
-        controllers = ["base"]
+    def _raw_controller_order(self):
+        controllers = ["base", "trunk"]
         for arm in self.arm_names:
             controllers += [f"arm_{arm}", f"gripper_{arm}"]
         return controllers
@@ -150,6 +146,7 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         controllers = super()._default_controllers
         # We use joint controllers for base as default
         controllers["base"] = "JointController"
+        controllers["trunk"] = "JointController"
         # We use IK and multi finger gripper controllers as default
         for arm in self.arm_names:
             controllers["arm_{}".format(arm)] = "InverseKinematicsController"
@@ -180,8 +177,8 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
     def assisted_grasp_start_points(self):
         return {
             arm: [
-                GraspingPoint(link_name=f"{arm}_gripper_link1", position=th.tensor([-0.032, 0.0, -0.009])),
-                GraspingPoint(link_name=f"{arm}_gripper_link1", position=th.tensor([0.025, 0.0, -0.009])),
+                GraspingPoint(link_name=f"{arm}_gripper_link1", position=th.tensor([-0.032, 0.0, -0.01])),
+                GraspingPoint(link_name=f"{arm}_gripper_link1", position=th.tensor([0.025, 0.0, -0.01])),
             ]
             for arm in self.arm_names
         }
@@ -190,11 +187,19 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
     def assisted_grasp_end_points(self):
         return {
             arm: [
-                GraspingPoint(link_name=f"{arm}_gripper_link1", position=th.tensor([-0.032, 0.0, -0.009])),
-                GraspingPoint(link_name=f"{arm}_gripper_link1", position=th.tensor([0.025, 0.0, -0.009])),
+                GraspingPoint(link_name=f"{arm}_gripper_link2", position=th.tensor([-0.032, 0.0, -0.01])),
+                GraspingPoint(link_name=f"{arm}_gripper_link2", position=th.tensor([0.025, 0.0, -0.01])),
             ]
             for arm in self.arm_names
         }
+
+    @property
+    def floor_touching_base_link_names(self):
+        return ["wheel_link1", "wheel_link2", "wheel_link3"]
+
+    @property
+    def trunk_link_names(self):
+        return ["torso_link1", "torso_link2", "torso_link3", "torso_link4"]
 
     @property
     def trunk_joint_names(self):
@@ -210,7 +215,7 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
 
     @property
     def arm_link_names(self):
-        return {arm: [f"{arm}_arm_link{i}" for i in range(1, 3)] for arm in self.arm_names}
+        return {arm: [f"{arm}_arm_link{i}" for i in range(1, 7)] for arm in self.arm_names}
 
     @property
     def arm_joint_names(self):
@@ -233,8 +238,23 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         return os.path.join(gm.ASSET_PATH, "models/r1/r1.usd")
 
     @property
+    def curobo_path(self):
+        return {
+            emb_sel: os.path.join(gm.ASSET_PATH, f"models/r1/r1_description_curobo_{emb_sel.value}.yaml")
+            for emb_sel in CuroboEmbodimentSelection
+        }
+
+    @property
+    def curobo_attached_object_link_names(self):
+        return {eef_link_name: f"attached_object_{eef_link_name}" for eef_link_name in self.eef_link_names.values()}
+
+    @property
     def robot_arm_descriptor_yamls(self):
-        return {arm: os.path.join(gm.ASSET_PATH, f"models/r1/r1_{arm}_descriptor.yaml") for arm in self.arm_names}
+        descriptor_yamls = {
+            arm: os.path.join(gm.ASSET_PATH, f"models/r1/r1_{arm}_descriptor.yaml") for arm in self.arm_names
+        }
+        descriptor_yamls["combined"]: os.path.join(gm.ASSET_PATH, "models/r1/r1_combined_descriptor.yaml")
+        return descriptor_yamls
 
     @property
     def urdf_path(self):
@@ -254,4 +274,7 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         return [
             ["left_gripper_link1", "left_gripper_link2"],
             ["right_gripper_link1", "right_gripper_link2"],
+            ["base_link", "wheel_link1"],
+            ["base_link", "wheel_link2"],
+            ["base_link", "wheel_link3"],
         ]

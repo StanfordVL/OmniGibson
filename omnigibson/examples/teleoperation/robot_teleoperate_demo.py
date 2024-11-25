@@ -18,6 +18,8 @@ TELEOP_METHOD = {
 }
 
 
+## https://github.com/UT-Austin-RobIn/telemoma/blob/main/telemoma/human_interface/keyboard.py
+
 def main():
     """
     Spawn a robot in an empty scene with a breakfast table and some toys.

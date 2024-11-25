@@ -7,6 +7,7 @@ import torch as th
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.sensors.sensor_base import BaseSensor
+from omnigibson.systems.system_base import get_all_system_names
 from omnigibson.utils.constants import (
     MAX_CLASS_COUNT,
     MAX_INSTANCE_COUNT,
@@ -17,8 +18,11 @@ from omnigibson.utils.constants import (
 from omnigibson.utils.numpy_utils import NumpyTypes
 from omnigibson.utils.python_utils import assert_valid_key, classproperty
 from omnigibson.utils.sim_utils import set_carb_setting
-from omnigibson.utils.ui_utils import dock_window
+from omnigibson.utils.ui_utils import create_module_logger, dock_window
 from omnigibson.utils.vision_utils import Remapper
+
+# Create module logger
+log = create_module_logger(module_name=__name__)
 
 
 # Duplicate of simulator's render method, used so that this can be done before simulator is created!
@@ -325,8 +329,6 @@ class VisionSensor(BaseSensor):
             obs[modality], info[modality] = self._remap_instance_segmentation(
                 obs[modality],
                 id_to_labels,
-                obs["seg_semantic"],
-                info["seg_semantic"],
                 id=(modality == "seg_instance_id"),
             )
         elif "bbox" in modality:
@@ -350,9 +352,7 @@ class VisionSensor(BaseSensor):
             if "," in replicator_mapping[key]:
                 # If there are multiple class names, grab the one that is a registered system
                 # This happens with MacroVisual particles, e.g. {"11": {"class": "breakfast_table,stain"}}
-                categories = [
-                    cat for cat in replicator_mapping[key].split(",") if cat in self.scene.available_systems.keys()
-                ]
+                categories = [cat for cat in replicator_mapping[key].split(",") if cat in get_all_system_names()]
                 assert (
                     len(categories) == 1
                 ), "There should be exactly one category that belongs to scene.system_registry"
@@ -378,13 +378,14 @@ class VisionSensor(BaseSensor):
         replicator_mapping = self._preprocess_semantic_labels(id_to_labels)
 
         image_keys = th.unique(img)
-        assert set(image_keys.tolist()).issubset(
-            set(replicator_mapping.keys())
-        ), "Semantic segmentation image does not match the original id_to_labels mapping."
+        if not set(image_keys.tolist()).issubset(set(replicator_mapping.keys())):
+            log.debug(
+                "Some semantic IDs in the image are not in the id_to_labels mapping. This is a known issue with the replicator and should only affect a few pixels. These pixels will be marked as unlabelled."
+            )
 
         return VisionSensor.SEMANTIC_REMAPPER.remap(replicator_mapping, semantic_class_id_to_name(), img, image_keys)
 
-    def _remap_instance_segmentation(self, img, id_to_labels, semantic_img, semantic_labels, id=False):
+    def _remap_instance_segmentation(self, img, id_to_labels, id=False):
         """
         Remap the instance segmentation image to our own instance IDs.
         Also, correct the id_to_labels input with our new labels and return it.
@@ -392,8 +393,6 @@ class VisionSensor(BaseSensor):
         Args:
             img (th.tensor): Instance segmentation image to remap
             id_to_labels (dict): Dictionary of instance IDs to class labels
-            semantic_img (th.tensor): Semantic segmentation image to use for instance registry
-            semantic_labels (dict): Dictionary of semantic IDs to class labels
             id (bool): Whether to remap for instance ID segmentation
         Returns:
             th.tensor: Remapped instance segmentation image
@@ -410,73 +409,103 @@ class VisionSensor(BaseSensor):
             key = int(key)
             if value in ["BACKGROUND", "UNLABELLED"]:
                 value = value.lower()
-            else:
-                assert "/" in value, f"Instance segmentation (ID) label {value} is not a valid prim path!"
-                prim_name = value.split("/")[-1]
-                # Hacky way to get the particles of MacroVisual/PhysicalParticleSystem
-                # Remap instance segmentation and instance segmentation ID labels to system name
-                if "Particle" in prim_name:
-                    category_name = prim_name.split("Particle")[0]
-                    assert (
-                        category_name in self.scene.available_systems.keys()
-                    ), f"System name {category_name} is not in the registered systems!"
-                    value = category_name
-                else:
-                    # Remap instance segmentation labels to object name
-                    if not id:
-                        # value is the prim path of the object
-                        if og.sim.floor_plane is not None and value == og.sim.floor_plane.prim_path:
-                            value = "groundPlane"
-                        else:
-                            obj = self.scene.object_registry("prim_path", value)
-                            # Remap instance segmentation labels from prim path to object name
-                            assert obj is not None, f"Object with prim path {value} cannot be found in objct registry!"
-                            value = obj.name
-
-                    # Keep the instance segmentation ID labels intact (prim paths of visual meshes)
+            elif "/" in value:
+                # Instance Segmentation
+                if not id:
+                    # Case 1: This is the ground plane
+                    if og.sim.floor_plane is not None and value == og.sim.floor_plane.prim_path:
+                        value = "groundPlane"
                     else:
-                        pass
+                        # Case 2: Check if this is an object, e.g. '/World/scene_0/breakfast_table', '/World/scene_0/dishtowel'
+                        obj = None
+                        if self.scene is not None:
+                            # If this is a camera within a scene, we check the object registry of the scene
+                            obj = self.scene.object_registry("prim_path", value)
+                        else:
+                            # If this is the viewer camera, we check each object registry
+                            for scene in og.sim.scenes:
+                                obj = scene.object_registry("prim_path", value)
+                                if obj:
+                                    break
+                        if obj is not None:
+                            # This is an object, so we remap the instance segmentation label to the object name
+                            value = obj.name
+                        # Case 3: Check if this is a particle system
+                        else:
+                            # This is a particle system
+                            path_split = value.split("/")
+                            prim_name = path_split[-1]
+                            system_matched = False
+                            # Case 3.1: Filter out macro particle systems
+                            # e.g. '/World/scene_0/diced__apple/particles/diced__appleParticle0', '/World/scene_0/breakfast_table/base_link/stainParticle0'
+                            if "Particle" in prim_name:
+                                macro_system_name = prim_name.split("Particle")[0]
+                                if macro_system_name in get_all_system_names():
+                                    system_matched = True
+                                    value = macro_system_name
+                            # Case 3.2: Filter out micro particle systems
+                            # e.g. '/World/scene_0/water/waterInstancer0/prototype0_1', '/World/scene_0/white_rice/white_riceInstancer0/prototype0'
+                            else:
+                                # If anything in path_split has "Instancer" in it, we know it's a micro particle system
+                                for path in path_split:
+                                    if "Instancer" in path:
+                                        # This is a micro particle system
+                                        system_matched = True
+                                        value = path.split("Instancer")[0]
+                                        break
+                            # Case 4: If nothing matched, we label it as unlabelled
+                            if not system_matched:
+                                value = "unlabelled"
+                # Instance ID Segmentation
+                else:
+                    # The only thing we do here is for micro particle system, we clean its name
+                    # e.g. a raw path looks like '/World/scene_0/water/waterInstancer0/prototype0.proto0_prototype0_id0'
+                    # we clean it to '/World/scene_0/water/waterInstancer0/prototype0'
+                    # Case 1: This is a micro particle system
+                    # e.g. '/World/scene_0/water/waterInstancer0/prototype0.proto0_prototype0_id0', '/World/scene_0/white_rice/white_riceInstancer0/prototype0.proto0_prototype0_id0'
+                    if "Instancer" in value and "." in value:
+                        # This is a micro particle system
+                        value = value[: value.rfind(".")]
+                    # Case 2: For everything else, we keep the name as is
+                    """
+                    e.g. 
+                    {
+                        '54': '/World/scene_0/water/waterInstancer0/prototype0.proto0_prototype0_id0', 
+                        '60': '/World/scene_0/water/waterInstancer0/prototype0.proto0_prototype0_id0', 
+                        '30': '/World/scene_0/breakfast_table/base_link/stainParticle1', 
+                        '27': '/World/scene_0/diced__apple/particles/diced__appleParticle0', 
+                        '58': '/World/scene_0/white_rice/white_riceInstancer0/prototype0.proto0_prototype0_id0', 
+                        '64': '/World/scene_0/white_rice/white_riceInstancer0/prototype0.proto0_prototype0_id0', 
+                        '40': '/World/scene_0/diced__apple/particles/diced__appleParticle1', 
+                        '48': '/World/scene_0/breakfast_table/base_link/stainParticle0', 
+                        '1': '/World/ground_plane/geom', 
+                        '19': '/World/scene_0/dishtowel/base_link_cloth', 
+                        '6': '/World/scene_0/breakfast_table/base_link/visuals'
+                    }
+                    """
+            else:
+                # TODO: This is a temporary fix unexpected labels e.g. INVALID introduced in new Isaac Sim versions
+                value = "unlabelled"
 
             self._register_instance(value, id=id)
             replicator_mapping[key] = value
 
-        # Handle the cases for MicroPhysicalParticleSystem (FluidSystem, GranularSystem).
-        # They show up in the image, but not in the info (id_to_labels).
-        # We identify these values, find the corresponding semantic label (system name), and add the mapping.
+        # This is a temporary fix for the problem where some small number of pixels show up in the image, but not in the info (id_to_labels).
+        # We identify these values and mark them as unlabelled.
         image_keys = th.unique(img)
         for key in image_keys:
             if str(key.item()) not in id_to_labels:
-                semantic_label = semantic_img[img == key].unique().item()
-                assert (
-                    semantic_label in semantic_labels
-                ), f"Semantic map value {semantic_label} is not in the semantic labels!"
-                category_name = semantic_labels[semantic_label]
-                if category_name in self.scene.available_systems.keys():
-                    value = category_name
-                    self._register_instance(value, id=id)
-                # If the category name is not in the registered systems,
-                # which happens because replicator sometimes returns segmentation map and id_to_labels that are not in sync,
-                # we will label this as "unlabelled" for now
-                # This only happens with a very small number of pixels, e.g. 0.1% of the image
-                else:
-                    num_of_pixels = (img == key).sum().item()
-                    resolution = (self._load_config["image_width"], self._load_config["image_height"])
-                    percentage = (num_of_pixels / (resolution[0] * resolution[1])) * 100
-                    if percentage > 2:
-                        og.log.warning(
-                            f"Marking {category_name} as unlabelled due to image & id_to_labels mismatch!"
-                            f"Percentage of pixels: {percentage}%"
-                        )
-                    value = "unlabelled"
-                    self._register_instance(value, id=id)
+                value = "unlabelled"
+                self._register_instance(value, id=id)
                 replicator_mapping[key.item()] = value
 
         registry = VisionSensor.INSTANCE_ID_REGISTRY if id else VisionSensor.INSTANCE_REGISTRY
         remapper = VisionSensor.INSTANCE_ID_REMAPPER if id else VisionSensor.INSTANCE_REMAPPER
 
-        assert set(image_keys.tolist()).issubset(
-            set(replicator_mapping.keys())
-        ), "Instance segmentation image does not match the original id_to_labels mapping."
+        if not set(image_keys.tolist()).issubset(set(replicator_mapping.keys())):
+            log.warning(
+                "Some instance IDs in the image are not in the id_to_labels mapping. This is a known issue with the replicator and should only affect a few pixels. These pixels will be marked as unlabelled."
+            )
 
         return remapper.remap(replicator_mapping, registry, img, image_keys)
 
@@ -499,6 +528,8 @@ class VisionSensor(BaseSensor):
         replicator_mapping = self._preprocess_semantic_labels(id_to_labels)
         for bbox in bboxes:
             bbox["semanticId"] = semantic_class_name_to_id()[replicator_mapping[bbox["semanticId"]]]
+        # Replicator returns each box as a numpy.void; we convert them to tuples here
+        bboxes = [box.tolist() for box in bboxes]
         info = {semantic_class_name_to_id()[val]: val for val in replicator_mapping.values()}
         return bboxes, info
 
@@ -787,12 +818,12 @@ class VisionSensor(BaseSensor):
         horizontal_fov = 2 * math.atan(horizontal_aperture / (2 * focal_length))
         vertical_fov = horizontal_fov * height / width
 
-        fx = (width / 2.0) / th.tan(horizontal_fov / 2.0)
-        fy = (height / 2.0) / th.tan(vertical_fov / 2.0)
+        fx = (width / 2.0) / math.tan(horizontal_fov / 2.0)
+        fy = (height / 2.0) / math.tan(vertical_fov / 2.0)
         cx = width / 2
         cy = height / 2
 
-        intrinsic_matrix = th.tensor([[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]])
+        intrinsic_matrix = th.tensor([[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]], dtype=th.float)
         return intrinsic_matrix
 
     @property
