@@ -1,3 +1,4 @@
+import numpy as np
 import torch as th
 
 import omnigibson as og
@@ -86,11 +87,16 @@ def main(random_selection=False, headless=False, short_exec=False):
         # unfolded = shirt.states[Unfolded].get_value()
         # info += " || tshirt: [folded] %d [unfolded] %d" % (folded, unfolded)
 
-        # print(f"{info}{' ' * (110 - len(info))}", end="\r")
-        return
+        from usdrt import Gf, Rt, Sdf, Usd, Vt
 
-    for _ in range(100):
-        og.sim.step()
+        cpp = carpet.root_link.prim_path
+        stage = Usd.Stage.Attach(og.sim.stage_id)
+        prim = stage.GetPrimAtPath(Sdf.Path(cpp))
+        points_attr = prim.GetAttribute("points")
+        points = np.array(points_attr.Get())
+        info = str(points.mean(axis=0))
+        print(f"{info}{' ' * (110 - len(info))}", end="\r")
+        return
 
     print("\nCloth state:\n")
 
@@ -148,6 +154,8 @@ def main(random_selection=False, headless=False, short_exec=False):
         #         obj.root_link.set_particle_positions(ctrl_pts, idxs=indices)
         #         env.step(th.empty(0))
         #         print_state()
+
+        # breakpoint()
 
         while True:
             env.step(th.empty(0))
