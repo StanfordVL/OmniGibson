@@ -115,6 +115,24 @@ def generate_collision_mesh(obj):
     print("Don't forget to make a selection!")
 
 
+def generate_all_missing_collision_meshes():
+    for obj in rt.objects:
+        if rt.classOf(obj) != rt.Editable_Poly:
+            continue
+        parsed_name = parse_name(obj.name)
+        if not parsed_name:
+            continue
+        if parsed_name.group("bad"):
+            continue
+        if parsed_name.group("instance_id") != "0":
+            continue
+        if parsed_name.group("meta_type"):
+            continue
+        if parsed_name.group("joint_side") == "upper":
+            continue
+        generate_collision_mesh(obj)
+
+
 def main():
     for obj in rt.selection:
         generate_collision_mesh(obj)

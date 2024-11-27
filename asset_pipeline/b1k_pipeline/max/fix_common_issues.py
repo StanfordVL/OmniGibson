@@ -16,6 +16,9 @@ import tqdm
 import b1k_pipeline.utils
 import b1k_pipeline.max.prebake_textures
 import b1k_pipeline.max.replace_bad_object
+import b1k_pipeline.max.collision_vertex_reduction
+import b1k_pipeline.max.run_coacd
+import b1k_pipeline.max.match_links
 
 rt = pymxs.runtime
 RENDER_PRESET_FILENAME = str(
@@ -106,27 +109,27 @@ def processFile(filename: pathlib.Path):
     # Prebake textures
     # b1k_pipeline.max.prebake_textures.process_open_file()
 
-    # Delete meta links from non-zero instances
-    for obj in rt.objects:
-        match = b1k_pipeline.utils.parse_name(obj.name)
-        if not match:
-            continue
-        if not match.group("bad") and match.group("instance_id") == "0":
-            continue
-        if not match.group("meta_type"):
-            continue
-        rt.delete(obj)
+    # # Delete meta links from non-zero instances
+    # for obj in rt.objects:
+    #     match = b1k_pipeline.utils.parse_name(obj.name)
+    #     if not match:
+    #         continue
+    #     if not match.group("bad") and match.group("instance_id") == "0":
+    #         continue
+    #     if not match.group("meta_type"):
+    #         continue
+    #     rt.delete(obj)
 
-    # # Delete upper links from non-zero instances
-    for obj in rt.objects:
-        match = b1k_pipeline.utils.parse_name(obj.name)
-        if not match:
-            continue
-        if not match.group("bad") and match.group("instance_id") == "0":
-            continue
-        if match.group("joint_side") != "upper":
-            continue
-        rt.delete(obj)
+    # # # Delete upper links from non-zero instances
+    # for obj in rt.objects:
+    #     match = b1k_pipeline.utils.parse_name(obj.name)
+    #     if not match:
+    #         continue
+    #     if not match.group("bad") and match.group("instance_id") == "0":
+    #         continue
+    #     if match.group("joint_side") != "upper":
+    #         continue
+    #     rt.delete(obj)
 
     # # Delete parts from non-zero instances
     # for obj in rt.objects:
@@ -183,6 +186,15 @@ def processFile(filename: pathlib.Path):
     # for obj in rt.objects:
     #     if "Mcollision" in obj.name:
     #         obj.isHidden = True
+
+    # Reduce collision mesh vertex counts
+    b1k_pipeline.max.collision_vertex_reduction.process_all_collision_objs()
+
+    # Generate all missing collision meshes
+    b1k_pipeline.max.run_coacd.generate_all_missing_collision_meshes()
+
+    # Match links
+    b1k_pipeline.max.match_links.process_all_objects()
 
     # Save again.
     new_filename = processed_fn(filename)

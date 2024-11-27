@@ -12,6 +12,7 @@ ENTRYPOINTS = {
     "align_pivots.py": "Find instances with unaligned pivots and align them.",
     "assign_light.py": "Assign lights to objects.",
     "assign_toggle.py": "Assign toggle button metalink to object",
+    "collision_vertex_reduction.py": "Reduce vertex count of a collision mesh.",
     "demirror.py": "Fix objects that are mirrored.",
     "find_duplicates.py": "Find duplicate objects in the scene.",
     # "fix_common_issues.py": "Fix common issues like scale.",
