@@ -191,7 +191,7 @@ def processFile(filename: pathlib.Path):
     b1k_pipeline.max.collision_vertex_reduction.process_all_collision_objs()
 
     # Generate all missing collision meshes
-    b1k_pipeline.max.run_coacd.generate_all_missing_collision_meshes()
+    # b1k_pipeline.max.run_coacd.generate_all_missing_collision_meshes()
 
     # Match links
     b1k_pipeline.max.match_links.process_all_objects()
@@ -205,8 +205,15 @@ def fix_common_issues_in_all_files():
     candidates = [
         pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
+
+    start_idx = 0
+    for i, x in enumerate(candidates):
+        if "custom-" in str(x):
+            start_idx = i
+            break
+
     # has_matching_processed = [processed_fn(x).exists() for x in candidates]
-    for i, f in enumerate(tqdm.tqdm(candidates)):
+    for i, f in enumerate(tqdm.tqdm(candidates[start_idx:])):
         processFile(f)
 
 

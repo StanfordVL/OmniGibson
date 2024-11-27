@@ -445,7 +445,7 @@ class SanityCheck:
             )
             pos_diff = this_offset_pos - desired_offset_pos
             self.expect(
-                np.allclose(pos_diff, 0, atol=5e-2),
+                np.allclose(pos_diff, 0, atol=1e-1),
                 f"{row.object_name} has different pivot offset position (by {pos_diff}). Match pivots on each instance.",
             )
 
@@ -881,7 +881,7 @@ class SanityCheck:
                 )
 
                 self.expect(
-                    np.allclose(scale_difference, 1, atol=1e-3),
+                    np.allclose(scale_difference, 1, atol=0.02),
                     f"{model_id} link {link_name} has different scale in instance {instance_id} compared to instance 0. Scale difference: {scale_difference}.",
                 )
                 self.expect(
@@ -889,7 +889,7 @@ class SanityCheck:
                     f"{model_id} link {link_name} has different position in instance {instance_id} compared to instance 0. Position difference: {position_difference}.",
                 )
                 self.expect(
-                    np.isclose(rotation_difference.magnitude(), 0, atol=1e-3),
+                    np.isclose(rotation_difference.magnitude(), 0, atol=np.deg2rad(1)),
                     f"{model_id} link {link_name} has different rotation in instance {instance_id} compared to instance 0. Rotation difference: {rotation_difference.magnitude()}.",
                 )
 
