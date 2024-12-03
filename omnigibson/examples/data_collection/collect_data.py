@@ -40,9 +40,9 @@ def main():
     )
     robot = env.robots[0]
     coffee_cup = env.scene.object_registry("name", "coffee_cup")
-    coffee_cup.links['base_link'].density = 100
+    coffee_cup.links["base_link"].density = 100
     paper_cup = env.scene.object_registry("name", "paper_cup")
-    paper_cup.links['base_link'].density = 100
+    paper_cup.links["base_link"].density = 100
     pdb.set_trace()
 
     # Create teleop controller

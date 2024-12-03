@@ -1,20 +1,28 @@
 import os
 import pdb
 
-import yaml
 import torch
 import torch as th
+import yaml
+from collect_data_tiago_script_cup import (
+    _empty_action,
+    close_gripper,
+    format_action,
+    generate_action,
+    generate_waypoint_sequence,
+    get_eef_pos_orn,
+    move_to_waypoints,
+    open_gripper,
+    send_to_target_pose,
+)
 
 import omnigibson as og
 import omnigibson.lazy as lazy
+import omnigibson.utils.transform_utils as T
 from omnigibson.envs import DataCollectionWrapper, DataPlaybackWrapper
 from omnigibson.macros import gm
-from omnigibson.utils.ui_utils import BimanualKeyboardRobotController, choose_from_options
-import omnigibson.utils.transform_utils as T
-
-from collect_data_tiago_script_cup import generate_action, generate_waypoint_sequence, move_to_waypoints, _empty_action, send_to_target_pose, format_action, get_eef_pos_orn, close_gripper, open_gripper
-
 from omnigibson.utils.control_utils import orientation_error
+from omnigibson.utils.ui_utils import BimanualKeyboardRobotController, choose_from_options
 
 gm.USE_GPU_DYNAMICS = False
 gm.ENABLE_FLATCACHE = False
@@ -59,14 +67,14 @@ def main():
     state = og.sim.dump_state()
     og.sim.stop()
     notebook = env.scene.object_registry("name", "notebook")
-    notebook.links['base_link'].density = 10
+    notebook.links["base_link"].density = 10
     # coffee_cup.links['base_link'].friction = 0.01 # friction is not in the link object
     # giftbox = env.scene.object_registry("name", "gift_box")
     # giftbox.links['base_link'].density = 100
     og.sim.play()
     og.sim.load_state(state)
-    for _ in range(10): og.sim.step()
-
+    for _ in range(10):
+        og.sim.step()
 
     # Create teleop controller
     action_generator = BimanualKeyboardRobotController(robot=robot)
@@ -75,11 +83,12 @@ def main():
         for _ in range(500):
             action = action_generator.get_teleop_action_bimanual()
             next_obs, reward, terminated, truncated, info = env.step(action=action)
-        print('arm_left:', get_eef_pos_orn(robot, 'left'))
-        print('arm_right:', get_eef_pos_orn(robot, 'right'))
-    
+        print("arm_left:", get_eef_pos_orn(robot, "left"))
+        print("arm_right:", get_eef_pos_orn(robot, "right"))
+
     def render(steps):
-        for _ in range(steps): og.sim.render()
+        for _ in range(steps):
+            og.sim.render()
 
     pdb.set_trace()
 
@@ -102,39 +111,30 @@ def main():
     # send_to_target_pose(robot, 'arm_right', torch.Tensor([0.4, -0.16,  0.73]), torch.Tensor([-0.5297, -0.4277,  0.5730,  0.4562]) )
     # send_to_target_pose(robot, 'arm_right', torch.Tensor([0.4, -0.05,  0.73]), torch.Tensor([-0.5297, -0.4277,  0.5730,  0.4562]) )
 
-
     waypoints_list = [
-    {
-        "arm_left":   
-        (      
-            (torch.Tensor([ 0.7,  0.15,  0.7834]), torch.Tensor([-0.6443,  0.5851,  0.3711,  0.3238]), -1),
-            (torch.Tensor([ 0.7,  0.05,  0.7834]), torch.Tensor([-0.6443,  0.5851,  0.3711,  0.3238]), 0),
-            (torch.Tensor([ 0.55,  0.05,  0.7834]), torch.Tensor([-0.6443,  0.5851,  0.3711,  0.3238]), 0),
-        ),
-        "arm_right":
-        (
-            (torch.Tensor([0.5, -0.16,  0.7805]), torch.Tensor([-0.5297, -0.4277,  0.5730,  0.4562]), 0),
-        ),
-    },
-    {
-        "arm_left":
-        (
-            (None, None, 0),
-        ),
-        "arm_right":
-        (
-            (torch.Tensor([0.4, -0.18,  0.78]), torch.Tensor([-0.5297, -0.4277,  0.5730,  0.4562]), 0),
-            (torch.Tensor([0.4, -0.18,  0.73]), torch.Tensor([-0.5297, -0.4277,  0.5730,  0.4562]), 0),
-            (torch.Tensor([0.4, -0.07,  0.73]), torch.Tensor([-0.5297, -0.4277,  0.5730,  0.4562]), -1)
-        )
-    }
+        {
+            "arm_left": (
+                (torch.Tensor([0.7, 0.15, 0.7834]), torch.Tensor([-0.6443, 0.5851, 0.3711, 0.3238]), -1),
+                (torch.Tensor([0.7, 0.05, 0.7834]), torch.Tensor([-0.6443, 0.5851, 0.3711, 0.3238]), 0),
+                (torch.Tensor([0.55, 0.05, 0.7834]), torch.Tensor([-0.6443, 0.5851, 0.3711, 0.3238]), 0),
+            ),
+            "arm_right": ((torch.Tensor([0.5, -0.16, 0.7805]), torch.Tensor([-0.5297, -0.4277, 0.5730, 0.4562]), 0),),
+        },
+        {
+            "arm_left": ((None, None, 0),),
+            "arm_right": (
+                (torch.Tensor([0.4, -0.18, 0.78]), torch.Tensor([-0.5297, -0.4277, 0.5730, 0.4562]), 0),
+                (torch.Tensor([0.4, -0.18, 0.73]), torch.Tensor([-0.5297, -0.4277, 0.5730, 0.4562]), 0),
+                (torch.Tensor([0.4, -0.07, 0.73]), torch.Tensor([-0.5297, -0.4277, 0.5730, 0.4562]), -1),
+            ),
+        },
     ]
 
     for waypoint in waypoints_list:
         move_to_waypoints(waypoint, env, robot)
 
     pdb.set_trace()
-    print('now the waypoint is reached')
+    print("now the waypoint is reached")
 
     print("Data saved")
     env.save_data()

@@ -9,7 +9,6 @@ import torch as th
 
 import omnigibson as og
 import omnigibson.lazy as lazy
-from omnigibson.objects import PrimitiveObject
 import omnigibson.utils.transform_utils as T
 from omnigibson.action_primitives.curobo import CuroboEmbodimentSelection, CuRoboMotionGenerator
 from omnigibson.action_primitives.starter_semantic_action_primitives import (
@@ -18,6 +17,7 @@ from omnigibson.action_primitives.starter_semantic_action_primitives import (
 )
 from omnigibson.macros import gm, macros
 from omnigibson.object_states import Touching
+from omnigibson.objects import PrimitiveObject
 from omnigibson.robots.holonomic_base_robot import HolonomicBaseRobot
 from omnigibson.robots.tiago import Tiago
 

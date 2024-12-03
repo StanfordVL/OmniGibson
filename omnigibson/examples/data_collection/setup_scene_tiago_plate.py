@@ -46,30 +46,36 @@ def main():
     ############################
     # breakfast table
     # Import task relevant objects
-    breakfast_table = DatasetObject(name="breakfast_table", category="breakfast_table", model="dcdtsr", scale=th.tensor([.8, .8, .8]))
+    breakfast_table = DatasetObject(
+        name="breakfast_table", category="breakfast_table", model="dcdtsr", scale=th.tensor([0.8, 0.8, 0.8])
+    )
     objs_to_add = [breakfast_table]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    breakfast_table.set_position_orientation([.6, 0.0, 0.6], T.euler2quat(th.tensor([0, 0, 0])))
+    breakfast_table.set_position_orientation([0.6, 0.0, 0.6], T.euler2quat(th.tensor([0, 0, 0])))
 
     # Assign to object scope
-    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(bddl_inst="breakfast_table.n.01_1", entity=breakfast_table)
+    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(
+        bddl_inst="breakfast_table.n.01_1", entity=breakfast_table
+    )
 
-    plate_1_position = [.65, -0.0, .7]
-    cup_1_position = [.7, 0.5, 0.7]
+    plate_1_position = [0.65, -0.0, 0.7]
+    cup_1_position = [0.7, 0.5, 0.7]
 
     ############################
     # coffee cup
     # Import task relevant objects
-    coffee_cup = DatasetObject(name="coffee_cup", category="coffee_cup", model="rixzrk", scale=th.tensor([1., 1.0, 1.0]))
+    coffee_cup = DatasetObject(
+        name="coffee_cup", category="coffee_cup", model="rixzrk", scale=th.tensor([1.0, 1.0, 1.0])
+    )
     objs_to_add = [coffee_cup]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    coffee_cup.set_position_orientation(cup_1_position, T.euler2quat(th.tensor([0, 0, np.pi*1.5 ])))
+    coffee_cup.set_position_orientation(cup_1_position, T.euler2quat(th.tensor([0, 0, np.pi * 1.5])))
     pdb.set_trace()
-    coffee_cup.links['base_link'].density = 10
+    coffee_cup.links["base_link"].density = 10
     pdb.set_trace()
 
     # Assign to object scope
@@ -87,7 +93,6 @@ def main():
 
     # Assign to object scope
     env.task.object_scope["plate.n.04_1"] = BDDLEntity(bddl_inst="plate.n.04_1", entity=plate)
-
 
     # END OF MODIFYING THE CODE
     ############################

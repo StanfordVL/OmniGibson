@@ -45,18 +45,22 @@ def main():
 
     # breakfast table
     # Import task relevant objects
-    breakfast_table = DatasetObject(name="breakfast_table", category="breakfast_table", model="bhszwe", scale=th.tensor([.8, .8, .6]))
+    breakfast_table = DatasetObject(
+        name="breakfast_table", category="breakfast_table", model="bhszwe", scale=th.tensor([0.8, 0.8, 0.6])
+    )
     objs_to_add = [breakfast_table]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    breakfast_table.set_position_orientation([.6, 0.0, 0.4], T.euler2quat(th.tensor([0, 0, 0])))
+    breakfast_table.set_position_orientation([0.6, 0.0, 0.4], T.euler2quat(th.tensor([0, 0, 0])))
 
     # Assign to object scope
-    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(bddl_inst="breakfast_table.n.01_1", entity=breakfast_table)
+    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(
+        bddl_inst="breakfast_table.n.01_1", entity=breakfast_table
+    )
 
-    cup_1_position = [.65, -0.1, .7]
-    cup_2_position = [.6, 0.15, 0.7]
+    cup_1_position = [0.65, -0.1, 0.7]
+    cup_2_position = [0.6, 0.15, 0.7]
 
     # cup_1_position = [.6, -0.1, .7]
     # cup_2_position = [.7, 0.2, 0.7]
@@ -64,14 +68,16 @@ def main():
 
     # coffee cup
     # Import task relevant objects, rixzrk, ckkwmj
-    coffee_cup = DatasetObject(name="coffee_cup", category="coffee_cup", model="rixzrk", scale=th.tensor([1., 1.0, 1.0]))
+    coffee_cup = DatasetObject(
+        name="coffee_cup", category="coffee_cup", model="rixzrk", scale=th.tensor([1.0, 1.0, 1.0])
+    )
     objs_to_add = [coffee_cup]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    coffee_cup.set_position_orientation(cup_1_position, T.euler2quat(th.tensor([0, 0, np.pi*1.5 ])))
+    coffee_cup.set_position_orientation(cup_1_position, T.euler2quat(th.tensor([0, 0, np.pi * 1.5])))
     # pdb.set_trace()
-    coffee_cup.links['base_link'].density = 10
+    coffee_cup.links["base_link"].density = 10
     pdb.set_trace()
 
     # Assign to object scope
@@ -80,7 +86,7 @@ def main():
     ############################
     # # change coffee to bowl, bowl-ajzltc
     ############################
-    
+
     # bowl = DatasetObject(name="bowl", category="bowl", model="ajzltc", scale=th.tensor([1., 1.0, 1.0]))
     # objs_to_add = [bowl]
     # og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
@@ -108,8 +114,6 @@ def main():
     # # Assign to object scope
     # env.task.object_scope["lid.n.02_1"] = BDDLEntity(bddl_inst="lid.n.02_1", entity=lid)
 
-
-
     # # soda cup
     # # Import task relevant objects
     # soda_cup = DatasetObject(name="soda_cup", category="soda_cup", model="lpanoc", scale=th.tensor([0.8, 0.8, 0.8]))
@@ -134,7 +138,6 @@ def main():
 
     # Assign to object scope
     env.task.object_scope["dixie_cup.n.01_1"] = BDDLEntity(bddl_inst="dixie_cup.n.01_1", entity=paper_cup)
-
 
     # END OF MODIFYING THE CODE
     ############################
