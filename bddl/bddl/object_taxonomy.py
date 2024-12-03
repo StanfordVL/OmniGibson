@@ -6,7 +6,8 @@ import networkx as nx
 import bddl
 
 DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
-    bddl.__package__, "generated_data/output_hierarchy_properties.json")
+    bddl.__package__, "generated_data/output_hierarchy_properties.json"
+)
 
 
 class ObjectTaxonomy(object):
@@ -15,7 +16,8 @@ class ObjectTaxonomy(object):
 
     def refresh_hierarchy_file(self):
         DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
-            bddl.__package__, "generated_data/output_hierarchy_properties.json")
+            bddl.__package__, "generated_data/output_hierarchy_properties.json"
+        )
         self.taxonomy = self._parse_taxonomy(DEFAULT_HIERARCHY_FILE)
 
     @staticmethod
@@ -35,16 +37,18 @@ class ObjectTaxonomy(object):
             next_nodes = []
             for node, parent in nodes:
                 children_names = set()
-                if 'children' in node:
-                    for child in node['children']:
+                if "children" in node:
+                    for child in node["children"]:
                         next_nodes.append((child, node))
-                        children_names.add(child['name'])
-                taxonomy.add_node(node['name'],
-                                  categories=node.get('categories', []),
-                                  substances=node.get('substances', []),
-                                  abilities=node['abilities'])
+                        children_names.add(child["name"])
+                taxonomy.add_node(
+                    node["name"],
+                    categories=node.get("categories", []),
+                    substances=node.get("substances", []),
+                    abilities=node["abilities"],
+                )
                 for child_name in children_names:
-                    taxonomy.add_edge(node['name'], child_name)
+                    taxonomy.add_edge(node["name"], child_name)
             nodes = next_nodes
         return taxonomy
 
@@ -56,17 +60,15 @@ class ObjectTaxonomy(object):
         :return: str corresponding to the matching synset, None if no match found.
         :raises: ValueError if more than one matching synset is found.
         """
-        matched = [
-            synset for synset in self.taxonomy.nodes if filter_fn(synset)]
+        matched = [synset for synset in self.taxonomy.nodes if filter_fn(synset)]
 
         if not matched:
             return None
         elif len(matched) > 1:
-            raise ValueError("Multiple synsets matched: %s" %
-                             ", ".join(matched))
+            raise ValueError("Multiple synsets matched: %s" % ", ".join(matched))
 
         return matched[0]
-    
+
     def get_all_synsets(self):
         """
         Return all synsets in topology, in topological order (every synsets appears before its descendants)
@@ -83,7 +85,9 @@ class ObjectTaxonomy(object):
         :return: str containing matching synset.
         :raises ValueError if multiple matching synsets are found.
         """
-        return self._get_synset_by_filter(lambda synset: category in self.get_categories(synset))
+        return self._get_synset_by_filter(
+            lambda synset: category in self.get_categories(synset)
+        )
 
     def get_synset_from_substance(self, substance):
         """
@@ -93,7 +97,9 @@ class ObjectTaxonomy(object):
         :return: str containing matching synset.
         :raises ValueError if multiple matching synsets are found.
         """
-        return self._get_synset_by_filter(lambda synset: substance in self.get_substances(synset))
+        return self._get_synset_by_filter(
+            lambda synset: substance in self.get_substances(synset)
+        )
 
     def get_subtree_categories(self, synset):
         """
@@ -110,7 +116,7 @@ class ObjectTaxonomy(object):
         for synset in synsets:
             all_categories += self.get_categories(synset)
         return all_categories
-    
+
     def get_subtree_substances(self, synset):
         """
         Get the substances matching the subtree of a given synset (by aggregating substances across all the leaf-level descendants).
@@ -153,7 +159,11 @@ class ObjectTaxonomy(object):
         :param synset: synset to search.
         :return: list of str corresponding to leaf descendant synsets.
         """
-        return [node for node in self.get_descendants(synset) if self.taxonomy.out_degree(node) == 0]
+        return [
+            node
+            for node in self.get_descendants(synset)
+            if self.taxonomy.out_degree(node) == 0
+        ]
 
     def get_ancestors(self, synset):
         """
@@ -197,7 +207,7 @@ class ObjectTaxonomy(object):
         :return: dict in the form of {ability: {param: value}} containing abilities and ability parameters.
         """
         assert self.is_valid_synset(synset), f"Invalid synset: {synset}"
-        return copy.deepcopy(self.taxonomy.nodes[synset]['abilities'])
+        return copy.deepcopy(self.taxonomy.nodes[synset]["abilities"])
 
     def get_categories(self, synset):
         """
@@ -207,8 +217,8 @@ class ObjectTaxonomy(object):
         :return: list of str corresponding to object categories matching the synset.
         """
         assert self.is_valid_synset(synset)
-        return list(self.taxonomy.nodes[synset]['categories'])
-    
+        return list(self.taxonomy.nodes[synset]["categories"])
+
     def get_substances(self, synset):
         """
         Get the substances matching a given synset.
@@ -217,7 +227,7 @@ class ObjectTaxonomy(object):
         :return: list of str corresponding to substances matching the synset.
         """
         assert self.is_valid_synset(synset)
-        return list(self.taxonomy.nodes[synset]['substances'])
+        return list(self.taxonomy.nodes[synset]["substances"])
 
     def get_children(self, synset):
         """
