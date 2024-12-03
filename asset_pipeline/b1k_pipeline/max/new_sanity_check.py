@@ -1,3 +1,6 @@
+# Install bddl by doing
+# pip install git+https://github.com/StanfordVL/bddl.git@develop
+
 import sys
 
 sys.path.append(r"D:\ig_pipeline")
@@ -19,6 +22,8 @@ from b1k_pipeline.max.prebake_textures import (
     get_recorded_uv_unwrapping_hash,
     hash_object,
 )
+
+from bddl.knowledge_base import OBJECT_TAXONOMY
 
 rt = pymxs.runtime
 
@@ -60,8 +65,9 @@ assert not (
 ), "Found invalid meta type mapping"
 
 
-def get_required_meta_links(category):
-    return set()
+def get_required_meta_links(category) -> set[str]:
+    synset = OBJECT_TAXONOMY.get_synset_from_category(category)
+    return OBJECT_TAXONOMY.get_required_meta_links_for_synset(synset)
 
 
 def is_light_required(category):
@@ -692,10 +698,14 @@ class SanityCheck:
 
         # Check that the meta links match what's needed
         required_meta_types = get_required_meta_links(row.name_category)
+        required_meta_types -= {
+            "subpart",
+            "joint",
+        }  # TODO: Should we check for subpart too?
         missing_meta_types = required_meta_types - found_ml_types
         self.expect(
             not missing_meta_types,
-            f"Expected meta types for {row.object_name} are missing: {missing_meta_types}",
+            f"Expected meta links for {row.object_name} are missing: {missing_meta_types}",
         )
 
         # Check that meta subids are correct:
@@ -805,6 +815,18 @@ class SanityCheck:
 
         # Then individually validate each of the model instances
         group.groupby("name_instance_id").apply(self.validate_model_instance_group)
+
+        # Then validate that if the object requires joints, it has them
+        requires_joints = "joint" in get_required_meta_links(
+            group["name_category"].iloc[0]
+        )
+        if requires_joints:
+            # it should contain at least one revolute or prismatic joint
+            # TODO: Perhaps also assert the presence of an openable tag later.
+            self.expect(
+                set(group["name_joint_type"].unique()) & {"R", "P"},
+                f"Model ID {model_id} requires joints but has no joints.",
+            )
 
         # For each instance, record the scale of the base link, and the positional offset of the
         # child links in the base link's frame. Assert that after scaling these numbers are close.
