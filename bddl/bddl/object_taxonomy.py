@@ -270,6 +270,56 @@ class ObjectTaxonomy(object):
         """
         return ability in self.get_abilities(synset)
 
+    @staticmethod
+    def get_required_meta_links_for_abilities(abilities):
+        if "substance" in abilities:
+            return set()  # substances don't need any meta links
+
+        required_links = set()
+
+        # If we are a heatSource or coldSource, we need to have certain links
+        for property in ["heatSource", "coldSource"]:
+            if property in abilities:
+                if (
+                    "requires_inside" in abilities[property]
+                    and abilities[property]["requires_inside"]
+                ):
+                    continue
+                required_links.add("heatsource")
+
+        # This is left out because the fillable annotations are currently automatically generated
+        if "fillable" in abilities:
+            required_links.add("fillable")
+
+        if "toggleable" in abilities:
+            required_links.add("togglebutton")
+
+        particle_pairs = [
+            ("particleSink", "fluidsink"),
+            ("particleSource", "fluidsource"),
+            ("particleApplier", "particleapplier"),
+            ("particleRemover", "particleremover"),
+        ]
+        for property, meta_link in particle_pairs:
+            if property in abilities:
+                if (
+                    "method" in abilities[property]
+                    and abilities[property]["method"] != "projection"
+                ):
+                    continue
+                required_links.add(meta_link)
+
+        if "slicer" in abilities:
+            required_links.add("slicer")
+
+        if "sliceable" in abilities:
+            required_links.add("subpart")
+
+        if "openable" in abilities:
+            required_links.add("joint")
+
+        return required_links
+
 
 if __name__ == "__main__":
     object_taxonomy = ObjectTaxonomy()
