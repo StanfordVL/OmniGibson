@@ -326,6 +326,17 @@ class SanityCheck:
             f"{row.object_name} has non-triangular faces. Apply the Triangulate script.",
         )
 
+        # Check that the object does not have self-intersecting faces
+        self_intersecting = any(
+            # A face is self-intersecting if a vertex shows up more than once in the face.
+            np.any(np.unique(np.array(rt.polyop.getFaceVerts(obj, i + 1)), return_counts=True)[1] > 1)
+            for i in range(rt.polyop.GetNumFaces(obj))
+        )
+        self.expect(
+            not self_intersecting,
+            f"{row.object_name} has self-intersecting faces. Apply the Triangulate script.",
+        )
+
         # Check that object satisfies the scale condition.
         scale = np.array(row.object.scale)
         self.expect(
