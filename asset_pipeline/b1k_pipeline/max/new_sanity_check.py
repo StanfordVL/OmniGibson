@@ -67,6 +67,8 @@ assert not (
 
 def get_required_meta_links(category) -> set[str]:
     synset = OBJECT_TAXONOMY.get_synset_from_category(category)
+    if synset is None:
+        raise ValueError(f"Category {category} not found in taxonomy.")
     return OBJECT_TAXONOMY.get_required_meta_links_for_synset(synset)
 
 
@@ -267,6 +269,18 @@ class SanityCheck:
                 f"{row.object_name} has different UV unwrapping than recorded. Reunwrap the object.",
             )
 
+            # Run cloth object checks
+            synset = OBJECT_TAXONOMY.get_synset_from_category(row.name_category)
+            if synset is not None:
+                obj_is_cloth = "cloth" in OBJECT_TAXONOMY.get_abilities(synset)
+                if obj_is_cloth:
+                    self.validate_cloth(row)
+            else:
+                self.expect(
+                    False,
+                    f"Cannot validate clothness: category {row.name_category} not found in taxonomy.",
+                )                
+
             # Check that each object zeroth instance object actually has a collision mesh
             if int(row.name_instance_id) == 0 and row.name_joint_side != "upper":
                 for child in obj.children:
@@ -369,6 +383,18 @@ class SanityCheck:
         # Validate meta stuff
         if int(row.name_instance_id) == 0:
             self.validate_meta_links(row)
+
+    def validate_cloth(self, row):
+        # A cloth object should consist of a single connected component
+        obj = row.object._obj
+        elems = {
+            tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
+            for i in range(rt.polyop.GetNumFaces(obj))
+        }
+        self.expect(
+            len(elems) == 1,
+            f"Cloth object {obj.name} should consist of exactly 1 element. Currently it has {len(elems)} elements.",
+        )
 
     def validate_light(self, row):
         # Validate that the object has a light ID
@@ -697,16 +723,22 @@ class SanityCheck:
         )
 
         # Check that the meta links match what's needed
-        required_meta_types = get_required_meta_links(row.name_category)
-        required_meta_types -= {
-            "subpart",
-            "joint",
-        }  # TODO: Should we check for subpart too?
-        missing_meta_types = required_meta_types - found_ml_types
-        self.expect(
-            not missing_meta_types,
-            f"Expected meta links for {row.object_name} are missing: {missing_meta_types}",
-        )
+        try:
+            required_meta_types = get_required_meta_links(row.name_category)
+            required_meta_types -= {
+                "subpart",
+                "joint",
+            }  # TODO: Should we check for subpart too?
+            missing_meta_types = required_meta_types - found_ml_types
+            self.expect(
+                not missing_meta_types,
+                f"Expected meta links for {row.object_name} are missing: {missing_meta_types}",
+            )
+        except ValueError as e:
+            self.expect(
+                False,
+                f"Cannot validate meta links for {row.object_name}: {e}",
+            )
 
         # Check that meta subids are correct:
         for meta_type, meta_ids_to_subids in found_ml_subids_for_id.items():
@@ -817,15 +849,21 @@ class SanityCheck:
         group.groupby("name_instance_id").apply(self.validate_model_instance_group)
 
         # Then validate that if the object requires joints, it has them
-        requires_joints = "joint" in get_required_meta_links(
-            group["name_category"].iloc[0]
-        )
-        if requires_joints:
-            # it should contain at least one revolute or prismatic joint
-            # TODO: Perhaps also assert the presence of an openable tag later.
+        try:
+            requires_joints = "joint" in get_required_meta_links(
+                group["name_category"].iloc[0]
+            )
+            if requires_joints:
+                # it should contain at least one revolute or prismatic joint
+                # TODO: Perhaps also assert the presence of an openable tag later.
+                self.expect(
+                    set(group["name_joint_type"].unique()) & {"R", "P"},
+                    f"Model ID {model_id} requires joints but has no joints.",
+                )
+        except ValueError as e:
             self.expect(
-                set(group["name_joint_type"].unique()) & {"R", "P"},
-                f"Model ID {model_id} requires joints but has no joints.",
+                False,
+                f"Cannot validate joints for model ID {model_id}: {e}",
             )
 
         # For each instance, record the scale of the base link, and the positional offset of the
