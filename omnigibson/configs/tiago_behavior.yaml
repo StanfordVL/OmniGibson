@@ -1,6 +1,6 @@
 env:
-  action_frequency: 60                  # (int): environment executes action at the action_frequency rate
-  physics_frequency: 60                 # (int): physics frequency (1 / physics_timestep for physx)
+  action_frequency: 30                  # (int): environment executes action at the action_frequency rate
+  physics_frequency: 30                 # (int): physics frequency (1 / physics_timestep for physx)
   device: null                          # (None or str): specifies the device to be used if running on the gpu with torch backend
   automatic_reset: false                # (bool): whether to automatic reset after an episode finishes
   flatten_action_space: false           # (bool): whether to flatten the action space as a sinle 1D-array
@@ -15,8 +15,9 @@ env:
       sensor_kwargs:
         image_height: 128
         image_width: 128
-      local_position: [0, 0, 1.0]
-      local_orientation: [0.707, 0.0, 0.0, 0.707]
+      position: [0, 0, 1.0]
+      orientation: [0.707, 0.0, 0.0, 0.707]
+      pose_frame: parent
 
 
 render:
@@ -46,8 +47,8 @@ robots:
     action_normalize: true
     action_type: continuous
     grasping_mode: physical
-    rigid_trunk: false
-    default_trunk_offset: 0.365
+    # rigid_trunk: false
+    # default_trunk_offset: 0.365
     default_arm_pose: diagonal30
     default_reset_mode: tuck
     sensor_config:
@@ -62,8 +63,11 @@ robots:
     controller_config:
       base:
         name: JointController
+      trunk:
+        name: JointController
       arm_left:
         name: InverseKinematicsController
+        subsume_controllers: [trunk]
       arm_right:
         name: InverseKinematicsController
       gripper_left:
