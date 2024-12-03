@@ -103,6 +103,15 @@ def get_hierarchy(syn_prop_dict):
         for path in paths:
             add_path(path[:-1], hierarchy)
 
+    # Sort the hierarchy's children by their names
+    def _sort_children(node):
+        if "children" in node:
+            node["children"].sort(key=lambda x: x["name"])
+            for child in node["children"]:
+                _sort_children(child)
+
+    _sort_children(hierarchy)
+
     synset_to_cat_raw = pd.read_csv(CATEGORY_MAPPING_FN)[
         ["category", "synset"]
     ].to_dict(orient="records")
