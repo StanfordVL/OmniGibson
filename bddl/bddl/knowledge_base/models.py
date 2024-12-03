@@ -4,7 +4,7 @@ import itertools
 import json
 import networkx as nx
 from typing import Dict, Set
-from bddl.object_taxonomy import OBJECT_TAXONOMY
+from bddl.object_taxonomy import ObjectTaxonomy
 from bddl.knowledge_base.orm import (
     Model,
     ManyToOne,
@@ -60,6 +60,8 @@ ROOM_TYPE_CHOICES = [
     ("staircase", "staircase"),
     ("storage room", "storage_room"),
 ]
+
+OBJECT_TAXONOMY = ObjectTaxonomy()
 
 
 @dataclass(eq=False, order=False)
