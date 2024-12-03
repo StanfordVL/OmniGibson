@@ -320,6 +320,16 @@ class ObjectTaxonomy(object):
 
         return required_links
 
+    def get_required_meta_links_for_synset(self, synset):
+        """
+        Get the required meta links for a given synset.
+
+        :param synset: synset to search.
+        :return: set of str containing required meta links.
+        """
+        abilities = self.get_abilities(synset)
+        return self.get_required_meta_links_for_abilities(abilities)
+
 
 if __name__ == "__main__":
     object_taxonomy = ObjectTaxonomy()
