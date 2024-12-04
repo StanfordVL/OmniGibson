@@ -23,7 +23,9 @@ from b1k_pipeline.max.prebake_textures import (
     hash_object,
 )
 
-from bddl.knowledge_base import OBJECT_TAXONOMY
+from bddl.object_taxonomy import ObjectTaxonomy
+
+OBJECT_TAXONOMY = ObjectTaxonomy()
 
 rt = pymxs.runtime
 
@@ -65,7 +67,7 @@ assert not (
 ), "Found invalid meta type mapping"
 
 
-def get_required_meta_links(category) -> set[str]:
+def get_required_meta_links(category):
     synset = OBJECT_TAXONOMY.get_synset_from_category(category)
     if synset is None:
         raise ValueError(f"Category {category} not found in taxonomy.")
@@ -279,7 +281,7 @@ class SanityCheck:
                 self.expect(
                     False,
                     f"Cannot validate clothness: category {row.name_category} not found in taxonomy.",
-                )                
+                )
 
             # Check that each object zeroth instance object actually has a collision mesh
             if int(row.name_instance_id) == 0 and row.name_joint_side != "upper":
@@ -329,7 +331,12 @@ class SanityCheck:
         # Check that the object does not have self-intersecting faces
         self_intersecting = any(
             # A face is self-intersecting if a vertex shows up more than once in the face.
-            np.any(np.unique(np.array(rt.polyop.getFaceVerts(obj, i + 1)), return_counts=True)[1] > 1)
+            np.any(
+                np.unique(
+                    np.array(rt.polyop.getFaceVerts(obj, i + 1)), return_counts=True
+                )[1]
+                > 1
+            )
             for i in range(rt.polyop.GetNumFaces(obj))
         )
         self.expect(
