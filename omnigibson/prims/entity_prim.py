@@ -21,7 +21,8 @@ from omnigibson.utils.usd_utils import PoseAPI, absolute_prim_path_to_scene_rela
 m = create_module_macros(module_path=__file__)
 
 # Default sleep threshold for all objects -- see https://docs.omniverse.nvidia.com/extensions/latest/ext_physics/simulation-control/physics-settings.html?highlight=sleep#sleeping
-m.DEFAULT_SLEEP_THRESHOLD = 0.001
+# Mass-normalized kinetic energy threshold below which an actor may go to sleep
+m.DEFAULT_SLEEP_THRESHOLD = 0.00005
 
 
 class EntityPrim(XFormPrim):
@@ -159,6 +160,8 @@ class EntityPrim(XFormPrim):
 
         # Run super
         super()._post_load()
+
+        assert th.all(self.original_scale == 1.0), "scale should be [1, 1, 1] at the EntityPrim (object) level"
 
         # Cache material information
         materials = set()
@@ -500,6 +503,10 @@ class EntityPrim(XFormPrim):
         return self._links
 
     @cached_property
+    def link_prim_paths(self):
+        return [link.prim_path for link in self._links.values()]
+
+    @cached_property
     def has_attachment_points(self):
         """
         Returns:
@@ -607,6 +614,8 @@ class EntityPrim(XFormPrim):
     def contact_list(self):
         """
         Get list of all current contacts with this object prim
+        NOTE: This method is slow and uncached, but it works even for sleeping objects.
+        For frequent contact checks, consider using RigidContactAPI for performance.
 
         Returns:
             list of CsRawData: raw contact info for this rigid body
@@ -1374,7 +1383,6 @@ class EntityPrim(XFormPrim):
         Returns:
             bool: Whether self-collisions are enabled for this prim or not
         """
-        assert self.articulated, "Cannot get self-collision for non-articulated EntityPrim!"
         return lazy.omni.isaac.core.utils.prims.get_prim_property(
             self.articulation_root_path, "physxArticulation:enabledSelfCollisions"
         )
@@ -1387,7 +1395,6 @@ class EntityPrim(XFormPrim):
         Args:
             flag (bool): Whether self collisions are enabled for this prim or not
         """
-        assert self.articulated, "Cannot set self-collision for non-articulated EntityPrim!"
         lazy.omni.isaac.core.utils.prims.set_prim_property(
             self.articulation_root_path, "physxArticulation:enabledSelfCollisions", flag
         )
@@ -1605,7 +1612,6 @@ class EntityPrim(XFormPrim):
         if self.n_joints > 0:
             state["joint_pos"] = self.get_joint_positions()
             state["joint_vel"] = self.get_joint_velocities()
-            state["joint_eff"] = self.get_joint_efforts()
 
             # We do NOT save joint pos / vel targets because this is only relevant for motorized joints (e.g.: robots).
             # Such control (a) only relies on the joint state, and not joint targets, when computing control, and
@@ -1626,7 +1632,6 @@ class EntityPrim(XFormPrim):
         elif self.n_joints > 0:
             self.set_joint_positions(state["joint_pos"])
             self.set_joint_velocities(state["joint_vel"])
-            self.set_joint_efforts(state["joint_eff"])
 
         # Make sure this object is awake
         self.wake()
@@ -1639,7 +1644,6 @@ class EntityPrim(XFormPrim):
             state_flat += [
                 state["joint_pos"].to(device="cpu"),
                 state["joint_vel"].to(device="cpu"),
-                state["joint_eff"].to(device="cpu"),
             ]
 
         return th.cat(state_flat)
@@ -1650,7 +1654,7 @@ class EntityPrim(XFormPrim):
         root_link_state, idx = self.root_link.deserialize(state=state)
         state_dict = dict(root_link=root_link_state)
         if self.n_joints > 0:
-            for jnt_state in ("pos", "vel", "eff"):
+            for jnt_state in ("pos", "vel"):
                 state_dict[f"joint_{jnt_state}"] = state[idx : idx + self.n_joints]
                 idx += self.n_joints
 

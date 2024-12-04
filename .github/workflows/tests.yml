@@ -24,6 +24,7 @@ jobs:
           - cuda
         test_file:
           - test_controllers
+          - test_curobo
           - test_data_collection
           - test_dump_load_states
           - test_envs
@@ -51,13 +52,12 @@ jobs:
           submodules: true
           path: omnigibson-src
 
-      - name: Install dev requirements
-        working-directory: omnigibson-src
-        run: pip install -r requirements-dev.txt
-
       - name: Install
         working-directory: omnigibson-src
-        run: pip install -e .
+        run: pip install -e .[dev,primitives] --no-build-isolation
+
+      - name: Print env
+        run: printenv
 
       - name: Run tests
         working-directory: omnigibson-src
@@ -70,21 +70,27 @@ jobs:
           name: ${{ github.run_id }}-tests-${{ matrix.test_file }}
           path: ${{ matrix.test_file }}-${{ matrix.device }}.xml
 
-      - name: Check for failures or errors
+      - name: Check for failures, errors, or missing XML
         run: |
-          if grep -Eq 'failures="[1-9][0-9]*"|errors="[1-9][0-9]*"' ${{ matrix.test_file }}-${{ matrix.device }}.xml; then
+          if [ ! -f ${{ matrix.test_file }}.xml ]; then
+            echo "Error: XML file not found, probably due to segfault"
+            exit 1
+          elif grep -Eq 'failures="[1-9][0-9]*"|errors="[1-9][0-9]*"' ${{ matrix.test_file }}-${{ matrix.device }}.xml; then
+            echo "Error: Test failures or errors found"
             exit 1
           else
+            echo "All tests passed successfully"
             exit 0
           fi
 
   upload_report:
     name: Compile Report
-    runs-on: [self-hosted, linux]
+    runs-on: ubuntu-latest
     defaults:
       run:
         shell: micromamba run -n omnigibson /bin/bash -leo pipefail {0}
     needs: [run_test]
+    if: always()
     steps:
       - name: Checkout source
         uses: actions/checkout@v2
@@ -102,8 +108,8 @@ jobs:
           working-directory: omnigibson-src
           path: ${{ github.run_id }}-tests-*/test_*.xml
           reporter: java-junit
-          fail-on-error: 'true'
-          fail-on-empty: 'true'
+          fail-on-error: 'false'
+          fail-on-empty: 'false'
 
       # - name: Upload coverage to Codecov
       #   uses: codecov/codecov-action@v2.1.0

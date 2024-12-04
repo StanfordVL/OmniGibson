@@ -141,7 +141,7 @@ class ClothPrim(GeomPrim):
         # self._centroid_idx = th.argmin(dists)
 
         # Store the default position of the points in the local frame
-        self._default_positions = th.tensor(self.get_attribute(attr="points"), dtype=th.float32)
+        self._default_positions = vtarray_to_torch(self.get_attribute(attr="points"))
 
     @property
     def visual_aabb(self):
@@ -177,7 +177,7 @@ class ClothPrim(GeomPrim):
 
     def _compute_usd_particle_positions(self, idxs=None):
         # Don't copy to save compute, since we won't be returning a reference to the underlying object anyways
-        p_local = th.as_tensor(self.get_attribute(attr="points"), dtype=th.float32)
+        p_local = vtarray_to_torch(self.get_attribute(attr="points"))
 
         return get_particle_positions_in_frame(
             *self.get_position_orientation(), self.scale, p_local[idxs] if idxs is not None else p_local
@@ -302,7 +302,7 @@ class ClothPrim(GeomPrim):
                 cartesian coordinates with respect to the world frame.
         """
         # the velocities attribute is w.r.t the world frame already
-        return th.tensor(self.get_attribute(attr="velocities"))
+        return vtarray_to_torch(self.get_attribute(attr="velocities"))
 
     @particle_velocities.setter
     def particle_velocities(self, vel):

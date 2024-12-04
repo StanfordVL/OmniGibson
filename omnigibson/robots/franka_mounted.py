@@ -11,14 +11,14 @@ class FrankaMounted(FrankaPanda):
     """
 
     @property
-    def controller_order(self):
-        return ["arm_{}".format(self.default_arm), "gripper_{}".format(self.default_arm)]
+    def _raw_controller_order(self):
+        return [f"arm_{self.default_arm}", f"gripper_{self.default_arm}"]
 
     @property
     def _default_controllers(self):
         controllers = super()._default_controllers
-        controllers["arm_{}".format(self.default_arm)] = "InverseKinematicsController"
-        controllers["gripper_{}".format(self.default_arm)] = "MultiFingerGripperController"
+        controllers[f"arm_{self.default_arm}"] = "InverseKinematicsController"
+        controllers[f"gripper_{self.default_arm}"] = "MultiFingerGripperController"
         return controllers
 
     @property
@@ -38,6 +38,10 @@ class FrankaMounted(FrankaPanda):
         return os.path.join(gm.ASSET_PATH, "models/franka/franka_mounted.urdf")
 
     @property
+    def curobo_path(self):
+        return os.path.join(gm.ASSET_PATH, "models/franka/franka_mounted_description_curobo.yaml")
+
+    @property
     def eef_usd_path(self):
         # TODO: Update!
         return {self.default_arm: os.path.join(gm.ASSET_PATH, "models/franka/franka_panda_eef.usd")}
@@ -46,7 +50,7 @@ class FrankaMounted(FrankaPanda):
     def assisted_grasp_start_points(self):
         return {
             self.default_arm: [
-                GraspingPoint(link_name="panda_rightfinger", position=[0.0, 0.001, 0.045]),
+                GraspingPoint(link_name="panda_rightfinger", position=th.tensor([0.0, 0.001, 0.045])),
             ]
         }
 
@@ -54,6 +58,6 @@ class FrankaMounted(FrankaPanda):
     def assisted_grasp_end_points(self):
         return {
             self.default_arm: [
-                GraspingPoint(link_name="panda_leftfinger", position=[0.0, 0.001, 0.045]),
+                GraspingPoint(link_name="panda_leftfinger", position=th.tensor([0.0, 0.001, 0.045])),
             ]
         }

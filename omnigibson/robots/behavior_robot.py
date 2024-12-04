@@ -209,7 +209,7 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
         return th.zeros(self.n_joints)
 
     @property
-    def controller_order(self):
+    def _raw_controller_order(self):
         controllers = ["base", "camera"]
         for arm_name in self.arm_names:
             controllers += [f"arm_{arm_name}", f"gripper_{arm_name}"]
@@ -261,6 +261,7 @@ class BehaviorRobot(ManipulationRobot, LocomotionRobot, ActiveCameraRobot):
                 "dof_idx": self.gripper_control_idx[arm],
                 "command_input_limits": None,
                 "mode": "independent",
+                "inverted": True,
             }
         return dic
 

@@ -71,7 +71,7 @@ class ManipulationRobot(BaseRobot):
         visible=True,
         fixed_base=False,
         visual_only=False,
-        self_collisions=False,
+        self_collisions=True,
         load_config=None,
         # Unique to USDObject hierarchy
         abilities=None,
@@ -94,8 +94,7 @@ class ManipulationRobot(BaseRobot):
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
-            prim_path (None or str): global path in the stage to this object. If not specified, will automatically be
-                created at /World/<name>
+            relative_prim_path (str): Scene-local prim path of the Prim to encapsulate or create.
             scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
                 for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
                 3-array specifies per-axis scaling.
@@ -275,32 +274,38 @@ class ManipulationRobot(BaseRobot):
                     set of unique robot link prim_paths that it is in contact with
         """
         arm = self.default_arm if arm == "default" else arm
-        # Get robot contact links
+
+        # Get robot finger links
+        finger_paths = set([link.prim_path for link in self.finger_links[arm]])
+
+        # Get robot links
         link_paths = set(self.link_prim_paths)
 
         if not return_contact_positions:
             raw_contact_data = {
                 (row, col)
-                for row, col in GripperRigidContactAPI.get_contact_pairs(self.scene.idx, column_prim_paths=link_paths)
+                for row, col in GripperRigidContactAPI.get_contact_pairs(self.scene.idx, column_prim_paths=finger_paths)
+                if row not in link_paths
+            }
+        else:
+            raw_contact_data = {
+                (row, col, point)
+                for row, col, force, point, normal, sep in GripperRigidContactAPI.get_contact_data(
+                    self.scene.idx, column_prim_paths=finger_paths
+                )
                 if row not in link_paths
             }
 
-            # Translate that to robot contact data
-            robot_contact_links = {}
-            for con_data in raw_contact_data:
+        # Translate to robot contact data
+        robot_contact_links = dict()
+        contact_data = set()
+        for con_data in raw_contact_data:
+            if not return_contact_positions:
                 other_contact, link_contact = con_data
-                if other_contact not in robot_contact_links:
-                    robot_contact_links[other_contact] = set()
-                robot_contact_links[other_contact].add(link_contact)
-
-            return {other for other, _ in raw_contact_data}, robot_contact_links
-
-        # Otherwise, we rely on the simpler, but more costly, get_contact_data API.
-        contacts = GripperRigidContactAPI.get_contact_data(self.scene.idx, column_prim_paths=link_paths)
-        contact_data = {(contact[0], contact[3]) for contact in contacts}
-        robot_contact_links = {}
-        for con_data in contacts:
-            other_contact, link_contact = con_data[:2]
+                contact_data.add(other_contact)
+            else:
+                other_contact, link_contact, point = con_data
+                contact_data.add((other_contact, point))
             if other_contact not in robot_contact_links:
                 robot_contact_links[other_contact] = set()
             robot_contact_links[other_contact].add(link_contact)
@@ -400,43 +405,9 @@ class ManipulationRobot(BaseRobot):
         fcns = super().get_control_dict()
 
         for arm in self.arm_names:
-            self._add_arm_control_dict(fcns=fcns, arm=arm)
+            self._add_task_frame_control_dict(fcns=fcns, task_name=f"eef_{arm}", link_name=self.eef_link_names[arm])
 
         return fcns
-
-    def _add_arm_control_dict(self, fcns, arm):
-        """
-        Internally helper function to generate per-arm control dictionary entries. Needed because otherwise generated
-        functions inadvertently point to the same arm, if directly iterated in a for loop!
-
-        Args:
-            fcns (CachedFunctions): Keyword-mapped control values for this object, mapping names to n-arrays.
-            arm (str): specific arm to generate necessary control dict entries for
-        """
-        fcns[f"_eef_{arm}_pos_quat_relative"] = (
-            lambda: ControllableObjectViewAPI.get_link_relative_position_orientation(
-                self.articulation_root_path, self.eef_link_names[arm]
-            )
-        )
-        fcns[f"eef_{arm}_pos_relative"] = lambda: fcns[f"_eef_{arm}_pos_quat_relative"][0]
-        fcns[f"eef_{arm}_quat_relative"] = lambda: fcns[f"_eef_{arm}_pos_quat_relative"][1]
-        fcns[f"eef_{arm}_lin_vel_relative"] = lambda: ControllableObjectViewAPI.get_link_relative_linear_velocity(
-            self.articulation_root_path, self.eef_link_names[arm]
-        )
-        fcns[f"eef_{arm}_ang_vel_relative"] = lambda: ControllableObjectViewAPI.get_link_relative_angular_velocity(
-            self.articulation_root_path, self.eef_link_names[arm]
-        )
-        # -n_joints because there may be an additional 6 entries at the beginning of the array, if this robot does
-        # not have a fixed base (i.e.: the 6DOF --> "floating" joint)
-        # see self.get_relative_jacobian() for more info
-        # We also count backwards for the link frame because if the robot is fixed base, the jacobian returned has one
-        # less index than the number of links. This is presumably because the 1st link of a fixed base robot will
-        # always have a zero jacobian since it can't move. Counting backwards resolves this issue.
-        start_idx = 0 if self.fixed_base else 6
-        eef_link_idx = self._articulation_view.get_body_index(self.eef_links[arm].body_name)
-        fcns[f"eef_{arm}_jacobian_relative"] = lambda: ControllableObjectViewAPI.get_relative_jacobian(
-            self.articulation_root_path
-        )[-(self.n_links - eef_link_idx), :, start_idx : start_idx + self.n_joints]
 
     def _get_proprioception_dict(self):
         dic = super()._get_proprioception_dict()
@@ -488,7 +459,7 @@ class ManipulationRobot(BaseRobot):
         return self._grasping_mode
 
     @property
-    def controller_order(self):
+    def _raw_controller_order(self):
         # Assumes we have arm(s) and corresponding gripper(s)
         controllers = []
         for arm in self.arm_names:
@@ -733,6 +704,18 @@ class ManipulationRobot(BaseRobot):
         """
         raise NotImplementedError
 
+    def get_eef_pose(self, arm="default"):
+        """
+        Args:
+            arm (str): specific arm to grab eef pose. Default is "default" which corresponds to the first entry
+                in self.arm_names
+
+        Returns:
+            2-tuple: End-effector pose, in (pos, quat) format, corresponding to arm @arm
+        """
+        arm = self.default_arm if arm == "default" else arm
+        return self._links[self.eef_link_names[arm]].get_position_orientation()
+
     def get_eef_position(self, arm="default"):
         """
         Args:
@@ -744,7 +727,7 @@ class ManipulationRobot(BaseRobot):
                 to arm @arm
         """
         arm = self.default_arm if arm == "default" else arm
-        return self._links[self.eef_link_names[arm]].get_position_orientation()[0]
+        return self.get_eef_pose(arm=arm)[0]
 
     def get_eef_orientation(self, arm="default"):
         """
@@ -757,7 +740,7 @@ class ManipulationRobot(BaseRobot):
                 to arm @arm
         """
         arm = self.default_arm if arm == "default" else arm
-        return self._links[self.eef_link_names[arm]].get_position_orientation()[1]
+        return self.get_eef_pose(arm=arm)[1]
 
     def get_relative_eef_pose(self, arm="default", mat=False):
         """
@@ -869,7 +852,7 @@ class ManipulationRobot(BaseRobot):
             if candidate_obj is None or link_name not in candidate_obj.links:
                 continue
             candidate_link = candidate_obj.links[link_name]
-            dist = th.norm(th.tensor(candidate_link.get_position_orientation()[0]) - th.tensor(gripper_center_pos))
+            dist = th.norm(candidate_link.get_position_orientation()[0] - gripper_center_pos)
             candidate_data.append((prim_path, dist))
 
         if not candidate_data:
@@ -1033,9 +1016,6 @@ class ManipulationRobot(BaseRobot):
             dic[arm] = {
                 "name": "InverseKinematicsController",
                 "task_name": f"eef_{arm}",
-                "robot_description_path": self.robot_arm_descriptor_yamls[arm],
-                "robot_urdf_path": self.urdf_path,
-                "eef_name": self.eef_link_names[arm],
                 "control_freq": self._control_freq,
                 "reset_joint_pos": self.reset_joint_pos,
                 "control_limits": self.control_limits,
@@ -1113,6 +1093,7 @@ class ManipulationRobot(BaseRobot):
                 "command_output_limits": "default",
                 "mode": "binary",
                 "limit_tolerance": 0.001,
+                "inverted": self._grasping_direction == "upper",
             }
         return dic
 
@@ -1241,9 +1222,14 @@ class ManipulationRobot(BaseRobot):
             force_data, _ = self._find_gripper_contacts(arm=arm, return_contact_positions=True)
             for c_link_prim_path, c_contact_pos in force_data:
                 if c_link_prim_path == ag_link.prim_path:
-                    contact_pos = th.tensor(c_contact_pos)
+                    contact_pos = c_contact_pos
                     break
-        assert contact_pos is not None
+
+        assert contact_pos is not None, (
+            f"contact_pos in self._find_gripper_contacts(return_contact_positions=True) is not found in "
+            f"self._find_gripper_contacts(return_contact_positions=False). This is likely because "
+            f"GripperRigidContactAPI.get_contact_pairs and get_contact_data return inconsistent results."
+        )
 
         # Joint frame set at the contact point
         # Need to find distance between robot and contact point in robot link's local frame and
@@ -1267,6 +1253,7 @@ class ManipulationRobot(BaseRobot):
             body0=self.eef_links[arm].prim_path,
             body1=ag_link.prim_path,
             enabled=True,
+            exclude_from_articulation=True,
             joint_frame_in_parent_frame_pos=parent_frame_pos / self.scale,
             joint_frame_in_parent_frame_quat=parent_frame_orn,
             joint_frame_in_child_frame_pos=child_frame_pos / ag_obj.scale,
@@ -1315,9 +1302,17 @@ class ManipulationRobot(BaseRobot):
             if controller.control is None:
                 applying_grasp = False
             elif self._grasping_direction == "lower":
-                applying_grasp = th.any(controller.control < threshold)
+                applying_grasp = (
+                    th.any(controller.control < threshold)
+                    if controller.control_type == ControlType.POSITION
+                    else th.any(controller.control < 0)
+                )
             else:
-                applying_grasp = th.any(controller.control > threshold)
+                applying_grasp = (
+                    th.any(controller.control > threshold)
+                    if controller.control_type == ControlType.POSITION
+                    else th.any(controller.control > 0)
+                )
             # Execute gradual release of object
             if self._ag_obj_in_hand[arm]:
                 if self._ag_release_counter[arm] is not None:
@@ -1449,6 +1444,7 @@ class ManipulationRobot(BaseRobot):
             body0=ag_link.prim_path,
             body1=None,
             enabled=False,
+            exclude_from_articulation=True,
             joint_frame_in_child_frame_pos=attachment_point_pos,
         )
 
@@ -1581,7 +1577,7 @@ class ManipulationRobot(BaseRobot):
         hands = ["left", "right"] if self.n_arms == 2 else ["right"]
         for i, hand in enumerate(hands):
             arm_name = self.arm_names[i]
-            arm_action = teleop_action[hand]
+            arm_action = th.tensor(teleop_action[hand]).float()
             # arm action
             assert isinstance(self._controllers[f"arm_{arm_name}"], InverseKinematicsController) or isinstance(
                 self._controllers[f"arm_{arm_name}"], OperationalSpaceController

@@ -37,6 +37,7 @@ def test_data_collect_and_playback(pipeline_mode):
     }
 
     if og.sim is None:
+        # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth)
         gm.ENABLE_OBJECT_STATES = True
         gm.ENABLE_TRANSITION_RULES = False
     else:
@@ -123,8 +124,8 @@ def test_data_collect_and_playback(pipeline_mode):
                 "image_width": 128,
                 "focal_length": 12.0,
             },
-            "local_position": th.tensor([-0.26549, -0.30288, 1.0 + 0.861], dtype=th.float32),
-            "local_orientation": th.tensor([0.36165891, -0.24745751, -0.50752921, 0.74187715], dtype=th.float32),
+            "position": th.tensor([-0.26549, -0.30288, 1.0 + 0.861], dtype=th.float32),
+            "orientation": th.tensor([0.36165891, -0.24745751, -0.50752921, 0.74187715], dtype=th.float32),
         },
     ]
 

@@ -17,8 +17,6 @@ NUM_STEPS = 100
 def main(random_selection=False, headless=False, short_exec=False):
     # Load the config
     gm.RENDER_VIEWER_CAMERA = False
-    gm.ENABLE_FLATCACHE = True
-    gm.USE_GPU_DYNAMICS = False
     config_filename = os.path.join(og.example_config_path, "fetch_primitives.yaml")
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 

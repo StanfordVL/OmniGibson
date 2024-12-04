@@ -149,6 +149,15 @@ def create_object_from_init_info(init_info):
     return cls(**init_info["args"], **init_info.get("kwargs", {}))
 
 
+def safe_equal(a, b):
+    if isinstance(a, th.Tensor) and isinstance(b, th.Tensor):
+        return a.shape == b.shape and (a == b).all().item()
+    elif isinstance(a, (list, tuple)) and isinstance(b, (list, tuple)):
+        return len(a) == len(b) and all(safe_equal(a_item, b_item) for a_item, b_item in zip(a, b))
+    else:
+        return a == b
+
+
 def merge_nested_dicts(base_dict, extra_dict, inplace=False, verbose=False):
     """
     Iteratively updates @base_dict with values from @extra_dict. Note: This generates a new dictionary!
@@ -171,10 +180,8 @@ def merge_nested_dicts(base_dict, extra_dict, inplace=False, verbose=False):
             if isinstance(v, dict) and isinstance(base_dict[k], dict):
                 base_dict[k] = merge_nested_dicts(base_dict[k], v)
             else:
-                not_equal = base_dict[k] != v
-                if isinstance(not_equal, th.Tensor):
-                    not_equal = not_equal.any()
-                if not_equal and verbose:
+                equal = safe_equal(base_dict[k], v)
+                if not equal and verbose:
                     print(f"Different values for key {k}: {base_dict[k]}, {v}\n")
                 base_dict[k] = v
 
@@ -574,6 +581,7 @@ class CachedFunctions:
     def __init__(self, **kwargs):
         # Create internal dict to store functions
         self._fcns = dict()
+        self._cache = dict()
         for kwarg in kwargs:
             self._fcns[kwarg] = kwargs[kwarg]
 
@@ -583,20 +591,20 @@ class CachedFunctions:
     def __setitem__(self, key, value):
         self.add_fcn(name=key, fcn=value)
 
-    def get(self, name, *args, **kwargs):
+    def get(self, name):
         """
         Computes the function referenced by @name with the corresponding @args and @kwargs. Note that for a unique
         set of arguments, this value will be internally cached
 
         Args:
             name (str): The name of the function to call
-            *args (tuple): Positional arguments to pass into the function call
-            **kwargs (tuple): Keyword arguments to pass into the function call
 
         Returns:
             any: Output of the function referenced by @name
         """
-        return self._fcns[name](*args, **kwargs)
+        if name not in self._cache:
+            self._cache[name] = self._fcns[name]()
+        return self._cache[name]
 
     def get_fcn(self, name):
         """

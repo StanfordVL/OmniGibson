@@ -15,12 +15,7 @@ A lot of factors could affect the speed of OmniGibson. Here are a few of them:
 
 1. `ENABLE_HQ_RENDERING`: While it is set to False by default, setting it to True will give us better rendering quality as well as other more advanced rendering features (e.g. isosurface for fluids), but with the cost of dragging down performance.
 
-2. `USE_GPU_DYNAMICS`: setting it to True is required for more advanced features like particles and fluids, but it will lower the performance of OmniGibson.
-
-3. `RENDER_VIEWER_CAMERA`: viewer camera refers to the camera that shows the default viewport in OmniGibson, if you don't want to view the entire scene (e.g. during training), you can set this to False andit will boost OmniGibson performance.
-
-4. `ENABLE_FLATCACHE`: setting it to True will boost OmniGibson performance.
-
+2. `RENDER_VIEWER_CAMERA`: viewer camera refers to the camera that shows the default viewport in OmniGibson, if you don't want to view the entire scene (e.g. during training), you can set this to False andit will boost OmniGibson performance.
 
 ## Miscellaneous
 
