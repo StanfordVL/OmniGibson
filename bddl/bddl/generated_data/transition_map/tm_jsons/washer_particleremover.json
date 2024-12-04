@@ -180,6 +180,16 @@
         }
     },
     {
+        "rule_name": "christmas_stocking.n.01-washer-saturate-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "christmas_stocking.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "collar.n.01-washer-saturate-cover",
         "input_synsets": {},
         "washed_item": {
