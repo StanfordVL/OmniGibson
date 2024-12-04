@@ -329,15 +329,10 @@ class SanityCheck:
         )
 
         # Check that the object does not have self-intersecting faces
-        self_intersecting = any(
-            # A face is self-intersecting if a vertex shows up more than once in the face.
-            np.any(
-                np.unique(
-                    np.array(rt.polyop.getFaceVerts(obj, i + 1)), return_counts=True
-                )[1]
-                > 1
-            )
-            for i in range(rt.polyop.GetNumFaces(obj))
+        faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
+        # A face is self-intersecting if a vertex shows up more than once in the face.
+        self_intersecting = np.any(
+            np.unique(faces, return_counts=True, axis=-1)[1] > 1
         )
         self.expect(
             not self_intersecting,
@@ -405,13 +400,18 @@ class SanityCheck:
     def validate_cloth(self, row):
         # A cloth object should consist of a single connected component
         obj = row.object._obj
-        elems = {
-            tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
-            for i in range(rt.polyop.GetNumFaces(obj))
-        }
+        verts = np.array(
+            rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1)))
+        )
+        faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
+
+
+        tm = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
+
+        # Split the faces into elements
         self.expect(
-            len(elems) == 1,
-            f"Cloth object {obj.name} should consist of exactly 1 element. Currently it has {len(elems)} elements.",
+            tm.body_count == 1,
+            f"Cloth object {obj.name} should consist of exactly 1 element. Currently it has {tm.body_count} elements.",
         )
 
     def validate_light(self, row):
@@ -538,55 +538,32 @@ class SanityCheck:
 
             # Get vertices and faces into numpy arrays for conversion
             verts = np.array(
-                [
-                    rt.polyop.getVert(obj, i + 1)
-                    for i in range(rt.polyop.GetNumVerts(obj))
-                ]
+                rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1)))
             )
-            faces_maxscript = [
-                rt.polyop.getFaceVerts(obj, i + 1)
-                for i in range(rt.polyop.GetNumFaces(obj))
-            ]
-            faces = np.array(
-                [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
-            )
+            faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
             self.expect(len(faces) > 0, f"{obj.name} has no faces.")
             self.expect(
                 all(len(f) == 3 for f in faces),
                 f"{obj.name} has non-triangular faces. Apply the Triangulate script.",
             )
 
+            all_cmeshes = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
+
             # Split the faces into elements
-            elems = {
-                tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
-                for i in range(rt.polyop.GetNumFaces(obj))
-            }
+            elems = all_cmeshes.split(only_watertight=False, repair=False)
             self.expect(
                 len(elems) <= 32,
                 f"{obj.name} should not have more than 32 elements. Has {len(elems)} elements.",
             )
-            elems = np.array(list(elems))
-            self.expect(
-                not np.any(np.sum(elems, axis=0) > 1),
-                f"{obj.name} has same face appear in multiple elements",
-            )
 
             # Iterate through the elements
-            for i, elem in enumerate(elems):
-                # Load the mesh into trimesh and expect convexity
-                relevant_faces = faces[elem]
-                m = trimesh.Trimesh(vertices=verts, faces=relevant_faces, process=False)
-                m.remove_unreferenced_vertices()
+            for i, m in enumerate(elems):
                 self.expect(
                     len(m.vertices) <= 60,
                     f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > 60)",
                 )
                 self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
                 # self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
-                self.expect(
-                    len(m.split()) == 1,
-                    f"{obj.name} element {i} has elements trimesh still finds splittable",
-                )
         except Exception as e:
             self.expect(False, str(e))
 
@@ -748,10 +725,12 @@ class SanityCheck:
                 "joint",
             }  # TODO: Should we check for subpart too?
             missing_meta_types = required_meta_types - found_ml_types
-            self.expect(
-                not missing_meta_types,
-                f"Expected meta links for {row.object_name} are missing: {missing_meta_types}",
-            )
+            if missing_meta_types:
+                for missing_meta_type in missing_meta_types:
+                    self.expect(
+                        False,
+                        f"{row.object_name} is missing meta link: {missing_meta_type}.",
+                    )
         except ValueError as e:
             self.expect(
                 False,

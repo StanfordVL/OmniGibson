@@ -40,15 +40,7 @@ def get_collision_meshes_relative_to_base(obj, base_transform):
             for i in range(rt.polyop.GetNumVerts(obj))
         ]
     )
-    faces = (
-        np.array(
-            [
-                rt.polyop.getFaceVerts(obj, i + 1)
-                for i in range(rt.polyop.GetNumFaces(obj))
-            ]
-        )
-        - 1
-    )
+    faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
 
     # Split the faces into elements

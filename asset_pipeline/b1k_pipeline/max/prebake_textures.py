@@ -88,20 +88,14 @@ def hash_object(obj):
     # which is NOT the pivot space.
     vertex_count = rt.polyop.GetNumVerts(obj.baseObject)
     vertex_idxes = list(range(1, vertex_count + 1))
+    face_count = rt.polyop.GetNumFaces(obj.baseObject)
+    face_idxes = list(range(1, face_count + 1))
 
     # Notice that we are adding 0. here. That is to avoid an absolutely INSANE bug where
     # 3ds Max returns -0. sometimes and 0. other times, causing the hash to be different
     # for very few objects because very few bytes differ. Adding zero makes all zeros positive.
     verts = np.array(rt.polyop.getVerts(obj.baseObject, vertex_idxes)) + 0.0
-    faces = (
-        np.array(
-            [
-                rt.polyop.getFaceVerts(obj.baseObject, i + 1)
-                for i in range(rt.polyop.GetNumFaces(obj.baseObject))
-            ]
-        )
-        - 1
-    )
+    faces = np.array(rt.polyop.getFacesVerts(obj.baseObject, face_idxes)) - 1
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
 
     # Hash the vertices and faces
