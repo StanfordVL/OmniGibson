@@ -113,10 +113,10 @@ gm.GPU_MAX_RIGID_CONTACT_COUNT = 524288 * 4
 gm.GPU_MAX_RIGID_PATCH_COUNT = 81920 * 4
 
 # Whether to enable object state logic or not
-gm.ENABLE_OBJECT_STATES = True
+gm.ENABLE_OBJECT_STATES = False
 
 # Whether to enable transition rules or not
-gm.ENABLE_TRANSITION_RULES = True
+gm.ENABLE_TRANSITION_RULES = False
 
 # Default settings for the omni UI viewer
 gm.DEFAULT_VIEWER_WIDTH = 1280
