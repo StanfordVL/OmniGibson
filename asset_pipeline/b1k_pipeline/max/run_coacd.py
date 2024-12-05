@@ -26,9 +26,9 @@ def _create_collision_obj_from_verts_faces(vertices, faces, parent, tag):
     rt.ConvertToPoly(collision_obj)
     parsed_name = parse_name(parent.name)
     collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision_{tag}"
-    collision_obj.position = parent.position
     collision_obj.rotation = parent.rotation
-    
+    collision_obj.position = parent.position
+
     # Add the vertices
     for v in vertices:
         rt.polyop.createVert(collision_obj, rt.Point3(*v.tolist()))

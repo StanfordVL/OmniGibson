@@ -87,9 +87,9 @@ def process_collision_obj(obj):
     new_obj = rt.Editable_Mesh()
     rt.ConvertToPoly(new_obj)
     new_obj.name = name
-    new_obj.position = position
     new_obj.rotation = rotation
-    
+    new_obj.position = position
+
     # Add the vertices
     for v in all_vertices:
         rt.polyop.createVert(new_obj, v)
