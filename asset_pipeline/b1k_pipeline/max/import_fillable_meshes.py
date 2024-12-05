@@ -26,7 +26,7 @@ FILLABLE_ASSIGNMENTS = {
 }
 BOUNDING_BOX_DATA_PATH = FILLABLE_DIR / "fillable_bboxes.json"
 BOUNDING_BOX_DATA = json.loads(BOUNDING_BOX_DATA_PATH.read_text())
-KEY_PATH = pathlib.Path(r"C:\Users\cgokmen\research\OmniGibson\omnigibson\data\omnigibson.key")
+KEY_PATH = FILLABLE_DIR / "omnigibson.key"
 REMOVE_EXISTING = True
 
 
