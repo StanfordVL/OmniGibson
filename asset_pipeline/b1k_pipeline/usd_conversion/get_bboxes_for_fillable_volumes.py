@@ -58,8 +58,6 @@ def view_object(cat, mdl):
     else:
         og.launch()
 
-    clear_meshes()
-
     if og.sim.is_playing():
         og.sim.stop()
 
@@ -91,8 +89,13 @@ def view_object(cat, mdl):
     fillable.set_position([0, 0, fillable.aabb_extent[2]])
     og.sim.step()
 
-    bbox_extents = fillable.aabb_extent.tolist()
-    bbox_center = fillable.aabb_center.tolist()
+    points_world = [link.visual_boundary_points_world for link in fillable._links.values()]
+    all_points = th.cat([p for p in points_world if p is not None], dim=0)
+    aabb_lo = th.min(all_points, dim=0).values
+    aabb_hi = th.max(all_points, dim=0).values
+
+    bbox_extents = (aabb_hi - aabb_lo).tolist()
+    bbox_center = ((aabb_hi + aabb_lo) / 2).tolist()
     base_pos = fillable.get_position_orientation()[0].numpy().tolist()
     base_orn = fillable.get_position_orientation()[1].numpy().tolist()
 

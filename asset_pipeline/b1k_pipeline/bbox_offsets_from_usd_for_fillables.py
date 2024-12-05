@@ -188,9 +188,9 @@ def get_bounding_box_from_usd(input_usd, rotmat, tempdir):
       with open(json_path, "r") as f:
         data = json.load(f)
       
-      size = data["bbox_extents"]
-      center = np.array(data["bbox_center"]) - np.array(data["base_pos"])
-      return center.tolist(), size
+      size = np.array(data["bbox_extents"]) * 1000
+      center = (np.array(data["bbox_center"]) - np.array(data["base_pos"])) * 1000
+      return center.tolist(), size.tolist()
 
     raise ValueError("Invalid mode.")
 
