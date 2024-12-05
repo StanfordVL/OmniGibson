@@ -55,24 +55,29 @@ def get_vert_sets_including_children(node, only_canonical_parts_of=None):
         parsed_name = parse_name(node.name)
         if not parsed_name:
             return []
-        
+
         if parsed_name.group("model_id") != only_canonical_parts_of:
             return []
-        
+
         if parsed_name.group("meta_type") or parsed_name.group("joint_side") == "upper":
             return []
-
-    vert_sets = [
-        np.array(
-            [
-                rt.polyop.getVert(node, i + 1)
-                for i in range(rt.polyop.GetNumVerts(node))
-            ],
-            dtype=np.float64,
+    vert_sets = []
+    if rt.classOf(node) == rt.Editable_Poly:
+        vert_sets.append(
+            np.array(
+                [
+                    rt.polyop.getVert(node, i + 1)
+                    for i in range(rt.polyop.GetNumVerts(node))
+                ],
+                dtype=np.float64,
+            )
         )
-    ]
     for child in node.children:
-        vert_sets.extend(get_vert_sets_including_children(child, only_canonical_parts_of=only_canonical_parts_of))
+        vert_sets.extend(
+            get_vert_sets_including_children(
+                child, only_canonical_parts_of=only_canonical_parts_of
+            )
+        )
     return vert_sets
 
 
@@ -86,7 +91,10 @@ def node_bounding_box_incl_children(node, transform=None, only_canonical=False):
         if not parsed_name:
             return None
         only_canonical = parsed_name.group("model_id")
-    verts_world = np.concatenate(get_vert_sets_including_children(node, only_canonical_parts_of=only_canonical), axis=0)
+    verts_world = np.concatenate(
+        get_vert_sets_including_children(node, only_canonical_parts_of=only_canonical),
+        axis=0,
+    )
     if transform is None or np.allclose(transform, np.eye(4)):
         verts = verts_world
     else:
