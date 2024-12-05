@@ -26,7 +26,7 @@ allow_list = [
 black_list = [
 ]
 
-def save_collision_mesh(obj, output_fs):
+def save_meta_mesh(obj, output_fs):
     # Assert that collision meshes do not share instances in the scene
     assert not [x for x in rt.objects if x.baseObject == obj.baseObject and x != obj], f"{obj.name} should not have instances."
 
@@ -173,8 +173,8 @@ class ObjectExporter:
             if rt.classOf(child) in (rt.Editable_Poly, rt.PolyMeshObject):
                 if child_name_result.group("meta_type"):
                     # Save collision mesh.
-                    assert child_name_result.group("meta_type") == "collision", f"Only Mcollision can be a mesh."
-                    save_collision_mesh(child, OSFS(obj_dir))
+                    assert child_name_result.group("meta_type") in ("collision", "fillable", "openfillable"), f"Only Mcollision, Mfillable and Mopenfillable can be a mesh."
+                    save_meta_mesh(child, OSFS(obj_dir))
                 else:
                     # Save part metadata.
                     metadata["parts"].append(child.name)

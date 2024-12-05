@@ -1,3 +1,4 @@
+from collections import defaultdict
 import pathlib
 import re
 import traceback
@@ -12,56 +13,29 @@ import sys
 
 sys.path.append(r"D:\ig_pipeline")
 
-from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh
+from b1k_pipeline.utils import PipelineFS, get_targets, parse_name, load_mesh, PIPELINE_ROOT
 
+FILLABLE_DIR = pathlib.Path(r"D:\fillable-10-21")
+JUST_THIS_FILE = True
+REMOVE_EXISTING = True
 
-def import_collision_mesh(obj, collision_selections, collision_mesh_fs):
-    print("Importing collision mesh for", obj.name)
+def import_fillable_volumes(model_id, object_links, fillable_assignment):
+    print("Importing collision mesh for", model_id)
 
-    if rt.classOf(obj) != rt.Editable_Poly:
-        return
+    # Remove any fillable volumes that this object already has
+    if REMOVE_EXISTING:
+        for cand_obj in rt.objects:
+            match = parse_name(cand_obj.name)
+            if not match:
+                continue
+            if match.group("model_id") != model_id:
+                continue
+            if match.group("meta_type") != "collision":
+                continue
+            rt.delete(cand_obj)
 
-    parsed_name = parse_name(obj.name)
-    if not parsed_name:
-        return
-
-    category = parsed_name.group("category")
-    model_id = parsed_name.group("model_id")
-    instance_id = parsed_name.group("instance_id")
-    link_name = parsed_name.group("link_name")
-    link_name = link_name if link_name else "base_link"
-    node_key = (category, model_id, instance_id, link_name)
-   
-    # Does it already have a collision mesh? If so, move on.
-    for child in obj.children:
-        parsed_child_name = parse_name(child.name)
-        if not parsed_child_name:
-            continue
-
-        # Skip parts etc.
-        if parsed_child_name.group("mesh_basename") != parsed_name.group("mesh_basename"):
-            continue
-
-        if parsed_child_name.group("meta_type") == "collision":
-            print("Collision mesh already exists for", obj.name, ", skipping.")
-            return
-        
-    # Try to load a collision mesh selection
-    collision_key = (model_id, link_name)
-    if collision_key not in collision_selections:
-        print("No collision selection found for", obj.name)
-        return
-    
-    collision_selection = collision_selections[collision_key]
-    print("Collision selection for", obj.name, "is", collision_selection)
-
-    if not collision_mesh_fs.exists(obj.name):
-        print("No collision mesh found for", obj.name)
-        return
-    
-    collision_fs = collision_mesh_fs.opendir(obj.name)
-    collision_filenames = collision_fs.listdir("/")
-    selection_matching_pattern = re.compile(collision_selection + r"-(\d+).obj$")
+    # Find the directory corresponding to this object
+    model_dir, = list(FILLABLE_DIR.glob(f"objects/*/{model_id}"))
 
     # Match the files
     if not collision_filenames:
@@ -126,43 +100,64 @@ def import_collision_mesh(obj, collision_selections, collision_mesh_fs):
     collision_obj.isHidden = True
 
 
-def process_target(pipeline_fs, target):
+def process_target(pipeline_fs, target, fillable_assignments):
     print("Processing", target)
-    filename = str(pipeline_fs.target(target).getsyspath("processed.max"))
-    assert rt.loadMaxFile(filename, useFileUnits=False, quiet=True)
+    
+    if not JUST_THIS_FILE:
+        filename = str(pipeline_fs.target(target).getsyspath("processed.max"))
+        assert rt.loadMaxFile(filename, useFileUnits=False, quiet=True)
 
-    with pipeline_fs.target_output(target) as target_output_fs:
-        # If there are no collision selections, move on
-        if not target_output_fs.exists("collision_selection.json"):
-            print("No collision selections found for", target)
-            return
+    # Iterate through the objects in the file and build the link lists
+    object_links = defaultdict(dict)
+    for obj in rt.objects:
+        match = parse_name(obj.name)
+        if not match:
+            continue
 
-        # Load the collision selections
-        with target_output_fs.open("collision_selection.json", "r") as f:
-            mesh_to_collision = json.load(f)
-            match_to_collision = {parse_name(k): v for k, v in mesh_to_collision.items()}
-            collision_selections = {(k.group("model_id"), k.group("link_name") if k.group("link_name") else "base_link"): v for k, v in match_to_collision.items() if k is not None}
+        if match.group("instance_id") != "0":
+            continue
 
-        # Open the collision meshes ZIP
-        with target_output_fs.open("collision_meshes.zip", "rb") as f, ZipFS(f) as collision_mesh_fs:
-            # Iterate over the objects in the scene
-            for obj in rt.objects:
-                import_collision_mesh(obj, collision_selections, collision_mesh_fs)
+        if match.group("bad"):
+            continue
 
-    rt.saveMaxFile(filename)
+        if match.group("meta_type"):
+            continue
+
+        if match.group("joint_side") == "upper":
+            continue
+
+        link_name = match.group("link_name") if match.group("link_name") else "base_link"
+        object_links[match.group("model_id")][link_name] = obj
+
+    # For each object, try to import the fillable volumes
+    availables = set(fillable_assignments.keys()) & set(object_links.keys())
+    for model_id in sorted(availables):
+        import_fillable_volumes(model_id, object_links[model_id], fillable_assignments[model_id])
+
+    if not JUST_THIS_FILE:
+        rt.saveMaxFile(filename)
 
 
 def main():
-    with PipelineFS() as pipeline_fs:
-        # current_target_dir = pathlib.Path(rt.maxFilePath)
-        # current_target_rel = current_target_dir.relative_to(PIPELINE_ROOT)
-        # cad, target_type, target_name = current_target_rel.parts
-        # assert cad == "cad", f"Current file is not in the cad directory: {current_target_rel}"
-        # assert target_type in ("scenes", "objects"), f"Current file is not in the scenes or objects directory: {current_target_rel}"
-        # current_target = target_type + "/" + target_name
+    # Load the fillable selection
+    with open(FILLABLE_DIR / "fillable_assignments_2.json", "r") as f:
+        fillable_assignments = json.load(f)
 
-        for target in get_targets("combined_unfiltered"):
-            process_target(pipeline_fs, target)
+    # Filter it down to just the fillable objects
+    fillable_assignments = {k: v for k, v in fillable_assignments.items() if v in {"dip", "ray", "combined", "generated"}}
+
+    with PipelineFS() as pipeline_fs:
+        current_target_dir = pathlib.Path(rt.maxFilePath)
+        current_target_rel = current_target_dir.relative_to(PIPELINE_ROOT)
+        cad, target_type, target_name = current_target_rel.parts
+        assert cad == "cad", f"Current file is not in the cad directory: {current_target_rel}"
+        assert target_type in ("scenes", "objects"), f"Current file is not in the scenes or objects directory: {current_target_rel}"
+        current_target = target_type + "/" + target_name
+
+        targets = get_targets("combined_unfiltered") if not JUST_THIS_FILE else [current_target]
+
+        for target in targets:
+            process_target(pipeline_fs, target, fillable_assignments)
 
 if __name__ == "__main__":
     main()

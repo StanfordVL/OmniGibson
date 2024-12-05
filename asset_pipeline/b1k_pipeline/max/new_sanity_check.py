@@ -61,7 +61,8 @@ ALLOWED_META_TYPES = {
     "particleremover": "primitive",
     "fluidsink": "primitive",
     "slicer": "primitive",
-    "fillable": "primitive",
+    "fillable": "convexmesh",
+    "openfillable": "convexmesh",
     "collision": "convexmesh",
 }
 assert not (
@@ -728,7 +729,10 @@ class SanityCheck:
                 "subpart",
                 "joint",
             }  # TODO: Should we check for subpart too?
-            missing_meta_types = required_meta_types - found_ml_types
+            existing_meta_types = set(found_ml_types)
+            if "openfillable" in existing_meta_types:
+                existing_meta_types.add("fillable")
+            missing_meta_types = required_meta_types - existing_meta_types
             if missing_meta_types:
                 for missing_meta_type in missing_meta_types:
                     self.expect(
