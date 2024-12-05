@@ -21,18 +21,6 @@ SUBSTANCE_PREDICATES = {"filled", "insource", "empty", "saturated", "contains", 
 # predicates that indicate the need for a fillable volume
 FILLABLE_PREDICATES = {"filled", "contains", "empty"}
 
-ANNOTATION_REQUIRED_PROPERTIES = {
-    "fillable",
-    "toggleable",
-    "fireSource",
-    # "sliceable",
-    "slicer",
-    "particleRemover",
-    "particleApplier",
-    "particleSource",
-    "particleSink",
-}
-
 
 def canonicalize(s):
     try:

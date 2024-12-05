@@ -154,7 +154,10 @@ class KnowledgeBaseProcessor():
                 category, _ = Category.get_or_create(name=category_name)
                 object = Object.create(name=object_name, original_name=orig_name, ready=False, provider=provider, category=category)
                 if orig_name in inventory["meta_links"]:
-                    for meta_link in inventory["meta_links"][orig_name]:
+                    existing_meta_types = set(inventory["meta_links"][orig_name])
+                    if "openfillable" in existing_meta_types:
+                        existing_meta_types.add("fillable")
+                    for meta_link in existing_meta_types:
                         meta_link_obj, _ = MetaLink.get_or_create(name=meta_link)
                         object.meta_links.add(meta_link_obj)
 
