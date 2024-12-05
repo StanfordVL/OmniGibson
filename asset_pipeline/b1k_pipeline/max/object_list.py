@@ -184,15 +184,7 @@ def main():
         verts = np.array(
             [rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))]
         )
-        faces = (
-            np.array(
-                [
-                    rt.polyop.getFaceVerts(obj, i + 1)
-                    for i in range(rt.polyop.GetNumFaces(obj))
-                ]
-            )
-            - 1
-        )
+        faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
         assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
         pivots_and_mesh_parts[model_id].append((pivot, verts, faces))
 

@@ -82,26 +82,22 @@ def unlight_all_mats():
         unlight_mats_recursively(mat)
 
 
-def hash_object(obj):
-    # Create a numpy array containing the vertex positions and the faces
-    # Notice by getting this from the baseObject we get them in the object's local space
-    # which is NOT the pivot space.
-    vertex_count = rt.polyop.GetNumVerts(obj.baseObject)
-    vertex_idxes = list(range(1, vertex_count + 1))
+def hash_object(obj, verts=None, faces=None):
+    # This optionally takes verts and faces so that the precached ones from sanitycheck can be used.
+
+    if verts is None:
+        # Create a numpy array containing the vertex positions and the faces
+        # Notice by getting this from the baseObject we get them in the object's local space
+        # which is NOT the pivot space.
+        verts = np.array(rt.polyop.getVerts(obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))))
+
+    if faces is None:
+        faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
 
     # Notice that we are adding 0. here. That is to avoid an absolutely INSANE bug where
     # 3ds Max returns -0. sometimes and 0. other times, causing the hash to be different
     # for very few objects because very few bytes differ. Adding zero makes all zeros positive.
-    verts = np.array(rt.polyop.getVerts(obj.baseObject, vertex_idxes)) + 0.0
-    faces = (
-        np.array(
-            [
-                rt.polyop.getFaceVerts(obj.baseObject, i + 1)
-                for i in range(rt.polyop.GetNumFaces(obj.baseObject))
-            ]
-        )
-        - 1
-    )
+    verts = verts + 0.0
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
 
     # Hash the vertices and faces

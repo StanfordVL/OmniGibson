@@ -96,9 +96,9 @@ def import_collision_mesh(obj, collision_selections, collision_mesh_fs):
     collision_obj = rt.Editable_Mesh()
     rt.ConvertToPoly(collision_obj)
     collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision"
-    collision_obj.position = obj.position
     collision_obj.rotation = obj.rotation
-    
+    collision_obj.position = obj.position
+
     # Add the vertices
     for v in all_vertices:
         rt.polyop.createVert(collision_obj, v)

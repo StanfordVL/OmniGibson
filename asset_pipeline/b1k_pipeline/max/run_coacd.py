@@ -26,9 +26,9 @@ def _create_collision_obj_from_verts_faces(vertices, faces, parent, tag):
     rt.ConvertToPoly(collision_obj)
     parsed_name = parse_name(parent.name)
     collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision_{tag}"
-    collision_obj.position = parent.position
     collision_obj.rotation = parent.rotation
-    
+    collision_obj.position = parent.position
+
     # Add the vertices
     for v in vertices:
         rt.polyop.createVert(collision_obj, rt.Point3(*v.tolist()))
@@ -73,8 +73,7 @@ def generate_collision_mesh(obj):
         
     # Get the vertices and faces
     verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
-    faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
-    faces = np.array([[int(v) - 1 for v in f] for f in faces_maxscript if f is not None])
+    faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
     assert all(len(f) == 3 for f in faces), f"{obj.name} has non-triangular faces. Apply the Triangulate script."
     coacd_mesh = coacd.Mesh(verts, faces)
 

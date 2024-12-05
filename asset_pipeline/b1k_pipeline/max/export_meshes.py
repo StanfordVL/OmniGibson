@@ -26,13 +26,13 @@ allow_list = [
 black_list = [
 ]
 
-def save_collision_mesh(obj, output_fs):
+def save_meta_mesh(obj, output_fs):
     # Assert that collision meshes do not share instances in the scene
     assert not [x for x in rt.objects if x.baseObject == obj.baseObject and x != obj], f"{obj.name} should not have instances."
 
     # Get vertices and faces into numpy arrays for conversion
     verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
-    faces = np.array([rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]) - 1
+    faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
 
     # Split the faces into elements
@@ -57,7 +57,7 @@ def save_collision_mesh(obj, output_fs):
 def save_mesh(obj, output_path):  
     # Get vertices and faces into numpy arrays for conversion
     verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
-    faces = np.array([rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]) - 1
+    faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
     
     # Convert to Trimesh
@@ -173,8 +173,8 @@ class ObjectExporter:
             if rt.classOf(child) in (rt.Editable_Poly, rt.PolyMeshObject):
                 if child_name_result.group("meta_type"):
                     # Save collision mesh.
-                    assert child_name_result.group("meta_type") == "collision", f"Only Mcollision can be a mesh."
-                    save_collision_mesh(child, OSFS(obj_dir))
+                    assert child_name_result.group("meta_type") in ("collision", "fillable", "openfillable"), f"Only Mcollision, Mfillable and Mopenfillable can be a mesh."
+                    save_meta_mesh(child, OSFS(obj_dir))
                 else:
                     # Save part metadata.
                     metadata["parts"].append(child.name)

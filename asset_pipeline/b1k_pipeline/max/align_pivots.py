@@ -13,9 +13,7 @@ def align_pivots():
     src_obj = rt.pickobject()
     # Center pivot to object
     src_obj.pivot = src_obj.center
-    src_pc = np.array(
-        rt.polyop.getVerts(src_obj, list(range(1, rt.polyop.getNumVerts(src_obj) + 1)))
-    )
+    src_pc = np.array(rt.polyop.getVerts(src_obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(src_obj))))
     old_src_quat = [
         src_obj.rotation.x,
         src_obj.rotation.y,
@@ -27,11 +25,7 @@ def align_pivots():
     for tgt_obj in rt.selection:
         # Center pivot to object
         tgt_obj.pivot = tgt_obj.center
-        tgt_pc = np.array(
-            rt.polyop.getVerts(
-                tgt_obj, list(range(1, rt.polyop.getNumVerts(tgt_obj) + 1))
-            )
-        )
+        tgt_pc = np.array(rt.polyop.getVerts(tgt_obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(tgt_obj))))
         assert (
             src_pc.shape == tgt_pc.shape
         ), "source object ({}) and target object ({}) are not instances of each other - they have different number of vertices.".format(

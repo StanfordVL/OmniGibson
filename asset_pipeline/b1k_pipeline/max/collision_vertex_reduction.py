@@ -28,7 +28,7 @@ def reduce_mesh(mesh):
 def convert_to_trimesh(obj):
     # Get vertices and faces into numpy arrays for conversion
     verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
-    faces = np.array([rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]) - 1
+    faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
 
     # Split the faces into elements
@@ -87,9 +87,9 @@ def process_collision_obj(obj):
     new_obj = rt.Editable_Mesh()
     rt.ConvertToPoly(new_obj)
     new_obj.name = name
-    new_obj.position = position
     new_obj.rotation = rotation
-    
+    new_obj.position = position
+
     # Add the vertices
     for v in all_vertices:
         rt.polyop.createVert(new_obj, v)

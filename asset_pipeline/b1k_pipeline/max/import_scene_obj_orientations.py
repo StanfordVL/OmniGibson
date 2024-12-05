@@ -50,7 +50,7 @@ def fix():
         model = match.group("model_id")
         com = (
             np.asarray(obj.position) / 1000
-        )  # np.mean(rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1))), axis=0) / 1000
+        )  # np.mean(np.array(rt.polyop.getVerts(obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj)))), axis=0) / 1000
         candidates[(cat, model)].append((obj, com))
 
     scene_name = pathlib.Path(rt.maxFilePath).parts[-1]

@@ -1,7 +1,9 @@
 # Install bddl by doing
 # pip install git+https://github.com/StanfordVL/bddl.git@develop
 
+import functools
 import sys
+import time
 
 sys.path.append(r"D:\ig_pipeline")
 
@@ -59,7 +61,8 @@ ALLOWED_META_TYPES = {
     "particleremover": "primitive",
     "fluidsink": "primitive",
     "slicer": "primitive",
-    "fillable": "primitive",
+    "fillable": "convexmesh",
+    "openfillable": "convexmesh",
     "collision": "convexmesh",
 }
 assert not (
@@ -143,6 +146,14 @@ class SanityCheck:
 
     def reset(self):
         self.errors = collections.defaultdict(list)
+
+    @functools.lru_cache(maxsize=None)
+    def get_verts_for_obj(self, obj):
+        return np.array(rt.polyop.getVerts(obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))))
+
+    @functools.lru_cache(maxsize=None)
+    def get_faces_for_obj(self, obj):
+        return np.array(rt.polyop.getFacesVerts(obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
 
     def is_valid_object_type(self, row):
         is_valid_type = row.type in [
@@ -264,7 +275,7 @@ class SanityCheck:
                 f"{row.object_name} is not rendering the baked material in the viewport. Select the baked material for viewport.",
             )
 
-            current_hash = hash_object(obj)
+            current_hash = hash_object(obj, verts=self.get_verts_for_obj(obj), faces=self.get_faces_for_obj(obj))
             recorded_hash = get_recorded_uv_unwrapping_hash(obj)
             self.expect(
                 recorded_hash == current_hash,
@@ -329,15 +340,10 @@ class SanityCheck:
         )
 
         # Check that the object does not have self-intersecting faces
-        self_intersecting = any(
-            # A face is self-intersecting if a vertex shows up more than once in the face.
-            np.any(
-                np.unique(
-                    np.array(rt.polyop.getFaceVerts(obj, i + 1)), return_counts=True
-                )[1]
-                > 1
-            )
-            for i in range(rt.polyop.GetNumFaces(obj))
+        faces = self.get_faces_for_obj(obj)
+        # A face is self-intersecting if a vertex shows up more than once in the face.
+        self_intersecting = np.any(
+            np.unique(faces, return_counts=True, axis=-1)[1] > 1
         )
         self.expect(
             not self_intersecting,
@@ -405,13 +411,14 @@ class SanityCheck:
     def validate_cloth(self, row):
         # A cloth object should consist of a single connected component
         obj = row.object._obj
-        elems = {
-            tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
-            for i in range(rt.polyop.GetNumFaces(obj))
-        }
+        verts = self.get_verts_for_obj(obj)
+        faces = self.get_faces_for_obj(obj)
+        tm = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
+
+        # Split the faces into elements
         self.expect(
-            len(elems) == 1,
-            f"Cloth object {obj.name} should consist of exactly 1 element. Currently it has {len(elems)} elements.",
+            tm.body_count == 1,
+            f"Cloth object {obj.name} should consist of exactly 1 element. Currently it has {tm.body_count} elements.",
         )
 
     def validate_light(self, row):
@@ -537,56 +544,31 @@ class SanityCheck:
             )
 
             # Get vertices and faces into numpy arrays for conversion
-            verts = np.array(
-                [
-                    rt.polyop.getVert(obj, i + 1)
-                    for i in range(rt.polyop.GetNumVerts(obj))
-                ]
-            )
-            faces_maxscript = [
-                rt.polyop.getFaceVerts(obj, i + 1)
-                for i in range(rt.polyop.GetNumFaces(obj))
-            ]
-            faces = np.array(
-                [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
-            )
+            verts = self.get_verts_for_obj(obj)
+            faces = self.get_faces_for_obj(obj)
             self.expect(len(faces) > 0, f"{obj.name} has no faces.")
             self.expect(
                 all(len(f) == 3 for f in faces),
                 f"{obj.name} has non-triangular faces. Apply the Triangulate script.",
             )
 
+            all_cmeshes = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
+
             # Split the faces into elements
-            elems = {
-                tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
-                for i in range(rt.polyop.GetNumFaces(obj))
-            }
+            elems = all_cmeshes.split(only_watertight=False, repair=False)
             self.expect(
                 len(elems) <= 32,
                 f"{obj.name} should not have more than 32 elements. Has {len(elems)} elements.",
             )
-            elems = np.array(list(elems))
-            self.expect(
-                not np.any(np.sum(elems, axis=0) > 1),
-                f"{obj.name} has same face appear in multiple elements",
-            )
 
             # Iterate through the elements
-            for i, elem in enumerate(elems):
-                # Load the mesh into trimesh and expect convexity
-                relevant_faces = faces[elem]
-                m = trimesh.Trimesh(vertices=verts, faces=relevant_faces, process=False)
-                m.remove_unreferenced_vertices()
+            for i, m in enumerate(elems):
                 self.expect(
                     len(m.vertices) <= 60,
                     f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > 60)",
                 )
                 self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
                 # self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
-                self.expect(
-                    len(m.split()) == 1,
-                    f"{obj.name} element {i} has elements trimesh still finds splittable",
-                )
         except Exception as e:
             self.expect(False, str(e))
 
@@ -603,7 +585,7 @@ class SanityCheck:
         found_ml_subids_for_id = collections.defaultdict(
             lambda: collections.defaultdict(list)
         )
-        found_collision_meshes = []
+        found_convex_mesh_metas = collections.defaultdict(list)
         for child in children:
             # Otherwise, we can validate the individual meta link
             match = b1k_pipeline.utils.parse_name(child.name)
@@ -715,9 +697,11 @@ class SanityCheck:
                     + ALLOWED_META_TYPES[meta_link_type]
                 )
 
+            if ALLOWED_META_TYPES.get(meta_link_type, None) == "convexmesh":
+                found_convex_mesh_metas[meta_link_type].append(child)
+
             if meta_link_type == "collision":
                 self.validate_collision(child)
-                found_collision_meshes.append(child)
             elif meta_link_type == "attachment":
                 attachment_type = match.group("meta_id")
                 self.expect(
@@ -734,11 +718,12 @@ class SanityCheck:
                     f"Missing attachment type on object {row.object_name}",
                 )
 
-        # Validate that each object has no more than one collision mesh.
-        self.expect(
-            len(found_collision_meshes) <= 1,
-            f"Object {row.object_name} has {len(found_collision_meshes)} collision meshes. Should have no more than one.",
-        )
+        # Validate that each object has no more than one of each kind of convexmesh meta.
+        for mesh_type, items in found_convex_mesh_metas.items():
+            self.expect(
+                len(items) <= 1,
+                f"Object {row.object_name} has {len(items)} {mesh_type} meshes. Should have no more than one.",
+            )
 
         # Check that the meta links match what's needed
         try:
@@ -747,11 +732,16 @@ class SanityCheck:
                 "subpart",
                 "joint",
             }  # TODO: Should we check for subpart too?
-            missing_meta_types = required_meta_types - found_ml_types
-            self.expect(
-                not missing_meta_types,
-                f"Expected meta links for {row.object_name} are missing: {missing_meta_types}",
-            )
+            existing_meta_types = set(found_ml_types)
+            if "openfillable" in existing_meta_types:
+                existing_meta_types.add("fillable")
+            missing_meta_types = required_meta_types - existing_meta_types
+            if missing_meta_types:
+                for missing_meta_type in missing_meta_types:
+                    self.expect(
+                        False,
+                        f"{row.object_name} is missing meta link: {missing_meta_type}.",
+                    )
         except ValueError as e:
             self.expect(
                 False,
@@ -1111,6 +1101,7 @@ def sanity_check_safe(batch=False):
     errors = []
     warnings = []
 
+    start_time = time.time()
     try:
         results = SanityCheck().run()
         errors = results["ERROR"]
@@ -1120,10 +1111,14 @@ def sanity_check_safe(batch=False):
         t = traceback.format_exc()
         errors.append("Exception occurred:" + t)
 
+    end_time = time.time()
+    total_time = end_time - start_time
+
     # Print results in interactive mode.
     if not batch:
+        print(f"Sanity check completed in {total_time:.2f} seconds.")
         if success:
-            print("Sanity check complete - no errors found!")
+            print("No errors found!")
         else:
             print("Errors found:")
             print("\n".join(errors))
@@ -1137,7 +1132,7 @@ def sanity_check_safe(batch=False):
         output_dir.mkdir(parents=True, exist_ok=True)
         with open(output_dir / OUTPUT_FILENAME, "w") as f:
             json.dump(
-                {"success": success, "errors": errors, "warnings": warnings},
+                {"success": success, "errors": errors, "warnings": warnings, "total_time": total_time},
                 f,
                 indent=4,
             )
