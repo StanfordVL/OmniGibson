@@ -30,12 +30,9 @@ gm.ENABLE_TRANSITION_RULES = False
 gm.ENABLE_FLATCACHE = False
 gm.DATASET_PATH = r"D:\fillable-10-21"
 
-ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments_2.json")
 ORIENTATION_EDITS_FILE = "orientation_edits.zip"
 
-MAX_BBOX = 0.3
-
-DRAWING_MESHES = []
+BATCH_SIZE = 100
 
 def get_orientation_edits():
     orientation_edits = {}
@@ -114,7 +111,7 @@ def main():
     ]
     random.shuffle(fillables)
 
-    for cat, mdl in tqdm.tqdm(fillables[:32]):
+    for cat, mdl in tqdm.tqdm(fillables[:BATCH_SIZE]):
         if not os.path.exists(DatasetObject.get_usd_path(cat, mdl).replace(".usd", ".encrypted.usd")):
             print(f"Skipping {cat}/{mdl} because it does not exist")
             continue

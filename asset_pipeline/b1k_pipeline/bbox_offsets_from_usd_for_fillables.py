@@ -204,7 +204,6 @@ def main():
     # Scale up
     futures = {}
     with tempfile.TemporaryDirectory() as tempdir:
-      tempdir = r"D:\tmp"
       with ProcessPoolExecutor() as executor:
           for input_usd in tqdm(input_usds, desc="Queueing up jobs"):
               mdl = input_usd.parts[-3]
