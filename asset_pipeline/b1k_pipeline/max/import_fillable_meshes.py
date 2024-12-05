@@ -1,9 +1,7 @@
 from collections import defaultdict
 import pathlib
-import tempfile
 import numpy as np
 import json
-import pxr.Usd
 from fs.osfs import OSFS
 from cryptography.fernet import Fernet
 
@@ -14,7 +12,7 @@ import sys
 
 sys.path.append(r"D:\ig_pipeline")
 
-from b1k_pipeline.utils import parse_name, load_mesh
+from b1k_pipeline.utils import parse_name, load_mesh, PIPELINE_ROOT
 from b1k_pipeline.max.replace_bad_object import node_bounding_box_incl_children, rotation_only_transform
 
 FILLABLE_DIR = pathlib.Path(r"D:\fillable-10-21")
@@ -27,8 +25,9 @@ FILLABLE_ASSIGNMENTS = {
 BOUNDING_BOX_DATA_PATH = FILLABLE_DIR / "fillable_bboxes.json"
 BOUNDING_BOX_DATA = json.loads(BOUNDING_BOX_DATA_PATH.read_text())
 KEY_PATH = FILLABLE_DIR / "omnigibson.key"
+LOG_PATH = FILLABLE_DIR / "import_fillable_meshes.log"
 REMOVE_EXISTING = True
-
+CHECK_MATCHING_SIZE = True
 
 def decrypt_file(encrypted_filename, decrypted_filename):
     with open(KEY_PATH, "rb") as filekey:
@@ -65,7 +64,7 @@ def import_fillable_volumes(model_id, object_links):
             rt.delete(cand_obj)
 
     # Find the directory corresponding to this object
-    model_dir, = list(FILLABLE_DIR.glob(f"objects/*/{model_id}"))
+    model_dir, = list({x.parent.parent for x in FILLABLE_DIR.glob(f"objects/*/{model_id}/usd/*.usd")})
 
     # Find the fillable mesh files
     fillable_files = list(model_dir.glob("fillable---*---*---*.obj"))
@@ -95,7 +94,15 @@ def import_fillable_volumes(model_id, object_links):
     bbox_size = bbox_max - bbox_min
 
     # Compare the bounding box sizes
-    assert np.allclose(bbox_size, usd_bbox_size, atol=10), f"Bounding box sizes do not match for {model_id}. USD has {usd_bbox_size}, max has {bbox_size}"
+    if CHECK_MATCHING_SIZE and not np.allclose(bbox_size, usd_bbox_size, atol=10):
+        msg = f"Bounding box sizes do not match for {model_id}. USD has {usd_bbox_size}, max has {bbox_size}, skipping."
+        print(msg)
+
+        # Append the message to the log file too
+        with open(LOG_PATH, "a") as f:
+            f.write(msg + "\n")
+
+        return
 
     for link_name, kind_files in by_link_and_kind.items():
         link_obj = object_links[link_name]
