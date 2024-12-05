@@ -4,7 +4,7 @@ import os
 import pathlib
 import tempfile
 from cryptography.fernet import Fernet
-from pxr import Usd, UsdGeom, Gf
+from pxr import Usd, UsdGeom, Gf, Sdf
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 from tqdm import tqdm
@@ -14,7 +14,7 @@ from fs.zipfs import ZipFS
 FILLABLE_DIR = pathlib.Path(r"D:\fillable-10-21")
 KEY_PATH = pathlib.Path(r"C:\Users\cgokmen\research\OmniGibson\omnigibson\data\omnigibson.key")
 PIPELINE_ROOT = pathlib.Path(r"D:\ig_pipeline")
-USE_ATTRIBUTE = False
+MODE = "JSON"   # use one of "ATTRIBUTE", "USD" or "JSON"
 
 
 def get_orientation_edits():
@@ -116,6 +116,48 @@ def compute_bbox(prim: Usd.Prim) -> Gf.Range3d:
     return np.array(bound_range.GetMin()), np.array(bound_range.GetMax())
 
 
+def keep_paths_to_all_visuals(stage):
+    """
+    Keeps only the paths to all prims named 'visuals' and their ancestors.
+    
+    Args:
+        stage (Usd.Stage): The USD stage to modify.
+    """
+    # Find all prims named 'visuals'
+    def find_visuals_prims(prim, visuals_paths):
+        for child in prim.GetChildren():
+            if child.GetName() == "visuals":
+                visuals_paths.add(child.GetPath())
+            find_visuals_prims(child, visuals_paths)
+
+    visuals_paths = set()
+    root_prim = stage.GetPseudoRoot()
+    find_visuals_prims(root_prim, visuals_paths)
+    
+    if not visuals_paths:
+        print("No prims named 'visuals' found.")
+        return
+
+    # Collect paths to keep (visuals and their ancestors)
+    paths_to_keep = set()
+    for path in visuals_paths:
+        current_path = path
+        while current_path != Sdf.Path.emptyPath:
+            paths_to_keep.add(current_path)
+            current_path = current_path.GetParentPath()
+
+    # Traverse and prune
+    def traverse_and_prune(prim):
+        for child in prim.GetChildren():
+            traverse_and_prune(child)
+        
+        # Remove the prim if its path is not in paths_to_keep
+        if prim.GetPath() not in paths_to_keep:
+            stage.RemovePrim(prim.GetPath())
+
+    traverse_and_prune(root_prim)
+
+
 def get_bounding_box_from_usd(input_usd, rotmat, tempdir):
     encrypted_filename = input_usd
     fd, decrypted_filename = tempfile.mkstemp(suffix=".usd", dir=tempdir)
@@ -123,21 +165,34 @@ def get_bounding_box_from_usd(input_usd, rotmat, tempdir):
     decrypt_file(encrypted_filename, decrypted_filename)
     stage = Usd.Stage.Open(str(decrypted_filename))
     prim = stage.GetDefaultPrim()
+    keep_paths_to_all_visuals(stage)
+    stage.Save()
 
-    if USE_ATTRIBUTE:
+    if MODE == "ATTRIBUTE":
       base_link_size = np.array(prim.GetAttribute("ig:nativeBB").Get()) * 1000
       base_link_offset = np.array(prim.GetAttribute("ig:offsetBaseLink").Get()) * 1000
 
       # THIS IS INACCURATE FOR NON-AA ROTATIONS!
       return (rotmat @ base_link_offset).tolist(), (rotmat @ base_link_size).tolist()
     
-    else:
+    elif MODE == "USD":
       # Rotate the object by the rotmat and get the bounding box
       _set_xform_properties(prim, np.zeros(3), R.from_matrix(rotmat).as_quat())
       bb_min, bb_max = compute_bbox(prim)
       center = ((bb_min + bb_max) / 2) * 1000
       size = (bb_max - bb_min) * 1000
-      return center.tolist(), size.tolist()
+      return center.tolist(), size.tolist()  
+
+    elif MODE == "JSON":
+      json_path = input_usd.parent.parent / "bbox.json"
+      with open(json_path, "r") as f:
+        data = json.load(f)
+      
+      size = data["bbox_extents"]
+      center = np.array(data["bbox_center"]) - np.array(data["base_pos"])
+      return center.tolist(), size
+
+    raise ValueError("Invalid mode.")
 
 def main():
     input_usds = list(FILLABLE_DIR.glob("objects/*/*/usd/*.usd"))
@@ -149,13 +204,14 @@ def main():
     # Scale up
     futures = {}
     with tempfile.TemporaryDirectory() as tempdir:
+      tempdir = r"D:\tmp"
       with ProcessPoolExecutor() as executor:
           for input_usd in tqdm(input_usds, desc="Queueing up jobs"):
               mdl = input_usd.parts[-3]
-              rot = R.identity() if mdl not in orientation_edits else R.from_quat(orientation_edits[mdl]).inv()
-              euler = rot.as_euler("xyz")
-              if not np.allclose(euler % (np.pi / 2), 0, atol=np.deg2rad(5)):
-                  print("Non-axis aligned rotation detected for", mdl, np.rad2deg(euler).tolist())
+              rot = R.identity() if mdl not in orientation_edits else R.from_quat(orientation_edits[mdl])
+              euler = np.rad2deg(rot.as_euler("xyz"))
+              if not np.allclose(np.remainder(np.abs(euler), 90), 0, atol=5):
+                  print("Non-axis aligned rotation detected for", mdl, euler.tolist())
               future = executor.submit(get_bounding_box_from_usd, input_usd, rot.as_matrix(), tempdir)
               futures[future] = input_usd
 
