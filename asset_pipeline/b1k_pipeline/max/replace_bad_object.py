@@ -50,7 +50,15 @@ def mat2transform(mat):
     return transform
 
 
-def get_vert_sets_including_children(node):
+def get_vert_sets_including_children(node, only_canonical=False):
+    if only_canonical:
+        parsed_name = parse_name(node.name)
+        if not parsed_name:
+            return []
+        
+        if parsed_name.group("meta_type") or parsed_name.group("joint_side") == "upper":
+            return []
+
     vert_sets = [
         np.array(
             [
@@ -61,7 +69,7 @@ def get_vert_sets_including_children(node):
         )
     ]
     for child in node.children:
-        vert_sets.extend(get_vert_sets_including_children(child))
+        vert_sets.extend(get_vert_sets_including_children(child, only_canonical=only_canonical))
     return vert_sets
 
 
@@ -69,8 +77,8 @@ def bounding_box_from_verts(verts):
     return np.min(verts, axis=0), np.max(verts, axis=0)
 
 
-def node_bounding_box_incl_children(node, transform=None):
-    verts_world = np.concatenate(get_vert_sets_including_children(node), axis=0)
+def node_bounding_box_incl_children(node, transform=None, only_canonical=False):
+    verts_world = np.concatenate(get_vert_sets_including_children(node, only_canonical=only_canonical), axis=0)
     if transform is None or np.allclose(transform, np.eye(4)):
         verts = verts_world
     else:
