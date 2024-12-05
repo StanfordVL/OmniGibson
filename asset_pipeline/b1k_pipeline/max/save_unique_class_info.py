@@ -52,9 +52,7 @@ def get_unique_class_info(src_obj):
     """
     Uniquely identify a class by its material name and the eigenvalues of its covariance matrix.
     """
-    X = np.array(
-        rt.polyop.getVerts(src_obj, list(range(1, rt.polyop.getNumVerts(src_obj) + 1)))
-    )
+    X = np.array(rt.polyop.getVerts(src_obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(src_obj))))
     n, m = X.shape
     u = np.mean(X, axis=0)
     # rt.messageBox("u: {}".format(u))

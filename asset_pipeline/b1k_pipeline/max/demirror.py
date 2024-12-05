@@ -37,7 +37,7 @@ def demirror():
     for base, objs in qualifying_objects_per_base.items():
         start_positions = {
             obj: np.mean(
-                rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1))),
+                np.array(rt.polyop.getVerts(obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj)))),
                 axis=0,
             )
             for obj in objs
@@ -67,7 +67,7 @@ def demirror():
         for obj in objs:
             obj.transform = X_MIRROR_MATRIX * obj.transform
             end_position = np.mean(
-                rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1))),
+                np.array(rt.polyop.getVerts(obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj)))),
                 axis=0,
             )
             diff = np.linalg.norm(end_position - start_positions[obj])

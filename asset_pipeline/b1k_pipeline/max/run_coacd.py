@@ -73,7 +73,7 @@ def generate_collision_mesh(obj):
         
     # Get the vertices and faces
     verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
-    faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
+    faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
     assert all(len(f) == 3 for f in faces), f"{obj.name} has non-triangular faces. Apply the Triangulate script."
     coacd_mesh = coacd.Mesh(verts, faces)
 

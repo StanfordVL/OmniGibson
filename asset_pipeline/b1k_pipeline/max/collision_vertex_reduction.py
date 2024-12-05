@@ -28,7 +28,7 @@ def reduce_mesh(mesh):
 def convert_to_trimesh(obj):
     # Get vertices and faces into numpy arrays for conversion
     verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
-    faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
+    faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
 
     # Split the faces into elements

@@ -1,7 +1,9 @@
 # Install bddl by doing
 # pip install git+https://github.com/StanfordVL/bddl.git@develop
 
+import functools
 import sys
+import time
 
 sys.path.append(r"D:\ig_pipeline")
 
@@ -144,6 +146,14 @@ class SanityCheck:
     def reset(self):
         self.errors = collections.defaultdict(list)
 
+    @functools.lru_cache(maxsize=None)
+    def get_verts_for_obj(self, obj):
+        return np.array(rt.polyop.getVerts(obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))))
+
+    @functools.lru_cache(maxsize=None)
+    def get_faces_for_obj(self, obj):
+        return np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
+
     def is_valid_object_type(self, row):
         is_valid_type = row.type in [
             rt.Editable_Poly,
@@ -264,7 +274,7 @@ class SanityCheck:
                 f"{row.object_name} is not rendering the baked material in the viewport. Select the baked material for viewport.",
             )
 
-            current_hash = hash_object(obj)
+            current_hash = hash_object(obj, verts=self.get_verts_for_obj(obj), faces=self.get_faces_for_obj(obj))
             recorded_hash = get_recorded_uv_unwrapping_hash(obj)
             self.expect(
                 recorded_hash == current_hash,
@@ -329,7 +339,7 @@ class SanityCheck:
         )
 
         # Check that the object does not have self-intersecting faces
-        faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
+        faces = self.get_faces_for_obj(obj)
         # A face is self-intersecting if a vertex shows up more than once in the face.
         self_intersecting = np.any(
             np.unique(faces, return_counts=True, axis=-1)[1] > 1
@@ -400,12 +410,8 @@ class SanityCheck:
     def validate_cloth(self, row):
         # A cloth object should consist of a single connected component
         obj = row.object._obj
-        verts = np.array(
-            rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1)))
-        )
-        faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
-
-
+        verts = self.get_verts_for_obj(obj)
+        faces = self.get_faces_for_obj(obj)
         tm = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
 
         # Split the faces into elements
@@ -537,10 +543,8 @@ class SanityCheck:
             )
 
             # Get vertices and faces into numpy arrays for conversion
-            verts = np.array(
-                rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1)))
-            )
-            faces = np.array(rt.polyop.getFacesVerts(obj, range(1, rt.polyop.GetNumFaces(obj) + 1))) - 1
+            verts = self.get_verts_for_obj(obj)
+            faces = self.get_faces_for_obj(obj)
             self.expect(len(faces) > 0, f"{obj.name} has no faces.")
             self.expect(
                 all(len(f) == 3 for f in faces),
@@ -1090,6 +1094,7 @@ def sanity_check_safe(batch=False):
     errors = []
     warnings = []
 
+    start_time = time.time()
     try:
         results = SanityCheck().run()
         errors = results["ERROR"]
@@ -1099,10 +1104,14 @@ def sanity_check_safe(batch=False):
         t = traceback.format_exc()
         errors.append("Exception occurred:" + t)
 
+    end_time = time.time()
+    total_time = end_time - start_time
+
     # Print results in interactive mode.
     if not batch:
+        print(f"Sanity check completed in {total_time:.2f} seconds.")
         if success:
-            print("Sanity check complete - no errors found!")
+            print("No errors found!")
         else:
             print("Errors found:")
             print("\n".join(errors))
@@ -1116,7 +1125,7 @@ def sanity_check_safe(batch=False):
         output_dir.mkdir(parents=True, exist_ok=True)
         with open(output_dir / OUTPUT_FILENAME, "w") as f:
             json.dump(
-                {"success": success, "errors": errors, "warnings": warnings},
+                {"success": success, "errors": errors, "warnings": warnings, "total_time": total_time},
                 f,
                 indent=4,
             )

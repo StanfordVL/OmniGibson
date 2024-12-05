@@ -36,7 +36,7 @@ def compute_bounding_box(objs):
             continue
 
         # Get all the vertices
-        X = np.array(rt.polyop.getVerts(obj, list(range(1, rt.polyop.getNumVerts(obj) + 1))))
+        X = np.array(rt.polyop.getVerts(obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))))
 
         # Convert them into the base frame
         pts = transform_points(X, invt)
