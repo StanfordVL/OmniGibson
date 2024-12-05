@@ -50,10 +50,13 @@ def mat2transform(mat):
     return transform
 
 
-def get_vert_sets_including_children(node, only_canonical=False):
-    if only_canonical:
+def get_vert_sets_including_children(node, only_canonical_parts_of=None):
+    if only_canonical_parts_of is not None:
         parsed_name = parse_name(node.name)
         if not parsed_name:
+            return []
+        
+        if parsed_name.group("model_id") != only_canonical_parts_of:
             return []
         
         if parsed_name.group("meta_type") or parsed_name.group("joint_side") == "upper":
@@ -69,7 +72,7 @@ def get_vert_sets_including_children(node, only_canonical=False):
         )
     ]
     for child in node.children:
-        vert_sets.extend(get_vert_sets_including_children(child, only_canonical=only_canonical))
+        vert_sets.extend(get_vert_sets_including_children(child, only_canonical_parts_of=only_canonical_parts_of))
     return vert_sets
 
 
@@ -78,7 +81,12 @@ def bounding_box_from_verts(verts):
 
 
 def node_bounding_box_incl_children(node, transform=None, only_canonical=False):
-    verts_world = np.concatenate(get_vert_sets_including_children(node, only_canonical=only_canonical), axis=0)
+    if only_canonical:
+        parsed_name = parse_name(node.name)
+        if not parsed_name:
+            return None
+        only_canonical = parsed_name.group("model_id")
+    verts_world = np.concatenate(get_vert_sets_including_children(node, only_canonical_parts_of=only_canonical), axis=0)
     if transform is None or np.allclose(transform, np.eye(4)):
         verts = verts_world
     else:
