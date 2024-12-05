@@ -3,9 +3,9 @@ import pathlib
 import numpy as np
 import json
 from fs.osfs import OSFS
-from cryptography.fernet import Fernet
 
 import pymxs
+
 rt = pymxs.runtime
 
 import sys
@@ -13,13 +13,17 @@ import sys
 sys.path.append(r"D:\ig_pipeline")
 
 from b1k_pipeline.utils import parse_name, load_mesh, PIPELINE_ROOT
-from b1k_pipeline.max.replace_bad_object import node_bounding_box_incl_children, rotation_only_transform
+from b1k_pipeline.max.replace_bad_object import (
+    node_bounding_box_incl_children,
+    rotation_only_transform,
+)
 
 FILLABLE_DIR = pathlib.Path(r"D:\fillable-10-21")
 FILLABLE_ASSIGNMENTS = {
     k: v
-    for k, v in
-    json.loads((FILLABLE_DIR / "fillable_assignments_2.json").read_text()).items()
+    for k, v in json.loads(
+        (FILLABLE_DIR / "fillable_assignments_2.json").read_text()
+    ).items()
     if v in {"dip", "ray", "combined", "generated"}
 }
 BOUNDING_BOX_DATA_PATH = FILLABLE_DIR / "fillable_bboxes.json"
@@ -28,19 +32,6 @@ KEY_PATH = FILLABLE_DIR / "omnigibson.key"
 LOG_PATH = FILLABLE_DIR / "import_fillable_meshes.log"
 REMOVE_EXISTING = True
 CHECK_MATCHING_SIZE = True
-
-def decrypt_file(encrypted_filename, decrypted_filename):
-    with open(KEY_PATH, "rb") as filekey:
-        key = filekey.read()
-    fernet = Fernet(key)
-
-    with open(encrypted_filename, "rb") as enc_f:
-        encrypted = enc_f.read()
-
-    decrypted = fernet.decrypt(encrypted)
-
-    with open(decrypted_filename, "wb") as decrypted_file:
-        decrypted_file.write(decrypted)
 
 
 def get_bounding_box_from_usd(obj_dir):
@@ -64,11 +55,15 @@ def import_fillable_volumes(model_id, object_links):
             rt.delete(cand_obj)
 
     # Find the directory corresponding to this object
-    model_dir, = list({x.parent.parent for x in FILLABLE_DIR.glob(f"objects/*/{model_id}/usd/*.usd")})
+    (model_dir,) = list(
+        {x.parent for x in FILLABLE_DIR.glob(f"objects/*/{model_id}/bbox.json")}
+    )
 
     # Find the fillable mesh files
     fillable_files = list(model_dir.glob("fillable---*---*---*.obj"))
-    assert len(fillable_files) >= 1, f"Expected at least one fillable mesh for {model_id}"
+    assert (
+        len(fillable_files) >= 1
+    ), f"Expected at least one fillable mesh for {model_id}"
     by_link_and_kind = defaultdict(lambda: defaultdict(list))
     for fillable_file in fillable_files:
         link, idx, kind = fillable_file.stem.split("---")[1:]
@@ -85,12 +80,18 @@ def import_fillable_volumes(model_id, object_links):
     # Compute the full object bbox by looking at all the links
     bbox_points = []
     for link_obj in object_links.values():
-        bbox_points.extend(node_bounding_box_incl_children(link_obj, base_link_rotation_transform, only_canonical=True))
+        bbox_points.extend(
+            node_bounding_box_incl_children(
+                link_obj, base_link_rotation_transform, only_canonical=True
+            )
+        )
     bbox_min = np.min(bbox_points, axis=0)
     bbox_max = np.max(bbox_points, axis=0)
     bbox_ctr_rotated = (bbox_min + bbox_max) / 2
-    base_link_rotated = (bbox_ctr_rotated - usd_bbox_offset)
-    base_link_world = (base_link_rotation_transform @ np.concatenate([base_link_rotated, [1]]))[:3]
+    base_link_rotated = bbox_ctr_rotated - usd_bbox_offset
+    base_link_world = (
+        base_link_rotation_transform @ np.concatenate([base_link_rotated, [1]])
+    )[:3]
     bbox_size = bbox_max - bbox_min
 
     # Compare the bounding box sizes
@@ -112,9 +113,13 @@ def import_fillable_volumes(model_id, object_links):
             for path in files:
                 fs = OSFS(str(path.parent))
                 filename = path.name
-                fillable_mesh = load_mesh(fs, filename, force="mesh", skip_materials=True)
+                fillable_mesh = load_mesh(
+                    fs, filename, force="mesh", skip_materials=True
+                )
                 if not fillable_mesh.is_volume:
-                    fillable_mesh = load_mesh(fs, filename, force="mesh", process=False, skip_materials=True)
+                    fillable_mesh = load_mesh(
+                        fs, filename, force="mesh", process=False, skip_materials=True
+                    )
                 fillable_meshes.append(fillable_mesh)
 
             # Get a flattened list of vertices and faces
@@ -123,7 +128,9 @@ def import_fillable_volumes(model_id, object_links):
             for split in fillable_meshes:
                 vertices = [rt.Point3(*(v * 1000).tolist()) for v in split.vertices]
                 # Offsetting here by the past vertex count
-                faces = [[v + len(all_vertices) + 1 for v in f.tolist()] for f in split.faces]
+                faces = [
+                    [v + len(all_vertices) + 1 for v in f.tolist()] for f in split.faces
+                ]
                 all_vertices.extend(vertices)
                 all_faces.extend(faces)
 
@@ -131,8 +138,10 @@ def import_fillable_volumes(model_id, object_links):
             fillable_obj = rt.Editable_Mesh()
             rt.ConvertToPoly(fillable_obj)
             fillable_type = "Mfillable" if kind == "enclosed" else "Mopenfillable"
-            fillable_obj.name = f"{parsed_link_name.group('mesh_basename')}-{fillable_type}"
-            
+            fillable_obj.name = (
+                f"{parsed_link_name.group('mesh_basename')}-{fillable_type}"
+            )
+
             # Add the vertices
             for v in all_vertices:
                 rt.polyop.createVert(fillable_obj, v)
@@ -157,10 +166,17 @@ def import_fillable_volumes(model_id, object_links):
             fillable_obj.parent = link_obj
 
             # Check that the new element count is the same as the split count
-            elems = {tuple(rt.polyop.GetElementsUsingFace(fillable_obj, i + 1)) for i in range(rt.polyop.GetNumFaces(fillable_obj))}
-            assert len(elems) == len(fillable_meshes), f"{fillable_obj.name} has different number of faces in fillable mesh than in splits"
+            elems = {
+                tuple(rt.polyop.GetElementsUsingFace(fillable_obj, i + 1))
+                for i in range(rt.polyop.GetNumFaces(fillable_obj))
+            }
+            assert len(elems) == len(
+                fillable_meshes
+            ), f"{fillable_obj.name} has different number of faces in fillable mesh than in splits"
             elems = np.array(list(elems))
-            assert not np.any(np.sum(elems, axis=0) > 1), f"{fillable_obj.name} has same face appear in multiple elements"
+            assert not np.any(
+                np.sum(elems, axis=0) > 1
+            ), f"{fillable_obj.name} has same face appear in multiple elements"
 
             # Hide the mesh
             fillable_obj.isHidden = True
@@ -186,13 +202,16 @@ def process_current_file():
         if match.group("joint_side") == "upper":
             continue
 
-        link_name = match.group("link_name") if match.group("link_name") else "base_link"
+        link_name = (
+            match.group("link_name") if match.group("link_name") else "base_link"
+        )
         object_links[match.group("model_id")][link_name] = obj
 
     # For each object, try to import the fillable volumes
     availables = set(FILLABLE_ASSIGNMENTS.keys()) & set(object_links.keys())
     for model_id in sorted(availables):
         import_fillable_volumes(model_id, object_links[model_id])
+
 
 if __name__ == "__main__":
     process_current_file()
