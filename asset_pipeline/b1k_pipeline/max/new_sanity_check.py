@@ -149,11 +149,11 @@ class SanityCheck:
 
     @functools.lru_cache(maxsize=None)
     def get_verts_for_obj(self, obj):
-        return np.array(rt.polyop.getVerts(obj, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))))
+        return np.array(rt.polyop.getVerts(obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))))
 
     @functools.lru_cache(maxsize=None)
     def get_faces_for_obj(self, obj):
-        return np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
+        return np.array(rt.polyop.getFacesVerts(obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
 
     def is_valid_object_type(self, row):
         is_valid_type = row.type in [
@@ -585,7 +585,7 @@ class SanityCheck:
         found_ml_subids_for_id = collections.defaultdict(
             lambda: collections.defaultdict(list)
         )
-        found_collision_meshes = []
+        found_convex_mesh_metas = collections.defaultdict(list)
         for child in children:
             # Otherwise, we can validate the individual meta link
             match = b1k_pipeline.utils.parse_name(child.name)
@@ -697,9 +697,11 @@ class SanityCheck:
                     + ALLOWED_META_TYPES[meta_link_type]
                 )
 
+            if ALLOWED_META_TYPES.get(meta_link_type, None) == "convexmesh":
+                found_convex_mesh_metas[meta_link_type].append(child)
+
             if meta_link_type == "collision":
                 self.validate_collision(child)
-                found_collision_meshes.append(child)
             elif meta_link_type == "attachment":
                 attachment_type = match.group("meta_id")
                 self.expect(
@@ -716,11 +718,12 @@ class SanityCheck:
                     f"Missing attachment type on object {row.object_name}",
                 )
 
-        # Validate that each object has no more than one collision mesh.
-        self.expect(
-            len(found_collision_meshes) <= 1,
-            f"Object {row.object_name} has {len(found_collision_meshes)} collision meshes. Should have no more than one.",
-        )
+        # Validate that each object has no more than one of each kind of convexmesh meta.
+        for mesh_type, items in found_convex_mesh_metas.items():
+            self.expect(
+                len(items) <= 1,
+                f"Object {row.object_name} has {len(items)} {mesh_type} meshes. Should have no more than one.",
+            )
 
         # Check that the meta links match what's needed
         try:
