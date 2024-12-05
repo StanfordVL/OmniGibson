@@ -103,7 +103,7 @@ def import_fillable_volumes(model_id, object_links):
         with open(LOG_PATH, "a") as f:
             f.write(msg + "\n")
 
-        return
+        return False
 
     for link_name, kind_files in by_link_and_kind.items():
         link_obj = object_links[link_name]
@@ -181,11 +181,15 @@ def import_fillable_volumes(model_id, object_links):
             # Hide the mesh
             fillable_obj.isHidden = True
 
+    return True
 
 def process_current_file():
     # Iterate through the objects in the file and build the link lists
     object_links = defaultdict(dict)
     for obj in rt.objects:
+        if rt.classOf(obj) != rt.Editable_Poly:
+            continue
+
         match = parse_name(obj.name)
         if not match:
             continue
@@ -209,8 +213,8 @@ def process_current_file():
 
     # For each object, try to import the fillable volumes
     availables = set(FILLABLE_ASSIGNMENTS.keys()) & set(object_links.keys())
-    for model_id in sorted(availables):
-        import_fillable_volumes(model_id, object_links[model_id])
+    
+    return any(import_fillable_volumes(model_id, object_links[model_id]) for model_id in availables)
 
 
 if __name__ == "__main__":

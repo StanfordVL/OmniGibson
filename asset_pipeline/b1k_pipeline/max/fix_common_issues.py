@@ -36,6 +36,9 @@ def processFile(filename: pathlib.Path):
     # Load file, fixing the units
     print(f"\n\nProcessing {filename}")
     assert rt.loadMaxFile(str(filename), useFileUnits=False, quiet=True)
+
+    made_any_changes = False
+
     # assert rt.units.systemScale == 1, "System scale not set to 1mm."
     # assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
 
@@ -198,11 +201,12 @@ def processFile(filename: pathlib.Path):
     # b1k_pipeline.max.match_links.process_all_objects()
 
     # Import fillable meshes
-    b1k_pipeline.max.import_fillable_meshes.process_current_file()
+    made_any_changes = made_any_changes or b1k_pipeline.max.import_fillable_meshes.process_current_file()
 
     # Save again.
-    new_filename = processed_fn(filename)
-    rt.saveMaxFile(str(new_filename))
+    if made_any_changes:
+        new_filename = processed_fn(filename)
+        rt.saveMaxFile(str(new_filename))
 
 
 def fix_common_issues_in_all_files():
