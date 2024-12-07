@@ -9,12 +9,15 @@ rt = pymxs.runtime
 REMACRO = re.compile('^[0-9]+ +"[^"]*" +"([^"]*)" +"[^"]*" +"([^"]*)"', re.M)
 
 ENTRYPOINTS = {
+    "add_fillable_seed.py": "Add a seed for generating fillable volumes.",
     "align_pivots.py": "Find instances with unaligned pivots and align them.",
     "assign_light.py": "Assign lights to objects.",
     "assign_toggle.py": "Assign toggle button metalink to object",
     "collision_vertex_reduction.py": "Reduce vertex count of a collision mesh.",
     "demirror.py": "Fix objects that are mirrored.",
     "find_duplicates.py": "Find duplicate objects in the scene.",
+    "generate_fillable_volume.py": "Generate fillable volume from seed point using ray casting.",
+    "generate_open_fillable_volume.py": "Generate open fillable volume from seed point using ray casting.",
     # "fix_common_issues.py": "Fix common issues like scale.",
     "fix_instance_materials.py": "Update object instances to use single material.",
     "fix_legacy_obj_rots.py": "Fix legacy object rotations > 180deg.",
@@ -36,6 +39,7 @@ ENTRYPOINTS = {
     "resolve_complaints.py": "Resolve QA complaints for this file.",
     "replace_bad_object.py": "Replace bad object instances with copy of the same object from provider file.",
     "rpc_server.py": "Run RPC Server for DVC stages.",
+    "run_coacd.py": "Run CoACD to generate collision mesh.",
     "select_mismatched_pivot.py": "Select groups of object instances whose pivots dont match.",
     "spherify.py": "Convert point helpers into spheres.",
     "switch_loose.py": "Switch visible object between different looseness options.",
