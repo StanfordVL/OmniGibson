@@ -237,14 +237,14 @@ def processFile(filename: pathlib.Path):
                 if "Mfillable" in child.name:
                     fillable_meshes.append(child)
 
-            if len(fillable_meshes) <= 1:
+            if len(fillable_meshes) < 1:
                 continue
 
             print("Processing", obj.name, "with fillable meshes", fillable_meshes)
             new_fillable = merge_collision(fillable_meshes, obj)
             new_fillable.name = re.sub(
                 r"(-M([a-z]+)(?:_([A-Za-z0-9]+))?(?:_([0-9]+))?)",
-                "Mfillable",
+                "-Mfillable",
                 new_fillable.name,
             )
             made_any_changes = True

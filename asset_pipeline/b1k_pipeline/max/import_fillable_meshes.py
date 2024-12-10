@@ -44,6 +44,7 @@ def import_fillable_volumes(model_id, object_links):
 
     # Remove any fillable volumes that this object already has
     if REMOVE_EXISTING:
+        to_remove = []
         for cand_obj in rt.objects:
             match = parse_name(cand_obj.name)
             if not match:
@@ -52,7 +53,10 @@ def import_fillable_volumes(model_id, object_links):
                 continue
             if match.group("meta_type") not in ("fillable", "openfillable"):
                 continue
-            rt.delete(cand_obj)
+            to_remove.append(cand_obj)
+
+        for obj in to_remove:
+            rt.delete(obj)
 
     # Find the directory corresponding to this object
     (model_dir,) = list(
@@ -183,6 +187,7 @@ def import_fillable_volumes(model_id, object_links):
 
     return True
 
+
 def process_current_file():
     # Iterate through the objects in the file and build the link lists
     object_links = defaultdict(dict)
@@ -213,8 +218,11 @@ def process_current_file():
 
     # For each object, try to import the fillable volumes
     availables = set(FILLABLE_ASSIGNMENTS.keys()) & set(object_links.keys())
-    
-    return any(import_fillable_volumes(model_id, object_links[model_id]) for model_id in availables)
+
+    return any(
+        import_fillable_volumes(model_id, object_links[model_id])
+        for model_id in availables
+    )
 
 
 if __name__ == "__main__":
