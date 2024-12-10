@@ -196,7 +196,7 @@ class SanityCheck:
     def maybe_rename_category(self, cat, model):
         if (cat, model) in RENAMES:
             return RENAMES[(cat, model)]
-        elif any(m == model and RENAMES[(c, m)] != c for c, m in RENAMES):
+        elif any(m == model and RENAMES[(c, m)] != cat for c, m in RENAMES):
             self.expect(
                 False,
                 f"Model {model} has category {cat} that is neither the from or to element in the rename file.",

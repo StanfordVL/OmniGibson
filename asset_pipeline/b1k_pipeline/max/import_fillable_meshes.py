@@ -220,8 +220,10 @@ def process_current_file():
     availables = set(FILLABLE_ASSIGNMENTS.keys()) & set(object_links.keys())
 
     return any(
-        import_fillable_volumes(model_id, object_links[model_id])
-        for model_id in availables
+        [
+            import_fillable_volumes(model_id, object_links[model_id])
+            for model_id in availables
+        ]
     )
 
 

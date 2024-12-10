@@ -223,55 +223,55 @@ def processFile(filename: pathlib.Path):
     # b1k_pipeline.max.match_links.process_all_objects()
 
     # Merge preexisting fillable meshes
-    processed_fillable = set()
-    while True:
-        for obj in list(rt.objects):
-            if not rt.classOf(obj) == rt.Editable_Poly:
-                continue
+    # processed_fillable = set()
+    # while True:
+    #     for obj in list(rt.objects):
+    #         if not rt.classOf(obj) == rt.Editable_Poly:
+    #             continue
 
-            if obj in processed_fillable:
-                continue
+    #         if obj in processed_fillable:
+    #             continue
 
-            fillable_meshes = []
-            for child in obj.children:
-                if "Mfillable" in child.name:
-                    fillable_meshes.append(child)
+    #         fillable_meshes = []
+    #         for child in obj.children:
+    #             if "Mfillable" in child.name:
+    #                 fillable_meshes.append(child)
 
-            if len(fillable_meshes) < 1:
-                continue
+    #         if len(fillable_meshes) < 1:
+    #             continue
 
-            print("Processing", obj.name, "with fillable meshes", fillable_meshes)
-            new_fillable = merge_collision(fillable_meshes, obj)
-            new_fillable.name = re.sub(
-                r"(-M([a-z]+)(?:_([A-Za-z0-9]+))?(?:_([0-9]+))?)",
-                "-Mfillable",
-                new_fillable.name,
-            )
-            made_any_changes = True
+    #         print("Processing", obj.name, "with fillable meshes", fillable_meshes)
+    #         new_fillable = merge_collision(fillable_meshes, obj)
+    #         new_fillable.name = re.sub(
+    #             r"(-M([a-z]+)(?:_([A-Za-z0-9]+))?(?:_([0-9]+))?)",
+    #             "-Mfillable",
+    #             new_fillable.name,
+    #         )
+    #         made_any_changes = True
 
-            processed_fillable.add(obj)
+    #         processed_fillable.add(obj)
 
-            # Break out of the for loop so that the iteration list restarts.
-            # Otherwise, we might get a RuntimeError due to the list changing size.
-            break
-        else:
-            # Break out of the while loop
-            break
+    #         # Break out of the for loop so that the iteration list restarts.
+    #         # Otherwise, we might get a RuntimeError due to the list changing size.
+    #         break
+    #     else:
+    #         # Break out of the while loop
+    #         break
 
     # Apply renames
-    for obj in rt.objects:
-        match = b1k_pipeline.utils.parse_name(obj.name)
-        if not match:
-            continue
+    # for obj in rt.objects:
+    #     match = b1k_pipeline.utils.parse_name(obj.name)
+    #     if not match:
+    #         continue
 
-        category = match.group("category")
-        model_id = match.group("model_id")
-        rename_key = f"{category}-{model_id}"
-        if model_id in RENAMES:
-            old_key, new_key = RENAMES[model_id]
-            if rename_key == old_key:
-                obj.name = obj.name.replace(old_key, new_key)
-                made_any_changes = True
+    #     category = match.group("category")
+    #     model_id = match.group("model_id")
+    #     rename_key = f"{category}-{model_id}"
+    #     if model_id in RENAMES:
+    #         old_key, new_key = RENAMES[model_id]
+    #         if rename_key == old_key:
+    #             obj.name = obj.name.replace(old_key, new_key)
+    #             made_any_changes = True
 
     # Import fillable meshes
     made_any_changes = (
@@ -280,13 +280,13 @@ def processFile(filename: pathlib.Path):
     )
 
     # Remove lights from bad objects and nonzero instances
-    for light in list(rt.lights):
-        match = b1k_pipeline.utils.parse_name(light.name)
-        if not match:
-            continue
-        if match.group("bad") or match.group("instance_id") != "0":
-            rt.delete(light)
-            made_any_changes = True
+    # for light in list(rt.lights):
+    #     match = b1k_pipeline.utils.parse_name(light.name)
+    #     if not match:
+    #         continue
+    #     if match.group("bad") or match.group("instance_id") != "0":
+    #         rt.delete(light)
+    #         made_any_changes = True
 
     # Save again.
     if made_any_changes:

@@ -16,6 +16,7 @@ import trimesh.transformations
 rt = pymxs.runtime
 
 OUTPUT_FILENAME = "object_list.json"
+COMPLEX_FINGERPRINT = False
 
 
 def compute_moment_of_inertia(triangles, reference_point=None):
@@ -181,12 +182,22 @@ def main():
         )
 
         # Get vertices and faces into numpy arrays for conversion
-        verts = np.array(
-            [rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))]
+        num_verts = rt.polyop.GetNumVerts(obj)
+        num_faces = rt.polyop.GetNumFaces(obj)
+        verts = None
+        faces = None
+        if COMPLEX_FINGERPRINT:
+            verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(num_verts)])
+            faces = (
+                np.array(
+                    rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % num_faces))
+                )
+                - 1
+            )
+            assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
+        pivots_and_mesh_parts[model_id].append(
+            (pivot, verts, faces, num_verts, num_faces)
         )
-        faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
-        assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
-        pivots_and_mesh_parts[model_id].append((pivot, verts, faces))
 
     # Accumulate the vertex and face counts and the moments of inertia
     mesh_fingerprints = {}
@@ -196,13 +207,13 @@ def main():
         face_count = 0
         triangle_subs = []
         pivots = []
-        for orientation, verts, faces in parts:
-            vertex_count += verts.shape[0]
-            face_count += faces.shape[0]
-            triangle_subs.append(verts[faces])
+        for orientation, verts, faces, num_verts, num_faces in parts:
+            vertex_count += num_verts
+            face_count += num_faces
+            if COMPLEX_FINGERPRINT:
+                triangle_subs.append(verts[faces])
             if orientation is not None:
                 pivots.append(orientation)
-        triangles = np.concatenate(triangle_subs, axis=0)
 
         # Grab the orientation
         assert (
@@ -210,42 +221,48 @@ def main():
         ), f"Expected 1 orientation for {model_id}, got {len(pivots)}"
         pivot = pivots[0]
 
-        # Orient the mesh such that it is in the frame of the orientation
-        world_to_pivot = np.linalg.inv(pivot)
-        oriented_triangles = trimesh.transformations.transform_points(
-            triangles.reshape(-1, 3), world_to_pivot
-        ).reshape(triangles.shape)
+        flattened_moment_of_inertia = None
+        pivot_to_centroid = None
+        if COMPLEX_FINGERPRINT:
+            triangles = np.concatenate(triangle_subs, axis=0)  # Flatten the triangles
 
-        # Rescale the mesh around its bounding box to exactly fit the unit cube.
-        min_bound = np.min(triangles.reshape(-1, 3), axis=0)
-        max_bound = np.max(triangles.reshape(-1, 3), axis=0)
-        center = (min_bound + max_bound) / 2
-        assert center.shape == (3,), f"Bad center shape {center.shape}"
-        scale = max_bound - min_bound
-        assert scale.shape == (3,), f"Bad scale shape {scale.shape}"
-        scale[np.isclose(scale, 0)] = 1.0  # avoid degenerate cases
-        scaled_triangles = (oriented_triangles - center) / scale
+            # Orient the mesh such that it is in the frame of the orientation
+            world_to_pivot = np.linalg.inv(pivot)
+            oriented_triangles = trimesh.transformations.transform_points(
+                triangles.reshape(-1, 3), world_to_pivot
+            ).reshape(triangles.shape)
 
-        # Compute the moment of inertia
-        I, centroid = compute_moment_of_inertia(scaled_triangles)
-        assert centroid.shape == (3,), f"Bad centroid shape {centroid.shape}"
-        assert I.shape == (3, 3), f"Bad moment of inertia shape {I.shape}"
+            # Rescale the mesh around its bounding box to exactly fit the unit cube.
+            min_bound = np.min(triangles.reshape(-1, 3), axis=0)
+            max_bound = np.max(triangles.reshape(-1, 3), axis=0)
+            center = (min_bound + max_bound) / 2
+            assert center.shape == (3,), f"Bad center shape {center.shape}"
+            scale = max_bound - min_bound
+            assert scale.shape == (3,), f"Bad scale shape {scale.shape}"
+            scale[np.isclose(scale, 0)] = 1.0  # avoid degenerate cases
+            scaled_triangles = (oriented_triangles - center) / scale
 
-        # Where would the pivot be in the scaled frame?
-        pivot_scaled = -center / scale
-        assert pivot_scaled.shape == (
-            3,
-        ), f"Bad scaled pivot shape {pivot_scaled.shape}"
+            # Compute the moment of inertia
+            I, centroid = compute_moment_of_inertia(scaled_triangles)
+            assert centroid.shape == (3,), f"Bad centroid shape {centroid.shape}"
+            assert I.shape == (3, 3), f"Bad moment of inertia shape {I.shape}"
 
-        # Compute the pivot-to-centroid vector in the scaled frame
-        pivot_to_centroid = centroid - pivot_scaled
+            # Where would the pivot be in the scaled frame?
+            pivot_scaled = -center / scale
+            assert pivot_scaled.shape == (
+                3,
+            ), f"Bad scaled pivot shape {pivot_scaled.shape}"
+
+            # Compute the pivot-to-centroid vector in the scaled frame
+            pivot_to_centroid = (centroid - pivot_scaled).tolist()
+            flattened_moment_of_inertia = I.flatten().tolist()
 
         # Store the vertex count, face count, moment of inertia and pivot-to-centroid vector as the mesh fingerprint
         mesh_fingerprints[model_id] = (
             vertex_count,
             face_count,
-            I.flatten().tolist(),
-            pivot_to_centroid.tolist(),
+            flattened_moment_of_inertia,
+            pivot_to_centroid,
         )
 
     for obj, _, parent in max_tree:
