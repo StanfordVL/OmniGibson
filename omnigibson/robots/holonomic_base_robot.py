@@ -14,6 +14,8 @@ from omnigibson.utils.python_utils import classproperty
 m = create_module_macros(module_path=__file__)
 m.MAX_LINEAR_VELOCITY = 1.5  # linear velocity in meters/second
 m.MAX_ANGULAR_VELOCITY = th.pi  # angular velocity in radians/second
+m.MAX_EFFORT = 1000.0
+m.BASE_JOINT_CONTROLLER_POSITION_KP = 100.0
 
 
 class HolonomicBaseRobot(LocomotionRobot):
@@ -40,7 +42,7 @@ class HolonomicBaseRobot(LocomotionRobot):
         visible=True,
         fixed_base=False,
         visual_only=False,
-        self_collisions=False,
+        self_collisions=True,
         load_config=None,
         # Unique to USDObject hierarchy
         abilities=None,
@@ -120,6 +122,18 @@ class HolonomicBaseRobot(LocomotionRobot):
             **kwargs,
         )
 
+    @property
+    def _default_base_joint_controller_config(self):
+        """
+        Returns:
+            dict: Default base joint controller config to control this robot's base. Uses velocity
+                control by default.
+        """
+        cfg = super()._default_base_joint_controller_config
+        # The default value is too small for the base joints
+        cfg["pos_kp"] = m.BASE_JOINT_CONTROLLER_POSITION_KP
+        return cfg
+
     def _post_load(self):
         super()._post_load()
 
@@ -139,15 +153,24 @@ class HolonomicBaseRobot(LocomotionRobot):
         for i, component in enumerate(["x", "y", "z", "rx", "ry", "rz"]):
             joint_name = f"base_footprint_{component}_joint"
             assert joint_name in self.joints, f"Missing base joint: {joint_name}"
+
+            # Set the linear and angular velocity limits for the base joints (the default value is too large)
             if i < 3:
                 self.joints[joint_name].max_velocity = m.MAX_LINEAR_VELOCITY
             else:
                 self.joints[joint_name].max_velocity = m.MAX_ANGULAR_VELOCITY
 
+            # Set the effort limits for the base joints (the default value is too small)
+            self.joints[joint_name].max_effort = m.MAX_EFFORT
+
         # Force the recomputation of this cached property
         del self.control_limits
 
-        # Reload the controllers to update command_output_limits, which read the updated control limits
+        # Overwrite with the new control limits
+        self._controller_config["base"]["control_limits"]["velocity"] = self.control_limits["velocity"]
+        self._controller_config["base"]["control_limits"]["effort"] = self.control_limits["effort"]
+
+        # Reload the controllers to update their command_output_limits and control_limits
         self.reload_controllers(self._controller_config)
 
     @property
@@ -282,11 +305,18 @@ class HolonomicBaseRobot(LocomotionRobot):
         base_orn = self.base_footprint_link.get_position_orientation()[1]
         root_link_orn = self.root_link.get_position_orientation()[1]
 
-        cur_orn = T.mat2quat(T.quat2mat(root_link_orn).T @ T.quat2mat(base_orn))
+        cur_orn_mat = T.quat2mat(root_link_orn).T @ T.quat2mat(base_orn)
+        cur_pose = th.zeros((2, 4, 4))
+        cur_pose[:, :3, :3] = cur_orn_mat
+        cur_pose[:, 3, 3] = 1.0
+
+        local_pose = th.zeros((2, 4, 4))
+        local_pose[:] = th.eye(4)
+        local_pose[:, :3, 3] = u_vec[self.base_idx].view(2, 3)
 
         # Rotate the linear and angular velocity to the desired frame
-        lin_vel_global, _ = T.pose_transform(th.zeros(3), cur_orn, u_vec[self.base_idx[:3]], th.tensor([0, 0, 0, 1]))
-        ang_vel_global, _ = T.pose_transform(th.zeros(3), cur_orn, u_vec[self.base_idx[3:]], th.tensor([0, 0, 0, 1]))
+        global_pose = cur_pose @ local_pose
+        lin_vel_global, ang_vel_global = global_pose[0, :3, 3], global_pose[1, :3, 3]
 
         u_vec[self.base_control_idx] = th.tensor([lin_vel_global[0], lin_vel_global[1], ang_vel_global[2]])
 

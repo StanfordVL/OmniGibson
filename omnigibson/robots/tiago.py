@@ -7,6 +7,7 @@ import torch as th
 import omnigibson as og
 import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
+from omnigibson.action_primitives.curobo import CuRoboEmbodimentSelection
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.robots.active_camera_robot import ActiveCameraRobot
 from omnigibson.robots.articulated_trunk_robot import ArticulatedTrunkRobot
@@ -31,7 +32,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         scale=None,
         visible=True,
         visual_only=False,
-        self_collisions=False,
+        self_collisions=True,
         load_config=None,
         # Unique to USDObject hierarchy
         abilities=None,
@@ -48,9 +49,6 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         # Unique to ManipulationRobot
         grasping_mode="physical",
         disable_grasp_handling=False,
-        # Unique to ArticulatedTrunkRobot
-        rigid_trunk=False,
-        default_trunk_offset=0.2,
         # Unique to MobileManipulationRobot
         default_reset_mode="untuck",
         # Unique to UntuckedArmPoseRobot
@@ -101,8 +99,6 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
                 If "sticky", will magnetize any object touching the gripper's fingers.
             disable_grasp_handling (bool): If True, will disable all grasp handling for this object. This means that
                 sticky and assisted grasp modes will not work unless the connection/release methodsare manually called.
-            rigid_trunk (bool): If True, will prevent the trunk from moving during execution.
-            default_trunk_offset (float): The default height of the robot's trunk
             default_reset_mode (str): Default reset mode for the robot. Should be one of: {"tuck", "untuck"}
                 If reset_joint_pos is not None, this will be ignored (since _default_joint_pos won't be used during initialization).
             default_arm_pose (str): Default pose for the robot arm. Should be one of:
@@ -138,8 +134,6 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
             sensor_config=sensor_config,
             grasping_mode=grasping_mode,
             disable_grasp_handling=disable_grasp_handling,
-            rigid_trunk=rigid_trunk,
-            default_trunk_offset=default_trunk_offset,
             default_reset_mode=default_reset_mode,
             default_arm_pose=default_arm_pose,
             **kwargs,
@@ -177,7 +171,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         pos = super().untucked_default_joint_pos
         # Keep the current joint positions for the base joints
         pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
-        pos[self.trunk_control_idx] = 0.02 + self.default_trunk_offset
+        pos[self.trunk_control_idx] = 0.17
         pos[self.camera_control_idx] = th.tensor([0.0, -0.45])
         for arm in self.arm_names:
             pos[self.gripper_control_idx[arm]] = th.tensor([0.045, 0.045])  # open gripper
@@ -215,8 +209,17 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         return "base_footprint"
 
     @property
-    def controller_order(self):
-        controllers = ["base", "camera"]
+    def floor_touching_base_link_names(self):
+        return [
+            "wheel_front_left_link",
+            "wheel_front_right_link",
+            "wheel_rear_left_link",
+            "wheel_rear_right_link",
+        ]
+
+    @property
+    def _raw_controller_order(self):
+        controllers = ["base", "trunk", "camera"]
         for arm in self.arm_names:
             controllers += ["arm_{}".format(arm), "gripper_{}".format(arm)]
 
@@ -228,6 +231,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         controllers = super()._default_controllers
         # We use joint controllers for base and camera as default
         controllers["base"] = "JointController"
+        controllers["trunk"] = "JointController"
         controllers["camera"] = "JointController"
         # We use multi finger gripper, and IK controllers for eefs as default
         for arm in self.arm_names:
@@ -240,10 +244,10 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         return {
             arm: [
                 GraspingPoint(
-                    link_name="gripper_{}_right_finger_link".format(arm), position=th.tensor([0.002, 0.0, -0.2])
+                    link_name="gripper_{}_right_finger_link".format(arm), position=th.tensor([-0.001, 0.0, -0.2])
                 ),
                 GraspingPoint(
-                    link_name="gripper_{}_right_finger_link".format(arm), position=th.tensor([0.002, 0.0, -0.13])
+                    link_name="gripper_{}_right_finger_link".format(arm), position=th.tensor([-0.001, 0.0, -0.13])
                 ),
             ]
             for arm in self.arm_names
@@ -254,10 +258,10 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         return {
             arm: [
                 GraspingPoint(
-                    link_name="gripper_{}_left_finger_link".format(arm), position=th.tensor([-0.002, 0.0, -0.2])
+                    link_name="gripper_{}_left_finger_link".format(arm), position=th.tensor([0.001, 0.0, -0.2])
                 ),
                 GraspingPoint(
-                    link_name="gripper_{}_left_finger_link".format(arm), position=th.tensor([-0.002, 0.0, -0.13])
+                    link_name="gripper_{}_left_finger_link".format(arm), position=th.tensor([0.001, 0.0, -0.13])
                 ),
             ]
             for arm in self.arm_names
@@ -437,6 +441,17 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         return os.path.join(
             gm.ASSET_PATH, "models/tiago/tiago_dual_omnidirectional_stanford/tiago_dual_omnidirectional_stanford_33.usd"
         )
+
+    @property
+    def curobo_path(self):
+        return {
+            emb_sel: os.path.join(gm.ASSET_PATH, f"models/tiago/tiago_description_curobo_{emb_sel.value}.yaml")
+            for emb_sel in CuRoboEmbodimentSelection
+        }
+
+    @property
+    def curobo_attached_object_link_names(self):
+        return {eef_link_name: f"attached_object_{eef_link_name}" for eef_link_name in self.eef_link_names.values()}
 
     @property
     def simplified_mesh_usd_path(self):
