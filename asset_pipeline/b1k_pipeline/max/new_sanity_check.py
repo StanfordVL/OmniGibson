@@ -1,6 +1,7 @@
 # Install bddl by doing
 # pip install git+https://github.com/StanfordVL/bddl.git@develop
 
+import csv
 import functools
 import sys
 import time
@@ -68,6 +69,32 @@ ALLOWED_META_TYPES = {
 assert not (
     set(ALLOWED_META_TYPES.values()) - {"dimensionless", "primitive", "convexmesh"}
 ), "Found invalid meta type mapping"
+
+
+# Objects that don't require these meta types should not have them
+REQUIRED_ONLY_META_TYPES = {
+    "fluidsource",
+    "togglebutton",
+    "heatsource",
+    "particleapplier",
+    "particleremover",
+    "fluidsink",
+    "slicer",
+    "fillable",
+}
+
+
+RENAMES = {}
+with open(b1k_pipeline.utils.PIPELINE_ROOT / "metadata/object_renames.csv") as f:
+    for row in csv.DictReader(f):
+        key = (row["Original category (auto)"], row["ID (auto)"])
+        RENAMES[key] = row["New Category"]
+
+
+DELETION_QUEUE = set()
+with open(b1k_pipeline.utils.PIPELINE_ROOT / "metadata/deletion_queue.csv", "r") as f:
+    for row in csv.DictReader(f):
+        DELETION_QUEUE.add(row["Object"].strip().split("-")[1])
 
 
 def get_required_meta_links(category):
@@ -149,11 +176,32 @@ class SanityCheck:
 
     @functools.lru_cache(maxsize=None)
     def get_verts_for_obj(self, obj):
-        return np.array(rt.polyop.getVerts(obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))))
+        return np.array(
+            rt.polyop.getVerts(
+                obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))
+            )
+        )
 
     @functools.lru_cache(maxsize=None)
     def get_faces_for_obj(self, obj):
-        return np.array(rt.polyop.getFacesVerts(obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
+        return (
+            np.array(
+                rt.polyop.getFacesVerts(
+                    obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj))
+                )
+            )
+            - 1
+        )
+
+    def maybe_rename_category(self, cat, model):
+        if (cat, model) in RENAMES:
+            return RENAMES[(cat, model)]
+        elif any(m == model and RENAMES[(c, m)] != c for c, m in RENAMES):
+            self.expect(
+                False,
+                f"Model {model} has category {cat} that is neither the from or to element in the rename file.",
+            )
+        return cat
 
     def is_valid_object_type(self, row):
         is_valid_type = row.type in [
@@ -275,7 +323,11 @@ class SanityCheck:
                 f"{row.object_name} is not rendering the baked material in the viewport. Select the baked material for viewport.",
             )
 
-            current_hash = hash_object(obj, verts=self.get_verts_for_obj(obj), faces=self.get_faces_for_obj(obj))
+            current_hash = hash_object(
+                obj,
+                verts=self.get_verts_for_obj(obj),
+                faces=self.get_faces_for_obj(obj),
+            )
             recorded_hash = get_recorded_uv_unwrapping_hash(obj)
             self.expect(
                 recorded_hash == current_hash,
@@ -320,6 +372,22 @@ class SanityCheck:
             )
 
         # Bad - nonbad common tasks.
+
+        # Check that the object is renamed properly
+        category = row.name_category
+        model_id = row.name_model_id
+        renamed_category = self.maybe_rename_category(category, model_id)
+        self.expect(
+            category == renamed_category,
+            f"{row.object_name} has unapplied rename {category}.",
+            level="WARNING",
+        )
+        if model_id in DELETION_QUEUE:
+            self.expect(
+                False,
+                f"{row.object_name} is in the deletion queue. Delete the object.",
+            )
+
         # Check that the object does not have any modifiers
         self.expect(
             len(row.object.modifiers) == 0, f"{row.object_name} has modifiers attached."
@@ -342,9 +410,7 @@ class SanityCheck:
         # Check that the object does not have self-intersecting faces
         faces = self.get_faces_for_obj(obj)
         # A face is self-intersecting if a vertex shows up more than once in the face.
-        self_intersecting = np.any(
-            np.unique(faces, return_counts=True, axis=-1)[1] > 1
-        )
+        self_intersecting = np.any(np.unique(faces, return_counts=True, axis=-1)[1] > 1)
         self.expect(
             not self_intersecting,
             f"{row.object_name} has self-intersecting faces. Apply the Triangulate script.",
@@ -725,29 +791,6 @@ class SanityCheck:
                 f"Object {row.object_name} has {len(items)} {mesh_type} meshes. Should have no more than one.",
             )
 
-        # Check that the meta links match what's needed
-        try:
-            required_meta_types = get_required_meta_links(row.name_category)
-            required_meta_types -= {
-                "subpart",
-                "joint",
-            }  # TODO: Should we check for subpart too?
-            existing_meta_types = set(found_ml_types)
-            if "openfillable" in existing_meta_types:
-                existing_meta_types.add("fillable")
-            missing_meta_types = required_meta_types - existing_meta_types
-            if missing_meta_types:
-                for missing_meta_type in missing_meta_types:
-                    self.expect(
-                        False,
-                        f"{row.object_name} is missing meta link: {missing_meta_type}.",
-                    )
-        except ValueError as e:
-            self.expect(
-                False,
-                f"Cannot validate meta links for {row.object_name}: {e}",
-            )
-
         # Check that meta subids are correct:
         for meta_type, meta_ids_to_subids in found_ml_subids_for_id.items():
             for meta_id, meta_subids in meta_ids_to_subids.items():
@@ -801,6 +844,11 @@ class SanityCheck:
         )
 
         # Get the model and instance ID
+        self.expect(
+            group["name_category"].nunique() == 1,
+            f"Model ID {group['name_model_id'].iloc[0]} has inconsistent categories.",
+        )
+        category = group["name_category"].iloc[0]
         assert group["name_model_id"].nunique() == 1
         model_id = group["name_model_id"].iloc[0]
         assert group["name_instance_id"].nunique() == 1
@@ -835,7 +883,71 @@ class SanityCheck:
                 f"{model_id}-{instance_id} has different face count than recorded in provider: {real_face_count} != {recorded_face_count}.",
             )
 
+        # If this is the zeroth instance, check the object's meta links set
+        if instance_id == "0":
+            try:
+                # First validate that if the object requires joints, it has them
+                renamed_category = self.maybe_rename_category(category, model_id)
+                required_meta_types = get_required_meta_links(renamed_category)
+
+                requires_joints = "joint" in required_meta_types
+                if requires_joints:
+                    # it should contain at least one revolute or prismatic joint
+                    # TODO: Perhaps also assert the presence of an openable tag later.
+                    self.expect(
+                        set(group["name_joint_type"].unique()) & {"R", "P"},
+                        f"Model ID {model_id} requires joints but has no joints.",
+                    )
+
+                # Then look at meta link types
+                def get_meta_type(o):
+                    pn = b1k_pipeline.utils.parse_name(o.name)
+                    return pn.group("meta_type") if pn else None
+
+                found_ml_types = {
+                    get_meta_type(child)
+                    for group_obj in group["object"]
+                    for child in group_obj.children
+                }
+                found_ml_types -= {None}
+
+                required_meta_types -= {
+                    "subpart",
+                    "joint",
+                }
+                existing_meta_types = set(found_ml_types)
+                if "openfillable" in existing_meta_types:
+                    existing_meta_types.add("fillable")
+                missing_meta_types = required_meta_types - existing_meta_types
+                if missing_meta_types:
+                    for missing_meta_type in missing_meta_types:
+                        self.expect(
+                            False,
+                            f"{model_id} is missing meta link: {missing_meta_type}.",
+                        )
+
+                # Also make sure that things that don't require a meta link don't have one,
+                # for certain specific cases.
+                found_nonoptional_meta_types = (
+                    existing_meta_types & REQUIRED_ONLY_META_TYPES
+                )
+                found_extra_nonoptional_meta_types = (
+                    found_nonoptional_meta_types - required_meta_types
+                )
+                if found_extra_nonoptional_meta_types:
+                    for extra_meta_type in found_extra_nonoptional_meta_types:
+                        self.expect(
+                            False,
+                            f"{model_id} has meta link not required by its synset: {extra_meta_type}.",
+                        )
+            except ValueError as e:
+                self.expect(
+                    False,
+                    f"Cannot validate meta links and joints for model ID {model_id}: {e}",
+                )
+
     def validate_model_group(self, group):
+        category = group["name_category"].iloc[0]
         model_id = group["name_model_id"].iloc[0]
 
         # Check that the group's model ID does not contain the phrase "todo"
@@ -855,24 +967,6 @@ class SanityCheck:
 
         # Then individually validate each of the model instances
         group.groupby("name_instance_id").apply(self.validate_model_instance_group)
-
-        # Then validate that if the object requires joints, it has them
-        try:
-            requires_joints = "joint" in get_required_meta_links(
-                group["name_category"].iloc[0]
-            )
-            if requires_joints:
-                # it should contain at least one revolute or prismatic joint
-                # TODO: Perhaps also assert the presence of an openable tag later.
-                self.expect(
-                    set(group["name_joint_type"].unique()) & {"R", "P"},
-                    f"Model ID {model_id} requires joints but has no joints.",
-                )
-        except ValueError as e:
-            self.expect(
-                False,
-                f"Cannot validate joints for model ID {model_id}: {e}",
-            )
 
         # For each instance, record the scale of the base link, and the positional offset of the
         # child links in the base link's frame. Assert that after scaling these numbers are close.
@@ -1132,7 +1226,12 @@ def sanity_check_safe(batch=False):
         output_dir.mkdir(parents=True, exist_ok=True)
         with open(output_dir / OUTPUT_FILENAME, "w") as f:
             json.dump(
-                {"success": success, "errors": errors, "warnings": warnings, "total_time": total_time},
+                {
+                    "success": success,
+                    "errors": errors,
+                    "warnings": warnings,
+                    "total_time": total_time,
+                },
                 f,
                 indent=4,
             )

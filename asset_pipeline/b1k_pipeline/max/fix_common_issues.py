@@ -1,3 +1,4 @@
+import csv
 import json
 import sys
 
@@ -20,11 +21,32 @@ import b1k_pipeline.max.replace_bad_object
 import b1k_pipeline.max.collision_vertex_reduction
 import b1k_pipeline.max.run_coacd
 import b1k_pipeline.max.match_links
+from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
+
+
+def get_renames():
+    with open(
+        b1k_pipeline.utils.PIPELINE_ROOT / "metadata/object_renames.csv", "r"
+    ) as f:
+        reader = csv.DictReader(f)
+        renames = {}
+        for row in reader:
+            obj_id = row["ID (auto)"]
+            old_cat = row["Original category (auto)"]
+            new_cat = row["New Category"]
+            in_name = f"{old_cat}-{obj_id}"
+            out_name = f"{new_cat}-{obj_id}"
+            renames[obj_id] = (in_name, out_name)
+
+        return renames
+
+
+RENAMES = get_renames()
 
 
 def processed_fn(orig_fn: pathlib.Path):
@@ -200,8 +222,71 @@ def processFile(filename: pathlib.Path):
     # Match links
     # b1k_pipeline.max.match_links.process_all_objects()
 
+    # Merge preexisting fillable meshes
+    processed_fillable = set()
+    while True:
+        for obj in list(rt.objects):
+            if not rt.classOf(obj) == rt.Editable_Poly:
+                continue
+
+            if obj in processed_fillable:
+                continue
+
+            fillable_meshes = []
+            for child in obj.children:
+                if "Mfillable" in child.name:
+                    fillable_meshes.append(child)
+
+            if len(fillable_meshes) <= 1:
+                continue
+
+            print("Processing", obj.name, "with fillable meshes", fillable_meshes)
+            new_fillable = merge_collision(fillable_meshes, obj)
+            new_fillable.name = re.sub(
+                r"(-M([a-z]+)(?:_([A-Za-z0-9]+))?(?:_([0-9]+))?)",
+                "Mfillable",
+                new_fillable.name,
+            )
+            made_any_changes = True
+
+            processed_fillable.add(obj)
+
+            # Break out of the for loop so that the iteration list restarts.
+            # Otherwise, we might get a RuntimeError due to the list changing size.
+            break
+        else:
+            # Break out of the while loop
+            break
+
+    # Apply renames
+    for obj in rt.objects:
+        match = b1k_pipeline.utils.parse_name(obj.name)
+        if not match:
+            continue
+
+        category = match.group("category")
+        model_id = match.group("model_id")
+        rename_key = f"{category}-{model_id}"
+        if model_id in RENAMES:
+            old_key, new_key = RENAMES[model_id]
+            if rename_key == old_key:
+                obj.name = obj.name.replace(old_key, new_key)
+                made_any_changes = True
+
     # Import fillable meshes
-    made_any_changes = made_any_changes or b1k_pipeline.max.import_fillable_meshes.process_current_file()
+    made_any_changes = (
+        made_any_changes
+        or b1k_pipeline.max.import_fillable_meshes.process_current_file()
+    )
+
+    # Remove lights from bad objects and nonzero instances
+    for light in list(rt.lights):
+        match = b1k_pipeline.utils.parse_name(light.name)
+        if not match:
+            continue
+        if match.group("bad") or match.group("instance_id") != "0":
+            rt.delete(light)
+            made_any_changes = True
 
     # Save again.
     if made_any_changes:
@@ -214,7 +299,7 @@ def fix_common_issues_in_all_files():
         pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
 
-    start_pattern = None   # specify a start pattern here to skip up to a file
+    start_pattern = None  # specify a start pattern here to skip up to a file
     start_idx = 0
     if start_pattern:
         for i, x in enumerate(candidates):
