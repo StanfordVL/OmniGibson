@@ -272,7 +272,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         # Add combined entry
         idxs = super().arm_control_idx
         # Concatenate all values and sort them
-        idxs["combined"] = th.sort(th.cat([val for val in idxs.values()]))[0]
+        idxs["combined"] = sorted([idx for arm, arm_idxes in idxs.items() for idx in arm_idxes])
         return idxs
 
     @property

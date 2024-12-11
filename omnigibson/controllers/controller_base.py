@@ -102,7 +102,8 @@ class BaseController(Serializable, Registerable, Recreatable):
         """
         # Store arguments
         assert "has_limit" in control_limits, "Expected has_limit specified in control_limits, but does not exist."
-        self._dof_idx = dof_idx.int().to(device=og.sim.device)
+        assert type(dof_idx) == list, f"Expected dof_idx to be a list, got type {type(dof_idx)} instead."
+        self._dof_idx = dof_idx
         # Store the indices in self.dof_idx that have control limits
         self._limited_dof_indices = th.tensor(
             [i for i, idx in enumerate(self.dof_idx) if control_limits["has_limit"][idx]],

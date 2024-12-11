@@ -601,8 +601,7 @@ class ManipulationRobot(BaseRobot):
                 vector corresponding to arm joints.
         """
         return {
-            arm: th.tensor([list(self.joints.keys()).index(name) for name in self.arm_joint_names[arm]])
-            for arm in self.arm_names
+            arm: [list(self.joints.keys()).index(name) for name in self.arm_joint_names[arm]] for arm in self.arm_names
         }
 
     @property
@@ -613,7 +612,7 @@ class ManipulationRobot(BaseRobot):
                 vector corresponding to gripper joints.
         """
         return {
-            arm: th.tensor([list(self.joints.keys()).index(name) for name in self.finger_joint_names[arm]])
+            arm: [list(self.joints.keys()).index(name) for name in self.finger_joint_names[arm]]
             for arm in self.arm_names
         }
 

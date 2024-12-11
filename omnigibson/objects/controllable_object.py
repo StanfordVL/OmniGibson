@@ -270,7 +270,7 @@ class ControllableObject(BaseObject):
             if name in controller_subsumes:
                 for subsumed_name in controller_subsumes[name]:
                     subsumed_cfg = _controller_config[subsumed_name]
-                    cfg["dof_idx"] = th.concatenate([subsumed_cfg["dof_idx"], cfg["dof_idx"]])
+                    cfg["dof_idx"] = subsumed_cfg["dof_idx"] + cfg["dof_idx"]
 
             # If we're using normalized action space, override the inputs for all controllers
             if self._action_normalize:
@@ -279,7 +279,7 @@ class ControllableObject(BaseObject):
             # Create the controller
             controller = create_controller(**cfg)
             # Verify the controller's DOFs can all be driven
-            for idx in controller.dof_idx.tolist():
+            for idx in controller.dof_idx:
                 assert self._joints[
                     self.dof_names_ordered[idx]
                 ].driven, "Controllers should only control driveable joints!"
@@ -293,10 +293,10 @@ class ControllableObject(BaseObject):
         # Update the control modes of each joint based on the outputted control from the controllers
         unused_dofs = {i for i in range(self.n_dof)}
         for name in self._controllers:
-            for dof in self._controllers[name].dof_idx.tolist():
+            for dof in self._controllers[name].dof_idx:
                 # Make sure the DOF has not already been set yet, and remove it afterwards
-                assert dof.item() in unused_dofs
-                unused_dofs.remove(dof.item())
+                assert dof in unused_dofs
+                unused_dofs.remove(dof)
                 control_type = self._controllers[name].control_type
                 self._joints[self.dof_names_ordered[dof]].set_control_type(
                     control_type=control_type,
@@ -894,7 +894,7 @@ class ControllableObject(BaseObject):
         """
         dic = {}
         for controller in self.controller_order:
-            dic[controller] = self._controllers[controller].dof_idx.tolist()
+            dic[controller] = self._controllers[controller].dof_idx
 
         return dic
 

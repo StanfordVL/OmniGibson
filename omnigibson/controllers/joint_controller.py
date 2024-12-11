@@ -112,13 +112,13 @@ class JointController(LocomotionController, ManipulationController, GripperContr
             assert pos_kp is None, "Cannot set pos_kp for JointController with motor_type=effort!"
             assert pos_damping_ratio is None, "Cannot set pos_damping_ratio for JointController with motor_type=effort!"
             assert vel_kp is None, "Cannot set vel_kp for JointController with motor_type=effort!"
-        self.pos_kp = th.tensor(pos_kp, device=og.sim.device)
+        self.pos_kp = th.tensor(pos_kp, device=og.sim.device) if pos_kp is not None else None
         self.pos_kd = (
             None
             if pos_kp is None or pos_damping_ratio is None
             else th.tensor(2 * math.sqrt(pos_kp) * pos_damping_ratio, device=og.sim.device)
         )
-        self.vel_kp = th.tensor(vel_kp, device=og.sim.device)
+        self.vel_kp = th.tensor(vel_kp, device=og.sim.device) if vel_kp is not None else None
         self._use_impedances = use_impedances
         self._use_gravity_compensation = use_gravity_compensation
         self._use_cc_compensation = use_cc_compensation

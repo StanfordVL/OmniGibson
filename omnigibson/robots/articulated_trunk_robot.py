@@ -51,7 +51,7 @@ class ArticulatedTrunkRobot(ManipulationRobot):
         Returns:
             n-array: Indices in low-level control vector corresponding to trunk joints.
         """
-        return th.tensor([list(self.joints.keys()).index(name) for name in self.trunk_joint_names])
+        return [list(self.joints.keys()).index(name) for name in self.trunk_joint_names]
 
     @property
     def trunk_action_idx(self):

@@ -224,7 +224,7 @@ class LocomotionRobot(BaseRobot):
         Returns:
             n-array: Indices in low-level control vector corresponding to base joints.
         """
-        return th.tensor([list(self.joints.keys()).index(name) for name in self.base_joint_names])
+        return [list(self.joints.keys()).index(name) for name in self.base_joint_names]
 
     @classproperty
     def _do_not_register_classes(cls):
