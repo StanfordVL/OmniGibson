@@ -1,5 +1,6 @@
 import hashlib
 import os
+import re
 import random
 import sys
 import glob
@@ -33,6 +34,8 @@ gm.DATASET_PATH = r"D:\fillable-10-21"
 ORIENTATION_EDITS_FILE = "orientation_edits.zip"
 
 BATCH_SIZE = 100
+
+META_PATTERN = re.compile('(particlesink|lights|particlesource|togglebutton|heatsource|attachment)_.*_.*_link')
 
 def get_orientation_edits():
     orientation_edits = {}
@@ -86,7 +89,11 @@ def view_object(cat, mdl):
     fillable.set_position([0, 0, fillable.aabb_extent[2]])
     og.sim.step()
 
-    points_world = [link.visual_boundary_points_world for link in fillable._links.values()]
+    points_world = [
+        link.visual_boundary_points_world
+        for link in fillable._links.values()
+        if not META_PATTERN.fullmatch(link.prim_path.split("/")[-1])
+    ]
     all_points = th.cat([p for p in points_world if p is not None], dim=0)
     aabb_lo = th.min(all_points, dim=0).values
     aabb_hi = th.max(all_points, dim=0).values
