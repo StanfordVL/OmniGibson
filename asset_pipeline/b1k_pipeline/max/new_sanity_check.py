@@ -884,7 +884,7 @@ class SanityCheck:
             )
 
         # If this is the zeroth instance, check the object's meta links set
-        if instance_id == "0":
+        if instance_id == "0" and not group["name_bad"].iloc[0]:
             try:
                 # First validate that if the object requires joints, it has them
                 renamed_category = self.maybe_rename_category(category, model_id)
