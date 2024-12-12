@@ -421,7 +421,7 @@ class Synset(Model):
             return None
 
         # Find the synset that has this as a child
-        parent_candidates = [s for s in Synset.all_objects() if self in s.children]
+        parent_candidates = [s for s in Synset.all_objects() if self in s.derivative_children]
         assert len(parent_candidates) == 1, f"Expected 1 parent, got {parent_candidates}"
         return parent_candidates[0]
 
