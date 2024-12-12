@@ -265,6 +265,7 @@ def main():
             pivot_to_centroid,
         )
 
+    # Find meta links
     for obj, _, parent in max_tree:
         if not parent:
             continue
@@ -279,6 +280,16 @@ def main():
         )
         meta_type = obj_match.group("meta_type")
         meta_links[parent_id].add(meta_type)
+
+    # Find joints
+    for obj, _, _ in max_tree:
+        obj_match = b1k_pipeline.utils.parse_name(obj)
+        if not obj_match:
+            continue
+        if obj_match.group("joint_type") not in ["R", "P"]:
+            continue
+        parent_id = obj_match.group("category") + "-" + obj_match.group("model_id")
+        meta_links[parent_id].add("joint")
 
     meta_links = {k: sorted(v) for k, v in sorted(meta_links.items())}
 
