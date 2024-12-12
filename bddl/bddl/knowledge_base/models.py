@@ -420,36 +420,10 @@ class Synset(Model):
         if not self.is_derivative:
             return None
 
-        # Get the parent name
-        parent_name = self.name.split(".n.")[0].split("__", 1)[-1]
-        if self.name.startswith("diced__"):
-            parent_name = "half__" + parent_name
-
-        # Otherwise make a set of candidates
-        parent_should_be_substance = self.name.startswith("cooked__")
-        parent_should_have_properties = set()
-
-        if self.name.startswith("diced__"):
-            parent_should_have_properties.add("diceable")
-        elif self.name.startswith("half__"):
-            parent_should_have_properties.add("sliceable")
-        elif self.name.startswith("cooked__"):
-            parent_should_have_properties.add("cookable")
-
-        parent_candidates = [
-            s
-            for s in Synset.all_objects()
-            if (s.state == STATE_SUBSTANCE) == parent_should_be_substance
-            and s.name.split(".n.")[0] == parent_name
-            and len(parent_should_have_properties - s.property_names) == 0
-        ]
-
-        assert (
-            len(parent_candidates) <= 1
-        ), f"Multiple candidates for parent of {self.name}: {parent_candidates}"
-
-        # Return the parent if it exists
-        return parent_candidates[0] if parent_candidates else None
+        # Find the synset that has this as a child
+        parent_candidates = [s for s in Synset.all_objects() if self in s.children]
+        assert len(parent_candidates) == 1, f"Expected 1 parent, got {parent_candidates}"
+        return parent_candidates[0]
 
     @cached_property
     def derivative_root(self):
@@ -460,8 +434,27 @@ class Synset(Model):
         return parent_root if parent_root else self.derivative_parent
 
     @cached_property
+    def derivative_children_names(self):
+        sliceable_children = [
+            Synset.get(json.loads(p.parameters)["sliceable_derivative_synset"])
+            for p in self.properties
+            if p.name == "sliceable"
+        ]
+        diceable_children = [
+            Synset.get(json.loads(p.parameters)["uncooked_diceable_derivative_synset"])
+            for p in self.properties
+            if p.name == "diceable"
+        ]
+        cookable_children = [
+            Synset.get(json.loads(p.parameters)["substance_cooking_derivative_synset"])
+            for p in self.properties
+            if p.name == "cookable" and self.state == STATE_SUBSTANCE
+        ]
+        return set(sliceable_children + diceable_children + cookable_children)
+
+    @cached_property
     def derivative_children(self):
-        return {s for s in Synset.all_objects() if s.derivative_parent == self}
+        return {Synset.get(name) for name in self.derivative_children_names}
 
     @cached_property
     def derivative_ancestors(self):
@@ -535,40 +528,10 @@ class Synset(Model):
     @classmethod
     def view_missing_derivative(cls):
         """Synsets that are missing a derivative synset that is expected to exist from property annotations"""
-        sliceables = [
-            s
-            for s in cls.all_objects()
-            if "sliceable" in s.property_names
-        ]
-        missing_half = [
-            s
-            for s in sliceables
-            if not any(c.name.startswith("half__") for c in s.derivative_children)
-        ]
-
-        diceables = [
-            s
-            for s in cls.all_objects()
-            if "diceable" in s.property_names
-        ]
-        missing_diced = [
-            s
-            for s in diceables
-            if not any(c.name.startswith("diced__") for c in s.derivative_children)
-        ]
-
-        cookable_substances = [
-            s
-            for s in cls.all_objects()
-            if "cookable" in s.property_names and s.state == STATE_SUBSTANCE
-        ]
-        missing_cooked = [
-            s
-            for s in cookable_substances
-            if not any(c.name.startswith("cooked__") for c in s.derivative_children)
-        ]
-
-        return sorted(missing_half + missing_diced + missing_cooked)
+        return sorted([
+            s for s in cls.all_objects()
+            if len(s.derivative_children_names) != len(s.derivative_children)
+        ])
 
 
 @dataclass(eq=False, order=False)
