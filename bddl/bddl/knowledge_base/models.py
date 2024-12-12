@@ -429,7 +429,9 @@ class Synset(Model):
         parent_should_be_substance = self.name.startswith("cooked__")
         parent_should_have_properties = set()
 
-        if self.name.startswith("diced__") or self.name.startswith("half__"):
+        if self.name.startswith("diced__"):
+            parent_should_have_properties.add("diceable")
+        elif self.name.startswith("half__"):
             parent_should_have_properties.add("sliceable")
         elif self.name.startswith("cooked__"):
             parent_should_have_properties.add("cookable")
@@ -533,21 +535,26 @@ class Synset(Model):
     @classmethod
     def view_missing_derivative(cls):
         """Synsets that are missing a derivative synset that is expected to exist from property annotations"""
-        # TODO: reimplement using new derivative fields
         sliceables = [
             s
             for s in cls.all_objects()
-            if "sliceable" in s.property_names and s.state != STATE_SUBSTANCE
+            if "sliceable" in s.property_names
         ]
         missing_half = [
             s
             for s in sliceables
-            if not cls.get("half__" + s.name.split(".n.")[0] + ".n.01")
+            if not any(c.name.startswith("half__") for c in s.derivative_children)
+        ]
+
+        diceables = [
+            s
+            for s in cls.all_objects()
+            if "diceable" in s.property_names
         ]
         missing_diced = [
             s
-            for s in sliceables
-            if not cls.get("diced__" + s.name.split(".n.")[0] + ".n.01")
+            for s in diceables
+            if not any(c.name.startswith("diced__") for c in s.derivative_children)
         ]
 
         cookable_substances = [
@@ -556,7 +563,9 @@ class Synset(Model):
             if "cookable" in s.property_names and s.state == STATE_SUBSTANCE
         ]
         missing_cooked = [
-            s for s in cookable_substances if not cls.get("cooked__" + s.name)
+            s
+            for s in cookable_substances
+            if not any(c.name.startswith("cooked__") for c in s.derivative_children)
         ]
 
         return sorted(missing_half + missing_diced + missing_cooked)
