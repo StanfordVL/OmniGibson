@@ -51,6 +51,8 @@ def add_fillable_seed():
             continue
         if candidate_parsed_name.group("joint_side") == "upper":
             continue
+        if candidate_parsed_name.group("light_id"):
+            continue
         link_name = candidate_parsed_name.group("link_name") or "base_link"
 
         # Assert that it has a collision mesh
