@@ -85,7 +85,7 @@ def bounding_box_from_verts(verts):
     return np.min(verts, axis=0), np.max(verts, axis=0)
 
 
-def node_bounding_box_incl_children(node, transform=None, only_canonical=False):
+def node_bounding_box_incl_children(node, transform=None, only_canonical=None):
     if only_canonical:
         parsed_name = parse_name(node.name)
         if not parsed_name:
