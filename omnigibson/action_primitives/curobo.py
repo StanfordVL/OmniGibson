@@ -228,12 +228,14 @@ class CuRoboMotionGenerator:
                 num_trajopt_seeds=4,
                 num_graph_seeds=4,
                 interpolation_dt=0.03,
-                collision_activation_distance=0.05,
+                collision_activation_distance=0.005,
                 self_collision_check=True,
                 maximum_trajectory_dt=None,
                 fixed_iters_trajopt=True,
                 finetune_trajopt_iters=100,
                 finetune_dt_scale=1.05,
+                position_threshold=0.005,
+                rotation_threshold=0.05,
             )
             if motion_cfg_kwargs is not None:
                 motion_kwargs.update(motion_cfg_kwargs)
@@ -597,7 +599,7 @@ class CuRoboMotionGenerator:
                     pitch_scale=1.0,
                     merge_meshes=True,
                     world_objects_pose_offset=lazy.curobo.types.math.Pose.from_list(
-                        [0, 0, 0.01, 1, 0, 0, 0], self._tensor_args
+                        [0, 0, 0, 1, 0, 0, 0], self._tensor_args
                     ),
                 )
 
