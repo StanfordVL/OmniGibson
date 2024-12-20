@@ -20,7 +20,7 @@ from omnigibson.macros import create_module_macros, gm
 from omnigibson.prims.geom_prim import GeomPrim
 from omnigibson.utils.numpy_utils import vtarray_to_torch
 from omnigibson.utils.sim_utils import CsRawData
-from omnigibson.utils.usd_utils import array_to_vtarray, mesh_prim_to_trimesh_mesh, sample_mesh_keypoints
+from omnigibson.utils.usd_utils import PoseAPI, array_to_vtarray, mesh_prim_to_trimesh_mesh, sample_mesh_keypoints
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -75,10 +75,6 @@ class ClothPrim(GeomPrim):
         # run super first
         super()._post_load()
 
-        # Make sure flatcache is not being used -- if so, raise an error, since we lose most of our needed functionality
-        # (such as R/W to specific particle states) when flatcache is enabled
-        assert not gm.ENABLE_FLATCACHE, "Cannot use flatcache with ClothPrim!"
-
         self._mass_api = (
             lazy.pxr.UsdPhysics.MassAPI(self._prim)
             if self._prim.HasAPI(lazy.pxr.UsdPhysics.MassAPI)
@@ -93,8 +89,22 @@ class ClothPrim(GeomPrim):
         self.cloth_system.clothify_mesh_prim(mesh_prim=self._prim, remesh=self._load_config.get("remesh", True))
 
         # Track generated particle count
+        self._n_particles = len(self.get_attribute(attr="points"))
+
+        # Import warp and create the kernel to get the particle poses
+        wp = lazy.warp
+
+        @wp.kernel
+        def get_particle_poses(
+            in_points: wp.indexedfabricarrayarray(dtype=wp.vec3f), out_points: wp.array(dtype=wp.vec3f)
+        ):
+            for item in range(self._n_particles):
+                out_points[item] = in_points[0, item]
+
+        self.get_particle_poses_kernel = get_particle_poses
+
+        # Get particle positions
         positions = self.compute_particle_positions()
-        self._n_particles = len(positions)
 
         # Sample mesh keypoints / keyvalues and sanity check the AABB of these subsampled points vs. the actual points
         success = False
@@ -180,14 +190,47 @@ class ClothPrim(GeomPrim):
             th.tensor: (N, 3) numpy array, where each of the N particles' positions are expressed in (x,y,z)
                 cartesian coordinates relative to the world frame
         """
-        pos, ori = self.get_position_orientation()
-        ori = T.quat2mat(ori)
-        scale = self.scale
+        world_pose_w_scale = PoseAPI.get_world_pose_with_scale(self.prim_path)
 
-        # Don't copy to save compute, since we won't be returning a reference to the underlying object anyways
-        p_local = vtarray_to_torch(self.get_attribute(attr="points"))
+        # Get all the cloth prims in the Fabric stage
+        stage = lazy.omni.isaac.core.utils.stage.get_current_stage(fabric=True)
+        selection = stage.SelectPrims(
+            require_attrs=[
+                (
+                    lazy.usdrt.Sdf.ValueTypeNames.Point3fArray,
+                    lazy.usdrt.UsdGeom.Tokens.points,
+                    lazy.usdrt.Usd.Access.Read,
+                )
+            ],
+            require_prim_type="Mesh",
+            require_applied_schemas=["PhysxParticleClothAPI"],
+            device="cpu",
+        )
+
+        # Find the index of some particular prim
+        paths = stage.GetPrimsWithTypeAndAppliedAPIName("Mesh", ["PhysxParticleClothAPI"])
+        assert selection.GetCount() == len(paths), "Mismatch in number of cloth prims found!"
+        this_prim_idx_in_selection = None
+        for i, meshPath in enumerate(paths):
+            if str(meshPath) == self.prim_path:
+                this_prim_idx_in_selection = i
+                break
+        assert this_prim_idx_in_selection is not None, f"Could not find cloth prim at path {self.prim_path}!"
+
+        # Launch the kernel on the indexed selection
+        # TODO: Consider parallelizing on GPU
+        idxes = th.tensor([this_prim_idx_in_selection], dtype=th.int32, device="cpu")
+        fabric_points = lazy.warp.fabricarray(selection.__fabric_arrays_interface__, "points")[idxes]
+        copied_points = lazy.warp.zeros(self.n_particles, dtype=lazy.warp.vec3f, device="cpu")
+        lazy.warp.launch(
+            self.get_particle_poses_kernel, dim=1, inputs=[fabric_points, copied_points, self.n_particles], device="cpu"
+        )
+        p_local = copied_points.numpy()
+
+        # TODO: Consider passing the particle indices directly to the kernel
         p_local = p_local[idxs] if idxs is not None else p_local
-        p_world = (ori @ (p_local * scale).T).T + pos
+        p_local_homogeneous = th.cat((p_local, th.ones((p_local.shape[0], 1))), dim=1)
+        p_world = (p_local_homogeneous @ world_pose_w_scale.T)[:, :3]
 
         return p_world
 
