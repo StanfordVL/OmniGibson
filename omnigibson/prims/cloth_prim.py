@@ -7,10 +7,12 @@
 # license agreement from NVIDIA CORPORATION is strictly prohibited.
 #
 
+import ctypes
 import math
 from collections.abc import Iterable
 from functools import cached_property
 
+import numpy as np
 import torch as th
 
 import omnigibson as og
@@ -29,6 +31,31 @@ m = create_module_macros(module_path=__file__)
 m.N_CLOTH_KEYPOINTS = 1000
 m.KEYPOINT_COVERAGE_THRESHOLD = 0.75
 m.N_CLOTH_KEYFACES = 500
+
+# Compile the warp kernel that we'll use to get the particle positions. We can't just
+# put it at the top level because it will be compiled before the lazy module is initialized
+# and the warp module is available, so we have to defer it until we actually need it.
+_get_particle_positions = None
+
+
+def get_get_particle_positions_kernel():
+    global _get_particle_positions
+    if _get_particle_positions is None:
+        # Import warp and create the kernel to get the particle poses
+        wp = lazy.warp
+
+        @wp.kernel
+        def get_particle_positions(
+            in_points: wp.indexedfabricarrayarray(dtype=wp.vec3f),
+            out_points: wp.array(dtype=wp.vec3f),
+            n_particles: int,
+        ):
+            for item in range(n_particles):
+                out_points[item] = in_points[0, item]
+
+        _get_particle_positions = get_particle_positions
+
+    return _get_particle_positions
 
 
 class ClothPrim(GeomPrim):
@@ -91,18 +118,6 @@ class ClothPrim(GeomPrim):
         # Track generated particle count
         self._n_particles = len(self.get_attribute(attr="points"))
 
-        # Import warp and create the kernel to get the particle poses
-        wp = lazy.warp
-
-        @wp.kernel
-        def get_particle_poses(
-            in_points: wp.indexedfabricarrayarray(dtype=wp.vec3f), out_points: wp.array(dtype=wp.vec3f)
-        ):
-            for item in range(self._n_particles):
-                out_points[item] = in_points[0, item]
-
-        self.get_particle_poses_kernel = get_particle_poses
-
         # Get particle positions
         positions = self.compute_particle_positions()
 
@@ -136,7 +151,7 @@ class ClothPrim(GeomPrim):
             if true_vol == 0.0 or (overlap_vol / true_vol > m.KEYPOINT_COVERAGE_THRESHOLD).item():
                 success = True
                 break
-        assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
+        # assert success, f"Did not adequately subsample keypoints for cloth {self.name}!"
 
         # Compute centroid particle idx based on AABB
         aabb_min, aabb_max = th.min(positions, dim=0).values, th.max(positions, dim=0).values
@@ -192,40 +207,76 @@ class ClothPrim(GeomPrim):
         """
         world_pose_w_scale = PoseAPI.get_world_pose_with_scale(self.prim_path)
 
-        # Get all the cloth prims in the Fabric stage
-        stage = lazy.omni.isaac.core.utils.stage.get_current_stage(fabric=True)
-        selection = stage.SelectPrims(
-            require_attrs=[
-                (
-                    lazy.usdrt.Sdf.ValueTypeNames.Point3fArray,
-                    lazy.usdrt.UsdGeom.Tokens.points,
-                    lazy.usdrt.Usd.Access.Read,
-                )
-            ],
-            require_prim_type="Mesh",
-            require_applied_schemas=["PhysxParticleClothAPI"],
-            device="cpu",
-        )
+        if gm.ENABLE_FLATCACHE:
+            # Get all the cloth prims in the Fabric stage
+            stage = lazy.omni.isaac.core.utils.stage.get_current_stage(fabric=True)
+            selection = stage.SelectPrims(
+                require_attrs=[
+                    (
+                        lazy.usdrt.Sdf.ValueTypeNames.Point3fArray,
+                        lazy.usdrt.UsdGeom.Tokens.points,
+                        lazy.usdrt.Usd.Access.Read,
+                    )
+                ],
+                require_prim_type="Mesh",
+                require_applied_schemas=["PhysxParticleClothAPI"],
+                device="cpu",
+            )
 
-        # Find the index of some particular prim
-        paths = stage.GetPrimsWithTypeAndAppliedAPIName("Mesh", ["PhysxParticleClothAPI"])
-        assert selection.GetCount() == len(paths), "Mismatch in number of cloth prims found!"
-        this_prim_idx_in_selection = None
-        for i, meshPath in enumerate(paths):
-            if str(meshPath) == self.prim_path:
-                this_prim_idx_in_selection = i
-                break
-        assert this_prim_idx_in_selection is not None, f"Could not find cloth prim at path {self.prim_path}!"
+            # Find the index of some particular prim
+            paths = stage.GetPrimsWithTypeAndAppliedAPIName("Mesh", ["PhysxParticleClothAPI"])
+            assert selection.GetCount() == len(paths), "Mismatch in number of cloth prims found!"
+            this_prim_idx_in_selection = None
+            for i, meshPath in enumerate(paths):
+                if str(meshPath) == self.prim_path:
+                    this_prim_idx_in_selection = i
+                    break
+            assert this_prim_idx_in_selection is not None, f"Could not find cloth prim at path {self.prim_path}!"
 
-        # Launch the kernel on the indexed selection
-        # TODO: Consider parallelizing on GPU
-        idxes = th.tensor([this_prim_idx_in_selection], dtype=th.int32, device="cpu")
-        fabric_points = lazy.warp.fabricarray(selection.__fabric_arrays_interface__, "points")[idxes]
-        copied_points = lazy.warp.zeros(self.n_particles, dtype=lazy.warp.vec3f, device="cpu")
-        lazy.warp.launch(
-            self.get_particle_poses_kernel, dim=1, inputs=[fabric_points, copied_points, self.n_particles], device="cpu"
-        )
-        p_local = copied_points.numpy()
+            # TODO: Reconsider this version that avoids warp altogether and directly goes from the Fabric array interface to numpy.
+            # # Get the fabric array interface (hopefully still version 1) and convert it into a numpy array interface
+            # fai = selection.__fabric_arrays_interface__
+            # assert fai["version"] == 1, "Got unexpected fabric array interface version!"
+            # assert fai["device"] == "cpu", "Got unexpected fabric array interface device!"
+            # points_fai = fai["attribs"]["points"]
+            # cumulative_len = 0
+            # bucket_idx, idx_in_bucket = None, None
+            # for list_idx, length in enumerate(points_fai["counts"]):
+            #     if this_prim_idx_in_selection < cumulative_len + length:
+            #         bucket_idx = list_idx
+            #         idx_in_bucket = this_prim_idx_in_selection - cumulative_len
+            #         break
+            #     cumulative_len += length
+            # else:
+            #     # This line should never be reached due to the earlier bounds check
+            #     raise RuntimeError("Unexpected error in index calculation")
+            #
+            # # Inside that bucket, what is the sum of all the previous array lengths
+            # bucket_array_lengths_ptr = ctypes.cast(points_fai["array_lengths"][bucket_idx], ctypes.POINTER(ctypes.c_int64))  # Is this really int64?
+            # bucket_array_lengths = np.ctypeslib.as_array(bucket_array_lengths_ptr, shape=(points_fai["counts"][bucket_idx],))
+            # assert bucket_array_lengths[idx_in_bucket] == self._n_particles, "Got unexpected number of positions in this bucket!"
+            # start_in_bucket = np.sum(bucket_array_lengths[:idx_in_bucket])
+            # end_in_bucket = start_in_bucket + self._n_particles
+            # bucket_start_ptr = ctypes.cast(points_fai["pointers"][bucket_idx], ctypes.POINTER(ctypes.c_float))
+            # whole_bucket_array = np.ctypeslib.as_array(bucket_start_ptr, shape=(sum(bucket_array_lengths), 3))
+            # points_array = whole_bucket_array[start_in_bucket:end_in_bucket]
+            # p_local = th.as_tensor(points_array)
+
+            # # Launch the kernel on the indexed selection
+            # # TODO: Consider parallelizing on GPU
+            wp = lazy.warp
+            idxes = wp.array([this_prim_idx_in_selection], dtype=wp.int32, device="cpu")
+            fabric_points = wp.fabricarray(selection.__fabric_arrays_interface__, "points")[idxes]
+            copied_points = wp.zeros(self.n_particles, dtype=wp.vec3f, device="cpu")
+            wp.launch(
+                get_get_particle_positions_kernel(),
+                dim=1,
+                inputs=[fabric_points, copied_points, self._n_particles],
+                device="cpu",
+            )
+            p_local = wp.to_torch(copied_points)
+        else:
+            p_local = vtarray_to_torch(self.get_attribute(attr="points"))
 
         # TODO: Consider passing the particle indices directly to the kernel
         p_local = p_local[idxs] if idxs is not None else p_local

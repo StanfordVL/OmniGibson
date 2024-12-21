@@ -1662,18 +1662,7 @@ class Cloth(MicroParticleSystem):
                 @mesh_prim's scale
         """
         has_uv_mapping = mesh_prim.GetAttribute("primvars:st").Get() is not None
-        if not remesh:
-            # We always load into trimesh to remove redundant particles (since natively omni redundantly represents
-            # the number of vertices as 6x the total unique number of vertices)
-            tm = mesh_prim_to_trimesh_mesh(
-                mesh_prim=mesh_prim, include_normals=True, include_texcoord=True, world_frame=False
-            )
-            texcoord = (
-                vtarray_to_torch(mesh_prim.GetAttribute("primvars:st").Get(), dtype=th.float32)
-                if has_uv_mapping
-                else None
-            )
-        else:
+        if remesh:
             # We will remesh in pymeshlab, but it doesn't allow programmatic construction of a mesh with texcoords so
             # we convert our mesh into a trimesh mesh, then export it to a temp file, then load it into pymeshlab
             scaled_world_transform = PoseAPI.get_world_pose_with_scale(mesh_prim.GetPath().pathString)
@@ -1749,14 +1738,14 @@ class Cloth(MicroParticleSystem):
             # Apply the inverse of the world transform to get the mesh back into its local frame
             tm.apply_transform(th.linalg.inv_ex(scaled_world_transform).inverse)
 
-        # Update the mesh prim
-        face_vertex_counts = th.tensor([len(face) for face in tm.faces], dtype=int).cpu().numpy()
-        mesh_prim.GetAttribute("faceVertexCounts").Set(face_vertex_counts)
-        mesh_prim.GetAttribute("points").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertices))
-        mesh_prim.GetAttribute("faceVertexIndices").Set(tm.faces.flatten())
-        mesh_prim.GetAttribute("normals").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertex_normals))
-        if has_uv_mapping:
-            mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(texcoord))
+            # Update the mesh prim
+            face_vertex_counts = th.tensor([len(face) for face in tm.faces], dtype=int).cpu().numpy()
+            mesh_prim.GetAttribute("faceVertexCounts").Set(face_vertex_counts)
+            mesh_prim.GetAttribute("points").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertices))
+            mesh_prim.GetAttribute("faceVertexIndices").Set(tm.faces.flatten())
+            mesh_prim.GetAttribute("normals").Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(tm.vertex_normals))
+            if has_uv_mapping:
+                mesh_prim.GetAttribute("primvars:st").Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(texcoord))
 
         # Convert into particle cloth
         lazy.omni.physx.scripts.particleUtils.add_physx_particle_cloth(
