@@ -4,6 +4,7 @@ Example script demo'ing robot control.
 Options for random actions, as well as selection of robot action space
 """
 
+from argparse import Namespace
 import torch as th
 
 import omnigibson as og
@@ -62,7 +63,8 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     Robot control demo with selection
     Queries the user to select a robot, the controllers, a scene and a type of input (random actions or teleop)
     """
-    og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
+    # og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
+    og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + (main.__doc__ or "") + "*" * 80)
 
     # Choose scene to load
     scene_model = "Rs_int"
@@ -176,5 +178,5 @@ if __name__ == "__main__":
         action="store_true",
         help="Whether the example should be loaded with default settings for a quick start.",
     )
-    args = parser.parse_args()
+    args: Namespace = parser.parse_args()
     main(quickstart=args.quickstart)
