@@ -45,27 +45,31 @@ def main():
 
     # breakfast table
     # Import task relevant objects
-    breakfast_table = DatasetObject(name="breakfast_table", category="breakfast_table", model="dcdtsr", scale=th.tensor([.4, .4, .8]))
+    breakfast_table = DatasetObject(
+        name="breakfast_table", category="breakfast_table", model="dcdtsr", scale=th.tensor([0.4, 0.4, 0.8])
+    )
     objs_to_add = [breakfast_table]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    breakfast_table.set_position_orientation([.6, 0.0, 0.6], T.euler2quat(th.tensor([0, 0, 0])))
+    breakfast_table.set_position_orientation([0.6, 0.0, 0.6], T.euler2quat(th.tensor([0, 0, 0])))
 
     # Assign to object scope
-    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(bddl_inst="breakfast_table.n.01_1", entity=breakfast_table)
+    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(
+        bddl_inst="breakfast_table.n.01_1", entity=breakfast_table
+    )
 
-    pot_1_position = [.60, -0.0, 0.9]
-    notebook_1_position = [.6, 0.0, 1.1]
+    pot_1_position = [0.60, -0.0, 0.9]
+    notebook_1_position = [0.6, 0.0, 1.1]
 
     # coffee cup
     # Import task relevant objects
-    notebook = DatasetObject(name="notebook", category="notebook", model="aanuhi", scale=th.tensor([2., 2.0, 2.0]))
+    notebook = DatasetObject(name="notebook", category="notebook", model="aanuhi", scale=th.tensor([2.0, 2.0, 2.0]))
     objs_to_add = [notebook]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    notebook.set_position_orientation(notebook_1_position, T.euler2quat(th.tensor([0, np.pi*0.5, np.pi ])))
+    notebook.set_position_orientation(notebook_1_position, T.euler2quat(th.tensor([0, np.pi * 0.5, np.pi])))
     # pdb.set_trace()
     # notebook.links['base_link'].density = 100
     # pdb.set_trace()
@@ -84,7 +88,6 @@ def main():
 
     # # Assign to object scope
     # env.task.object_scope["crock_pot.n.01_1"] = BDDLEntity(bddl_inst="crock_pot.n.01_1", entity=crock_pot)
-
 
     # END OF MODIFYING THE CODE
     ############################

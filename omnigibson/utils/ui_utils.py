@@ -6,6 +6,7 @@ import contextlib
 import datetime
 import logging
 import math
+import pdb
 import random
 import sys
 from pathlib import Path
@@ -23,7 +24,6 @@ import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
 from omnigibson.macros import gm
 
-import pdb
 
 def print_icon():
     raw_texts = [
@@ -962,6 +962,7 @@ class KeyboardRobotController:
         print("*" * 30)
         print()
 
+
 class BimanualKeyboardRobotController:
     """
     Simple class for controlling OmniGibson robots using keyboard commands
@@ -1022,7 +1023,7 @@ class BimanualKeyboardRobotController:
         # Register the keyboard callback function
         self.register_keyboard_handler_bimanual()
 
-    # functions for bimanual 
+    # functions for bimanual
     def register_keyboard_handler_bimanual(self):
         # need to register the keyboard handler for controlling two arms simultaneously
         """
@@ -1055,7 +1056,6 @@ class BimanualKeyboardRobotController:
 
         for component, info in self.controller_info.items():
             print(f"Component: {component}, Info: {info}")
-        
 
         # Iterate over all controller info and populate mapping
         for component, info in self.controller_info.items():
@@ -1097,7 +1097,7 @@ class BimanualKeyboardRobotController:
                 self.keypress_mapping[lazy.carb.input.KeyboardInput.T] = {"idx": None, "val": None}
             else:
                 raise ValueError("Unknown controller name received: {}".format(info["name"]))
-    
+
     def generate_ik_keypress_mapping_left(self, controller_info):
         """
         for left arm IK control
@@ -1112,18 +1112,39 @@ class BimanualKeyboardRobotController:
         """
         mapping = {}
 
-        mapping[lazy.carb.input.KeyboardInput.W] = {"idx": controller_info["start_idx"] + 0, "val": 0.5} # positive x
-        mapping[lazy.carb.input.KeyboardInput.S] = {"idx": controller_info["start_idx"] + 0, "val": -0.5} # negative x
-        mapping[lazy.carb.input.KeyboardInput.D] = {"idx": controller_info["start_idx"] + 1, "val": -0.5} # negative y
-        mapping[lazy.carb.input.KeyboardInput.A] = {"idx": controller_info["start_idx"] + 1, "val": 0.5} # positive y
-        mapping[lazy.carb.input.KeyboardInput.KEY_4] = {"idx": controller_info["start_idx"] + 2, "val": 0.5} # positive z
-        mapping[lazy.carb.input.KeyboardInput.R] = {"idx": controller_info["start_idx"] + 2, "val": -0.5} # negative z
-        mapping[lazy.carb.input.KeyboardInput.Q] = {"idx": controller_info["start_idx"] + 3, "val": 0.5} # positive rotate about x 
-        mapping[lazy.carb.input.KeyboardInput.E] = {"idx": controller_info["start_idx"] + 3, "val": -0.5} # negative rotate about x 
-        mapping[lazy.carb.input.KeyboardInput.Z] = {"idx": controller_info["start_idx"] + 4, "val": 0.5} # positive rotate about y
-        mapping[lazy.carb.input.KeyboardInput.X] = {"idx": controller_info["start_idx"] + 4, "val": -0.5} # negative rotate about y
-        mapping[lazy.carb.input.KeyboardInput.C] = {"idx": controller_info["start_idx"] + 5, "val": 0.5} # positive rotate about z
-        mapping[lazy.carb.input.KeyboardInput.V] = {"idx": controller_info["start_idx"] + 5, "val": -0.5} # negative rotate about z
+        mapping[lazy.carb.input.KeyboardInput.W] = {"idx": controller_info["start_idx"] + 0, "val": 0.5}  # positive x
+        mapping[lazy.carb.input.KeyboardInput.S] = {"idx": controller_info["start_idx"] + 0, "val": -0.5}  # negative x
+        mapping[lazy.carb.input.KeyboardInput.D] = {"idx": controller_info["start_idx"] + 1, "val": -0.5}  # negative y
+        mapping[lazy.carb.input.KeyboardInput.A] = {"idx": controller_info["start_idx"] + 1, "val": 0.5}  # positive y
+        mapping[lazy.carb.input.KeyboardInput.KEY_4] = {
+            "idx": controller_info["start_idx"] + 2,
+            "val": 0.5,
+        }  # positive z
+        mapping[lazy.carb.input.KeyboardInput.R] = {"idx": controller_info["start_idx"] + 2, "val": -0.5}  # negative z
+        mapping[lazy.carb.input.KeyboardInput.Q] = {
+            "idx": controller_info["start_idx"] + 3,
+            "val": 0.5,
+        }  # positive rotate about x
+        mapping[lazy.carb.input.KeyboardInput.E] = {
+            "idx": controller_info["start_idx"] + 3,
+            "val": -0.5,
+        }  # negative rotate about x
+        mapping[lazy.carb.input.KeyboardInput.Z] = {
+            "idx": controller_info["start_idx"] + 4,
+            "val": 0.5,
+        }  # positive rotate about y
+        mapping[lazy.carb.input.KeyboardInput.X] = {
+            "idx": controller_info["start_idx"] + 4,
+            "val": -0.5,
+        }  # negative rotate about y
+        mapping[lazy.carb.input.KeyboardInput.C] = {
+            "idx": controller_info["start_idx"] + 5,
+            "val": 0.5,
+        }  # positive rotate about z
+        mapping[lazy.carb.input.KeyboardInput.V] = {
+            "idx": controller_info["start_idx"] + 5,
+            "val": -0.5,
+        }  # negative rotate about z
 
         return mapping
 
@@ -1141,18 +1162,39 @@ class BimanualKeyboardRobotController:
         """
         mapping = {}
 
-        mapping[lazy.carb.input.KeyboardInput.I] = {"idx": controller_info["start_idx"] + 0, "val": 0.5} # positive x
-        mapping[lazy.carb.input.KeyboardInput.K] = {"idx": controller_info["start_idx"] + 0, "val": -0.5} # negative x
-        mapping[lazy.carb.input.KeyboardInput.L] = {"idx": controller_info["start_idx"] + 1, "val": -0.5} # negative y
-        mapping[lazy.carb.input.KeyboardInput.J] = {"idx": controller_info["start_idx"] + 1, "val": 0.5} # positive y
-        mapping[lazy.carb.input.KeyboardInput.P] = {"idx": controller_info["start_idx"] + 2, "val": 0.5} # positive z
-        mapping[lazy.carb.input.KeyboardInput.SEMICOLON] = {"idx": controller_info["start_idx"] + 2, "val": -0.5} # negative z
-        mapping[lazy.carb.input.KeyboardInput.U] = {"idx": controller_info["start_idx"] + 3, "val": 0.5} # positive rotate about x 
-        mapping[lazy.carb.input.KeyboardInput.O] = {"idx": controller_info["start_idx"] + 3, "val": -0.5} # negative rotate about x 
-        mapping[lazy.carb.input.KeyboardInput.N] = {"idx": controller_info["start_idx"] + 4, "val": 0.5} # positive rotate about y
-        mapping[lazy.carb.input.KeyboardInput.B] = {"idx": controller_info["start_idx"] + 4, "val": -0.5} # negative rotate about y
-        mapping[lazy.carb.input.KeyboardInput.COMMA] = {"idx": controller_info["start_idx"] + 5, "val": 0.5} # positive rotate about z
-        mapping[lazy.carb.input.KeyboardInput.PERIOD] = {"idx": controller_info["start_idx"] + 5, "val": -0.5} # negative rotate about z
+        mapping[lazy.carb.input.KeyboardInput.I] = {"idx": controller_info["start_idx"] + 0, "val": 0.5}  # positive x
+        mapping[lazy.carb.input.KeyboardInput.K] = {"idx": controller_info["start_idx"] + 0, "val": -0.5}  # negative x
+        mapping[lazy.carb.input.KeyboardInput.L] = {"idx": controller_info["start_idx"] + 1, "val": -0.5}  # negative y
+        mapping[lazy.carb.input.KeyboardInput.J] = {"idx": controller_info["start_idx"] + 1, "val": 0.5}  # positive y
+        mapping[lazy.carb.input.KeyboardInput.P] = {"idx": controller_info["start_idx"] + 2, "val": 0.5}  # positive z
+        mapping[lazy.carb.input.KeyboardInput.SEMICOLON] = {
+            "idx": controller_info["start_idx"] + 2,
+            "val": -0.5,
+        }  # negative z
+        mapping[lazy.carb.input.KeyboardInput.U] = {
+            "idx": controller_info["start_idx"] + 3,
+            "val": 0.5,
+        }  # positive rotate about x
+        mapping[lazy.carb.input.KeyboardInput.O] = {
+            "idx": controller_info["start_idx"] + 3,
+            "val": -0.5,
+        }  # negative rotate about x
+        mapping[lazy.carb.input.KeyboardInput.N] = {
+            "idx": controller_info["start_idx"] + 4,
+            "val": 0.5,
+        }  # positive rotate about y
+        mapping[lazy.carb.input.KeyboardInput.B] = {
+            "idx": controller_info["start_idx"] + 4,
+            "val": -0.5,
+        }  # negative rotate about y
+        mapping[lazy.carb.input.KeyboardInput.COMMA] = {
+            "idx": controller_info["start_idx"] + 5,
+            "val": 0.5,
+        }  # positive rotate about z
+        mapping[lazy.carb.input.KeyboardInput.PERIOD] = {
+            "idx": controller_info["start_idx"] + 5,
+            "val": -0.5,
+        }  # negative rotate about z
 
         return mapping
 
@@ -1205,7 +1247,7 @@ class BimanualKeyboardRobotController:
         print()
 
     def print_bimanual_action_space(self):
-        
+
         print("Action Space for Bimanual Control")
         print()
 
@@ -1218,7 +1260,9 @@ class BimanualKeyboardRobotController:
         print()
 
         print("arm_left: InverseKinematicsController")
-        print("action index: [5,6,7,8,9,10]; start_idx: 5, dofs: tensor([ 6,  7, 10, 13, 15, 17, 19, 21], dtype=torch.int32), command_dim: 6}")
+        print(
+            "action index: [5,6,7,8,9,10]; start_idx: 5, dofs: tensor([ 6,  7, 10, 13, 15, 17, 19, 21], dtype=torch.int32), command_dim: 6}"
+        )
         print()
 
         print("gripper_left: MultiFingerGripperController")
@@ -1226,7 +1270,9 @@ class BimanualKeyboardRobotController:
         print()
 
         print("arm_right: InverseKinematicsController")
-        print("action index: [12,13,14,15,16,17]; start_idx: 13, dofs: tensor([ 8, 11, 14, 16, 18, 20, 22], dtype=torch.int32), command_dim: 6}")
+        print(
+            "action index: [12,13,14,15,16,17]; start_idx: 13, dofs: tensor([ 8, 11, 14, 16, 18, 20, 22], dtype=torch.int32), command_dim: 6}"
+        )
         print()
 
         print("gripper_right: MultiFingerGripperController")
@@ -1326,7 +1372,10 @@ class BimanualKeyboardRobotController:
                     action[idx] = val
 
         # Possibly set the persistent gripper action
-        if self.keypress_mapping[lazy.carb.input.KeyboardInput.T]["val"] is not None or self.keypress_mapping[lazy.carb.input.KeyboardInput.Y]["val"] is not None:
+        if (
+            self.keypress_mapping[lazy.carb.input.KeyboardInput.T]["val"] is not None
+            or self.keypress_mapping[lazy.carb.input.KeyboardInput.Y]["val"] is not None
+        ):
 
             for i, binary_gripper in enumerate(self.binary_grippers):
                 # Possibly update the stored value if the toggle gripper key has been pressed and
@@ -1341,7 +1390,7 @@ class BimanualKeyboardRobotController:
 
                     # Clear the toggling gripper flag
                     self.toggling_gripper_left = False
-                
+
                 if self.toggling_gripper_right and binary_gripper == "gripper_right":
                     # We toggle the gripper direction or this gripper
                     self.gripper_direction[binary_gripper] *= -1.0
@@ -1365,7 +1414,7 @@ class BimanualKeyboardRobotController:
         sys.stdout.write("\033[F")
 
         # Return action
-        
+
         return action
 
     def register_custom_keymapping(self, key, description, callback_fn):
@@ -1409,7 +1458,6 @@ class BimanualKeyboardRobotController:
         mapping[lazy.carb.input.KeyboardInput.C] = {"idx": controller_info["start_idx"] + 5, "val": -0.5}
 
         return mapping
-
 
 
 def generate_box_edges(center, extents):

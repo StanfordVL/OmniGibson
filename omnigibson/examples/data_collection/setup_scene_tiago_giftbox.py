@@ -45,17 +45,21 @@ def main():
 
     # breakfast table
     # Import task relevant objects
-    breakfast_table = DatasetObject(name="breakfast_table", category="breakfast_table", model="dcdtsr", scale=th.tensor([.8, .8, .8]))
+    breakfast_table = DatasetObject(
+        name="breakfast_table", category="breakfast_table", model="dcdtsr", scale=th.tensor([0.8, 0.8, 0.8])
+    )
     objs_to_add = [breakfast_table]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    breakfast_table.set_position_orientation([.7, 0.0, 0.6], T.euler2quat(th.tensor([0, 0, 0])))
+    breakfast_table.set_position_orientation([0.7, 0.0, 0.6], T.euler2quat(th.tensor([0, 0, 0])))
 
     # Assign to object scope
-    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(bddl_inst="breakfast_table.n.01_1", entity=breakfast_table)
+    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(
+        bddl_inst="breakfast_table.n.01_1", entity=breakfast_table
+    )
 
-    gift_box_1_position = [.65, -0.0, .8]
+    gift_box_1_position = [0.65, -0.0, 0.8]
 
     # giftbox cup
     # Import task relevant objects
@@ -68,7 +72,6 @@ def main():
 
     # Assign to object scope
     env.task.object_scope["gift_box.n.01_1"] = BDDLEntity(bddl_inst="gift_box.n.01_1", entity=gift_box)
-
 
     # END OF MODIFYING THE CODE
     ############################

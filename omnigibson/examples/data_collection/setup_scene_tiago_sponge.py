@@ -46,55 +46,56 @@ def main():
     ############################
     # breakfast table
     # Import task relevant objects
-    breakfast_table = DatasetObject(name="breakfast_table", category="breakfast_table", model="dcdtsr", scale=th.tensor([.8, .8, .8]))
+    breakfast_table = DatasetObject(
+        name="breakfast_table", category="breakfast_table", model="dcdtsr", scale=th.tensor([0.8, 0.8, 0.8])
+    )
     objs_to_add = [breakfast_table]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    breakfast_table.set_position_orientation([.6, 0.0, 0.6], T.euler2quat(th.tensor([0, 0, 0])))
+    breakfast_table.set_position_orientation([0.6, 0.0, 0.6], T.euler2quat(th.tensor([0, 0, 0])))
 
     # Assign to object scope
-    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(bddl_inst="breakfast_table.n.01_1", entity=breakfast_table)
+    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(
+        bddl_inst="breakfast_table.n.01_1", entity=breakfast_table
+    )
 
-    plate_1_position = [.65, 0.3, .7]
-    sponge_1_position = [.6, -0.3, .7]
+    plate_1_position = [0.65, 0.3, 0.7]
+    sponge_1_position = [0.6, -0.3, 0.7]
 
     ############################
     # sponge
     # Import task relevant objects
-    sponge = DatasetObject(name="sponge", category="sponge", model="rixzrk", scale=th.tensor([1., 1.0, 1.0]))
+    sponge = DatasetObject(name="sponge", category="sponge", model="rixzrk", scale=th.tensor([1.0, 1.0, 1.0]))
     objs_to_add = [sponge]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    sponge.set_position_orientation(sponge_1_position, T.euler2quat(th.tensor([0, 0, np.pi*1.5 ])))
+    sponge.set_position_orientation(sponge_1_position, T.euler2quat(th.tensor([0, 0, np.pi * 1.5])))
     pdb.set_trace()
-    sponge.links['base_link'].density = 10
+    sponge.links["base_link"].density = 10
     pdb.set_trace()
 
     # Assign to object scope
     env.task.object_scope["coffee_cup.n.01_1"] = BDDLEntity(bddl_inst="coffee_cup.n.01_1", entity=sponge)
 
-
     ############################
     # dust
     # Import task relevant objects
-    sponge = DatasetObject(name="dust", category="sponge", model="rixzrk", scale=th.tensor([1., 1.0, 1.0]))
+    sponge = DatasetObject(name="dust", category="sponge", model="rixzrk", scale=th.tensor([1.0, 1.0, 1.0]))
     objs_to_add = [sponge]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    sponge.set_position_orientation(sponge_1_position, T.euler2quat(th.tensor([0, 0, np.pi*1.5 ])))
+    sponge.set_position_orientation(sponge_1_position, T.euler2quat(th.tensor([0, 0, np.pi * 1.5])))
     pdb.set_trace()
-    sponge.links['base_link'].density = 10
+    sponge.links["base_link"].density = 10
     pdb.set_trace()
 
     # Assign to object scope
     env.task.object_scope["coffee_cup.n.01_1"] = BDDLEntity(bddl_inst="coffee_cup.n.01_1", entity=sponge)
 
     # trash_can-cjmezk
-
-
 
     ############################
     # Import task relevant objects
@@ -107,7 +108,6 @@ def main():
 
     # Assign to object scope
     env.task.object_scope["plate.n.04_1"] = BDDLEntity(bddl_inst="plate.n.04_1", entity=plate)
-
 
     # END OF MODIFYING THE CODE
     ############################

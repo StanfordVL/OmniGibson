@@ -1,18 +1,18 @@
 import argparse
+import math
 import time
 
+import numpy as np
 import torch as th
 
 import omnigibson as og
 import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
+from omnigibson.macros import gm
 from omnigibson.objects import PrimitiveObject
 from omnigibson.robots import Fetch
 from omnigibson.scenes import Scene
 from omnigibson.utils.control_utils import IKSolver
-import math
-from omnigibson.macros import gm
-import numpy as np
 
 
 def euler_to_quaternion(roll, pitch, yaw):
