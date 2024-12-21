@@ -22,7 +22,7 @@ def main():
     config_filename = os.path.join(og.example_config_path, "tiago_behavior.yaml")
     cfg = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
     cfg["scene"]["load_object_categories"] = ["floors"]
-    cfg["task"]["activity_name"] = "test_tiago_stir"
+    cfg["task"]["activity_name"] = "test_tiago_cook"
     cfg["task"]["online_object_sampling"] = True
     cfg["env"]["flatten_obs_space"] = True
     cfg["env"]["action_frequency"] = 30
