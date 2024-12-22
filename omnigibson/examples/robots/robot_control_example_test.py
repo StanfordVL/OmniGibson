@@ -72,7 +72,7 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
         scene_model = choose_from_options(options=SCENES, name="scene", random_selection=random_selection)
 
     # Choose robot to create
-    robot_name = "Fetch"
+    robot_name = "Turtlebot"  # "Fetch"
     if not quickstart:
         robot_name = choose_from_options(
             options=list(sorted(REGISTERED_ROBOTS.keys())), name="robot", random_selection=random_selection
@@ -94,6 +94,7 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
 
     # Compile config
     cfg = dict(scene=scene_cfg, robots=[robot0_cfg])
+    print(f"cfg: {cfg}")
 
     # Create the environment
     env = og.Environment(configs=cfg)
@@ -102,8 +103,8 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     robot = env.robots[0]
     controller_choices = {
         "base": "DifferentialDriveController",
-        "arm_0": "InverseKinematicsController",
-        "gripper_0": "MultiFingerGripperController",
+        # "arm_0": "InverseKinematicsController",
+        # "gripper_0": "MultiFingerGripperController",
         "camera": "JointController",
     }
     if not quickstart:
