@@ -1,7 +1,5 @@
 import os
-
 import yaml
-
 import omnigibson as og
 from omnigibson.utils.ui_utils import choose_from_options
 
@@ -16,17 +14,9 @@ def main(random_selection=False, headless=False, short_exec=False):
     """
     og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
 
-    print(f"og.example_config_path: {og.example_config_path} \n")
-
     # Load the config
-    config_filename = os.path.join(og.example_config_path, f"turtlebot_nav.yaml")
+    config_filename = os.path.join(og.example_config_path, "turtlebot_multi_nav.yaml")
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
-
-    # Print the config by keys and values (key: value)
-    for key, value in config.items():
-        print("\n")
-        print(f"{key}: {value}")
-    print("\n")
 
     # check if we want to quick load or full load the scene
     load_options = {
@@ -43,14 +33,18 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Allow user to move camera more easily
     og.sim.enable_viewer_camera_teleoperation()
 
+    # Print robot names
+    robots = env.robots
+    og.log.info(f"Loaded robots: {[robot.name for robot in robots]}")
+
     # Run a simple loop and reset periodically
     max_iterations = 10 if not short_exec else 1
     for j in range(max_iterations):
         og.log.info("Resetting environment")
         env.reset()
         for i in range(100):
-            action = env.action_space.sample()
-            state, reward, terminated, truncated, info = env.step(action)
+            actions = {robot.name: robot.action_space.sample() for robot in robots}
+            states, rewards, terminated, truncated, infos = env.step(actions)
             if terminated or truncated:
                 og.log.info("Episode finished after {} timesteps".format(i + 1))
                 break
