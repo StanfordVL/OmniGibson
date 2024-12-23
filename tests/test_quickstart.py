@@ -51,7 +51,7 @@ cfg["objects"] = [
 # Define robots
 cfg["robots"] = [
     {
-        "type": "Fetch",
+        "type": "Turtlebot",  # "Fetch",
         "name": "skynet_robot",
         "obs_modalities": ["scan", "rgb", "depth"],
     },
@@ -74,7 +74,7 @@ og.sim.enable_viewer_camera_teleoperation()
 timestep = 0
 for _ in range(10000):
     obs, rew, terminated, truncated, info = env.step(env.action_space.sample())
-    print(f"Step {timestep}: rew={rew}, terminated={terminated}, truncated={truncated}")
+    # print(f"Step {timestep}: rew={rew}, terminated={terminated}, truncated={truncated}")
     timestep += 1
 
 og.shutdown()
