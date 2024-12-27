@@ -56,14 +56,14 @@ jobs:
         run: printenv
 
       - name: Run tests
-        run: pytest -s tests/${{ matrix.test_file }}.py --junitxml=${{ matrix.test_file }}.xml && cp ${{ matrix.test_file }}.xml ${GITHUB_WORKSPACE}/
+        run: pytest -s --annotate-output=./${{ matrix.test_file }}.json tests/${{ matrix.test_file }}.py --junitxml=${{ matrix.test_file }}.xml && cp ${{ matrix.test_file }}.xml ${GITHUB_WORKSPACE}/ && cp ${{ matrix.test_file }}.json ${GITHUB_WORKSPACE}/
         continue-on-error: true
 
       - name: Deploy artifact
         uses: actions/upload-artifact@v3
         with:
           name: ${{ github.run_id }}-tests-${{ matrix.test_file }}
-          path: ${{ matrix.test_file }}.xml
+          path: ${{ matrix.test_file }}.*
 
       - name: Check for failures, errors, or missing XML
         run: |

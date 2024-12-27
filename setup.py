@@ -57,6 +57,7 @@ setup(
             "pytest>=6.2.3",
             "pytest-cov>=3.0.0",
             "pytest_rerunfailures",
+            "pytest-annotate",
             "mkdocs",
             "mkdocs-autorefs",
             "mkdocs-gen-files",
