@@ -12,7 +12,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     It steps the environment 100 times with random actions sampled from the action space,
     using the Gym interface, resetting it 10 times.
     """
-    og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
+    og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + (main.__doc__ or "") + "*" * 80)
 
     # Load the config
     config_filename = os.path.join(og.example_config_path, "turtlebot_multi_nav.yaml")
@@ -21,7 +21,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # check if we want to quick load or full load the scene
     load_options = {
         "Quick": "Only load the building assets (i.e.: the floors, walls, ceilings)",
-        "Full": "Load all interactive objects in the scene",
+        # "Full": "Load all interactive objects in the scene",
     }
     load_mode = choose_from_options(options=load_options, name="load mode", random_selection=random_selection)
     if load_mode == "Quick":
@@ -31,7 +31,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     env = og.Environment(configs=config)
 
     # Allow user to move camera more easily
-    og.sim.enable_viewer_camera_teleoperation()
+    # og.sim.enable_viewer_camera_teleoperation()
 
     # Print robot names
     robots = env.robots
@@ -44,7 +44,9 @@ def main(random_selection=False, headless=False, short_exec=False):
         env.reset()
         for i in range(100):
             actions = {robot.name: robot.action_space.sample() for robot in robots}
+
             states, rewards, terminated, truncated, infos = env.step(actions)
+
             if terminated or truncated:
                 og.log.info("Episode finished after {} timesteps".format(i + 1))
                 break

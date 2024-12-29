@@ -57,7 +57,29 @@ robots:
     self_collision: false
     action_normalize: true
     action_type: continuous
-    initial_pos: [1.0, 0.0, 0.0]
+    initial_pos: [5.0, 0.0, 0.0]
+    initial_quat: [0.0, 0.0, 0.0, 1.0]
+    sensor_config:
+      VisionSensor:
+        sensor_kwargs:
+          image_height: 128
+          image_width: 128
+      ScanSensor:
+        sensor_kwargs:
+          min_range: 0.05
+          max_range: 10.0
+    controller_config:
+      base:
+        name: DifferentialDriveController
+
+  - name: turtlebot3
+    type: Turtlebot
+    obs_modalities: [scan, rgb, depth]
+    scale: 1.0
+    self_collision: false
+    action_normalize: true
+    action_type: continuous
+    initial_pos: [5.0, 5.0, 0.0]
     initial_quat: [0.0, 0.0, 0.0, 1.0]
     sensor_config:
       VisionSensor:
