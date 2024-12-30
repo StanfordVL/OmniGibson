@@ -272,6 +272,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
                     robot_config["name"] = "robot_" + "".join(random.choices(string.ascii_lowercase, k=6))
 
                 position, orientation = robot_config.pop("position", None), robot_config.pop("orientation", None)
+                # position, orientation = robot_config.pop("initial_pos", None), robot_config.pop("initial_quat", None)
                 pose_frame = robot_config.pop("pose_frame", "scene")
                 if position is not None:
                     position = position if isinstance(position, th.Tensor) else th.tensor(position, dtype=th.float32)
@@ -482,7 +483,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """No-op to satisfy certain RL frameworks."""
         pass
 
-    def get_obs(self):
+    def get_obs(self, **kwargs):
         """
         Get the current environment observation.
 
@@ -500,7 +501,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 obs[robot.name], info[robot.name] = robot.get_obs()
 
         # Add task observations
+        assert self._task is not None, "Task must be specified in config!"
         if maxdim(self._task.observation_space) > 0:
+            assert self._task is not None, "Task must be specified in config!"
             obs["task"] = self._task.get_obs(env=self)
 
         # Add external sensor observations if they exist
@@ -508,6 +511,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
             external_obs = dict()
             external_info = dict()
             for sensor_name, sensor in self._external_sensors.items():
+                assert self._external_sensors_include_in_obs is not None, "External sensors must be included in obs!"
                 if not self._external_sensors_include_in_obs[sensor_name]:
                     continue
 
