@@ -183,7 +183,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self._initial_pos_z_offset = self.env_config["initial_pos_z_offset"]
 
         # Reset bookkeeping variables
-        self._reset_variables()
+        self._reset_variables()  # Reset episode variables
         self._current_episode = 0  # Manually set this to 0 since resetting actually increments this
 
         # - Potentially overwrite the USD entry for the scene if none is specified and we're online sampling -
@@ -272,7 +272,6 @@ class Environment(gym.Env, GymObservable, Recreatable):
                     robot_config["name"] = "robot_" + "".join(random.choices(string.ascii_lowercase, k=6))
 
                 position, orientation = robot_config.pop("position", None), robot_config.pop("orientation", None)
-                # position, orientation = robot_config.pop("initial_pos", None), robot_config.pop("initial_quat", None)
                 pose_frame = robot_config.pop("pose_frame", "scene")
                 if position is not None:
                     position = position if isinstance(position, th.Tensor) else th.tensor(position, dtype=th.float32)
