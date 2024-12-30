@@ -23,9 +23,13 @@ def main(random_selection=False, headless=False, short_exec=False):
         "Quick": "Only load the building assets (i.e.: the floors, walls, ceilings)",
         # "Full": "Load all interactive objects in the scene",
     }
-    load_mode = choose_from_options(options=load_options, name="load mode", random_selection=random_selection)
-    if load_mode == "Quick":
-        config["scene"]["load_object_categories"] = ["floors", "walls", "ceilings"]
+    # load_mode = choose_from_options(options=load_options, name="load mode", random_selection=random_selection)
+    # if load_mode == "Quick":
+    #     config["scene"]["load_object_categories"] = ["floors", "walls", "ceilings"]
+
+    # Define load mode for convenience
+    load_mode = "Quick"
+    config["scene"]["load_object_categories"] = ["floors", "walls", "ceilings"]
 
     # Load the environment
     env = og.Environment(configs=config)
