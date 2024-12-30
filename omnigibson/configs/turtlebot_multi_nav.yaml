@@ -57,7 +57,7 @@ robots:
     self_collision: false
     action_normalize: true
     action_type: continuous
-    initial_pos: [5.0, 0.0, 0.0]
+    initial_pos: [2.0, 0.0, 0.0]
     initial_quat: [0.0, 0.0, 0.0, 1.0]
     sensor_config:
       VisionSensor:
@@ -79,7 +79,7 @@ robots:
     self_collision: false
     action_normalize: true
     action_type: continuous
-    initial_pos: [5.0, 5.0, 0.0]
+    initial_pos: [2.0, 2.0, 0.0]
     initial_quat: [0.0, 0.0, 0.0, 1.0]
     sensor_config:
       VisionSensor:
