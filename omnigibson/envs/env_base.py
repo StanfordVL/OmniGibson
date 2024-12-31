@@ -58,30 +58,36 @@ class Environment(gym.Env, GymObservable, Recreatable):
         # Store if we are part of a vec env
         self.in_vec_env = in_vec_env
 
-        # Convert config file(s) into a single parsed dict
-        configs = configs if isinstance(configs, list) or isinstance(configs, tuple) else [configs]
+        # Convert config into OmegaConf structured config
+        from omnigibson.configs.env_config import OmniGibsonConfig
+        from omegaconf import OmegaConf
 
-        # Initial default config
-        self.config = self.default_config
-
-        # Merge in specified configs
-        for config in configs:
-            merge_nested_dicts(base_dict=self.config, extra_dict=parse_config(config), inplace=True)
+        # Handle single config case
+        configs = configs if isinstance(configs, (list, tuple)) else [configs]
+        
+        # Start with default structured config
+        self.config = OmegaConf.structured(OmniGibsonConfig())
+        
+        # Merge in all configs
+        for cfg in configs:
+            # Parse the config if it's a string/dict
+            parsed_cfg = parse_config(cfg)
+            # Convert to OmegaConf and merge
+            cfg_omega = OmegaConf.create(parsed_cfg)
+            self.config = OmegaConf.merge(self.config, cfg_omega)
 
         # Store settings and other initialized values
-        self._automatic_reset = self.env_config["automatic_reset"]
-        self._flatten_action_space = self.env_config["flatten_action_space"]
-        self._flatten_obs_space = self.env_config["flatten_obs_space"]
-        self.device = self.env_config["device"] if self.env_config["device"] else "cpu"
-        self._initial_pos_z_offset = self.env_config[
-            "initial_pos_z_offset"
-        ]  # how high to offset object placement to account for one action step of dropping
+        self._automatic_reset = self.config.env.automatic_reset
+        self._flatten_action_space = self.config.env.flatten_action_space
+        self._flatten_obs_space = self.config.env.flatten_obs_space
+        self.device = self.config.env.device if self.config.env.device else "cpu"
+        self._initial_pos_z_offset = self.config.env.initial_pos_z_offset
 
-        physics_dt = 1.0 / self.env_config["physics_frequency"]
-        rendering_dt = 1.0 / self.env_config["rendering_frequency"]
-        sim_step_dt = 1.0 / self.env_config["action_frequency"]
-        viewer_width = self.render_config["viewer_width"]
-        viewer_height = self.render_config["viewer_height"]
+        physics_dt = 1.0 / self.config.env.physics_frequency
+        rendering_dt = 1.0 / self.config.env.rendering_frequency
+        sim_step_dt = 1.0 / self.config.env.action_frequency
+        viewer_width = self.config.render.viewer_width
+        viewer_height = self.config.render.viewer_height
 
         # If the sim is launched, check that the parameters match
         if og.sim is not None:
@@ -145,21 +151,28 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 merge in the new config(s) into the pre-existing one. Setting this to False allows for minor
                 modifications to be made without having to specify entire configs during each reload.
         """
-        # Convert config file(s) into a single parsed dict
-        configs = [configs] if isinstance(configs, dict) or isinstance(configs, str) else configs
+        from omegaconf import OmegaConf
+        from omnigibson.configs.env_config import OmniGibsonConfig
 
-        # Initial default config
-        new_config = self.default_config
+        # Convert config file(s) into OmegaConf
+        configs = [configs] if isinstance(configs, (dict, str)) else configs
+        
+        # Start with default structured config
+        new_config = OmegaConf.structured(OmniGibsonConfig())
+        
+        # Merge in all configs
+        for cfg in configs:
+            # Parse the config if it's a string/dict
+            parsed_cfg = parse_config(cfg)
+            # Convert to OmegaConf and merge
+            cfg_omega = OmegaConf.create(parsed_cfg)
+            new_config = OmegaConf.merge(new_config, cfg_omega)
 
-        # Merge in specified configs
-        for config in configs:
-            merge_nested_dicts(base_dict=new_config, extra_dict=parse_config(config), inplace=True)
-
-        # Either merge in or overwrite the old config
+        # Either overwrite or merge with existing config
         if overwrite_old:
             self.config = new_config
         else:
-            merge_nested_dicts(base_dict=self.config, extra_dict=new_config, inplace=True)
+            self.config = OmegaConf.merge(self.config, new_config)
 
         # Load this environment again
         self.load()
@@ -774,104 +787,55 @@ class Environment(gym.Env, GymObservable, Recreatable):
     def env_config(self):
         """
         Returns:
-            dict: Environment-specific configuration kwargs
+            EnvConfig: Environment-specific configuration
         """
-        return self.config["env"]
+        return self.config.env
 
     @property
     def render_config(self):
         """
         Returns:
-            dict: Render-specific configuration kwargs
+            RenderConfig: Render-specific configuration
         """
-        return self.config["render"]
+        return self.config.render
 
     @property
     def scene_config(self):
         """
         Returns:
-            dict: Scene-specific configuration kwargs
+            SceneConfig: Scene-specific configuration
         """
-        return self.config["scene"]
+        return self.config.scene
 
     @property
     def robots_config(self):
         """
         Returns:
-            dict: Robot-specific configuration kwargs
+            List[RobotConfig]: Robot-specific configurations
         """
-        return self.config["robots"]
+        return self.config.robots
 
     @property
     def objects_config(self):
         """
         Returns:
-            dict: Object-specific configuration kwargs
+            List[Dict]: Object-specific configurations
         """
-        return self.config["objects"]
+        return self.config.objects
 
     @property
     def task_config(self):
         """
         Returns:
-            dict: Task-specific configuration kwargs
+            TaskConfig: Task-specific configuration
         """
-        return self.config["task"]
+        return self.config.task
 
     @property
     def wrapper_config(self):
         """
         Returns:
-            dict: Wrapper-specific configuration kwargs
+            WrapperConfig: Wrapper-specific configuration
         """
-        return self.config["wrapper"]
+        return self.config.wrapper
 
-    @property
-    def default_config(self):
-        """
-        Returns:
-            dict: Default configuration for this environment. May not be fully specified (i.e.: still requires @config
-                to be specified during environment creation)
-        """
-        return {
-            # Environment kwargs
-            "env": {
-                "action_frequency": gm.DEFAULT_SIM_STEP_FREQ,
-                "rendering_frequency": gm.DEFAULT_RENDERING_FREQ,
-                "physics_frequency": gm.DEFAULT_PHYSICS_FREQ,
-                "device": None,
-                "automatic_reset": False,
-                "flatten_action_space": False,
-                "flatten_obs_space": False,
-                "initial_pos_z_offset": 0.1,
-                "external_sensors": None,
-            },
-            # Rendering kwargs
-            "render": {
-                "viewer_width": 1280,
-                "viewer_height": 720,
-            },
-            # Scene kwargs
-            "scene": {
-                # Traversibility map kwargs
-                "waypoint_resolution": 0.2,
-                "num_waypoints": 10,
-                "trav_map_resolution": 0.1,
-                "default_erosion_radius": 0.0,
-                "trav_map_with_objects": True,
-                "scene_instance": None,
-                "scene_file": None,
-            },
-            # Robot kwargs
-            "robots": [],  # no robots by default
-            # Object kwargs
-            "objects": [],  # no objects by default
-            # Task kwargs
-            "task": {
-                "type": "DummyTask",
-            },
-            # Wrapper kwargs
-            "wrapper": {
-                "type": None,
-            },
-        }
