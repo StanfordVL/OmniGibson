@@ -65,19 +65,7 @@ class StatefulObject(BaseObject):
 
     def __init__(
         self,
-        name,
-        relative_prim_path=None,
-        category="object",
-        scale=None,
-        visible=True,
-        fixed_base=False,
-        visual_only=False,
-        kinematic_only=None,
-        self_collisions=False,
-        prim_type=PrimType.RIGID,
-        load_config=None,
-        abilities=None,
-        include_default_states=True,
+        config,
         **kwargs,
     ):
         """
@@ -110,30 +98,22 @@ class StatefulObject(BaseObject):
         self._emitters = dict()
         self._visual_states = None
         self._current_texture_state = None
-        self._include_default_states = include_default_states
+        self._include_default_states = config.include_default_states
 
         # Load abilities from taxonomy if needed & possible
-        if abilities is None:
+        if config.abilities is None:
             abilities = {}
-            taxonomy_class = OBJECT_TAXONOMY.get_synset_from_category(category)
+            taxonomy_class = OBJECT_TAXONOMY.get_synset_from_category(config.category)
             if taxonomy_class is not None:
                 abilities = OBJECT_TAXONOMY.get_abilities(taxonomy_class)
+        else:
+            abilities = config.abilities
         assert isinstance(abilities, dict), "Object abilities must be in dictionary form."
         self._abilities = abilities
 
         # Run super init
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            category=category,
-            scale=scale,
-            visible=visible,
-            fixed_base=fixed_base,
-            visual_only=visual_only,
-            kinematic_only=kinematic_only,
-            self_collisions=self_collisions,
-            prim_type=prim_type,
-            load_config=load_config,
+            config=config,
             **kwargs,
         )
 

@@ -37,17 +37,7 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
 
     def __init__(
         self,
-        name,
-        relative_prim_path=None,
-        category="object",
-        scale=None,
-        visible=True,
-        fixed_base=False,
-        visual_only=False,
-        kinematic_only=None,
-        self_collisions=False,
-        prim_type=PrimType.RIGID,
-        load_config=None,
+        config,
         **kwargs,
     ):
         """
@@ -74,36 +64,36 @@ class BaseObject(EntityPrim, Registerable, metaclass=ABCMeta):
                 that kwargs are only shared between all SUBclasses (children), not SUPERclasses (parents).
         """
         # Generate default prim path if none is specified
-        relative_prim_path = f"/{name}" if relative_prim_path is None else relative_prim_path
+        relative_prim_path = f"/{config.name}" if config.relative_prim_path is None else config.relative_prim_path
 
         # Store values
-        self._uuid = get_uuid(name, deterministic=True)
-        self.category = category
-        self.fixed_base = fixed_base
+        self._uuid = get_uuid(config.name, deterministic=True)
+        self.category = config.category
+        self.fixed_base = config.fixed_base
 
         # Values to be created at runtime
         self._highlight_cached_values = None
         self._highlighted = None
 
         # Create load config from inputs
-        load_config = dict() if load_config is None else load_config
+        load_config = dict() if config.load_config is None else config.load_config
         load_config["scale"] = (
-            scale
-            if isinstance(scale, th.Tensor)
-            else th.tensor(scale, dtype=th.float32)
-            if isinstance(scale, Iterable)
-            else scale
+            config.scale
+            if isinstance(config.scale, th.Tensor)
+            else th.tensor(config.scale, dtype=th.float32)
+            if isinstance(config.scale, Iterable)
+            else config.scale
         )
-        load_config["visible"] = visible
-        load_config["visual_only"] = visual_only
-        load_config["kinematic_only"] = kinematic_only
-        load_config["self_collisions"] = self_collisions
-        load_config["prim_type"] = prim_type
+        load_config["visible"] = config.visible
+        load_config["visual_only"] = config.visual_only
+        load_config["kinematic_only"] = config.kinematic_only
+        load_config["self_collisions"] = config.self_collisions
+        load_config["prim_type"] = config.prim_type
 
         # Run super init
         super().__init__(
             relative_prim_path=relative_prim_path,
-            name=name,
+            name=config.name,
             load_config=load_config,
         )
 
