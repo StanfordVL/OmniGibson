@@ -280,29 +280,29 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
             # Iterate over all robots to generate in the robot config
             for robot_config in self.robots_config:
-                # Add a name for the robot if necessary
-                if "name" not in robot_config:
-                    robot_config["name"] = "robot_" + "".join(random.choices(string.ascii_lowercase, k=6))
-                robot_config = deepcopy(robot_config)
-                position, orientation = robot_config.pop("position", None), robot_config.pop("orientation", None)
-                pose_frame = robot_config.pop("pose_frame", "scene")
-                if position is not None:
-                    position = position if isinstance(position, th.Tensor) else th.tensor(position, dtype=th.float32)
-                if orientation is not None:
-                    orientation = (
-                        orientation if isinstance(orientation, th.Tensor) else th.tensor(orientation, dtype=th.float32)
-                    )
+                # Generate name if not specified
+                if not robot_config.name:
+                    robot_config.name = "robot_" + "".join(random.choices(string.ascii_lowercase, k=6))
 
-                # Make sure robot exists, grab its corresponding kwargs, and create / import the robot
+                # Convert position/orientation to tensors if specified
+                if robot_config.position is not None:
+                    robot_config.position = th.tensor(robot_config.position, dtype=th.float32)
+                if robot_config.orientation is not None:
+                    robot_config.orientation = th.tensor(robot_config.orientation, dtype=th.float32)
+
+                # Create and import the robot
                 robot = create_class_from_registry_and_config(
-                    cls_name=robot_config["type"],
+                    cls_name=robot_config.type,
                     cls_registry=REGISTERED_ROBOTS,
                     cfg=robot_config,
                     cls_type_descriptor="robot",
                 )
-                # Import the robot into the simulator
                 self.scene.add_object(robot)
-                robot.set_position_orientation(position=position, orientation=orientation, frame=pose_frame)
+                robot.set_position_orientation(
+                    position=robot_config.position,
+                    orientation=robot_config.orientation,
+                    frame=robot_config.pose_frame,
+                )
 
         assert og.sim.is_stopped(), "Simulator must be stopped after loading robots!"
 
@@ -312,22 +312,29 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         assert og.sim.is_stopped(), "Simulator must be stopped before loading objects!"
         for i, obj_config in enumerate(self.objects_config):
-            # Add a name for the object if necessary
-            if "name" not in obj_config:
-                obj_config["name"] = f"obj{i}"
-            # Pop the desired position and orientation
-            obj_config = deepcopy(obj_config)
-            position, orientation = obj_config.pop("position", None), obj_config.pop("orientation", None)
-            # Make sure robot exists, grab its corresponding kwargs, and create / import the robot
+            # Generate name if not specified
+            if not obj_config.name:
+                obj_config.name = f"obj{i}"
+
+            # Convert position/orientation to tensors if specified  
+            if obj_config.position is not None:
+                obj_config.position = th.tensor(obj_config.position, dtype=th.float32)
+            if obj_config.orientation is not None:
+                obj_config.orientation = th.tensor(obj_config.orientation, dtype=th.float32)
+
+            # Create and import the object
             obj = create_class_from_registry_and_config(
-                cls_name=obj_config["type"],
+                cls_name=obj_config.type,
                 cls_registry=REGISTERED_OBJECTS,
                 cfg=obj_config,
                 cls_type_descriptor="object",
             )
-            # Import the robot into the simulator and set the pose
             self.scene.add_object(obj)
-            obj.set_position_orientation(position=position, orientation=orientation, frame="scene")
+            obj.set_position_orientation(
+                position=obj_config.position,
+                orientation=obj_config.orientation,
+                frame="scene",
+            )
 
         assert og.sim.is_stopped(), "Simulator must be stopped after loading objects!"
 

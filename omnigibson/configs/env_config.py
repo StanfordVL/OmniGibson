@@ -2,6 +2,8 @@ from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any
 from omegaconf import MISSING
 
+from omnigibson.configs.object_config import ObjectConfig, RobotConfig
+
 @dataclass
 class RenderConfig:
     viewer_width: int = 1280
@@ -32,14 +34,6 @@ class SceneConfig:
     scene_file: Optional[str] = None
 
 @dataclass
-class RobotConfig:
-    type: str = MISSING
-    name: Optional[str] = None
-    position: Optional[List[float]] = None
-    orientation: Optional[List[float]] = None
-    pose_frame: str = "scene"
-
-@dataclass
 class TaskConfig:
     type: str = "DummyTask"
     params: Dict[str, Any] = field(default_factory=dict)
@@ -55,6 +49,6 @@ class OmniGibsonConfig:
     render: RenderConfig = field(default_factory=RenderConfig)
     scene: SceneConfig = field(default_factory=SceneConfig)
     robots: List[RobotConfig] = field(default_factory=list)
-    objects: List[Dict[str, Any]] = field(default_factory=list)
+    objects: List[ObjectConfig] = field(default_factory=list)
     task: TaskConfig = field(default_factory=TaskConfig)
     wrapper: WrapperConfig = field(default_factory=WrapperConfig)
