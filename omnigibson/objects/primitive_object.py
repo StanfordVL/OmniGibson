@@ -27,24 +27,7 @@ class PrimitiveObject(StatefulObject):
 
     def __init__(
         self,
-        name,
-        primitive_type,
-        relative_prim_path=None,
-        category="object",
-        scale=None,
-        visible=True,
-        fixed_base=False,
-        visual_only=False,
-        kinematic_only=None,
-        self_collisions=False,
-        prim_type=PrimType.RIGID,
-        load_config=None,
-        abilities=None,
-        include_default_states=True,
-        rgba=(0.5, 0.5, 0.5, 1.0),
-        radius=None,
-        height=None,
-        size=None,
+        config,
         **kwargs,
     ):
         """
@@ -80,37 +63,25 @@ class PrimitiveObject(StatefulObject):
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
-        # Compose load config and add rgba values
-        load_config = dict() if load_config is None else load_config
-        load_config["color"] = rgba[:3]
-        load_config["opacity"] = rgba[3]
-        load_config["radius"] = radius
-        load_config["height"] = height
-        load_config["size"] = size
-
         # Initialize other internal variables
         self._vis_geom = None
         self._col_geom = None
         self._extents = th.ones(3)  # (x,y,z extents)
 
         # Make sure primitive type is valid
-        assert_valid_key(key=primitive_type, valid_keys=PRIMITIVE_MESH_TYPES, name="primitive mesh type")
-        self._primitive_type = primitive_type
+        assert_valid_key(key=config.primitive_type, valid_keys=PRIMITIVE_MESH_TYPES, name="primitive mesh type")
+        self._primitive_type = config.primitive_type
+
+        # Compose load config
+        load_config = dict() if config.load_config is None else config.load_config
+        load_config["color"] = config.rgba[:3]
+        load_config["opacity"] = config.rgba[3]
+        load_config["radius"] = config.radius
+        load_config["height"] = config.height
+        load_config["size"] = config.size
 
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            category=category,
-            scale=scale,
-            visible=visible,
-            fixed_base=fixed_base,
-            visual_only=visual_only,
-            kinematic_only=kinematic_only,
-            self_collisions=self_collisions,
-            prim_type=prim_type,
-            include_default_states=include_default_states,
-            load_config=load_config,
-            abilities=abilities,
+            config=config,
             **kwargs,
         )
 

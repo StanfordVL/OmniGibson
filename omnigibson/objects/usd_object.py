@@ -16,21 +16,7 @@ class USDObject(StatefulObject):
 
     def __init__(
         self,
-        name,
-        usd_path,
-        encrypted=False,
-        relative_prim_path=None,
-        category="object",
-        scale=None,
-        visible=True,
-        fixed_base=False,
-        visual_only=False,
-        kinematic_only=None,
-        self_collisions=False,
-        prim_type=PrimType.RIGID,
-        load_config=None,
-        abilities=None,
-        include_default_states=True,
+        config,
         **kwargs,
     ):
         """
@@ -62,22 +48,10 @@ class USDObject(StatefulObject):
                 Note that this base object does NOT pass kwargs down into the Prim-type super() classes, and we assume
                 that kwargs are only shared between all SUBclasses (children), not SUPERclasses (parents).
         """
-        self._usd_path = usd_path
-        self._encrypted = encrypted
+        self._usd_path = config.usd_path
+        self._encrypted = config.encrypted
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            category=category,
-            scale=scale,
-            visible=visible,
-            fixed_base=fixed_base,
-            visual_only=visual_only,
-            kinematic_only=kinematic_only,
-            self_collisions=self_collisions,
-            prim_type=prim_type,
-            include_default_states=include_default_states,
-            load_config=load_config,
-            abilities=abilities,
+            config=config,
             **kwargs,
         )
 

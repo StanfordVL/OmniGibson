@@ -29,17 +29,7 @@ class LightObject(StatefulObject):
 
     def __init__(
         self,
-        name,
-        light_type,
-        relative_prim_path=None,
-        category="light",
-        scale=None,
-        fixed_base=False,
-        load_config=None,
-        abilities=None,
-        include_default_states=True,
-        radius=1.0,
-        intensity=50000.0,
+        config,
         **kwargs,
     ):
         """
@@ -63,33 +53,22 @@ class LightObject(StatefulObject):
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
-        # Compose load config and add rgba values
-        load_config = dict() if load_config is None else load_config
-        load_config["scale"] = scale
-        load_config["intensity"] = intensity
-        load_config["radius"] = radius if light_type in {"Cylinder", "Disk", "Sphere"} else None
-
         # Make sure primitive type is valid
-        assert_valid_key(key=light_type, valid_keys=self.LIGHT_TYPES, name="light_type")
-        self.light_type = light_type
+        assert_valid_key(key=config.light_type, valid_keys=self.LIGHT_TYPES, name="light_type")
+        self.light_type = config.light_type
+
+        # Compose load config
+        load_config = dict() if config.load_config is None else config.load_config
+        load_config["scale"] = config.scale
+        load_config["intensity"] = config.intensity
+        load_config["radius"] = config.radius if config.light_type in {"Cylinder", "Disk", "Sphere"} else None
 
         # Other attributes to be filled in at runtime
         self._light_link = None
 
         # Run super method
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            category=category,
-            scale=scale,
-            visible=True,
-            fixed_base=fixed_base,
-            visual_only=True,
-            self_collisions=False,
-            prim_type=PrimType.RIGID,
-            include_default_states=include_default_states,
-            load_config=load_config,
-            abilities=abilities,
+            config=config,
             **kwargs,
         )
 
