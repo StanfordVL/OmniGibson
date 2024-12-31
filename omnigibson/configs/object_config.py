@@ -1,31 +1,72 @@
 from dataclasses import dataclass, field
-from typing import List, Optional, Dict, Any
+from typing import List, Optional, Dict, Any, Tuple
 from omegaconf import MISSING
+from omnigibson.utils.constants import PrimType
 
 @dataclass
 class PrimConfig:
     """Base configuration for all prims"""
     name: str = MISSING
-    prim_type: str = MISSING  
+    relative_prim_path: Optional[str] = None
+    prim_type: PrimType = PrimType.RIGID
     position: Optional[List[float]] = None
     orientation: Optional[List[float]] = None
     scale: Optional[List[float]] = None
     fixed_base: bool = False
     visible: bool = True
     visual_only: bool = False
-    self_collisions: bool = True
+    kinematic_only: Optional[bool] = None
+    self_collisions: bool = False
     load_config: Dict[str, Any] = field(default_factory=dict)
 
 @dataclass 
 class ObjectConfig(PrimConfig):
     """Configuration for objects"""
-    category: Optional[str] = None
-    model: Optional[str] = None
+    category: str = "object"
     abilities: Dict[str, Dict[str, Any]] = field(default_factory=dict)
-    controller_config: Optional[Dict[str, Any]] = None
-    
+    include_default_states: bool = True
+
 @dataclass
-class RobotConfig(ObjectConfig):
+class USDObjectConfig(ObjectConfig):
+    """Configuration for USD-based objects"""
+    usd_path: str = MISSING
+    encrypted: bool = False
+
+@dataclass
+class DatasetObjectConfig(ObjectConfig):
+    """Configuration for dataset objects"""
+    model: Optional[str] = None
+    dataset_type: str = "BEHAVIOR"
+    bounding_box: Optional[List[float]] = None
+    in_rooms: Optional[List[str]] = None
+
+@dataclass
+class PrimitiveObjectConfig(ObjectConfig):
+    """Configuration for primitive objects"""
+    primitive_type: str = MISSING
+    rgba: Tuple[float, float, float, float] = (0.5, 0.5, 0.5, 1.0)
+    radius: Optional[float] = None
+    height: Optional[float] = None 
+    size: Optional[float] = None
+
+@dataclass
+class LightObjectConfig(ObjectConfig):
+    """Configuration for light objects"""
+    light_type: str = MISSING
+    radius: float = 1.0
+    intensity: float = 50000.0
+
+@dataclass
+class ControllableObjectConfig(ObjectConfig):
+    """Configuration for controllable objects"""
+    control_freq: Optional[float] = None
+    controller_config: Optional[Dict[str, Any]] = None
+    action_type: str = "continuous"
+    action_normalize: bool = True
+    reset_joint_pos: Optional[List[float]] = None
+
+@dataclass
+class RobotConfig(ControllableObjectConfig):
     """Configuration for robots"""
     controller_type: Optional[str] = None
     controller_params: Dict[str, Any] = field(default_factory=dict)
