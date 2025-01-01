@@ -1022,7 +1022,7 @@ class EntityPrim(XFormPrim):
 
         # If kinematic only, clear cache for the root link
         if self.kinematic_only:
-            self.root_link.clear_kinematic_only_cache()
+            self.root_link.clear_kinematic_only_cache()  # Clear the cache for the root link
 
         # If the simulation isn't running, we should set this prim's XForm (object-level) properties directly
         if og.sim.is_stopped():
