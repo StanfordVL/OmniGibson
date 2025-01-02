@@ -2,6 +2,7 @@ from abc import abstractmethod
 
 import gymnasium as gym
 import torch as th
+from omegaconf import MISSING
 
 from omnigibson.controllers import DifferentialDriveController
 from omnigibson.robots.locomotion_robot import LocomotionRobot
