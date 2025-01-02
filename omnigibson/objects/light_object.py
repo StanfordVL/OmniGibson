@@ -26,50 +26,22 @@ class LightObject(StatefulObject):
         "Sphere",
     }
 
-    def __init__(
-        self,
-        config,
-        **kwargs,
-    ):
+    def __init__(self, config: LightObjectConfig):
         """
         Args:
-            name (str): Name for the object. Names need to be unique per scene
-            light_type (str): Type of light to create. Valid options are LIGHT_TYPES
-            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
-            category (str): Category for the object. Defaults to "object".
-            scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
-                for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
-                3-array specifies per-axis scaling.
-            fixed_base (bool): whether to fix the base of this object or not
-            load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
-                loading this prim at runtime.
-            abilities (None or dict): If specified, manually adds specific object states to this object. It should be
-                a dict in the form of {ability: {param: value}} containing object abilities and parameters to pass to
-                the object state instance constructor.
-            include_default_states (bool): whether to include the default object states from @get_default_states
-            radius (float): Radius for this light.
-            intensity (float): Intensity for this light.
-            kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
-                for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
+            config (LightObjectConfig): Configuration object containing all parameters for this light object
         """
         # Make sure primitive type is valid
         assert_valid_key(key=config.light_type, valid_keys=self.LIGHT_TYPES, name="light_type")
-        self.light_type = config.light_type
-
-        # Compose load config
-        load_config = dict() if config.load_config is None else config.load_config
-        load_config["scale"] = config.scale
-        load_config["intensity"] = config.intensity
-        load_config["radius"] = config.radius if config.light_type in {"Cylinder", "Disk", "Sphere"} else None
-
+        
+        # Store the config
+        self._config = config
+        
         # Other attributes to be filled in at runtime
         self._light_link = None
 
         # Run super method
-        super().__init__(
-            config=config,
-            **kwargs,
-        )
+        super().__init__(config=config)
 
     def _load(self):
         # Define XForm and base link for this light
@@ -98,13 +70,12 @@ class LightObject(StatefulObject):
         # Apply Shaping API and set default cone angle attribute
         lazy.pxr.UsdLux.ShapingAPI.Apply(self._light_link.prim).GetShapingConeAngleAttr().Set(180.0)
 
-        # Optionally set the intensity
-        if self._load_config.get("intensity", None) is not None:
-            self.intensity = self._load_config["intensity"]
-
-        # Optionally set the radius
-        if self._load_config.get("radius", None) is not None:
-            self.radius = self._load_config["radius"]
+        # Set the intensity and radius from config
+        self.intensity = self._config.intensity
+        
+        # Only set radius for applicable light types
+        if self._config.light_type in {"Cylinder", "Disk", "Sphere"}:
+            self.radius = self._config.radius
 
     def _initialize(self):
         # Run super
@@ -206,3 +177,10 @@ class LightObject(StatefulObject):
             texture_file_path (str): path of texture file that should be used for this light
         """
         self._light_link.set_attribute("inputs:texture:file", lazy.pxr.Sdf.AssetPath(texture_file_path))
+    @property
+    def light_type(self):
+        """
+        Returns:
+            str: Type of light
+        """
+        return self._config.light_type
