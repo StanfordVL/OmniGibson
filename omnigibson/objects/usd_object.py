@@ -13,46 +13,17 @@ class USDObject(StatefulObject):
     or more links and joints. They may or may not be passive.
     """
 
-    def __init__(
-        self,
-        config,
-        **kwargs,
-    ):
+    def __init__(self, config: USDObjectConfig):
         """
         Args:
-            name (str): Name for the object. Names need to be unique per scene
-            usd_path (str): global path to the USD file to load
-            encrypted (bool): whether this file is encrypted (and should therefore be decrypted) or not
-            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
-            category (str): Category for the object. Defaults to "object".
-            scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
-                for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
-                3-array specifies per-axis scaling.
-            visible (bool): whether to render this object or not in the stage
-            fixed_base (bool): whether to fix the base of this object or not
-            visual_only (bool): Whether this object should be visual only (and not collide with any other objects)
-            kinematic_only (None or bool): Whether this object should be kinematic only (and not get affected by any
-                collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
-                are satisfied (see object_base.py post_load function), else False.
-            self_collisions (bool): Whether to enable self collisions for this object
-            prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
-            load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
-                loading this prim at runtime.
-            abilities (None or dict): If specified, manually adds specific object states to this object. It should be
-                a dict in the form of {ability: {param: value}} containing object abilities and parameters to pass to
-                the object state instance constructor.
-            include_default_states (bool): whether to include the default object states from @get_default_states
-            kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
-                for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
-                Note that this base object does NOT pass kwargs down into the Prim-type super() classes, and we assume
-                that kwargs are only shared between all SUBclasses (children), not SUPERclasses (parents).
+            config (USDObjectConfig): Configuration object containing all relevant parameters for
+                initializing this USD object. See the USDObjectConfig dataclass for specific parameters.
         """
-        self._usd_path = config.usd_path
-        self._encrypted = config.encrypted
-        super().__init__(
-            config=config,
-            **kwargs,
-        )
+        # Store the config
+        self._config = config
+        
+        # Initialize super
+        super().__init__(config=config)
 
     def prebuild(self, stage):
         # Load the object into the given USD stage
@@ -85,16 +56,16 @@ class USDObject(StatefulObject):
         """
         Load the object into pybullet and set it to the correct pose
         """
-        usd_path = self._usd_path
-        if self._encrypted:
+        usd_path = self._config.usd_path
+        if self._config.encrypted:
             # Create a temporary file to store the decrytped asset, load it, and then delete it
-            encrypted_filename = self._usd_path.replace(".usd", ".encrypted.usd")
-            decrypted_fd, usd_path = tempfile.mkstemp(os.path.basename(self._usd_path), dir=og.tempdir)
+            encrypted_filename = self._config.usd_path.replace(".usd", ".encrypted.usd")
+            decrypted_fd, usd_path = tempfile.mkstemp(os.path.basename(self._config.usd_path), dir=og.tempdir)
             decrypt_file(encrypted_filename, usd_path)
 
         prim = add_asset_to_stage(asset_path=usd_path, prim_path=self.prim_path)
 
-        if self._encrypted:
+        if self._config.encrypted:
             os.close(decrypted_fd)
             # On Windows, Isaac Sim won't let go of the file until the prim is removed, so we can't delete it.
             if os.name == "posix":
@@ -107,6 +78,6 @@ class USDObject(StatefulObject):
         """
         Returns:
             str: absolute path to this model's USD file. By default, this is the loaded usd path
-                passed in as an argument
+                from the config
         """
-        return self._usd_path
+        return self._config.usd_path
