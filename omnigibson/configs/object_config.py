@@ -10,12 +10,13 @@ from omnigibson.configs.base_config import (
     LightObjectConfig,
     ControllableObjectConfig,
 )
-from omnigibson.configs.controller_config import (
-    BaseControllerConfig,
+from omnigibson.configs.robot_config import (
+    ControllerConfig,
     JointControllerConfig,
-    DifferentialDriveControllerConfig,
-    InverseKinematicsControllerConfig,
-    MultiFingerGripperControllerConfig,
+    IKControllerConfig,
+    OSCControllerConfig,
+    DifferentialDriveConfig,
+    GripperControllerConfig,
 )
 from omnigibson.configs.sensor_config import SensorConfig
 
@@ -42,9 +43,10 @@ class RobotConfig(ControllableObjectConfig):
     default_reset_mode: str = "untuck"
     default_arm_pose: str = "vertical"
     controllers: Dict[str, Union[
-        BaseControllerConfig,
-        JointControllerConfig, 
-        DifferentialDriveControllerConfig,
-        InverseKinematicsControllerConfig,
-        MultiFingerGripperControllerConfig,
+        ControllerConfig,
+        JointControllerConfig,
+        IKControllerConfig,
+        OSCControllerConfig, 
+        DifferentialDriveConfig,
+        GripperControllerConfig,
     ]] = field(default_factory=dict)
