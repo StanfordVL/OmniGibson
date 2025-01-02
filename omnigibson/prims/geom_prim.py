@@ -27,7 +27,7 @@ class GeomPrim(XFormPrim):
 
     def __init__(
         self,
-        config,
+        config: GeomPrimConfig,
     ):
         # Run super method
         super().__init__(
@@ -190,9 +190,7 @@ class GeomPrim(XFormPrim):
 class CollisionGeomPrim(GeomPrim):
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config: CollisionGeomPrimConfig,
     ):
         # Store values created at runtime
         self._collision_api = None

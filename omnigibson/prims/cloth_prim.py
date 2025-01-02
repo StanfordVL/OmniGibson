@@ -54,9 +54,7 @@ class ClothPrim(GeomPrim):
 
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config: ClothPrimConfig,
     ):
         # Internal vars stored
         self._centroid_idx = None

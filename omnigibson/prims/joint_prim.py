@@ -63,7 +63,7 @@ class JointPrim(BasePrim):
 
     def __init__(
         self,
-        config,
+        config: JointPrimConfig,
         articulation_view=None,
     ):
         # Grab dynamic control reference and set properties

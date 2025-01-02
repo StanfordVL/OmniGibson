@@ -39,7 +39,7 @@ class XFormPrim(BasePrim):
 
     def __init__(
         self,
-        config,
+        config: XFormPrimConfig,
     ):
         # Other values that will be filled in at runtime
         self._material = None
