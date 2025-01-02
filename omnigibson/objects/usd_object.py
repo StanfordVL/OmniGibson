@@ -2,6 +2,7 @@ import os
 import tempfile
 
 import omnigibson as og
+from omnigibson.configs.base_config import USDObjectConfig
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.utils.asset_utils import decrypt_file
 from omnigibson.utils.usd_utils import add_asset_to_stage
