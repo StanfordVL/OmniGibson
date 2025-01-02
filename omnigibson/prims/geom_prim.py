@@ -27,15 +27,11 @@ class GeomPrim(XFormPrim):
 
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config,
     ):
         # Run super method
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
 
     def _load(self):
@@ -206,9 +202,7 @@ class CollisionGeomPrim(GeomPrim):
 
         # Run super method
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
 
     def _post_load(self):

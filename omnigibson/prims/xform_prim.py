@@ -39,9 +39,7 @@ class XFormPrim(BasePrim):
 
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config,
     ):
         # Other values that will be filled in at runtime
         self._material = None
@@ -49,9 +47,7 @@ class XFormPrim(BasePrim):
 
         # Run super method
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
 
     def _load(self):

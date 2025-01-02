@@ -60,9 +60,7 @@ class RigidPrim(XFormPrim):
 
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config,
     ):
         # Other values that will be filled in at runtime
         self._rigid_prim_view_direct = None

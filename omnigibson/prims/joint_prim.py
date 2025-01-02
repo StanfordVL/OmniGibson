@@ -63,9 +63,7 @@ class JointPrim(BasePrim):
 
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config,
         articulation_view=None,
     ):
         # Grab dynamic control reference and set properties
@@ -88,9 +86,7 @@ class JointPrim(BasePrim):
 
         # Run super method
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
 
     def _load(self):

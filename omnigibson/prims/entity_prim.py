@@ -45,9 +45,7 @@ class EntityPrim(XFormPrim):
 
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config,
     ):
         # Other values that will be filled in at runtime
         self._root_link_name = None  # Name of the root link
@@ -68,9 +66,7 @@ class EntityPrim(XFormPrim):
 
         # Run super init
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
 
     def _initialize(self):
