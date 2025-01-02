@@ -4,7 +4,6 @@ import tempfile
 import omnigibson as og
 from omnigibson.objects.stateful_object import StatefulObject
 from omnigibson.utils.asset_utils import decrypt_file
-from omnigibson.utils.constants import PrimType
 from omnigibson.utils.usd_utils import add_asset_to_stage
 
 
@@ -102,22 +101,6 @@ class USDObject(StatefulObject):
                 os.remove(usd_path)
 
         return prim
-
-    def _create_prim_with_same_kwargs(self, relative_prim_path, name, load_config):
-        # Add additional kwargs
-        return self.__class__(
-            relative_prim_path=relative_prim_path,
-            usd_path=self._usd_path,
-            name=name,
-            category=self.category,
-            scale=self.scale,
-            visible=self.visible,
-            fixed_base=self.fixed_base,
-            visual_only=self._visual_only,
-            prim_type=self._prim_type,
-            load_config=load_config,
-            abilities=self._abilities,
-        )
 
     @property
     def usd_path(self):

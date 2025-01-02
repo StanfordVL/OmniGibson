@@ -25,7 +25,7 @@ from omnigibson.object_states.object_state_base import REGISTERED_OBJECT_STATES
 from omnigibson.object_states.on_fire import OnFire
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.renderer_settings.renderer_settings import RendererSettings
-from omnigibson.utils.constants import EmitterType, PrimType
+from omnigibson.utils.constants import EmitterType
 from omnigibson.utils.python_utils import classproperty, extract_class_init_kwargs_from_dict
 from omnigibson.utils.ui_utils import create_module_logger
 

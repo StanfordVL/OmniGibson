@@ -61,7 +61,9 @@ class EntityPrim(XFormPrim):
 
         # This needs to be initialized to be used for _load() of PrimitiveObject
         self._prim_type = (
-            config.load_config["prim_type"] if config.load_config is not None and "prim_type" in config.load_config else PrimType.RIGID
+            config.load_config["prim_type"]
+            if config.load_config is not None and "prim_type" in config.load_config
+            else PrimType.RIGID
         )
         assert self._prim_type in iter(PrimType), f"Unknown prim type {self._prim_type}!"
 
@@ -1656,10 +1658,3 @@ class EntityPrim(XFormPrim):
                 idx += self.n_joints
 
         return state_dict, idx
-
-    def _create_prim_with_same_kwargs(self, relative_prim_path, name, load_config):
-        # Subclass must implement this method for duplication functionality
-        raise NotImplementedError(
-            "Subclass must implement _create_prim_with_same_kwargs() to enable duplication "
-            "functionality for EntityPrim!"
-        )

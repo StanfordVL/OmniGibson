@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 import gymnasium as gym
 import torch as th
 from omegaconf import MISSING
@@ -28,7 +26,7 @@ class TwoWheelRobot(LocomotionRobot):
     def _validate_configuration(self):
         # Make sure base only has two indices (i.e.: two wheels for differential drive)
         assert len(self.base_control_idx) == 2, "Differential drive can only be used with robot with two base joints!"
-        
+
         # Make sure wheel parameters are specified
         assert self.config.wheel_radius is not MISSING, "wheel_radius must be specified in config!"
         assert self.config.wheel_axle_length is not MISSING, "wheel_axle_length must be specified in config!"

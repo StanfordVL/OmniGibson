@@ -8,7 +8,6 @@ import gymnasium as gym
 import torch as th
 
 import omnigibson as og
-from omnigibson.macros import gm
 from omnigibson.objects import REGISTERED_OBJECTS
 from omnigibson.robots import REGISTERED_ROBOTS
 from omnigibson.scene_graphs.graph_builder import SceneGraphBuilder
@@ -27,7 +26,6 @@ from omnigibson.utils.python_utils import (
     Recreatable,
     assert_valid_key,
     create_class_from_registry_and_config,
-    merge_nested_dicts,
 )
 from omnigibson.utils.ui_utils import create_module_logger
 
@@ -64,10 +62,10 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Handle single config case
         configs = configs if isinstance(configs, (list, tuple)) else [configs]
-        
+
         # Start with default structured config
         self.config = OmegaConf.structured(OmniGibsonConfig())
-        
+
         # Merge in all configs
         for cfg in configs:
             # Parse the config if it's a string/dict
@@ -156,10 +154,10 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Convert config file(s) into OmegaConf
         configs = [configs] if isinstance(configs, (dict, str)) else configs
-        
+
         # Start with default structured config
         new_config = OmegaConf.structured(OmniGibsonConfig())
-        
+
         # Merge in all configs
         for cfg in configs:
             # Parse the config if it's a string/dict
@@ -316,7 +314,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
             if not obj_config.name:
                 obj_config.name = f"obj{i}"
 
-            # Convert position/orientation to tensors if specified  
+            # Convert position/orientation to tensors if specified
             if obj_config.position is not None:
                 obj_config.position = th.tensor(obj_config.position, dtype=th.float32)
             if obj_config.orientation is not None:
@@ -845,4 +843,3 @@ class Environment(gym.Env, GymObservable, Recreatable):
             WrapperConfig: Wrapper-specific configuration
         """
         return self.config.wrapper
-

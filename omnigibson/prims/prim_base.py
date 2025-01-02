@@ -33,7 +33,9 @@ class BasePrim(Serializable, Recreatable, ABC):
         config,
     ):
         self._relative_prim_path = config.relative_prim_path
-        assert self._relative_prim_path.startswith("/"), f"Relative prim path {self._relative_prim_path} must start with a '/'!"
+        assert self._relative_prim_path.startswith(
+            "/"
+        ), f"Relative prim path {self._relative_prim_path} must start with a '/'!"
         assert all(
             component[0] in string.ascii_letters for component in self._relative_prim_path[1:].split("/")
         ), f"Each component of relative prim path {self._relative_prim_path} must start with a letter!"
@@ -275,24 +277,3 @@ class BasePrim(Serializable, Recreatable, ABC):
             dict: Dictionary of any custom information
         """
         return self._prim.GetCustomData()
-
-    def _create_prim_with_same_kwargs(self, relative_prim_path, name, load_config):
-        """
-        Generates a new instance of this prim's class with specified @relative_prim_path, @name, and @load_config, but otherwise
-        all other kwargs should be identical to this instance's values.
-
-        Args:
-            relative_prim_path (str): Scene-local prim path of the Prim to encapsulate or create.
-            name (str): Name for the newly created prim
-            load_config (dict): Keyword-mapped kwargs to use to set specific attributes for the created prim's instance
-
-        Returns:
-            BasePrim: Generated prim object (not loaded, and not initialized!)
-        """
-        from omnigibson.configs.prim_config import PrimConfig
-        config = PrimConfig(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
-        )
-        return self.__class__(config=config)

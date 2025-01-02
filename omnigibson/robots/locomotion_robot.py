@@ -1,10 +1,8 @@
-from abc import abstractmethod
 from functools import cached_property
 
 import torch as th
 from omegaconf import MISSING
 
-from omnigibson.configs.robot_config import LocomotionRobotConfig
 from omnigibson.controllers import LocomotionController
 from omnigibson.robots.robot_base import BaseRobot
 from omnigibson.utils.python_utils import classproperty
