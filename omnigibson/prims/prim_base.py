@@ -290,7 +290,5 @@ class BasePrim(Serializable, Recreatable, ABC):
             BasePrim: Generated prim object (not loaded, and not initialized!)
         """
         return self.__class__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
