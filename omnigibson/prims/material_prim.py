@@ -4,6 +4,7 @@ import os
 import torch as th
 
 import omnigibson as og
+from omnigibson.configs.prim_config import PrimConfig
 import omnigibson.lazy as lazy
 from omnigibson.prims.prim_base import BasePrim
 from omnigibson.utils.physx_utils import bind_material
