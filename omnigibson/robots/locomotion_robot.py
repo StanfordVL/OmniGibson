@@ -17,7 +17,7 @@ class LocomotionRobot(BaseRobot):
     Provides common interface for a wide variety of robots.
 
     Args:
-        config (LocomotionRobotConfig): Configuration object for the robot containing:
+        config (LocomotionRobotConfig): Configuration object containing:
             - base_joint_names: List of joint names for base control
             - base_control_idx: List of control indices for base joints
             - controllers: Dict of controller configurations including:
