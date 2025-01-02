@@ -54,7 +54,12 @@ class MaterialPrim(BasePrim):
 
         # Otherwise, create a new one and return it
         relative_prim_path = absolute_prim_path_to_scene_relative(scene, prim_path)
-        new_material = cls(relative_prim_path=relative_prim_path, name=name, load_config=load_config)
+        config = PrimConfig(
+            name=name,
+            relative_prim_path=relative_prim_path,
+            load_config=load_config,
+        )
+        new_material = cls(config=config)
         new_material.load(scene)
         assert (
             new_material.prim_path == prim_path
@@ -64,9 +69,7 @@ class MaterialPrim(BasePrim):
 
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config,
     ):
         # Other values that will be filled in at runtime
         self._shader = None
@@ -76,9 +79,7 @@ class MaterialPrim(BasePrim):
 
         # Run super init
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
 
     def _load(self):
