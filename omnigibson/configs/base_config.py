@@ -34,7 +34,8 @@ class ObjectConfig(EntityConfig):
 @dataclass
 class StatefulObjectConfig(ObjectConfig):
     """Configuration for stateful objects"""
-    pass
+    abilities: Optional[Dict[str, Dict[str, Any]]] = None
+    include_default_states: bool = True
 
 @dataclass
 class USDObjectConfig(StatefulObjectConfig):

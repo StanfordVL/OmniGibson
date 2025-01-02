@@ -169,6 +169,14 @@ class StatefulObject(BaseObject):
         return self._states
 
     @property
+    def config(self) -> StatefulObjectConfig:
+        """
+        Returns:
+            StatefulObjectConfig: Configuration object for this stateful object
+        """
+        return self._config
+
+    @property 
     def abilities(self):
         """
         Returns:
@@ -202,7 +210,7 @@ class StatefulObject(BaseObject):
         """
         states_info = (
             {state_type: {"ability": None, "params": dict()} for state_type in get_default_states()}
-            if self._include_default_states
+            if self.config.include_default_states
             else dict()
         )
 
