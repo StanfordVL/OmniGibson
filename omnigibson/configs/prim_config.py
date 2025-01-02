@@ -1,6 +1,7 @@
-from omnigibson.configs.base_config import BasePrimConfig
 from dataclasses import dataclass
 from typing import Optional, Any
+from omegaconf import MISSING
+from omnigibson.configs.base_config import BasePrimConfig
 
 @dataclass
 class XFormPrimConfig(BasePrimConfig):
