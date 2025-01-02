@@ -53,19 +53,97 @@ class GripperControllerConfig(ControllerConfig):
     limit_tolerance: float = 0.001
     inverted: bool = False
 
-@dataclass
+@dataclass 
 class RobotConfig(ControllableObjectConfig):
-    """Configuration for robots"""
+    """Base configuration for robots"""
     type: str = MISSING
     obs_modalities: List[str] = field(default_factory=lambda: ["rgb", "proprio"])
     proprio_obs: str = "default"
     sensor_config: Optional[Dict[str, Any]] = None
-    grasping_mode: str = "physical"
-    grasping_direction: str = "lower"
-    disable_grasp_handling: bool = False
-    default_reset_mode: str = "untuck"
-    default_arm_pose: str = "vertical"
     controllers: Dict[str, ControllerConfig] = field(default_factory=dict)
+
+@dataclass
+class ManipulationRobotConfig(RobotConfig):
+    """Configuration for manipulation robots"""
+    grasping_mode: str = "physical"
+    grasping_direction: str = "lower" 
+    disable_grasp_handling: bool = False
+
+@dataclass
+class MobileManipulationRobotConfig(ManipulationRobotConfig):
+    """Configuration for mobile manipulation robots"""
+    default_reset_mode: str = "untuck"
+
+@dataclass
+class UntuckedArmPoseRobotConfig(MobileManipulationRobotConfig):
+    """Configuration for robots with untucked arm poses"""
+    default_arm_pose: str = "vertical"
+
+@dataclass
+class BehaviorRobotConfig(ManipulationRobotConfig):
+    """Configuration for behavior robots"""
+    use_ghost_hands: bool = True
+
+@dataclass
+class FrankaConfig(ManipulationRobotConfig):
+    """Configuration for Franka robots"""
+    end_effector: str = "gripper"
+
+@dataclass
+class A1Config(ManipulationRobotConfig):
+    """Configuration for A1 robot"""
+    end_effector: str = "inspire"
+
+@dataclass
+class TiagoConfig(UntuckedArmPoseRobotConfig):
+    """Configuration for Tiago robot"""
+    variant: str = "default"
+
+@dataclass
+class FetchConfig(UntuckedArmPoseRobotConfig):
+    """Configuration for Fetch robot"""
+    pass
+
+@dataclass
+class R1Config(MobileManipulationRobotConfig):
+    """Configuration for R1 robot"""
+    pass
+
+@dataclass
+class StretchConfig(ManipulationRobotConfig):
+    """Configuration for Stretch robot"""
+    pass
+
+@dataclass
+class VX300SConfig(ManipulationRobotConfig):
+    """Configuration for VX300S robot"""
+    pass
+
+@dataclass
+class TwoWheelRobotConfig(RobotConfig):
+    """Configuration for two wheel robots"""
+    wheel_radius: float = MISSING
+    wheel_axle_length: float = MISSING
+
+@dataclass
+class HuskyConfig(TwoWheelRobotConfig):
+    """Configuration for Husky robot"""
+    pass
+
+@dataclass
+class TurtlebotConfig(TwoWheelRobotConfig):
+    """Configuration for Turtlebot robot"""
+    pass
+
+@dataclass
+class FreightConfig(TwoWheelRobotConfig):
+    """Configuration for Freight robot"""
+    pass
+
+@dataclass
+class LocobotConfig(TwoWheelRobotConfig):
+    """Configuration for Locobot robot"""
+    pass
 
 @dataclass
 class ManipulationRobotConfig(RobotConfig):
