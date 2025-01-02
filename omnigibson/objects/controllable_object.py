@@ -29,44 +29,13 @@ class ControllableObject(BaseObject):
     e.g.: a conveyor belt or a robot agent
     """
 
-    def __init__(self, config, **kwargs):
+    def __init__(self, config):
         """
         Args:
-            name (str): Name for the object. Names need to be unique per scene
-            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
-            category (str): Category for the object. Defaults to "object".
-            scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
-                for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
-                3-array specifies per-axis scaling.
-            visible (bool): whether to render this object or not in the stage
-            fixed_base (bool): whether to fix the base of this object or not
-            visual_only (bool): Whether this object should be visual only (and not collide with any other objects)
-            self_collisions (bool): Whether to enable self collisions for this object
-            prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
-            load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
-                loading this prim at runtime.
-            control_freq (float): control frequency (in Hz) at which to control the object. If set to be None,
-                we will automatically set the control frequency to be at the render frequency by default.
-            controller_config (None or dict): nested dictionary mapping controller name(s) to specific controller
-                configurations for this object. This will override any default values specified by this class.
-            action_type (str): one of {discrete, continuous} - what type of action space to use
-            action_normalize (bool): whether to normalize inputted actions. This will override any default values
-                specified by this class.
-            reset_joint_pos (None or n-array): if specified, should be the joint positions that the object should
-                be set to during a reset. If None (default), self._default_joint_pos will be used instead.
-                Note that _default_joint_pos are hardcoded & precomputed, and thus should not be modified by the user.
-                Set this value instead if you want to initialize the object with a different rese joint position.
-            kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
-                for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
+            config (ControllableObjectConfig): Configuration object for this controllable object
         """
-        # Store inputs from config
-        self._control_freq = config.control_freq
-        self._reset_joint_pos = None if config.reset_joint_pos is None else th.tensor(config.reset_joint_pos, dtype=th.float)
-
-        # Make sure action type is valid, and also save
-        assert_valid_key(key=config.action_type, valid_keys={"discrete", "continuous"}, name="action type")
-        self._action_type = config.action_type
-        self._action_normalize = config.action_normalize
+        # Store config
+        self._config = config
 
         # Store internal placeholders that will be filled in later
         self._dof_to_joints = None  # dict that will map DOF indices to JointPrims
@@ -75,6 +44,10 @@ class ControllableObject(BaseObject):
         self.dof_names_ordered = None
         self._control_enabled = True
 
+        # Make sure action type is valid
+        assert_valid_key(key=config.action_type, valid_keys={"discrete", "continuous"}, name="action type")
+
+        # Handle prim path
         class_name = self.__class__.__name__.lower()
         if config.relative_prim_path:
             # If prim path is specified, assert that the last element starts with the right prefix to ensure that
@@ -93,8 +66,8 @@ class ControllableObject(BaseObject):
             # If prim path is not specified, set it to the default path, but prepend controllable.
             config.relative_prim_path = f"/controllable__{class_name}__{config.name}"
 
-        # Run super init with config
-        super().__init__(config=config, **kwargs)
+        # Run super init
+        super().__init__(config=config)
 
     def _initialize(self):
         # Assert that the prim path matches ControllableObjectViewAPI's expected format
@@ -193,39 +166,27 @@ class ControllableObject(BaseObject):
         Stores created controllers as dictionary mapping controller names to specific controller
         instances used by this object.
         """
-        # Store controller configs from structured config
-        self._controller_config = self.config.controllers
-
         # Store dof idx mapping to dof name
         self.dof_names_ordered = list(self._joints.keys())
 
         # Initialize controllers to create
         self._controllers = dict()
-        # Keep track of any controllers that are subsumed by other controllers
-        # We will not instantiate subsumed controllers
-        controller_subsumes = dict()  # Maps independent controller name to list of subsumed controllers
-        subsume_names = set()
+        
+        # Process controller configs from structured config
         for name in self._raw_controller_order:
             # Make sure we have the valid controller name specified
-            assert_valid_key(key=name, valid_keys=self._controller_config, name="controller name")
-            cfg = self._controller_config[name]
-            subsume_controllers = cfg.pop("subsume_controllers", [])
-            # If this controller subsumes other controllers, it cannot be subsumed by another controller
-            # (i.e.: we don't allow nested / cyclical subsuming)
-            if len(subsume_controllers) > 0:
-                assert (
-                    name not in subsume_names
-                ), f"Controller {name} subsumes other controllers, and therefore cannot be subsumed by another controller!"
-                controller_subsumes[name] = subsume_controllers
-                for subsume_name in subsume_controllers:
-                    # Make sure it doesn't already exist -- a controller should only be subsumed by up to one other
-                    assert (
-                        subsume_name not in subsume_names
-                    ), f"Controller {subsume_name} cannot be subsumed by more than one other controller!"
-                    assert (
-                        subsume_name not in controller_subsumes
-                    ), f"Controller {name} subsumes other controllers, and therefore cannot be subsumed by another controller!"
-                    subsume_names.add(subsume_name)
+            assert_valid_key(key=name, valid_keys=self.config.controllers, name="controller name")
+            
+            # Create the controller from structured config
+            controller = create_controller(**cb.from_torch_recursive(self.config.controllers[name]))
+            
+            # Verify the controller's DOFs can all be driven
+            for idx in controller.dof_idx:
+                assert self._joints[
+                    self.dof_names_ordered[idx]
+                ].driven, "Controllers should only control driveable joints!"
+                
+            self._controllers[name] = controller
 
         # Loop over all controllers, in the order corresponding to @action dim
         for name in self._raw_controller_order:
@@ -319,15 +280,16 @@ class ControllableObject(BaseObject):
 
         return controller_config
 
-    def reload_controllers(self, controller_config=None):
+    def reload_controllers(self, controller_configs=None):
         """
-        Reloads controllers based on the specified new @controller_config
+        Reloads controllers based on the specified new controller configs
 
         Args:
-            controller_config (None or Dict[str, ...]): nested dictionary mapping controller name(s) to specific
-                controller configurations for this object. This will override any default values specified by this class.
+            controller_configs (None or Dict[str, ControllerConfig]): Mapping of controller names to their configs.
+                If None, will use the existing controller configs.
         """
-        self._controller_config = {} if controller_config is None else controller_config
+        if controller_configs is not None:
+            self.config.controllers = controller_configs
 
         # (Re-)load controllers
         self._load_controllers()
@@ -335,7 +297,7 @@ class ControllableObject(BaseObject):
         # (Re-)create the action space
         self._action_space = (
             self._create_discrete_action_space()
-            if self._action_type == "discrete"
+            if self.config.action_type == "discrete"
             else self._create_continuous_action_space()
         )
 
