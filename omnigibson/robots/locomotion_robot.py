@@ -2,7 +2,9 @@ from abc import abstractmethod
 from functools import cached_property
 
 import torch as th
+from omegaconf import MISSING
 
+from omnigibson.configs.robot_config import LocomotionRobotConfig
 from omnigibson.controllers import LocomotionController
 from omnigibson.robots.robot_base import BaseRobot
 from omnigibson.utils.python_utils import classproperty
@@ -14,17 +16,21 @@ class LocomotionRobot(BaseRobot):
     Robot that is is equipped with locomotive (navigational) capabilities.
     Provides common interface for a wide variety of robots.
 
-    NOTE: controller_config should, at the minimum, contain:
-        base: controller specifications for the controller to control this robot's base (locomotion).
-            Should include:
-
-            - name: Controller to create
-            - <other kwargs> relevant to the controller being created. Note that all values will have default
-                values specified, but setting these individual kwargs will override them
-
+    Args:
+        config (LocomotionRobotConfig): Configuration object for the robot containing:
+            - base_joint_names: List of joint names for base control
+            - base_control_idx: List of control indices for base joints
+            - controllers: Dict of controller configurations including:
+                base: Controller specifications for locomotion control
+                    - name: Controller to create
+                    - <other kwargs> relevant to the controller being created
     """
 
     def _validate_configuration(self):
+        # Make sure base joint configuration is specified
+        assert self.config.base_joint_names is not MISSING, "base_joint_names must be specified in config!"
+        assert self.config.base_control_idx is not MISSING, "base_control_idx must be specified in config!"
+
         # We make sure that our base controller exists and is a locomotion controller
         assert (
             "base" in self._controllers
