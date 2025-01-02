@@ -1,6 +1,7 @@
 from collections.abc import Iterable
 
 import torch as th
+from omnigibson.configs.prim_config import JointPrimConfig
 
 import omnigibson as og
 import omnigibson.lazy as lazy

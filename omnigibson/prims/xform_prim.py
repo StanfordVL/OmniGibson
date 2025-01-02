@@ -3,6 +3,7 @@ from collections.abc import Iterable
 from typing import Literal
 
 import torch as th
+from omnigibson.configs.prim_config import XFormPrimConfig
 
 import omnigibson as og
 import omnigibson.lazy as lazy

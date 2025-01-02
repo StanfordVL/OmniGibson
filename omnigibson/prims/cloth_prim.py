@@ -11,6 +11,7 @@ import math
 from functools import cached_property
 
 import torch as th
+from omnigibson.configs.prim_config import ClothPrimConfig
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -63,9 +64,7 @@ class ClothPrim(GeomPrim):
 
         # Run super init
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
 
     def _post_load(self):

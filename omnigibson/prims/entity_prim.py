@@ -4,6 +4,7 @@ from typing import Literal
 
 import networkx as nx
 import torch as th
+from omnigibson.configs.prim_config import EntityPrimConfig
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -60,7 +61,7 @@ class EntityPrim(XFormPrim):
 
         # This needs to be initialized to be used for _load() of PrimitiveObject
         self._prim_type = (
-            load_config["prim_type"] if load_config is not None and "prim_type" in load_config else PrimType.RIGID
+            config.load_config["prim_type"] if config.load_config is not None and "prim_type" in config.load_config else PrimType.RIGID
         )
         assert self._prim_type in iter(PrimType), f"Unknown prim type {self._prim_type}!"
 

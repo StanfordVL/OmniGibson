@@ -3,6 +3,7 @@ from functools import cached_property
 from typing import Literal
 
 import torch as th
+from omnigibson.configs.prim_config import RigidPrimConfig
 from scipy.spatial import ConvexHull
 
 import omnigibson as og
@@ -77,9 +78,7 @@ class RigidPrim(XFormPrim):
 
         # Run super init
         super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            load_config=load_config,
+            config=config,
         )
 
     def _post_load(self):

@@ -1,6 +1,7 @@
 from functools import cached_property
 
 import torch as th
+from omnigibson.configs.prim_config import GeomPrimConfig, CollisionGeomPrimConfig
 
 import omnigibson as og
 import omnigibson.lazy as lazy
