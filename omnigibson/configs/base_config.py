@@ -1,6 +1,7 @@
 from dataclasses import dataclass, field
 from typing import Optional, List, Dict, Any
 from omegaconf import MISSING
+from omnigibson.configs.robot_config import ControllerConfig
 
 @dataclass 
 class BaseConfig:

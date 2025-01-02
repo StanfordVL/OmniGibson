@@ -76,22 +76,22 @@ class ControllableObject(BaseObject):
         self._control_enabled = True
 
         class_name = self.__class__.__name__.lower()
-        if relative_prim_path:
+        if config.relative_prim_path:
             # If prim path is specified, assert that the last element starts with the right prefix to ensure that
             # the object will be included in the ControllableObjectViewAPI.
-            assert relative_prim_path.split("/")[-1].startswith(f"controllable__{class_name}__"), (
+            assert config.relative_prim_path.split("/")[-1].startswith(f"controllable__{class_name}__"), (
                 "If relative_prim_path is specified, the last element of the path must look like "
                 f"'controllable__{class_name}__robotname' where robotname can be an arbitrary "
                 "string containing no double underscores."
             )
-            assert relative_prim_path.split("/")[-1].count("__") == 2, (
+            assert config.relative_prim_path.split("/")[-1].count("__") == 2, (
                 "If relative_prim_path is specified, the last element of the path must look like "
                 f"'controllable__{class_name}__robotname' where robotname can be an arbitrary "
                 "string containing no double underscores."
             )
         else:
             # If prim path is not specified, set it to the default path, but prepend controllable.
-            relative_prim_path = f"/controllable__{class_name}__{name}"
+            config.relative_prim_path = f"/controllable__{class_name}__{config.name}"
 
         # Run super init with config
         super().__init__(config=config, **kwargs)
@@ -194,7 +194,7 @@ class ControllableObject(BaseObject):
         instances used by this object.
         """
         # Store controller configs from structured config
-        self._controller_config = config.controllers
+        self._controller_config = self.config.controllers
 
         # Store dof idx mapping to dof name
         self.dof_names_ordered = list(self._joints.keys())
@@ -207,8 +207,8 @@ class ControllableObject(BaseObject):
         subsume_names = set()
         for name in self._raw_controller_order:
             # Make sure we have the valid controller name specified
-            assert_valid_key(key=name, valid_keys=_controller_config, name="controller name")
-            cfg = _controller_config[name]
+            assert_valid_key(key=name, valid_keys=self._controller_config, name="controller name")
+            cfg = self._controller_config[name]
             subsume_controllers = cfg.pop("subsume_controllers", [])
             # If this controller subsumes other controllers, it cannot be subsumed by another controller
             # (i.e.: we don't allow nested / cyclical subsuming)
@@ -232,11 +232,11 @@ class ControllableObject(BaseObject):
             # If this controller is subsumed by another controller, simply skip it
             if name in subsume_names:
                 continue
-            cfg = _controller_config[name]
+            cfg = self._controller_config[name]
             # If we subsume other controllers, prepend the subsumed' dof idxs to this controller's idxs
             if name in controller_subsumes:
                 for subsumed_name in controller_subsumes[name]:
-                    subsumed_cfg = _controller_config[subsumed_name]
+                    subsumed_cfg = self._controller_config[subsumed_name]
                     cfg["dof_idx"] = th.concatenate([subsumed_cfg["dof_idx"], cfg["dof_idx"]])
 
             # If we're using normalized action space, override the inputs for all controllers
