@@ -1,18 +1,11 @@
-from dataclasses import dataclass, field
-from typing import Dict, Any, Optional, List
-from omegaconf import MISSING
+from omnigibson.configs.base_config import BasePrimConfig
+from dataclasses import dataclass
+from typing import Optional, Any
 
 @dataclass
-class PrimConfig:
-    """Base configuration for all prims"""
-    relative_prim_path: str = MISSING
-    name: str = MISSING
-    load_config: Dict[str, Any] = field(default_factory=dict)
-
-@dataclass
-class XFormPrimConfig(PrimConfig):
+class XFormPrimConfig(BasePrimConfig):
     """Configuration for XForm prims"""
-    scale: Optional[List[float]] = None
+    pass
 
 @dataclass
 class GeomPrimConfig(XFormPrimConfig):
@@ -44,7 +37,7 @@ class RigidPrimConfig(XFormPrimConfig):
     density: Optional[float] = None
 
 @dataclass
-class JointPrimConfig(PrimConfig):
+class JointPrimConfig(BasePrimConfig):
     """Configuration for joint prims"""
     joint_type: Optional[str] = None
     body0: Optional[str] = None 
