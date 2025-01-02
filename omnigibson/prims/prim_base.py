@@ -289,6 +289,10 @@ class BasePrim(Serializable, Recreatable, ABC):
         Returns:
             BasePrim: Generated prim object (not loaded, and not initialized!)
         """
-        return self.__class__(
-            config=config,
+        from omnigibson.configs.prim_config import PrimConfig
+        config = PrimConfig(
+            relative_prim_path=relative_prim_path,
+            name=name,
+            load_config=load_config,
         )
+        return self.__class__(config=config)
