@@ -6,6 +6,7 @@ from enum import IntEnum
 import torch as th
 
 import omnigibson.lazy as lazy
+from omnigibson.configs.base_config import DatasetObjectConfig, USDObjectConfig
 import omnigibson.utils.transform_utils as T
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.objects.usd_object import USDObject
