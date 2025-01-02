@@ -4,6 +4,8 @@ from typing import Literal
 import torch as th
 from bddl.object_taxonomy import ObjectTaxonomy
 
+from omnigibson.configs.base_config import StatefulObjectConfig
+
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros, gm
