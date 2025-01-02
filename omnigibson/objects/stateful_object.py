@@ -63,59 +63,29 @@ LAYER_REGISTRY = FlowEmitterLayerRegistry()
 class StatefulObject(BaseObject):
     """Objects that support object states."""
 
-    def __init__(
-        self,
-        config,
-        **kwargs,
-    ):
+    def __init__(self, config: StatefulObjectConfig):
         """
         Args:
-            name (str): Name for the object. Names need to be unique per scene
-            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
-            category (str): Category for the object. Defaults to "object".
-            scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
-                for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
-                3-array specifies per-axis scaling.
-            visible (bool): whether to render this object or not in the stage
-            fixed_base (bool): whether to fix the base of this object or not
-            visual_only (bool): Whether this object should be visual only (and not collide with any other objects)
-            kinematic_only (None or bool): Whether this object should be kinematic only (and not get affected by any
-                collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
-                are satisfied (see object_base.py post_load function), else False.
-            self_collisions (bool): Whether to enable self collisions for this object
-            prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
-            load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
-                loading this prim at runtime.
-            abilities (None or dict): If specified, manually adds specific object states to this object. It should be
-                a dict in the form of {ability: {param: value}} containing object abilities and parameters to pass to
-                the object state instance constructor.
-            include_default_states (bool): whether to include the default object states from @get_default_states
-            kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
-                for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
+            config (StatefulObjectConfig): Configuration object for this stateful object
         """
         # Values that will be filled later
         self._states = None
         self._emitters = dict()
         self._visual_states = None
         self._current_texture_state = None
-        self._include_default_states = config.include_default_states
+        self._config = config
 
         # Load abilities from taxonomy if needed & possible
+        self._abilities = {}
         if config.abilities is None:
-            abilities = {}
             taxonomy_class = OBJECT_TAXONOMY.get_synset_from_category(config.category)
             if taxonomy_class is not None:
-                abilities = OBJECT_TAXONOMY.get_abilities(taxonomy_class)
+                self._abilities = OBJECT_TAXONOMY.get_abilities(taxonomy_class)
         else:
-            abilities = config.abilities
-        assert isinstance(abilities, dict), "Object abilities must be in dictionary form."
-        self._abilities = abilities
+            self._abilities = config.abilities
 
         # Run super init
-        super().__init__(
-            config=config,
-            **kwargs,
-        )
+        super().__init__(config=config)
 
     def _post_load(self):
         # Run super first
