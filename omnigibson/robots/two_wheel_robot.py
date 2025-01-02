@@ -27,6 +27,10 @@ class TwoWheelRobot(LocomotionRobot):
     def _validate_configuration(self):
         # Make sure base only has two indices (i.e.: two wheels for differential drive)
         assert len(self.base_control_idx) == 2, "Differential drive can only be used with robot with two base joints!"
+        
+        # Make sure wheel parameters are specified
+        assert self.config.wheel_radius is not MISSING, "wheel_radius must be specified in config!"
+        assert self.config.wheel_axle_length is not MISSING, "wheel_axle_length must be specified in config!"
 
         # run super
         super()._validate_configuration()
@@ -107,9 +111,9 @@ class TwoWheelRobot(LocomotionRobot):
         """
         return {
             "name": "DifferentialDriveController",
-            "control_freq": self._control_freq,
-            "wheel_radius": self.wheel_radius,
-            "wheel_axle_length": self.wheel_axle_length,
+            "control_freq": self.config.control_freq,
+            "wheel_radius": self.config.wheel_radius,
+            "wheel_axle_length": self.config.wheel_axle_length,
             "control_limits": self.control_limits,
             "dof_idx": self.base_control_idx,
         }
@@ -127,22 +131,20 @@ class TwoWheelRobot(LocomotionRobot):
         return cfg
 
     @property
-    @abstractmethod
     def wheel_radius(self):
         """
         Returns:
             float: radius of each wheel at the base, in metric units
         """
-        raise NotImplementedError
+        return self.config.wheel_radius
 
     @property
-    @abstractmethod
     def wheel_axle_length(self):
         """
         Returns:
             float: perpendicular distance between the robot's two wheels, in metric units
         """
-        raise NotImplementedError
+        return self.config.wheel_axle_length
 
     @classproperty
     def _do_not_register_classes(cls):
