@@ -68,11 +68,13 @@ class ControllableObjectConfig(ObjectConfig):
 @dataclass
 class RobotConfig(ControllableObjectConfig):
     """Configuration for robots"""
-    controller_type: Optional[str] = None
-    controller_params: Dict[str, Any] = field(default_factory=dict)
-    default_joint_pos: Optional[Dict[str, float]] = None
-    default_arm_pose: Optional[str] = None
-    default_gripper_pose: Optional[str] = None
-    base_threshold: float = 0.2
-    arm_threshold: float = 0.2
-    gripper_threshold: float = 0.2
+    type: str = MISSING
+    obs_modalities: List[str] = field(default_factory=lambda: ["rgb", "proprio"])
+    proprio_obs: str = "default"
+    sensor_config: Optional[Dict[str, Any]] = None
+    grasping_mode: str = "physical"
+    grasping_direction: str = "lower"
+    disable_grasp_handling: bool = False
+    default_reset_mode: str = "untuck"
+    default_arm_pose: str = "vertical"
+    controllers: Dict[str, ControllerConfig] = field(default_factory=dict)
