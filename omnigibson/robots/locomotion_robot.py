@@ -212,25 +212,13 @@ class LocomotionRobot(BaseRobot):
         action_start_idx = sum([self.controllers[self.controller_order[i]].command_dim for i in range(controller_idx)])
         return th.arange(action_start_idx, action_start_idx + self.controllers["base"].command_dim)
 
-    @property
-    @abstractmethod
-    def base_joint_names(self):
-        """
-        Returns:
-            list: Array of joint names corresponding to this robot's base joints (e.g.: wheels).
-
-                Note: the ordering within the list is assumed to be intentional, and is
-                directly used to define the set of corresponding control idxs.
-        """
-        raise NotImplementedError
-
     @cached_property
     def base_control_idx(self):
         """
         Returns:
             n-array: Indices in low-level control vector corresponding to base joints.
         """
-        return th.tensor([list(self.joints.keys()).index(name) for name in self.base_joint_names])
+        return th.tensor(self.config.base_control_idx)
 
     @classproperty
     def _do_not_register_classes(cls):
