@@ -36,27 +36,7 @@ class DatasetObject(USDObject):
     object's category, e.g., avg dims, bounding boxes, masses, etc.
     """
 
-    def __init__(
-        self,
-        name,
-        relative_prim_path=None,
-        category="object",
-        model=None,
-        dataset_type=DatasetType.BEHAVIOR,
-        scale=None,
-        visible=True,
-        fixed_base=False,
-        visual_only=False,
-        kinematic_only=None,
-        self_collisions=False,
-        prim_type=PrimType.RIGID,
-        load_config=None,
-        abilities=None,
-        include_default_states=True,
-        bounding_box=None,
-        in_rooms=None,
-        **kwargs,
-    ):
+    def __init__(self, config: DatasetObjectConfig):
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
@@ -97,59 +77,60 @@ class DatasetObject(USDObject):
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
         # Store variables
-        if isinstance(in_rooms, str):
-            assert "," not in in_rooms
-        self._in_rooms = [in_rooms] if isinstance(in_rooms, str) else in_rooms
+        if isinstance(config.in_rooms, str):
+            assert "," not in config.in_rooms
+        self._in_rooms = [config.in_rooms] if isinstance(config.in_rooms, str) else config.in_rooms
 
         # Make sure only one of bounding_box and scale are specified
-        if bounding_box is not None and scale is not None:
-            raise Exception("You cannot define both scale and bounding box size for an DatasetObject")
+        if config.bounding_box is not None and config.scale is not None:
+            raise Exception("You cannot define both scale and bounding box size for a DatasetObject")
 
-        # Add info to load config
-        load_config = dict() if load_config is None else load_config
-        load_config["bounding_box"] = bounding_box
-        load_config["dataset_type"] = dataset_type
-        # All DatasetObjects should have xform properties pre-loaded
-        load_config["xform_props_pre_loaded"] = True
+        # Store config
+        self._config = config
 
         # Infer the correct usd path to use
-        if model is None:
-            available_models = get_all_object_category_models(category=category)
-            assert len(available_models) > 0, f"No available models found for category {category}!"
-            model = random.choice(available_models)
+        if config.model is None:
+            available_models = get_all_object_category_models(category=config.category)
+            assert len(available_models) > 0, f"No available models found for category {config.category}!"
+            config.model = random.choice(available_models)
 
         # If the model is in BAD_CLOTH_MODELS, raise an error for now -- this is a model that's unstable and needs to be fixed
         # TODO: Remove this once the asset is fixed!
         from omnigibson.utils.bddl_utils import BAD_CLOTH_MODELS
 
-        if prim_type == PrimType.CLOTH and model in BAD_CLOTH_MODELS.get(category, dict()):
+        if config.prim_type == PrimType.CLOTH and config.model in BAD_CLOTH_MODELS.get(config.category, dict()):
             raise ValueError(
-                f"Cannot create cloth object category: {category}, model: {model} because it is "
+                f"Cannot create cloth object category: {config.category}, model: {config.model} because it is "
                 f"currently broken ): This will be fixed in the next release!"
             )
 
-        self._model = model
-        usd_path = self.get_usd_path(category=category, model=model, dataset_type=dataset_type)
+        self._model = config.model
+        usd_path = self.get_usd_path(
+            category=config.category,
+            model=config.model,
+            dataset_type=DatasetType[config.dataset_type],
+        )
+
+        # Create USDObjectConfig from our config
+        usd_config = USDObjectConfig(
+            name=config.name,
+            relative_prim_path=config.relative_prim_path,
+            category=config.category,
+            usd_path=usd_path,
+            encrypted=config.dataset_type == "BEHAVIOR",
+            scale=config.scale,
+            visible=config.visible,
+            fixed_base=config.fixed_base,
+            visual_only=config.visual_only,
+            kinematic_only=config.kinematic_only,
+            self_collisions=config.self_collisions,
+            prim_type=config.prim_type,
+            abilities=config.abilities,
+            include_default_states=config.include_default_states,
+        )
 
         # Run super init
-        super().__init__(
-            relative_prim_path=relative_prim_path,
-            usd_path=usd_path,
-            encrypted=dataset_type == DatasetType.BEHAVIOR,
-            name=name,
-            category=category,
-            scale=scale,
-            visible=visible,
-            fixed_base=fixed_base,
-            visual_only=visual_only,
-            kinematic_only=kinematic_only,
-            self_collisions=self_collisions,
-            prim_type=prim_type,
-            include_default_states=include_default_states,
-            load_config=load_config,
-            abilities=abilities,
-            **kwargs,
-        )
+        super().__init__(config=usd_config)
 
     @classmethod
     def get_usd_path(cls, category, model, dataset_type=DatasetType.BEHAVIOR):
@@ -233,20 +214,20 @@ class DatasetObject(USDObject):
 
     def _post_load(self):
         # If manual bounding box is specified, scale based on ratio between that and the native bbox
-        if self._load_config["bounding_box"] is not None:
+        if self._config.bounding_box is not None:
             scale = th.ones(3)
             valid_idxes = self.native_bbox > 1e-4
             scale[valid_idxes] = (
-                th.tensor(self._load_config["bounding_box"])[valid_idxes] / self.native_bbox[valid_idxes]
+                th.tensor(self._config.bounding_box)[valid_idxes] / self.native_bbox[valid_idxes]
             )
         else:
-            scale = th.ones(3) if self._load_config["scale"] is None else self._load_config["scale"]
+            scale = th.ones(3) if self._config.scale is None else self._config.scale
 
         # Assert that the scale does not have too small dimensions
         assert th.all(th.tensor(scale) > 1e-4), f"Scale of {self.name} is too small: {scale}"
 
-        # Set this scale in the load config -- it will automatically scale the object during self.initialize()
-        self._load_config["scale"] = scale
+        # Update config scale
+        self._config.scale = scale
 
         # Run super last
         super()._post_load()

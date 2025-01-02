@@ -50,6 +50,7 @@ class DatasetObjectConfig(StatefulObjectConfig):
     dataset_type: str = "BEHAVIOR"
     bounding_box: Optional[List[float]] = None
     in_rooms: Optional[List[str]] = None
+    xform_props_pre_loaded: bool = True
 
 @dataclass
 class PrimitiveObjectConfig(StatefulObjectConfig):
