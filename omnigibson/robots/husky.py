@@ -1,15 +1,30 @@
 from functools import cached_property
-
 import torch as th
 
 from omnigibson.robots.locomotion_robot import LocomotionRobot
-
+from omnigibson.configs.robot_config import HuskyConfig
 
 class Husky(LocomotionRobot):
     """
     Husky robot
     Reference: https://clearpathrobotics.com/, http://wiki.ros.org/Robots/Husky
     """
+    
+    def __init__(
+        self,
+        config: HuskyConfig,
+        **kwargs,
+    ):
+        """
+        Args:
+            config (HuskyConfig): Configuration object for the robot
+            kwargs (dict): Additional keyword arguments that are used for other super() calls
+        """
+        # Run super init
+        super().__init__(
+            config=config,
+            **kwargs,
+        )
 
     def _create_discrete_action_space(self):
         raise ValueError("Husky does not support discrete actions!")
