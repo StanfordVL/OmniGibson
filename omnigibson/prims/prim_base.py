@@ -30,18 +30,16 @@ class BasePrim(Serializable, Recreatable, ABC):
 
     def __init__(
         self,
-        relative_prim_path,
-        name,
-        load_config=None,
+        config,
     ):
-        self._relative_prim_path = relative_prim_path
-        assert relative_prim_path.startswith("/"), f"Relative prim path {relative_prim_path} must start with a '/'!"
+        self._relative_prim_path = config.relative_prim_path
+        assert self._relative_prim_path.startswith("/"), f"Relative prim path {self._relative_prim_path} must start with a '/'!"
         assert all(
-            component[0] in string.ascii_letters for component in relative_prim_path[1:].split("/")
-        ), f"Each component of relative prim path {relative_prim_path} must start with a letter!"
+            component[0] in string.ascii_letters for component in self._relative_prim_path[1:].split("/")
+        ), f"Each component of relative prim path {self._relative_prim_path} must start with a letter!"
 
-        self._name = name
-        self._load_config = dict() if load_config is None else load_config
+        self._name = config.name
+        self._load_config = config.load_config
 
         # Other values that will be filled in at runtime
         self._scene = None
