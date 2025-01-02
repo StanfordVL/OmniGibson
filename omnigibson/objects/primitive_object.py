@@ -25,43 +25,10 @@ class PrimitiveObject(StatefulObject):
     PrimitiveObjects are objects defined by a single geom, e.g: sphere, mesh, cube, etc.
     """
 
-    def __init__(
-        self,
-        config,
-        **kwargs,
-    ):
+    def __init__(self, config):
         """
         Args:
-            name (str): Name for the object. Names need to be unique per scene
-            primitive_type (str): type of primitive object to create. Should be one of:
-                {"Cone", "Cube", "Cylinder", "Disk", "Plane", "Sphere", "Torus"}
-            relative_prim_path (None or str): The path relative to its scene prim for this object. If not specified, it defaults to /<name>.
-            category (str): Category for the object. Defaults to "object".
-            scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
-                for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
-                3-array specifies per-axis scaling.
-            visible (bool): whether to render this object or not in the stage
-            fixed_base (bool): whether to fix the base of this object or not
-            visual_only (bool): Whether this object should be visual only (and not collide with any other objects)
-            kinematic_only (None or bool): Whether this object should be kinematic only (and not get affected by any
-                collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
-                are satisfied (see object_base.py post_load function), else False.
-            self_collisions (bool): Whether to enable self collisions for this object
-            prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
-            load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
-                loading this prim at runtime.
-            abilities (None or dict): If specified, manually adds specific object states to this object. It should be
-                a dict in the form of {ability: {param: value}} containing object abilities and parameters to pass to
-                the object state instance constructor.rgba (4-array): (R, G, B, A) values to set for this object
-            include_default_states (bool): whether to include the default object states from @get_default_states
-            radius (None or float): If specified, sets the radius for this object. This value is scaled by @scale
-                Note: Should only be specified if the @primitive_type is one of {"Cone", "Cylinder", "Disk", "Sphere"}
-            height (None or float): If specified, sets the height for this object. This value is scaled by @scale
-                Note: Should only be specified if the @primitive_type is one of {"Cone", "Cylinder"}
-            size (None or float): If specified, sets the size for this object. This value is scaled by @scale
-                Note: Should only be specified if the @primitive_type is one of {"Cube", "Torus"}
-            kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
-                for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
+            config (PrimitiveObjectConfig): Configuration object for this primitive object
         """
         # Initialize other internal variables
         self._vis_geom = None
@@ -72,18 +39,7 @@ class PrimitiveObject(StatefulObject):
         assert_valid_key(key=config.primitive_type, valid_keys=PRIMITIVE_MESH_TYPES, name="primitive mesh type")
         self._primitive_type = config.primitive_type
 
-        # Compose load config
-        load_config = dict() if config.load_config is None else config.load_config
-        load_config["color"] = config.rgba[:3]
-        load_config["opacity"] = config.rgba[3]
-        load_config["radius"] = config.radius
-        load_config["height"] = config.height
-        load_config["size"] = config.size
-
-        super().__init__(
-            config=config,
-            **kwargs,
-        )
+        super().__init__(config=config)
 
     def _load(self):
         # Define an Xform at the specified path
@@ -113,15 +69,15 @@ class PrimitiveObject(StatefulObject):
 
     def _post_load(self):
         # Possibly set scalings (only if the scale value is not set)
-        if self._load_config["scale"] is not None:
+        if self.config.scale is not None:
             log.warning("Custom scale specified for primitive object, so ignoring radius, height, and size arguments!")
         else:
-            if self._load_config["radius"] is not None:
-                self.radius = self._load_config["radius"]
-            if self._load_config["height"] is not None:
-                self.height = self._load_config["height"]
-            if self._load_config["size"] is not None:
-                self.size = self._load_config["size"]
+            if self.config.radius is not None:
+                self.radius = self.config.radius
+            if self.config.height is not None:
+                self.height = self.config.height
+            if self.config.size is not None:
+                self.size = self.config.size
 
         # This step might will perform cloth remeshing if self._prim_type == PrimType.CLOTH.
         # Therefore, we need to apply size, radius, and height before this to scale the points properly.
@@ -150,11 +106,11 @@ class PrimitiveObject(StatefulObject):
         else:
             raise ValueError("Prim type must either be PrimType.RIGID or PrimType.CLOTH for loading a primitive object")
 
-        visual_geom_prim.color = self._load_config["color"]
+        visual_geom_prim.color = self.config.rgba[:3]
         visual_geom_prim.opacity = (
-            self._load_config["opacity"].item()
-            if isinstance(self._load_config["opacity"], th.Tensor)
-            else self._load_config["opacity"]
+            self.config.rgba[3].item()
+            if isinstance(self.config.rgba[3], th.Tensor)
+            else self.config.rgba[3]
         )
 
     @property
