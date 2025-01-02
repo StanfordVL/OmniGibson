@@ -29,25 +29,7 @@ class ControllableObject(BaseObject):
     e.g.: a conveyor belt or a robot agent
     """
 
-    def __init__(
-        self,
-        name,
-        relative_prim_path=None,
-        category="object",
-        scale=None,
-        visible=True,
-        fixed_base=False,
-        visual_only=False,
-        self_collisions=False,
-        prim_type=PrimType.RIGID,
-        load_config=None,
-        control_freq=None,
-        controller_config=None,
-        action_type="continuous",
-        action_normalize=True,
-        reset_joint_pos=None,
-        **kwargs,
-    ):
+    def __init__(self, config, **kwargs):
         """
         Args:
             name (str): Name for the object. Names need to be unique per scene
@@ -77,15 +59,14 @@ class ControllableObject(BaseObject):
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
-        # Store inputs
-        self._control_freq = control_freq
-        self._controller_config = controller_config
-        self._reset_joint_pos = None if reset_joint_pos is None else th.tensor(reset_joint_pos, dtype=th.float)
+        # Store inputs from config
+        self._control_freq = config.control_freq
+        self._reset_joint_pos = None if config.reset_joint_pos is None else th.tensor(config.reset_joint_pos, dtype=th.float)
 
         # Make sure action type is valid, and also save
-        assert_valid_key(key=action_type, valid_keys={"discrete", "continuous"}, name="action type")
-        self._action_type = action_type
-        self._action_normalize = action_normalize
+        assert_valid_key(key=config.action_type, valid_keys={"discrete", "continuous"}, name="action type")
+        self._action_type = config.action_type
+        self._action_normalize = config.action_normalize
 
         # Store internal placeholders that will be filled in later
         self._dof_to_joints = None  # dict that will map DOF indices to JointPrims
@@ -112,20 +93,8 @@ class ControllableObject(BaseObject):
             # If prim path is not specified, set it to the default path, but prepend controllable.
             relative_prim_path = f"/controllable__{class_name}__{name}"
 
-        # Run super init
-        super().__init__(
-            relative_prim_path=relative_prim_path,
-            name=name,
-            category=category,
-            scale=scale,
-            visible=visible,
-            fixed_base=fixed_base,
-            visual_only=visual_only,
-            self_collisions=self_collisions,
-            prim_type=prim_type,
-            load_config=load_config,
-            **kwargs,
-        )
+        # Run super init with config
+        super().__init__(config=config, **kwargs)
 
     def _initialize(self):
         # Assert that the prim path matches ControllableObjectViewAPI's expected format
@@ -224,11 +193,8 @@ class ControllableObject(BaseObject):
         Stores created controllers as dictionary mapping controller names to specific controller
         instances used by this object.
         """
-        # Generate the controller config
-        self._controller_config = self._generate_controller_config(custom_config=self._controller_config)
-
-        # We copy the controller config here because we add/remove some keys in-place that shouldn't persist
-        _controller_config = deepcopy(self._controller_config)
+        # Store controller configs from structured config
+        self._controller_config = config.controllers
 
         # Store dof idx mapping to dof name
         self.dof_names_ordered = list(self._joints.keys())

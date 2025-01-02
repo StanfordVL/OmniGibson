@@ -68,11 +68,11 @@ class LightObjectConfig(StatefulObjectConfig):
     radius: float = 1.0
     intensity: float = 50000.0
 
-@dataclass
+@dataclass 
 class ControllableObjectConfig(StatefulObjectConfig):
     """Configuration for controllable objects"""
     control_freq: Optional[float] = None
-    controller_config: Optional[Dict[str, Any]] = None
     action_type: str = "continuous"
     action_normalize: bool = True
     reset_joint_pos: Optional[List[float]] = None
+    controllers: Dict[str, ControllerConfig] = field(default_factory=dict)
