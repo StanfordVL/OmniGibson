@@ -20,7 +20,7 @@ class USDObject(StatefulObject):
             config (USDObjectConfig): Configuration object containing all relevant parameters for
                 initializing this USD object. See the USDObjectConfig dataclass for specific parameters.
         """
-        # Store the config
+        # Store config
         self._config = config
         
         # Initialize super

@@ -35,40 +35,38 @@ class ControllableObject(BaseObject):
         Args:
             config (ControllableObjectConfig): Configuration object for this controllable object
         """
-        # Store config
-        self.config = config
-
-        # Store internal placeholders that will be filled in later
-        self._dof_to_joints = None  # dict that will map DOF indices to JointPrims
-        self._last_action = None
-        self._controllers = None
-        self.dof_names_ordered = None
-        self._control_enabled = True
-
         # Make sure action type is valid
-        assert_valid_key(key=self.config.action_type, valid_keys={"discrete", "continuous"}, name="action type")
+        assert_valid_key(key=config.action_type, valid_keys={"discrete", "continuous"}, name="action type")
 
         # Handle prim path
         class_name = self.__class__.__name__.lower()
-        if self.config.relative_prim_path:
+        if config.relative_prim_path:
             # If prim path is specified, assert that the last element starts with the right prefix to ensure that
             # the object will be included in the ControllableObjectViewAPI.
-            assert self.config.relative_prim_path.split("/")[-1].startswith(f"controllable__{class_name}__"), (
+            assert config.relative_prim_path.split("/")[-1].startswith(f"controllable__{class_name}__"), (
                 "If relative_prim_path is specified, the last element of the path must look like "
                 f"'controllable__{class_name}__robotname' where robotname can be an arbitrary "
                 "string containing no double underscores."
             )
-            assert self.config.relative_prim_path.split("/")[-1].count("__") == 2, (
+            assert config.relative_prim_path.split("/")[-1].count("__") == 2, (
                 "If relative_prim_path is specified, the last element of the path must look like "
                 f"'controllable__{class_name}__robotname' where robotname can be an arbitrary "
                 "string containing no double underscores."
             )
         else:
             # If prim path is not specified, set it to the default path, but prepend controllable.
-            self.config.relative_prim_path = f"/controllable__{class_name}__{self.config.name}"
+            config.relative_prim_path = f"/controllable__{class_name}__{config.name}"
+
+        # Store config and initialize other attributes
+        self._config = config
+        self._dof_to_joints = None  # dict that will map DOF indices to JointPrims
+        self._last_action = None
+        self._controllers = None
+        self.dof_names_ordered = None
+        self._control_enabled = True
 
         # Run super init with config
-        super().__init__(config=self.config)
+        super().__init__(config=config)
 
     def _initialize(self):
         # Assert that the prim path matches ControllableObjectViewAPI's expected format

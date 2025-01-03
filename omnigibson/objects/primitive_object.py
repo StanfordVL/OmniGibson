@@ -30,14 +30,16 @@ class PrimitiveObject(StatefulObject):
         Args:
             config (PrimitiveObjectConfig): Configuration object for this primitive object
         """
-        # Initialize other internal variables
+        # Make sure primitive type is valid
+        assert_valid_key(key=config.primitive_type, valid_keys=PRIMITIVE_MESH_TYPES, name="primitive mesh type")
+
+        # Initialize other internal variables 
         self._vis_geom = None
         self._col_geom = None
         self._extents = th.ones(3)  # (x,y,z extents)
 
-        # Make sure primitive type is valid
-        assert_valid_key(key=config.primitive_type, valid_keys=PRIMITIVE_MESH_TYPES, name="primitive mesh type")
-        self._primitive_type = config.primitive_type
+        # Store config
+        self._config = config
 
         super().__init__(config=config)
 

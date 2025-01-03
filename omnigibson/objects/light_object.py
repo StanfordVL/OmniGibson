@@ -32,10 +32,10 @@ class LightObject(StatefulObject):
         Args:
             config (LightObjectConfig): Configuration object containing all parameters for this light object
         """
-        # Make sure primitive type is valid
+        # Make sure light type is valid
         assert_valid_key(key=config.light_type, valid_keys=self.LIGHT_TYPES, name="light_type")
         
-        # Store the config
+        # Store config
         self._config = config
         
         # Other attributes to be filled in at runtime

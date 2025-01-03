@@ -77,17 +77,13 @@ class DatasetObject(USDObject):
             kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
                 for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
         """
-        # Store variables
+        # Validate in_rooms
         if isinstance(config.in_rooms, str):
             assert "," not in config.in_rooms
-        self._in_rooms = [config.in_rooms] if isinstance(config.in_rooms, str) else config.in_rooms
 
         # Make sure only one of bounding_box and scale are specified
         if config.bounding_box is not None and config.scale is not None:
             raise Exception("You cannot define both scale and bounding box size for a DatasetObject")
-
-        # Store config
-        self._config = config
 
         # Infer the correct usd path to use
         if config.model is None:
@@ -105,7 +101,8 @@ class DatasetObject(USDObject):
                 f"currently broken ): This will be fixed in the next release!"
             )
 
-        self._model = config.model
+        # Store config
+        self._config = config
         usd_path = self.get_usd_path(
             category=config.category,
             model=config.model,
