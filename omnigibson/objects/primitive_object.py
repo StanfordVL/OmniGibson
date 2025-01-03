@@ -125,7 +125,7 @@ class PrimitiveObject(StatefulObject):
         Returns:
             float: radius for this object
         """
-        assert_valid_key(key=self._primitive_type, valid_keys=VALID_RADIUS_OBJECTS, name="primitive object with radius")
+        assert_valid_key(key=self._config.primitive_type, valid_keys=VALID_RADIUS_OBJECTS, name="primitive object with radius")
         return self._extents[0] / 2.0
 
     @radius.setter
