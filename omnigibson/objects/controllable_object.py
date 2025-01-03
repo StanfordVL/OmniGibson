@@ -29,11 +29,14 @@ class ControllableObject(BaseObject):
     e.g.: a conveyor belt or a robot agent
     """
 
-    def __init__(self, config):
+    def __init__(self, config: ControllableObjectConfig):
         """
         Args:
             config (ControllableObjectConfig): Configuration object for this controllable object
         """
+        # Store config
+        self.config = config
+
         # Store internal placeholders that will be filled in later
         self._dof_to_joints = None  # dict that will map DOF indices to JointPrims
         self._last_action = None
@@ -42,29 +45,29 @@ class ControllableObject(BaseObject):
         self._control_enabled = True
 
         # Make sure action type is valid
-        assert_valid_key(key=config.action_type, valid_keys={"discrete", "continuous"}, name="action type")
+        assert_valid_key(key=self.config.action_type, valid_keys={"discrete", "continuous"}, name="action type")
 
         # Handle prim path
         class_name = self.__class__.__name__.lower()
-        if config.relative_prim_path:
+        if self.config.relative_prim_path:
             # If prim path is specified, assert that the last element starts with the right prefix to ensure that
             # the object will be included in the ControllableObjectViewAPI.
-            assert config.relative_prim_path.split("/")[-1].startswith(f"controllable__{class_name}__"), (
+            assert self.config.relative_prim_path.split("/")[-1].startswith(f"controllable__{class_name}__"), (
                 "If relative_prim_path is specified, the last element of the path must look like "
                 f"'controllable__{class_name}__robotname' where robotname can be an arbitrary "
                 "string containing no double underscores."
             )
-            assert config.relative_prim_path.split("/")[-1].count("__") == 2, (
+            assert self.config.relative_prim_path.split("/")[-1].count("__") == 2, (
                 "If relative_prim_path is specified, the last element of the path must look like "
                 f"'controllable__{class_name}__robotname' where robotname can be an arbitrary "
                 "string containing no double underscores."
             )
         else:
             # If prim path is not specified, set it to the default path, but prepend controllable.
-            config.relative_prim_path = f"/controllable__{class_name}__{config.name}"
+            self.config.relative_prim_path = f"/controllable__{class_name}__{self.config.name}"
 
         # Run super init with config
-        super().__init__(config=config)
+        super().__init__(config=self.config)
 
     def _initialize(self):
         # Assert that the prim path matches ControllableObjectViewAPI's expected format
@@ -180,7 +183,7 @@ class ControllableObject(BaseObject):
                 controller_cfg.command_input_limits = "default"  # default is normalized (-1, 1)
             
             # Create the controller from structured config
-            controller = create_controller(**cb.from_torch_recursive(controller_cfg))
+            controller = create_controller(name=controller_cfg.name, **cb.from_torch_recursive(controller_cfg))
             
             # Verify the controller's DOFs can all be driven
             for idx in controller.dof_idx:
@@ -269,7 +272,15 @@ class ControllableObject(BaseObject):
                 If None, will use the existing controller configs.
         """
         if controller_configs is not None:
-            self.config.controllers = controller_configs
+            # Create new structured configs from the input
+            from omnigibson.configs.robot_config import ControllerConfig
+            new_controllers = {}
+            for name, cfg in controller_configs.items():
+                if isinstance(cfg, dict):
+                    new_controllers[name] = ControllerConfig(**cfg)
+                else:
+                    new_controllers[name] = cfg
+            self.config.controllers = new_controllers
 
         # (Re-)load controllers
         self._load_controllers()
