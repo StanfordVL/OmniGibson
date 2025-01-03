@@ -34,9 +34,6 @@ class ControllableObject(BaseObject):
         Args:
             config (ControllableObjectConfig): Configuration object for this controllable object
         """
-        # Store config
-        self._config = config
-
         # Store internal placeholders that will be filled in later
         self._dof_to_joints = None  # dict that will map DOF indices to JointPrims
         self._last_action = None
@@ -66,7 +63,7 @@ class ControllableObject(BaseObject):
             # If prim path is not specified, set it to the default path, but prepend controllable.
             config.relative_prim_path = f"/controllable__{class_name}__{config.name}"
 
-        # Run super init
+        # Run super init with config
         super().__init__(config=config)
 
     def _initialize(self):
@@ -177,8 +174,13 @@ class ControllableObject(BaseObject):
             # Make sure we have the valid controller name specified
             assert_valid_key(key=name, valid_keys=self.config.controllers, name="controller name")
             
+            # Get controller config and override input limits if using normalized actions
+            controller_cfg = self.config.controllers[name]
+            if self.config.action_normalize:
+                controller_cfg.command_input_limits = "default"  # default is normalized (-1, 1)
+            
             # Create the controller from structured config
-            controller = create_controller(**cb.from_torch_recursive(self.config.controllers[name]))
+            controller = create_controller(**cb.from_torch_recursive(controller_cfg))
             
             # Verify the controller's DOFs can all be driven
             for idx in controller.dof_idx:
@@ -187,25 +189,7 @@ class ControllableObject(BaseObject):
                 ].driven, "Controllers should only control driveable joints!"
                 
             self._controllers[name] = controller
-
-        # Loop over all controllers, in the order corresponding to @action dim
-        for name in self._raw_controller_order:
-            # Make sure we have the valid controller name specified
-            assert_valid_key(key=name, valid_keys=self.config.controllers, name="controller name")
             
-            # If we're using normalized action space, override the inputs for all controllers
-            cfg = dict(self.config.controllers[name])
-            if self.config.action_normalize:
-                cfg["command_input_limits"] = "default"  # default is normalized (-1, 1)
-
-            # Create the controller
-            controller = create_controller(**cb.from_torch_recursive(cfg))
-            # Verify the controller's DOFs can all be driven
-            for idx in controller.dof_idx:
-                assert self._joints[
-                    self.dof_names_ordered[idx]
-                ].driven, "Controllers should only control driveable joints!"
-            self._controllers[name] = controller
         self.update_controller_mode()
 
     def update_controller_mode(self):
@@ -251,26 +235,28 @@ class ControllableObject(BaseObject):
         specified in @custom_config
 
         Args:
-            custom_config (None or Dict[str, ...]): nested dictionary mapping controller name(s) to specific custom
-                controller configurations for this object. This will override any default values specified by this class
+            custom_config (None or Dict[str, ControllerConfig]): Mapping of controller names to their configs.
+                If specified, will override the default controller configs.
 
         Returns:
-            dict: Fully-populated nested dictionary mapping controller name(s) to specific controller configurations for
-                this object
+            Dict[str, ControllerConfig]: Mapping of controller names to their configs
         """
-        controller_config = {} if custom_config is None else deepcopy(custom_config)
-
-        # Update the configs
+        # Start with default controller configs
+        controller_config = {}
+        
+        # For each controller group
         for group in self._raw_controller_order:
-            group_controller_name = (
-                controller_config[group]["name"]
-                if group in controller_config and "name" in controller_config[group]
-                else self._default_controllers[group]
-            )
-            controller_config[group] = merge_nested_dicts(
-                base_dict=self._default_controller_config[group][group_controller_name],
-                extra_dict=controller_config.get(group, {}),
-            )
+            # Get default controller type for this group
+            default_controller = self._default_controllers[group]
+            
+            # Get default config for this controller type
+            default_config = self._default_controller_config[group][default_controller]
+            
+            # Override with custom config if specified
+            if custom_config is not None and group in custom_config:
+                controller_config[group] = custom_config[group]
+            else:
+                controller_config[group] = default_config
 
         return controller_config
 
