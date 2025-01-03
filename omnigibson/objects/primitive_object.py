@@ -25,7 +25,7 @@ class PrimitiveObject(StatefulObject):
     PrimitiveObjects are objects defined by a single geom, e.g: sphere, mesh, cube, etc.
     """
 
-    def __init__(self, config):
+    def __init__(self, config: PrimitiveObjectConfig):
         """
         Args:
             config (PrimitiveObjectConfig): Configuration object for this primitive object
@@ -38,9 +38,7 @@ class PrimitiveObject(StatefulObject):
         self._col_geom = None
         self._extents = th.ones(3)  # (x,y,z extents)
 
-        # Store config
-        self._config = config
-
+        # Run super init with config
         super().__init__(config=config)
 
     def _load(self):
@@ -71,15 +69,15 @@ class PrimitiveObject(StatefulObject):
 
     def _post_load(self):
         # Possibly set scalings (only if the scale value is not set)
-        if self.config.scale is not None:
+        if self._config.scale is not None:
             log.warning("Custom scale specified for primitive object, so ignoring radius, height, and size arguments!")
         else:
-            if self.config.radius is not None:
-                self.radius = self.config.radius
-            if self.config.height is not None:
-                self.height = self.config.height
-            if self.config.size is not None:
-                self.size = self.config.size
+            if self._config.radius is not None:
+                self.radius = self._config.radius
+            if self._config.height is not None:
+                self.height = self._config.height
+            if self._config.size is not None:
+                self.size = self._config.size
 
         # This step might will perform cloth remeshing if self._prim_type == PrimType.CLOTH.
         # Therefore, we need to apply size, radius, and height before this to scale the points properly.
@@ -108,11 +106,11 @@ class PrimitiveObject(StatefulObject):
         else:
             raise ValueError("Prim type must either be PrimType.RIGID or PrimType.CLOTH for loading a primitive object")
 
-        visual_geom_prim.color = self.config.rgba[:3]
+        visual_geom_prim.color = self._config.rgba[:3]
         visual_geom_prim.opacity = (
-            self.config.rgba[3].item()
-            if isinstance(self.config.rgba[3], th.Tensor)
-            else self.config.rgba[3]
+            self._config.rgba[3].item()
+            if isinstance(self._config.rgba[3], th.Tensor)
+            else self._config.rgba[3]
         )
 
     @property
