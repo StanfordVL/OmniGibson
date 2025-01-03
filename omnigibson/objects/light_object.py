@@ -34,10 +34,10 @@ class LightObject(StatefulObject):
         """
         # Make sure light type is valid
         assert_valid_key(key=config.light_type, valid_keys=self.LIGHT_TYPES, name="light_type")
-        
+
         # Store config
         self._config = config
-        
+
         # Other attributes to be filled in at runtime
         self._light_link = None
 
@@ -73,7 +73,7 @@ class LightObject(StatefulObject):
 
         # Set the intensity and radius from config
         self.intensity = self._config.intensity
-        
+
         # Only set radius for applicable light types
         if self._config.light_type in {"Cylinder", "Disk", "Sphere"}:
             self.radius = self._config.radius
@@ -178,6 +178,7 @@ class LightObject(StatefulObject):
             texture_file_path (str): path of texture file that should be used for this light
         """
         self._light_link.set_attribute("inputs:texture:file", lazy.pxr.Sdf.AssetPath(texture_file_path))
+
     @property
     def light_type(self):
         """

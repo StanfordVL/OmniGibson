@@ -4,12 +4,13 @@ import torch as th
 from omnigibson.robots.locomotion_robot import LocomotionRobot
 from omnigibson.configs.robot_config import HuskyConfig
 
+
 class Husky(LocomotionRobot):
     """
     Husky robot
     Reference: https://clearpathrobotics.com/, http://wiki.ros.org/Robots/Husky
     """
-    
+
     def __init__(
         self,
         config: HuskyConfig,

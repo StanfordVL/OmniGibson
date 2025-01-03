@@ -22,7 +22,7 @@ from omnigibson.configs.sensor_config import SensorConfig
 
 __all__ = [
     "ObjectConfig",
-    "USDObjectConfig", 
+    "USDObjectConfig",
     "DatasetObjectConfig",
     "PrimitiveObjectConfig",
     "LightObjectConfig",
@@ -30,9 +30,11 @@ __all__ = [
     "RobotConfig",
 ]
 
+
 @dataclass
 class RobotConfig(ControllableObjectConfig):
     """Configuration for robots"""
+
     type: str = MISSING
     obs_modalities: List[str] = field(default_factory=lambda: ["rgb", "proprio"])
     proprio_obs: str = "default"
@@ -42,11 +44,14 @@ class RobotConfig(ControllableObjectConfig):
     disable_grasp_handling: bool = False
     default_reset_mode: str = "untuck"
     default_arm_pose: str = "vertical"
-    controllers: Dict[str, Union[
-        ControllerConfig,
-        JointControllerConfig,
-        IKControllerConfig,
-        OSCControllerConfig, 
-        DifferentialDriveConfig,
-        GripperControllerConfig,
-    ]] = field(default_factory=dict)
+    controllers: Dict[
+        str,
+        Union[
+            ControllerConfig,
+            JointControllerConfig,
+            IKControllerConfig,
+            OSCControllerConfig,
+            DifferentialDriveConfig,
+            GripperControllerConfig,
+        ],
+    ] = field(default_factory=dict)

@@ -215,9 +215,7 @@ class DatasetObject(USDObject):
         if self._config.bounding_box is not None:
             scale = th.ones(3)
             valid_idxes = self.native_bbox > 1e-4
-            scale[valid_idxes] = (
-                th.tensor(self._config.bounding_box)[valid_idxes] / self.native_bbox[valid_idxes]
-            )
+            scale[valid_idxes] = th.tensor(self._config.bounding_box)[valid_idxes] / self.native_bbox[valid_idxes]
         else:
             scale = th.ones(3) if self._config.scale is None else self._config.scale
 

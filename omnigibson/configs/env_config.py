@@ -4,22 +4,25 @@ from omegaconf import MISSING
 
 from omnigibson.configs.object_config import ObjectConfig, RobotConfig
 
+
 @dataclass
 class RenderConfig:
     viewer_width: int = 1280
     viewer_height: int = 720
 
-@dataclass 
+
+@dataclass
 class EnvConfig:
     action_frequency: int = 60
     rendering_frequency: int = 60
     physics_frequency: int = 60
     device: Optional[str] = None
     automatic_reset: bool = False
-    flatten_action_space: bool = False 
+    flatten_action_space: bool = False
     flatten_obs_space: bool = False
     initial_pos_z_offset: float = 0.1
     external_sensors: Optional[List[Dict[str, Any]]] = None
+
 
 @dataclass
 class SceneConfig:
@@ -33,15 +36,18 @@ class SceneConfig:
     scene_instance: Optional[str] = None
     scene_file: Optional[str] = None
 
+
 @dataclass
 class TaskConfig:
     type: str = "DummyTask"
     params: Dict[str, Any] = field(default_factory=dict)
 
+
 @dataclass
 class WrapperConfig:
     type: Optional[str] = None
     params: Dict[str, Any] = field(default_factory=dict)
+
 
 @dataclass
 class OmniGibsonConfig:

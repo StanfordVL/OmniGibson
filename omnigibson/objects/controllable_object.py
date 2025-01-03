@@ -170,28 +170,28 @@ class ControllableObject(BaseObject):
 
         # Initialize controllers to create
         self._controllers = dict()
-        
+
         # Process controller configs from structured config
         for name in self._raw_controller_order:
             # Make sure we have the valid controller name specified
             assert_valid_key(key=name, valid_keys=self.config.controllers, name="controller name")
-            
+
             # Get controller config and override input limits if using normalized actions
             controller_cfg = self.config.controllers[name]
             if self.config.action_normalize:
                 controller_cfg.command_input_limits = "default"  # default is normalized (-1, 1)
-            
+
             # Create the controller from structured config
             controller = create_controller(name=controller_cfg.name, **cb.from_torch_recursive(controller_cfg))
-            
+
             # Verify the controller's DOFs can all be driven
             for idx in controller.dof_idx:
                 assert self._joints[
                     self.dof_names_ordered[idx]
                 ].driven, "Controllers should only control driveable joints!"
-                
+
             self._controllers[name] = controller
-            
+
         self.update_controller_mode()
 
     def update_controller_mode(self):
@@ -245,15 +245,15 @@ class ControllableObject(BaseObject):
         """
         # Start with default controller configs
         controller_config = {}
-        
+
         # For each controller group
         for group in self._raw_controller_order:
             # Get default controller type for this group
             default_controller = self._default_controllers[group]
-            
+
             # Get default config for this controller type
             default_config = self._default_controller_config[group][default_controller]
-            
+
             # Override with custom config if specified
             if custom_config is not None and group in custom_config:
                 controller_config[group] = custom_config[group]
@@ -273,6 +273,7 @@ class ControllableObject(BaseObject):
         if controller_configs is not None:
             # Create new structured configs from the input
             from omnigibson.configs.robot_config import ControllerConfig
+
             new_controllers = {}
             for name, cfg in controller_configs.items():
                 if isinstance(cfg, dict):

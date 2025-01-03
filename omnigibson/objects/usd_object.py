@@ -22,7 +22,7 @@ class USDObject(StatefulObject):
         """
         # Store config
         self._config = config
-        
+
         # Initialize super
         super().__init__(config=config)
 

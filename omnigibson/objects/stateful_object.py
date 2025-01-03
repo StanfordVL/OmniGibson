@@ -148,7 +148,7 @@ class StatefulObject(BaseObject):
         """
         return self._config
 
-    @property 
+    @property
     def abilities(self):
         """
         Returns:
