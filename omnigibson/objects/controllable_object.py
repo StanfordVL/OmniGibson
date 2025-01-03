@@ -190,18 +190,12 @@ class ControllableObject(BaseObject):
 
         # Loop over all controllers, in the order corresponding to @action dim
         for name in self._raw_controller_order:
-            # If this controller is subsumed by another controller, simply skip it
-            if name in subsume_names:
-                continue
-            cfg = self._controller_config[name]
-            # If we subsume other controllers, prepend the subsumed' dof idxs to this controller's idxs
-            if name in controller_subsumes:
-                for subsumed_name in controller_subsumes[name]:
-                    subsumed_cfg = self._controller_config[subsumed_name]
-                    cfg["dof_idx"] = th.concatenate([subsumed_cfg["dof_idx"], cfg["dof_idx"]])
-
+            # Make sure we have the valid controller name specified
+            assert_valid_key(key=name, valid_keys=self.config.controllers, name="controller name")
+            
             # If we're using normalized action space, override the inputs for all controllers
-            if self._action_normalize:
+            cfg = dict(self.config.controllers[name])
+            if self.config.action_normalize:
                 cfg["command_input_limits"] = "default"  # default is normalized (-1, 1)
 
             # Create the controller
