@@ -34,7 +34,10 @@ class PrimitiveObject(StatefulObject):
         # Make sure primitive type is valid
         assert_valid_key(key=config.primitive_type, valid_keys=PRIMITIVE_MESH_TYPES, name="primitive mesh type")
 
-        # Initialize other internal variables 
+        # Store config
+        self._config = config
+
+        # Initialize other internal variables
         self._vis_geom = None
         self._col_geom = None
         self._extents = th.ones(3)  # (x,y,z extents)
@@ -49,10 +52,10 @@ class PrimitiveObject(StatefulObject):
         # Define a nested mesh corresponding to the root link for this prim
         og.sim.stage.DefinePrim(f"{self.prim_path}/base_link", "Xform")
         self._vis_geom = create_primitive_mesh(
-            prim_path=f"{self.prim_path}/base_link/visuals", primitive_type=self._primitive_type
+            prim_path=f"{self.prim_path}/base_link/visuals", primitive_type=self._config.primitive_type
         )
         self._col_geom = create_primitive_mesh(
-            prim_path=f"{self.prim_path}/base_link/collisions", primitive_type=self._primitive_type
+            prim_path=f"{self.prim_path}/base_link/collisions", primitive_type=self._config.primitive_type
         )
 
         # Add collision API to collision geom
@@ -87,9 +90,9 @@ class PrimitiveObject(StatefulObject):
         # Cloth primitive does not have collision meshes
         if self._prim_type != PrimType.CLOTH:
             # Set the collision approximation appropriately
-            if self._primitive_type == "Sphere":
+            if self._config.primitive_type == "Sphere":
                 col_approximation = "boundingSphere"
-            elif self._primitive_type == "Cube":
+            elif self._config.primitive_type == "Cube":
                 col_approximation = "boundingCube"
             else:
                 col_approximation = "convexHull"
@@ -109,9 +112,7 @@ class PrimitiveObject(StatefulObject):
 
         visual_geom_prim.color = self._config.rgba[:3]
         visual_geom_prim.opacity = (
-            self._config.rgba[3].item()
-            if isinstance(self._config.rgba[3], th.Tensor)
-            else self._config.rgba[3]
+            self._config.rgba[3].item() if isinstance(self._config.rgba[3], th.Tensor) else self._config.rgba[3]
         )
 
     @property
@@ -124,7 +125,9 @@ class PrimitiveObject(StatefulObject):
         Returns:
             float: radius for this object
         """
-        assert_valid_key(key=self._config.primitive_type, valid_keys=VALID_RADIUS_OBJECTS, name="primitive object with radius")
+        assert_valid_key(
+            key=self._config.primitive_type, valid_keys=VALID_RADIUS_OBJECTS, name="primitive object with radius"
+        )
         return self._extents[0] / 2.0
 
     @radius.setter
@@ -137,12 +140,14 @@ class PrimitiveObject(StatefulObject):
         Args:
             radius (float): radius to set
         """
-        assert_valid_key(key=self._primitive_type, valid_keys=VALID_RADIUS_OBJECTS, name="primitive object with radius")
+        assert_valid_key(
+            key=self._config.primitive_type, valid_keys=VALID_RADIUS_OBJECTS, name="primitive object with radius"
+        )
         # Update the extents variable
         original_extent = self._extents.clone()
         self._extents = (
             th.ones(3) * radius * 2.0
-            if self._primitive_type == "Sphere"
+            if self._config.primitive_type == "Sphere"
             else th.tensor([radius * 2.0, radius * 2.0, self._extents[2]])
         )
         attr_pairs = []
@@ -164,7 +169,7 @@ class PrimitiveObject(StatefulObject):
         scaling_factor = 2.0 * radius / original_extent[0]
         for attr, vals in attr_pairs:
             # If this is a sphere, modify all 3 axes
-            if self._primitive_type == "Sphere":
+            if self._config.primitive_type == "Sphere":
                 vals = vals * scaling_factor
             # Otherwise, just modify the first two dimensions
             else:
@@ -182,7 +187,9 @@ class PrimitiveObject(StatefulObject):
         Returns:
             float: height for this object
         """
-        assert_valid_key(key=self._primitive_type, valid_keys=VALID_HEIGHT_OBJECTS, name="primitive object with height")
+        assert_valid_key(
+            key=self._config.primitive_type, valid_keys=VALID_HEIGHT_OBJECTS, name="primitive object with height"
+        )
         return self._extents[2]
 
     @height.setter
@@ -195,7 +202,9 @@ class PrimitiveObject(StatefulObject):
         Args:
             height (float): height to set
         """
-        assert_valid_key(key=self._primitive_type, valid_keys=VALID_HEIGHT_OBJECTS, name="primitive object with height")
+        assert_valid_key(
+            key=self._config.primitive_type, valid_keys=VALID_HEIGHT_OBJECTS, name="primitive object with height"
+        )
         # Update the extents variable
         original_extent = self._extents.clone()
         self._extents[2] = height
@@ -228,7 +237,9 @@ class PrimitiveObject(StatefulObject):
         Returns:
             float: size for this object
         """
-        assert_valid_key(key=self._primitive_type, valid_keys=VALID_SIZE_OBJECTS, name="primitive object with size")
+        assert_valid_key(
+            key=self._config.primitive_type, valid_keys=VALID_SIZE_OBJECTS, name="primitive object with size"
+        )
         return self._extents[0]
 
     @size.setter
@@ -241,7 +252,9 @@ class PrimitiveObject(StatefulObject):
         Args:
             size (float): size to set
         """
-        assert_valid_key(key=self._primitive_type, valid_keys=VALID_SIZE_OBJECTS, name="primitive object with size")
+        assert_valid_key(
+            key=self._config.primitive_type, valid_keys=VALID_SIZE_OBJECTS, name="primitive object with size"
+        )
 
         # Update the extents variable
         original_extent = self._extents.clone()
@@ -267,19 +280,19 @@ class PrimitiveObject(StatefulObject):
     def _dump_state(self):
         state = super()._dump_state()
         # state["extents"] = self._extents
-        state["radius"] = self.radius if self._primitive_type in VALID_RADIUS_OBJECTS else -1
-        state["height"] = self.height if self._primitive_type in VALID_HEIGHT_OBJECTS else -1
-        state["size"] = self.size if self._primitive_type in VALID_SIZE_OBJECTS else -1
+        state["radius"] = self.radius if self._config.primitive_type in VALID_RADIUS_OBJECTS else -1
+        state["height"] = self.height if self._config.primitive_type in VALID_HEIGHT_OBJECTS else -1
+        state["size"] = self.size if self._config.primitive_type in VALID_SIZE_OBJECTS else -1
         return state
 
     def _load_state(self, state):
         super()._load_state(state=state)
         # self._extents = th.tensor(state["extents"])
-        if self._primitive_type in VALID_RADIUS_OBJECTS:
+        if self._config.primitive_type in VALID_RADIUS_OBJECTS:
             self.radius = state["radius"]
-        if self._primitive_type in VALID_HEIGHT_OBJECTS:
+        if self._config.primitive_type in VALID_HEIGHT_OBJECTS:
             self.height = state["height"]
-        if self._primitive_type in VALID_SIZE_OBJECTS:
+        if self._config.primitive_type in VALID_SIZE_OBJECTS:
             self.size = state["size"]
 
     def deserialize(self, state):
