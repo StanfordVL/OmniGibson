@@ -14680,6 +14680,16 @@
         }
     },
     {
+        "rule_name": "public_trash_can.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "public_trash_can.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "puck.n.02-washer-cover",
         "input_synsets": {},
         "washed_item": {
