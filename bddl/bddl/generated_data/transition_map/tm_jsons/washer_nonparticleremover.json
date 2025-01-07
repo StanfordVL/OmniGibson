@@ -1410,6 +1410,56 @@
         }
     },
     {
+        "rule_name": "bookcase_back.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "bookcase_back.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "bookcase_baseboard.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "bookcase_baseboard.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "bookcase_shelf.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "bookcase_shelf.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "bookcase_side.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "bookcase_side.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "bookcase_top.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "bookcase_top.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "bookend.n.01-washer-cover",
         "input_synsets": {},
         "washed_item": {
@@ -6150,6 +6200,16 @@
         }
     },
     {
+        "rule_name": "detachable_lid_jar.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "detachable_lid_jar.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "detergent__atomizer.n.01-washer-cover",
         "input_synsets": {},
         "washed_item": {
@@ -7030,6 +7090,16 @@
         }
     },
     {
+        "rule_name": "fixed_window.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "fixed_window.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "flagpole.n.02-washer-cover",
         "input_synsets": {},
         "washed_item": {
@@ -7814,6 +7884,16 @@
         "input_synsets": {},
         "washed_item": {
             "grill.n.02": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "grocery_shelf.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "grocery_shelf.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -10760,6 +10840,16 @@
         }
     },
     {
+        "rule_name": "hinged_jar.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "hinged_jar.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "hip.n.05-washer-cover",
         "input_synsets": {},
         "washed_item": {
@@ -12400,16 +12490,6 @@
         }
     },
     {
-        "rule_name": "mason_jar.n.01-washer-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "mason_jar.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "mat.n.03-washer-cover",
         "input_synsets": {},
         "washed_item": {
@@ -13014,6 +13094,16 @@
         "input_synsets": {},
         "washed_item": {
             "open-end_wrench.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "openable_window.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "openable_window.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -15704,56 +15794,6 @@
         "input_synsets": {},
         "washed_item": {
             "shelf.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "shelf_back.n.01-washer-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "shelf_back.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "shelf_baseboard.n.01-washer-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "shelf_baseboard.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "shelf_shelf.n.01-washer-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "shelf_shelf.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "shelf_side.n.01-washer-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "shelf_side.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "shelf_top.n.01-washer-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "shelf_top.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -18694,16 +18734,6 @@
         "input_synsets": {},
         "washed_item": {
             "wind_chime.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "window.n.01-washer-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "window.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1

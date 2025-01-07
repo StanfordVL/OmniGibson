@@ -26388,7 +26388,23 @@
                                   "children": [
                                     {
                                       "name": "mason_jar.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "detachable_lid_jar.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "detachable_lid_jar"
+                                          ]
+                                        },
+                                        {
+                                          "name": "hinged_jar.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "hinged_jar"
+                                          ]
+                                        }
+                                      ]
                                     },
                                     {
                                       "name": "vase.n.01",
@@ -29168,26 +29184,6 @@
                                   ]
                                 },
                                 {
-                                  "name": "shelf_back.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "shelf_baseboard.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "shelf_shelf.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "shelf_side.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "shelf_top.n.01",
-                                  "hasModel": true
-                                },
-                                {
                                   "name": "step.n.04",
                                   "hasModel": true,
                                   "categories": [
@@ -29844,6 +29840,41 @@
                                   ]
                                 },
                                 {
+                                  "name": "bookcase_back.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bookcase_back"
+                                  ]
+                                },
+                                {
+                                  "name": "bookcase_baseboard.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bookcase_baseboard"
+                                  ]
+                                },
+                                {
+                                  "name": "bookcase_shelf.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bookcase_shelf"
+                                  ]
+                                },
+                                {
+                                  "name": "bookcase_side.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bookcase_side"
+                                  ]
+                                },
+                                {
+                                  "name": "bookcase_top.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "bookcase_top"
+                                  ]
+                                },
+                                {
                                   "name": "cabinet.n.01",
                                   "hasModel": true,
                                   "categories": [
@@ -29856,6 +29887,13 @@
                                 {
                                   "name": "chest_of_drawers.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "grocery_shelf.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "grocery_shelf"
+                                  ]
                                 },
                                 {
                                   "name": "hallstand.n.01",
@@ -32486,7 +32524,23 @@
                                 },
                                 {
                                   "name": "window.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "fixed_window.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "fixed_window"
+                                      ]
+                                    },
+                                    {
+                                      "name": "openable_window.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "openable_window"
+                                      ]
+                                    }
+                                  ]
                                 }
                               ]
                             },

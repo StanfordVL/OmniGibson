@@ -2629,8 +2629,31 @@
         "disinfectable": {}
     },
     "bookcase.n.01": {
+        "fillable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
+        "heatable": {},
+        "freezable": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {}
+    },
+    "grocery_shelf.n.01": {
+        "fillable": {},
+        "sceneObject": {},
+        "rigidBody": {},
+        "nonSubstance": {},
+        "heatable": {},
+        "freezable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -18850,10 +18873,29 @@
         "wrinkleable": {},
         "disinfectable": {}
     },
-    "mason_jar.n.01": {
+    "hinged_jar.n.01": {
         "breakable": {},
         "fillable": {},
         "openable": {},
+        "rigidBody": {},
+        "nonSubstance": {},
+        "heatable": {},
+        "freezable": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {}
+    },
+    "detachable_lid_jar.n.01": {
+        "breakable": {},
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "heatable": {},
@@ -25162,10 +25204,9 @@
         "wrinkleable": {},
         "disinfectable": {}
     },
-    "shelf_back.n.01": {
+    "bookcase_back.n.01": {
         "rigidBody": {},
         "nonSubstance": {},
-        "attachable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -25178,10 +25219,9 @@
         "wrinkleable": {},
         "disinfectable": {}
     },
-    "shelf_baseboard.n.01": {
+    "bookcase_baseboard.n.01": {
         "rigidBody": {},
         "nonSubstance": {},
-        "attachable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -25194,10 +25234,9 @@
         "wrinkleable": {},
         "disinfectable": {}
     },
-    "shelf_shelf.n.01": {
+    "bookcase_shelf.n.01": {
         "rigidBody": {},
         "nonSubstance": {},
-        "attachable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -25210,10 +25249,9 @@
         "wrinkleable": {},
         "disinfectable": {}
     },
-    "shelf_side.n.01": {
+    "bookcase_side.n.01": {
         "rigidBody": {},
         "nonSubstance": {},
-        "attachable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -25226,10 +25264,9 @@
         "wrinkleable": {},
         "disinfectable": {}
     },
-    "shelf_top.n.01": {
+    "bookcase_top.n.01": {
         "rigidBody": {},
         "nonSubstance": {},
-        "attachable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -25243,13 +25280,10 @@
         "disinfectable": {}
     },
     "shelf.n.01": {
-        "fillable": {},
         "assembleable": {},
         "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
-        "heatable": {},
-        "freezable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -30742,7 +30776,23 @@
         "wrinkleable": {},
         "disinfectable": {}
     },
-    "window.n.01": {
+    "fixed_window.n.01": {
+        "sceneObject": {},
+        "rigidBody": {},
+        "nonSubstance": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {}
+    },
+    "openable_window.n.01": {
         "openable": {},
         "sceneObject": {},
         "rigidBody": {},
