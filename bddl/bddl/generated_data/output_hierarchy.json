@@ -20652,8 +20652,7 @@
                                                   "name": "cooler.n.01",
                                                   "hasModel": true,
                                                   "categories": [
-                                                    "cooler",
-                                                    "open_air_cooler"
+                                                    "cooler"
                                                   ]
                                                 },
                                                 {
@@ -20670,6 +20669,13 @@
                                                     "display_fridge",
                                                     "fridge",
                                                     "wine_fridge"
+                                                  ]
+                                                },
+                                                {
+                                                  "name": "grocery_fridge.n.01",
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "grocery_fridge"
                                                   ]
                                                 }
                                               ]
@@ -32156,10 +32162,7 @@
                               "children": [
                                 {
                                   "name": "cupboard.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "grocery_cupboard"
-                                  ]
+                                  "hasModel": true
                                 }
                               ]
                             }
