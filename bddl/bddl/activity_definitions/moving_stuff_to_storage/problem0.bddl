@@ -4,7 +4,7 @@
     (:objects
         floor.n.01_1 floor.n.01_2 - floor.n.01
         ice_skate.n.01_1 ice_skate.n.01_2 - ice_skate.n.01
-        shelf.n.01_1 - shelf.n.01
+        bookcase.n.01_1 - bookcase.n.01
         bowling_ball.n.01_1 - bowling_ball.n.01
         painting.n.01_1 - painting.n.01
         textbook.n.01_1 textbook.n.01_2 - textbook.n.01
@@ -13,16 +13,16 @@
     )
     
     (:init 
-        (inside ice_skate.n.01_1 shelf.n.01_1) 
-        (inside ice_skate.n.01_2 shelf.n.01_1) 
+        (inside ice_skate.n.01_1 bookcase.n.01_1) 
+        (inside ice_skate.n.01_2 bookcase.n.01_1) 
         (ontop bowling_ball.n.01_1 floor.n.01_1) 
-        (inside textbook.n.01_1 shelf.n.01_1) 
-        (inside textbook.n.01_2 shelf.n.01_1) 
+        (inside textbook.n.01_1 bookcase.n.01_1) 
+        (inside textbook.n.01_2 bookcase.n.01_1) 
         (ontop painting.n.01_1 floor.n.01_1)
         (ontop carton.n.02_1 floor.n.01_1)
         (ontop carton.n.02_2 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1) 
-        (inroom shelf.n.01_1 living_room) 
+        (inroom bookcase.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room)
         (inroom floor.n.01_2 storage_room)
     )

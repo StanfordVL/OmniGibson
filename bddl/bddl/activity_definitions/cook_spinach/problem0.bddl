@@ -9,7 +9,7 @@
         black_pepper.n.02_1 - black_pepper.n.02
         pepper__shaker.n.01_1 - pepper__shaker.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-        shelf.n.01_1 - shelf.n.01
+        cabinet.n.01_1 - cabinet.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -26,10 +26,10 @@
         )
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
         (insource pepper__shaker.n.01_1 black_pepper.n.02_1)
-        (inside pepper__shaker.n.01_1 shelf.n.01_1)
+        (inside pepper__shaker.n.01_1 cabinet.n.01_1)
         (inroom stove.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
-        (inroom shelf.n.01_1 kitchen) 
+        (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
