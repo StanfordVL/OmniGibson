@@ -59,25 +59,29 @@ def main(model_dir):
     }
     vfk: Dict[trimesh.Trimesh, np.ndarray] = robot.visual_trimesh_fk(cfg=joint_cfg)
     
-    scene = trimesh.Scene()
+    meshes = []
     for mesh, transform in vfk.items():
-        scene.add_geometry(geometry=mesh, transform=transform)
+        mesh_copy = mesh.copy()
+        mesh_copy.apply_transform(transform)
+        meshes.append(mesh_copy)
+    final_mesh = trimesh.util.concatenate(meshes)
+    final_mesh.show()
+    os.makedirs("export", exist_ok=True)
+    final_mesh.export("export/test.obj")
 
-    sphere = trimesh.creation.uv_sphere(radius=0.01)
-
-    bbox_size = np.array(metadata["bbox_size"])
-    print("bb size", bbox_size)
-    bbox_ctr = np.array(metadata["base_link_offset"])
-    print("bb ctr", bbox_ctr)
-    bbox_min = bbox_ctr - bbox_size / 2
-    bbox_max = bbox_ctr + bbox_size / 2
-    limits = np.stack([bbox_min, bbox_max], axis=1)
-    v, e, f = get_cube(limits)
-    for point in v:
-        p_transform = trimesh.transformations.translation_matrix(point)
-        scene.add_geometry(geometry=sphere, transform=p_transform)
-
-    scene.show()
+    # sphere = trimesh.creation.uv_sphere(radius=0.01)
+    # bbox_size = np.array(metadata["bbox_size"])
+    # print("bb size", bbox_size)
+    # bbox_ctr = np.array(metadata["base_link_offset"])
+    # print("bb ctr", bbox_ctr)
+    # bbox_min = bbox_ctr - bbox_size / 2
+    # bbox_max = bbox_ctr + bbox_size / 2
+    # limits = np.stack([bbox_min, bbox_max], axis=1)
+    # v, e, f = get_cube(limits)
+    # for point in v:
+    #     p_transform = trimesh.transformations.translation_matrix(point)
+    #     scene.add_geometry(geometry=sphere, transform=p_transform)
+    # scene.show()
 
 if __name__ == "__main__":
     main(sys.argv[1])
