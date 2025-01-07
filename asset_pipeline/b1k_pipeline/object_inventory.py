@@ -48,17 +48,6 @@ def main(use_future=False):
                 for obj, links in object_list["meta_links"].items():
                     meta_links[obj].update(links)
 
-                # Manually generate pseudo-metalinks for non-fixed joints
-                for name, _, _ in object_list["max_tree"]:
-                    parsed_name = b1k_pipeline.utils.parse_name(name)
-                    if parsed_name is None:
-                        continue
-                    if parsed_name.group("joint_type") not in ["R", "P"]:
-                        continue
-
-                    key = f"{parsed_name.group('category')}-{parsed_name.group('model_id')}"
-                    meta_links[key].update("joint")
-
                 # Manually generate pseudo-metalinks for parts
                 for name, _, parent in object_list["max_tree"]:
                     if not parent:
