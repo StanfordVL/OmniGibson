@@ -66,8 +66,8 @@ def main(model_dir):
         meshes.append(mesh_copy)
     final_mesh = trimesh.util.concatenate(meshes)
     final_mesh.show()
-    os.makedirs("export", exist_ok=True)
-    final_mesh.export("export/test.obj")
+    os.makedirs(f"export/{model_id}", exist_ok=True)
+    final_mesh.export("export/{model_id}/export.obj")
 
     # sphere = trimesh.creation.uv_sphere(radius=0.01)
     # bbox_size = np.array(metadata["bbox_size"])
