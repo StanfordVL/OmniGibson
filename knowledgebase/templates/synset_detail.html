@@ -45,26 +45,8 @@
   <br>
 
   <h2>Directly Mapped Categories</h2>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Category Name</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for category in synset.categories %}
-        <tr>
-          <td><a href="{{ url_for('category_detail', name=category.name) }}">{{ category.name }}</a></td>
-        </tr>
-        {% else %}
-        <tr>
-          <td>No categories found</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  {% from "table_modules/category_table.html" import render_category_table %}
+  {{ render_category_table(synset.categories, enable_search=False, enable_csv=False) }}
   <br>
   
   <h2>Directly Mapped Objects</h2>
