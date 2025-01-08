@@ -17,15 +17,8 @@
   {% from "table_modules/usage_table.html" import render_usage_table %}
   {{ render_usage_table(synset, enable_search=False, enable_csv=False) }}
   <h2>Tasks</h2>
-  <div class="container">
-    <div class="row justify-content-md-center">
-      {% for task in synset.tasks %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('task_detail', name=task.name) }}" class="btn btn-{{- task.state|tocolor -}}">{{ task.name }}</a></div>
-      {% else %}
-      <div>None</div>
-      {% endfor %}
-    </div>
-  </div>
+  {% from "table_modules/task_table.html" import render_task_table %}
+  {{ render_task_table(synset.tasks, enable_search=False, enable_csv=False) }}
   <br>
 
   <h2>Directly Mapped Categories</h2>
