@@ -9,12 +9,12 @@ from bddl.parsing import parse_domain
 from enum import Enum, auto
 
 class SynsetState(Enum):
-    MATCHED = auto()
-    PLANNED = auto() 
-    UNMATCHED = auto()
-    SUBSTANCE = auto()
-    ILLEGAL = auto()
-    NONE = auto()
+    MATCHED = "Matched"
+    PLANNED = "Planned"
+    UNMATCHED = "Unmatched"
+    SUBSTANCE = "Substance"
+    ILLEGAL = "Illegal"
+    NONE = "No State Info"
 
 
 # predicates that can only be used for substances

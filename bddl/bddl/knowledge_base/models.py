@@ -169,7 +169,7 @@ class Category(Model):
     def view_mapped_to_substance_synset(cls):
         """Categories Incorrectly Mapped to Substance Synsets"""
         return [
-            x for x in cls.all_objects() if x.synset.state == STATE_SUBSTANCE
+            x for x in cls.all_objects() if x.synset.state == SynsetState.SUBSTANCE
         ]
 
     @classmethod
@@ -325,7 +325,7 @@ class Synset(Model):
 
     @cached_property
     def has_fully_supporting_object(self) -> bool:
-        if self.state == STATE_SUBSTANCE:
+        if self.state == SynsetState.SUBSTANCE:
             return True
 
         for obj in self.matching_objects:
@@ -440,7 +440,7 @@ class Synset(Model):
                     diceable_children.append(json.loads(p.parameters)["uncooked_diceable_derivative_synset"])
                 except KeyError:
                     raise ValueError(f"'uncooked_diceable_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
-            elif p.name == "cookable" and self.state == STATE_SUBSTANCE:
+            elif p.name == "cookable" and self.state == SynsetState.SUBSTANCE:
                 try:
                     cookable_children.append(json.loads(p.parameters)["substance_cooking_derivative_synset"])
                 except KeyError:
@@ -475,8 +475,8 @@ class Synset(Model):
             s
             for s in cls.all_objects()
             if (
-                (s.state == STATE_SUBSTANCE and s.is_used_as_non_substance)
-                or (not s.state == STATE_SUBSTANCE and s.is_used_as_substance)
+                (s.state == SynsetState.SUBSTANCE and s.is_used_as_non_substance)
+                or (not s.state == SynsetState.SUBSTANCE and s.is_used_as_substance)
                 or (s.is_used_as_substance and s.is_used_as_non_substance)
             )
         ]
@@ -640,7 +640,7 @@ class Task(Model):
     @cached_property
     def substance_synsets(self):
         """synsets that represent a substance"""
-        return [x for x in self.synsets if x.state == STATE_SUBSTANCE]
+        return [x for x in self.synsets if x.state == SynsetState.SUBSTANCE]
 
     @cached_property
     def synset_state(self) -> str:
@@ -658,7 +658,7 @@ class Task(Model):
         return [
             synset
             for synset in self.synsets
-            if synset.state in (STATE_ILLEGAL, STATE_UNMATCHED)
+            if synset.state in (SynsetState.ILLEGAL, SynsetState.UNMATCHED)
         ]
 
     @cached_property
@@ -682,11 +682,11 @@ class Task(Model):
     def scene_state(self) -> str:
         scene_matching_dict = self.scene_matching_dict
         if any(x["matched_ready"] for x in scene_matching_dict.values()):
-            return STATE_MATCHED
+            return SynsetState.MATCHED
         elif any(x["matched_planned"] for x in scene_matching_dict.values()):
-            return STATE_PLANNED
+            return SynsetState.PLANNED
         else:
-            return STATE_UNMATCHED
+            return SynsetState.UNMATCHED
 
     @cached_property
     def substance_required(self) -> str:
@@ -805,7 +805,7 @@ class Task(Model):
     @classmethod
     def view_non_scene_matched(cls):
         """Non-Scene-Matched Tasks"""
-        return [x for x in cls.all_objects() if x.scene_state == STATE_UNMATCHED]
+        return [x for x in cls.all_objects() if x.scene_state == SynsetState.UNMATCHED]
 
 
 @dataclass(eq=False, order=False)
