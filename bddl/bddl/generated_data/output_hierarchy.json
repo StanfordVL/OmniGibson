@@ -9970,6 +9970,19 @@
                                       ]
                                     }
                                   ]
+                                },
+                                {
+                                  "name": "winter_squash.n.02",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "butternut_squash.n.02",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "butternut_squash"
+                                      ]
+                                    }
+                                  ]
                                 }
                               ]
                             }
@@ -33449,13 +33462,6 @@
                                           "name": "winter_squash.n.01",
                                           "hasModel": true,
                                           "children": [
-                                            {
-                                              "name": "butternut_squash.n.01",
-                                              "hasModel": true,
-                                              "categories": [
-                                                "butternut_squash"
-                                              ]
-                                            },
                                             {
                                               "name": "cooked__diced__butternut_squash.n.01",
                                               "hasModel": true,
