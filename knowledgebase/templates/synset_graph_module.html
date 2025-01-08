@@ -8,7 +8,7 @@ graph TD;
   {% endfor %}
   {% for synset in G.nodes %}
     click {{synset.name}} "{{ url_for('synset_detail', name=synset.name) }}" "Synset details page";
-    class {{synset.name}} {{synset.state}};
+    class {{synset.name}} {{synset.state|tocolor}};
   {% endfor %}
   {% if center_node %}
     style {{center_node.name}} stroke:#333,stroke-width:2px;
