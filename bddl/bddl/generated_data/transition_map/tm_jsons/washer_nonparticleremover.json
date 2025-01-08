@@ -6200,16 +6200,6 @@
         }
     },
     {
-        "rule_name": "detachable_lid_jar.n.01-washer-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "detachable_lid_jar.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "detergent__atomizer.n.01-washer-cover",
         "input_synsets": {},
         "washed_item": {
@@ -7884,6 +7874,16 @@
         "input_synsets": {},
         "washed_item": {
             "grill.n.02": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "grocery_fridge.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "grocery_fridge.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -10844,6 +10844,16 @@
         "input_synsets": {},
         "washed_item": {
             "hinged_jar.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "hingeless_jar.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "hingeless_jar.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -14664,6 +14674,16 @@
         "input_synsets": {},
         "washed_item": {
             "pruner.n.02": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "public_trash_can.n.01-washer-cover",
+        "input_synsets": {},
+        "washed_item": {
+            "public_trash_can.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1

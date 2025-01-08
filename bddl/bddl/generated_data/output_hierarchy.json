@@ -20652,8 +20652,7 @@
                                                   "name": "cooler.n.01",
                                                   "hasModel": true,
                                                   "categories": [
-                                                    "cooler",
-                                                    "open_air_cooler"
+                                                    "cooler"
                                                   ]
                                                 },
                                                 {
@@ -20670,6 +20669,13 @@
                                                     "display_fridge",
                                                     "fridge",
                                                     "wine_fridge"
+                                                  ]
+                                                },
+                                                {
+                                                  "name": "grocery_fridge.n.01",
+                                                  "hasModel": true,
+                                                  "categories": [
+                                                    "grocery_fridge"
                                                   ]
                                                 }
                                               ]
@@ -24789,7 +24795,6 @@
                                   "name": "ashcan.n.01",
                                   "hasModel": true,
                                   "categories": [
-                                    "public_trash_can",
                                     "trash_can"
                                   ]
                                 },
@@ -24798,6 +24803,13 @@
                                   "hasModel": true,
                                   "categories": [
                                     "compost_bin"
+                                  ]
+                                },
+                                {
+                                  "name": "public_trash_can.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "public_trash_can"
                                   ]
                                 },
                                 {
@@ -26391,17 +26403,17 @@
                                       "hasModel": true,
                                       "children": [
                                         {
-                                          "name": "detachable_lid_jar.n.01",
-                                          "hasModel": true,
-                                          "categories": [
-                                            "detachable_lid_jar"
-                                          ]
-                                        },
-                                        {
                                           "name": "hinged_jar.n.01",
                                           "hasModel": true,
                                           "categories": [
                                             "hinged_jar"
+                                          ]
+                                        },
+                                        {
+                                          "name": "hingeless_jar.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "hingeless_jar"
                                           ]
                                         }
                                       ]
@@ -29892,7 +29904,8 @@
                                   "name": "grocery_shelf.n.01",
                                   "hasModel": true,
                                   "categories": [
-                                    "grocery_shelf"
+                                    "grocery_shelf",
+                                    "magazine_stand"
                                   ]
                                 },
                                 {
@@ -32156,10 +32169,7 @@
                               "children": [
                                 {
                                   "name": "cupboard.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "grocery_cupboard"
-                                  ]
+                                  "hasModel": true
                                 }
                               ]
                             }
@@ -32274,7 +32284,8 @@
                                       "name": "door.n.01",
                                       "hasModel": true,
                                       "categories": [
-                                        "door"
+                                        "door",
+                                        "folding_door"
                                       ]
                                     },
                                     {
