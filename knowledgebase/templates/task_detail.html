@@ -3,9 +3,10 @@
 {% block content %}
   <h1 class="text-center">{{ task.name }}</h1>
   <hr>
-  <h2>Synsets</h2>
+  <h2>Required Synsets</h2>
   {% from "table_modules/synset_table.html" import render_synset_table %}
   {{ render_synset_table(task.synsets, enable_search=False, enable_csv=False) }}
+  
   <h2>Transition Paths By Task Scope Objects</h2>
   <div class="mermaid">
     graph TD;
