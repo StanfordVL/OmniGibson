@@ -70,7 +70,7 @@
     <tbody id="myTable">
       {% for object in object_list %}
       <tr>
-        <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
+        <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a></td>
         <td>{{ object.category.name }}</td>
         <td>{{ object.category.synset.name }}</td>
         <td>{{ object.category.synset.task_relevant }}</td>
