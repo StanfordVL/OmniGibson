@@ -13,10 +13,10 @@
           <div class="card-body">
             <div class="card-header">
               <h5 class="card-title mb-0">
-                <a href="{{ url_for('object_detail', name=object.name) }}" class="text-decoration-none">{{ object.name }}</a>
+                <a href="{{ url_for('object_detail', name=object.name) }}" class="text-decoration-none">{{ object }}</a>
               </h5>
             </div>
-            <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object.name }}">
+            <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object }}">
           </div>
         </div>
       </div>

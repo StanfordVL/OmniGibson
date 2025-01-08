@@ -79,7 +79,7 @@
       <tbody>
         {% for object in synset.direct_matching_object %}
         <tr>
-          <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
+          <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a></td>
           <td><span class="badge badge-{{ object.state|tocolor }}">{{ object.state|title }}</span></td>
         </tr>
         {% else %}
