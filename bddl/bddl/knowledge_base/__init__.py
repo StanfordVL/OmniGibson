@@ -12,7 +12,7 @@ from bddl.knowledge_base.models import Property, \
   Room, \
   RoomObject
 
-from bddl.knowledge_base.utils import State
+from bddl.knowledge_base.utils import SynsetState
 
 from bddl.knowledge_base.processing import KnowledgeBaseProcessor
 

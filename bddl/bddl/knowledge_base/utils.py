@@ -8,7 +8,7 @@ from bddl.parsing import parse_domain
 
 from enum import Enum, auto
 
-class State(Enum):
+class SynsetState(Enum):
     MATCHED = auto()
     PLANNED = auto() 
     UNMATCHED = auto()

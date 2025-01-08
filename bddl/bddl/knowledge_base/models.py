@@ -210,10 +210,10 @@ class Object(Model):
     @cached_property
     def state(self):
         if self.ready:
-            return State.MATCHED
+            return SynsetState.MATCHED
         elif self.planned:
-            return State.PLANNED
-        return State.UNMATCHED
+            return SynsetState.PLANNED
+        return SynsetState.UNMATCHED
 
     @cached_property
     def image_url(self):
@@ -264,7 +264,7 @@ class Synset(Model):
     ancestors_fk: ManyToMany = ManyToManyField("Synset", "descendants")
     descendants_fk: ManyToMany = ManyToManyField("Synset", "ancestors")
     # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
-    state: State = field(default=State.ILLEGAL, repr=False)
+    state: SynsetState = field(default=SynsetState.ILLEGAL, repr=False)
 
     categories_fk: OneToMany = OneToManyField(Category, "synset")
     properties_fk: OneToMany = OneToManyField(Property, "synset")
@@ -588,14 +588,14 @@ class Task(Model):
 
     @cached_property
     def state(self):
-        if self.synset_state == State.MATCHED and self.scene_state == State.MATCHED:
-            return State.MATCHED
+        if self.synset_state == SynsetState.MATCHED and self.scene_state == SynsetState.MATCHED:
+            return SynsetState.MATCHED
         elif (
-            self.synset_state == State.UNMATCHED or self.scene_state == State.UNMATCHED
+            self.synset_state == SynsetState.UNMATCHED or self.scene_state == SynsetState.UNMATCHED
         ):
-            return State.UNMATCHED
+            return SynsetState.UNMATCHED
         else:
-            return State.PLANNED
+            return SynsetState.PLANNED
 
     def matching_scene(self, scene: Scene, ready: bool = True) -> str:
         """checks whether a scene satisfies task requirements"""
@@ -644,14 +644,14 @@ class Task(Model):
 
     @cached_property
     def synset_state(self) -> str:
-        if any(synset.state == State.ILLEGAL for synset in self.synsets):
-            return State.UNMATCHED
-        elif any(synset.state == State.UNMATCHED for synset in self.synsets):
-            return State.UNMATCHED
-        elif any(synset.state == State.PLANNED for synset in self.synsets):
-            return State.PLANNED
+        if any(synset.state == SynsetState.ILLEGAL for synset in self.synsets):
+            return SynsetState.UNMATCHED
+        elif any(synset.state == SynsetState.UNMATCHED for synset in self.synsets):
+            return SynsetState.UNMATCHED
+        elif any(synset.state == SynsetState.PLANNED for synset in self.synsets):
+            return SynsetState.PLANNED
         else:
-            return State.MATCHED
+            return SynsetState.MATCHED
 
     @cached_property
     def problem_synsets(self):
@@ -691,9 +691,9 @@ class Task(Model):
     @cached_property
     def substance_required(self) -> str:
         if self.substance_synsets:
-            return State.SUBSTANCE
+            return SynsetState.SUBSTANCE
         else:
-            return State.NONE
+            return SynsetState.NONE
 
     @cached_property
     def producability_data(self) -> Dict[Synset, Tuple[bool, Set[TransitionRule]]]:
