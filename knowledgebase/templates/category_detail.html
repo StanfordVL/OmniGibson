@@ -4,6 +4,26 @@
   <h1 class="text-center">{{ category.name }}</h1>
   <h3 class="text-center">Synset: {% if category.synset %}<a href="{{ url_for('synset_detail', name=category.synset.name) }}"">{{ category.synset.name }}</a>{% else %}None{% endif %}</h2>
 
+  <h2>Object Images</h2>
+  <div class="container">
+    <div class="row">
+      {% for object in category.objects %}
+      <div class="col-md-4 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a>
+          </div>
+          <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object }} photo">
+        </div>
+      </div>
+      {% else %}
+      <div class="col-12">
+        <div class="alert alert-info">No objects found</div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
   <h2>Objects</h2>
   {% from "table_modules/object_table.html" import render_object_table %}
   {{ render_object_table(category.objects, enable_search=False, enable_csv=False) }}
