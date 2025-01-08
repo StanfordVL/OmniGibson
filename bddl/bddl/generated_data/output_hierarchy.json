@@ -3354,14 +3354,14 @@
                                 },
                                 {
                                   "name": "half__card.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "half__cardstock.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "half_cardstock"
                                   ]
+                                },
+                                {
+                                  "name": "half__cardstock.n.01",
+                                  "hasModel": true
                                 }
                               ]
                             }
@@ -3388,14 +3388,14 @@
                                 },
                                 {
                                   "name": "half__card.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "half__cardstock.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "half_cardstock"
                                   ]
+                                },
+                                {
+                                  "name": "half__cardstock.n.01",
+                                  "hasModel": true
                                 }
                               ]
                             },
@@ -4821,18 +4821,21 @@
                                 },
                                 {
                                   "name": "half__crescent_roll.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "half__croissant.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "half_croissant"
                                   ]
                                 },
                                 {
-                                  "name": "half__frankfurter_bun.n.01",
+                                  "name": "half__croissant.n.01",
                                   "hasModel": true
+                                },
+                                {
+                                  "name": "half__frankfurter_bun.n.01",
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_hotdog_bun"
+                                  ]
                                 },
                                 {
                                   "name": "half__hamburger_bun.n.01",
@@ -4843,10 +4846,7 @@
                                 },
                                 {
                                   "name": "half__hotdog_bun.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "half_hotdog_bun"
-                                  ]
+                                  "hasModel": true
                                 },
                                 {
                                   "name": "hamburger_bun.n.01",
@@ -4910,10 +4910,7 @@
                                     },
                                     {
                                       "name": "half__cheese_danish.n.01",
-                                      "hasModel": true,
-                                      "categories": [
-                                        "half_cheese_danish"
-                                      ]
+                                      "hasModel": true
                                     },
                                     {
                                       "name": "half__cinnamon_roll.n.01",
@@ -4924,7 +4921,10 @@
                                     },
                                     {
                                       "name": "half__danish.n.01",
-                                      "hasModel": true
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_cheese_danish"
+                                      ]
                                     }
                                   ]
                                 }
@@ -5251,14 +5251,14 @@
                                     },
                                     {
                                       "name": "half__baguet.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "half__baguette.n.01",
                                       "hasModel": true,
                                       "categories": [
                                         "half_baguette"
                                       ]
+                                    },
+                                    {
+                                      "name": "half__baguette.n.01",
+                                      "hasModel": true
                                     }
                                   ]
                                 }
@@ -7211,14 +7211,14 @@
                             },
                             {
                               "name": "half__frank.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "half__hotdog_frank.n.01",
                               "hasModel": true,
                               "categories": [
                                 "half_hotdog_frank"
                               ]
+                            },
+                            {
+                              "name": "half__hotdog_frank.n.01",
+                              "hasModel": true
                             },
                             {
                               "name": "half__kielbasa.n.01",
@@ -8713,14 +8713,14 @@
                                 },
                                 {
                                   "name": "half__mustard.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "half__mustard_leaf.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "half_mustard_leaf"
                                   ]
+                                },
+                                {
+                                  "name": "half__mustard_leaf.n.01",
+                                  "hasModel": true
                                 },
                                 {
                                   "name": "half__radish.n.01",
@@ -9567,14 +9567,14 @@
                                     },
                                     {
                                       "name": "half__candied_yam.n.01",
+                                      "hasModel": true
+                                    },
+                                    {
+                                      "name": "half__yam.n.01",
                                       "hasModel": true,
                                       "categories": [
                                         "half_candied_yam"
                                       ]
-                                    },
-                                    {
-                                      "name": "half__yam.n.01",
-                                      "hasModel": true
                                     },
                                     {
                                       "name": "yam.n.03",
@@ -10278,18 +10278,21 @@
                             },
                             {
                               "name": "half__crawfish.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "half__crayfish.n.01",
                               "hasModel": true,
                               "categories": [
                                 "half_crawfish"
                               ]
                             },
                             {
-                              "name": "half__crayfish.n.01",
-                              "hasModel": true
-                            },
-                            {
                               "name": "half__huitre.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_oyster"
+                              ]
                             },
                             {
                               "name": "half__lobster.n.01",
@@ -10300,10 +10303,7 @@
                             },
                             {
                               "name": "half__oyster.n.01",
-                              "hasModel": true,
-                              "categories": [
-                                "half_oyster"
-                              ]
+                              "hasModel": true
                             },
                             {
                               "name": "huitre.n.01",
@@ -12256,14 +12256,14 @@
                             },
                             {
                               "name": "half__card.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "half__cardstock.n.01",
                               "hasModel": true,
                               "categories": [
                                 "half_cardstock"
                               ]
+                            },
+                            {
+                              "name": "half__cardstock.n.01",
+                              "hasModel": true
                             }
                           ]
                         }
@@ -12290,14 +12290,14 @@
                             },
                             {
                               "name": "half__card.n.01",
-                              "hasModel": true
-                            },
-                            {
-                              "name": "half__cardstock.n.01",
                               "hasModel": true,
                               "categories": [
                                 "half_cardstock"
                               ]
+                            },
+                            {
+                              "name": "half__cardstock.n.01",
+                              "hasModel": true
                             }
                           ]
                         },
@@ -16162,14 +16162,14 @@
                                 },
                                 {
                                   "name": "half__ginger.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "half__ginger_root.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "half_ginger_root"
                                   ]
+                                },
+                                {
+                                  "name": "half__ginger_root.n.01",
+                                  "hasModel": true
                                 },
                                 {
                                   "name": "herb.n.02",
@@ -17064,18 +17064,21 @@
                                     },
                                     {
                                       "name": "half__crescent_roll.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "half__croissant.n.01",
                                       "hasModel": true,
                                       "categories": [
                                         "half_croissant"
                                       ]
                                     },
                                     {
-                                      "name": "half__frankfurter_bun.n.01",
+                                      "name": "half__croissant.n.01",
                                       "hasModel": true
+                                    },
+                                    {
+                                      "name": "half__frankfurter_bun.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "half_hotdog_bun"
+                                      ]
                                     },
                                     {
                                       "name": "half__hamburger_bun.n.01",
@@ -17086,10 +17089,7 @@
                                     },
                                     {
                                       "name": "half__hotdog_bun.n.01",
-                                      "hasModel": true,
-                                      "categories": [
-                                        "half_hotdog_bun"
-                                      ]
+                                      "hasModel": true
                                     },
                                     {
                                       "name": "hamburger_bun.n.01",
@@ -17153,10 +17153,7 @@
                                         },
                                         {
                                           "name": "half__cheese_danish.n.01",
-                                          "hasModel": true,
-                                          "categories": [
-                                            "half_cheese_danish"
-                                          ]
+                                          "hasModel": true
                                         },
                                         {
                                           "name": "half__cinnamon_roll.n.01",
@@ -17167,7 +17164,10 @@
                                         },
                                         {
                                           "name": "half__danish.n.01",
-                                          "hasModel": true
+                                          "hasModel": true,
+                                          "categories": [
+                                            "half_cheese_danish"
+                                          ]
                                         }
                                       ]
                                     }
@@ -17494,14 +17494,14 @@
                                         },
                                         {
                                           "name": "half__baguet.n.01",
-                                          "hasModel": true
-                                        },
-                                        {
-                                          "name": "half__baguette.n.01",
                                           "hasModel": true,
                                           "categories": [
                                             "half_baguette"
                                           ]
+                                        },
+                                        {
+                                          "name": "half__baguette.n.01",
+                                          "hasModel": true
                                         }
                                       ]
                                     }
