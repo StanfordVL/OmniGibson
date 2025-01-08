@@ -45,38 +45,75 @@
   <br>
 
   <h2>Directly Mapped Categories</h2>
-  <div class="container">
-    <div class="row justify-content-md-center">
-      {% for category in synset.categories %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('category_detail', name=category.name) }}" class="btn">{{ category.name }}</a></div>
-      {% else %}
-      <p>None</p>
-      {% endfor %}
-    </div>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Category Name</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for category in synset.categories %}
+        <tr>
+          <td><a href="{{ url_for('category_detail', name=category.name) }}">{{ category.name }}</a></td>
+        </tr>
+        {% else %}
+        <tr>
+          <td>No categories found</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   <br>
   
   <h2>Directly Mapped Objects</h2>
-  <div class="container">
-    <div class="row justify-content-md-center">
-      {% for object in synset.direct_matching_object %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
-      {% else %}
-      <p>None</p>
-      {% endfor %}
-    </div>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Object Name</th>
+          <th>State</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in synset.direct_matching_object %}
+        <tr>
+          <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
+          <td><span class="badge badge-{{ object.state }}">{{ object.state|title }}</span></td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="2">No objects found</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   <br>
 
   <h2>All Descendant Objects (including Direct)</h2>
-  <div class="container">
-    <div class="row justify-content-md-center">
-      {% for object in synset.matching_objects %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
-      {% else %}
-      <p>None</p>
-      {% endfor %}
-    </div>
+  <div class="table-responsive">
+    <table class="table table-hover">
+      <thead>
+        <tr>
+          <th>Object Name</th>
+          <th>State</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for object in synset.matching_objects %}
+        <tr>
+          <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
+          <td><span class="badge badge-{{ object.state }}">{{ object.state|title }}</span></td>
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="2">No objects found</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   <br>
 
