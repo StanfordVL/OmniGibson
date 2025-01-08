@@ -68,53 +68,12 @@
   <br>
   
   <h2>Directly Mapped Objects</h2>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Object Name</th>
-          <th>State</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for object in synset.direct_matching_object %}
-        <tr>
-          <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a></td>
-          <td><span class="badge badge-{{ object.state|tocolor }}">{{ object.state|title }}</span></td>
-        </tr>
-        {% else %}
-        <tr>
-          <td colspan="2">No objects found</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  {% from "table_modules/object_table.html" import render_object_table %}
+  {{ render_object_table(synset.direct_matching_object, enable_search=False, enable_csv=False) }}
   <br>
 
   <h2>All Descendant Objects (including Direct)</h2>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead>
-        <tr>
-          <th>Object Name</th>
-          <th>State</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for object in synset.matching_objects %}
-        <tr>
-          <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
-          <td><span class="badge badge-{{ object.state|tocolor }}">{{ object.state|title }}</span></td>
-        </tr>
-        {% else %}
-        <tr>
-          <td colspan="2">No objects found</td>
-        </tr>
-        {% endfor %}
-      </tbody>
-    </table>
-  </div>
+  {{ render_object_table(synset.matching_objects, enable_search=False, enable_csv=False) }}
   <br>
 
   <h2>Transitions that produce or use this object</h2>

@@ -4,28 +4,8 @@
   <h1 class="text-center">{{ task.name }}</h1>
   <hr>
   <h2>Synsets</h2>
-  <div class="container">
-    <div class="row">
-      {% for synset in task.synsets %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <a href="{{ url_for('synset_detail', name=synset.name) }}" class="text-decoration-none">
-              <h5 class="card-title">{{ synset.name }}</h5>
-              <p class="card-text">
-                <span class="badge badge-{{ synset.state|tocolor }}">{{ synset.state|title }}</span>
-              </p>
-            </a>
-          </div>
-        </div>
-      </div>
-      {% else %}
-      <div class="col-12">
-        <div class="alert alert-info">No synsets found</div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
+  {% from "table_modules/synset_table.html" import render_synset_table %}
+  {{ render_synset_table(task.synsets, enable_search=False, enable_csv=False) }}
   <h2>Transition Paths By Task Scope Objects</h2>
   <div class="mermaid">
     graph TD;
