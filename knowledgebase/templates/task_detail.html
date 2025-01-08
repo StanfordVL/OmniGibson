@@ -26,46 +26,9 @@
     {% endfor %}
   {% endif %}
   </ul>
-  <h2>Scenes</h2>
-  <ul>
-    <li>Matched:
-      <ul>
-        {% for scene, info in task.scene_matching_dict.items() %}
-          {% if info.matched_ready %}
-            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene }}</a></li>
-          {% endif %}
-        {% else %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
-    </li>
-    
-    <li>Planned:
-      <ul>
-        {% for scene, info in task.scene_matching_dict.items() %}
-          {% if not info.matched_ready and info.matched_planned %}
-            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene }}</a>: <ul>
-              <li>This scene will match in its planned form. In its currently ready form it does not match, because: {{ info.reason_ready }}</li>
-            </ul></li>
-          {% endif %}
-        {% else %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
-    </li>
-
-    <li>Unmatched:
-      <ul>
-        {% for scene, info in task.scene_matching_dict.items() %}
-          {% if not info.matched_ready and not info.matched_planned %}
-            <li><a class="font-weight-bold" href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene }}</a>: {{ info.reason_planned }}</li>
-          {% endif %}
-        {% else %}
-        <li>None</li>
-        {% endfor %}
-      </ul>
-    </li>
-  </ul>
+  <h2>Scene Matching Status</h2>
+  {% from "table_modules/scene_matching_table.html" import render_scene_matching_table %}
+  {{ render_scene_matching_table(task.scene_matching_dict, enable_search=False, enable_csv=False) }}
   <h2>Full Definition</h2>
   <pre>
 {{ task.definition | safe }}

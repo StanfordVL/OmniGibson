@@ -58,7 +58,12 @@
   {{ render_object_table(synset.matching_objects, enable_search=False, enable_csv=False) }}
   <br>
 
-  <h2>Transitions that produce or use this object</h2>
+  <h2>Transitions</h2>
+  {% from "table_modules/transition_table.html" import render_transition_table %}
+  {{ render_transition_table(synset.transitions, enable_search=False, enable_csv=False) }}
+  <br>
+
+  <h2>Transition Graph</h2>
   <div class="mermaid">
     graph TD;
       {% for node in synset.transition_subgraph.nodes %}
