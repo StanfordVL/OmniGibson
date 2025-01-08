@@ -55,30 +55,6 @@
   <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Objects{% endif %}</h1>
   <h4 class="text-center">Total count: {{ object_list | length }}</h4>
   <br>
-  <table class="table table-striped" id="datatable">
-    <thead>
-      <tr>
-        <th>Object</th>
-        <th>Category</th>
-        <th>Synset</th>
-        <th>Task Relevant</th>
-        <th>Missing Meta Links</th>
-        <th>Used Rooms</th>
-        <th>Ready?</th>
-      </tr>
-    </thead>
-    <tbody id="myTable">
-      {% for object in object_list %}
-      <tr>
-        <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a></td>
-        <td>{{ object.category.name }}</td>
-        <td>{{ object.category.synset.name }}</td>
-        <td>{{ object.category.synset.task_relevant }}</td>
-        <td>{% for ml in object.missing_meta_links %} {{ ml }}, {% endfor %}</td>
-        <td>{{ object.roomobjects|length }}</td>
-        <td class="{% if object.ready %}bg-success{% else %}bg-warning|tocolor{% endif %}">{{ object.ready }}</td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% from "table_modules/object_table.html" import render_object_table %}
+  {{ render_object_table(object_list) }}
 {% endblock %}

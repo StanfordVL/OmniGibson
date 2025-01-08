@@ -1,0 +1,62 @@
+{% macro render_object_table(objects, enable_search=True, enable_csv=True) %}
+<table class="table table-striped" id="datatable">
+  <thead>
+    <tr>
+      <th>Object</th>
+      <th>Category</th>
+      <th>Synset</th>
+      <th>Task Relevant</th>
+      <th>Missing Meta Links</th>
+      <th>Used Rooms</th>
+      <th>Ready?</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for object in objects %}
+    <tr>
+      <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a></td>
+      <td>{{ object.category.name }}</td>
+      <td>{{ object.category.synset.name }}</td>
+      <td>{{ object.category.synset.task_relevant }}</td>
+      <td>{% for ml in object.missing_meta_links %} {{ ml }}, {% endfor %}</td>
+      <td>{{ object.roomobjects|length }}</td>
+      <td class="{% if object.ready %}bg-success{% else %}bg-warning|tocolor{% endif %}">{{ object.ready }}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if enable_search %}
+<script>
+  $(document).ready(function() {
+    var table = $('#datatable').DataTable({
+      {% if enable_csv %}dom: 'Bfrtip', buttons: ['csv'],{% endif %}
+      paging: false,
+      searchPanes: {
+        viewTotal: true,
+        columns: [2, 3]
+      },
+      columnDefs: [
+        {
+          searchPanes: {
+            options: [
+              {
+                label: 'Matched',
+                value: function(rowData, rowIdx) {return rowData[2] !== "";}
+              },
+              {
+                label: 'Unmatched',
+                value: function(rowData, rowIdx) {return rowData[2] === "";}
+              },
+            ]
+          },
+          targets: [2]
+        },
+      ],
+    });
+    table.searchPanes.container().prependTo(table.table().container());
+    table.searchPanes.resizePanes();
+  });
+</script>
+{% endif %}
+{% endmacro %}

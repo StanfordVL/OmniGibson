@@ -38,26 +38,6 @@
   <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Scenes{% endif %}</h1>
   <h4 class="text-center">Total count: {{ scene_list | length }}</h4>
   <br>
-  <table class="table table-striped" id="datatable">
-    <thead>
-      <tr>
-        <th>Scene</th>
-        <th>Rooms</th>
-        <th>Objects</th>
-        <th>Ready?</th>
-      </tr>
-    </thead>
-    <tbody id="myTable">
-      {% for scene in scene_list %}
-      <tr>
-        <td><a href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene.name }}</a></td>
-        <td>{{ scene.room_count }}</td>
-        <td>{{ scene.object_count }}</td>
-        <td class="{% if scene.fully_ready %}bg-success{% elif scene.any_ready %}bg-warning{% else %}bg-danger{% endif %}">
-          {% if scene.fully_ready %}Fully Ready{% elif scene.any_ready %}Partially Ready{% else %}Not Ready{% endif %}
-        </td>
-      </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  {% from "table_modules/scene_table.html" import render_scene_table %}
+  {{ render_scene_table(scene_list) }}
 {% endblock %}

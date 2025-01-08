@@ -1,0 +1,41 @@
+{% macro render_scene_table(scenes, enable_search=True, enable_csv=True) %}
+<table class="table table-striped" id="datatable">
+  <thead>
+    <tr>
+      <th>Scene</th>
+      <th>Rooms</th>
+      <th>Objects</th>
+      <th>Ready?</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for scene in scenes %}
+    <tr>
+      <td><a href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene.name }}</a></td>
+      <td>{{ scene.room_count }}</td>
+      <td>{{ scene.object_count }}</td>
+      <td class="{% if scene.fully_ready %}bg-success{% elif scene.any_ready %}bg-warning{% else %}bg-danger{% endif %}">
+        {% if scene.fully_ready %}Fully Ready{% elif scene.any_ready %}Partially Ready{% else %}Not Ready{% endif %}
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+
+{% if enable_search %}
+<script>
+  $(document).ready(function() {
+    var table = $('#datatable').DataTable({
+      {% if enable_csv %}dom: 'Bfrtip', buttons: ['csv'],{% endif %}
+      paging: false,
+      searchPanes: {
+        viewTotal: true,
+        columns: [3]
+      },
+    });
+    table.searchPanes.container().prependTo(table.table().container());
+    table.searchPanes.resizePanes();
+  });
+</script>
+{% endif %}
+{% endmacro %}
