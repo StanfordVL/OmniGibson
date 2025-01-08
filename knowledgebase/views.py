@@ -15,7 +15,7 @@ def camel_to_snake(name: str) -> str:
 
 class TemplateView(View):
     def get_context_data(self):
-        return {"view": self}
+        return {"view": self, "SynsetState": SynsetState}
 
     def get_template_name(self):
         return self.template_name
