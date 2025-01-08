@@ -10,11 +10,12 @@
       <div class="col-md-4 mb-4">
         <div class="card h-100">
           <div class="card-body">
-            <h5 class="card-title">{{ synset.name }}</h5>
-            <p class="card-text">
-              <span class="badge badge-{{ synset.state }}">{{ synset.state|title }}</span>
-            </p>
-            <a href="{{ url_for('synset_detail', name=synset.name) }}" class="btn btn-primary btn-block">View Details</a>
+            <a href="{{ url_for('synset_detail', name=synset.name) }}" class="text-decoration-none">
+              <h5 class="card-title">{{ synset.name }}</h5>
+              <p class="card-text">
+                <span class="badge badge-{{ synset.state }}">{{ synset.state|title }}</span>
+              </p>
+            </a>
           </div>
         </div>
       </div>

@@ -25,11 +25,12 @@
               <div class="col-md-6 mb-3">
                 <div class="card h-100">
                   <div class="card-body">
-                    <h5 class="card-title">{{ roomobject.object.name }}</h5>
-                    <p class="card-text">
-                      Count: {{ roomobject.count }}
-                    </p>
-                    <a href="{{ url_for('object_detail', name=roomobject.object.name) }}" class="btn btn-primary btn-sm">View Object</a>
+                    <a href="{{ url_for('object_detail', name=roomobject.object.name) }}" class="text-decoration-none">
+                      <h5 class="card-title">{{ roomobject.object.name }}</h5>
+                      <p class="card-text">
+                        Count: {{ roomobject.count }}
+                      </p>
+                    </a>
                   </div>
                 </div>
               </div>
