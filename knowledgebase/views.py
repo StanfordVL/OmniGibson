@@ -101,13 +101,6 @@ class CategoryListView(ListView):
     context_object_name = "category_list"
 
 
-class CategoryMappedToSubstanceListView(CategoryListView):
-    page_title = inspect.getdoc(Category.view_mapped_to_substance_synset)
-
-    def get_queryset(self):
-        return Category.view_mapped_to_substance_synset()
-
-
 class NonLeafCategoryListView(CategoryListView):
     page_title = inspect.getdoc(Category.view_mapped_to_non_leaf_synsets)
 
