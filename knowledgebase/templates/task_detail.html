@@ -13,7 +13,7 @@
             <a href="{{ url_for('synset_detail', name=synset.name) }}" class="text-decoration-none">
               <h5 class="card-title">{{ synset.name }}</h5>
               <p class="card-text">
-                <span class="badge badge-{{ synset.state }}">{{ synset.state|title }}</span>
+                <span class="badge badge-{{ synset.state|tocolor }}">{{ synset.state|title }}</span>
               </p>
             </a>
           </div>

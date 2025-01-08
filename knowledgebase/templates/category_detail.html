@@ -42,7 +42,7 @@
             <a href="{{ url_for('synset_detail', name=ancestor.name) }}" class="text-decoration-none">
               <h5 class="card-title">{{ ancestor.name }}</h5>
               <p class="card-text">
-                <span class="badge badge-{{ ancestor.state }}">{{ ancestor.state|title }}</span>
+                <span class="badge badge-{{ ancestor.state|tocolor }}">{{ ancestor.state|title }}</span>
               </p>
             </a>
           </div>
@@ -67,7 +67,7 @@
             <a href="{{ url_for('synset_detail', name=parent.name) }}" class="text-decoration-none">
               <h5 class="card-title">{{ parent.name }}</h5>
               <p class="card-text">
-                <span class="badge badge-{{ parent.state }}">{{ parent.state|title }}</span>
+                <span class="badge badge-{{ parent.state|tocolor }}">{{ parent.state|title }}</span>
               </p>
             </a>
           </div>
@@ -86,7 +86,7 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for child in category.synset.children %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=child.name) }}" class="btn btn-{{- child.state -}}">{{ child.name }}</a></div>
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=child.name) }}" class="btn btn-{{- child.state|tocolor -}}">{{ child.name }}</a></div>
       {% else %}
       <p>None</p>
       {% endfor %}

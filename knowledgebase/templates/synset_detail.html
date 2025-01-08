@@ -36,7 +36,7 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for task in synset.tasks %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('task_detail', name=task.name) }}" class="btn btn-{{- task.state -}}">{{ task.name }}</a></div>
+      <div class="col-md-auto my-1"><a href="{{ url_for('task_detail', name=task.name) }}" class="btn btn-{{- task.state|tocolor -}}">{{ task.name }}</a></div>
       {% else %}
       <div>None</div>
       {% endfor %}
@@ -80,7 +80,7 @@
         {% for object in synset.direct_matching_object %}
         <tr>
           <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
-          <td><span class="badge badge-{{ object.state }}">{{ object.state|title }}</span></td>
+          <td><span class="badge badge-{{ object.state|tocolor }}">{{ object.state|title }}</span></td>
         </tr>
         {% else %}
         <tr>
@@ -105,7 +105,7 @@
         {% for object in synset.matching_objects %}
         <tr>
           <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object.name }}</a></td>
-          <td><span class="badge badge-{{ object.state }}">{{ object.state|title }}</span></td>
+          <td><span class="badge badge-{{ object.state|tocolor }}">{{ object.state|title }}</span></td>
         </tr>
         {% else %}
         <tr>
@@ -138,7 +138,7 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for ancestor in synset.ancestors%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=ancestor.name) }}" class="btn btn-{{- ancestor.state -}}">{{ ancestor.name }}</a></div>
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=ancestor.name) }}" class="btn btn-{{- ancestor.state|tocolor -}}">{{ ancestor.name }}</a></div>
       {% else %}
       <p>None</p>
       {% endfor %}
@@ -150,7 +150,7 @@
   <div class="container">
     <div class="row justify-content-md-center">
       {% for parent in synset.parents%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=parent.name) }}" class="btn btn-{{- parent.state -}}">{{ parent.name }}</a></div>
+      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=parent.name) }}" class="btn btn-{{- parent.state|tocolor -}}">{{ parent.name }}</a></div>
       {% else %}
       <p>None</p>
       {% endfor %}
@@ -168,7 +168,7 @@
             <a href="{{ url_for('synset_detail', name=child.name) }}" class="text-decoration-none">
               <h5 class="card-title">{{ child.name }}</h5>
               <p class="card-text">
-                <span class="badge badge-{{ child.state }}">{{ child.state|title }}</span>
+                <span class="badge badge-{{ child.state|tocolor }}">{{ child.state|title }}</span>
               </p>
             </a>
           </div>
