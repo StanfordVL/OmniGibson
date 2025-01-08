@@ -27,11 +27,20 @@
 
   <h2>Object Images</h2>
   <div class="container">
-    <div class="row justify-content-md-center">
+    <div class="row">
       {% for object in category.objects %}
-      <div class="col-md-3 my-1"><img class="img-fluid" src="{{ object.image_url }}" alt="{{ object.name }} photo" /></div>
+      <div class="col-md-3 mb-4">
+        <div class="card">
+          <img class="card-img-top" src="{{ object.image_url }}" alt="{{ object.name }} photo">
+          <div class="card-body">
+            <p class="card-text text-center">{{ object.name }}</p>
+          </div>
+        </div>
+      </div>
       {% else %}
-      <p>None</p>
+      <div class="col-12">
+        <div class="alert alert-info">No images available</div>
+      </div>
       {% endfor %}
     </div>
   </div>
@@ -44,11 +53,23 @@
   
   <h2>Ancestor Synsets</h2>
   <div class="container">
-    <div class="row justify-content-md-center">
-      {% for ancestor in category.synset.ancestors%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=ancestor.name) }}" class="btn btn-{{- ancestor.state -}}">{{ ancestor.name }}</a></div>
+    <div class="row">
+      {% for ancestor in category.synset.ancestors %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ ancestor.name }}</h5>
+            <p class="card-text">
+              <span class="badge badge-{{ ancestor.state }}">{{ ancestor.state|title }}</span>
+            </p>
+            <a href="{{ url_for('synset_detail', name=ancestor.name) }}" class="btn btn-primary btn-block">View Details</a>
+          </div>
+        </div>
+      </div>
       {% else %}
-      <p>None</p>
+      <div class="col-12">
+        <div class="alert alert-info">No ancestor synsets found</div>
+      </div>
       {% endfor %}
     </div>
   </div>
@@ -56,11 +77,23 @@
 
   <h2>Parents Synsets</h2>
   <div class="container">
-    <div class="row justify-content-md-center">
-      {% for parent in category.synset.parents%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=parent.name) }}" class="btn btn-{{- parent.state -}}">{{ parent.name }}</a></div>
+    <div class="row">
+      {% for parent in category.synset.parents %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ parent.name }}</h5>
+            <p class="card-text">
+              <span class="badge badge-{{ parent.state }}">{{ parent.state|title }}</span>
+            </p>
+            <a href="{{ url_for('synset_detail', name=parent.name) }}" class="btn btn-primary btn-block">View Details</a>
+          </div>
+        </div>
+      </div>
       {% else %}
-      <p>None</p>
+      <div class="col-12">
+        <div class="alert alert-info">No parent synsets found</div>
+      </div>
       {% endfor %}
     </div>
   </div>

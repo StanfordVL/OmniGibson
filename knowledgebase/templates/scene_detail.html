@@ -11,14 +11,38 @@
   <h4 class="text-center text-danger">Not Ready</h4>
   {% endif %}
   <h2>Rooms</h2>
-  {% for room in scene.rooms %}
-  <h3>{{ room.name }}</h3>
-  <ul>
-    {% for roomobject in room.roomobjects %}
-    <li><a href="{{ url_for('object_detail', name=roomobject.object.name) }}">{{ roomobject.object.name }}</a>: {{ roomobject.count }}</li>
-    {% else %}
-    <li>None</li>
-    {% endfor %}
-  </ul>
-  {% endfor %}
+  <div class="container">
+    <div class="row">
+      {% for room in scene.rooms %}
+      <div class="col-md-6 mb-4">
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title mb-0">{{ room.name }}</h3>
+          </div>
+          <div class="card-body">
+            <div class="row">
+              {% for roomobject in room.roomobjects %}
+              <div class="col-md-6 mb-3">
+                <div class="card h-100">
+                  <div class="card-body">
+                    <h5 class="card-title">{{ roomobject.object.name }}</h5>
+                    <p class="card-text">
+                      Count: {{ roomobject.count }}
+                    </p>
+                    <a href="{{ url_for('object_detail', name=roomobject.object.name) }}" class="btn btn-primary btn-sm">View Object</a>
+                  </div>
+                </div>
+              </div>
+              {% else %}
+              <div class="col-12">
+                <div class="alert alert-info">No objects in this room</div>
+              </div>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
 {% endblock %}
