@@ -11,27 +11,11 @@
 
   <br>
   <h2>Properties</h2>
-  <div class="container">
-    <div class="row justify-content-md-center">
-      <!-- TODO: Add parameters -->
-      {% for property in synset.properties %}
-      <div class="col-md-auto my-1 py-2 border">{{ property.name }}</div>
-      {% else %}
-      <p>None</p>
-      {% endfor %}
-    </div>
-  </div>
+  {% from "table_modules/property_table.html" import render_property_table %}
+  {{ render_property_table(synset.properties, enable_search=False, enable_csv=False) }}
   <h2>Uses</h2>
-  <div class="row justify-content-md-center">
-    <div class="col-md-auto my-1 border py-2">{% if synset.is_used_as_substance %} IS {% else %} NOT {% endif %} used as substance</div>
-    <div class="col-md-auto my-1 border py-2">{% if synset.is_used_as_non_substance %} IS {% else %} NOT {% endif %} used as non-substance</div>
-    <div class="col-md-auto my-1 border py-2">{% if synset.is_used_as_fillable %} IS {% else %} NOT {% endif %} used as fillable</div>
-  </div>
-  <div class="row justify-content-md-center">
-    {% for predicate in synset.used_in_predicates %}
-    <div class="col-md-3 my-1 border py-2">{{ predicate.name }}</div>
-    {% endfor %}
-  </div>
+  {% from "table_modules/usage_table.html" import render_usage_table %}
+  {{ render_usage_table(synset, enable_search=False, enable_csv=False) }}
   <h2>Tasks</h2>
   <div class="container">
     <div class="row justify-content-md-center">
