@@ -16,6 +16,9 @@ class SynsetState(Enum):
     ILLEGAL = "Illegal"
     NONE = "No State Info"
 
+    def __str__(self):
+        return str(self.value)
+
 
 # predicates that can only be used for substances
 SUBSTANCE_PREDICATES = {"filled", "insource", "empty", "saturated", "contains", "covered"}
