@@ -30,10 +30,13 @@
     <div class="row">
       {% for object in category.objects %}
       <div class="col-md-3 mb-4">
-        <div class="card">
+        <div class="card h-100">
+          <div class="card-header">
+            <h5 class="card-title mb-0 text-center">{{ object.name }}</h5>
+          </div>
           <img class="card-img-top" src="{{ object.image_url }}" alt="{{ object.name }} photo">
-          <div class="card-body">
-            <p class="card-text text-center">{{ object.name }}</p>
+          <div class="card-footer">
+            <a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-sm btn-primary btn-block">View Details</a>
           </div>
         </div>
       </div>
