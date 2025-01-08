@@ -10,16 +10,6 @@
   {% endif %}
 
   <br>
-  <h2>Properties</h2>
-  {% from "table_modules/property_table.html" import render_property_table %}
-  {{ render_property_table(synset.properties, enable_search=False, enable_csv=False) }}
-  <h2>Uses</h2>
-  {% from "table_modules/usage_table.html" import render_usage_table %}
-  {{ render_usage_table(synset, enable_search=False, enable_csv=False) }}
-  <h2>Tasks</h2>
-  {% from "table_modules/task_table.html" import render_task_table %}
-  {{ render_task_table(synset.tasks, enable_search=False, enable_csv=False) }}
-  <br>
 
   <h2>Directly Mapped Categories</h2>
   {% from "table_modules/category_table.html" import render_category_table %}
@@ -33,6 +23,17 @@
 
   <h2>All Descendant Objects (including Direct)</h2>
   {{ render_object_table(synset.matching_objects, enable_search=False, enable_csv=False) }}
+  <br>
+
+  <h2>Properties</h2>
+  {% from "table_modules/property_table.html" import render_property_table %}
+  {{ render_property_table(synset.properties, enable_search=False, enable_csv=False) }}
+  <h2>Uses</h2>
+  {% from "table_modules/usage_table.html" import render_usage_table %}
+  {{ render_usage_table(synset, enable_search=False, enable_csv=False) }}
+  <h2>Tasks</h2>
+  {% from "table_modules/task_table.html" import render_task_table %}
+  {{ render_task_table(synset.tasks, enable_search=False, enable_csv=False) }}
   <br>
 
   <h2>Transitions</h2>
