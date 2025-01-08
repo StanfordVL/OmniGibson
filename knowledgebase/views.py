@@ -213,19 +213,19 @@ class IndexView(TemplateView):
         # task metadata
         tasks_state = [task.state for task in Task.all_objects()]
         context["task_metadata"] = [
-            sum([1 for state in tasks_state if state == STATE_MATCHED]),
-            sum([1 for state in tasks_state if state == STATE_PLANNED]),
-            sum([1 for state in tasks_state if state == STATE_UNMATCHED]),
-            sum([1 for x in Task.all_objects() if x.scene_state == STATE_UNMATCHED]),
+            sum([1 for state in tasks_state if state == SynsetState.MATCHED]),
+            sum([1 for state in tasks_state if state == SynsetState.PLANNED]),
+            sum([1 for state in tasks_state if state == SynsetState.UNMATCHED]),
+            sum([1 for x in Task.all_objects() if x.scene_state == SynsetState.UNMATCHED]),
             len(tasks_state)
         ]
         # synset metadata
         context["synset_metadata"] = [
-            sum(1 for x in Synset.all_objects() if x.state == STATE_MATCHED),
-            sum(1 for x in Synset.all_objects() if x.state == STATE_PLANNED),
-            sum(1 for x in Synset.all_objects() if x.state == STATE_SUBSTANCE),
-            sum(1 for x in Synset.all_objects() if x.state == STATE_UNMATCHED),
-            sum(1 for x in Synset.all_objects() if x.state == STATE_ILLEGAL),
+            sum(1 for x in Synset.all_objects() if x.state == SynsetState.MATCHED),
+            sum(1 for x in Synset.all_objects() if x.state == SynsetState.PLANNED),
+            sum(1 for x in Synset.all_objects() if x.state == SynsetState.SUBSTANCE),
+            sum(1 for x in Synset.all_objects() if x.state == SynsetState.UNMATCHED),
+            sum(1 for x in Synset.all_objects() if x.state == SynsetState.ILLEGAL),
             sum(1 for x in Synset.all_objects()),
         ]
         # object metadata
