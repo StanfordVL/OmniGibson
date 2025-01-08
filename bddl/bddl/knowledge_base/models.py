@@ -148,6 +148,9 @@ class Category(Model):
     # objects that belong to this category
     objects_fk: OneToMany = OneToManyField("Object", "category")
 
+    # objects that used to belong to this category but were renamed
+    renamed_objects_fk: OneToMany = OneToManyField("Object", "original_category")
+
     def __str__(self):
         return self.name
 
@@ -181,8 +184,6 @@ class Category(Model):
 @dataclass(eq=False, order=False)
 class Object(Model):
     name: str
-    # the name of the object prior to getting renamed
-    original_name: str
     # providing target
     provider: str = ""
     # whether the object is in the current dataset
@@ -191,13 +192,15 @@ class Object(Model):
     planned: bool = True
     # the category that the object belongs to
     category_fk: ManyToOne = ManyToOneField(Category, "objects")
+    # the category of the object prior to getting renamed
+    original_category_fk: ManyToOne = ManyToOneField(Category, "renamed_objects")
     # meta links owned by the object
     meta_links_fk: ManyToMany = ManyToManyField(MetaLink, "on_objects")
     # roomobject counts of this object
     roomobjects_fk: OneToMany = OneToManyField("RoomObject", "object")
 
     def __str__(self):
-        return self.name
+        return self.category.name + "-" + self.name
 
     class Meta:
         pk = "name"

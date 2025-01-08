@@ -152,14 +152,19 @@ class KnowledgeBaseProcessor():
                 # Create the object
                 category_name = object_name.split("-")[0]
                 category, _ = Category.get_or_create(name=category_name)
-                object = Object.create(name=object_name, original_name=orig_name, ready=False, provider=provider, category=category)
+
+                # Original category
+                orig_category_name = orig_name.split("-")[0]
+                orig_category, _ = Category.get_or_create(name=orig_category_name)
+
+                obj = Object.create(name=orig_id, original_category=orig_category, ready=False, provider=provider, category=category)
                 if orig_name in inventory["meta_links"]:
                     existing_meta_types = set(inventory["meta_links"][orig_name])
                     if "openfillable" in existing_meta_types:
                         existing_meta_types.add("fillable")
                     for meta_link in existing_meta_types:
                         meta_link_obj, _ = MetaLink.get_or_create(name=meta_link)
-                        object.meta_links.add(meta_link_obj)
+                        obj.meta_links.add(meta_link_obj)
 
         with open(GENERATED_DATA_DIR / "object_inventory.json", "r") as f:
             objs = []
@@ -174,13 +179,13 @@ class KnowledgeBaseProcessor():
                     category_name = object_name.split("-")[0]
                     category, _ = Category.get_or_create(name=category_name)
                     # safeguard to ensure currently available objects are also in future planned dataset
-                    assert Object.exists(name=object_name), f"{object_name} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!"
-                    object = Object.get(name=object_name)
-                    object.ready = True
-                    objs.append(object)
+                    assert Object.exists(name=orig_id), f"{orig_id} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!"
+                    obj = Object.get(name=orig_id)
+                    obj.ready = True
+                    objs.append(obj)
 
         # Check that all of the renames have happened
-        missing_renames = {final_name for _, final_name in self.object_rename_mapping.values() if not Object.exists(name=final_name)}
+        missing_renames = {final_name for _, final_name in self.object_rename_mapping.values() if not Object.exists(name=final_name.split("-")[1])}
         assert len(missing_renames) == 0, f"{missing_renames} do not exist in the database. Did you rename a nonexistent object (or one in the deletion queue)?"
 
 
@@ -213,9 +218,9 @@ class KnowledgeBaseProcessor():
                                 from_name, to_name = self.object_rename_mapping[orig_id]
                                 assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
                                 object_name = to_name
-                            object = Object.get(name=object_name)
-                            assert object is not None, f"Scene {scene_name} object {object_name} does not exist in the database."
-                            RoomObject.create(room=room, object=object, count=count)
+                            obj = Object.get(name=orig_id)
+                            assert obj is not None, f"Scene {scene_name} object {orig_id} does not exist in the database."
+                            RoomObject.create(room=room, object=obj, count=count)
 
         with open(GENERATED_DATA_DIR / "combined_room_object_list.json", "r") as f:
             current_scene_dict = json.load(f)["scenes"]
@@ -239,9 +244,9 @@ class KnowledgeBaseProcessor():
                                 from_name, to_name = self.object_rename_mapping[orig_id]
                                 assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
                                 object_name = to_name
-                            object = Object.get(name=object_name)
-                            assert object is not None, f"Scene {scene_name} object {object_name} does not exist in the database."
-                            RoomObject.create(room=room, object=object, count=count)
+                            obj = Object.get(name=orig_id)
+                            assert obj is not None, f"Scene {scene_name} object {orig_id} does not exist in the database."
+                            RoomObject.create(room=room, object=obj, count=count)
 
 
     def create_tasks(self):
