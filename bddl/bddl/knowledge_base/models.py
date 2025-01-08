@@ -644,14 +644,14 @@ class Task(Model):
 
     @cached_property
     def synset_state(self) -> str:
-        if any(synset.state == STATE_ILLEGAL for synset in self.synsets):
-            return STATE_UNMATCHED
-        elif any(synset.state == STATE_UNMATCHED for synset in self.synsets):
-            return STATE_UNMATCHED
-        elif any(synset.state == STATE_PLANNED for synset in self.synsets):
-            return STATE_PLANNED
+        if any(synset.state == State.ILLEGAL for synset in self.synsets):
+            return State.UNMATCHED
+        elif any(synset.state == State.UNMATCHED for synset in self.synsets):
+            return State.UNMATCHED
+        elif any(synset.state == State.PLANNED for synset in self.synsets):
+            return State.PLANNED
         else:
-            return STATE_MATCHED
+            return State.MATCHED
 
     @cached_property
     def problem_synsets(self):
