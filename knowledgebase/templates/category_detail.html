@@ -26,29 +26,6 @@
     </div>
   </div>
 
-  <h2>Object Images</h2>
-  <div class="container">
-    <div class="row">
-      {% for object in category.objects %}
-      <div class="col-md-3 mb-4">
-        <div class="card h-100">
-          <div class="card-header">
-            <h5 class="card-title mb-0 text-center">{{ object.name }}</h5>
-          </div>
-          <img class="card-img-top" src="{{ object.image_url }}" alt="{{ object.name }} photo">
-          <div class="card-footer">
-            <a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-sm btn-primary btn-block">View Details</a>
-          </div>
-        </div>
-      </div>
-      {% else %}
-      <div class="col-12">
-        <div class="alert alert-info">No images available</div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-
   <h2>Related Synsets</h2>
   {% with G=category.synset.subgraph, center_node=category.synset %}
     {% include "synset_graph_module.html" %}
