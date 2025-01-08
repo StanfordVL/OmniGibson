@@ -836,7 +836,7 @@ class RoomSynsetRequirement(Model):
     class Meta:
         pk = "id"
         unique_together = ("room_requirement", "synset")
-        ordering = ["synset__name"]
+        ordering = ["id"]  # TODO: synset__name when implemented
 
 
 @dataclass(eq=False, order=False)
@@ -912,7 +912,7 @@ class RoomObject(Model):
     class Meta:
         pk = "id"
         unique_together = ("room", "object")
-        ordering = ["room__name", "object__name"]
+        ordering = ["id"]  # TODO: ["room__name", "object__name"] when implemented
 
     def __str__(self):
         return f"{str(self.room)}_{self.object.name}"
