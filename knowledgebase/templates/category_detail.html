@@ -5,26 +5,8 @@
   <h3 class="text-center">Synset: {% if category.synset %}<a href="{{ url_for('synset_detail', name=category.synset.name) }}"">{{ category.synset.name }}</a>{% else %}None{% endif %}</h2>
 
   <h2>Objects</h2>
-  <div class="container">
-    <div class="row">
-      {% for object in category.objects %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-header">
-            <h5 class="card-title mb-0">
-              <a href="{{ url_for('object_detail', name=object.name) }}" class="text-decoration-none">{{ object }}</a>
-            </h5>
-          </div>
-          <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object }}">
-        </div>
-      </div>
-      {% else %}
-      <div class="col-12">
-        <div class="alert alert-info">No objects found</div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
+  {% from "table_modules/object_table.html" import render_object_table %}
+  {{ render_object_table(category.objects, enable_search=False, enable_csv=False) }}
 
   <h2>Related Synsets</h2>
   {% with G=category.synset.subgraph, center_node=category.synset %}

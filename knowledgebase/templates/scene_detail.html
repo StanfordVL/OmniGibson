@@ -11,39 +11,6 @@
   <h4 class="text-center text-danger">Not Ready</h4>
   {% endif %}
   <h2>Rooms</h2>
-  <div class="container">
-    <div class="row">
-      {% for room in scene.rooms %}
-      <div class="col-md-6 mb-4">
-        <div class="card">
-          <div class="card-header">
-            <h3 class="card-title mb-0">{{ room.name }}</h3>
-          </div>
-          <div class="card-body">
-            <div class="row">
-              {% for roomobject in room.roomobjects %}
-              <div class="col-md-6 mb-3">
-                <div class="card h-100">
-                  <div class="card-header">
-                    <h5 class="card-title mb-0">
-                      <a href="{{ url_for('object_detail', name=roomobject.object.name) }}" class="text-decoration-none">{{ roomobject.object }}</a>
-                    </h5>
-                  </div>
-                  <p class="card-text p-3 mb-0">
-                    Count: {{ roomobject.count }}
-                  </p>
-                </div>
-              </div>
-              {% else %}
-              <div class="col-12">
-                <div class="alert alert-info">No objects in this room</div>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-        </div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
+  {% from "table_modules/room_table.html" import render_room_table %}
+  {{ render_room_table(scene.rooms, enable_search=False, enable_csv=False) }}
 {% endblock %}
