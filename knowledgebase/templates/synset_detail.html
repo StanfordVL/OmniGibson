@@ -123,11 +123,23 @@
 
   <h2>Children Synsets</h2>
   <div class="container">
-    <div class="row justify-content-md-center">
+    <div class="row">
       {% for child in synset.children %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=child.name) }}" class="btn btn-{{- child.state -}}">{{ child.name }}</a></div>
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ child.name }}</h5>
+            <p class="card-text">
+              <span class="badge badge-{{ child.state }}">{{ child.state|title }}</span>
+            </p>
+            <a href="{{ url_for('synset_detail', name=child.name) }}" class="btn btn-primary btn-block">View Details</a>
+          </div>
+        </div>
+      </div>
       {% else %}
-      <p>None</p>
+      <div class="col-12">
+        <div class="alert alert-info">No children synsets found</div>
+      </div>
       {% endfor %}
     </div>
   </div>

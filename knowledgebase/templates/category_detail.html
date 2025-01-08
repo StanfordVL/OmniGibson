@@ -6,11 +6,21 @@
 
   <h2>Objects</h2>
   <div class="container">
-    <div class="row justify-content-md-center">
-      {% for object in category.objects%}
-      <div class="col-md-auto my-1"><a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-{{- object.state -}}">{{ object.name }}</a></div>
+    <div class="row">
+      {% for object in category.objects %}
+      <div class="col-md-4 mb-4">
+        <div class="card h-100">
+          <div class="card-body">
+            <h5 class="card-title">{{ object.name }}</h5>
+            <img class="card-img-top mb-2" src="{{ object.image_url }}" alt="{{ object.name }}">
+            <a href="{{ url_for('object_detail', name=object.name) }}" class="btn btn-{{- object.state -}} btn-block">View Details</a>
+          </div>
+        </div>
+      </div>
       {% else %}
-      <p>None</p>
+      <div class="col-12">
+        <div class="alert alert-info">No objects found</div>
+      </div>
       {% endfor %}
     </div>
   </div>
