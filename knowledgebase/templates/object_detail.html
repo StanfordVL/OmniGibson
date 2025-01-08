@@ -16,32 +16,12 @@
   </div>
 
   <h2>Meta Links</h2>
-  <div class="container">
-    <div class="row">
-      {% for meta_link in object.meta_links %}
-      <div class="col-md-4 mb-4">
-        <div class="card">
-          <div class="card-body">
-            <h5 class="card-title">{{ meta_link.name }}</h5>
-          </div>
-        </div>
-      </div>
-      {% else %}
-      <div class="col-12">
-        <div class="alert alert-info">No meta links found</div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
+  {% from "table_modules/meta_link_table.html" import render_meta_link_table %}
+  {{ render_meta_link_table(object.meta_links, enable_search=False, enable_csv=False) }}
 
   <h2>Scene / Rooms</h2>
-  <ul>
-      {% for roomobject in object.roomobjects %}
-      <li><a href="{{ url_for('scene_detail', name=roomobject.room.scene.name) }}">{{ roomobject.room.scene.name }} - {{ roomobject.room.name }} - {% if roomobject.room.ready %}Ready{% else %}Future{% endif %}: {{ roomobject.count }}</a></li>
-      {% else %}
-      <li>None</li>
-      {% endfor %}
-  </ul>
+  {% from "table_modules/room_object_table.html" import render_room_object_table %}
+  {{ render_room_object_table(object.roomobjects, enable_search=False, enable_csv=False) }}
 
   <h2>Synsets</h2>
   {% with G=object.category.synset.subgraph, center_node=object.category.synset %}
