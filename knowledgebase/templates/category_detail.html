@@ -35,63 +35,12 @@
   <br>
   
   <h2>Ancestor Synsets</h2>
-  <div class="container">
-    <div class="row">
-      {% for ancestor in category.synset.ancestors %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <a href="{{ url_for('synset_detail', name=ancestor.name) }}" class="text-decoration-none">
-              <h5 class="card-title">{{ ancestor.name }}</h5>
-              <p class="card-text">
-                <span class="badge badge-{{ ancestor.state|tocolor }}">{{ ancestor.state|title }}</span>
-              </p>
-            </a>
-          </div>
-        </div>
-      </div>
-      {% else %}
-      <div class="col-12">
-        <div class="alert alert-info">No ancestor synsets found</div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  <br>
+  {% from "table_modules/synset_table.html" import render_synset_table %}
+  {{ render_synset_table(category.synset.ancestors, enable_search=False, enable_csv=False) }}
 
-  <h2>Parents Synsets</h2>
-  <div class="container">
-    <div class="row">
-      {% for parent in category.synset.parents %}
-      <div class="col-md-4 mb-4">
-        <div class="card h-100">
-          <div class="card-body">
-            <a href="{{ url_for('synset_detail', name=parent.name) }}" class="text-decoration-none">
-              <h5 class="card-title">{{ parent.name }}</h5>
-              <p class="card-text">
-                <span class="badge badge-{{ parent.state|tocolor }}">{{ parent.state|title }}</span>
-              </p>
-            </a>
-          </div>
-        </div>
-      </div>
-      {% else %}
-      <div class="col-12">
-        <div class="alert alert-info">No parent synsets found</div>
-      </div>
-      {% endfor %}
-    </div>
-  </div>
-  <br>
+  <h2>Parent Synsets</h2>
+  {{ render_synset_table(category.synset.parents, enable_search=False, enable_csv=False) }}
 
   <h2>Children Synsets</h2>
-  <div class="container">
-    <div class="row justify-content-md-center">
-      {% for child in category.synset.children %}
-      <div class="col-md-auto my-1"><a href="{{ url_for('synset_detail', name=child.name) }}" class="btn btn-{{- child.state|tocolor -}}">{{ child.name }}</a></div>
-      {% else %}
-      <p>None</p>
-      {% endfor %}
-    </div>
-  </div>
+  {{ render_synset_table(category.synset.children, enable_search=False, enable_csv=False) }}
 {% endblock %}
