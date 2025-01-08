@@ -1,5 +1,6 @@
 import unicodedata, re
-from flask import Flask, redirect
+from flask import redirect
+from . import create_app
 from knowledgebase.views import *
 
 error_url_patterns = [
@@ -30,7 +31,7 @@ urlpatterns = [
   ("transitions/<name>/", TransitionDetailView, "transition_detail"),
 ]
 
-app = Flask(__name__)
+app = create_app()
 app.config["TEMPLATES_AUTO_RELOAD"] = True
 
 @app.template_filter('slugify')
