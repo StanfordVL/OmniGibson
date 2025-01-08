@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for transition in transitions|sort(attribute='name') %}
+    {% for transition in transitions|sort %}
     <tr>
       <td><a href="{{ url_for('transition_detail', name=transition.name) }}">{{ transition.name }}</a></td>
       <td>

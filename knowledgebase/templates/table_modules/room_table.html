@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for room in rooms|sort(attribute='name') %}
+    {% for room in rooms|sort %}
     <tr>
       <td>{{ room.name }}</td>
       <td>

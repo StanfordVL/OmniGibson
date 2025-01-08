@@ -10,7 +10,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for task in tasks|sort(attribute='name') %}
+    {% for task in tasks|sort %}
     <tr>
       <td><a href="{{ url_for('task_detail', name=task.name) }}">{{ task.name }}</a></td>
       <td class="bg-{{- task.synset_state|tocolor -}}">

@@ -6,7 +6,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for property in properties|sort(attribute='name') %}
+    {% for property in properties|sort %}
     <tr>
       <td>{{ property.name }}</td>
     </tr>

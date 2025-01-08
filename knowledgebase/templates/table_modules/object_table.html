@@ -12,7 +12,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for object in objects|sort(attribute='name') %}
+    {% for object in objects|sort %}
     <tr>
       <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a></td>
       <td>{{ object.category.name }}</td>
