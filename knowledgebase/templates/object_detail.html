@@ -1,7 +1,7 @@
 {% extends "base.html" %}
-{% block title %}Object {{ object.name }} Details{% endblock %}
+{% block title %}Object {{ object }} Details{% endblock %}
 {% block content %}
-  <h1 class="text-center">{{ object.name }}</h1>
+  <h1 class="text-center">{{ object }}</h1>
   <hr>
   <h4 class="text-center">
     {% if object.ready %}<span class="text-success">Ready</span>{% elif object.planned %}<div class="text-warning">Planned</div>{% else %}<div class="text-danger">Need Action</div>{% endif %} 
