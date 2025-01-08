@@ -24,14 +24,14 @@
               {% for roomobject in room.roomobjects %}
               <div class="col-md-6 mb-3">
                 <div class="card h-100">
-                  <div class="card-body">
-                    <a href="{{ url_for('object_detail', name=roomobject.object.name) }}" class="text-decoration-none">
-                      <h5 class="card-title">{{ roomobject.object }}</h5>
-                      <p class="card-text">
-                        Count: {{ roomobject.count }}
-                      </p>
-                    </a>
+                  <div class="card-header">
+                    <h5 class="card-title mb-0">
+                      <a href="{{ url_for('object_detail', name=roomobject.object.name) }}" class="text-decoration-none">{{ roomobject.object }}</a>
+                    </h5>
                   </div>
+                  <p class="card-text p-3 mb-0">
+                    Count: {{ roomobject.count }}
+                  </p>
                 </div>
               </div>
               {% else %}

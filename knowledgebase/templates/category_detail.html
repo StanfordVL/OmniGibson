@@ -10,14 +10,12 @@
       {% for object in category.objects %}
       <div class="col-md-4 mb-4">
         <div class="card h-100">
-          <div class="card-body">
-            <div class="card-header">
-              <h5 class="card-title mb-0">
-                <a href="{{ url_for('object_detail', name=object.name) }}" class="text-decoration-none">{{ object }}</a>
-              </h5>
-            </div>
-            <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object }}">
+          <div class="card-header">
+            <h5 class="card-title mb-0">
+              <a href="{{ url_for('object_detail', name=object.name) }}" class="text-decoration-none">{{ object }}</a>
+            </h5>
           </div>
+          <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object }}">
         </div>
       </div>
       {% else %}
