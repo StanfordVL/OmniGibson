@@ -12,12 +12,7 @@ from bddl.knowledge_base.models import Property, \
   Room, \
   RoomObject
 
-from bddl.knowledge_base.utils import STATE_MATCHED, \
-  STATE_PLANNED, \
-  STATE_UNMATCHED, \
-  STATE_SUBSTANCE, \
-  STATE_ILLEGAL, \
-  STATE_NONE
+from bddl.knowledge_base.utils import State
 
 from bddl.knowledge_base.processing import KnowledgeBaseProcessor
 

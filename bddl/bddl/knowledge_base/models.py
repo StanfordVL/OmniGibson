@@ -210,10 +210,10 @@ class Object(Model):
     @cached_property
     def state(self):
         if self.ready:
-            return STATE_MATCHED
+            return State.MATCHED
         elif self.planned:
-            return STATE_PLANNED
-        return STATE_UNMATCHED
+            return State.PLANNED
+        return State.UNMATCHED
 
     @cached_property
     def image_url(self):
@@ -264,7 +264,7 @@ class Synset(Model):
     ancestors_fk: ManyToMany = ManyToManyField("Synset", "descendants")
     descendants_fk: ManyToMany = ManyToManyField("Synset", "ancestors")
     # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
-    state: str = field(default=STATE_ILLEGAL, repr=False)
+    state: State = field(default=State.ILLEGAL, repr=False)
 
     categories_fk: OneToMany = OneToManyField(Category, "synset")
     properties_fk: OneToMany = OneToManyField(Property, "synset")
@@ -588,14 +588,14 @@ class Task(Model):
 
     @cached_property
     def state(self):
-        if self.synset_state == STATE_MATCHED and self.scene_state == STATE_MATCHED:
-            return STATE_MATCHED
+        if self.synset_state == State.MATCHED and self.scene_state == State.MATCHED:
+            return State.MATCHED
         elif (
-            self.synset_state == STATE_UNMATCHED or self.scene_state == STATE_UNMATCHED
+            self.synset_state == State.UNMATCHED or self.scene_state == State.UNMATCHED
         ):
-            return STATE_UNMATCHED
+            return State.UNMATCHED
         else:
-            return STATE_PLANNED
+            return State.PLANNED
 
     def matching_scene(self, scene: Scene, ready: bool = True) -> str:
         """checks whether a scene satisfies task requirements"""
@@ -691,9 +691,9 @@ class Task(Model):
     @cached_property
     def substance_required(self) -> str:
         if self.substance_synsets:
-            return STATE_SUBSTANCE
+            return State.SUBSTANCE
         else:
-            return STATE_NONE
+            return State.NONE
 
     @cached_property
     def producability_data(self) -> Dict[Synset, Tuple[bool, Set[TransitionRule]]]:

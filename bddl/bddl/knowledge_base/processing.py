@@ -353,18 +353,18 @@ class KnowledgeBaseProcessor():
         synsets = []
         substances = {s.name for s in Synset.all_objects() if "substance" in s.property_names}
         for synset in self.tqdm(Synset.all_objects()):
-            if synset.name == "entity.n.01": synset.state = STATE_MATCHED   # root synset is always legal
+            if synset.name == "entity.n.01": synset.state = State.MATCHED   # root synset is always legal
             elif synset.name in substances:
-                synset.state = STATE_SUBSTANCE
+                synset.state = State.SUBSTANCE
             elif synset.parents:
                 if len(synset.matching_ready_objects) > 0:
-                    synset.state = STATE_MATCHED
+                    synset.state = State.MATCHED
                 elif len(synset.matching_objects) > 0:
-                    synset.state = STATE_PLANNED
+                    synset.state = State.PLANNED
                 else:
-                    synset.state = STATE_UNMATCHED
+                    synset.state = State.UNMATCHED
             else:
-                synset.state = STATE_ILLEGAL
+                synset.state = State.ILLEGAL
             synsets.append(synset)
 
 

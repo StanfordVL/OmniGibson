@@ -6,13 +6,15 @@ from bddl.logic_base import UnaryAtomicFormula, BinaryAtomicFormula, Expression
 from bddl.backend_abc import BDDLBackend
 from bddl.parsing import parse_domain
 
-# STATE METADATA
-STATE_MATCHED = "success"
-STATE_PLANNED = "warning"
-STATE_UNMATCHED = "danger"
-STATE_SUBSTANCE = "info"
-STATE_ILLEGAL = "secondary"
-STATE_NONE = "light"
+from enum import Enum, auto
+
+class State(Enum):
+    MATCHED = auto()
+    PLANNED = auto() 
+    UNMATCHED = auto()
+    SUBSTANCE = auto()
+    ILLEGAL = auto()
+    NONE = auto()
 
 
 # predicates that can only be used for substances
