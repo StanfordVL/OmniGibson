@@ -84,7 +84,7 @@
       {% for task in task_list %}
       <tr>
         <td><a href="{{ url_for('task_detail', name=task.name) }}">{{ task.name }}</a></td>
-        <td class="bg-{{- task.synset_state -}}">
+        <td class="bg-{{- task.synset_state|tocolor -}}">
           {% for synset in task.synsets %}
             {{ synset.name }}, 
           {% endfor %}

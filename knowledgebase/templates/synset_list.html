@@ -121,7 +121,7 @@
       {% for synset in synset_list %}
       <tr>
         <td><a href="{{ url_for('synset_detail', name=synset.name) }}">{{ synset.name }}</a></td>
-        <td class="bg-{{- synset.state -}}">
+        <td class="bg-{{- synset.state|tocolor -}}">
           {% if synset.state == 'success' %}Ready
           {% elif synset.state == 'warning' %}Planned
           {% elif synset.state == 'danger' %}Not Ready

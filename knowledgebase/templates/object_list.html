@@ -76,7 +76,7 @@
         <td>{{ object.category.synset.task_relevant }}</td>
         <td>{% for ml in object.missing_meta_links %} {{ ml }}, {% endfor %}</td>
         <td>{{ object.roomobjects|length }}</td>
-        <td class="{% if object.ready %}bg-success{% else %}bg-warning{% endif %}">{{ object.ready }}</td>
+        <td class="{% if object.ready %}bg-success{% else %}bg-warning|tocolor{% endif %}">{{ object.ready }}</td>
       </tr>
       {% endfor %}
     </tbody>
