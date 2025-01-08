@@ -33820,17 +33820,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "diced__ivy.n.01": {
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "diced__kabob.n.01": {
         "cookable": {
             "cook_temperature": 74.0,
@@ -49879,30 +49868,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "half__ivy.n.01": {
-        "diceable": {
-            "uncooked_diceable_derivative_synset": "diced__ivy.n.01"
-        },
-        "disinfectable": {},
-        "dustyable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "grassyable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "half__kabob.n.01": {
         "cookable": {
             "cook_temperature": 74.0
@@ -56015,30 +55980,6 @@
         "liquid": {},
         "physicalSubstance": {},
         "substance": {}
-    },
-    "ivy.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "grassyable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "sliceable": {
-            "sliceable_derivative_synset": "half__ivy.n.01"
-        },
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
     },
     "jacket.n.01": {
         "cloth": {},
@@ -112369,7 +112310,11 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "vine.n.01": {},
+    "vine.n.01": {
+        "macroPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "vinegar.n.01": {
         "boilable": {},
         "cookable": {
