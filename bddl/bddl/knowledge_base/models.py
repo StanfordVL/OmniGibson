@@ -148,9 +148,6 @@ class Category(Model):
     # objects that belong to this category
     objects_fk: OneToMany = OneToManyField("Object", "category")
 
-    # objects that used to belong to this category but were renamed
-    renamed_objects_fk: OneToMany = OneToManyField("Object", "original_category")
-
     def __str__(self):
         return self.name
 
@@ -172,7 +169,7 @@ class Category(Model):
     def view_mapped_to_substance_synset(cls):
         """Categories Incorrectly Mapped to Substance Synsets"""
         return [
-            x for x in cls.all_objects() if x.category.synset.state == STATE_SUBSTANCE
+            x for x in cls.all_objects() if x.synset.state == STATE_SUBSTANCE
         ]
 
     @classmethod
@@ -193,7 +190,7 @@ class Object(Model):
     # the category that the object belongs to
     category_fk: ManyToOne = ManyToOneField(Category, "objects")
     # the category of the object prior to getting renamed
-    original_category_fk: ManyToOne = ManyToOneField(Category, "renamed_objects")
+    original_category_name: str = ""
     # meta links owned by the object
     meta_links_fk: ManyToMany = ManyToManyField(MetaLink, "on_objects")
     # roomobject counts of this object
@@ -428,21 +425,26 @@ class Synset(Model):
 
     @cached_property
     def derivative_children_names(self):
-        sliceable_children = [
-            json.loads(p.parameters)["sliceable_derivative_synset"]
-            for p in self.properties
-            if p.name == "sliceable"
-        ]
-        diceable_children = [
-            json.loads(p.parameters)["uncooked_diceable_derivative_synset"]
-            for p in self.properties
-            if p.name == "diceable"
-        ]
-        cookable_children = [
-            json.loads(p.parameters)["substance_cooking_derivative_synset"]
-            for p in self.properties
-            if p.name == "cookable" and self.state == STATE_SUBSTANCE
-        ]
+        sliceable_children = []
+        diceable_children = []
+        cookable_children = []
+
+        for p in self.properties:
+            if p.name == "sliceable":
+                try:
+                    sliceable_children.append(json.loads(p.parameters)["sliceable_derivative_synset"])
+                except KeyError:
+                    raise ValueError(f"'sliceable_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
+            elif p.name == "diceable":
+                try:
+                    diceable_children.append(json.loads(p.parameters)["uncooked_diceable_derivative_synset"])
+                except KeyError:
+                    raise ValueError(f"'uncooked_diceable_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
+            elif p.name == "cookable" and self.state == STATE_SUBSTANCE:
+                try:
+                    cookable_children.append(json.loads(p.parameters)["substance_cooking_derivative_synset"])
+                except KeyError:
+                    raise ValueError(f"'substance_cooking_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
         return set(sliceable_children + diceable_children + cookable_children)
 
     @cached_property
