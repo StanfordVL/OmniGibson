@@ -6,7 +6,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for meta_link in meta_links %}
+    {% for meta_link in meta_links|sort(attribute='name') %}
     <tr>
       <td>{{ meta_link.name }}</td>
     </tr>

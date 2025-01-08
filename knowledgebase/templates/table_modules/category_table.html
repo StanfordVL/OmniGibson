@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for category in categories %}
+    {% for category in categories|sort(attribute='name') %}
     <tr>
       <td><a href="{{ url_for('category_detail', name=category.name) }}">{{ category.name }}</a></td>
       <td><a href="{% if category.synset.name %}{{ url_for('synset_detail', name=category.synset.name) }}{% else %}#{% endif %}">{{ category.synset.name }}</a></td>

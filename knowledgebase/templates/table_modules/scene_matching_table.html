@@ -8,7 +8,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for scene, info in scene_matching_dict.items() %}
+    {% for scene, info in scene_matching_dict|dictsort(by='key.name') %}
     <tr>
       <td><a href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene.name }}</a></td>
       <td class="{% if info.matched_ready %}bg-success{% elif info.matched_planned %}bg-warning{% else %}bg-danger{% endif %}">

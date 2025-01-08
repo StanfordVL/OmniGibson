@@ -9,7 +9,7 @@
     </tr>
   </thead>
   <tbody>
-    {% for roomobject in roomobjects %}
+    {% for roomobject in roomobjects|sort(attribute='room.name') %}
     <tr>
       <td><a href="{{ url_for('scene_detail', name=roomobject.room.scene.name) }}">{{ roomobject.room.scene.name }}</a></td>
       <td>{{ roomobject.room.name }}</td>
