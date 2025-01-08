@@ -8,11 +8,8 @@
     | Category: <a href="{{ url_for('category_detail', name=object.category.name) }}">{{ object.category }}</a> | Original name: {{ object.original_name }} | Provider: {{ object.provider }}
   </h4>
 
-  <div class="card mb-4">
-    <div class="card-header">
-      <h5 class="card-title mb-0">Object Image</h5>
-    </div>
-    <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object }} photo" />
+  <div class="text-center mb-4">
+    <img class="img-fluid" src="{{ object.image_url }}" alt="{{ object }} photo" />
   </div>
 
   <h2>Meta Links</h2>
