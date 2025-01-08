@@ -5066,7 +5066,10 @@
                             },
                             {
                               "name": "half__sour_bread.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_sourdough"
+                              ]
                             },
                             {
                               "name": "half__toast.n.01",
@@ -6600,14 +6603,14 @@
                                 },
                                 {
                                   "name": "half__quail.n.01",
-                                  "hasModel": true
-                                },
-                                {
-                                  "name": "half__quail_breast.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "half_quail_breast"
                                   ]
+                                },
+                                {
+                                  "name": "half__quail_breast.n.01",
+                                  "hasModel": true
                                 },
                                 {
                                   "name": "quail.n.01",
@@ -6688,14 +6691,14 @@
                                 },
                                 {
                                   "name": "half__pork_chop.n.01",
+                                  "hasModel": true
+                                },
+                                {
+                                  "name": "half__porkchop.n.01",
                                   "hasModel": true,
                                   "categories": [
                                     "half_pork_chop"
                                   ]
-                                },
-                                {
-                                  "name": "half__porkchop.n.01",
-                                  "hasModel": true
                                 },
                                 {
                                   "name": "porkchop.n.01",
@@ -6890,14 +6893,14 @@
                             },
                             {
                               "name": "half__pork_rib.n.01",
+                              "hasModel": true
+                            },
+                            {
+                              "name": "half__rib.n.01",
                               "hasModel": true,
                               "categories": [
                                 "half_pork_rib"
                               ]
-                            },
-                            {
-                              "name": "half__rib.n.01",
-                              "hasModel": true
                             },
                             {
                               "name": "half__sirloin.n.01",
@@ -9085,7 +9088,10 @@
                             },
                             {
                               "name": "half__pieplant.n.01",
-                              "hasModel": true
+                              "hasModel": true,
+                              "categories": [
+                                "half_rhubarb"
+                              ]
                             },
                             {
                               "name": "half__pumpkin.n.01",
@@ -9096,10 +9102,7 @@
                             },
                             {
                               "name": "half__rhubarb.n.01",
-                              "hasModel": true,
-                              "categories": [
-                                "half_rhubarb"
-                              ]
+                              "hasModel": true
                             },
                             {
                               "name": "leek.n.02",
@@ -10024,14 +10027,14 @@
                         },
                         {
                           "name": "half__prawn.n.01",
-                          "hasModel": true
-                        },
-                        {
-                          "name": "half__shrimp.n.01",
                           "hasModel": true,
                           "categories": [
                             "half_shrimp"
                           ]
+                        },
+                        {
+                          "name": "half__shrimp.n.01",
+                          "hasModel": true
                         },
                         {
                           "name": "half__squid.n.01",
@@ -14525,10 +14528,7 @@
                                 },
                                 {
                                   "name": "half__sourdough.n.01",
-                                  "hasModel": true,
-                                  "categories": [
-                                    "half_sourdough"
-                                  ]
+                                  "hasModel": true
                                 },
                                 {
                                   "name": "half__spice_cookie_dough.n.01",
@@ -17309,7 +17309,10 @@
                                 },
                                 {
                                   "name": "half__sour_bread.n.01",
-                                  "hasModel": true
+                                  "hasModel": true,
+                                  "categories": [
+                                    "half_sourdough"
+                                  ]
                                 },
                                 {
                                   "name": "half__toast.n.01",
@@ -33310,14 +33313,14 @@
                                                 },
                                                 {
                                                   "name": "half__vanilla.n.01",
-                                                  "hasModel": true
-                                                },
-                                                {
-                                                  "name": "half__vanilla_flower.n.01",
                                                   "hasModel": true,
                                                   "categories": [
                                                     "half_vanilla_flower"
                                                   ]
+                                                },
+                                                {
+                                                  "name": "half__vanilla_flower.n.01",
+                                                  "hasModel": true
                                                 },
                                                 {
                                                   "name": "vanilla.n.01",
@@ -34974,14 +34977,14 @@
                                     },
                                     {
                                       "name": "half__hip.n.01",
-                                      "hasModel": true
-                                    },
-                                    {
-                                      "name": "half__rosehip.n.01",
                                       "hasModel": true,
                                       "categories": [
                                         "half_rosehip"
                                       ]
+                                    },
+                                    {
+                                      "name": "half__rosehip.n.01",
+                                      "hasModel": true
                                     },
                                     {
                                       "name": "hip.n.05",
