@@ -11,10 +11,12 @@
       <div class="col-md-4 mb-4">
         <div class="card h-100">
           <div class="card-body">
-            <a href="{{ url_for('object_detail', name=object.name) }}" class="text-decoration-none">
-              <h5 class="card-title">{{ object.name }}</h5>
-              <img class="card-img-top mb-2" src="{{ object.image_url }}" alt="{{ object.name }}">
-            </a>
+            <div class="card-header">
+              <h5 class="card-title mb-0">
+                <a href="{{ url_for('object_detail', name=object.name) }}" class="text-decoration-none">{{ object.name }}</a>
+              </h5>
+            </div>
+            <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object.name }}">
           </div>
         </div>
       </div>
