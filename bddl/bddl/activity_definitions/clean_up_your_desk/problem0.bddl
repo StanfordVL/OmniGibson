@@ -59,7 +59,7 @@
             (forall 
                 (?folder.n.02 - folder.n.02) 
                 (or
-                    (inside ?folder.n.02 ?shelf.n.01_1)
+                    (ontop ?folder.n.02 ?shelf.n.01_1)
                     (ontop ?folder.n.02 ?desk.n.01_1)
                     (ontop ?folder.n.02 ?folder.n.02_1)
                     (ontop ?folder.n.02 ?folder.n.02_2)
@@ -71,7 +71,7 @@
             ) 
             (forall 
                 (?paperback_book.n.01 - paperback_book.n.01) 
-                (inside ?paperback_book.n.01 ?shelf.n.01_1)
+                (ontop ?paperback_book.n.01 ?shelf.n.01_1)
             ) 
             (inside ?pencil.n.01_1 ?pencil_box.n.01_1) 
             (inside ?shears.n.01_1 ?pencil_box.n.01_1) 
