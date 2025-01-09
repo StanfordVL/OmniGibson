@@ -348,6 +348,11 @@ class KnowledgeBaseProcessor():
             for synset_name in outputs:
                 synset = Synset.get(name=synset_name)
                 transition.output_synsets.add(synset)
+            if "machine" in transition_data:
+                machines = transition_data["machine"]
+                for synset_name in machines:
+                    machine, _ = Synset.get(name=synset_name)
+                    transition.machine_synsets.add(machine)
 
     def generate_synset_state(self):
         synsets = []

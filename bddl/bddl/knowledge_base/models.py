@@ -276,6 +276,9 @@ class Synset(Model):
     produced_by_transition_rules_fk: ManyToMany = ManyToManyField(
         "TransitionRule", "output_synsets"
     )
+    machine_in_transition_rules_fk: ManyToMany = ManyToManyField(
+        "TransitionRule", "machine_synsets"
+    )
     roomsynsetrequirements_fk: OneToMany = OneToManyField(
         "RoomSynsetRequirement", "synset"
     )
@@ -360,15 +363,18 @@ class Synset(Model):
         return bool(self.tasks or any(ancestor.tasks for ancestor in self.ancestors))
 
     @cached_property
+    def relevant_transitions(self):
+        return sorted(set(self.produced_by_transition_rules) | set(self.used_by_transition_rules) | set(self.machine_in_transition_rules))
+
+    @cached_property
     def transition_subgraph(self):
-        producing_recipes = list(self.produced_by_transition_rules)
-        consuming_recipes = list(self.used_by_transition_rules)
-        transitions = set(itertools.chain(producing_recipes, consuming_recipes))
         G = nx.DiGraph()
-        for transition in transitions:
+        for transition in self.relevant_transitions:
             G.add_node(transition)
             for input_synset in transition.input_synsets:
                 G.add_edge(input_synset, transition)
+            for machine_synset in transition.machine_synsets:
+                G.add_edge(machine_synset, transition)
             for output_synset in transition.output_synsets:
                 G.add_edge(transition, output_synset)
         return nx.relabel_nodes(
@@ -538,6 +544,7 @@ class TransitionRule(Model):
     output_synsets_fk: ManyToMany = ManyToManyField(
         Synset, "produced_by_transition_rules"
     )
+    machine_synsets_fk: ManyToMany = ManyToManyField(Synset, "machine_in_transition_rules")
 
     class Meta:
         pk = "name"
@@ -549,6 +556,8 @@ class TransitionRule(Model):
         G.add_node(self)
         for input_synset in self.input_synsets:
             G.add_edge(input_synset, self)
+        for machine_synset in self.machine_synsets:
+            G.add_edge(machine_synset, self)
         for output_synset in self.output_synsets:
             G.add_edge(self, output_synset)
         return nx.relabel_nodes(
@@ -564,6 +573,8 @@ class TransitionRule(Model):
             G.add_node(transition)
             for input_synset in transition.input_synsets:
                 G.add_edge(input_synset, transition)
+            for machine_synset in transition.machine_synsets:
+                G.add_edge(machine_synset, transition)
             for output_synset in transition.output_synsets:
                 G.add_edge(transition, output_synset)
         return G
@@ -733,6 +744,8 @@ class Task(Model):
             G.add_node(transition_name, type="transition", text=transition.name)
             for input_synset in transition.input_synsets:
                 G.add_edge(human_readable_name(input_synset), transition_name)
+            for machine_synset in transition.machine_synsets:
+                G.add_edge(human_readable_name(machine_synset), transition_name)
             for output_synset in transition.output_synsets:
                 G.add_edge(transition_name, human_readable_name(output_synset))
 
