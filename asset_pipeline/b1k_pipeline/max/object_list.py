@@ -149,6 +149,9 @@ def main():
 
     meta_links = defaultdict(set)
 
+    attachment_pairs = defaultdict(lambda: defaultdict(set))  # attachment_pairs[model_id][F/M] = {attachment_type1, attachment_type2}
+    bad_attachments = []
+
     # Store vertex/face counts for bad model matching
     pivots_and_mesh_parts = defaultdict(list)
     for obj in rt.objects:
@@ -281,6 +284,18 @@ def main():
         meta_type = obj_match.group("meta_type")
         meta_links[parent_id].add(meta_type)
 
+        if meta_type == "attachment":
+            attachment_type = obj_match.group("meta_id")
+            if not attachment_type:
+                bad_attachments.append(f"Missing attachment type/gender on object {row.object_name}")
+            if attachment_type[-1] not in "MF":
+                bad_attachments.append(f"Invalid attachment gender {attachment_type} on object {row.object_name}")
+            attachment_side = attachment_type[-1]
+            attachment_type = attachment_type[:-1]
+            if not attachment_type:
+                bad_attachments.append(f"Missing attachment type on object {row.object_name}")
+            attachment_pairs[parent_id][attachment_side].add(attachment_type)
+
     # Find joints
     for obj, _, _ in max_tree:
         obj_match = b1k_pipeline.utils.parse_name(obj)
@@ -303,10 +318,12 @@ def main():
         "provided_objects": provided,
         "meshes": meshes,
         "meta_links": meta_links,
+        "attachment_pairs": attachment_pairs,
         "max_tree": max_tree,
         "object_counts": counts,
         "mesh_fingerprints": mesh_fingerprints,
         "error_invalid_name": sorted(nomatch),
+        "error_bad_attachment": bad_attachments,
     }
     with open(filename, "w") as f:
         json.dump(results, f, indent=4)
