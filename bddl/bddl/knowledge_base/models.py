@@ -98,6 +98,10 @@ class AttachmentPair(Model):
     class Meta:
         pk = "name"
 
+    @classmethod
+    def view_attachment_pairs_with_missing_objects(cls):
+        return [x for x in cls.all_objects() if len(x.female_objects) == 0 or len(x.male_objects) == 0]
+
 
 @dataclass(eq=False, order=False)
 class Predicate(Model):
