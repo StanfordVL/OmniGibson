@@ -100,6 +100,7 @@ class AttachmentPair(Model):
 
     @classmethod
     def view_attachment_pairs_with_missing_objects(cls):
+        """Attachment pairs that only have objects on one side"""
         return [x for x in cls.all_objects() if len(x.female_objects) == 0 or len(x.male_objects) == 0]
 
 

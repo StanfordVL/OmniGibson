@@ -164,15 +164,17 @@ class KnowledgeBaseProcessor():
                         meta_link_obj, _ = MetaLink.get_or_create(name=meta_link)
                         obj.meta_links.add(meta_link_obj)
                     
-                    existing_attachment_pairs = set(inventory["attachment_pairs"][orig_name])
-                    for gender, pair in existing_attachment_pairs:
-                        pair_obj, _ = AttachmentPair.get_or_create(name=pair)
-                        if gender == "F":
-                            obj.female_attachment_pairs.add(pair_obj)
-                        elif gender == "M":
-                            obj.male_attachment_pairs.add(pair_obj)
-                        else:
-                            raise Exception(f"Invalid gender {gender} for attachment pair {pair}")
+                    if orig_name in inventory["attachment_pairs"]:
+                        existing_attachment_pairs = inventory["attachment_pairs"][orig_name]
+                        for gender, pairs in existing_attachment_pairs.items():
+                            for pair in pairs:
+                                pair_obj, _ = AttachmentPair.get_or_create(name=pair)
+                                if gender == "F":
+                                    obj.female_attachment_pairs.add(pair_obj)
+                                elif gender == "M":
+                                    obj.male_attachment_pairs.add(pair_obj)
+                                else:
+                                    raise Exception(f"Invalid gender {gender} for attachment pair {pair}")
 
         with open(GENERATED_DATA_DIR / "object_inventory.json", "r") as f:
             objs = []
@@ -358,11 +360,12 @@ class KnowledgeBaseProcessor():
             for synset_name in outputs:
                 synset = Synset.get(name=synset_name)
                 transition.output_synsets.add(synset)
-            if "machine" in transition_data:
-                machines = transition_data["machine"]
-                for synset_name in machines:
-                    machine = Synset.get(name=synset_name)
-                    transition.machine_synsets.add(machine)
+            for auxiliary_synset_type in ["machine", "heat_source", "container"]:
+                if auxiliary_synset_type in transition_data:
+                    machines = transition_data[auxiliary_synset_type]
+                    for synset_name in machines:
+                        machine = Synset.get(name=synset_name)
+                        transition.machine_synsets.add(machine)
 
     def generate_synset_state(self):
         synsets = []
