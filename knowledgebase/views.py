@@ -201,6 +201,13 @@ class TransitionDetailView(DetailView):
     slug_url_kwarg = "name"
 
 
+class AttachmentPairDetailView(DetailView):
+    model = AttachmentPair
+    context_object_name = "attachment_pair"
+    slug_field = "name"
+    slug_url_kwarg = "name"
+
+
 class IndexView(TemplateView):
     template_name = "index.html"
 

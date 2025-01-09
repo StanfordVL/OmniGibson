@@ -29,6 +29,7 @@ urlpatterns = [
   ("scenes/<name>/", SceneDetailView, "scene_detail"),
   ("objects/<name>/", ObjectDetailView, "object_detail"),
   ("transitions/<name>/", TransitionDetailView, "transition_detail"),
+  ("attachments/<name>/", AttachmentPairDetailView, "attachment_pair_detail"),
 ]
 
 app = create_app()
