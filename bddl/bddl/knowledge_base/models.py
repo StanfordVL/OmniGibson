@@ -117,7 +117,15 @@ class Scene(Model):
 
     @cached_property
     def room_count(self):
-        return len(self.rooms)
+        return len(self.future_rooms)
+    
+    @cached_property
+    def ready_rooms(self):
+        return [room for room in self.rooms if room.ready]
+    
+    @cached_property
+    def future_rooms(self):
+        return [room for room in self.rooms if not room.ready]
 
     @cached_property
     def object_count(self):
