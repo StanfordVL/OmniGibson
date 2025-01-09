@@ -23,6 +23,7 @@ urlpatterns = [
   ("synsets/", SynsetListView, "synset_list"),
   ("categories/", CategoryListView, "category_list"),
   ("transitions/", TransitionListView, "transition_list"),
+  ("attachments/", AttachmentPairListView, "attachment_pair_list"),
   ("tasks/<name>/", TaskDetailView, "task_detail"),
   ("synsets/<name>/", SynsetDetailView, "synset_detail"),
   ("categories/<name>/", CategoryDetailView, "category_detail"),
