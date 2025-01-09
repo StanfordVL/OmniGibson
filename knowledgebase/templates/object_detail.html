@@ -20,6 +20,13 @@
   {% from "table_modules/room_object_table.html" import render_room_object_table %}
   {{ render_room_object_table(object.roomobjects, enable_search=False, enable_csv=False) }}
 
+  <h2>Attachment Pairs - Female Role</h2>
+  {% from "table_modules/attachment_pair_table.html" import render_attachment_pair_table %}
+  {{ render_attachment_pair_table(object.female_attachment_pairs, enable_search=False, enable_csv=False) }}
+
+  <h2>Attachment Pairs - Male Role</h2>
+  {{ render_attachment_pair_table(object.male_attachment_pairs, enable_search=False, enable_csv=False) }}
+
   <h2>Synsets</h2>
   {% with G=object.category.synset.subgraph, center_node=object.category.synset %}
     {% include "synset_graph_module.html" %}
