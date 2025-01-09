@@ -3,7 +3,7 @@ from functools import cached_property, cache
 import itertools
 import json
 import networkx as nx
-from typing import Dict, Set
+from typing import Dict, Set, List, Tuple
 from bddl.object_taxonomy import ObjectTaxonomy
 from bddl.knowledge_base.orm import (
     Model,
@@ -15,7 +15,7 @@ from bddl.knowledge_base.orm import (
     OneToManyField,
     UUIDField,
 )
-from bddl.knowledge_base.utils import *
+from bddl.knowledge_base.utils import SynsetState
 from collections import defaultdict
 
 
@@ -84,6 +84,16 @@ class Property(Model):
 class MetaLink(Model):
     name: str
     on_objects_fk: ManyToMany = ManyToManyField("Object", "meta_links")
+
+    class Meta:
+        pk = "name"
+
+
+@dataclass(eq=False, order=False)
+class AttachmentPair(Model):
+    name: str
+    female_object_fk: ManyToMany = ManyToManyField("Object", "female_attachment_pairs")
+    male_object_fk: ManyToMany = ManyToManyField("Object", "male_attachment_pairs")
 
     class Meta:
         pk = "name"
@@ -195,6 +205,10 @@ class Object(Model):
     meta_links_fk: ManyToMany = ManyToManyField(MetaLink, "on_objects")
     # roomobject counts of this object
     roomobjects_fk: OneToMany = OneToManyField("RoomObject", "object")
+
+    # attachment pairs this object participates in
+    female_attachment_pairs_fk: ManyToMany = ManyToManyField(AttachmentPair, "female_objects")
+    male_attachment_pairs_fk: ManyToMany = ManyToManyField(AttachmentPair, "male_objects")
 
     def __str__(self):
         return self.category.name + "-" + self.name
