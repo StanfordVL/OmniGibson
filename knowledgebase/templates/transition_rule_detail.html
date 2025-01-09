@@ -7,6 +7,9 @@
   {% from "table_modules/synset_table.html" import render_synset_table %}
   {{ render_synset_table(transition.input_synsets, enable_search=False, enable_csv=False) }}
 
+  <h2>Machine Synsets</h2>
+  {{ render_synset_table(transition.machine_synsets, enable_search=False, enable_csv=False) }}
+
   <h2>Output Synsets</h2>
   {{ render_synset_table(transition.output_synsets, enable_search=False, enable_csv=False) }}
 

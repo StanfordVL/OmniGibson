@@ -4,6 +4,7 @@
     <tr>
       <th>Transition Name</th>
       <th>Input Synsets</th>
+      <th>Machine Synsets</th>
       <th>Output Synsets</th>
     </tr>
   </thead>
@@ -13,6 +14,11 @@
       <td><a href="{{ url_for('transition_detail', name=transition.name) }}">{{ transition.name }}</a></td>
       <td>
         {% for synset in transition.input_synsets %}
+          {{ synset.name }}, 
+        {% endfor %}
+      </td>
+      <td></td>
+        {% for synset in transition.machine_synsets %}
           {{ synset.name }}, 
         {% endfor %}
       </td>
