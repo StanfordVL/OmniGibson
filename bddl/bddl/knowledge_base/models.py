@@ -92,8 +92,8 @@ class MetaLink(Model):
 @dataclass(eq=False, order=False)
 class AttachmentPair(Model):
     name: str
-    female_object_fk: ManyToMany = ManyToManyField("Object", "female_attachment_pairs")
-    male_object_fk: ManyToMany = ManyToManyField("Object", "male_attachment_pairs")
+    female_objects_fk: ManyToMany = ManyToManyField("Object", "female_attachment_pairs")
+    male_objects_fk: ManyToMany = ManyToManyField("Object", "male_attachment_pairs")
 
     class Meta:
         pk = "name"
