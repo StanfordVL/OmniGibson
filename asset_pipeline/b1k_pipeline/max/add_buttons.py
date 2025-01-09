@@ -39,7 +39,7 @@ ENTRYPOINTS = {
     "resolve_complaints.py": "Resolve QA complaints for this file.",
     "replace_bad_object.py": "Replace bad object instances with copy of the same object from provider file.",
     "rpc_server.py": "Run RPC Server for DVC stages.",
-    "run_coacd.py": "Run CoACD to generate collision mesh.",
+    "collision_generation.py": "Run CoACD and VHACD to generate collision mesh.",
     "select_mismatched_pivot.py": "Select groups of object instances whose pivots dont match.",
     "spherify.py": "Convert point helpers into spheres.",
     "switch_loose.py": "Switch visible object between different looseness options.",

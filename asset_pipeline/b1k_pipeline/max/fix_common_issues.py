@@ -19,7 +19,7 @@ import b1k_pipeline.max.import_fillable_meshes
 import b1k_pipeline.max.prebake_textures
 import b1k_pipeline.max.replace_bad_object
 import b1k_pipeline.max.collision_vertex_reduction
-import b1k_pipeline.max.run_coacd
+import b1k_pipeline.max.collision_generation
 import b1k_pipeline.max.match_links
 from b1k_pipeline.max.merge_collision import merge_collision
 
@@ -217,7 +217,7 @@ def processFile(filename: pathlib.Path):
     # b1k_pipeline.max.collision_vertex_reduction.process_all_collision_objs()
 
     # Generate all missing collision meshes
-    # b1k_pipeline.max.run_coacd.generate_all_missing_collision_meshes()
+    # b1k_pipeline.max.collision_generation.generate_all_missing_collision_meshes()
 
     # Match links
     # b1k_pipeline.max.match_links.process_all_objects()

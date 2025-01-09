@@ -2,17 +2,55 @@ import numpy as np
 from scipy.spatial import ConvexHull
 import coacd
 import trimesh
+import subprocess
 
 import pymxs
 rt = pymxs.runtime
 
 import sys
+import tempfile
 
 sys.path.append(r"D:\ig_pipeline")
 
 from b1k_pipeline.utils import parse_name
+from b1k_pipeline.max.collision_vertex_reduction import reduce_mesh
 
-HULL_COUNTS = [4, 8, 16, 32]
+HULL_COUNTS = [32]  # [4, 8, 16, 32]
+VHACD_EXECUTABLE = r"D:\ig_pipeline\b1k_pipeline\vhacd2.exe"
+
+def run_coacd(input_mesh, hull_count):
+    coacd_mesh = coacd.Mesh(input_mesh.vertices, input_mesh.faces)
+    result = coacd.run_coacd(
+        coacd_mesh,
+        max_convex_hull=hull_count,
+    )
+    output_meshes = []
+    for vertices, faces in result:
+        output_trimesh = trimesh.Trimesh(vertices=vertices, faces=faces)
+        output_meshes.append(output_trimesh)
+    return output_meshes
+
+def run_vhacd(input_mesh, hull_count):
+    with tempfile.TemporaryDirectory() as td:
+        in_path = os.path.join(td, "in.obj")
+        out_path = os.path.join(td, "decomp.obj")  # This is the path that VHACD outputs to.
+        input_mesh.export(in_path)
+
+        vhacd_cmd = [str(VHACD_EXECUTABLE), in_path, "-r", "1000000", "-d", "20", "-f", "flood", "-e", "10", "-p", "true", "-l", "2", "-v", "60", "-h", str(hull_count)]
+        try:
+            proc = subprocess.run(vhacd_cmd, shell=False, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd=td, check=True)
+            if not os.path.exists(out_path):
+                raise ValueError("VHACD failed to produce an output file. VHACD output:\n" + proc.stdout.decode("utf-8"))
+            out_mesh = trimesh.load(out_path, file_type="obj", force="mesh", skip_material=True, merge_tex=True, merge_norm=True)
+            return out_mesh.split(only_watertight=False)
+        except subprocess.CalledProcessError as e:
+            print(e.output.decode("utf-8"))
+            raise ValueError(f"VHACD failed with exit code {e.returncode}")
+
+USE_METHODS = {
+    # "coacd": run_coacd,  # DISABLED BECAUSE TOO SLOW
+    "vhacd": run_vhacd,
+}
 
 
 def _create_collision_obj_from_verts_faces(vertices, faces, parent, tag):
@@ -75,8 +113,6 @@ def generate_collision_mesh(obj):
     verts = np.array([rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))])
     faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
     assert all(len(f) == 3 for f in faces), f"{obj.name} has non-triangular faces. Apply the Triangulate script."
-    coacd_mesh = coacd.Mesh(verts, faces)
-
     print("\nGenerating collision meshes for", obj.name)
 
     # Run the convex hull option
@@ -86,30 +122,29 @@ def generate_collision_mesh(obj):
     print("Generated convex hull", convex_hull_obj.name)
 
     # Run CoACD a number of times
-    for hull_count in HULL_COUNTS:
-        result = coacd.run_coacd(
-            coacd_mesh,
-            max_convex_hull=hull_count,
-        )
+    for method_name, method in USE_METHODS.items():
+        for hull_count in HULL_COUNTS:
+            meshes = method(tm, hull_count)
+            reduced_meshes = [reduce_mesh(m) for m in meshes]
 
-        # Get a flattened list of vertices and faces
-        all_vertices = []
-        all_faces = []
-        for vertices, faces in result:
-            # Offsetting here by the past vertex count
-            all_faces.extend(faces + len(all_vertices))
-            all_vertices.extend(vertices)
-        all_vertices = np.array(all_vertices)
-        all_faces = np.array(all_faces)
-        collision_obj = _create_collision_obj_from_verts_faces(all_vertices, all_faces, obj, f"coacd{hull_count}")
+            # Get a flattened list of vertices and faces
+            all_vertices = []
+            all_faces = []
+            for cmesh in reduced_meshes:
+                # Offsetting here by the past vertex count
+                all_faces.extend(cmesh.faces + len(all_vertices))
+                all_vertices.extend(cmesh.vertices)
+            all_vertices = np.array(all_vertices)
+            all_faces = np.array(all_faces)
+            collision_obj = _create_collision_obj_from_verts_faces(all_vertices, all_faces, obj, f"{method_name}{hull_count}")
 
-        # Check that the new element count is the same as the split count
-        elems = {tuple(rt.polyop.GetElementsUsingFace(collision_obj, i + 1)) for i in range(rt.polyop.GetNumFaces(collision_obj))}
-        assert len(elems) == len(result), f"{obj.name} has different number of faces in collision mesh than in splits"
-        elems = np.array(list(elems))
-        assert not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements"
+            # Check that the new element count is the same as the split count
+            elems = {tuple(rt.polyop.GetElementsUsingFace(collision_obj, i + 1)) for i in range(rt.polyop.GetNumFaces(collision_obj))}
+            assert len(elems) == len(reduced_meshes), f"{obj.name} has different number of faces in collision mesh than in splits"
+            elems = np.array(list(elems))
+            assert not np.any(np.sum(elems, axis=0) > 1), f"{obj.name} has same face appear in multiple elements"
 
-        print("Generated w/ max hull count", hull_count, ", actual hull count", len(result), "name", collision_obj.name)
+            print(f"Generated {method_name} w/ max hull count {hull_count}, actual hull count {len(reduced_meshes)}, name {collision_obj.name}")
 
     print("Don't forget to make a selection!")
 

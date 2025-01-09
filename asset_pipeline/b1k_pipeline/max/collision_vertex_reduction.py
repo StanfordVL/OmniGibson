@@ -124,11 +124,11 @@ def process_all_collision_objs():
         process_collision_obj(obj)
 
 def main():
-    # obj, = rt.selection
-    # assert "Mcollision" in obj.name
-    # process_collision_obj(obj)
+    obj, = rt.selection
+    assert "Mcollision" in obj.name
+    process_collision_obj(obj)
 
-    process_all_collision_objs()
+    # process_all_collision_objs()
 
 if __name__ == "__main__":
     main()
