@@ -12,5 +12,5 @@
   {% endif %}
   <h2>Rooms</h2>
   {% from "table_modules/room_table.html" import render_room_table %}
-  {{ render_room_table(scene.rooms, enable_search=False, enable_csv=False) }}
+  {{ render_room_table(scene.ready_rooms, enable_search=False, enable_csv=False) }}
 {% endblock %}
