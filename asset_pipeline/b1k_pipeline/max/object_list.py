@@ -313,7 +313,7 @@ def main():
         tags_str = obj_match.group("tag")
         if not tags_str or parent_match.group("bad"):
             continue
-        tags = {[x[1:] for x in tags_str.split("-") if x]}
+        tags = {x[1:] for x in tags_str.split("-") if x}
         if "connectedpart" not in tags:
             continue
 
