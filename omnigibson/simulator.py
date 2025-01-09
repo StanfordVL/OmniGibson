@@ -911,6 +911,7 @@ def _launch_simulator(*args, **kwargs):
                             system.refresh_particles_view()
 
             # Finally update any unified views
+            PoseAPI.initialize_view()
             RigidContactAPI.initialize_view()
             GripperRigidContactAPI.initialize_view()
             ControllableObjectViewAPI.initialize_view()

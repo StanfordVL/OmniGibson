@@ -732,12 +732,17 @@ class PoseAPI:
 
     VALID = False
 
+    _VIEW = None
+    _VIEW_CACHE = dict()
+
     # Dictionary mapping prim path to fabric prim
     PRIMS = dict()
 
     @classmethod
     def clear(cls):
         cls.PRIMS = dict()
+        cls._VIEW_CACHE = dict()
+        cls._VIEW = None
 
     @classmethod
     def invalidate(cls):
@@ -748,8 +753,14 @@ class PoseAPI:
         cls.VALID = True
 
     @classmethod
+    def initialize_view(cls):
+        cls._VIEW = og.sim.physics_sim_view.create_rigid_prim_view("/*/*/*")
+
+    @classmethod
     def _refresh(cls):
         if og.sim is not None and not cls.VALID:
+            # create the physx view first
+            cls._VIEW_CACHE = cls._VIEW.get_world_poses()
             # when flatcache is on
             if og.sim._physx_fabric_interface:
                 # no time step is taken here
@@ -772,16 +783,26 @@ class PoseAPI:
                 - torch.Tensor: (x,y,z,w) quaternion orientation in the world frame
         """
         # Add to stored prims if not already existing
+        # TODO: Don't do this for a prim that's in the PhysX view
         if prim_path not in cls.PRIMS:
             cls.PRIMS[prim_path] = lazy.omni.isaac.core.utils.prims.get_prim_at_path(prim_path=prim_path, fabric=True)
 
         cls._refresh()
+
+        if prim_path in cls._VIEW.prim_paths:
+            # TODO: Improve this by storing a prim-path-to-index map
+            return cls._VIEW_CACHE[cls._VIEW.prim_paths.index(prim_path)]
 
         # Avoid premature imports
         from omnigibson.utils.deprecated_utils import get_world_pose
 
         position, orientation = get_world_pose(cls.PRIMS[prim_path])
         return th.tensor(position, dtype=th.float32), th.tensor(orientation, dtype=th.float32)
+
+    @classmethod
+    def get_all_world_poses(cls):
+        assert cls._VIEW is not None, "PoseAPI must be initialized before calling get_all_world_poses"
+        return cls._VIEW_CACHE
 
     @classmethod
     def get_world_pose_with_scale(cls, prim_path):

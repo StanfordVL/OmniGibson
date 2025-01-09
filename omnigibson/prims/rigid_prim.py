@@ -378,14 +378,14 @@ class RigidPrim(XFormPrim):
             return position, orientation
 
         # Otherwise, get the pose from the rigid prim view and convert to our format
-        positions, orientations = self._rigid_prim_view.get_world_poses(clone=clone)
-        position = positions[0]
-        orientation = orientations[0][[1, 2, 3, 0]]
+        position, orientation = PoseAPI.get_world_pose(
+            self.prim_path
+        )  # self._rigid_prim_view.get_world_poses(clone=clone)
 
         # Assert that the orientation is a unit quaternion
         assert math.isclose(
-            th.norm(orientations).item(), 1, abs_tol=1e-3
-        ), f"{self.prim_path} orientation {orientations} is not a unit quaternion."
+            th.norm(orientation).item(), 1, abs_tol=1e-3
+        ), f"{self.prim_path} orientation {orientation} is not a unit quaternion."
 
         # Cache world pose if we're kinematic-only
         if self.kinematic_only:
