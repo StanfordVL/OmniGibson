@@ -149,7 +149,9 @@ def main():
 
     meta_links = defaultdict(set)
 
-    attachment_pairs = defaultdict(lambda: defaultdict(set))  # attachment_pairs[model_id][F/M] = {attachment_type1, attachment_type2}
+    attachment_pairs = defaultdict(
+        lambda: defaultdict(set)
+    )  # attachment_pairs[model_id][F/M] = {attachment_type1, attachment_type2}
     bad_attachments = []
 
     # Store vertex/face counts for bad model matching
@@ -287,14 +289,47 @@ def main():
         if meta_type == "attachment":
             attachment_type = obj_match.group("meta_id")
             if not attachment_type:
-                bad_attachments.append(f"Missing attachment type/gender on object {row.object_name}")
+                bad_attachments.append(
+                    f"Missing attachment type/gender on object {obj}"
+                )
             if attachment_type[-1] not in "MF":
-                bad_attachments.append(f"Invalid attachment gender {attachment_type} on object {row.object_name}")
+                bad_attachments.append(
+                    f"Invalid attachment gender {attachment_type} on object {obj}"
+                )
             attachment_side = attachment_type[-1]
             attachment_type = attachment_type[:-1]
             if not attachment_type:
-                bad_attachments.append(f"Missing attachment type on object {row.object_name}")
+                bad_attachments.append(f"Missing attachment type on object {obj}")
             attachment_pairs[parent_id][attachment_side].add(attachment_type)
+
+    # Find connected parts and add them into the attachment pairs
+    for obj, _, parent in max_tree:
+        if not parent:
+            continue
+        parent_match = b1k_pipeline.utils.parse_name(parent)
+        obj_match = b1k_pipeline.utils.parse_name(obj)
+        if not parent_match or not obj_match:
+            continue
+        tags_str = obj_match.group("tag")
+        if not tags_str or parent_match.group("bad"):
+            continue
+        tags = {[x[1:] for x in tags_str.split("-") if x]}
+        if "connectedpart" not in tags:
+            continue
+
+        # Generate the attachment pair name
+        part_model = obj_match.group("model_id")
+        attachment_pair = f"{part_model}parent"
+
+        # Add the male side on the part
+        part_id = parent_match.group("category") + "-" + part_model
+        attachment_pairs[part_id]["M"].add(attachment_pair)
+
+        # Add the female side on the parent
+        parent_id = (
+            parent_match.group("category") + "-" + parent_match.group("model_id")
+        )
+        attachment_pairs[parent_id]["F"].add(attachment_pair)
 
     # Find joints
     for obj, _, _ in max_tree:
@@ -307,6 +342,10 @@ def main():
         meta_links[parent_id].add("joint")
 
     meta_links = {k: sorted(v) for k, v in sorted(meta_links.items())}
+    attachment_pairs = {
+        k: {kk: sorted(vv) for kk, vv in sorted(v.items())}
+        for k, v in sorted(attachment_pairs.items())
+    }
 
     output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
     output_dir.mkdir(parents=True, exist_ok=True)

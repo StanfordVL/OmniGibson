@@ -18,7 +18,9 @@ def main(use_future=False):
     needed = set()
     providers = defaultdict(list)
     meta_links = defaultdict(set)
-    attachment_pairs = defaultdict(lambda: defaultdict(set))  # attachment_pairs[model_id][F/M] = {attachment_type1, attachment_type2}
+    attachment_pairs = defaultdict(
+        lambda: defaultdict(set)
+    )  # attachment_pairs[model_id][F/M] = {attachment_type1, attachment_type2}
     needed_by = defaultdict(list)
     seen_as = defaultdict(set)
     skipped_files = []
@@ -50,7 +52,9 @@ def main(use_future=False):
                     meta_links[obj].update(links)
                 for obj, attachment_dict in object_list["attachment_pairs"].items():
                     for attachment_gender, attachment_types in attachment_dict.items():
-                        attachment_pairs[obj][attachment_gender].update(attachment_types)
+                        attachment_pairs[obj][attachment_gender].update(
+                            attachment_types
+                        )
 
                 # Manually generate pseudo-metalinks for parts
                 for name, _, parent in object_list["max_tree"]:
@@ -136,7 +140,10 @@ def main(use_future=False):
             "providers": single_provider,
             "needed_by": needed_by,
             "meta_links": {x: sorted(y) for x, y in meta_links.items()},
-            "attachment_pairs": attachment_pairs,
+            "attachment_pairs": {
+                k: {kk: sorted(vv) for kk, vv in sorted(v.items())}
+                for k, v in sorted(attachment_pairs.items())
+            },
             "error_skipped_files": sorted(skipped_files),
             "error_multiple_provided": multiple_provided,
             "error_missing_objects": sorted(missing_objects),
