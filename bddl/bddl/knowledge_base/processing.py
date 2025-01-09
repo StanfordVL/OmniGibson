@@ -163,6 +163,16 @@ class KnowledgeBaseProcessor():
                     for meta_link in existing_meta_types:
                         meta_link_obj, _ = MetaLink.get_or_create(name=meta_link)
                         obj.meta_links.add(meta_link_obj)
+                    
+                    existing_attachment_pairs = set(inventory["attachment_pairs"][orig_name])
+                    for gender, pair in existing_attachment_pairs:
+                        pair_obj, _ = AttachmentPair.get_or_create(name=pair)
+                        if gender == "F":
+                            obj.female_attachment_pairs.add(pair_obj)
+                        elif gender == "M":
+                            obj.male_attachment_pairs.add(pair_obj)
+                        else:
+                            raise Exception(f"Invalid gender {gender} for attachment pair {pair}")
 
         with open(GENERATED_DATA_DIR / "object_inventory.json", "r") as f:
             objs = []
