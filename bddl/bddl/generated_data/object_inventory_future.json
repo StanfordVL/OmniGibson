@@ -1,5 +1,5 @@
 {
-    "success": true,
+    "success": false,
     "providers": {
         "bag_of_brown_rice-tnfazj": "objects/batch-00",
         "batting_gloves-uteyjv": "objects/batch-00",
@@ -9,7 +9,7 @@
         "bookend-eyddem": "objects/batch-00",
         "bookend-hlpgle": "objects/batch-00",
         "bookend-huxmnl": "objects/batch-00",
-        "bookend-jtodol": "objects/batch-00",
+        "bookend-jmodol": "objects/batch-00",
         "bookend-oxfecv": "objects/batch-00",
         "bookend-rwvcah": "objects/batch-00",
         "bookend-sgiryo": "objects/batch-00",
@@ -32,7 +32,6 @@
         "butternut_squash-xfpdui": "objects/batch-00",
         "cap-ghwjwe": "objects/batch-00",
         "cap-qscujv": "objects/batch-00",
-        "car-gewjwh": "objects/batch-00",
         "cardstock-bihwte": "objects/batch-00",
         "charcoal_grill-crdaeu": "objects/batch-00",
         "cherry_tomato-dqjuub": "objects/batch-00",
@@ -158,7 +157,6 @@
         "can_of_beans-kclbuu": "objects/batch-01",
         "can_of_beans-ojqgjz": "objects/batch-01",
         "cap-rgtedj": "objects/batch-01",
-        "cash_register-strtoe": "objects/batch-01",
         "chard-linuaq": "objects/batch-01",
         "cutting_board-idmcgf": "objects/batch-01",
         "diamond-xeoqwf": "objects/batch-01",
@@ -370,7 +368,6 @@
         "hamburger_bun-jeygaq": "objects/batch-02",
         "hanger-agrpio": "objects/batch-02",
         "heap_of_gravel-kcsyrn": "objects/batch-02",
-        "jacket-ylycdz": "objects/batch-02",
         "jar_of_cumin-tsktnz": "objects/batch-02",
         "jar_of_curry_powder-ozhftu": "objects/batch-02",
         "jar_of_dill_seed-reavkt": "objects/batch-02",
@@ -463,7 +460,6 @@
         "teaspoon-piqabk": "objects/batch-02",
         "tennis_ball-rgekxe": "objects/batch-02",
         "toast-nmxadm": "objects/batch-02",
-        "toolbox-buoocq": "objects/batch-02",
         "trash_can-dnvpag": "objects/batch-02",
         "trash_can-wkxtxh": "objects/batch-02",
         "tray-spopfj": "objects/batch-02",
@@ -537,7 +533,6 @@
         "hamper-pdzaca": "objects/batch-03",
         "hiking_boot-ljiila": "objects/batch-03",
         "hiking_boot-tariyy": "objects/batch-03",
-        "jacket-nogevo": "objects/batch-03",
         "jar-qdnmwg": "objects/batch-03",
         "life_jacket-uevmzv": "objects/batch-03",
         "mint-sivqgq": "objects/batch-03",
@@ -562,7 +557,6 @@
         "rhubarb-njgkah": "objects/batch-03",
         "tablespoon-pltxjb": "objects/batch-03",
         "teddy_bear-faxvha": "objects/batch-03",
-        "van-zvidlq": "objects/batch-03",
         "waffle_maker-yjmnej": "objects/batch-03",
         "walker-pmypfd": "objects/batch-03",
         "walker-uewtgk": "objects/batch-03",
@@ -9351,7 +9345,7 @@
         "bookend-huxmnl": [
             "objects/batch-00"
         ],
-        "bookend-jtodol": [
+        "bookend-jmodol": [
             "objects/batch-00"
         ],
         "bookend-oxfecv": [
@@ -9419,10 +9413,6 @@
         ],
         "cap-qscujv": [
             "objects/batch-00"
-        ],
-        "car-gewjwh": [
-            "objects/batch-00",
-            "scenes/Merom_0_garden"
         ],
         "cardstock-bihwte": [
             "objects/batch-00"
@@ -9798,9 +9788,6 @@
             "objects/batch-01"
         ],
         "cap-rgtedj": [
-            "objects/batch-01"
-        ],
-        "cash_register-strtoe": [
             "objects/batch-01"
         ],
         "chard-linuaq": [
@@ -10436,9 +10423,6 @@
         "heap_of_gravel-kcsyrn": [
             "objects/batch-02"
         ],
-        "jacket-ylycdz": [
-            "objects/batch-02"
-        ],
         "jar_of_cumin-tsktnz": [
             "objects/batch-02"
         ],
@@ -10715,9 +10699,6 @@
         "toast-nmxadm": [
             "objects/batch-02"
         ],
-        "toolbox-buoocq": [
-            "objects/batch-02"
-        ],
         "trash_can-dnvpag": [
             "objects/batch-02"
         ],
@@ -10937,9 +10918,6 @@
         "hiking_boot-tariyy": [
             "objects/batch-03"
         ],
-        "jacket-nogevo": [
-            "objects/batch-03"
-        ],
         "jar-qdnmwg": [
             "objects/batch-03"
         ],
@@ -11010,9 +10988,6 @@
             "objects/batch-03"
         ],
         "teddy_bear-faxvha": [
-            "objects/batch-03"
-        ],
-        "van-zvidlq": [
             "objects/batch-03"
         ],
         "waffle_maker-yjmnej": [
@@ -23024,6 +22999,9 @@
             "scenes/Merom_0_garden"
         ],
         "bathtub-uqmgtw": [
+            "scenes/Merom_0_garden"
+        ],
+        "car-gewjwh": [
             "scenes/Merom_0_garden"
         ],
         "ceilings-aghvud": [
@@ -38598,7 +38576,7 @@
         "bookend-huxmnl": [
             "collision"
         ],
-        "bookend-jtodol": [
+        "bookend-jmodol": [
             "collision"
         ],
         "bookend-oxfecv": [
@@ -38670,9 +38648,6 @@
         "cap-qscujv": [
             "collision"
         ],
-        "car-gewjwh": [
-            "collision"
-        ],
         "cardstock-bihwte": [
             "collision",
             "subpart"
@@ -38680,12 +38655,7 @@
         "charcoal_grill-crdaeu": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "cherry_tomato-dqjuub": [
@@ -38743,13 +38713,8 @@
         "fridge-petcxr": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "openfillable",
-            "t"
+            "openfillable"
         ],
         "green_onion-ljynzg": [
             "collision",
@@ -38809,12 +38774,7 @@
         "instant_pot-wengzf": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "kayak-dkizyc": [
@@ -39063,12 +39023,7 @@
         "blender-dhfqid": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "bobby_pin-zphpcz": [
@@ -39108,9 +39063,6 @@
         "cap-rgtedj": [
             "collision"
         ],
-        "cash_register-strtoe": [
-            "collision"
-        ],
         "chard-linuaq": [
             "collision",
             "subpart"
@@ -39126,7 +39078,7 @@
         ],
         "fireplace-gpnsij": [
             "collision",
-            "openfillable"
+            "fillable"
         ],
         "firewood-awnmwf": [
             "collision"
@@ -39234,12 +39186,7 @@
         "instant_pot-lkbvad": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "jar_of_honey-wdxfaq": [
@@ -39681,12 +39628,7 @@
         "electric_kettle-hkdsla": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "farm_stand-yoacgd": [
@@ -39799,9 +39741,6 @@
         "heap_of_gravel-kcsyrn": [
             "collision"
         ],
-        "jacket-ylycdz": [
-            "collision"
-        ],
         "jar_of_cumin-tsktnz": [
             "collision"
         ],
@@ -39909,12 +39848,7 @@
         ],
         "notebook-yibctu": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "paperback_book-okcflv": [
             "collision"
@@ -40108,9 +40042,6 @@
         "toast-nmxadm": [
             "collision",
             "subpart"
-        ],
-        "toolbox-buoocq": [
-            "collision"
         ],
         "trash_can-dnvpag": [
             "collision",
@@ -40348,9 +40279,6 @@
         "hiking_boot-tariyy": [
             "collision"
         ],
-        "jacket-nogevo": [
-            "collision"
-        ],
         "jar-qdnmwg": [
             "collision",
             "fillable"
@@ -40435,18 +40363,10 @@
         "teddy_bear-faxvha": [
             "collision"
         ],
-        "van-zvidlq": [
-            "collision"
-        ],
         "waffle_maker-yjmnej": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "walker-pmypfd": [
@@ -40495,12 +40415,7 @@
         ],
         "case_of_eyeshadow-zgervc": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cheesecake-epmobi": [
             "collision",
@@ -40690,12 +40605,7 @@
         ],
         "juicer-mvrllt": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "leaf-lrwbfy": [
@@ -40933,12 +40843,7 @@
         "bottom_cabinet_no_top-gjrero": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "box_of_baking_soda-pskrgy": [
             "collision"
@@ -41034,12 +40939,7 @@
         "cooler-pnkiag": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cotton_thread-obnsix": [
             "collision"
@@ -41267,12 +41167,7 @@
         ],
         "plier-zwzncq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "punching_bag-svkdji": [
             "collision"
@@ -41288,12 +41183,7 @@
             "collision",
             "connectedpart",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "rubber_boot-ejwnhl": [
@@ -41308,12 +41198,7 @@
         ],
         "shelf-svhjxd": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "sliced_chocolate_cake-unwjgp": [
             "collision"
@@ -41336,12 +41221,7 @@
         "table_lamp-fhsorf": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "tablespoon-mwzxal": [
@@ -41828,12 +41708,7 @@
         ],
         "coffee_grinder-bubzvn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "crab-eqfklx": [
             "collision",
@@ -42229,12 +42104,7 @@
         "toaster_oven-ctrngh": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "vase-hkwtnf": [
@@ -42376,12 +42246,7 @@
         ],
         "espresso_machine-tysouc": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "fire_sprinkler-nodoxv": [
@@ -42389,13 +42254,8 @@
         ],
         "food_processor-gamkbo": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
             "openfillable",
-            "t",
             "togglebutton"
         ],
         "frying_pan-hzspwg": [
@@ -42675,12 +42535,7 @@
         "canteen-ttxunv": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "centerpiece-atfpvd": [
             "collision"
@@ -42993,12 +42848,7 @@
         "smoker-uihgsf": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "soccer_ball-ikagkc": [
@@ -43085,12 +42935,7 @@
         ],
         "bottle_of_lemon_juice-vsjter": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottle_of_oil-kzvkyp": [
             "collision"
@@ -43229,12 +43074,7 @@
         ],
         "french_press-zidmyo": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "funnel-jzqlrt": [
             "collision"
@@ -43422,32 +43262,17 @@
         "suitcase-njalke": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "suitcase-oqiwhb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "suitcase-qthouj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "thermostat-jophec": [
             "collision",
@@ -43472,12 +43297,7 @@
         ],
         "violin_case-jlasop": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "baguette-xhqnuc": [
             "collision"
@@ -43621,12 +43441,7 @@
         "jar-jnjtrl": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "jersey-ojgwec": [
             "collision"
@@ -43658,12 +43473,7 @@
             "collision",
             "com",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "marker-hmlofs": [
             "collision"
@@ -43813,12 +43623,7 @@
         ],
         "storage_organizer-hmygav": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "sugar_cookie-cgkiti": [
             "collision"
@@ -44610,12 +44415,7 @@
         "tank-bsdexp": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "tuna-xkjged": [
             "collision",
@@ -44634,12 +44434,7 @@
         "bottom_cabinet-songes": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bowl-ycbbwl": [
             "collision",
@@ -44655,12 +44450,7 @@
         "wardrobe-brimns": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "apple-agveuv": [
             "collision",
@@ -44760,613 +44550,308 @@
         "bottom_cabinet-bamfsz": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-bycegi": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-cjcyed": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-dajebq": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-dsbcxl": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-eupgpt": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-gcrjan": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-getjzo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-glefdh": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-gvtucm": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-hnxyev": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-hrdeys": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-ilofmb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-immwzb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-imyaje": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-jhymlr": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-jrhgeu": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-kdbgpm": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-kenkcw": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-kubcdk": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-kxushk": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-leizjb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-lhucjo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-lwjdmj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-mbmbpa": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-mwgceh": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-mxrzpj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-ncbfwr": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-nddvba": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-nnvyol": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-nrlayx": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-nyfebf": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-ojceew": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-olgoza": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-phoesw": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-pkdnbu": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "openfillable",
-            "t"
+            "openfillable"
         ],
         "bottom_cabinet-plccav": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-pllcur": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-pzjecb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-qacthv": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-qkgfln": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-rntwkg": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-rvpunw": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-rvunhj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-ryznya": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-slgzfc": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-smujam": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-sxppcj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-tolupn": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-ttmejh": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-twhums": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-ujniob": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-vceupd": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-vespxk": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "openfillable",
-            "t"
+            "openfillable"
         ],
         "bottom_cabinet-wesxdp": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-xiurwn": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-xpdbgf": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-ybntlp": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-yohygj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-yxfueo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-zuwvdo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "can_of_soda-chwjfu": [
             "collision"
@@ -45837,21 +45322,11 @@
         ],
         "breakfast_table-lwtcfh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "breakfast_table-mwsyqb": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "breakfast_table-pllvrt": [
             "collision"
@@ -45900,220 +45375,120 @@
         "table_lamp-awfehr": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-bhdxug": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-dkfwyb": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-eosezn": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-htinka": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-jiuwwn": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-kwkqot": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-lyjkje": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-midfvh": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-ncgcgo": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-pmekkr": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-pxdhzm": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-tggobp": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-tnbwvj": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-utsqrs": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-wdqvjl": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-wslomg": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-wvysoe": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-xbfgjc": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "table_lamp-zpqejt": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "teddy_bear-ecvxmu": [
@@ -46257,21 +45632,11 @@
         ],
         "desk-ampuyz": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-bptvoy": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-cjhriz": [
             "collision"
@@ -46281,108 +45646,53 @@
         ],
         "desk-cnewsu": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-egzdgz": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-jfhurf": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-kmmlna": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-ntezkg": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-phavlj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-sfstso": [
             "collision"
         ],
         "desk-tdhgko": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-tmukzm": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-uffjvo": [
             "collision"
         ],
         "desk-uxgyui": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-vpwmkm": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-yezrwt": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-zjbhgq": [
             "collision"
@@ -46390,78 +45700,43 @@
         "dishwasher-cgugie": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "dishwasher-dngvvi": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "dishwasher-dugpby": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "dishwasher-tnlzww": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "dishwasher-xlmier": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "dishwasher-ynrhuk": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "dishwasher-znfvmj": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "jar-qzwijs": [
@@ -46471,12 +45746,7 @@
         "jar-vzwhbg": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "jar_of_grains-fyfahz": [
             "collision"
@@ -46705,153 +45975,78 @@
         "bottom_cabinet_no_top-apjbrw": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-bmsclc": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "openfillable",
-            "t"
+            "openfillable"
         ],
         "bottom_cabinet_no_top-exgntg": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-fmelap": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-motill": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-ozzcvs": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-pluwfl": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-qohxjq": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-qudfwe": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-spojpj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-ufhpbn": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-vdedzt": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-vzzafs": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-wamrju": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet_no_top-wtnrwl": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bowl-adciys": [
             "collision",
@@ -46903,12 +46098,7 @@
         ],
         "coffee_table-aoojzy": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coffee_table-elhvfw": [
             "collision"
@@ -46921,72 +46111,37 @@
         ],
         "coffee_table-gpkbiw": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coffee_table-hmwkkt": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coffee_table-qlmqyy": [
             "collision"
         ],
         "coffee_table-stocuk": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coffee_table-tzmkgq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coffee_table-vcgabn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coffee_table-xshzms": [
             "collision"
         ],
         "coffee_table-ytlgdt": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coffee_table-zzqwse": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "folderal-zwhewa": [
             "collision"
@@ -47054,22 +46209,12 @@
         "public_trash_can-mdojox": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "public_trash_can-pdmzhv": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "public_trash_can-rteihy": [
             "collision",
@@ -47090,303 +46235,153 @@
         "recycling_bin-nuoypc": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-aapttl": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-chuack": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-jkwccu": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-kfmkbm": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-mzocsn": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-nqwekw": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-rqxqtd": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-sjjweo": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-vcgvfe": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-vdbmon": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-vtqdev": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-wkltpj": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-wusctd": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-yxbgey": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-dhguym": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-dmwxyl": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-eobsmt": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-fqhdne": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-fqitbw": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-jvdbxh": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-lsyzkh": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-nkrgez": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "openfillable",
-            "t"
+            "openfillable"
         ],
         "top_cabinet-oztrra": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-qiausz": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-tactqn": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-twjqua": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-yegcau": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-zjtaus": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "trash_can-eahqyq": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "trash_can-hqdnjz": [
             "collision",
@@ -47395,12 +46390,7 @@
         "trash_can-ifzxzj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "trash_can-wklill": [
             "collision",
@@ -47444,111 +46434,51 @@
         ],
         "door-cbgtjl": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ceddpg": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-chonxi": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-gmytjz": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ktydvs": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-lctyaf": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-lhxdte": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-lvgliq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-mgmayh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-nfrbch": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ohagsq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-rhcnln": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "gym_shoe-arigtn": [
             "collision",
@@ -47655,130 +46585,70 @@
         "oven-fexqbj": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-hxorzh": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-kenajw": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-kfftgk": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-leqtlc": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-nkxhvf": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-nvqqkv": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-qriitd": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-qygclv": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
             "openfillable",
-            "t",
             "togglebutton"
         ],
         "oven-rwuazb": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-tllnvs": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "oven-wuinhm": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "pillow-cfqdde": [
@@ -47927,111 +46797,51 @@
         ],
         "window-bhwwja": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-bxydsr": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-fufios": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-ithrgo": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-iwcqsz": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-jzxtbv": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-mjssrd": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-qdkcdn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-subxdn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-tflzbx": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-tuztdv": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-ulnafj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottle_of_medicine-egondf": [
             "collision"
@@ -48096,56 +46906,31 @@
         "clothes_dryer-fhtvuq": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "clothes_dryer-smcyys": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "clothes_dryer-wivnic": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "clothes_dryer-xsuyua": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "clothes_dryer-zlmnfg": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "drop_in_sink-wzpabm": [
@@ -48158,23 +46943,13 @@
         "floor_lamp-fanocp": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "floor_lamp-imgsrd": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "floor_lamp-jcbvfi": [
@@ -48189,23 +46964,13 @@
         "floor_lamp-lqdmym": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "floor_lamp-pfuqec": [
             "collision",
             "com",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "floor_lamp-vdxlda": [
@@ -48215,62 +46980,32 @@
         "fridge-dszchb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fridge-hivvdf": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fridge-hzgqdn": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fridge-jtqazu": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fridge-juwaoh": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fridge-xyejdx": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "furniture_sink-bnpjjy": [
             "collision",
@@ -48290,13 +47025,8 @@
             "collision",
             "fluidsink",
             "fluidsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
             "openfillable",
-            "t",
             "togglebutton"
         ],
         "furniture_sink-zexzrc": [
@@ -48308,67 +47038,37 @@
         "microwave-abzvij": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "microwave-bfbeeb": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "microwave-hjjxmi": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "microwave-rtfebu": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "microwave-snsqrt": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "microwave-vuezel": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "multi_station_furniture_sink-ejooms": [
@@ -48445,159 +47145,84 @@
         ],
         "standing_tv-bkyguk": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "standing_tv-blyapt": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "standing_tv-ghxsoy": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "standing_tv-gjlztf": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "standing_tv-lkpsai": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "standing_tv-sbxgwj": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "standing_tv-udotid": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "standing_tv-wbkvxr": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "stove-dusebh": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "stove-dwhqap": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "stove-igwqpj": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "stove-kfhkqp": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "stove-qbjiva": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "stove-rgpphy": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "stove-yhjzwg": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "tablespoon-huudhe": [
@@ -48686,33 +47311,18 @@
         ],
         "briefcase-fdpjtj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "briefcase-lwbctq": [
             "collision"
         ],
         "briefcase-ohelib": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "briefcase-rxvbea": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bucket_of_paint-gjjugj": [
             "collision"
@@ -48772,39 +47382,19 @@
         ],
         "console_table-emeeke": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "console_table-fihyuz": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "console_table-tvhett": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "console_table-xqlxni": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "dishtowel-dtfspn": [
             "collision"
@@ -48990,67 +47580,37 @@
         "washer-dobgmu": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "washer-jgyzhv": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "washer-mrgspe": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "washer-omeuop": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "washer-xusefg": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "washer-zgzvcv": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "apricot-qmwmwm": [
@@ -49064,23 +47624,13 @@
         "blender-cwkvib": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "blender-eyedvd": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "bottle_of_olive_oil-cqycjk": [
@@ -49155,22 +47705,12 @@
         "cedar_chest-fwstpx": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cedar_chest-gbdzls": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "chaise_longue-ajjxcd": [
             "collision"
@@ -49201,30 +47741,15 @@
         ],
         "folding_chair-dqhazh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "folding_chair-dxergu": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "folding_chair-vngcqu": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "grandfather_clock-icznug": [
             "collision"
@@ -49297,30 +47822,15 @@
         ],
         "nightstand-geeldi": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "nightstand-kanola": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "nightstand-ljtrka": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "pattypan_squash-dybtwb": [
             "collision"
@@ -49461,12 +47971,7 @@
         ],
         "wall_mounted_tv-gffrzl": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "wall_mounted_tv-ggfznh": [
@@ -49487,12 +47992,7 @@
         "backpack-gvbiwl": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bagel-zlxkry": [
             "collision",
@@ -49514,22 +48014,12 @@
         "carton-msfzpz": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "carton-sxlklf": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "chili-pbbkpz": [
             "collision"
@@ -49550,13 +48040,8 @@
         ],
         "folder-poqpux": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "openfillable",
-            "t"
+            "openfillable"
         ],
         "half_bagel-gywbkh": [
             "collision"
@@ -49669,22 +48154,12 @@
         ],
         "monitor-huvcgu": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "monitor-rbqanz": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "mushroom-zlukhz": [
@@ -49762,13 +48237,8 @@
         ],
         "shears-iizidc": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "slicer",
-            "t"
+            "slicer"
         ],
         "skimmer-xocqxg": [
             "collision"
@@ -49850,21 +48320,11 @@
         ],
         "wall_clock-przkmo": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "wall_clock-xevvel": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "walnut-nzqier": [
             "collision"
@@ -49993,12 +48453,7 @@
         "carton-causya": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "carton_of_eggs-mimzbz": [
             "collision"
@@ -50060,12 +48515,7 @@
         "coffee_maker-pyttso": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "colander-ambnzk": [
@@ -50507,12 +48957,7 @@
         ],
         "laptop-nvulcs": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "lasagna-eovigz": [
@@ -50844,12 +49289,7 @@
         "baking_powder_jar-lgopij": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "barbecue_sauce_bottle-gfxrnj": [
             "collision",
@@ -50859,12 +49299,7 @@
         "basil_jar-swytaw": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "beef_broth_carton-ecqxgd": [
             "collision",
@@ -50895,12 +49330,7 @@
         "butter_package-qixpto": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cap-fomiem": [
             "collision"
@@ -50941,12 +49371,7 @@
         "chickpea_can-jeqtzg": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "chlorine_bottle-uzkxtz": [
             "collision",
@@ -50973,52 +49398,27 @@
         "clove_jar-cqdioi": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cocoa_box-kxwgoo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cocoa_powder_box-cjmtvq": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coconut_oil_jar-phimqa": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "coffee_bean_jar-loduxu": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "conditioner_atomizer-quqgcu": [
             "collision",
@@ -51038,32 +49438,17 @@
         "cornstarch_jar-dhseui": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cream_carton-lfjmos": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cream_cheese_box-hfclfn": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cream_of_tartar_shaker-busceb": [
             "collision",
@@ -51116,12 +49501,7 @@
         "feta_box-qxnzpx": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "floor_wax_bottle-fzhcdb": [
             "collision",
@@ -51136,22 +49516,12 @@
         "frosting_jar-ztyxyi": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "gelatin_box-oxknkz": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ginger_shaker-adciyu": [
             "collision",
@@ -51166,22 +49536,12 @@
         "granola_box-yzeuqo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "granulated_sugar_jar-qwthua": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "granulated_sugar_sack-oywwzz": [
             "collision",
@@ -51204,12 +49564,7 @@
         "honey_jar-dhgtvg": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "hot_sauce_bottle-qvpthd": [
             "collision",
@@ -51219,12 +49574,7 @@
         "hummus_box-jvnqly": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "hydrogen_peroxide_bottle-luhnej": [
             "collision",
@@ -51235,12 +49585,7 @@
         "ice_cream_carton-lulzdz": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "insectifuge_atomizer-qnroki": [
             "collision",
@@ -51250,52 +49595,27 @@
         "instant_coffee_jar-ycgxwb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "jar-kijnrj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "jelly_bean_jar-nftsal": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "jelly_jar-lrjoro": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "jimmies_jar-oqyoos": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "jug-quzmfw": [
             "collision",
@@ -51337,32 +49657,17 @@
         "maple_syrup_jar-wigtue": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "margarine_box-owqbsb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "marinara_jar-cydfkt": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "marjoram_shaker-xlspnl": [
             "collision",
@@ -51391,12 +49696,7 @@
         "noodle_jar-tmjxno": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "nutmeg_shaker-truuld": [
             "collision",
@@ -51406,12 +49706,7 @@
         "oat_box-xdhysb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "oil_bottle-yoxfyu": [
             "collision",
@@ -51446,22 +49741,12 @@
         "pasta_box-jaypjo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "peanut_butter_jar-xdxqxj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "pellet_food_bag-jgyqpd": [
             "collision",
@@ -51498,22 +49783,12 @@
         "raisin_box-yowyst": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "refried_beans_can-dafdgk": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "rubbing_alcohol_atomizer-kbnobp": [
             "collision",
@@ -51587,12 +49862,7 @@
         "soda_can-xbkwbi": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "soda_water_bottle-upfssc": [
             "collision",
@@ -51602,12 +49872,7 @@
         "sodium_carbonate_jar-vxtjjn": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "soil_bag-gzcqwx": [
             "collision",
@@ -51676,12 +49941,7 @@
         "tomato_sauce_jar-krfzqk": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "vanilla_bottle-drevku": [
             "collision",
@@ -51742,12 +50002,7 @@
         "yeast_jar-vmajcm": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "yeast_shaker-kdbnge": [
             "collision",
@@ -52825,12 +51080,7 @@
         ],
         "piano-qlcpph": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "pita-igejpf": [
             "collision",
@@ -53243,12 +51493,7 @@
             "collision",
             "connectedpart",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ice-cmjpva": [
             "collision"
@@ -53417,12 +51662,7 @@
             "attachment",
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ribbon-apyxhw": [
             "collision"
@@ -53594,21 +51834,11 @@
         ],
         "door-lvncak": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-xdcuws": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "driveway-ywqsrg": [
             "collision"
@@ -53658,22 +51888,12 @@
         ],
         "gate-izmteu": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "gate-vqjuvg": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "glass_lantern-engbrg": [
@@ -54775,12 +52995,7 @@
         ],
         "door-vngpad": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "driveway-ulegfe": [
             "collision"
@@ -54829,22 +53044,12 @@
         ],
         "gate-bzotkq": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "gate-jnzgyw": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "grill-tusmtd": [
@@ -55303,30 +53508,15 @@
         ],
         "door-mfocvp": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ofgpit": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-poafwh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "driveway-aipswu": [
             "collision"
@@ -55377,22 +53567,12 @@
         ],
         "gate-flveay": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "gate-rhnrfc": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "glass_lantern-otidux": [
@@ -55666,39 +53846,19 @@
         ],
         "window-agoayg": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-jdxnzi": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-uzxlbr": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-yorgot": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-ysgkig": [
             "collision"
@@ -56112,12 +54272,7 @@
         ],
         "gate-wvbxij": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "grill-dtfail": [
@@ -56303,12 +54458,7 @@
             "attachment",
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ceilings-dqxnks": [
             "collision"
@@ -56388,30 +54538,15 @@
         ],
         "door-myihfn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-pzgdls": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-zniqtp": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "driveway-bswjlv": [
             "collision"
@@ -56524,12 +54659,7 @@
         ],
         "rail_fence-cfcgtl": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "room_light-fxtqtn": [
             "collision",
@@ -56666,93 +54796,43 @@
         ],
         "window-bpmpuw": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-dlficn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-inmymj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-irfkql": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-jongdb": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-jpftow": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-mfiens": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-nirntp": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-ntlgsx": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-wwhydr": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ceilings-dulwkz": [
             "collision"
@@ -57199,12 +55279,7 @@
         "cauldron-lbcxwi": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "ceiling_rack-bndsom": [
@@ -57244,12 +55319,7 @@
             "fillable",
             "fluidsink",
             "fluidsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "commercial_kitchen_sink-ollneo": [
@@ -57257,12 +55327,7 @@
             "fillable",
             "fluidsink",
             "fluidsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "commercial_kitchen_table-bwlfnu": [
@@ -57270,12 +55335,7 @@
         ],
         "deep_fryer-jcmoji": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "digital_scale-hfetby": [
@@ -57287,52 +55347,27 @@
         "dishwasher-xvchpe": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "door-bandpe": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ubesbe": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "electric_cauldron-qmdgct": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "electric_mixer-ceaeqf": [
             "collision",
             "connectedpart",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "electric_mixer-qornxa": [
@@ -57363,22 +55398,12 @@
         ],
         "food_slicer-uanenn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fridge-vwylob": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "frying_pan-jpzusm": [
             "collision",
@@ -57404,12 +55429,7 @@
         "jar-gqtsam": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "jar_of_chilli_powder-mxhrcl": [
             "collision",
@@ -57469,52 +55489,27 @@
         "metal_bottom_cabinet-bbjuqu": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "metal_bottom_cabinet-jqyhjy": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "metal_bottom_cabinet-melxmd": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "metal_bottom_cabinet-mvsgdm": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "metal_bottom_cabinet-yfycfx": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "mixing_bowl-rgnjdt": [
             "collision",
@@ -57523,12 +55518,7 @@
         "oven-cgtaer": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "plate-akfjxx": [
@@ -57628,12 +55618,7 @@
         "stove-xspxzg": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "teaspoon-rycter": [
@@ -57720,22 +55705,12 @@
         ],
         "deep_fryer-fooamf": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "door-mkcndz": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fire_alarm-jyifxp": [
             "collision",
@@ -57802,12 +55777,7 @@
         "oven-amblrk": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "plate-fkpaie": [
@@ -57873,12 +55843,7 @@
         "stove-ykretu": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "teapot-mvrhya": [
@@ -58273,21 +56238,11 @@
         ],
         "door-ofgodc": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-rqextk": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-avpijm": [
             "collision",
@@ -58329,12 +56284,7 @@
         "fridge-lleghp": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "furniture_sink-jqvfyl": [
             "collision",
@@ -58982,12 +56932,7 @@
         ],
         "turnstile-uzrfpq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "wall_mounted_shelf-iruewm": [
             "collision"
@@ -59119,12 +57064,7 @@
         "bottom_cabinet-xqmipa": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bowl-hynhgz": [
             "collision",
@@ -59205,12 +57145,7 @@
         "carton-ylrxhe": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "carton_of_milk-aginyz": [
             "collision"
@@ -59239,12 +57174,7 @@
         "cash_register-ykfcaz": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ceilings-cpmden": [
             "collision"
@@ -59272,31 +57202,16 @@
         "display_fridge-oddyhd": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "display_fridge-wlxyjn": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-hgcxno": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "drink_dispenser-midfat": [
             "collision",
@@ -59328,22 +57243,12 @@
         ],
         "freezer-aayduy": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fridge-dxwbae": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "grocery_shelf-duckhq": [
             "collision",
@@ -59390,12 +57295,7 @@
         "microwave-ihxrvr": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "music_stool-bjtbrp": [
@@ -59420,12 +57320,7 @@
         "oven-vduyjh": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "pack_of_bread-sfupqo": [
@@ -59468,12 +57363,7 @@
         "recycling_bin-duugbb": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "security_camera-bhsikv": [
             "collision",
@@ -59775,21 +57665,11 @@
         ],
         "door-mrdthd": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-msovkn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "electric_fan-qqphyr": [
             "collision",
@@ -59803,12 +57683,7 @@
         ],
         "grocery_cupboard-uundbq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "grocery_shelf-kpfgcm": [
             "collision",
@@ -59902,12 +57777,7 @@
         ],
         "photocopier-tajnkx": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "shopping_basket-nedrsh": [
@@ -60037,12 +57907,7 @@
         ],
         "door-ozlhfk": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-yrnfdt": [
             "collision",
@@ -60344,39 +58209,19 @@
         ],
         "door-adejun": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-dladgw": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-lcrefl": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-uubpeq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-adwcsx": [
             "collision",
@@ -60459,12 +58304,7 @@
         "locker-bxlkyo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "massage_bed-jkeydh": [
             "collision"
@@ -60559,12 +58399,7 @@
         ],
         "shower_stall-vcwkma": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "showerhead-hukknl": [
             "collision",
@@ -60865,21 +58700,11 @@
         ],
         "window-dpngol": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "window-xljwun": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "armchair-hfydou": [
             "collision"
@@ -60953,30 +58778,15 @@
         ],
         "door-gjtspo": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-uptpdr": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ydokma": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-miioxs": [
             "collision",
@@ -61155,12 +58965,7 @@
         ],
         "laptop-sngiih": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "lid-pwgbsb": [
@@ -61457,30 +59262,15 @@
         ],
         "door-duymuw": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-frkbgd": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-woxoyn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-dfjhxs": [
             "collision",
@@ -61602,12 +59392,7 @@
         "bottom_cabinet-rhdbzv": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bowl-xplzbo": [
             "collision",
@@ -61703,21 +59488,11 @@
         ],
         "door-bexenl": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-vudhlc": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-pawfmw": [
             "collision",
@@ -61790,12 +59565,7 @@
         ],
         "garage_door-prdjyt": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "garden_chair-cottya": [
@@ -61881,12 +59651,7 @@
         ],
         "laptop-pczjnr": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "lawn-ogzsvf": [
@@ -61930,12 +59695,7 @@
         "oven-ffitak": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "pencil-efaadr": [
@@ -62103,12 +59863,7 @@
         "suitcase-fqsjey": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "swing_set-yzhrgz": [
             "collision"
@@ -62126,22 +59881,12 @@
         "toilet-essgie": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-tynnnw": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "track_light-ltnnrc": [
             "collision",
@@ -62380,12 +60125,7 @@
         "washer-ziomqg": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "window-kvdqep": [
@@ -62441,12 +60181,7 @@
         "bottom_cabinet-ncgmqr": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "cap-amryfj": [
             "collision"
@@ -62509,30 +60244,15 @@
         ],
         "door-dlncrt": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-pevmgl": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-pxhbim": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-oxglnt": [
             "collision",
@@ -62777,12 +60497,7 @@
         ],
         "laptop-ongghk": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "magazine-kbzalg": [
@@ -63138,12 +60853,7 @@
         "toilet-udiezm": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "towel_rack-qedffr": [
             "collision"
@@ -63637,213 +61347,98 @@
         ],
         "door-agrzdb": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-arkmpj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-crtrpa": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-eduavq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-egqeue": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-engzvq": [
             "collision"
         ],
         "door-fnvpyu": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-fstpos": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-hkxqfh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-iuuykr": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-jpubcg": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-kwbnhy": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-lrvyvc": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-mqlbnj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-mtufto": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-nhcpvf": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ryflkw": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-tfdrhh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-tonlzz": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-tprpvb": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-vgjnsq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-whqaxp": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-xqdonc": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-zlxolj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-fisfbn": [
             "collision",
@@ -64084,22 +61679,12 @@
         ],
         "laptop-izydvb": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "laptop-vhbsgv": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "lawn-wwoqjw": [
@@ -65206,12 +62791,7 @@
         "top_cabinet-lkxmne": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toy_box-aviadj": [
             "collision"
@@ -65827,12 +63407,7 @@
         "wardrobe-bhyopq": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "wardrobe-ktworp": [
             "attachment",
@@ -65855,12 +63430,7 @@
         "washer-ynwamu": [
             "collision",
             "fillable",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "water_glass-bbpraa": [
@@ -66287,39 +63857,19 @@
         ],
         "door-gfrgkk": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ggcyib": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-pwoerr": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-xqxiyb": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "eames_chair-hpwusn": [
             "collision"
@@ -66429,12 +63979,7 @@
         ],
         "printer-icxhbx": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "printer-kqmlho": [
@@ -66748,21 +64293,11 @@
         ],
         "door-bkdxqa": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-booxjn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-hpkvem": [
             "collision",
@@ -67167,30 +64702,15 @@
         ],
         "door-dqnbsj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-jsoewn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-stvajh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-ghdczp": [
             "collision",
@@ -67345,12 +64865,7 @@
         ],
         "laptop-rocupn": [
             "collision",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "monitor-nghyiv": [
@@ -67865,12 +65380,7 @@
         ],
         "door-ccfetu": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "eames_chair-mmqvnh": [
             "collision"
@@ -67915,12 +65425,7 @@
         "locker-umumgu": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "monitor-fpkdou": [
             "collision",
@@ -68070,24 +65575,14 @@
         ],
         "window-cbudyv": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ceilings-jzqwrq": [
             "collision"
         ],
         "door-ilmrvy": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-vqlqsa": [
             "collision",
@@ -68120,12 +65615,7 @@
         ],
         "shower_stall-sqzpmj": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "soap_dispenser-ijxawq": [
             "collision",
@@ -68176,12 +65666,7 @@
         ],
         "door-lztyfn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "floors-mlogeo": [
             "collision"
@@ -68208,21 +65693,11 @@
         ],
         "shower_stall-taqzxq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "shower_stall-vshrva": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "standing_mirror-hnadel": [
             "collision"
@@ -68269,12 +65744,7 @@
         ],
         "door-edhkmd": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-xhoqgk": [
             "collision",
@@ -68308,12 +65778,7 @@
         ],
         "shower_stall-nvempw": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "soap_dispenser-sinntg": [
             "collision",
@@ -68323,12 +65788,7 @@
         "toilet-prpnvd": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet_paper_dispenser-anrnaw": [
             "collision"
@@ -68429,12 +65889,7 @@
         ],
         "door-cvvumy": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-jexffy": [
             "collision",
@@ -68461,12 +65916,7 @@
         ],
         "shower_stall-gqxmqf": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet-obhimx": [
             "collision",
@@ -68498,12 +65948,7 @@
         ],
         "door-nywsku": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "drop_in_sink-wqjwbx": [
             "collision",
@@ -68535,12 +65980,7 @@
         ],
         "shower_stall-rhvubh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "soap_dispenser-edinmg": [
             "collision",
@@ -68554,12 +65994,7 @@
         "toilet-mminnd": [
             "collision",
             "fluidsink",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "toilet_paper_dispenser-buljwa": [
             "collision"
@@ -68567,12 +66002,7 @@
         "trash_can-cdzyew": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "urinal-akmwjs": [
             "collision",
@@ -68719,21 +66149,11 @@
         ],
         "door-izyvmu": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-vngfge": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "floors-ckbwre": [
             "collision"
@@ -68747,12 +66167,7 @@
         "fridge-seyhuo": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "hanging_banners-ajcjzr": [
             "collision"
@@ -69458,30 +66873,15 @@
         ],
         "door-axhbtu": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-esgehq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-hzfirv": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-ldapja": [
             "collision",
@@ -69588,12 +66988,7 @@
         "stove-urgtyy": [
             "collision",
             "heatsource",
-            "i",
-            "j",
             "joint",
-            "n",
-            "o",
-            "t",
             "togglebutton"
         ],
         "straight_chair-dzrlfn": [
@@ -69681,12 +67076,7 @@
         ],
         "bar-xxftww": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "beer_tap-vgaluf": [
             "collision"
@@ -69736,21 +67126,11 @@
         ],
         "door-ccyiwn": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-jkisfk": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fire_extinguisher-jgdvdl": [
             "collision",
@@ -69964,39 +67344,19 @@
         ],
         "door-frusok": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-gzaggw": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-mdglvs": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-scfdua": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-jrrugm": [
             "collision",
@@ -70553,12 +67913,7 @@
         ],
         "wine_fridge-tgcuwh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "wineglass-euzudc": [
             "collision",
@@ -70567,32 +67922,17 @@
         "bottom_cabinet-kctcuj": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-qbdweu": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "carton-hhlmbi": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ceilings-jlvuea": [
             "collision"
@@ -70620,57 +67960,27 @@
         ],
         "desk-ctaxkd": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-aknswb": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-ewqpfv": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-nwlbit": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-xkfmjp": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-xxipyh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "fire_alarm-xjupjc": [
             "collision",
@@ -70694,32 +68004,17 @@
         ],
         "lab_table-vujgjq": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "locker-gemgfz": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "locker-yhthgr": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "microscope-ktzwez": [
             "collision",
@@ -70801,22 +68096,12 @@
         "top_cabinet-ldmnwh": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "top_cabinet-lxznit": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "tray-wbwmcs": [
             "collision",
@@ -70937,12 +68222,7 @@
         ],
         "window-rgmujm": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "blackboard-pktarr": [
             "collision"
@@ -70953,12 +68233,7 @@
         "bottom_cabinet-rmmvcd": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "briefcase-haecvf": [
             "collision"
@@ -70981,12 +68256,7 @@
         "carton-libote": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ceilings-eejalh": [
             "collision"
@@ -71020,12 +68290,7 @@
         ],
         "desk-slgrxc": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "desk-tmluxa": [
             "collision"
@@ -71077,21 +68342,11 @@
         ],
         "lab_table-ishrsy": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "lab_table-jkemfk": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "magnetic_stirrer-xtamki": [
             "collision"
@@ -71179,12 +68434,7 @@
         "top_cabinet-nitufd": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "trash_can-uknjdm": [
             "collision",
@@ -71308,51 +68558,26 @@
         ],
         "bed_screen-klvmfw": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bed_screen-ofpyax": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-ccjinv": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "bottom_cabinet-eluyvx": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "carton-cdmmwy": [
             "collision",
             "fillable",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "ceiling_mounted_projector-uswrqt": [
             "collision",
@@ -71396,21 +68621,11 @@
         ],
         "door-exaqtm": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-rwmofs": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "downlight-ggwgmo": [
             "collision",
@@ -71714,12 +68929,7 @@
         ],
         "door-ehwmol": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "electric_switch-oedwla": [
             "collision",
@@ -72026,30 +69236,15 @@
         ],
         "door-rsypfh": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-uatmde": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "door-vxmxbc": [
             "collision",
-            "i",
-            "j",
-            "joint",
-            "n",
-            "o",
-            "t"
+            "joint"
         ],
         "drinking_fountain-oyipuy": [
             "collision",
@@ -72346,9 +69541,1720 @@
             "collision"
         ]
     },
+    "attachment_pairs": {
+        "address-pbfbxj": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "antlers-nlsanr": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "bed-aetpte": {
+            "M": [
+                "aetpteparent"
+            ]
+        },
+        "bed-cakwer": {
+            "M": [
+                "cakwerparent"
+            ]
+        },
+        "bed-cnaerr": {
+            "M": [
+                "cnaerrparent"
+            ]
+        },
+        "bed-cnskfp": {
+            "M": [
+                "cnskfpparent"
+            ]
+        },
+        "bed-eyioee": {
+            "M": [
+                "eyioeeparent"
+            ]
+        },
+        "bed-gcgodj": {
+            "F": [
+                "cakwerparent",
+                "cnskfpparent"
+            ]
+        },
+        "bed-gjsepr": {
+            "M": [
+                "gjseprparent"
+            ]
+        },
+        "bed-guguqb": {
+            "F": [
+                "eyioeeparent"
+            ]
+        },
+        "bed-hojitx": {
+            "F": [
+                "yiuopuparent"
+            ]
+        },
+        "bed-lslyyi": {
+            "F": [
+                "rhewoiparent"
+            ]
+        },
+        "bed-nwzbyk": {
+            "F": [
+                "pdkrerparent"
+            ]
+        },
+        "bed-pdkrer": {
+            "M": [
+                "pdkrerparent"
+            ]
+        },
+        "bed-rhanfx": {
+            "F": [
+                "aetpteparent",
+                "cnaerrparent"
+            ]
+        },
+        "bed-rhewoi": {
+            "M": [
+                "rhewoiparent"
+            ]
+        },
+        "bed-spethe": {
+            "M": [
+                "spetheparent"
+            ]
+        },
+        "bed-wbjidf": {
+            "F": [
+                "spetheparent"
+            ]
+        },
+        "bed-wfxgbb": {
+            "F": [
+                "gjseprparent"
+            ]
+        },
+        "bed-yiuopu": {
+            "M": [
+                "yiuopuparent"
+            ]
+        },
+        "beef_broth_carton-ecqxgd": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "beef_broth_carton-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        },
+        "bicycle-xjumcf": {
+            "M": [
+                "bikerack"
+            ]
+        },
+        "bicycle_rack-mltrbs": {
+            "F": [
+                "bikerack"
+            ],
+            "M": [
+                "displaywall"
+            ]
+        },
+        "bird_feeder-hvlkjx": {
+            "F": [
+                "ngionjparent"
+            ]
+        },
+        "bird_feeder-ngionj": {
+            "M": [
+                "ngionjparent"
+            ]
+        },
+        "blackberry-tvpfvb": {
+            "M": [
+                "berrybush"
+            ]
+        },
+        "blender-cjtyvz": {
+            "M": [
+                "cjtyvzparent"
+            ]
+        },
+        "blender-xnjqix": {
+            "F": [
+                "cjtyvzparent"
+            ]
+        },
+        "bottle_of_strawberry_juice-ceizxn": {
+            "M": [
+                "ceizxnparent"
+            ]
+        },
+        "bottle_of_strawberry_juice-mlnuza": {
+            "F": [
+                "ceizxnparent"
+            ]
+        },
+        "bottle_of_vodka-gxkbcd": {
+            "M": [
+                "gxkbcdparent"
+            ]
+        },
+        "bottle_of_vodka-nwegts": {
+            "F": [
+                "gxkbcdparent"
+            ]
+        },
+        "bottle_of_water-amryfj": {
+            "M": [
+                "amryfjparent"
+            ]
+        },
+        "bottle_of_water-emquat": {
+            "F": [
+                "gmdwweparent"
+            ]
+        },
+        "bottle_of_water-gmdwwe": {
+            "M": [
+                "gmdwweparent"
+            ]
+        },
+        "bottle_of_water-lojipo": {
+            "F": [
+                "tkwpyrparent"
+            ]
+        },
+        "bottle_of_water-qaceen": {
+            "F": [
+                "amryfjparent"
+            ]
+        },
+        "bottle_of_water-tkwpyr": {
+            "M": [
+                "tkwpyrparent"
+            ]
+        },
+        "bottle_of_whiskey-arskxc": {
+            "M": [
+                "arskxcparent"
+            ]
+        },
+        "bottle_of_whiskey-hejqyo": {
+            "F": [
+                "uxpeazparent"
+            ]
+        },
+        "bottle_of_whiskey-lzjuvy": {
+            "F": [
+                "arskxcparent"
+            ]
+        },
+        "bottle_of_whiskey-pyfpss": {
+            "F": [
+                "xeswtqparent"
+            ]
+        },
+        "bottle_of_whiskey-tihatc": {
+            "F": [
+                "tpknvfparent"
+            ]
+        },
+        "bottle_of_whiskey-tpknvf": {
+            "M": [
+                "tpknvfparent"
+            ]
+        },
+        "bottle_of_whiskey-uxpeaz": {
+            "M": [
+                "uxpeazparent"
+            ]
+        },
+        "bottle_of_whiskey-xeswtq": {
+            "M": [
+                "xeswtqparent"
+            ]
+        },
+        "bow-fhchql": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "broken_light_bulb-cugtye": {
+            "M": [
+                "bulblamp"
+            ]
+        },
+        "bunk_bed-hkmwyc": {
+            "F": [
+                "wirpqeparent"
+            ]
+        },
+        "bunk_bed-wirpqe": {
+            "M": [
+                "wirpqeparent"
+            ]
+        },
+        "bush-waafqw": {
+            "F": [
+                "berrybush"
+            ]
+        },
+        "cabinet_base-dcmhhh": {
+            "F": [
+                "doorcabinet"
+            ]
+        },
+        "cabinet_door-ertkre": {
+            "M": [
+                "doorcabinet"
+            ]
+        },
+        "camera_tripod-hnpofr": {
+            "F": [
+                "cameratripod"
+            ]
+        },
+        "can-damllm": {
+            "F": [
+                "myrzacparent"
+            ]
+        },
+        "can-myrzac": {
+            "M": [
+                "myrzacparent"
+            ]
+        },
+        "candle_holder-wiufnv": {
+            "F": [
+                "dipcandle"
+            ]
+        },
+        "canister-bemtjd": {
+            "M": [
+                "bemtjdparent"
+            ]
+        },
+        "canister-gqwnfv": {
+            "F": [
+                "bemtjdparent"
+            ]
+        },
+        "canister-snklci": {
+            "M": [
+                "snklciparent"
+            ]
+        },
+        "canister-xcppkc": {
+            "F": [
+                "snklciparent"
+            ]
+        },
+        "canteen-ouhqnw": {
+            "F": [
+                "rhoycwparent"
+            ]
+        },
+        "canteen-rhoycw": {
+            "M": [
+                "rhoycwparent"
+            ]
+        },
+        "car-xxsgpq": {
+            "F": [
+                "platecar"
+            ]
+        },
+        "cat_food_tin-rclizj": {
+            "F": [
+                "tzbbeoparent"
+            ]
+        },
+        "cat_food_tin-tzbbeo": {
+            "M": [
+                "tzbbeoparent"
+            ]
+        },
+        "chicken_broth_carton-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        },
+        "chicken_broth_carton-ztripg": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "chicken_soup_carton-ooyqcr": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "chicken_soup_carton-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        },
+        "chlorine_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "chlorine_bottle-uzkxtz": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "cleansing_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "cleansing_bottle-ovjhuf": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "clothesline_pole-smrqrw": {
+            "F": [
+                "clotheslinepole"
+            ]
+        },
+        "clothesline_rope-gkqoro": {
+            "M": [
+                "clotheslinepole"
+            ]
+        },
+        "coatrack-qyjssf": {
+            "F": [
+                "hangerrack"
+            ]
+        },
+        "coffee_maker-fwlabx": {
+            "F": [
+                "kaolpgparent"
+            ]
+        },
+        "coffee_maker-kaolpg": {
+            "M": [
+                "kaolpgparent"
+            ]
+        },
+        "cola_bottle-hbafeb": {
+            "M": [
+                "hbafebparent"
+            ]
+        },
+        "cola_bottle-oyqdtz": {
+            "F": [
+                "hbafebparent"
+            ]
+        },
+        "compost_bin-fvkdos": {
+            "F": [
+                "oawddrparent"
+            ]
+        },
+        "compost_bin-oawddr": {
+            "M": [
+                "oawddrparent"
+            ]
+        },
+        "cooking_oil_bottle-cfdond": {
+            "F": [
+                "fomiemparent"
+            ]
+        },
+        "cooking_oil_bottle-fomiem": {
+            "M": [
+                "fomiemparent"
+            ]
+        },
+        "cork-ncxgpe": {
+            "M": [
+                "corkbottle"
+            ]
+        },
+        "crock_pot-cofhlg": {
+            "M": [
+                "cofhlgparent"
+            ]
+        },
+        "crock_pot-xdahvv": {
+            "F": [
+                "cofhlgparent"
+            ]
+        },
+        "curtain_rod-pburmj": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "dartboard-zjenlc": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "deodorant_stick-albeyc": {
+            "F": [
+                "vsvwigparent"
+            ]
+        },
+        "deodorant_stick-vsvwig": {
+            "M": [
+                "vsvwigparent"
+            ]
+        },
+        "desk_bracket-lwqwre": {
+            "F": [
+                "deskleg"
+            ],
+            "M": [
+                "deskbracket"
+            ]
+        },
+        "desk_leg-qoerre": {
+            "M": [
+                "deskleg"
+            ]
+        },
+        "desk_top-eggere": {
+            "F": [
+                "deskbracket"
+            ]
+        },
+        "detergent_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "detergent_bottle-yufawg": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "digital_camera-wbzzjl": {
+            "F": [
+                "lenscamera"
+            ]
+        },
+        "digital_camera-zcnxuz": {
+            "M": [
+                "cameratripod"
+            ]
+        },
+        "dip_candle-poexjo": {
+            "M": [
+                "dipcandle"
+            ]
+        },
+        "disinfectant_bottle-ifqdxn": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "disinfectant_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "dog_food_can-swszeb": {
+            "M": [
+                "swszebparent"
+            ]
+        },
+        "dog_food_can-vxxcvg": {
+            "F": [
+                "swszebparent"
+            ]
+        },
+        "dutch_oven-obuzeh": {
+            "M": [
+                "obuzehparent"
+            ]
+        },
+        "dutch_oven-tyxwap": {
+            "F": [
+                "obuzehparent"
+            ]
+        },
+        "electric_mixer-ceaeqf": {
+            "F": [
+                "rgnjdtparent"
+            ]
+        },
+        "electric_mixer-rgnjdt": {
+            "M": [
+                "rgnjdtparent"
+            ]
+        },
+        "fabric_softener_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "fabric_softener_bottle-uyixwc": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "fire_alarm-dkwmmf": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "fishing_rod-zhmrtc": {
+            "F": [
+                "fishrod"
+            ]
+        },
+        "floor_wax_bottle-fzhcdb": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "floor_wax_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "hamper-kgjkzr": {
+            "M": [
+                "kgjkzrparent"
+            ]
+        },
+        "hamper-stibna": {
+            "F": [
+                "kgjkzrparent"
+            ]
+        },
+        "hanger-sfdekb": {
+            "M": [
+                "hangerrack"
+            ]
+        },
+        "herbicide_bottle-aeslmf": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "herbicide_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "hitch-eqwskw": {
+            "M": [
+                "hitchcar"
+            ]
+        },
+        "holly_decoration-shmkir": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "hutch-vsqsuy": {
+            "F": [
+                "yqtlhyparent"
+            ]
+        },
+        "hutch-yqtlhy": {
+            "M": [
+                "yqtlhyparent"
+            ]
+        },
+        "hydrogen_peroxide_bottle-luhnej": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "hydrogen_peroxide_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "icicle_lights-lbwpka": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "jar-bqpmsv": {
+            "F": [
+                "ckgilbparent"
+            ]
+        },
+        "jar-ckgilb": {
+            "M": [
+                "ckgilbparent"
+            ]
+        },
+        "jar-dduopd": {
+            "M": [
+                "dduopdparent"
+            ]
+        },
+        "jar-fvebnu": {
+            "M": [
+                "fvebnuparent"
+            ]
+        },
+        "jar-gejwoi": {
+            "F": [
+                "kbuqwwparent"
+            ]
+        },
+        "jar-ifgcmr": {
+            "F": [
+                "fvebnuparent"
+            ]
+        },
+        "jar-jdwvyt": {
+            "F": [
+                "oyofsvparent"
+            ]
+        },
+        "jar-kbuqww": {
+            "M": [
+                "kbuqwwparent"
+            ]
+        },
+        "jar-lvuvbf": {
+            "F": [
+                "wxdxssparent"
+            ]
+        },
+        "jar-mefezc": {
+            "F": [
+                "picclmparent"
+            ]
+        },
+        "jar-ociqav": {
+            "F": [
+                "urmqxkparent"
+            ]
+        },
+        "jar-owcsun": {
+            "M": [
+                "owcsunparent"
+            ]
+        },
+        "jar-oyofsv": {
+            "M": [
+                "oyofsvparent"
+            ]
+        },
+        "jar-picclm": {
+            "M": [
+                "picclmparent"
+            ]
+        },
+        "jar-pjaljg": {
+            "F": [
+                "dduopdparent"
+            ]
+        },
+        "jar-sihkub": {
+            "M": [
+                "sihkubparent"
+            ]
+        },
+        "jar-urmqxk": {
+            "M": [
+                "urmqxkparent"
+            ]
+        },
+        "jar-vxqpnm": {
+            "F": [
+                "zggjifparent"
+            ]
+        },
+        "jar-waousd": {
+            "F": [
+                "owcsunparent"
+            ]
+        },
+        "jar-wcqjew": {
+            "F": [
+                "sihkubparent"
+            ]
+        },
+        "jar-wxdxss": {
+            "M": [
+                "wxdxssparent"
+            ]
+        },
+        "jar-zdeyzf": {
+            "F": [
+                "zknitkparent"
+            ]
+        },
+        "jar-zggjif": {
+            "M": [
+                "zggjifparent"
+            ]
+        },
+        "jar-zknitk": {
+            "M": [
+                "zknitkparent"
+            ]
+        },
+        "jar_of_chilli_powder-mxhrcl": {
+            "F": [
+                "vnpjfnparent"
+            ]
+        },
+        "jar_of_chilli_powder-vnpjfn": {
+            "M": [
+                "vnpjfnparent"
+            ]
+        },
+        "jar_of_clove-dlvall": {
+            "F": [
+                "dwpcldparent"
+            ]
+        },
+        "jar_of_clove-dwpcld": {
+            "M": [
+                "dwpcldparent"
+            ]
+        },
+        "jar_of_cocoa-sjwgfn": {
+            "F": [
+                "yivigeparent"
+            ]
+        },
+        "jar_of_cocoa-yivige": {
+            "M": [
+                "yivigeparent"
+            ]
+        },
+        "jar_of_coffee-bnrvcs": {
+            "F": [
+                "qwrndiparent"
+            ]
+        },
+        "jar_of_coffee-qwrndi": {
+            "M": [
+                "qwrndiparent"
+            ]
+        },
+        "jar_of_cumin-bpxhso": {
+            "F": [
+                "qcfsnvparent"
+            ]
+        },
+        "jar_of_cumin-qcfsnv": {
+            "M": [
+                "qcfsnvparent"
+            ]
+        },
+        "jar_of_cumin-vyfehw": {
+            "F": [
+                "ytjxqnparent"
+            ]
+        },
+        "jar_of_cumin-ytjxqn": {
+            "M": [
+                "ytjxqnparent"
+            ]
+        },
+        "jar_of_kidney_beans-ciopwh": {
+            "M": [
+                "ciopwhparent"
+            ]
+        },
+        "jar_of_kidney_beans-kfzxah": {
+            "F": [
+                "ciopwhparent"
+            ]
+        },
+        "jar_of_orange_jam-hjrnct": {
+            "F": [
+                "iojcmfparent"
+            ]
+        },
+        "jar_of_orange_jam-iojcmf": {
+            "M": [
+                "iojcmfparent"
+            ]
+        },
+        "jar_of_pepper_seasoning-clhquh": {
+            "M": [
+                "clhquhparent"
+            ]
+        },
+        "jar_of_pepper_seasoning-iuydyz": {
+            "F": [
+                "clhquhparent"
+            ]
+        },
+        "jar_of_peppercorns-gkakwk": {
+            "F": [
+                "wwbaypparent"
+            ]
+        },
+        "jar_of_peppercorns-wwbayp": {
+            "M": [
+                "wwbaypparent"
+            ]
+        },
+        "jar_of_sesame_seed-acsllv": {
+            "F": [
+                "jybxvqparent"
+            ]
+        },
+        "jar_of_sesame_seed-jybxvq": {
+            "M": [
+                "jybxvqparent"
+            ]
+        },
+        "jar_of_strawberry_jam-actmgl": {
+            "M": [
+                "actmglparent"
+            ]
+        },
+        "jar_of_strawberry_jam-busiti": {
+            "F": [
+                "actmglparent"
+            ]
+        },
+        "jar_of_tumeric-miivhi": {
+            "F": [
+                "yqvildparent"
+            ]
+        },
+        "jar_of_tumeric-yqvild": {
+            "M": [
+                "yqvildparent"
+            ]
+        },
+        "jug-quzmfw": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "jug-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        },
+        "kayak-dkizyc": {
+            "M": [
+                "kayakrack"
+            ]
+        },
+        "kayak_rack-goewhp": {
+            "F": [
+                "kayakrack"
+            ],
+            "M": [
+                "displaywall"
+            ]
+        },
+        "kettle-bzisss": {
+            "F": [
+                "ugfmpqparent"
+            ]
+        },
+        "kettle-ugfmpq": {
+            "M": [
+                "ugfmpqparent"
+            ]
+        },
+        "kettle-vjbldp": {
+            "F": [
+                "zkdergparent"
+            ]
+        },
+        "kettle-zkderg": {
+            "M": [
+                "zkdergparent"
+            ]
+        },
+        "lemon_juice_bottle-fomiem": {
+            "M": [
+                "fomiemparent"
+            ]
+        },
+        "lemon_juice_bottle-qsdqik": {
+            "F": [
+                "fomiemparent"
+            ]
+        },
+        "lemonade_bottle-xxqyrt": {
+            "M": [
+                "xxqyrtparent"
+            ]
+        },
+        "lemonade_bottle-yprkek": {
+            "F": [
+                "xxqyrtparent"
+            ]
+        },
+        "lens-oeeuic": {
+            "M": [
+                "lenscamera"
+            ]
+        },
+        "license_plate-hjdaqn": {
+            "F": [
+                "stickerplate"
+            ]
+        },
+        "license_plate-nuqnlr": {
+            "M": [
+                "platecar"
+            ]
+        },
+        "light_bulb-kfmkwd": {
+            "M": [
+                "bulblamp"
+            ]
+        },
+        "lime_juice_bottle-bnekjp": {
+            "F": [
+                "fomiemparent"
+            ]
+        },
+        "lime_juice_bottle-fomiem": {
+            "M": [
+                "fomiemparent"
+            ]
+        },
+        "liquid_carton-rsvypp": {
+            "F": [
+                "xsxeijparent"
+            ]
+        },
+        "liquid_carton-sjsles": {
+            "M": [
+                "sjslesparent"
+            ]
+        },
+        "liquid_carton-xsxeij": {
+            "M": [
+                "xsxeijparent"
+            ]
+        },
+        "liquid_carton-ykfkyq": {
+            "F": [
+                "sjslesparent"
+            ]
+        },
+        "liquid_soap_bottle-hazvbh": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "liquid_soap_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "lubricant_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "lubricant_bottle-omknho": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "menu-keaqlh": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "milk_carton-icvmix": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "milk_carton-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        },
+        "mirror-pevdqu": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "monitor-qvpbge": {
+            "F": [
+                "webcamcomputer"
+            ]
+        },
+        "oil_bottle-eukcfr": {
+            "M": [
+                "eukcfrparent"
+            ]
+        },
+        "oil_bottle-fomiem": {
+            "M": [
+                "fomiemparent"
+            ]
+        },
+        "oil_bottle-gcixra": {
+            "F": [
+                "eukcfrparent"
+            ]
+        },
+        "oil_bottle-yoxfyu": {
+            "F": [
+                "fomiemparent"
+            ]
+        },
+        "olive_oil_bottle-fomiem": {
+            "M": [
+                "fomiemparent"
+            ]
+        },
+        "olive_oil_bottle-zfvhus": {
+            "F": [
+                "fomiemparent"
+            ]
+        },
+        "orange_juice_carton-jjlfla": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "orange_juice_carton-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        },
+        "paper_cup-guobeq": {
+            "F": [
+                "iqeybaparent"
+            ]
+        },
+        "paper_cup-iqeyba": {
+            "M": [
+                "iqeybaparent"
+            ]
+        },
+        "paper_lantern-hgmreo": {
+            "M": [
+                "hangpole"
+            ]
+        },
+        "pickup_truck-zppyty": {
+            "F": [
+                "hitchcar"
+            ]
+        },
+        "picture-pblkaf": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "pill_bottle-csvdbe": {
+            "F": [
+                "iizvmnparent"
+            ]
+        },
+        "pill_bottle-dmzavi": {
+            "M": [
+                "dmzaviparent"
+            ]
+        },
+        "pill_bottle-iizvmn": {
+            "M": [
+                "iizvmnparent"
+            ]
+        },
+        "pill_bottle-wsasmm": {
+            "F": [
+                "dmzaviparent"
+            ]
+        },
+        "pineapple_juice_carton-barzwx": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "pineapple_juice_carton-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        },
+        "pole-pkzvpk": {
+            "F": [
+                "hangpole"
+            ],
+            "M": [
+                "displaywall"
+            ]
+        },
+        "polish_bottle-hldhxl": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "polish_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "poster-dsrcyt": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "pressure_cooker-gerjlh": {
+            "M": [
+                "gerjlhparent"
+            ]
+        },
+        "pressure_cooker-otyngn": {
+            "F": [
+                "gerjlhparent"
+            ]
+        },
+        "raspberry-ygrfsn": {
+            "M": [
+                "berrybush"
+            ]
+        },
+        "reagent_bottle-nkjxbc": {
+            "M": [
+                "nkjxbcparent"
+            ]
+        },
+        "reagent_bottle-tnjpsf": {
+            "F": [
+                "nkjxbcparent"
+            ]
+        },
+        "reagent_bottle-trtrsl": {
+            "F": [
+                "nkjxbcparent"
+            ]
+        },
+        "reagent_bottle-ukayce": {
+            "F": [
+                "nkjxbcparent"
+            ]
+        },
+        "reagent_bottle-xstykf": {
+            "F": [
+                "nkjxbcparent"
+            ]
+        },
+        "recreational_vehicle-doiucd": {
+            "F": [
+                "displaywall"
+            ]
+        },
+        "rice_cooker-azoiaq": {
+            "M": [
+                "azoiaqparent"
+            ]
+        },
+        "rice_cooker-qatgeb": {
+            "F": [
+                "azoiaqparent"
+            ]
+        },
+        "roasting_pan-nrecsa": {
+            "F": [
+                "zjtjrnparent"
+            ]
+        },
+        "roasting_pan-zjtjrn": {
+            "M": [
+                "zjtjrnparent"
+            ]
+        },
+        "round_bottom_flask-ghwjwe": {
+            "M": [
+                "ghwjweparent"
+            ]
+        },
+        "round_bottom_flask-hmzafz": {
+            "F": [
+                "ghwjweparent"
+            ]
+        },
+        "rum_bottle-lseuwf": {
+            "M": [
+                "lseuwfparent"
+            ]
+        },
+        "rum_bottle-ueagnt": {
+            "F": [
+                "lseuwfparent"
+            ]
+        },
+        "saddle_soap_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "saddle_soap_bottle-ugqdao": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "salt_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "salt_bottle-wdpcmk": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "sesame_oil_bottle-bupgpj": {
+            "F": [
+                "fomiemparent"
+            ]
+        },
+        "sesame_oil_bottle-fomiem": {
+            "M": [
+                "fomiemparent"
+            ]
+        },
+        "shampoo_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "shampoo_bottle-tukaoq": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "shelf_back_panel-gjsnrt": {
+            "F": [
+                "shelfback",
+                "shelfsidebxfkjj",
+                "shelfsideyujrmw",
+                "shelftop"
+            ]
+        },
+        "shelf_baseboard-hlhneo": {
+            "M": [
+                "shelfbase"
+            ]
+        },
+        "shelf_shelf-ymtnqa": {
+            "M": [
+                "shelfback"
+            ]
+        },
+        "shelf_side-bxfkjj": {
+            "F": [
+                "shelfbase"
+            ],
+            "M": [
+                "shelfsidebxfkjj"
+            ]
+        },
+        "shelf_side-yujrmw": {
+            "M": [
+                "shelfsideyujrmw"
+            ]
+        },
+        "shelf_top-pfiole": {
+            "M": [
+                "shelftop"
+            ]
+        },
+        "shortening_carton-gswpdr": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "shortening_carton-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        },
+        "skateboard_deck-acmbvb": {
+            "M": [
+                "acmbvbparent"
+            ]
+        },
+        "skateboard_deck-jljqtt": {
+            "M": [
+                "jljqttparent"
+            ]
+        },
+        "skateboard_deck-tgfidu": {
+            "F": [
+                "acmbvbparent",
+                "jljqttparent"
+            ]
+        },
+        "soap_bottle-hamffy": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "soap_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "soda_cup-hkvuxj": {
+            "M": [
+                "hkvuxjparent"
+            ]
+        },
+        "soda_cup-vicaqs": {
+            "F": [
+                "hkvuxjparent"
+            ]
+        },
+        "soda_water_bottle-upfssc": {
+            "F": [
+                "xxqyrtparent"
+            ]
+        },
+        "soda_water_bottle-xxqyrt": {
+            "M": [
+                "xxqyrtparent"
+            ]
+        },
+        "sofa-cfqdde": {
+            "M": [
+                "cfqddeparent"
+            ]
+        },
+        "sofa-dbmico": {
+            "M": [
+                "dbmicoparent"
+            ]
+        },
+        "sofa-itbkff": {
+            "F": [
+                "cfqddeparent",
+                "libtpuparent"
+            ]
+        },
+        "sofa-libtpu": {
+            "M": [
+                "libtpuparent"
+            ]
+        },
+        "sofa-rxtscm": {
+            "F": [
+                "dbmicoparent"
+            ]
+        },
+        "solvent_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "solvent_bottle-nbctrk": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "steamer_basket-lageli": {
+            "F": [
+                "ppkjuyparent"
+            ]
+        },
+        "steamer_basket-ppkjuy": {
+            "M": [
+                "ppkjuyparent"
+            ]
+        },
+        "sticker-wshged": {
+            "M": [
+                "stickerplate"
+            ]
+        },
+        "stockpot-oshwps": {
+            "F": [
+                "pbmsjiparent"
+            ]
+        },
+        "stockpot-pbmsji": {
+            "M": [
+                "pbmsjiparent"
+            ]
+        },
+        "storage_box-aqdbdu": {
+            "F": [
+                "mdowozparent"
+            ]
+        },
+        "storage_box-bwbpvg": {
+            "F": [
+                "qkpdihparent"
+            ]
+        },
+        "storage_box-eicujj": {
+            "F": [
+                "lryrttparent"
+            ]
+        },
+        "storage_box-izcglf": {
+            "F": [
+                "jzwezhparent"
+            ]
+        },
+        "storage_box-jzwezh": {
+            "M": [
+                "jzwezhparent"
+            ]
+        },
+        "storage_box-lryrtt": {
+            "M": [
+                "lryrttparent"
+            ]
+        },
+        "storage_box-mdowoz": {
+            "M": [
+                "mdowozparent"
+            ]
+        },
+        "storage_box-mloxso": {
+            "M": [
+                "mloxsoparent"
+            ]
+        },
+        "storage_box-qkpdih": {
+            "M": [
+                "qkpdihparent"
+            ]
+        },
+        "storage_box-qsaoni": {
+            "F": [
+                "stukvkparent"
+            ]
+        },
+        "storage_box-stukvk": {
+            "M": [
+                "stukvkparent"
+            ]
+        },
+        "storage_box-twvgzf": {
+            "F": [
+                "mloxsoparent"
+            ]
+        },
+        "table_lamp-ehjsdz": {
+            "F": [
+                "bulblamp"
+            ]
+        },
+        "teapot-jlalfc": {
+            "F": [
+                "pwgbsbparent"
+            ]
+        },
+        "teapot-mvrhya": {
+            "F": [
+                "tnwispparent"
+            ]
+        },
+        "teapot-pwgbsb": {
+            "M": [
+                "pwgbsbparent"
+            ]
+        },
+        "teapot-tnwisp": {
+            "M": [
+                "tnwispparent"
+            ]
+        },
+        "toilet_soap_bottle-iyrrna": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "toilet_soap_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "tomato_paste_can-krarex": {
+            "F": [
+                "xxqyrtparent"
+            ]
+        },
+        "tomato_paste_can-xxqyrt": {
+            "M": [
+                "xxqyrtparent"
+            ]
+        },
+        "trampoline_leg-qkerde": {
+            "M": [
+                "trampolineleg"
+            ]
+        },
+        "trampoline_top-iemeer": {
+            "F": [
+                "trampolineleg"
+            ]
+        },
+        "trash_can-wklill": {
+            "F": [
+                "xdyddoparent"
+            ]
+        },
+        "trash_can-xdyddo": {
+            "M": [
+                "xdyddoparent"
+            ]
+        },
+        "trout-kqpeke": {
+            "M": [
+                "fishrod"
+            ]
+        },
+        "tupperware-mkstwr": {
+            "F": [
+                "wjrwerparent"
+            ]
+        },
+        "tupperware-wjrwer": {
+            "M": [
+                "wjrwerparent"
+            ]
+        },
+        "vinegar_bottle-fomiem": {
+            "M": [
+                "fomiemparent"
+            ]
+        },
+        "vinegar_bottle-hbsbwt": {
+            "F": [
+                "uycetaparent"
+            ]
+        },
+        "vinegar_bottle-uyceta": {
+            "M": [
+                "uycetaparent"
+            ]
+        },
+        "vinegar_bottle-ykysuc": {
+            "F": [
+                "fomiemparent"
+            ]
+        },
+        "vodka_bottle-bojwlu": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "vodka_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "wall_nail-wlnail": {
+            "F": [
+                "displaywall"
+            ]
+        },
+        "wardrobe-ktworp": {
+            "F": [
+                "hangerrack"
+            ]
+        },
+        "wardrobe-lrokhl": {
+            "F": [
+                "hangerrack"
+            ]
+        },
+        "water_bottle-ackxiy": {
+            "F": [
+                "rgtedjparent"
+            ]
+        },
+        "water_bottle-lzdzkk": {
+            "F": [
+                "xxqyrtparent"
+            ]
+        },
+        "water_bottle-rgtedj": {
+            "M": [
+                "rgtedjparent"
+            ]
+        },
+        "water_bottle-xxqyrt": {
+            "M": [
+                "xxqyrtparent"
+            ]
+        },
+        "water_glass-vgvkps": {
+            "M": [
+                "vgvkpsparent"
+            ]
+        },
+        "water_glass-xchqhl": {
+            "F": [
+                "vgvkpsparent"
+            ]
+        },
+        "webcam-fabztm": {
+            "M": [
+                "webcamcomputer"
+            ]
+        },
+        "whiskey_bottle-jpduev": {
+            "F": [
+                "mgirziparent"
+            ]
+        },
+        "whiskey_bottle-mgirzi": {
+            "M": [
+                "mgirziparent"
+            ]
+        },
+        "wind_chime-tghelo": {
+            "M": [
+                "hangpole"
+            ]
+        },
+        "window_blind-mmaana": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "wine_bottle-inkqch": {
+            "F": [
+                "corkbottle"
+            ]
+        },
+        "wreath-rkrxno": {
+            "M": [
+                "displaywall"
+            ]
+        },
+        "yogurt_carton-ahbhsd": {
+            "F": [
+                "ygsmgmparent"
+            ]
+        },
+        "yogurt_carton-ygsmgm": {
+            "M": [
+                "ygsmgmparent"
+            ]
+        }
+    },
     "error_skipped_files": [],
     "error_multiple_provided": {},
-    "error_missing_objects": [],
+    "error_missing_objects": [
+        "gewjwh"
+    ],
     "error_id_collisions": {},
     "error_seen_as_multiple_categories": {}
 }
