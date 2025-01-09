@@ -15,6 +15,7 @@ sys.path.append(r"D:\ig_pipeline")
 
 from b1k_pipeline.utils import parse_name
 
+REQUIRE_ADDITIONAL_BASE_POINTS = True
 
 def anorm(x, axis=None, keepdims=False):
     """Compute L2 norms alogn specified axes."""
@@ -282,70 +283,72 @@ def sample_fillable_volume(
         len(mesh_points) > 0
     ), "Got no valid mesh points for generating fillable mesh!"
 
-    # 5. Create fillable trimesh
-    tm_fillable_tmp = trimesh.Trimesh(vertices=np.array(mesh_points))
+    if REQUIRE_ADDITIONAL_BASE_POINTS:
+        # 5. Create fillable trimesh
+        tm_fillable_tmp = trimesh.Trimesh(vertices=np.array(mesh_points))
 
-    # Rotate it so that the z-axis points in @direction
-    tm_fillable_tmp.apply_transform(tf)
+        # Rotate it so that the z-axis points in @direction
+        tm_fillable_tmp.apply_transform(tf)
 
-    # 6. Create convex hull
-    ctm_rot = tm_fillable_tmp.convex_hull
-    ctm_rot.unmerge_vertices()
+        # 6. Create convex hull
+        ctm_rot = tm_fillable_tmp.convex_hull
+        ctm_rot_unmerged = ctm_rot.copy()
+        ctm_rot_unmerged.unmerge_vertices()
 
-    # 7. Take the projection of the convex hull with normal @direction (which, since already rotated, is simply
-    # [0, 0, 1]), and then sample rays shooting against that normal to compensate for the original offset
-    # We know the bounding box is [1, 1, 1], so sample points uniformly in XY plane
-    proj = ConvexHull(ctm_rot.vertices[:, :2].copy())
-    equations = np.array(proj.equations, dtype=np.float32)
+        # 7. Take the projection of the convex hull with normal @direction (which, since already rotated, is simply
+        # [0, 0, 1]), and then sample rays shooting against that normal to compensate for the original offset
+        # We know the bounding box is [1, 1, 1], so sample points uniformly in XY plane
+        proj = ConvexHull(ctm_rot_unmerged.vertices[:, :2].copy())
+        equations = np.array(proj.equations, dtype=np.float32)
 
-    n_dim_samples = 10
-    ctm_rot_min, ctm_rot_max = ctm_rot.bounding_box.bounds
-    x_range = np.linspace(ctm_rot_min[0], ctm_rot_max[0], n_dim_samples)
-    y_range = np.linspace(ctm_rot_min[1], ctm_rot_max[1], n_dim_samples)
-    ray_grid = np.stack(np.meshgrid(x_range, y_range, indexing="ij"), axis=-1)
-    ray_grid_flattened = ray_grid.reshape(-1, 2)
+        n_dim_samples = 10
+        ctm_rot_min, ctm_rot_max = ctm_rot_unmerged.bounding_box.bounds
+        x_range = np.linspace(ctm_rot_min[0], ctm_rot_max[0], n_dim_samples)
+        y_range = np.linspace(ctm_rot_min[1], ctm_rot_max[1], n_dim_samples)
+        ray_grid = np.stack(np.meshgrid(x_range, y_range, indexing="ij"), axis=-1)
+        ray_grid_flattened = ray_grid.reshape(-1, 2)
 
-    # Check which rays are within the polygon
-    # Each inequality is of the form Ax + By + C <= 0
-    # We need to check if the point satisfies all inequalities
-    is_within = np.all(
-        (ray_grid_flattened @ equations[:, :-1].T) + equations[:, -1] <= 0, axis=1
-    )
-    xy_ray_positions = ray_grid_flattened[is_within]
+        # Check which rays are within the polygon
+        # Each inequality is of the form Ax + By + C <= 0
+        # We need to check if the point satisfies all inequalities
+        is_within = np.all(
+            (ray_grid_flattened @ equations[:, :-1].T) + equations[:, -1] <= 0, axis=1
+        )
+        xy_ray_positions = ray_grid_flattened[is_within]
 
-    # Shoot these rays downwards and record their poses -- add them to the point set
-    z_range = np.linspace(bbox_min_rot[2], bbox_max_rot[2], n_dim_samples)
-    additional_points_rot = []
-    for xy_ray_pos in xy_ray_positions:
-        # Find a corresponding z value within the convex hull to use as the start raycasting point
-        start_samples = np.zeros((n_dim_samples, 3))
-        start_samples[:, :2] = xy_ray_pos
-        start_samples[:, 2] = z_range
-        is_contained = ctm_rot.contains(start_samples)
-        if not np.any(is_contained):
-            # Just skip this sample
-            continue
-        # Use the lowest point (i.e.: the first idx that is True) as the raycasting start point
-        z = z_range[np.where(is_contained)[0][0]]
+        # Shoot these rays downwards and record their poses -- add them to the point set
+        z_range = np.linspace(bbox_min_rot[2], bbox_max_rot[2], n_dim_samples)
+        additional_points_rot = []
+        for xy_ray_pos in xy_ray_positions:
+            # Find a corresponding z value within the convex hull to use as the start raycasting point
+            start_samples = np.zeros((n_dim_samples, 3))
+            start_samples[:, :2] = xy_ray_pos
+            start_samples[:, 2] = z_range
+            is_contained = ctm_rot.contains(start_samples)
+            if not np.any(is_contained):
+                # Just skip this sample
+                continue
+            # Use the lowest point (i.e.: the first idx that is True) as the raycasting start point
+            z = z_range[np.where(is_contained)[0][0]]
 
-        # Raycast downwards and record the hit point
-        start = np.array([*xy_ray_pos, z])
-        hit = shoot_ray(tm=ctm_rot, point=start, direction=np.array([0, 0, -1.0]))
+            # Raycast downwards and record the hit point
+            start = np.array([*xy_ray_pos, z])
+            hit = shoot_ray(tm=ctm_rot_unmerged, point=start, direction=np.array([0, 0, -1.0]))
 
-        # If we have a valid hit, record this point
-        if hit is not None:
-            additional_points_rot.append(hit)
+            # If we have a valid hit, record this point
+            if hit is not None:
+                additional_points_rot.append(hit)
 
-    assert (
-        len(additional_points_rot) > 0
-    ), "Failed to generate any additional points for the fillable mesh!"
+        assert (
+            len(additional_points_rot) > 0
+        ), "Failed to generate any additional points for the fillable mesh!"
 
-    # Rotate the points back into the original frame
-    # Note: forward transform is points @ rot.T so inverse is points @ rot
-    additional_points = np.array(additional_points_rot) @ rot
+        # Rotate the points back into the original frame
+        # Note: forward transform is points @ rot.T so inverse is points @ rot
+        additional_points = np.array(additional_points_rot) @ rot
 
-    # Append all additional points to our existing set of points
-    mesh_points = np.concatenate([mesh_points, additional_points], axis=0)
+        # Append all additional points to our existing set of points
+        mesh_points = np.concatenate([mesh_points, additional_points], axis=0)
 
     # Re-write to trimesh and take the finalized convex hull
     tm_fillable = trimesh.Trimesh(vertices=np.array(mesh_points))
