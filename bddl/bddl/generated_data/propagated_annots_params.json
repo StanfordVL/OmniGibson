@@ -52799,16 +52799,15 @@
         "wrinkleable": {}
     },
     "hammock.n.03": {
-        "cloth": {},
         "deformable": {},
         "disinfectable": {},
-        "drapeable": {},
         "dustyable": {},
         "grassyable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rustable": {},
         "scratchable": {},
+        "softBody": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
@@ -55216,7 +55215,6 @@
         "cookable": {
             "cook_temperature": 74.0
         },
-        "deformable": {},
         "disinfectable": {},
         "dustyable": {},
         "freezable": {},
@@ -55224,12 +55222,12 @@
         "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
+        "rigidBody": {},
         "rustable": {},
         "scratchable": {},
         "sliceable": {
             "sliceable_derivative_synset": "half__huitre.n.01"
         },
-        "softBody": {},
         "stainable": {},
         "stickyable": {},
         "tarnishable": {},
