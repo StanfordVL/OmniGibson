@@ -4,7 +4,7 @@
     (:objects
         jersey.n.03_1 jersey.n.03_2 - jersey.n.03
         washer.n.03_1 - washer.n.03
-        underwear.n.01_1 underwear.n.01_2 - underwear.n.01
+        undergarment.n.01_1 undergarment.n.01_2 - undergarment.n.01
         sock.n.01_1 sock.n.01_2 - sock.n.01
         water.n.06_1 - water.n.06
         clothes_dryer.n.01_1 - clothes_dryer.n.01
@@ -17,10 +17,10 @@
         (saturated jersey.n.03_1 water.n.06_1)
         (inside jersey.n.03_2 washer.n.03_1) 
         (saturated jersey.n.03_2 water.n.06_1)
-        (inside underwear.n.01_1 washer.n.03_1) 
-        (saturated underwear.n.01_1 water.n.06_1)
-        (inside underwear.n.01_2 washer.n.03_1)
-        (saturated underwear.n.01_2 water.n.06_1)
+        (inside undergarment.n.01_1 washer.n.03_1) 
+        (saturated undergarment.n.01_1 water.n.06_1)
+        (inside undergarment.n.01_2 washer.n.03_1)
+        (saturated undergarment.n.01_2 water.n.06_1)
         (inside sock.n.01_1 washer.n.03_1) 
         (saturated sock.n.01_1 water.n.06_1)
         (inside sock.n.01_2 washer.n.03_1) 
@@ -38,8 +38,8 @@
                 (inside ?jersey.n.03 ?clothes_dryer.n.01_1)
             )
             (forall 
-                (?underwear.n.01 - underwear.n.01)
-                (inside ?underwear.n.01 ?clothes_dryer.n.01_1)
+                (?undergarment.n.01 - undergarment.n.01)
+                (inside ?undergarment.n.01 ?clothes_dryer.n.01_1)
             )
             (forall 
                 (?sock.n.01 - sock.n.01)

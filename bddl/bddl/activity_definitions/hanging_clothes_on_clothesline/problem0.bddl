@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        underwear.n.01_1 - underwear.n.01
+        undergarment.n.01_1 - undergarment.n.01
         hamper.n.02_1 - hamper.n.02
         floor.n.01_1 - floor.n.01
         water.n.06_1 - water.n.06
@@ -11,17 +11,17 @@
     )
 
     (:init
-        (inside underwear.n.01_1 hamper.n.02_1)
+        (inside undergarment.n.01_1 hamper.n.02_1)
         (ontop hamper.n.02_1 floor.n.01_1)
         (ontop clothesline.n.01_1 floor.n.01_1)
-        (saturated underwear.n.01_1 water.n.06_1)
+        (saturated undergarment.n.01_1 water.n.06_1)
         (inroom floor.n.01_1 garden)
         (ontop agent.n.01_1 floor.n.01_1)
     )
 
     (:goal
         (and
-            (draped ?underwear.n.01_1 ?clothesline.n.01_1)
+            (draped ?undergarment.n.01_1 ?clothesline.n.01_1)
         )
     )
 )

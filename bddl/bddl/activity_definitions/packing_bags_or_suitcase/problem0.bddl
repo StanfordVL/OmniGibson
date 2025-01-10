@@ -8,7 +8,7 @@
     	bed.n.01_1 - bed.n.01
     	bottle__of__shampoo.n.01_1 - bottle__of__shampoo.n.01
     	hardback.n.01_1 - hardback.n.01
-    	underwear.n.01_1 underwear.n.01_2 - underwear.n.01
+    	undergarment.n.01_1 undergarment.n.01_2 - undergarment.n.01
     	tube__of__toothpaste.n.01_1 - tube__of__toothpaste.n.01
     	door.n.01_1 - door.n.01
     	window.n.01_1 - window.n.01
@@ -20,8 +20,8 @@
         (ontop toothbrush.n.01_1 bed.n.01_1) 
         (ontop bottle__of__shampoo.n.01_1 bed.n.01_1) 
         (ontop hardback.n.01_1 bed.n.01_1) 
-        (ontop underwear.n.01_1 bed.n.01_1) 
-        (ontop underwear.n.01_2 bed.n.01_1) 
+        (ontop undergarment.n.01_1 bed.n.01_1) 
+        (ontop undergarment.n.01_2 bed.n.01_1) 
         (ontop tube__of__toothpaste.n.01_1 bed.n.01_1) 
         (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
@@ -33,8 +33,8 @@
     (:goal 
         (and 
             (forall 
-                (?underwear.n.01 - underwear.n.01) 
-                (inside ?underwear.n.01 ?backpack.n.01_1)
+                (?undergarment.n.01 - undergarment.n.01) 
+                (inside ?undergarment.n.01 ?backpack.n.01_1)
             ) 
             (inside ?toothbrush.n.01_1 ?backpack.n.01_1) 
             (inside ?bottle__of__shampoo.n.01_1 ?backpack.n.01_1) 
