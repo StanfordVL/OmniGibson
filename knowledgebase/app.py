@@ -13,6 +13,7 @@ error_url_patterns = [
   ("badderivativesynsets/", BadDerivativeSynsetView, "bad_derivative_synset_list"),
   ("missingderivativesynsets/", MissingDerivativeSynsetView, "missing_derivative_synset_list"),
   ("nonleafcategories/", NonLeafCategoryListView, "non_leaf_category_list"),
+  ("missingobjectattachmentpairs/", MissingObjectAttachmentPairListView, "missing_object_attachment_pair_list"),
 ]
 
 urlpatterns = [

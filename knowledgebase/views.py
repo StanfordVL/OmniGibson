@@ -206,6 +206,13 @@ class AttachmentPairListView(ListView):
     context_object_name = "attachment_pair_list"
 
 
+class MissingObjectAttachmentPairListView(AttachmentPairListView):
+    page_title = inspect.getdoc(AttachmentPair.view_attachment_pairs_with_missing_objects)
+
+    def get_queryset(self):
+        return AttachmentPair.view_attachment_pairs_with_missing_objects()
+
+
 class AttachmentPairDetailView(DetailView):
     model = AttachmentPair
     context_object_name = "attachment_pair"

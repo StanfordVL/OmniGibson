@@ -2,6 +2,7 @@
 {% block title %}Synset {{ synset.name }} Details{% endblock %}
 {% block content %}
   <h1 class="text-center">{{ synset.name }}</h1>
+  <p class="text-center">{{ synset.definition }}</p>
   <hr/>
   {% if synset.legal %} 
   <div class="text-center">{{ synset.definition }}</div>
