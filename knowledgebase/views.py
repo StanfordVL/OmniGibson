@@ -2,7 +2,7 @@ import inspect
 import io
 import re
 from flask.views import View
-from flask import render_template, send_file
+from flask import render_template, send_file, url_for, jsonify
 from bddl.knowledge_base import *
 
 from . import profile_utils
@@ -263,12 +263,32 @@ class IndexView(TemplateView):
         ]
         return context
     
+
+def searchable_items_list():
+    SEARCHABLE_ITEM_TYPES = [
+        (Object, "Object", "object_detail"),
+        (Category, "Category", "category_detail"), 
+        (Synset, "Synset", "synset_detail"),
+        (Task, "Task", "task_detail"),
+        (Scene, "Scene", "scene_detail"),
+        (TransitionRule, "Transition Rule", "transition_detail"),
+        (AttachmentPair, "Attachment Pair", "attachment_pair_detail")
+    ]
+    searchable_items = []
+    for item_type, type_str, detail_view_name in SEARCHABLE_ITEM_TYPES:
+        for item in item_type.all_objects():
+            item_title = item.name if item_type != Object else str(item)
+            searchable_items.append({"type": type_str, "title": item_title, "url": url_for(detail_view_name, name=item.name)})
+    return jsonify(searchable_items)
+
+
 def profile_plot_view():
     plot_img = profile_utils.plot_profile("Realtime Performance", 10, ignore_series=["Empty scene"])
     stream = io.BytesIO()
     plot_img.save(stream, format="png")
     stream.seek(0)
     return send_file(stream, mimetype="image/png")
+
 
 def profile_badge_view():
     badge_text = profile_utils.make_realtime_badge("Rs_int")

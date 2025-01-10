@@ -36,6 +36,8 @@ urlpatterns = [
 
 app = create_app()
 app.config["TEMPLATES_AUTO_RELOAD"] = True
+app.jinja_env.auto_reload = True  # Add this line to enable Jinja2 auto-reload
+app.debug = True  # This enables auto-reload for Python files
 
 @app.template_filter('slugify')
 def slugify_filter(value):
@@ -61,3 +63,4 @@ for view_info in urlpatterns + error_url_patterns:
 # Add the profile views
 app.add_url_rule("/knowledgebase/profile/badge.svg", view_func=profile_badge_view)
 app.add_url_rule("/knowledgebase/profile/plot.png", view_func=profile_plot_view)
+app.add_url_rule("/knowledgebase/searchable_items.json", view_func=searchable_items_list)
