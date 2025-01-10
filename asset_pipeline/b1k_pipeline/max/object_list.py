@@ -322,7 +322,7 @@ def main():
         attachment_pair = f"{part_model}parent"
 
         # Add the male side on the part
-        part_id = parent_match.group("category") + "-" + part_model
+        part_id = obj_match.group("category") + "-" + part_model
         attachment_pairs[part_id]["M"].add(attachment_pair)
 
         # Add the female side on the parent
