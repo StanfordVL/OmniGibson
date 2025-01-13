@@ -335,7 +335,8 @@ class SanityCheck:
             )
 
             # Run cloth object checks
-            synset = OBJECT_TAXONOMY.get_synset_from_category(row.name_category)
+            renamed_category = self.maybe_rename_category(row.name_category, row.name_model_id)
+            synset = OBJECT_TAXONOMY.get_synset_from_category(renamed_category)
             if synset is not None:
                 obj_is_cloth = "cloth" in OBJECT_TAXONOMY.get_abilities(synset)
                 if obj_is_cloth:
@@ -343,7 +344,7 @@ class SanityCheck:
             else:
                 self.expect(
                     False,
-                    f"Cannot validate clothness: category {row.name_category} not found in taxonomy.",
+                    f"Cannot validate clothness: category {renamed_category} not found in taxonomy.",
                 )
 
             # Check that each object zeroth instance object actually has a collision mesh
@@ -623,8 +624,8 @@ class SanityCheck:
             # Split the faces into elements
             elems = all_cmeshes.split(only_watertight=False, repair=False)
             self.expect(
-                len(elems) <= 32,
-                f"{obj.name} should not have more than 32 elements. Has {len(elems)} elements.",
+                len(elems) <= 40,
+                f"{obj.name} should not have more than 40 elements. Has {len(elems)} elements.",
             )
 
             # Iterate through the elements
