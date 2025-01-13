@@ -389,12 +389,12 @@ def get_distance_from_traversability(trav_map, bbox_min, bbox_max):
         closest_traversable_point = trav_map.map_to_world(th.tensor(closest_traversable_point_on_map, dtype=float))
 
         # Compute the distance between the corner and the closest traversable point
-        distance = th.linalg.norm(th.tensor(corner_2d) - closest_traversable_point).item()
+        distance = (th.tensor(corner_2d) - closest_traversable_point).tolist()
         if distance is None:
             continue
 
         # Update the minimum distance
-        if min_dist is None or distance < min_dist:
+        if min_dist is None or np.linalg.norm(distance) < np.linalg.norm(min_dist):
             min_dist = distance
 
     return min_dist
