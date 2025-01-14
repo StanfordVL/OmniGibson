@@ -294,8 +294,6 @@ class KnowledgeBaseProcessor():
                 synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
                 synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
                 synset_used_predicates = object_used_predicates(combined_conds, synset_name)
-                if not synset_used_predicates:
-                    self.debug_print(f"Synset {synset_name} is not used in any predicate in {task_name}")
                 for predicate in synset_used_predicates:
                     pred_obj, _ = Predicate.get_or_create(name=predicate)
                     if pred_obj not in synset.used_in_predicates:
@@ -310,15 +308,19 @@ class KnowledgeBaseProcessor():
                     if "future" not in initial_preds:
                         self.debug_print(f"Synset {synset_name} is not used as future in initial in {task_name}")
                     if "real" in initial_preds:
-                        self.debug_print(f"Synset {synset_name} is used as real in initial in {task_name}")
+                        raise ValueError(f"Synset {synset_name} is used as real in initial in {task_name}")
 
                     goal_preds = object_used_predicates(goal_conds, synset_name)
                     if "real" not in goal_preds:
                         self.debug_print(f"Synset {synset_name} is not used as real in goal in {task_name}")
                     if "future" in goal_preds:
-                        self.debug_print(f"Synset {synset_name} is used as future in goal in {task_name}")
+                        raise ValueError(f"Synset {synset_name} is used as future in goal in {task_name}")
 
-                    task.future_synsets.add(synset)
+                    # We only add it if it's used in the initial predicates. Sometimes things will be real()
+                    # in the goal but they will already exist in the initial, and the real is just being
+                    # used to say that the object is not entirely used up during the transition.
+                    if "future" in initial_preds:
+                        task.future_synsets.add(synset)
 
             # generate room requirements for task
             room_synset_requirements = defaultdict(Counter)  # room[synset] = count
@@ -340,7 +342,8 @@ class KnowledgeBaseProcessor():
         json_paths = glob.glob(str(GENERATED_DATA_DIR / "transition_map/tm_jsons/*.json"))
         transitions = []
         for jp in json_paths:
-            if "washer" in jp:
+            # This file is in a different format and not relevant.
+            if jp.endswith("washer.json"):
                 continue
             with open(jp) as f:
                 transitions.extend(json.load(f))
@@ -349,11 +352,22 @@ class KnowledgeBaseProcessor():
         for transition_data in self.tqdm(transitions):
             rule_name = transition_data["rule_name"]
             transition = TransitionRule.create(name=rule_name)
+
+            # Add the default inputs and outputs
             inputs = set(transition_data["input_synsets"].keys())
-            assert inputs, f"Transition {transition.name} has no inputs!"
             outputs = set(transition_data["output_synsets"].keys())
+
+            # Add the washer rules' washed item both to inputs and outputs
+            if "washed_item" in transition_data:
+                washed_items = set(transition_data["washed_item"].keys())
+                inputs.update(washed_items)
+                outputs.update(washed_items)
+
+            assert inputs, f"Transition {transition.name} has no inputs!"
             assert outputs, f"Transition {transition.name} has no outputs!"
-            assert inputs & outputs == set(), f"Inputs and outputs of {transition.name} overlap!"
+            # TODO: With washer rules, this is no longer true. Check if this is important
+            # assert inputs & outputs == set(), f"Inputs and outputs of {transition.name} overlap!"
+
             for synset_name in inputs:
                 synset = Synset.get(name=synset_name)
                 transition.input_synsets.add(synset)
