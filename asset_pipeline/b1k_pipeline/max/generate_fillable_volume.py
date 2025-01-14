@@ -15,7 +15,7 @@ sys.path.append(r"D:\ig_pipeline")
 
 from b1k_pipeline.utils import parse_name
 
-REQUIRE_ADDITIONAL_BASE_POINTS = True
+REQUIRE_ADDITIONAL_BASE_POINTS = False
 
 def anorm(x, axis=None, keepdims=False):
     """Compute L2 norms alogn specified axes."""

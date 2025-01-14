@@ -15,7 +15,7 @@ sys.path.append(r"D:\ig_pipeline")
 from b1k_pipeline.utils import parse_name
 from b1k_pipeline.max.collision_vertex_reduction import reduce_mesh
 
-HULL_COUNTS = [4, 8, 16, 32]
+HULL_COUNTS = [8]
 VHACD_EXECUTABLE = r"D:\ig_pipeline\b1k_pipeline\vhacd2.exe"
 
 def run_coacd(input_mesh, hull_count):
@@ -49,7 +49,7 @@ def run_vhacd(input_mesh, hull_count):
 
 USE_METHODS = {
     # "coacd": run_coacd,  # DISABLED BECAUSE TOO SLOW
-    "vhacd": run_vhacd,
+    # "vhacd": run_vhacd,
 }
 
 
