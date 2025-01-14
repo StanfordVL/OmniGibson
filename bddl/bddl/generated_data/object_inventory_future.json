@@ -2716,6 +2716,7 @@
         "rubber_glove-feadfc": "objects/legacy_batch-08",
         "rubber_glove-hsaxtc": "objects/legacy_batch-08",
         "rubber_glove-leuiso": "objects/legacy_batch-08",
+        "rubber_glove-plffer": "objects/legacy_batch-08",
         "rubber_glove-rlzvry": "objects/legacy_batch-08",
         "shower_stall-aktzdp": "objects/legacy_batch-08",
         "shower_stall-atiuco": "objects/legacy_batch-08",
@@ -2746,8 +2747,6 @@
         "carton-sxlklf": "objects/legacy_batch-09",
         "chili-pbbkpz": "objects/legacy_batch-09",
         "chili-xhbpqh": "objects/legacy_batch-09",
-        "crewneck_sweater-ekcjci": "objects/legacy_batch-09",
-        "crewneck_sweater-eknmzl": "objects/legacy_batch-09",
         "folder-piezyg": "objects/legacy_batch-09",
         "folder-poqpux": "objects/legacy_batch-09",
         "half_bagel-gywbkh": "objects/legacy_batch-09",
@@ -2774,8 +2773,6 @@
         "hard_drive-ubjbsm": "objects/legacy_batch-09",
         "highchair-eteuuf": "objects/legacy_batch-09",
         "highchair-pahqnp": "objects/legacy_batch-09",
-        "jacket-brebdk": "objects/legacy_batch-09",
-        "jacket-kiiium": "objects/legacy_batch-09",
         "jeans-nmvvil": "objects/legacy_batch-09",
         "jeans-pvzxyp": "objects/legacy_batch-09",
         "kitchen_analog_scale-lpjpez": "objects/legacy_batch-09",
@@ -2915,7 +2912,6 @@
         "dress-gtghon": "objects/legacy_batch-10",
         "drill-nzgmza": "objects/legacy_batch-10",
         "drumstick-lkvzmj": "objects/legacy_batch-10",
-        "duffel_bag-ozykxk": "objects/legacy_batch-10",
         "dustpan-espzwv": "objects/legacy_batch-10",
         "eggplant-jniuxf": "objects/legacy_batch-10",
         "envelope-urcigc": "objects/legacy_batch-10",
@@ -3081,8 +3077,6 @@
         "scraper-icqmje": "objects/legacy_batch-11",
         "scrub_brush-hsejyi": "objects/legacy_batch-11",
         "shoulder_bag-mcualj": "objects/legacy_batch-11",
-        "sock-laksie": "objects/legacy_batch-11",
-        "sock-rhgweu": "objects/legacy_batch-11",
         "spatula-ktkigm": "objects/legacy_batch-11",
         "spinach-gojnss": "objects/legacy_batch-11",
         "spinach-lcmibz": "objects/legacy_batch-11",
@@ -18340,6 +18334,9 @@
         "rubber_glove-leuiso": [
             "objects/legacy_batch-08"
         ],
+        "rubber_glove-plffer": [
+            "objects/legacy_batch-08"
+        ],
         "rubber_glove-rlzvry": [
             "objects/legacy_batch-08"
         ],
@@ -18466,12 +18463,6 @@
         "chili-xhbpqh": [
             "objects/legacy_batch-09"
         ],
-        "crewneck_sweater-ekcjci": [
-            "objects/legacy_batch-09"
-        ],
-        "crewneck_sweater-eknmzl": [
-            "objects/legacy_batch-09"
-        ],
         "folder-piezyg": [
             "objects/legacy_batch-09"
         ],
@@ -18548,12 +18539,6 @@
             "objects/legacy_batch-09"
         ],
         "highchair-pahqnp": [
-            "objects/legacy_batch-09"
-        ],
-        "jacket-brebdk": [
-            "objects/legacy_batch-09"
-        ],
-        "jacket-kiiium": [
             "objects/legacy_batch-09"
         ],
         "jeans-nmvvil": [
@@ -19015,9 +19000,6 @@
             "objects/legacy_batch-10"
         ],
         "drumstick-lkvzmj": [
-            "objects/legacy_batch-10"
-        ],
-        "duffel_bag-ozykxk": [
             "objects/legacy_batch-10"
         ],
         "dustpan-espzwv": [
@@ -19532,12 +19514,6 @@
             "objects/legacy_batch-11"
         ],
         "shoulder_bag-mcualj": [
-            "objects/legacy_batch-11"
-        ],
-        "sock-laksie": [
-            "objects/legacy_batch-11"
-        ],
-        "sock-rhgweu": [
             "objects/legacy_batch-11"
         ],
         "spatula-ktkigm": [
@@ -39566,7 +39542,8 @@
             "collision"
         ],
         "desk_organizer-yvhjht": [
-            "collision"
+            "collision",
+            "fillable"
         ],
         "dice-rcgtzz": [
             "collision"
@@ -41155,6 +41132,7 @@
         ],
         "shelf-svhjxd": [
             "collision",
+            "fillable",
             "joint"
         ],
         "sliced_chocolate_cake-unwjgp": [
@@ -46525,6 +46503,7 @@
         ],
         "oven-hxorzh": [
             "collision",
+            "fillable",
             "joint",
             "togglebutton"
         ],
@@ -46548,6 +46527,7 @@
         ],
         "oven-nkxhvf": [
             "collision",
+            "fillable",
             "joint",
             "togglebutton"
         ],
@@ -46583,6 +46563,7 @@
         ],
         "oven-wuinhm": [
             "collision",
+            "fillable",
             "joint",
             "togglebutton"
         ],
@@ -46640,7 +46621,8 @@
             "openfillable"
         ],
         "shelf-ptxdid": [
-            "collision"
+            "collision",
+            "fillable"
         ],
         "shelf-tahafx": [
             "collision",
@@ -46958,14 +46940,15 @@
         ],
         "furniture_sink-xiybkb": [
             "collision",
+            "fillable",
             "fluidsink",
             "fluidsource",
             "joint",
-            "openfillable",
             "togglebutton"
         ],
         "furniture_sink-zexzrc": [
             "collision",
+            "fillable",
             "fluidsink",
             "fluidsource",
             "togglebutton"
@@ -47008,12 +46991,14 @@
         ],
         "multi_station_furniture_sink-ejooms": [
             "collision",
+            "fillable",
             "fluidsink",
             "fluidsource",
             "togglebutton"
         ],
         "multi_station_furniture_sink-yfaufu": [
             "collision",
+            "fillable",
             "fluidsink",
             "fluidsource",
             "togglebutton"
@@ -47204,6 +47189,7 @@
         ],
         "wall_mounted_sink-vbquye": [
             "collision",
+            "fillable",
             "fluidsink",
             "fluidsource",
             "togglebutton"
@@ -47848,6 +47834,9 @@
         "rubber_glove-leuiso": [
             "collision"
         ],
+        "rubber_glove-plffer": [
+            "collision"
+        ],
         "rubber_glove-rlzvry": [
             "collision"
         ],
@@ -47963,12 +47952,6 @@
             "collision",
             "subpart"
         ],
-        "crewneck_sweater-ekcjci": [
-            "collision"
-        ],
-        "crewneck_sweater-eknmzl": [
-            "collision"
-        ],
         "folder-piezyg": [
             "collision",
             "fillable"
@@ -48026,6 +48009,9 @@
         "half_radish-kyujnh": [
             "collision"
         ],
+        "half_radish-zjeukz": [
+            "collision"
+        ],
         "half_strawberry-pgguhi": [
             "collision"
         ],
@@ -48045,12 +48031,6 @@
             "collision"
         ],
         "highchair-pahqnp": [
-            "collision"
-        ],
-        "jacket-brebdk": [
-            "collision"
-        ],
-        "jacket-kiiium": [
             "collision"
         ],
         "jeans-nmvvil": [
@@ -48132,7 +48112,8 @@
             "subpart"
         ],
         "pencil_case-acikzo": [
-            "collision"
+            "collision",
+            "fillable"
         ],
         "pencil_case-otcmih": [
             "collision",
@@ -48537,9 +48518,6 @@
             "collision"
         ],
         "drumstick-lkvzmj": [
-            "collision"
-        ],
-        "duffel_bag-ozykxk": [
             "collision"
         ],
         "dustpan-espzwv": [
@@ -49078,12 +49056,6 @@
             "particleremover"
         ],
         "shoulder_bag-mcualj": [
-            "collision"
-        ],
-        "sock-laksie": [
-            "collision"
-        ],
-        "sock-rhgweu": [
             "collision"
         ],
         "spatula-ktkigm": [
