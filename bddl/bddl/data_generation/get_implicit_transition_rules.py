@@ -256,6 +256,9 @@ def generate_washer_particleremover_rules(props_to_syns):
     {
         "rule_name": <particleRemover>-washer-saturate-cover,
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1,
+        },
         "washed_item": {
             <particleRemover>: 1,
         },
@@ -273,6 +276,9 @@ def generate_washer_particleremover_rules(props_to_syns):
         rule = {
             "rule_name": f"{particleRemover}-washer-saturate-cover",
             "input_synsets": {},
+            "machine": {
+                "washer.n.03": 1,
+            },
             "washed_item": {
                 particleRemover: 1
             },
@@ -293,6 +299,9 @@ def generate_washer_nonparticleremover_rules(props_to_syns):
     {
         "rule_name": <nonSubstance,non-particleRemover>-washer-cover,
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1,
+        },
         "washed_item": {
             <non-particleRemover,nonSubstance>: 1
         },
@@ -313,6 +322,9 @@ def generate_washer_nonparticleremover_rules(props_to_syns):
         rule = {
             "rule_name": f"{syn}-washer-cover",
             "input_synsets": {},
+            "machine": {
+                "washer.n.03": 1,
+            },
             "washed_item": {
                 syn: 1
             },
