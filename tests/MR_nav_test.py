@@ -16,7 +16,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     # Load the config
     # config_filename = os.path.join(og.example_config_path, "turtlebot_multi_nav.yaml")
-    config_filename = os.path.join(og.example_config_path, "turtlebot_nav.yaml")
+    config_filename = os.path.join(og.example_config_path, "hetero_multi_robots.yaml")
     config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
     # check if we want to quick load or full load the scene
@@ -56,20 +56,20 @@ def main(random_selection=False, headless=False, short_exec=False):
             states, rewards, terminated, truncated, infos = env.step(actions)
             # return observations, rewards, dones, infos
             # print(f"states: {states}")
-            robot_state = states[robot_name]
-            print(f"states[robot_name]: {robot_state}")
+            # robot_state = states[robot_name]
+            # print(f"states[robot_name]: {robot_state}")
 
             # Get the format of the state (dict[Any, Any])
             # print(f"states: {states}")
-            print(f"states.keys: {robot_state.keys()}")
-            print(f"states.values: {robot_state.values()}")
-            print(f"states.items: {states.items()}")
+            # print(f"states.keys: {robot_state.keys()}")
+            # print(f"states.values: {robot_state.values()}")
+            # print(f"states.items: {states.items()}")
 
-            camera_key = f"{robot_name}:eyes:Camera:0"
+            # camera_key = f"{robot_name}:eyes:Camera:0"
 
-            camera_output = robot_state[camera_key]
-            print(f"camera output: {camera_output}")
-            print(f"camera: {camera_output['rgb'].shape}")
+            # camera_output = robot_state[camera_key]
+            # print(f"camera output: {camera_output}")
+            # print(f"camera: {camera_output['rgb'].shape}")
 
             # print(f"state_shape: {states[robots[0].name].shape}")
 

@@ -28,63 +28,87 @@ scene:
   include_robots: true
 
 robots:
-  - name: turtlebot1
-    type: Turtlebot
-    obs_modalities: [scan, rgb, depth]
+  # - name: turtlebot1
+  #   type: Turtlebot
+  #   obs_modalities: [rgb]
+  #   scale: 1.0
+  #   self_collision: false
+  #   action_normalize: true
+  #   action_type: continuous
+  #   initial_pos: [0.0, 0.0, 0.0]
+  #   initial_quat: [0.0, 0.0, 0.0, 1.0]
+  #   sensor_config:
+  #     VisionSensor:
+  #       sensor_kwargs:
+  #         image_height: 128
+  #         image_width: 128
+  #     # ScanSensor:
+  #     #   sensor_kwargs:
+  #     #     min_range: 0.05
+  #     #     max_range: 10.0
+  #   controller_config:
+  #     base:
+  #       name: DifferentialDriveController
+
+  - name: Locobot1
+    type: Locobot
+    obs_modalities: [rgb]
     scale: 1.0
     self_collision: false
     action_normalize: true
     action_type: continuous
-    initial_pos: [0.0, 0.0, 0.0]
-    initial_quat: [0.0, 0.0, 0.0, 1.0]
+    position: [0.0, 0.0, 0.0]
+    orientation: [0.0, 0.0, 0.0, 1.0]
+    # initial_pos: [0.0, 0.0, 0.0]
+    # initial_quat: [0.0, 0.0, 0.0, 1.0]
     sensor_config:
       VisionSensor:
         sensor_kwargs:
           image_height: 128
           image_width: 128
-      ScanSensor:
-        sensor_kwargs:
-          min_range: 0.05
-          max_range: 10.0
+      # ScanSensor:
+      #   sensor_kwargs:
+      #     min_range: 0.05
+      #     max_range: 10.0
     controller_config:
       base:
         name: DifferentialDriveController
 
-  - name: Fetch1
-  - type: Fetch
-    position: [0, 0, 0]
-    orientation: [0, 0, 0, 1]
-    obs_modalities: [scan, rgb, depth]
-    scale: 1.0
-    self_collision: false
-    action_normalize: true
-    action_type: continuous
-    grasping_mode: physical
-    rigid_trunk: false
-    default_trunk_offset: 0.365
-    default_arm_pose: diagonal30
-    reset_joint_pos: tuck
-    sensor_config:
-      VisionSensor:
-        sensor_kwargs:
-          image_height: 128
-          image_width: 128
-      ScanSensor:
-        sensor_kwargs:
-          min_range: 0.05
-          max_range: 10.0
-    controller_config:
-      base:
-        name: DifferentialDriveController
-      arm_0:
-        name: InverseKinematicsController
-        kv: 2.0
-      gripper_0:
-        name: MultiFingerGripperController
-        mode: binary
-      camera:
-        name: JointController
-        use_delta_commands: False
+  # - name: Fetch1
+  #   type: Fetch
+  #   position: [0, 0, 0]
+  #   orientation: [0, 0, 0, 1]
+  #   obs_modalities: [scan, rgb, depth]
+  #   scale: 1.0
+  #   self_collision: false
+  #   action_normalize: true
+  #   action_type: continuous
+  #   grasping_mode: physical
+  #   rigid_trunk: false
+  #   default_trunk_offset: 0.365
+  #   default_arm_pose: diagonal30
+  #   reset_joint_pos: tuck
+  #   sensor_config:
+  #     VisionSensor:
+  #       sensor_kwargs:
+  #         image_height: 128
+  #         image_width: 128
+  #     ScanSensor:
+  #       sensor_kwargs:
+  #         min_range: 0.05
+  #         max_range: 10.0
+  #   controller_config:
+  #     base:
+  #       name: DifferentialDriveController
+  #     arm_0:
+  #       name: InverseKinematicsController
+  #       kv: 2.0
+  #     gripper_0:
+  #       name: MultiFingerGripperController
+  #       mode: binary
+  #     camera:
+  #       name: JointController
+  #       use_delta_commands: False
 
   # - name: turtlebot2
   #   type: Turtlebot
