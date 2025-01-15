@@ -29,7 +29,7 @@ scene:
 
 robots:
   - type: Turtlebot
-    obs_modalities: [scan, rgb, depth]
+    obs_modalities: [scan, rgb, depth, proprio]
     scale: 1.0
     self_collision: false
     action_normalize: true
@@ -46,6 +46,7 @@ robots:
     controller_config:
       base:
         name: DifferentialDriveController
+    proprio_obs: [robot_pos, robot_2d_ori]
 
 objects: []
 
