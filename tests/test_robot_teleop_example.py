@@ -67,7 +67,7 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + (main.__doc__ or "") + "*" * 80)
 
     # Choose scene to load
-    scene_model = "Rs_int"
+    scene_model = "Rs_int"  # "Rs_int"
     if not quickstart:
         scene_model = choose_from_options(options=SCENES, name="scene", random_selection=random_selection)
 
@@ -173,13 +173,27 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser(description="Teleoperate a robot in a BEHAVIOR scene.")
+    # parser.add_argument(
+    #     "--quickstart",
+    #     action="store_true",
+    #     help="Whether the example should be loaded with default settings for a quick start.",
+    # )
 
+    # Add quickstart argument with a default value
     parser.add_argument(
         "--quickstart",
         action="store_true",
+        default=False,  # Default value if the argument is not passed
         help="Whether the example should be loaded with default settings for a quick start.",
     )
 
+    import sys
+
+    # Print the arguments received
+    print(f"- Arguments received: {sys.argv}")
+
+    # Parse the arguments
     args: Namespace = parser.parse_args()
 
+    # Call the main function with the parsed quickstart argument
     main(quickstart=args.quickstart)
