@@ -54,35 +54,39 @@ def main(random_selection=False, headless=False, short_exec=False):
         for i in range(100):
             actions = {robot.name: robot.action_space.sample() for robot in robots}
 
+            print(f"actions: {actions}")
+            actions = {robot_name: np.array([0.2, 0.0], dtype=np.float32)}
+            print(f"actions : {actions}")
+
             # states: dict
             states, rewards, terminated, truncated, infos = env.step(actions)
 
-            print(f"states: {states}")
-            print(f"states.keys: {states.keys()}")
+            # print(f"states: {states}")
+            # print(f"states.keys: {states.keys()}")
 
             robot_state = states[robot_name]
-            print(f"states[robot_name]: {robot_state}")
+            # print(f"states[robot_name]: {robot_state}")
 
             # Get the format of the state (dict[Any, Any])
             # print(f"states: {states}")
-            print(f"states.keys: {robot_state.keys()}")
+            # print(f"states.keys: {robot_state.keys()}")
             # print(f"states.values: {robot_state.values()}")
-            print(f"states.items: {states.items()}")
+            # print(f"states.items: {states.items()}")
 
             camera_key = f"{robot_name}:eyes:Camera:0"
 
             camera_output = robot_state[camera_key]
-            print(f"camera output: {camera_output}")
-            print(f"camera: {camera_output['rgb'].shape}")
+            # print(f"camera output: {camera_output}")
+            # print(f"camera: {camera_output['rgb'].shape}")
 
             #  Print position and orientation of the robot (x,y,z, Yaw)
             proprio = robot_state["proprio"]
-            print(f"proprio: {proprio}")
+            # print(f"proprio: {proprio}")
             robot_pos_2d = proprio[:2]
             robot_yaw = proprio[3]
 
-            print(f"robot_pos_2d: {robot_pos_2d}")
-            print(f"robot_yaw: {np.rad2deg(robot_yaw):.2f}")
+            # print(f"robot_pos_2d: {robot_pos_2d}")
+            # print(f"robot_yaw: {np.rad2deg(robot_yaw):.2f}")
 
             # print(f"state_shape: {states[robots[0].name].shape}")
 
