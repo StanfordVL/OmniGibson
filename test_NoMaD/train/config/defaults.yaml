@@ -1,0 +1,66 @@
+# defaults for training
+project_name: vint
+run_name: vint
+
+# training setup
+use_wandb: True # set to false if you don't want to log to wandb
+train: True
+batch_size: 400
+eval_batch_size: 400
+epochs: 30
+gpu_ids: [0] 
+num_workers: 4
+lr: 5e-4
+optimizer: adam
+seed: 0
+clipping: False
+train_subset: 1.
+
+# model params
+model_type: gnm
+obs_encoding_size: 1024
+goal_encoding_size: 1024
+
+# normalization for the action space
+normalize: True
+
+# context
+context_type: temporal
+context_size: 5
+
+# tradeoff between action and distance prediction loss
+alpha: 0.5
+
+# tradeoff between task loss and kld
+beta: 0.1
+
+obs_type: image
+goal_type: image
+scheduler: null
+
+# distance bounds for distance and action and distance predictions 
+distance:
+  min_dist_cat: 0
+  max_dist_cat: 20
+action:
+  min_dist_cat: 2
+  max_dist_cat: 10
+close_far_threshold: 10 # distance threshold used to seperate the close and the far  subgoals that are sampled per datapoint
+
+# action output params
+len_traj_pred: 5
+learn_angle: True
+
+# dataset specific parameters
+image_size: [85, 64] # width, height
+
+# logging stuff
+## =0 turns off
+print_log_freq: 100 # in iterations
+image_log_freq: 1000 # in iterations
+num_images_log: 8 # number of images to log in a logging iteration
+pairwise_test_freq: 10 # in epochs
+eval_fraction: 0.25 # fraction of the dataset to use for evaluation
+wandb_log_freq: 10 # in iterations
+eval_freq: 1 # in epochs
+
