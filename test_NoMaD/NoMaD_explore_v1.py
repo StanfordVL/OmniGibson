@@ -17,7 +17,7 @@ from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 ##############################################################################
 # (예) "msg_to_pil" 대체: Omnigibson RGB array -> PIL 이미지로 변환 예시 함수
 ##############################################################################
-def array_to_pil(rgb_array: np.ndarray) -> PILImage:
+def array_to_pil(rgb_array: np.ndarray) -> PILImage.Image:
     # rgb_array: (H, W, 3) uint8 (Omnigibson 카메라 출력)
     return PILImage.fromarray(rgb_array)
 
