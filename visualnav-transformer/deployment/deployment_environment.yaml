@@ -1,0 +1,18 @@
+name: vint_deployment
+channels:
+- pytorch
+- conda-forge
+dependencies:
+- python=3.8.5
+- cudatoolkit=11.
+- torchvision
+- numpy
+- matplotlib
+- pyyaml
+- rospkg
+- pip:
+  - torch
+  - torchvision
+  - efficientnet_pytorch
+  - warmup_scheduler
+  - diffusers==0.11.1

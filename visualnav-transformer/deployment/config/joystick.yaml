@@ -1,0 +1,7 @@
+# joystick parameters for src/gnm_locobot.launch
+dev: "/dev/input/js0" # change this to your joystick device path
+
+# joystick parameters for src/joy_teleop.py
+deadman_switch: 5 # button index
+lin_vel_button: 4
+ang_vel_button: 0 

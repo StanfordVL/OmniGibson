@@ -1,0 +1,38 @@
+# # Velocity command sources
+# vel_sources:
+#   # Teleoperation commands
+#   teleop:
+#     topic: /cmd_vel_mux/input/teleop
+#     timeout: 0.6
+#     priority: 100
+
+#   # Move base commands
+#   move_base:
+#     topic: /cmd_vel_mux/input/navi
+#     timeout: 0.6
+#     priority: 90
+
+# # Mux parameters
+# yaml_cfg_file: ""
+# allow_unsafe_topics: false
+# cmd_vel_timeout: 0.25
+# publish_topic: /mobile_base/commands/velocity
+
+
+subscribers:
+  - name:        "gnm vels"
+    topic:       "/cmd_vel_mux/input/navi"
+    timeout:     0.1
+    priority:    0
+    short_desc:  "The default cmd_vel, controllers unaware that we are multiplexing cmd_vel should come here"
+  - name:        "teleop"
+    topic:       "/cmd_vel_mux/input/teleop"
+    timeout:     0.5
+    priority:    2
+    short_desc:  "Navigation stack controller"
+  - name:       "gnm recovery"
+    topic:       "/cmd_vel_mux/input/recovery"
+    timeout:     0.1
+    priority:    1
+publisher:       "/mobile_base/commands/velocity"
+       
