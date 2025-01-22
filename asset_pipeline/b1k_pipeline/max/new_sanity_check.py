@@ -1014,9 +1014,9 @@ class SanityCheck:
             instance_zero_relative_transform = links_relative_transforms["0"].get(
                 link_name
             )
-            inverse_instance_zero_relative_transform = rt.inverse(
-                instance_zero_relative_transform
-            )
+            instance_zero_position = np.array(instance_zero_relative_transform.position)
+            instance_zero_rotation = quat2arr(instance_zero_relative_transform.rotation)
+            instance_zero_scale = np.array(instance_zero_relative_transform.scale)
 
             # For each instance, check that the relative transform is the same
             for instance_id, link_transforms in links_relative_transforms.items():
@@ -1032,28 +1032,22 @@ class SanityCheck:
 
                 # Check that the relative transform is the same
                 relative_transform = link_transforms[link_name]
-                transform_difference = (
-                    relative_transform * inverse_instance_zero_relative_transform
-                )
-
-                # Decompose the transform difference into position, rotation and scale
-                scale_difference = np.array(transform_difference.scale)
-                position_difference = np.array(transform_difference.position)
-                rotation_difference = Rotation.from_quat(
-                    quat2arr(transform_difference.rotation)
-                )
+                this_position = np.array(relative_transform.position)
+                this_rotation = quat2arr(relative_transform.rotation)
+                this_scale = np.array(relative_transform.scale)              
+                rotation_difference = (Rotation.from_quat(instance_zero_rotation).inv() * Rotation.from_quat(this_rotation)).magnitude()
 
                 self.expect(
-                    np.allclose(scale_difference, 1, atol=0.02),
-                    f"{model_id} link {link_name} has different scale in instance {instance_id} compared to instance 0. Scale difference: {scale_difference}.",
+                    np.allclose(this_scale, instance_zero_scale, atol=0.02),
+                    f"{model_id} link {link_name} has different scale in instance {instance_id} compared to instance 0. Base has {instance_zero_scale}, instance has {this_scale}.",
                 )
                 self.expect(
-                    np.allclose(position_difference, 0, atol=1),  # Up to 1mm is fine
-                    f"{model_id} link {link_name} has different position in instance {instance_id} compared to instance 0. Position difference: {position_difference}.",
+                    np.allclose(this_position, instance_zero_position, atol=1),  # Up to 1mm is fine
+                    f"{model_id} link {link_name} has different position in instance {instance_id} compared to instance 0. Base has {instance_zero_position}, instance has {relative_transform.position}.",
                 )
                 self.expect(
-                    np.isclose(rotation_difference.magnitude(), 0, atol=np.deg2rad(1)),
-                    f"{model_id} link {link_name} has different rotation in instance {instance_id} compared to instance 0. Rotation difference: {rotation_difference.magnitude()}.",
+                    np.isclose(rotation_difference, 0, atol=np.deg2rad(1)),
+                    f"{model_id} link {link_name} has different rotation in instance {instance_id} compared to instance 0. Rotation difference: {rotation_difference} between {instance_zero_rotation} and {this_rotation}.",
                 )
 
         # Additionally, if the model group has more than one link, check warn if the base links of different instances
@@ -1144,6 +1138,8 @@ class SanityCheck:
         # of links, and that "base_link"  is included.
         grouped_by_model = non_meta_polies.groupby("name_model_id")
         grouped_by_model.apply(self.validate_model_group)
+
+        return self.errors
 
         # Run the single-object validation checks.
         non_meta_polies.apply(self.validate_object, axis="columns")
