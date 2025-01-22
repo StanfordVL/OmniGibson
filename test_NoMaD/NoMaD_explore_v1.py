@@ -19,10 +19,20 @@ from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 
 
 ##############################################################################
-# (예) "msg_to_pil" 대체: Omnigibson RGB array -> PIL 이미지로 변환 예시 함수
+# "msg_to_pil" 대체: Omnigibson에서 받은 torch.Tensor (H, W, 4) -> (H, W, 3) -> PIL.Image
 ##############################################################################
-def array_to_pil(rgb_array: np.ndarray) -> PILImage.Image:
-    # rgb_array: (H, W, 3) uint8 (Omnigibson 카메라 출력)
+def array_to_pil(rgb_tensor: torch.Tensor) -> PILImage.Image:
+    """
+    rgb_tensor: shape (H, W, 4) 혹은 (H, W, 3), dtype은 float32 또는 uint8 등
+    """
+    # 만약 (H, W, 4)라면 마지막 채널(Alpha) 제거
+    if rgb_tensor.shape[-1] == 4:
+        rgb_tensor = rgb_tensor[..., :3]
+
+    # GPU 상에 있을 수 있으니 cpu로 이동, PIL 변환 위해 uint8로 변환
+    rgb_array = rgb_tensor.cpu().numpy().astype(np.uint8)
+
+    # (H, W, 3)의 numpy 배열을 PIL로 변환
     return PILImage.fromarray(rgb_array)
 
 
@@ -190,9 +200,12 @@ def main(random_selection=False, headless=False, short_exec=False):
                 # 첫 단계에서는 아무것도 안 하는 액션
                 zero_action = np.array([0.0, 0.0], dtype=np.float32)
                 states, rewards, terminated, truncated, infos = env.step({robot_name: zero_action})
+            else:
+                # 이후에는 이전 단계의 결과로부터 카메라 이미지를 얻음
+                states, rewards, terminated, truncated, infos = env.step({robot_name: action})
 
             # 이제 robot_state에서 카메라 이미지 획득
-            robot_state = env.last_state[robot_name]  # 혹은 states[robot_name]
+            robot_state = states[robot_name]  # 혹은 states[robot_name]
             camera_key = f"{robot_name}:eyes:Camera:0"
             camera_output = robot_state[camera_key]  # dict with "rgb", "seg", "depth" 등
             rgb_array = camera_output["rgb"]  # (H, W, 3) in uint8

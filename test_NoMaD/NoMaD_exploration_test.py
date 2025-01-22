@@ -76,8 +76,8 @@ def main(random_selection=False, headless=False, short_exec=False):
             camera_key = f"{robot_name}:eyes:Camera:0"
 
             camera_output = robot_state[camera_key]
-            # print(f"camera output: {camera_output}")
-            # print(f"camera: {camera_output['rgb'].shape}")
+            print(f"camera output: {camera_output}")
+            print(f"camera: {camera_output['rgb'].shape}")
 
             #  Print position and orientation of the robot (x,y,z, Yaw)
             proprio = robot_state["proprio"]
