@@ -3,9 +3,12 @@ import yaml
 import numpy as np
 import torch
 import omnigibson as og
-from omnigibson.utils.ui_utils import choose_from_options
+
+# from omnigibson.utils.ui_utils import choose_from_options
 from PIL import Image as PILImage
 from deployment.src.utils import to_numpy, transform_images, load_model
+from train.vint_train.training.train_utils import get_action
+
 
 # Diffusers
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
@@ -31,7 +34,7 @@ def sample_diffusion_action(
     obs_images,  # (context_size + 1)개의 PIL 이미지
     model_params,
     device,
-    noise_scheduler,
+    noise_scheduler: DDPMScheduler,
     args,
 ):
     """
@@ -93,21 +96,36 @@ def main(random_selection=False, headless=False, short_exec=False):
     """
     Omnigibson 환경에서 Diffusion 모델을 이용해 action을 샘플링하고 로봇을 이동시키는 예시
     """
+
+    model_name = "nomad"  # 사용할 모델 이름
+
     og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + (main.__doc__ or "") + "*" * 80)
 
     # (A) 모델 설정 로드 (이전 ROS 코드와 동일하게)
     # 예: ../config/models.yaml 파일에서 특정 모델을 골라 그 안의 config_path, ckpt_path를 읽어온다고 가정
-    MODEL_CONFIG_PATH = "../config/models.yaml"
+
+    print()
+    work_dir = os.getcwd()
+    print(f"work_dir = {work_dir}")
+    print()
+
+    # C:\Users\Joonkyung\Desktop\python_ws\OmniGibson\test_NoMaD\train\config\nomad.yaml
+    # test_NoMaD\train\config\vint.yaml
+
+    MODEL_DEPLOY_PATH = f"{work_dir}\\test_NoMaD\\deployment"  # Path to deployment for Windows
+    MODEL_TRAIN_PATH = f"{work_dir}\\test_NoMaD\\train"  # Path to train for Windows
+    MODEL_CONFIG_PATH = f"{MODEL_DEPLOY_PATH}\\config\\models.yaml"  # Path to model configs for Windows
+
     with open(MODEL_CONFIG_PATH, "r") as f:
         model_paths = yaml.safe_load(f)
 
-    # 가령 'nomad'라는 모델을 쓰기로 가정
-    model_name = "nomad"
-    model_config_path = model_paths[model_name]["config_path"]
+    # model_config_path = model_paths[model_name]["config_path"]
+    model_config_path = f"{MODEL_TRAIN_PATH}\\config\\nomad.yaml"  # Path to model config for Windows
     with open(model_config_path, "r") as f:
         model_params = yaml.safe_load(f)
 
     ckpth_path = model_paths[model_name]["ckpt_path"]
+    ckpth_path = f"{MODEL_DEPLOY_PATH}\\model_weights\\nomad.pth"  # Path to model checkpoint for Windows
 
     # (B) 모델 로드
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")

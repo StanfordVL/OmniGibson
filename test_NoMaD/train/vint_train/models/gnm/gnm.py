@@ -3,8 +3,8 @@ import torch.nn as nn
 import torch.nn.functional as F
 
 from typing import List, Dict, Optional, Tuple
-from vint_train.models.gnm.modified_mobilenetv2 import MobileNetEncoder
-from vint_train.models.base_model import BaseModel
+from train.vint_train.models.gnm.modified_mobilenetv2 import MobileNetEncoder
+from train.vint_train.models.base_model import BaseModel
 
 
 class GNM(BaseModel):
@@ -57,9 +57,7 @@ class GNM(BaseModel):
             nn.Linear(32, self.len_trajectory_pred * self.num_action_params),
         )
 
-    def forward(
-        self, obs_img: torch.tensor, goal_img: torch.tensor
-    ) -> Tuple[torch.Tensor, torch.Tensor]:
+    def forward(self, obs_img: torch.tensor, goal_img: torch.tensor) -> Tuple[torch.Tensor, torch.Tensor]:
         obs_encoding = self.obs_mobilenet(obs_img)
         obs_encoding = self.flatten(obs_encoding)
         obs_encoding = self.compress_observation(obs_encoding)
@@ -75,14 +73,8 @@ class GNM(BaseModel):
         action_pred = self.action_predictor(z)
 
         # augment outputs to match labels size-wise
-        action_pred = action_pred.reshape(
-            (action_pred.shape[0], self.len_trajectory_pred, self.num_action_params)
-        )
-        action_pred[:, :, :2] = torch.cumsum(
-            action_pred[:, :, :2], dim=1
-        )  # convert position deltas into waypoints
+        action_pred = action_pred.reshape((action_pred.shape[0], self.len_trajectory_pred, self.num_action_params))
+        action_pred[:, :, :2] = torch.cumsum(action_pred[:, :, :2], dim=1)  # convert position deltas into waypoints
         if self.learn_angle:
-            action_pred[:, :, 2:] = F.normalize(
-                action_pred[:, :, 2:].clone(), dim=-1
-            )  # normalize the angle prediction
+            action_pred[:, :, 2:] = F.normalize(action_pred[:, :, 2:].clone(), dim=-1)  # normalize the angle prediction
         return dist_pred, action_pred

@@ -3,8 +3,9 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import List, Dict, Optional, Tuple
 from efficientnet_pytorch import EfficientNet
-from vint_train.models.base_model import BaseModel
-from vint_train.models.vint.self_attention import MultiLayerDecoder
+from train.vint_train.models.base_model import BaseModel
+from train.vint_train.models.vint.self_attention import MultiLayerDecoder
+
 
 class ViNT(BaseModel):
     def __init__(
@@ -20,8 +21,8 @@ class ViNT(BaseModel):
         mha_ff_dim_factor: Optional[int] = 4,
     ) -> None:
         """
-        ViNT class: uses a Transformer-based architecture to encode (current and past) visual observations 
-        and goals using an EfficientNet CNN, and predicts temporal distance and normalized actions 
+        ViNT class: uses a Transformer-based architecture to encode (current and past) visual observations
+        and goals using an EfficientNet CNN, and predicts temporal distance and normalized actions
         in an embodiment-agnostic manner
         Args:
             context_size (int): how many previous observations to used for context
@@ -37,21 +38,21 @@ class ViNT(BaseModel):
 
         self.late_fusion = late_fusion
         if obs_encoder.split("-")[0] == "efficientnet":
-            self.obs_encoder = EfficientNet.from_name(obs_encoder, in_channels=3) # context
+            self.obs_encoder = EfficientNet.from_name(obs_encoder, in_channels=3)  # context
             self.num_obs_features = self.obs_encoder._fc.in_features
             if self.late_fusion:
                 self.goal_encoder = EfficientNet.from_name("efficientnet-b0", in_channels=3)
             else:
-                self.goal_encoder = EfficientNet.from_name("efficientnet-b0", in_channels=6) # obs+goal
+                self.goal_encoder = EfficientNet.from_name("efficientnet-b0", in_channels=6)  # obs+goal
             self.num_goal_features = self.goal_encoder._fc.in_features
         else:
             raise NotImplementedError
-        
+
         if self.num_obs_features != self.obs_encoding_size:
             self.compress_obs_enc = nn.Linear(self.num_obs_features, self.obs_encoding_size)
         else:
             self.compress_obs_enc = nn.Identity()
-        
+
         if self.num_goal_features != self.goal_encoding_size:
             self.compress_goal_enc = nn.Linear(self.num_goal_features, self.goal_encoding_size)
         else:
@@ -59,7 +60,7 @@ class ViNT(BaseModel):
 
         self.decoder = MultiLayerDecoder(
             embed_dim=self.obs_encoding_size,
-            seq_len=self.context_size+2,
+            seq_len=self.context_size + 2,
             output_layers=[256, 128, 64, 32],
             nhead=mha_num_attention_heads,
             num_layers=mha_num_attention_layers,
@@ -73,15 +74,16 @@ class ViNT(BaseModel):
         )
 
     def forward(
-        self, obs_img: torch.tensor, goal_img: torch.tensor,
+        self,
+        obs_img: torch.tensor,
+        goal_img: torch.tensor,
     ) -> Tuple[torch.Tensor, torch.Tensor]:
 
-        
         # get the fused observation and goal encoding
         if self.late_fusion:
             goal_encoding = self.goal_encoder.extract_features(goal_img)
         else:
-            obsgoal_img = torch.cat([obs_img[:, 3*self.context_size:, :, :], goal_img], dim=1)
+            obsgoal_img = torch.cat([obs_img[:, 3 * self.context_size :, :, :], goal_img], dim=1)
             goal_encoding = self.goal_encoder.extract_features(obsgoal_img)
         goal_encoding = self.goal_encoder._avg_pooling(goal_encoding)
         if self.goal_encoder._global_params.include_top:
@@ -93,7 +95,7 @@ class ViNT(BaseModel):
             goal_encoding = goal_encoding.unsqueeze(1)
         # currently, the size of goal_encoding is [batch_size, 1, self.goal_encoding_size]
         assert goal_encoding.shape[2] == self.goal_encoding_size
-        
+
         # split the observation into context based on the context size
         # image size is [batch_size, 3*self.context_size, H, W]
         obs_img = torch.split(obs_img, 3, dim=1)
@@ -114,7 +116,7 @@ class ViNT(BaseModel):
         obs_encoding = self.compress_obs_enc(obs_encoding)
         # currently, the size is [batch_size*(self.context_size + 1), self.obs_encoding_size]
         # reshape the obs_encoding to [context + 1, batch, encoding_size], note that the order is flipped
-        obs_encoding = obs_encoding.reshape((self.context_size+1, -1, self.obs_encoding_size))
+        obs_encoding = obs_encoding.reshape((self.context_size + 1, -1, self.obs_encoding_size))
         obs_encoding = torch.transpose(obs_encoding, 0, 1)
         # currently, the size is [batch_size, self.context_size+1, self.obs_encoding_size]
 
@@ -127,14 +129,8 @@ class ViNT(BaseModel):
         action_pred = self.action_predictor(final_repr)
 
         # augment outputs to match labels size-wise
-        action_pred = action_pred.reshape(
-            (action_pred.shape[0], self.len_trajectory_pred, self.num_action_params)
-        )
-        action_pred[:, :, :2] = torch.cumsum(
-            action_pred[:, :, :2], dim=1
-        )  # convert position deltas into waypoints
+        action_pred = action_pred.reshape((action_pred.shape[0], self.len_trajectory_pred, self.num_action_params))
+        action_pred[:, :, :2] = torch.cumsum(action_pred[:, :, :2], dim=1)  # convert position deltas into waypoints
         if self.learn_angle:
-            action_pred[:, :, 2:] = F.normalize(
-                action_pred[:, :, 2:].clone(), dim=-1
-            )  # normalize the angle prediction
+            action_pred[:, :, 2:] = F.normalize(action_pred[:, :, 2:].clone(), dim=-1)  # normalize the angle prediction
         return dist_pred, action_pred

@@ -3,15 +3,16 @@ import os
 import numpy as np
 import yaml
 from typing import List, Optional, Dict
-from prettytable import PrettyTable
+
+# from prettytable import PrettyTable
 import tqdm
 import itertools
 
-from vint_train.visualizing.action_utils import visualize_traj_pred, plot_trajs_and_points
-from vint_train.visualizing.distance_utils import visualize_dist_pred
-from vint_train.visualizing.visualize_utils import to_numpy, from_numpy
-from vint_train.training.logger import Logger
-from vint_train.data.data_utils import VISUALIZATION_IMAGE_SIZE
+from train.vint_train.visualizing.action_utils import visualize_traj_pred, plot_trajs_and_points
+from train.vint_train.visualizing.distance_utils import visualize_dist_pred
+from train.vint_train.visualizing.visualize_utils import to_numpy, from_numpy
+from train.vint_train.training.logger import Logger
+from train.vint_train.data.data_utils import VISUALIZATION_IMAGE_SIZE
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 from diffusers.training_utils import EMAModel
 
@@ -29,8 +30,9 @@ with open(os.path.join(os.path.dirname(__file__), "../data/data_config.yaml"), "
     data_config = yaml.safe_load(f)
 # POPULATE ACTION STATS
 ACTION_STATS = {}
-for key in data_config['action_stats']:
-    ACTION_STATS[key] = np.array(data_config['action_stats'][key])
+for key in data_config["action_stats"]:
+    ACTION_STATS[key] = np.array(data_config["action_stats"][key])
+
 
 # Train utils for ViNT and GNM
 def _compute_losses(
@@ -59,14 +61,16 @@ def _compute_losses(
     assert action_pred.shape == action_label.shape, f"{action_pred.shape} != {action_label.shape}"
     action_loss = action_reduce(F.mse_loss(action_pred, action_label, reduction="none"))
 
-    action_waypts_cos_similairity = action_reduce(F.cosine_similarity(
-        action_pred[:, :, :2], action_label[:, :, :2], dim=-1
-    ))
-    multi_action_waypts_cos_sim = action_reduce(F.cosine_similarity(
-        torch.flatten(action_pred[:, :, :2], start_dim=1),
-        torch.flatten(action_label[:, :, :2], start_dim=1),
-        dim=-1,
-    ))
+    action_waypts_cos_similairity = action_reduce(
+        F.cosine_similarity(action_pred[:, :, :2], action_label[:, :, :2], dim=-1)
+    )
+    multi_action_waypts_cos_sim = action_reduce(
+        F.cosine_similarity(
+            torch.flatten(action_pred[:, :, :2], start_dim=1),
+            torch.flatten(action_label[:, :, :2], start_dim=1),
+            dim=-1,
+        )
+    )
 
     results = {
         "dist_loss": dist_loss,
@@ -76,13 +80,12 @@ def _compute_losses(
     }
 
     if learn_angle:
-        action_orien_cos_sim = action_reduce(F.cosine_similarity(
-            action_pred[:, :, 2:], action_label[:, :, 2:], dim=-1
-        ))
-        multi_action_orien_cos_sim = action_reduce(F.cosine_similarity(
-            torch.flatten(action_pred[:, :, 2:], start_dim=1),
-            torch.flatten(action_label[:, :, 2:], start_dim=1),
-            dim=-1,
+        action_orien_cos_sim = action_reduce(F.cosine_similarity(action_pred[:, :, 2:], action_label[:, :, 2:], dim=-1))
+        multi_action_orien_cos_sim = action_reduce(
+            F.cosine_similarity(
+                torch.flatten(action_pred[:, :, 2:], start_dim=1),
+                torch.flatten(action_label[:, :, 2:], start_dim=1),
+                dim=-1,
             )
         )
         results["action_orien_cos_sim"] = action_orien_cos_sim
@@ -203,12 +206,8 @@ def train(
     model.train()
     dist_loss_logger = Logger("dist_loss", "train", window_size=print_log_freq)
     action_loss_logger = Logger("action_loss", "train", window_size=print_log_freq)
-    action_waypts_cos_sim_logger = Logger(
-        "action_waypts_cos_sim", "train", window_size=print_log_freq
-    )
-    multi_action_waypts_cos_sim_logger = Logger(
-        "multi_action_waypts_cos_sim", "train", window_size=print_log_freq
-    )
+    action_waypts_cos_sim_logger = Logger("action_waypts_cos_sim", "train", window_size=print_log_freq)
+    multi_action_waypts_cos_sim_logger = Logger("multi_action_waypts_cos_sim", "train", window_size=print_log_freq)
     total_loss_logger = Logger("total_loss", "train", window_size=print_log_freq)
     loggers = {
         "dist_loss": dist_loss_logger,
@@ -219,12 +218,8 @@ def train(
     }
 
     if learn_angle:
-        action_orien_cos_sim_logger = Logger(
-            "action_orien_cos_sim", "train", window_size=print_log_freq
-        )
-        multi_action_orien_cos_sim_logger = Logger(
-            "multi_action_orien_cos_sim", "train", window_size=print_log_freq
-        )
+        action_orien_cos_sim_logger = Logger("action_orien_cos_sim", "train", window_size=print_log_freq)
+        multi_action_orien_cos_sim_logger = Logger("multi_action_orien_cos_sim", "train", window_size=print_log_freq)
         loggers["action_orien_cos_sim"] = action_orien_cos_sim_logger
         loggers["multi_action_orien_cos_sim"] = multi_action_orien_cos_sim_logger
 
@@ -252,7 +247,7 @@ def train(
         obs_image = torch.cat(obs_images, dim=1)
 
         viz_goal_image = TF.resize(goal_image, VISUALIZATION_IMAGE_SIZE)
-        
+
         goal_image = transform(goal_image).to(device)
         model_outputs = model(obs_image, goal_image)
 
@@ -261,7 +256,7 @@ def train(
         action_mask = action_mask.to(device)
 
         optimizer.zero_grad()
-      
+
         dist_pred, action_pred = model_outputs
 
         losses = _compute_losses(
@@ -322,7 +317,6 @@ def evaluate(
     use_wandb: bool = True,
     eval_fraction: float = 1.0,
     use_tqdm: bool = True,
-
 ):
     """
     Evaluate the model on the given evaluation dataset.
@@ -444,6 +438,7 @@ def evaluate(
 
 # Train utils for NOMAD
 
+
 def _compute_losses_nomad(
     ema_model,
     noise_scheduler,
@@ -471,9 +466,9 @@ def _compute_losses_nomad(
         num_samples=1,
         device=device,
     )
-    uc_actions = model_output_dict['uc_actions']
-    gc_actions = model_output_dict['gc_actions']
-    gc_distance = model_output_dict['gc_distance']
+    uc_actions = model_output_dict["uc_actions"]
+    gc_actions = model_output_dict["gc_actions"]
+    gc_distance = model_output_dict["gc_distance"]
 
     gc_dist_loss = F.mse_loss(gc_distance, batch_dist_label.unsqueeze(-1))
 
@@ -491,23 +486,27 @@ def _compute_losses_nomad(
     uc_action_loss = action_reduce(F.mse_loss(uc_actions, batch_action_label, reduction="none"))
     gc_action_loss = action_reduce(F.mse_loss(gc_actions, batch_action_label, reduction="none"))
 
-    uc_action_waypts_cos_similairity = action_reduce(F.cosine_similarity(
-        uc_actions[:, :, :2], batch_action_label[:, :, :2], dim=-1
-    ))
-    uc_multi_action_waypts_cos_sim = action_reduce(F.cosine_similarity(
-        torch.flatten(uc_actions[:, :, :2], start_dim=1),
-        torch.flatten(batch_action_label[:, :, :2], start_dim=1),
-        dim=-1,
-    ))
+    uc_action_waypts_cos_similairity = action_reduce(
+        F.cosine_similarity(uc_actions[:, :, :2], batch_action_label[:, :, :2], dim=-1)
+    )
+    uc_multi_action_waypts_cos_sim = action_reduce(
+        F.cosine_similarity(
+            torch.flatten(uc_actions[:, :, :2], start_dim=1),
+            torch.flatten(batch_action_label[:, :, :2], start_dim=1),
+            dim=-1,
+        )
+    )
 
-    gc_action_waypts_cos_similairity = action_reduce(F.cosine_similarity(
-        gc_actions[:, :, :2], batch_action_label[:, :, :2], dim=-1
-    ))
-    gc_multi_action_waypts_cos_sim = action_reduce(F.cosine_similarity(
-        torch.flatten(gc_actions[:, :, :2], start_dim=1),
-        torch.flatten(batch_action_label[:, :, :2], start_dim=1),
-        dim=-1,
-    ))
+    gc_action_waypts_cos_similairity = action_reduce(
+        F.cosine_similarity(gc_actions[:, :, :2], batch_action_label[:, :, :2], dim=-1)
+    )
+    gc_multi_action_waypts_cos_sim = action_reduce(
+        F.cosine_similarity(
+            torch.flatten(gc_actions[:, :, :2], start_dim=1),
+            torch.flatten(batch_action_label[:, :, :2], start_dim=1),
+            dim=-1,
+        )
+    )
 
     results = {
         "uc_action_loss": uc_action_loss,
@@ -550,7 +549,7 @@ def train_nomad(
         dataloader: dataloader for training
         transform: transform to use
         device: device to use
-        noise_scheduler: noise scheduler to train with 
+        noise_scheduler: noise scheduler to train with
         project_folder: folder to save images to
         epoch: current epoch
         alpha: weight of action loss
@@ -564,17 +563,13 @@ def train_nomad(
     num_batches = len(dataloader)
 
     uc_action_loss_logger = Logger("uc_action_loss", "train", window_size=print_log_freq)
-    uc_action_waypts_cos_sim_logger = Logger(
-        "uc_action_waypts_cos_sim", "train", window_size=print_log_freq
-    )
+    uc_action_waypts_cos_sim_logger = Logger("uc_action_waypts_cos_sim", "train", window_size=print_log_freq)
     uc_multi_action_waypts_cos_sim_logger = Logger(
         "uc_multi_action_waypts_cos_sim", "train", window_size=print_log_freq
     )
     gc_dist_loss_logger = Logger("gc_dist_loss", "train", window_size=print_log_freq)
     gc_action_loss_logger = Logger("gc_action_loss", "train", window_size=print_log_freq)
-    gc_action_waypts_cos_sim_logger = Logger(
-        "gc_action_waypts_cos_sim", "train", window_size=print_log_freq
-    )
+    gc_action_waypts_cos_sim_logger = Logger("gc_action_waypts_cos_sim", "train", window_size=print_log_freq)
     gc_multi_action_waypts_cos_sim_logger = Logger(
         "gc_multi_action_waypts_cos_sim", "train", window_size=print_log_freq
     )
@@ -590,15 +585,15 @@ def train_nomad(
     with tqdm.tqdm(dataloader, desc="Train Batch", leave=False) as tepoch:
         for i, data in enumerate(tepoch):
             (
-                obs_image, 
+                obs_image,
                 goal_image,
                 actions,
                 distance,
                 goal_pos,
                 dataset_idx,
-                action_mask, 
+                action_mask,
             ) = data
-            
+
             obs_images = torch.split(obs_image, 3, dim=1)
             batch_viz_obs_images = TF.resize(obs_images[-1], VISUALIZATION_IMAGE_SIZE[::-1])
             batch_viz_goal_images = TF.resize(goal_image, VISUALIZATION_IMAGE_SIZE[::-1])
@@ -611,8 +606,10 @@ def train_nomad(
 
             # Generate random goal mask
             goal_mask = (torch.rand((B,)) < goal_mask_prob).long().to(device)
-            obsgoal_cond = model("vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=goal_mask)
-            
+            obsgoal_cond = model(
+                "vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=goal_mask
+            )
+
             # Get distance label
             distance = distance.float().to(device)
 
@@ -624,21 +621,17 @@ def train_nomad(
             # Predict distance
             dist_pred = model("dist_pred_net", obsgoal_cond=obsgoal_cond)
             dist_loss = nn.functional.mse_loss(dist_pred.squeeze(-1), distance)
-            dist_loss = (dist_loss * (1 - goal_mask.float())).mean() / (1e-2 +(1 - goal_mask.float()).mean())
+            dist_loss = (dist_loss * (1 - goal_mask.float())).mean() / (1e-2 + (1 - goal_mask.float()).mean())
 
             # Sample noise to add to actions
             noise = torch.randn(naction.shape, device=device)
 
             # Sample a diffusion iteration for each data point
-            timesteps = torch.randint(
-                0, noise_scheduler.config.num_train_timesteps,
-                (B,), device=device
-            ).long()
+            timesteps = torch.randint(0, noise_scheduler.config.num_train_timesteps, (B,), device=device).long()
 
             # Add noise to the clean images according to the noise magnitude at each diffusion iteration
-            noisy_action = noise_scheduler.add_noise(
-                naction, noise, timesteps)
-            
+            noisy_action = noise_scheduler.add_noise(naction, noise, timesteps)
+
             # Predict the noise residual
             noise_pred = model("noise_pred_net", sample=noisy_action, timestep=timesteps, global_cond=obsgoal_cond)
 
@@ -651,9 +644,9 @@ def train_nomad(
 
             # L2 loss
             diffusion_loss = action_reduce(F.mse_loss(noise_pred, noise, reduction="none"))
-            
+
             # Total loss
-            loss = alpha * dist_loss + (1-alpha) * diffusion_loss
+            loss = alpha * dist_loss + (1 - alpha) * diffusion_loss
 
             # Optimize
             optimizer.zero_grad()
@@ -670,24 +663,23 @@ def train_nomad(
             wandb.log({"dist_loss": dist_loss.item()})
             wandb.log({"diffusion_loss": diffusion_loss.item()})
 
-
             if i % print_log_freq == 0:
                 losses = _compute_losses_nomad(
-                            ema_model.averaged_model,
-                            noise_scheduler,
-                            batch_obs_images,
-                            batch_goal_images,
-                            distance.to(device),
-                            actions.to(device),
-                            device,
-                            action_mask.to(device),
-                        )
-                
+                    ema_model.averaged_model,
+                    noise_scheduler,
+                    batch_obs_images,
+                    batch_goal_images,
+                    distance.to(device),
+                    actions.to(device),
+                    device,
+                    action_mask.to(device),
+                )
+
                 for key, value in losses.items():
                     if key in loggers:
                         logger = loggers[key]
                         logger.log_data(value.item())
-            
+
                 data_log = {}
                 for key, logger in loggers.items():
                     data_log[logger.full_name()] = logger.latest()
@@ -744,10 +736,10 @@ def evaluate_nomad(
         dataloader (DataLoader): dataloader for eval
         transform (transforms): transform to apply to images
         device (torch.device): device to use for evaluation
-        noise_scheduler: noise scheduler to evaluate with 
+        noise_scheduler: noise scheduler to evaluate with
         project_folder (string): path to project folder
         epoch (int): current epoch
-        print_log_freq (int): how often to print logs 
+        print_log_freq (int): how often to print logs
         wandb_log_freq (int): how often to log to wandb
         image_log_freq (int): how often to log images
         alpha (float): weight for action loss
@@ -758,21 +750,17 @@ def evaluate_nomad(
     goal_mask_prob = torch.clip(torch.tensor(goal_mask_prob), 0, 1)
     ema_model = ema_model.averaged_model
     ema_model.eval()
-    
+
     num_batches = len(dataloader)
 
     uc_action_loss_logger = Logger("uc_action_loss", eval_type, window_size=print_log_freq)
-    uc_action_waypts_cos_sim_logger = Logger(
-        "uc_action_waypts_cos_sim", eval_type, window_size=print_log_freq
-    )
+    uc_action_waypts_cos_sim_logger = Logger("uc_action_waypts_cos_sim", eval_type, window_size=print_log_freq)
     uc_multi_action_waypts_cos_sim_logger = Logger(
         "uc_multi_action_waypts_cos_sim", eval_type, window_size=print_log_freq
     )
     gc_dist_loss_logger = Logger("gc_dist_loss", eval_type, window_size=print_log_freq)
     gc_action_loss_logger = Logger("gc_action_loss", eval_type, window_size=print_log_freq)
-    gc_action_waypts_cos_sim_logger = Logger(
-        "gc_action_waypts_cos_sim", eval_type, window_size=print_log_freq
-    )
+    gc_action_waypts_cos_sim_logger = Logger("gc_action_waypts_cos_sim", eval_type, window_size=print_log_freq)
     gc_multi_action_waypts_cos_sim_logger = Logger(
         "gc_multi_action_waypts_cos_sim", eval_type, window_size=print_log_freq
     )
@@ -788,14 +776,15 @@ def evaluate_nomad(
     num_batches = max(int(num_batches * eval_fraction), 1)
 
     with tqdm.tqdm(
-        itertools.islice(dataloader, num_batches), 
-        total=num_batches, 
-        dynamic_ncols=True, 
-        desc=f"Evaluating {eval_type} for epoch {epoch}", 
-        leave=False) as tepoch:
+        itertools.islice(dataloader, num_batches),
+        total=num_batches,
+        dynamic_ncols=True,
+        desc=f"Evaluating {eval_type} for epoch {epoch}",
+        leave=False,
+    ) as tepoch:
         for i, data in enumerate(tepoch):
             (
-                obs_image, 
+                obs_image,
                 goal_image,
                 actions,
                 distance,
@@ -803,7 +792,7 @@ def evaluate_nomad(
                 dataset_idx,
                 action_mask,
             ) = data
-            
+
             obs_images = torch.split(obs_image, 3, dim=1)
             batch_viz_obs_images = TF.resize(obs_images[-1], VISUALIZATION_IMAGE_SIZE[::-1])
             batch_viz_goal_images = TF.resize(goal_image, VISUALIZATION_IMAGE_SIZE[::-1])
@@ -819,12 +808,18 @@ def evaluate_nomad(
             goal_mask = torch.ones_like(rand_goal_mask).long().to(device)
             no_mask = torch.zeros_like(rand_goal_mask).long().to(device)
 
-            rand_mask_cond = ema_model("vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=rand_goal_mask)
+            rand_mask_cond = ema_model(
+                "vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=rand_goal_mask
+            )
 
-            obsgoal_cond = ema_model("vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=no_mask)
+            obsgoal_cond = ema_model(
+                "vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=no_mask
+            )
             obsgoal_cond = obsgoal_cond.flatten(start_dim=1)
 
-            goal_mask_cond = ema_model("vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=goal_mask)
+            goal_mask_cond = ema_model(
+                "vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=goal_mask
+            )
 
             distance = distance.to(device)
 
@@ -837,35 +832,37 @@ def evaluate_nomad(
             noise = torch.randn(naction.shape, device=device)
 
             # Sample a diffusion iteration for each data point
-            timesteps = torch.randint(
-                0, noise_scheduler.config.num_train_timesteps,
-                (B,), device=device
-            ).long()
+            timesteps = torch.randint(0, noise_scheduler.config.num_train_timesteps, (B,), device=device).long()
 
-            noisy_actions = noise_scheduler.add_noise(
-                naction, noise, timesteps)
+            noisy_actions = noise_scheduler.add_noise(naction, noise, timesteps)
 
             ### RANDOM MASK ERROR ###
             # Predict the noise residual
-            rand_mask_noise_pred = ema_model("noise_pred_net", sample=noisy_actions, timestep=timesteps, global_cond=rand_mask_cond)
-            
+            rand_mask_noise_pred = ema_model(
+                "noise_pred_net", sample=noisy_actions, timestep=timesteps, global_cond=rand_mask_cond
+            )
+
             # L2 loss
             rand_mask_loss = nn.functional.mse_loss(rand_mask_noise_pred, noise)
-            
+
             ### NO MASK ERROR ###
             # Predict the noise residual
-            no_mask_noise_pred = ema_model("noise_pred_net", sample=noisy_actions, timestep=timesteps, global_cond=obsgoal_cond)
-            
+            no_mask_noise_pred = ema_model(
+                "noise_pred_net", sample=noisy_actions, timestep=timesteps, global_cond=obsgoal_cond
+            )
+
             # L2 loss
             no_mask_loss = nn.functional.mse_loss(no_mask_noise_pred, noise)
 
             ### GOAL MASK ERROR ###
             # predict the noise residual
-            goal_mask_noise_pred = ema_model("noise_pred_net", sample=noisy_actions, timestep=timesteps, global_cond=goal_mask_cond)
-            
+            goal_mask_noise_pred = ema_model(
+                "noise_pred_net", sample=noisy_actions, timestep=timesteps, global_cond=goal_mask_cond
+            )
+
             # L2 loss
             goal_mask_loss = nn.functional.mse_loss(goal_mask_noise_pred, noise)
-            
+
             # Logging
             loss_cpu = rand_mask_loss.item()
             tepoch.set_postfix(loss=loss_cpu)
@@ -876,21 +873,21 @@ def evaluate_nomad(
 
             if i % print_log_freq == 0 and print_log_freq != 0:
                 losses = _compute_losses_nomad(
-                            ema_model,
-                            noise_scheduler,
-                            batch_obs_images,
-                            batch_goal_images,
-                            distance.to(device),
-                            actions.to(device),
-                            device,
-                            action_mask.to(device),
-                        )
-                
+                    ema_model,
+                    noise_scheduler,
+                    batch_obs_images,
+                    batch_goal_images,
+                    distance.to(device),
+                    actions.to(device),
+                    device,
+                    action_mask.to(device),
+                )
+
                 for key, value in losses.items():
                     if key in loggers:
                         logger = loggers[key]
                         logger.log_data(value.item())
-            
+
                 data_log = {}
                 for key, logger in loggers.items():
                     data_log[logger.full_name()] = logger.latest()
@@ -923,30 +920,31 @@ def evaluate_nomad(
 
 # normalize data
 def get_data_stats(data):
-    data = data.reshape(-1,data.shape[-1])
-    stats = {
-        'min': np.min(data, axis=0),
-        'max': np.max(data, axis=0)
-    }
+    data = data.reshape(-1, data.shape[-1])
+    stats = {"min": np.min(data, axis=0), "max": np.max(data, axis=0)}
     return stats
+
 
 def normalize_data(data, stats):
     # nomalize to [0,1]
-    ndata = (data - stats['min']) / (stats['max'] - stats['min'])
+    ndata = (data - stats["min"]) / (stats["max"] - stats["min"])
     # normalize to [-1, 1]
     ndata = ndata * 2 - 1
     return ndata
 
+
 def unnormalize_data(ndata, stats):
     ndata = (ndata + 1) / 2
-    data = ndata * (stats['max'] - stats['min']) + stats['min']
+    data = ndata * (stats["max"] - stats["min"]) + stats["min"]
     return data
+
 
 def get_delta(actions):
     # append zeros to first action
-    ex_actions = np.concatenate([np.zeros((actions.shape[0],1,actions.shape[-1])), actions], axis=1)
-    delta = ex_actions[:,1:] - ex_actions[:,:-1]
+    ex_actions = np.concatenate([np.zeros((actions.shape[0], 1, actions.shape[-1])), actions], axis=1)
+    delta = ex_actions[:, 1:] - ex_actions[:, :-1]
     return delta
+
 
 def get_action(diffusion_output, action_stats=ACTION_STATS):
     # diffusion_output: (B, 2*T+1, 1)
@@ -976,15 +974,15 @@ def model_output(
     obs_cond = obs_cond.repeat_interleave(num_samples, dim=0)
 
     no_mask = torch.zeros((batch_goal_images.shape[0],)).long().to(device)
-    obsgoal_cond = model("vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=no_mask)
-    # obsgoal_cond = obsgoal_cond.flatten(start_dim=1)  
+    obsgoal_cond = model(
+        "vision_encoder", obs_img=batch_obs_images, goal_img=batch_goal_images, input_goal_mask=no_mask
+    )
+    # obsgoal_cond = obsgoal_cond.flatten(start_dim=1)
     obsgoal_cond = obsgoal_cond.repeat_interleave(num_samples, dim=0)
 
     # initialize action from Gaussian noise
-    noisy_diffusion_output = torch.randn(
-        (len(obs_cond), pred_horizon, action_dim), device=device)
+    noisy_diffusion_output = torch.randn((len(obs_cond), pred_horizon, action_dim), device=device)
     diffusion_output = noisy_diffusion_output
-
 
     for k in noise_scheduler.timesteps[:]:
         # predict noise
@@ -992,21 +990,18 @@ def model_output(
             "noise_pred_net",
             sample=diffusion_output,
             timestep=k.unsqueeze(-1).repeat(diffusion_output.shape[0]).to(device),
-            global_cond=obs_cond
+            global_cond=obs_cond,
         )
 
         # inverse diffusion step (remove noise)
         diffusion_output = noise_scheduler.step(
-            model_output=noise_pred,
-            timestep=k,
-            sample=diffusion_output
+            model_output=noise_pred, timestep=k, sample=diffusion_output
         ).prev_sample
 
     uc_actions = get_action(diffusion_output, ACTION_STATS)
 
     # initialize action from Gaussian noise
-    noisy_diffusion_output = torch.randn(
-        (len(obs_cond), pred_horizon, action_dim), device=device)
+    noisy_diffusion_output = torch.randn((len(obs_cond), pred_horizon, action_dim), device=device)
     diffusion_output = noisy_diffusion_output
 
     for k in noise_scheduler.timesteps[:]:
@@ -1015,23 +1010,21 @@ def model_output(
             "noise_pred_net",
             sample=diffusion_output,
             timestep=k.unsqueeze(-1).repeat(diffusion_output.shape[0]).to(device),
-            global_cond=obsgoal_cond
+            global_cond=obsgoal_cond,
         )
 
         # inverse diffusion step (remove noise)
         diffusion_output = noise_scheduler.step(
-            model_output=noise_pred,
-            timestep=k,
-            sample=diffusion_output
+            model_output=noise_pred, timestep=k, sample=diffusion_output
         ).prev_sample
     obsgoal_cond = obsgoal_cond.flatten(start_dim=1)
     gc_actions = get_action(diffusion_output, ACTION_STATS)
     gc_distance = model("dist_pred_net", obsgoal_cond=obsgoal_cond)
 
     return {
-        'uc_actions': uc_actions,
-        'gc_actions': gc_actions,
-        'gc_distance': gc_distance,
+        "uc_actions": uc_actions,
+        "gc_actions": gc_actions,
+        "gc_distance": gc_distance,
     }
 
 
@@ -1067,12 +1060,18 @@ def visualize_diffusion_action_distribution(
 
     max_batch_size = batch_obs_images.shape[0]
 
-    num_images_log = min(num_images_log, batch_obs_images.shape[0], batch_goal_images.shape[0], batch_action_label.shape[0], batch_goal_pos.shape[0])
+    num_images_log = min(
+        num_images_log,
+        batch_obs_images.shape[0],
+        batch_goal_images.shape[0],
+        batch_action_label.shape[0],
+        batch_goal_pos.shape[0],
+    )
     batch_obs_images = batch_obs_images[:num_images_log]
     batch_goal_images = batch_goal_images[:num_images_log]
     batch_action_label = batch_action_label[:num_images_log]
     batch_goal_pos = batch_goal_pos[:num_images_log]
-    
+
     wandb_list = []
 
     pred_horizon = batch_action_label.shape[1]
@@ -1097,9 +1096,9 @@ def visualize_diffusion_action_distribution(
             num_samples,
             device,
         )
-        uc_actions_list.append(to_numpy(model_output_dict['uc_actions']))
-        gc_actions_list.append(to_numpy(model_output_dict['gc_actions']))
-        gc_distances_list.append(to_numpy(model_output_dict['gc_distance']))
+        uc_actions_list.append(to_numpy(model_output_dict["uc_actions"]))
+        gc_actions_list.append(to_numpy(model_output_dict["gc_actions"]))
+        gc_distances_list.append(to_numpy(model_output_dict["gc_distance"]))
 
     # concatenate
     uc_actions_list = np.concatenate(uc_actions_list, axis=0)
@@ -1124,11 +1123,14 @@ def visualize_diffusion_action_distribution(
         gc_actions = gc_actions_list[i]
         action_label = to_numpy(batch_action_label[i])
 
-        traj_list = np.concatenate([
-            uc_actions,
-            gc_actions,
-            action_label[None],
-        ], axis=0)
+        traj_list = np.concatenate(
+            [
+                uc_actions,
+                gc_actions,
+                action_label[None],
+            ],
+            axis=0,
+        )
         # traj_labels = ["r", "GC", "GC_mean", "GT"]
         traj_colors = ["red"] * len(uc_actions) + ["green"] * len(gc_actions) + ["magenta"]
         traj_alphas = [0.1] * (len(uc_actions) + len(gc_actions)) + [1.0]
@@ -1148,9 +1150,9 @@ def visualize_diffusion_action_distribution(
             point_labels=None,
             quiver_freq=0,
             traj_alphas=traj_alphas,
-            point_alphas=point_alphas, 
+            point_alphas=point_alphas,
         )
-        
+
         obs_image = to_numpy(batch_viz_obs_images[i])
         goal_image = to_numpy(batch_viz_goal_images[i])
         # move channel to last dimension
@@ -1162,8 +1164,10 @@ def visualize_diffusion_action_distribution(
         # set title
         ax[0].set_title(f"diffusion action predictions")
         ax[1].set_title(f"observation")
-        ax[2].set_title(f"goal: label={np_distance_labels[i]} gc_dist={gc_distances_avg[i]:.2f}±{gc_distances_std[i]:.2f}")
-        
+        ax[2].set_title(
+            f"goal: label={np_distance_labels[i]} gc_dist={gc_distances_avg[i]:.2f}±{gc_distances_std[i]:.2f}"
+        )
+
         # make the plot large
         fig.set_size_inches(18.5, 10.5)
 
@@ -1173,5 +1177,3 @@ def visualize_diffusion_action_distribution(
         plt.close(fig)
     if len(wandb_list) > 0 and use_wandb:
         wandb.log({f"{eval_type}_action_samples": wandb_list}, commit=False)
-
-

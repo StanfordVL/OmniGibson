@@ -7,7 +7,7 @@ import wandb
 import yaml
 import torch
 import torch.nn as nn
-from vint_train.visualizing.visualize_utils import (
+from train.vint_train.visualizing.visualize_utils import (
     to_numpy,
     numpy_to_img,
     VIZ_IMAGE_SIZE,
@@ -59,9 +59,7 @@ def visualize_traj_pred(
     """
     visualize_path = None
     if save_folder is not None:
-        visualize_path = os.path.join(
-            save_folder, "visualize", eval_type, f"epoch{epoch}", "action_prediction"
-        )
+        visualize_path = os.path.join(save_folder, "visualize", eval_type, f"epoch{epoch}", "action_prediction")
 
     if not os.path.exists(visualize_path):
         os.makedirs(visualize_path)
@@ -197,9 +195,7 @@ def plot_trajs_and_points_on_image(
     """
     assert len(list_trajs) <= len(traj_colors), "Not enough colors for trajectories"
     assert len(list_points) <= len(point_colors), "Not enough colors for points"
-    assert (
-        dataset_name in data_config
-    ), f"Dataset {dataset_name} not found in data/data_config.yaml"
+    assert dataset_name in data_config, f"Dataset {dataset_name} not found in data/data_config.yaml"
 
     ax.imshow(img)
     if (
@@ -243,9 +239,7 @@ def plot_trajs_and_points_on_image(
                 point = point[None, :2]
             else:
                 point = point[:, :2]
-            pt_pixels = get_pos_pixels(
-                point, camera_height, camera_x_offset, camera_matrix, dist_coeffs, clip=True
-            )
+            pt_pixels = get_pos_pixels(point, camera_height, camera_x_offset, camera_matrix, dist_coeffs, clip=True)
             ax.plot(
                 pt_pixels[:250, 0],
                 pt_pixels[:250, 1],
@@ -287,9 +281,7 @@ def plot_trajs_and_points(
         point_alphas: list of alphas for points
         quiver_freq: frequency of quiver plot (if the trajectory data includes the yaw of the robot)
     """
-    assert (
-        len(list_trajs) <= len(traj_colors) or default_coloring
-    ), "Not enough colors for trajectories"
+    assert len(list_trajs) <= len(traj_colors) or default_coloring, "Not enough colors for trajectories"
     assert len(list_points) <= len(point_colors), "Not enough colors for points"
     assert (
         traj_labels is None or len(list_trajs) == len(traj_labels) or default_coloring
@@ -299,8 +291,8 @@ def plot_trajs_and_points(
     for i, traj in enumerate(list_trajs):
         if traj_labels is None:
             ax.plot(
-                traj[:, 0], 
-                traj[:, 1], 
+                traj[:, 0],
+                traj[:, 1],
                 color=traj_colors[i],
                 alpha=traj_alphas[i] if traj_alphas is not None else 1.0,
                 marker="o",
@@ -327,12 +319,12 @@ def plot_trajs_and_points(
     for i, pt in enumerate(list_points):
         if point_labels is None:
             ax.plot(
-                pt[0], 
-                pt[1], 
-                color=point_colors[i], 
+                pt[0],
+                pt[1],
+                color=point_colors[i],
                 alpha=point_alphas[i] if point_alphas is not None else 1.0,
                 marker="o",
-                markersize=7.0
+                markersize=7.0,
             )
         else:
             ax.plot(
@@ -345,7 +337,6 @@ def plot_trajs_and_points(
                 label=point_labels[i],
             )
 
-    
     # put the legend below the plot
     if traj_labels is not None or point_labels is not None:
         ax.legend()
@@ -401,18 +392,14 @@ def project_points(
     batch_size, horizon, _ = xy.shape
 
     # create 3D coordinates with the camera positioned at the given height
-    xyz = np.concatenate(
-        [xy, -camera_height * np.ones(list(xy.shape[:-1]) + [1])], axis=-1
-    )
+    xyz = np.concatenate([xy, -camera_height * np.ones(list(xy.shape[:-1]) + [1])], axis=-1)
 
     # create dummy rotation and translation vectors
     rvec = tvec = (0, 0, 0)
 
     xyz[..., 0] += camera_x_offset
     xyz_cv = np.stack([xyz[..., 1], -xyz[..., 2], xyz[..., 0]], axis=-1)
-    uv, _ = cv2.projectPoints(
-        xyz_cv.reshape(batch_size * horizon, 3), rvec, tvec, camera_matrix, dist_coeffs
-    )
+    uv, _ = cv2.projectPoints(xyz_cv.reshape(batch_size * horizon, 3), rvec, tvec, camera_matrix, dist_coeffs)
     uv = uv.reshape(batch_size, horizon, 2)
 
     return uv
@@ -438,9 +425,7 @@ def get_pos_pixels(
     Returns:
         pixels: array of shape (batch_size, horizon, 2) representing (u, v) coordinates on the 2D image plane
     """
-    pixels = project_points(
-        points[np.newaxis], camera_height, camera_x_offset, camera_matrix, dist_coeffs
-    )[0]
+    pixels = project_points(points[np.newaxis], camera_height, camera_x_offset, camera_matrix, dist_coeffs)[0]
     pixels[:, 0] = VIZ_IMAGE_SIZE[0] - pixels[:, 0]
     if clip:
         pixels = np.array(
@@ -453,13 +438,7 @@ def get_pos_pixels(
             ]
         )
     else:
-        pixels = np.array(
-            [
-                p
-                for p in pixels
-                if np.all(p > 0) and np.all(p < [VIZ_IMAGE_SIZE[0], VIZ_IMAGE_SIZE[1]])
-            ]
-        )
+        pixels = np.array([p for p in pixels if np.all(p > 0) and np.all(p < [VIZ_IMAGE_SIZE[0], VIZ_IMAGE_SIZE[1]])])
     return pixels
 
 
