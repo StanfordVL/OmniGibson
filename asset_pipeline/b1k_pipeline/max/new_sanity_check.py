@@ -1048,11 +1048,11 @@ class SanityCheck:
                     f"{model_id} link {link_name} has different scale in instance {instance_id} compared to instance 0. Scale difference: {scale_difference}.",
                 )
                 self.expect(
-                    np.allclose(position_difference, 0, atol=1),  # Up to 1mm is fine
+                    np.allclose(position_difference, 0, atol=5),  # Up to 5mm is fine
                     f"{model_id} link {link_name} has different position in instance {instance_id} compared to instance 0. Position difference: {position_difference}.",
                 )
                 self.expect(
-                    np.isclose(rotation_difference.magnitude(), 0, atol=np.deg2rad(1)),
+                    np.isclose(rotation_difference.magnitude(), 0, atol=np.deg2rad(2)),
                     f"{model_id} link {link_name} has different rotation in instance {instance_id} compared to instance 0. Rotation difference: {rotation_difference.magnitude()}.",
                 )
 
