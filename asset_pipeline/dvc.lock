@@ -1416,8 +1416,8 @@ stages:
       md5: e752145605087f368810b52e2056a1e5
       size: 75170
     - path: cad/objects/batch-07/artifacts/object_list.json
-      md5: de6946b4b83128d154d3250dc1e876b6
-      size: 92471
+      md5: ae935bf53efcd0f4bd24002ef8205f55
+      size: 92466
     - path: cad/objects/batch-08/artifacts/object_list.json
       md5: c3798e232a3b4cff290e504df3cd822e
       size: 73850
@@ -1455,10 +1455,10 @@ stages:
       md5: 9680121a74d9ee91942b260702204fe2
       size: 146697
     - path: cad/objects/legacy_batch-05/artifacts/object_list.json
-      md5: e246522ca4e006dbf6786c30b96622ed
-      size: 126914
+      md5: 815b6732599756d5b1a6cf02fe411089
+      size: 126405
     - path: cad/objects/legacy_batch-06/artifacts/object_list.json
-      md5: e95d042e177786cae3cf198a04fc3656
+      md5: 8c6ed6b609cb37462f3912e8e08bdfb0
       size: 118764
     - path: cad/objects/legacy_batch-07/artifacts/object_list.json
       md5: 0a780fc00222598292959f194f1a24fd
@@ -1494,8 +1494,8 @@ stages:
       md5: 32840dd5e43ab2dffc2391af2a93e4dd
       size: 119623
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 003b753090aeeba92aac58c310bce8e9
-      size: 130771
+      md5: 0088f8398794477e9480f24beadeecb4
+      size: 130881
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: 83d4e38b96e0bd60348d7bf08b8f8d5e
       size: 82969
@@ -1554,8 +1554,8 @@ stages:
       md5: d2e720f950fa35f51ec29957b9de0621
       size: 84810
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
-      md5: 615a8e1d882d9c347f2467764d9183fd
-      size: 134720
+      md5: e757267c8887b65240398d94624f87e8
+      size: 134054
     - path: cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
       md5: a2bc15bd836bd77d9fff2ce11759b082
       size: 131466
@@ -1563,8 +1563,8 @@ stages:
       md5: 018c7df28ea99bea45f40cac930ee1be
       size: 15641
     - path: cad/scenes/grocery_store_asian/artifacts/object_list.json
-      md5: 487fe6151139c05854a2c7cdecb084a7
-      size: 738398
+      md5: 076f346676c18887c471253a1b4f16e3
+      size: 742442
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
       md5: 54087d47edbd1912a10bcffdfac72722
       size: 1266757
@@ -1587,11 +1587,11 @@ stages:
       md5: 3f024d48f7e9a8286fde545f185ebb83
       size: 28832
     - path: cad/scenes/hotel_gym_spa/artifacts/object_list.json
-      md5: f13cab3931740af1585cd2dc3cd705c1
-      size: 155411
+      md5: 267135e4005b2101faf03221531e9149
+      size: 155101
     - path: cad/scenes/hotel_suite_large/artifacts/object_list.json
-      md5: 5835506956df3c32895bc254bd79140f
-      size: 109392
+      md5: e7c994e1e343e00b57d81aeba526eaa1
+      size: 109390
     - path: cad/scenes/hotel_suite_small/artifacts/object_list.json
       md5: 84e38b84fb6e874f9f9eb21d5371b848
       size: 28792
@@ -1672,8 +1672,8 @@ stages:
       size: 12864
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: ca52d9af059a099cb1e3fe59716d8da2
-      size: 2003168
+      md5: 93460f717645436fe5a3e9607b43b0f2
+      size: 2002882
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
