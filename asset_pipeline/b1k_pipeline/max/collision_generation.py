@@ -8,6 +8,7 @@ import pymxs
 
 rt = pymxs.runtime
 
+import os
 import sys
 import tempfile
 
@@ -16,7 +17,7 @@ sys.path.append(r"D:\ig_pipeline")
 from b1k_pipeline.utils import parse_name
 from b1k_pipeline.max.collision_vertex_reduction import reduce_mesh
 
-HULL_COUNTS = [1]
+HULL_COUNTS = [16, 32]
 VHACD_EXECUTABLE = r"D:\ig_pipeline\b1k_pipeline\vhacd2.exe"
 
 
@@ -90,8 +91,8 @@ def run_vhacd(input_mesh, hull_count):
 
 
 USE_METHODS = {
-    # "coacd": run_coacd,  # DISABLED BECAUSE TOO SLOW
-    "vhacd": run_vhacd,
+    "coacd": run_coacd,  # DISABLED BECAUSE TOO SLOW
+    # "vhacd": run_vhacd,
 }
 
 
@@ -138,20 +139,20 @@ def generate_collision_mesh(obj):
         return
 
     # Does it already have a collision mesh? If so, move on.
-    for child in obj.children:
-        parsed_child_name = parse_name(child.name)
-        if not parsed_child_name:
-            continue
+    # for child in obj.children:
+    #     parsed_child_name = parse_name(child.name)
+    #     if not parsed_child_name:
+    #         continue
 
-        # Skip parts etc.
-        if parsed_child_name.group("mesh_basename") != parsed_name.group(
-            "mesh_basename"
-        ):
-            continue
+    #     # Skip parts etc.
+    #     if parsed_child_name.group("mesh_basename") != parsed_name.group(
+    #         "mesh_basename"
+    #     ):
+    #         continue
 
-        if parsed_child_name.group("meta_type") == "collision":
-            print("Collision mesh already exists for", obj.name, ", skipping.")
-            return
+    #     if parsed_child_name.group("meta_type") == "collision":
+    #         print("Collision mesh already exists for", obj.name, ", skipping.")
+    #         return
 
     # Get the vertices and faces
     verts = np.array(
