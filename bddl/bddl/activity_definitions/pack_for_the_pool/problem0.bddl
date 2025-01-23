@@ -10,10 +10,9 @@
         cooler.n.01_1 - cooler.n.01
         swimsuit.n.01_1 - swimsuit.n.01
         life_jacket.n.01_1 - life_jacket.n.01
-        duffel_bag.n.01_1 - duffel_bag.n.01
+        carryall.n.01_1 - carryall.n.01
         cabinet.n.01_1 - cabinet.n.01
         water_bottle.n.01_1 water_bottle.n.01_2 - water_bottle.n.01
-        shoulder_bag.n.01_1 - shoulder_bag.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -26,8 +25,7 @@
         (ontop cooler.n.01_1 sofa.n.01_1) 
         (ontop swimsuit.n.01_1 sofa.n.01_1) 
         (ontop life_jacket.n.01_1 coffee_table.n.01_1) 
-        (ontop duffel_bag.n.01_1 floor.n.01_1)
-        (ontop shoulder_bag.n.01_1 coffee_table.n.01_1)
+        (ontop carryall.n.01_1 coffee_table.n.01_1)
         (inside water_bottle.n.01_1 cabinet.n.01_1)
         (inside water_bottle.n.01_2 cabinet.n.01_1)
         (inroom floor.n.01_1 living_room) 
@@ -39,18 +37,18 @@
     
     (:goal 
         (and 
-            (inside ?money.n.01_1 ?shoulder_bag.n.01_1)
-            (inside ?lip_balm.n.01_1 ?shoulder_bag.n.01_1)
+            (inside ?money.n.01_1 ?carryall.n.01_1)
+            (inside ?lip_balm.n.01_1 ?carryall.n.01_1)
             (forall 
                 (?bath_towel.n.01 - bath_towel.n.01)
                 (and 
                     (folded ?bath_towel.n.01)
-                    (inside ?bath_towel.n.01 ?duffel_bag.n.01_1)
+                    (inside ?bath_towel.n.01 ?carryall.n.01_1)
                 )
             )
-            (inside ?life_jacket.n.01_1 ?duffel_bag.n.01_1)
+            (inside ?life_jacket.n.01_1 ?carryall.n.01_1)
             (folded ?swimsuit.n.01_1)
-            (inside ?swimsuit.n.01_1 ?duffel_bag.n.01_1)
+            (inside ?swimsuit.n.01_1 ?carryall.n.01_1)
             (forall 
                 (?water_bottle.n.01 - water_bottle.n.01)
                 (inside ?water_bottle.n.01 ?cooler.n.01_1)
