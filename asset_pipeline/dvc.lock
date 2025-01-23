@@ -8,11 +8,11 @@ stages:
       md5: 6e08375d29de9d09c5a962643db241ea
       size: 13640
     - path: cad/scenes/Beechwood_0_garden/processed.max
-      md5: 472e52f06e7ff88fb2e413d1c8f33ea0
-      size: 249691370
+      md5: 7a73f6fa02d49b381b80d9a368560e4a
+      size: 249711850
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 0088f8398794477e9480f24beadeecb4
+      md5: 9aa2d08401e19f9e2dda28b53493a58e
       size: 130881
   object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
@@ -328,12 +328,12 @@ stages:
       md5: 6e08375d29de9d09c5a962643db241ea
       size: 13640
     - path: cad/scenes/grocery_store_asian/processed.max
-      md5: b54153d45d23a87613abe2dced44b539
-      size: 174214654
+      md5: a6bd5703275e7f3f1414fc064f39a7a0
+      size: 173731374
     outs:
     - path: cad/scenes/grocery_store_asian/artifacts/object_list.json
-      md5: 076f346676c18887c471253a1b4f16e3
-      size: 742442
+      md5: ca2a142087ffafea01f8cb43ac9697b7
+      size: 744299
   object_list@scenes/grocery_store_cafe:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_cafe/processed.max
       b1k_pipeline/max/object_list.py
@@ -916,7 +916,7 @@ stages:
       md5: 32840dd5e43ab2dffc2391af2a93e4dd
       size: 119623
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 0088f8398794477e9480f24beadeecb4
+      md5: 9aa2d08401e19f9e2dda28b53493a58e
       size: 130881
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: 83d4e38b96e0bd60348d7bf08b8f8d5e
@@ -985,8 +985,8 @@ stages:
       md5: 018c7df28ea99bea45f40cac930ee1be
       size: 15641
     - path: cad/scenes/grocery_store_asian/artifacts/object_list.json
-      md5: 076f346676c18887c471253a1b4f16e3
-      size: 742442
+      md5: ca2a142087ffafea01f8cb43ac9697b7
+      size: 744299
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
       md5: 54087d47edbd1912a10bcffdfac72722
       size: 1266757
@@ -1205,7 +1205,7 @@ stages:
       md5: 32840dd5e43ab2dffc2391af2a93e4dd
       size: 119623
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 0088f8398794477e9480f24beadeecb4
+      md5: 9aa2d08401e19f9e2dda28b53493a58e
       size: 130881
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: 83d4e38b96e0bd60348d7bf08b8f8d5e
@@ -1274,8 +1274,8 @@ stages:
       md5: 018c7df28ea99bea45f40cac930ee1be
       size: 15641
     - path: cad/scenes/grocery_store_asian/artifacts/object_list.json
-      md5: 076f346676c18887c471253a1b4f16e3
-      size: 742442
+      md5: ca2a142087ffafea01f8cb43ac9697b7
+      size: 744299
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
       md5: 54087d47edbd1912a10bcffdfac72722
       size: 1266757
@@ -1383,8 +1383,8 @@ stages:
       size: 12864
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 93460f717645436fe5a3e9607b43b0f2
-      size: 2002882
+      md5: 0eba886b002c2e3e832c97eece3a248e
+      size: 2002951
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -1494,7 +1494,7 @@ stages:
       md5: 32840dd5e43ab2dffc2391af2a93e4dd
       size: 119623
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-      md5: 0088f8398794477e9480f24beadeecb4
+      md5: 9aa2d08401e19f9e2dda28b53493a58e
       size: 130881
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       md5: 83d4e38b96e0bd60348d7bf08b8f8d5e
@@ -1563,8 +1563,8 @@ stages:
       md5: 018c7df28ea99bea45f40cac930ee1be
       size: 15641
     - path: cad/scenes/grocery_store_asian/artifacts/object_list.json
-      md5: 076f346676c18887c471253a1b4f16e3
-      size: 742442
+      md5: ca2a142087ffafea01f8cb43ac9697b7
+      size: 744299
     - path: cad/scenes/grocery_store_cafe/artifacts/object_list.json
       md5: 54087d47edbd1912a10bcffdfac72722
       size: 1266757
@@ -1672,8 +1672,8 @@ stages:
       size: 12864
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
-      md5: 93460f717645436fe5a3e9607b43b0f2
-      size: 2002882
+      md5: 0eba886b002c2e3e832c97eece3a248e
+      size: 2002951
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
