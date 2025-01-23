@@ -13,10 +13,6 @@ from train.vint_train.training.train_utils import get_action
 # Diffusers
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 
-# 이 부분은 이전에 사용한 utils / train_utils 등에서 필요한 함수들을 임포트한다고 가정합니다.
-# from utils import to_numpy, transform_images, load_model
-# from vint_train.training.train_utils import get_action
-
 
 ##############################################################################
 # "msg_to_pil" 대체: Omnigibson에서 받은 torch.Tensor (H, W, 4) -> (H, W, 3) -> PIL.Image
@@ -77,14 +73,17 @@ def sample_diffusion_action(
         # (5) Diffusion 역추론
         noise_scheduler.set_timesteps(model_params["num_diffusion_iters"])
         for k in noise_scheduler.timesteps:
+            # predict noise
             noise_pred = model("noise_pred_net", sample=naction, timestep=k, global_cond=obs_cond)
+
+            # inverse diffusion step (remove noise)
             naction = noise_scheduler.step(model_output=noise_pred, timestep=k, sample=naction).prev_sample
 
     # (6) Tensor -> NumPy
     naction = to_numpy(get_action(naction))
 
     # (7) 샘플 중 하나 선택 (원본 코드는 [0]을 사용)
-    chosen_traj = naction[0]
+    chosen_traj = naction[0]  # change this based on heuristic
     # 해당 trajectory에서 특정 waypoint 인덱스 하나만 뽑아서 반환
     waypoint = chosen_traj[args.waypoint]
 
@@ -103,50 +102,29 @@ def sample_diffusion_action(
 # Omnigibson 메인 루프
 ##############################################################################
 def main(random_selection=False, headless=False, short_exec=False):
-    """
-    Omnigibson 환경에서 Diffusion 모델을 이용해 action을 샘플링하고 로봇을 이동시키는 예시
-    """
+    # (A) 모델 설정 및 로드
+    model_name = "nomad"
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print("Using device:", device)
 
-    model_name = "nomad"  # 사용할 모델 이름
-
-    og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + (main.__doc__ or "") + "*" * 80)
-
-    # (A) 모델 설정 로드 (이전 ROS 코드와 동일하게)
-    # 예: ../config/models.yaml 파일에서 특정 모델을 골라 그 안의 config_path, ckpt_path를 읽어온다고 가정
-
-    print()
     work_dir = os.getcwd()
-    print(f"work_dir = {work_dir}")
-    print()
-
-    # C:\Users\Joonkyung\Desktop\python_ws\OmniGibson\test_NoMaD\train\config\nomad.yaml
-    # test_NoMaD\train\config\vint.yaml
-
-    MODEL_DEPLOY_PATH = f"{work_dir}\\test_NoMaD\\deployment"  # Path to deployment for Windows
-    MODEL_TRAIN_PATH = f"{work_dir}\\test_NoMaD\\train"  # Path to train for Windows
-    MODEL_CONFIG_PATH = f"{MODEL_DEPLOY_PATH}\\config\\models.yaml"  # Path to model configs for Windows
+    MODEL_DEPLOY_PATH = os.path.join(work_dir, "test_NoMaD", "deployment")
+    MODEL_TRAIN_PATH = os.path.join(work_dir, "test_NoMaD", "train")
+    MODEL_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "models.yaml")
 
     with open(MODEL_CONFIG_PATH, "r") as f:
         model_paths = yaml.safe_load(f)
 
-    # model_config_path = model_paths[model_name]["config_path"]
-    model_config_path = f"{MODEL_TRAIN_PATH}\\config\\nomad.yaml"  # Path to model config for Windows
+    # model_config_path와 ckpth_path 설정 (사용자 환경에 맞춤)
+    model_config_path = os.path.join(MODEL_TRAIN_PATH, "config", "nomad.yaml")
+    ckpth_path = os.path.join(MODEL_DEPLOY_PATH, "model_weights", "nomad.pth")
+
     with open(model_config_path, "r") as f:
         model_params = yaml.safe_load(f)
 
-    ckpth_path = model_paths[model_name]["ckpt_path"]
-    ckpth_path = f"{MODEL_DEPLOY_PATH}\\model_weights\\nomad.pth"  # Path to model checkpoint for Windows
-
-    # (B) 모델 로드
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    print("Using device:", device)
-
-    # 사용자 정의 함수 load_model 사용
     model = load_model(ckpth_path, model_params, device)
-    model.to(device)
     model.eval()
 
-    # (C) DDPMScheduler 설정
     noise_scheduler = DDPMScheduler(
         num_train_timesteps=model_params["num_diffusion_iters"],
         beta_schedule="squaredcos_cap_v2",
@@ -154,27 +132,24 @@ def main(random_selection=False, headless=False, short_exec=False):
         prediction_type="epsilon",
     )
 
-    # (D) Omnigibson 환경 구성 로드
+    # (B) Omnigibson 환경 구성
     config_filename = os.path.join(og.example_config_path, "turtlebot_nav.yaml")
-    config = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
+    with open(config_filename, "r") as f:
+        config = yaml.safe_load(f)
 
-    # load_mode를 "Quick"로 (floors, walls, ceilings만)
     config["scene"]["load_object_categories"] = ["floors", "walls", "ceilings"]
-
     env = og.Environment(configs=config)
+
     robots = env.robots
     robot_name = robots[0].name
-    og.log.info(f"Loaded robots: {[robot.name for robot in robots]}")
 
-    # (E) 이미지를 저장할 컨텍스트 버퍼
+    # (C) context
     context_queue = []
     context_size = model_params["context_size"]
 
-    # (F) 에피소드 루프
     max_iterations = 10 if not short_exec else 1
     steps_per_ep = 100
 
-    # 편의상 argparse 대체용
     class ArgObj:
         def __init__(self):
             self.num_samples = 8
@@ -183,42 +158,32 @@ def main(random_selection=False, headless=False, short_exec=False):
     args = ArgObj()
 
     for ep_i in range(max_iterations):
-        og.log.info(f"Resetting environment, episode={ep_i}")
         env.reset()
         context_queue.clear()
 
         for step_i in range(steps_per_ep):
-            # 1) Omnigibson에서 step 하기 전에, 카메라 이미지를 얻으려면
-            #    먼저 "현재 상태"를 받아야 합니다.
-            #    Omnigibson의 경우, action을 먼저 넘기지 않으면 state 업데이트가 안 될 수도 있으니,
-            #    매 step에서 action -> env.step -> state 조회가 일반적입니다.
-            #    또는 zero-action으로 한 번 step해서 현재 화면을 받도록 할 수도 있습니다.
-
-            # 여기서는 "직전 step" 결과를 바탕으로 카메라 이미지를 얻는다고 가정
-            # 만약 첫 step이라면 action=[0,0]을 미리 줘도 됩니다.
+            # 1) step
             if step_i == 0:
-                # 첫 단계에서는 아무것도 안 하는 액션
                 zero_action = np.array([0.0, 0.0], dtype=np.float32)
                 states, rewards, terminated, truncated, infos = env.step({robot_name: zero_action})
             else:
-                # 이후에는 이전 단계의 결과로부터 카메라 이미지를 얻음
                 states, rewards, terminated, truncated, infos = env.step({robot_name: action})
 
-            # 이제 robot_state에서 카메라 이미지 획득
-            robot_state = states[robot_name]  # 혹은 states[robot_name]
+            # 2) 카메라 텐서 획득 (Omnigibson이 torch.Tensor로 반환한다고 가정)
+            robot_state = states[robot_name]
             camera_key = f"{robot_name}:eyes:Camera:0"
-            camera_output = robot_state[camera_key]  # dict with "rgb", "seg", "depth" 등
-            rgb_array = camera_output["rgb"]  # (H, W, 3) in uint8
+            camera_output = robot_state[camera_key]
+            rgb_tensor = camera_output["rgb"]  # shape (H, W, 4) / torch.Tensor
 
-            # 2) PIL Image로 변환 후 큐에 쌓기
-            obs_img = array_to_pil(rgb_array)
+            # 3) PIL 변환 + context 큐에 저장
+            obs_img = array_to_pil(rgb_tensor)  # (H, W, 4) -> (H, W, 3) -> PIL.Image
             if len(context_queue) < context_size + 1:
                 context_queue.append(obs_img)
             else:
                 context_queue.pop(0)
                 context_queue.append(obs_img)
 
-            # 3) 만약 컨텍스트 사이즈가 충족되면 Diffusion으로 행동 샘플링
+            # 4) Diffusion 액션 샘플링
             if len(context_queue) > context_size:
                 action_waypoint = sample_diffusion_action(
                     model=model,
@@ -228,23 +193,15 @@ def main(random_selection=False, headless=False, short_exec=False):
                     noise_scheduler=noise_scheduler,
                     args=args,
                 )
-                # 예: action_waypoint = [v, w]
                 action = np.array(action_waypoint, dtype=np.float32)
             else:
-                # 아직 충분한 이미지가 없으면 일단 정지 or 간단한 random
                 action = np.array([0.0, 0.0], dtype=np.float32)
 
-            # 4) Omnigibson에 최종 액션 적용
-            states, rewards, terminated, truncated, infos = env.step({robot_name: action})
-
-            # Debug print
-            print(f"[ep={ep_i}, step={step_i}] action={action}, reward={rewards[robot_name]}")
+            print(f"[ep={ep_i}, step={step_i}] action={action}")
 
             if terminated or truncated:
-                og.log.info(f"Episode finished early at step={step_i}")
                 break
 
-    # 마지막에 환경 종료
     og.clear()
 
 
