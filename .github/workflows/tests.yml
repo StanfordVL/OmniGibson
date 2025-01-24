@@ -45,25 +45,22 @@ jobs:
 
     steps:
       - name: Checkout source
-        uses: actions/checkout@v2
+        uses: actions/checkout@v4
         with:
           submodules: true
-          path: omnigibson-src
 
       - name: Install
-        working-directory: omnigibson-src
         run: pip install -e .[dev,primitives] --no-build-isolation
 
       - name: Print env
         run: printenv
 
       - name: Run tests
-        working-directory: omnigibson-src
         run: pytest -s tests/${{ matrix.test_file }}.py --junitxml=${{ matrix.test_file }}.xml && cp ${{ matrix.test_file }}.xml ${GITHUB_WORKSPACE}/
         continue-on-error: true
 
       - name: Deploy artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: ${{ github.run_id }}-tests-${{ matrix.test_file }}
           path: ${{ matrix.test_file }}.xml

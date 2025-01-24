@@ -1,13 +1,11 @@
-from abc import abstractmethod
+import os
 from copy import deepcopy
-from typing import Iterable
 
 import torch as th
 
 import omnigibson.utils.transform_utils as T
-from omnigibson.macros import create_module_macros
+from omnigibson.macros import create_module_macros, gm
 from omnigibson.objects.controllable_object import ControllableObject
-from omnigibson.objects.object_base import BaseObject
 from omnigibson.objects.usd_object import USDObject
 from omnigibson.sensors import (
     ALL_SENSOR_MODALITIES,
@@ -16,15 +14,12 @@ from omnigibson.sensors import (
     VisionSensor,
     create_sensor,
 )
+from omnigibson.utils.backend_utils import _compute_backend as cb
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.gym_utils import GymObservable
 from omnigibson.utils.numpy_utils import NumpyTypes
 from omnigibson.utils.python_utils import classproperty, merge_nested_dicts
-from omnigibson.utils.usd_utils import (
-    ControllableObjectViewAPI,
-    absolute_prim_path_to_scene_relative,
-    add_asset_to_stage,
-)
+from omnigibson.utils.usd_utils import ControllableObjectViewAPI, absolute_prim_path_to_scene_relative
 from omnigibson.utils.vision_utils import segmentation_to_rgb
 
 # Global dicts that will contain mappings
@@ -117,7 +112,9 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         self._obs_modalities = (
             obs_modalities
             if obs_modalities == "all"
-            else {obs_modalities} if isinstance(obs_modalities, str) else set(obs_modalities)
+            else {obs_modalities}
+            if isinstance(obs_modalities, str)
+            else set(obs_modalities)
         )  # this will get updated later when we fill in our sensors
         self._proprio_obs = self.default_proprio_obs if proprio_obs == "default" else list(proprio_obs)
         self._sensor_config = sensor_config
@@ -301,10 +298,11 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             dict: keyword-mapped proprioception observations available for this robot.
                 Can be extended by subclasses
         """
-        joint_positions = ControllableObjectViewAPI.get_joint_positions(self.articulation_root_path)
-        joint_velocities = ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
-        joint_efforts = ControllableObjectViewAPI.get_joint_efforts(self.articulation_root_path)
+        joint_positions = cb.to_torch(ControllableObjectViewAPI.get_joint_positions(self.articulation_root_path))
+        joint_velocities = cb.to_torch(ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path))
+        joint_efforts = cb.to_torch(ControllableObjectViewAPI.get_joint_efforts(self.articulation_root_path))
         pos, quat = ControllableObjectViewAPI.get_position_orientation(self.articulation_root_path)
+        pos, quat = cb.to_torch(pos), cb.to_torch(quat)
         ori = T.quat2euler(quat)
 
         ori_2d = T.z_angle_from_quat(quat)
@@ -322,8 +320,8 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
             robot_2d_ori=ori_2d,
             robot_2d_ori_cos=th.cos(ori_2d),
             robot_2d_ori_sin=th.sin(ori_2d),
-            robot_lin_vel=ControllableObjectViewAPI.get_linear_velocity(self.articulation_root_path),
-            robot_ang_vel=ControllableObjectViewAPI.get_angular_velocity(self.articulation_root_path),
+            robot_lin_vel=cb.to_torch(ControllableObjectViewAPI.get_linear_velocity(self.articulation_root_path)),
+            robot_ang_vel=cb.to_torch(ControllableObjectViewAPI.get_angular_velocity(self.articulation_root_path)),
         )
 
     def _load_observation_space(self):
@@ -574,11 +572,10 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         return self.__class__.__name__
 
     @property
-    @abstractmethod
     def usd_path(self):
-        # For all robots, this must be specified a priori, before we actually initialize the USDObject constructor!
-        # So we override the parent implementation, and make this an abstract method
-        raise NotImplementedError
+        # By default, sets the standardized path
+        model = self.model_name.lower()
+        return os.path.join(gm.ASSET_PATH, f"models/{model}/usd/{model}.usda")
 
     @property
     def urdf_path(self):
@@ -586,24 +583,9 @@ class BaseRobot(USDObject, ControllableObject, GymObservable):
         Returns:
             str: file path to the robot urdf file.
         """
-        raise NotImplementedError
-
-    @property
-    def curobo_path(self):
-        """
-        Returns:
-            str or Dict[CuroboEmbodimentSelection, str]: file path to the robot curobo file or a mapping from
-                CuroboEmbodimentSelection to the file path
-        """
-        raise NotImplementedError
-
-    @property
-    def curobo_attached_object_link_names(self):
-        """
-        Returns:
-            Dict[str, str]: mapping from robot eef link names to the link names of the attached objects
-        """
-        raise NotImplementedError
+        # By default, sets the standardized path
+        model = self.model_name.lower()
+        return os.path.join(gm.ASSET_PATH, f"models/{model}/urdf/{model}.urdf")
 
     @classproperty
     def _do_not_register_classes(cls):

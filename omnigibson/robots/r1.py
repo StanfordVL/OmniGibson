@@ -1,19 +1,12 @@
-import math
-import os
+from functools import cached_property
 
 import torch as th
 
-import omnigibson as og
-import omnigibson.lazy as lazy
-import omnigibson.utils.transform_utils as T
-from omnigibson.action_primitives.curobo import CuroboEmbodimentSelection
-from omnigibson.macros import create_module_macros, gm
 from omnigibson.robots.articulated_trunk_robot import ArticulatedTrunkRobot
 from omnigibson.robots.holonomic_base_robot import HolonomicBaseRobot
 from omnigibson.robots.manipulation_robot import GraspingPoint
 from omnigibson.robots.mobile_manipulation_robot import MobileManipulationRobot
-from omnigibson.utils.python_utils import assert_valid_key, classproperty
-from omnigibson.utils.usd_utils import ControllableObjectViewAPI
+from omnigibson.utils.python_utils import classproperty
 
 
 class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
@@ -103,7 +96,6 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
             name=name,
             scale=scale,
             visible=visible,
-            fixed_base=True,
             visual_only=visual_only,
             self_collisions=self_collisions,
             load_config=load_config,
@@ -146,7 +138,7 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
     def _default_controllers(self):
         controllers = super()._default_controllers
         # We use joint controllers for base as default
-        controllers["base"] = "JointController"
+        controllers["base"] = "HolonomicBaseJointController"
         controllers["trunk"] = "JointController"
         # We use IK and multi finger gripper controllers as default
         for arm in self.arm_names:
@@ -159,6 +151,8 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         pos = th.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
         pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
+        for arm in self.arm_names:
+            pos[self.gripper_control_idx[arm]] = th.tensor([0.03, 0.03])  # open gripper
         return pos
 
     @property
@@ -166,8 +160,9 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         pos = th.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
         pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
-        pos[self.arm_control_idx["left"]] = th.tensor([-0.0464, 2.6172, -1.4584, -0.0433, 1.5899, -1.1587])
-        pos[self.arm_control_idx["right"]] = th.tensor([0.0464, 2.6168, -1.4570, 0.0418, -1.5896, 1.1593])
+        for arm in self.arm_names:
+            pos[self.gripper_control_idx[arm]] = th.tensor([0.03, 0.03])  # open gripper
+            pos[self.arm_control_idx[arm]] = th.tensor([0.0, 1.906, -0.991, 1.571, 0.915, -1.571])
         return pos
 
     @property
@@ -194,44 +189,17 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
             for arm in self.arm_names
         }
 
-    @property
+    @cached_property
     def floor_touching_base_link_names(self):
         return ["wheel_link1", "wheel_link2", "wheel_link3"]
 
-    @property
+    @cached_property
     def trunk_link_names(self):
         return ["torso_link1", "torso_link2", "torso_link3", "torso_link4"]
 
-    @property
+    @cached_property
     def trunk_joint_names(self):
         return [f"torso_joint{i}" for i in range(1, 5)]
-
-    @property
-    def manipulation_link_names(self):
-        return [
-            "torso_link1",
-            "torso_link2",
-            "torso_link3",
-            "torso_link4",
-            "left_arm_link1",
-            "left_arm_link2",
-            "left_arm_link3",
-            "left_arm_link4",
-            "left_arm_link5",
-            "left_arm_link6",
-            "left_gripper_link1",
-            "left_gripper_link2",
-            "left_hand",
-            "right_arm_link1",
-            "right_arm_link2",
-            "right_arm_link3",
-            "right_arm_link4",
-            "right_arm_link5",
-            "right_arm_link6",
-            "right_gripper_link1",
-            "right_gripper_link2",
-            "right_hand",
-        ]
 
     @classproperty
     def n_arms(cls):
@@ -241,60 +209,29 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
     def arm_names(cls):
         return ["left", "right"]
 
-    @property
+    @cached_property
     def arm_link_names(self):
         return {arm: [f"{arm}_arm_link{i}" for i in range(1, 7)] for arm in self.arm_names}
 
-    @property
+    @cached_property
     def arm_joint_names(self):
         return {arm: [f"{arm}_arm_joint{i}" for i in range(1, 7)] for arm in self.arm_names}
 
-    @property
+    @cached_property
     def eef_link_names(self):
-        return {arm: f"{arm}_hand" for arm in self.arm_names}
+        return {arm: f"{arm}_eef_link" for arm in self.arm_names}
 
-    @property
+    @cached_property
     def finger_link_names(self):
         return {arm: [f"{arm}_gripper_link{i}" for i in range(1, 3)] for arm in self.arm_names}
 
-    @property
+    @cached_property
     def finger_joint_names(self):
         return {arm: [f"{arm}_gripper_axis{i}" for i in range(1, 3)] for arm in self.arm_names}
 
     @property
-    def usd_path(self):
-        return os.path.join(gm.ASSET_PATH, "models/r1/r1.usd")
-
-    @property
-    def curobo_path(self):
-        return {
-            emb_sel: os.path.join(gm.ASSET_PATH, f"models/r1/r1_description_curobo_{emb_sel.value}.yaml")
-            for emb_sel in CuroboEmbodimentSelection
-        }
-
-    @property
-    def curobo_attached_object_link_names(self):
-        return {eef_link_name: f"attached_object_{eef_link_name}" for eef_link_name in self.eef_link_names.values()}
-
-    @property
-    def robot_arm_descriptor_yamls(self):
-        descriptor_yamls = {
-            arm: os.path.join(gm.ASSET_PATH, f"models/r1/r1_{arm}_descriptor.yaml") for arm in self.arm_names
-        }
-        descriptor_yamls["combined"]: os.path.join(gm.ASSET_PATH, "models/r1/r1_combined_descriptor.yaml")
-        return descriptor_yamls
-
-    @property
-    def urdf_path(self):
-        return os.path.join(gm.ASSET_PATH, "models/r1/r1.urdf")
-
-    @property
     def arm_workspace_range(self):
         return {arm: th.deg2rad(th.tensor([-45, 45], dtype=th.float32)) for arm in self.arm_names}
-
-    @property
-    def eef_usd_path(self):
-        return {arm: os.path.join(gm.ASSET_PATH, "models/r1/r1_eef.usd") for arm in self.arm_names}
 
     @property
     def disabled_collision_pairs(self):
@@ -302,33 +239,7 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
         return [
             ["left_gripper_link1", "left_gripper_link2"],
             ["right_gripper_link1", "right_gripper_link2"],
-            ["base_link", "torso_link1"],
-            ["base_link", "servo_link1"],
-            ["base_link", "wheel_link3"],
-            ["base_link", "servo_link3"],
-            ["base_link", "servo_link2"],
             ["base_link", "wheel_link1"],
             ["base_link", "wheel_link2"],
-            ["servo_link1", "wheel_link1"],
-            ["servo_link2", "wheel_link2"],
-            ["servo_link3", "wheel_link3"],
-            ["torso_link1", "torso_link2"],
-            ["torso_link2", "torso_link3"],
-            ["torso_link3", "torso_link4"],
-            ["torso_link4", "left_arm_link1"],
-            ["left_arm_link1", "left_arm_link2"],
-            ["left_arm_link2", "left_arm_link3"],
-            ["left_arm_link3", "left_arm_link4"],
-            ["left_arm_link4", "left_arm_link5"],
-            ["left_arm_link5", "left_arm_link6"],
-            ["left_arm_link6", "left_gripper_link1"],
-            ["left_arm_link6", "left_gripper_link2"],
-            ["torso_link4", "right_arm_link1"],
-            ["right_arm_link1", "right_arm_link2"],
-            ["right_arm_link2", "right_arm_link3"],
-            ["right_arm_link3", "right_arm_link4"],
-            ["right_arm_link4", "right_arm_link5"],
-            ["right_arm_link5", "right_arm_link6"],
-            ["right_arm_link6", "right_gripper_link1"],
-            ["right_arm_link6", "right_gripper_link2"],
+            ["base_link", "wheel_link3"],
         ]

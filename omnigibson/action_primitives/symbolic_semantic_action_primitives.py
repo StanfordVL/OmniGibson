@@ -12,7 +12,7 @@ from omnigibson.action_primitives.action_primitive_set_base import ActionPrimiti
 from omnigibson.action_primitives.starter_semantic_action_primitives import StarterSemanticActionPrimitives
 from omnigibson.objects import DatasetObject
 from omnigibson.robots.robot_base import BaseRobot
-from omnigibson.transition_rules import REGISTERED_RULES, SlicingRule, TransitionRuleAPI
+from omnigibson.transition_rules import SlicingRule
 
 
 class SymbolicSemanticActionPrimitiveSet(IntEnum):
@@ -40,8 +40,8 @@ class SymbolicSemanticActionPrimitiveSet(IntEnum):
 
 
 class SymbolicSemanticActionPrimitives(StarterSemanticActionPrimitives):
-    def __init__(self, env):
-        super().__init__(env)
+    def __init__(self, env, robot):
+        super().__init__(env, robot, skip_curobo_initilization=True)
         self.controller_functions = {
             SymbolicSemanticActionPrimitiveSet.GRASP: self._grasp,
             SymbolicSemanticActionPrimitiveSet.PLACE_ON_TOP: self._place_on_top,

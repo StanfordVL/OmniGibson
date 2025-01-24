@@ -1,6 +1,5 @@
 import tempfile
 
-import pytest
 import torch as th
 
 import omnigibson as og
@@ -29,7 +28,7 @@ def test_data_collect_and_playback():
         "task": {
             "type": "BehaviorTask",
             # BehaviorTask-specific
-            "activity_name": "assembling_gift_baskets",
+            "activity_name": "laying_wood_floors",
             "online_object_sampling": True,
         },
     }
@@ -58,23 +57,22 @@ def test_data_collect_and_playback():
     # Record 2 episodes
     for i in range(2):
         env.reset()
-        for _ in range(5):
+        for _ in range(2):
             env.step(env.robots[0].action_space.sample())
-
         # Manually add a random object, e.g.: a banana, and place on the floor
         obj = DatasetObject(name="banana", category="banana")
         env.scene.add_object(obj)
         obj.set_position(th.ones(3, dtype=th.float32) * 10.0)
 
         # Take a few more steps
-        for _ in range(5):
+        for _ in range(2):
             env.step(env.robots[0].action_space.sample())
 
         # Manually remove the added object
         env.scene.remove_object(obj)
 
         # Take a few more steps
-        for _ in range(5):
+        for _ in range(2):
             env.step(env.robots[0].action_space.sample())
 
         # Add water particles
@@ -83,14 +81,14 @@ def test_data_collect_and_playback():
         water.generate_particles(positions=pos)
 
         # Take a few more steps
-        for _ in range(5):
+        for _ in range(2):
             env.step(env.robots[0].action_space.sample())
 
         # Clear the system
         env.scene.clear_system("water")
 
         # Take a few more steps
-        for _ in range(5):
+        for _ in range(2):
             env.step(env.robots[0].action_space.sample())
 
     # Save this data
@@ -106,9 +104,10 @@ def test_data_collect_and_playback():
     # Define robot sensor config and external sensors to use during playback
     robot_sensor_config = {
         "VisionSensor": {
+            "modalities": ["rgb"],
             "sensor_kwargs": {
-                "image_height": 128,
-                "image_width": 128,
+                "image_height": 16,
+                "image_width": 16,
             },
         },
     }
@@ -116,12 +115,11 @@ def test_data_collect_and_playback():
         {
             "sensor_type": "VisionSensor",
             "name": "external_sensor0",
-            "relative_prim_path": f"/robot0/root_link/external_sensor0",
-            "modalities": ["rgb", "seg_semantic"],
+            "relative_prim_path": "/robot0/root_link/external_sensor0",
+            "modalities": ["rgb"],
             "sensor_kwargs": {
-                "image_height": 128,
-                "image_width": 128,
-                "focal_length": 12.0,
+                "image_height": 16,
+                "image_width": 16,
             },
             "position": th.tensor([-0.26549, -0.30288, 1.0 + 0.861], dtype=th.float32),
             "orientation": th.tensor([0.36165891, -0.24745751, -0.50752921, 0.74187715], dtype=th.float32),

@@ -3,16 +3,13 @@ import math
 import torch as th
 
 import omnigibson as og
-import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
-from omnigibson.action_primitives.curobo import CuroboEmbodimentSelection, CuRoboMotionGenerator
-from omnigibson.macros import gm, macros
-from omnigibson.object_states import Touching
+from omnigibson.action_primitives.curobo import CuRoboEmbodimentSelection, CuRoboMotionGenerator
 from omnigibson.utils.ui_utils import choose_from_options
 
 
 def plan_trajectory(
-    cmg, target_pos, target_quat, emb_sel=CuroboEmbodimentSelection.DEFAULT, attached_obj=None, attached_obj_scale=None
+    cmg, target_pos, target_quat, emb_sel=CuRoboEmbodimentSelection.DEFAULT, attached_obj=None, attached_obj_scale=None
 ):
     # Generate collision-free trajectories to the sampled eef poses (including self-collisions)
     successes, traj_paths = cmg.compute_trajectories(
@@ -37,12 +34,12 @@ def execute_trajectory(q_traj, env, robot, attached_obj):
     for i, q in enumerate(q_traj):
         q = q.cpu()
         q = set_gripper_joint_positions(robot, q, attached_obj)
-        command = q_to_action(q, robot)
+        action = robot.q_to_action(q)
 
         num_repeat = 5
         print(f"Executing waypoint {i}/{len(q_traj)}")
         for _ in range(num_repeat):
-            env.step(command)
+            env.step(action)
 
 
 def plan_and_execute_trajectory(
@@ -58,7 +55,7 @@ def plan_and_execute_trajectory(
     if success:
         print("Successfully planned trajectory")
         if not dry_run:
-            q_traj = cmg.path_to_joint_trajectory(traj_path, emb_sel)
+            q_traj = cmg.path_to_joint_trajectory(traj_path, get_full_js=True, emb_sel=emb_sel)
             execute_trajectory(q_traj, env, robot, attached_obj)
     else:
         print("Failed to plan trajectory")
@@ -79,22 +76,11 @@ def control_gripper(env, robot, attached_obj):
     # Control the gripper to open or close, while keeping the rest of the robot still
     q = robot.get_joint_positions()
     q = set_gripper_joint_positions(robot, q, attached_obj)
-    command = q_to_action(q, robot)
+    action = robot.q_to_action(q)
     num_repeat = 30
     print(f"Gripper (attached_obj={attached_obj})")
     for _ in range(num_repeat):
-        env.step(command)
-
-
-def q_to_action(q, robot):
-    # Convert target joint positions to command
-    action = []
-    for controller in robot.controllers.values():
-        command = q[controller.dof_idx]
-        action.append(controller._reverse_preprocess_command(command))
-    action = th.cat(action, dim=0)
-    assert action.shape[0] == robot.action_dim
-    return action
+        env.step(action)
 
 
 def test_curobo():
@@ -112,25 +98,24 @@ def test_curobo():
         "grasping_mode": "assisted",
         "controller_config": {
             "base": {
-                "name": "JointController",
+                "name": "HolonomicBaseJointController",
                 "motor_type": "position",
                 "command_input_limits": None,
-                "use_delta_commands": False,
-                "use_impedances": True,
+                "use_impedances": False,
             },
             "trunk": {
                 "name": "JointController",
                 "motor_type": "position",
                 "command_input_limits": None,
                 "use_delta_commands": False,
-                "use_impedances": True,
+                "use_impedances": False,
             },
             "arm_left": {
                 "name": "JointController",
                 "motor_type": "position",
                 "command_input_limits": None,
                 "use_delta_commands": False,
-                "use_impedances": True,
+                "use_impedances": False,
                 "pos_kp": 200.0,
             },
             "arm_right": {
@@ -138,7 +123,7 @@ def test_curobo():
                 "motor_type": "position",
                 "command_input_limits": None,
                 "use_delta_commands": False,
-                "use_impedances": True,
+                "use_impedances": False,
                 "pos_kp": 200.0,
             },
             "gripper_left": {
@@ -146,7 +131,7 @@ def test_curobo():
                 "motor_type": "position",
                 "command_input_limits": None,
                 "use_delta_commands": False,
-                "use_impedances": True,
+                "use_impedances": False,
                 "pos_kp": 1500.0,
             },
             "gripper_right": {
@@ -154,7 +139,7 @@ def test_curobo():
                 "motor_type": "position",
                 "command_input_limits": None,
                 "use_delta_commands": False,
-                "use_impedances": True,
+                "use_impedances": False,
                 "pos_kp": 1500.0,
             },
         },
@@ -165,7 +150,7 @@ def test_curobo():
             "motor_type": "position",
             "command_input_limits": None,
             "use_delta_commands": False,
-            "use_impedances": True,
+            "use_impedances": False,
         }
 
     # Create env
@@ -230,21 +215,6 @@ def test_curobo():
     robot = env.robots[0]
     eef_markers = [env.scene.object_registry("name", f"eef_marker_{i}") for i in range(2)]
 
-    # Stablize the robot and update the initial state
-    robot.reset()
-
-    # Open the gripper(s) to match cuRobo's default state
-    for arm_name in robot.gripper_control_idx.keys():
-        gripper_control_idx = robot.gripper_control_idx[arm_name]
-        robot.set_joint_positions(th.ones_like(gripper_control_idx), indices=gripper_control_idx, normalized=True)
-    robot.keep_still()
-
-    for _ in range(5):
-        og.sim.step()
-
-    env.scene.update_initial_state()
-    env.scene.reset()
-
     # Create CuRobo instance
     cmg = CuRoboMotionGenerator(
         robot=robot,
@@ -255,8 +225,8 @@ def test_curobo():
     table = env.scene.object_registry("name", "table")
     cologne = env.scene.object_registry("name", "cologne")
     fridge = env.scene.object_registry("name", "fridge")
-    cologne_scale = 0.99
-    fridge_door_scale = 0.7
+    cologne_scale = 0.8
+    fridge_door_scale = 0.8
     if robot_type == "R1":
         table_local_pose = (th.tensor([-0.8, 0.0, -0.402]), th.tensor([0.0, 0.0, 0.0, 1.0]))
         cologne_local_pose = (th.tensor([-0.03, 0.0, 0.052]), T.euler2quat(th.tensor([math.pi, -math.pi / 2.0, 0.0])))
@@ -293,7 +263,7 @@ def test_curobo():
     table_nav_pos, table_nav_quat = T.pose_transform(*table.get_position_orientation(), *table_local_pose)
     target_pos = {robot.base_footprint_link_name: table_nav_pos}
     target_quat = {robot.base_footprint_link_name: table_nav_quat}
-    emb_sel = CuroboEmbodimentSelection.BASE
+    emb_sel = CuRoboEmbodimentSelection.BASE
     attached_obj = None
     attached_obj_scale = None
     plan_and_execute_trajectory(
@@ -309,7 +279,7 @@ def test_curobo():
     right_hand_pos, right_hand_quat = robot.get_eef_pose(arm="right")
     target_pos = {robot.eef_link_names["left"]: left_hand_pos}
     target_quat = {robot.eef_link_names["left"]: left_hand_quat}
-    emb_sel = CuroboEmbodimentSelection.ARM
+    emb_sel = CuRoboEmbodimentSelection.ARM
     attached_obj = None
     attached_obj_scale = None
     plan_and_execute_trajectory(
@@ -317,7 +287,7 @@ def test_curobo():
     )
     attached_obj = {robot.eef_link_names["left"]: cologne.root_link}
     control_gripper(env, robot, attached_obj)
-    assert robot._ag_obj_in_hand["left"] == cologne and robot._ag_obj_in_hand["right"] == None
+    assert robot._ag_obj_in_hand["left"] == cologne and robot._ag_obj_in_hand["right"] is None
 
     # Reset to reset pose (both hands)
     target_pos = {
@@ -328,7 +298,7 @@ def test_curobo():
         robot.eef_link_names["left"]: left_hand_reset_quat,
         robot.eef_link_names["right"]: right_hand_reset_quat,
     }
-    emb_sel = CuroboEmbodimentSelection.ARM
+    emb_sel = CuRoboEmbodimentSelection.ARM
     attached_obj = {robot.eef_link_names["left"]: cologne.root_link}
     attached_obj_scale = {robot.eef_link_names["left"]: cologne_scale}
     plan_and_execute_trajectory(
@@ -339,7 +309,7 @@ def test_curobo():
     fridge_nav_pos, fridge_nav_quat = T.pose_transform(*fridge.get_position_orientation(), *fridge_local_pose)
     target_pos = {robot.base_footprint_link_name: fridge_nav_pos}
     target_quat = {robot.base_footprint_link_name: fridge_nav_quat}
-    emb_sel = CuroboEmbodimentSelection.BASE
+    emb_sel = CuRoboEmbodimentSelection.BASE
     attached_obj = {robot.eef_link_names["left"]: cologne.root_link}
     attached_obj_scale = {robot.eef_link_names["left"]: cologne_scale}
     plan_and_execute_trajectory(
@@ -350,7 +320,7 @@ def test_curobo():
     right_hand_pos, right_hand_quat = T.pose_transform(*fridge.get_position_orientation(), *fridge_door_local_pose)
     target_pos = {robot.eef_link_names["right"]: right_hand_pos}
     target_quat = {robot.eef_link_names["right"]: right_hand_quat}
-    emb_sel = CuroboEmbodimentSelection.ARM
+    emb_sel = CuRoboEmbodimentSelection.ARM
     attached_obj = {robot.eef_link_names["left"]: cologne.root_link}
     attached_obj_scale = {robot.eef_link_names["left"]: cologne_scale}
     plan_and_execute_trajectory(
@@ -367,7 +337,7 @@ def test_curobo():
     right_hand_pos, right_hand_quat = T.pose_transform(*fridge.get_position_orientation(), *fridge_door_open_local_pose)
     target_pos = {robot.eef_link_names["right"]: right_hand_pos}
     target_quat = {robot.eef_link_names["right"]: right_hand_quat}
-    emb_sel = CuroboEmbodimentSelection.DEFAULT
+    emb_sel = CuRoboEmbodimentSelection.DEFAULT
     attached_obj = {
         robot.eef_link_names["left"]: cologne.root_link,
         robot.eef_link_names["right"]: fridge.links["link_0"],
@@ -378,13 +348,13 @@ def test_curobo():
     )
     attached_obj = {robot.eef_link_names["left"]: cologne.root_link}
     control_gripper(env, robot, attached_obj)
-    assert robot._ag_obj_in_hand["left"] == cologne and robot._ag_obj_in_hand["right"] == None
+    assert robot._ag_obj_in_hand["left"] == cologne and robot._ag_obj_in_hand["right"] is None
 
     # Place the cologne (left hand)
     left_hand_pos, left_hand_quat = T.pose_transform(*fridge.get_position_orientation(), *fridge_place_local_pose)
     target_pos = {robot.eef_link_names["left"]: left_hand_pos}
     target_quat = {robot.eef_link_names["left"]: left_hand_quat}
-    emb_sel = CuroboEmbodimentSelection.DEFAULT
+    emb_sel = CuRoboEmbodimentSelection.DEFAULT
     attached_obj = {robot.eef_link_names["left"]: cologne.root_link}
     attached_obj_scale = {robot.eef_link_names["left"]: cologne_scale}
     plan_and_execute_trajectory(
@@ -392,7 +362,7 @@ def test_curobo():
     )
     attached_obj = None
     control_gripper(env, robot, attached_obj)
-    assert robot._ag_obj_in_hand["left"] == None and robot._ag_obj_in_hand["right"] == None
+    assert robot._ag_obj_in_hand["left"] is None and robot._ag_obj_in_hand["right"] is None
 
     og.shutdown()
 

@@ -4,13 +4,13 @@ import torch as th
 
 import omnigibson as og
 import omnigibson.lazy as lazy
-import omnigibson.utils.transform_utils as T
 from omnigibson.controllers.controller_base import ControlType
 from omnigibson.macros import create_module_macros
 from omnigibson.prims.prim_base import BasePrim
 from omnigibson.utils.constants import JointAxis, JointType
 from omnigibson.utils.python_utils import assert_valid_key
 from omnigibson.utils.usd_utils import PoseAPI, create_joint
+from omnigibson.utils.numpy_utils import gf_quat_to_torch, vtarray_to_torch
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -75,6 +75,8 @@ class JointPrim(BasePrim):
         self._joint_type = None
         self._control_type = None
         self._driven = None
+        self._body0 = None
+        self._body1 = None
 
         # The following values will only be valid if this joint is part of an articulation
         self._n_dof = None  # The number of degrees of freedom this joint provides
@@ -232,8 +234,10 @@ class JointPrim(BasePrim):
             None or str: Absolute prim path to the body prim to set as this joint's parent link, or None if there is
                 no body0 specified.
         """
-        targets = self._prim.GetRelationship("physics:body0").GetTargets()
-        return targets[0].__str__() if len(targets) > 0 else None
+        if self._body0 is None:
+            targets = self._prim.GetRelationship("physics:body0").GetTargets()
+            self._body0 = targets[0].__str__()
+        return self._body0
 
     @body0.setter
     def body0(self, body0):
@@ -246,6 +250,7 @@ class JointPrim(BasePrim):
         # Make sure prim path is valid
         assert lazy.omni.isaac.core.utils.prims.is_prim_path_valid(body0), f"Invalid body0 path specified: {body0}"
         self._prim.GetRelationship("physics:body0").SetTargets([lazy.pxr.Sdf.Path(body0)])
+        self._body0 = None
 
     @property
     def body1(self):
@@ -256,8 +261,10 @@ class JointPrim(BasePrim):
             None or str: Absolute prim path to the body prim to set as this joint's child link, or None if there is
                 no body1 specified.
         """
-        targets = self._prim.GetRelationship("physics:body1").GetTargets()
-        return targets[0].__str__()
+        if self._body1 is None:
+            targets = self._prim.GetRelationship("physics:body1").GetTargets()
+            self._body1 = targets[0].__str__()
+        return self._body1
 
     @body1.setter
     def body1(self, body1):
@@ -270,23 +277,39 @@ class JointPrim(BasePrim):
         # Make sure prim path is valid
         assert lazy.omni.isaac.core.utils.prims.is_prim_path_valid(body1), f"Invalid body1 path specified: {body1}"
         self._prim.GetRelationship("physics:body1").SetTargets([lazy.pxr.Sdf.Path(body1)])
+        self._body1 = None
 
     @property
-    def local_orientation(self):
+    def local_orientation_0(self):
         """
         Returns:
             4-array: (x,y,z,w) local quaternion orientation of this joint, relative to the parent link
         """
-        # Grab local rotation to parent and child links
-        quat0 = lazy.omni.isaac.core.utils.rotations.gf_quat_to_np_array(self.get_attribute("physics:localRot0"))[
-            [1, 2, 3, 0]
-        ]
-        quat1 = lazy.omni.isaac.core.utils.rotations.gf_quat_to_np_array(self.get_attribute("physics:localRot1"))[
-            [1, 2, 3, 0]
-        ]
+        return gf_quat_to_torch(self.get_attribute("physics:localRot0"))
 
-        # Invert the child link relationship, and multiply the two rotations together to get the final rotation
-        return T.quat_multiply(quaternion1=T.quat_inverse(quat1), quaternion0=quat0)
+    @property
+    def local_orientation_1(self):
+        """
+        Returns:
+            4-array: (x,y,z,w) local quaternion orientation of this joint, relative to the child link
+        """
+        return gf_quat_to_torch(self.get_attribute("physics:localRot1"))
+
+    @property
+    def local_position_0(self):
+        """
+        Returns:
+            3-array: (x,y,z) local position of this joint, relative to the parent link
+        """
+        return vtarray_to_torch(self.get_attribute("physics:localPos0"))
+
+    @property
+    def local_position_1(self):
+        """
+        Returns:
+            3-array: (x,y,z) local position of this joint, relative to the child link
+        """
+        return vtarray_to_torch(self.get_attribute("physics:localPos1"))
 
     @property
     def joint_name(self):
@@ -776,12 +799,11 @@ class JointPrim(BasePrim):
             pos = self._denormalize_pos(pos)
 
         # Set the DOF(s) in this joint
-        if not drive:
+        if drive:
+            self._articulation_view.set_joint_position_targets(positions=pos, joint_indices=self.dof_indices)
+        else:
             self._articulation_view.set_joint_positions(positions=pos, joint_indices=self.dof_indices)
             PoseAPI.invalidate()
-
-        # Also set the target
-        self._articulation_view.set_joint_position_targets(positions=pos, joint_indices=self.dof_indices)
 
     def set_vel(self, vel, normalized=False, drive=False):
         """
@@ -820,11 +842,10 @@ class JointPrim(BasePrim):
             vel = self._denormalize_vel(vel)
 
         # Set the DOF(s) in this joint
-        if not drive:
+        if drive:
+            self._articulation_view.set_joint_velocity_targets(velocities=vel, joint_indices=self.dof_indices)
+        else:
             self._articulation_view.set_joint_velocities(velocities=vel, joint_indices=self.dof_indices)
-
-        # Also set the target
-        self._articulation_view.set_joint_velocity_targets(velocities=vel, joint_indices=self.dof_indices)
 
     def set_effort(self, effort, normalized=False):
         """

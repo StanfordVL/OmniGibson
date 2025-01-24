@@ -7,7 +7,43 @@ from utils import SYSTEM_EXAMPLES, get_random_pose, og_test, place_obj_on_floor_
 import omnigibson as og
 import omnigibson.utils.transform_utils as T
 from omnigibson.macros import macros as m
-from omnigibson.object_states import *
+from omnigibson.object_states import (
+    AABB,
+    AttachedTo,
+    Burnt,
+    ContactBodies,
+    ContactParticles,
+    Contains,
+    Cooked,
+    Covered,
+    Draped,
+    Filled,
+    Folded,
+    Frozen,
+    Heated,
+    HeatSourceOrSink,
+    HorizontalAdjacency,
+    Inside,
+    Joint,
+    MaxTemperature,
+    NextTo,
+    OnFire,
+    OnTop,
+    Open,
+    Overlaid,
+    ParticleApplier,
+    ParticleRemover,
+    ParticleSink,
+    ParticleSource,
+    Pose,
+    Saturated,
+    Temperature,
+    ToggledOn,
+    Touching,
+    Under,
+    Unfolded,
+    VerticalAdjacency,
+)
 from omnigibson.systems import VisualParticleSystem
 from omnigibson.utils.constants import PrimType
 from omnigibson.utils.physx_utils import apply_force_at_pos
@@ -665,7 +701,7 @@ def test_toggled_on(env):
     robot = env.robots[0]
 
     stove.set_position_orientation(
-        [1.48, 0.3, 0.443], T.euler2quat(th.tensor([0, 0, -math.pi / 2.0], dtype=th.float32))
+        [1.505, 0.3, 0.443], T.euler2quat(th.tensor([0, 0, -math.pi / 2.0], dtype=th.float32))
     )
     robot.set_position_orientation(position=[0.0, 0.38, 0.0], orientation=[0, 0, 0, 1])
 

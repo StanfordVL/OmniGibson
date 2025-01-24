@@ -1,5 +1,6 @@
 import torch as th
 
+from omnigibson.utils.backend_utils import _compute_backend as cb
 from omnigibson.utils.python_utils import Serializable
 
 
@@ -42,6 +43,13 @@ class Filter(Serializable):
         # Default is no state, so do nothing
         return dict(), 0
 
+    @property
+    def state_size(self):
+        """
+        Size of the serialized state of this filter
+        """
+        raise NotImplementedError
+
 
 class MovingAverageFilter(Filter):
     """
@@ -59,7 +67,7 @@ class MovingAverageFilter(Filter):
         self.obs_dim = obs_dim
         assert filter_width > 0, f"MovingAverageFilter must have a non-zero size! Got: {filter_width}"
         self.filter_width = filter_width
-        self.past_samples = th.zeros((filter_width, obs_dim))
+        self.past_samples = cb.zeros((filter_width, obs_dim))
         self.current_idx = 0
         self.fully_filled = False  # Whether the entire filter buffer is filled or not
 
@@ -80,12 +88,12 @@ class MovingAverageFilter(Filter):
 
         # Compute value based on whether we're fully filled or not
         if not self.fully_filled:
-            val = self.past_samples[: self.current_idx + 1, :].mean(dim=0)
+            val = cb.mean(self.past_samples[: self.current_idx + 1, :], dim=0)
             # Denote that we're fully filled if we're at the end of the buffer
             if self.current_idx == self.filter_width - 1:
                 self.fully_filled = True
         else:
-            val = self.past_samples.mean(dim=0)
+            val = cb.mean(self.past_samples, dim=0)
 
         # Increment the index to write the next sample to
         self.current_idx = (self.current_idx + 1) % self.filter_width
@@ -98,12 +106,17 @@ class MovingAverageFilter(Filter):
         self.current_idx = 0
         self.fully_filled = False
 
+    @property
+    def state_size(self):
+        # This is the size of the internal buffer plus the current index and fully filled single values
+        return cb.prod(self.past_samples.shape) + 2
+
     def _dump_state(self):
         # Run super init first
         state = super()._dump_state()
 
         # Add info from this filter
-        state["past_samples"] = self.past_samples
+        state["past_samples"] = cb.to_torch(self.past_samples)
         state["current_idx"] = self.current_idx
         state["fully_filled"] = self.fully_filled
 
@@ -114,7 +127,7 @@ class MovingAverageFilter(Filter):
         super()._load_state(state=state)
 
         # Load relevant info for this filter
-        self.past_samples = state["past_samples"]
+        self.past_samples = cb.from_torch(state["past_samples"])
         self.current_idx = state["current_idx"]
         self.fully_filled = state["fully_filled"]
 
@@ -159,7 +172,7 @@ class ExponentialAverageFilter(Filter):
             alpha (float): The relative weighting of new samples relative to older samples
         """
         self.obs_dim = obs_dim
-        self.avg = th.zeros(obs_dim)
+        self.avg = cb.zeros(obs_dim)
         self.num_samples = 0
         self.alpha = alpha
 
@@ -178,19 +191,24 @@ class ExponentialAverageFilter(Filter):
         self.avg = self.alpha * observation + (1.0 - self.alpha) * self.avg
         self.num_samples += 1
 
-        return th.tensor(self.avg)
+        return cb.copy(self.avg)
 
     def reset(self):
         # Clear internal state
         self.avg *= 0.0
         self.num_samples = 0
 
+    @property
+    def state_size(self):
+        # This is the size of the internal value as well as a num samples
+        return len(self.avg) + 1
+
     def _dump_state(self):
         # Run super init first
         state = super()._dump_state()
 
         # Add info from this filter
-        state["avg"] = th.tensor(self.avg)
+        state["avg"] = cb.to_torch(self.avg)
         state["num_samples"] = self.num_samples
 
         return state
@@ -200,7 +218,7 @@ class ExponentialAverageFilter(Filter):
         super()._load_state(state=state)
 
         # Load relevant info for this filter
-        self.avg = th.tensor(state["avg"])
+        self.avg = cb.from_torch(state["avg"])
         self.num_samples = state["num_samples"]
 
     def serialize(self, state):

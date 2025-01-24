@@ -196,7 +196,7 @@ class DataWrapper(EnvironmentWrapper):
         success = self.env.task.success or not self.only_successes
         if success and self.hdf5_file is not None:
             traj_grp_name = f"demo_{self.traj_count}"
-            traj_grp = self.process_traj_to_hdf5(self.current_traj_history, traj_grp_name, nested_keys=["obs"])
+            self.process_traj_to_hdf5(self.current_traj_history, traj_grp_name, nested_keys=["obs"])
             self.traj_count += 1
         else:
             # Remove this demo
@@ -232,7 +232,6 @@ class DataWrapper(EnvironmentWrapper):
             self.flush_current_traj()
 
         if self.hdf5_file is not None:
-
             log.info(
                 f"\nSaved:\n"
                 f"{self.traj_count} trajectories / {self.step_count} total steps\n"
@@ -309,14 +308,22 @@ class DataCollectionWrapper(DataWrapper):
         og.sim.viewer_camera.active_camera_path = viewport_camera_path
 
         # Use asynchronous rendering for faster performance
-        lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", True)
-        lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
+        # We have to do a super hacky workaround to avoid the GUI freezing, which is
+        # toggling these settings to be True -> False -> True
+        # Only setting it to True once will actually freeze the GUI for some reason!
+        if not gm.HEADLESS:
+            lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", True)
+            lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
+            lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", False)
+            lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", False)
+            lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", True)
+            lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
 
-        # Disable mouse grabbing since we're only using the UI passively
-        lazy.carb.settings.get_settings().set_bool("/physics/mouseInteractionEnabled", False)
-        lazy.carb.settings.get_settings().set_bool("/physics/mouseGrab", False)
-        lazy.carb.settings.get_settings().set_bool("/physics/forceGrab", False)
-        lazy.carb.settings.get_settings().set_bool("/physics/suppressReadback", True)
+            # Disable mouse grabbing since we're only using the UI passively
+            lazy.carb.settings.get_settings().set_bool("/physics/mouseInteractionEnabled", False)
+            lazy.carb.settings.get_settings().set_bool("/physics/mouseGrab", False)
+            lazy.carb.settings.get_settings().set_bool("/physics/forceGrab", False)
+            lazy.carb.settings.get_settings().set_bool("/physics/suppressReadback", True)
 
         # Set the dump filter for better performance
         # TODO: Possibly remove this feature once we have fully tensorized state saving, which may be more efficient

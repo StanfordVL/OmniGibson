@@ -56,10 +56,11 @@ def determine_gm_path(default_path, env_var_name):
 
 
 # Path (either relative to OmniGibson/omnigibson directory or global absolute path) for data
-# Assets correspond to non-objects / scenes (e.g.: robots), and dataset incliudes objects + scene
+# Assets correspond to non-objects / scenes (e.g.: robots), and dataset includes objects + scene
 # can override assets_path and dataset_path from environment variable
 gm.ASSET_PATH = determine_gm_path(os.path.join("data", "assets"), "OMNIGIBSON_ASSET_PATH")
 gm.DATASET_PATH = determine_gm_path(os.path.join("data", "og_dataset"), "OMNIGIBSON_DATASET_PATH")
+gm.CUSTOM_DATASET_PATH = determine_gm_path(os.path.join("data", "custom_dataset"), "OMNIGIBSON_CUSTOM_DATASET_PATH")
 gm.KEY_PATH = determine_gm_path(os.path.join("data", "omnigibson.key"), "OMNIGIBSON_KEY_PATH")
 
 # Which GPU to use -- None will result in omni automatically using an appropriate GPU. Otherwise, set with either
@@ -75,6 +76,10 @@ gm.REMOTE_STREAMING = os.getenv("OMNIGIBSON_REMOTE_STREAMING", None)
 # What port the webrtc and http servers should run on. This is only used if REMOTE_STREAMING is set to "webrtc"
 gm.HTTP_PORT = os.getenv("OMNIGIBSON_HTTP_PORT", 8211)
 gm.WEBRTC_PORT = os.getenv("OMNIGIBSON_WEBRTC_PORT", 49100)
+
+# Whether to use numpy or torch controller backend. Numpy is significantly faster and should be used
+# for single-threaded (i.e.: non-large scale parallelized env) purposes
+gm.USE_NUMPY_CONTROLLER_BACKEND = True
 
 # Whether only the viewport should be shown in the GUI or not (if not, other peripherals are additionally shown)
 # CANNOT be set at runtime

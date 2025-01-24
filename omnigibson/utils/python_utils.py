@@ -3,11 +3,10 @@ A set of utility functions for general python usage
 """
 
 import inspect
-import re
 from abc import ABCMeta
 from collections.abc import Iterable
 from copy import deepcopy
-from functools import cache, wraps
+from functools import wraps
 from hashlib import md5
 from importlib import import_module
 
@@ -20,7 +19,6 @@ CLASS_NAMES = set()
 
 
 class classproperty:
-
     def __init__(self, fget):
         self.fget = fget
 
@@ -783,6 +781,25 @@ def recursively_convert_to_torch(state):
     return state
 
 
+def recursively_convert_from_torch(state):
+    # For all the lists in state dict, convert from torch tensor -> numpy array
+    import numpy as np
+
+    for key, value in state.items():
+        if isinstance(value, dict):
+            state[key] = recursively_convert_from_torch(value)
+        elif isinstance(value, th.Tensor):
+            state[key] = value.cpu().numpy()
+        elif (isinstance(value, list) or isinstance(value, tuple)) and len(value) > 0:
+            if isinstance(value[0], dict):
+                state[key] = [recursively_convert_from_torch(val) for val in value]
+            elif isinstance(value[0], th.Tensor):
+                state[key] = [tensor.numpy() for tensor in value]
+            elif isinstance(value[0], int) or isinstance(value[0], float):
+                state[key] = np.array(value)
+    return state
+
+
 def h5py_group_to_torch(group):
     state = {}
     for key, value in group.items():
@@ -794,7 +811,7 @@ def h5py_group_to_torch(group):
 
 
 @th.jit.script
-def multi_dim_linspace(start: th.Tensor, stop: th.Tensor, num: int) -> th.Tensor:
+def multi_dim_linspace(start: th.Tensor, stop: th.Tensor, num: int, endpoint: bool = True) -> th.Tensor:
     """
     Generate a tensor with evenly spaced values along multiple dimensions.
     This function creates a tensor where each slice along the first dimension
@@ -805,12 +822,13 @@ def multi_dim_linspace(start: th.Tensor, stop: th.Tensor, num: int) -> th.Tensor
         start (th.Tensor): Starting values for each dimension.
         stop (th.Tensor): Ending values for each dimension.
         num (int): Number of samples to generate along the interpolated dimension.
+        endpoint (bool, optional): If True, stop is the last sample. Otherwise, it is not included.
     Returns:
         th.Tensor: A tensor of shape (num, *start.shape) containing the interpolated values.
     Example:
-        >>> start = th.tensor([0, 10, 100])
-        >>> stop = th.tensor([1, 20, 200])
-        >>> result = multi_dim_linspace(start, stop, num=5)
+        >>> start = th.tensor([0.0, 10.0, 100.0])
+        >>> stop = th.tensor([1.0, 20.0, 200.0])
+        >>> result = multi_dim_linspace(start, stop, num=5, endpoint=True)
         >>> print(result.shape)
         torch.Size([5, 3])
         >>> print(result)
@@ -819,8 +837,20 @@ def multi_dim_linspace(start: th.Tensor, stop: th.Tensor, num: int) -> th.Tensor
                 [  0.5000,  15.0000, 150.0000],
                 [  0.7500,  17.5000, 175.0000],
                 [  1.0000,  20.0000, 200.0000]])
+        >>> result = multi_dim_linspace(start, stop, num=5, endpoint=False)
+        >>> print(result.shape)
+        torch.Size([5, 3])
+        >>> print(result)
+        tensor([[  0.0000,  10.0000, 100.0000],
+                [  0.2000,  12.0000, 120.0000],
+                [  0.4000,  14.0000, 140.0000],
+                [  0.6000,  16.0000, 160.0000],
+                [  0.8000,  18.0000, 180.0000]])
     """
-    steps = th.linspace(0, 1, num, dtype=start.dtype, device=start.device)
+    if endpoint:
+        steps = th.linspace(0, 1, num, dtype=start.dtype, device=start.device)
+    else:
+        steps = th.linspace(0, 1, num + 1, dtype=start.dtype, device=start.device)[:-1]
 
     # Create a new shape for broadcasting
     new_shape = [num] + [1] * start.dim()

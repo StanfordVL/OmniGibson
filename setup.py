@@ -47,6 +47,10 @@ setup(
         "rtree>=1.2.0",
         "graphviz>=0.20",
         "matplotlib>=3.0.0",
+        "lxml>=5.2.2",
+        "numba>=0.59.1",
+        "cffi>=1.16.0",
+        "pillow~=10.2.0",
     ],
     extras_require={
         "dev": [
@@ -64,7 +68,7 @@ setup(
             "telemoma~=0.1.2",
         ],
         "primitives": [
-            "nvidia-curobo @ git+https://github.com/StanfordVL/curobo@6a4eb2ca8677829b0f57451ad107e0a3186525e9",
+            "nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73",
             "ompl @ https://storage.googleapis.com/gibson_scenes/ompl-1.6.0-cp310-cp310-manylinux_2_28_x86_64.whl",
         ],
     },

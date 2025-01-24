@@ -1,6 +1,8 @@
 import math
+import os
 from abc import abstractmethod
 from collections import namedtuple
+from functools import cached_property
 from typing import Literal
 
 import networkx as nx
@@ -21,11 +23,12 @@ from omnigibson.controllers import (
 from omnigibson.macros import create_module_macros, gm
 from omnigibson.object_states import ContactBodies
 from omnigibson.robots.robot_base import BaseRobot
+from omnigibson.utils.backend_utils import _compute_backend as cb
 from omnigibson.utils.constants import JointType, PrimType
 from omnigibson.utils.geometry_utils import generate_points_in_volume_checker_function
 from omnigibson.utils.python_utils import assert_valid_key, classproperty
 from omnigibson.utils.sampling_utils import raytest_batch
-from omnigibson.utils.usd_utils import ControllableObjectViewAPI, GripperRigidContactAPI, RigidContactAPI, create_joint
+from omnigibson.utils.usd_utils import ControllableObjectViewAPI, GripperRigidContactAPI, create_joint
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
@@ -412,8 +415,8 @@ class ManipulationRobot(BaseRobot):
         dic = super()._get_proprioception_dict()
 
         # Loop over all arms to grab proprio info
-        joint_positions = ControllableObjectViewAPI.get_joint_positions(self.articulation_root_path)
-        joint_velocities = ControllableObjectViewAPI.get_joint_velocities(self.articulation_root_path)
+        joint_positions = dic["joint_qpos"]
+        joint_velocities = dic["joint_qvel"]
         for arm in self.arm_names:
             # Add arm info
             dic["arm_{}_qpos".format(arm)] = joint_positions[self.arm_control_idx[arm]]
@@ -422,11 +425,10 @@ class ManipulationRobot(BaseRobot):
             dic["arm_{}_qvel".format(arm)] = joint_velocities[self.arm_control_idx[arm]]
 
             # Add eef and grasping info
-            dic["eef_{}_pos".format(arm)], dic["eef_{}_quat".format(arm)] = (
-                ControllableObjectViewAPI.get_link_relative_position_orientation(
-                    self.articulation_root_path, self.eef_link_names[arm]
-                )
+            eef_pos, eef_quat = ControllableObjectViewAPI.get_link_relative_position_orientation(
+                self.articulation_root_path, self.eef_link_names[arm]
             )
+            dic["eef_{}_pos".format(arm)], dic["eef_{}_quat".format(arm)] = cb.to_torch(eef_pos), cb.to_torch(eef_quat)
             dic["grasp_{}".format(arm)] = th.tensor([self.is_grasping(arm)])
             dic["gripper_{}_qpos".format(arm)] = joint_positions[self.gripper_control_idx[arm]]
             dic["gripper_{}_qvel".format(arm)] = joint_velocities[self.gripper_control_idx[arm]]
@@ -530,7 +532,7 @@ class ManipulationRobot(BaseRobot):
             )
         return gripper_action_idx
 
-    @property
+    @cached_property
     @abstractmethod
     def arm_link_names(self):
         """
@@ -543,7 +545,7 @@ class ManipulationRobot(BaseRobot):
         """
         raise NotImplementedError
 
-    @property
+    @cached_property
     @abstractmethod
     def arm_joint_names(self):
         """
@@ -556,7 +558,7 @@ class ManipulationRobot(BaseRobot):
         """
         raise NotImplementedError
 
-    @property
+    @cached_property
     @abstractmethod
     def eef_link_names(self):
         """
@@ -566,7 +568,7 @@ class ManipulationRobot(BaseRobot):
         """
         raise NotImplementedError
 
-    @property
+    @cached_property
     @abstractmethod
     def finger_link_names(self):
         """
@@ -579,7 +581,7 @@ class ManipulationRobot(BaseRobot):
         """
         raise NotImplementedError
 
-    @property
+    @cached_property
     @abstractmethod
     def finger_joint_names(self):
         """
@@ -592,7 +594,7 @@ class ManipulationRobot(BaseRobot):
         """
         raise NotImplementedError
 
-    @property
+    @cached_property
     def arm_control_idx(self):
         """
         Returns:
@@ -604,7 +606,7 @@ class ManipulationRobot(BaseRobot):
             for arm in self.arm_names
         }
 
-    @property
+    @cached_property
     def gripper_control_idx(self):
         """
         Returns:
@@ -616,7 +618,7 @@ class ManipulationRobot(BaseRobot):
             for arm in self.arm_names
         }
 
-    @property
+    @cached_property
     def arm_links(self):
         """
         Returns:
@@ -625,7 +627,7 @@ class ManipulationRobot(BaseRobot):
         """
         return {arm: [self._links[link] for link in self.arm_link_names[arm]] for arm in self.arm_names}
 
-    @property
+    @cached_property
     def eef_links(self):
         """
         Returns:
@@ -634,7 +636,7 @@ class ManipulationRobot(BaseRobot):
         """
         return {arm: self._links[self.eef_link_names[arm]] for arm in self.arm_names}
 
-    @property
+    @cached_property
     def finger_links(self):
         """
         Returns:
@@ -643,7 +645,7 @@ class ManipulationRobot(BaseRobot):
         """
         return {arm: [self._links[link] for link in self.finger_link_names[arm]] for arm in self.arm_names}
 
-    @property
+    @cached_property
     def finger_joints(self):
         """
         Returns:
@@ -974,13 +976,32 @@ class ManipulationRobot(BaseRobot):
             joint.set_vel(vel=0.0)
 
     @property
-    def robot_arm_descriptor_yamls(self):
+    def curobo_path(self):
         """
         Returns:
-            dict: Dictionary mapping arm appendage name to files path to the descriptor
-                of the robot for IK Controller.
+            str or Dict[CuRoboEmbodimentSelection, str]: file path to the robot curobo file or a mapping from
+                CuRoboEmbodimentSelection to the file path
         """
-        raise NotImplementedError
+        # Import here to avoid circular imports
+        from omnigibson.action_primitives.curobo import CuRoboEmbodimentSelection
+
+        # By default, sets the standardized path
+        model = self.model_name.lower()
+        return {
+            emb_sel: os.path.join(
+                gm.ASSET_PATH, f"models/{model}/curobo/{model}_description_curobo_{emb_sel.value}.yaml"
+            )
+            for emb_sel in CuRoboEmbodimentSelection
+        }
+
+    @property
+    def curobo_attached_object_link_names(self):
+        """
+        Returns:
+            Dict[str, str]: mapping from robot eef link names to the link names of the attached objects
+        """
+        # By default, sets the standardized path
+        return {eef_link_name: f"attached_object_{eef_link_name}" for eef_link_name in self.eef_link_names.values()}
 
     @property
     def _default_arm_joint_controller_configs(self):
@@ -1069,7 +1090,7 @@ class ManipulationRobot(BaseRobot):
                 "motor_type": "position",
                 "control_limits": self.control_limits,
                 "dof_idx": self.arm_control_idx[arm],
-                "default_command": self.reset_joint_pos[self.arm_control_idx[arm]],
+                "default_goal": self.reset_joint_pos[self.arm_control_idx[arm]],
                 "use_impedances": False,
             }
         return dic
@@ -1132,7 +1153,7 @@ class ManipulationRobot(BaseRobot):
                 "motor_type": "velocity",
                 "control_limits": self.control_limits,
                 "dof_idx": self.gripper_control_idx[arm],
-                "default_command": th.zeros(len(self.gripper_control_idx[arm])),
+                "default_goal": th.zeros(len(self.gripper_control_idx[arm])),
                 "use_impedances": False,
             }
         return dic
@@ -1225,9 +1246,9 @@ class ManipulationRobot(BaseRobot):
                     break
 
         assert contact_pos is not None, (
-            f"contact_pos in self._find_gripper_contacts(return_contact_positions=True) is not found in "
-            f"self._find_gripper_contacts(return_contact_positions=False). This is likely because "
-            f"GripperRigidContactAPI.get_contact_pairs and get_contact_data return inconsistent results."
+            "contact_pos in self._find_gripper_contacts(return_contact_positions=True) is not found in "
+            "self._find_gripper_contacts(return_contact_positions=False). This is likely because "
+            "GripperRigidContactAPI.get_contact_pairs and get_contact_data return inconsistent results."
         )
 
         # Joint frame set at the contact point
@@ -1294,23 +1315,24 @@ class ManipulationRobot(BaseRobot):
             # a zero action will actually keep the AG setting where it already is.
             controller = self._controllers[f"gripper_{arm}"]
             controlled_joints = controller.dof_idx
+            control = cb.to_torch(controller.control)
             threshold = th.mean(
                 th.stack([self.joint_lower_limits[controlled_joints], self.joint_upper_limits[controlled_joints]]),
                 dim=0,
             )
-            if controller.control is None:
+            if control is None:
                 applying_grasp = False
             elif self._grasping_direction == "lower":
                 applying_grasp = (
-                    th.any(controller.control < threshold)
+                    th.any(control < threshold)
                     if controller.control_type == ControlType.POSITION
-                    else th.any(controller.control < 0)
+                    else th.any(control < 0)
                 )
             else:
                 applying_grasp = (
-                    th.any(controller.control > threshold)
+                    th.any(control > threshold)
                     if controller.control_type == ControlType.POSITION
-                    else th.any(controller.control > 0)
+                    else th.any(control > 0)
                 )
             # Execute gradual release of object
             if self._ag_obj_in_hand[arm]:
@@ -1504,6 +1526,8 @@ class ManipulationRobot(BaseRobot):
         # Include AG_state
         # TODO: currently does not take care of cloth objects
         # TODO: add unit tests
+        if "ag_obj_constraint_params" not in state:
+            return
         for arm in state["ag_obj_constraint_params"].keys():
             if len(state["ag_obj_constraint_params"][arm]) > 0:
                 data = state["ag_obj_constraint_params"][arm]
