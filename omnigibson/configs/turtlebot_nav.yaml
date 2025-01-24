@@ -37,8 +37,8 @@ robots:
     sensor_config:
       VisionSensor:
         sensor_kwargs:
-          image_height: 128
-          image_width: 128
+          image_height: 96 #128
+          image_width: 96 #128
       ScanSensor:
         sensor_kwargs:
           min_range: 0.05

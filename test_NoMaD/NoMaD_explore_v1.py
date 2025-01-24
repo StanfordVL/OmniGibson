@@ -15,6 +15,23 @@ from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 
 
 ##############################################################################
+# 경로 설정
+##############################################################################
+work_dir = os.getcwd()
+MODEL_DEPLOY_PATH = os.path.join(work_dir, "test_NoMaD", "deployment")
+MODEL_TRAIN_PATH = os.path.join(work_dir, "test_NoMaD", "train")
+MODEL_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "models.yaml")
+ROBOT_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "robot.yaml")
+
+# 로봇 설정 로드
+with open(ROBOT_CONFIG_PATH, "r") as f:
+    robot_config = yaml.safe_load(f)
+MAX_V = robot_config["max_v"]
+MAX_W = robot_config["max_w"]
+RATE = robot_config["frame_rate"]
+
+
+##############################################################################
 # "msg_to_pil" 대체: Omnigibson에서 받은 torch.Tensor (H, W, 4) -> (H, W, 3) -> PIL.Image
 ##############################################################################
 def array_to_pil(rgb_tensor: torch.Tensor) -> PILImage.Image:
@@ -84,11 +101,14 @@ def sample_diffusion_action(
 
     # (7) 샘플 중 하나 선택 (원본 코드는 [0]을 사용)
     chosen_traj = naction[0]  # change this based on heuristic
+
     # 해당 trajectory에서 특정 waypoint 인덱스 하나만 뽑아서 반환
     waypoint = chosen_traj[args.waypoint]
 
     # 속도 정규화를 사용하는 경우
     if model_params.get("normalize", False):
+        # waypoint = waypoint * (MAX_V / RATE)
+        # print(f"The normalization is not implemented yet.")
         # 예: max_v와 frame_rate가 있다면
         # max_v = ...
         # RATE = ...
@@ -107,17 +127,26 @@ def main(random_selection=False, headless=False, short_exec=False):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Using device:", device)
 
-    work_dir = os.getcwd()
-    MODEL_DEPLOY_PATH = os.path.join(work_dir, "test_NoMaD", "deployment")
-    MODEL_TRAIN_PATH = os.path.join(work_dir, "test_NoMaD", "train")
-    MODEL_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "models.yaml")
+    # 모델 경로 설정
+    # work_dir = os.getcwd()
+    # MODEL_DEPLOY_PATH = os.path.join(work_dir, "test_NoMaD", "deployment")
+    # MODEL_TRAIN_PATH = os.path.join(work_dir, "test_NoMaD", "train")
+    # MODEL_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "models.yaml")
+    # ROBOT_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "robot.yaml")
 
+    # 모델 설정 로드
     with open(MODEL_CONFIG_PATH, "r") as f:
         model_paths = yaml.safe_load(f)
 
+    # with open(ROBOT_CONFIG_PATH, "r") as f:
+    #     robot_config = yaml.safe_load(f)
+    # MAX_V = robot_config["max_v"]
+    # MAX_W = robot_config["max_w"]
+    # RATE = robot_config["frame_rate"]
+
     # model_config_path와 ckpth_path 설정 (사용자 환경에 맞춤)
-    model_config_path = os.path.join(MODEL_TRAIN_PATH, "config", "nomad.yaml")
-    ckpth_path = os.path.join(MODEL_DEPLOY_PATH, "model_weights", "nomad.pth")
+    model_config_path = os.path.join(MODEL_TRAIN_PATH, "config", "nomad.yaml")  # path to the model config
+    ckpth_path = os.path.join(MODEL_DEPLOY_PATH, "model_weights", "nomad.pth")  # path to the pre-trained weights
 
     with open(model_config_path, "r") as f:
         model_params = yaml.safe_load(f)
@@ -148,7 +177,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     context_size = model_params["context_size"]
 
     max_iterations = 10 if not short_exec else 1
-    steps_per_ep = 100
+    steps_per_ep = 10000
 
     class ArgObj:
         def __init__(self):
