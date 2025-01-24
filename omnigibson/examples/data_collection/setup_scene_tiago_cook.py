@@ -22,7 +22,7 @@ def main():
     config_filename = os.path.join(og.example_config_path, "tiago_behavior.yaml")
     cfg = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
     cfg["scene"]["load_object_categories"] = ["floors"]
-    cfg["task"]["activity_name"] = "test_tiago_stir"
+    cfg["task"]["activity_name"] = "test_tiago_cook"
     cfg["task"]["online_object_sampling"] = True
     cfg["env"]["flatten_obs_space"] = True
     cfg["env"]["action_frequency"] = 30
@@ -53,21 +53,19 @@ def main():
     breakfast_table.set_position_orientation([.6, 0.0, 0.4], T.euler2quat(th.tensor([0, 0, 0])))
 
     # Assign to object scope
-    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(
-        bddl_inst="breakfast_table.n.01_1", entity=breakfast_table
-    )
+    env.task.object_scope["breakfast_table.n.01_1"] = BDDLEntity(bddl_inst="breakfast_table.n.01_1", entity=breakfast_table)
 
-    pot_1_position = [0.60, -0.0, 0.9]
-    spoon_1_position = [0.6, 0.0, 1.1]
+    pot_1_position = [.60, -0.0, 0.9]
+    spoon_1_position = [.6, 0.0, 1.1]
 
     # coffee cup
     # Import task relevant objects
-    spatula = DatasetObject(name="spatula", category="spatula", model="crkmux", scale=th.tensor([1.0, 1.0, 1.0]))
+    spatula = DatasetObject(name="spatula", category="spatula", model="crkmux", scale=th.tensor([1., 1.0, 1.0]))
     objs_to_add = [spatula]
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    spatula.set_position_orientation(spoon_1_position, T.euler2quat(th.tensor([0, 0, np.pi * 1.5])))
+    spatula.set_position_orientation(spoon_1_position, T.euler2quat(th.tensor([0, 0, np.pi*1.5 ])))
     # pdb.set_trace()
     # spatula.links['base_link'].density = 100
     # pdb.set_trace()
@@ -84,10 +82,11 @@ def main():
     og.sim.batch_add_objects(objs_to_add, [env.scene] * len(objs_to_add))
 
     # Position them in the scene
-    saucepot.set_position_orientation(pot_1_position, T.euler2quat(th.tensor([0, 0, np.pi])))
+    saucepot.set_position_orientation(pot_1_position, T.euler2quat(th.tensor([0, 0, np.pi ])))
 
     # Assign to object scope
     env.task.object_scope["saucepot.n.01_1"] = BDDLEntity(bddl_inst="saucepot.n.01_1", entity=saucepot)
+
 
     # END OF MODIFYING THE CODE
     ############################
