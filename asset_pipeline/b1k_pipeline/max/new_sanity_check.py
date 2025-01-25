@@ -871,18 +871,20 @@ class SanityCheck:
             real_vertex_count = group["vertex_count"].sum()
             real_face_count = group["face_count"].sum()
             # Get the recorded vertex and face count for the model ID
-            recorded_vertex_count, recorded_face_count = (
-                self.get_recorded_vertex_and_face_count(model_id)
-            )
-            # Check that the total vertex and face count matches the recorded vertex and face count
-            self.expect(
-                real_vertex_count == recorded_vertex_count,
-                f"{model_id}-{instance_id} has different vertex count than recorded in provider: {real_vertex_count} != {recorded_vertex_count}.",
-            )
-            self.expect(
-                real_face_count == recorded_face_count,
-                f"{model_id}-{instance_id} has different face count than recorded in provider: {real_face_count} != {recorded_face_count}.",
-            )
+            recorded_counts = self.get_recorded_vertex_and_face_count(model_id)
+            if recorded_counts is None:
+                self.expect("False", f"{model_id} has no recorded face and vertex counts. Make sure you run object list first.")
+            else:
+                recorded_vertex_count, recorded_face_count = recorded_counts
+                # Check that the total vertex and face count matches the recorded vertex and face count
+                self.expect(
+                    real_vertex_count == recorded_vertex_count,
+                    f"{model_id}-{instance_id} has different vertex count than recorded in provider: {real_vertex_count} != {recorded_vertex_count}.",
+                )
+                self.expect(
+                    real_face_count == recorded_face_count,
+                    f"{model_id}-{instance_id} has different face count than recorded in provider: {real_face_count} != {recorded_face_count}.",
+                )
 
         # If this is the zeroth instance, check the object's meta links set
         if instance_id == "0" and not group["name_bad"].iloc[0]:
