@@ -217,7 +217,7 @@ stages:
   room_object_list_success:
     cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/room_object_list.json artifacts/pipeline/room_object_list.success scenes'
     deps:
-    - cad/#{scenes}/artifacts/sanitycheck.json
+    - cad/#{scenes}/artifacts/room_object_list.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:
@@ -226,7 +226,7 @@ stages:
   room_object_list_future_success:
     cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/room_object_list.json artifacts/pipeline/room_object_list_future.success scenes_unfiltered'
     deps:
-    - cad/#{scenes_unfiltered}/artifacts/sanitycheck.json
+    - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
     - b1k_pipeline/check_success_aggregate.py
     - params.yaml
     outs:
