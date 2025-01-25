@@ -1596,11 +1596,8 @@
     "deformable": {},
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "flammable": {},
-    "freezable": {},
     "grassyable": {},
-    "heatable": {},
     "moldyable": {},
     "nonSubstance": {},
     "particleRemover": {},
@@ -2235,15 +2232,13 @@
     "wrinkleable": {}
   },
   "banner.n.01": {
-    "cloth": {},
-    "deformable": {},
     "disinfectable": {},
-    "drapeable": {},
     "dustyable": {},
     "flammable": {},
     "grassyable": {},
     "moldyable": {},
     "nonSubstance": {},
+    "rigidBody": {},
     "rustable": {},
     "scratchable": {},
     "stainable": {},
@@ -2870,12 +2865,6 @@
     "wrinkleable": {}
   },
   "bean.n.01": {},
-  "bean.n.03": {
-    "flammable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "bean_curd.n.01": {
     "cookable": {},
     "deformable": {},
@@ -7991,12 +7980,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "bush_bean.n.01": {
-    "flammable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "buskin.n.01": {
     "disinfectable": {},
     "dustyable": {},
@@ -11125,12 +11108,6 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "climber.n.01": {
-    "flammable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
-  },
   "clip.n.03": {
     "disinfectable": {},
     "dustyable": {},
@@ -12069,12 +12046,6 @@
     "tarnishable": {},
     "wetable": {},
     "wrinkleable": {}
-  },
-  "common_bean.n.01": {
-    "flammable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
   },
   "common_bean.n.02": {},
   "communication.n.02": {
@@ -19688,10 +19659,7 @@
     "visualSubstance": {}
   },
   "emblem.n.01": {
-    "cloth": {},
-    "deformable": {},
     "disinfectable": {},
-    "drapeable": {},
     "dustyable": {},
     "flammable": {},
     "grassyable": {},
@@ -20775,10 +20743,7 @@
     "wrinkleable": {}
   },
   "flag.n.01": {
-    "cloth": {},
-    "deformable": {},
     "disinfectable": {},
-    "drapeable": {},
     "dustyable": {},
     "flammable": {},
     "grassyable": {},
@@ -20932,10 +20897,7 @@
     "wrinkleable": {}
   },
   "floor_cover.n.01": {
-    "cloth": {},
-    "deformable": {},
     "disinfectable": {},
-    "drapeable": {},
     "dustyable": {},
     "grassyable": {},
     "moldyable": {},
@@ -24110,22 +24072,6 @@
     "wrinkleable": {}
   },
   "half__card.n.01": {
-    "disinfectable": {},
-    "dustyable": {},
-    "grassyable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "slicer": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
-  "half__cardstock.n.01": {
     "disinfectable": {},
     "dustyable": {},
     "grassyable": {},
@@ -31048,7 +30994,7 @@
     "wetable": {},
     "wrinkleable": {}
   },
-  "kidney_bean.n.01": {
+  "kidney_bean.n.02": {
     "cookable": {},
     "flammable": {},
     "macroPhysicalSubstance": {},
@@ -31618,12 +31564,6 @@
     "tarnishable": {},
     "wetable": {},
     "wrinkleable": {}
-  },
-  "legume.n.01": {
-    "flammable": {},
-    "macroPhysicalSubstance": {},
-    "physicalSubstance": {},
-    "substance": {}
   },
   "legume.n.03": {},
   "lemon-pepper_seasoning.n.01": {
@@ -41287,16 +41227,14 @@
     "wrinkleable": {}
   },
   "rug.n.01": {
-    "cloth": {},
-    "deformable": {},
     "disinfectable": {},
-    "drapeable": {},
     "dustyable": {},
     "flammable": {},
     "grassyable": {},
     "moldyable": {},
     "nonSubstance": {},
     "particleRemover": {},
+    "rigidBody": {},
     "rustable": {},
     "scratchable": {},
     "stainable": {},
@@ -43168,11 +43106,8 @@
     "deformable": {},
     "disinfectable": {},
     "dustyable": {},
-    "fillable": {},
     "flammable": {},
-    "freezable": {},
     "grassyable": {},
-    "heatable": {},
     "moldyable": {},
     "nonSubstance": {},
     "particleRemover": {},

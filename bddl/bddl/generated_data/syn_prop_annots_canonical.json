@@ -1453,10 +1453,8 @@
     },
     "banner.n.01": {
         "flammable": {},
-        "cloth": {},
+        "rigidBody": {},
         "nonSubstance": {},
-        "deformable": {},
-        "drapeable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -17290,7 +17288,7 @@
         "wrinkleable": {},
         "disinfectable": {}
     },
-    "kidney_bean.n.01": {
+    "kidney_bean.n.02": {
         "flammable": {},
         "cookable": {},
         "waterCook": {},
@@ -24104,10 +24102,8 @@
     "rug.n.01": {
         "flammable": {},
         "particleRemover": {},
-        "cloth": {},
+        "rigidBody": {},
         "nonSubstance": {},
-        "deformable": {},
-        "drapeable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -25531,14 +25527,11 @@
         "disinfectable": {}
     },
     "shoulder_bag.n.01": {
-        "fillable": {},
         "flammable": {},
         "particleRemover": {},
         "softBody": {},
         "nonSubstance": {},
         "deformable": {},
-        "heatable": {},
-        "freezable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -34829,7 +34822,6 @@
         "disinfectable": {}
     },
     "half__card.n.01": {
-        "slicer": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
@@ -38835,21 +38827,6 @@
         "nonSubstance": {},
         "heatable": {},
         "freezable": {},
-        "wetable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {}
-    },
-    "half__cardstock.n.01": {
-        "rigidBody": {},
-        "nonSubstance": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
