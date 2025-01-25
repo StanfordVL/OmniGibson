@@ -919,7 +919,7 @@ class Room(Model):
                 G.add_node(node_name)
                 synset_node_to_synset[node_name] = room_synset_requirement.synset
         # Add a node for each object in the room
-        for roomobject in self.non_clutter_roomobjects:
+        for roomobject in self.non_clutter_roomobjects():
             for i in range(roomobject.count):
                 object_name = f"{roomobject.object.name}_{i}"
                 G.add_node(object_name)
