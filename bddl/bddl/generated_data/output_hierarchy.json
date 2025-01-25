@@ -9137,6 +9137,16 @@
                                           ]
                                         },
                                         {
+                                          "name": "cooked__kidney_bean.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "cooked__kidney_bean"
+                                          ],
+                                          "substances": [
+                                            "cooked__kidney_bean"
+                                          ]
+                                        },
+                                        {
                                           "name": "fresh_bean.n.01",
                                           "hasModel": true,
                                           "children": [
@@ -9188,6 +9198,16 @@
                                                 }
                                               ]
                                             }
+                                          ]
+                                        },
+                                        {
+                                          "name": "kidney_bean.n.02",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "kidney_bean"
+                                          ],
+                                          "substances": [
+                                            "kidney_bean"
                                           ]
                                         }
                                       ]
@@ -33174,50 +33194,6 @@
                                       ]
                                     },
                                     {
-                                      "name": "legume.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "bean.n.03",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "bush_bean.n.01",
-                                              "hasModel": true,
-                                              "children": [
-                                                {
-                                                  "name": "common_bean.n.01",
-                                                  "hasModel": true,
-                                                  "children": [
-                                                    {
-                                                      "name": "cooked__kidney_bean.n.01",
-                                                      "hasModel": true,
-                                                      "categories": [
-                                                        "cooked__kidney_bean"
-                                                      ],
-                                                      "substances": [
-                                                        "cooked__kidney_bean"
-                                                      ]
-                                                    },
-                                                    {
-                                                      "name": "kidney_bean.n.01",
-                                                      "hasModel": true,
-                                                      "categories": [
-                                                        "kidney_bean"
-                                                      ],
-                                                      "substances": [
-                                                        "kidney_bean"
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
-                                    {
                                       "name": "mint.n.02",
                                       "hasModel": true,
                                       "children": [
@@ -33381,56 +33357,6 @@
                                   "name": "vine.n.01",
                                   "hasModel": true,
                                   "children": [
-                                    {
-                                      "name": "climber.n.01",
-                                      "hasModel": true,
-                                      "children": [
-                                        {
-                                          "name": "legume.n.01",
-                                          "hasModel": true,
-                                          "children": [
-                                            {
-                                              "name": "bean.n.03",
-                                              "hasModel": true,
-                                              "children": [
-                                                {
-                                                  "name": "bush_bean.n.01",
-                                                  "hasModel": true,
-                                                  "children": [
-                                                    {
-                                                      "name": "common_bean.n.01",
-                                                      "hasModel": true,
-                                                      "children": [
-                                                        {
-                                                          "name": "cooked__kidney_bean.n.01",
-                                                          "hasModel": true,
-                                                          "categories": [
-                                                            "cooked__kidney_bean"
-                                                          ],
-                                                          "substances": [
-                                                            "cooked__kidney_bean"
-                                                          ]
-                                                        },
-                                                        {
-                                                          "name": "kidney_bean.n.01",
-                                                          "hasModel": true,
-                                                          "categories": [
-                                                            "kidney_bean"
-                                                          ],
-                                                          "substances": [
-                                                            "kidney_bean"
-                                                          ]
-                                                        }
-                                                      ]
-                                                    }
-                                                  ]
-                                                }
-                                              ]
-                                            }
-                                          ]
-                                        }
-                                      ]
-                                    },
                                     {
                                       "name": "squash.n.01",
                                       "hasModel": true,

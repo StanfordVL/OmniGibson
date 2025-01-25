@@ -805,7 +805,7 @@ jelly,jelly.n.02,manual,"{""type"": ""fluid"", ""particle_contact_offset"": 0.01
 jelly_bean,jelly_bean.n.01,manual,"{""type"": ""macro_physical_particle"", ""particle_density"": 1000.0}"
 jerk_seasoning,jerk_seasoning.n.01,manual,"{""type"": ""granular"", ""particle_density"": 1217.0}"
 jimmies,jimmies.n.01,manual,"{""type"": ""granular"", ""particle_density"": 814.0}"
-kidney_bean,kidney_bean.n.01,manual,"{""type"": ""macro_physical_particle"", ""particle_density"": 748.0}"
+kidney_bean,kidney_bean.n.02,manual,"{""type"": ""macro_physical_particle"", ""particle_density"": 748.0}"
 lacquer,lacquer.n.01,gpt,"{""type"": ""macro_visual_particle"", ""relative_particle_scaling"": true}"
 lamb_stew,lamb_stew.n.01,gpt,"{""type"": ""fluid"", ""particle_density"": 1040.0, ""particle_contact_offset"": 0.015, ""is_viscous"": true, ""material_mtl_name"": ""WholeMilk"", ""customize_material_kwargs"": {""specular_transmission_color"": [0.6, 0.3, 0.1], ""diffuse_reflection_color"": [0.6, 0.3, 0.1], ""specular_transmission_scattering_color"": [0.6, 0.3, 0.1]}}"
 lemon_juice,lemon_juice.n.01,manual,"{""type"": ""fluid"", ""particle_contact_offset"": 0.012, ""particle_density"": 1040.0, ""is_viscous"": false, ""material_mtl_name"": ""ClearWater"", ""customize_material_kwargs"": {""specular_transmission_color"": [0.98, 1.0, 0.68]}}"
