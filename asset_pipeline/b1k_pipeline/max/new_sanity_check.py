@@ -1020,41 +1020,52 @@ class SanityCheck:
 
             # For each instance, check that the relative transform is the same
             for instance_id, link_transforms in links_relative_transforms.items():
-                if instance_id == "0":
-                    continue
-
                 if link_name not in link_transforms:
                     self.expect(
                         False,
                         f"{model_id} link {link_name} is missing in instance {instance_id}, so relative transform check cannot be completed.",
                     )
                     continue
+                relative_transform = link_transforms[link_name]
+
+                # Check that the relative transform is a multiple of 90 degrees. To do this we check
+                # if each column approximately consists of just ones and zeroes.
+                if instance_id == "0":
+                    relative_rotation = Rotation.from_quat(quat2arr(relative_transform.rotation)).as_matrix()
+                    is_90_deg = np.all(
+                        np.isclose(np.abs(relative_rotation), np.ones_like(relative_rotation), atol=1e-2) |
+                        np.isclose(relative_rotation, np.zeros_like(relative_rotation), atol=1e-2)
+                    )
+                    self.expect(
+                        is_90_deg,
+                        f"{model_id} link {link_name} has a relative rotation that is not orthogonal to the base's axes.",
+                    )
 
                 # Check that the relative transform is the same
-                relative_transform = link_transforms[link_name]
-                transform_difference = (
-                    relative_transform * inverse_instance_zero_relative_transform
-                )
+                if instance_id != "0":
+                    transform_difference = (
+                        relative_transform * inverse_instance_zero_relative_transform
+                    )
 
-                # Decompose the transform difference into position, rotation and scale
-                scale_difference = np.array(transform_difference.scale)
-                position_difference = np.array(transform_difference.position)
-                rotation_difference = Rotation.from_quat(
-                    quat2arr(transform_difference.rotation)
-                )
+                    # Decompose the transform difference into position, rotation and scale
+                    scale_difference = np.array(transform_difference.scale)
+                    position_difference = np.array(transform_difference.position)
+                    rotation_difference = Rotation.from_quat(
+                        quat2arr(transform_difference.rotation)
+                    )
 
-                self.expect(
-                    np.allclose(scale_difference, 1, atol=0.02),
-                    f"{model_id} link {link_name} has different scale in instance {instance_id} compared to instance 0. Scale difference: {scale_difference}.",
-                )
-                self.expect(
-                    np.allclose(position_difference, 0, atol=5),  # Up to 5mm is fine
-                    f"{model_id} link {link_name} has different position in instance {instance_id} compared to instance 0. Position difference: {position_difference}.",
-                )
-                self.expect(
-                    np.isclose(rotation_difference.magnitude(), 0, atol=np.deg2rad(2)),
-                    f"{model_id} link {link_name} has different rotation in instance {instance_id} compared to instance 0. Rotation difference: {rotation_difference.magnitude()}.",
-                )
+                    self.expect(
+                        np.allclose(scale_difference, 1, atol=0.02),
+                        f"{model_id} link {link_name} has different scale in instance {instance_id} compared to instance 0. Scale difference: {scale_difference}.",
+                    )
+                    self.expect(
+                        np.allclose(position_difference, 0, atol=5),  # Up to 5mm is fine
+                        f"{model_id} link {link_name} has different position in instance {instance_id} compared to instance 0. Position difference: {position_difference}.",
+                    )
+                    self.expect(
+                        np.isclose(rotation_difference.magnitude(), 0, atol=np.deg2rad(2)),
+                        f"{model_id} link {link_name} has different rotation in instance {instance_id} compared to instance 0. Rotation difference: {rotation_difference.magnitude()}.",
+                    )
 
         # Additionally, if the model group has more than one link, check warn if the base links of different instances
         # have different scale, because this might have broken things during runs of the match links script.
