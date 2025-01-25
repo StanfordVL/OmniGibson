@@ -137,7 +137,7 @@ class Scene(Model):
         return sum(
             roomobject.count
             for room in self.rooms
-            for roomobject in room.roomobjects
+            for roomobject in room.non_clutter_roomobjects  # TODO: Should we include clutter objects?
             if not room.ready
         )
 
@@ -900,6 +900,9 @@ class Room(Model):
 
     def __str__(self):
         return f'{self.scene.name}_{self.type}_{"ready" if self.ready else "planned"}'
+    
+    def non_clutter_roomobjects(self):
+        return [x for x in self.roomobjects if not x.clutter]
 
     def matching_room_requirement(self, room_requirement: RoomRequirement) -> str:
         """
@@ -916,7 +919,7 @@ class Room(Model):
                 G.add_node(node_name)
                 synset_node_to_synset[node_name] = room_synset_requirement.synset
         # Add a node for each object in the room
-        for roomobject in self.roomobjects:
+        for roomobject in self.non_clutter_roomobjects:
             for i in range(roomobject.count):
                 object_name = f"{roomobject.object.name}_{i}"
                 G.add_node(object_name)
@@ -948,6 +951,8 @@ class RoomObject(Model):
     object_fk: ManyToOne = ManyToOneField(Object, "roomobjects")
     # number of objects in the room
     count: int = 0
+    # whether this count is for clutter objects or not
+    clutter: bool = False
 
     class Meta:
         pk = "id"
@@ -955,4 +960,5 @@ class RoomObject(Model):
         ordering = ["id"]  # TODO: ["room__name", "object__name"] when implemented
 
     def __str__(self):
-        return f"{str(self.room)}_{self.object.name}"
+        clutter_substr = "clutter" if self.clutter else "nonclutter"
+        return f"{str(self.room)}_{self.object.name}_{clutter_substr}"
