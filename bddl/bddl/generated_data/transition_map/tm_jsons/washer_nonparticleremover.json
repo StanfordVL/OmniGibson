@@ -23608,6 +23608,19 @@
         }
     },
     {
+        "rule_name": "vine.n.01-washer-cover",
+        "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
+        "washed_item": {
+            "vine.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "vinegar__atomizer.n.01-washer-cover",
         "input_synsets": {},
         "machine": {

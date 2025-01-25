@@ -99164,11 +99164,6 @@
         "wetable": {},
         "wrinkleable": {}
     },
-    "squash.n.01": {
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
     "squash.n.02": {},
     "squeegee.n.01": {
         "disinfectable": {},
@@ -112237,9 +112232,19 @@
         "wrinkleable": {}
     },
     "vine.n.01": {
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
+        "disinfectable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "vinegar.n.01": {
         "boilable": {},
@@ -114406,29 +114411,7 @@
     "wing.n.09": {
         "flammable": {}
     },
-    "winter_squash.n.01": {
-        "macroPhysicalSubstance": {},
-        "physicalSubstance": {},
-        "substance": {}
-    },
-    "winter_squash.n.02": {
-        "cookable": {},
-        "disinfectable": {},
-        "dustyable": {},
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
+    "winter_squash.n.02": {},
     "wire.n.01": {
         "deformable": {},
         "disinfectable": {},
