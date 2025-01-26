@@ -901,6 +901,7 @@ class Room(Model):
     def __str__(self):
         return f'{self.scene.name}_{self.type}_{"ready" if self.ready else "planned"}'
     
+    @cached_property
     def non_clutter_roomobjects(self):
         return [x for x in self.roomobjects if not x.clutter]
 
@@ -919,7 +920,7 @@ class Room(Model):
                 G.add_node(node_name)
                 synset_node_to_synset[node_name] = room_synset_requirement.synset
         # Add a node for each object in the room
-        for roomobject in self.non_clutter_roomobjects():
+        for roomobject in self.non_clutter_roomobjects:
             for i in range(roomobject.count):
                 object_name = f"{roomobject.object.name}_{i}"
                 G.add_node(object_name)
