@@ -4,7 +4,7 @@ import os
 from collections import defaultdict
 from copy import deepcopy
 from pathlib import Path
-from typing import List
+from typing import List, Optional
 
 import h5py
 import imageio
@@ -480,6 +480,8 @@ class DataPlaybackWrapper(DataWrapper):
         external_sensors_config=None,
         n_render_iterations=5,
         only_successes=False,
+        enable_annotation=False,
+        subtasks=None,
     ):
         """
         Create a DataPlaybackWrapper environment instance form the recorded demonstration info
@@ -505,6 +507,8 @@ class DataPlaybackWrapper(DataWrapper):
                 the physical state changes. Increasing this number will improve the rendered quality at the expense of
                 speed.
             only_successes (bool): Whether to only save successful episodes
+            enable_annotation (bool): Whether to enable trajectory annotation during playback
+            subtasks (None or List[str]): List of possible subtask names for annotation (required if enable_annotation is True)
 
         Returns:
             DataPlaybackWrapper: Generated playback environment
@@ -550,9 +554,20 @@ class DataPlaybackWrapper(DataWrapper):
             output_path=output_path,
             n_render_iterations=n_render_iterations,
             only_successes=only_successes,
+            enable_annotation=enable_annotation,
+            subtasks=subtasks,
         )
 
-    def __init__(self, env, input_path, output_path, n_render_iterations=5, only_successes=False):
+    def __init__(
+        self,
+        env,
+        input_path: str,
+        output_path: str,
+        n_render_iterations: int = 5,
+        only_successes: bool = False,
+        enable_annotation: bool = False,
+        subtasks: Optional[List[str]] = None,
+    ):
         """
         Args:
             env (Environment): The environment to wrap
@@ -561,6 +576,8 @@ class DataPlaybackWrapper(DataWrapper):
             n_render_iterations (int): Number of rendering iterations to use when loading each stored frame from the
                 recorded data
             only_successes (bool): Whether to only save successful episodes
+            enable_annotation: Whether to enable trajectory annotation during playback
+            subtasks: List of possible subtask names for annotation (required if enable_annotation is True)
         """
         # Make sure transition rules are DISABLED for playback since we manually propagate transitions
         assert not gm.ENABLE_TRANSITION_RULES, "Transition rules must be disabled for DataPlaybackWrapper env!"
@@ -571,9 +588,89 @@ class DataPlaybackWrapper(DataWrapper):
 
         # Store additional variables
         self.n_render_iterations = n_render_iterations
+        self.enable_annotation = enable_annotation
+        if enable_annotation:
+            assert subtasks is not None, "subtasks must be provided when enable_annotation is True"
+            self.subtasks = subtasks
+            self.current_subtask = None
+            self.playback_state = PlaybackState.PLAYING
+            self.current_segment_start = 0
+            self.annotations = []
+            self._setup_keyboard_controls()
 
         # Run super
         super().__init__(env=env, output_path=output_path, only_successes=only_successes)
+
+    def _setup_keyboard_controls(self):
+        """Setup keyboard controls for annotation."""
+        KeyboardEventHandler.initialize()
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.SPACE,
+            callback_fn=self._toggle_pause,
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.ENTER,
+            callback_fn=self._mark_segment,
+        )
+        KeyboardEventHandler.add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.S,
+            callback_fn=self._select_subtask,
+        )
+
+    def _toggle_pause(self):
+        """Toggle between playing and paused states."""
+        if self.playback_state == PlaybackState.PLAYING:
+            self.playback_state = PlaybackState.PAUSED
+            print(f"\nPlayback paused at step {self.step_count}")
+            print("Press 'S' to select a subtask")
+            print("Press 'Enter' to mark the current segment")
+            print("Press 'Space' to resume playback")
+        else:
+            self.playback_state = PlaybackState.PLAYING
+            print("\nPlayback resumed")
+
+    def _select_subtask(self):
+        """Open prompt for selecting a subtask."""
+        if self.playback_state == PlaybackState.PLAYING:
+            return
+
+        subtask_dict = {task: f"Annotate segment as '{task}'" for task in self.subtasks}
+        subtask_dict["skip"] = "Skip annotation for this segment"
+
+        self.playback_state = PlaybackState.ANNOTATING
+        selected = choose_from_options(subtask_dict, "subtask")
+
+        if selected != "skip":
+            self.current_subtask = selected
+            print(f"\nSelected subtask: {self.current_subtask}")
+        else:
+            self.current_subtask = None
+            print("\nSkipping annotation for this segment")
+
+        self.playback_state = PlaybackState.PAUSED
+
+    def _mark_segment(self):
+        """Mark the current segment with the selected subtask."""
+        if self.playback_state == PlaybackState.PLAYING:
+            return
+
+        self.annotations.append(
+            {
+                "start_step": self.current_segment_start,
+                "end_step": self.step_count,
+                "subtask": self.current_subtask,
+            }
+        )
+
+        self.current_segment_start = self.step_count
+
+        if self.current_subtask is not None:
+            print(f"\nMarked segment {len(self.annotations)} with subtask: {self.current_subtask}")
+        else:
+            print(f"\nMarked segment {len(self.annotations)} as unannotated")
+        print(f"From step {self.current_segment_start} to {self.step_count}")
+
+        self.current_subtask = None
 
     def _parse_step_data(self, action, obs, reward, terminated, truncated, info):
         # Store action, obs, reward, terminated, truncated, info
@@ -648,6 +745,11 @@ class DataPlaybackWrapper(DataWrapper):
                 # Step physics to initialize any new objects
                 og.sim.step()
 
+            if self.enable_annotation:
+                while self.playback_state in [PlaybackState.PAUSED, PlaybackState.ANNOTATING]:
+                    if self.playback_state == PlaybackState.PAUSED:
+                        og.sim.render()
+
             # Restore the sim state, and take a very small step with the action to make sure physics are
             # properly propagated after the sim state update
             og.sim.load_state(s[: int(ss)], serialized=True)
@@ -672,6 +774,8 @@ class DataPlaybackWrapper(DataWrapper):
             self.step_count += 1
 
         if record:
+            if self.enable_annotation:
+                self.current_traj_history[-1]["annotations"] = self.annotations
             self.flush_current_traj()
 
         # If we weren't using an external writer but we're still writing a video, close the writer
@@ -696,266 +800,13 @@ class DataPlaybackWrapper(DataWrapper):
         if video_writer is not None:
             video_writer.close()
 
-
-class AnnotatedDataPlaybackWrapper(DataPlaybackWrapper):
-    """
-    A wrapper that extends DataPlaybackWrapper to support trajectory annotation during playback.
-    Allows users to pause playback and annotate segments of the trajectory with subtask labels.
-    """
-
-    def __init__(
-        self,
-        env,
-        input_path: str,
-        output_path: str,
-        subtasks: List[str],
-        n_render_iterations: int = 5,
-        only_successes: bool = False,
-    ):
-        """
-        Args:
-            env: The environment to wrap
-            input_path: Path to input hdf5 collected data file
-            output_path: Path to store output hdf5 data file
-            subtasks: List of possible subtask names that can be annotated
-            n_render_iterations: Number of rendering iterations when loading each frame
-            only_successes: Whether to only save successful episodes
-        """
-        super().__init__(
-            env=env,
-            input_path=input_path,
-            output_path=output_path,
-            n_render_iterations=n_render_iterations,
-            only_successes=only_successes,
-        )
-
-        # Store subtask information
-        self.subtasks = subtasks
-        self.current_subtask = None
-
-        # Initialize annotation data structures
-        self.playback_state = PlaybackState.PAUSED
-        self.current_segment_start = 0  # Step index where current segment starts
-        self.annotations = []  # List of (start_idx, end_idx, subtask) tuples
-
-        # Register keyboard callbacks
-        self._setup_keyboard_controls()
-
-    def _setup_keyboard_controls(self):
-        """Setup keyboard controls for playback and annotation."""
-        KeyboardEventHandler.initialize()
-
-        # Playback control
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.SPACE,
-            callback_fn=self._toggle_pause,
-        )
-
-        # Annotation controls
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.ENTER,
-            callback_fn=self._mark_segment,
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.S,
-            callback_fn=self._select_subtask,
-        )
-
-    def _toggle_pause(self):
-        """Toggle between playing and paused states."""
-        if self.playback_state == PlaybackState.PLAYING:
-            self.playback_state = PlaybackState.PAUSED
-            print(f"\nPlayback paused at step {self.step_count}")
-            print("Press 'S' to select a subtask")
-            print("Press 'Enter' to mark the current segment")
-            print("Press 'Space' to resume playback")
-        else:
-            self.playback_state = PlaybackState.PLAYING
-            print("\nPlayback resumed")
-
-    def _select_subtask(self):
-        """Open prompt for selecting a subtask."""
-        if self.playback_state == PlaybackState.PLAYING:
-            return
-
-        # Create subtasks dictionary with descriptions
-        subtask_dict = {task: f"Annotate segment as '{task}'" for task in self.subtasks}
-        subtask_dict["skip"] = "Skip annotation for this segment"
-
-        # Pause rendering while getting user input
-        self.playback_state = PlaybackState.ANNOTATING
-        selected = choose_from_options(subtask_dict, "subtask")
-
-        if selected != "skip":
-            self.current_subtask = selected
-            print(f"\nSelected subtask: {self.current_subtask}")
-        else:
-            self.current_subtask = None
-            print("\nSkipping annotation for this segment")
-
-        self.playback_state = PlaybackState.PAUSED
-
-    def _mark_segment(self):
-        """Mark the current segment with the selected subtask."""
-        if self.playback_state == PlaybackState.PLAYING:
-            return
-
-        # Record the segment
-        self.annotations.append(
-            {
-                "start_step": self.current_segment_start,
-                "end_step": self.step_count,
-                "subtask": self.current_subtask,  # Can be None if skipped
-            }
-        )
-
-        # Update the start of the next segment
-        self.current_segment_start = self.step_count
-
-        if self.current_subtask is not None:
-            print(f"\nMarked segment {len(self.annotations)} with subtask: {self.current_subtask}")
-        else:
-            print(f"\nMarked segment {len(self.annotations)} as unannotated")
-        print(f"From step {self.current_segment_start} to {self.step_count}")
-
-        # Reset current subtask
-        self.current_subtask = None
-
-    def playback_episode(self, episode_id: int, record: bool = True):
-        """
-        Playback episode with annotation support.
-
-        Args:
-            episode_id: Episode to playback
-            record: Whether to record data during playback
-        """
-        # Reset annotation state
-        self.playback_state = PlaybackState.PLAYING
-        self.current_segment_start = 0
-        self.annotations = []
-        self.current_subtask = None
-
-        print("\nStarting playback of episode {episode_id}")
-        print("Controls:")
-        print("  - Space: Pause/Resume playback")
-        print("  - S: Select subtask for annotation")
-        print("  - Enter: Mark current segment with selected subtask")
-
-        # Get episode data
-        data_grp = self.input_hdf5["data"]
-        assert f"demo_{episode_id}" in data_grp, f"No valid episode with ID {episode_id} found!"
-        traj_grp = data_grp[f"demo_{episode_id}"]
-
-        # Process episode data same as parent class
-        transitions = json.loads(traj_grp.attrs["transitions"])
-        traj_grp = h5py_group_to_torch(traj_grp)
-        action = traj_grp["action"]
-        state = traj_grp["state"]
-        state_size = traj_grp["state_size"]
-        reward = traj_grp["reward"]
-        terminated = traj_grp["terminated"]
-        truncated = traj_grp["truncated"]
-
-        # Reset environment
-        og.sim.restore(scene_files=[self.scene_file])
-        self.reset()
-
-        # Restore initial state
-        og.sim.load_state(state[0, : int(state_size[0])], serialized=True)
-
-        # Record initial observations if needed
-        if record:
-            init_obs, _, _, _, _ = self.env.step(action=action[0], n_render_iterations=self.n_render_iterations)
-            step_data = {"obs": init_obs}
-            self.current_traj_history.append(step_data)
-
-        # Main playback loop
-        for i, (a, s, ss, r, te, tr) in enumerate(
-            zip(action, state[1:], state_size[1:], reward, terminated, truncated)
-        ):
-            # Handle transitions
-            if str(i) in transitions:
-                self._handle_transitions(transitions[str(i)])
-
-            # Wait while paused or annotating
-            while self.playback_state in [PlaybackState.PAUSED, PlaybackState.ANNOTATING]:
-                if self.playback_state == PlaybackState.PAUSED:
-                    self.env.render()
-
-            # Update simulation state
-            og.sim.load_state(s[: int(ss)], serialized=True)
-            self.current_obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
-
-            # Record data if needed
-            if record:
-                step_data = self._parse_step_data(
-                    action=a,
-                    obs=self.current_obs,
-                    reward=r,
-                    terminated=te,
-                    truncated=tr,
-                    info=info,
-                )
-                self.current_traj_history.append(step_data)
-
-            self.step_count += 1
-
-        # Handle any remaining unannotated segments
-        if self.step_count > self.current_segment_start:
-            self.annotations.append(
-                {
-                    "start_step": self.current_segment_start,
-                    "end_step": self.step_count,
-                    "subtask": None,  # Mark as unannotated
-                }
-            )
-
-        # Store annotations in the trajectory group
-        if record:
-            self.current_traj_history[-1]["annotations"] = self.annotations
-            self.flush_current_traj()
-
-        print(f"\nFinished playback of episode {episode_id}")
-        print(f"Total segments annotated: {len(self.annotations)}")
-        for i, ann in enumerate(self.annotations):
-            subtask = ann["subtask"] if ann["subtask"] is not None else "unannotated"
-            print(f"Segment {i+1}: {subtask} (steps {ann['start_step']} to {ann['end_step']})")
-
-    def _handle_transitions(self, transitions):
-        """Handle object and system transitions during playback."""
-        scene = og.sim.scenes[0]
-
-        # Handle system transitions
-        for add_sys_name in transitions["systems"]["add"]:
-            scene.get_system(add_sys_name, force_init=True)
-        for remove_sys_name in transitions["systems"]["remove"]:
-            scene.clear_system(remove_sys_name)
-
-        # Handle object transitions
-        for j, add_obj_info in enumerate(transitions["objects"]["add"]):
-            obj = create_object_from_init_info(add_obj_info)
-            scene.add_object(obj)
-            obj.set_position(th.ones(3) * 100.0 + th.ones(3) * 5 * j)
-        for remove_obj_name in transitions["objects"]["remove"]:
-            obj = scene.object_registry("name", remove_obj_name)
-            scene.remove_object(obj)
-
-        # Step physics to initialize new objects
-        og.sim.step()
-
     def process_traj_to_hdf5(self, traj_data, traj_grp_name, nested_keys=("obs",)):
-        """
-        Process trajectory data and store in HDF5, including annotations.
-        """
+        """Process trajectory data and store in HDF5, including annotations if enabled."""
         # Get trajectory group from parent processing
-        traj_grp = super().process_traj_to_hdf5(
-            traj_data,
-            traj_grp_name,
-            nested_keys,
-        )
+        traj_grp = super().process_traj_to_hdf5(traj_data, traj_grp_name, nested_keys)
 
-        # Add annotations as metadata
-        if len(traj_data) > 0 and "annotations" in traj_data[-1]:
+        # Add annotations as metadata if enabled and present
+        if self.enable_annotation and len(traj_data) > 0 and "annotations" in traj_data[-1]:
             self.add_metadata(
                 group=traj_grp,
                 name="annotations",
