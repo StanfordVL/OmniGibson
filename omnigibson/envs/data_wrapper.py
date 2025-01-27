@@ -592,9 +592,8 @@ class DataPlaybackWrapper(DataWrapper):
         if enable_annotation:
             assert subtasks is not None, "subtasks must be provided when enable_annotation is True"
             self.subtasks = subtasks
-            self.current_subtask = None
-            self.playback_state = PlaybackState.PLAYING
-            self.current_segment_start = 0
+            self.playback_state = PlaybackState.PAUSED
+            self.current_segment = {"start_step": None, "end_step": None, "subtask": None}
             self.annotations = []
             self._setup_keyboard_controls()
 
@@ -605,16 +604,12 @@ class DataPlaybackWrapper(DataWrapper):
         """Setup keyboard controls for annotation."""
         KeyboardEventHandler.initialize()
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.SPACE,
+            key=lazy.carb.input.KeyboardInput.ENTER,
             callback_fn=self._toggle_pause,
         )
         KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.ENTER,
-            callback_fn=self._mark_segment,
-        )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.S,
-            callback_fn=self._select_subtask,
+            key=lazy.carb.input.KeyboardInput.Z,
+            callback_fn=self._mark_segment_boundary,
         )
 
     def _toggle_pause(self):
@@ -622,55 +617,62 @@ class DataPlaybackWrapper(DataWrapper):
         if self.playback_state == PlaybackState.PLAYING:
             self.playback_state = PlaybackState.PAUSED
             print(f"\nPlayback paused at step {self.step_count}")
-            print("Press 'S' to select a subtask")
-            print("Press 'Enter' to mark the current segment")
-            print("Press 'Space' to resume playback")
+            if self.current_segment["start_step"] is None:
+                print("Press 'Z' to mark segment start")
+            else:
+                print("Press 'Z' to mark segment end")
+            print("Press 'ENTER' to resume playback")
         else:
             self.playback_state = PlaybackState.PLAYING
             print("\nPlayback resumed")
 
-    def _select_subtask(self):
-        """Open prompt for selecting a subtask."""
+    def _mark_segment_boundary(self):
+        """Mark segment boundaries and prompt for subtask selection when a segment is completed."""
         if self.playback_state == PlaybackState.PLAYING:
             return
 
+        # If no segment start is marked, this is the start of a new segment
+        if self.current_segment["start_step"] is None:
+            self.current_segment["start_step"] = self.step_count
+            print(f"\nMarked segment start at step {self.step_count}")
+            print("Press 'ENTER' to resume playback")
+            print("Press 'Z' when you want to mark the segment end")
+            return
+
+        # If we already have a start point, this marks the end of the segment
+        self.current_segment["end_step"] = self.step_count
+
+        # Prompt for subtask selection
+        self.playback_state = PlaybackState.ANNOTATING
         subtask_dict = {task: f"Annotate segment as '{task}'" for task in self.subtasks}
         subtask_dict["skip"] = "Skip annotation for this segment"
 
-        self.playback_state = PlaybackState.ANNOTATING
         selected = choose_from_options(subtask_dict, "subtask")
 
-        if selected != "skip":
-            self.current_subtask = selected
-            print(f"\nSelected subtask: {self.current_subtask}")
-        else:
-            self.current_subtask = None
-            print("\nSkipping annotation for this segment")
-
-        self.playback_state = PlaybackState.PAUSED
-
-    def _mark_segment(self):
-        """Mark the current segment with the selected subtask."""
-        if self.playback_state == PlaybackState.PLAYING:
-            return
-
+        # Record the completed segment
+        self.current_segment["subtask"] = None if selected == "skip" else selected
         self.annotations.append(
             {
-                "start_step": self.current_segment_start,
-                "end_step": self.step_count,
-                "subtask": self.current_subtask,
+                "start_step": self.current_segment["start_step"],
+                "end_step": self.current_segment["end_step"],
+                "subtask": self.current_segment["subtask"],
             }
         )
 
-        self.current_segment_start = self.step_count
-
-        if self.current_subtask is not None:
-            print(f"\nMarked segment {len(self.annotations)} with subtask: {self.current_subtask}")
+        # Print segment info
+        if self.current_segment["subtask"] is not None:
+            print(f"\nMarked segment {len(self.annotations)} with subtask: {self.current_segment['subtask']}")
         else:
             print(f"\nMarked segment {len(self.annotations)} as unannotated")
-        print(f"From step {self.current_segment_start} to {self.step_count}")
+        print(f"From step {self.current_segment['start_step']} to {self.current_segment['end_step']}")
 
-        self.current_subtask = None
+        # Reset current segment for the next annotation
+        self.current_segment = {"start_step": None, "end_step": None, "subtask": None}
+
+        self.playback_state = PlaybackState.PAUSED
+        print("\nReady for next segment")
+        print("Press 'Z' to mark new segment start")
+        print("Press 'ENTER' to resume playback")
 
     def _parse_step_data(self, action, obs, reward, terminated, truncated, info):
         # Store action, obs, reward, terminated, truncated, info
@@ -724,9 +726,19 @@ class DataPlaybackWrapper(DataWrapper):
             step_data = {"obs": init_obs}
             self.current_traj_history.append(step_data)
 
+        if self.enable_annotation:
+            print("\nPlayback paused at step 0")
+            print("Press 'ENTER' to resume playback")
+            print("Press 'Z' to mark the start of a segment")
+
         for i, (a, s, ss, r, te, tr) in enumerate(
             zip(action, state[1:], state_size[1:], reward, terminated, truncated)
         ):
+            if self.enable_annotation:
+                while self.playback_state in [PlaybackState.PAUSED, PlaybackState.ANNOTATING]:
+                    if self.playback_state == PlaybackState.PAUSED:
+                        og.sim.render()
+
             # Execute any transitions that should occur at this current step
             if str(i) in transitions:
                 cur_transitions = transitions[str(i)]
@@ -744,11 +756,6 @@ class DataPlaybackWrapper(DataWrapper):
                     scene.remove_object(obj)
                 # Step physics to initialize any new objects
                 og.sim.step()
-
-            if self.enable_annotation:
-                while self.playback_state in [PlaybackState.PAUSED, PlaybackState.ANNOTATING]:
-                    if self.playback_state == PlaybackState.PAUSED:
-                        og.sim.render()
 
             # Restore the sim state, and take a very small step with the action to make sure physics are
             # properly propagated after the sim state update
