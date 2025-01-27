@@ -21,10 +21,10 @@ ROBOT_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "robot.yaml")
 # 로봇 설정 로드
 with open(ROBOT_CONFIG_PATH, "r") as f:
     robot_config = yaml.safe_load(f)
-MAX_V = 0.3  # robot_config["max_v"]
-MAX_W = robot_config["max_w"]
+MAX_V = 3.1  # robot_config["max_v"]
+MAX_W = 3.0  # robot_config["max_w"]
 RATE = robot_config["frame_rate"]
-DT = 1.0 / RATE  # 한 스텝 시간(초)
+DT = 1.0  # / RATE  # 한 스텝 시간(초)
 
 
 ##############################################################################
@@ -65,8 +65,8 @@ def waypoint_to_velocity(waypoint: np.ndarray, max_v: float, max_w: float, dt: f
         w = np.arctan2(dy, dx) / dt
 
     # 최대치 제한
-    v = np.clip(v, -max_v, max_v)
-    w = np.clip(w, -max_w, max_w)
+    # v = np.clip(v, -max_v, max_v)
+    # w = np.clip(w, -max_w, max_w)
     return np.array([v, w], dtype=np.float32)
 
 

@@ -23,13 +23,6 @@ MODEL_TRAIN_PATH = os.path.join(work_dir, "test_NoMaD", "train")
 MODEL_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "models.yaml")
 ROBOT_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "robot.yaml")
 
-# 로봇 설정 로드
-with open(ROBOT_CONFIG_PATH, "r") as f:
-    robot_config = yaml.safe_load(f)
-MAX_V = robot_config["max_v"]
-MAX_W = robot_config["max_w"]
-RATE = robot_config["frame_rate"]
-
 
 ##############################################################################
 # "msg_to_pil" 대체: Omnigibson에서 받은 torch.Tensor (H, W, 4) -> (H, W, 3) -> PIL.Image
@@ -138,11 +131,11 @@ def main(random_selection=False, headless=False, short_exec=False):
     with open(MODEL_CONFIG_PATH, "r") as f:
         model_paths = yaml.safe_load(f)
 
-    # with open(ROBOT_CONFIG_PATH, "r") as f:
-    #     robot_config = yaml.safe_load(f)
-    # MAX_V = robot_config["max_v"]
-    # MAX_W = robot_config["max_w"]
-    # RATE = robot_config["frame_rate"]
+    with open(ROBOT_CONFIG_PATH, "r") as f:
+        robot_config = yaml.safe_load(f)
+    MAX_V = robot_config["max_v"]
+    MAX_W = robot_config["max_w"]
+    RATE = robot_config["frame_rate"]
 
     # model_config_path와 ckpth_path 설정 (사용자 환경에 맞춤)
     model_config_path = os.path.join(MODEL_TRAIN_PATH, "config", "nomad.yaml")  # path to the model config
@@ -177,7 +170,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     context_size = model_params["context_size"]
 
     max_iterations = 10 if not short_exec else 1
-    steps_per_ep = 10000
+    steps_per_ep = 2000
 
     class ArgObj:
         def __init__(self):
@@ -196,6 +189,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                 zero_action = np.array([0.0, 0.0], dtype=np.float32)
                 states, rewards, terminated, truncated, infos = env.step({robot_name: zero_action})
             else:
+                # action = np.array([20.0, 0.0], dtype=np.float32)
                 states, rewards, terminated, truncated, infos = env.step({robot_name: action})
 
             # 2) 카메라 텐서 획득 (Omnigibson이 torch.Tensor로 반환한다고 가정)
