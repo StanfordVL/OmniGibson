@@ -591,7 +591,7 @@ class SanityCheck:
                 f"{row.object_name} has different material. Match materials on each instance.",
             )
 
-    def validate_collision(self, obj):
+    def validate_convex_mesh(self, obj, max_elements=40, max_vertices_per_element=60):
         try:
             # For this case, unwrap the object
             obj = obj._obj
@@ -623,19 +623,21 @@ class SanityCheck:
 
             # Split the faces into elements
             elems = all_cmeshes.split(only_watertight=False, repair=False)
-            self.expect(
-                len(elems) <= 40,
-                f"{obj.name} should not have more than 40 elements. Has {len(elems)} elements.",
-            )
+            if max_elements is not None:
+                self.expect(
+                    len(elems) <= max_elements,
+                    f"{obj.name} should not have more than {max_elements} elements. Has {len(elems)} elements.",
+                )
 
             # Iterate through the elements
             for i, m in enumerate(elems):
-                self.expect(
-                    len(m.vertices) <= 60,
-                    f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > 60)",
-                )
+                if max_vertices_per_element is not None:
+                    self.expect(
+                        len(m.vertices) <= max_vertices_per_element,
+                        f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > {max_vertices_per_element})",
+                    )
                 self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
-                # self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
+                self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
         except Exception as e:
             self.expect(False, str(e))
 
@@ -766,10 +768,9 @@ class SanityCheck:
 
             if ALLOWED_META_TYPES.get(meta_link_type, None) == "convexmesh":
                 found_convex_mesh_metas[meta_link_type].append(child)
+                self.validate_convex_mesh(child)
 
-            if meta_link_type == "collision":
-                self.validate_collision(child)
-            elif meta_link_type == "attachment":
+            if meta_link_type == "attachment":
                 attachment_type = match.group("meta_id")
                 self.expect(
                     len(attachment_type) > 0,
