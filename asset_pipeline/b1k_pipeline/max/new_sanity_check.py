@@ -184,14 +184,17 @@ class SanityCheck:
 
     @functools.lru_cache(maxsize=None)
     def get_faces_for_obj(self, obj):
-        return (
-            np.array(
-                rt.polyop.getFacesVerts(
-                    obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj))
+        try:
+            return (
+                np.array(
+                    rt.polyop.getFacesVerts(
+                        obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj))
+                    )
                 )
+                - 1
             )
-            - 1
-        )
+        except:
+            raise ValueError(f"Error getting faces for {obj.name}. Did you triangulate?")
 
     def maybe_rename_category(self, cat, model):
         if (cat, model) in RENAMES:
@@ -943,6 +946,7 @@ class SanityCheck:
                         self.expect(
                             False,
                             f"{model_id} has meta link not required by its synset: {extra_meta_type}.",
+                            level="WARNING",
                         )
             except ValueError as e:
                 self.expect(
