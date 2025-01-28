@@ -93,11 +93,10 @@ ig_pipeline/
     object_list --> object_inventory
     object_list --> object_list_success
     object_list_success --> export_objs
-    room_object_list --> combined_room_object_list
+    object_list --> combined_room_object_list
     sanitycheck --> sanitycheck_success
     processed.max --> export_meshes
     processed.max --> object_list
-    processed.max --> room_object_list
     processed.max --> sanitycheck
 ```
 
@@ -119,7 +118,6 @@ Here is a description of all stages:
 | usdify_objs               | Converts objects into USD from URDF.                                                                                                                                       | Docker, WSL2, Windows 11 |
 | generate_scene_images     | Generates images of scenes from a number of fixed perspectives. Deprecated - use camera images.                                                                            | 3ds Max                  |
 | generate_camera_images    | Generates images of scenes from the camera viewpoints they contain.                                                                                                        | 3ds Max                  |
-| room_object_list          | Exports a room-based object list (e.g. which rooms contain which objects).                                                                                                 | 3ds Max                  |
 | combined_room_object_list | Combines the room object lists (and combines any requested partial scenes' contents) and converts them into WordNet synset format.                                         |                          |
 | export_scene              | Using the exported meshes, creates a scene URDF file that references the appropriate objects.                                                                              |                          |
 | validate_scene            | Runs validation checks (e.g. physics stability) on scene files.                                                                                                            |                          |

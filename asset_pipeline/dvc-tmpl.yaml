@@ -201,43 +201,13 @@ stages:
     - b1k_pipeline/check_success.py
     outs:
     - artifacts/pipeline/export_objs.success
-
-  room_object_list:
-    # Generate a list of all objects found in each room in each scene.
-    foreach: ${scenes_unfiltered}
-    do:
-      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/room_object_list.py'
-      deps:
-      - b1k_pipeline/max/room_object_list.py
-      - cad/${item}/processed.max
-      # - artifacts/pipeline/sanitycheck.success
-      outs:
-      - cad/${item}/artifacts/room_object_list.json
-
-  room_object_list_success:
-    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/room_object_list.json artifacts/pipeline/room_object_list.success scenes'
-    deps:
-    - cad/#{scenes}/artifacts/room_object_list.json
-    - b1k_pipeline/check_success_aggregate.py
-    - params.yaml
-    outs:
-    - artifacts/pipeline/room_object_list.success
-
-  room_object_list_future_success:
-    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/room_object_list.json artifacts/pipeline/room_object_list_future.success scenes_unfiltered'
-    deps:
-    - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
-    - b1k_pipeline/check_success_aggregate.py
-    - params.yaml
-    outs:
-    - artifacts/pipeline/room_object_list_future.success
-      
+     
   combined_room_object_list:
     # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
     cmd: 'python -m b1k_pipeline.combined_room_object_list'
     deps:
-    - cad/#{scenes}/artifacts/room_object_list.json
-    - artifacts/pipeline/room_object_list.success
+    - cad/#{scenes}/artifacts/object_list.json
+    - artifacts/pipeline/object_list.success
     - b1k_pipeline/combined_room_object_list.py
     - metadata/allowed_room_types.csv
     - params.yaml
@@ -248,8 +218,8 @@ stages:
     # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
     cmd: 'python -m b1k_pipeline.combined_room_object_list --future'
     deps:
-    - cad/#{scenes_unfiltered}/artifacts/room_object_list.json
-    - artifacts/pipeline/room_object_list_future.success
+    - cad/#{scenes_unfiltered}/artifacts/object_list.json
+    - artifacts/pipeline/object_list_future.success
     - b1k_pipeline/combined_room_object_list.py
     - metadata/allowed_room_types.csv
     - params.yaml
@@ -262,8 +232,8 @@ stages:
     deps:
     - artifacts/pipeline/export_meshes.success
     - cad/#{scenes}/artifacts/meshes.zip
-    - cad/#{scenes}/artifacts/room_object_list.json
-    - cad/#{scenes}/artifacts/room_object_list.success
+    - cad/#{scenes}/artifacts/object_list.json
+    - cad/#{scenes}/artifacts/object_list.success
     - b1k_pipeline/export_scenes_global.py
     - b1k_pipeline/export_objs_global.py
     - b1k_pipeline/mesh_tree.py

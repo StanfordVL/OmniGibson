@@ -17,6 +17,7 @@ rt = pymxs.runtime
 
 OUTPUT_FILENAME = "object_list.json"
 COMPLEX_FINGERPRINT = False
+MUST_HAVE_ROOM_ASSIGNMENT_CATEGORIES = {"wall_nail"}
 
 
 def compute_moment_of_inertia(triangles, reference_point=None):
@@ -347,10 +348,7 @@ def main():
         for k, v in sorted(attachment_pairs.items())
     }
 
-    output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
-    output_dir.mkdir(parents=True, exist_ok=True)
-
-    filename = output_dir / OUTPUT_FILENAME
+    # Start storing the data
     results = {
         "success": success,
         "needed_objects": needed,
@@ -364,6 +362,83 @@ def main():
         "error_invalid_name": sorted(nomatch),
         "error_bad_attachment": bad_attachments,
     }
+
+    # For scenes, do this stuff that used to be in room_object_list only
+    is_scene = pathlib.Path(rt.maxFilePath).parts[-2] == "scenes"
+    if is_scene:
+        objects_by_room = defaultdict(Counter)
+        missing_room_assignment = set()
+
+        for obj in rt.objects:
+            if rt.classOf(obj) != rt.Editable_Poly:
+                continue
+
+            match = b1k_pipeline.utils.parse_name(obj.name)
+            if not match:
+                continue
+
+            model = match.group("category") + "-" + match.group("model_id")
+
+            room_strs = obj.layer.name
+            for room_str in room_strs.split(","):
+                room_str = room_str.strip()
+                if room_str == "0":
+                    if match.group("category") in MUST_HAVE_ROOM_ASSIGNMENT_CATEGORIES:
+                        missing_room_assignment.add(obj.name)
+                    continue
+                link_name = match.group("link_name")
+                if link_name == "base_link" or not link_name:
+                    objects_by_room[room_str][model] += 1
+
+        # Separately process portals
+        portals = [x for x in rt.objects if rt.classOf(x) == rt.Plane]
+        incoming_portal = None
+        outgoing_portals = {}
+        portal_nomatch = []
+        for portal in portals:
+            portal_match = b1k_pipeline.utils.parse_portal_name(portal.name)
+            if not portal_match:
+                portal_nomatch.append(portal.name)
+                continue
+
+            # Get portal info
+            position = list(portal.position)
+            rotation = portal.rotation
+            quat = [rotation.x, rotation.y, rotation.z, rotation.w]
+            scale = np.array(list(portal.scale))
+            size = list(np.array([portal.width, portal.length]) * scale[:2])
+
+            portal_info = [position, quat, size]
+
+            # Process incoming portal
+            if portal_match.group("partial_scene") is None:
+                assert incoming_portal is None, "Duplicate incoming portal"
+                incoming_portal = portal_info
+            else:
+                scene_name = portal_match.group("partial_scene")
+                assert (
+                    scene_name not in outgoing_portals
+                ), f"Duplicate outgoing portal for scene {scene_name}"
+                outgoing_portals[scene_name] = portal_info
+
+        success = (
+            success and len(portal_nomatch) == 0 and len(missing_room_assignment) == 0
+        )
+        results.update(
+            {
+                "success": success,
+                "objects_by_room": objects_by_room,
+                "incoming_portal": incoming_portal,
+                "outgoing_portals": outgoing_portals,
+                "error_invalid_name_portal": sorted(portal_nomatch),
+                "error_missing_room_assignment": sorted(missing_room_assignment),
+            }
+        )
+
+    output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    filename = output_dir / OUTPUT_FILENAME
     with open(filename, "w") as f:
         json.dump(results, f, indent=4)
 
