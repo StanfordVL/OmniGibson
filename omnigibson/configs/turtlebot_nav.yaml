@@ -13,7 +13,7 @@ render:
 
 scene:
   type: InteractiveTraversableScene
-  scene_model: Rs_int
+  scene_model: Ihlen_1_int #Rs_int
   trav_map_resolution: 0.1
   default_erosion_radius: 0.0
   trav_map_with_objects: true
@@ -29,7 +29,7 @@ scene:
 
 robots:
   - type: Turtlebot
-    obs_modalities: [scan, rgb, depth, proprio]
+    obs_modalities: [rgb, proprio] #[scan, rgb, depth, proprio]
     scale: 1.0
     self_collision: false
     action_normalize: true
@@ -37,8 +37,8 @@ robots:
     sensor_config:
       VisionSensor:
         sensor_kwargs:
-          image_height: 96 #128
-          image_width: 96 #128
+          image_height: 128
+          image_width: 128
       ScanSensor:
         sensor_kwargs:
           min_range: 0.05
@@ -51,7 +51,8 @@ robots:
 objects: []
 
 task:
-  type: PointNavigationTask
+  # type: PointNavigationTask
+  type: DummyTask
   robot_idn: 0
   floor: 0
   initial_pos: null
@@ -63,12 +64,12 @@ task:
   visualize_goal: true
   visualize_path: false
   n_vis_waypoints: 25
-  reward_type: geodesic
-  termination_config:
-    max_collisions: 500
-    max_steps: 500
-    fall_height: 0.03
-  reward_config:
-    r_potential: 1.0
-    r_collision: 0.1
-    r_pointgoal: 10.0
+  # reward_type: geodesic
+  # termination_config:
+  #   max_collisions: 500
+  #   max_steps: 500
+  #   fall_height: 0.03
+  # reward_config:
+  #   r_potential: 1.0
+  #   r_collision: 0.1
+  #   r_pointgoal: 10.0
