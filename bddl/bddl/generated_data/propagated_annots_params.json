@@ -46342,7 +46342,13 @@
         "wrinkleable": {}
     },
     "grocery_fridge.n.01": {
-        "coldSource": {},
+        "coldSource": {
+            "requires_toggled_on": 0.0,
+            "requires_closed": 0.0,
+            "requires_inside": 1.0,
+            "temperature": 4.0,
+            "heating_rate": 0.01
+        },
         "disinfectable": {},
         "dustyable": {},
         "fillable": {},
@@ -58368,6 +58374,21 @@
         "freezable": {},
         "grassyable": {},
         "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "job-oriented_terminal.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "grassyable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -106487,6 +106508,21 @@
         "freezable": {},
         "grassyable": {},
         "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
+    "terminal.n.04": {
+        "disinfectable": {},
+        "dustyable": {},
+        "grassyable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},

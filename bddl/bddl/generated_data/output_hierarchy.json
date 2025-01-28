@@ -25043,8 +25043,7 @@
                                           "name": "cash_register.n.01",
                                           "hasModel": true,
                                           "categories": [
-                                            "cash_register",
-                                            "credit_card_terminal"
+                                            "cash_register"
                                           ]
                                         }
                                       ]
@@ -29456,6 +29455,19 @@
                                             "cell_phone"
                                           ]
                                         }
+                                      ]
+                                    }
+                                  ]
+                                },
+                                {
+                                  "name": "terminal.n.04",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "job-oriented_terminal.n.01",
+                                      "hasModel": true,
+                                      "categories": [
+                                        "credit_card_terminal"
                                       ]
                                     }
                                   ]
