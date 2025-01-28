@@ -30174,10 +30174,7 @@
                                       "children": [
                                         {
                                           "name": "bar.n.02",
-                                          "hasModel": true,
-                                          "categories": [
-                                            "bar"
-                                          ]
+                                          "hasModel": true
                                         },
                                         {
                                           "name": "checkout.n.03",
@@ -32718,6 +32715,7 @@
                                   "name": "countertop.n.01",
                                   "hasModel": true,
                                   "categories": [
+                                    "bar",
                                     "commercial_kitchen_table",
                                     "countertop"
                                   ]
