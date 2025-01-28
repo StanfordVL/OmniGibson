@@ -3,7 +3,7 @@
 
     (:objects
         wineglass.n.01_1 wineglass.n.01_2 - wineglass.n.01
-        bar.n.02_1 - bar.n.02
+        countertop.n.01_1 - countertop.n.01
         stain.n.01_1 - stain.n.01
         bowl.n.01_1 - bowl.n.01
         water.n.06_1 - water.n.06
@@ -18,19 +18,19 @@
     )
     
     (:init 
-        (ontop wineglass.n.01_1 bar.n.02_1) 
-        (ontop wineglass.n.01_2 bar.n.02_1) 
+        (ontop wineglass.n.01_1 countertop.n.01_1) 
+        (ontop wineglass.n.01_2 countertop.n.01_1) 
         (covered wineglass.n.01_1 stain.n.01_1) 
         (covered wineglass.n.01_2 stain.n.01_1) 
-        (ontop bowl.n.01_1 bar.n.02_1) 
+        (ontop bowl.n.01_1 countertop.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 bar.n.02_1) 
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (filled vinegar__bottle.n.01_1 vinegar.n.01_1) 
-        (ontop vinegar__bottle.n.01_1 bar.n.02_1) 
-        (ontop sponge.n.01_1 bar.n.02_1) 
+        (ontop vinegar__bottle.n.01_1 countertop.n.01_1) 
+        (ontop sponge.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
-        (inroom bar.n.02_1 bar) 
+        (inroom countertop.n.01_1 bar) 
         (inroom floor.n.01_1 bar) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
