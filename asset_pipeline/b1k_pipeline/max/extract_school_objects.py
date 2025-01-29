@@ -23,7 +23,9 @@ from b1k_pipeline.utils import parse_name
 
 def bin_files():
     max_files = glob.glob(r"D:\ig_pipeline\cad\scenes\*\processed.max")
-    school_files = sorted([pathlib.Path(x) for x in max_files if "scenes/school_" in x])
+    school_files = sorted(
+        [pathlib.Path(x) for x in max_files if "scenes" in x and "school_" in x]
+    )
 
     # Items to merge
     ids_to_merge = {
@@ -129,7 +131,7 @@ def bin_files():
             if m.group("bad") or m.group("instance_id") != "0":
                 continue
 
-            visual_objects_to_merge[m.group("model_id")] = obj
+            visual_objects_to_merge[m.group("model_id")].add(obj)
 
         model_ids_to_import = set(visual_objects_to_merge.keys()) & ids_to_merge
         print(

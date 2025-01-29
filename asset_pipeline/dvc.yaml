@@ -42,6 +42,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/max_object_images.zip
     - cad/objects/legacy_batch-12/artifacts/max_object_images.zip
     - cad/objects/procedural-aa/artifacts/max_object_images.zip
+    - cad/objects/school_objects-aa/artifacts/max_object_images.zip
     - cad/objects/substances-01/artifacts/max_object_images.zip
     - cad/objects/substances-02/artifacts/max_object_images.zip
     - cad/objects/task_relavant-ab/artifacts/max_object_images.zip
@@ -237,6 +238,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/meshes.zip
     - cad/objects/legacy_batch-12/artifacts/meshes.zip
     - cad/objects/procedural-aa/artifacts/meshes.zip
+    - cad/objects/school_objects-aa/artifacts/meshes.zip
     - cad/objects/substances-01/artifacts/meshes.zip
     - cad/objects/substances-02/artifacts/meshes.zip
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
@@ -328,6 +330,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/object_list.json
     - cad/objects/legacy_batch-12/artifacts/object_list.json
     - cad/objects/procedural-aa/artifacts/object_list.json
+    - cad/objects/school_objects-aa/artifacts/object_list.json
     - cad/objects/substances-01/artifacts/object_list.json
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
@@ -419,6 +422,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-12/artifacts/collision_meshes.zip
     - cad/objects/procedural-aa/artifacts/collision_meshes.zip
+    - cad/objects/school_objects-aa/artifacts/collision_meshes.zip
     - cad/objects/substances-01/artifacts/collision_meshes.zip
     - cad/objects/substances-02/artifacts/collision_meshes.zip
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
@@ -510,6 +514,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/collision_selection.json
     - cad/objects/legacy_batch-12/artifacts/collision_selection.json
     - cad/objects/procedural-aa/artifacts/collision_selection.json
+    - cad/objects/school_objects-aa/artifacts/collision_selection.json
     - cad/objects/substances-01/artifacts/collision_selection.json
     - cad/objects/substances-02/artifacts/collision_selection.json
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
@@ -616,6 +621,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/meshes.zip
     - cad/objects/legacy_batch-12/artifacts/meshes.zip
     - cad/objects/procedural-aa/artifacts/meshes.zip
+    - cad/objects/school_objects-aa/artifacts/meshes.zip
     - cad/objects/substances-01/artifacts/meshes.zip
     - cad/objects/substances-02/artifacts/meshes.zip
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
@@ -707,6 +713,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/object_list.json
     - cad/objects/legacy_batch-12/artifacts/object_list.json
     - cad/objects/procedural-aa/artifacts/object_list.json
+    - cad/objects/school_objects-aa/artifacts/object_list.json
     - cad/objects/substances-01/artifacts/object_list.json
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
@@ -798,6 +805,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-12/artifacts/collision_meshes.zip
     - cad/objects/procedural-aa/artifacts/collision_meshes.zip
+    - cad/objects/school_objects-aa/artifacts/collision_meshes.zip
     - cad/objects/substances-01/artifacts/collision_meshes.zip
     - cad/objects/substances-02/artifacts/collision_meshes.zip
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
@@ -889,6 +897,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/collision_selection.json
     - cad/objects/legacy_batch-12/artifacts/collision_selection.json
     - cad/objects/procedural-aa/artifacts/collision_selection.json
+    - cad/objects/school_objects-aa/artifacts/collision_selection.json
     - cad/objects/substances-01/artifacts/collision_selection.json
     - cad/objects/substances-02/artifacts/collision_selection.json
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
@@ -1140,6 +1149,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/export_meshes.json
     - cad/objects/legacy_batch-12/artifacts/export_meshes.json
     - cad/objects/procedural-aa/artifacts/export_meshes.json
+    - cad/objects/school_objects-aa/artifacts/export_meshes.json
     - cad/objects/substances-01/artifacts/export_meshes.json
     - cad/objects/substances-02/artifacts/export_meshes.json
     - cad/objects/task_relavant-ab/artifacts/export_meshes.json
@@ -1237,6 +1247,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/meshes.zip
     - cad/objects/legacy_batch-12/artifacts/meshes.zip
     - cad/objects/procedural-aa/artifacts/meshes.zip
+    - cad/objects/school_objects-aa/artifacts/meshes.zip
     - cad/objects/substances-01/artifacts/meshes.zip
     - cad/objects/substances-02/artifacts/meshes.zip
     - cad/objects/task_relavant-ab/artifacts/meshes.zip
@@ -1328,6 +1339,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/collision_meshes.zip
     - cad/objects/legacy_batch-12/artifacts/collision_meshes.zip
     - cad/objects/procedural-aa/artifacts/collision_meshes.zip
+    - cad/objects/school_objects-aa/artifacts/collision_meshes.zip
     - cad/objects/substances-01/artifacts/collision_meshes.zip
     - cad/objects/substances-02/artifacts/collision_meshes.zip
     - cad/objects/task_relavant-ab/artifacts/collision_meshes.zip
@@ -1419,6 +1431,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/collision_selection.json
     - cad/objects/legacy_batch-12/artifacts/collision_selection.json
     - cad/objects/procedural-aa/artifacts/collision_selection.json
+    - cad/objects/school_objects-aa/artifacts/collision_selection.json
     - cad/objects/substances-01/artifacts/collision_selection.json
     - cad/objects/substances-02/artifacts/collision_selection.json
     - cad/objects/task_relavant-ab/artifacts/collision_selection.json
@@ -1510,6 +1523,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/object_list.json
     - cad/objects/legacy_batch-12/artifacts/object_list.json
     - cad/objects/procedural-aa/artifacts/object_list.json
+    - cad/objects/school_objects-aa/artifacts/object_list.json
     - cad/objects/substances-01/artifacts/object_list.json
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
@@ -1830,6 +1844,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/generate_max_object_images.json
     - cad/objects/legacy_batch-12/artifacts/generate_max_object_images.json
     - cad/objects/procedural-aa/artifacts/generate_max_object_images.json
+    - cad/objects/school_objects-aa/artifacts/generate_max_object_images.json
     - cad/objects/substances-01/artifacts/generate_max_object_images.json
     - cad/objects/substances-02/artifacts/generate_max_object_images.json
     - cad/objects/task_relavant-ab/artifacts/generate_max_object_images.json
@@ -1945,6 +1960,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/object_list.json
     - cad/objects/legacy_batch-12/artifacts/object_list.json
     - cad/objects/procedural-aa/artifacts/object_list.json
+    - cad/objects/school_objects-aa/artifacts/object_list.json
     - cad/objects/substances-01/artifacts/object_list.json
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
@@ -2044,6 +2060,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/object_list.json
     - cad/objects/legacy_batch-12/artifacts/object_list.json
     - cad/objects/procedural-aa/artifacts/object_list.json
+    - cad/objects/school_objects-aa/artifacts/object_list.json
     - cad/objects/substances-01/artifacts/object_list.json
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
@@ -2161,6 +2178,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/object_list.json
     - cad/objects/legacy_batch-12/artifacts/object_list.json
     - cad/objects/procedural-aa/artifacts/object_list.json
+    - cad/objects/school_objects-aa/artifacts/object_list.json
     - cad/objects/substances-01/artifacts/object_list.json
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
@@ -2301,6 +2319,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/sanitycheck.json
     - cad/objects/legacy_batch-12/artifacts/sanitycheck.json
     - cad/objects/procedural-aa/artifacts/sanitycheck.json
+    - cad/objects/school_objects-aa/artifacts/sanitycheck.json
     - cad/objects/substances-01/artifacts/sanitycheck.json
     - cad/objects/substances-02/artifacts/sanitycheck.json
     - cad/objects/task_relavant-ab/artifacts/sanitycheck.json
@@ -2436,6 +2455,7 @@ stages:
     - cad/objects/legacy_batch-11/artifacts/object_list.json
     - cad/objects/legacy_batch-12/artifacts/object_list.json
     - cad/objects/procedural-aa/artifacts/object_list.json
+    - cad/objects/school_objects-aa/artifacts/object_list.json
     - cad/objects/substances-01/artifacts/object_list.json
     - cad/objects/substances-02/artifacts/object_list.json
     - cad/objects/task_relavant-ab/artifacts/object_list.json
