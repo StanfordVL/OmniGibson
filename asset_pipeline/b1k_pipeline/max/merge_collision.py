@@ -31,7 +31,7 @@ def merge_collision(collision_objs, target, metatype="collision"):
     baseObj.parent = target
 
     # Rename the first object to match the selected object
-    baseObj.name = target.name + "M" + metatype
+    baseObj.name = target.name + "-M" + metatype
 
     # Validate that the object name is valid
     assert (

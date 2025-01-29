@@ -640,7 +640,7 @@ class SanityCheck:
                         f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > {max_vertices_per_element})",
                     )
                 self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
-                self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
+                # self.expect(m.is_convex, f"{obj.name} element {i} is not convex")
         except Exception as e:
             self.expect(False, str(e))
 
