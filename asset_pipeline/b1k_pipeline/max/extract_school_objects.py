@@ -1,12 +1,6 @@
-from collections import defaultdict, Counter
-import filecmp
+from collections import defaultdict
 import glob
-import hashlib
-import os
 import pathlib
-import random
-import shutil
-import numpy as np
 
 import sys
 
@@ -20,102 +14,102 @@ rt = pymxs.runtime
 
 from b1k_pipeline.utils import parse_name
 
+# Items to merge
+IDS_TO_MERGE = {
+    "aknswb",
+    "arbekb",
+    "ayuubt",
+    "bftrar",
+    "bgpvtb",
+    "bpwjxr",
+    "cgvoho",
+    "ebtgyg",
+    "ehwmol",
+    "enfumt",
+    "ertfpr",
+    "ewqpfv",
+    "exaqtm",
+    "fdxevw",
+    "fjytro",
+    "fkosow",
+    "flctdz",
+    "ftvzzg",
+    "gemgfz",
+    "gvkgsi",
+    "gxajos",
+    "hfianz",
+    "hlktkb",
+    "hocerb",
+    "hvjwvj",
+    "hwhisw",
+    "hxbrop",
+    "hylkmj",
+    "inkwmw",
+    "izhouj",
+    "jchomn",
+    "jwagmm",
+    "khxpgc",
+    "kjxpdi",
+    "kkrlrc",
+    "ldbalq",
+    "ldrjoi",
+    "lufqkq",
+    "mbfgxr",
+    "mcukuh",
+    "mgzyjy",
+    "mstxjw",
+    "muqeud",
+    "myaxie",
+    "nbwrns",
+    "neqiyu",
+    "nwlbit",
+    "oedwla",
+    "oynrtw",
+    "paaegg",
+    "pktarr",
+    "pmtynn",
+    "qebtel",
+    "qemval",
+    "qvvvxz",
+    "qzrpiw",
+    "rgmujm",
+    "rpprcc",
+    "rwmofs",
+    "sdsfzw",
+    "shnohg",
+    "skcdiz",
+    "tbzucx",
+    "tfgypq",
+    "tfrisv",
+    "tiscsa",
+    "tjawkk",
+    "tmluxa",
+    "tqyiso",
+    "uztisk",
+    "vaoegv",
+    "vgsgxk",
+    "wraizn",
+    "wttqrk",
+    "wxkuww",
+    "xijidt",
+    "xjupjc",
+    "xkfmjp",
+    "xnjodq",
+    "xxipyh",
+    "ydfgju",
+    "yhthgr",
+    "zoolef",
+    "zrsytt",
+    "zughoy",
+    "zywgbh",
+}
 
-def bin_files():
+
+def merge_files():
     max_files = glob.glob(r"D:\ig_pipeline\cad\scenes\*\processed.max")
     school_files = sorted(
         [pathlib.Path(x) for x in max_files if "scenes" in x and "school_" in x]
     )
-
-    # Items to merge
-    ids_to_merge = {
-        "aknswb",
-        "arbekb",
-        "ayuubt",
-        "bftrar",
-        "bgpvtb",
-        "bpwjxr",
-        "cgvoho",
-        "ebtgyg",
-        "ehwmol",
-        "enfumt",
-        "ertfpr",
-        "ewqpfv",
-        "exaqtm",
-        "fdxevw",
-        "fjytro",
-        "fkosow",
-        "flctdz",
-        "ftvzzg",
-        "gemgfz",
-        "gvkgsi",
-        "gxajos",
-        "hfianz",
-        "hlktkb",
-        "hocerb",
-        "hvjwvj",
-        "hwhisw",
-        "hxbrop",
-        "hylkmj",
-        "inkwmw",
-        "izhouj",
-        "jchomn",
-        "jwagmm",
-        "khxpgc",
-        "kjxpdi",
-        "kkrlrc",
-        "ldbalq",
-        "ldrjoi",
-        "lufqkq",
-        "mbfgxr",
-        "mcukuh",
-        "mgzyjy",
-        "mstxjw",
-        "muqeud",
-        "myaxie",
-        "nbwrns",
-        "neqiyu",
-        "nwlbit",
-        "oedwla",
-        "oynrtw",
-        "paaegg",
-        "pktarr",
-        "pmtynn",
-        "qebtel",
-        "qemval",
-        "qvvvxz",
-        "qzrpiw",
-        "rgmujm",
-        "rpprcc",
-        "rwmofs",
-        "sdsfzw",
-        "shnohg",
-        "skcdiz",
-        "tbzucx",
-        "tfgypq",
-        "tfrisv",
-        "tiscsa",
-        "tjawkk",
-        "tmluxa",
-        "tqyiso",
-        "uztisk",
-        "vaoegv",
-        "vgsgxk",
-        "wraizn",
-        "wttqrk",
-        "wxkuww",
-        "xijidt",
-        "xjupjc",
-        "xkfmjp",
-        "xnjodq",
-        "xxipyh",
-        "ydfgju",
-        "yhthgr",
-        "zoolef",
-        "zrsytt",
-        "zughoy",
-        "zywgbh",
-    }
 
     # Merge in each file
     for p in tqdm.tqdm(school_files):
@@ -133,7 +127,7 @@ def bin_files():
 
             visual_objects_to_merge[m.group("model_id")].add(obj)
 
-        model_ids_to_import = set(visual_objects_to_merge.keys()) & ids_to_merge
+        model_ids_to_import = set(visual_objects_to_merge.keys()) & IDS_TO_MERGE
         print(
             f"Importing {len(model_ids_to_import)} models from {filename}: {sorted(model_ids_to_import)}"
         )
@@ -183,4 +177,4 @@ def bin_files():
 
 
 if __name__ == "__main__":
-    bin_files()
+    merge_files()

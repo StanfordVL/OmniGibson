@@ -16,6 +16,7 @@ import tqdm
 
 import b1k_pipeline.utils
 import b1k_pipeline.max.import_fillable_meshes
+import b1k_pipeline.max.extract_school_objects
 import b1k_pipeline.max.prebake_textures
 import b1k_pipeline.max.replace_bad_object
 import b1k_pipeline.max.collision_vertex_reduction
@@ -59,7 +60,7 @@ def processFile(filename: pathlib.Path):
     print(f"\n\nProcessing {filename}")
     assert rt.loadMaxFile(str(filename), useFileUnits=False, quiet=True)
 
-    made_any_changes = False
+    made_any_changes = True  # for now. TODO: fix
 
     # assert rt.units.systemScale == 1, "System scale not set to 1mm."
     # assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
@@ -135,41 +136,54 @@ def processFile(filename: pathlib.Path):
     # Prebake textures
     # b1k_pipeline.max.prebake_textures.process_open_file()
 
-    # # Delete meta links from non-zero instances
-    # for obj in rt.objects:
-    #     match = b1k_pipeline.utils.parse_name(obj.name)
-    #     if not match:
-    #         continue
-    #     if not match.group("bad") and match.group("instance_id") == "0":
-    #         continue
-    #     if not match.group("meta_type"):
-    #         continue
-    #     rt.delete(obj)
+    # Convert extracted school objects to BAD on these scenes
+    ids_to_bad = b1k_pipeline.max.extract_school_objects.IDS_TO_MERGE
+    for obj in rt.objects:
+        m = b1k_pipeline.utils.parse_name(obj.name)
+        if not m:
+            continue
+        if m.group("model_id") in ids_to_bad and not m.group("bad"):
+            obj.name = "B-" + obj.name
+            made_any_changes = True
+
+    # # Delete meta links from non-zero or bad instances
+    for obj in rt.objects:
+        match = b1k_pipeline.utils.parse_name(obj.name)
+        if not match:
+            continue
+        if not match.group("bad") and match.group("instance_id") == "0":
+            continue
+        if not match.group("meta_type"):
+            continue
+        rt.delete(obj)
+        made_any_changes = True
 
     # # # Delete upper links from non-zero instances
-    # for obj in rt.objects:
-    #     match = b1k_pipeline.utils.parse_name(obj.name)
-    #     if not match:
-    #         continue
-    #     if not match.group("bad") and match.group("instance_id") == "0":
-    #         continue
-    #     if match.group("joint_side") != "upper":
-    #         continue
-    #     rt.delete(obj)
+    for obj in rt.objects:
+        match = b1k_pipeline.utils.parse_name(obj.name)
+        if not match:
+            continue
+        if not match.group("bad") and match.group("instance_id") == "0":
+            continue
+        if match.group("joint_side") != "upper":
+            continue
+        rt.delete(obj)
+        made_any_changes = True
 
     # # Delete parts from non-zero instances
-    # for obj in rt.objects:
-    #     if not obj.parent:
-    #         continue
-    #     tags = {"subpart", "extrapart", "connectedpart"}
-    #     if not any("T" + tag in obj.name for tag in tags):
-    #         continue
-    #     match = b1k_pipeline.utils.parse_name(obj.parent.name)
-    #     if not match:
-    #         continue
-    #     if match.group("instance_id") == "0":
-    #         continue
-    #     rt.delete(obj)
+    for obj in rt.objects:
+        if not obj.parent:
+            continue
+        tags = {"subpart", "extrapart", "connectedpart"}
+        if not any("T" + tag in obj.name for tag in tags):
+            continue
+        match = b1k_pipeline.utils.parse_name(obj.parent.name)
+        if not match:
+            continue
+        if match.group("instance_id") == "0":
+            continue
+        rt.delete(obj)
+        made_any_changes = True
 
     # # Update UV unwrap to use correct attribute
     # for obj in rt.objects:
@@ -202,16 +216,16 @@ def processFile(filename: pathlib.Path):
     #         json.dump(comparison_data, f)
 
     # # Exit isolate mode
-    # rt.IsolateSelection.ExitIsolateSelectionMode()
+    rt.IsolateSelection.ExitIsolateSelectionMode()
 
     # # Unhide everything
-    # for obj in rt.objects:
-    #     obj.isHidden = False
+    for obj in rt.objects:
+        obj.isHidden = False
 
     # # Hide collision meshes
-    # for obj in rt.objects:
-    #     if "Mcollision" in obj.name:
-    #         obj.isHidden = True
+    for obj in rt.objects:
+        if "Mcollision" in obj.name:
+            obj.isHidden = True
 
     # Reduce collision mesh vertex counts
     # b1k_pipeline.max.collision_vertex_reduction.process_all_collision_objs()
@@ -274,19 +288,19 @@ def processFile(filename: pathlib.Path):
     #             made_any_changes = True
 
     # Import fillable meshes
-    made_any_changes = (
-        made_any_changes
-        or b1k_pipeline.max.import_fillable_meshes.process_current_file()
-    )
+    # made_any_changes = (
+    #     made_any_changes
+    #     or b1k_pipeline.max.import_fillable_meshes.process_current_file()
+    # )
 
     # Remove lights from bad objects and nonzero instances
-    # for light in list(rt.lights):
-    #     match = b1k_pipeline.utils.parse_name(light.name)
-    #     if not match:
-    #         continue
-    #     if match.group("bad") or match.group("instance_id") != "0":
-    #         rt.delete(light)
-    #         made_any_changes = True
+    for light in list(rt.lights):
+        match = b1k_pipeline.utils.parse_name(light.name)
+        if not match:
+            continue
+        if match.group("bad") or match.group("instance_id") != "0":
+            rt.delete(light)
+            made_any_changes = True
 
     # Save again.
     if made_any_changes:
@@ -296,7 +310,8 @@ def processFile(filename: pathlib.Path):
 
 def fix_common_issues_in_all_files():
     candidates = [
-        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        pathlib.Path(x)
+        for x in glob.glob(r"D:\ig_pipeline\cad\scenes\school_*\processed.max")
     ]
 
     start_pattern = None  # specify a start pattern here to skip up to a file

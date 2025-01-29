@@ -88,9 +88,10 @@ def run_vhacd(input_mesh, hull_count):
             print(e.output.decode("utf-8"))
             raise ValueError(f"VHACD failed with exit code {e.returncode}")
 
-HULL_COUNTS = [16]
+
+HULL_COUNTS = [8]
 USE_METHODS = {
-    "coacd": run_coacd,  # DISABLED BECAUSE TOO SLOW
+    # "coacd": run_coacd,  # DISABLED BECAUSE TOO SLOW
     # "vhacd": run_vhacd,
 }
 
