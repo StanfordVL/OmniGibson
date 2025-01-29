@@ -22,53 +22,55 @@ def flat_floor_to_cmesh(collision_objs, target):
         rt.addmodifier(obj, rt.Edit_Poly())
         rt.maxOps.collapseNodeTo(obj, 1, True)
 
-        # Decide which axis we're going to extrude along
-        points = np.array(
-            rt.polyop.getVerts(
-                obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))
-            )
-        )
-        bbox_min, bbox_max = np.min(points, axis=0), np.max(points, axis=0)
-        bbox_extent = bbox_max - bbox_min
-        extrusion_axis = int(np.argmin(bbox_extent))
-
-        # Make the points planar
-        plane_normal = np.zeros(3)
-        plane_normal[extrusion_axis] = 1
-        rt.polyop.moveVertsToPlane(
-            obj,
-            list(range(1, len(points) + 1)),
-            rt.Point3(*plane_normal.tolist()),
-            float(np.mean(points[:, extrusion_axis])),
-        )
-
-        # Flip the faces' normals for extrusion
-        nm = rt.NormalModifier()
-        nm.flip = True
-        rt.addmodifier(obj, nm)
-        rt.maxOps.collapseNodeTo(obj, 1, True)
-
-        # Select all the faces
-        rt.polyop.setFaceSelection(obj, list(range(1, rt.polyop.getNumFaces(obj) + 1)))
-
-        # Apply the Face Extrusion modifier
-        fe = rt.Face_Extrude()
-        fe.amount = 300
-        rt.addmodifier(obj, fe)
-        rt.maxOps.collapseNodeTo(obj, 1, True)
-
-        # Convert to editable poly again
-        rt.addmodifier(obj, rt.Edit_Poly())
-        rt.maxOps.collapseNodeTo(obj, 1, True)
-
-        # And then cap holes
-        rt.addmodifier(obj, rt.Cap_Holes())
-        rt.maxOps.collapseNodeTo(obj, 1, True)
-
     # Attach all of them to the first obj
     baseObj = collision_objs[0]
     for obj in collision_objs[1:]:
         rt.polyop.attach(baseObj, obj)
+
+    # Decide which axis we're going to extrude along
+    points = np.array(
+        rt.polyop.getVerts(
+            baseObj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(baseObj))
+        )
+    )
+    bbox_min, bbox_max = np.min(points, axis=0), np.max(points, axis=0)
+    bbox_extent = bbox_max - bbox_min
+    print("Bbox extents:", bbox_extent)
+    extrusion_axis = int(np.argmin(bbox_extent))
+
+    # Make the points planar
+    print("Planarizing along", "xyz"[extrusion_axis], "axis")
+    plane_normal = np.zeros(3)
+    plane_normal[extrusion_axis] = 1
+    rt.polyop.moveVertsToPlane(
+        baseObj.baseObject,
+        list(range(1, len(points) + 1)),
+        rt.Point3(*plane_normal.tolist()),
+        float(np.mean(points[:, extrusion_axis])),
+    )
+
+    # Flip the faces' normals for extrusion
+    nm = rt.NormalModifier()
+    nm.flip = True
+    rt.addmodifier(baseObj, nm)
+    rt.maxOps.collapseNodeTo(baseObj, 1, True)
+
+    # Select all the faces
+    rt.polyop.setFaceSelection(baseObj, list(range(1, rt.polyop.getNumFaces(baseObj) + 1)))
+
+    # Apply the Face Extrusion modifier
+    fe = rt.Face_Extrude()
+    fe.amount = 300
+    rt.addmodifier(baseObj, fe)
+    rt.maxOps.collapseNodeTo(baseObj, 1, True)
+
+    # Convert to editable poly again
+    rt.addmodifier(baseObj, rt.Edit_Poly())
+    rt.maxOps.collapseNodeTo(baseObj, 1, True)
+
+    # And then cap holes
+    rt.addmodifier(baseObj, rt.Cap_Holes())
+    rt.maxOps.collapseNodeTo(baseObj, 1, True)
 
     # Triangulate the faces
     ttp = rt.Turn_To_Poly()
@@ -81,7 +83,7 @@ def flat_floor_to_cmesh(collision_objs, target):
     baseObj.parent = target
 
     # Rename the first object to match the selected object
-    baseObj.name = target.name + "-M" + "collision"
+    baseObj.name = target.name + "-Mcollision"
 
     # Validate that the object name is valid
     assert (

@@ -21,6 +21,7 @@ ENTRYPOINTS = {
     # "fix_common_issues.py": "Fix common issues like scale.",
     "fix_instance_materials.py": "Update object instances to use single material.",
     "fix_legacy_obj_rots.py": "Fix legacy object rotations > 180deg.",
+    "flat_floor_to_cmesh.py": "Extrude flat floors to make collision meshes.",
     "import_legacy_objs.py": "Import missing legacy objects from iG2.",
     "import_scene_obj_orientations.py": "Fix legacy scene orientations.",
     "instanceify.py": "Convert objects into instances.",
@@ -44,6 +45,7 @@ ENTRYPOINTS = {
     "spherify.py": "Convert point helpers into spheres.",
     "switch_loose.py": "Switch visible object between different looseness options.",
     "switch_metalink.py": "Switch type of selected metalinks",
+    "toggle_meta_visibility.py": "Toggle visibility of meta links.",
     "translate_ig_dataset.py": "Update names of iG2 objects to new format.",
     "view_complaints.py": "View QA complaints for this file.",
 }

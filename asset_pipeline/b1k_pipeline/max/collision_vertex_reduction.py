@@ -116,19 +116,21 @@ def process_collision_obj(obj):
     # Hide the mesh
     new_obj.isHidden = True
 
-def process_all_collision_objs():
-    for obj in rt.objects:
-        if "Mcollision" not in obj.name:
+def process_all_collision_objs(objs=None):
+    if objs is None:
+        objs = list(rt.objects)
+    for obj in objs:
+        if "Mcollision" not in obj.name and "Mfillable" not in obj.name and "Mopenfillable" not in obj.name:
             continue
         
         process_collision_obj(obj)
 
 def main():
-    obj, = rt.selection
-    assert "Mcollision" in obj.name
-    process_collision_obj(obj)
+    # for obj in rt.selection:
+    #     assert "Mcollision" in obj.name or "Mfillable" in obj.name or "Mopenfillable" in obj.name, "Please select a collision or fillable object"
+    # process_collision_obj(list(rt.selection))
 
-    # process_all_collision_objs()
+    process_all_collision_objs()
 
 if __name__ == "__main__":
     main()
