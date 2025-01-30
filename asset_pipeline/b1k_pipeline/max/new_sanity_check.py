@@ -1135,6 +1135,16 @@ class SanityCheck:
         # no-link-name objects are matched with the base link.
         df["name_link_name"] = df["name_link_name"].fillna("base_link")
 
+        # Check that meta links are not at root level
+        meta_links = df[df["name_meta_type"].notnull()]
+        meta_links.apply(
+            lambda row: self.expect(
+                row.object.parent is not None,
+                f"{row.object_name} is a meta link at root level. Place it under the appropriate object.",
+            ),
+            axis="columns",
+        )
+
         non_meta_polies = df[
             (df["type"] == rt.Editable_Poly) & df["name_meta_type"].isnull()
         ]
