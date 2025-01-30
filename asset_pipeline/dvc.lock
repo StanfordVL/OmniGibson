@@ -748,12 +748,12 @@ stages:
       md5: f1637ebe64f9862ecb8005e1715f4c87
       size: 16675
     - path: cad/scenes/school_biology/processed.max
-      md5: 2afd09a6a7f54b8e6427cd5eb42ebef7
-      size: 153202850
+      md5: ce01687986d7c69e02bcf0b402997c4b
+      size: 152621138
     outs:
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: e826b54af1b394bff4882c812a8c4184
-      size: 241736
+      md5: bf7e078c131b63ac25f511242bf69526
+      size: 239788
   object_list@scenes/school_chemistry:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_chemistry/processed.max
       b1k_pipeline/max/object_list.py
@@ -762,12 +762,12 @@ stages:
       md5: f1637ebe64f9862ecb8005e1715f4c87
       size: 16675
     - path: cad/scenes/school_chemistry/processed.max
-      md5: c8da285162254932fd450a72504c693e
-      size: 144209762
+      md5: 79a5743f3cf02519b96ca8ab5353d43e
+      size: 142800658
     outs:
     - path: cad/scenes/school_chemistry/artifacts/object_list.json
-      md5: ced605ac00f290eb8efe6725007c29cb
-      size: 274576
+      md5: 8471a3db2cb0ec32da7aaddc7e0eb9b3
+      size: 268726
   object_list@scenes/school_computer_lab_and_infirmary:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_computer_lab_and_infirmary/processed.max
       b1k_pipeline/max/object_list.py
@@ -776,12 +776,12 @@ stages:
       md5: f1637ebe64f9862ecb8005e1715f4c87
       size: 16675
     - path: cad/scenes/school_computer_lab_and_infirmary/processed.max
-      md5: f60d29a10b925779dd51b60ed5296e62
-      size: 122451948
+      md5: c81eb63311692a204a6a88dd54190833
+      size: 122189780
     outs:
     - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
-      md5: 23dc6f3d28f98ec53960ab18560ac5cf
-      size: 236848
+      md5: 3c47cd6e151cb45ec52a4f48863fed02
+      size: 233241
   object_list@scenes/school_geography:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_geography/processed.max
       b1k_pipeline/max/object_list.py
@@ -790,12 +790,12 @@ stages:
       md5: f1637ebe64f9862ecb8005e1715f4c87
       size: 16675
     - path: cad/scenes/school_geography/processed.max
-      md5: 6ee90d33e508e5d5504ea8816c0aab48
-      size: 96845284
+      md5: 0d5e1d3e31629f283a455260898e4801
+      size: 95817164
     outs:
     - path: cad/scenes/school_geography/artifacts/object_list.json
-      md5: 4d6d1465ab471f7a299713125e0dd8a8
-      size: 173664
+      md5: 9e9f17ee7ac04e6adc180929dfcb547c
+      size: 167470
   object_list@scenes/school_gym:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_gym/processed.max b1k_pipeline/max/object_list.py
     deps:
@@ -803,12 +803,12 @@ stages:
       md5: f1637ebe64f9862ecb8005e1715f4c87
       size: 16675
     - path: cad/scenes/school_gym/processed.max
-      md5: 9efd065377a5c0f6a4f762928608e242
-      size: 59901618
+      md5: 7149eccc5968171d45a4feb9a1eec84e
+      size: 59262602
     outs:
     - path: cad/scenes/school_gym/artifacts/object_list.json
-      md5: 842bb86fb04458359758d10e98e0c20d
-      size: 161213
+      md5: 73d6395066192cc10617f969090bd053
+      size: 159360
   object_list_success:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json
       artifacts/pipeline/object_list.success
@@ -903,6 +903,9 @@ stages:
     - path: cad/objects/procedural-aa/artifacts/object_list.json
       md5: f821959383f5a25acecbe2dde98b3514
       size: 228226
+    - path: cad/objects/school_objects-aa/artifacts/object_list.json
+      md5: 9d9a4bb43af7effb71070dc58e3afe90
+      size: 75908
     - path: cad/objects/substances-01/artifacts/object_list.json
       md5: 5dba680c58eb5ce465147a8615fa95c5
       size: 102481
@@ -1075,23 +1078,23 @@ stages:
       md5: aa87088a6d8abcdd68a6e132e297de50
       size: 244770
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: e826b54af1b394bff4882c812a8c4184
-      size: 241736
+      md5: bf7e078c131b63ac25f511242bf69526
+      size: 239788
     - path: cad/scenes/school_chemistry/artifacts/object_list.json
-      md5: ced605ac00f290eb8efe6725007c29cb
-      size: 274576
+      md5: 8471a3db2cb0ec32da7aaddc7e0eb9b3
+      size: 268726
     - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
-      md5: 23dc6f3d28f98ec53960ab18560ac5cf
-      size: 236848
+      md5: 3c47cd6e151cb45ec52a4f48863fed02
+      size: 233241
     - path: cad/scenes/school_geography/artifacts/object_list.json
-      md5: 4d6d1465ab471f7a299713125e0dd8a8
-      size: 173664
+      md5: 9e9f17ee7ac04e6adc180929dfcb547c
+      size: 167470
     - path: cad/scenes/school_gym/artifacts/object_list.json
-      md5: 842bb86fb04458359758d10e98e0c20d
-      size: 161213
+      md5: 73d6395066192cc10617f969090bd053
+      size: 159360
     - path: params.yaml
-      md5: 71129c820e05ef16a6bb1dceecebdb68
-      size: 12864
+      md5: e56f89df12d2776cad80aabaec1b88a6
+      size: 12980
     outs:
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -1192,6 +1195,9 @@ stages:
     - path: cad/objects/procedural-aa/artifacts/object_list.json
       md5: f821959383f5a25acecbe2dde98b3514
       size: 228226
+    - path: cad/objects/school_objects-aa/artifacts/object_list.json
+      md5: 9d9a4bb43af7effb71070dc58e3afe90
+      size: 75908
     - path: cad/objects/substances-01/artifacts/object_list.json
       md5: 5dba680c58eb5ce465147a8615fa95c5
       size: 102481
@@ -1364,27 +1370,27 @@ stages:
       md5: aa87088a6d8abcdd68a6e132e297de50
       size: 244770
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: e826b54af1b394bff4882c812a8c4184
-      size: 241736
+      md5: bf7e078c131b63ac25f511242bf69526
+      size: 239788
     - path: cad/scenes/school_chemistry/artifacts/object_list.json
-      md5: ced605ac00f290eb8efe6725007c29cb
-      size: 274576
+      md5: 8471a3db2cb0ec32da7aaddc7e0eb9b3
+      size: 268726
     - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
-      md5: 23dc6f3d28f98ec53960ab18560ac5cf
-      size: 236848
+      md5: 3c47cd6e151cb45ec52a4f48863fed02
+      size: 233241
     - path: cad/scenes/school_geography/artifacts/object_list.json
-      md5: 4d6d1465ab471f7a299713125e0dd8a8
-      size: 173664
+      md5: 9e9f17ee7ac04e6adc180929dfcb547c
+      size: 167470
     - path: cad/scenes/school_gym/artifacts/object_list.json
-      md5: 842bb86fb04458359758d10e98e0c20d
-      size: 161213
+      md5: 73d6395066192cc10617f969090bd053
+      size: 159360
     - path: params.yaml
-      md5: 71129c820e05ef16a6bb1dceecebdb68
-      size: 12864
+      md5: e56f89df12d2776cad80aabaec1b88a6
+      size: 12980
     outs:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 6e89da22bd21f43ccc94fac362ef1c4c
-      size: 1984131
+      md5: 78ca86af9aeda2ce7b550cf476c3a957
+      size: 1992139
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -13226,8 +13232,8 @@ stages:
       artifacts/pipeline/object_inventory.success
     deps:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 815e7ed6af5e66e897dda1188a32aa3b
-      size: 2002836
+      md5: 78ca86af9aeda2ce7b550cf476c3a957
+      size: 1992139
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 729
@@ -17130,3 +17136,17 @@ stages:
     - path: cad/scenes/restaurant_hotel/artifacts/check_collisions.json
       md5: 2e9bbe370e2a35d3b12126dbc07fa505
       size: 4966
+  object_list@objects/school_objects-aa:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/school_objects-aa/processed.max
+      b1k_pipeline/max/object_list.py
+    deps:
+    - path: b1k_pipeline/max/object_list.py
+      md5: f1637ebe64f9862ecb8005e1715f4c87
+      size: 16675
+    - path: cad/objects/school_objects-aa/processed.max
+      md5: d08f0e7259deefcfeefac22e1324c38a
+      size: 93271958
+    outs:
+    - path: cad/objects/school_objects-aa/artifacts/object_list.json
+      md5: 9d9a4bb43af7effb71070dc58e3afe90
+      size: 75908
