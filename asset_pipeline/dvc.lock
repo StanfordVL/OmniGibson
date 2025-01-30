@@ -748,11 +748,11 @@ stages:
       md5: f1637ebe64f9862ecb8005e1715f4c87
       size: 16675
     - path: cad/scenes/school_biology/processed.max
-      md5: 863a8b3d312d8fe6f4bf0b47740ea991
-      size: 154917036
+      md5: 195fbbd883e3ec69f39d7cc148c831dd
+      size: 154921132
     outs:
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: cf710ee228ade92f9852a96ff7710a6d
+      md5: dee7f3c2a9ab8ca948d4fa2af70b9416
       size: 240402
   object_list@scenes/school_chemistry:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_chemistry/processed.max
@@ -1078,7 +1078,7 @@ stages:
       md5: aa87088a6d8abcdd68a6e132e297de50
       size: 244770
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: cf710ee228ade92f9852a96ff7710a6d
+      md5: dee7f3c2a9ab8ca948d4fa2af70b9416
       size: 240402
     - path: cad/scenes/school_chemistry/artifacts/object_list.json
       md5: 739d39a316a84fdcb0ff95ff51608198
@@ -1370,7 +1370,7 @@ stages:
       md5: aa87088a6d8abcdd68a6e132e297de50
       size: 244770
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: cf710ee228ade92f9852a96ff7710a6d
+      md5: dee7f3c2a9ab8ca948d4fa2af70b9416
       size: 240402
     - path: cad/scenes/school_chemistry/artifacts/object_list.json
       md5: 739d39a316a84fdcb0ff95ff51608198
@@ -1662,7 +1662,7 @@ stages:
       md5: aa87088a6d8abcdd68a6e132e297de50
       size: 244770
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: cf710ee228ade92f9852a96ff7710a6d
+      md5: dee7f3c2a9ab8ca948d4fa2af70b9416
       size: 240402
     - path: cad/scenes/school_chemistry/artifacts/object_list.json
       md5: 739d39a316a84fdcb0ff95ff51608198
@@ -2508,7 +2508,7 @@ stages:
       md5: aa87088a6d8abcdd68a6e132e297de50
       size: 244770
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: cf710ee228ade92f9852a96ff7710a6d
+      md5: dee7f3c2a9ab8ca948d4fa2af70b9416
       size: 240402
     - path: cad/scenes/school_chemistry/artifacts/object_list.json
       md5: 739d39a316a84fdcb0ff95ff51608198
@@ -2854,7 +2854,7 @@ stages:
       md5: aa87088a6d8abcdd68a6e132e297de50
       size: 244770
     - path: cad/scenes/school_biology/artifacts/object_list.json
-      md5: cf710ee228ade92f9852a96ff7710a6d
+      md5: dee7f3c2a9ab8ca948d4fa2af70b9416
       size: 240402
     - path: cad/scenes/school_chemistry/artifacts/object_list.json
       md5: 739d39a316a84fdcb0ff95ff51608198
