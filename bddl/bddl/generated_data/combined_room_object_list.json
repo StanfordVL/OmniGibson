@@ -690,7 +690,6 @@
                 "table_runner-mxxyva": 1,
                 "vase-eqhgiy": 1,
                 "flower-mylblj": 1,
-                "toy_box-qgfbdj": 1,
                 "coffee_table-ejlbho": 1,
                 "toy_car-dgnnin": 1,
                 "soccer_ball-nlpvzv": 1,
@@ -750,7 +749,6 @@
                 "gate-flveay": 1,
                 "gate-rhnrfc": 1,
                 "floors-rrizax": 2,
-                "car-supuws": 1,
                 "lawn-ucjwnm": 2,
                 "greenery-ccisua": 1,
                 "bush-hnzfgt": 5,
@@ -781,7 +779,10 @@
                 "rail_fence-jayfuh": 1,
                 "rail_fence-vjfdnl": 1,
                 "rail_fence-nmmzqh": 1,
-                "wall_nail-wlnail": 1
+                "wall_nail-wlnail": 1,
+                "car-xxsgpq": 1,
+                "toy_box-qgfbdj": 1,
+                "lid-kdswwr": 1
             },
             "bedroom_0": {
                 "window-jdxnzi": 1,
@@ -941,7 +942,6 @@
                 "walls-aknoez": 1,
                 "armchair-thhqkc": 1,
                 "carpet-iepqvq": 1,
-                "grill-dtfail": 1,
                 "sofa-ksabpq": 1,
                 "coffee_table-puwazg": 1,
                 "pillow-nbtsys": 1,
@@ -978,7 +978,6 @@
                 "armchair-thhqkc": 2,
                 "carpet-iepqvq": 1,
                 "pillow-nbtsys": 2,
-                "grill-dtfail": 1,
                 "sofa-ksabpq": 1,
                 "coffee_table-puwazg": 1,
                 "pillow-xuxkvl": 1,
@@ -1036,6 +1035,9 @@
             },
             "Outlets": {
                 "electric_switch-wseglt": 6
+            },
+            "Grill": {
+                "charcoal_grill-crdaeu": 1
             }
         },
         "Rs_int": {
@@ -1711,7 +1713,7 @@
         },
         "grocery_store_cafe": {
             "grocery_store_0": {
-                "floors-ndfsiw": 2,
+                "floors-ndfsiw": 1,
                 "rail_fence-mnegtc": 2,
                 "reception_desk-vxombm": 1,
                 "room_light-bypxxd": 54,
@@ -1797,6 +1799,7 @@
                 "cash_register-ekvdjq": 1
             },
             "corridor_0": {
+                "floors-ndfsiw": 1,
                 "reception_desk-vxombm": 1,
                 "ceilings-gexutv": 1,
                 "orange-cwcefi": 1,
@@ -1918,6 +1921,8 @@
                 "bottle_of_soup-maycxf": 1,
                 "plate-pyilfa": 2,
                 "beaker-dtjmai": 2,
+                "floors-sehwtc": 1,
+                "floors-pxxgzr": 1,
                 "walls-xutcqv": 2,
                 "walls-gnsefd": 2,
                 "ceilings-nwyhda": 2,
@@ -1933,7 +1938,7 @@
                 "magazine-tfovwy": 4,
                 "straight_chair-qnjtxe": 12,
                 "beaker-dtjmai": 8,
-                "floors-pxxgzr": 2
+                "floors-pxxgzr": 1
             },
             "bar_0": {
                 "structural_element-kebons": 2,
@@ -1970,7 +1975,7 @@
                 "espresso_machine-qhrtyw": 2,
                 "room_light-bypxxd": 2,
                 "wall_mounted_shelf-iruewm": 1,
-                "floors-sehwtc": 2
+                "floors-sehwtc": 1
             },
             "bathroom_0": {
                 "walls-kfkuxu": 2,
@@ -2022,7 +2027,7 @@
             "grocery_store_0": {
                 "door-hgcxno": 1,
                 "carton-ylrxhe": 1,
-                "floors-rojznj": 2,
+                "floors-rojznj": 1,
                 "cash_register-ykfcaz": 2,
                 "credit_card_terminal-bqpanz": 1,
                 "security_camera-bhsikv": 7,
@@ -2164,6 +2169,7 @@
             "corridor_0": {
                 "door-hgcxno": 1,
                 "carton-ylrxhe": 2,
+                "floors-rojznj": 1,
                 "cash_register-ykfcaz": 1,
                 "credit_card_terminal-bqpanz": 1,
                 "security_camera-bhsikv": 1,
@@ -2182,13 +2188,13 @@
                 "tongs-gbjqyn": 1,
                 "tongs-igsklx": 1,
                 "oden_cooker-fjpams": 1,
-                "magazine_rack-apfdcj": 1,
+                "magazine_rack-apfdcj": 2,
                 "pedestal_table-xcnvsy": 1,
-                "magazine_rack-rkpmec": 1,
+                "magazine_rack-rkpmec": 2,
                 "fridge-dxwbae": 2,
                 "crock_pot-lspxjq": 2,
                 "reception_desk-qztpgl": 1,
-                "magazine_rack-arrjbg": 1,
+                "magazine_rack-arrjbg": 2,
                 "photocopier-hemqez": 1,
                 "bag_of_cookies-bbyvsc": 1,
                 "bowl-hynhgz": 2,
@@ -2395,7 +2401,6 @@
                 "box_of_rum-lvruzr": 5,
                 "box_of_rum-tumgbj": 6,
                 "bottle_of_wine-ynfvhg": 40,
-                "cash_register-ztrupq": 1,
                 "shopping_basket-nedrsh": 10,
                 "countertop-ncqmrq": 1,
                 "canned_food-ycodks": 27,
@@ -2430,9 +2435,10 @@
                 "walls-xyfhzb": 2,
                 "walls-vfscgv": 2,
                 "walls-mgybhc": 2,
-                "walls-wzmenm": 2,
+                "walls-wzmenm": 1,
                 "walls-gudcjw": 2,
-                "walls-jzvfvo": 2
+                "walls-jzvfvo": 2,
+                "cash_register-ekvdjq": 1
             },
             "corridor_0": {
                 "grocery_shelf-kpfgcm": 2,
@@ -2446,13 +2452,14 @@
                 "bottle_of_champagne-pxaayf": 1,
                 "bottle_of_rum-rduqdf": 1,
                 "grocery_shelf-znpari": 2,
+                "grocery_shelf-rywinu": 1,
                 "bottle_of_wine-dbccri": 1,
                 "bottle_of_wine-dawhco": 1,
                 "electric_fan-qqphyr": 1,
                 "door-msovkn": 1,
                 "wall_mounted_shelf-wiiyfk": 2,
                 "wall_mounted_shelf-wvkefp": 2,
-                "grocery_cupboard-uundbq": 1,
+                "grocery_cupboard-uundbq": 2,
                 "square_light-bmrewz": 2,
                 "bottle_of_wine-gaqzfq": 1,
                 "bottle_of_wine-kqokhv": 1,
@@ -2504,7 +2511,6 @@
                 "box_of_rum-lvruzr": 1,
                 "box_of_rum-tumgbj": 1,
                 "bottle_of_wine-ynfvhg": 1,
-                "cash_register-ztrupq": 1,
                 "countertop-ncqmrq": 1,
                 "bag_of_chips-wnuoym": 1,
                 "box_of_cookies-fsdjun": 1,
@@ -2535,6 +2541,7 @@
                 "pack_of_ramen-bcfzfr": 1,
                 "pack_of_ramen-fqnsjp": 1,
                 "shopping_basket-nedrsh": 2,
+                "walls-wzmenm": 1,
                 "walls-houvgp": 2,
                 "walls-bstmin": 2,
                 "ceilings-kbnnvd": 2,
@@ -3331,8 +3338,6 @@
             },
             "kitchen_0": {
                 "statue-qbfkek": 1,
-                "blender-xnjqix": 1,
-                "cap-cjtyvz": 1,
                 "coatrack-hmedjt": 1,
                 "knife_block-mjywpg": 1,
                 "chopping_board-bzauwp": 1,
@@ -3345,7 +3350,7 @@
                 "range_hood-xvdfpp": 1,
                 "lid-egfobe": 1,
                 "casserole-ncbsee": 1,
-                "bottom_cabinet-byvbuc": 1,
+                "bar-byvbuc": 1,
                 "straight_chair-uofiqj": 2,
                 "straight_chair-zdhnyg": 2,
                 "straight_chair-hgunnf": 2,
@@ -3442,7 +3447,6 @@
                 "driveway-qbxmgb": 2,
                 "window-lhzwtz": 1,
                 "rail_fence-owbrvb": 6,
-                "grill-sxfjac": 1,
                 "garden_light-qyfrwj": 9,
                 "playground-xdlcdi": 1,
                 "swing_set-yzhrgz": 1,
@@ -3457,7 +3461,7 @@
                 "garden_chair-lraplz": 1,
                 "pillow-kvqbla": 1,
                 "floors-ghetev": 1,
-                "lawn-ogzsvf": 2,
+                "lawn-ogzsvf": 1,
                 "tree-gmzozb": 5,
                 "tree-rrhqpw": 6,
                 "tree-flkzbo": 3,
@@ -3475,6 +3479,9 @@
                 "bush-ebuvur": 5,
                 "floors-uddigl": 2,
                 "car-xxsgpq": 1
+            },
+            "Grill": {
+                "charcoal_grill-crdaeu": 1
             }
         },
         "house_double_floor_upper": {
@@ -3525,7 +3532,7 @@
                 "window-lhzwtz": 1,
                 "door-pxhbim": 4,
                 "window-etjpqr": 2,
-                "floors-b7kvnz": 2
+                "floors-rfqizg": 2
             },
             "bathroom_0": {
                 "shower-giialz": 1,
@@ -3549,7 +3556,7 @@
                 "picture-xnuynn": 1,
                 "toilet-udiezm": 1,
                 "window-etjpqr": 2,
-                "floors-4msp4l": 2,
+                "floors-tfuahz": 2,
                 "bidet-lcyvov": 1
             },
             "bedroom_0": {
@@ -3569,7 +3576,6 @@
                 "hardback-qompdt": 1,
                 "folderal-ydrlth": 1,
                 "map-fdtxut": 1,
-                "picture-vchhhl": 1,
                 "picture-abtgvz": 1,
                 "picture-bzmdxc": 2,
                 "picture-svpzro": 1,
@@ -3621,8 +3627,7 @@
                 "plate-nrjump": 2,
                 "window-lhzwtz": 1,
                 "railing-pqzbbb": 1,
-                "door-pxhbim": 1,
-                "floors-q3uvqz": 2
+                "floors-nlswvt": 2
             },
             "bedroom_1": {
                 "curtain-didlbp": 1,
@@ -3663,13 +3668,12 @@
                 "statue-oaxifo": 1,
                 "railing-pqzbbb": 1,
                 "window-lhzwtz": 1,
-                "door-pxhbim": 1,
-                "floors-gfx390": 2
+                "floors-zrhxwn": 2
             },
             "bedroom_2": {
                 "shelf-eckdny": 1,
                 "curtain-zmodhv": 1,
-                "bottom_cabinet-ncgmqr": 2,
+                "bottom_cabinet-ncgmqr": 1,
                 "mug-ppdqbj": 1,
                 "centerpiece-gakixx": 1,
                 "keyboard-mzskhj": 1,
@@ -3695,7 +3699,6 @@
                 "hardback-lixbdf": 1,
                 "shelf-opryhp": 2,
                 "shelf-bsvnni": 1,
-                "laptop-ongghk": 1,
                 "hardback-zxjfcp": 1,
                 "floor_lamp-drpann": 1,
                 "window-lhzwtz": 1,
@@ -3705,7 +3708,6 @@
                 "wall_socket-zyzufw": 2,
                 "painting-jfkvxh": 1,
                 "railing-pqzbbb": 2,
-                "door-pxhbim": 1,
                 "hardback-scdwke": 1,
                 "hardback-hdczhd": 1,
                 "hardback-orkzoz": 1,
@@ -3727,10 +3729,10 @@
                 "hardback-ajpulw": 1,
                 "hardback-iklrpf": 1,
                 "window-etjpqr": 1,
-                "floors-2w2nau": 2
+                "floors-dcxicr": 2
             },
             "bathroom_1": {
-                "door-pxhbim": 1
+                "door-pxhbim": 4
             }
         },
         "house_single_floor": {
@@ -4596,10 +4598,8 @@
                 "legal_document-mougvz": 1,
                 "eames_chair-hpwusn": 4,
                 "spotlight-vojnfz": 3,
-                "bookcase-smeuzl": 1,
                 "keyboard-jtdyix": 32,
                 "downlight-hpkvem": 8,
-                "desk_organizer-rxxzzb": 31,
                 "binder-lktggf": 62,
                 "desk_phone-kpxrpb": 31,
                 "notepad-oaikde": 62,
@@ -4868,7 +4868,6 @@
                 "mouse-pljjtu": 10,
                 "keyboard-jtdyix": 10,
                 "binder-lktggf": 20,
-                "desk_organizer-rxxzzb": 10,
                 "cubicle-hzalfx": 6,
                 "cubicle-deceti": 4,
                 "monitor-kmltvq": 10,
@@ -5001,8 +5000,6 @@
                 "coffee_cup-nbhcgu": 2,
                 "coffee_cup-xjdyon": 2,
                 "jug-gjgwvi": 2,
-                "saucer-cjsbft": 1,
-                "cup-vlikrk": 1,
                 "breakfast_table-yclkbw": 1,
                 "monitor-nghyiv": 1,
                 "monitor-wxhvqc": 1,
@@ -5195,8 +5192,6 @@
                 "swivel_chair-srucpc": 20,
                 "saucer-szzjzd": 9,
                 "jug-gjgwvi": 3,
-                "saucer-cjsbft": 9,
-                "cup-vlikrk": 8,
                 "notebook-sommfe": 8,
                 "notebook-eijrqw": 8,
                 "pen-gzrbrx": 8,
@@ -5342,7 +5337,6 @@
                 "picture-kigjuq": 1,
                 "picture-bxpohm": 1,
                 "picture-sfqdjg": 1,
-                "backpack-ygrams": 3,
                 "bicycle-fjvlyf": 3,
                 "hardback-sinlfd": 2,
                 "hardback-isjnmo": 2,
@@ -5387,7 +5381,6 @@
                 "picture-kigjuq": 1,
                 "picture-bxpohm": 1,
                 "picture-sfqdjg": 1,
-                "backpack-ygrams": 1,
                 "bicycle-fjvlyf": 1,
                 "hardback-sinlfd": 1,
                 "hardback-isjnmo": 1,
@@ -5502,7 +5495,6 @@
                 "paper_lantern-cvzqeb": 7,
                 "painting-zfyrna": 1,
                 "portrait-xsayvx": 1,
-                "curtain-ohvomi": 2,
                 "structural_element-fhkiwo": 1,
                 "structural_element-pzuwme": 1,
                 "door-vngfge": 2,
@@ -5518,7 +5510,6 @@
                 "box_of_sake-hxrhoc": 1,
                 "box_of_sake-abpqcs": 1,
                 "bottle_of_sake-hbpenm": 11,
-                "bottle_of_sake-zrkfim": 3,
                 "bottle_of_sake-mvvomd": 13,
                 "bottle_of_sake-pwtebq": 4,
                 "bottle_of_sake-vfxfuj": 7,
@@ -5531,7 +5522,6 @@
                 "hanging_banners-bpjqwj": 4,
                 "hanging_banners-szdonp": 5,
                 "door-izyvmu": 1,
-                "curtain-shbakk": 2,
                 "bottle_of_pop-tfvmik": 30,
                 "can_of_soda-ixrfxv": 20,
                 "bottle_of_pop-zsisxf": 12,
@@ -5560,7 +5550,8 @@
                 "walls-rikals": 2,
                 "walls-foactj": 2,
                 "walls-oglkuk": 2,
-                "walls-jyvcbs": 2
+                "walls-jyvcbs": 2,
+                "bottle_of_sake-zrkfim": 3
             },
             "corridor_1": {
                 "bench-qhuvow": 1,
@@ -5595,7 +5586,6 @@
                 "paper_lantern-cvzqeb": 1,
                 "painting-zfyrna": 1,
                 "portrait-xsayvx": 1,
-                "curtain-ohvomi": 1,
                 "structural_element-fhkiwo": 1,
                 "structural_element-pzuwme": 1,
                 "door-vngfge": 1,
@@ -5623,14 +5613,16 @@
                 "hanging_banners-bpjqwj": 1,
                 "dinner_napkin-etxjzg": 1,
                 "door-izyvmu": 1,
-                "curtain-shbakk": 1,
                 "bottle_of_pop-tfvmik": 1,
                 "can_of_soda-ixrfxv": 1,
                 "bottle_of_pop-zsisxf": 1,
                 "walls-jyxmbq": 2,
                 "walls-tnygto": 2,
                 "ceilings-wsblre": 2,
-                "floors-muzlgy": 2
+                "floors-muzlgy": 2,
+                "bottle_of_sake-zrkfim": 1,
+                "curtain-ohvomi": 1,
+                "curtain-shbakk": 1
             },
             "corridor_0": {
                 "walls-zhuaij": 1,
@@ -5750,7 +5742,6 @@
                 "skeletal_frame-nxyffe": 1,
                 "skeletal_frame-twalud": 1,
                 "room_light-occcxo": 3,
-                "dress-jmujjo": 1,
                 "vine-gccsfy": 1,
                 "vine-nuhdae": 1,
                 "vine-hdbgla": 1,
@@ -6713,6 +6704,7 @@
                 "beer_tap-bebcmz": 1,
                 "painting-pqsidc": 1,
                 "bottle_of_wine-cldder": 1,
+                "wine_fridge-tgcuwh": 1,
                 "window-txxinx": 1,
                 "window-vapbnz": 1,
                 "room_light-nimhbn": 1,
@@ -6997,7 +6989,7 @@
                 "trophy-bgpvtb": 2,
                 "display_case-khxpgc": 2,
                 "ceilings-ykfapk": 2,
-                "floors-rzbksf": 2,
+                "floors-rzbksf": 1,
                 "ceilings-nxtdrt": 2,
                 "ceilings-jlvuea": 2,
                 "door-ewqpfv": 1
@@ -7012,7 +7004,7 @@
                 "locker-yhthgr": 62,
                 "ceilings-mjjple": 2,
                 "ceilings-wrpobd": 2,
-                "floors-bsblwz": 2,
+                "floors-bsblwz": 1,
                 "window-uztisk": 18
             },
             "biology_lab_0": {
@@ -7072,17 +7064,17 @@
                 "electric_switch-ldrjoi": 2,
                 "trash_can-gxajos": 1,
                 "ceilings-uyaovq": 2,
-                "floors-ijwnhc": 2
+                "floors-ijwnhc": 1
             },
             "corridor_3": {
                 "door-nwlbit": 5,
                 "door-xxipyh": 3
             },
-            "computer_lab_0": {
-                "window-rgmujm": 9
-            },
             "corridor_4": {
                 "door-xxipyh": 3
+            },
+            "computer_lab_0": {
+                "window-rgmujm": 9
             },
             "bathroom_0": {
                 "walls-zhhwmy": 2,
@@ -7121,7 +7113,7 @@
                 "locker-yhthgr": 62,
                 "ceilings-smktgh": 2,
                 "ceilings-mqaxkj": 2,
-                "floors-cjrrdo": 2
+                "floors-cjrrdo": 1
             },
             "chemistry_lab_0": {
                 "electric_switch-oedwla": 1,
@@ -7197,7 +7189,7 @@
                 "electric_switch-ldrjoi": 2,
                 "folder-lufqkq": 7,
                 "ceilings-mljgdp": 2,
-                "floors-ngibqw": 2
+                "floors-ngibqw": 1
             },
             "corridor_0": {
                 "drinking_fountain-xijidt": 2,
@@ -7298,7 +7290,7 @@
                 "door-exaqtm": 1,
                 "square_light-qebtel": 39,
                 "ceilings-jlzyja": 2,
-                "floors-vedzwu": 2
+                "floors-vedzwu": 1
             },
             "computer_lab_0": {
                 "mouse-eosngb": 21,
@@ -7326,11 +7318,11 @@
                 "pen-enfumt": 1,
                 "pen-vgsgxk": 1,
                 "pencil_holder-muqeud": 1,
-                "window-rgmujm": 5,
                 "wall_mounted_loudspeaker-wxkuww": 4,
                 "square_light-qebtel": 18,
                 "ceilings-jvrcgi": 2,
-                "floors-zysogn": 2
+                "floors-zysogn": 1,
+                "window-rgmujm": 7
             },
             "corridor_0": {
                 "drinking_fountain-xijidt": 2,
@@ -7367,7 +7359,7 @@
                 "display_case-khxpgc": 2,
                 "ceilings-kjvgnu": 2,
                 "ceilings-solfrt": 2,
-                "floors-bijmgk": 2,
+                "floors-bijmgk": 1,
                 "ceilings-coxqnv": 2,
                 "ceilings-fidwbv": 2
             },
@@ -7379,7 +7371,7 @@
                 "square_light-qebtel": 14,
                 "locker-yhthgr": 49,
                 "ceilings-mwfpjb": 2,
-                "floors-zelrbj": 2,
+                "floors-zelrbj": 1,
                 "window-uztisk": 20
             },
             "infirmary_0": {
@@ -7396,7 +7388,7 @@
                 "bed_screen-ofpyax": 1,
                 "bottom_cabinet-eluyvx": 1,
                 "carton-cdmmwy": 2,
-                "tray-avotsj": 5,
+                "tray-avotsj": 4,
                 "specimen_bottle-vlplhs": 6,
                 "tray-gsxbym": 1,
                 "water_cooler-essxzr": 1,
@@ -7413,12 +7405,11 @@
                 "desk-ccxuey": 1,
                 "bottom_cabinet-ccjinv": 4,
                 "downlight-ggwgmo": 9,
-                "window-rgmujm": 2,
                 "electric_switch-ldrjoi": 2,
                 "radiator-bftrar": 2,
                 "wall_socket-hocerb": 6,
                 "ceilings-qhqlvn": 2,
-                "floors-qloiuu": 2
+                "floors-qloiuu": 1
             },
             "corridor_3": {
                 "door-nwlbit": 7,
@@ -7489,7 +7480,7 @@
                 "electric_switch-ldrjoi": 1,
                 "folder-lufqkq": 1,
                 "ceilings-yspjpt": 2,
-                "floors-bqaini": 2
+                "floors-bqaini": 1
             },
             "corridor_0": {
                 "window-ebtgyg": 1,
@@ -7498,39 +7489,13 @@
                 "fire_sprinkler-skcdiz": 12,
                 "fire_alarm-xjupjc": 6,
                 "door-ewqpfv": 1,
-                "door-ehwmol": 2,
-                "door-nwlbit": 2,
+                "door-nwlbit": 1,
                 "locker-gemgfz": 13,
                 "square_light-qebtel": 12,
-                "door-xxipyh": 1,
                 "locker-yhthgr": 28,
                 "ceilings-bgopyy": 2,
-                "floors-kwjfig": 2
-            },
-            "corridor_4": {
-                "fire_extinguisher-tfgypq": 2,
-                "pillar-hfianz": 8,
-                "bench-ftvzzg": 13,
-                "drinking_fountain-xijidt": 2,
-                "public_trash_can-fkosow": 1,
-                "security_camera-tiscsa": 5,
-                "door-rwmofs": 1,
-                "fire_sprinkler-skcdiz": 36,
-                "fire_alarm-xjupjc": 17,
-                "door-nwlbit": 1,
-                "picture-zrsytt": 1,
-                "picture-mstxjw": 1,
-                "picture-nbwrns": 1,
-                "picture-hvjwvj": 1,
-                "picture-qvvvxz": 1,
-                "picture-cgvoho": 1,
-                "picture-hxbrop": 1,
-                "door-exaqtm": 1,
-                "square_light-qebtel": 39,
-                "door-xxipyh": 1,
-                "ceilings-yjctda": 2,
-                "floors-yvcljn": 2,
-                "ceilings-mbiazj": 2
+                "floors-kwjfig": 1,
+                "door-ehwmol": 2
             },
             "corridor_2": {
                 "drinking_fountain-xijidt": 2,
@@ -7565,10 +7530,9 @@
                 "trophy-ayuubt": 3,
                 "trophy-arbekb": 2,
                 "trophy-bgpvtb": 2,
-                "door-xxipyh": 3,
                 "ceilings-fvvkeq": 2,
                 "ceilings-grvlep": 2,
-                "floors-hxdqav": 2,
+                "floors-hxdqav": 1,
                 "ceilings-nuxqsg": 2,
                 "ceilings-vtdhil": 2,
                 "display_case-khxpgc": 2
@@ -7582,25 +7546,21 @@
                 "locker-gemgfz": 60,
                 "square_light-qebtel": 10,
                 "radiator-bftrar": 4,
-                "door-xxipyh": 2,
                 "ceilings-pintgc": 2,
-                "floors-fdcjvm": 2,
-                "window-uztisk": 28
-            },
-            "corridor_3": {
-                "security_camera-tiscsa": 3,
-                "fire_sprinkler-skcdiz": 14,
-                "fire_alarm-xjupjc": 7,
-                "door-nwlbit": 4,
-                "locker-gemgfz": 42,
-                "square_light-qebtel": 14,
-                "door-xxipyh": 2,
-                "locker-yhthgr": 49,
-                "ceilings-qmybpc": 2,
-                "floors-etzlde": 2
+                "floors-fdcjvm": 1,
+                "window-uztisk": 14
             },
             "computer_lab_0": {
                 "window-rgmujm": 11
+            },
+            "corridor_3": {
+                "door-xxipyh": 4
+            },
+            "corridor_4": {
+                "door-xxipyh": 4
+            },
+            "gym_0": {
+                "door-ehwmol": 2
             },
             "bathroom_0": {
                 "walls-zhhwmy": 2,
@@ -7628,23 +7588,6 @@
             }
         },
         "school_gym": {
-            "corridor_0": {
-                "window-ebtgyg": 1,
-                "security_camera-tiscsa": 3,
-                "public_trash_can-mcukuh": 3,
-                "fire_sprinkler-skcdiz": 12,
-                "fire_alarm-xjupjc": 6,
-                "door-ewqpfv": 1,
-                "door-ehwmol": 2,
-                "locker-gemgfz": 13,
-                "square_light-qebtel": 12,
-                "locker-yhthgr": 28,
-                "ceilings-nfyjdf": 2,
-                "floors-dwqjup": 2
-            },
-            "classroom_0": {
-                "window-ebtgyg": 1
-            },
             "gym_0": {
                 "volleyball_net-ykiiqr": 1,
                 "scoreboard-oiiyae": 1,
@@ -7665,7 +7608,7 @@
                 "door-uatmde": 2,
                 "stadium_stand-mtoaja": 2,
                 "ceilings-fnostb": 2,
-                "floors-gvzlnj": 2
+                "floors-gvzlnj": 1
             },
             "locker_room_1": {
                 "paper_towel_dispenser-jacqxv": 1,
@@ -7684,7 +7627,7 @@
                 "drinking_fountain-oyipuy": 1,
                 "window-dompiq": 4,
                 "ceilings-ezklae": 2,
-                "floors-gzjodz": 2
+                "floors-gzjodz": 1
             },
             "locker_room_0": {
                 "wall_socket-hocerb": 2,
@@ -7703,67 +7646,13 @@
                 "door-vxmxbc": 1,
                 "bench-nnzwxs": 4,
                 "ceilings-zuwvgy": 2,
-                "floors-lzecin": 2
+                "floors-lzecin": 1
+            },
+            "corridor_0": {
+                "door-ehwmol": 2
             },
             "corridor_2": {
-                "drinking_fountain-xijidt": 2,
-                "security_camera-tiscsa": 6,
-                "public_trash_can-mcukuh": 3,
-                "bench-ftvzzg": 7,
-                "fire_sprinkler-skcdiz": 23,
-                "fire_alarm-xjupjc": 9,
-                "door-aknswb": 1,
-                "picture-qzrpiw": 1,
-                "picture-tfrisv": 1,
-                "picture-pmtynn": 1,
-                "picture-zughoy": 1,
-                "picture-mbfgxr": 1,
-                "picture-zywgbh": 1,
-                "picture-ydfgju": 1,
-                "picture-wttqrk": 1,
-                "square_light-qebtel": 42,
-                "trophy-rpprcc": 2,
-                "trophy-shnohg": 1,
-                "trophy-ldbalq": 1,
-                "trophy-wraizn": 2,
-                "trophy-tjawkk": 2,
-                "trophy-paaegg": 4,
-                "trophy-xnjodq": 2,
-                "trophy-jwagmm": 2,
-                "trophy-jchomn": 2,
-                "trophy-zoolef": 9,
-                "trophy-myaxie": 2,
-                "trophy-hlktkb": 1,
-                "trophy-ayuubt": 3,
-                "trophy-arbekb": 2,
-                "trophy-bgpvtb": 2,
-                "display_case-khxpgc": 2,
-                "ceilings-upaqox": 2,
-                "floors-vmjgcn": 1,
-                "ceilings-qnydqr": 2,
-                "ceilings-gjahvk": 2
-            },
-            "corridor_1": {
-                "security_camera-tiscsa": 1,
-                "bench-fdxevw": 2,
-                "fire_sprinkler-skcdiz": 10,
-                "fire_alarm-xjupjc": 5,
-                "locker-gemgfz": 60,
-                "square_light-qebtel": 10,
-                "radiator-bftrar": 4,
-                "ceilings-dasnxz": 2,
-                "floors-mblctm": 2,
-                "window-uztisk": 14
-            },
-            "corridor_3": {
-                "door-nwlbit": 6,
-                "door-xxipyh": 4
-            },
-            "computer_lab_0": {
-                "window-rgmujm": 4
-            },
-            "corridor_4": {
-                "door-xxipyh": 4
+                "square_light-qebtel": 12
             },
             "bathroom_0": {
                 "walls-zhhwmy": 2,
@@ -7839,6 +7728,7 @@
             "Outlets"
         ],
         "Rs_garden": [
+            "Grill",
             "Outlets"
         ],
         "Rs_int": [
@@ -7852,6 +7742,9 @@
         ],
         "Wainscott_1_int": [
             "Outlets"
+        ],
+        "house_double_floor_lower": [
+            "Grill"
         ],
         "office_large": [
             "Workplace set with decor. Sk"
@@ -7883,6 +7776,12 @@
                 1,
                 3,
                 4
+            ]
+        },
+        "school_gym": {
+            "corridor": [
+                0,
+                2
             ]
         }
     }
