@@ -3340,8 +3340,8 @@ stages:
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 6e89da22bd21f43ccc94fac362ef1c4c
-      size: 1984131
+      md5: 78ca86af9aeda2ce7b550cf476c3a957
+      size: 1992139
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3349,12 +3349,12 @@ stages:
       md5: ce747e4ed59c34cc52ff13aeeca76d89
       size: 51940
     - path: cad/scenes/school_biology/processed.max
-      md5: 2afd09a6a7f54b8e6427cd5eb42ebef7
-      size: 153202850
+      md5: ce01687986d7c69e02bcf0b402997c4b
+      size: 152621138
     outs:
     - path: cad/scenes/school_biology/artifacts/sanitycheck.json
-      md5: a151f418b2f12876ad84c3691671178a
-      size: 15803
+      md5: 5e487e6eba8137bb8dd539cd38ad0887
+      size: 11765
   sanitycheck@scenes/public_restroom_white:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_white/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -3980,8 +3980,8 @@ stages:
       b1k_pipeline/max/new_sanity_check.py batch=true
     deps:
     - path: artifacts/pipeline/object_inventory.json
-      md5: 6e89da22bd21f43ccc94fac362ef1c4c
-      size: 1984131
+      md5: 78ca86af9aeda2ce7b550cf476c3a957
+      size: 1992139
     - path: artifacts/pipeline/object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -3989,12 +3989,12 @@ stages:
       md5: ce747e4ed59c34cc52ff13aeeca76d89
       size: 51940
     - path: cad/scenes/school_chemistry/processed.max
-      md5: c8da285162254932fd450a72504c693e
-      size: 144209762
+      md5: 79a5743f3cf02519b96ca8ab5353d43e
+      size: 142800658
     outs:
     - path: cad/scenes/school_chemistry/artifacts/sanitycheck.json
-      md5: 145edbc8e02e58ca19371f354b446349
-      size: 16608
+      md5: a890ba7e371b56b68bffd496a313cf0f
+      size: 12656
   sanitycheck@scenes/school_computer_lab_and_infirmary:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_computer_lab_and_infirmary/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true

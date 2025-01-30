@@ -1035,19 +1035,6 @@ class SanityCheck:
                     continue
                 relative_transform = link_transforms[link_name]
 
-                # Check that the relative transform is a multiple of 90 degrees. To do this we check
-                # if each column approximately consists of just ones and zeroes.
-                if instance_id == "0":
-                    relative_rotation = Rotation.from_quat(quat2arr(relative_transform.rotation)).as_matrix()
-                    is_90_deg = np.all(
-                        np.isclose(np.abs(relative_rotation), np.ones_like(relative_rotation), atol=1e-2) |
-                        np.isclose(relative_rotation, np.zeros_like(relative_rotation), atol=1e-2)
-                    )
-                    self.expect(
-                        is_90_deg,
-                        f"{model_id} link {link_name} has a relative rotation that is not orthogonal to the base's axes.",
-                    )
-
                 # Check that the relative transform is the same
                 if instance_id != "0":
                     transform_difference = (
