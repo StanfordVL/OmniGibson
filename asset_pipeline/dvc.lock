@@ -3352,12 +3352,12 @@ stages:
       md5: a507f0b918f33f940cfece17efb9f870
       size: 51113
     - path: cad/scenes/school_biology/processed.max
-      md5: 863a8b3d312d8fe6f4bf0b47740ea991
-      size: 154917036
+      md5: 195fbbd883e3ec69f39d7cc148c831dd
+      size: 154921132
     outs:
     - path: cad/scenes/school_biology/artifacts/sanitycheck.json
-      md5: 9e4646b67008a7b764322e13be8d29ea
-      size: 1791
+      md5: dacf9537051086560eb21e32b5cf8cbe
+      size: 11022
   sanitycheck@scenes/public_restroom_white:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_white/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
