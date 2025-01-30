@@ -491,6 +491,13 @@ class SanityCheck:
             f"Cloth object {obj.name} should consist of exactly 1 element. Currently it has {tm.body_count} elements.",
         )
 
+        # A cloth object should always be clutter.
+        if pathlib.Path(rt.maxFilePath).resolve().parts[-2] == "scenes":
+            self.expect(
+                row.name_loose == "C-",
+                f"Cloth object {obj.name} is fixed or loose. It should always be clutter.",
+            )
+
     def validate_light(self, row):
         # Validate that the object has a light ID
         self.expect(

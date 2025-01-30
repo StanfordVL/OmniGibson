@@ -52,18 +52,25 @@ def convert_to_trimesh(obj):
     return meshes
 
 
-def process_collision_obj(obj):
+def process_convex_obj(obj):
     # Get the collision meshes into a set of trimeshes
-    collision_meshes = convert_to_trimesh(obj)
+    convex_meshes = convert_to_trimesh(obj)
 
     # Check if any of the meshes have too many verts
-    if not any(len(m.vertices) > MAX_VERTEX_COUNT for m in collision_meshes):
+    too_many_verts = any(len(m.vertices) > MAX_VERTEX_COUNT for m in convex_meshes)
+
+    # Check if any of the meshes is not a volume
+    not_volume = any(not m.is_volume for m in convex_meshes)
+
+    if not too_many_verts and not not_volume:
         return
     
     print("Reducing", obj.name)
 
-    # Individually reduce each of the trimeshes
-    reduced_trimeshes = [reduce_mesh(m) for m in collision_meshes]
+    # Individually reduce each of the trimeshes. This has multiple effects: it will reduce the vertices
+    # if the vertex count is too high, and replace the shape with its convex hull helping with the volumeness
+    # issues.
+    reduced_trimeshes = [reduce_mesh(m) for m in convex_meshes]
 
     # Get a flattened list of vertices and faces
     all_vertices = []
@@ -109,28 +116,28 @@ def process_collision_obj(obj):
 
     # Check that the new element count is the same as the split count
     elems = {tuple(rt.polyop.GetElementsUsingFace(new_obj, i + 1)) for i in range(rt.polyop.GetNumFaces(new_obj))}
-    assert len(elems) == len(collision_meshes), f"{name} has different number of faces in collision mesh than in splits"
+    assert len(elems) == len(convex_meshes), f"{name} has different number of faces in convex mesh than in splits"
     elems = np.array(list(elems))
     assert not np.any(np.sum(elems, axis=0) > 1), f"{name} has same face appear in multiple elements"
 
     # Hide the mesh
     new_obj.isHidden = True
 
-def process_all_collision_objs(objs=None):
+def process_all_convex_meshes(objs=None):
     if objs is None:
         objs = list(rt.objects)
     for obj in objs:
         if "Mcollision" not in obj.name and "Mfillable" not in obj.name and "Mopenfillable" not in obj.name:
             continue
         
-        process_collision_obj(obj)
+        process_convex_obj(obj)
 
 def main():
-    # for obj in rt.selection:
-    #     assert "Mcollision" in obj.name or "Mfillable" in obj.name or "Mopenfillable" in obj.name, "Please select a collision or fillable object"
-    # process_collision_obj(list(rt.selection))
+    for obj in rt.selection:
+        assert "Mcollision" in obj.name or "Mfillable" in obj.name or "Mopenfillable" in obj.name, "Please select a collision or fillable object"
+    process_collision_obj(list(rt.selection))
 
-    process_all_collision_objs()
+    # process_all_convex_meshes()
 
 if __name__ == "__main__":
     main()

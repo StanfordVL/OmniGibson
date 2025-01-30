@@ -22,8 +22,6 @@ from b1k_pipeline.usd_conversion.asset_conversion_utils import import_obj_metada
 
 
 IMPORT_RENDER_CHANNELS = True
-CLOTH_CATEGORIES = ["t_shirt", "dishtowel", "carpet"]
-
 
 if __name__ == "__main__":
     og.launch()
@@ -45,10 +43,6 @@ if __name__ == "__main__":
             import_render_channels=IMPORT_RENDER_CHANNELS,
         )
         print("Done importing metadata")
-        # # Apply cloth conversions if necessary.
-        # if obj_category in CLOTH_CATEGORIES:
-        #     rigid_usd_path = os.path.join(dataset_root, "objects", obj_category, obj_model, "usd", f"{obj_model}.usd")
-        #     postprocess_cloth(rigid_usd_path)
 
         # Encrypt the output files.
         print("Encrypting")

@@ -25,10 +25,26 @@ import b1k_pipeline.max.match_links
 from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
+
+PASS_FILENAME = "done-1-30.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
 
+from bddl.object_taxonomy import ObjectTaxonomy
+
+OBJECT_TAXONOMY = ObjectTaxonomy()
+
+def get_approved_room_types():
+    approved = []
+    with open(b1k_pipeline.utils.PIPELINE_ROOT / "metadata/allowed_room_types.csv", newline="") as csvfile:
+        reader = csv.reader(csvfile)
+        for row in reader:
+            approved.append(row[0])
+
+    return set(approved)
+
+APPROVED_ROOM_TYPES = get_approved_room_types()
 
 def get_renames():
     with open(
@@ -72,6 +88,38 @@ def processFile(filename: pathlib.Path):
     # Fix any bad materials
     # rt.select(rt.objects)
     # rt.convertToVRay(True)
+
+    # Apply renames
+    for obj in rt.objects:
+        match = b1k_pipeline.utils.parse_name(obj.name)
+        if not match:
+            continue
+
+        category = match.group("category")
+        model_id = match.group("model_id")
+        rename_key = f"{category}-{model_id}"
+        if model_id in RENAMES:
+            old_key, new_key = RENAMES[model_id]
+            if rename_key == old_key:
+                obj.name = obj.name.replace(old_key, new_key)
+                made_any_changes = True
+
+    # Remove layers that don't make sense
+    zero_layer, = [rt.LayerManager.getLayer(x) for x in range(rt.LayerManager.count) if rt.LayerManager.getLayer(x).name == "0" and x == 0]  # assert layer 0 is "0"
+    zero_layer.current = True
+    layers_to_remove = set()
+    for obj in rt.objects:
+        layer = obj.layer
+        if layer.name.rsplit("_", 1)[0] not in APPROVED_ROOM_TYPES:
+            zero_layer.addNode(obj)
+            layers_to_remove.add(layer.name)
+    for layer_name in layers_to_remove:
+        rt.LayerManager.deleteLayerByName(layer_name)
+
+    # Remove soft tags
+    for obj in rt.objects:
+        if "-Tsoft" in obj.name:
+            obj.name = obj.name.replace("-Tsoft", "")
 
     # # Fix layers called hallway
     # existing_layer_names = {rt.LayerManager.getLayer(x).name for x in range(rt.LayerManager.count)}
@@ -133,18 +181,41 @@ def processFile(filename: pathlib.Path):
     #         # print("Need to collapse", obj.name)
     #         rt.polyop.CollapseDeadStructs(obj)
 
+    # Remove shell materials that might show up under multi materials
+    def _replace_shell(mat):
+        # If this is a multi material, recurse through its submaterials
+        if rt.classOf(mat) == rt.MultiMaterial:
+            for i in range(len(mat.materialList)):
+                mat.materialList[i] = _replace_shell(mat.materialList[i])
+
+        # If it's a shell material recurse down the original side
+        if rt.classOf(mat) == rt.Shell_Material:
+            mat.originalMaterial = _replace_shell(mat.originalMaterial)
+
+        # If this is a shell material, return the unbaked material
+        if rt.classOf(mat) == rt.Shell_Material:
+            return mat.originalMaterial
+        
+        # Otherwise just return this material
+        return mat
+
+    for obj in rt.objects:
+        # Note that we don't assign the return value here, in effect keeping the top-level
+        # material and only replacing the nested ones.
+        _replace_shell(obj.material)
+
     # Prebake textures
-    # b1k_pipeline.max.prebake_textures.process_open_file()
+    b1k_pipeline.max.prebake_textures.process_open_file()
 
     # Convert extracted school objects to BAD on these scenes
-    ids_to_bad = b1k_pipeline.max.extract_school_objects.IDS_TO_MERGE
-    for obj in rt.objects:
-        m = b1k_pipeline.utils.parse_name(obj.name)
-        if not m:
-            continue
-        if m.group("model_id") in ids_to_bad and not m.group("bad"):
-            obj.name = "B-" + obj.name
-            made_any_changes = True
+    # ids_to_bad = b1k_pipeline.max.extract_school_objects.IDS_TO_MERGE
+    # for obj in rt.objects:
+    #     m = b1k_pipeline.utils.parse_name(obj.name)
+    #     if not m:
+    #         continue
+    #     if m.group("model_id") in ids_to_bad and not m.group("bad"):
+    #         obj.name = "B-" + obj.name
+    #         made_any_changes = True
 
     # # Delete meta links from non-zero or bad instances
     for obj in rt.objects:
@@ -227,11 +298,29 @@ def processFile(filename: pathlib.Path):
         if "Mcollision" in obj.name:
             obj.isHidden = True
 
-    # Reduce collision mesh vertex counts
-    # b1k_pipeline.max.collision_vertex_reduction.process_all_collision_objs()
+    # Remove collision meshes belonging to any of the cloth objects that needed to be reduced
+    for obj in rt.objects:
+        m = b1k_pipeline.utils.parse_name(obj.name)
+        if not m:
+            continue
+
+        if m.group("meta_type") != "collision":
+            continue
+
+        synset = OBJECT_TAXONOMY.get_synset_from_category(m.group("category"))
+        if synset is None:
+            continue
+
+        if "cloth" not in OBJECT_TAXONOMY.get_abilities(synset):
+            continue
+
+        rt.delete(obj)
 
     # Generate all missing collision meshes
-    # b1k_pipeline.max.collision_generation.generate_all_missing_collision_meshes()
+    b1k_pipeline.max.collision_generation.generate_all_missing_collision_meshes()
+
+    # Reduce collision mesh vertex counts
+    b1k_pipeline.max.collision_vertex_reduction.process_all_convex_meshes()
 
     # Match links
     # b1k_pipeline.max.match_links.process_all_objects()
@@ -272,21 +361,6 @@ def processFile(filename: pathlib.Path):
     #         # Break out of the while loop
     #         break
 
-    # Apply renames
-    # for obj in rt.objects:
-    #     match = b1k_pipeline.utils.parse_name(obj.name)
-    #     if not match:
-    #         continue
-
-    #     category = match.group("category")
-    #     model_id = match.group("model_id")
-    #     rename_key = f"{category}-{model_id}"
-    #     if model_id in RENAMES:
-    #         old_key, new_key = RENAMES[model_id]
-    #         if rename_key == old_key:
-    #             obj.name = obj.name.replace(old_key, new_key)
-    #             made_any_changes = True
-
     # Import fillable meshes
     # made_any_changes = (
     #     made_any_changes
@@ -307,11 +381,14 @@ def processFile(filename: pathlib.Path):
         new_filename = processed_fn(filename)
         rt.saveMaxFile(str(new_filename))
 
+    with open(filename.parent / PASS_FILENAME, "w") as f:
+        pass
+
 
 def fix_common_issues_in_all_files():
     candidates = [
         pathlib.Path(x)
-        for x in glob.glob(r"D:\ig_pipeline\cad\scenes\school_*\processed.max")
+        for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
 
     start_pattern = None  # specify a start pattern here to skip up to a file
@@ -323,6 +400,8 @@ def fix_common_issues_in_all_files():
                 break
 
     for i, f in enumerate(tqdm.tqdm(candidates[start_idx:])):
+        if (f.parent / PASS_FILENAME).exists():
+            continue
         processFile(f)
 
 

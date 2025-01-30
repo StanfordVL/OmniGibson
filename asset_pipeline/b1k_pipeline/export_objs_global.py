@@ -25,7 +25,6 @@ import b1k_pipeline.utils
 from b1k_pipeline.utils import (
     parse_name,
     get_targets,
-    SUBDIVIDE_CLOTH_CATEGORIES,
     save_mesh,
 )
 
