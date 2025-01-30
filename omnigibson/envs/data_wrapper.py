@@ -18,7 +18,7 @@ from omnigibson.objects.object_base import BaseObject
 from omnigibson.sensors.vision_sensor import VisionSensor
 from omnigibson.utils.config_utils import TorchEncoder
 from omnigibson.utils.python_utils import create_object_from_init_info, h5py_group_to_torch
-from omnigibson.utils.ui_utils import create_module_logger, KeyboardEventHandler, choose_from_options
+from omnigibson.utils.ui_utils import create_module_logger, KeyboardEventHandler, choose_from_options, get_user_input
 
 # Create module logger
 log = create_module_logger(module_name=__name__)
@@ -705,18 +705,14 @@ class DataPlaybackWrapper(DataWrapper):
                 # For fields with predefined options
                 options = {str(opt): str(opt) for opt in field_config["options"]}
                 value = choose_from_options(options, field_name)
-                # Convert to appropriate type
-                field_values[field_name] = field_type(value)
             else:
                 # For free-form input fields
-                while True:
-                    try:
-                        print(f"\n{prompt}")
-                        value = input("> ")
-                        field_values[field_name] = field_type(value)
-                        break
-                    except ValueError:
-                        print(f"Invalid input. Please enter a valid {field_type.__name__}")
+                value = get_user_input(
+                    prompt,
+                    field_name,
+                )
+            # Convert to appropriate type
+            field_values[field_name] = field_type(value)
 
         return field_values
 

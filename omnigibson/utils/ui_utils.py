@@ -272,7 +272,6 @@ def choose_from_options(options, name, random_selection=False):
     Returns:
         str: Requested option
     """
-    # Select robot
     print("\nHere is a list of available {}s:\n".format(name))
 
     for k, option in enumerate(options):
@@ -293,6 +292,48 @@ def choose_from_options(options, name, random_selection=False):
 
     # Return requested option
     return list(options)[k]
+
+
+def get_user_input(prompt, name, valid_check=None, default=None):
+    """
+    Gets free-form input from user with validation and default value handling.
+
+    Args:
+        prompt (str): The prompt to display to the user
+        name (str): Name of the input type (used in messages)
+        valid_check (callable, optional): Function that checks if input is valid.
+            Should return (bool, str) tuple of (is_valid, error_message)
+        default (str, optional): Default value to use if input is empty
+
+    Returns:
+        str: User's validated input or default value
+    """
+    print(f"\n{prompt}")
+
+    try:
+        user_input = input("> ").strip()
+
+        # Return default if input is empty and default exists
+        if not user_input and default is not None:
+            print(f"No input provided. Using default {name}: {default}")
+            return default
+
+        # Validate input if validation function provided
+        if valid_check:
+            is_valid, error_msg = valid_check(user_input)
+            if not is_valid:
+                print(f"Invalid {name}: {error_msg}")
+                print(f"Using default {name}: {default}" if default else "Please try again.")
+                return default if default else None
+
+        return user_input
+
+    except EOFError:
+        # Handle Ctrl+D/EOF
+        if default:
+            print(f"\nInput interrupted. Using default {name}: {default}")
+            return default
+        return None
 
 
 class CameraMover:
