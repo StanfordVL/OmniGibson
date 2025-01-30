@@ -1098,7 +1098,7 @@ stages:
     - cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
     - cad/scenes/school_geography/artifacts/object_list.json
     - cad/scenes/school_gym/artifacts/object_list.json
-    - artifacts/pipeline/object_list_future.success
+    - artifacts/pipeline/object_list.success
     - b1k_pipeline/combined_room_object_list.py
     - metadata/allowed_room_types.csv
     - params.yaml
