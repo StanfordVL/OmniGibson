@@ -121,7 +121,7 @@ def run_vhacd(input_mesh, hull_count):
             raise ValueError(f"VHACD failed with exit code {e.returncode}")
 
 
-HULL_COUNTS = [8]
+HULL_COUNTS = [16]
 USE_METHODS = {
     "coacd": run_coacd,
     "vhacd": run_vhacd,

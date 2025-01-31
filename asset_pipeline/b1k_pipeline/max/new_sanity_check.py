@@ -383,7 +383,7 @@ class SanityCheck:
         renamed_category = self.maybe_rename_category(category, model_id)
         self.expect(
             category == renamed_category,
-            f"{row.object_name} has unapplied rename {category}.",
+            f"{row.object_name} has unapplied rename {renamed_category}.",
             level="WARNING",
         )
         if model_id in DELETION_QUEUE:
