@@ -1340,7 +1340,7 @@
             "grocery_store_0": {
                 "walls-hukrvr": 2,
                 "ceilings-yxxaov": 2,
-                "floors-mwnkac": 2,
+                "floors-mwnkac": 1,
                 "door-rqextk": 2,
                 "door-ofgodc": 1,
                 "pillar-vzzejz": 2,
@@ -1520,6 +1520,7 @@
                 "grocery_sign-kyyjer": 30
             },
             "corridor_0": {
+                "floors-mwnkac": 1,
                 "door-rqextk": 1,
                 "door-ofgodc": 1,
                 "pillar-vzzejz": 1,
@@ -5620,9 +5621,7 @@
                 "walls-tnygto": 2,
                 "ceilings-wsblre": 2,
                 "floors-muzlgy": 2,
-                "bottle_of_sake-zrkfim": 1,
-                "curtain-ohvomi": 1,
-                "curtain-shbakk": 1
+                "bottle_of_sake-zrkfim": 1
             },
             "corridor_0": {
                 "walls-zhuaij": 1,
@@ -7728,8 +7727,8 @@
             "Outlets"
         ],
         "Rs_garden": [
-            "Grill",
-            "Outlets"
+            "Outlets",
+            "Grill"
         ],
         "Rs_int": [
             "Outlets"
