@@ -32143,8 +32143,21 @@
                                     {
                                       "name": "fireplace.n.01",
                                       "hasModel": true,
-                                      "categories": [
-                                        "fireplace"
+                                      "children": [
+                                        {
+                                          "name": "gas_fireplace.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "gas_fireplace"
+                                          ]
+                                        },
+                                        {
+                                          "name": "wood_fireplace.n.01",
+                                          "hasModel": true,
+                                          "categories": [
+                                            "wood_fireplace"
+                                          ]
+                                        }
                                       ]
                                     }
                                   ]

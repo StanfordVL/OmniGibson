@@ -42022,10 +42022,7 @@
     "fireplace.n.01": {
         "disinfectable": {},
         "dustyable": {},
-        "fillable": {},
-        "freezable": {},
         "grassyable": {},
-        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -43961,6 +43958,22 @@
         "liquid": {},
         "physicalSubstance": {},
         "substance": {}
+    },
+    "gas_fireplace.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "sceneObject": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "gasoline.n.01": {
         "boilable": {},
@@ -114538,6 +114551,25 @@
         "macroPhysicalSubstance": {},
         "physicalSubstance": {},
         "substance": {}
+    },
+    "wood_fireplace.n.01": {
+        "disinfectable": {},
+        "dustyable": {},
+        "fillable": {},
+        "freezable": {},
+        "grassyable": {},
+        "heatable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "sceneObject": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
     },
     "wooden_spoon.n.02": {
         "disinfectable": {},

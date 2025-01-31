@@ -9126,19 +9126,6 @@
         }
     },
     {
-        "rule_name": "fireplace.n.01-washer-cover",
-        "input_synsets": {},
-        "machine": {
-            "washer.n.03": 1
-        },
-        "washed_item": {
-            "fireplace.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "firewood.n.01-washer-cover",
         "input_synsets": {},
         "machine": {
@@ -9718,6 +9705,19 @@
         },
         "washed_item": {
             "garlic_bread.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "gas_fireplace.n.01-washer-cover",
+        "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
+        "washed_item": {
+            "gas_fireplace.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -24460,6 +24460,19 @@
         },
         "washed_item": {
             "wok.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
+        "rule_name": "wood_fireplace.n.01-washer-cover",
+        "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
+        "washed_item": {
+            "wood_fireplace.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
