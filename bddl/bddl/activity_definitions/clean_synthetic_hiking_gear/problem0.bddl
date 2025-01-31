@@ -6,7 +6,7 @@
         sleeping_bag.n.01_1 - sleeping_bag.n.01
         dust.n.01_1 - dust.n.01
         hiking_boot.n.01_1 hiking_boot.n.01_2 - hiking_boot.n.01
-        jacket.n.01_1 - jacket.n.01
+        vest.n.01_1 - vest.n.01
         countertop.n.01_1 - countertop.n.01
         floor.n.01_1 - floor.n.01
         scrub_brush.n.01_1 - scrub_brush.n.01
@@ -23,8 +23,8 @@
         (covered sleeping_bag.n.01_1 stain.n.01_1) 
         (covered hiking_boot.n.01_1 dust.n.01_1)
         (covered hiking_boot.n.01_2 dust.n.01_1)
-        (covered jacket.n.01_1 dust.n.01_1) 
-        (ontop jacket.n.01_1 countertop.n.01_1) 
+        (covered vest.n.01_1 dust.n.01_1) 
+        (ontop vest.n.01_1 countertop.n.01_1) 
         (ontop sleeping_bag.n.01_1 floor.n.01_1)
         (ontop hiking_boot.n.01_1 floor.n.01_1)
         (ontop hiking_boot.n.01_2 floor.n.01_1)
@@ -52,7 +52,7 @@
                 )
             )
             (not 
-                (covered ?jacket.n.01_1 ?dust.n.01_1)
+                (covered ?vest.n.01_1 ?dust.n.01_1)
             )
         )
     )

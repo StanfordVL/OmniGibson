@@ -3,7 +3,7 @@
 
     (:objects
         washer.n.03_1 - washer.n.03
-        lingerie.n.01_1 lingerie.n.01_2 lingerie.n.01_3 lingerie.n.01_4 - lingerie.n.01
+        undergarment.n.01_1 undergarment.n.01_2 undergarment.n.01_3 undergarment.n.01_4 - undergarment.n.01
         stain.n.01_1 - stain.n.01
         dust.n.01_1 - dust.n.01
         sweater.n.01_1 - sweater.n.01
@@ -16,14 +16,14 @@
     )
     
     (:init 
-        (inside lingerie.n.01_1 washer.n.03_1) 
-        (covered lingerie.n.01_1 stain.n.01_1) 
-        (inside lingerie.n.01_2 washer.n.03_1) 
-        (covered lingerie.n.01_2 stain.n.01_1) 
-        (inside lingerie.n.01_3 washer.n.03_1) 
-        (covered lingerie.n.01_3 dust.n.01_1) 
-        (inside lingerie.n.01_4 washer.n.03_1) 
-        (covered lingerie.n.01_4 dust.n.01_1) 
+        (inside undergarment.n.01_1 washer.n.03_1) 
+        (covered undergarment.n.01_1 stain.n.01_1) 
+        (inside undergarment.n.01_2 washer.n.03_1) 
+        (covered undergarment.n.01_2 stain.n.01_1) 
+        (inside undergarment.n.01_3 washer.n.03_1) 
+        (covered undergarment.n.01_3 dust.n.01_1) 
+        (inside undergarment.n.01_4 washer.n.03_1) 
+        (covered undergarment.n.01_4 dust.n.01_1) 
         (inside sweater.n.01_1 washer.n.03_1) 
         (covered sweater.n.01_1 stain.n.01_1) 
         (inside undergarment.n.01_1 washer.n.03_1) 
@@ -41,13 +41,13 @@
     (:goal 
         (and 
             (forall 
-                (?lingerie.n.01 - lingerie.n.01)
+                (?undergarment.n.01 - undergarment.n.01)
                 (and
                     (not
-                        (covered ?lingerie.n.01 ?stain.n.01_1)
+                        (covered ?undergarment.n.01 ?stain.n.01_1)
                     )
                     (not
-                        (covered ?lingerie.n.01 ?dust.n.01_1)
+                        (covered ?undergarment.n.01 ?dust.n.01_1)
                     )
                 )
             )

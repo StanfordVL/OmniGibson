@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        lingerie.n.01_1 - lingerie.n.01
+        undergarment.n.01_1 - undergarment.n.01
         hamper.n.02_1 - hamper.n.02
         sock.n.01_1 sock.n.01_2 - sock.n.01
         jersey.n.03_1 - jersey.n.03
@@ -14,7 +14,7 @@
     )
     
     (:init 
-        (ontop lingerie.n.01_1 bed.n.01_1)
+        (ontop undergarment.n.01_1 bed.n.01_1)
         (ontop trouser.n.01_1 bed.n.01_1)
         (inside sock.n.01_1 hamper.n.02_1) 
         (inside sock.n.01_2 hamper.n.02_1)
@@ -32,10 +32,10 @@
             (exists 
                 (?cabinet.n.01 - cabinet.n.01)
                 (forall 
-                    (?lingerie.n.01 - lingerie.n.01)
+                    (?undergarment.n.01 - undergarment.n.01)
                     (and
-                        (folded ?lingerie.n.01)
-                        (inside ?lingerie.n.01 ?cabinet.n.01)
+                        (folded ?undergarment.n.01)
+                        (inside ?undergarment.n.01 ?cabinet.n.01)
                     )
                 )
             )

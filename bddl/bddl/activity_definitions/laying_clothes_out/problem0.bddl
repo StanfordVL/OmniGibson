@@ -2,7 +2,8 @@
     (:domain omnigibson)
 
     (:objects
-        jacket.n.01_1 - jacket.n.01
+        shirt.n.01_1 - shirt.n.01
+        trouser.n.01_1 - trouser.n.01
         wardrobe.n.01_1 - wardrobe.n.01
         sandal.n.01_1 - sandal.n.01
         bed.n.01_1 - bed.n.01
@@ -11,7 +12,8 @@
     )
     
     (:init 
-        (inside jacket.n.01_1 wardrobe.n.01_1) 
+        (inside shirt.n.01_1 wardrobe.n.01_1) 
+        (inside trouser.n.01_1 wardrobe.n.01_1) 
         (inside sandal.n.01_1 wardrobe.n.01_1)
         (inroom wardrobe.n.01_1 closet)
         (inroom floor.n.01_1 closet) 
@@ -22,7 +24,10 @@
     
     (:goal 
         (and 
-            (ontop ?jacket.n.01_1 ?bed.n.01_1) 
+            (ontop ?shirt.n.01_1 ?bed.n.01_1) 
+            (unfolded ?shirt.n.01_1)
+            (ontop ?trouser.n.01_1 ?bed.n.01_1) 
+            (unfolded ?trouser.n.01_1)
             (ontop ?sandal.n.01_1 ?floor.n.01_2)
         )
     )
