@@ -45,12 +45,17 @@ def load_collision_selections():
                     preferred_hull_count = int(selection.split("-h")[-1])
                 else:
                     raise ValueError(f"Unknown selection method {selection}")
-                
-                selections[(model_id, link_name)] = (preferred_method, preferred_hull_count)
+
+                selections[(model_id, link_name)] = (
+                    preferred_method,
+                    preferred_hull_count,
+                )
 
     return selections
 
+
 COLLISION_SELECTIONS = load_collision_selections()
+
 
 def run_coacd(input_mesh, hull_count):
     coacd_mesh = coacd.Mesh(input_mesh.vertices, input_mesh.faces)
@@ -171,20 +176,20 @@ def generate_collision_mesh(obj, preferred_method=None, preferred_hull_count=Non
         return
 
     # Does it already have a collision mesh? If so, move on.
-    # for child in obj.children:
-    #     parsed_child_name = parse_name(child.name)
-    #     if not parsed_child_name:
-    #         continue
+    for child in obj.children:
+        parsed_child_name = parse_name(child.name)
+        if not parsed_child_name:
+            continue
 
-    #     # Skip parts etc.
-    #     if parsed_child_name.group("mesh_basename") != parsed_name.group(
-    #         "mesh_basename"
-    #     ):
-    #         continue
+        # Skip parts etc.
+        if parsed_child_name.group("mesh_basename") != parsed_name.group(
+            "mesh_basename"
+        ):
+            continue
 
-    #     if parsed_child_name.group("meta_type") == "collision":
-    #         print("Collision mesh already exists for", obj.name, ", skipping.")
-    #         return
+        if parsed_child_name.group("meta_type") == "collision":
+            # print("Collision mesh already exists for", obj.name, ", skipping.")
+            return
 
     # Get the vertices and faces
     verts = np.array(
@@ -206,13 +211,16 @@ def generate_collision_mesh(obj, preferred_method=None, preferred_hull_count=Non
     # Run the convex hull option
     tm = trimesh.Trimesh(vertices=verts, faces=faces)
 
-    if preferred_method is None or preferred_method == "chull":    
+    if preferred_method is None or preferred_method == "chull":
         chull = tm.convex_hull
         # TODO: Quadric decimation
         convex_hull_obj = _create_collision_obj_from_verts_faces(
-            chull.vertices, chull.faces, obj, ("_chull" if preferred_method is None else "")
+            chull.vertices,
+            chull.faces,
+            obj,
+            ("_chull" if preferred_method is None else ""),
         )
-    print("Generated convex hull", convex_hull_obj.name)
+        print("Generated convex hull", convex_hull_obj.name)
 
     # Run CoACD a number of times
     for method_name, method in USE_METHODS.items():
@@ -234,7 +242,14 @@ def generate_collision_mesh(obj, preferred_method=None, preferred_hull_count=Non
             all_vertices = np.array(all_vertices)
             all_faces = np.array(all_faces)
             collision_obj = _create_collision_obj_from_verts_faces(
-                all_vertices, all_faces, obj, (f"_{method_name}{hull_count}" if preferred_method is None or preferred_hull_count is None else ""),
+                all_vertices,
+                all_faces,
+                obj,
+                (
+                    f"_{method_name}{hull_count}"
+                    if preferred_method is None or preferred_hull_count is None
+                    else ""
+                ),
             )
 
             # Check that the new element count is the same as the split count
@@ -279,9 +294,15 @@ def generate_all_missing_collision_meshes():
         link_name = parsed_name.group("link_name") or "base_link"
         preferred_method, preferred_hull_count = None, None
         if (model_id, link_name) in COLLISION_SELECTIONS:
-            preferred_method, preferred_hull_count = COLLISION_SELECTIONS[(model_id, link_name)]
+            preferred_method, preferred_hull_count = COLLISION_SELECTIONS[
+                (model_id, link_name)
+            ]
 
-        generate_collision_mesh(obj, preferred_method=preferred_method, preferred_hull_count=preferred_hull_count)
+        generate_collision_mesh(
+            obj,
+            preferred_method=preferred_method,
+            preferred_hull_count=preferred_hull_count,
+        )
 
 
 def main():

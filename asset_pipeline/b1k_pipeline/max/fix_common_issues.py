@@ -35,16 +35,21 @@ from bddl.object_taxonomy import ObjectTaxonomy
 
 OBJECT_TAXONOMY = ObjectTaxonomy()
 
+
 def get_approved_room_types():
     approved = []
-    with open(b1k_pipeline.utils.PIPELINE_ROOT / "metadata/allowed_room_types.csv", newline="") as csvfile:
+    with open(
+        b1k_pipeline.utils.PIPELINE_ROOT / "metadata/allowed_room_types.csv", newline=""
+    ) as csvfile:
         reader = csv.reader(csvfile)
         for row in reader:
             approved.append(row[0])
 
     return set(approved)
 
+
 APPROVED_ROOM_TYPES = get_approved_room_types()
+
 
 def get_renames():
     with open(
@@ -105,7 +110,11 @@ def processFile(filename: pathlib.Path):
                 made_any_changes = True
 
     # Remove layers that don't make sense
-    zero_layer, = [rt.LayerManager.getLayer(x) for x in range(rt.LayerManager.count) if rt.LayerManager.getLayer(x).name == "0" and x == 0]  # assert layer 0 is "0"
+    (zero_layer,) = [
+        rt.LayerManager.getLayer(x)
+        for x in range(rt.LayerManager.count)
+        if rt.LayerManager.getLayer(x).name == "0" and x == 0
+    ]  # assert layer 0 is "0"
     zero_layer.current = True
     layers_to_remove = set()
     for obj in rt.objects:
@@ -154,58 +163,30 @@ def processFile(filename: pathlib.Path):
     #         obj.name = obj.name.replace(old_str, new_str)
 
     # Get all editable polies
-    # for obj in tqdm.tqdm(list(rt.objects)):
-    #     if rt.classOf(obj) != rt.Editable_Poly:
-    #         continue
+    for obj in tqdm.tqdm(list(rt.objects)):
+        if rt.classOf(obj) != rt.Editable_Poly:
+            continue
 
-    #     # Check all faces are triangular
-    #     faces_maxscript = [rt.polyop.getFaceVerts(obj, i + 1) for i in range(rt.polyop.GetNumFaces(obj))]
-    #     faces = [[int(v) - 1 for v in f] for f in faces_maxscript if f is not None]
-    #     if not all(len(f) == 3 for f in faces):
-    #         # print("Need to triangulate", obj.name)
+        # Check all faces are triangular
+        all_triangular = all(
+            len(rt.polyop.getFaceVerts(obj, i + 1)) == 3
+            for i in range(rt.polyop.GetNumFaces(obj))
+        )
+        if not all_triangular:
+            print("Need to triangulate", obj.name)
 
-    #         # Turn to mesh first
-    #         ttm = rt.Turn_To_Mesh()
-    #         rt.addmodifier(obj, ttm)
+            # Triangulate
+            ttp = rt.Turn_To_Poly()
+            ttp.limitPolySize = True
+            ttp.maxPolySize = 3
+            rt.addmodifier(obj, ttp)
+            rt.maxOps.collapseNodeTo(obj, 1, True)
 
-    #         # Triangulate
-    #         ttp = rt.Turn_To_Poly()
-    #         ttp.limitPolySize = True
-    #         ttp.maxPolySize = 3
-    #         rt.addmodifier(obj, ttp)
-    #         rt.maxOps.collapseNodeTo(obj, 1, True)
-
-    #     # Check that there are no dead elements
-    #     if rt.polyop.GetHasDeadStructs(obj) != 0:
-    #         # Remove dead structs
-    #         # print("Need to collapse", obj.name)
-    #         rt.polyop.CollapseDeadStructs(obj)
-
-    # Remove shell materials that might show up under multi materials
-    def _replace_shell(mat):
-        # If this is a multi material, recurse through its submaterials
-        if rt.classOf(mat) == rt.MultiMaterial:
-            for i in range(len(mat.materialList)):
-                mat.materialList[i] = _replace_shell(mat.materialList[i])
-
-        # If it's a shell material recurse down the original side
-        if rt.classOf(mat) == rt.Shell_Material:
-            mat.originalMaterial = _replace_shell(mat.originalMaterial)
-
-        # If this is a shell material, return the unbaked material
-        if rt.classOf(mat) == rt.Shell_Material:
-            return mat.originalMaterial
-        
-        # Otherwise just return this material
-        return mat
-
-    for obj in rt.objects:
-        # Note that we don't assign the return value here, in effect keeping the top-level
-        # material and only replacing the nested ones.
-        _replace_shell(obj.material)
-
-    # Prebake textures
-    b1k_pipeline.max.prebake_textures.process_open_file()
+        # Check that there are no dead elements
+        if rt.polyop.GetHasDeadStructs(obj) != 0:
+            # Remove dead structs
+            # print("Need to collapse", obj.name)
+            rt.polyop.CollapseDeadStructs(obj)
 
     # Convert extracted school objects to BAD on these scenes
     # ids_to_bad = b1k_pipeline.max.extract_school_objects.IDS_TO_MERGE
@@ -376,6 +357,32 @@ def processFile(filename: pathlib.Path):
             rt.delete(light)
             made_any_changes = True
 
+    # Remove shell materials that might show up under multi materials
+    def _replace_shell(mat):
+        # If this is a multi material, recurse through its submaterials
+        if rt.classOf(mat) == rt.MultiMaterial:
+            for i in range(len(mat.materialList)):
+                mat.materialList[i] = _replace_shell(mat.materialList[i])
+
+        # If it's a shell material recurse down the original side
+        if rt.classOf(mat) == rt.Shell_Material:
+            mat.originalMaterial = _replace_shell(mat.originalMaterial)
+
+        # If this is a shell material, return the unbaked material
+        if rt.classOf(mat) == rt.Shell_Material:
+            return mat.originalMaterial
+
+        # Otherwise just return this material
+        return mat
+
+    for obj in rt.objects:
+        # Note that we don't assign the return value here, in effect keeping the top-level
+        # material and only replacing the nested ones.
+        _replace_shell(obj.material)
+
+    # Prebake textures
+    b1k_pipeline.max.prebake_textures.process_open_file()
+
     # Save again.
     if made_any_changes:
         new_filename = processed_fn(filename)
@@ -387,8 +394,7 @@ def processFile(filename: pathlib.Path):
 
 def fix_common_issues_in_all_files():
     candidates = [
-        pathlib.Path(x)
-        for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
 
     start_pattern = None  # specify a start pattern here to skip up to a file
