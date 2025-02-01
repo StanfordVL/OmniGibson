@@ -3,7 +3,7 @@ import io
 import re
 from flask.views import View
 from flask import render_template, send_file, url_for, jsonify
-from bddl.knowledge_base import *
+from bddl.knowledge_base import Task, Scene, Synset, Category, Object, TransitionRule, AttachmentPair, Property, SynsetState
 
 from . import profile_utils
 
@@ -230,28 +230,27 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # task metadata
-        tasks_state = [task.state ]
         context["task_metadata"] = {
-            "ready": sum([1 for state in tasks_state if state == SynsetState.MATCHED]),
+            "ready": sum([1 for task in Task.all_objects() if task.synset_state == SynsetState.MATCHED and task.scene_state == SynsetState.MATCHED]),
             "missing_object": sum([1 for task in Task.all_objects() if task.synset_state == SynsetState.UNMATCHED]),
             "missing_scene": sum([1 for task in Task.all_objects() if task.scene_state == SynsetState.UNMATCHED]),
-            "total": len(tasks_state),
+            "total": len(list(Task.all_objects())),
         }
         # synset metadata
-        context["synset_metadata"] = [
+        context["synset_metadata"] = {
             "valid": sum(1 for x in Synset.all_objects() if x.state == SynsetState.MATCHED),
             "planned": sum(1 for x in Synset.all_objects() if x.state == SynsetState.PLANNED),
             "substance": sum(1 for x in Synset.all_objects() if x.state == SynsetState.SUBSTANCE),
             "unmatched": sum(1 for x in Synset.all_objects() if x.state == SynsetState.UNMATCHED),
             "illegal": sum(1 for x in Synset.all_objects() if x.state == SynsetState.ILLEGAL),
             "total": sum(1 for x in Synset.all_objects()),
-        ]
+        }
         # object metadata
-        context["object_metadata"] = [
+        context["object_metadata"] = {
             "ready": sum(1 for x in Object.all_objects() if x.ready),
             "planned": sum(1 for x in Object.all_objects() if not x.ready and x.planned),
             "error": sum(1 for x in Object.all_objects() if not x.planned),
-        ]
+        }
         # scene metadata
         num_ready_scenes = sum([scene.any_ready for scene in Scene.all_objects()])
         num_planned_scenes = sum(1 for scene in Scene.all_objects()) - num_ready_scenes
