@@ -9,7 +9,6 @@
         rosemary.n.02_1 - rosemary.n.02
         carving_knife.n.01_1 - carving_knife.n.01
         salt.n.02_1 - salt.n.02
-        chicken_soup.n.01_1 - chicken_soup.n.01
         cooked__chicken_soup.n.01_1 - cooked__chicken_soup.n.01
         stove.n.01_1 - stove.n.01
         stockpot.n.01_1 - stockpot.n.01
@@ -50,7 +49,6 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (ontop stockpot.n.01_1 countertop.n.01_1) 
-        (future chicken_soup.n.01_1) 
         (future cooked__chicken_soup.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -58,14 +56,8 @@
     
     (:goal 
         (and 
-            (or 
-                (real ?chicken_soup.n.01_1) 
-                (real ?cooked__chicken_soup.n.01_1)
-            ) 
-            (or 
-                (contains ?stockpot.n.01_1 ?chicken_soup.n.01_1) 
-                (contains ?stockpot.n.01_1 ?cooked__chicken_soup.n.01_1)
-            )
+            (real ?cooked__chicken_soup.n.01_1)
+            (contains ?stockpot.n.01_1 ?cooked__chicken_soup.n.01_1)
         )
     )
 )
