@@ -89,10 +89,21 @@ def hash_object(obj, verts=None, faces=None):
         # Create a numpy array containing the vertex positions and the faces
         # Notice by getting this from the baseObject we get them in the object's local space
         # which is NOT the pivot space.
-        verts = np.array(rt.polyop.getVerts(obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))))
+        verts = np.array(
+            rt.polyop.getVerts(
+                obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))
+            )
+        )
 
     if faces is None:
-        faces = np.array(rt.polyop.getFacesVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj)))) - 1
+        faces = (
+            np.array(
+                rt.polyop.getFacesVerts(
+                    obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj))
+                )
+            )
+            - 1
+        )
 
     # Notice that we are adding 0. here. That is to avoid an absolutely INSANE bug where
     # 3ds Max returns -0. sometimes and 0. other times, causing the hash to be different
@@ -253,8 +264,9 @@ class TextureBaker:
         siblings = []
         for candidate in rt.objects:
             if (
-                candidate.baseObject == obj.baseObject
-                and candidate.material == obj.material
+                candidate.baseObject
+                == obj.baseObject
+                # and candidate.material == obj.material  # TODO: Is this too aggressive?
             ):
                 siblings.append(candidate)
 

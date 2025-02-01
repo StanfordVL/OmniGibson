@@ -223,12 +223,13 @@ def generate_collision_mesh(obj, preferred_method=None, preferred_hull_count=Non
         print("Generated convex hull", convex_hull_obj.name)
 
     # Run CoACD a number of times
+    hull_counts = (
+        [preferred_hull_count] if preferred_hull_count is not None else HULL_COUNTS
+    )
     for method_name, method in USE_METHODS.items():
         if preferred_method is not None and method_name != preferred_method:
             continue
-        for hull_count in HULL_COUNTS:
-            if preferred_hull_count is not None and hull_count != preferred_hull_count:
-                continue
+        for hull_count in hull_counts:
             meshes = method(tm, hull_count)
             reduced_meshes = [reduce_mesh(m) for m in meshes]
 

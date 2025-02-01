@@ -107,6 +107,7 @@ def process_convex_obj(obj):
     parent = obj.parent
     position = obj.position
     rotation = obj.rotation
+    layer = obj.layer
     rt.delete(obj)
     del obj
 
@@ -116,6 +117,7 @@ def process_convex_obj(obj):
     new_obj.name = name
     new_obj.rotation = rotation
     new_obj.position = position
+    layer.addNode(new_obj)
 
     # Add the vertices
     for v in all_vertices:
