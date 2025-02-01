@@ -230,28 +230,27 @@ class IndexView(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # task metadata
-        tasks_state = [task.state for task in Task.all_objects()]
-        context["task_metadata"] = [
-            sum([1 for state in tasks_state if state == SynsetState.MATCHED]),
-            sum([1 for state in tasks_state if state == SynsetState.PLANNED]),
-            sum([1 for state in tasks_state if state == SynsetState.UNMATCHED]),
-            sum([1 for x in Task.all_objects() if x.scene_state == SynsetState.UNMATCHED]),
-            len(tasks_state)
-        ]
+        tasks_state = [task.state ]
+        context["task_metadata"] = {
+            "ready": sum([1 for state in tasks_state if state == SynsetState.MATCHED]),
+            "missing_object": sum([1 for task in Task.all_objects() if task.synset_state == SynsetState.UNMATCHED]),
+            "missing_scene": sum([1 for task in Task.all_objects() if task.scene_state == SynsetState.UNMATCHED]),
+            "total": len(tasks_state),
+        }
         # synset metadata
         context["synset_metadata"] = [
-            sum(1 for x in Synset.all_objects() if x.state == SynsetState.MATCHED),
-            sum(1 for x in Synset.all_objects() if x.state == SynsetState.PLANNED),
-            sum(1 for x in Synset.all_objects() if x.state == SynsetState.SUBSTANCE),
-            sum(1 for x in Synset.all_objects() if x.state == SynsetState.UNMATCHED),
-            sum(1 for x in Synset.all_objects() if x.state == SynsetState.ILLEGAL),
-            sum(1 for x in Synset.all_objects()),
+            "valid": sum(1 for x in Synset.all_objects() if x.state == SynsetState.MATCHED),
+            "planned": sum(1 for x in Synset.all_objects() if x.state == SynsetState.PLANNED),
+            "substance": sum(1 for x in Synset.all_objects() if x.state == SynsetState.SUBSTANCE),
+            "unmatched": sum(1 for x in Synset.all_objects() if x.state == SynsetState.UNMATCHED),
+            "illegal": sum(1 for x in Synset.all_objects() if x.state == SynsetState.ILLEGAL),
+            "total": sum(1 for x in Synset.all_objects()),
         ]
         # object metadata
         context["object_metadata"] = [
-            sum(1 for x in Object.all_objects() if x.ready),
-            sum(1 for x in Object.all_objects() if not x.ready and x.planned),
-            sum(1 for x in Object.all_objects() if not x.planned),
+            "ready": sum(1 for x in Object.all_objects() if x.ready),
+            "planned": sum(1 for x in Object.all_objects() if not x.ready and x.planned),
+            "error": sum(1 for x in Object.all_objects() if not x.planned),
         ]
         # scene metadata
         num_ready_scenes = sum([scene.any_ready for scene in Scene.all_objects()])
