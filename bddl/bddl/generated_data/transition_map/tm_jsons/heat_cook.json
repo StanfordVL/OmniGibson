@@ -887,5 +887,25 @@
             ]
         },
         "timesteps": null
+    },
+    {
+        "rule_name": "white_wine_sauce",
+        "input_synsets": {
+            "heavy_cream.n.01": 1,
+            "white_wine.n.01": 1,
+            "flour.n.01": 1
+        },
+        "input_states": null,
+        "container": {
+            "saucepan.n.01": 1
+        },
+        "heat_source": {
+            "stove.n.01": 1
+        },
+        "output_synsets": {
+            "cooked__wine_sauce.n.01": 1
+        },
+        "output_states": null,
+        "timesteps": null
     }
 ]
