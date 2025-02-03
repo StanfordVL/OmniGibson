@@ -179,12 +179,9 @@ stages:
     cmd: 'python -m b1k_pipeline.export_objs_global'
     deps:
     - cad/#{combined}/artifacts/meshes.zip
-    - cad/#{combined}/artifacts/collision_meshes.zip
-    - cad/#{combined}/artifacts/collision_selection.json
     - cad/#{combined}/artifacts/object_list.json
     - metadata/orientation_edits.zip
     - artifacts/pipeline/object_list.success
-    - artifacts/pipeline/collision_selection_validation.success
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
     - artifacts/pipeline/export_meshes.success
