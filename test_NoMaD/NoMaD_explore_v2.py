@@ -39,7 +39,7 @@ MAX_W = 1.90  # 1.90 rad/s = 108.8 deg/s
 
 # Timestep for stepping the robot.
 # If your environment or robot_config prescribes a certain step time, use it:
-DT = 1.0 / RATE
+DT = 1.0  # / RATE
 EPS = 1e-8
 
 
@@ -245,10 +245,11 @@ def sample_diffusion_action(
     waypoint = chosen_traj[args.waypoint]  # shape (2,)
 
     # If model was trained in normalized action space, rescale
-    # print(f"waypoint={waypoint}")
+    print(f"waypoint dist. = {np.linalg.norm(waypoint)}")
     if model_params.get("normalize", False):
         # e.g., scale by max velocity for a single step
-        waypoint *= MAX_V / RATE
+        # waypoint *= MAX_V / RATE
+        pass
         # print(f"Normalized waypoint={waypoint}")
 
     return waypoint  # (dx, dy)
@@ -268,6 +269,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # 1) Load Model Config
     with open(MODEL_CONFIG_PATH, "r") as f:
         model_paths = yaml.safe_load(f)
+
     # Example of direct usage (hard-coded for 'nomad'):
     model_config_path = os.path.join(MODEL_TRAIN_PATH, "config", "nomad.yaml")
     ckpt_path = os.path.join(MODEL_DEPLOY_PATH, "model_weights", "nomad.pth")
@@ -367,7 +369,6 @@ def main(random_selection=False, headless=False, short_exec=False):
                 action_vw = pd_controller(waypoint_dxdy, DT, MAX_V, MAX_W)
                 action = action_vw
             else:
-
                 # Not enough context, remain still
                 action = np.array([0.0, 0.0], dtype=np.float32)
 
