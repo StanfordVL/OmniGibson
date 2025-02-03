@@ -5,6 +5,7 @@ import torch
 import omnigibson as og
 from PIL import Image as PILImage
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
+import shutil
 
 # Local imports (change paths if necessary)
 from deployment.src.utils import to_numpy, transform_images, load_model
@@ -28,7 +29,7 @@ MAX_V = 0.31
 MAX_W = 1.90
 
 # We assume 1 second per step in PD controller logic unless environment is matched
-DT = 1.0
+DT = 1.0  # 0.1 or 1.0
 EPS = 1e-8
 
 # Path to store topomap images (online creation)
