@@ -223,61 +223,43 @@ def build_mesh_tree(
                 )
 
                 # Check if a collision mesh exist in the same directory
-                manual_collision_pattern = re.compile(r"^.*Mcollision-(\d+).obj$")
-                manual_collision_filenames = [
+                selection_matching_pattern = re.compile(r"^.*Mcollision(?:_[a-z0-9]+)?-(\d+).obj$")
+                collision_filenames = [
                     x
                     for x in mesh_dir.listdir("/")
-                    if manual_collision_pattern.fullmatch(x)
+                    if selection_matching_pattern.fullmatch(x)
                 ]
-                assert (
-                    manual_collision_filenames
-                ), f"No collision mesh found for {node_key}"
+                
+                if collision_filenames:
+                    # Match the files
+                    selection_matches = [
+                        (selection_matching_pattern.fullmatch(x), x)
+                        for x in collision_filenames
+                    ]
+                    indexed_matches = {
+                        int(match.group(1)): fn for match, fn in selection_matches if match
+                    }
+                    expected_keys = set(range(len(indexed_matches)))
+                    found_keys = set(indexed_matches.keys())
+                    assert (
+                        expected_keys == found_keys
+                    ), f"Missing collision meshes for {node_key}: {expected_keys - found_keys}"
+                    ordered_collision_filenames = [
+                        indexed_matches[i] for i in range(len(indexed_matches))
+                    ]
 
-                # Store the collision mesh filename
-                G.nodes[node_key][
-                    "manual_collision_filename"
-                ] = manual_collision_filenames
-
-                collision_fs = mesh_dir
-                collision_filenames = manual_collision_filenames
-                selection_matching_pattern = manual_collision_pattern
-
-                # Match the files
-                selection_matches = [
-                    (selection_matching_pattern.fullmatch(x), x)
-                    for x in collision_filenames
-                ]
-                indexed_matches = {
-                    int(match.group(1)): fn for match, fn in selection_matches if match
-                }
-                expected_keys = set(range(len(indexed_matches)))
-                found_keys = set(indexed_matches.keys())
-                assert (
-                    expected_keys == found_keys
-                ), f"Missing collision meshes for {node_key}: {expected_keys - found_keys}"
-                ordered_collision_filenames = [
-                    indexed_matches[i] for i in range(len(indexed_matches))
-                ]
-
-                collision_meshes = []
-                for collision_filename in ordered_collision_filenames:
-                    collision_mesh = load_mesh(
-                        collision_fs,
-                        collision_filename,
-                        force="mesh",
-                        skip_materials=True,
-                    )
-                    if not collision_mesh.is_volume:
+                    collision_meshes = []
+                    for collision_filename in ordered_collision_filenames:
                         collision_mesh = load_mesh(
-                            collision_fs,
+                            mesh_dir,
                             collision_filename,
                             force="mesh",
                             process=False,
                             skip_materials=True,
                         )
-                    collision_mesh.apply_transform(SCALE_MATRIX)
-                    collision_meshes.append(collision_mesh)
-                G.nodes[node_key]["collision_mesh"] = collision_meshes
+                        collision_mesh.apply_transform(SCALE_MATRIX)
+                        collision_meshes.append(collision_mesh)
+                    G.nodes[node_key]["collision_mesh"] = collision_meshes
 
         # Add the edge in from the parent
         if link_name != "base_link":
@@ -288,19 +270,6 @@ def build_mesh_tree(
             G.add_edge(parent_key, node_key, joint_type=joint_type)
             if "is_loose" not in G.nodes[parent_key]:
                 G.nodes[parent_key]["is_loose"] = None
-
-    # Pop any invalid base links
-    # TODO: Remove this.
-    bad_base = [
-        node
-        for node, in_degree in G.in_degree()
-        if in_degree == 0 and "metadata" not in G.nodes[node]
-    ]
-    for b in bad_base:
-        if b not in G.nodes:
-            continue
-        bad_nodes = list(nx.dfs_preorder_nodes(G, b))
-        G.remove_nodes_from(bad_nodes)
 
     # Quick validation.
     for node, data in G.nodes(data=True):

@@ -797,6 +797,7 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
             with output_fs.makedir("misc").open("metadata.json", "w") as f:
                 json.dump(out_metadata, f, cls=NumpyEncoder)
     except Exception as exc:
+        print(traceback.print_exc())
         return exc
 
 
@@ -873,7 +874,7 @@ def main():
         ) as target_executor, futures.ProcessPoolExecutor(
             max_workers=16
         ) as obj_executor:
-            targets = get_targets("combined")
+            targets = ["objects/substances-01"] #get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[
                     target_executor.submit(

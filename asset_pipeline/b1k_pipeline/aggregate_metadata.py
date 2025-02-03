@@ -36,12 +36,11 @@ def main():
 
                     volume = collision_average_volumes[category] if category in collision_average_volumes else None
                     mass = float(row["mass (auto)"]) if row["mass (auto)"] and row["mass (auto)"] != "#DIV/0!" else None
+                    assert mass is not None and mass > 0, f"Invalid mass for category {category}"
                     density = mass / volume if mass and volume else None
 
                     avg_category_specs[category] = {
-                        # "enable_ag": None,
                         "mass": mass,
-                        # "size": None,
                         "volume": volume,
                         "density": density,
                     }
@@ -50,10 +49,6 @@ def main():
             for cat in avg_category_specs:
                 if cat not in categories_by_id.values():
                     error_msgs.append(f"Could not find ID for category {cat}")
-
-                # Structure categories currently don't need to be included here
-                if cat in ("walls", "floors", "ceilings"):
-                    continue
 
                 if cat not in avg_category_specs:
                     error_msgs.append(
@@ -74,7 +69,7 @@ def main():
                         )
 
             # Only continue if no errors are found by now
-            # assert not error_msgs
+            assert not error_msgs
 
             # Fill missing IDs with spaces
             category_ids = [
