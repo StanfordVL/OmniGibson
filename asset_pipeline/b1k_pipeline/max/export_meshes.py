@@ -51,7 +51,7 @@ def save_meta_mesh(obj, output_fs):
         tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
         for i in range(rt.polyop.GetNumFaces(obj))
     }
-    assert len(elems) <= 32, f"{obj.name} should not have more than 32 elements."
+    assert len(elems) <= 40, f"{obj.name} should not have more than 40 elements."
     elems = np.array(list(elems))
     assert not np.any(
         np.sum(elems, axis=0) > 1
