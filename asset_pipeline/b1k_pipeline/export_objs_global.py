@@ -874,7 +874,7 @@ def main():
         ) as target_executor, futures.ProcessPoolExecutor(
             max_workers=16
         ) as obj_executor:
-            targets = ["objects/substances-01"] #get_targets("combined")
+            targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[
                     target_executor.submit(

@@ -7394,8 +7394,8 @@ stages:
     cmd: python -m b1k_pipeline.export_objs_global
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: dbfeafd00ea0b47c9bc4ed76a998a0c2
-      size: 77948
+      md5: 56a4caa0abb094216ed6582999a4303e
+      size: 75479
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -7412,8 +7412,8 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/export_objs_global.py
-      md5: d18583c0cfcea5cb90a8fa84dad9eef4
-      size: 36595
+      md5: e26318041f83ceea8a697648359ded50
+      size: 36568
     - path: b1k_pipeline/mesh_tree.py
       md5: bda59909753f919d9be373a840c10356
       size: 13425
@@ -7974,11 +7974,11 @@ stages:
       size: 201675
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: ca42cacbc0c77b713ca2d702c56420f1
-      size: 261686523
+      md5: a26bdfccb446f6d035b8746807548235
+      size: 21275268066
     - path: artifacts/pipeline/export_objs.json
-      md5: e21162803bb67692d4ba1542c1a042c6
-      size: 1867
+      md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
+      size: 31
   aggregate_metadata:
     cmd: python -m b1k_pipeline.aggregate_metadata
     deps:
@@ -7995,31 +7995,31 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/aggregate_metadata.py
-      md5: 38288fe093a73d6e3b04e10f24ed510d
-      size: 5404
+      md5: e7336432a92f784b212e724305bde6e5
+      size: 5465
     - path: metadata/allowed_room_types.csv
       md5: c5a525dc66bb52a692d8a8374a93cf3b
       size: 454
     - path: metadata/category_mapping.csv
-      md5: be3e4ce252fd78c0f0f3260faacc56f3
-      size: 184671
+      md5: 9865940a21cfc1ae541be49dd793e52f
+      size: 184737
     - path: metadata/non_sampleable_categories.csv
       md5: 1fdd0762be41ba03ee7a15db19b16c6b
       size: 562
     outs:
     - path: artifacts/parallels/metadata.zip
-      md5: dbfeafd00ea0b47c9bc4ed76a998a0c2
-      size: 77948
+      md5: 56a4caa0abb094216ed6582999a4303e
+      size: 75479
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: d353f04d6e4b341b8916fc13ea7ba099
-      size: 14929
+      md5: 3f6059a52842bd4b8d8ea19a40456a8e
+      size: 69
   aggregate_metadata_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/aggregate_metadata.json
       artifacts/pipeline/aggregate_metadata.success
     deps:
     - path: artifacts/pipeline/aggregate_metadata.json
-      md5: d353f04d6e4b341b8916fc13ea7ba099
-      size: 14929
+      md5: 3f6059a52842bd4b8d8ea19a40456a8e
+      size: 69
     - path: b1k_pipeline/check_success.py
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
       size: 707

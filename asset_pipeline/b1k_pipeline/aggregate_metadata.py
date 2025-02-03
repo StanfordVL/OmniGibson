@@ -34,7 +34,12 @@ def main():
                     category = row["category"].strip()
                     categories_by_id[cat_id] = category
 
-                    volume = collision_average_volumes[category] if category in collision_average_volumes else None
+                    if category not in collision_average_volumes:
+                        # If a category is not in the average volumes, it means it doesn't have
+                        # any objects. So we can skip it in the metadata.
+                        continue
+
+                    volume = collision_average_volumes[category]
                     mass = float(row["mass (auto)"]) if row["mass (auto)"] and row["mass (auto)"] != "#DIV/0!" else None
                     assert mass is not None and mass > 0, f"Invalid mass for category {category}"
                     density = mass / volume if mass and volume else None
