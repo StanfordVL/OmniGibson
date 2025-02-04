@@ -17,6 +17,9 @@ SCALE_MATRIX = trimesh.transformations.scale_matrix(0.001)
 
 PARTICLE_APPLIER_CONE_LENGTH = 0.3
 
+CONVEX_MESH_TYPES = {"collision", "fillable", "openfillable"}
+NON_COLLISION_CONVEX_MESH_TYPES = CONVEX_MESH_TYPES - {"collision"}
+
 # Load the rename file
 RENAMES = {}
 with PipelineFS().open("metadata/object_renames.csv") as f:
@@ -222,44 +225,47 @@ def build_mesh_tree(
                     trimesh.transformations.transform_points(lower_points, SCALE_MATRIX)
                 )
 
-                # Check if a collision mesh exist in the same directory
-                selection_matching_pattern = re.compile(r"^.*Mcollision(?:_[a-z0-9]+)?-(\d+).obj$")
-                collision_filenames = [
-                    x
-                    for x in mesh_dir.listdir("/")
-                    if selection_matching_pattern.fullmatch(x)
-                ]
-                
-                if collision_filenames:
-                    # Match the files
-                    selection_matches = [
-                        (selection_matching_pattern.fullmatch(x), x)
-                        for x in collision_filenames
+                # Load convexmesh meta links
+                for cm_type in CONVEX_MESH_TYPES:
+                    # Check if a collision mesh exist in the same directory
+                    pattern_str = r"^.*-M" + cm_type + r"(?:_[A-Za-z0-9]+)?-(\d+).obj$"
+                    selection_matching_pattern = re.compile(pattern_str)
+                    cm_filenames = [
+                        x
+                        for x in mesh_dir.listdir("/")
+                        if selection_matching_pattern.fullmatch(x)
                     ]
-                    indexed_matches = {
-                        int(match.group(1)): fn for match, fn in selection_matches if match
-                    }
-                    expected_keys = set(range(len(indexed_matches)))
-                    found_keys = set(indexed_matches.keys())
-                    assert (
-                        expected_keys == found_keys
-                    ), f"Missing collision meshes for {node_key}: {expected_keys - found_keys}"
-                    ordered_collision_filenames = [
-                        indexed_matches[i] for i in range(len(indexed_matches))
-                    ]
+                    
+                    if cm_filenames:
+                        # Match the files
+                        selection_matches = [
+                            (selection_matching_pattern.fullmatch(x), x)
+                            for x in cm_filenames
+                        ]
+                        indexed_matches = {
+                            int(match.group(1)): fn for match, fn in selection_matches if match
+                        }
+                        expected_keys = set(range(len(indexed_matches)))
+                        found_keys = set(indexed_matches.keys())
+                        assert (
+                            expected_keys == found_keys
+                        ), f"Missing {cm_type} meshes for {node_key}: {expected_keys - found_keys}"
+                        ordered_cm_filenames = [
+                            indexed_matches[i] for i in range(len(indexed_matches))
+                        ]
 
-                    collision_meshes = []
-                    for collision_filename in ordered_collision_filenames:
-                        collision_mesh = load_mesh(
-                            mesh_dir,
-                            collision_filename,
-                            force="mesh",
-                            process=False,
-                            skip_materials=True,
-                        )
-                        collision_mesh.apply_transform(SCALE_MATRIX)
-                        collision_meshes.append(collision_mesh)
-                    G.nodes[node_key]["collision_mesh"] = collision_meshes
+                        convex_meshes = []
+                        for convex_mesh_filename in ordered_cm_filenames:
+                            convex_mesh = load_mesh(
+                                mesh_dir,
+                                convex_mesh_filename,
+                                force="mesh",
+                                process=False,
+                                skip_materials=True,
+                            )
+                            convex_mesh.apply_transform(SCALE_MATRIX)
+                            convex_meshes.append(convex_mesh)
+                        G.nodes[node_key][f"{cm_type}_mesh"] = convex_meshes
 
         # Add the edge in from the parent
         if link_name != "base_link":
@@ -319,11 +325,12 @@ def build_mesh_tree(
             combined_mesh = trimesh.util.concatenate(meshes)
             G.nodes[root]["combined_mesh"] = combined_mesh
 
-            if all("collision_mesh" in G.nodes[node] for node in nodes):
-                collision_meshes = [
-                    cm for node in nodes for cm in G.nodes[node]["collision_mesh"]
-                ]
-                combined_collision_mesh = trimesh.util.concatenate(collision_meshes)
-                G.nodes[root]["combined_collision_mesh"] = combined_collision_mesh
+            for cm_type in CONVEX_MESH_TYPES:
+                if all(f"{cm_type}_mesh" in G.nodes[node] for node in nodes):
+                    convex_meshes = [
+                        cm for node in nodes for cm in G.nodes[node][f"{cm_type}_mesh"]
+                    ]
+                    combined_convex_mesh = trimesh.util.concatenate(convex_meshes)
+                    G.nodes[root][f"combined_{cm_type}_mesh"] = combined_convex_mesh
 
     return G
