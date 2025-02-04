@@ -6,31 +6,27 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 import tqdm
 
-import igibson
-igibson.ig_dataset_path = "/scr/test-upside"
-
-from igibson.simulator import Simulator
-from igibson.scenes.igibson_indoor_scene import InteractiveIndoorScene
-from igibson.scenes.empty_scene import EmptyScene
-from igibson.objects.articulated_object import URDFObject
-from igibson.external.pybullet_tools import utils
+import pybullet as p
+import pybullet_data
 
 
 def main():
     # Load the scene into iGibson 2
-    s = Simulator(mode="headless", use_pb_gui=True, image_height=1080, image_width=1920)
-    scene = EmptyScene()
-    s.import_scene(scene)
+    p.connect(p.GUI)
+    p.setGravity(0,0,-10)
+    p.setAdditionalSearchPath(pybullet_data.getDataPath()) #used by loadURDF
+    p.loadURDF("plane.urdf")
+    
+    dataset_path = r"C:\Users\cgokmen\Downloads\urdf-test-2-3"
+    cat = "floor_lamp"
+    obj = "hdfnqb"
+    urdf_path = os.path.join(dataset_path, "objects", cat, obj, f"{obj}.urdf")
 
-    cat = "carton"
-    obj = "libote"
-
-    obj = URDFObject(os.path.join(igibson.ig_dataset_path, "objects", cat, obj, f"{obj}.urdf"))
-    s.import_object(obj)
+    p.loadURDF(urdf_path, useFixedBase=False, flags=p.URDF_USE_INERTIA_FROM_FILE)
 
     # Step the simulation by 5 seconds.
     while True:
-        s.step()
+        p.stepSimulation()
 
 if __name__ == "__main__":
     main()
