@@ -31,7 +31,7 @@ if __name__ == "__main__":
         assert model_dir.exists()
         print(f"IMPORTING CATEGORY/MODEL {obj_category}/{obj_model}...")
         import_obj_urdf(
-            urdf_path=str(model_dir / f"{obj_model}.urdf"), obj_category=obj_category, obj_model=obj_model, dataset_root=dataset_root
+            urdf_path=str(model_dir / "urdf" / f"{obj_model}.urdf"), obj_category=obj_category, obj_model=obj_model, dataset_root=dataset_root
         )
         print("Importing metadata")
         import_obj_metadata(
