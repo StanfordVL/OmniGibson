@@ -81,7 +81,7 @@ def main(dataset_path, record_path):
             for i, obj_model in enumerate(get_object_models_of_category(obj_category)):
                 obj_name = "{}_{}".format(obj_category, obj_model)
                 model_path = get_ig_model_path(obj_category, obj_model)
-                filename = os.path.join(model_path, obj_model + ".urdf")
+                filename = os.path.join(model_path, "urdf", obj_model + ".urdf")
 
                 print("Visualizing category {}, model {}".format(obj_category, obj_model))
                 bbox = URDFObject(

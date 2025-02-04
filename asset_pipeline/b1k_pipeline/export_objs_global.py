@@ -680,7 +680,8 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
             xmlio = io.StringIO(xmlstr)
             tree = ET.parse(xmlio)
 
-            with output_fs.open(f"{obj_model}.urdf", "wb") as f:
+            urdf_fs = output_fs.makedir("urdf", recreate=True)
+            with urdf_fs.open(f"{obj_model}.urdf", "wb") as f:
                 tree.write(f, xml_declaration=True)
 
             bbox_size, base_link_offset, _, _ = compute_object_bounding_box(

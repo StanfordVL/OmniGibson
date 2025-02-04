@@ -8031,11 +8031,11 @@ stages:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
     - path: artifacts/parallels/metadata.zip
-      md5: 26f166d4cd0a03ac30de06a33f783fa3
-      size: 77958
+      md5: 56a4caa0abb094216ed6582999a4303e
+      size: 75479
     - path: artifacts/parallels/objects.zip
-      md5: 60532642e6c3ff5940b989a9ec25ce15
-      size: 1593331158
+      md5: a26bdfccb446f6d035b8746807548235
+      size: 21275268066
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8043,21 +8043,21 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/usd_conversion/asset_conversion_utils.py
-      md5: 828020b8dfda6c428dda0e0f36516621
-      size: 70958
+      md5: a737ef507e2a5a269eb274774f9eb32b
+      size: 70910
     - path: b1k_pipeline/usd_conversion/usdify_objects.py
-      md5: 934e52125dba62af30b75c1e6409d865
-      size: 6702
+      md5: 154b1a0ed3254dd45b19499fb023b10d
+      size: 6710
     - path: b1k_pipeline/usd_conversion/usdify_objects_process.py
-      md5: 663136a7929f41443c72edd2fefdf9cd
-      size: 2046
+      md5: 94017a846159b119805e3a1821d91416
+      size: 1785
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: cde5d93e3c34d5dcc800833a6fb37c0f
-      size: 3251340740
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
     - path: artifacts/pipeline/usdify_objects.json
-      md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
-      size: 51
+      md5: 67976b9a5b38947211b93b1ed57e71bb
+      size: 639
   export_scene@scenes/Beechwood_1_int:
     cmd: python -m b1k_pipeline.export_scene scenes/Beechwood_1_int
     deps:

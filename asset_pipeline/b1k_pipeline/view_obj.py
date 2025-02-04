@@ -25,7 +25,7 @@ def main():
     cat = "carton"
     obj = "libote"
 
-    obj = URDFObject(os.path.join(igibson.ig_dataset_path, "objects", cat, obj, f"{obj}.urdf"))
+    obj = URDFObject(os.path.join(igibson.ig_dataset_path, "objects", cat, obj, "urdf", f"{obj}.urdf"))
     s.import_object(obj)
 
     # Step the simulation by 5 seconds.

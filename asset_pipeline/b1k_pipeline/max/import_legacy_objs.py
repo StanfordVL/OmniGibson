@@ -80,7 +80,7 @@ def process_urdf(old_category_name, old_model_name):
 
     # Load the URDF file into urdfpy
     urdf_filename = old_model_name + ".urdf"
-    urdf_path = os.path.join(model_dir, urdf_filename)
+    urdf_path = os.path.join(model_dir, "urdf", urdf_filename)
     robot = URDF.load(urdf_path)
 
     # Load the metadata file too

@@ -13,7 +13,7 @@ import tqdm
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
 WORKER_COUNT = 6
-BATCH_SIZE = 32
+BATCH_SIZE = 1
 
 def run_on_batch(dataset_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
@@ -33,7 +33,7 @@ def main():
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
             fs.copy.copy_fs(metadata_fs, dataset_fs)
-            objdir_glob = list(objects_fs.glob("objects/*/*/"))
+            objdir_glob = list(objects_fs.glob("objects/floor_lamp/*/"))
             for item in tqdm.tqdm(objdir_glob):
                 if objects_fs.opendir(item.path).glob("*.urdf").count().files == 0:
                     continue
