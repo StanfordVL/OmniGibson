@@ -43,7 +43,7 @@ def main(model_dir):
     # Load the URDF file into urdfpy
     model_id = os.path.basename(model_dir)
     urdf_filename = f"{model_id}.urdf"
-    urdf_path = os.path.join(model_dir, urdf_filename)
+    urdf_path = os.path.join(model_dir, "urdf", urdf_filename)
     robot = URDF.load(urdf_path)
 
     # Load the metadata file too

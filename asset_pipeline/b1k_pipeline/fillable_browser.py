@@ -29,7 +29,7 @@ def main():
     fillable_paths = sorted([
         path
         for fm in fillable_models
-        for path in glob.glob(os.path.join(igibson.ig_dataset_path, "objects", "*", fm, f"{fm}.urdf"))
+        for path in glob.glob(os.path.join(igibson.ig_dataset_path, "objects", "*", fm, "urdf", f"{fm}.urdf"))
     ])
     print("Found", len(fillable_paths), "fillable objects out of", len(fillable_models))
 

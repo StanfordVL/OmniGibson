@@ -17,11 +17,8 @@ gm.FORCE_LIGHT_INTENSITY = None
 
 import omnigibson as og
 from omnigibson.utils.asset_utils import encrypt_file
+from omnigibson.utils.asset_conversion_utils import import_obj_metadata, import_obj_urdf
 
-from b1k_pipeline.usd_conversion.asset_conversion_utils import import_obj_metadata, import_obj_urdf
-
-
-IMPORT_RENDER_CHANNELS = True
 
 if __name__ == "__main__":
     og.launch()
@@ -30,17 +27,19 @@ if __name__ == "__main__":
     batch = sys.argv[2:]
     for path in batch:
         obj_category, obj_model = pathlib.Path(path).parts[-2:]
-        assert (pathlib.Path(dataset_root) / "objects" / obj_category / obj_model).exists()
+        model_dir = pathlib.Path(dataset_root) / "objects" / obj_category / obj_model
+        assert model_dir.exists()
         print(f"IMPORTING CATEGORY/MODEL {obj_category}/{obj_model}...")
         import_obj_urdf(
-            obj_category=obj_category, obj_model=obj_model, dataset_root=dataset_root, skip_if_exist=False
+            urdf_path=str(model_dir / f"{obj_model}.urdf"), obj_category=obj_category, obj_model=obj_model, dataset_root=dataset_root
         )
         print("Importing metadata")
         import_obj_metadata(
+            usd_path=str(model_dir / "usd" / f"{obj_model}.usd"),
             obj_category=obj_category,
             obj_model=obj_model,
             dataset_root=dataset_root,
-            import_render_channels=IMPORT_RENDER_CHANNELS,
+            import_render_channels=True,
         )
         print("Done importing metadata")
 

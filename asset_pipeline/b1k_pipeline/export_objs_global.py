@@ -299,9 +299,6 @@ def process_link(
         obj_link_visual_mesh_folder_fs = obj_link_mesh_folder_fs.makedir(
             "visual", recreate=True
         )
-        obj_link_collision_mesh_folder_fs = obj_link_mesh_folder_fs.makedir(
-            "collision", recreate=True
-        )
         obj_link_material_folder_fs = output_fs.makedir("material", recreate=True)
 
         # Check if a material got exported.
@@ -347,29 +344,38 @@ def process_link(
             tfs, obj_relative_path, obj_link_visual_mesh_folder_fs, obj_relative_path
         )
 
-        # Save and merge precomputed collision mesh
-        canonical_collision_meshes = []
-        collision_filenames_and_scales = []
-        for i, collision_mesh in enumerate(G.nodes[link_node]["collision_mesh"]):
-            canonical_collision_mesh = transform_mesh(
-                collision_mesh, mesh_center, canonical_orientation
-            )
-            canonical_collision_mesh._cache.cache["vertex_normals"] = (
-                canonical_collision_mesh.vertex_normals
-            )
-            collision_filename = obj_relative_path.replace(".obj", f"-{i}.obj")
-            collision_scale = save_mesh_unit_bbox(
-                canonical_collision_mesh,
-                obj_link_collision_mesh_folder_fs,
-                collision_filename,
-            )
-            collision_filenames_and_scales.append((collision_filename, collision_scale))
-            canonical_collision_meshes.append(canonical_collision_mesh)
+        # Save and merge precomputed convex meshes e.g. collision, fillable
+        canonical_convex_meshes = {}
+        convex_mesh_filenames_and_scales = {}
+        for convex_mesh_type in mesh_tree.CONVEX_MESH_TYPES:
+            convex_mesh_key = f"{convex_mesh_type}_mesh"
+            if convex_mesh_key not in G.nodes[link_node]:
+                continue
+            canonical_convex_meshes[convex_mesh_type] = []
+            convex_mesh_filenames_and_scales[convex_mesh_type] = []
+            for i, convex_mesh in enumerate(G.nodes[link_node][convex_mesh_key]):
+                canonical_convex_mesh = transform_mesh(
+                    convex_mesh, mesh_center, canonical_orientation
+                )
+                canonical_convex_mesh._cache.cache["vertex_normals"] = (
+                    canonical_convex_mesh.vertex_normals
+                )
+                convex_filename = obj_relative_path.replace(".obj", f"-{convex_mesh_type}-{i}.obj")
+                obj_link_convex_mesh_folder_fs = obj_link_mesh_folder_fs.makedir(
+                    convex_mesh_type, recreate=True
+                )
+                convex_scale = save_mesh_unit_bbox(
+                    canonical_convex_mesh,
+                    obj_link_convex_mesh_folder_fs,
+                    convex_filename,
+                )
+                convex_mesh_filenames_and_scales[convex_mesh_type].append((convex_filename, convex_scale))
+                canonical_convex_meshes[convex_mesh_type].append(canonical_convex_mesh)
 
         # Store the final meshes
         G.nodes[link_node]["visual_mesh"] = canonical_mesh.copy()
         G.nodes[link_node]["canonical_collision_mesh"] = trimesh.util.concatenate(
-            canonical_collision_meshes
+            canonical_convex_meshes["collision"]
         )
 
         if material_files:
@@ -416,7 +422,7 @@ def process_link(
     }
 
     collision_origin_xmls = []
-    for collision_filename, collision_scale in collision_filenames_and_scales:
+    for collision_filename, collision_scale in convex_mesh_filenames_and_scales["collision"]:
         collision_xml = ET.SubElement(link_xml, "collision")
         collision_xml.attrib = {"name": collision_filename.replace(".obj", "")}
         collision_origin_xml = ET.SubElement(collision_xml, "origin")
@@ -626,6 +632,55 @@ def process_link(
         "izz": str(moment_of_inertia[2, 2]),
     }
 
+    # Walk over the meta links to add visual meshes for non-collision convex meshes, since this
+    # is the only way to get them into the URDF.
+    for cm_type in mesh_tree.NON_COLLISION_CONVEX_MESH_TYPES:
+        # Skip the convex mesh type if the object does not have one
+        if f"{cm_type}_mesh" not in G.nodes[link_node]:
+            continue
+
+        # Unpack some info
+        cm_link_name = f"__meta_{link_name}_{cm_type}_0_link"
+        cm_joint_name = f"__meta_{link_name}_{cm_type}_0_link"
+
+        # Create the link in URDF
+        cm_link_xml = ET.SubElement(tree_root, "link")
+        cm_link_xml.attrib = {"name": cm_link_name}
+        cm_inertial_xml = ET.SubElement(cm_link_xml, "inertial")
+        cm_inertial_origin_xml = ET.SubElement(cm_inertial_xml, "origin")
+        cm_inertial_origin_xml.attrib = {
+            "xyz": "0 0 0",
+            "rpy": "0 0 0",
+        }
+
+        # Create the joint in URDF
+        cm_joint_xml = ET.SubElement(tree_root, "joint")
+        cm_joint_xml.attrib = {
+            "name": cm_joint_name,
+            "type": "fixed",
+        }
+        cm_joint_parent_xml = ET.SubElement(cm_joint_xml, "parent")
+        cm_joint_parent_xml.attrib = {"link": link_name}
+        cm_joint_child_xml = ET.SubElement(cm_joint_xml, "child")
+        cm_joint_child_xml.attrib = {"link": cm_link_name}
+        cm_joint_origin_xml = ET.SubElement(cm_joint_xml, "origin")
+        cm_joint_origin_xml.attrib = {"xyz": "0 0 0"}
+
+        # Save the meshes into the visual mesh FS and record them in the URDF
+        for cm_filename, cm_scale in convex_mesh_filenames_and_scales[cm_type]:
+            cm_visual_xml = ET.SubElement(cm_link_xml, "visual")
+            cm_visual_origin_xml = ET.SubElement(cm_visual_xml, "origin")
+            cm_visual_origin_xml.attrib = {"xyz": "0 0 0"}
+            cm_visual_geometry_xml = ET.SubElement(cm_visual_xml, "geometry")
+            cm_visual_mesh_xml = ET.SubElement(cm_visual_geometry_xml, "mesh")
+            cm_visual_mesh_xml.attrib = {
+                "filename": os.path.join("shape", cm_type, cm_filename).replace(
+                    "\\", "/"
+                ),
+                "scale": " ".join([str(item) for item in cm_scale]),
+            }
+            
+
     out_metadata["meta_links"][link_name] = meta_links
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
 
@@ -680,7 +735,8 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
             xmlio = io.StringIO(xmlstr)
             tree = ET.parse(xmlio)
 
-            with output_fs.open(f"{obj_model}.urdf", "wb") as f:
+            urdf_fs = output_fs.makedir("urdf", recreate=True)
+            with urdf_fs.open(f"{obj_model}.urdf", "wb") as f:
                 tree.write(f, xml_declaration=True)
 
             bbox_size, base_link_offset, _, _ = compute_object_bounding_box(
@@ -777,8 +833,7 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
             openable_joint_ids = [
                 (i, joint.attrib["name"])
                 for i, joint in enumerate(tree.findall("joint"))
-                if "openable"
-                in out_metadata["link_tags"][joint.find("child").attrib["link"]]
+                if "openable" in out_metadata["link_tags"].get(joint.find("child").attrib["link"], [])
             ]
 
             # Save metadata json
@@ -820,7 +875,7 @@ def process_target(target, objects_path, executor):
         saveable_roots = [
             root_node
             for root_node in roots
-            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]
+            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"] and root_node[0] == "ice_tray"
         ]
         object_futures = {}
         for root_node in saveable_roots:
@@ -874,7 +929,7 @@ def main():
         ) as target_executor, futures.ProcessPoolExecutor(
             max_workers=16
         ) as obj_executor:
-            targets = get_targets("combined")
+            targets = ["objects/batch-08"]  # get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[
                     target_executor.submit(
