@@ -3,9 +3,10 @@ import yaml
 import numpy as np
 import torch
 import omnigibson as og
+import shutil
+import time
 from PIL import Image as PILImage
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
-import shutil
 
 # Local imports (change paths if necessary)
 from deployment.src.utils import to_numpy, transform_images, load_model
@@ -29,19 +30,24 @@ MAX_V = 0.31
 MAX_W = 1.90
 
 # We assume 1 second per step in PD controller logic unless environment is matched
-DT = 1.0  # 0.1 or 1.0
+DT = 1.0
 EPS = 1e-8
 
 # Path to store topomap images (online creation)
 TOPOMAP_IMAGES_DIR = "./topomaps/images"
 MAP_NAME = "dynamic_map"
-os.makedirs(os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME), exist_ok=True)
+
+# Create or clear the directory for this map:
+map_dir = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME)
+if os.path.isdir(map_dir):
+    print(f"[INFO] Removing old files in {map_dir}")
+    shutil.rmtree(map_dir)
+os.makedirs(map_dir, exist_ok=True)
 
 # Simple parameters for node creation
-ADD_NODE_DIST = 0.5  # 0.5m 이동 시 새 노드 생성
+ADD_NODE_DIST = 0.5  # 0.5m movement triggers new node
 node_index = 0
 topomap_nodes = []  # [{"idx": int, "pos": (x,y), "yaw": float, "img_path": str}, ...]
-
 
 ##############################################################################
 # Utility Functions
@@ -93,6 +99,7 @@ def array_to_pil(rgb_tensor: torch.Tensor) -> PILImage.Image:
     """
     Converts OmniGibson camera output (H, W, 4) to a PIL Image.
     """
+    # If alpha channel is present, drop it
     if rgb_tensor.shape[-1] == 4:
         rgb_tensor = rgb_tensor[..., :3]
     rgb_array = rgb_tensor.cpu().numpy().astype(np.uint8)
@@ -110,7 +117,6 @@ def add_node(obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float
 
     # Save PIL image
     obs_img.save(save_path)
-    print(f"[TOPO] Saved node {node_index} to {save_path}")
 
     node_info = {
         "idx": node_index,
@@ -120,7 +126,8 @@ def add_node(obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float
     }
     topomap_nodes.append(node_info)
     print(
-        f"[TOPO] Added node {node_index} at pos={node_info['pos']}, yaw={node_info['yaw']:.2f} deg, saved={save_path}"
+        f"[TOPO] Node {node_index} => pos=({robot_pos_xy[0]:.2f}, "
+        f"{robot_pos_xy[1]:.2f}), yaw={robot_yaw:.2f} deg, saved={save_path}"
     )
     node_index += 1
 
@@ -129,13 +136,13 @@ def sample_diffusion_action(
     model, obs_images, model_params, device, noise_scheduler: DDPMScheduler, args
 ):
     """
-    Runs the diffusion model to predict (dx, dy).
+    Runs the diffusion model to predict (dx, dy) for exploration.
     """
     obs_tensor = transform_images(
         obs_images, model_params["image_size"], center_crop=False
     ).to(device)
     fake_goal = torch.randn((1, 3, *model_params["image_size"])).to(device)
-    mask = torch.ones(1).long().to(device)
+    mask = torch.ones(1).long().to(device)  # "Ignore" the goal
     with torch.no_grad():
         obs_cond = model(
             "vision_encoder", obs_img=obs_tensor, goal_img=fake_goal, input_goal_mask=mask
@@ -163,13 +170,26 @@ def sample_diffusion_action(
     naction = to_numpy(get_action(naction))  # (num_samples, len_traj_pred, 2)
     chosen_traj = naction[0]
     waypoint = chosen_traj[args.waypoint]
-    print(f"waypoint dist. = {np.linalg.norm(waypoint):.3f}")
+    dist_wp = np.linalg.norm(waypoint)
+    print(f"[DIFFUSION] Sampled waypoint dist={dist_wp:.3f}")
 
-    # If normalize, optionally rescale
+    # If normalized in training, consider scaling
     if model_params.get("normalize", False):
         pass
         # e.g. waypoint *= (MAX_V / RATE)
+
     return waypoint
+
+
+def save_topomap_yaml():
+    """
+    After you've finished collecting nodes, save them to a nodes_info.yaml
+    so the navigation script can load them later.
+    """
+    node_data_path = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME, "nodes_info.yaml")
+    with open(node_data_path, "w") as f:
+        yaml.safe_dump(topomap_nodes, f)
+    print(f"[TOPO] Wrote {len(topomap_nodes)} nodes to {node_data_path}")
 
 
 ##############################################################################
@@ -215,7 +235,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     context_queue = []
     context_size = model_params["context_size"]
     max_episodes = 10 if not short_exec else 1
-    steps_per_episode = 10000
+    steps_per_episode = 1000  # reduce if debugging
 
     # Arg-like container
     class ArgObj:
@@ -231,12 +251,14 @@ def main(random_selection=False, headless=False, short_exec=False):
     for ep_i in range(max_episodes):
         env.reset()
         context_queue.clear()
+        print(f"\n[INFO] Starting episode={ep_i} ...")
 
         for step_i in range(steps_per_episode):
+            # Step environment
             if step_i == 0:
-                zero_action = np.array([0.0, 0.0], dtype=np.float32)
+                # no motion on first step
                 states, rewards, terminated, truncated, infos = env.step(
-                    {robot_name: zero_action}
+                    {robot_name: np.array([0.0, 0.0], dtype=np.float32)}
                 )
             else:
                 states, rewards, terminated, truncated, infos = env.step(
@@ -248,12 +270,10 @@ def main(random_selection=False, headless=False, short_exec=False):
             # e.g. "proprio": [x, y, z, roll, pitch, yaw]
             proprio = robot_state["proprio"]
             robot_pos_2d = proprio[:2]  # (x, y)
-            # robot_yaw = (
-            #     proprio[5] if len(proprio) >= 6 else proprio[3]
-            # )  # sometimes yaw might be at index 5, check your array
+            # robot_yaw = proprio[5] if len(proprio) >= 6 else proprio[3]
             robot_yaw = proprio[3]
 
-            # Get camera
+            # Get camera data
             camera_key = f"{robot_name}:eyes:Camera:0"
             camera_output = robot_state[camera_key]
             rgb_tensor = camera_output["rgb"]
@@ -269,14 +289,14 @@ def main(random_selection=False, headless=False, short_exec=False):
                     add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw))
                     last_node_pos_2d = robot_pos_2d
 
-            # (2) Add image to context queue
+            # (2) Fill the context queue
             if len(context_queue) < context_size + 1:
                 context_queue.append(obs_img)
             else:
                 context_queue.pop(0)
                 context_queue.append(obs_img)
 
-            # (3) If context is sufficient, run diffusion
+            # (3) Sample from NoMaD diffusion if context is ready
             if len(context_queue) > context_size:
                 waypoint_dxdy = sample_diffusion_action(
                     model=model,
@@ -286,24 +306,30 @@ def main(random_selection=False, headless=False, short_exec=False):
                     noise_scheduler=noise_scheduler,
                     args=args,
                 )
-                # PD controller
-                print(f"[Episode={ep_i}, Step={step_i}] waypoint_dxdy={waypoint_dxdy}")
+                # PD controller to turn (dx, dy) into velocity
                 action = pd_controller(waypoint_dxdy, DT, MAX_V, MAX_W)
             else:
                 action = np.array([0.0, 0.0], dtype=np.float32)
 
-            # Step info
             print(
-                f"[Episode={ep_i}, Step={step_i}] action={action}, robot_pos={robot_pos_2d}, yaw={np.degrees(robot_yaw):.2f}"
+                f"[Episode={ep_i}, Step={step_i}] action={action}, pos={robot_pos_2d}, yaw={np.degrees(robot_yaw):.2f}"
             )
 
+            # Check termination
             if terminated or truncated:
+                print(
+                    f"[INFO] Episode {ep_i} ended (terminated={terminated}, truncated={truncated})"
+                )
                 break
 
+    # Once done, save the topomap
+    save_topomap_yaml()
+
     og.clear()
-    print("[INFO] Finished simulation.")
+    print("[INFO] Finished simulation and saved topomap.")
 
 
 if __name__ == "__main__":
-    # main(headless=True, short_exec=True)
-    main()
+    # Example usage:
+    #   python create_topomap_sim.py  (runs with default parameters)
+    main(headless=False, short_exec=False)
