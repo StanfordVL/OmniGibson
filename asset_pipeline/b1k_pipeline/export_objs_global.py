@@ -415,7 +415,7 @@ def process_link(
     visual_geometry_xml = ET.SubElement(visual_xml, "geometry")
     visual_mesh_xml = ET.SubElement(visual_geometry_xml, "mesh")
     visual_mesh_xml.attrib = {
-        "filename": os.path.join("shape", "visual", obj_relative_path).replace(
+        "filename": os.path.join("..", "shape", "visual", obj_relative_path).replace(
             "\\", "/"
         ),
         "scale": " ".join([str(item) for item in np.ones(3)]),
@@ -432,7 +432,7 @@ def process_link(
         collision_geometry_xml = ET.SubElement(collision_xml, "geometry")
         collision_mesh_xml = ET.SubElement(collision_geometry_xml, "mesh")
         collision_mesh_xml.attrib = {
-            "filename": os.path.join("shape", "collision", collision_filename).replace(
+            "filename": os.path.join("..", "shape", "collision", collision_filename).replace(
                 "\\", "/"
             ),
             "scale": " ".join([str(item) for item in collision_scale]),
@@ -640,8 +640,8 @@ def process_link(
             continue
 
         # Unpack some info
-        cm_link_name = f"__meta_{link_name}_{cm_type}_0_link"
-        cm_joint_name = f"__meta_{link_name}_{cm_type}_0_link"
+        cm_link_name = f"meta__{link_name}_{cm_type}_0_link"
+        cm_joint_name = f"meta__{link_name}_{cm_type}_0_joint"
 
         # Create the link in URDF
         cm_link_xml = ET.SubElement(tree_root, "link")
@@ -686,7 +686,7 @@ def process_link(
             cm_visual_geometry_xml = ET.SubElement(cm_visual_xml, "geometry")
             cm_visual_mesh_xml = ET.SubElement(cm_visual_geometry_xml, "mesh")
             cm_visual_mesh_xml.attrib = {
-                "filename": os.path.join("shape", cm_type, cm_filename).replace(
+                "filename": os.path.join("..", "shape", cm_type, cm_filename).replace(
                     "\\", "/"
                 ),
                 "scale": " ".join([str(item) for item in cm_scale]),
