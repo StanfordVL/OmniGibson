@@ -652,6 +652,18 @@ def process_link(
             "xyz": "0 0 0",
             "rpy": "0 0 0",
         }
+        cm_inertial_mass_xml = ET.SubElement(cm_inertial_xml, "mass")
+        cm_inertial_mass_xml.attrib = {"value": str(0.001)}
+        cm_inertial_inertia_xml = ET.SubElement(cm_inertial_xml, "inertia")
+        cm_moment_of_inertia = np.eye(3) * 1e-7
+        cm_inertial_inertia_xml.attrib = {
+            "ixx": str(cm_moment_of_inertia[0, 0]),
+            "ixy": str(cm_moment_of_inertia[0, 1]),
+            "ixz": str(cm_moment_of_inertia[0, 2]),
+            "iyy": str(cm_moment_of_inertia[1, 1]),
+            "iyz": str(cm_moment_of_inertia[1, 2]),
+            "izz": str(cm_moment_of_inertia[2, 2]),
+        }
 
         # Create the joint in URDF
         cm_joint_xml = ET.SubElement(tree_root, "joint")
@@ -875,7 +887,7 @@ def process_target(target, objects_path, executor):
         saveable_roots = [
             root_node
             for root_node in roots
-            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"] and root_node[0] == "ice_tray"
+            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]
         ]
         object_futures = {}
         for root_node in saveable_roots:
@@ -929,7 +941,7 @@ def main():
         ) as target_executor, futures.ProcessPoolExecutor(
             max_workers=16
         ) as obj_executor:
-            targets = ["objects/batch-08"]  # get_targets("combined")
+            targets = get_targets("combined")
             for target in tqdm.tqdm(targets):
                 target_futures[
                     target_executor.submit(

@@ -33,9 +33,9 @@ def main():
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
             fs.copy.copy_fs(metadata_fs, dataset_fs)
-            objdir_glob = list(objects_fs.glob("objects/floor_lamp/*/"))
+            objdir_glob = list(objects_fs.glob("objects/ice_tray/*/"))
             for item in tqdm.tqdm(objdir_glob):
-                if objects_fs.opendir(item.path).glob("*.urdf").count().files == 0:
+                if objects_fs.opendir(item.path).opendir("urdf").glob("*.urdf").count().files == 0:
                     continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path, recreate=True))
                 # fillable_path = fs.path.join(item.path, "fillable.obj")

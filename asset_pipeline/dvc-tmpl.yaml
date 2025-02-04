@@ -257,7 +257,6 @@ stages:
     # - artifacts/parallels/fillable_volumes.zip
     - artifacts/pipeline/export_objs.success
     - artifacts/pipeline/aggregate_metadata.success
-    - b1k_pipeline/usd_conversion/asset_conversion_utils.py
     - b1k_pipeline/usd_conversion/usdify_objects.py
     - b1k_pipeline/usd_conversion/usdify_objects_process.py
     outs:
@@ -281,7 +280,6 @@ stages:
     - artifacts/pipeline/export_objs.success
     - artifacts/pipeline/export_scenes.success
     - artifacts/pipeline/aggregate_metadata.success
-    - b1k_pipeline/usd_conversion/asset_conversion_utils.py
     - b1k_pipeline/usd_conversion/usdify_scenes.py
     - b1k_pipeline/usd_conversion/usdify_scenes_process.py
     outs:
