@@ -18,8 +18,8 @@ def main():
     p.loadURDF("plane.urdf")
     
     dataset_path = r"C:\Users\cgokmen\Downloads\urdf-test-2-3"
-    cat = "floor_lamp"
-    obj = "hdfnqb"
+    cat = "ice_tray"
+    obj = "gewlsk"
     urdf_path = os.path.join(dataset_path, "objects", cat, obj, "urdf", f"{obj}.urdf")
 
     p.loadURDF(urdf_path, useFixedBase=False, flags=p.URDF_USE_INERTIA_FROM_FILE)
