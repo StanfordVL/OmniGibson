@@ -252,12 +252,11 @@ def process_link(
     link_node,
     base_link_center,
     canonical_orientation,
-    obj_name,
     output_fs,
     tree_root,
     out_metadata,
 ):
-    category_name, _, _, link_name = link_node
+    category_name, model_id, _, link_name = link_node
     raw_meta_links = G.nodes[link_node]["meta_links"]
 
     # Create a canonicalized copy of the lower and upper meshes.
@@ -291,7 +290,7 @@ def process_link(
 
     # Save the mesh
     with TempFS() as tfs:
-        obj_relative_path = f"{obj_name}-{link_name}.obj"
+        obj_relative_path = f"{model_id}__{link_name}.obj"
         save_mesh(canonical_mesh, tfs, obj_relative_path)
 
         # Move the mesh to the correct path
@@ -323,7 +322,7 @@ def process_link(
                     else:
                         raise ValueError(f"Unknown texture map: {fname}")
 
-                    dst_texture_file = f"{obj_name}-{link_name}-{dst_fname}.png"
+                    dst_texture_file = f"{model_id}__{link_name}__{dst_fname}.png"
 
                     # Load the image
                     # TODO: Re-enable this after tuning it.
@@ -360,7 +359,7 @@ def process_link(
                 canonical_convex_mesh._cache.cache["vertex_normals"] = (
                     canonical_convex_mesh.vertex_normals
                 )
-                convex_filename = obj_relative_path.replace(".obj", f"-{convex_mesh_type}-{i}.obj")
+                convex_filename = obj_relative_path.replace(".obj", f"__{convex_mesh_type}__{i}.obj")
                 obj_link_convex_mesh_folder_fs = obj_link_mesh_folder_fs.makedir(
                     convex_mesh_type, recreate=True
                 )
@@ -380,7 +379,7 @@ def process_link(
 
         if material_files:
             # Modify MTL reference in OBJ file
-            mtl_name = f"{obj_name}-{link_name}.mtl"
+            mtl_name = f"{model_id}__{link_name}.mtl"
             with obj_link_visual_mesh_folder_fs.open(obj_relative_path, "r") as f:
                 new_lines = []
                 for line in f.readlines():
@@ -399,7 +398,7 @@ def process_link(
                     if "map_Kd material_0.png" in line:
                         line = ""
                         for key in MTL_MAPPING:
-                            line += f"{key} ../../material/{obj_name}-{link_name}-{MTL_MAPPING[key]}.png\n"
+                            line += f"{key} ../../material/{model_id}__{link_name}__{MTL_MAPPING[key]}.png\n"
                     new_lines.append(line)
 
             with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:
@@ -708,8 +707,6 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
         )
 
         with OSFS(output_dir) as output_fs:
-            obj_name = "-".join([obj_cat, obj_model])
-
             # Prepare the URDF tree
             tree_root = ET.Element("robot")
             tree_root.attrib = {"name": obj_model}
@@ -734,7 +731,6 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
                     link_node,
                     base_link_center,
                     canonical_orientation,
-                    obj_name,
                     output_fs,
                     tree_root,
                     out_metadata,
@@ -887,7 +883,7 @@ def process_target(target, objects_path, executor):
         saveable_roots = [
             root_node
             for root_node in roots
-            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]
+            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"] and root_node[0] in ("jeans", "floor_lamp", "ice_tray")
         ]
         object_futures = {}
         for root_node in saveable_roots:

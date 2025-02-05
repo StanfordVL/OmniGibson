@@ -33,7 +33,7 @@ def main():
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
             fs.copy.copy_fs(metadata_fs, dataset_fs)
-            objdir_glob = list(objects_fs.glob("objects/ice_tray/*/"))
+            objdir_glob = list(objects_fs.glob("objects/*/*/"))
             for item in tqdm.tqdm(objdir_glob):
                 if objects_fs.opendir(item.path).opendir("urdf").glob("*.urdf").count().files == 0:
                     continue
