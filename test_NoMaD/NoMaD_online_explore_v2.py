@@ -23,33 +23,39 @@ ROBOT_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "robot.yaml")
 
 with open(ROBOT_CONFIG_PATH, "r") as f:
     robot_config = yaml.safe_load(f)
+
 RATE = 10
+MAX_V = robot_config.get("max_v", 0.31)  # override if needed
+MAX_W = robot_config.get("max_w", 1.90)
 
-# Max velocities (adjust to your robot.yaml if needed)
-MAX_V = 0.31
-MAX_W = 1.90
-
-# We assume 1 second per step in PD controller logic unless environment is matched
-DT = 1.0
+DT = 1.0  # 1 second per step in PD controller
 EPS = 1e-8
 
 # Path to store topomap images (online creation)
 TOPOMAP_IMAGES_DIR = "./topomaps/images"
 MAP_NAME = "dynamic_map"
 
-# Create or clear the directory for this map:
+# Clear or create the map directory
 map_dir = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME)
 if os.path.isdir(map_dir):
     print(f"[INFO] Removing old files in {map_dir}")
     shutil.rmtree(map_dir)
 os.makedirs(map_dir, exist_ok=True)
 
-# Distance threshold to add a new node
+# Distance threshold to add a new node & marking visited
 ADD_NODE_DIST = 0.5
+VISIT_THRESHOLD = 0.1  # 0.3  # distance threshold to consider a node visited
 node_index = 0
-topomap_nodes = (
-    []
-)  # [{"idx": int, "pos": (x,y), "yaw": float, "img_path": str}, ...]
+
+# topomap_nodes: list of dictionaries:
+# {
+#   "idx": int,
+#   "pos": (x, y),
+#   "yaw": float_degrees,
+#   "img_path": str,
+#   "visited": bool
+# }
+topomap_nodes = []
 
 ##############################################################################
 # Utility Functions
@@ -68,7 +74,7 @@ def pd_controller(
     waypoint: np.ndarray, dt: float, max_v: float, max_w: float
 ) -> np.ndarray:
     """
-    PD-like controller that turns the (dx, dy) or (dx, dy, hx, hy) into robot velocities.
+    PD-like controller turning (dx, dy) or (dx, dy, hx, hy) into robot velocities.
     """
     assert len(waypoint) in [2, 4], "waypoint must be 2D or 4D"
     if len(waypoint) == 2:
@@ -77,7 +83,6 @@ def pd_controller(
     else:
         dx, dy, hx, hy = waypoint
 
-    # If near-zero displacement and we have heading -> rotate in place
     if len(waypoint) == 4 and (abs(dx) < EPS and abs(dy) < EPS):
         v = 0.0
         heading_angle = clip_angle(np.arctan2(hy, hx))
@@ -96,18 +101,17 @@ def pd_controller(
 
 
 def array_to_pil(rgb_tensor: torch.Tensor) -> PILImage.Image:
-    """Converts OmniGibson camera output (H, W, 4) to a PIL Image."""
+    """Convert OmniGibson camera output (H, W, 4) to a PIL Image."""
     if rgb_tensor.shape[-1] == 4:
-        rgb_tensor = rgb_tensor[..., :3]  # discard alpha
+        rgb_tensor = rgb_tensor[..., :3]
     rgb_array = rgb_tensor.cpu().numpy().astype(np.uint8)
     return PILImage.fromarray(rgb_array)
 
 
-def add_node(
-    obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float
-):
+def add_node(obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float):
     """
-    Save the current observation as a node in the topomap, along with the robot's position + yaw.
+    Save the current observation as a node in the topomap, plus the robot's (x,y,yaw).
+    Each node is initially unvisited.
     """
     global node_index, topomap_nodes
 
@@ -120,13 +124,65 @@ def add_node(
         "pos": (float(robot_pos_xy[0]), float(robot_pos_xy[1])),
         "yaw": float(robot_yaw),
         "img_path": save_path,
+        "visited": False,
     }
     topomap_nodes.append(node_info)
     print(
         f"[TOPO] Node {node_index} => pos=({robot_pos_xy[0]:.2f}, {robot_pos_xy[1]:.2f}), yaw={robot_yaw:.2f}, saved={save_path}"
     )
-
     node_index += 1
+
+
+def mark_visited_if_close(robot_pos_xy: np.ndarray):
+    """
+    Mark any node as visited if the robot is within VISIT_THRESHOLD of that node,
+    except skip node 0 so the script doesn't terminate immediately.
+    """
+    # If you only have 1 node (node 0), there's no 'frontier' to explore yet,
+    # so skip visiting it.
+    if len(topomap_nodes) == 1:
+        return
+
+    for node in topomap_nodes:
+        # Option A: skip node 0
+        if node["idx"] == 0:
+            continue
+
+        if not node["visited"]:
+            dist = np.linalg.norm(robot_pos_xy - np.array(node["pos"]))
+            if dist < VISIT_THRESHOLD:
+                node["visited"] = True
+                print(f"[VISIT] Marking node {node['idx']} as visited (dist={dist:.2f}).")
+
+
+def get_closest_unvisited_node(robot_pos_xy: np.ndarray):
+    """
+    Return the closest node with visited=False. If none found, return None.
+    """
+    best_node = None
+    best_dist = float("inf")
+    for node in topomap_nodes:
+        if not node["visited"]:
+            dist = np.linalg.norm(robot_pos_xy - np.array(node["pos"]))
+            if dist < best_dist:
+                best_dist = dist
+                best_node = node
+    return best_node
+
+
+def save_topomap_yaml():
+    """
+    Save the topological graph to 'nodes_info.yaml'.
+    """
+    node_data_path = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME, "nodes_info.yaml")
+    with open(node_data_path, "w") as f:
+        yaml.safe_dump(topomap_nodes, f)
+    print(f"[TOPO] Wrote {len(topomap_nodes)} nodes to {node_data_path}")
+
+
+##############################################################################
+# NoMaD (Local Planner) - Extended to Handle a Real Goal Image
+##############################################################################
 
 
 def sample_diffusion_action(
@@ -136,35 +192,50 @@ def sample_diffusion_action(
     device,
     noise_scheduler: DDPMScheduler,
     args,
+    goal_image: PILImage.Image = None,
 ):
     """
-    Runs the NoMaD diffusion model to predict (dx, dy) for exploration.
+    Runs the NoMaD diffusion model to predict (dx, dy).
+    If 'goal_image' is provided, we feed that as the real goal (mask=0).
+    Otherwise, we do random exploration (mask=1).
     """
     obs_tensor = transform_images(
         obs_images, model_params["image_size"], center_crop=False
     ).to(device)
 
-    # Use a random 'goal' placeholder, since NoMaD ignores it for exploration
-    fake_goal = torch.randn((1, 3, *model_params["image_size"])).to(device)
-    mask = torch.ones(1).long().to(device)
+    if goal_image is None:
+        # Use a random 'fake goal' => mask=1 => ignoring the goal
+        fake_goal = torch.randn((1, 3, *model_params["image_size"])).to(device)
+        mask_val = 1
+        goal_tensor = fake_goal
+    else:
+        # Use the node's image => mask=0 => actually incorporate the goal
+        goal_tensor = transform_images(
+            goal_image, model_params["image_size"], center_crop=False
+        ).to(device)
+        mask_val = 0
+
+    mask = torch.ones(1).long().to(device) * mask_val
 
     with torch.no_grad():
         obs_cond = model(
             "vision_encoder",
             obs_img=obs_tensor,
-            goal_img=fake_goal,
+            goal_img=goal_tensor,
             input_goal_mask=mask,
         )
+
         # Expand for multiple samples
         if obs_cond.ndim == 2:
             obs_cond = obs_cond.repeat(args.num_samples, 1)
         else:
             obs_cond = obs_cond.repeat(args.num_samples, 1, 1)
 
-        # Diffusion
+        # Diffusion steps
         noisy_action = torch.randn(
             (args.num_samples, model_params["len_traj_pred"], 2), device=device
         )
+
         naction = noisy_action
         noise_scheduler.set_timesteps(model_params["num_diffusion_iters"])
         for k in noise_scheduler.timesteps:
@@ -178,46 +249,33 @@ def sample_diffusion_action(
                 model_output=noise_pred, timestep=k, sample=naction
             ).prev_sample
 
-    naction = to_numpy(get_action(naction))  # (num_samples, len_traj_pred, 2)
+    naction = to_numpy(get_action(naction))  # shape: (num_samples, len_traj_pred, 2)
+
     chosen_traj = naction[0]
+    other_trajs = naction[1:]  # shape: (num_samples-1, len_traj_pred, 2)
+
     waypoint = chosen_traj[args.waypoint]
     dist_wp = np.linalg.norm(waypoint)
-    print(f"[DIFFUSION] Sampled waypoint dist={dist_wp:.3f}")
+    print(f"[DIFFUSION] Sampled waypoint dist={dist_wp:.3f}, mask_val={mask_val}")
 
-    # If model was trained with "normalize", you might scale:
     if model_params.get("normalize", False):
-        pass
-        # e.g. waypoint *= (MAX_V / RATE)
+        # waypoint *= MAX_V / RATE
+        pass  # e.g. waypoint *= (MAX_V / RATE)
     return waypoint
 
 
-def save_topomap_yaml():
-    """
-    After you've finished collecting nodes, save them to a nodes_info.yaml
-    so that you have a record of what was created.
-    """
-    node_data_path = os.path.join(
-        TOPOMAP_IMAGES_DIR, MAP_NAME, "nodes_info.yaml"
-    )
-    with open(node_data_path, "w") as f:
-        yaml.safe_dump(topomap_nodes, f)
-    print(f"[TOPO] Wrote {len(topomap_nodes)} nodes to {node_data_path}")
-
-
 ##############################################################################
-# Main OmniGibson Loop + Online Topomap
+# Main OmniGibson Loop + Frontier-Based (Nearest Frontier) + NoMaD Local Planner
 ##############################################################################
 def main(random_selection=False, headless=False, short_exec=False):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("[INFO] Using device:", device)
 
-    # 1) Load model / config
+    # 1) Load NoMaD model / config
     with open(MODEL_CONFIG_PATH, "r") as f:
         model_paths = yaml.safe_load(f)
-    # We'll assume 'nomad' is our key
     model_config_path = os.path.join(MODEL_TRAIN_PATH, "config", "nomad.yaml")
     ckpt_path = os.path.join(MODEL_DEPLOY_PATH, "model_weights", "nomad.pth")
-
     with open(model_config_path, "r") as f:
         model_params = yaml.safe_load(f)
     print(f"[INFO] Loaded model config from {model_config_path}")
@@ -250,7 +308,6 @@ def main(random_selection=False, headless=False, short_exec=False):
     max_episodes = 1 if not short_exec else 1
     steps_per_episode = 2000
 
-    # Arg-like container
     class ArgObj:
         def __init__(self):
             self.num_samples = 8
@@ -258,14 +315,16 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     args = ArgObj()
 
-    # We'll store the last node position to track distance
+    # For tracking new nodes
     last_node_pos_2d = None
 
-    # 4) Main exploration loop
+    # 4) Main loop
     for ep_i in range(max_episodes):
         env.reset()
         context_queue.clear()
-        print(f"\n[INFO] Starting episode={ep_i} for online exploration...")
+        print(
+            f"\n[INFO] Starting episode={ep_i} with frontier-based + NoMaD local planning..."
+        )
 
         for step_i in range(steps_per_episode):
             # Step environment
@@ -279,21 +338,19 @@ def main(random_selection=False, headless=False, short_exec=False):
                     {robot_name: action}
                 )
 
-            # 4A) Get robot state
+            # (A) Robot state
             robot_state = states[robot_name]
-            # e.g. "proprio": [x, y, z, roll, pitch, yaw]
             proprio = robot_state["proprio"]
-            # might be: x,y = proprio[0:2], yaw = proprio[3] or [5] depending on your environment
             robot_pos_2d = proprio[:2]
-            robot_yaw = proprio[3]  # or proprio[5], check environment
+            robot_yaw = proprio[3]  # or [5], check environment
 
-            # 4B) Convert camera to PIL
+            # (B) Convert camera image
             camera_key = f"{robot_name}:eyes:Camera:0"
             camera_output = robot_state[camera_key]
             rgb_tensor = camera_output["rgb"]
             obs_img = array_to_pil(rgb_tensor)
 
-            # 4C) Create a new node if the robot has moved far enough
+            # (C) Add node if we moved enough
             if last_node_pos_2d is None:
                 add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw))
                 last_node_pos_2d = robot_pos_2d
@@ -303,15 +360,36 @@ def main(random_selection=False, headless=False, short_exec=False):
                     add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw))
                     last_node_pos_2d = robot_pos_2d
 
-            # 4D) Maintain a rolling context queue for NoMaD
+            # (D) Mark visited if close
+            mark_visited_if_close(robot_pos_2d)
+
+            # (E) Check if all frontiers are visited
+            unvisited_exists = any(not n["visited"] for n in topomap_nodes)
+            if not unvisited_exists:
+                print("[FRONTIER] No unvisited nodes left. Stopping exploration.")
+                action = np.array([0.0, 0.0])
+                break
+
+            # (F) Build context queue
             if len(context_queue) < context_size + 1:
                 context_queue.append(obs_img)
             else:
                 context_queue.pop(0)
                 context_queue.append(obs_img)
 
-            # 4E) If enough context, sample a diffusion action
+            # (G) High-level planning: pick nearest unvisited node
+            frontier_node = get_closest_unvisited_node(robot_pos_2d)
+            if frontier_node is None:
+                print("[FRONTIER] Could not find any unvisited node.")
+                action = np.array([0.0, 0.0])
+                break
+
+            # Load that node's image from disk
+            goal_image = PILImage.open(frontier_node["img_path"])
+
+            # (H) Low-level NoMaD local planning
             if len(context_queue) > context_size:
+                # feed the frontier node's image
                 waypoint_dxdy = sample_diffusion_action(
                     model=model,
                     obs_images=context_queue,
@@ -319,6 +397,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     device=device,
                     noise_scheduler=noise_scheduler,
                     args=args,
+                    goal_image=goal_image,
                 )
                 action = pd_controller(waypoint_dxdy, DT, MAX_V, MAX_W)
             else:
@@ -335,10 +414,17 @@ def main(random_selection=False, headless=False, short_exec=False):
                 )
                 break
 
-    # 5) When done, save the newly created topomap
+        # End of the episode (max steps or all visited)
+        unvisited_exists = any(not n["visited"] for n in topomap_nodes)
+        if not unvisited_exists:
+            print("[FRONTIER] All nodes visited, finishing episode.")
+        else:
+            print("[INFO] Reached max steps or environment ended.")
+
+    # Save the final topomap
     save_topomap_yaml()
     env.close()
-    print("[INFO] Finished online exploration, saved dynamic map.")
+    print("[INFO] Frontier-based exploration + NoMaD local planner finished. Map saved.")
 
 
 if __name__ == "__main__":
