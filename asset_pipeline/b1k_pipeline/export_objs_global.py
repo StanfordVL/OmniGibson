@@ -883,7 +883,7 @@ def process_target(target, objects_path, executor):
         saveable_roots = [
             root_node
             for root_node in roots
-            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"] and root_node[0] in ("jeans", "floor_lamp", "ice_tray")
+            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]
         ]
         object_futures = {}
         for root_node in saveable_roots:
