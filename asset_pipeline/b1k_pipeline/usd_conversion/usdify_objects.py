@@ -13,7 +13,7 @@ import tqdm
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
 WORKER_COUNT = 6
-BATCH_SIZE = 1
+BATCH_SIZE = 32
 
 def run_on_batch(dataset_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch

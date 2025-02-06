@@ -8034,8 +8034,8 @@ stages:
       md5: 56a4caa0abb094216ed6582999a4303e
       size: 75479
     - path: artifacts/parallels/objects.zip
-      md5: a8aba3a6ad47e47c5819d045132fc29e
-      size: 57886558
+      md5: 19f01fb0333dc51e3a233db36c41fee7
+      size: 21277666305
     - path: artifacts/pipeline/aggregate_metadata.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
@@ -8043,15 +8043,15 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/usd_conversion/usdify_objects.py
-      md5: afda0cb1979e3de1965fb305ebde7290
-      size: 6717
+      md5: 8260b2d59957ae541ac5687405b901f9
+      size: 6722
     - path: b1k_pipeline/usd_conversion/usdify_objects_process.py
-      md5: 6d16649545847438dab2605144e8f8fd
-      size: 1794
+      md5: 80714c5802597ae0ee4e712d1bceb12e
+      size: 4318
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: e45ed40a55b8cc980b13bb107445f8fb
-      size: 31828940
+      md5: 748c04f0f532ecd3f5bd8271a7730da6
+      size: 4531369
     - path: artifacts/pipeline/usdify_objects.json
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
       size: 51
