@@ -11,7 +11,7 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
+        (inroom cash_register.n.01_1 grocery_store) 
         (ontop postage.n.02_1 checkout.n.03_1) 
         (ontop postage.n.02_2 checkout.n.03_1) 
         (ontop postage.n.02_3 checkout.n.03_1) 
