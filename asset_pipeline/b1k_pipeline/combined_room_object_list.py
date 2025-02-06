@@ -22,17 +22,6 @@ def get_approved_room_types(pipeline_fs):
     return approved
 
 
-SCENES_TO_EXCLUDE = {
-    "public_restroom_blue",
-    "public_restroom_brown",
-    "public_restroom_futuristic",
-    "public_restroom_marble",
-    "public_restroom_white",
-    "commercial_kitchen_fire_extinguisher",
-    "commercial_kitchen_pans",
-}
-
-
 def main(use_future=False):
     scenes = {}
     skipped_files = []
@@ -46,6 +35,7 @@ def main(use_future=False):
         with pipeline_fs.open("params.yaml", "r") as f:
             params = yaml.load(f, Loader=yaml.SafeLoader)
             targets = params["scenes_unfiltered"] if use_future else params["scenes"]
+            final_scenes = [x.replace("scenes/", "") for x in params["final_scenes"]]
 
         outgoing_portals = {}
         incoming_portals = {}
@@ -75,14 +65,7 @@ def main(use_future=False):
                 for model, cnt in models.items():
                     contents[model] += cnt
 
-                # synsets["floor.n.01"] = 1
-                # synsets["wall.n.01"] = 1
                 scene_content_info[rm] = dict(contents)
-
-            # if scene_name in SCENE_ROOMS_TO_REMOVE:
-            #     for rm in SCENE_ROOMS_TO_REMOVE[scene_name]:
-            #         assert rm in scene_content_info, f"{scene_name} does not contain removal-requested room {rm}. Valid keys: {list(scene_content_info.keys())}"
-            #         del scene_content_info[rm]
 
             scenes[scene_name] = scene_content_info
 
@@ -117,9 +100,8 @@ def main(use_future=False):
         assert not room_collision_errors, "\n".join(room_collision_errors)
 
         # Delete any exclusion scenes
-        for scene in SCENES_TO_EXCLUDE:
-            if scene not in scenes:
-                continue
+        scenes_to_exclude = [x for x in scenes if x not in final_scenes]
+        for scene in scenes_to_exclude:
             del scenes[scene]
 
         # Check that the IDs of all the rooms are contiguous

@@ -16,8 +16,6 @@ from b1k_pipeline.mesh_tree import build_mesh_tree
 from b1k_pipeline.export_objs_global import compute_object_bounding_box
 import b1k_pipeline.utils
 
-NEVER_CLUTTER_CATEGORIES = {"shopping_cart"}
-
 ALLOWED_PART_TAGS = {
     "subpart",
     "extrapart",
@@ -174,11 +172,8 @@ def process_target(target, scenes_dir):
         for root_node in roots:
             obj_cat, obj_model, obj_inst_id, _ = root_node
 
-            # For now, skip loose objects
-            if (
-                G.nodes[root_node]["is_loose"] == "C-"
-                and obj_cat not in NEVER_CLUTTER_CATEGORIES
-            ):
+            # For now, skip clutter objects
+            if G.nodes[root_node]["is_loose"] == "C-":
                 continue
 
             obj_name_in_scene = "-".join([obj_cat, obj_model, obj_inst_id])

@@ -24,5 +24,9 @@ RUN git clone https://github.com/kmammou/v-hacd.git /root/vhacd && \
 # Install shapely in omnigibson env
 RUN micromamba run -n omnigibson pip install shapely
 
+# Clone BDDL and install it in omnigibson env. We do this to allow external mounting.
+RUN git clone --branch develop https://github.com/StanfordVL/bddl.git /bddl-src && \
+    micromamba run -n omnigibson pip install -e /bddl-src
+
 # Launch a dask worker - the first argument needs to be the scheduler.
 ENTRYPOINT ["micromamba", "run", "-n", "pipeline", "dask-worker", "--nworkers=1", "--nthreads=1"]

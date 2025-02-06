@@ -7412,11 +7412,11 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/export_objs_global.py
-      md5: 923b3bdc87dc9af6e8d6aa00b7804cd6
-      size: 39953
+      md5: 186f685827d2498014ec84abea6ac229
+      size: 39897
     - path: b1k_pipeline/mesh_tree.py
-      md5: b92d6fb2ec6e3cc55dc5ef9747a53b9b
-      size: 13869
+      md5: c916a062d86abeed53937868a26ba9e5
+      size: 12931
     - path: cad/objects/batch-00/artifacts/meshes.zip
       md5: 3cad9d2e026ec76f091400752b696cd3
       size: 286125475
@@ -7974,8 +7974,8 @@ stages:
       size: 201675
     outs:
     - path: artifacts/parallels/objects.zip
-      md5: a8aba3a6ad47e47c5819d045132fc29e
-      size: 57886558
+      md5: 19f01fb0333dc51e3a233db36c41fee7
+      size: 21277666305
     - path: artifacts/pipeline/export_objs.json
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
       size: 31
