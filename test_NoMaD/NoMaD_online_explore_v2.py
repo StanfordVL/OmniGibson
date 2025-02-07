@@ -344,6 +344,7 @@ def main(headless=False, short_exec=False):
     model = load_model(ckpt_path, model_params, device)
     model.eval()
 
+    # Define the noise scheduler
     noise_scheduler = DDPMScheduler(
         num_train_timesteps=model_params["num_diffusion_iters"],
         beta_schedule="squaredcos_cap_v2",
@@ -351,8 +352,7 @@ def main(headless=False, short_exec=False):
         prediction_type="epsilon",
     )
 
-    # import omnigibson as og
-
+    # Load the config file for the environment
     config_filename = os.path.join(og.example_config_path, "turtlebot_nav.yaml")
     with open(config_filename, "r") as f:
         config = yaml.safe_load(f)
@@ -362,17 +362,22 @@ def main(headless=False, short_exec=False):
     env = og.Environment(configs=config)
     robot_name = env.robots[0].name
 
-    context_queue = []
+    #
+    context_queue = []  # queue of images
     context_size = model_params["context_size"]
     max_episodes = 2 if short_exec else 5
-    steps_per_episode = 500
+    steps_per_episode = 1000
 
     class ArgObj:
+        """
+        Dummy object to hold arguments for sample_diffusion_action.
+        """
+
         def __init__(self):
             self.num_samples = 8
             self.waypoint = 2
 
-    args = ArgObj()
+    args = ArgObj()  # for sample_diffusion_action
 
     global node_index, topomap_nodes, adj_list
     last_node_pos_2d = None
