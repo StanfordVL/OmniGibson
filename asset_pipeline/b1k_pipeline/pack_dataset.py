@@ -24,6 +24,7 @@ PARALLELS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifa
 OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset.zip")
 DEMO_OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset_demo.zip")
 PARALLELS = [
+    "objects.zip",
     "objects_usd.zip",
     "metadata.zip",
     "scenes_json.zip",
@@ -74,6 +75,12 @@ def main():
                 if objects_dir.exists(system_dir):
                     print("Removing", system_dir)
                     objects_dir.removetree(system_dir)
+
+            # Delete the URDF and shape directories since they contain unencrypted objects
+            print("Removing URDF directories")
+            urdf_dirs = {x.path for x in out_fs.glob("objects/*/*/urdf")} | {x.path for x in out_fs.glob("objects/*/*/shape")}
+            for urdf_dir in urdf_dirs:
+                out_fs.removetree(urdf_dir)
 
             # Now create the demo zip
             with fs.zipfs.ZipFS(DEMO_OUT_FILENAME, write=True) as demo_out_fs:

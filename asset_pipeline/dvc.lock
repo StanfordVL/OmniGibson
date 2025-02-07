@@ -9144,6 +9144,9 @@ stages:
     - path: artifacts/parallels/metadata.zip
       md5: 56a4caa0abb094216ed6582999a4303e
       size: 75479
+    - path: artifacts/parallels/objects.zip
+      md5: 60546f4476dadd0440b07852b02b8819
+      size: 21277668209
     - path: artifacts/parallels/objects_usd.zip
       md5: 87345fe975794e67aa07003335dab075
       size: 6224891999
@@ -9166,15 +9169,15 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/pack_dataset.py
-      md5: 34e018f9ea6fc3dbe8482d71614fd997
-      size: 4857
+      md5: 9ce1957e019ebf1adfc8b5e613d5f4d9
+      size: 5225
     outs:
     - path: artifacts/og_dataset.zip
-      md5: a6a468b4c4b47c178c5b463b33a3fd04
-      size: 6226871804
+      md5: f38db0e84146455a1c0bc809130fb26e
+      size: 27039730864
     - path: artifacts/og_dataset_demo.zip
-      md5: c25370a918c2f045a0b78fdc1fcb0969
-      size: 25351024
+      md5: 31e099c2f2adc1fbda9cd80ecbcda990
+      size: 193574960
     - path: artifacts/pipeline/pack_dataset.json
       md5: 2ad066aadc9c024dff5e8d3c6587590d
       size: 44
