@@ -1,0 +1,192 @@
+name: "tiago"
+model_name: "Tiago"
+usd_path: "${ASSET_PATH}/models/tiago/usd/tiago.usda"
+urdf_path: "${ASSET_PATH}/models/tiago/urdf/tiago.urdf"
+scale: 1.0
+
+features:
+  manipulation:
+    enabled: true
+    grasping_mode: "physical"
+    grasping_direction: "lower"
+    disable_grasp_handling: false
+    arms:
+      - name: "left"
+        joints: ["arm_left_1_joint", "arm_left_2_joint", "arm_left_3_joint", "arm_left_4_joint", 
+                "arm_left_5_joint", "arm_left_6_joint", "arm_left_7_joint"]
+        links: ["arm_left_1_link", "arm_left_2_link", "arm_left_3_link", "arm_left_4_link",
+               "arm_left_5_link", "arm_left_6_link", "arm_left_7_link"]
+        eef_link: "left_eef_link"
+        finger_links: ["gripper_left_right_finger_link", "gripper_left_left_finger_link"]
+        finger_joints: ["gripper_left_right_finger_joint", "gripper_left_left_finger_joint"]
+        workspace_range: [15, 75]  # in degrees, will be converted to radians
+        default_poses:
+          vertical: [0.85846, -0.14852, 1.81008, 1.63368, 0.13764, -1.32488, -0.68415]
+          diagonal15: [0.90522, -0.42811, 2.23505, 1.64627, 0.76867, -0.79464, -1.08908]
+          diagonal30: [0.71883, -0.02787, 1.86002, 1.52897, 0.52204, -0.99741, -1.11046]
+          diagonal45: [0.66058, -0.14251, 1.77547, 1.43345, 0.65988, -1.02741, -1.32857]
+          horizontal: [0.61511, 0.49229, 1.46306, 1.24919, 1.08282, -1.28865, 1.50910]
+      - name: "right"
+        joints: ["arm_right_1_joint", "arm_right_2_joint", "arm_right_3_joint", "arm_right_4_joint",
+                "arm_right_5_joint", "arm_right_6_joint", "arm_right_7_joint"]
+        links: ["arm_right_1_link", "arm_right_2_link", "arm_right_3_link", "arm_right_4_link",
+               "arm_right_5_link", "arm_right_6_link", "arm_right_7_link"]
+        eef_link: "right_eef_link"
+        finger_links: ["gripper_right_right_finger_link", "gripper_right_left_finger_link"]
+        finger_joints: ["gripper_right_right_finger_joint", "gripper_right_left_finger_joint"]
+        workspace_range: [-75, -15]  # in degrees, will be converted to radians
+        default_poses:
+          vertical: [0.85846, -0.14852, 1.81008, 1.63368, 0.13764, -1.32488, -0.68415]
+          diagonal15: [0.90522, -0.42811, 2.23505, 1.64627, 0.76867, -0.79464, -1.08908]
+          diagonal30: [0.71883, -0.02787, 1.86002, 1.52897, 0.52204, -0.99741, -1.11046]
+          diagonal45: [0.66058, -0.14251, 1.77547, 1.43345, 0.65988, -1.02741, -1.32857]
+          horizontal: [0.61511, 0.49229, 1.46306, 1.24919, 1.08282, -1.28865, 1.50910]
+
+  locomotion:
+    enabled: true
+    type: "holonomic"
+    base_footprint_link: "base_footprint"
+    base_joints: ["base_footprint_x_joint", "base_footprint_y_joint", "base_footprint_rz_joint"]
+    floor_touching_links: ["wheel_front_left_link", "wheel_front_right_link", "wheel_rear_left_link", "wheel_rear_right_link"]
+    non_floor_touching_links: ["base_footprint"]
+    max_linear_velocity: 1.5
+    max_angular_velocity: 3.14
+
+  trunk:
+    enabled: true
+    joints: ["torso_lift_joint"]
+    links: ["torso_lift_link"]
+
+  camera:
+    enabled: true
+    joints: ["head_1_joint", "head_2_joint"]
+
+controllers:
+  base:
+    name: "HolonomicBaseJointController"
+    control_freq: 30
+    motor_type: "velocity"
+    control_limits:
+      position: [-inf, inf]
+      velocity: [-20, 20]
+      effort: [-200, 200]
+
+  trunk:
+    name: "JointController"
+    control_freq: 30
+    motor_type: "position"
+    control_limits:
+      position: [0, 0.35]
+      velocity: [-1.5, 1.5]
+      effort: [-1000, 1000]
+    command_output_limits: null
+    use_delta_commands: true
+
+  camera:
+    name: "JointController"
+    control_freq: 30
+    motor_type: "position"
+    control_limits:
+      position: [-1.24, 1.24]
+      velocity: [-3.0, 3.0]
+      effort: [-50, 50]
+    command_output_limits: null
+    use_delta_commands: true
+
+  arm_left:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_left:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+  arm_right:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_right:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+reset_configuration:
+  mode: "untuck"
+  arm_pose: "vertical"
+  joint_positions:
+    arm_left_1_joint: 1.4707963267948965
+    arm_left_2_joint: -0.4
+    arm_left_3_joint: 1.6707963267948966
+    arm_left_4_joint: 0.0
+    arm_left_5_joint: 1.5707963267948966
+    arm_left_6_joint: 0.0
+    arm_left_7_joint: 0.0
+    gripper_left_right_finger_joint: 0.045
+    gripper_left_left_finger_joint: 0.045
+    arm_right_1_joint: 1.4707963267948965
+    arm_right_2_joint: -0.4
+    arm_right_3_joint: 1.6707963267948966
+    arm_right_4_joint: 0.0
+    arm_right_5_joint: 1.5707963267948966
+    arm_right_6_joint: 0.0
+    arm_right_7_joint: 0.0
+    gripper_right_right_finger_joint: 0.045
+    gripper_right_left_finger_joint: 0.045
+    torso_lift_joint: 0.17
+    head_1_joint: 0.0
+    head_2_joint: -0.45
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "trunk_qpos"
+    - "trunk_qvel"
+    - "camera_qpos_sin"
+    - "camera_qpos_cos"
+    - "eef_left_pos"
+    - "eef_left_quat"
+    - "grasp_left"
+    - "eef_right_pos"
+    - "eef_right_quat"
+    - "grasp_right"
+
+collisions:
+  disabled_links:
+    - "arm_left_tool_link"
+    - "wrist_left_ft_link"
+    - "wrist_left_ft_tool_link"
+    - "arm_right_tool_link"
+    - "wrist_right_ft_link"
+    - "wrist_right_ft_tool_link"
+  disabled_pairs:
+    - ["arm_left_1_link", "arm_left_2_link"]
+    - ["arm_left_2_link", "arm_left_3_link"]
+    - ["arm_left_3_link", "arm_left_4_link"]
+    - ["arm_left_4_link", "arm_left_5_link"]
+    - ["arm_left_5_link", "arm_left_6_link"]
+    - ["arm_left_6_link", "arm_left_7_link"]
+    - ["arm_right_1_link", "arm_right_2_link"]
+    - ["arm_right_2_link", "arm_right_3_link"]
+    - ["arm_right_3_link", "arm_right_4_link"]
+    - ["arm_right_4_link", "arm_right_5_link"]
+    - ["arm_right_5_link", "arm_right_6_link"]
+    - ["arm_right_6_link", "arm_right_7_link"]

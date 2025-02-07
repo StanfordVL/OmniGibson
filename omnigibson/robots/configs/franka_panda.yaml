@@ -1,0 +1,76 @@
+name: "franka_panda"
+model_name: "franka_panda"
+usd_path: "${ASSET_PATH}/models/franka/franka_panda/usd/franka_panda.usda"
+urdf_path: "${ASSET_PATH}/models/franka/franka_panda/urdf/franka_panda.urdf"
+scale: 1.0
+
+features:
+  manipulation:
+    enabled: true
+    grasping_mode: "physical"
+    grasping_direction: "lower"  # gripper grasps in the opposite direction
+    disable_grasp_handling: false
+    arms:
+      - name: "default"
+        joints: ["panda_joint1", "panda_joint2", "panda_joint3", "panda_joint4", 
+                "panda_joint5", "panda_joint6", "panda_joint7"]
+        links: ["panda_link0", "panda_link1", "panda_link2", "panda_link3", 
+               "panda_link4", "panda_link5", "panda_link6", "panda_link7"]
+        eef_link: "eef_link"
+        finger_links: ["panda_leftfinger", "panda_rightfinger"]
+        finger_joints: ["panda_finger_joint1", "panda_finger_joint2"]
+        workspace_range: [-180, 180]  # Full range since it's a fixed base manipulator
+        teleop_rotation_offset: [-1, 0, 0, 0]
+        assisted_grasp_points:
+          start_points:
+            - link_name: "panda_rightfinger"
+              position: [0.0, 0.001, 0.045]
+          end_points:
+            - link_name: "panda_leftfinger"
+              position: [0.0, 0.001, 0.045]
+
+controllers:
+  arm_default:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_default:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+reset_configuration:
+  joint_positions:
+    panda_joint1: 0.00
+    panda_joint2: -1.3
+    panda_joint3: 0.00
+    panda_joint4: -2.87
+    panda_joint5: 0.00
+    panda_joint6: 2.00
+    panda_joint7: 0.75
+    panda_finger_joint1: 0.04
+    panda_finger_joint2: 0.04
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "eef_default_pos"
+    - "eef_default_quat"
+    - "grasp_default"
+
+collisions:
+  disabled_pairs:
+    - ["panda_link5", "panda_link7"]
+    - ["panda_link5", "panda_hand"]

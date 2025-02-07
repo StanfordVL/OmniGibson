@@ -1,0 +1,145 @@
+name: "r1"
+model_name: "R1"
+usd_path: "${ASSET_PATH}/models/r1/r1.usd"
+urdf_path: "${ASSET_PATH}/models/r1/r1.urdf"
+scale: 1.0
+
+features:
+  manipulation:
+    enabled: true
+    grasping_mode: "physical"
+    grasping_direction: "lower"
+    disable_grasp_handling: false
+    arms:
+      - name: "left"
+        joints: ["left_arm_joint1", "left_arm_joint2", "left_arm_joint3", 
+                "left_arm_joint4", "left_arm_joint5", "left_arm_joint6"]
+        links: ["left_arm_link1", "left_arm_link2", "left_arm_link3", 
+               "left_arm_link4", "left_arm_link5", "left_arm_link6"]
+        eef_link: "left_eef_link"
+        finger_links: ["left_gripper_link1", "left_gripper_link2"]
+        finger_joints: ["left_gripper_axis1", "left_gripper_axis2"]
+        workspace_range: [-45, 45]  # in degrees, will be converted to radians
+      - name: "right"
+        joints: ["right_arm_joint1", "right_arm_joint2", "right_arm_joint3", 
+                "right_arm_joint4", "right_arm_joint5", "right_arm_joint6"]
+        links: ["right_arm_link1", "right_arm_link2", "right_arm_link3", 
+               "right_arm_link4", "right_arm_link5", "right_arm_link6"]
+        eef_link: "right_eef_link"
+        finger_links: ["right_gripper_link1", "right_gripper_link2"]
+        finger_joints: ["right_gripper_axis1", "right_gripper_axis2"]
+        workspace_range: [-45, 45]  # in degrees, will be converted to radians
+
+  locomotion:
+    enabled: true
+    type: "holonomic"
+    base_footprint_link: "base_link"
+    base_joints: ["base_footprint_x", "base_footprint_y", "base_footprint_rz"]
+    floor_touching_links: ["wheel_link1", "wheel_link2", "wheel_link3"]
+    non_floor_touching_links: ["base_link"]
+    max_linear_velocity: 1.5
+    max_angular_velocity: 3.14
+
+  trunk:
+    enabled: true
+    joints: ["torso_joint1", "torso_joint2", "torso_joint3", "torso_joint4"]
+    links: ["torso_link1", "torso_link2", "torso_link3", "torso_link4"]
+
+controllers:
+  base:
+    name: "HolonomicBaseJointController"
+    control_freq: 30
+    motor_type: "velocity"
+    control_limits:
+      position: [-inf, inf]
+      velocity: [-20, 20]
+      effort: [-200, 200]
+
+  trunk:
+    name: "JointController"
+    control_freq: 30
+    motor_type: "position"
+    control_limits:
+      position: [-1.57, 1.57]
+      velocity: [-3.0, 3.0]
+      effort: [-50, 50]
+    command_output_limits: null
+    use_delta_commands: true
+
+  arm_left:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_left:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+  arm_right:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_right:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+reset_configuration:
+  mode: "untuck"
+  joint_positions:
+    # Base joints stay at current position
+    # Arms in untucked position
+    left_arm_joint1: 0.0
+    left_arm_joint2: 1.906
+    left_arm_joint3: -0.991
+    left_arm_joint4: 1.571
+    left_arm_joint5: 0.915
+    left_arm_joint6: -1.571
+    left_gripper_axis1: 0.03
+    left_gripper_axis2: 0.03
+    right_arm_joint1: 0.0
+    right_arm_joint2: 1.906
+    right_arm_joint3: -0.991
+    right_arm_joint4: 1.571
+    right_arm_joint5: 0.915
+    right_arm_joint6: -1.571
+    right_gripper_axis1: 0.03
+    right_gripper_axis2: 0.03
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "trunk_qpos"
+    - "trunk_qvel"
+    - "eef_left_pos"
+    - "eef_left_quat"
+    - "grasp_left"
+    - "eef_right_pos"
+    - "eef_right_quat"
+    - "grasp_right"
+
+collisions:
+  disabled_pairs:
+    - ["left_gripper_link1", "left_gripper_link2"]
+    - ["right_gripper_link1", "right_gripper_link2"]
+    - ["base_link", "wheel_link1"]
+    - ["base_link", "wheel_link2"]
+    - ["base_link", "wheel_link3"]

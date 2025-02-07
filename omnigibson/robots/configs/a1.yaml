@@ -1,0 +1,95 @@
+name: "a1"
+model_name: "a1_inspire"  # Hardcoded to inspire hand since that's the only supported end effector
+usd_path: "${ASSET_PATH}/models/a1/a1_inspire.usd"
+urdf_path: "${ASSET_PATH}/models/a1/a1_inspire.urdf"
+scale: 1.0
+
+features:
+  manipulation:
+    enabled: true
+    grasping_mode: "physical"
+    grasping_direction: "upper"  # inspire hand grasps in upper direction
+    disable_grasp_handling: false
+    arms:
+      - name: "default"
+        joints: ["arm_joint1", "arm_joint2", "arm_joint3", "arm_joint4", "arm_joint5", "arm_joint6"]
+        links: ["arm_seg1", "arm_seg2", "arm_seg3", "arm_seg4", "arm_seg5"]
+        eef_link: "palm_lower"
+        finger_links: ["link11", "link12", "link13", "link14", "link21", "link22", 
+                      "link31", "link32", "link41", "link42", "link51", "link52"]
+        finger_joints: ["joint11", "joint12", "joint13", "joint14", "joint21", "joint22",
+                       "joint31", "joint32", "joint41", "joint42", "joint51", "joint52"]
+        workspace_range: [-180, 180]  # Full range since it's a fixed base manipulator
+        teleop_rotation_offset: [0, 0, 0.707, 0.707]
+        assisted_grasp_points:
+          start_points:
+            - link_name: "base_link"
+              position: [-0.025, -0.07, 0.012]
+            - link_name: "base_link"
+              position: [-0.015, -0.11, 0.012]
+            - link_name: "link14"
+              position: [-0.01, 0.015, 0.004]
+          end_points:
+            - link_name: "link22"
+              position: [0.006, 0.04, 0.003]
+            - link_name: "link32"
+              position: [0.006, 0.045, 0.003]
+            - link_name: "link42"
+              position: [0.006, 0.04, 0.003]
+            - link_name: "link52"
+              position: [0.006, 0.04, 0.003]
+
+controllers:
+  arm_default:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_default:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+reset_configuration:
+  joint_positions:
+    arm_joint1: 0.0
+    arm_joint2: 1.906
+    arm_joint3: -0.991
+    arm_joint4: 1.571
+    arm_joint5: 0.915
+    arm_joint6: -1.571
+    joint11: 0.0
+    joint12: 0.0
+    joint13: 0.0
+    joint14: 0.0
+    joint21: 0.0
+    joint22: 0.0
+    joint31: 0.0
+    joint32: 0.0
+    joint41: 0.0
+    joint42: 0.0
+    joint51: 0.0
+    joint52: 0.0
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "eef_default_pos"
+    - "eef_default_quat"
+    - "grasp_default"
+
+collisions:
+  disabled_pairs:
+    - ["base_link", "connector"]
+    - ["base_link", "link12"]

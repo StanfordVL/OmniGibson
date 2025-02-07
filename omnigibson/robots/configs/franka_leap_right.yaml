@@ -1,0 +1,104 @@
+name: "franka_leap_right"
+model_name: "franka_leap_right"
+usd_path: "${ASSET_PATH}/models/franka/franka_leap_right.usd"
+urdf_path: "${ASSET_PATH}/models/franka/franka_leap_right.urdf"
+scale: 1.0
+
+features:
+  manipulation:
+    enabled: true
+    grasping_mode: "physical"
+    grasping_direction: "upper"
+    disable_grasp_handling: false
+    arms:
+      - name: "default"
+        joints: ["panda_joint1", "panda_joint2", "panda_joint3", "panda_joint4", 
+                "panda_joint5", "panda_joint6", "panda_joint7"]
+        links: ["panda_link0", "panda_link1", "panda_link2", "panda_link3", 
+               "panda_link4", "panda_link5", "panda_link6", "panda_link7"]
+        eef_link: "palm_center"
+        finger_links: ["mcp_joint_1", "pip_1", "dip_1", "fingertip_1", "realtip_1",
+                      "mcp_joint_2", "pip_2", "dip_2", "fingertip_2", "realtip_2",
+                      "mcp_joint_3", "pip_3", "dip_3", "fingertip_3", "realtip_3",
+                      "mcp_joint_4", "pip_4", "dip_4", "fingertip_4", "realtip_4"]
+        finger_joints: ["finger_joint_12", "finger_joint_13", "finger_joint_14", "finger_joint_15",
+                       "finger_joint_1", "finger_joint_0", "finger_joint_2", "finger_joint_3",
+                       "finger_joint_5", "finger_joint_4", "finger_joint_6", "finger_joint_7",
+                       "finger_joint_9", "finger_joint_8", "finger_joint_10", "finger_joint_11"]
+        workspace_range: [-180, 180]  # Full range since it's a fixed base manipulator
+        teleop_rotation_offset: [-0.7071, 0.7071, 0, 0]
+        assisted_grasp_points:
+          start_points:
+            - link_name: "palm_center"
+              position: [0, -0.025, 0.035]
+            - link_name: "palm_center"
+              position: [0, 0.03, 0.035]
+            - link_name: "fingertip_4"
+              position: [-0.0115, -0.07, -0.015]
+          end_points:
+            - link_name: "fingertip_1"
+              position: [-0.0115, -0.06, 0.015]
+            - link_name: "fingertip_2"
+              position: [-0.0115, -0.06, 0.015]
+            - link_name: "fingertip_3"
+              position: [-0.0115, -0.06, 0.015]
+
+controllers:
+  arm_default:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_default:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+reset_configuration:
+  joint_positions:
+    panda_joint1: 0.86
+    panda_joint2: -0.27
+    panda_joint3: -0.68
+    panda_joint4: -1.52
+    panda_joint5: -0.18
+    panda_joint6: 1.29
+    panda_joint7: 1.72
+    finger_joint_0: 0.0
+    finger_joint_1: 0.0
+    finger_joint_2: 0.0
+    finger_joint_3: 0.0
+    finger_joint_4: 0.0
+    finger_joint_5: 0.0
+    finger_joint_6: 0.0
+    finger_joint_7: 0.0
+    finger_joint_8: 0.0
+    finger_joint_9: 0.0
+    finger_joint_10: 0.0
+    finger_joint_11: 0.0
+    finger_joint_12: 0.0
+    finger_joint_13: 0.0
+    finger_joint_14: 0.0
+    finger_joint_15: 0.0
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "eef_default_pos"
+    - "eef_default_quat"
+    - "grasp_default"
+
+collisions:
+  disabled_pairs:
+    - ["panda_link5", "panda_link7"]
+    - ["panda_link5", "panda_hand"]

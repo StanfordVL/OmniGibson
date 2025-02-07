@@ -1,0 +1,43 @@
+name: "locobot"
+model_name: "Locobot"
+usd_path: "${ASSET_PATH}/models/locobot/locobot.usd"
+urdf_path: "${ASSET_PATH}/models/locobot/locobot.urdf"
+scale: 1.0
+
+features:
+  locomotion:
+    enabled: true
+    type: "two_wheel"
+    base_footprint_link: "base_footprint"
+    base_joints: ["wheel_left_joint", "wheel_right_joint"]
+    floor_touching_links: ["wheel_left_link", "wheel_right_link"]
+    non_floor_touching_links: ["base_footprint"]
+    wheel_radius: 0.038
+    wheel_axle_length: 0.230
+
+controllers:
+  base:
+    name: "DifferentialDriveController"
+    control_freq: 30
+    motor_type: "velocity"
+    control_limits:
+      position: [-inf, inf]
+      velocity: [-20, 20]
+      effort: [-200, 200]
+
+reset_configuration:
+  joint_positions:
+    wheel_left_joint: 0.0
+    wheel_right_joint: 0.0
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "dd_base_lin_vel"
+    - "dd_base_ang_vel"

@@ -1,0 +1,105 @@
+name: "franka_allegro"
+model_name: "franka_allegro"
+usd_path: "${ASSET_PATH}/models/franka/franka_allegro.usd"
+urdf_path: "${ASSET_PATH}/models/franka/franka_allegro.urdf"
+scale: 1.0
+
+features:
+  manipulation:
+    enabled: true
+    grasping_mode: "physical"
+    grasping_direction: "upper"
+    disable_grasp_handling: false
+    arms:
+      - name: "default"
+        joints: ["panda_joint1", "panda_joint2", "panda_joint3", "panda_joint4", 
+                "panda_joint5", "panda_joint6", "panda_joint7"]
+        links: ["panda_link0", "panda_link1", "panda_link2", "panda_link3", 
+               "panda_link4", "panda_link5", "panda_link6", "panda_link7"]
+        eef_link: "base_link"
+        finger_links: ["link_0_0", "link_1_0", "link_2_0", "link_3_0", "link_4_0", 
+                      "link_5_0", "link_6_0", "link_7_0", "link_8_0", "link_9_0", 
+                      "link_10_0", "link_11_0", "link_12_0", "link_13_0", "link_14_0", 
+                      "link_15_0"]
+        finger_joints: ["joint_12_0", "joint_13_0", "joint_14_0", "joint_15_0", 
+                       "joint_8_0", "joint_9_0", "joint_10_0", "joint_11_0", 
+                       "joint_4_0", "joint_5_0", "joint_6_0", "joint_7_0", 
+                       "joint_0_0", "joint_1_0", "joint_2_0", "joint_3_0"]
+        workspace_range: [-180, 180]  # Full range since it's a fixed base manipulator
+        teleop_rotation_offset: [0, 0.7071, 0, 0.7071]
+        assisted_grasp_points:
+          start_points:
+            - link_name: "base_link"
+              position: [0.015, 0, -0.03]
+            - link_name: "base_link"
+              position: [0.015, 0, -0.08]
+            - link_name: "link_15_0_tip"
+              position: [0, 0.015, 0.007]
+          end_points:
+            - link_name: "link_3_0_tip"
+              position: [0.012, 0, 0.007]
+            - link_name: "link_7_0_tip"
+              position: [0.012, 0, 0.007]
+            - link_name: "link_11_0_tip"
+              position: [0.012, 0, 0.007]
+
+controllers:
+  arm_default:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_default:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+reset_configuration:
+  joint_positions:
+    panda_joint1: 0.86
+    panda_joint2: -0.27
+    panda_joint3: -0.68
+    panda_joint4: -1.52
+    panda_joint5: -0.18
+    panda_joint6: 1.29
+    panda_joint7: 1.72
+    joint_0_0: 0.0
+    joint_1_0: 0.0
+    joint_2_0: 0.0
+    joint_3_0: 0.0
+    joint_4_0: 0.0
+    joint_5_0: 0.0
+    joint_6_0: 0.0
+    joint_7_0: 0.0
+    joint_8_0: 0.0
+    joint_9_0: 0.0
+    joint_10_0: 0.0
+    joint_11_0: 0.0
+    joint_12_0: 0.0
+    joint_13_0: 0.0
+    joint_14_0: 0.0
+    joint_15_0: 0.0
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "eef_default_pos"
+    - "eef_default_quat"
+    - "grasp_default"
+
+collisions:
+  disabled_pairs:
+    - ["panda_link5", "panda_link7"]
+    - ["panda_link5", "panda_hand"]
+    - ["link_12_0", "part_studio_link"]

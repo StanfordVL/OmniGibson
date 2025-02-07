@@ -1,0 +1,62 @@
+name: "vx300s"
+model_name: "VX300S"
+usd_path: "${ASSET_PATH}/models/vx300s/vx300s.usd"
+urdf_path: "${ASSET_PATH}/models/vx300s/vx300s.urdf"
+scale: 1.0
+
+features:
+  manipulation:
+    enabled: true
+    grasping_mode: "physical"
+    grasping_direction: "lower"
+    disable_grasp_handling: false
+    arms:
+      - name: "default"
+        joints: ["waist", "shoulder", "elbow", "forearm_roll", "wrist_angle", "wrist_rotate"]
+        links: ["base_link", "shoulder_link", "upper_arm_link", "upper_forearm_link", 
+               "lower_forearm_link", "wrist_link", "gripper_link"]
+        eef_link: "eef_link"
+        finger_links: ["left_finger_link", "right_finger_link"]
+        finger_joints: ["left_finger", "right_finger"]
+        workspace_range: [-180, 180]  # Full range since it's a fixed base manipulator
+        teleop_rotation_offset: [-3.14159, 0, 0]  # -pi, 0, 0
+
+controllers:
+  arm_default:
+    name: "InverseKinematicsController"
+    control_freq: 30
+    command_output_limits: [-0.2, 0.2]
+    mode: "pose_delta_ori"
+    smoothing_filter_size: 2
+
+  gripper_default:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+reset_configuration:
+  joint_positions:
+    waist: 0.0
+    shoulder: -0.849879
+    elbow: 0.258767
+    forearm_roll: 0.0
+    wrist_angle: 1.2831712
+    wrist_rotate: 0.0
+    left_finger: 0.057
+    right_finger: 0.057
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "eef_default_pos"
+    - "eef_default_quat"
+    - "grasp_default"

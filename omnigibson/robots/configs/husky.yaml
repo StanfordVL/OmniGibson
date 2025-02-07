@@ -1,0 +1,46 @@
+name: "husky"
+model_name: "Husky"
+usd_path: "${ASSET_PATH}/models/husky/husky.usd"
+urdf_path: "${ASSET_PATH}/models/husky/husky.urdf"
+scale: 1.0
+
+features:
+  locomotion:
+    enabled: true
+    type: "two_wheel"  # Still uses two-wheel control despite having 4 wheels
+    base_footprint_link: "base_footprint"
+    base_joints: ["front_left_wheel", "front_right_wheel", "rear_left_wheel", "rear_right_wheel"]
+    floor_touching_links: ["front_left_wheel_link", "front_right_wheel_link", 
+                          "rear_left_wheel_link", "rear_right_wheel_link"]
+    non_floor_touching_links: ["base_footprint"]
+    wheel_radius: 0.165
+    wheel_axle_length: 0.670
+
+controllers:
+  base:
+    name: "DifferentialDriveController"
+    control_freq: 30
+    motor_type: "velocity"
+    control_limits:
+      position: [-inf, inf]
+      velocity: [-20, 20]
+      effort: [-200, 200]
+
+reset_configuration:
+  joint_positions:
+    front_left_wheel: 0.0
+    front_right_wheel: 0.0
+    rear_left_wheel: 0.0
+    rear_right_wheel: 0.0
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "dd_base_lin_vel"
+    - "dd_base_ang_vel"

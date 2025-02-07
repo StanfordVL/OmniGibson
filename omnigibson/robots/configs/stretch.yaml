@@ -1,0 +1,121 @@
+name: "stretch"
+model_name: "Stretch"
+usd_path: "${ASSET_PATH}/models/stretch/stretch.usd"
+urdf_path: "${ASSET_PATH}/models/stretch/stretch.urdf"
+scale: 1.0
+
+features:
+  manipulation:
+    enabled: true
+    grasping_mode: "physical"
+    grasping_direction: "lower"
+    disable_grasp_handling: false
+    arms:
+      - name: "default"
+        joints: ["joint_lift", "joint_arm_l3", "joint_arm_l2", "joint_arm_l1", 
+                "joint_arm_l0", "joint_wrist_yaw", "joint_wrist_pitch", "joint_wrist_roll"]
+        links: ["link_lift", "link_arm_l3", "link_arm_l2", "link_arm_l1", 
+               "link_arm_l0", "link_wrist_yaw", "link_wrist_pitch", "link_wrist_roll"]
+        eef_link: "eef_link"
+        finger_links: ["link_gripper_finger_left", "link_gripper_finger_right"]
+        finger_joints: ["joint_gripper_finger_right", "joint_gripper_finger_left"]
+        workspace_range: [-180, 180]  # Full range since it's a mobile manipulator
+
+  locomotion:
+    enabled: true
+    type: "two_wheel"
+    base_footprint_link: "base_footprint"
+    base_joints: ["joint_left_wheel", "joint_right_wheel"]
+    floor_touching_links: ["link_left_wheel", "link_right_wheel"]
+    non_floor_touching_links: ["base_footprint"]
+    wheel_radius: 0.050
+    wheel_axle_length: 0.330
+
+  camera:
+    enabled: true
+    joints: ["joint_head_pan", "joint_head_tilt"]
+
+controllers:
+  base:
+    name: "DifferentialDriveController"
+    control_freq: 30
+    motor_type: "velocity"
+    control_limits:
+      position: [-inf, inf]
+      velocity: [-20, 20]
+      effort: [-200, 200]
+
+  camera:
+    name: "JointController"
+    control_freq: 30
+    motor_type: "position"
+    control_limits:
+      position: [-1.57, 1.57]
+      velocity: [-3.0, 3.0]
+      effort: [-50, 50]
+    command_output_limits: null
+    use_delta_commands: true
+
+  arm_default:
+    name: "JointController"
+    control_freq: 30
+    motor_type: "position"
+    control_limits:
+      position: [-3.14, 3.14]
+      velocity: [-3.0, 3.0]
+      effort: [-200, 200]
+    command_output_limits: null
+    use_delta_commands: true
+
+  gripper_default:
+    name: "MultiFingerGripperController"
+    control_freq: 30
+    motor_type: "position"
+    mode: "binary"
+    limit_tolerance: 0.001
+    inverted: false
+
+reset_configuration:
+  joint_positions:
+    joint_left_wheel: 0.0
+    joint_right_wheel: 0.0
+    joint_lift: 0.5
+    joint_arm_l3: 0.0
+    joint_arm_l2: 0.0
+    joint_arm_l1: 0.0
+    joint_arm_l0: 0.0
+    joint_wrist_yaw: 0.0
+    joint_wrist_pitch: 0.0
+    joint_wrist_roll: 0.0
+    joint_gripper_finger_right: 0.392699  # pi/8
+    joint_gripper_finger_left: 0.392699   # pi/8
+    joint_head_pan: 0.0
+    joint_head_tilt: 0.0
+
+proprio_obs:
+  enabled_keys:
+    - "robot_pos"
+    - "robot_ori_cos"
+    - "robot_ori_sin"
+    - "robot_lin_vel"
+    - "robot_ang_vel"
+    - "joint_qpos"
+    - "joint_qvel"
+    - "camera_qpos_sin"
+    - "camera_qpos_cos"
+    - "eef_default_pos"
+    - "eef_default_quat"
+    - "grasp_default"
+    - "dd_base_lin_vel"
+    - "dd_base_ang_vel"
+
+collisions:
+  disabled_pairs:
+    - ["link_lift", "link_arm_l3"]
+    - ["link_lift", "link_arm_l2"]
+    - ["link_lift", "link_arm_l1"]
+    - ["link_lift", "link_arm_l0"]
+    - ["link_arm_l3", "link_arm_l1"]
+    - ["link_arm_l0", "link_arm_l1"]
+    - ["link_arm_l0", "link_arm_l2"]
+    - ["link_arm_l0", "link_arm_l3"]
