@@ -3,6 +3,7 @@ import math
 import os
 import random
 import subprocess
+import traceback
 from dask.distributed import Client, as_completed
 import fs.copy
 from fs.multifs import MultiFS
@@ -12,15 +13,19 @@ import tqdm
 
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
-WORKER_COUNT = 6
+WORKER_COUNT = 4
 BATCH_SIZE = 32
 
 def run_on_batch(dataset_path, batch):
-    python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
-    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
-    obj = batch[0][:-1].split("/")[-1]
-    with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}.err", "w") as ferr:
-        return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")
+    try:
+        python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
+        cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + " ".join(python_cmd)]
+        obj = batch[0][:-1].split("/")[-1]
+        with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}.err", "w") as ferr:
+            return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")
+    except:
+        # The exception cannot be pickled well, so we just return its message as a ValueError.
+        raise ValueError(traceback.format_exc())
 
 
 def main():
@@ -38,9 +43,6 @@ def main():
                 if objects_fs.opendir(item.path).opendir("urdf").glob("*.urdf").count().files == 0:
                     continue
                 fs.copy.copy_fs(objects_fs.opendir(item.path), dataset_fs.makedirs(item.path, recreate=True))
-                # fillable_path = fs.path.join(item.path, "fillable.obj")
-                #  if fillable_fs.exists(fillable_path):
-                #     fs.copy.copy_file(fillable_fs, fillable_path, dataset_fs, fillable_path)
 
             print("Launching cluster...")
             dask_client = Client(n_workers=0, host="", scheduler_port=8786)
@@ -75,13 +77,11 @@ def main():
                 for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
                     # Check the batch results.
                     batch = futures[future]
-                    if future.exception():
-                        e = future.exception()
-                        # logs.append({"stdout": e.stdout.decode("utf-8"), "stderr": e.stderr.decode("utf-8")})
-                        print(e)
-                    else:
-                        out = future.result()
-                        # logs.append({"stdout": out.stdout.decode("utf-8"), "stderr": out.stderr.decode("utf-8")})
+                    try:
+                        future.result()
+                    except Exception as e:
+                        pass
+                        # print(e)
 
                     # Remove everything that failed and make a new batch from them.
                     new_batch = []
@@ -125,9 +125,10 @@ def main():
 
             # Move the USDs to the output FS
             print("Copying USDs to output FS...")
-            usd_glob = [x.path for x in dataset_fs.glob("objects/*/*/usd/")]
+            usd_glob = [x.path for x in dataset_fs.glob("objects/*/*/usd/*.encrypted.usd")]
             for item in tqdm.tqdm(usd_glob):
-                fs.copy.copy_fs(dataset_fs.opendir(item), out_fs.makedirs(item))
+                itemdir = fs.path.dirname(item)
+                fs.copy.copy_fs(dataset_fs.opendir(itemdir), out_fs.makedirs(itemdir))
 
             print("Done processing. Archiving things now.")
 

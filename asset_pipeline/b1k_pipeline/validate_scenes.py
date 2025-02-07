@@ -14,7 +14,7 @@ WORKER_COUNT = 1
 
 def run_on_scene(dataset_path, scene, output_dir):
     python_cmd = ["python", "-m", "b1k_pipeline.validate_scenes_process", dataset_path, scene, output_dir]
-    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
+    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + " ".join(python_cmd)]
     return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd="/scr/ig_pipeline")
 
 

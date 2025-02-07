@@ -24,7 +24,7 @@ def run_on_batch(dataset_path, batch, mode):
     else:
         raise ValueError(f"Unknown mode: {mode}. Choose either ray or dip.")
     python_cmd = ["python", "-m", script, dataset_path] + batch
-    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && " + " ".join(python_cmd)]
+    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + " ".join(python_cmd)]
     obj = batch[0][:-1].split("/")[-1]
     with open(f"/scr/ig_pipeline/logs/{obj}-{mode}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}-{mode}.err", "w") as ferr:
         return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")

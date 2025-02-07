@@ -181,6 +181,6 @@ def run_in_env(python_cmd, omnigibson_env=False):
     env = "omnigibson" if omnigibson_env else "pipeline"
     subcmd = " ".join(python_cmd)
     if omnigibson_env:
-        subcmd = "source /isaac-sim/setup_conda_env.sh && " + cmd
+        subcmd = "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + cmd
     cmd = ["micromamba", "run", "-n", env, "/bin/bash", "-c", subcmd]
     return subprocess.run(cmd, capture_output=True, check=True, cwd="/scr/ig_pipeline")

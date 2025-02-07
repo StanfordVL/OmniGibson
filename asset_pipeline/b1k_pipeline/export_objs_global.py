@@ -639,8 +639,8 @@ def process_link(
             continue
 
         # Unpack some info
-        cm_link_name = f"meta__{link_name}_{cm_type}_0_link"
-        cm_joint_name = f"meta__{link_name}_{cm_type}_0_joint"
+        cm_link_name = f"meta__{link_name}_{cm_type}_0_0_link"
+        cm_joint_name = f"meta__{link_name}_{cm_type}_0_0_joint"
 
         # Create the link in URDF
         cm_link_xml = ET.SubElement(tree_root, "link")
