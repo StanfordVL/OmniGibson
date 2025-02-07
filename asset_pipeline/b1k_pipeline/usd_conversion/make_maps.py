@@ -7,7 +7,7 @@ from PIL import Image
 
 PIPELINE_ROOT = pathlib.Path(__file__).parents[2]
 
-RESOLUTION = 0.01
+RESOLUTION = 1.0
 Z_START = 2.  # Just above the typical robot height
 Z_END = -0.1  # Just below the floor
 HALF_Z = (Z_START + Z_END) / 2.
@@ -69,7 +69,7 @@ def generate_maps_for_current_scene(scene_id):
         # Move the doors to the open position if necessary
         if fname == "floor_trav_open_door_0.png":
             for door_cat in DOOR_CATEGORIES:
-                for door in og.sim.scene.object_registry("category", door_cat, []):
+                for door in og.sim.scenes[0].object_registry("category", door_cat, []):
                     if object_states.Open not in door.states:
                         continue
                     door.states[object_states.Open].set_value(True, fully=True)
@@ -78,7 +78,7 @@ def generate_maps_for_current_scene(scene_id):
         floor_objs = {
             floor
             for floor_cat in FLOOR_CATEGORIES
-            for floor in og.sim.scene.object_registry("category", floor_cat, [])
+            for floor in og.sim.scenes[0].object_registry("category", floor_cat, [])
         }
         roomless_floor_objs = [(floor, len(floor.in_rooms)) for floor in floor_objs if len(floor.in_rooms) != 1]
         assert not roomless_floor_objs, f"Found {len(roomless_floor_objs)} floor objects without exactly one room: {roomless_floor_objs}"
@@ -108,12 +108,12 @@ def generate_maps_for_current_scene(scene_id):
         # Using the load/not load params, build the set of allowed hits
         allowed_hit_paths = {
             link.prim_path: obj
-            for obj in og.sim.scene.objects
+            for obj in og.sim.scenes[0].objects
             for link in obj.links.values()
             if not load_categories or obj.category in load_categories
         }
         if not_load_categories:
-            for obj in og.sim.scene.objects:
+            for obj in og.sim.scenes[0].objects:
                 for link in obj.links.values():
                     if obj.category in not_load_categories:
                         allowed_hit_paths.pop(link.prim_path, None)
@@ -144,7 +144,7 @@ def generate_maps_for_current_scene(scene_id):
             # Get a list of all of the room instances in the scene
             all_insts = {
                 room
-                for floor in og.sim.scene.objects
+                for floor in og.sim.scenes[0].objects
                 for room in (floor.in_rooms if floor.in_rooms else [])
             }
             sorted_all_insts = sorted(all_insts)

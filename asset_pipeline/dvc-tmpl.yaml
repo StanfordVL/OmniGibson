@@ -211,9 +211,9 @@ stages:
     cmd: 'python -m b1k_pipeline.export_scenes_global'
     deps:
     - artifacts/pipeline/export_meshes.success
+    - artifacts/pipeline/object_list.success
     - cad/#{scenes}/artifacts/meshes.zip
     - cad/#{scenes}/artifacts/object_list.json
-    - cad/#{scenes}/artifacts/object_list.success
     - b1k_pipeline/export_scenes_global.py
     - b1k_pipeline/export_objs_global.py
     - b1k_pipeline/mesh_tree.py
