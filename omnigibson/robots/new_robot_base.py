@@ -1,6 +1,7 @@
+from collections import namedtuple
 import os
 import math
-import gym
+import gymnasium as gym
 import networkx as nx
 from copy import deepcopy
 from typing import Literal
@@ -10,10 +11,11 @@ import torch as th
 import omnigibson as og
 from omnigibson.controllers import joint_controller
 import omnigibson.utils.transform_utils as T
-from omnigibson.utils.python_utils import wrap_angle
-from omnigibson.macros import create_module_macros, gm, lazy
+from omnigibson.utils.geometry_utils import wrap_angle
+from omnigibson.macros import create_module_macros, gm
+import omnigibson.lazy as lazy
 from omnigibson.objects.controllable_object import ControllableObject
-from omnigibson.objects.stateful_object import ContactBodies
+from omnigibson.object_states import ContactBodies
 from omnigibson.objects.usd_object import USDObject
 from omnigibson.robots.robot_config import RobotConfig
 from omnigibson.sensors import (
@@ -24,7 +26,8 @@ from omnigibson.sensors import (
     create_sensor,
 )
 from omnigibson.utils.backend_utils import _compute_backend as cb
-from omnigibson.utils.constants import PrimType, IsGraspingState, JointType, ControlType
+from omnigibson.controllers import IsGraspingState, ControlType
+from omnigibson.utils.constants import PrimType, JointType
 from omnigibson.utils.gym_utils import GymObservable
 from omnigibson.utils.numpy_utils import NumpyTypes
 from omnigibson.utils.python_utils import classproperty, merge_nested_dicts
@@ -32,9 +35,9 @@ from omnigibson.utils.usd_utils import (
     ControllableObjectViewAPI,
     absolute_prim_path_to_scene_relative,
     create_joint,
-    raytest_batch,
     GripperRigidContactAPI,
 )
+from omnigibson.utils.sampling_utils import raytest_batch
 from omnigibson.utils.vision_utils import segmentation_to_rgb
 
 # Global dicts that will contain mappings
@@ -63,13 +66,12 @@ m.ASSIST_FRACTION = 0.5  # Fraction of max force to use
 m.ARTICULATED_ASSIST_FRACTION = 0.5  # Fraction of assist force to use for articulated objects
 m.RELEASE_WINDOW = 0.5  # Time window for releasing objects
 
+GraspingPoint = namedtuple("GraspingPoint", ["link_name", "position"])  # link_name (str), position (x,y,z tuple)
+
 
 class NewRobot(USDObject, ControllableObject, GymObservable):
     """
     Base class for USD-based robot agents.
-
-    This class handles object loading, and provides method interfaces that should be
-    implemented by subclassed robots.
     """
 
     def __init__(
@@ -143,8 +145,8 @@ class NewRobot(USDObject, ControllableObject, GymObservable):
                 for valid key choices
             sensor_config (None or dict): nested dictionary mapping sensor class name(s) to specific sensor
                 configurations for this object. This will override any default values specified by this class.
-            kwargs (dict): Additional keyword arguments that are used for other super() calls from subclasses, allowing
-                for flexible compositions of various object subclasses (e.g.: Robot is USDObject + ControllableObject).
+            kwargs (dict): Additional keyword arguments allowing for flexible compositions of various object subclasses
+                (e.g.: Robot is USDObject + ControllableObject).
         """
         # Load config if provided
         if config_path is not None:
@@ -1379,73 +1381,37 @@ class NewRobot(USDObject, ControllableObject, GymObservable):
 
     @property
     def assisted_grasp_start_points(self):
-        """
-        Returns:
-            dict: Dictionary mapping individual arm appendage names to array of GraspingPoint tuples,
-                composed of (link_name, position) values specifying valid grasping start points located at
-                cartesian (x,y,z) coordinates specified in link_name's local coordinate frame.
-                These values will be used in conjunction with
-                @self.assisted_grasp_end_points to trigger assisted grasps, where objects that intersect
-                with any ray starting at any point in @self.assisted_grasp_start_points and terminating at any point in
-                @self.assisted_grasp_end_points will trigger an assisted grasp (calculated individually for each gripper
-                appendage). By default, each entry returns None, and must be implemented by any robot subclass that
-                wishes to use assisted grasping.
-        """
+        """Returns dict mapping arm names to array of GraspingPoint tuples..."""
         if not self.has_manipulation:
             return {}
-        return {arm.name: None for arm in self._config.manipulation.arms}
 
-    @property
-    def _assisted_grasp_start_points(self):
-        """
-        Returns:
-            dict: Dictionary mapping individual arm appendage names to array of GraspingPoint tuples,
-                composed of (link_name, position) values specifying valid grasping start points located at
-                cartesian (x,y,z) coordinates specified in link_name's local coordinate frame.
-                These values will be used in conjunction with
-                @self.assisted_grasp_end_points to trigger assisted grasps, where objects that intersect
-                with any ray starting at any point in @self.assisted_grasp_start_points and terminating at any point in
-                @self.assisted_grasp_end_points will trigger an assisted grasp (calculated individually for each gripper
-                appendage). By default, each entry returns None, and must be implemented by any robot subclass that
-                wishes to use assisted grasping.
-        """
-        # Should be optionally implemented by subclass
-        return None
+        points = {}
+        for arm in self._config.manipulation.arms:
+            if arm.assisted_grasp_points and arm.assisted_grasp_points.start_points:
+                points[arm.name] = [
+                    GraspingPoint(link_name=point.link_name, position=th.tensor(point.position))
+                    for point in arm.assisted_grasp_points.start_points
+                ]
+            else:
+                points[arm.name] = None
+        return points
 
     @property
     def assisted_grasp_end_points(self):
-        """
-        Returns:
-            dict: Dictionary mapping individual arm appendage names to array of GraspingPoint tuples,
-                composed of (link_name, position) values specifying valid grasping end points located at
-                cartesian (x,y,z) coordinates specified in link_name's local coordinate frame.
-                These values will be used in conjunction with
-                @self.assisted_grasp_start_points to trigger assisted grasps, where objects that intersect
-                with any ray starting at any point in @self.assisted_grasp_start_points and terminating at any point in
-                @self.assisted_grasp_end_points will trigger an assisted grasp (calculated individually for each gripper
-                appendage). By default, each entry returns None, and must be implemented by any robot subclass that
-                wishes to use assisted grasping.
-        """
+        """Returns dict mapping arm names to array of GraspingPoint tuples..."""
         if not self.has_manipulation:
             return {}
-        return {arm.name: None for arm in self._config.manipulation.arms}
 
-    @property
-    def _assisted_grasp_end_points(self):
-        """
-        Returns:
-            dict: Dictionary mapping individual arm appendage names to array of GraspingPoint tuples,
-                composed of (link_name, position) values specifying valid grasping end points located at
-                cartesian (x,y,z) coordinates specified in link_name's local coordinate frame.
-                These values will be used in conjunction with
-                @self.assisted_grasp_start_points to trigger assisted grasps, where objects that intersect
-                with any ray starting at any point in @self.assisted_grasp_start_points and terminating at any point in
-                @self.assisted_grasp_end_points will trigger an assisted grasp (calculated individually for each gripper
-                appendage). By default, each entry returns None, and must be implemented by any robot subclass that
-                wishes to use assisted grasping.
-        """
-        # Should be optionally implemented by subclass
-        return None
+        points = {}
+        for arm in self._config.manipulation.arms:
+            if arm.assisted_grasp_points and arm.assisted_grasp_points.end_points:
+                points[arm.name] = [
+                    GraspingPoint(link_name=point.link_name, position=th.tensor(point.position))
+                    for point in arm.assisted_grasp_points.end_points
+                ]
+            else:
+                points[arm.name] = None
+        return points
 
     # =========== Locomotion Properties and Methods ===========
     @property

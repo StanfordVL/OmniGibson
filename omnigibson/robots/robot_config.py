@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+import os
 from typing import Dict, List, Optional, Union, Literal
 import yaml
 import torch as th
@@ -132,6 +133,7 @@ class RobotConfig:
     @classmethod
     def from_yaml(cls, yaml_path: str) -> "RobotConfig":
         """Load robot configuration from YAML file"""
+        yaml_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "configs", f"{yaml_path}.yaml")
         with open(yaml_path, "r") as f:
             config_dict = yaml.safe_load(f)
 

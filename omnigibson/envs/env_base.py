@@ -10,7 +10,7 @@ import torch as th
 import omnigibson as og
 from omnigibson.macros import gm
 from omnigibson.objects import REGISTERED_OBJECTS
-from omnigibson.robots import REGISTERED_ROBOTS
+from omnigibson.robots.new_robot_base import NewRobot
 from omnigibson.scene_graphs.graph_builder import SceneGraphBuilder
 from omnigibson.scenes import REGISTERED_SCENES
 from omnigibson.sensors import VisionSensor, create_sensor
@@ -281,12 +281,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
                     )
 
                 # Make sure robot exists, grab its corresponding kwargs, and create / import the robot
-                robot = create_class_from_registry_and_config(
-                    cls_name=robot_config["type"],
-                    cls_registry=REGISTERED_ROBOTS,
-                    cfg=robot_config,
-                    cls_type_descriptor="robot",
-                )
+                robot = NewRobot(**robot_config, config_file=robot_config["type"])
                 # Import the robot into the simulator
                 self.scene.add_object(robot)
                 robot.set_position_orientation(position=position, orientation=orientation, frame=pose_frame)
