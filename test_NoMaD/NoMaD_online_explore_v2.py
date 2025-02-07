@@ -101,13 +101,17 @@ def array_to_pil(rgb_tensor: torch.Tensor) -> PILImage.Image:
 
 
 def add_edge(u: int, v: int, dist_val: float):
+    """
+    Store the distance as a python float (not numpy float64).
+    """
     global adj_list
+    dist_python = float(dist_val)  # ensure python float
     if u not in adj_list:
         adj_list[u] = []
     if v not in adj_list:
         adj_list[v] = []
-    adj_list[u].append((v, dist_val))
-    adj_list[v].append((u, dist_val))
+    adj_list[u].append((v, dist_python))
+    adj_list[v].append((u, dist_python))
 
 
 def dijkstra(start_idx: int) -> dict:
@@ -155,16 +159,21 @@ def add_node(obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float
     save_path = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME, filename)
     obs_img.save(save_path)
 
+    # Convert the positions and yaw to standard Python float
+    x_float = float(robot_pos_xy[0])
+    y_float = float(robot_pos_xy[1])
+    yaw_float = float(robot_yaw)
+
     node_info = {
         "idx": node_index,
-        "pos": (float(robot_pos_xy[0]), float(robot_pos_xy[1])),
-        "yaw": float(robot_yaw),
+        "pos": (x_float, y_float),
+        "yaw": yaw_float,
         "img_path": save_path,
         "visited": False,
     }
     topomap_nodes.append(node_info)
     print(
-        f"[TOPO] Node {node_index} => pos=({robot_pos_xy[0]:.2f}, {robot_pos_xy[1]:.2f}), yaw={robot_yaw:.2f} deg, saved={save_path}"
+        f"[TOPO] Node {node_index} => pos=({x_float:.2f}, {y_float:.2f}), yaw={yaw_float:.2f} deg, saved={save_path}"
     )
 
     if node_index not in adj_list:
@@ -174,7 +183,11 @@ def add_node(obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float
     for old_node in topomap_nodes:
         if old_node["idx"] == node_index:
             continue
-        dist_val = np.linalg.norm(np.array(old_node["pos"]) - np.array(node_info["pos"]))
+        old_x, old_y = old_node["pos"]
+        dist_val_np = np.linalg.norm(
+            np.array([old_x, old_y]) - np.array([x_float, y_float])
+        )
+        dist_val = float(dist_val_np)  # ensure it's a Python float
         if dist_val < EDGE_DISTANCE_THRESHOLD:
             add_edge(node_index, old_node["idx"], dist_val)
 
@@ -217,15 +230,38 @@ def get_next_frontier(robot_pos_xy: np.ndarray) -> int:
 
 ##############################################################################
 def save_topomap_yaml():
+    """
+    Convert all numeric data to standard Python float before saving.
+    """
     global topomap_nodes, adj_list
     node_data_path = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME, "nodes_info.yaml")
+
+    # Prepare a serializable data structure
+    # Copy each node, converting positions and yaw to float
+    serializable_nodes = []
+    for node in topomap_nodes:
+        # copy the node info
+        x, y = node["pos"]
+        serializable_node = {
+            "idx": int(node["idx"]),
+            "pos": (float(x), float(y)),
+            "yaw": float(node["yaw"]),
+            "img_path": str(node["img_path"]),
+            "visited": bool(node.get("visited", False)),
+        }
+        serializable_nodes.append(serializable_node)
+
+    # Flatten adjacency
     edges_list = []
     for u, neighbors in adj_list.items():
         for v, dist_val in neighbors:
-            edges_list.append((u, v, dist_val))
-    data = {"nodes": topomap_nodes, "edges": edges_list}
+            edges_list.append((int(u), int(v), float(dist_val)))
+
+    data = {"nodes": serializable_nodes, "edges": edges_list}
+
     with open(node_data_path, "w") as f:
-        yaml.safe_dump(data, f)
+        yaml.safe_dump(data, f)  # now it should represent everything properly
+
     print(f"[TOPO] Wrote {len(topomap_nodes)} nodes and adjacency to {node_data_path}")
 
 
@@ -243,6 +279,7 @@ def sample_diffusion_action(
     obs_tensor = transform_images(
         obs_images, model_params["image_size"], center_crop=False
     ).to(device)
+
     if goal_image is None:
         fake_goal = torch.randn((1, 3, *model_params["image_size"])).to(device)
         mask_val = 1  # ignore
@@ -257,6 +294,7 @@ def sample_diffusion_action(
     mask = torch.ones(1).long().to(device) * mask_val
 
     with torch.no_grad():
+
         obs_cond = model(
             "vision_encoder",
             obs_img=obs_tensor,
@@ -313,7 +351,7 @@ def main(headless=False, short_exec=False):
         prediction_type="epsilon",
     )
 
-    import omnigibson as og
+    # import omnigibson as og
 
     config_filename = os.path.join(og.example_config_path, "turtlebot_nav.yaml")
     with open(config_filename, "r") as f:
@@ -378,8 +416,9 @@ def main(headless=False, short_exec=False):
                     last_node_pos_2d = robot_pos_2d
 
             # Fill context queue
-            if len(context_queue) < context_size + 1:
-                context_queue.append(obs_img)
+            if len(context_queue) < context_size + 1:  # if not full
+                for i in range(context_size + 1 - len(context_queue)):
+                    context_queue.append(obs_img)  # fill with latest
             else:
                 context_queue.pop(0)
                 context_queue.append(obs_img)
