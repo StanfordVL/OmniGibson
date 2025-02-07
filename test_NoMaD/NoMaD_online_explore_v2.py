@@ -31,11 +31,11 @@ MAX_W = robot_config.get("max_w", 1.90)
 DT = 1.0
 EPS = 1e-8
 
-# Path to store topomap images (online creation)
+# Path to store topomap images
 TOPOMAP_IMAGES_DIR = "./topomaps/images"
 MAP_NAME = "dynamic_map"
 
-# Clear or create the directory
+# We'll remove the old topomaps/dynamic_map folder once before running multiple episodes
 map_dir = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME)
 if os.path.isdir(map_dir):
     print(f"[INFO] Removing old files in {map_dir}")
@@ -46,9 +46,10 @@ os.makedirs(map_dir, exist_ok=True)
 ADD_NODE_DIST = 0.5
 EDGE_DISTANCE_THRESHOLD = 3.0
 
+# We will reset these for each episode
 node_index = 0
 topomap_nodes = []
-adj_list = {}  # adjacency: node_idx -> list of (nbr_idx, dist)
+adj_list = {}
 
 ##############################################################################
 # Utility Functions
@@ -105,7 +106,7 @@ def add_edge(u: int, v: int, dist_val: float):
     Store the distance as a python float (not numpy float64).
     """
     global adj_list
-    dist_python = float(dist_val)  # ensure python float
+    dist_python = float(dist_val)
     if u not in adj_list:
         adj_list[u] = []
     if v not in adj_list:
@@ -153,13 +154,20 @@ def get_closest_node_to_pos(xy: np.ndarray) -> int:
 ##############################################################################
 
 
-def add_node(obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float):
+def add_node(
+    obs_img: PILImage.Image,
+    robot_pos_xy: np.ndarray,
+    robot_yaw: float,
+    episode_map_dir: str,
+):
+    """
+    Save the node's image inside the episode-specific directory.
+    """
     global node_index, topomap_nodes, adj_list
     filename = f"{node_index}.png"
-    save_path = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME, filename)
+    save_path = os.path.join(episode_map_dir, filename)
     obs_img.save(save_path)
 
-    # Convert the positions and yaw to standard Python float
     x_float = float(robot_pos_xy[0])
     y_float = float(robot_pos_xy[1])
     yaw_float = float(robot_yaw)
@@ -184,10 +192,7 @@ def add_node(obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float
         if old_node["idx"] == node_index:
             continue
         old_x, old_y = old_node["pos"]
-        dist_val_np = np.linalg.norm(
-            np.array([old_x, old_y]) - np.array([x_float, y_float])
-        )
-        dist_val = float(dist_val_np)  # ensure it's a Python float
+        dist_val = np.linalg.norm(np.array([old_x, old_y]) - np.array([x_float, y_float]))
         if dist_val < EDGE_DISTANCE_THRESHOLD:
             add_edge(node_index, old_node["idx"], dist_val)
 
@@ -200,14 +205,9 @@ def add_node(obs_img: PILImage.Image, robot_pos_xy: np.ndarray, robot_yaw: float
 
 
 def get_next_frontier(robot_pos_xy: np.ndarray) -> int:
-    """
-    1) If only one node, return -1 => do random
-    2) else pick unvisited node with min path distance from current node
-    """
     if len(topomap_nodes) <= 1:
         return -1
 
-    # find node that is physically closest
     current_idx = get_closest_node_to_pos(robot_pos_xy)
     if current_idx < 0:
         return -1
@@ -229,18 +229,17 @@ def get_next_frontier(robot_pos_xy: np.ndarray) -> int:
 
 
 ##############################################################################
-def save_topomap_yaml():
+def save_topomap_yaml(episode_map_dir: str):
     """
     Convert all numeric data to standard Python float before saving.
+    Saves 'nodes_info.yaml' in the directory for this episode.
     """
     global topomap_nodes, adj_list
-    node_data_path = os.path.join(TOPOMAP_IMAGES_DIR, MAP_NAME, "nodes_info.yaml")
+    node_data_path = os.path.join(episode_map_dir, "nodes_info.yaml")
 
     # Prepare a serializable data structure
-    # Copy each node, converting positions and yaw to float
     serializable_nodes = []
     for node in topomap_nodes:
-        # copy the node info
         x, y = node["pos"]
         serializable_node = {
             "idx": int(node["idx"]),
@@ -251,7 +250,6 @@ def save_topomap_yaml():
         }
         serializable_nodes.append(serializable_node)
 
-    # Flatten adjacency
     edges_list = []
     for u, neighbors in adj_list.items():
         for v, dist_val in neighbors:
@@ -260,7 +258,7 @@ def save_topomap_yaml():
     data = {"nodes": serializable_nodes, "edges": edges_list}
 
     with open(node_data_path, "w") as f:
-        yaml.safe_dump(data, f)  # now it should represent everything properly
+        yaml.safe_dump(data, f)
 
     print(f"[TOPO] Wrote {len(topomap_nodes)} nodes and adjacency to {node_data_path}")
 
@@ -294,7 +292,6 @@ def sample_diffusion_action(
     mask = torch.ones(1).long().to(device) * mask_val
 
     with torch.no_grad():
-
         obs_cond = model(
             "vision_encoder",
             obs_img=obs_tensor,
@@ -344,7 +341,6 @@ def main(headless=False, short_exec=False):
     model = load_model(ckpt_path, model_params, device)
     model.eval()
 
-    # Define the noise scheduler
     noise_scheduler = DDPMScheduler(
         num_train_timesteps=model_params["num_diffusion_iters"],
         beta_schedule="squaredcos_cap_v2",
@@ -352,40 +348,49 @@ def main(headless=False, short_exec=False):
         prediction_type="epsilon",
     )
 
-    # Load the config file for the environment
     config_filename = os.path.join(og.example_config_path, "turtlebot_nav.yaml")
     with open(config_filename, "r") as f:
         config = yaml.safe_load(f)
     config["scene"]["load_object_categories"] = ["floors", "walls", "ceilings"]
     if headless:
         config["headless"] = True
+
     env = og.Environment(configs=config)
     robot_name = env.robots[0].name
 
-    #
-    context_queue = []  # queue of images
+    context_queue = []
     context_size = model_params["context_size"]
     max_episodes = 2 if short_exec else 5
     steps_per_episode = 1000
 
     class ArgObj:
-        """
-        Dummy object to hold arguments for sample_diffusion_action.
-        """
+        """Dummy object to hold arguments for sample_diffusion_action."""
 
         def __init__(self):
             self.num_samples = 8
             self.waypoint = 2
 
-    args = ArgObj()  # for sample_diffusion_action
-
-    global node_index, topomap_nodes, adj_list
-    last_node_pos_2d = None
+    args = ArgObj()
 
     for ep_i in range(max_episodes):
+        # -----------------------------------------------------------
+        # (A) Reset the graph data structures for this episode
+        # -----------------------------------------------------------
+        global node_index, topomap_nodes, adj_list
+        node_index = 0
+        topomap_nodes = []
+        adj_list = {}
+
+        # Create a per-episode subfolder inside dynamic_map
+        episode_map_dir = os.path.join(map_dir, f"episode_{ep_i}")
+        os.makedirs(episode_map_dir, exist_ok=True)
+
+        # Reset environment
         env.reset()
         context_queue.clear()
-        print(f"\n[INFO] Starting episode={ep_i} with graph-based frontier approach...")
+        last_node_pos_2d = None
+
+        print(f"\n[INFO] Starting episode={ep_i} ...")
 
         for step_i in range(steps_per_episode):
             if step_i == 0:
@@ -398,48 +403,54 @@ def main(headless=False, short_exec=False):
                     {robot_name: action}
                 )
 
-            # Robot state
             robot_state = states[robot_name]
             proprio = robot_state["proprio"]
             robot_pos_2d = proprio[:2]
             robot_yaw = proprio[3]
 
-            # Camera
             camera_key = f"{robot_name}:eyes:Camera:0"
             camera_out = robot_state[camera_key]
             rgb_tensor = camera_out["rgb"]
             obs_img = array_to_pil(rgb_tensor)
 
-            # Possibly add node
+            # Possibly add a new node
             if last_node_pos_2d is None:
-                add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw))
+                add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw), episode_map_dir)
                 last_node_pos_2d = robot_pos_2d
             else:
                 dist = np.linalg.norm(robot_pos_2d - last_node_pos_2d)
                 if dist > ADD_NODE_DIST:
-                    add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw))
+                    add_node(
+                        obs_img, robot_pos_2d, np.degrees(robot_yaw), episode_map_dir
+                    )
                     last_node_pos_2d = robot_pos_2d
 
-            # Fill context queue
-            if len(context_queue) < context_size + 1:  # if not full
-                for i in range(context_size + 1 - len(context_queue)):
-                    context_queue.append(obs_img)  # fill with latest
+            # Update context
+            if len(context_queue) < context_size + 1:
+                # Fill up if not full
+                while len(context_queue) < (context_size + 1):
+                    context_queue.append(obs_img)
             else:
                 context_queue.pop(0)
                 context_queue.append(obs_img)
 
-            # Decide next frontier
+            # Frontier
             frontier_idx = get_next_frontier(robot_pos_2d)
             if frontier_idx < 0:
-                # no frontier => do random exploration
+                # No frontier => random exploration
                 waypoint_dxdy = sample_diffusion_action(
-                    model, context_queue, model_params, device, noise_scheduler, args
+                    model,
+                    context_queue,
+                    model_params,
+                    device,
+                    noise_scheduler,
+                    args,
+                    goal_image=None,
                 )
             else:
-                # We have a frontier => load that node's image if you want
+                # Use frontier's node image as goal
                 frontier_node = [n for n in topomap_nodes if n["idx"] == frontier_idx][0]
                 goal_img = PILImage.open(frontier_node["img_path"])
-                # feed that to sample_diffusion_action with mask=0
                 waypoint_dxdy = sample_diffusion_action(
                     model,
                     context_queue,
@@ -449,8 +460,8 @@ def main(headless=False, short_exec=False):
                     args,
                     goal_image=goal_img,
                 )
-            action = pd_controller(waypoint_dxdy, DT, MAX_V, MAX_W)
 
+            action = pd_controller(waypoint_dxdy, DT, MAX_V, MAX_W)
             print(
                 f"[Episode={ep_i}, Step={step_i}] action={action}, pos={robot_pos_2d}, yaw={robot_yaw:.2f}"
             )
@@ -464,9 +475,14 @@ def main(headless=False, short_exec=False):
 
         print(f"[INFO] Episode {ep_i} finished or max steps reached.")
 
-    save_topomap_yaml()
+        # -----------------------------------------------------------
+        # (B) Save the graph (nodes & edges) for this episode
+        # -----------------------------------------------------------
+        save_topomap_yaml(episode_map_dir)
+
     env.close()
-    print("[INFO] Graph-based frontier exploration with fallback random NoMaD is done.")
+    print("[INFO] Graph-based frontier exploration with fallback NoMaD is done.")
+    print(f"[INFO] Per-episode maps saved under: {map_dir}")
 
 
 if __name__ == "__main__":
