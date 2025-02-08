@@ -25,8 +25,8 @@ with open(ROBOT_CONFIG_PATH, "r") as f:
     robot_config = yaml.safe_load(f)
 
 RATE = 10
-MAX_V = robot_config.get("max_v", 0.31)
-MAX_W = robot_config.get("max_w", 1.90)
+MAX_V = 0.31  # robot_config.get("max_v", 0.31)
+MAX_W = 1.90  #  robot_config.get("max_w", 1.90)
 
 DT = 1.0
 EPS = 1e-8
@@ -45,6 +45,9 @@ os.makedirs(map_dir, exist_ok=True)
 # Thresholds
 ADD_NODE_DIST = 0.5
 EDGE_DISTANCE_THRESHOLD = 3.0
+
+# If the robot is within this distance to the frontier node, we consider it 'reached'
+FRONTIER_REACHED_THRESHOLD = 0.5
 
 # We will reset these for each episode
 node_index = 0
@@ -102,9 +105,6 @@ def array_to_pil(rgb_tensor: torch.Tensor) -> PILImage.Image:
 
 
 def add_edge(u: int, v: int, dist_val: float):
-    """
-    Store the distance as a python float (not numpy float64).
-    """
     global adj_list
     dist_python = float(dist_val)
     if u not in adj_list:
@@ -160,9 +160,6 @@ def add_node(
     robot_yaw: float,
     episode_map_dir: str,
 ):
-    """
-    Save the node's image inside the episode-specific directory.
-    """
     global node_index, topomap_nodes, adj_list
     filename = f"{node_index}.png"
     save_path = os.path.join(episode_map_dir, filename)
@@ -181,7 +178,8 @@ def add_node(
     }
     topomap_nodes.append(node_info)
     print(
-        f"[TOPO] Node {node_index} => pos=({x_float:.2f}, {y_float:.2f}), yaw={yaw_float:.2f} deg, saved={save_path}"
+        f"[TOPO] Node {node_index} => pos=({x_float:.2f}, {y_float:.2f}), "
+        f"yaw={yaw_float:.2f} deg, saved={save_path}"
     )
 
     if node_index not in adj_list:
@@ -205,6 +203,10 @@ def add_node(
 
 
 def get_next_frontier(robot_pos_xy: np.ndarray) -> int:
+    """
+    Return the closest unvisited node (by Dijkstra path distance)
+    from the robot's current position. If none found, return -1.
+    """
     if len(topomap_nodes) <= 1:
         return -1
 
@@ -218,7 +220,7 @@ def get_next_frontier(robot_pos_xy: np.ndarray) -> int:
     for node in topomap_nodes:
         if not node["visited"]:
             idx = node["idx"]
-            # skip same node
+            # skip if it's the same node or unreachable
             if idx == current_idx:
                 continue
             cost = dist_map.get(idx, float("inf"))
@@ -272,7 +274,8 @@ def sample_diffusion_action(
     model, obs_images, model_params, device, noise_scheduler, args, goal_image=None
 ):
     """
-    Single-frame input. If goal_image is None => random exploration.
+    If goal_image is None => random exploration.
+    Otherwise => condition on the provided goal image.
     """
     obs_tensor = transform_images(
         obs_images, model_params["image_size"], center_crop=False
@@ -283,7 +286,6 @@ def sample_diffusion_action(
         mask_val = 1  # ignore
         goal_tensor = fake_goal
     else:
-        # if we do want a real goal
         goal_tensor = transform_images(
             [goal_image], model_params["image_size"], center_crop=False
         ).to(device)
@@ -341,6 +343,7 @@ def main(headless=False, short_exec=False):
     model = load_model(ckpt_path, model_params, device)
     model.eval()
 
+    # Noise scheduler
     noise_scheduler = DDPMScheduler(
         num_train_timesteps=model_params["num_diffusion_iters"],
         beta_schedule="squaredcos_cap_v2",
@@ -348,6 +351,7 @@ def main(headless=False, short_exec=False):
         prediction_type="epsilon",
     )
 
+    # Load OmniGibson config
     config_filename = os.path.join(og.example_config_path, "turtlebot_nav.yaml")
     with open(config_filename, "r") as f:
         config = yaml.safe_load(f)
@@ -360,8 +364,10 @@ def main(headless=False, short_exec=False):
 
     context_queue = []
     context_size = model_params["context_size"]
+
+    # how many episodes / steps
     max_episodes = 2 if short_exec else 5
-    steps_per_episode = 1000
+    steps_per_episode = 300
 
     class ArgObj:
         """Dummy object to hold arguments for sample_diffusion_action."""
@@ -373,15 +379,15 @@ def main(headless=False, short_exec=False):
     args = ArgObj()
 
     for ep_i in range(max_episodes):
-        # -----------------------------------------------------------
-        # (A) Reset the graph data structures for this episode
-        # -----------------------------------------------------------
+        # -----------------------------------------
+        # Reset the graph data for this episode
+        # -----------------------------------------
         global node_index, topomap_nodes, adj_list
         node_index = 0
         topomap_nodes = []
         adj_list = {}
 
-        # Create a per-episode subfolder inside dynamic_map
+        # Create per-episode subfolder
         episode_map_dir = os.path.join(map_dir, f"episode_{ep_i}")
         os.makedirs(episode_map_dir, exist_ok=True)
 
@@ -390,7 +396,11 @@ def main(headless=False, short_exec=False):
         context_queue.clear()
         last_node_pos_2d = None
 
-        print(f"\n[INFO] Starting episode={ep_i} ...")
+        # We'll store the current frontier until we reach it
+        current_frontier_idx = None
+        frontier_node = None
+
+        print(f"\n[INFO] Starting episode={ep_i}...")
 
         for step_i in range(steps_per_episode):
             if step_i == 0:
@@ -413,7 +423,7 @@ def main(headless=False, short_exec=False):
             rgb_tensor = camera_out["rgb"]
             obs_img = array_to_pil(rgb_tensor)
 
-            # Possibly add a new node
+            # Possibly add a new node (based on traveled distance)
             if last_node_pos_2d is None:
                 add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw), episode_map_dir)
                 last_node_pos_2d = robot_pos_2d
@@ -425,31 +435,72 @@ def main(headless=False, short_exec=False):
                     )
                     last_node_pos_2d = robot_pos_2d
 
-            # Update context
+            # Maintain the context queue (for diffusion model)
             if len(context_queue) < context_size + 1:
-                # Fill up if not full
                 while len(context_queue) < (context_size + 1):
                     context_queue.append(obs_img)
             else:
                 context_queue.pop(0)
                 context_queue.append(obs_img)
 
-            # Frontier
-            frontier_idx = get_next_frontier(robot_pos_2d)
-            if frontier_idx < 0:
-                # No frontier => random exploration
-                waypoint_dxdy = sample_diffusion_action(
-                    model,
-                    context_queue,
-                    model_params,
-                    device,
-                    noise_scheduler,
-                    args,
-                    goal_image=None,
+            # -----------------------------------------
+            # 1) Check if we have a frontier assigned
+            #    AND if we've reached it
+            # -----------------------------------------
+            if current_frontier_idx is not None:
+                # distance to the current frontier
+                frontier_pos = topomap_nodes[current_frontier_idx]["pos"]
+                dist_to_frontier = np.linalg.norm(robot_pos_2d - np.array(frontier_pos))
+                print(
+                    f"[DEBUG] Dist to current frontier node {current_frontier_idx} = {dist_to_frontier:.2f}"
                 )
+
+                # If within threshold, mark it visited
+                if dist_to_frontier < FRONTIER_REACHED_THRESHOLD:
+                    print(
+                        f"[DEBUG] Reached frontier node {current_frontier_idx}! Marking visited."
+                    )
+                    topomap_nodes[current_frontier_idx]["visited"] = True
+                    current_frontier_idx = None
+                    frontier_node = None
+
+            # -----------------------------------------
+            # 2) If we don't have a current frontier,
+            #    pick a new one (if available).
+            # -----------------------------------------
+            if current_frontier_idx is None:
+                frontier_idx = get_next_frontier(robot_pos_2d)
+                if frontier_idx < 0:
+                    # No frontier => random exploration
+                    print("[DEBUG] No frontier found; sampling random exploration.")
+                    waypoint_dxdy = sample_diffusion_action(
+                        model,
+                        context_queue,
+                        model_params,
+                        device,
+                        noise_scheduler,
+                        args,
+                        goal_image=None,
+                    )
+                else:
+                    # Set new frontier
+                    current_frontier_idx = frontier_idx
+                    frontier_node = [
+                        n for n in topomap_nodes if n["idx"] == frontier_idx
+                    ][0]
+                    print(f"[DEBUG] Setting new frontier node {current_frontier_idx}")
+                    goal_img = PILImage.open(frontier_node["img_path"])
+                    waypoint_dxdy = sample_diffusion_action(
+                        model,
+                        context_queue,
+                        model_params,
+                        device,
+                        noise_scheduler,
+                        args,
+                        goal_image=goal_img,
+                    )
             else:
-                # Use frontier's node image as goal
-                frontier_node = [n for n in topomap_nodes if n["idx"] == frontier_idx][0]
+                # We already have a frontier => use its image as goal
                 goal_img = PILImage.open(frontier_node["img_path"])
                 waypoint_dxdy = sample_diffusion_action(
                     model,
@@ -461,11 +512,15 @@ def main(headless=False, short_exec=False):
                     goal_image=goal_img,
                 )
 
+            # PD control to convert the chosen waypoint into velocities
             action = pd_controller(waypoint_dxdy, DT, MAX_V, MAX_W)
+
             print(
-                f"[Episode={ep_i}, Step={step_i}] action={action}, pos={robot_pos_2d}, yaw={robot_yaw:.2f}"
+                f"[Episode={ep_i}, Step={step_i}] action={action}, "
+                f"pos={robot_pos_2d}, yaw={robot_yaw:.2f}"
             )
 
+            # Step the environment
             states, rewards, terminated, truncated, infos = env.step({robot_name: action})
             if terminated or truncated:
                 print(
@@ -475,9 +530,7 @@ def main(headless=False, short_exec=False):
 
         print(f"[INFO] Episode {ep_i} finished or max steps reached.")
 
-        # -----------------------------------------------------------
-        # (B) Save the graph (nodes & edges) for this episode
-        # -----------------------------------------------------------
+        # Save the graph (nodes & edges) for this episode
         save_topomap_yaml(episode_map_dir)
 
     env.close()
