@@ -8043,15 +8043,15 @@ stages:
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/usd_conversion/usdify_objects.py
-      md5: 6a74ed2ec714f60fd3cfa708d3fe07d0
-      size: 6551
+      md5: 668673e3b8607a5e5856221146261efa
+      size: 6825
     - path: b1k_pipeline/usd_conversion/usdify_objects_process.py
       md5: 80714c5802597ae0ee4e712d1bceb12e
       size: 4318
     outs:
     - path: artifacts/parallels/objects_usd.zip
-      md5: 87345fe975794e67aa07003335dab075
-      size: 6224891999
+      md5: ded9b90241392a7e5763ad58f9ffdd74
+      size: 1678584
     - path: artifacts/pipeline/usdify_objects.json
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
       size: 51

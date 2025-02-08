@@ -1,6 +1,8 @@
 import json
 import os
+import signal
 import subprocess
+import sys
 from dask.distributed import Client, as_completed
 import fs.copy
 from fs.multifs import MultiFS
@@ -11,12 +13,19 @@ import tqdm
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR, launch_cluster
 
 WORKER_COUNT = 2
+MAX_TIME_PER_PROCESS = 20 * 60  # 20 minutes
 
 def run_on_scene(dataset_path, scene):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_scenes_process", dataset_path, scene]
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + " ".join(python_cmd)]
     with open(f"/scr/ig_pipeline/logs/{scene}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{scene}.err", "w") as ferr:
-        return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")
+        try:
+            p = subprocess.Popen(cmd, stdout=f, stderr=ferr, cwd="/scr/ig_pipeline", start_new_session=True)
+            return p.wait(timeout=MAX_TIME_PER_PROCESS)
+        except subprocess.TimeoutExpired:
+            print(f'Timeout for {scene} ({MAX_TIME_PER_PROCESS}s) expired. Killing', file=sys.stderr)
+            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
+            return p.wait()
 
 def main():
     with PipelineFS() as pipeline_fs, \

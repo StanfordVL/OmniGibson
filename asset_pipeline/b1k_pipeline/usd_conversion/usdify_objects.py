@@ -2,7 +2,9 @@ import json
 import math
 import os
 import random
+import signal
 import subprocess
+import sys
 import traceback
 from dask.distributed import Client, as_completed
 import fs.copy
@@ -15,17 +17,20 @@ from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
 WORKER_COUNT = 4
 BATCH_SIZE = 32
+MAX_TIME_PER_PROCESS = 5 * 60  # 5 minutes
 
 def run_on_batch(dataset_path, batch):
-    try:
-        python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
-        cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + " ".join(python_cmd)]
-        obj = batch[0][:-1].split("/")[-1]
-        with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}.err", "w") as ferr:
-            return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")
-    except:
-        # The exception cannot be pickled well, so we just return its message as a ValueError.
-        raise ValueError(traceback.format_exc())
+    python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_objects_process", dataset_path] + batch
+    cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + " ".join(python_cmd)]
+    obj = batch[0][:-1].split("/")[-1]
+    with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}.err", "w") as ferr:
+        try:
+            p = subprocess.Popen(cmd, stdout=f, stderr=ferr, cwd="/scr/ig_pipeline", start_new_session=True)
+            return p.wait(timeout=MAX_TIME_PER_PROCESS)
+        except subprocess.TimeoutExpired:
+            print(f'Timeout for {batch} ({MAX_TIME_PER_PROCESS}s) expired. Killing', file=sys.stderr)
+            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
+            return p.wait()
 
 
 def main():
@@ -77,11 +82,7 @@ def main():
                 for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
                     # Check the batch results.
                     batch = futures[future]
-                    try:
-                        future.result()
-                    except Exception as e:
-                        pass
-                        # print(e)
+                    return_code = future.result()  # we dont use the return code since we check the output files directly
 
                     # Remove everything that failed and make a new batch from them.
                     new_batch = []
@@ -113,6 +114,7 @@ def main():
                                 run_on_batch,
                                 dataset_fs.getsyspath("/"),
                                 subbatch,
+                                retries=(1 if len(subbatch) == 1 else 0),  # Retry once if we are only processing one item
                                 pure=False)
                             futures[worker_future] = subbatch
                         del futures[future]
