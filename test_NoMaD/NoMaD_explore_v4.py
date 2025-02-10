@@ -7,6 +7,7 @@ import shutil
 import time
 from PIL import Image as PILImage
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
+from collections import deque
 
 # Local imports (change paths if necessary)
 from deployment.src.utils import to_numpy, transform_images, load_model
@@ -48,17 +49,14 @@ ADD_NODE_DIST = 0.5  # 0.5m movement triggers new node
 node_index = 0
 
 # Our global data structures for the topological map:
-topomap_nodes = (
-    []
-)  # List[ { "idx": int, "pos": (x,y), "yaw": float, "img_path": str}, ... ]
-topomap_edges = {}  # Dict[ node_idx -> Set[node_idx] ]
+topomap_nodes = []  # [{"idx": int, "pos": (x,y), "yaw": float, "img_path": str}, ...]
+topomap_edges = {}  # Dict[node_idx -> set(node_idx, ...)]
 unvisited_frontiers = set()  # Which node indices might lead to unexplored areas?
+
 
 ##############################################################################
 # Utility Functions
 ##############################################################################
-
-
 def clip_angle(theta: float) -> float:
     """Clip angle to [-pi, pi]."""
     theta = np.mod(theta, 2.0 * np.pi)
@@ -152,6 +150,7 @@ def sample_diffusion_action(
 ):
     """
     Runs the diffusion model in *goal-free* mode (mask=1) to predict (dx, dy) for exploration.
+    Now randomly picks one of the 'num_samples' trajectories for added diversity.
     """
     obs_tensor = transform_images(
         obs_images, model_params["image_size"], center_crop=False
@@ -162,15 +161,20 @@ def sample_diffusion_action(
         obs_cond = model(
             "vision_encoder", obs_img=obs_tensor, goal_img=fake_goal, input_goal_mask=mask
         )
+
+        # Expand for multiple samples
         if obs_cond.ndim == 2:
             obs_cond = obs_cond.repeat(args.num_samples, 1)
         else:
             obs_cond = obs_cond.repeat(args.num_samples, 1, 1)
 
+        # Initialize action from Gaussian noise
         noisy_action = torch.randn(
             (args.num_samples, model_params["len_traj_pred"], 2), device=device
         )
         naction = noisy_action
+
+        # Diffusion steps
         noise_scheduler.set_timesteps(model_params["num_diffusion_iters"])
         for k in noise_scheduler.timesteps:
             noise_pred = model(
@@ -180,11 +184,19 @@ def sample_diffusion_action(
                 model_output=noise_pred, timestep=k, sample=naction
             ).prev_sample
 
-    naction = to_numpy(get_action(naction))  # (num_samples, len_traj_pred, 2)
-    chosen_traj = naction[0]
+    # Convert to numpy
+    naction = to_numpy(get_action(naction))  # shape: (num_samples, len_traj_pred, 2)
+
+    # Randomly pick one of the 'num_samples' trajectories
+    chosen_idx = np.random.randint(0, args.num_samples)
+    chosen_traj = naction[chosen_idx]
+
+    # Take the 'args.waypoint'-th step from that trajectory
     waypoint = chosen_traj[args.waypoint]
     dist_wp = np.linalg.norm(waypoint)
-    print(f"[DIFFUSION] Sampled waypoint dist={dist_wp:.3f}, waypoint={waypoint}")
+    print(
+        f"[DIFFUSION] Sampled waypoint dist={dist_wp:.3f}, waypoint={waypoint} (sample_idx={chosen_idx})"
+    )
     return waypoint
 
 
@@ -205,9 +217,6 @@ def save_topomap_yaml():
 ##############################################################################
 # Graph + Frontier Utilities
 ##############################################################################
-from collections import deque
-
-
 def compute_path(start_idx, goal_idx, edges_dict):
     """
     Simple BFS to find a path (list of node indices) from start_idx to goal_idx
@@ -215,6 +224,7 @@ def compute_path(start_idx, goal_idx, edges_dict):
     """
     if start_idx == goal_idx:
         return [start_idx]
+
     visited = set()
     queue = deque([[start_idx]])
     while queue:
@@ -257,27 +267,25 @@ def go_to_node(goal_idx, model, device, noise_scheduler, model_params, env, robo
     goal_img_path = topomap_nodes[goal_idx]["img_path"]
     goal_img = PILImage.open(goal_img_path)
 
-    # We will do multiple steps until we are "close enough" to the goal node
+    # We'll do multiple steps until we are "close enough" to the goal node
     mask = torch.zeros(1).long().to(device)  # 0 => we have a real goal
     max_iters = 200
 
     for i in range(max_iters):
-        # (A) Get current robot state
-        states = env.step({robot_name: np.array([0.0, 0.0], dtype=np.float32)})[
-            0
-        ]  # small no-op step
+        # (A) Get current robot state (small no-op step)
+        states = env.step({robot_name: np.array([0.0, 0.0], dtype=np.float32)})[0]
         robot_state = states[robot_name]
         proprio = robot_state["proprio"]
         robot_pos_2d = proprio[:2]
 
-        # Check if we've arrived
+        # Check arrival
         goal_pos = topomap_nodes[goal_idx]["pos"]
         dist_to_goal = np.linalg.norm(np.array(goal_pos) - robot_pos_2d.numpy())
         if dist_to_goal < 0.3:  # threshold for arrival
             print(f"[GOAL] Reached node={goal_idx}, dist={dist_to_goal:.2f}")
             return
 
-        # (B) Get new observation
+        # (B) Get observation
         camera_key = f"{robot_name}:eyes:Camera:0"
         camera_output = robot_state[camera_key]
         rgb_tensor = camera_output["rgb"]
@@ -291,7 +299,7 @@ def go_to_node(goal_idx, model, device, noise_scheduler, model_params, env, robo
             goal_img, model_params["image_size"], center_crop=False
         ).to(device)
 
-        # (D) Forward pass through the model
+        # (D) Forward pass through the model (goal-conditioned)
         with torch.no_grad():
             obs_cond = model(
                 "vision_encoder",
@@ -313,12 +321,12 @@ def go_to_node(goal_idx, model, device, noise_scheduler, model_params, env, robo
                     model_output=noise_pred, timestep=k, sample=naction
                 ).prev_sample
 
-        # (E) Take the first step from the predicted trajectory
+        # (E) Take the first step from predicted trajectory
         action_traj = to_numpy(get_action(naction))  # shape (1, len_traj_pred, 2)
         waypoint = action_traj[0][0]  # e.g., the first step
         velocity_cmd = pd_controller(waypoint, DT, MAX_V, MAX_W)
 
-        # (F) Step environment with the chosen velocities
+        # (F) Step environment with chosen velocities
         env.step({robot_name: velocity_cmd})
 
     print(f"[WARN] Timed out trying to reach node={goal_idx} after {max_iters} steps.")
@@ -366,11 +374,10 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Basic parameters
     context_queue = []
     context_size = model_params["context_size"]
-    max_episodes = 10 if not short_exec else 1
+    max_episodes = 2 if not short_exec else 1
 
     # Steps for local "goal-free" exploration
-    # (you can tweak these)
-    local_exploration_steps = 200
+    local_exploration_steps = 1000
 
     # Arg-like container
     class ArgObj:
@@ -388,12 +395,11 @@ def main(random_selection=False, headless=False, short_exec=False):
         context_queue.clear()
         print(f"\n[INFO] Starting episode={ep_i} ...")
 
-        ############################################################################
+        ####################################################################
         # 1) Local exploration (unconditional diffusion) for X steps
-        ############################################################################
+        ####################################################################
         action = np.array([0.0, 0.0], dtype=np.float32)
         for step_i in range(local_exploration_steps):
-            # Step environment
             states, rewards, terminated, truncated, infos = env.step({robot_name: action})
 
             robot_state = states[robot_name]
@@ -401,13 +407,13 @@ def main(random_selection=False, headless=False, short_exec=False):
             robot_pos_2d = proprio[:2]
             robot_yaw = proprio[3]  # or 5 if your array is different
 
-            # Get camera data
+            # (A) Convert camera -> PIL
             camera_key = f"{robot_name}:eyes:Camera:0"
             camera_output = robot_state[camera_key]
             rgb_tensor = camera_output["rgb"]
             obs_img = array_to_pil(rgb_tensor)
 
-            # (1) Add node if moved enough
+            # (B) Add node if we've moved enough
             if last_node_pos_2d is None:
                 add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw))
                 last_node_pos_2d = robot_pos_2d
@@ -417,14 +423,14 @@ def main(random_selection=False, headless=False, short_exec=False):
                     add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw))
                     last_node_pos_2d = robot_pos_2d
 
-            # (2) Fill the context queue
+            # (C) Update the context queue
             if len(context_queue) < context_size + 1:
                 context_queue.append(obs_img)
             else:
                 context_queue.pop(0)
                 context_queue.append(obs_img)
 
-            # (3) Sample from NoMaD diffusion if context is ready
+            # (D) Sample from NoMaD diffusion if context is ready
             if len(context_queue) > context_size:
                 waypoint_dxdy = sample_diffusion_action(
                     model=model,
@@ -438,7 +444,6 @@ def main(random_selection=False, headless=False, short_exec=False):
             else:
                 action = np.array([0.0, 0.0], dtype=np.float32)
 
-            # Print debug info
             print(
                 f"[Episode={ep_i}, Step={step_i}] action={action}, pos={robot_pos_2d}, yaw={np.degrees(robot_yaw):.2f}"
             )
@@ -449,28 +454,26 @@ def main(random_selection=False, headless=False, short_exec=False):
                 )
                 break
 
-        ############################################################################
+        ####################################################################
         # 2) If we have any frontier nodes, pick one and navigate to it
-        ############################################################################
+        ####################################################################
         if unvisited_frontiers:
-            # Find your current node
-            # (Take a small no-op step to get the latest state.)
+            # Small no-op step to get latest state
             states = env.step({robot_name: np.array([0.0, 0.0], dtype=np.float32)})[0]
             robot_state = states[robot_name]
             robot_pos_2d = robot_state["proprio"][:2]
             current_node = find_closest_node(robot_pos_2d)
             print(f"[FRONTIER] Current node = {current_node}")
 
-            # Pick a frontier node from the set (e.g. pop or pick nearest, etc.)
+            # Pick a frontier node from the set
             frontier_idx = unvisited_frontiers.pop()
             print(f"[FRONTIER] Chosen frontier node = {frontier_idx}")
 
-            # Compute BFS path in the graph
+            # BFS path in the graph
             path_nodes = compute_path(current_node, frontier_idx, topomap_edges)
             print(f"[FRONTIER] BFS path: {path_nodes}")
 
             # Traverse each node in that path (goal-conditioned)
-            # (Skipping the first index, which is current_node)
             for next_node in path_nodes[1:]:
                 go_to_node(
                     goal_idx=next_node,
@@ -485,7 +488,6 @@ def main(random_selection=False, headless=False, short_exec=False):
                 f"[FRONTIER] Arrived at frontier node={frontier_idx}. Resuming local exploration..."
             )
 
-        # End of one "episode" iteration
         print(
             f"[INFO] Finished local exploration + frontier navigation for episode {ep_i}."
         )
