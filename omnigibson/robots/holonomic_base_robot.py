@@ -7,7 +7,7 @@ import torch as th
 import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.macros import create_module_macros
-from omnigibson.controllers import JointController, HolonomicBaseJointController
+from omnigibson.controllers import HolonomicBaseJointController, MultiFingerGripperController
 from omnigibson.robots.locomotion_robot import LocomotionRobot
 from omnigibson.robots.manipulation_robot import ManipulationRobot
 from omnigibson.utils.geometry_utils import wrap_angle
@@ -372,9 +372,10 @@ class HolonomicBaseRobot(LocomotionRobot):
         """
         action = []
         for name, controller in self.controllers.items():
-            assert (
-                isinstance(controller, JointController) and not controller.use_delta_commands
-            ), f"Controller [{name}] should be a JointController/HolonomicBaseJointController with use_delta_commands=False!"
+            # TODO: temporary hack for mobile manipulation data gen (where the gripper controller is MultiFingerGripperController)
+            # assert (
+            #     isinstance(controller, JointController) and not controller.use_delta_commands
+            # ), f"Controller [{name}] should be a JointController/HolonomicBaseJointController with use_delta_commands=False!"
             command = q[controller.dof_idx]
             if isinstance(controller, HolonomicBaseJointController):
                 # For a holonomic base joint controller, the command should be in the robot local frame
@@ -387,6 +388,11 @@ class HolonomicBaseRobot(LocomotionRobot):
                 canonical_pos = th.tensor([command[0], command[1], body_pose[0][2]], dtype=th.float32)
                 local_pos = T.relative_pose_transform(canonical_pos, th.tensor([0.0, 0.0, 0.0, 1.0]), *body_pose)[0]
                 command = th.tensor([local_pos[0], local_pos[1], delta_q])
+
+            # TODO: temporary hack for mobile manipulation data gen (where the gripper controller is MultiFingerGripperController)
+            elif isinstance(controller, MultiFingerGripperController):
+                command = th.tensor([1.0])
+
             action.append(controller._reverse_preprocess_command(command))
         action = th.cat(action, dim=0)
         assert (

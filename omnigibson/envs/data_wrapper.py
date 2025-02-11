@@ -51,15 +51,18 @@ class DataWrapper(EnvironmentWrapper):
 
         self.current_traj_history = []
 
-        Path(os.path.dirname(output_path)).mkdir(parents=True, exist_ok=True)
-        log.info(f"\nWriting OmniGibson dataset hdf5 to: {output_path}\n")
-        self.hdf5_file = h5py.File(output_path, "w")
-        data_grp = self.hdf5_file.create_group("data")
         env.task.write_task_metadata()
         scene_file = og.sim.save()[0]
-        config = deepcopy(env.config)
-        self.add_metadata(group=data_grp, name="config", data=config)
-        self.add_metadata(group=data_grp, name="scene_file", data=scene_file)
+
+        self.hdf5_file = None
+        if output_path is not None:
+            Path(os.path.dirname(output_path)).mkdir(parents=True, exist_ok=True)
+            log.info(f"\nWriting OmniGibson dataset hdf5 to: {output_path}\n")
+            self.hdf5_file = h5py.File(output_path, "w")
+            data_grp = self.hdf5_file.create_group("data")
+            config = deepcopy(env.config)
+            self.add_metadata(group=data_grp, name="config", data=config)
+            self.add_metadata(group=data_grp, name="scene_file", data=scene_file)
 
         # Run super
         super().__init__(env=env)
@@ -628,7 +631,7 @@ class DataPlaybackWrapper(DataWrapper):
         step_data["truncated"] = truncated
         return step_data
 
-    def playback_episode(self, episode_id, record_data=True, video_writer=None, video_rgb_key=None):
+    def playback_episode(self, episode_id, record_data=True, video_writer=None, video_rgb_key=None, callback=None):
         """
         Playback episode @episode_id, and optionally record observation data if @record is True
 
@@ -654,12 +657,16 @@ class DataPlaybackWrapper(DataWrapper):
         terminated = traj_grp["terminated"]
         truncated = traj_grp["truncated"]
 
+        result = []
+
         # Reset environment
         og.sim.restore(scene_files=[self.scene_file])
         self.reset()
 
         # Restore to initial state
         og.sim.load_state(state[0, : int(state_size[0])], serialized=True)
+        if callback is not None:
+            result.append(callback(state=state[0, : int(state_size[0])], action=action[0]))
 
         # If record, record initial observations
         if record_data:
@@ -692,6 +699,8 @@ class DataPlaybackWrapper(DataWrapper):
                 # Restore the sim state, and take a very small step with the action to make sure physics are
                 # properly propagated after the sim state update
                 og.sim.load_state(s[: int(ss)], serialized=True)
+                if callback is not None:
+                    result.append(callback(state=s[: int(ss)], action=a))
 
             self.current_obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
 
@@ -717,7 +726,9 @@ class DataPlaybackWrapper(DataWrapper):
         if record_data:
             self.flush_current_traj()
 
-    def playback_dataset(self, record_data=False, video_writer=None, video_rgb_key=None):
+        return result
+
+    def playback_dataset(self, record_data=False, video_writer=None, video_rgb_key=None, callback=None):
         """
         Playback all episodes from the input HDF5 file, and optionally record observation data if @record is True
 
@@ -727,13 +738,18 @@ class DataPlaybackWrapper(DataWrapper):
             video_rgb_key (None or str): If specified, observation key representing the RGB frames to write to video.
                 If @video_writer is specified, this must also be specified!
         """
+        results = []
         for episode_id in range(self.input_hdf5["data"].attrs["n_episodes"]):
-            self.playback_episode(
-                episode_id=episode_id,
-                record_data=record_data,
-                video_writer=video_writer,
-                video_rgb_key=video_rgb_key,
+            results.append(
+                self.playback_episode(
+                    episode_id=episode_id,
+                    record_data=record_data,
+                    video_writer=video_writer,
+                    video_rgb_key=video_rgb_key,
+                    callback=callback,
+                )
             )
+        return results
 
     def create_video_writer(self, fpath, fps=30):
         """

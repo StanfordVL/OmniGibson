@@ -153,3 +153,6 @@ class HolonomicBaseJointController(JointController):
             command = cb.cat([linear_velocity, angular_velocity])
 
         return super()._update_goal(command=command, control_dict=control_dict)
+
+    def _compute_no_op_command(self, control_dict):
+        return cb.zeros(self.command_dim)

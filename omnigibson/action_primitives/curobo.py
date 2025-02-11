@@ -31,6 +31,7 @@ class CuRoboEmbodimentSelection(str, Enum):
     BASE = "base"
     ARM = "arm"
     DEFAULT = "default"
+    ARM_NO_TORSO = "arm_no_torso"
 
 
 def create_world_mesh_collision(tensor_args, obb_cache_size=10, mesh_cache_size=2048, max_distance=0.05):

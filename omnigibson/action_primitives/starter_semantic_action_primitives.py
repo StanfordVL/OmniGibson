@@ -812,8 +812,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 - th.tensor or None: Joint positions to reach target pose or None if impossible to reach the target pose
                 - th.tensor: Indices for joints in the robot
         """
-        target_pos = {self.robot.eef_link_names[self.arm]: target_pose[0]}
-        target_quat = {self.robot.eef_link_names[self.arm]: target_pose[1]}
+        if isinstance(target_pose, tuple):
+            target_pose = {self.arm: target_pose}
+
+        target_pos = {}
+        target_quat = {}
+        for arm, pose in target_pose.items():
+            target_pos[self.robot.eef_link_names[arm]] = pose[0]
+            target_quat[self.robot.eef_link_names[arm]] = pose[1]
 
         target_pos = {k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_pos.items()}
         target_quat = {
@@ -1792,10 +1798,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if eef_pose is None:
             eef_pose, _ = self._sample_grasp_pose(obj)
 
+        if isinstance(eef_pose, tuple):
+            eef_pose = {self.arm: eef_pose}
+
         target_pose = eef_pose
 
         obj_rooms = (
-            obj.in_rooms if obj.in_rooms else [self.robot.scene._seg_map.get_room_instance_by_point(target_pose[0][:2])]
+            obj.in_rooms
+            if obj.in_rooms
+            else [self.robot.scene._seg_map.get_room_instance_by_point(target_pose[self.arm][0][:2])]
         )
 
         attempt = 0
@@ -1805,21 +1816,24 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         while attempt < sampling_attempts:
             candidate_poses = []
             for _ in range(self._curobo_batch_size):
+                candidate_2d_pose_correct_room = None
                 for _ in range(m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_FOR_CORRECT_ROOM):
                     distance = (th.rand(1) * (distance_hi - distance_lo) + distance_lo).item()
                     yaw = th.rand(1) * (yaw_hi - yaw_lo) + yaw_lo
                     candidate_2d_pose = th.cat(
                         [
-                            target_pose[0][0] + distance * th.cos(yaw),
-                            target_pose[0][1] + distance * th.sin(yaw),
+                            target_pose[self.arm][0][0] + distance * th.cos(yaw),
+                            target_pose[self.arm][0][1] + distance * th.sin(yaw),
                             yaw + math.pi - avg_arm_workspace_range,
                         ]
                     )
 
                     # Check room
                     if self.robot.scene._seg_map.get_room_instance_by_point(candidate_2d_pose[:2]) in obj_rooms:
+                        candidate_2d_pose_correct_room = candidate_2d_pose
                         break
-                candidate_poses.append(candidate_2d_pose)
+                if candidate_2d_pose_correct_room is not None:
+                    candidate_poses.append(candidate_2d_pose_correct_room)
 
             # Normally candidate_poses will have length equal to self._curobo_batch_size
             # In case we are unable to find a valid pose in the room, we will have less than self._curobo_batch_size.
@@ -1969,6 +1983,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             list of bool: Whether the default arm can reach all poses on the objects and is not in collision
                 at the specified 2d poses
         """
+        if isinstance(eef_pose, tuple):
+            eef_pose = {self.arm: eef_pose}
+
         # First check collisions for all candidate poses
         candidate_joint_positions = []
         if plan_with_open_gripper:
