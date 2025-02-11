@@ -17,47 +17,29 @@ def load_topomap(yaml_path):
     return topomap_nodes, topomap_edges
 
 
-def visualize_topomap(topomap_nodes, topomap_edges):
-    # same function as above
-    G = nx.Graph()
-    for node_info in topomap_nodes:
-        node_id = node_info["idx"]
-        pos_xy = node_info["pos"]
-        G.add_node(node_id, pos=pos_xy)
-    for src, nbrs in topomap_edges.items():
-        for tgt in nbrs:
-            G.add_edge(src, tgt)
-
-    pos_dict = nx.get_node_attributes(G, "pos")
-    plt.figure(figsize=(6, 6))
-    nx.draw(G, pos=pos_dict, with_labels=True, node_size=500, node_color="skyblue")
-    plt.axis("equal")
-    plt.show()
-
-
 def visualize_topomap_with_images(topomap_nodes, topomap_edges):
     """
-    Visualize the topological graph with each node's image placed at its (x,y) position
-    and display the node index above each image.
+    Visualize the topological graph with each node's image placed at its (x,y) position,
+    displaying the node index above each image, plus (x, y, yaw) info below the image.
     """
-    import matplotlib.pyplot as plt
-    import networkx as nx
-    import matplotlib.image as mpimg
-    from matplotlib.offsetbox import OffsetImage, AnnotationBbox
-
-    # 1) Build a NetworkX graph
     G = nx.Graph()
+
+    # 1) Build a NetworkX graph with node attributes
     for node_info in topomap_nodes:
         node_id = node_info["idx"]
         pos_xy = node_info["pos"]  # (x, y)
         img_path = node_info["img_path"]
-        G.add_node(node_id, pos=pos_xy, img_path=img_path)
+        yaw_val = node_info.get("yaw", 0.0)  # if 'yaw' not found, default 0
 
+        # Store 'yaw' in the node's data as well
+        G.add_node(node_id, pos=pos_xy, img_path=img_path, yaw=yaw_val)
+
+    # Add edges
     for src, neighbors in topomap_edges.items():
         for tgt in neighbors:
             G.add_edge(src, tgt)
 
-    # 2) Extract positions for drawing
+    # 2) Positions for drawing edges
     pos_dict = nx.get_node_attributes(G, "pos")
 
     # 3) Create figure/axis
@@ -66,14 +48,11 @@ def visualize_topomap_with_images(topomap_nodes, topomap_edges):
     # Draw edges in gray
     nx.draw_networkx_edges(G, pos_dict, ax=ax, edge_color="gray")
 
-    # Optionally, you could skip the built-in labels from NetworkX
-    # since we'll place our own labels near the images. But let's leave them for reference:
-    # nx.draw_networkx_labels(G, pos_dict, ax=ax, font_weight="bold")
-
-    # 4) Place each node's image and its label
+    # 4) Place each node's image and labels
     for node_id, data in G.nodes(data=True):
         x, y = data["pos"]
         img_path = data["img_path"]
+        yaw_val = data["yaw"]  # stored above
 
         # Attempt to load the node image
         try:
@@ -92,12 +71,11 @@ def visualize_topomap_with_images(topomap_nodes, topomap_edges):
         )
         ax.add_artist(ab)
 
-        # Place a text label (e.g., "Node 3") slightly above the image
-        # The offset (0.2) can be tweaked based on zoom or your coordinate scale
-        label_offset = 0.2
+        # (A) Node ID label (above image)
+        label_offset_above = 0.25
         ax.text(
             x,
-            y + label_offset,
+            y + label_offset_above,
             f"Node {node_id}",
             ha="center",
             va="bottom",
@@ -106,17 +84,25 @@ def visualize_topomap_with_images(topomap_nodes, topomap_edges):
             fontweight="bold",
         )
 
-    # Keep aspect ratio equal so positions look correct
+        # (B) (x, y, yaw) label (below image)
+        label_offset_below = -0.20
+        ax.text(
+            x,
+            y + label_offset_below,
+            f"X={x:.2f}, Y={y:.2f}\nYaw={yaw_val:.2f}",
+            ha="center",
+            va="top",
+            fontsize=8,
+            color="black",
+        )
+
+    # Keep aspect ratio equal
     plt.axis("equal")
     plt.title("Topological Graph with Node Images + Labels")
     plt.show()
 
 
-# Example usage:
 if __name__ == "__main__":
-    # topomap_path = "\\topomaps\images\dynamic_map\nodes_info.yaml"
     yaml_path = "./topomaps/images/dynamic_map/nodes_info.yaml"
     topomap_nodes, topomap_edges = load_topomap(yaml_path)
-    # visualize_topomap(topomap_nodes, topomap_edges)
-
     visualize_topomap_with_images(topomap_nodes, topomap_edges)
