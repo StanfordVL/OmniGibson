@@ -236,8 +236,8 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Basic parameters
     context_queue = []
     context_size = model_params["context_size"]
-    max_episodes = 10 if not short_exec else 1
-    steps_per_episode = 1500  # reduce if debugging
+    max_episodes = 1 if not short_exec else 1
+    steps_per_episode = 2000  # reduce if debugging
 
     # Arg-like container
     class ArgObj:

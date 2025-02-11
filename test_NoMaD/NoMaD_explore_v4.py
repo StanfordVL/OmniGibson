@@ -390,10 +390,10 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Basic parameters
     context_queue = []
     context_size = model_params["context_size"]
-    max_episodes = 2 if not short_exec else 1
+    max_episodes = 1 if not short_exec else 1
 
     # Steps for local "goal-free" exploration
-    local_exploration_steps = 200
+    local_exploration_steps = 1000
 
     # Arg-like container
     class ArgObj:
@@ -490,19 +490,19 @@ def main(random_selection=False, headless=False, short_exec=False):
             print(f"[FRONTIER] BFS path: {path_nodes}")
 
             # Traverse each node in that path (goal-conditioned)
-            for next_node in path_nodes[1:]:
-                go_to_node(
-                    goal_idx=next_node,
-                    model=model,
-                    device=device,
-                    noise_scheduler=noise_scheduler,
-                    model_params=model_params,
-                    env=env,
-                    robot_name=robot_name,
-                )
-            print(
-                f"[FRONTIER] Arrived at frontier node={frontier_idx}. Resuming local exploration..."
-            )
+            # for next_node in path_nodes[1:]:
+            #     go_to_node(
+            #         goal_idx=next_node,
+            #         model=model,
+            #         device=device,
+            #         noise_scheduler=noise_scheduler,
+            #         model_params=model_params,
+            #         env=env,
+            #         robot_name=robot_name,
+            #     )
+            # print(
+            #     f"[FRONTIER] Arrived at frontier node={frontier_idx}. Resuming local exploration..."
+            # )
 
         print(
             f"[INFO] Finished local exploration + frontier navigation for episode {ep_i}."
