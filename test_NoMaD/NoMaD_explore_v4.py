@@ -262,14 +262,19 @@ def go_to_node(goal_idx, model, device, noise_scheduler, model_params, env, robo
     """
     Uses *goal-conditioned* diffusion (mask=0) to navigate from current position
     to 'goal_idx' (a node in the topomap).
+
+    Now includes a local 'goal_context_queue' so the model gets (context_size+1) frames
+    concatenated along the channels, just like in local exploration.
     """
-    # Load the goal node's image
     goal_img_path = topomap_nodes[goal_idx]["img_path"]
     goal_img = PILImage.open(goal_img_path)
 
-    # We'll do multiple steps until we are "close enough" to the goal node
     mask = torch.zeros(1).long().to(device)  # 0 => we have a real goal
     max_iters = 200
+    context_size = model_params["context_size"]
+
+    # Local queue for storing the last (context_size + 1) images
+    goal_context_queue = []
 
     for i in range(max_iters):
         # (A) Get current robot state (small no-op step)
@@ -278,28 +283,39 @@ def go_to_node(goal_idx, model, device, noise_scheduler, model_params, env, robo
         proprio = robot_state["proprio"]
         robot_pos_2d = proprio[:2]
 
-        # Check arrival
+        # Check if we've arrived
         goal_pos = topomap_nodes[goal_idx]["pos"]
         dist_to_goal = np.linalg.norm(np.array(goal_pos) - robot_pos_2d.numpy())
         if dist_to_goal < 0.3:  # threshold for arrival
             print(f"[GOAL] Reached node={goal_idx}, dist={dist_to_goal:.2f}")
             return
 
-        # (B) Get observation
+        # (B) Get current observation
         camera_key = f"{robot_name}:eyes:Camera:0"
         camera_output = robot_state[camera_key]
         rgb_tensor = camera_output["rgb"]
         obs_img = array_to_pil(rgb_tensor)
 
-        # (C) Prepare for diffusion
+        # (C) Update the local context queue
+        if len(goal_context_queue) < (context_size + 1):
+            goal_context_queue.append(obs_img)
+            # If we don't have enough frames yet, skip diffusion this iteration
+            if len(goal_context_queue) < (context_size + 1):
+                continue
+        else:
+            # We already have (context_size + 1) frames, so remove oldest
+            goal_context_queue.pop(0)
+            goal_context_queue.append(obs_img)
+
+        # (D) Prepare for diffusion
         obs_tensor = transform_images(
-            obs_img, model_params["image_size"], center_crop=False
+            goal_context_queue, model_params["image_size"], center_crop=False
         ).to(device)
         goal_tensor = transform_images(
             goal_img, model_params["image_size"], center_crop=False
         ).to(device)
 
-        # (D) Forward pass through the model (goal-conditioned)
+        # (E) Diffusion forward pass (goal-conditioned)
         with torch.no_grad():
             obs_cond = model(
                 "vision_encoder",
@@ -321,12 +337,12 @@ def go_to_node(goal_idx, model, device, noise_scheduler, model_params, env, robo
                     model_output=noise_pred, timestep=k, sample=naction
                 ).prev_sample
 
-        # (E) Take the first step from predicted trajectory
+        # (F) Take the first step from predicted trajectory
         action_traj = to_numpy(get_action(naction))  # shape (1, len_traj_pred, 2)
-        waypoint = action_traj[0][0]  # e.g., the first step
+        waypoint = action_traj[0][0]
         velocity_cmd = pd_controller(waypoint, DT, MAX_V, MAX_W)
 
-        # (F) Step environment with chosen velocities
+        # (G) Step environment with chosen velocities
         env.step({robot_name: velocity_cmd})
 
     print(f"[WARN] Timed out trying to reach node={goal_idx} after {max_iters} steps.")
@@ -377,7 +393,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     max_episodes = 2 if not short_exec else 1
 
     # Steps for local "goal-free" exploration
-    local_exploration_steps = 1000
+    local_exploration_steps = 200
 
     # Arg-like container
     class ArgObj:
@@ -405,7 +421,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             robot_state = states[robot_name]
             proprio = robot_state["proprio"]
             robot_pos_2d = proprio[:2]
-            robot_yaw = proprio[3]  # or 5 if your array is different
+            robot_yaw = proprio[3]
 
             # (A) Convert camera -> PIL
             camera_key = f"{robot_name}:eyes:Camera:0"
@@ -423,7 +439,7 @@ def main(random_selection=False, headless=False, short_exec=False):
                     add_node(obs_img, robot_pos_2d, np.degrees(robot_yaw))
                     last_node_pos_2d = robot_pos_2d
 
-            # (C) Update the context queue
+            # (C) Update the context queue (for local exploration)
             if len(context_queue) < context_size + 1:
                 context_queue.append(obs_img)
             else:
