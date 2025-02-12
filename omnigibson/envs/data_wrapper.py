@@ -666,7 +666,7 @@ class DataPlaybackWrapper(DataWrapper):
         # Restore to initial state
         og.sim.load_state(state[0, : int(state_size[0])], serialized=True)
         if callback is not None:
-            result.append(callback(state=state[0, : int(state_size[0])], action=action[0]))
+            result.append(callback(action=action[0]))
 
         # If record, record initial observations
         if record_data:
