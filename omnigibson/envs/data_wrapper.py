@@ -700,7 +700,7 @@ class DataPlaybackWrapper(DataWrapper):
                 # properly propagated after the sim state update
                 og.sim.load_state(s[: int(ss)], serialized=True)
                 if callback is not None:
-                    result.append(callback(state=s[: int(ss)], action=a))
+                    result.append(callback(action=a))
 
             self.current_obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
 
