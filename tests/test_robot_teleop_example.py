@@ -138,6 +138,7 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     controller_config = {
         component: {"name": name} for component, name in controller_choices.items()
     }
+
     robot.reload_controllers(controller_config=controller_config)
 
     # Because the controllers have been updated, we need to update the initial state so the correct controller state
