@@ -13,6 +13,7 @@ from omnigibson.prims.cloth_prim import ClothPrim
 from omnigibson.prims.joint_prim import JointPrim
 from omnigibson.prims.rigid_prim import RigidPrim
 from omnigibson.prims.xform_prim import XFormPrim
+from omnigibson.prims.deformable_prim import DeformablePrim
 from omnigibson.utils.constants import JointAxis, JointType, PrimType
 from omnigibson.utils.ui_utils import suppress_omni_log
 from omnigibson.utils.usd_utils import PoseAPI, absolute_prim_path_to_scene_relative
@@ -100,7 +101,7 @@ class EntityPrim(XFormPrim):
 
     def _post_load(self):
         # If this is a cloth, delete the root link and replace it with the single nested mesh
-        if self._prim_type == PrimType.CLOTH:
+        if self._prim_type == PrimType.CLOTH or self._prim_type == PrimType.DEFORMABLE:
             # Verify only a single link and a single mesh exists
             old_link_prim = None
             cloth_mesh_prim = None
@@ -143,7 +144,7 @@ class EntityPrim(XFormPrim):
             else False
         )
 
-        if self._prim_type == PrimType.CLOTH:
+        if self._prim_type == PrimType.CLOTH or self._prim_type == PrimType.DEFORMABLE:
             assert not self._visual_only, "Cloth cannot be visual-only."
             assert len(self._links) == 1, f"Cloth entity prim can only have one link; got: {len(self._links)}"
             if gm.AG_CLOTH:
@@ -222,6 +223,10 @@ class EntityPrim(XFormPrim):
             elif self._prim_type == PrimType.CLOTH and prim.GetPrimTypeInfo().GetTypeName() == "Mesh":
                 # For cloth object, process prims that are Meshes
                 link_cls = ClothPrim
+            
+            elif self._prim_type == PrimType.DEFORMABLE and prim.GetPrimTypeInfo().GetTypeName() == "Mesh":
+                # For deformable object, process prims that are Meshes
+                link_cls = DeformablePrim
 
             # Keep track of all the links we will create. We can't create that just yet because we need to find
             # the base link first.
@@ -648,7 +653,7 @@ class EntityPrim(XFormPrim):
         assert og.sim.is_playing(), "Simulator must be playing in order to reset controllable object's joints!"
 
         # If this is a cloth, reset the particle positions
-        if self.prim_type == PrimType.CLOTH:
+        if self.prim_type == PrimType.CLOTH or self.prim_type == PrimType.DEFORMABLE:
             self.root_link.reset()
 
         # Otherwise, set all joints to have 0 position and 0 velocity if this object has joints

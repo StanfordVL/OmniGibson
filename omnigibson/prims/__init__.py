@@ -17,4 +17,5 @@ __all__ = [
     "RigidPrim",
     "VisualGeomPrim",
     "XFormPrim",
+    "DeformablePrim",
 ]

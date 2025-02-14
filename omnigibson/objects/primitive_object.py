@@ -64,7 +64,7 @@ class PrimitiveObject(StatefulObject):
                 collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
                 are satisfied (see object_base.py post_load function), else False.
             self_collisions (bool): Whether to enable self collisions for this object
-            prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
+            prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH, PrimType.DEFORMABLE}
             load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
                 loading this prim at runtime.
             abilities (None or dict): If specified, manually adds specific object states to this object. It should be
@@ -176,8 +176,10 @@ class PrimitiveObject(StatefulObject):
             visual_geom_prim = list(self.root_link.visual_meshes.values())[0]
         elif self._prim_type == PrimType.CLOTH:
             visual_geom_prim = self.root_link
+        elif self._prim_type == PrimType.DEFORMABLE:
+            visual_geom_prim = self.root_link
         else:
-            raise ValueError("Prim type must either be PrimType.RIGID or PrimType.CLOTH for loading a primitive object")
+            raise ValueError("Prim type must either be PrimType.RIGID or PrimType.CLOTH or PrimType.DEFORMABLE for loading a primitive object")
 
         visual_geom_prim.color = self._load_config["color"]
         visual_geom_prim.opacity = (

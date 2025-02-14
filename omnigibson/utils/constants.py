@@ -68,6 +68,7 @@ SPECIAL_JOINT_FRICTIONS = {
 class PrimType(IntEnum):
     RIGID = 0
     CLOTH = 1
+    DEFORMABLE = 2
 
 
 class EmitterType(IntEnum):

@@ -81,7 +81,7 @@ class DatasetObject(USDObject):
                 collisions). If None, then this value will be set to True if @fixed_base is True and some other criteria
                 are satisfied (see object_base.py post_load function), else False.
             self_collisions (bool): Whether to enable self collisions for this object
-            prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
+            prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH, PrimType.DEFORMABLE}
             load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
                 loading this prim at runtime.
             abilities (None or dict): If specified, manually adds specific object states to this object. It should be
@@ -274,7 +274,7 @@ class DatasetObject(USDObject):
                     link.mass = 0.0
                     link.density = density
 
-        elif self._prim_type == PrimType.CLOTH:
+        elif self._prim_type == PrimType.CLOTH or self._prim_type == PrimType.DEFORMABLE:
             self.root_link.mass = density * self.root_link.volume
 
     def _update_texture_change(self, object_state):
