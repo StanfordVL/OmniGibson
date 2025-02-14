@@ -114,7 +114,6 @@ def main():
                                 run_on_batch,
                                 dataset_fs.getsyspath("/"),
                                 subbatch,
-                                retries=(1 if len(subbatch) == 1 else 0),  # Retry once if we are only processing one item
                                 pure=False)
                             futures[worker_future] = subbatch
                         del futures[future]

@@ -21,11 +21,15 @@ def run_on_scene(dataset_path, scene):
     with open(f"/scr/ig_pipeline/logs/{scene}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{scene}.err", "w") as ferr:
         try:
             p = subprocess.Popen(cmd, stdout=f, stderr=ferr, cwd="/scr/ig_pipeline", start_new_session=True)
-            return p.wait(timeout=MAX_TIME_PER_PROCESS)
+            p.wait(timeout=MAX_TIME_PER_PROCESS)
         except subprocess.TimeoutExpired:
             print(f'Timeout for {scene} ({MAX_TIME_PER_PROCESS}s) expired. Killing', file=sys.stderr)
             os.killpg(os.getpgid(p.pid), signal.SIGKILL)
-            return p.wait()
+            p.wait()
+
+    # Check if the success file exists.
+    if not os.path.exists(f"{dataset_path}/scenes/{scene}/usdify_scenes.success"):
+        raise ValueError(f"Scene {scene} processing failed: no success file found. Check the logs.")
 
 def main():
     with PipelineFS() as pipeline_fs, \
@@ -68,11 +72,9 @@ def main():
             logs = {}
             for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
                 try:
-                    out = future.result()
-                    # logs[futures[future]] = out.stdout.decode("utf-8")
-                except subprocess.CalledProcessError as e:
+                    future.result()
+                except Exception as e:
                     print("Error in worker")
-                    # print(e.stdout.decode("utf-8"))
 
             # Move the USDs to the output FS
             print("Copying scene JSONs to output FS...")

@@ -26,6 +26,20 @@ from bddl.object_taxonomy import ObjectTaxonomy
 if __name__ == "__main__":
     og.launch()
 
+    # Here we need to save the kwargs for when we clear later. This is because the
+    # URDF importer will open a new stage and thus make the SimulationContext unusable,
+    # so og.clear()'s default implementation of getting the kwargs from the existing
+    # context will not work.
+    clear_kwargs = dict(
+        gravity=og.sim.gravity,
+        physics_dt=og.sim.get_physics_dt(),
+        rendering_dt=og.sim.get_rendering_dt(),
+        sim_step_dt=og.sim.get_sim_step_dt(),
+        viewer_width=og.sim.viewer_width,
+        viewer_height=og.sim.viewer_height,
+        device=og.sim.device,
+    )
+
     ot = ObjectTaxonomy()
 
     dataset_root = str(pathlib.Path(sys.argv[1]))
@@ -52,7 +66,7 @@ if __name__ == "__main__":
         obj_synset = ot.get_synset_from_category(obj_category)
         assert obj_synset is not None, f"Could not find synset for category {obj_category}"
         if "cloth" in ot.get_abilities(obj_synset):
-            og.clear()
+            og.clear(**clear_kwargs)
             empty_scene = Scene()
             og.sim.import_scene(empty_scene)
 
@@ -81,7 +95,7 @@ if __name__ == "__main__":
                 attrib_types_and_values[attrib_name] = (attrib.GetTypeName(), attrib.Get())
 
             # Clear the simulation again to remove the reference
-            og.clear()
+            og.clear(**clear_kwargs)
 
             # Open the USD file and add the attributes
             cloth_stage = lazy.pxr.Usd.Stage.Open(usd_path)

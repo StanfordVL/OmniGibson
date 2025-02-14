@@ -28,6 +28,7 @@ if __name__ == "__main__":
     scene = sys.argv[2]
     urdf_path = f"{dataset_root}/scenes/{scene}/urdf/{scene}_best.urdf"
     json_path = f"{dataset_root}/scenes/{scene}/json/{scene}_best.json"
+    success_path = f"{dataset_root}/scenes/{scene}/usdify_scenes.success"
 
     # Convert URDF to USD
     convert_scene_urdf_to_json(urdf=urdf_path, json_path=json_path)
@@ -38,6 +39,9 @@ if __name__ == "__main__":
     generate_maps_for_current_scene(scene)
     map_end = time.time()
     print("Generated maps in ", map_end - map_start, "seconds")
+
+    with open(success_path, "w") as f:
+        pass
 
     # Clear the sim
     og.sim.clear()
