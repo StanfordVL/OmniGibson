@@ -1,9 +1,13 @@
+import os
+import signal
 import subprocess
+import sys
 from dask.distributed import as_completed
 
 from fs.copy import copy_fs
 from fs.tempfs import TempFS
 from fs.osfs import OSFS
+from fs.multifs import MultiFS
 
 from b1k_pipeline.utils import PipelineFS, ParallelZipFS, TMP_DIR, launch_cluster, run_in_env
 
@@ -13,27 +17,37 @@ import tqdm
 BATCH_SIZE = 32
 assert(BATCH_SIZE % 2 == 0)
 WORKER_COUNT = 6
-
+MAX_TIME_PER_PROCESS = 5 * 60  # 5 minutes
 
 def run_on_batch(dataset_path, out_path, batch):
     python_cmd = ["python", "-m", "b1k_pipeline.generate_object_images_og", dataset_path, out_path] + batch
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + " ".join(python_cmd)]
     obj = batch[0][:-1].split("/")[-1]
     with open(f"/scr/ig_pipeline/logs/{obj}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{obj}.err", "w") as ferr:
-        return subprocess.run(cmd, stdout=f, stderr=ferr, check=True, cwd="/scr/ig_pipeline")
+        try:
+            p = subprocess.Popen(cmd, stdout=f, stderr=ferr, cwd="/scr/ig_pipeline", start_new_session=True)
+            return p.wait(timeout=MAX_TIME_PER_PROCESS)
+        except subprocess.TimeoutExpired:
+            print(f'Timeout for {batch} ({MAX_TIME_PER_PROCESS}s) expired. Killing', file=sys.stderr)
+            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
+            return p.wait()
 
 def main():
     with PipelineFS() as pipeline_fs, \
          ParallelZipFS("objects_usd.zip") as usd_fs, \
+         ParallelZipFS("objects.zip") as urdf_and_mtl_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs, \
          OSFS(pipeline_fs.makedirs("artifacts/pipeline/object_images", recreate=True).getsyspath("/")) as out_temp_fs:
         # Copy everything over to the dataset FS
         print("Copy everything over to the dataset FS...")
-        objdir_glob = list(usd_fs.glob("objects/*/*/"))
+        multi_fs = MultiFS()
+        multi_fs.add_fs('urdf', urdf_and_mtl_fs, priority=0)
+        multi_fs.add_fs('usd', usd_fs, priority=1)
+        objdir_glob = list(multi_fs.glob("objects/*/*/"))
         for item in tqdm.tqdm(objdir_glob):
-            if usd_fs.opendir(item.path).glob("usd/*.usd").count().files == 0:
+            if multi_fs.opendir(item.path).glob("usd/*.usd").count().files == 0:
                 continue
-            copy_fs(usd_fs.opendir(item.path), dataset_fs.makedirs(item.path))
+            copy_fs(multi_fs.opendir(item.path), dataset_fs.makedirs(item.path))
 
         # Launch the cluster
         dask_client = launch_cluster(WORKER_COUNT)
@@ -71,7 +85,7 @@ def main():
                         print(f"Failed on a single item {batch[0]}. Skipping.")
                     else:
                         print(f"Subdividing batch of length {len(batch)}")
-                        batch_names = ["-".join(x.split("/")[-3:-1]) for x in object_glob]
+                        batch_names = [x.split("/")[1] for x in object_glob]
                         batch_remaining = [path for path, name in zip(batch, batch_names) if not out_temp_fs.exists(f"{name}.webp")]
                         batch_size = len(batch_remaining) // 2
                         subbatches = [batch_remaining[:batch_size], batch_remaining[batch_size:]]

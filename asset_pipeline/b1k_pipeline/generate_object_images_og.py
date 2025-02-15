@@ -1,6 +1,6 @@
 import pathlib
 import sys
-import numpy as np
+import torch as th
 from PIL import Image
 import os
 
@@ -27,8 +27,8 @@ def main():
     env = og.Environment(configs=cfg)
 
     # Make it brighter
-    dome_light = og.sim.scene.skybox
-    dome_light.intensity = 0.5e4
+    dome_light = og.sim.skybox
+    dome_light.intensity = 0.25e4
 
     for item in batch:
         obj_category, obj_model = pathlib.Path(item).parts[-2:]
@@ -39,62 +39,70 @@ def main():
             model=obj_model,
             visual_only=True,
         )
-        og.sim.import_object(obj)
+        env.scene.add_object(obj)
         # Make sure the object fits in a box of unit size 1
-        obj.scale = (np.ones(3) / obj.aabb_extent).min()
+        obj.scale = (th.ones(3) / obj.aabb_extent).min()
         og.sim.play()
 
         # Move the object so that its center is at [0, 0, 1]
         camera_dist = obj.aabb_extent[:2].max() * 4.0
-        height_range = obj.aabb_extent[2] * 2.0
+        height_range = th.maximum(
+            th.sin(th.deg2rad(th.tensor(45.))) * camera_dist,  # Either 45 degrees
+            obj.aabb_extent[2] * 2.0  # Or twice the object height
+        )
         center_offset = obj.get_position() - obj.aabb_center
-        target_pos = np.array([0.0, 0.0, CENTER_HEIGHT])
+        target_pos = th.tensor([0.0, 0.0, CENTER_HEIGHT])
 
         # Place the center at [0, 0, CENTER_HEIGHT]
         obj.set_position_orientation(position=center_offset + target_pos, orientation=[0, 0, 0, 1])
         og.sim.viewer_camera.set_position_orientation(
-            position=np.array([camera_dist, 0, CENTER_HEIGHT]),
-            orientation=T.euler2quat(np.array([np.pi / 2.0, 0.0, np.pi / 2.0])),
+            position=th.tensor([camera_dist, 0, CENTER_HEIGHT]),
+            orientation=T.euler2quat(th.tensor([th.pi / 2.0, 0.0, th.pi / 2.0])),
             )
 
         og.sim.step()
         for _ in range(10):
             og.sim.render()
 
-        # 60 frames in total
-        timesteps = 60
+        total_time_ms = 6000
+        total_frames = 120
+        frame_duration = total_time_ms // total_frames
+        total_horizontal_revolutions = 3
+        total_vertical_revolutions = 2
+        total_joint_loops = 1.5
+        pitch_angular_velocity = th.tensor(2 * th.pi * total_vertical_revolutions / total_frames)
+        yaw_angular_velocity = th.tensor(2 * th.pi * total_horizontal_revolutions / total_frames)
+        joint_angular_velocity = th.tensor(2 * th.pi * total_joint_loops / total_frames)
         images = []
 
         # Open/close joints for 3 times (lower_limit -> upper_limit -> lower_limit, 3 times)
-        steps_per_joint = timesteps / 6
-        for i in range(timesteps):
-            camera_yaw = 2 * np.pi * i / timesteps
-            camera_pos = np.array([
-                np.cos(camera_yaw) * camera_dist,
-                np.sin(camera_yaw) * camera_dist,
-                np.sin(camera_yaw) * height_range + CENTER_HEIGHT,
+        for i in range(total_frames):
+            camera_yaw = th.tensor(yaw_angular_velocity * i)
+            camera_pos = th.tensor([
+                th.cos(camera_yaw) * camera_dist,
+                th.sin(camera_yaw) * camera_dist,
+                th.sin(pitch_angular_velocity * i) * height_range + CENTER_HEIGHT,
             ])
-            camera_pitch = np.arctan((CENTER_HEIGHT - camera_pos[2]) / camera_dist)
+            camera_pitch = th.arctan((CENTER_HEIGHT - camera_pos[2]) / camera_dist)
             og.sim.viewer_camera.set_position_orientation(
                 position=camera_pos,
-                orientation=T.euler2quat(np.array([camera_pitch + np.pi / 2.0, 0.0, camera_yaw + np.pi / 2.0])),
+                orientation=T.euler2quat(th.tensor([camera_pitch + th.pi / 2.0, 0.0, camera_yaw + th.pi / 2.0])),
             )
             if obj.n_dof > 0:
-                frac = (i % steps_per_joint) / steps_per_joint
-                j_frac = -1.0 + 2.0 * frac if (i // steps_per_joint) % 2 == 0 else 1.0 - 2.0 * frac
-                obj.set_joint_positions(positions=j_frac * np.ones(obj.n_dof), normalized=True, drive=False)
+                j_frac = th.sin(joint_angular_velocity * i)
+                obj.set_joint_positions(positions=j_frac * th.ones(obj.n_dof), normalized=True, drive=False)
 
             og.sim.step()
             og.sim.render()
             og.sim.render()
 
-            image = Image.fromarray(og.sim.viewer_camera.get_obs()[0]["rgb"].copy())
+            image = Image.fromarray(th.clone(og.sim.viewer_camera.get_obs()[0]["rgb"]).cpu().numpy())
             images.append(image)
 
-        og.sim.remove_object(obj)
+        env.scene.remove_object(obj)
 
         # 3-second webp
-        images[0].save(os.path.join(output_path, f"{obj_category}-{obj_model}.webp"), save_all=True, append_images=images[1:], duration=3000 // timesteps, loop=0)
+        images[0].save(os.path.join(output_path, f"{obj_model}.webp"), save_all=True, append_images=images[1:], duration=frame_duration, loop=0)
 
     # Shut down at the end
     og.shutdown()
