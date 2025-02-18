@@ -9,9 +9,7 @@ import sys
 import json
 import argparse
 import time
-import numpy as np
 from omnigibson.prims.xform_prim import XFormPrim
-from scipy.spatial.transform import Rotation as R
 import trimesh
 import omnigibson as og
 from omnigibson.utils.asset_utils import (
@@ -30,19 +28,22 @@ from PIL import Image
 import bddl.object_taxonomy
 from pathlib import Path
 from nltk.corpus import wordnet as wn
+import torch as th
 
 
 gm.ENABLE_FLATCACHE = True
 gm.USE_GPU_DYNAMICS = False
 
-LOW_PRECISION_ANGLE_INCREMENT = np.pi / 4
-ANGLE_INCREMENT = np.pi / 90
+PI = th.tensor(th.pi)
+LOW_PRECISION_ANGLE_INCREMENT = PI / 4
+ANGLE_INCREMENT = PI / 90
 FIXED_Y_SPACING = 0.1
 INTERESTING_ABILITIES = {"fillable", "openable", "cloth", "heatSource", "coldSource", "particleApplier", "particleRemover", "toggleable", "particleSource", "particleSink"}
 JOINT_SECONDS_PER_CYCLE = 4.0
 
 class BatchQAViewer:
     def __init__(self, record_path, your_id, total_ids, seed, pipeline_root):
+        self.env = None
         self.pipeline_root = pipeline_root
         self.record_path = record_path
         self.your_id = your_id
@@ -52,17 +53,22 @@ class BatchQAViewer:
             (cat, model) for cat in get_all_object_categories()
             for model in get_all_object_category_models(cat)
         }
-        self.filtered_objs = sorted({
-            (cat, model) for cat, model in self.all_objs
-            if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == self.your_id
-        })
+        filtered_objs_by_id = {
+            this_id: sorted({
+                (cat, model) for cat, model in self.all_objs
+                if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == this_id
+            })
+            for this_id in range(self.total_ids)
+        }
+        # print("Filtered objects by id:", {k: len(v) for k, v in filtered_objs_by_id.items()})
+        self.filtered_objs = filtered_objs_by_id[self.your_id]
         self.processed_objects = self.load_processed_objects()
         print("-"*80)
         print("IMPORTANT: VERIFY THIS NUMBER!")
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
-        print("You are running the 4.16.2 version of this script.")
+        print("You are running the 5.0.0 version of this script.")
         print("-"*80)
-        input("Press Enter to continue...")
+        # input("Press Enter to continue...")
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
 
         # Reference objects
@@ -73,9 +79,9 @@ class BatchQAViewer:
         self.precision_mode = False
 
         # Camera parameters
-        self.pan = 0.
-        self.tilt = 0.
-        self.dist = 3.
+        self.pan = th.tensor(0.)
+        self.tilt = th.tensor(0.)
+        self.dist = th.tensor(3.)
 
     @property
     def angle_increment(self):
@@ -118,7 +124,7 @@ class BatchQAViewer:
                 model=obj_model,
                 visual_only=True,
             )
-            og.sim.import_object(obj)
+            self.env.scene.add_object(obj)
             all_objects.append(obj)
 
         return all_objects
@@ -131,7 +137,7 @@ class BatchQAViewer:
             clear_debug_drawing()
 
         for index, obj in enumerate(all_objects):
-            obj_radius = np.linalg.norm(obj.aabb_extent[:2]) / 2.0
+            obj_radius = th.linalg.norm(obj.aabb_extent[:2]) / 2.0
             if index != 0:
                 y_coordinate += prev_obj_radius + FIXED_Y_SPACING + obj_radius
             obj_in_min = obj.get_position() - obj.aabb[0]
@@ -139,7 +145,7 @@ class BatchQAViewer:
             obj.set_position(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05])
 
             if should_draw:
-                draw_text(obj.name.replace("obj_", ""), [0, y_coordinate, -0.1], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
+                draw_text(obj.name.replace("obj_", ""), [0, y_coordinate, -0.1], T.euler2quat(th.tensor([th.pi / 2, 0, th.pi / 2])), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
 
             prev_obj_radius = obj_radius
 
@@ -149,7 +155,7 @@ class BatchQAViewer:
         center_y = (min_y + max_y) / 2
         length_y = max_y - min_y
         if should_draw:
-            draw_text(obj.category, [0, center_y, -0.3], R.from_euler("xz", [np.pi / 2, np.pi / 2]).as_quat(), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=length_y)
+            draw_text(obj.category, [0, center_y, -0.3], T.euler2quat(th.tensor([th.pi / 2, 0, th.pi / 2])), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=length_y)
         og.sim.step()
         og.sim.step()
         og.sim.step()
@@ -167,13 +173,13 @@ class BatchQAViewer:
             }, f)
 
     def set_camera_bindings(self, default_dist = 3.):
-        self.pan, self.tilt, self.dist = np.pi, 0., default_dist
+        self.pan, self.tilt, self.dist = PI, th.tensor(0.), th.tensor(default_dist)
         def update_camera(d_pan, d_tilt, d_dist):
-            self.pan = (self.pan + d_pan) % (2 * np.pi)
-            self.tilt = np.clip(self.tilt + d_tilt, -np.pi / 2, np.pi / 2)
-            self.dist = np.clip(self.dist + d_dist, 0, 100)
+            self.pan = (self.pan + d_pan) % (2 * th.pi)
+            self.tilt = th.clip(self.tilt + d_tilt, -th.pi / 2, th.pi / 2)
+            self.dist = th.clip(self.dist + d_dist, 0, 100)
         def reset_camera():
-            self.pan, self.tilt, self.dist = np.pi, 0., default_dist
+            self.pan, self.tilt, self.dist = PI, th.tensor(0.), th.tensor(default_dist)
 
         KeyboardEventHandler.add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.UP,
@@ -208,19 +214,20 @@ class BatchQAViewer:
     def update_camera(self, target):
         # Get the camera position by starting at the target point and moving back by the distance
         # along the negative pan / tilt direction
-        camera_pos = target - self.dist * np.array([
-            np.cos(self.pan) * np.cos(self.tilt),
-            np.sin(self.pan) * np.cos(self.tilt),
-            -np.sin(self.tilt),
+        camera_pos = target - self.dist * th.tensor([
+            th.cos(self.pan) * th.cos(self.tilt),
+            th.sin(self.pan) * th.cos(self.tilt),
+            -th.sin(self.tilt),
         ])
         # Camera matrix: note that this is the OpenGL frame, so the camera is looking down the negative z-axis
         # and the up vector is the positive y-axis.
-        camera_matrix = np.array([
+        weird_camera_frame = T.mat2quat(th.tensor([
             [0, 0, -1],
             [-1, 0, 0],
             [0, 1, 0],
-        ])
-        camera_orn = (R.from_euler("xyz", [0.0, self.tilt, self.pan]) * R.from_matrix(camera_matrix)).as_quat()
+        ]))
+        camera_orn = T.euler2quat(th.tensor([0.0, self.tilt, self.pan]))
+        camera_orn = T.quat_multiply(camera_orn, weird_camera_frame)
         og.sim.viewer_camera.set_position_orientation(camera_pos, camera_orn)
         # print(f"Camera position: {camera_pos}, target: {target}, pan: {pan}, tilt: {tilt}, dist: {dist}")
 
@@ -230,15 +237,15 @@ class BatchQAViewer:
 
         done = False
         skip = False
-        y_min = np.min([obj.aabb[0][1] for obj in all_objects])
-        y_max = np.max([obj.aabb[1][1] for obj in all_objects])
-        average_pos = np.mean([obj.aabb_center for obj in all_objects], axis=0)
+        y_min = th.min(th.tensor([obj.aabb[0][1] for obj in all_objects]))
+        y_max = th.max(th.tensor([obj.aabb[1][1] for obj in all_objects]))
+        average_pos = th.mean(th.stack([obj.aabb_center for obj in all_objects]), dim=0)
         # frame = 0
         # amplitude = (y_max - y_min) / 2
         # meters_per_second = 0.1
         # period = max(2 * amplitude / meters_per_second, 3)
         # frequency = 1 / period
-        # angular_velocity = 2 * np.pi * frequency
+        # angular_velocity = 2 * th.pi * frequency
 
         offset = 0.
 
@@ -277,8 +284,8 @@ class BatchQAViewer:
         print("Hit Numpad 4-6 to translate camera.")
 
         while not done:
-            y = np.clip(y_min + offset, y_min, y_max)
-            target = np.array([average_pos[0], y, average_pos[2]])
+            y = th.clip(y_min + offset, y_min, y_max)
+            target = th.tensor([average_pos[0], y, average_pos[2]])
             self.update_camera(target)
             og.sim.step()
             # frame += 1
@@ -335,7 +342,7 @@ class BatchQAViewer:
                         if mesh_points is None or len(mesh_points)==0:
                             continue
                         points.append(trimesh.transformations.transform_points(mesh_points, transform))
-                points = np.concatenate(points, axis=0)
+                points = th.concat(points, dim=0)
 
                 # Apply PCA to 3D points
                 from sklearn.decomposition import PCA
@@ -350,7 +357,7 @@ class BatchQAViewer:
                     pc = pca.components_[1]
 
                 # Compute the angle between the first principal component and the x-axis
-                angle = np.arctan2(pc[1], pc[0])
+                angle = th.arctan2(pc[1], pc[0])
 
                 if pca_axis == 1:
                     obj_first_pca_angle_map[obj] = angle
@@ -358,21 +365,23 @@ class BatchQAViewer:
                     obj_second_pca_angle_map[obj] = angle
 
             # Create a quaternion from this angle
-            rot = R.from_euler('z', angle)
+            rot = T.euler2quat(th.tensor([0, 0, angle]))
 
             # Apply the rotation to the object
-            obj.set_orientation(rot.as_quat())
+            obj.set_orientation(rot)
 
             # Reposition everything
             self.position_objects(all_objects)
             self.position_reference_objects(target_y=obj.aabb_center[1])
 
         def _rotate_object(axis, angle):
-            current_rot = R.from_quat(obj.get_orientation())
-            new_rot = R.from_euler(axis, angle) * current_rot
+            current_rot = obj.get_orientation()
+            rotation_delta = th.zeros(3)
+            rotation_delta["xyz".index(axis)] = angle
+            new_rot = T.quat_multiply(T.euler2quat(rotation_delta) * current_rot)
             # Round the new rotation to the nearest degree
-            rounded_rot = R.from_euler('xyz', np.deg2rad(np.round(np.rad2deg(new_rot.as_euler('xyz')))))
-            obj.set_orientation(rounded_rot.as_quat())
+            rounded_rot = T.euler2quat(th.deg2rad(th.round(th.rad2deg(T.quat2euler(new_rot)))))
+            obj.set_orientation(rounded_rot)
 
             # Reposition everything
             self.position_objects(all_objects)
@@ -558,18 +567,18 @@ class BatchQAViewer:
 
             # Apply any scale changes
             if len(scale_queue) > 0:
-                scale = np.array(obj.scale)
+                scale = th.tensor(obj.scale)
                 if any(s == 0 for s in scale_queue):
-                    scale = np.ones(3)  # Reset the scale
+                    scale = th.ones(3)  # Reset the scale
                 else:
-                    scale *= np.prod(scale_queue)
+                    scale *= th.prod(scale_queue)
                 _set_scale(scale)
                 scale_queue.clear()
 
             self.update_camera(obj.aabb_center)
             if step % 100 == 0:
                 scale_str = f"{obj.scale[0]:.2f}, {obj.scale[1]:.2f}, {obj.scale[2]:.2f}"
-                rotation = np.rad2deg(T.quat2euler(obj.get_orientation()))
+                rotation = th.rad2deg(T.quat2euler(obj.get_orientation()))
                 rotation_str = f"{rotation[0]:.2f}, {rotation[1]:.2f}, {rotation[2]:.2f}"
                 bbox_str = f"{obj.aabb_extent[0] * 100:.2f}cm, {obj.aabb_extent[1] * 100:.2f}cm, {obj.aabb_extent[2] * 100:.2f}cm"
                 print(f"Bounding box extent: {bbox_str}. Scale: {scale_str}. Rotation: {rotation_str}              ", end="\r")
@@ -612,7 +621,7 @@ class BatchQAViewer:
                 # During this part, we want to be moving the joints
                 for joint in obj.joints.values():
                     seconds_since_start = step * og.sim.get_rendering_dt()
-                    interpolation_point = 0.5 * np.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * np.pi) + 0.5
+                    interpolation_point = 0.5 * th.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * PI) + 0.5
                     target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
                     joint.set_pos(target_pos)
 
@@ -656,7 +665,7 @@ class BatchQAViewer:
 
         # Clean up.
         for obj in all_objects:
-            og.sim.remove_object(obj)
+            self.env.scene.remove_object(obj)
 
         return skip
 
@@ -679,19 +688,20 @@ class BatchQAViewer:
             model="dbhfuh",
             visual_only=True,
         )
-        og.sim.import_object(phone)
+        self.env.scene.add_object(phone)
         og.sim.step()
-        phone.links["togglebutton_0_0_link"].visible = False
-        phone.set_orientation(orientation=R.from_euler("yx", [np.pi / 2, np.pi/2]).as_quat())
+        phone.links["meta__base_link_togglebutton_0_0_link"].visible = False
+        phone.set_orientation(orientation=T.euler2quat(th.tensor([th.pi / 2, th.pi / 2, 0])))
 
         # Add a human into the scene
         curr_dir = os.path.dirname(os.path.realpath(__file__))
         human_usd_path = os.path.join(curr_dir, "HumanFemale/HumanFemale.usd")
         print("Human usd path: " + human_usd_path)
-        human_prim_path = "/World/human"
+        human_prim_path = "/World/scene_0/human"
         lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
-        human_prim = XFormPrim(human_prim_path, "human")
-        human_prim.set_orientation(R.from_euler("z", np.pi / 2).as_quat())
+        human_prim = XFormPrim(name="human", relative_prim_path="/human")
+        human_prim.load(self.env.scene)
+        human_prim.set_orientation(T.euler2quat(th.tensor([0, 0, th.pi / 2])))
         human_prim.scale = [0.012, 0.012, 0.012]
         og.sim.step()
 
@@ -702,16 +712,12 @@ class BatchQAViewer:
             print("Invalid id!")
             sys.exit(1)
 
-        # Check the BDDL version
-        assert "fillable" in bddl.object_taxonomy.ObjectTaxonomy().get_abilities("cabinet.n.01"), \
-            "Your BDDL version is too old. Please uninstall BDDL and pip install -e . within the latest develop branch."
-
         print(f"{len(self.processed_objects)}/{len(self.filtered_objs)} objects processed. {len(self.remaining_objects)} objects remaining.")
 
         # Load the environment and set the lighting parameters.
         cfg = {"scene": {"type": "Scene", "floor_plane_visible": False}}
-        env = og.Environment(configs=cfg)
-        dome_light = env.scene.skybox
+        self.env = og.Environment(configs=cfg)
+        dome_light = og.sim.skybox
         dome_light.intensity = 7.5e2
         dome_light.color = [1.0, 1.0, 1.0]
         dome_light.light_link.prim.GetAttribute("inputs:texture:file").Clear()
