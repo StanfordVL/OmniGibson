@@ -4,6 +4,7 @@ import subprocess
 import sys
 from dask.distributed import as_completed
 
+import fs.path
 from fs.copy import copy_fs
 from fs.tempfs import TempFS
 from fs.osfs import OSFS
@@ -14,7 +15,7 @@ from b1k_pipeline.utils import PipelineFS, ParallelZipFS, TMP_DIR, launch_cluste
 import tqdm
 
 
-BATCH_SIZE = 32
+BATCH_SIZE = 8
 assert(BATCH_SIZE % 2 == 0)
 WORKER_COUNT = 6
 MAX_TIME_PER_PROCESS = 5 * 60  # 5 minutes
@@ -47,15 +48,18 @@ def main():
         for item in tqdm.tqdm(objdir_glob):
             if multi_fs.opendir(item.path).glob("usd/*.usd").count().files == 0:
                 continue
+            objdir_normalized = fs.path.normpath(item.path)
+            obj_id = fs.path.basename(objdir_normalized)
+            if out_temp_fs.exists(f"{obj_id}.webp"):
+                continue
             copy_fs(multi_fs.opendir(item.path), dataset_fs.makedirs(item.path))
 
         # Launch the cluster
         dask_client = launch_cluster(WORKER_COUNT)
 
         # Start the batched run
-        object_glob = [x.path for x in dataset_fs.glob("objects/*/*/")]
-        object_names = ["-".join(x.split("/")[-3:-1]) for x in object_glob]
-        object_glob = [path for path, name in zip(object_glob, object_names) if not out_temp_fs.exists(f"{name}.webp")]
+        object_glob = [fs.path.normpath(x.path) for x in dataset_fs.glob("objects/*/*/")]
+
         print("Queueing batches.")
         print("Total count: ", len(object_glob))
         futures = {}
@@ -74,43 +78,51 @@ def main():
         print("Queued all batches. Waiting for them to finish...")
         while True:
             for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
+                # Check the batch results.
                 batch = futures[future]
-                try:
-                    future.result()
-                except Exception as e:
-                    # print(str(e))
-                    # print(e.stdout.decode("utf-8"))
-                    # print(e.stderr.decode("utf-8"))
-                    if len(batch) == 1:
-                        print(f"Failed on a single item {batch[0]}. Skipping.")
-                    else:
-                        print(f"Subdividing batch of length {len(batch)}")
-                        batch_names = [x.split("/")[1] for x in object_glob]
-                        batch_remaining = [path for path, name in zip(batch, batch_names) if not out_temp_fs.exists(f"{name}.webp")]
-                        batch_size = len(batch_remaining) // 2
-                        subbatches = [batch_remaining[:batch_size], batch_remaining[batch_size:]]
-                        for subbatch in subbatches:
-                            if not subbatch:
-                                continue
-                            worker_future = dask_client.submit(
-                                run_on_batch,
-                                dataset_fs.getsyspath("/"),
-                                out_temp_fs.getsyspath("/"),
-                                subbatch,
-                                pure=False)
-                            futures[worker_future] = subbatch
-                        del futures[future]
-                        # Restart the for loop so that the counter can update
-                        break
+                return_code = future.result()  # we dont use the return code since we check the output files directly
 
+                # Remove everything that failed and make a new batch from them.
+                new_batch = []
+                for item in batch:
+                    item_basename = fs.path.basename(item)
+                    expected_output = f"{item_basename}.webp"
+                    if not out_temp_fs.exists(expected_output):
+                        print("Could not find", expected_output)
+                        new_batch.append(item)
+
+                # If there's nothing to requeue, we are good!
+                if not new_batch:
+                    continue
+
+                # Otherwise, decide if we are going to requeue or just skip.
+                if len(batch) == 1:
+                    print(f"Failed on a single item {batch[0]}. Skipping.")
+                else:
+                    print(f"Subdividing batch of length {len(new_batch)}")
+                    batch_size = len(new_batch) // 2
+                    subbatches = [new_batch[:batch_size], new_batch[batch_size:]]
+                    for subbatch in subbatches:
+                        if not subbatch:
+                            continue
+                        worker_future = dask_client.submit(
+                            run_on_batch,
+                            dataset_fs.getsyspath("/"),
+                            subbatch,
+                            pure=False)
+                        futures[worker_future] = subbatch
+                    del futures[future]
+
+                    # Restart the for loop so that the counter can update
+                    break
             else:
                 # Completed successfully - break out of the while loop.
                 break
 
-        print("Archiving results...")
+    print("Archiving results...")
 
-        # At this point, out_temp_fs's contents will be zipped. Save the success file.
-        pipeline_fs.pipeline_output().touch("generate_images.success")
+    # At this point, out_temp_fs's contents will be zipped. Save the success file.
+    pipeline_fs.pipeline_output().touch("generate_images.success")
 
 
 if __name__ == "__main__":
