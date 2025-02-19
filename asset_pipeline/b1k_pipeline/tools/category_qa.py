@@ -61,7 +61,7 @@ class BatchQAViewer:
         filtered_objs_by_id = {
             this_id: sorted({
                 (cat, model) for cat, model in self.all_objs
-                if cat == "bottom_cabinet" # int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == this_id
+                if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == this_id
             })
             for this_id in range(self.total_ids)
         }
