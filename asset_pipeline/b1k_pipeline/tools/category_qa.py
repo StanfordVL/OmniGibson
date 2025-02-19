@@ -140,7 +140,7 @@ class BatchQAViewer:
             obj_radius = th.linalg.norm(obj.aabb_extent[:2]) / 2.0
             if index != 0:
                 y_coordinate += prev_obj_radius + FIXED_Y_SPACING + obj_radius
-            obj_in_min = obj.get_position() - obj.aabb[0]
+            obj_in_min = obj.get_position_orientation()[0] - obj.aabb[0]
 
             obj.set_position(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05])
 
@@ -161,7 +161,7 @@ class BatchQAViewer:
         og.sim.step()
 
     def save_object_results(self, obj, orientation, scale, complaints):
-        orientation = obj.get_orientation()
+        orientation = obj.get_position_orientation()[1]
         scale = obj.scale
         if not os.path.exists(os.path.join(self.record_path, obj.category)):
             os.makedirs(os.path.join(self.record_path, obj.category))
@@ -375,7 +375,7 @@ class BatchQAViewer:
             self.position_reference_objects(target_y=obj.aabb_center[1])
 
         def _rotate_object(axis, angle):
-            current_rot = obj.get_orientation()
+            current_rot = obj.get_position_orientation()[1]
             rotation_delta = th.zeros(3)
             rotation_delta["xyz".index(axis)] = angle
             new_rot = T.quat_multiply(T.euler2quat(rotation_delta) * current_rot)
@@ -578,7 +578,7 @@ class BatchQAViewer:
             self.update_camera(obj.aabb_center)
             if step % 100 == 0:
                 scale_str = f"{obj.scale[0]:.2f}, {obj.scale[1]:.2f}, {obj.scale[2]:.2f}"
-                rotation = th.rad2deg(T.quat2euler(obj.get_orientation()))
+                rotation = th.rad2deg(T.quat2euler(obj.get_position_orientation()[1]))
                 rotation_str = f"{rotation[0]:.2f}, {rotation[1]:.2f}, {rotation[2]:.2f}"
                 bbox_str = f"{obj.aabb_extent[0] * 100:.2f}cm, {obj.aabb_extent[1] * 100:.2f}cm, {obj.aabb_extent[2] * 100:.2f}cm"
                 print(f"Bounding box extent: {bbox_str}. Scale: {scale_str}. Rotation: {rotation_str}              ", end="\r")
@@ -587,7 +587,7 @@ class BatchQAViewer:
         print("-"*80)
 
         # Now we're done with bbox and scale and orientation. Save the data.
-        orientation = obj.get_orientation()
+        orientation = obj.get_position_orientation()[1]
         scale = obj.scale
 
         # Set the object back to visual only and reposition everything
@@ -670,14 +670,14 @@ class BatchQAViewer:
         return skip
 
     def position_reference_objects(self, target_y):
-        obj_in_center_frame = self.phone.get_position() - self.phone.aabb_center
-        obj_in_min_frame = self.phone.get_position() - self.phone.aabb[0]
-        obj_in_max_frame = self.phone.get_position() - self.phone.aabb[1]
+        obj_in_center_frame = self.phone.get_position_orientation()[0] - self.phone.aabb_center
+        obj_in_min_frame = self.phone.get_position_orientation()[0] - self.phone.aabb[0]
+        obj_in_max_frame = self.phone.get_position_orientation()[0] - self.phone.aabb[1]
         self.phone.set_position(position=[-0.05 + obj_in_max_frame[0], target_y + obj_in_center_frame[1], obj_in_min_frame[2]])
 
-        human_in_center_frame = self.human.get_position() - self.human.aabb_center
-        human_in_min_frame = self.human.get_position() - self.human.aabb[0]
-        human_in_max_frame = self.human.get_position() - self.human.aabb[1]
+        human_in_center_frame = self.human.get_position_orientation()[0] - self.human.aabb_center
+        human_in_min_frame = self.human.get_position_orientation()[0] - self.human.aabb[0]
+        human_in_max_frame = self.human.get_position_orientation()[0] - self.human.aabb[1]
         self.human.set_position([-0.1 + self.phone.aabb_extent[0] + human_in_max_frame[0], target_y + human_in_center_frame[1], human_in_min_frame[2]])
 
     def add_reference_objects(self):
@@ -830,14 +830,14 @@ class ObjectComplaintHandler:
 
     def get_questions(self, obj):
         messages = [
-            self._get_synset_question(obj),
-            self._get_substanceness_question(obj),
+            # self._get_synset_question(obj),
+            # self._get_substanceness_question(obj),
             self._get_ability_question(obj),
             self._get_category_question(obj),
             self._get_single_rigid_body_question(obj),
             self._get_appearance_question(obj),
             self._get_articulation_question(obj),
-            # self._get_collision_question(obj),
+            self._get_collision_question(obj),
         ]
 
         if "cloth" in self._get_synset_and_abilities(obj.category)[1]:
