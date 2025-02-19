@@ -423,7 +423,7 @@ class BatchQAViewer:
         _toggle_meta_visibility()
 
         joint_position_seed = th.tensor(0.)  # monotonically increasing, to be passed into th.sin
-        joints_moving = True
+        joints_moving = False
         def _toggle_joints():
             nonlocal joints_moving
             joints_moving = not joints_moving
@@ -601,31 +601,36 @@ class BatchQAViewer:
         )
         add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.KEY_1,
-            callback_fn=lambda: _set_complaint("appearance"),
-            description="add a visual appearance complaint"
-        )
-        add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.KEY_2,
-            callback_fn=lambda: _set_complaint("handle"),
-            description="add a handle-specific collision mesh complaint"
-        )
-        add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.KEY_3,
-            callback_fn=lambda: _set_complaint("collision"),
-            description="add a general collision complaint"
-        )
-        add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.KEY_4,
             callback_fn=lambda: _set_complaint("category"),
             description="add a category or synset complaint"
         )
         add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_2,
+            callback_fn=lambda: _set_complaint("appearance"),
+            description="add a visual appearance complaint"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_3,
+            callback_fn=lambda: _set_complaint("handle"),
+            description="add a handle-specific collision mesh complaint"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_4,
+            callback_fn=lambda: _set_complaint("collision"),
+            description="add a general collision complaint"
+        )
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.KEY_5,
-            callback_fn=lambda: _set_complaint("metalink"),
+            callback_fn=lambda: _set_complaint("joint"),
             description="add a meta link complaint"
         )
         add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.KEY_6,
+            callback_fn=lambda: _set_complaint("metalink"),
+            description="add a meta link complaint"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_7,
             callback_fn=lambda: _set_complaint("unknown"),
             description="add a generic complaint to be re-examined by the team"
         )
