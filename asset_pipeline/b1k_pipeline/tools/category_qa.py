@@ -41,6 +41,11 @@ FIXED_Y_SPACING = 0.1
 INTERESTING_ABILITIES = {"fillable", "openable", "cloth", "heatSource", "coldSource", "particleApplier", "particleRemover", "toggleable", "particleSource", "particleSink"}
 JOINT_SECONDS_PER_CYCLE = 4.0
 
+def add_keyboard_callback(key, callback_fn, description):
+    KeyboardEventHandler.add_keyboard_callback(key=key, callback_fn=callback_fn)
+    key_name = str(key).replace("KeyboardInput.", "").replace("_", " ")
+    print(f"Press {key_name} to {description}.")
+
 class BatchQAViewer:
     def __init__(self, record_path, your_id, total_ids, seed, pipeline_root):
         self.env = None
@@ -127,6 +132,15 @@ class BatchQAViewer:
             self.env.scene.add_object(obj)
             all_objects.append(obj)
 
+            # Make the collision meshes also visible
+            for link in obj.links.values():
+                for mesh in link.visual_meshes.values():
+                    mesh.purpose = "default"
+                    mesh.visible = not link.is_meta_link
+                for mesh in link.collision_meshes.values():
+                    mesh.purpose = "default"
+                    mesh.visible = False
+
         return all_objects
 
     def position_objects(self, all_objects, should_draw=True):
@@ -142,7 +156,7 @@ class BatchQAViewer:
                 y_coordinate += prev_obj_radius + FIXED_Y_SPACING + obj_radius
             obj_in_min = obj.get_position_orientation()[0] - obj.aabb[0]
 
-            obj.set_position(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05])
+            obj.set_position_orientation(position=[obj_in_min[0], y_coordinate, obj_in_min[2] + 0.05])
 
             if should_draw:
                 draw_text(obj.name.replace("obj_", ""), [0, y_coordinate, -0.1], T.euler2quat(th.tensor([th.pi / 2, 0, th.pi / 2])), color=(1.0, 0.0, 0.0, 1.0), line_size=3.0, anchor="topcenter", max_width=obj_radius, max_height=0.2)
@@ -181,33 +195,40 @@ class BatchQAViewer:
         def reset_camera():
             self.pan, self.tilt, self.dist = PI, th.tensor(0.), th.tensor(default_dist)
 
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.UP,
             callback_fn=lambda: update_camera(0, ANGLE_INCREMENT, 0),
+            description="tilt camera up"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.DOWN,
             callback_fn=lambda: update_camera(0, -ANGLE_INCREMENT, 0),
+            description="tilt camera down"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.LEFT,
             callback_fn=lambda: update_camera(-ANGLE_INCREMENT, 0, 0),
+            description="pan camera left"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.RIGHT,
             callback_fn=lambda: update_camera(ANGLE_INCREMENT, 0, 0),
+            description="pan camera right"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.PAGE_DOWN,
             callback_fn=lambda: update_camera(0, 0, 0.1),
+            description="zoom in"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.PAGE_UP,
             callback_fn=lambda: update_camera(0, 0, -0.1),
+            description="zoom out"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.END,
             callback_fn=lambda: reset_camera(),
+            description="reset camera"
         )
 
 
@@ -229,7 +250,6 @@ class BatchQAViewer:
         camera_orn = T.euler2quat(th.tensor([0.0, self.tilt, self.pan]))
         camera_orn = T.quat_multiply(camera_orn, weird_camera_frame)
         og.sim.viewer_camera.set_position_orientation(camera_pos, camera_orn)
-        # print(f"Camera position: {camera_pos}, target: {target}, pan: {pan}, tilt: {tilt}, dist: {dist}")
 
     def whole_batch_preview(self, all_objects):
         KeyboardEventHandler.initialize()
@@ -240,12 +260,6 @@ class BatchQAViewer:
         y_min = th.min(th.tensor([obj.aabb[0][1] for obj in all_objects]))
         y_max = th.max(th.tensor([obj.aabb[1][1] for obj in all_objects]))
         average_pos = th.mean(th.stack([obj.aabb_center for obj in all_objects]), dim=0)
-        # frame = 0
-        # amplitude = (y_max - y_min) / 2
-        # meters_per_second = 0.1
-        # period = max(2 * amplitude / meters_per_second, 3)
-        # frequency = 1 / period
-        # angular_velocity = 2 * th.pi * frequency
 
         offset = 0.
 
@@ -263,32 +277,84 @@ class BatchQAViewer:
             offset += d_offset
 
         # Set done when the user presses 'C'
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
             callback_fn=_set_done,
+            description="continue to object editing"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.HOME,
             callback_fn=_set_skip,
+            description="skip to next category"
         )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.A,
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_7,
             callback_fn=lambda: change_offset(-1),
+            description="pan camera left"
         )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.D,
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_9,
             callback_fn=lambda: change_offset(1),
+            description="pan camera right"
         )
-        print("Hit numpad enter to continue to object editing.")
-        print("Hit home to skip to the next category.")
-        print("Hit Numpad 4-6 to translate camera.")
+
+        def _rotate_category(axis, angle):
+            current_rot = all_objects[0].get_position_orientation()[1]
+            rotation_delta = th.zeros(3)
+            rotation_delta["xyz".index(axis)] = angle
+            new_rot = T.quat_multiply(T.euler2quat(rotation_delta), current_rot)
+            # Round the new rotation to the nearest degree
+            rounded_rot = T.euler2quat(th.deg2rad(th.round(th.rad2deg(T.quat2euler(new_rot)))))
+
+            for obj in all_objects:
+                obj.set_position_orientation(orientation=rounded_rot)
+
+            # Reposition everything
+            self.position_objects(all_objects)
+            self.position_reference_objects(target_y=all_objects[0].aabb_center[1])
+
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_3,
+            callback_fn=lambda: _rotate_category("z", self.angle_increment),
+            description="rotate category counterclockwise around z-axis"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_1,
+            callback_fn=lambda: _rotate_category("z", -self.angle_increment),
+            description="rotate category clockwise around z-axis"
+
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_2,
+            callback_fn=lambda: _rotate_category("y", self.angle_increment),
+            description="rotate category counterclockwise around y-axis"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_8,
+            callback_fn=lambda: _rotate_category("y", -self.angle_increment),
+            description="rotate category clockwise around y-axis"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_4,
+            callback_fn=lambda: _rotate_category("x", self.angle_increment),
+            description="rotate category counterclockwise around x-axis"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_6,
+            callback_fn=lambda: _rotate_category("x", -self.angle_increment),
+            description="rotate category clockwise around x-axis"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.NUMPAD_MULTIPLY,
+            callback_fn=lambda: [obj.set_position_orientation(orientation=[0, 0, 0, 1]) for obj in all_objects],
+            description="reset category orientation"
+        )
 
         while not done:
             y = th.clip(y_min + offset, y_min, y_max)
             target = th.tensor([average_pos[0], y, average_pos[2]])
             self.update_camera(target)
             og.sim.step()
-            # frame += 1
 
         KeyboardEventHandler.reset()
         return skip
@@ -302,7 +368,7 @@ class BatchQAViewer:
 
         done = False
         should_show_photo = False
-        should_do_complaints = True
+        quick_complaints = []
         scale_queue = []  # We queue scales to apply them all at once to avoid .play getting called from .step
         obj_first_pca_angle_map = {}
         obj_second_pca_angle_map = {}
@@ -311,13 +377,14 @@ class BatchQAViewer:
             nonlocal done
             done = True
 
-        def _set_complaint(filename):
-            # nonlocal should_do_complaints
-            # should_do_complaints = not should_do_complaints
-            # print("Set to do complaints:", should_do_complaints, "\n")
-            with open(os.path.join(r"D:\ig_pipeline", filename), 'a') as file:
-                file.write(obj.name.replace('obj_', '') + '\n')
-            print(f"Wrote {filename} complaint")
+        def _set_complaint(message):
+            quick_complaints.append({
+                "object": f"{obj.category}-{obj.model}",
+                "message": "QC: " + message,
+                "complaint": "quick complaint added during category & collision QA",
+                "processed": False,
+                "new": True,
+            })
 
         def _toggle_gravity():
             obj.visual_only = not obj.visual_only
@@ -325,6 +392,34 @@ class BatchQAViewer:
             # Reposition everything
             self.position_objects(all_objects)
             self.position_reference_objects(target_y=obj.aabb_center[1])
+
+        collision_visibility = True
+        def _toggle_collision_visibility():
+            # Disable all the visual meshes and enable all the collision ones
+            nonlocal collision_visibility
+            collision_visibility = not collision_visibility
+            for link in obj.links.values():
+                for mesh in link.visual_meshes.values():
+                    mesh.visible = not collision_visibility
+                for mesh in link.collision_meshes.values():
+                    mesh.visible = collision_visibility
+        # Warm this up
+        _toggle_collision_visibility()
+
+        meta_visibility = True
+        def _toggle_meta_visibility():
+            # Toggle the visibility of all the links
+            nonlocal meta_visibility
+            meta_visibility = not meta_visibility
+            for link in obj.links.values():
+                if not link.is_meta_link:
+                    continue
+                for mesh in link.visual_meshes.values():
+                    mesh.visible = meta_visibility
+                for mesh in link.collision_meshes.values():
+                    mesh.visible = meta_visibility
+        # Warm this up
+        _toggle_meta_visibility()
 
         def _align_to_pca(pca_axis):
             if pca_axis == 1 and obj in obj_first_pca_angle_map:
@@ -368,7 +463,7 @@ class BatchQAViewer:
             rot = T.euler2quat(th.tensor([0, 0, angle]))
 
             # Apply the rotation to the object
-            obj.set_orientation(rot)
+            obj.set_position_orientation(orientation=rot)
 
             # Reposition everything
             self.position_objects(all_objects)
@@ -378,10 +473,10 @@ class BatchQAViewer:
             current_rot = obj.get_position_orientation()[1]
             rotation_delta = th.zeros(3)
             rotation_delta["xyz".index(axis)] = angle
-            new_rot = T.quat_multiply(T.euler2quat(rotation_delta) * current_rot)
+            new_rot = T.quat_multiply(T.euler2quat(rotation_delta), current_rot)
             # Round the new rotation to the nearest degree
             rounded_rot = T.euler2quat(th.deg2rad(th.round(th.rad2deg(T.quat2euler(new_rot)))))
-            obj.set_orientation(rounded_rot)
+            obj.set_position_orientation(orientation=rounded_rot)
 
             # Reposition everything
             self.position_objects(all_objects)
@@ -406,132 +501,122 @@ class BatchQAViewer:
             should_show_photo = True
 
         # Other controls
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
             callback_fn=_set_done,
+            description="continue to complaint process"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_7,
             callback_fn=lambda: _align_to_pca(1),
+            description="align object to first principal component"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_9,
             callback_fn=lambda: _align_to_pca(2),
+            description="align object to second principal component"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_3,
             callback_fn=lambda: _rotate_object("z", self.angle_increment),
+            description="rotate object counterclockwise around z-axis"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_1,
             callback_fn=lambda: _rotate_object("z", -self.angle_increment),
+            description="rotate object clockwise around z-axis"
+
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_2,
             callback_fn=lambda: _rotate_object("y", self.angle_increment),
+            description="rotate object counterclockwise around y-axis"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_8,
             callback_fn=lambda: _rotate_object("y", -self.angle_increment),
+            description="rotate object clockwise around y-axis"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_4,
             callback_fn=lambda: _rotate_object("x", self.angle_increment),
+            description="rotate object counterclockwise around x-axis"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_6,
             callback_fn=lambda: _rotate_object("x", -self.angle_increment),
+            description="rotate object clockwise around x-axis"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_MULTIPLY,
-            callback_fn=lambda: obj.set_orientation([0, 0, 0, 1]),
+            callback_fn=lambda: obj.set_position_orientation(orientation=[0, 0, 0, 1]),
+            description="reset object orientation"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_0,
             callback_fn=_toggle_gravity,
+            description="toggle gravity for selected object"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_DEL,
             callback_fn=lambda: self._toggle_precision(),
+            description="toggle precision mode"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_ADD,
             callback_fn=lambda: scale_queue.append(self.scale_increment),
+            description="increase object scale"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_SUBTRACT,
             callback_fn=lambda: scale_queue.append(1 / self.scale_increment),
+            description="decrease object scale"
         )
-        KeyboardEventHandler.add_keyboard_callback(
+        add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
             callback_fn=lambda: scale_queue.append(0),
+            description="reset object scale"
         )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.X,
-        #     callback_fn=lambda: _set_complaint("todo-manual.txt"),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.S,
-        #     callback_fn=lambda: _set_complaint("todo-synset.txt"),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.C,
-        #     callback_fn=lambda: _set_complaint("todo-category.txt"),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.W,
-        #     callback_fn=lambda: _set_complaint("todo-thickness.txt"),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.Q,
-        #     callback_fn=lambda: _set_complaint("todo-multiple-pieces.txt"),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.A,
-        #     callback_fn=lambda: _set_complaint("todo-appearance.txt"),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.E,
-        #     callback_fn=lambda: _set_complaint("todo-unclosed.txt"),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.D,
-        #     callback_fn=lambda: _set_complaint("todo-glassness.txt"),
-        # )
-        # KeyboardEventHandler.add_keyboard_callback(
-        #     key=lazy.carb.input.KeyboardInput.R,
-        #     callback_fn=lambda: _set_complaint("todo-triangulation.txt"),
-        # )
-        KeyboardEventHandler.add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.V,
-            callback_fn=_show_photo,
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.C,
+            callback_fn=_toggle_collision_visibility,
+            description="toggle collision mesh visibility"
         )
-
-
-        print("-" * 80)
-        print("All of the below are numpad keys.")
-        print("Press '7' to align object to its first principal component.")
-        print("Press '9' to align object to its second principal component.")
-        print("Press '1', '3' to rotate object around z-axis.")
-        print("Press '4', '6' to rotate object around x-axis.")
-        print("Press '2', '8' to rotate object around y-axis.")
-        print("Press '*' to reset object orientation.")
-        print("Press '+', '-' to change object scale.")
-        print("Press '/' to reset object scale.")
-        print("Press '0' to toggle gravity for selected object.")
-        print("Press . to change between normal and precision mode. Angle and scale increments are much smaller in precision mode.")
-        # print("Press Z to complete the object.")
-        # print("Press X to select object for manual complaint.")
-        # print("Press C to make a category complaint.")
-        # print("Press S to make a synset complaint.")
-        # print("Press W to make a thickness complaint.")
-        # print("Press Q to make a multiple pieces complaint.")
-        # print("Press A to make an appearance complaint.")
-        # print("Press E to make an unclosed object complaint.")
-        # print("Press D to make a glassness complaint.")
-        # print("Press R to make a triangulation complaint.")
-        print("Press V to show photos of the object.")
-        print("Press 'Enter' to continue to complaint process.")
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.M,
+            callback_fn=_toggle_meta_visibility,
+            description="toggle meta link mesh visibility"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_1,
+            callback_fn=lambda: _set_complaint("appearance"),
+            description="add a visual appearance complaint"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_2,
+            callback_fn=lambda: _set_complaint("handle"),
+            description="add a handle-specific collision mesh complaint"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_3,
+            callback_fn=lambda: _set_complaint("collision"),
+            description="add a general collision complaint"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_5,
+            callback_fn=lambda: _set_complaint("category"),
+            description="add a category or synset complaint"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_6,
+            callback_fn=lambda: _set_complaint("metalink"),
+            description="add a meta link complaint"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.KEY_7,
+            callback_fn=lambda: _set_complaint("unknown"),
+            description="add a generic complaint to be re-examined by the team"
+        )
         print("-" * 80)
 
         print("\nEdit the currently selected object to match the realistic size of the category.")
@@ -555,7 +640,6 @@ class BatchQAViewer:
                 # Open the zip file
                 zip_path = os.path.join(self.pipeline_root, "artifacts", "pipeline", "max_object_images.zip")
                 with ZipFS(zip_path) as zip_fs:
-                    print(len(zip_fs.listdir("/")))
                     # Find and show photos of this object.
                     image_paths = sorted([x for x in zip_fs.listdir("/") if obj.name.replace("obj_", "") in x])
                     for image_path in image_paths:
@@ -600,47 +684,45 @@ class BatchQAViewer:
         KeyboardEventHandler.initialize()
         self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
 
-        complaints = []
-        if should_do_complaints:
-            # Launch the complaint thread
-            multiprocess_queue = multiprocessing.Queue()
-            questions = self.complaint_handler.get_questions(obj)
-            complaint_process = multiprocessing.Process(
-                target=self.complaint_handler.process_complaints,
-                args=[multiprocess_queue, obj.category, obj.name.replace("obj_", ""), questions, sys.stdin.fileno()],
-                daemon=True)
-            complaint_process.start()
+        # Launch the complaint thread
+        multiprocess_queue = multiprocessing.Queue()
+        questions = self.complaint_handler.get_questions(obj)
+        complaint_process = multiprocessing.Process(
+            target=self.complaint_handler.process_complaints,
+            args=[multiprocess_queue, obj.category, obj.name.replace("obj_", ""), questions, quick_complaints, sys.stdin.fileno()],
+            daemon=True)
+        complaint_process.start()
 
-            # Wait to receive the complaints
-            step = 0
-            while complaint_process.is_alive():
-                step += 1
-                og.sim.step()
-                self.update_camera(obj.aabb_center)
+        # Wait to receive the complaints
+        step = 0
+        while complaint_process.is_alive():
+            step += 1
+            og.sim.step()
+            self.update_camera(obj.aabb_center)
 
-                # During this part, we want to be moving the joints
-                for joint in obj.joints.values():
-                    seconds_since_start = step * og.sim.get_rendering_dt()
-                    interpolation_point = 0.5 * th.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * PI) + 0.5
-                    target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
-                    joint.set_pos(target_pos)
+            # During this part, we want to be moving the joints
+            for joint in obj.joints.values():
+                seconds_since_start = step * og.sim.get_rendering_dt()
+                interpolation_point = 0.5 * th.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * PI) + 0.5
+                target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
+                joint.set_pos(target_pos)
 
-                if not multiprocess_queue.empty():
-                    # Got a response, we can stop.
-                    break
+            if not multiprocess_queue.empty():
+                # Got a response, we can stop.
+                break
 
-            assert not multiprocess_queue.empty(), "Complaint process did not return a message."
-            message = multiprocess_queue.get()
-            complaints = json.loads(message)
+        assert not multiprocess_queue.empty(), "Complaint process did not return a message."
+        message = multiprocess_queue.get()
+        complaints = json.loads(message)
 
-            # Wait for the complaint process to finish to not have to kill it
-            time.sleep(0.5)
+        # Wait for the complaint process to finish to not have to kill it
+        time.sleep(0.5)
 
-            # If the complaint process is still alive, kill it.
-            if complaint_process.is_alive():
-                # Join the finished thread
-                complaint_process.join()
-                assert complaint_process.exitcode == 0, "Complaint process exited."
+        # If the complaint process is still alive, kill it.
+        if complaint_process.is_alive():
+            # Join the finished thread
+            complaint_process.join()
+            assert complaint_process.exitcode == 0, "Complaint process exited."
 
         # Save the object results
         self.save_object_results(obj, orientation, scale, complaints)
@@ -673,12 +755,12 @@ class BatchQAViewer:
         obj_in_center_frame = self.phone.get_position_orientation()[0] - self.phone.aabb_center
         obj_in_min_frame = self.phone.get_position_orientation()[0] - self.phone.aabb[0]
         obj_in_max_frame = self.phone.get_position_orientation()[0] - self.phone.aabb[1]
-        self.phone.set_position(position=[-0.05 + obj_in_max_frame[0], target_y + obj_in_center_frame[1], obj_in_min_frame[2]])
+        self.phone.set_position_orientation(position=[-0.05 + obj_in_max_frame[0], target_y + obj_in_center_frame[1], obj_in_min_frame[2]])
 
         human_in_center_frame = self.human.get_position_orientation()[0] - self.human.aabb_center
         human_in_min_frame = self.human.get_position_orientation()[0] - self.human.aabb[0]
         human_in_max_frame = self.human.get_position_orientation()[0] - self.human.aabb[1]
-        self.human.set_position([-0.1 + self.phone.aabb_extent[0] + human_in_max_frame[0], target_y + human_in_center_frame[1], human_in_min_frame[2]])
+        self.human.set_position_orientation(position=[-0.1 + self.phone.aabb_extent[0] + human_in_max_frame[0], target_y + human_in_center_frame[1], human_in_min_frame[2]])
 
     def add_reference_objects(self):
         # Add a cellphone into the scene
@@ -691,17 +773,16 @@ class BatchQAViewer:
         self.env.scene.add_object(phone)
         og.sim.step()
         phone.links["meta__base_link_togglebutton_0_0_link"].visible = False
-        phone.set_orientation(orientation=T.euler2quat(th.tensor([th.pi / 2, th.pi / 2, 0])))
+        phone.set_position_orientation(orientation=T.euler2quat(th.tensor([th.pi / 2, th.pi / 2, 0])))
 
         # Add a human into the scene
         curr_dir = os.path.dirname(os.path.realpath(__file__))
         human_usd_path = os.path.join(curr_dir, "HumanFemale/HumanFemale.usd")
-        print("Human usd path: " + human_usd_path)
         human_prim_path = "/World/scene_0/human"
         lazy.omni.isaac.core.utils.stage.add_reference_to_stage(usd_path=human_usd_path, prim_path=human_prim_path, prim_type="Xform")
         human_prim = XFormPrim(name="human", relative_prim_path="/human")
         human_prim.load(self.env.scene)
-        human_prim.set_orientation(T.euler2quat(th.tensor([0, 0, th.pi / 2])))
+        human_prim.set_position_orientation(orientation=T.euler2quat(th.tensor([0, 0, th.pi / 2])))
         human_prim.scale = [0.012, 0.012, 0.012]
         og.sim.step()
 
@@ -772,7 +853,7 @@ class ObjectComplaintHandler:
             filtered_complaints.append(complaint)
         return filtered_complaints
 
-    def process_complaints(self, queue, category, model, messages, stdin_fileno):
+    def process_complaints(self, queue, category, model, messages, quick_complaints, stdin_fileno):
         sys.stdin = os.fdopen(stdin_fileno)
 
         # Get existing complaints.
@@ -812,7 +893,9 @@ class ObjectComplaintHandler:
                 existing_complaints.append(complaint)
             print("-"*80)
 
-        queue.put(json.dumps(existing_complaints))
+        all_complaints = existing_complaints + quick_complaints
+
+        queue.put(json.dumps(all_complaints))
 
     def _process_single_complaint(self, message, category, model):
         print(message)
@@ -832,16 +915,16 @@ class ObjectComplaintHandler:
         messages = [
             # self._get_synset_question(obj),
             # self._get_substanceness_question(obj),
-            self._get_ability_question(obj),
-            self._get_category_question(obj),
-            self._get_single_rigid_body_question(obj),
-            self._get_appearance_question(obj),
-            self._get_articulation_question(obj),
-            self._get_collision_question(obj),
+            # self._get_ability_question(obj),
+            # self._get_category_question(obj),
+            # self._get_single_rigid_body_question(obj),
+            # self._get_appearance_question(obj),
+            # self._get_articulation_question(obj),
+            # self._get_collision_question(obj),
         ]
 
-        if "cloth" in self._get_synset_and_abilities(obj.category)[1]:
-            self._get_unfolded_question(obj),
+        # if "cloth" in self._get_synset_and_abilities(obj.category)[1]:
+        #     self._get_unfolded_question(obj),
 
         return messages
 
@@ -927,17 +1010,16 @@ class ObjectComplaintHandler:
         message = (
             "APPEARANCE: Confirm object visual appearance.\n"
             "Requirements:\n"
-            "- make sure the object has a valid texture or appearance (e.g., texture not black,\n"
+            "- make sure the object has a valid texture or appearance (e.g., texture not UNEXPECTEDLY black,\n"
             "       transparency rendered correctly, etc).\n"
             "- make sure any glass parts are transparent (would this object contain glass? e.g.\n"
             "       wall pictures, clocks, etc. - anything wrong)\n"
-            "- compare the object against the 3ds Max image that should open up now."
         )
         return message
 
     def _get_collision_question(self, obj):
         message = (
-            "COLLISION: Confirm object collision meshes.\n"
+            "COLLISION: Confirm object collision meshes (C to toggle on/off).\n"
             "Requirements:\n"
             "- make sure the collision meshes well approximate the original visual meshes\n"
             "- make sure the collision meshes don't lose any affordance (e.g., holes and handles are preserved)."
