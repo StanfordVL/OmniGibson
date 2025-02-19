@@ -73,7 +73,7 @@ class BatchQAViewer:
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
         print("You are running the 5.0.0 version of this script.")
         print("-"*80)
-        # input("Press Enter to continue...")
+        input("Press Enter to continue...")
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
 
         # Reference objects
