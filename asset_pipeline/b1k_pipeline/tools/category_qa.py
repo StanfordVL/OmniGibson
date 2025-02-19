@@ -61,7 +61,7 @@ class BatchQAViewer:
         filtered_objs_by_id = {
             this_id: sorted({
                 (cat, model) for cat, model in self.all_objs
-                if int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == this_id
+                if cat == "bottom_cabinet" # int(hashlib.md5((cat + self.seed).encode()).hexdigest(), 16) % self.total_ids == this_id
             })
             for this_id in range(self.total_ids)
         }
@@ -94,7 +94,7 @@ class BatchQAViewer:
 
     @property
     def scale_increment(self):
-        return 1.1 if self.precision_mode else 10.
+        return th.tensor(1.1) if self.precision_mode else th.tensor(10.)
 
     def _toggle_precision(self):
         self.precision_mode = not self.precision_mode
@@ -422,6 +422,12 @@ class BatchQAViewer:
         # Warm this up
         _toggle_meta_visibility()
 
+        joint_position_seed = th.tensor(0.)  # monotonically increasing, to be passed into th.sin
+        joints_moving = True
+        def _toggle_joints():
+            nonlocal joints_moving
+            joints_moving = not joints_moving
+
         def _align_to_pca(pca_axis):
             if pca_axis == 1 and obj in obj_first_pca_angle_map:
                 angle = obj_first_pca_angle_map[obj]
@@ -484,7 +490,7 @@ class BatchQAViewer:
             self.position_reference_objects(target_y=obj.aabb_center[1])
 
         def _set_scale(new_scale):
-            object_poses = {o: o.get_position_orientation() for o in og.sim.scene.objects}
+            object_poses = {o: o.get_position_orientation() for o in self.env.scene.objects}
             og.sim.stop()
             obj.scale = new_scale
             og.sim.play()
@@ -507,16 +513,16 @@ class BatchQAViewer:
             callback_fn=_set_done,
             description="continue to complaint process"
         )
-        add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_7,
-            callback_fn=lambda: _align_to_pca(1),
-            description="align object to first principal component"
-        )
-        add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.NUMPAD_9,
-            callback_fn=lambda: _align_to_pca(2),
-            description="align object to second principal component"
-        )
+        # add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_7,
+        #     callback_fn=lambda: _align_to_pca(1),
+        #     description="align object to first principal component"
+        # )
+        # add_keyboard_callback(
+        #     key=lazy.carb.input.KeyboardInput.NUMPAD_9,
+        #     callback_fn=lambda: _align_to_pca(2),
+        #     description="align object to second principal component"
+        # )
         add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_3,
             callback_fn=lambda: _rotate_object("z", self.angle_increment),
@@ -575,7 +581,7 @@ class BatchQAViewer:
         )
         add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.NUMPAD_DIVIDE,
-            callback_fn=lambda: scale_queue.append(0),
+            callback_fn=lambda: scale_queue.append(th.tensor(0)),
             description="reset object scale"
         )
         add_keyboard_callback(
@@ -587,6 +593,11 @@ class BatchQAViewer:
             key=lazy.carb.input.KeyboardInput.M,
             callback_fn=_toggle_meta_visibility,
             description="toggle meta link mesh visibility"
+        )
+        add_keyboard_callback(
+            key=lazy.carb.input.KeyboardInput.J,
+            callback_fn=_toggle_joints,
+            description="toggle joint movement"
         )
         add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.KEY_1,
@@ -656,9 +667,15 @@ class BatchQAViewer:
                 if any(s == 0 for s in scale_queue):
                     scale = th.ones(3)  # Reset the scale
                 else:
-                    scale *= th.prod(scale_queue)
+                    scale *= th.prod(th.tensor(scale_queue))
                 _set_scale(scale)
                 scale_queue.clear()
+
+            # Apply joint motion
+            if joints_moving:
+                joint_position_seed += 2 * th.pi * og.sim.get_rendering_dt() / JOINT_SECONDS_PER_CYCLE
+            joint_positions = th.ones(obj.n_dof) * th.sin(joint_position_seed)
+            obj.set_joint_positions(positions=joint_positions, normalized=True, drive=False)
 
             self.update_camera(obj.aabb_center)
             if step % 100 == 0:
@@ -702,11 +719,11 @@ class BatchQAViewer:
             self.update_camera(obj.aabb_center)
 
             # During this part, we want to be moving the joints
-            for joint in obj.joints.values():
-                seconds_since_start = step * og.sim.get_rendering_dt()
-                interpolation_point = 0.5 * th.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * PI) + 0.5
-                target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
-                joint.set_pos(target_pos)
+            # for joint in obj.joints.values():
+            #     seconds_since_start = step * og.sim.get_rendering_dt()
+            #     interpolation_point = 0.5 * th.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * PI) + 0.5
+            #     target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
+            #     joint.set_pos(target_pos)
 
             if not multiprocess_queue.empty():
                 # Got a response, we can stop.
