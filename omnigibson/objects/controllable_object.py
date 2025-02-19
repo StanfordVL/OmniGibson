@@ -3,6 +3,7 @@ from abc import abstractmethod
 from copy import deepcopy
 from functools import cached_property
 from typing import Literal
+import numpy as np
 
 import gymnasium as gym
 import networkx as nx
@@ -441,7 +442,8 @@ class ControllableObject(BaseObject):
         )
 
         # Convert action from torch if necessary
-        action = cb.from_torch(action)
+        if not isinstance(action, np.ndarray):
+            action = cb.from_torch(action)
 
         # First, loop over all controllers, and update the desired command
         idx = 0

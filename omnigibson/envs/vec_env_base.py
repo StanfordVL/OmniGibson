@@ -6,7 +6,7 @@ import omnigibson as og
 
 
 class VectorEnvironment:
-    def __init__(self, num_envs, config):
+    def __init__(self, num_envs, configs):
         self.num_envs = num_envs
         if og.sim is not None:
             og.sim.stop()
@@ -14,8 +14,8 @@ class VectorEnvironment:
         # First we create the environments. We can't let DummyVecEnv do this for us because of the play call
         # needing to happen before spaces are available for it to read things from.
         self.envs = [
-            og.Environment(configs=copy.deepcopy(config), in_vec_env=True)
-            for _ in trange(num_envs, desc="Loading environments")
+            og.Environment(configs=copy.deepcopy(configs[i]), in_vec_env=True)
+            for i in trange(num_envs, desc="Loading environments")
         ]
 
         # Play, and finish loading all the envs

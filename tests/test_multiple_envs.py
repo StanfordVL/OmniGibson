@@ -28,7 +28,7 @@ def setup_multi_environment(num_of_envs, robot="Fetch", additional_objects_cfg=[
 
     if og.sim is None:
         # Make sure GPU dynamics are enabled (GPU dynamics needed for cloth)
-        gm.RENDER_VIEWER_CAMERA = False
+        gm.RENDER_VIEWER_CAMERA = True
         gm.ENABLE_OBJECT_STATES = True
         gm.USE_GPU_DYNAMICS = True
         gm.ENABLE_FLATCACHE = False
@@ -297,6 +297,7 @@ def test_tiago_getter():
 
 def test_tiago_setter():
     vec_env = setup_multi_environment(2, robot="Tiago")
+    breakpoint()
 
     # use a robot with non-zero scene position
     robot = vec_env.envs[1].scene.robots[0]
@@ -486,3 +487,6 @@ def test_behavior_setter():
     got_world_pos, got_world_ori = robot.get_position_orientation()
     assert not th.allclose(got_world_pos, new_world_pos, atol=1e-3)
     assert not th.allclose(got_world_ori, new_world_ori, atol=1e-3)
+
+
+test_tiago_setter()
