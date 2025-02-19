@@ -184,7 +184,7 @@ class BatchQAViewer:
                 "orientation": orientation.tolist(),
                 "scale": scale.tolist(),
                 "complaints": complaints,
-            }, f)
+            }, f, indent=4)
 
     def set_camera_bindings(self, default_dist = 3.):
         self.pan, self.tilt, self.dist = PI, th.tensor(0.), th.tensor(default_dist)
@@ -385,6 +385,7 @@ class BatchQAViewer:
                 "processed": False,
                 "new": True,
             })
+            print("Added", message, "complaint.\n")
 
         def _toggle_gravity():
             obj.visual_only = not obj.visual_only
@@ -603,17 +604,17 @@ class BatchQAViewer:
             description="add a general collision complaint"
         )
         add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.KEY_5,
+            key=lazy.carb.input.KeyboardInput.KEY_4,
             callback_fn=lambda: _set_complaint("category"),
             description="add a category or synset complaint"
         )
         add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.KEY_6,
+            key=lazy.carb.input.KeyboardInput.KEY_5,
             callback_fn=lambda: _set_complaint("metalink"),
             description="add a meta link complaint"
         )
         add_keyboard_callback(
-            key=lazy.carb.input.KeyboardInput.KEY_7,
+            key=lazy.carb.input.KeyboardInput.KEY_6,
             callback_fn=lambda: _set_complaint("unknown"),
             description="add a generic complaint to be re-examined by the team"
         )
