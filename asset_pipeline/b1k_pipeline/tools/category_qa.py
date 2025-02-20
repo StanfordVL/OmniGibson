@@ -71,7 +71,7 @@ class BatchQAViewer:
         print("-"*80)
         print("IMPORTANT: VERIFY THIS NUMBER!")
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
-        print("You are running the 5.0.0 version of this script.")
+        print("You are running the 5.0.1 version of this script.")
         print("-"*80)
         input("Press Enter to continue...")
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
@@ -677,10 +677,11 @@ class BatchQAViewer:
                 scale_queue.clear()
 
             # Apply joint motion
-            if joints_moving:
-                joint_position_seed += 2 * th.pi * og.sim.get_rendering_dt() / JOINT_SECONDS_PER_CYCLE
-            joint_positions = th.ones(obj.n_dof) * th.sin(joint_position_seed)
-            obj.set_joint_positions(positions=joint_positions, normalized=True, drive=False)
+            if obj.n_dof > 0:
+                if joints_moving:
+                    joint_position_seed += 2 * th.pi * og.sim.get_rendering_dt() / JOINT_SECONDS_PER_CYCLE
+                joint_positions = th.ones(obj.n_dof) * th.sin(joint_position_seed)
+                obj.set_joint_positions(positions=joint_positions, normalized=True, drive=False)
 
             self.update_camera(obj.aabb_center)
             if step % 100 == 0:
