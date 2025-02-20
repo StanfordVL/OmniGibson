@@ -71,7 +71,7 @@ class BatchQAViewer:
         print("-"*80)
         print("IMPORTANT: VERIFY THIS NUMBER!")
         print("There are a total of", len(self.filtered_objs), "objects in this batch.")
-        print("You are running the 5.0.1 version of this script.")
+        print("You are running the 5.0.2 version of this script.")
         print("-"*80)
         input("Press Enter to continue...")
         self.complaint_handler = ObjectComplaintHandler(pipeline_root)
