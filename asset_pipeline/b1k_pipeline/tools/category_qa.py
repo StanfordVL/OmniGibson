@@ -622,7 +622,7 @@ class BatchQAViewer:
         add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.KEY_5,
             callback_fn=lambda: _set_complaint("joint"),
-            description="add a meta link complaint"
+            description="add a joint complaint"
         )
         add_keyboard_callback(
             key=lazy.carb.input.KeyboardInput.KEY_6,
@@ -734,10 +734,6 @@ class BatchQAViewer:
                 # Got a response, we can stop.
                 break
 
-        assert not multiprocess_queue.empty(), "Complaint process did not return a message."
-        message = multiprocess_queue.get()
-        complaints = json.loads(message)
-
         # Wait for the complaint process to finish to not have to kill it
         time.sleep(0.5)
 
@@ -745,7 +741,11 @@ class BatchQAViewer:
         if complaint_process.is_alive():
             # Join the finished thread
             complaint_process.join()
-            assert complaint_process.exitcode == 0, "Complaint process exited."
+        assert complaint_process.exitcode == 0, "Complaint process exited with error code."
+
+        assert not multiprocess_queue.empty(), "Complaint process did not return a message."
+        message = multiprocess_queue.get()
+        complaints = json.loads(message)
 
         # Save the object results
         self.save_object_results(obj, orientation, scale, complaints)
