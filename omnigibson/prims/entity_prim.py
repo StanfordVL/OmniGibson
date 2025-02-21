@@ -223,7 +223,7 @@ class EntityPrim(XFormPrim):
             elif self._prim_type == PrimType.CLOTH and prim.GetPrimTypeInfo().GetTypeName() == "Mesh":
                 # For cloth object, process prims that are Meshes
                 link_cls = ClothPrim
-            
+
             elif self._prim_type == PrimType.DEFORMABLE and prim.GetPrimTypeInfo().GetTypeName() == "Mesh":
                 # For deformable object, process prims that are Meshes
                 link_cls = DeformablePrim

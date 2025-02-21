@@ -179,7 +179,9 @@ class PrimitiveObject(StatefulObject):
         elif self._prim_type == PrimType.DEFORMABLE:
             visual_geom_prim = self.root_link
         else:
-            raise ValueError("Prim type must either be PrimType.RIGID or PrimType.CLOTH or PrimType.DEFORMABLE for loading a primitive object")
+            raise ValueError(
+                "Prim type must either be PrimType.RIGID or PrimType.CLOTH or PrimType.DEFORMABLE for loading a primitive object"
+            )
 
         visual_geom_prim.color = self._load_config["color"]
         visual_geom_prim.opacity = (

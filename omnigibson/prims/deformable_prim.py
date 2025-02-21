@@ -83,14 +83,12 @@ class DeformablePrim(GeomPrim):
         if "mass" in self._load_config and self._load_config["mass"] is not None:
             self.mass = self._load_config["mass"]
 
-        success_flag = (
-            lazy.omni.physx.scripts.deformableUtils.add_physx_deformable_body(
-                stage=og.sim.stage,
-                prim_path=self._prim.GetPath(),
-                collision_simplification=m.COLLISION_SIMPLIFICATION,
-                simulation_hexahedral_resolution=m.DEFAULT_SIMULATION_RESOLUTION,
-                self_collision=m.SELF_COLLISION,
-            )
+        success_flag = lazy.omni.physx.scripts.deformableUtils.add_physx_deformable_body(
+            stage=og.sim.stage,
+            prim_path=self._prim.GetPath(),
+            collision_simplification=m.COLLISION_SIMPLIFICATION,
+            simulation_hexahedral_resolution=m.DEFAULT_SIMULATION_RESOLUTION,
+            self_collision=m.SELF_COLLISION,
         )
         assert success_flag
 
@@ -168,9 +166,7 @@ class DeformablePrim(GeomPrim):
 
     @property
     def volume(self):
-        mesh = mesh_prim_to_trimesh_mesh(
-            self.prim, include_normals=False, include_texcoord=False, world_frame=True
-        )
+        mesh = mesh_prim_to_trimesh_mesh(self.prim, include_normals=False, include_texcoord=False, world_frame=True)
         return mesh.volume if mesh.is_volume else mesh.convex_hull.volume
 
     @volume.setter
