@@ -114,6 +114,10 @@ class DeformablePrim(GeomPrim):
         # Store the default position of the points in the local frame
         self._default_positions = vtarray_to_torch(self.get_attribute(attr="points"))
 
+    @cached_property
+    def is_meta_link(self):
+        return False
+
     # For cloth, points should NOT be @cached_property because their local poses change over time
     @property
     def points(self):

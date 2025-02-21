@@ -222,7 +222,7 @@ class ClothPrim(GeomPrim):
                 # If the cloth has multiple pieces, only keep the largest one
                 ms.generate_splitting_by_connected_components(delete_source_mesh=True)
                 if len(ms) > 1:
-                    assert m.ALLOW_MULTIPLE_CLOTH_MESH_COMPONENTS, "Cloth mesh has multiple components!"
+                    # assert m.ALLOW_MULTIPLE_CLOTH_MESH_COMPONENTS, "Cloth mesh has multiple components!"
 
                     log.warning(
                         f"The cloth mesh has {len(ms)} disconnected components. To simplify, we only keep the mesh with largest face number."
@@ -291,6 +291,10 @@ class ClothPrim(GeomPrim):
 
         # Then update the points to the default configuration
         self.reset_points_to_configuration("default")
+
+    @cached_property
+    def is_meta_link(self):
+        return False
 
     def generate_settled_configuration(self):
         """
