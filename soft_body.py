@@ -48,24 +48,24 @@ def main(visualize_wall=False):
                     "position": [0, 0, 0.5],
                     # "scale": [30, 30, 30]
                 },
-                {
-                    "type": "DatasetObject",
-                    "name": "jalllb",
-                    "category": "pillow",
-                    "model": "jalllb",
-                    "prim_type": PrimType.DEFORMABLE,
-                    "position": [1, 0, 0.8],
-                    # "scale": [30, 30, 30]
-                },
-                {
-                    "type": "DatasetObject",
-                    "name": "agftpm",
-                    "category": "hoodie",
-                    "model": "agftpm",
-                    "prim_type": PrimType.CLOTH,
-                    "position": [2, 0, 1],
-                    # "scale": [30, 30, 30]
-                },
+                # {
+                #     "type": "DatasetObject",
+                #     "name": "jalllb",
+                #     "category": "pillow",
+                #     "model": "jalllb",
+                #     "prim_type": PrimType.DEFORMABLE,
+                #     "position": [1, 0, 0.8],
+                #     # "scale": [30, 30, 30]
+                # },
+                # {
+                #     "type": "DatasetObject",
+                #     "name": "agftpm",
+                #     "category": "hoodie",
+                #     "model": "agftpm",
+                #     "prim_type": PrimType.CLOTH,
+                #     "position": [2, 0, 1],
+                #     # "scale": [30, 30, 30]
+                # },
             ],
         }
 

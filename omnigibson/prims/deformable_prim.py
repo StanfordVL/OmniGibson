@@ -111,6 +111,34 @@ class DeformablePrim(GeomPrim):
             materialPath=deformable_material_path,
         )
 
+        # Store the default position of the points in the local frame
+        self._default_positions = vtarray_to_torch(self.get_attribute(attr="points"))
+
+    # For cloth, points should NOT be @cached_property because their local poses change over time
+    @property
+    def points(self):
+        """
+        Returns:
+            th.tensor: Local poses of all points
+        """
+        # If the geom is a mesh we can directly return its points.
+        mesh = self.prim
+        mesh_type = mesh.GetPrimTypeInfo().GetTypeName()
+        assert mesh_type == "Mesh", f"Expected a mesh prim, got {mesh_type} instead!"
+        return vtarray_to_torch(mesh.GetAttribute("points").Get(), dtype=th.float32)
+
+    @property
+    def visual_aabb(self):
+        return self.aabb
+
+    @property
+    def visual_aabb_extent(self):
+        return self.aabb_extent
+
+    @property
+    def visual_aabb_center(self):
+        return self.aabb_center
+
     @cached_property
     def kinematic_only(self):
         """
@@ -118,14 +146,27 @@ class DeformablePrim(GeomPrim):
             bool: Whether this object is a kinematic-only object. For DeformablePrim, always return False.
         """
         return False
-    
+
+    @property
+    def faces(self):
+        """
+        Grabs particle indexes defining each of the faces for this cloth prim
+
+        Returns:
+             th.tensor: (N, 3) numpy array, where each of the N faces are defined by the 3 particle indices
+                corresponding to that face's vertices
+        """
+        return th.tensor(self.get_attribute("faceVertexIndices")).reshape(-1, 3)
+
     def update_handles(self):
         # no handles to update
         pass
 
     @property
     def volume(self):
-        mesh = mesh_prim_to_trimesh_mesh(self.prim, include_normals=False, include_texcoord=False, world_frame=True)
+        mesh = mesh_prim_to_trimesh_mesh(
+            self.prim, include_normals=False, include_texcoord=False, world_frame=True
+        )
         return mesh.volume if mesh.is_volume else mesh.convex_hull.volume
 
     @volume.setter
@@ -165,7 +206,17 @@ class DeformablePrim(GeomPrim):
             str: Name of this body
         """
         return self.prim_path.split("/")[-1]
-    
+
     def wake(self):
         # TODO (eric): Just a pass through for now.
         return
+
+    def reset(self):
+        """
+        Reset the points to their default positions in the local frame, and also zeroes out velocities
+        """
+        if self.initialized:
+            self.set_attribute(
+                attr="points",
+                val=lazy.pxr.Vt.Vec3fArray(self._default_positions.tolist()),
+            )
