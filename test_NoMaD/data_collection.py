@@ -4,6 +4,7 @@ import time
 import numpy as np
 from PIL import Image as PILImage
 import yaml
+from datetime import datetime
 
 import omnigibson as og
 from omnigibson.macros import gm
@@ -19,7 +20,7 @@ def array_to_pil(rgb_tensor: th.Tensor) -> PILImage.Image:
     return PILImage.fromarray(rgb_array)
 
 
-def init_dataset(dataset_root="./omnigibson_dataset"):
+def init_dataset(dataset_root="./scene_dataset"):
     if not os.path.exists(dataset_root):
         os.makedirs(dataset_root)
     return dataset_root
@@ -108,6 +109,7 @@ def main():
     #     "action_normalize": True,
     # }
     # cfg = {"scene": scene_cfg, "robots": [robot_cfg]}
+
     env = og.Environment(configs=cfg)
     robot = env.robots[0]
 
@@ -116,8 +118,9 @@ def main():
     camera_key = f"{robot.name}:eyes:Camera:0"
 
     # Initialize dataset directory and start a new trajectory
-    dataset_root = init_dataset("./omnigibson_dataset")
-    traj_id = int(time.time())  # or use a counter
+    dataset_root = init_dataset("./scene_dataset")
+    # traj_id = int(time.time())  # or use a counter
+    traj_id = datetime.now().strftime("%Y%m%d_%H%M%S")
     traj_folder, data = start_new_trajectory(dataset_root, traj_id)
 
     # Optionally, you can let the user control when to start/stop recording (e.g., using a key press)
@@ -126,7 +129,7 @@ def main():
     )
 
     try:
-        run_control_loop(env, robot, camera_key, traj_folder, data, max_steps=2000)
+        run_control_loop(env, robot, camera_key, traj_folder, data, max_steps=10000)
     except KeyboardInterrupt:
         print("Data collection interrupted by user.")
 
