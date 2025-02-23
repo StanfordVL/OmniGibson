@@ -1,0 +1,119 @@
+project_name: vint-release
+run_name: vint-5c
+
+# training setup
+use_wandb: True # set to false if you don't want to log to wandb
+train: True
+batch_size: 256
+epochs: 100
+gpu_ids: [0]
+num_workers: 12
+lr: 5e-4
+optimizer: adamw
+clipping: False
+max_norm: 1.
+scheduler: "cosine"
+warmup: True 
+warmup_epochs: 4
+cyclic_period: 10
+plateau_patience: 3
+plateau_factor: 0.5
+seed: 0
+
+# model params
+model_type: vint
+obs_encoder: "efficientnet-b0" # by default, this is imagenet pretrained
+obs_encoding_size: 512
+mha_num_attention_heads: 4
+mha_num_attention_layers: 4
+mha_ff_dim_factor: 4
+late_fusion: False
+
+# normalization for the action space
+normalize: True
+
+# context
+context_type: temporal
+context_size: 5
+# tradeoff between action and distance prediction loss
+alpha: 0.5
+
+# distance bounds for distance and action and distance predictions 
+distance:
+  min_dist_cat: 0
+  max_dist_cat: 20
+action:
+  min_dist_cat: 0
+  max_dist_cat: 10
+close_far_threshold: 10 # distance threshold used to seperate the close and the far  subgoals that are sampled per datapoint
+
+# action output params
+len_traj_pred: 5
+learn_angle: True
+
+# dataset specific parameters
+image_size: [85, 64] # width, height
+goal_type: "image"
+
+datasets:
+  recon:
+    data_folder: /home/<username>/vint_dataset/recon
+    train: /home/<username>/data_splits/recon/train/ # path to train folder with traj_names.txt
+    test: /home/<username>/data_splits/recon/test/ # path to test folder with traj_names.txt
+    end_slack: 3 # because many trajectories end in collisions
+    goals_per_obs: 1 # how many goals are sampled per observation
+    negative_mining: True # negative mining from the ViNG paper (Shah et al.)
+  go_stanford:
+    data_folder: /home/<username>/vint_dataset/go_stanford_cropped # datasets/stanford_go_new
+    train: /home/<username>/data_splits/go_stanford/train/
+    test: /home/<username>/data_splits/go_stanford/test/
+    end_slack: 0
+    goals_per_obs: 2 # increase dataset size
+    negative_mining: True
+  cory_hall:
+    data_folder: /home/<username>/vint_dataset/cory_hall/
+    train: /home/<username>/data_splits/cory_hall/train/
+    test: /home/<username>/data_splits/cory_hall/test/
+    end_slack: 3 # because many trajectories end in collisions
+    goals_per_obs: 1
+    negative_mining: True
+  tartan_drive:
+    data_folder: /home/<username>/vint_dataset/tartan_drive/
+    train: /home/<username>/data_splits/tartan_drive/train/
+    test: /home/<username>/data_splits/tartan_drive/test/
+    end_slack: 3 # because many trajectories end in collisions
+    goals_per_obs: 1
+    negative_mining: True
+  sacson:
+    data_folder: /home/<username>/vint_dataset/sacson/
+    train: /home/<username>/data_splits/sacson/train/
+    test: /home/<username>/data_splits/sacson/test/
+    end_slack: 3 # because many trajectories end in collisions
+    goals_per_obs: 1
+    negative_mining: True
+
+  # private datasets (uncomment if you have access)
+  # seattle:
+  #   data_folder: /home/<username>/vint_dataset/seattle/
+  #   train: /home/<username>/data_splits/seattle/train/
+  #   test: /home/<username>/data_splits/seattle/test/
+  #   end_slack: 0
+  #   goals_per_obs: 1
+  #   negative_mining: True
+  # scand:
+  #   data_folder: /home/<username>/vint_dataset/scand/
+  #   train: /home/<username>/data_splits/scand/train/
+  #   test: /home/<username>/data_splits/scand/test/
+  #   end_slack: 0
+  #   goals_per_obs: 1
+  #   negative_mining: True
+
+# logging stuff
+## =0 turns off
+print_log_freq: 100 # in iterations
+image_log_freq: 1000 #0 # in iterations
+num_images_log: 8 #0 
+pairwise_test_freq: 0 # in epochs
+eval_fraction: 0.25
+wandb_log_freq: 10 # in iterations
+eval_freq: 1 # in epochs

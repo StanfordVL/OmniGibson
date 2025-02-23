@@ -1,0 +1,16 @@
+env:
+  device: null                      # (None or str): specifies the device to be used if running on the gpu with torch backend
+
+render:
+  viewer_width: 1280
+  viewer_height: 720
+
+scene:
+  type: Scene
+
+robots: []
+
+objects: []
+
+task:
+  type: DummyTask

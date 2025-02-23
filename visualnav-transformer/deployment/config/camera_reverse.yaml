@@ -1,0 +1,8 @@
+# camera parameters for src/gnm_locobot.launch
+video_device: "/dev/video2" # change this to your video device path
+image_width: 160
+image_height: 120
+pixel_format: yuyv
+camera_frame_id: "usb_cam"
+io_method: "mmap"
+framerate: 9

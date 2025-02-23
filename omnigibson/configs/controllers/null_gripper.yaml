@@ -1,0 +1,9 @@
+# Example Null Gripper control config (shown for gripper control)
+# See omnigibson/controllers/null_gripper_controller for docstring of arguments
+# Arguments below are the arguments that should be specified by external user (other kwargs
+# used in constructor are generated automatically at runtime)
+robot:
+  controller_config:
+    gripper:
+      name: NullJointController
+      # no other args to specify (this is a dummy controller)

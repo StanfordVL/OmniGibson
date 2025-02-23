@@ -1,0 +1,29 @@
+[tool.black]
+line-length = 120
+target-version = ['py310']
+force-exclude = 'omnigibson/(data|external)'
+
+[tool.isort]
+profile = "black"
+line_length = 120
+py_version = '310'
+filter_files = true
+extend_skip_glob = [
+    'omnigibson/data/*',
+    'omnigibson/external/*'
+]
+
+[tool.pyright]
+exclude = [
+  'omnigibson/data',
+  'omnigibson/docs',
+  'omnigibson/docker'
+]
+
+[tool.pytest.ini_options]
+testpaths = [
+    "tests",
+]
+
+[tool.coverage.run]
+omit = ["omnigibson/external/*"]
