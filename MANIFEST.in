@@ -1,6 +1,0 @@
-include LICENSE
-
-graft omnigibson
-prune omnigibson/data
-
-global-exclude *.py[co]
