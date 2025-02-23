@@ -2,7 +2,9 @@ import os
 import wandb
 import numpy as np
 from typing import List, Optional, Tuple
-from train.vint_train.visualizing.visualize_utils import numpy_to_img
+
+# from train.vint_train.visualizing.visualize_utils import numpy_to_img
+from vint_train.visualizing.visualize_utils import numpy_to_img
 import matplotlib.pyplot as plt
 
 
@@ -46,7 +48,12 @@ def visualize_dist_pred(
     )
     if not os.path.isdir(visualize_path):
         os.makedirs(visualize_path)
-    assert len(batch_obs_images) == len(batch_goal_images) == len(batch_dist_preds) == len(batch_dist_labels)
+    assert (
+        len(batch_obs_images)
+        == len(batch_goal_images)
+        == len(batch_dist_preds)
+        == len(batch_dist_labels)
+    )
     batch_size = batch_obs_images.shape[0]
     wandb_list = []
     for i in range(min(batch_size, num_images_preds)):

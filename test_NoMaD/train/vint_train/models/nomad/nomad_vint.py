@@ -4,7 +4,9 @@ import torch.nn.functional as F
 import torchvision
 from typing import List, Dict, Optional, Tuple, Callable
 from efficientnet_pytorch import EfficientNet
-from train.vint_train.models.vint.self_attention import PositionalEncoding
+from vint_train.models.vint.self_attention import PositionalEncoding
+
+# from train.vint_train.models.vint.self_attention import PositionalEncoding
 
 
 class NoMaD_ViNT(nn.Module):

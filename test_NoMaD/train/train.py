@@ -12,20 +12,25 @@ from torch.utils.data import DataLoader, ConcatDataset
 from torch.optim import Adam, AdamW
 from torchvision import transforms
 import torch.backends.cudnn as cudnn
-from warmup_scheduler import GradualWarmupScheduler
+
+# from warmup_scheduler import GradualWarmupScheduler
 
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
-from diffusers.optimization import get_scheduler
+
+# from diffusers.optimization import get_scheduler
 
 """
 IMPORT YOUR MODEL HERE
 """
+
 from vint_train.models.gnm.gnm import GNM
 from vint_train.models.vint.vint import ViNT
 from vint_train.models.vint.vit import ViT
 from vint_train.models.nomad.nomad import NoMaD, DenseNetwork
 from vint_train.models.nomad.nomad_vint import NoMaD_ViNT, replace_bn_with_gn
-from diffusion_policy.model.diffusion.conditional_unet1d import ConditionalUnet1D
+from diffusion_policy.diffusion_policy.model.diffusion.conditional_unet1d import (
+    ConditionalUnet1D,
+)
 
 
 from vint_train.data.vint_dataset import ViNT_Dataset
@@ -46,17 +51,13 @@ def main(config):
             config["gpu_ids"] = [0]
         elif type(config["gpu_ids"]) == int:
             config["gpu_ids"] = [config["gpu_ids"]]
-        os.environ["CUDA_VISIBLE_DEVICES"] = ",".join(
-            [str(x) for x in config["gpu_ids"]]
-        )
+        os.environ["CUDA_VISIBLE_DEVICES"] = ",".join([str(x) for x in config["gpu_ids"]])
         print("Using cuda devices:", os.environ["CUDA_VISIBLE_DEVICES"])
     else:
         print("Using cpu")
 
     first_gpu_id = config["gpu_ids"][0]
-    device = torch.device(
-        f"cuda:{first_gpu_id}" if torch.cuda.is_available() else "cpu"
-    )
+    device = torch.device(f"cuda:{first_gpu_id}" if torch.cuda.is_available() else "cpu")
 
     if "seed" in config:
         np.random.seed(config["seed"])
@@ -64,9 +65,9 @@ def main(config):
         cudnn.deterministic = True
 
     cudnn.benchmark = True  # good if input sizes don't vary
-    transform = ([
+    transform = [
         transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
-    ])
+    ]
     transform = transforms.Compose(transform)
 
     # Load the data
@@ -92,33 +93,33 @@ def main(config):
 
         for data_split_type in ["train", "test"]:
             if data_split_type in data_config:
-                    dataset = ViNT_Dataset(
-                        data_folder=data_config["data_folder"],
-                        data_split_folder=data_config[data_split_type],
-                        dataset_name=dataset_name,
-                        image_size=config["image_size"],
-                        waypoint_spacing=data_config["waypoint_spacing"],
-                        min_dist_cat=config["distance"]["min_dist_cat"],
-                        max_dist_cat=config["distance"]["max_dist_cat"],
-                        min_action_distance=config["action"]["min_dist_cat"],
-                        max_action_distance=config["action"]["max_dist_cat"],
-                        negative_mining=data_config["negative_mining"],
-                        len_traj_pred=config["len_traj_pred"],
-                        learn_angle=config["learn_angle"],
-                        context_size=config["context_size"],
-                        context_type=config["context_type"],
-                        end_slack=data_config["end_slack"],
-                        goals_per_obs=data_config["goals_per_obs"],
-                        normalize=config["normalize"],
-                        goal_type=config["goal_type"],
-                    )
-                    if data_split_type == "train":
-                        train_dataset.append(dataset)
-                    else:
-                        dataset_type = f"{dataset_name}_{data_split_type}"
-                        if dataset_type not in test_dataloaders:
-                            test_dataloaders[dataset_type] = {}
-                        test_dataloaders[dataset_type] = dataset
+                dataset = ViNT_Dataset(
+                    data_folder=data_config["data_folder"],
+                    data_split_folder=data_config[data_split_type],
+                    dataset_name=dataset_name,
+                    image_size=config["image_size"],
+                    waypoint_spacing=data_config["waypoint_spacing"],
+                    min_dist_cat=config["distance"]["min_dist_cat"],
+                    max_dist_cat=config["distance"]["max_dist_cat"],
+                    min_action_distance=config["action"]["min_dist_cat"],
+                    max_action_distance=config["action"]["max_dist_cat"],
+                    negative_mining=data_config["negative_mining"],
+                    len_traj_pred=config["len_traj_pred"],
+                    learn_angle=config["learn_angle"],
+                    context_size=config["context_size"],
+                    context_type=config["context_type"],
+                    end_slack=data_config["end_slack"],
+                    goals_per_obs=data_config["goals_per_obs"],
+                    normalize=config["normalize"],
+                    goal_type=config["goal_type"],
+                )
+                if data_split_type == "train":
+                    train_dataset.append(dataset)
+                else:
+                    dataset_type = f"{dataset_name}_{data_split_type}"
+                    if dataset_type not in test_dataloaders:
+                        test_dataloaders[dataset_type] = {}
+                    test_dataloaders[dataset_type] = dataset
 
     # combine all the datasets from different robots
     train_dataset = ConcatDataset(train_dataset)
@@ -175,7 +176,7 @@ def main(config):
                 mha_ff_dim_factor=config["mha_ff_dim_factor"],
             )
             vision_encoder = replace_bn_with_gn(vision_encoder)
-        elif config["vision_encoder"] == "vib": 
+        elif config["vision_encoder"] == "vib":
             vision_encoder = ViB(
                 obs_encoding_size=config["encoding_size"],
                 context_size=config["context_size"],
@@ -184,7 +185,7 @@ def main(config):
                 mha_ff_dim_factor=config["mha_ff_dim_factor"],
             )
             vision_encoder = replace_bn_with_gn(vision_encoder)
-        elif config["vision_encoder"] == "vit": 
+        elif config["vision_encoder"] == "vit":
             vision_encoder = ViT(
                 obs_encoding_size=config["encoding_size"],
                 context_size=config["context_size"],
@@ -194,17 +195,17 @@ def main(config):
                 mha_num_attention_layers=config["mha_num_attention_layers"],
             )
             vision_encoder = replace_bn_with_gn(vision_encoder)
-        else: 
+        else:
             raise ValueError(f"Vision encoder {config['vision_encoder']} not supported")
-            
+
         noise_pred_net = ConditionalUnet1D(
-                input_dim=2,
-                global_cond_dim=config["encoding_size"],
-                down_dims=config["down_dims"],
-                cond_predict_scale=config["cond_predict_scale"],
-            )
+            input_dim=2,
+            global_cond_dim=config["encoding_size"],
+            down_dims=config["down_dims"],
+            cond_predict_scale=config["cond_predict_scale"],
+        )
         dist_pred_network = DenseNetwork(embedding_dim=config["encoding_size"])
-        
+
         model = NoMaD(
             vision_encoder=vision_encoder,
             noise_pred_net=noise_pred_net,
@@ -213,9 +214,9 @@ def main(config):
 
         noise_scheduler = DDPMScheduler(
             num_train_timesteps=config["num_diffusion_iters"],
-            beta_schedule='squaredcos_cap_v2',
+            beta_schedule="squaredcos_cap_v2",
             clip_sample=True,
-            prediction_type='epsilon'
+            prediction_type="epsilon",
         )
     else:
         raise ValueError(f"Model {config['model']} not supported")
@@ -254,7 +255,7 @@ def main(config):
             print("Using cyclic LR with cycle", config["cyclic_period"])
             scheduler = torch.optim.lr_scheduler.CyclicLR(
                 optimizer,
-                base_lr=lr / 10.,
+                base_lr=lr / 10.0,
                 max_lr=lr,
                 step_size_up=config["cyclic_period"] // 2,
                 cycle_momentum=False,
@@ -270,21 +271,23 @@ def main(config):
         else:
             raise ValueError(f"Scheduler {config['scheduler']} not supported")
 
-        if config["warmup"]:
-            print("Using warmup scheduler")
-            scheduler = GradualWarmupScheduler(
-                optimizer,
-                multiplier=1,
-                total_epoch=config["warmup_epochs"],
-                after_scheduler=scheduler,
-            )
+        # if config["warmup"]:
+        #     print("Using warmup scheduler")
+        #     scheduler = GradualWarmupScheduler(
+        #         optimizer,
+        #         multiplier=1,
+        #         total_epoch=config["warmup_epochs"],
+        #         after_scheduler=scheduler,
+        #     )
 
     current_epoch = 0
     if "load_run" in config:
         load_project_folder = os.path.join("logs", config["load_run"])
         print("Loading model from ", load_project_folder)
         latest_path = os.path.join(load_project_folder, "latest.pth")
-        latest_checkpoint = torch.load(latest_path) #f"cuda:{}" if torch.cuda.is_available() else "cpu")
+        latest_checkpoint = torch.load(
+            latest_path
+        )  # f"cuda:{}" if torch.cuda.is_available() else "cpu")
         load_model(model, config["model_type"], latest_checkpoint)
         if "epoch" in latest_checkpoint:
             current_epoch = latest_checkpoint["epoch"] + 1
@@ -300,7 +303,7 @@ def main(config):
         if scheduler is not None and "scheduler" in latest_checkpoint:
             scheduler.load_state_dict(latest_checkpoint["scheduler"].state_dict())
 
-    if config["model_type"] == "vint" or config["model_type"] == "gnm": 
+    if config["model_type"] == "vint" or config["model_type"] == "gnm":
         train_eval_loop(
             train_model=config["train"],
             model=model,
@@ -359,16 +362,20 @@ if __name__ == "__main__":
     parser.add_argument(
         "--config",
         "-c",
-        default="config/vint.yaml",
+        # default="config/vint.yaml",
+        default="test_NoMaD/train/config/nomad.yaml",
         type=str,
         help="Path to the config file in train_config folder",
     )
     args = parser.parse_args()
 
-    with open("config/defaults.yaml", "r") as f:
+    default_config_path = "test_NoMaD/train/config/defaults.yaml"
+    with open(default_config_path, "r") as f:
         default_config = yaml.safe_load(f)
 
     config = default_config
+
+    args_config = args.config
 
     with open(args.config, "r") as f:
         user_config = yaml.safe_load(f)
@@ -390,7 +397,7 @@ if __name__ == "__main__":
         wandb.init(
             project=config["project_name"],
             settings=wandb.Settings(start_method="fork"),
-            entity="gnmv2", # TODO: change this to your wandb entity
+            entity="gnmv2",  # TODO: change this to your wandb entity
         )
         wandb.save(args.config, policy="now")  # save the config file
         wandb.run.name = config["run_name"]

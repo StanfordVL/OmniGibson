@@ -3,12 +3,12 @@ project_name: vint
 run_name: vint
 
 # training setup
-use_wandb: True # set to false if you don't want to log to wandb
+use_wandb: False #True # set to false if you don't want to log to wandb
 train: True
 batch_size: 400
 eval_batch_size: 400
 epochs: 30
-gpu_ids: [0] 
+gpu_ids: [0]
 num_workers: 4
 lr: 5e-4
 optimizer: adam
@@ -38,7 +38,7 @@ obs_type: image
 goal_type: image
 scheduler: null
 
-# distance bounds for distance and action and distance predictions 
+# distance bounds for distance and action and distance predictions
 distance:
   min_dist_cat: 0
   max_dist_cat: 20

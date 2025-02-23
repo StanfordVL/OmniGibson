@@ -118,13 +118,14 @@ def organize_data_splits(
 
 
 def main():
+
     parser = argparse.ArgumentParser(
         description="Verify and organize collected trajectory data for NoMaD training."
     )
     parser.add_argument(
         "--dataset_root",
         type=str,
-        default="./scene_dataset",
+        default="./omnigibson_dataset",
         help="Root directory of the collected dataset (each subfolder is a trajectory).",
     )
     parser.add_argument(
