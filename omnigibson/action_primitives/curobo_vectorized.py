@@ -78,7 +78,9 @@ class CuRoboMotionGenerator:
         debug=False,
         use_default_embodiment_only=False,
         collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
-        num_envs=1
+        num_envs=1,
+        use_batch_env=False,
+        warmup=True
     ):
         """
         Args:
@@ -108,6 +110,7 @@ class CuRoboMotionGenerator:
         self.robots = robots
         self.robot_joint_names = list(robots[0].joints.keys())
         self.batch_size = batch_size
+        self.use_batch_env = use_batch_env
 
         # Load robot config and usd paths and make sure paths point correctly
         robot_cfg_path_dict = robots[0].curobo_path if robot_cfg_path is None else robot_cfg_path
@@ -155,11 +158,11 @@ class CuRoboMotionGenerator:
                 use_cuda_graph=use_cuda_graph,
                 num_ik_seeds=128,
                 num_batch_ik_seeds=128,
-                num_batch_trajopt_seeds=1,
-                num_trajopt_noisy_seeds=1,
+                num_batch_trajopt_seeds=8, # Increase this for increasing motion planning success rate. Although this also increases VRAM usage 
+                num_trajopt_noisy_seeds=1, 
                 ik_opt_iters=100,
                 optimize_dt=True,
-                num_trajopt_seeds=4,
+                num_trajopt_seeds=8, # Increase this for increasing motion planning success rate. I am not sure this affects, nevertheless I am keeping it consistent with num_batch_trajopt_seeds
                 num_graph_seeds=4,
                 interpolation_dt=0.03,
                 collision_activation_distance=collision_activation_distance,
@@ -185,8 +188,9 @@ class CuRoboMotionGenerator:
             )
             self.mg[emb_sel] = lazy.curobo.wrap.reacher.motion_gen.MotionGen(motion_gen_config)
 
-        for mg in self.mg.values():
-            mg.warmup(enable_graph=False, warmup_js_trajopt=False, batch=batch_size)
+        if warmup:
+            for mg in self.mg.values():
+                mg.warmup(enable_graph=False, warmup_js_trajopt=False, batch=batch_size, batch_env_mode=use_batch_env)
 
     def update_joint_limits(self, robot_cfg_obj, emb_sel):
         joint_limits = robot_cfg_obj.kinematics.kinematics_config.joint_limits
@@ -202,7 +206,7 @@ class CuRoboMotionGenerator:
 
                 joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
 
-    def save_visualization(self, q, file_path, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
+    def save_visualization(self, q, idx, file_path, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
         # Update obstacles
         self.update_obstacles()
 
@@ -215,7 +219,8 @@ class CuRoboMotionGenerator:
         robot_world = lazy.curobo.geom.types.WorldConfig(sphere=sph[0])
 
         # Combine all obstacles into a single mesh
-        mesh_world = self.mg[emb_sel].world_model.get_mesh_world(merge_meshes=True)
+        # mesh_world = self.mg[emb_sel].world_model.get_mesh_world(merge_meshes=True)
+        mesh_world = self.mg[emb_sel].world_model_list[idx].get_mesh_world(merge_meshes=True)
         robot_world.add_obstacle(mesh_world.mesh[0])
         robot_world.save_world_as_mesh(file_path)
 
@@ -437,9 +442,14 @@ class CuRoboMotionGenerator:
             bool: Whether the IK solution was successful for the batch.
             JointState: Joint state of the robot at the goal pose.
         """
-        solve_state = self.mg[emb_sel]._get_solve_state(
-            lazy.curobo.wrap.reacher.types.ReacherSolveType.BATCH, plan_config, goal_pose, start_state
-        )
+        if self.use_batch_env:
+            solve_state = self.mg[emb_sel]._get_solve_state(
+                lazy.curobo.wrap.reacher.types.ReacherSolveType.BATCH_ENV, plan_config, goal_pose, start_state
+            )
+        else:
+            solve_state = self.mg[emb_sel]._get_solve_state(
+                lazy.curobo.wrap.reacher.types.ReacherSolveType.BATCH, plan_config, goal_pose, start_state
+            )
         result = self.mg[emb_sel]._solve_ik_from_solve_state(
             goal_pose,
             solve_state,
@@ -478,15 +488,18 @@ class CuRoboMotionGenerator:
             bool: Whether the IK solution was successful for the batch.
             JointState: Joint state of the robot at the goal pose.
         """
-        # FIXME: Changed to plan_batch_env for now. Check if plan_batch will be needed later
-        # result = self.mg[emb_sel].plan_batch(start_state, goal_pose, plan_config, link_poses=link_poses)
-        result = self.mg[emb_sel].plan_batch_env(start_state, goal_pose, plan_config, link_poses=link_poses)
+        if self.use_batch_env:
+            print("using plan_batch_env")
+            result = self.mg[emb_sel].plan_batch_env(start_state, goal_pose, plan_config, link_poses=link_poses)
+        else:
+            print("using plan_batch")
+            result = self.mg[emb_sel].plan_batch(start_state, goal_pose, plan_config, link_poses=link_poses)
+
         success = result.success
         if result.interpolated_plan is None:
             joint_state = [None] * goal_pose.batch
         else:
             joint_state = result.get_paths()
-        # breakpoint()
 
         return result, success, joint_state
 
@@ -607,7 +620,6 @@ class CuRoboMotionGenerator:
             target_pos = {k: v if len(v.shape) == 2 else v.unsqueeze(0) for k, v in target_pos.items()}
             target_quat = {k: v if len(v.shape) == 2 else v.unsqueeze(0) for k, v in target_quat.items()}
 
-            print("BEFORE target_pos: ", target_pos["left_eef_link"][:5])
             for link_name in target_pos.keys():
                 target_pos_link = target_pos[link_name]
                 target_quat_link = target_quat[link_name]
@@ -635,13 +647,16 @@ class CuRoboMotionGenerator:
 
                 target_pos[link_name] = target_pos_link
                 target_quat[link_name] = target_quat_link
-            print("AFTER target_pos: ", target_pos["left_eef_link"][:5])
-
+            
             # Add the pose cost metric
             if self.ee_link[emb_sel] in target_pos and motion_constraint is not None:
                 plan_cfg.pose_cost_metric = lazy.curobo.wrap.reacher.motion_gen.PoseCostMetric(
                     hold_partial_pose=True, hold_vec_weight=self._tensor_args.to_device(motion_constraint)
                 )
+
+            target_pos_list[env_idx] = target_pos
+            target_quat_list[env_idx] = target_quat
+
 
         # Construct initial state
         if initial_joint_pos is None:
@@ -737,61 +752,69 @@ class CuRoboMotionGenerator:
                     else rollout_fn.primitive_collision_constraint.disable_cost()
                 )
 
+        # Pad target_pos and target_quat for envs that have lesser targets
+        current_right_eef_pos = self.robots[0].get_relative_eef_pose(arm="right")[0].cuda()
+        current_right_eef_quat = self.robots[0].get_relative_eef_pose(arm="right")[1][[3, 0, 1, 2]].cuda()
+        current_left_eef_pos = self.robots[0].get_relative_eef_pose(arm="left")[0].cuda()
+        current_left_eef_quat = self.robots[0].get_relative_eef_pose(arm="left")[1][[3, 0, 1, 2]].cuda()
+        max_num_targets = max([next(iter(target_pos.values())).shape[0] for target_pos in target_pos_list])
+        for env_idx in range(len(self.robots)):
+            num_targets_in_env = next(iter(target_pos_list[env_idx].values())).shape[0]
+            if num_targets_in_env < max_num_targets:
+               # Calculate how many repeats needed
+               num_repeats = max_num_targets - num_targets_in_env
+               
+               # Repeat current positions to pad up to max_num_targets
+               target_pos_list[env_idx]["right_eef_link"] = th.cat([target_pos_list[env_idx]["right_eef_link"], current_right_eef_pos.repeat(num_repeats, 1)])
+               target_pos_list[env_idx]["left_eef_link"] = th.cat([target_pos_list[env_idx]["left_eef_link"], current_left_eef_pos.repeat(num_repeats, 1)])
+               target_quat_list[env_idx]["right_eef_link"] = th.cat([target_quat_list[env_idx]["right_eef_link"], current_right_eef_quat.repeat(num_repeats, 1)])
+               target_quat_list[env_idx]["left_eef_link"] = th.cat([target_quat_list[env_idx]["left_eef_link"], current_left_eef_quat.repeat(num_repeats, 1)])
+
         # Determine how many internal batches we need to run based on submitted size
-        num_targets = next(iter(target_pos.values())).shape[0]
+        num_targets = next(iter(target_pos_list[0].values())).shape[0]
+        # num_targets = max([next(iter(target_pos.values())).shape[0] for target_pos in target_pos_list])
         remainder = num_targets % self.batch_size
         n_batches = math.ceil(num_targets / self.batch_size)
 
         # If ee_link is not in target_pos, add trivial target poses to avoid errors
-        if self.ee_link[emb_sel] not in target_pos:
-            target_pos[self.ee_link[emb_sel]] = self._tensor_args.to_device(th.zeros((num_targets, 3)))
-            target_quat[self.ee_link[emb_sel]] = self._tensor_args.to_device(th.zeros((num_targets, 4)))
-            target_quat[self.ee_link[emb_sel]][..., 0] = 1.0
+        for env_idx in range(len(self.robots)):
+            if self.ee_link[emb_sel] not in target_pos_list[env_idx]:
+                target_pos_list[env_idx][self.ee_link[emb_sel]] = self._tensor_args.to_device(th.zeros((num_targets, 3)))
+                target_quat_list[env_idx][self.ee_link[emb_sel]] = self._tensor_args.to_device(th.zeros((num_targets, 4)))
+                target_quat_list[env_idx][self.ee_link[emb_sel]][..., 0] = 1.0
 
         # Run internal batched calls
-        results, successes, paths = [], self._tensor_args.to_device(th.tensor([], dtype=th.bool)), [[]] * len(self.robots)
+        results, successes, paths = [], [], [[]] * len(self.robots)
         print("n_batches in compute_trajectories: ", n_batches)
-        # This is a temporary list for debugging purposes. Will be removed later
-        temp_list = []
+        retval_targets = []
         for i in range(n_batches):
-            # We're using a remainder if we're on the final batch and our remainder is nonzero
-            using_remainder = (i == n_batches - 1) and remainder > 0
-            offset_idx = self.batch_size * i
-            end_idx = remainder if using_remainder else self.batch_size
 
             ik_goal_batch_by_link = dict()
             for link_name in target_pos.keys():
                 target_pos_link = target_pos[link_name]
                 target_quat_link = target_quat[link_name]
 
-                batch_target_pos = target_pos_link[offset_idx : offset_idx + end_idx]
-                batch_target_quat = target_quat_link[offset_idx : offset_idx + end_idx]
+                batch_target_pos, batch_target_quat = [], []
+                for env_idx in range(len(self.robots)):
+                    batch_target_pos.append(target_pos_list[env_idx][link_name][i])
+                    batch_target_quat.append(target_quat_list[env_idx][link_name][i])
 
-                # Pad the goal if we're in our final batch
-                if using_remainder:
-                    new_batch_target_pos = self._tensor_args.to_device(th.zeros((self.batch_size, 3)))
-                    new_batch_target_pos[:end_idx] = batch_target_pos
-                    new_batch_target_pos[end_idx:] = batch_target_pos[-1]
-                    batch_target_pos = new_batch_target_pos
-                    new_batch_target_quat = self._tensor_args.to_device(th.zeros((self.batch_size, 4)))
-                    new_batch_target_quat[:end_idx] = batch_target_quat
-                    new_batch_target_quat[end_idx:] = batch_target_quat[-1]
-                    batch_target_quat = new_batch_target_quat
-
+                # breakpoint()
                 # Create IK goal
                 ik_goal_batch = lazy.curobo.types.math.Pose(
-                    position=batch_target_pos,
-                    quaternion=batch_target_quat,
+                    position=th.stack(batch_target_pos),
+                    quaternion=th.stack(batch_target_quat),
                     name=link_name,
                 )
 
                 ik_goal_batch_by_link[link_name] = ik_goal_batch
-            # breakpoint()
 
             # Run batched planning
             if self.debug:
                 self.mg[emb_sel].store_debug_in_result = True
 
+            retval_targets.append(ik_goal_batch_by_link.copy())
+            
             # Pop the main ee_link goal
             main_ik_goal_batch = ik_goal_batch_by_link.pop(self.ee_link[emb_sel])
 
@@ -799,41 +822,50 @@ class CuRoboMotionGenerator:
             if len(ik_goal_batch_by_link) == 0:
                 ik_goal_batch_by_link = None
 
-            # Have set the target pose for the ee_link for all scenes as the same for debugging purporses. 
-            # i.e. with same robot initial config, same collision env and same target pose => either all envs should have a solution 
-            # or all envs should not. THIS IS NOT HAPPENING RIGHT NOW!
-            from curobo.types.base import TensorDeviceType
-            from curobo.types.math import Pose
-            tensor_args = TensorDeviceType()
-            sp_buffer = [main_ik_goal_batch.position.cpu().numpy()] * len(self.robots)
-            sq_buffer = [main_ik_goal_batch.quaternion.cpu().numpy()] * len(self.robots)
-            main_ik_goal_batch = Pose(
-                position=tensor_args.to_device(sp_buffer),
-                quaternion=tensor_args.to_device(sq_buffer),
-                name="left_eef_link"
-            )
-            ik_goal_batch_by_link = None
+            # # Have set the target pose for the ee_link for all scenes as the same for debugging purporses. 
+            # # i.e. with same robot initial config, same collision env and same target pose => either all envs should have a solution 
+            # # or all envs should not. THIS IS NOT HAPPENING RIGHT NOW!
+            # # main_ik_goal_batch shape is (num_envs, 1, 3)
+            # from curobo.types.base import TensorDeviceType
+            # from curobo.types.math import Pose
+            # tensor_args = TensorDeviceType()
+            # sp_buffer = [main_ik_goal_batch.position.cpu().numpy()] * len(self.robots)
+            # sq_buffer = [main_ik_goal_batch.quaternion.cpu().numpy()] * len(self.robots)
+            # # sp_buffer = [self.robots[0].get_relative_eef_pose()[0].cpu().numpy()] * len(self.robots)
+            # # sq_buffer = [self.robots[0].get_relative_eef_pose()[1][[3, 0, 1, 2]].cpu().numpy()] * len(self.robots)
+            # main_ik_goal_batch = Pose(
+            #     position=tensor_args.to_device(sp_buffer),
+            #     quaternion=tensor_args.to_device(sq_buffer),
+            #     name="left_eef_link"
+            # )
+            # ik_goal_batch_by_link = None
 
-            print("==== Planning for target position: ", main_ik_goal_batch.position[0, 0])
-            temp_list.append(main_ik_goal_batch.position[0, 0])
+            # print("==== Planning for target position: ", main_ik_goal_batch.position[0, 0])
+            # temp_list.append(main_ik_goal_batch.position[0, 0])
             plan_fn = self.plan_batch if not ik_only else self.solve_ik_batch
             result, success, joint_state = plan_fn(
                 full_js, main_ik_goal_batch, plan_cfg, link_poses=ik_goal_batch_by_link, emb_sel=emb_sel
             )
             print("success: ", success)
+
+            # debug
+            # js_temp = joint_state[0].get_ordered_joint_state(self.mg[emb_sel].kinematics.joint_names)
+            # self.mg[emb_sel].kinematics.get_state(js_temp.position).ee_pose
+
             # if not success.item():
             # for idx in range(len(self.robots)):
-            #     self.save_visualization(self.robots[idx].get_joint_positions(), f"test_{idx}.obj") 
-            breakpoint()
+            #     self.save_visualization(self.robots[idx].get_joint_positions(), idx, f"test_{idx}.obj") 
+            # breakpoint()
 
             if self.debug:
                 breakpoint()
 
             # Append results
             results.append(result)
-            successes = th.concatenate([successes, success[:end_idx]])
+            successes.append(success)
             for idx in range(len(self.robots)):
                 paths[idx] = paths[idx] + joint_state[idx:idx+1]
+            # breakpoint()
 
 
         # Detach attached object if it was attached
@@ -842,8 +874,8 @@ class CuRoboMotionGenerator:
         if return_full_result:
             return results
         else:
-            temp_list = [tensor.cpu() for tensor in temp_list]
-            return successes, paths, temp_list
+            # temp_list = [tensor.cpu() for tensor in retval_targets]
+            return th.stack(successes), paths, retval_targets
 
     def path_to_joint_trajectory(self, path, get_full_js=True, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
         """

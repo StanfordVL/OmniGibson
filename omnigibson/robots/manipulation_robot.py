@@ -1189,7 +1189,7 @@ class ManipulationRobot(BaseRobot):
                 CuRoboEmbodimentSelection to the file path
         """
         # Import here to avoid circular imports
-        from omnigibson.action_primitives.curobo import CuRoboEmbodimentSelection
+        from omnigibson.action_primitives.curobo_vectorized import CuRoboEmbodimentSelection
 
         # By default, sets the standardized path
         model = self.model_name.lower()
