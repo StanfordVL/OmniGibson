@@ -35,7 +35,6 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
-        (future wine_sauce.n.01_1) 
         (future cooked__wine_sauce.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -43,14 +42,8 @@
     
     (:goal 
         (and 
-            (or 
-                (real ?wine_sauce.n.01_1) 
-                (real ?cooked__wine_sauce.n.01_1)
-            ) 
-            (or 
-                (contains ?saucepan.n.01_1 ?wine_sauce.n.01_1) 
-                (contains ?saucepan.n.01_1 ?cooked__wine_sauce.n.01_1)
-            )
+            (real ?cooked__wine_sauce.n.01_1)
+            (contains ?saucepan.n.01_1 ?cooked__wine_sauce.n.01_1)
         )
     )
 )

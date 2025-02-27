@@ -2,6 +2,7 @@ import pathlib
 import json
 import os
 from collections.abc import Iterable
+from bddl.object_taxonomy import ObjectTaxonomy
 
 TRANSITION_RULE_FOLDER = pathlib.Path(__file__).parents[1] / "generated_data" / "transition_map" / "tm_jsons"
 SYNSET_KEYS = ["machine", "container", "washed_item", "heat_source", "input_synsets", "output_synsets"]
@@ -63,9 +64,9 @@ def sanity_check_transition_rules_washer(object_taxonomy):
                 assert cleanser_synset in leaf_synsets, f"In washer transition rule, {cleanser_synset} is not a leaf synset."
 
 def sanity_check():
-    # Lazy import so that it can use the latest version of output_hierarchy_properties.json
-    from bddl.object_taxonomy import ObjectTaxonomy
     object_taxonomy = ObjectTaxonomy()
+    # Needs to refresh to use the latest version of the taxonomy
+    object_taxonomy.refresh_hierarchy_file()
     sanity_check_object_hierarchy(object_taxonomy)
     sanity_check_transition_rules(object_taxonomy)
     sanity_check_transition_rules_washer(object_taxonomy)

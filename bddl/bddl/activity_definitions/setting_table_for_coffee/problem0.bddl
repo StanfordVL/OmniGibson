@@ -6,7 +6,7 @@
         pitcher.n.02_1 - pitcher.n.02
         countertop.n.01_1 - countertop.n.01
         box__of__cream.n.01_1 - box__of__cream.n.01
-        shelf.n.01_1 - shelf.n.01
+        cabinet.n.01_1 - cabinet.n.01
         napkin.n.01_1 napkin.n.01_2 - napkin.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
         granulated_sugar.n.01_1 - granulated_sugar.n.01
@@ -24,11 +24,11 @@
         (ontop napkin.n.01_1 breakfast_table.n.01_1) 
         (ontop napkin.n.01_2 breakfast_table.n.01_1) 
         (filled bowl.n.01_1 granulated_sugar.n.01_1) 
-        (inside teaspoon.n.02_1 shelf.n.01_1) 
-        (inside teaspoon.n.02_2 shelf.n.01_1) 
+        (inside teaspoon.n.02_1 cabinet.n.01_1) 
+        (inside teaspoon.n.02_2 cabinet.n.01_1) 
         (ontop bowl.n.01_1 countertop.n.01_1) 
         (inroom breakfast_table.n.01_1 dining_room) 
-        (inroom shelf.n.01_1 kitchen) 
+        (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 

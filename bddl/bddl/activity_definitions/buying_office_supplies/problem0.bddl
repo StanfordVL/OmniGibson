@@ -3,7 +3,7 @@
 
     (:objects
         checkout.n.03_1 - checkout.n.03
-        shelf.n.01_1 - shelf.n.01
+        grocery_shelf.n.01_1 - grocery_shelf.n.01
         cash_register.n.01_1 - cash_register.n.01
         pen.n.01_1 - pen.n.01
         pencil.n.01_1 - pencil.n.01
@@ -15,13 +15,13 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (inside pen.n.01_1 shelf.n.01_1) 
-        (inside pencil.n.01_1 shelf.n.01_1) 
-        (inside tape.n.01_1 shelf.n.01_1) 
-        (inside eraser.n.01_1 shelf.n.01_1) 
+        (inroom cash_register.n.01_1 grocery_store) 
+        (inside pen.n.01_1 grocery_shelf.n.01_1) 
+        (inside pencil.n.01_1 grocery_shelf.n.01_1) 
+        (inside tape.n.01_1 grocery_shelf.n.01_1) 
+        (inside eraser.n.01_1 grocery_shelf.n.01_1) 
         (ontop credit_card.n.01_1 checkout.n.03_1) 
-        (inroom shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
         (inroom checkout.n.03_1 grocery_store)
         (ontop agent.n.01_1 floor.n.01_1)

@@ -13,7 +13,6 @@
     	table.n.02_1 - table.n.02
     	recycling_bin.n.01_1 - recycling_bin.n.01
     	sink.n.01_1 - sink.n.01
-    	shelf.n.01_1 - shelf.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -31,7 +30,6 @@
         (inroom floor.n.01_1 garage) 
         (inroom cabinet.n.01_1 garage) 
         (inroom sink.n.01_1 storage_room) 
-        (inroom shelf.n.01_1 storage_room) 
         (inroom table.n.02_1 storage_room) 
         (inroom floor.n.01_2 storage_room) 
         (ontop agent.n.01_1 floor.n.01_2)

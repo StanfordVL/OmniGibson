@@ -2,7 +2,7 @@ name: Sync Google Sheets data
 
 on:
   schedule:
-    - cron: "50 * * * *"  # 50 past every hour
+    - cron: "0 10 * * *"  # Every day at 10am
   workflow_dispatch:
   push:
     branches:

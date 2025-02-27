@@ -5,7 +5,7 @@
         cash_register.n.01_1 - cash_register.n.01
         checkout.n.03_1 - checkout.n.03
         chocolate_cake.n.01_1 - chocolate_cake.n.01
-        shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 - shelf.n.01
+        grocery_shelf.n.01_1 grocery_shelf.n.01_2 grocery_shelf.n.01_3 - grocery_shelf.n.01
         carton__of__milk.n.01_1 - carton__of__milk.n.01
         bottle__of__apple_juice.n.01_1 - bottle__of__apple_juice.n.01
         pack__of__pasta.n.01_1 pack__of__pasta.n.01_2 - pack__of__pasta.n.01
@@ -16,12 +16,12 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (inside chocolate_cake.n.01_1 shelf.n.01_1) 
-        (inside carton__of__milk.n.01_1 shelf.n.01_2) 
-        (inside bottle__of__apple_juice.n.01_1 shelf.n.01_2) 
-        (inside pack__of__pasta.n.01_1 shelf.n.01_3) 
-        (inside pack__of__pasta.n.01_2 shelf.n.01_3) 
+        (inroom cash_register.n.01_1 grocery_store) 
+        (inside chocolate_cake.n.01_1 grocery_shelf.n.01_1) 
+        (inside carton__of__milk.n.01_1 grocery_shelf.n.01_2) 
+        (inside bottle__of__apple_juice.n.01_1 grocery_shelf.n.01_2) 
+        (inside pack__of__pasta.n.01_1 grocery_shelf.n.01_3) 
+        (inside pack__of__pasta.n.01_2 grocery_shelf.n.01_3) 
         (inside money.n.01_1 shopping_cart.n.01_1) 
         (inside money.n.01_2 shopping_cart.n.01_1) 
         (inside money.n.01_3 shopping_cart.n.01_1) 
@@ -29,9 +29,9 @@
         (inside money.n.01_5 shopping_cart.n.01_1)
         (inroom floor.n.01_1 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
-        (inroom shelf.n.01_1 grocery_store) 
-        (inroom shelf.n.01_2 grocery_store) 
-        (inroom shelf.n.01_3 grocery_store)
+        (inroom grocery_shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_2 grocery_store) 
+        (inroom grocery_shelf.n.01_3 grocery_store)
         (inroom shopping_cart.n.01_1 grocery_store) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

@@ -8,7 +8,6 @@
         mug.n.04_1 mug.n.04_2 - mug.n.04
         chocolate_milk.n.01_1 - chocolate_milk.n.01
         pitcher.n.02_1 - pitcher.n.02
-        shelf.n.01_1 - shelf.n.01
         water.n.06_1 - water.n.06
         sink.n.01_1 - sink.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -30,7 +29,6 @@
         (covered mug.n.04_1 chocolate_milk.n.01_1)
         (filled pitcher.n.02_1 chocolate_milk.n.01_1)
         (insource sink.n.01_1 water.n.06_1)
-        (inroom shelf.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 dining_room) 

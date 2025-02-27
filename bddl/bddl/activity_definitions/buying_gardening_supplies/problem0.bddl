@@ -6,7 +6,7 @@
         checkout.n.03_1 - checkout.n.03
         rake.n.03_1 - rake.n.03
         pruner.n.02_1 - pruner.n.02
-        shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 - shelf.n.01
+        grocery_shelf.n.01_1 grocery_shelf.n.01_2 grocery_shelf.n.01_3 - grocery_shelf.n.01
         money.n.01_1 money.n.01_2 money.n.01_3 - money.n.01
         shears.n.01_1 - shears.n.01
         shovel.n.01_1 - shovel.n.01
@@ -18,22 +18,22 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
+        (inroom cash_register.n.01_1 grocery_store) 
         (ontop money.n.01_1 checkout.n.03_1) 
         (ontop money.n.01_2 checkout.n.03_1) 
         (ontop money.n.01_3 checkout.n.03_1) 
         (ontop rake.n.03_1 floor.n.01_1) 
-        (ontop pruner.n.02_1 shelf.n.01_1) 
-        (ontop shears.n.01_1 shelf.n.01_1) 
+        (ontop pruner.n.02_1 grocery_shelf.n.01_1) 
+        (ontop shears.n.01_1 grocery_shelf.n.01_1) 
         (ontop shovel.n.01_1 floor.n.01_1) 
-        (ontop bag__of__mulch.n.01_1 shelf.n.01_2) 
-        (ontop fertilizer__atomizer.n.01_1 shelf.n.01_2) 
-        (ontop pot_plant.n.01_1 shelf.n.01_3) 
-        (ontop pot_plant.n.01_2 shelf.n.01_3) 
+        (ontop bag__of__mulch.n.01_1 grocery_shelf.n.01_2) 
+        (ontop fertilizer__atomizer.n.01_1 grocery_shelf.n.01_2) 
+        (ontop pot_plant.n.01_1 grocery_shelf.n.01_3) 
+        (ontop pot_plant.n.01_2 grocery_shelf.n.01_3) 
         (inroom floor.n.01_1 grocery_store) 
-        (inroom shelf.n.01_1 grocery_store) 
-        (inroom shelf.n.01_2 grocery_store) 
-        (inroom shelf.n.01_3 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_2 grocery_store) 
+        (inroom grocery_shelf.n.01_3 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
         (ontop agent.n.01_1 floor.n.01_1)
     

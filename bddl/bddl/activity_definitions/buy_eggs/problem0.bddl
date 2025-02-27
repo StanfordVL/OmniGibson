@@ -4,7 +4,7 @@
     (:objects
         egg.n.02_1 egg.n.02_2 egg.n.02_3 egg.n.02_4 egg.n.02_5 egg.n.02_6 - egg.n.02
         tray.n.01_1 - tray.n.01
-        shelf.n.01_1 - shelf.n.01
+        grocery_shelf.n.01_1 - grocery_shelf.n.01
         shopping_cart.n.01_1 - shopping_cart.n.01
         money.n.01_1 - money.n.01
         checkout.n.03_1 - checkout.n.03
@@ -19,9 +19,9 @@
         (ontop egg.n.02_4 tray.n.01_1) 
         (ontop egg.n.02_5 tray.n.01_1) 
         (ontop egg.n.02_6 tray.n.01_1)
-        (inside tray.n.01_1 shelf.n.01_1)
+        (inside tray.n.01_1 grocery_shelf.n.01_1)
         (inside money.n.01_1 shopping_cart.n.01_1) 
-        (inroom shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shopping_cart.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 

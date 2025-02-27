@@ -6,7 +6,7 @@
         checkout.n.03_1 - checkout.n.03
         sack.n.01_1 sack.n.01_2 - sack.n.01
         prawn.n.01_1 - prawn.n.01
-        shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 shelf.n.01_4 - shelf.n.01
+        grocery_shelf.n.01_1 grocery_shelf.n.01_2 grocery_shelf.n.01_3 grocery_shelf.n.01_4 - grocery_shelf.n.01
         bottle__of__apple_juice.n.01_1 - bottle__of__apple_juice.n.01
         carton__of__milk.n.01_1 - carton__of__milk.n.01
         bottle__of__peanut_butter.n.01_1 - bottle__of__peanut_butter.n.01
@@ -19,25 +19,25 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1)
+        (inroom cash_register.n.01_1 grocery_store)
         (ontop sack.n.01_1 checkout.n.03_1)
         (ontop sack.n.01_2 checkout.n.03_1)
-        (inside prawn.n.01_1 shelf.n.01_4)
-        (inside bottle__of__apple_juice.n.01_1 shelf.n.01_1) 
-        (inside carton__of__milk.n.01_1 shelf.n.01_1) 
-        (inside bottle__of__peanut_butter.n.01_1 shelf.n.01_2) 
-        (inside bag__of__brown_rice.n.01_1 shelf.n.01_2) 
-        (inside banana.n.02_1 shelf.n.01_3) 
+        (inside prawn.n.01_1 grocery_shelf.n.01_4)
+        (inside bottle__of__apple_juice.n.01_1 grocery_shelf.n.01_1) 
+        (inside carton__of__milk.n.01_1 grocery_shelf.n.01_1) 
+        (inside bottle__of__peanut_butter.n.01_1 grocery_shelf.n.01_2) 
+        (inside bag__of__brown_rice.n.01_1 grocery_shelf.n.01_2) 
+        (inside banana.n.02_1 grocery_shelf.n.01_3) 
         (inside money.n.01_1 shopping_cart.n.01_1) 
         (inside money.n.01_2 shopping_cart.n.01_1) 
         (inside money.n.01_3 shopping_cart.n.01_1) 
         (inside money.n.01_4 shopping_cart.n.01_1) 
         (inside money.n.01_5 shopping_cart.n.01_1) 
         (inroom floor.n.01_1 grocery_store) 
-        (inroom shelf.n.01_1 grocery_store) 
-        (inroom shelf.n.01_2 grocery_store) 
-        (inroom shelf.n.01_3 grocery_store) 
-        (inroom shelf.n.01_4 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_2 grocery_store) 
+        (inroom grocery_shelf.n.01_3 grocery_store) 
+        (inroom grocery_shelf.n.01_4 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shopping_cart.n.01_1 grocery_store)
         (ontop agent.n.01_1 floor.n.01_1)

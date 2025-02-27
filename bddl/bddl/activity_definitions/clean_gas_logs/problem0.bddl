@@ -3,7 +3,7 @@
 
     (:objects
         log.n.01_1 log.n.01_2 - log.n.01
-        fireplace.n.01_1 - fireplace.n.01
+        wood_fireplace.n.01_1 - wood_fireplace.n.01
         scrub_brush.n.01_1 - scrub_brush.n.01
         rag.n.01_1 - rag.n.01
         dust.n.01_1 - dust.n.01
@@ -12,13 +12,13 @@
     )
     
     (:init 
-        (inside log.n.01_1 fireplace.n.01_1) 
-        (inside log.n.01_2 fireplace.n.01_1) 
+        (inside log.n.01_1 wood_fireplace.n.01_1) 
+        (inside log.n.01_2 wood_fireplace.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (covered log.n.01_1 dust.n.01_1) 
         (covered log.n.01_2 dust.n.01_1) 
-        (ontop fireplace.n.01_1 floor.n.01_1) 
+        (ontop wood_fireplace.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

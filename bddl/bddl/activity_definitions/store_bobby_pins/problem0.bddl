@@ -4,17 +4,17 @@
     (:objects
         bobby_pin.n.01_1 bobby_pin.n.01_2 bobby_pin.n.01_3 - bobby_pin.n.01
         pencil_box.n.01_1 - pencil_box.n.01
-        shelf.n.01_1 - shelf.n.01
+        bookcase.n.01_1 - bookcase.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (inside bobby_pin.n.01_1 shelf.n.01_1) 
-        (inside bobby_pin.n.01_2 shelf.n.01_1) 
-        (inside bobby_pin.n.01_3 shelf.n.01_1) 
-        (inside pencil_box.n.01_1 shelf.n.01_1)
-        (inroom shelf.n.01_1 bedroom) 
+        (inside bobby_pin.n.01_1 bookcase.n.01_1) 
+        (inside bobby_pin.n.01_2 bookcase.n.01_1) 
+        (inside bobby_pin.n.01_3 bookcase.n.01_1) 
+        (inside pencil_box.n.01_1 bookcase.n.01_1)
+        (inroom bookcase.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -25,7 +25,7 @@
                 (?bobby_pin.n.01 - bobby_pin.n.01)
                 (inside ?bobby_pin.n.01 ?pencil_box.n.01_1)
             )
-            (inside ?pencil_box.n.01_1 ?shelf.n.01_1)
+            (inside ?pencil_box.n.01_1 ?bookcase.n.01_1)
         )
     )
 )

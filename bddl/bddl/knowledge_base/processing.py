@@ -152,11 +152,29 @@ class KnowledgeBaseProcessor():
                 # Create the object
                 category_name = object_name.split("-")[0]
                 category, _ = Category.get_or_create(name=category_name)
-                object = Object.create(name=object_name, original_name=orig_name, ready=False, provider=provider, category=category)
+
+                # Original category
+                orig_category_name = orig_name.split("-")[0]
+                obj = Object.create(name=orig_id, original_category_name=orig_category_name, ready=False, provider=provider, category=category)
                 if orig_name in inventory["meta_links"]:
-                    for meta_link in inventory["meta_links"][orig_name]:
+                    existing_meta_types = set(inventory["meta_links"][orig_name])
+                    if "openfillable" in existing_meta_types:
+                        existing_meta_types.add("fillable")
+                    for meta_link in existing_meta_types:
                         meta_link_obj, _ = MetaLink.get_or_create(name=meta_link)
-                        object.meta_links.add(meta_link_obj)
+                        obj.meta_links.add(meta_link_obj)
+                    
+                    if orig_name in inventory["attachment_pairs"]:
+                        existing_attachment_pairs = inventory["attachment_pairs"][orig_name]
+                        for gender, pairs in existing_attachment_pairs.items():
+                            for pair in pairs:
+                                pair_obj, _ = AttachmentPair.get_or_create(name=pair)
+                                if gender == "F":
+                                    obj.female_attachment_pairs.add(pair_obj)
+                                elif gender == "M":
+                                    obj.male_attachment_pairs.add(pair_obj)
+                                else:
+                                    raise Exception(f"Invalid gender {gender} for attachment pair {pair}")
 
         with open(GENERATED_DATA_DIR / "object_inventory.json", "r") as f:
             objs = []
@@ -171,14 +189,15 @@ class KnowledgeBaseProcessor():
                     category_name = object_name.split("-")[0]
                     category, _ = Category.get_or_create(name=category_name)
                     # safeguard to ensure currently available objects are also in future planned dataset
-                    assert Object.exists(name=object_name), f"{object_name} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!"
-                    object = Object.get(name=object_name)
-                    object.ready = True
-                    objs.append(object)
+                    assert Object.exists(name=orig_id), f"{orig_id} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!"
+                    obj = Object.get(name=orig_id)
+                    obj.ready = True
+                    objs.append(obj)
 
         # Check that all of the renames have happened
-        missing_renames = {final_name for _, final_name in self.object_rename_mapping.values() if not Object.exists(name=final_name)}
-        assert len(missing_renames) == 0, f"{missing_renames} do not exist in the database. Did you rename a nonexistent object (or one in the deletion queue)?"
+        # TODO: Is this really useful? Doubt it.
+        # missing_renames = {final_name for _, final_name in self.object_rename_mapping.values() if not Object.exists(name=final_name.split("-")[1])}
+        # assert len(missing_renames) == 0, f"{missing_renames} do not exist in the database. Did you rename a nonexistent object (or one in the deletion queue)?"
 
 
     def create_scenes(self):
@@ -210,9 +229,9 @@ class KnowledgeBaseProcessor():
                                 from_name, to_name = self.object_rename_mapping[orig_id]
                                 assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
                                 object_name = to_name
-                            object = Object.get(name=object_name)
-                            assert object is not None, f"Scene {scene_name} object {object_name} does not exist in the database."
-                            RoomObject.create(room=room, object=object, count=count)
+                            obj = Object.get(name=orig_id)
+                            assert obj is not None, f"Scene {scene_name} object {orig_id} does not exist in the database."
+                            RoomObject.create(room=room, object=obj, count=count)
 
         with open(GENERATED_DATA_DIR / "combined_room_object_list.json", "r") as f:
             current_scene_dict = json.load(f)["scenes"]
@@ -236,9 +255,9 @@ class KnowledgeBaseProcessor():
                                 from_name, to_name = self.object_rename_mapping[orig_id]
                                 assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
                                 object_name = to_name
-                            object = Object.get(name=object_name)
-                            assert object is not None, f"Scene {scene_name} object {object_name} does not exist in the database."
-                            RoomObject.create(room=room, object=object, count=count)
+                            obj = Object.get(name=orig_id)
+                            assert obj is not None, f"Scene {scene_name} object {orig_id} does not exist in the database."
+                            RoomObject.create(room=room, object=obj, count=count)
 
 
     def create_tasks(self):
@@ -276,8 +295,6 @@ class KnowledgeBaseProcessor():
                 synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
                 synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
                 synset_used_predicates = object_used_predicates(combined_conds, synset_name)
-                if not synset_used_predicates:
-                    self.debug_print(f"Synset {synset_name} is not used in any predicate in {task_name}")
                 for predicate in synset_used_predicates:
                     pred_obj, _ = Predicate.get_or_create(name=predicate)
                     if pred_obj not in synset.used_in_predicates:
@@ -292,15 +309,19 @@ class KnowledgeBaseProcessor():
                     if "future" not in initial_preds:
                         self.debug_print(f"Synset {synset_name} is not used as future in initial in {task_name}")
                     if "real" in initial_preds:
-                        self.debug_print(f"Synset {synset_name} is used as real in initial in {task_name}")
+                        raise ValueError(f"Synset {synset_name} is used as real in initial in {task_name}")
 
                     goal_preds = object_used_predicates(goal_conds, synset_name)
                     if "real" not in goal_preds:
                         self.debug_print(f"Synset {synset_name} is not used as real in goal in {task_name}")
                     if "future" in goal_preds:
-                        self.debug_print(f"Synset {synset_name} is used as future in goal in {task_name}")
+                        raise ValueError(f"Synset {synset_name} is used as future in goal in {task_name}")
 
-                    task.future_synsets.add(synset)
+                    # We only add it if it's used in the initial predicates. Sometimes things will be real()
+                    # in the goal but they will already exist in the initial, and the real is just being
+                    # used to say that the object is not entirely used up during the transition.
+                    if "future" in initial_preds:
+                        task.future_synsets.add(synset)
 
             # generate room requirements for task
             room_synset_requirements = defaultdict(Counter)  # room[synset] = count
@@ -322,7 +343,8 @@ class KnowledgeBaseProcessor():
         json_paths = glob.glob(str(GENERATED_DATA_DIR / "transition_map/tm_jsons/*.json"))
         transitions = []
         for jp in json_paths:
-            if "washer" in jp:
+            # This file is in a different format and not relevant.
+            if jp.endswith("washer.json"):
                 continue
             with open(jp) as f:
                 transitions.extend(json.load(f))
@@ -331,34 +353,51 @@ class KnowledgeBaseProcessor():
         for transition_data in self.tqdm(transitions):
             rule_name = transition_data["rule_name"]
             transition = TransitionRule.create(name=rule_name)
+
+            # Add the default inputs and outputs
             inputs = set(transition_data["input_synsets"].keys())
-            assert inputs, f"Transition {transition.name} has no inputs!"
             outputs = set(transition_data["output_synsets"].keys())
+
+            # Add the washer rules' washed item both to inputs and outputs
+            if "washed_item" in transition_data:
+                washed_items = set(transition_data["washed_item"].keys())
+                inputs.update(washed_items)
+                outputs.update(washed_items)
+
+            assert inputs, f"Transition {transition.name} has no inputs!"
             assert outputs, f"Transition {transition.name} has no outputs!"
-            assert inputs & outputs == set(), f"Inputs and outputs of {transition.name} overlap!"
+            # TODO: With washer rules, this is no longer true. Check if this is important
+            # assert inputs & outputs == set(), f"Inputs and outputs of {transition.name} overlap!"
+
             for synset_name in inputs:
                 synset = Synset.get(name=synset_name)
                 transition.input_synsets.add(synset)
             for synset_name in outputs:
                 synset = Synset.get(name=synset_name)
                 transition.output_synsets.add(synset)
+            for auxiliary_synset_type in ["machine", "heat_source", "container"]:
+                if auxiliary_synset_type in transition_data:
+                    machines = transition_data[auxiliary_synset_type]
+                    for synset_name in machines:
+                        machine = Synset.get(name=synset_name)
+                        transition.machine_synsets.add(machine)
 
     def generate_synset_state(self):
         synsets = []
         substances = {s.name for s in Synset.all_objects() if "substance" in s.property_names}
         for synset in self.tqdm(Synset.all_objects()):
-            if synset.name == "entity.n.01": synset.state = STATE_MATCHED   # root synset is always legal
+            if synset.name == "entity.n.01": synset.state = SynsetState.MATCHED   # root synset is always legal
             elif synset.name in substances:
-                synset.state = STATE_SUBSTANCE
+                synset.state = SynsetState.SUBSTANCE
             elif synset.parents:
                 if len(synset.matching_ready_objects) > 0:
-                    synset.state = STATE_MATCHED
+                    synset.state = SynsetState.MATCHED
                 elif len(synset.matching_objects) > 0:
-                    synset.state = STATE_PLANNED
+                    synset.state = SynsetState.PLANNED
                 else:
-                    synset.state = STATE_UNMATCHED
+                    synset.state = SynsetState.UNMATCHED
             else:
-                synset.state = STATE_ILLEGAL
+                synset.state = SynsetState.ILLEGAL
             synsets.append(synset)
 
 

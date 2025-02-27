@@ -8,7 +8,6 @@
         trouser.n.01_1 trouser.n.01_2 - trouser.n.01
         hamper.n.02_1 hamper.n.02_2 hamper.n.02_3 - hamper.n.02
         floor.n.01_1 - floor.n.01
-        shelf.n.01_1 - shelf.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -23,7 +22,6 @@
         (ontop hamper.n.02_2 floor.n.01_1) 
         (ontop hamper.n.02_3 floor.n.01_1) 
         (inroom bed.n.01_1 bedroom) 
-        (inroom shelf.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

@@ -3,7 +3,7 @@
 
     (:objects
         book.n.02_1 - book.n.02
-        shelf.n.01_1 - shelf.n.01
+        bookcase.n.01_1 - bookcase.n.01
         rag.n.01_1 - rag.n.01
         dust.n.01_1 - dust.n.01
         floor.n.01_1 - floor.n.01
@@ -11,10 +11,10 @@
     )
     
     (:init 
-        (inside book.n.02_1 shelf.n.01_1) 
-        (ontop rag.n.01_1 shelf.n.01_1) 
+        (inside book.n.02_1 bookcase.n.01_1) 
+        (ontop rag.n.01_1 bookcase.n.01_1) 
         (covered book.n.02_1 dust.n.01_1) 
-        (inroom shelf.n.01_1 living_room) 
+        (inroom bookcase.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

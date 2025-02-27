@@ -68,10 +68,10 @@ VALID_ATTACHMENTS = set([
     ("pole.n.01", "wall_nail.n.01"),
     ("poster.n.01", "wall_nail.n.01"),
     ("raspberry.n.02", "scrub.n.01"),
-    ("shelf_baseboard.n.01", "shelf_side.n.01"),
-    ("shelf_shelf.n.01", "shelf_back.n.01"),
-    ("shelf_side.n.01", "shelf_back.n.01"),
-    ("shelf_top.n.01", "shelf_back.n.01"),
+    ("bookcase_baseboard.n.01", "bookcase_side.n.01"),
+    ("bookcase_shelf.n.01", "bookcase_back.n.01"),
+    ("bookcase_side.n.01", "bookcase_back.n.01"),
+    ("bookcase_top.n.01", "bookcase_back.n.01"),
     ("skateboard_wheel.n.01", "skateboard_deck.n.01"),
     ("trampoline_leg.n.01", "trampoline_top.n.01"),
     ("trout.n.01", "fishing_rod.n.01"),
@@ -314,6 +314,7 @@ def check_synset_predicate_alignment(atom, syns_to_props):
         assert ("rigidBody" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable touching: {atom}"
     if pred == "inside": 
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]] or "softBody" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
+        assert "fillable" in syns_to_props[objects[1]], f"Inapplicable inside: {atom}"
     if pred == "overlaid": 
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "attached":

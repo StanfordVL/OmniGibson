@@ -3,7 +3,7 @@
 
     (:objects
         swab.n.02_1 - swab.n.02
-        shelf.n.01_1 - shelf.n.01
+        bookcase.n.01_1 - bookcase.n.01
         polish.n.03_1 - polish.n.03
         bucket.n.01_1 - bucket.n.01
         floor.n.01_1 - floor.n.01
@@ -15,9 +15,9 @@
         (ontop swab.n.02_1 floor.n.01_1) 
         (filled polish__bottle.n.01_1 polish.n.03_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
-        (inside polish__bottle.n.01_1 shelf.n.01_1) 
+        (inside polish__bottle.n.01_1 bookcase.n.01_1) 
         (inroom floor.n.01_1 living_room) 
-        (inroom shelf.n.01_1 living_room) 
+        (inroom bookcase.n.01_1 garage) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

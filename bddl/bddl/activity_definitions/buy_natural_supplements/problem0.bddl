@@ -5,7 +5,7 @@
         cash_register.n.01_1 - cash_register.n.01
         checkout.n.03_1 - checkout.n.03
         bottle__of__supplements.n.01_1 bottle__of__supplements.n.01_2 bottle__of__supplements.n.01_3 bottle__of__supplements.n.01_4 - bottle__of__supplements.n.01
-        shelf.n.01_1 shelf.n.01_2 - shelf.n.01
+        grocery_shelf.n.01_1 grocery_shelf.n.01_2 - grocery_shelf.n.01
         money.n.01_1 money.n.01_2 money.n.01_3 - money.n.01
         sack.n.01_1 - sack.n.01
         floor.n.01_1 - floor.n.01
@@ -13,18 +13,18 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1)
-        (ontop bottle__of__supplements.n.01_1 shelf.n.01_1) 
-        (ontop bottle__of__supplements.n.01_2 shelf.n.01_2) 
-        (ontop bottle__of__supplements.n.01_3 shelf.n.01_1) 
-        (ontop bottle__of__supplements.n.01_4 shelf.n.01_2) 
+        (inroom cash_register.n.01_1 grocery_store)
+        (ontop bottle__of__supplements.n.01_1 grocery_shelf.n.01_1) 
+        (ontop bottle__of__supplements.n.01_2 grocery_shelf.n.01_2) 
+        (ontop bottle__of__supplements.n.01_3 grocery_shelf.n.01_1) 
+        (ontop bottle__of__supplements.n.01_4 grocery_shelf.n.01_2) 
         (ontop money.n.01_1 checkout.n.03_1) 
         (ontop money.n.01_2 checkout.n.03_1) 
         (ontop money.n.01_3 checkout.n.03_1) 
         (ontop sack.n.01_1 checkout.n.03_1) 
         (inroom floor.n.01_1 grocery_store) 
-        (inroom shelf.n.01_1 grocery_store) 
-        (inroom shelf.n.01_2 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_2 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
         (ontop agent.n.01_1 floor.n.01_1)
     

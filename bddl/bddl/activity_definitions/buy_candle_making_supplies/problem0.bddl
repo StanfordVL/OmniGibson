@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        shelf.n.01_1 - shelf.n.01
+        grocery_shelf.n.01_1 - grocery_shelf.n.01
         paraffin.n.01_1 - paraffin.n.01
         candlestick.n.01_1 candlestick.n.01_2 - candlestick.n.01
         shopping_cart.n.01_1 - shopping_cart.n.01
@@ -13,13 +13,13 @@
     )
     
     (:init 
-        (ontop paraffin.n.01_1 shelf.n.01_1)
-        (ontop candlestick.n.01_1 shelf.n.01_1) 
-        (inside candlestick.n.01_2 shelf.n.01_1)
+        (ontop paraffin.n.01_1 grocery_shelf.n.01_1)
+        (ontop candlestick.n.01_1 grocery_shelf.n.01_1) 
+        (inside candlestick.n.01_2 grocery_shelf.n.01_1)
         (inside money.n.01_1 shopping_cart.n.01_1) 
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shopping_cart.n.01_1 grocery_store) 
-        (inroom shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

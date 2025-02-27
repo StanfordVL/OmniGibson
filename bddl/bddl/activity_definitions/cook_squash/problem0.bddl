@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        butternut_squash.n.01_1 - butternut_squash.n.01
+        butternut_squash.n.02_1 - butternut_squash.n.02
         countertop.n.01_1 - countertop.n.01
         cookie_sheet.n.01_1 - cookie_sheet.n.01
         oven.n.01_1 - oven.n.01
@@ -11,9 +11,9 @@
     )
     
     (:init 
-        (ontop butternut_squash.n.01_1 countertop.n.01_1) 
+        (ontop butternut_squash.n.02_1 countertop.n.01_1) 
         (not 
-            (cooked butternut_squash.n.01_1)
+            (cooked butternut_squash.n.02_1)
         ) 
         (ontop cookie_sheet.n.01_1 oven.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
@@ -24,7 +24,7 @@
     
     (:goal 
         (and 
-            (cooked ?butternut_squash.n.01_1)
+            (cooked ?butternut_squash.n.02_1)
         )
     )
 )

@@ -10,7 +10,7 @@
         long_trousers.n.01_1 - long_trousers.n.01
         floor.n.01_1 - floor.n.01
         sink.n.01_1 - sink.n.01
-        shelf.n.01_1 - shelf.n.01
+        bed.n.01_1 - bed.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -21,15 +21,15 @@
         (filled detergent__bottle.n.01_1 detergent.n.02_1)
         (ontop detergent__bottle.n.01_1 floor.n.01_1)
         (insource sink.n.01_1 water.n.06_1)
-        (inroom shelf.n.01_1 living_room) 
-        (inroom floor.n.01_1 living_room) 
-        (inroom sink.n.01_1 kitchen) 
+        (inroom bed.n.01_1 bedroom) 
+        (inroom floor.n.01_1 bedroom) 
+        (inroom sink.n.01_1 bathroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (draped ?long_trousers.n.01_1 ?shelf.n.01_1)
+            (draped ?long_trousers.n.01_1 ?bed.n.01_1)
             (not
                 (covered ?long_trousers.n.01_1 ?wrinkle.n.01_1)
             )

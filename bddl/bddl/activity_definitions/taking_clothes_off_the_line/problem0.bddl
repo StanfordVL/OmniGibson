@@ -8,7 +8,7 @@
         tank_top.n.01_1 - tank_top.n.01
         blouse.n.01_1 - blouse.n.01
         trouser.n.01_1 - trouser.n.01
-        underwear.n.01_1 underwear.n.01_2 - underwear.n.01
+        undergarment.n.01_1 undergarment.n.01_2 - undergarment.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -18,8 +18,8 @@
         (draped tank_top.n.01_1 clothesline.n.01_1) 
         (draped blouse.n.01_1 clothesline.n.01_1) 
         (draped trouser.n.01_1 clothesline.n.01_1)
-        (draped underwear.n.01_1 clothesline.n.01_1) 
-        (draped underwear.n.01_2 clothesline.n.01_1) 
+        (draped undergarment.n.01_1 clothesline.n.01_1) 
+        (draped undergarment.n.01_2 clothesline.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -30,8 +30,8 @@
             (inside ?trouser.n.01_1 ?hamper.n.02_1)
             (inside ?blouse.n.01_1 ?hamper.n.02_1)
             (forall 
-                (?underwear.n.01 - underwear.n.01)
-                (inside ?underwear.n.01 ?hamper.n.02_1)
+                (?undergarment.n.01 - undergarment.n.01)
+                (inside ?undergarment.n.01 ?hamper.n.02_1)
             )
         )
     )

@@ -45,7 +45,7 @@
                     (inside ?board_game.n.01 ?toy_box.n.01)
                 ) 
             )
-            (inside ?wicker_basket.n.01_1 ?shelf.n.01_1) 
+            (ontop ?wicker_basket.n.01_1 ?shelf.n.01_1) 
             (inside ?tennis_ball.n.01_1 ?wicker_basket.n.01_1)
         )
     )

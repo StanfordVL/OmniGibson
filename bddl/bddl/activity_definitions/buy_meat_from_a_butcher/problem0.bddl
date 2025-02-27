@@ -5,7 +5,7 @@
         cash_register.n.01_1 - cash_register.n.01
         checkout.n.03_1 - checkout.n.03
         steak.n.01_1 steak.n.01_2 - steak.n.01
-        shelf.n.01_1 shelf.n.01_2 - shelf.n.01
+        grocery_shelf.n.01_1 grocery_shelf.n.01_2 - grocery_shelf.n.01
         brisket.n.01_1 - brisket.n.01
         bratwurst.n.01_1 bratwurst.n.01_2 - bratwurst.n.01
         pack__of__ground_beef.n.01_1 - pack__of__ground_beef.n.01
@@ -15,13 +15,13 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
-        (ontop steak.n.01_1 shelf.n.01_1) 
-        (ontop steak.n.01_2 shelf.n.01_1) 
-        (ontop brisket.n.01_1 shelf.n.01_2) 
-        (ontop bratwurst.n.01_1 shelf.n.01_2) 
-        (ontop bratwurst.n.01_2 shelf.n.01_2) 
-        (ontop pack__of__ground_beef.n.01_1 shelf.n.01_1)
+        (inroom cash_register.n.01_1 grocery_store) 
+        (ontop steak.n.01_1 grocery_shelf.n.01_1) 
+        (ontop steak.n.01_2 grocery_shelf.n.01_1) 
+        (ontop brisket.n.01_1 grocery_shelf.n.01_2) 
+        (ontop bratwurst.n.01_1 grocery_shelf.n.01_2) 
+        (ontop bratwurst.n.01_2 grocery_shelf.n.01_2) 
+        (ontop pack__of__ground_beef.n.01_1 grocery_shelf.n.01_1)
         (ontop money.n.01_1 checkout.n.03_1) 
         (ontop money.n.01_2 checkout.n.03_1) 
         (ontop money.n.01_3 checkout.n.03_1) 
@@ -31,8 +31,8 @@
         (ontop steak.n.01_1 steak.n.01_2) 
         (inroom floor.n.01_1 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
-        (inroom shelf.n.01_1 grocery_store) 
-        (inroom shelf.n.01_2 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_2 grocery_store) 
         (ontop agent.n.01_1 floor.n.01_1)
     
     )

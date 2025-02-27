@@ -6,7 +6,7 @@
         diced__chicken.n.01_1 - diced__chicken.n.01
         countertop.n.01_1 - countertop.n.01
         salt.n.02_1 - salt.n.02
-        mason_jar.n.01_1 - mason_jar.n.01
+        hinged_jar.n.01_1 - hinged_jar.n.01
         salt__shaker.n.01_1 - salt__shaker.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         floor.n.01_1 - floor.n.01
@@ -17,9 +17,9 @@
         (filled tupperware.n.01_1 diced__chicken.n.01_1) 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
         (insource salt__shaker.n.01_1 salt.n.02_1) 
-        (ontop mason_jar.n.01_1 countertop.n.01_1) 
+        (ontop hinged_jar.n.01_1 countertop.n.01_1) 
         (ontop salt__shaker.n.01_1 countertop.n.01_1) 
-        (open mason_jar.n.01_1) 
+        (open hinged_jar.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -28,10 +28,10 @@
     
     (:goal 
         (and 
-            (contains ?mason_jar.n.01_1 ?diced__chicken.n.01_1) 
-            (contains ?mason_jar.n.01_1 ?salt.n.02_1)
+            (contains ?hinged_jar.n.01_1 ?diced__chicken.n.01_1) 
+            (contains ?hinged_jar.n.01_1 ?salt.n.02_1)
             (not
-                (open ?mason_jar.n.01_1)
+                (open ?hinged_jar.n.01_1)
             )
         )
     )
