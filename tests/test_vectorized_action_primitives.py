@@ -40,12 +40,13 @@ def setup_environment(load_object_categories, robot="R1"):
                 "type": "InteractiveTraversableScene",
                 "scene_model": "Rs_int",
                 "load_object_categories": load_object_categories,
+                # "not_load_object_categories": ["walls"]
             },
             "robots": [robots],
         }
         cfgs.append(cfg)
 
-    seed = 40
+    seed = 2
     random.seed(seed)
     np.random.seed(seed)
     th.manual_seed(seed)
@@ -81,9 +82,10 @@ def primitive_tester(vec_env, objects, primitive, primitives_args):
     robots = []
     for env_idx, obj in enumerate(objects):
         robots.append(vec_env.envs[env_idx].robots[0])
-        vec_env.envs[env_idx].scene.add_object(obj["object"])
-        obj["object"].set_position_orientation(position=obj["position"], orientation=obj["orientation"])
-        og.sim.step()
+        print(f"Navigate to obj {obj.name} in env {env_idx}")
+    #     vec_env.envs[env_idx].scene.add_object(obj["object"])
+    #     obj["object"].set_position_orientation(position=obj["position"], orientation=obj["orientation"])
+    #     og.sim.step()
 
     # Let the objects settle
     for _ in range(30):
@@ -95,6 +97,7 @@ def primitive_tester(vec_env, objects, primitive, primitives_args):
     try:
         execute_controller(controller.apply_ref(primitive, primitives_args, attempts=1), vec_env)
     finally:
+        breakpoint()
         # Clear the sim
         og.clear()
 
@@ -102,20 +105,28 @@ def primitive_tester(vec_env, objects, primitive, primitives_args):
 @pytest.mark.parametrize("robot", ["Tiago", "R1"])
 class TestPrimitives:
     def test_navigate(self, robot):
-        categories = ["floors"]
+        categories = ["floors", "table_lamp", "coffee_table", "pot_plant", "loudspeaker", "bed", "sink"]
         vec_env = setup_environment(categories, robot=robot)
         num_envs = len(vec_env.envs)
 
         objects = []
         primitives_args = []
         for env_idx in range(len(vec_env.envs)):
-            obj_1 = {
-                "object": DatasetObject(name="cologne", category="bottle_of_cologne", model="lyipur"),
-                "position": [-0.3 + (15.96 * env_idx), -0.8, 0.5],
-                "orientation": [0, 0, 0, 1],
-            }
-            objects.append(obj_1)
-            primitives_args.append(obj_1["object"])
+            # obj_1 = {
+            #     "object": DatasetObject(name="cologne", category="bottle_of_cologne", model="lyipur"),
+            #     "position": [-0.3 + (15.96 * env_idx), -0.8, 0.5],
+            #     "orientation": [0, 0, 0, 1],
+            # }
+            
+            # Skip 'floors' by starting from index 1
+            # Note that motion planning often fails for bed and sink.
+            # For sink, a collision-free, reachable base pose is found but motion planning is failing due to some reason
+            # For bed, finding a collision-free, reachable base pose is failing
+            random_category = random.choice(categories[1:])
+            obj_category = list(vec_env.envs[env_idx].scene.object_registry("category", random_category))
+            obj = random.choice(obj_category)
+            objects.append(obj)
+            primitives_args.append(obj)
         
         primitive = StarterSemanticActionPrimitiveSet.NAVIGATE_TO
 

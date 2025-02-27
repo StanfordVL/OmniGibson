@@ -802,7 +802,7 @@ class CuRoboMotionGenerator:
 
         # Run internal batched calls
         results, successes, paths = [], [], [[]] * len(self.robots)
-        print("n_batches in compute_trajectories: ", n_batches)
+        # print("n_batches in compute_trajectories: ", n_batches)
         retval_targets = []
         for i in range(n_batches):
 
@@ -862,7 +862,10 @@ class CuRoboMotionGenerator:
             result, success, joint_state = plan_fn(
                 full_js, main_ik_goal_batch, plan_cfg, link_poses=ik_goal_batch_by_link, emb_sel=emb_sel
             )
-            print("success: ", success)
+            if ik_only:
+                print("IK only success: ", success)
+            else:
+                print("Motion planning success: ", success)
             # breakpoint()
 
             # debug

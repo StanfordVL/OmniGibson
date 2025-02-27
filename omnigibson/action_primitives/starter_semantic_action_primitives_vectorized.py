@@ -309,24 +309,25 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             except ActionPrimitiveError as e:
                 errors.append(e)
 
-            try:
-                # If we're not holding anything, release the hand so it doesn't stick to anything else.
-                if not self._get_obj_in_hand():
-                    yield from self._execute_release()
-            except ActionPrimitiveError:
-                pass
+            # TODO: Check if commenting this is fine
+            # try:
+            #     # If we're not holding anything, release the hand so it doesn't stick to anything else.
+            #     if not self._get_obj_in_hand():
+            #         yield from self._execute_release()
+            # except ActionPrimitiveError:
+            #     pass
 
-            try:
-                # Make sure we retract the arms after every step
-                yield from self._reset_robot()
-            except ActionPrimitiveError:
-                pass
+            # try:
+            #     # Make sure we retract the arms after every step
+            #     yield from self._reset_robot()
+            # except ActionPrimitiveError:
+            #     pass
 
-            try:
-                # Settle before returning.
-                yield from self._settle_robot()
-            except ActionPrimitiveError:
-                pass
+            # try:
+            #     # Settle before returning.
+            #     yield from self._settle_robot()
+            # except ActionPrimitiveError:
+            #     pass
 
             # Stop on success
             if success:
