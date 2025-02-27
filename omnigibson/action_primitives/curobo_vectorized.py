@@ -523,6 +523,7 @@ class CuRoboMotionGenerator:
         ik_only=False,
         ik_world_collision_check=True,
         emb_sel=CuRoboEmbodimentSelection.DEFAULT,
+        env_idx=None
     ):
         """
         Computes the robot joint trajectory to reach the desired @target_pos and @target_quat
@@ -602,11 +603,17 @@ class CuRoboMotionGenerator:
             success_ratio=1.0 / self.batch_size if success_ratio is None else success_ratio,
         )
 
-        # breakpoint()
-
-        for env_idx, robot in enumerate(self.robots):
-            target_pos = target_pos_list[env_idx]
-            target_quat = target_quat_list[env_idx]
+        # env_idx is None when >1 robot is present i.e. I do not want to run motion planning on a single env
+        single_env_mode = False
+        if env_idx is not None:
+            single_env_mode = True
+        
+        for i in range(len(target_pos_list)):
+            if not single_env_mode:
+                env_idx = i
+            robot = self.robots[env_idx]
+            target_pos = target_pos_list[i]
+            target_quat = target_quat_list[i]
         
             # If target_pos and target_quat are torch tensors, it's assumed that they correspond to the default ee_link
             if isinstance(target_pos, th.Tensor):
@@ -654,48 +661,53 @@ class CuRoboMotionGenerator:
                     hold_partial_pose=True, hold_vec_weight=self._tensor_args.to_device(motion_constraint)
                 )
 
-            target_pos_list[env_idx] = target_pos
-            target_quat_list[env_idx] = target_quat
+            target_pos_list[i] = target_pos
+            target_quat_list[i] = target_quat
 
 
         # Construct initial state
-        if initial_joint_pos is None:
-            q_pos = th.stack([self.robots[0].get_joint_positions()] * self.batch_size, axis=0)
-            q_vel = th.stack([self.robots[0].get_joint_velocities()] * self.batch_size, axis=0)
-            q_eff = th.stack([self.robots[0].get_joint_efforts()] * self.batch_size, axis=0)
-        else:
-            q_pos = th.stack([initial_joint_pos] * self.batch_size, axis=0)
-            q_vel = th.zeros_like(q_pos)
-            q_eff = th.zeros_like(q_pos)
+        for i in range(len(target_pos_list)):
+            if initial_joint_pos is None:
+                q_pos = th.stack([self.robots[i].get_joint_positions()] * self.batch_size, axis=0)
+                q_vel = th.stack([self.robots[i].get_joint_velocities()] * self.batch_size, axis=0)
+                q_eff = th.stack([self.robots[i].get_joint_efforts()] * self.batch_size, axis=0)
+            else:
+                q_pos = th.stack([initial_joint_pos] * self.batch_size, axis=0)
+                q_vel = th.zeros_like(q_pos)
+                q_eff = th.zeros_like(q_pos)
 
-        # cu_js.shape: (1, num_robot_joints) full_js.shape: (num_envs, num_robot_joints)
-        full_js = lazy.curobo.types.state.JointState(
-            position=self._tensor_args.to_device(q_pos),
-            # TODO: Ideally these should be nonzero, but curobo fails to compute a solution if so
-            # See this note from https://curobo.org/get_started/2b_isaacsim_examples.html
-            # Motion generation only generates motions when the robot is static.
-            # cuRobo has an experimental mode to optimize from non-static states.
-            # You can try this by passing --reactive to motion_gen_reacher.py.
-            # This mode will have lower success than the static mode as now the optimization
-            # has to account for the robot’s current velocity and acceleration.
-            # The weights have also not been tuned for reactive mode.
-            velocity=self._tensor_args.to_device(q_vel) * 0.0,
-            acceleration=self._tensor_args.to_device(q_eff) * 0.0,
-            jerk=self._tensor_args.to_device(q_eff) * 0.0,
-            joint_names=self.robot_joint_names,
-        )
-        for env_idx in range(1, len(self.robots)):
-            cu_js = lazy.curobo.types.state.JointState(
-                position=self._tensor_args.to_device(q_pos),
-                velocity=self._tensor_args.to_device(q_vel) * 0.0,
-                acceleration=self._tensor_args.to_device(q_eff) * 0.0,
-                jerk=self._tensor_args.to_device(q_eff) * 0.0,
-                joint_names=self.robot_joint_names,
-            )
+            if i == 0:
+                # cu_js.shape: (1, num_robot_joints) full_js.shape: (num_envs, num_robot_joints)
+                full_js = lazy.curobo.types.state.JointState(
+                    position=self._tensor_args.to_device(q_pos),
+                    # TODO: Ideally these should be nonzero, but curobo fails to compute a solution if so
+                    # See this note from https://curobo.org/get_started/2b_isaacsim_examples.html
+                    # Motion generation only generates motions when the robot is static.
+                    # cuRobo has an experimental mode to optimize from non-static states.
+                    # You can try this by passing --reactive to motion_gen_reacher.py.
+                    # This mode will have lower success than the static mode as now the optimization
+                    # has to account for the robot’s current velocity and acceleration.
+                    # The weights have also not been tuned for reactive mode.
+                    velocity=self._tensor_args.to_device(q_vel) * 0.0,
+                    acceleration=self._tensor_args.to_device(q_eff) * 0.0,
+                    jerk=self._tensor_args.to_device(q_eff) * 0.0,
+                    joint_names=self.robot_joint_names,
+                )
+            else:
+                cu_js = lazy.curobo.types.state.JointState(
+                    position=self._tensor_args.to_device(q_pos),
+                    velocity=self._tensor_args.to_device(q_vel) * 0.0,
+                    acceleration=self._tensor_args.to_device(q_eff) * 0.0,
+                    jerk=self._tensor_args.to_device(q_eff) * 0.0,
+                    joint_names=self.robot_joint_names,
+                )
+                full_js = full_js.stack(cu_js)
 
-            full_js = full_js.stack(cu_js)
-
-        for env_idx, robot in enumerate(self.robots):
+        
+        for i in range(len(target_pos_list)):
+            if not single_env_mode:
+                env_idx = i
+            robot = self.robots[env_idx]
             # Update the locked joints with the current joint positions
             self.update_locked_joints(robot, full_js, emb_sel)
 
@@ -753,22 +765,25 @@ class CuRoboMotionGenerator:
                 )
 
         # Pad target_pos and target_quat for envs that have lesser targets
-        current_right_eef_pos = self.robots[0].get_relative_eef_pose(arm="right")[0].cuda()
-        current_right_eef_quat = self.robots[0].get_relative_eef_pose(arm="right")[1][[3, 0, 1, 2]].cuda()
-        current_left_eef_pos = self.robots[0].get_relative_eef_pose(arm="left")[0].cuda()
-        current_left_eef_quat = self.robots[0].get_relative_eef_pose(arm="left")[1][[3, 0, 1, 2]].cuda()
         max_num_targets = max([next(iter(target_pos.values())).shape[0] for target_pos in target_pos_list])
-        for env_idx in range(len(self.robots)):
-            num_targets_in_env = next(iter(target_pos_list[env_idx].values())).shape[0]
+        for i in range(len(target_pos_list)):
+            if not single_env_mode:
+                env_idx = i
+            num_targets_in_env = next(iter(target_pos_list[i].values())).shape[0]
             if num_targets_in_env < max_num_targets:
-               # Calculate how many repeats needed
-               num_repeats = max_num_targets - num_targets_in_env
-               
-               # Repeat current positions to pad up to max_num_targets
-               target_pos_list[env_idx]["right_eef_link"] = th.cat([target_pos_list[env_idx]["right_eef_link"], current_right_eef_pos.repeat(num_repeats, 1)])
-               target_pos_list[env_idx]["left_eef_link"] = th.cat([target_pos_list[env_idx]["left_eef_link"], current_left_eef_pos.repeat(num_repeats, 1)])
-               target_quat_list[env_idx]["right_eef_link"] = th.cat([target_quat_list[env_idx]["right_eef_link"], current_right_eef_quat.repeat(num_repeats, 1)])
-               target_quat_list[env_idx]["left_eef_link"] = th.cat([target_quat_list[env_idx]["left_eef_link"], current_left_eef_quat.repeat(num_repeats, 1)])
+                # Calculate how many repeats needed
+                num_repeats = max_num_targets - num_targets_in_env
+    
+                current_right_eef_pos = self.robots[env_idx].get_relative_eef_pose(arm="right")[0].cuda()
+                current_right_eef_quat = self.robots[env_idx].get_relative_eef_pose(arm="right")[1][[3, 0, 1, 2]].cuda()
+                current_left_eef_pos = self.robots[env_idx].get_relative_eef_pose(arm="left")[0].cuda()
+                current_left_eef_quat = self.robots[env_idx].get_relative_eef_pose(arm="left")[1][[3, 0, 1, 2]].cuda()
+
+                # Repeat current positions to pad up to max_num_targets
+                target_pos_list[i]["right_eef_link"] = th.cat([target_pos_list[i]["right_eef_link"], current_right_eef_pos.repeat(num_repeats, 1)])
+                target_pos_list[i]["left_eef_link"] = th.cat([target_pos_list[i]["left_eef_link"], current_left_eef_pos.repeat(num_repeats, 1)])
+                target_quat_list[i]["right_eef_link"] = th.cat([target_quat_list[i]["right_eef_link"], current_right_eef_quat.repeat(num_repeats, 1)])
+                target_quat_list[i]["left_eef_link"] = th.cat([target_quat_list[i]["left_eef_link"], current_left_eef_quat.repeat(num_repeats, 1)])
 
         # Determine how many internal batches we need to run based on submitted size
         num_targets = next(iter(target_pos_list[0].values())).shape[0]
@@ -777,11 +792,13 @@ class CuRoboMotionGenerator:
         n_batches = math.ceil(num_targets / self.batch_size)
 
         # If ee_link is not in target_pos, add trivial target poses to avoid errors
-        for env_idx in range(len(self.robots)):
-            if self.ee_link[emb_sel] not in target_pos_list[env_idx]:
-                target_pos_list[env_idx][self.ee_link[emb_sel]] = self._tensor_args.to_device(th.zeros((num_targets, 3)))
-                target_quat_list[env_idx][self.ee_link[emb_sel]] = self._tensor_args.to_device(th.zeros((num_targets, 4)))
-                target_quat_list[env_idx][self.ee_link[emb_sel]][..., 0] = 1.0
+        for i in range(len(target_pos_list)):
+            if not single_env_mode:
+                env_idx = i
+            if self.ee_link[emb_sel] not in target_pos_list[i]:
+                target_pos_list[i][self.ee_link[emb_sel]] = self._tensor_args.to_device(th.zeros((num_targets, 3)))
+                target_quat_list[i][self.ee_link[emb_sel]] = self._tensor_args.to_device(th.zeros((num_targets, 4)))
+                target_quat_list[i][self.ee_link[emb_sel]][..., 0] = 1.0
 
         # Run internal batched calls
         results, successes, paths = [], [], [[]] * len(self.robots)
@@ -795,9 +812,9 @@ class CuRoboMotionGenerator:
                 target_quat_link = target_quat[link_name]
 
                 batch_target_pos, batch_target_quat = [], []
-                for env_idx in range(len(self.robots)):
-                    batch_target_pos.append(target_pos_list[env_idx][link_name][i])
-                    batch_target_quat.append(target_quat_list[env_idx][link_name][i])
+                for j in range(len(target_pos_list)):
+                    batch_target_pos.append(target_pos_list[j][link_name][i])
+                    batch_target_quat.append(target_quat_list[j][link_name][i])
 
                 # breakpoint()
                 # Create IK goal
@@ -841,12 +858,12 @@ class CuRoboMotionGenerator:
             # ik_goal_batch_by_link = None
 
             # print("==== Planning for target position: ", main_ik_goal_batch.position[0, 0])
-            # temp_list.append(main_ik_goal_batch.position[0, 0])
             plan_fn = self.plan_batch if not ik_only else self.solve_ik_batch
             result, success, joint_state = plan_fn(
                 full_js, main_ik_goal_batch, plan_cfg, link_poses=ik_goal_batch_by_link, emb_sel=emb_sel
             )
             print("success: ", success)
+            # breakpoint()
 
             # debug
             # js_temp = joint_state[0].get_ordered_joint_state(self.mg[emb_sel].kinematics.joint_names)
@@ -863,8 +880,8 @@ class CuRoboMotionGenerator:
             # Append results
             results.append(result)
             successes.append(success)
-            for idx in range(len(self.robots)):
-                paths[idx] = paths[idx] + joint_state[idx:idx+1]
+            for j in range(len(target_pos_list)):
+                paths[j] = paths[j] + joint_state[j:j+1]
             # breakpoint()
 
 
@@ -874,8 +891,7 @@ class CuRoboMotionGenerator:
         if return_full_result:
             return results
         else:
-            # temp_list = [tensor.cpu() for tensor in retval_targets]
-            return th.stack(successes), paths, retval_targets
+            return th.stack(successes), paths
 
     def path_to_joint_trajectory(self, path, get_full_js=True, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
         """
