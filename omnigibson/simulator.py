@@ -49,6 +49,7 @@ from omnigibson.utils.usd_utils import (
     GripperRigidContactAPI,
     PoseAPI,
     RigidContactAPI,
+    generate_multi_resolution_checkerboard_grid,
 )
 from omnigibson.utils.usd_utils import clear as clear_usd_utils
 from omnigibson.utils.usd_utils import triangularize_mesh
@@ -599,28 +600,70 @@ def _launch_simulator(*args, **kwargs):
             """
             self._viewer_camera.image_width = width
 
-        def add_ground_plane(self, floor_plane_visible=True, floor_plane_color=None):
+        def add_ground_plane(
+            self, floor_plane_size, floor_plane_visible=True, floor_plane_color=None, floor_plane_grid_resolutions=None
+        ):
             """
             Generate a ground plane into the simulator.
             """
             if self._floor_plane is not None:
                 return
+
+            # Create a visual material for the ground plane if we want a grid
+            visual_material = None
+            if floor_plane_grid_resolutions is not None:
+                visual_material = lazy.omni.isaac.core.materials.OmniPBR(
+                    prim_path="/World/Looks/checkerboard",
+                    name="checkerboard",
+                    texture_path=os.path.join(gm.ASSET_PATH, "models/background/checkerboard.png"),
+                )
+                visual_material.set_project_uvw(
+                    False
+                )  # The above enables this by default which overrides the annotated UVs
+
             ground_plane_relative_path = "/ground_plane"
             plane = lazy.omni.isaac.core.objects.ground_plane.GroundPlane(
                 prim_path="/World" + ground_plane_relative_path,
                 name="ground_plane",
                 z_position=0,
-                size=None,
+                size=floor_plane_size,
                 color=None if floor_plane_color is None else th.tensor(floor_plane_color),
                 visible=floor_plane_visible,
+                visual_material=visual_material,
                 # TODO: update with new PhysicsMaterial API
                 # static_friction=static_friction,
                 # dynamic_friction=dynamic_friction,
                 # restitution=restitution,
             )
 
-            triangularize_mesh(lazy.pxr.UsdGeom.Mesh.Define(self.stage, plane.prim.GetChildren()[0].GetPath()))
+            # Triangularize the floor mesh
+            mesh_path = plane.prim.GetChildren()[0].GetPath()
+            mesh_prim = lazy.pxr.UsdGeom.Mesh.Define(self.stage, mesh_path)
+            triangularize_mesh(mesh_prim)
 
+            # Remove the collision API from the visual prim. The GroundPlane util produces this.
+            if mesh_prim.GetPrim().HasAPI(lazy.pxr.UsdPhysics.CollisionAPI):
+                mesh_prim.GetPrim().RemoveAPI(lazy.pxr.UsdPhysics.CollisionAPI)
+            if mesh_prim.GetPrim().HasAPI(lazy.pxr.UsdPhysics.MeshCollisionAPI):
+                mesh_prim.GetPrim().RemoveAPI(lazy.pxr.UsdPhysics.MeshCollisionAPI)
+
+            # Generate the floor plane checkerboard grid if requested (fully making the floor plane
+            # from scratch)
+            if floor_plane_grid_resolutions is not None:
+                checkerboard_verts, checkerboard_faces, checkerboard_uvs = generate_multi_resolution_checkerboard_grid(
+                    floor_plane_size, floor_plane_grid_resolutions
+                )
+                mesh_prim.GetPointsAttr().Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(checkerboard_verts.numpy()))
+                mesh_prim.GetFaceVertexCountsAttr().Set(th.full((checkerboard_faces.shape[0],), 3, dtype=int).numpy())
+                mesh_prim.GetFaceVertexIndicesAttr().Set(checkerboard_faces.numpy())
+                normals = th.zeros((checkerboard_faces.shape[0] * 3, 3), dtype=th.float32)
+                normals[:, 2] = 1.0
+                mesh_prim.GetNormalsAttr().Set(lazy.pxr.Vt.Vec3fArray.FromNumpy(normals.numpy()))
+                lazy.pxr.UsdGeom.PrimvarsAPI(mesh_prim).CreatePrimvar(
+                    "st", lazy.pxr.Sdf.ValueTypeNames.TexCoord2fArray, lazy.pxr.UsdGeom.Tokens.faceVarying
+                ).Set(lazy.pxr.Vt.Vec2fArray.FromNumpy(checkerboard_uvs.reshape(-1, 2).numpy()))
+
+            # Make sure the prim conforms to our xform expectations
             self._floor_plane = XFormPrim(
                 relative_prim_path=ground_plane_relative_path,
                 name=plane.name,
@@ -634,9 +677,13 @@ def _launch_simulator(*args, **kwargs):
                 type_label="class",
             )
 
-        def add_skybox(self):
+        def add_skybox(self, color_temperature=None, texture_path=None):
             """
             Generate a skybox into the simulator.
+
+            Args:
+                color_temperature (None or float): color temperature of the skybox, in Kelvin (1000 to 10000)
+                texture_path (None or str): path to the texture file of the skybox
             """
             if self._skybox is not None:
                 return
@@ -649,8 +696,11 @@ def _launch_simulator(*args, **kwargs):
                 fixed_base=True,
             )
             self._skybox.load(None)
-            self._skybox.color = (1.07, 0.85, 0.61)
-            self._skybox.texture_file_path = f"{gm.ASSET_PATH}/models/background/sky.jpg"
+            if color_temperature is not None:
+                self._skybox.enable_color_temperature = True
+                self._skybox.color_temperature = color_temperature
+            if texture_path is not None:
+                self._skybox.texture_file_path = texture_path
 
         def get_sim_step_dt(self):
             """

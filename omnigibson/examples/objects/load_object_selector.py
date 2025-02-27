@@ -48,6 +48,9 @@ def main(random_selection=False, headless=False, short_exec=False):
     }
     if scene_type == "InteractiveTraversableScene":
         cfg["scene"]["scene_model"] = "Rs_int"
+    else:
+        cfg["scene"]["floor_plane_grid"] = True
+        cfg["scene"]["use_skybox_texture"] = False
 
     # Create the environment
     env = og.Environment(configs=cfg)

@@ -216,6 +216,46 @@ class LightObject(StatefulObject):
         self._light_link.set_attribute("inputs:color", lazy.pxr.Gf.Vec3f(color))
 
     @property
+    def enable_color_temperature(self):
+        """
+        Gets whether this light's color temperature is enabled
+
+        Returns:
+            bool: whether color temperature is enabled for this light
+        """
+        return self._light_link.get_attribute("inputs:enableColorTemperature")
+
+    @enable_color_temperature.setter
+    def enable_color_temperature(self, enable_color_temperature):
+        """
+        Sets whether this light's color temperature is enabled
+
+        Args:
+            enable_color_temperature (bool): whether color temperature should be enabled for this light
+        """
+        self._light_link.set_attribute("inputs:enableColorTemperature", enable_color_temperature)
+
+    @property
+    def color_temperature(self):
+        """
+        Gets this light's color temperature
+
+        Returns:
+            float: color temperature for this light
+        """
+        return self._light_link.get_attribute("inputs:colorTemperature")
+
+    @color_temperature.setter
+    def color_temperature(self, color_temperature):
+        """
+        Sets this light's color temperature
+
+        Args:
+            color_temperature (float): color temperature to set
+        """
+        self._light_link.set_attribute("inputs:colorTemperature", color_temperature)
+
+    @property
     def texture_file_path(self):
         """
         Gets this light's texture file path. Only valid for dome lights.

@@ -4,6 +4,7 @@ import math
 import os
 import re
 from collections.abc import Iterable
+from typing import Tuple
 
 import numpy as np
 import torch as th
@@ -1659,6 +1660,104 @@ def mesh_prim_to_trimesh_mesh(mesh_prim, include_normals=True, include_texcoord=
     return trimesh_mesh
 
 
+def generate_multi_resolution_checkerboard_grid(extent, edge_sizes=(0.001, 0.01, 1.0)):
+    """
+    Generate a multi-resolution checkerboard grid with the specified extent and cell sizes.
+
+    Args:
+        extent (float): The extent of the grid in the x and y directions. The grid will be square.
+        edge_sizes (tuple of float): The sizes of the edges of the grid. The grid will have a checkerboard pattern
+            with the specified edge sizes. The largest edge size must be less than the extent.
+
+    Returns:
+        vertices (torch.Tensor): Vx3 vertices of the grid.
+        face_vert_indices (torch.Tensor): Fx3 indices of the vertices for each face of the grid.
+        face_uvs (torch.Tensor): Fx3x2 UV coordinates for each vertex in each face of the grid.
+    """
+    assert extent > max(edge_sizes), "Extent must be greater than the maximum edge size"
+    edge_sizes = sorted(list(edge_sizes) + [extent])
+
+    # Start a rolling list for vertices and face vertex indices.
+    vertices = []
+    face_vert_indices = []
+    face_uvs = []
+
+    # Iterate over cell sizes and the areas they will need to cover (which is the next cell size)
+    last_size_vert_idxes = None
+    for cell_size, area_size in zip(edge_sizes[:-1], edge_sizes[1:]):
+        # First, create the vertices for the area. These are named after the quadrants.
+        new_1 = (area_size, area_size, 0)
+        new_2 = (-area_size, area_size, 0)
+        new_3 = (-area_size, -area_size, 0)
+        new_4 = (area_size, -area_size, 0)
+        vertices.extend([new_1, new_2, new_3, new_4])
+
+        # Get the indices of the 3d coordinates for the area vertices
+        new_1_idx = len(vertices) - 4
+        new_2_idx = len(vertices) - 3
+        new_3_idx = len(vertices) - 2
+        new_4_idx = len(vertices) - 1
+
+        if last_size_vert_idxes is None:
+            # If this is the first iteration, we only have the area vertices. Connect them in two
+            # triangles to form the area.
+            face_vert_indices.extend([[new_1_idx, new_2_idx, new_3_idx], [new_1_idx, new_3_idx, new_4_idx]])
+
+            # For this case we can just get the indices of the UV coordinates for the area vertices.
+            repetitions = area_size / cell_size
+            new_1_uv = (repetitions, repetitions)
+            new_2_uv = (0, repetitions)
+            new_3_uv = (0, 0)
+            new_4_uv = (repetitions, 0)
+            face_uvs.extend([[new_1_uv, new_2_uv, new_3_uv], [new_1_uv, new_3_uv, new_4_uv]])
+        else:
+            # Otherwise, we have to connect the area to the previous area. We do this by connecting
+            # the vertices of the previous area to the vertices of the current area in triangles.
+            old_1_idx, old_2_idx, old_3_idx, old_4_idx = last_size_vert_idxes
+
+            area_face_verts = [
+                [old_1_idx, new_1_idx, new_2_idx],
+                [old_1_idx, new_2_idx, old_2_idx],
+                [old_2_idx, new_2_idx, new_3_idx],
+                [old_2_idx, new_3_idx, old_3_idx],
+                [old_3_idx, new_3_idx, new_4_idx],
+                [old_3_idx, new_4_idx, old_4_idx],
+                [old_4_idx, new_4_idx, new_1_idx],
+                [old_4_idx, new_1_idx, old_1_idx],
+            ]
+            face_vert_indices.extend(area_face_verts)
+
+            # Now for each face we need to find the UV coordinates for each of the vertices.
+            # We just need to find how many times the texture would be repeated in the face,
+            # and subtract that from the UV coordinates of the new vertices.
+            for single_face_verts in area_face_verts:
+                # Get the face vertices
+                v1i, v2i, v3i = single_face_verts
+                v1, v2, v3 = vertices[v1i], vertices[v2i], vertices[v3i]
+
+                # Get 0-based coordinates by adding the minimum along each dimension to each vertex
+                min_x = min(v1[0], v2[0], v3[0])
+                min_y = min(v1[1], v2[1], v3[1])
+                # Adjust the min x and min y to avoid changing the parity of any coordinates (to maintain the checkerboard pattern)
+                min_x = min_x - (min_x % cell_size)
+                min_y = min_y - (min_y % cell_size)
+                # Adjust the vertices
+                v1 = (v1[0] - min_x, v1[1] - min_y, 0)
+                v2 = (v2[0] - min_x, v2[1] - min_y, 0)
+                v3 = (v3[0] - min_x, v3[1] - min_y, 0)
+
+                # Adjust UV coordinates to maintain the checkerboard pattern
+                v1_uv = (v1[0] / cell_size, v1[1] / cell_size)
+                v2_uv = (v2[0] / cell_size, v2[1] / cell_size)
+                v3_uv = (v3[0] / cell_size, v3[1] / cell_size)
+
+                # Add the UV indices to the list
+                face_uvs.append([v1_uv, v2_uv, v3_uv])
+        last_size_vert_idxes = [new_1_idx, new_2_idx, new_3_idx, new_4_idx]
+
+    return th.tensor(vertices), th.tensor(face_vert_indices, dtype=int), th.tensor(face_uvs)
+
+
 def sample_mesh_keypoints(mesh_prim, n_keypoints, n_keyfaces, seed=None):
     """
     Samples keypoints and keyfaces for mesh @mesh_prim
@@ -2001,7 +2100,7 @@ def _compute_relative_poses_torch(
     idx: int,
     n_links: int,
     all_tfs: th.Tensor,
-    base_pose: th.Tensor,
+    base_pose: Tuple[th.Tensor, th.Tensor],
 ):
     tfs = th.zeros((n_links, 4, 4), dtype=th.float32)
     # base vel is the final -1 index

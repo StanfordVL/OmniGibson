@@ -59,9 +59,14 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self,
         scene_file=None,
         use_floor_plane=True,
+        floor_plane_size=1000.0,
         floor_plane_visible=True,
         floor_plane_color=(1.0, 1.0, 1.0),
+        floor_plane_grid=False,
+        floor_plane_grid_resolutions=(0.001, 0.01, 0.1, 1.0),
         use_skybox=True,
+        use_skybox_texture=True,
+        skybox_color_temperature=5000,
     ):
         """
         Args:
@@ -69,10 +74,20 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 pre-loaded scene state from that json.
                 None results in no additional objects being loaded into the scene
             use_floor_plane (bool): whether to load a flat floor plane into the simulator
+            floor_plane_size (float): size of the visible floor plane to load into the simulator
             floor_plane_visible (bool): whether to render the additionally added floor plane
             floor_plane_color (3-array): if @floor_plane_visible is True, this determines the (R,G,B) color assigned
                 to the generated floor plane
+            floor_plane_grid (bool): whether to render a checkerboard floor plane with grid squares
+            floor_plane_grid_resolutions (Tuple[float]): A tuple of integers where each integer represents a
+                grid cell size, e.g. (0.001, 0.01, 1.) will render a floor plane with 3 different grid cell sizes at 1mm,
+                1cm, and 1m respectively. Will be ignored if @floor_plane_grid is False.
             use_skybox (bool): whether to load a skybox into the simulator
+            use_skybox_texture (Union[str, bool]): whether to use a texture for the skybox or not. False will disable the
+                texture and expose the skybox color, True will use the default texture, and a string will use the
+                specified texture.
+            skybox_color_temperature (float): Color temperature of the skybox if @use_skybox is True. This is the color of the
+                light emitted by the skybox in Kelvin, and the color of the skybox itself if no texture is used.
         """
         # Store internal variables
         self.scene_file = scene_file
@@ -84,9 +99,17 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self._objects_info = None  # Information associated with this scene
         self._idx = None
         self._use_floor_plane = use_floor_plane
+        self._floor_plane_size = floor_plane_size
         self._floor_plane_visible = floor_plane_visible
         self._floor_plane_color = floor_plane_color
+        self._floor_plane_grid_resolutions = floor_plane_grid_resolutions if floor_plane_grid else None
         self._use_skybox = use_skybox
+        self._skybox_texture_path = None
+        if isinstance(use_skybox_texture, str):
+            self._skybox_texture_path = use_skybox_texture
+        elif use_skybox_texture:
+            self._skybox_texture_path = os.path.join(gm.ASSET_PATH, "models/background/sky.jpg")
+        self._skybox_color_temperature = skybox_color_temperature
         self._transition_rule_api = None
         self._available_systems = None
         self._pose = None
@@ -429,10 +452,13 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         # Load floor plane and skybox
         if self.use_floor_plane:
             og.sim.add_ground_plane(
-                floor_plane_visible=self._floor_plane_visible, floor_plane_color=self._floor_plane_color
+                floor_plane_size=self._floor_plane_size,
+                floor_plane_visible=self._floor_plane_visible,
+                floor_plane_color=self._floor_plane_color,
+                floor_plane_grid_resolutions=self._floor_plane_grid_resolutions,
             )
         if self._use_skybox:
-            og.sim.add_skybox()
+            og.sim.add_skybox(color_temperature=self._skybox_color_temperature, texture_path=self._skybox_texture_path)
 
         # Go through whatever else loading the scene needs to do.
         self._load()
