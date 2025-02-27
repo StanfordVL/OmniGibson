@@ -4,7 +4,7 @@ import itertools
 import numpy as np
 
 import bddl
-from bddl.logic_base import Expression
+from bddl.logic_base import Expression, AtomicFormula
 from bddl.utils import (
     UnsupportedPredicateError,
     truncated_permutations,
@@ -521,12 +521,18 @@ def get_ground_state_options(compiled_state, backend, scope=None, object_map=Non
 
 
 def compiled_to_parsed(compiled_condition, parsed_so_far=None):
+    """
+    WIP - doesn't get the filler string terms for quantifiers at this moment
+    """
     parsed_so_far = parsed_so_far if parsed_so_far is not None else []
-    reverse_map = { v: k for k, v in TOKEN_MAPPING.items()}
-    reverse_map[HEAD] = "and"
-    parsed_expr = [reverse_map[type(compiled_condition)]]
-    for term in parsed_expr.body: 
-        
+    parsed_expr = [token_from_compiled(compiled_condition)]
+    if isinstance(compiled_condition, AtomicFormula):
+        for term in compiled_condition.body: 
+            if not isinstance(term, list):
+                parsed_expr.append(term)
+    for child in compiled_condition.children: 
+        parsed_expr.append(compiled_to_parsed(child, parsed_so_far=parsed_expr))
+    return parsed_expr
 
 
 #################### UTIL ######################
@@ -538,6 +544,16 @@ def flatten_list(li):
             yield from flatten_list(elem)
         else:
             yield elem
+
+
+def token_from_compiled(compiled_condition): 
+    reverse_map = { v: k for k, v in TOKEN_MAPPING.items() }
+    if type(compiled_condition) in reverse_map: 
+        return reverse_map[type(compiled_condition)]
+    elif isinstance(compiled_condition, HEAD): 
+        return "and"
+    elif isinstance(compiled_condition, AtomicFormula):
+        return compiled_condition.STATE_NAME
 
 
 #################### TOKEN MAPPING ####################
