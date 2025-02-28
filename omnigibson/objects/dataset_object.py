@@ -50,6 +50,7 @@ class DatasetObject(USDObject):
         kinematic_only=None,
         self_collisions=False,
         prim_type=PrimType.RIGID,
+        link_physics_materials=None,
         load_config=None,
         abilities=None,
         include_default_states=True,
@@ -82,6 +83,10 @@ class DatasetObject(USDObject):
                 are satisfied (see object_base.py post_load function), else False.
             self_collisions (bool): Whether to enable self collisions for this object
             prim_type (PrimType): Which type of prim the object is, Valid options are: {PrimType.RIGID, PrimType.CLOTH}
+            link_physics_materials (None or dict): If specified, dictionary mapping link name to kwargs used to generate
+                a specific physical material for that link's collision meshes, where the kwargs are arguments directly
+                passed into the omni.isaac.core.materials.PhysicsMaterial constructor, e.g.: "static_friction",
+                "dynamic_friction", and "restitution"
             load_config (None or dict): If specified, should contain keyword-mapped values that are relevant for
                 loading this prim at runtime.
             abilities (None or dict): If specified, manually adds specific object states to this object. It should be
@@ -118,16 +123,6 @@ class DatasetObject(USDObject):
             assert len(available_models) > 0, f"No available models found for category {category}!"
             model = random.choice(available_models)
 
-        # If the model is in BAD_CLOTH_MODELS, raise an error for now -- this is a model that's unstable and needs to be fixed
-        # TODO: Remove this once the asset is fixed!
-        from omnigibson.utils.bddl_utils import BAD_CLOTH_MODELS
-
-        if prim_type == PrimType.CLOTH and model in BAD_CLOTH_MODELS.get(category, dict()):
-            raise ValueError(
-                f"Cannot create cloth object category: {category}, model: {model} because it is "
-                f"currently broken ): This will be fixed in the next release!"
-            )
-
         self._model = model
         usd_path = self.get_usd_path(category=category, model=model, dataset_type=dataset_type)
 
@@ -146,6 +141,7 @@ class DatasetObject(USDObject):
             self_collisions=self_collisions,
             prim_type=prim_type,
             include_default_states=include_default_states,
+            link_physics_materials=link_physics_materials,
             load_config=load_config,
             abilities=abilities,
             **kwargs,
