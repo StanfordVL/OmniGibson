@@ -87,3 +87,13 @@ if __name__ == "__main__":
     # pprint.pprint(list(truncated_product(*sample_small)))
     # print(list(truncated_permutations(range(10), 3)))
     list(truncated_permutations(range(10), 3))
+
+
+# Tools
+
+def flatten_list(li):
+    for elem in li:
+        if isinstance(elem, list):
+            yield from flatten_list(elem)
+        else:
+            yield elem

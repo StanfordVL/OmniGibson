@@ -9,6 +9,7 @@ from bddl.utils import (
     UnsupportedPredicateError,
     truncated_permutations,
     truncated_product,
+    flatten_list
 )
 
 #################### RECURSIVE PREDICATES ####################
@@ -536,15 +537,6 @@ def compiled_to_parsed(compiled_condition, parsed_so_far=None):
 
 
 #################### UTIL ######################
-
-
-def flatten_list(li):
-    for elem in li:
-        if isinstance(elem, list):
-            yield from flatten_list(elem)
-        else:
-            yield elem
-
 
 def token_from_compiled(compiled_condition): 
     reverse_map = { v: k for k, v in TOKEN_MAPPING.items() }
