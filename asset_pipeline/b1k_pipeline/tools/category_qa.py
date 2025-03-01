@@ -29,6 +29,7 @@ import bddl.object_taxonomy
 from pathlib import Path
 from nltk.corpus import wordnet as wn
 import torch as th
+import math
 
 
 gm.ENABLE_FLATCACHE = True
@@ -253,7 +254,19 @@ class BatchQAViewer:
 
     def whole_batch_preview(self, all_objects):
         KeyboardEventHandler.initialize()
-        self.set_camera_bindings()
+
+        params = og.sim.viewer_camera.camera_parameters
+        focal_length = params["cameraFocalLength"]
+        width, height = params["renderProductResolution"]
+        horizontal_aperture = params["cameraAperture"][0]
+        horizontal_fov = 2 * math.atan(horizontal_aperture / (2 * focal_length))
+        vertical_fov = horizontal_fov * height / width
+        obj = all_objects[0]
+        obj_x, obj_y, obj_z = obj.aabb_extent
+        self.set_camera_bindings(default_dist=max(
+            obj_x / 2 + ((obj_y / 2) / math.tan(horizontal_fov / 2)) * 1.1,
+            obj_x / 2 + ((obj_z / 2) / math.tan(vertical_fov / 2)) * 1.1,
+        ))
 
         done = False
         skip = False
@@ -364,7 +377,18 @@ class BatchQAViewer:
         print(f"\n\n\n\nNow editing object {obj.name.replace('obj_', '')}\n")
 
         KeyboardEventHandler.initialize()
-        self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
+
+        params = og.sim.viewer_camera.camera_parameters
+        focal_length = params["cameraFocalLength"]
+        width, height = params["renderProductResolution"]
+        horizontal_aperture = params["cameraAperture"][0]
+        horizontal_fov = 2 * math.atan(horizontal_aperture / (2 * focal_length))
+        vertical_fov = horizontal_fov * height / width
+        obj_x, obj_y, obj_z = obj.aabb_extent
+        self.set_camera_bindings(default_dist=max(
+            obj_x / 2 + ((obj_y / 2) / math.tan(horizontal_fov / 2)) * 1.1,
+            obj_x / 2 + ((obj_z / 2) / math.tan(vertical_fov / 2)) * 1.1,
+        ))
 
         done = False
         should_show_photo = False
@@ -492,6 +516,7 @@ class BatchQAViewer:
         def _set_scale(new_scale):
             object_poses = {o: o.get_position_orientation() for o in self.env.scene.objects}
             og.sim.stop()
+            scale_ratio = new_scale[0] / obj.scale[0]
             obj.scale = new_scale
             og.sim.play()
             for o, pose in object_poses.items():
@@ -500,7 +525,7 @@ class BatchQAViewer:
             # Reposition everything
             self.position_objects(all_objects)
             self.position_reference_objects(target_y=obj.aabb_center[1])
-            self.dist = obj.aabb_extent[0] * 2.5
+            self.dist *= scale_ratio
 
 
         def _show_photo():
@@ -706,47 +731,24 @@ class BatchQAViewer:
         # Set the keyboard bindings back to camera only
         KeyboardEventHandler.reset()
         KeyboardEventHandler.initialize()
-        self.set_camera_bindings(default_dist=obj.aabb_extent[0] * 2.5)
+        self.set_camera_bindings(default_dist=max(
+            obj_x / 2 + ((obj_y / 2) / math.tan(horizontal_fov / 2)) * 1.1,
+            obj_x / 2 + ((obj_z / 2) / math.tan(vertical_fov / 2)) * 1.1,
+        ))
 
-        # Launch the complaint thread
-        multiprocess_queue = multiprocessing.Queue()
-        questions = self.complaint_handler.get_questions(obj)
-        complaint_process = multiprocessing.Process(
-            target=self.complaint_handler.process_complaints,
-            args=[multiprocess_queue, obj.category, obj.name.replace("obj_", ""), questions, quick_complaints, sys.stdin.fileno()],
-            daemon=True)
-        complaint_process.start()
-
-        # Wait to receive the complaints
         step = 0
-        while complaint_process.is_alive():
+        def update():
+            nonlocal step
             step += 1
             og.sim.step()
             self.update_camera(obj.aabb_center)
 
-            # During this part, we want to be moving the joints
-            # for joint in obj.joints.values():
-            #     seconds_since_start = step * og.sim.get_rendering_dt()
-            #     interpolation_point = 0.5 * th.sin(seconds_since_start / JOINT_SECONDS_PER_CYCLE * 2 * PI) + 0.5
-            #     target_pos = joint.lower_limit + interpolation_point * (joint.upper_limit - joint.lower_limit)
-            #     joint.set_pos(target_pos)
 
-            if not multiprocess_queue.empty():
-                # Got a response, we can stop.
-                break
-
-        # Wait for the complaint process to finish to not have to kill it
-        time.sleep(0.5)
-
-        # If the complaint process is still alive, kill it.
-        if complaint_process.is_alive():
-            # Join the finished thread
-            complaint_process.join()
-        assert complaint_process.exitcode == 0, "Complaint process exited with error code."
-
-        assert not multiprocess_queue.empty(), "Complaint process did not return a message."
-        message = multiprocess_queue.get()
-        complaints = json.loads(message)
+        # Launch the complaint thread
+        questions = self.complaint_handler.get_questions(obj)
+        complaints = self.complaint_handler.process_complaints(
+            obj.category, obj.name.replace("obj_", ""), questions, quick_complaints, sys.stdin.fileno(), update,
+        )
 
         # Save the object results
         self.save_object_results(obj, orientation, scale, complaints)
@@ -831,7 +833,7 @@ class BatchQAViewer:
 
         remaining_objs_by_cat = self.group_objects_by_category(self.remaining_objects)
 
-        batch_size = 50
+        batch_size = 20
 
         for cat, models in remaining_objs_by_cat.items():
             print(f"Processing category {cat}...")
@@ -843,7 +845,7 @@ class BatchQAViewer:
                     print("Skipping the rest of the category", cat)
                     break
                 print(f"\n\n{len(self.processed_objects)}/{len(self.filtered_objs)} objects processed. {len(self.remaining_objects)} objects remaining.\n")
-                time.sleep(1)
+                # time.sleep(0.1)
 
 
 class ObjectComplaintHandler:
@@ -877,7 +879,17 @@ class ObjectComplaintHandler:
             filtered_complaints.append(complaint)
         return filtered_complaints
 
-    def process_complaints(self, queue, category, model, messages, quick_complaints, stdin_fileno):
+    def create_unresolve_complaint(self, existing_complaints, idx):
+
+        def unresolve_complaint():
+            nonlocal existing_complaints, idx
+            print(f"Unresolved complaint {idx + 1}")
+            existing_complaints[idx]["processed"] = False
+
+        return unresolve_complaint
+
+
+    def process_complaints(self, category, model, messages, quick_complaints, stdin_fileno, update):
         sys.stdin = os.fdopen(stdin_fileno)
 
         # Get existing complaints.
@@ -900,12 +912,43 @@ class ObjectComplaintHandler:
                 print(f"Complaint: {complaint['complaint']}\n")
 
             print("\nALL complaints except the ones you enter below will be marked as RESOLVED.")
-            response = input("Enter complaint numbers to KEEP as UNRESOLVED (e.g., 1,2,3): ")
-            if response:
-                response = response.split(",")
-                for idx in response:
-                    complaint_idx = unresolved_indices[int(idx)-1]
-                    existing_complaints[complaint_idx]["processed"] = False
+
+            assert len(unresolved_indices) < 10
+            KEYS = {
+                lazy.carb.input.KeyboardInput.KEY_1: 0,
+                lazy.carb.input.KeyboardInput.KEY_2: 1,
+                lazy.carb.input.KeyboardInput.KEY_3: 2,
+                lazy.carb.input.KeyboardInput.KEY_4: 3,
+                lazy.carb.input.KeyboardInput.KEY_5: 4,
+                lazy.carb.input.KeyboardInput.KEY_6: 5,
+                lazy.carb.input.KeyboardInput.KEY_7: 6,
+                lazy.carb.input.KeyboardInput.KEY_8: 7,
+                lazy.carb.input.KeyboardInput.KEY_9: 8,
+            }
+            KEYS_LIST = list(KEYS.keys())
+            for i in range(len(unresolved_indices)):
+                add_keyboard_callback(
+                    key=KEYS_LIST[i],
+                    callback_fn=self.create_unresolve_complaint(existing_complaints, i),
+                    description=f"unresolve complaint {i + 1}",
+                )
+
+            done = False
+
+            def _set_done():
+                nonlocal done
+                done = True
+
+            # Set done when the user presses 'C'
+            add_keyboard_callback(
+                key=lazy.carb.input.KeyboardInput.NUMPAD_ENTER,
+                callback_fn=_set_done,
+                description="finish complaints",
+            )
+
+            while not done:
+                update()
+
         else:
             print("No unresolved complaints found.")
 
@@ -919,7 +962,7 @@ class ObjectComplaintHandler:
 
         all_complaints = existing_complaints + quick_complaints
 
-        queue.put(json.dumps(all_complaints))
+        return all_complaints
 
     def _process_single_complaint(self, message, category, model):
         print(message)
