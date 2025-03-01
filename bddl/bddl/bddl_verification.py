@@ -83,7 +83,7 @@ VALID_ATTACHMENTS = set([
 
 VALID_ROOMS = set()
 
-OBJECT_INSTANCE_RE = r"[A-Za-z-_]+\.n\.[0-9]+_[0-9]+"
+OBJECT_INSTANCE_RE = r"[A-Za-z-_]+\.n\.[0-9]+_[0-9\*]+"
 OBJECT_CAT_RE = r"[A-Za-z-_]+\.n\.[0-9]+$"
 OBJECT_CAT_AND_INST_RE = r"[A-Za-z-_]+\.n\.[0-9]+"
 SINGLE_CAT_QUANTS = ["forall", "exists", "forn"]
@@ -455,8 +455,10 @@ def all_objects_appropriate(objects, init, goal):
     4. There are no categories in :init
     '''
     instances, categories = _get_objects_from_object_list(objects)
+    # Exception for starred instances 
+    instances = set([inst for inst in instances if inst[-2:] != "_*"])
     init_insts = _get_instances_in_init(init)
-    
+
     assert init_insts.issubset(instances), f":init has object instances not in :objects: {init_insts.difference(instances)}"
     assert instances.issubset(init_insts), f":objects has object instances not in :init: {instances.difference(init_insts)}"
     
