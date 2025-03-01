@@ -2,12 +2,12 @@ project_name: nomad
 run_name: nomad
 
 # training setup
-use_wandb: False #True # set to false if you don't want to log to wandb
+use_wandb: True #False #True # set to false if you don't want to log to wandb
 train: True
-batch_size: 256
+batch_size: 64 # 256
 epochs: 100
 gpu_ids: [0]
-num_workers: 12
+num_workers: 4 #12
 lr: 1e-4
 optimizer: adamw
 clipping: False
@@ -111,7 +111,7 @@ datasets:
     end_slack: 0 # Number of timesteps to cut off at the end of each trajectory (if needed)
     goals_per_obs: 1 # Number of goal samples per observation
     negative_mining: True # Enable negative mining (as described in the ViNG paper)
-    load_run: log/nomad/pretrained/latest.pth
+    # load_run: log/nomad/pretrained/latest.pth
 
   # private datasets (uncomment if you have access)
   # seattle:

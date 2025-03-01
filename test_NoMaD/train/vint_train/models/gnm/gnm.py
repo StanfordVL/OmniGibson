@@ -4,12 +4,6 @@ import torch.nn.functional as F
 
 from typing import List, Dict, Optional, Tuple
 
-import sys
-
-sys.path.append("/test_NoMaD/train")
-
-print(sys.path)
-
 # from train.vint_train.models.gnm.modified_mobilenetv2 import MobileNetEncoder
 # from train.vint_train.models.base_model import BaseModel
 from vint_train.models.gnm.modified_mobilenetv2 import MobileNetEncoder

@@ -3,7 +3,7 @@ project_name: vint
 run_name: vint
 
 # training setup
-use_wandb: False #True # set to false if you don't want to log to wandb
+use_wandb: True #False #True # set to false if you don't want to log to wandb
 train: True
 batch_size: 400
 eval_batch_size: 400
@@ -64,3 +64,6 @@ eval_fraction: 0.25 # fraction of the dataset to use for evaluation
 wandb_log_freq: 10 # in iterations
 eval_freq: 1 # in epochs
 
+# Load weights from a previous run
+# load_run: log/nomad/pretrained/latest.pth
+load_run: nomad/pretrained

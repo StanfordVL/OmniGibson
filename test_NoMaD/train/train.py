@@ -6,6 +6,8 @@ import yaml
 import time
 import pdb
 
+
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader, ConcatDataset
@@ -39,6 +41,10 @@ from vint_train.training.train_eval_loop import (
     train_eval_loop_nomad,
     load_model,
 )
+
+import matplotlib
+
+matplotlib.use("Agg")  # Use non-interactive backend
 
 
 def main(config):
@@ -392,14 +398,27 @@ if __name__ == "__main__":
         ],  # should error if dir already exists to avoid overwriting and old project
     )
 
+    import platform
+
+    # if config["use_wandb"] and wandb.run:
+    #     try:
+    #         import shutil
+    #         wandb_files_dir = os.path.join(wandb.run.dir, "files")
+    #         os.makedirs(os.path.join(wandb_files_dir, os.path.dirname(args.config)), exist_ok=True)
+    #         shutil.copy2(args.config, os.path.join(wandb_files_dir, args.config))
+    #     except Exception as e:
+    #         print(f"Warning: Could not save config file to wandb: {e}")
+
     if config["use_wandb"]:
         wandb.login()
+
+        start_method = "spawn" if platform.system() == "Windows" else "fork"
         wandb.init(
             project=config["project_name"],
-            settings=wandb.Settings(start_method="fork"),
-            entity="gnmv2",  # TODO: change this to your wandb entity
+            settings=wandb.Settings(start_method=start_method),
+            entity="airlab_",  # TODO: change this to your wandb entity
         )
-        wandb.save(args.config, policy="now")  # save the config file
+        # wandb.save(args.config, policy="now")  # save the config file
         wandb.run.name = config["run_name"]
         # update the wandb args with the training configurations
         if wandb.run:

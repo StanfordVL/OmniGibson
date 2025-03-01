@@ -18,6 +18,7 @@ from vint_train.data.data_utils import (
     to_local_coords,
 )
 
+
 class ViNT_Dataset(Dataset):
     def __init__(
         self,
@@ -64,7 +65,7 @@ class ViNT_Dataset(Dataset):
         self.data_folder = data_folder
         self.data_split_folder = data_split_folder
         self.dataset_name = dataset_name
-        
+
         traj_names_file = os.path.join(data_split_folder, "traj_names.txt")
         with open(traj_names_file, "r") as f:
             file_lines = f.read()
@@ -102,9 +103,7 @@ class ViNT_Dataset(Dataset):
         self.goal_type = goal_type
 
         # load data/data_config.yaml
-        with open(
-            os.path.join(os.path.dirname(__file__), "data_config.yaml"), "r"
-        ) as f:
+        with open(os.path.join(os.path.dirname(__file__), "data_config.yaml"), "r") as f:
             all_data_config = yaml.safe_load(f)
         assert (
             self.dataset_name in all_data_config
@@ -117,7 +116,7 @@ class ViNT_Dataset(Dataset):
         self.trajectory_cache = {}
         self._load_index()
         self._build_caches()
-        
+
         if self.learn_angle:
             self.num_action_params = 3
         else:
@@ -127,7 +126,7 @@ class ViNT_Dataset(Dataset):
         state = self.__dict__.copy()
         state["_image_cache"] = None
         return state
-    
+
     def __setstate__(self, state):
         self.__dict__ = state
         self._build_caches()
@@ -153,9 +152,10 @@ class ViNT_Dataset(Dataset):
                 self.goals_index,
                 disable=not use_tqdm,
                 dynamic_ncols=True,
-                desc=f"Building LMDB cache for {self.dataset_name}"
+                desc=f"Building LMDB cache for {self.dataset_name}",
             )
-            with lmdb.open(cache_filename, map_size=2**40) as image_cache:
+            # with lmdb.open(cache_filename, map_size=2**40) as image_cache:
+            with lmdb.open(cache_filename, map_size=2**36) as image_cache:
                 with image_cache.begin(write=True) as txn:
                     for traj_name, time in tqdm_iterator:
                         image_path = get_data_path(self.data_folder, traj_name, time)
@@ -172,7 +172,9 @@ class ViNT_Dataset(Dataset):
         samples_index = []
         goals_index = []
 
-        for traj_name in tqdm.tqdm(self.traj_names, disable=not use_tqdm, dynamic_ncols=True):
+        for traj_name in tqdm.tqdm(
+            self.traj_names, disable=not use_tqdm, dynamic_ncols=True
+        ):
             traj_data = self._get_trajectory(traj_name)
             traj_len = len(traj_data["position"])
 
@@ -180,9 +182,13 @@ class ViNT_Dataset(Dataset):
                 goals_index.append((traj_name, goal_time))
 
             begin_time = self.context_size * self.waypoint_spacing
-            end_time = traj_len - self.end_slack - self.len_traj_pred * self.waypoint_spacing
+            end_time = (
+                traj_len - self.end_slack - self.len_traj_pred * self.waypoint_spacing
+            )
             for curr_time in range(begin_time, end_time):
-                max_goal_distance = min(self.max_dist_cat * self.waypoint_spacing, traj_len - curr_time - 1)
+                max_goal_distance = min(
+                    self.max_dist_cat * self.waypoint_spacing, traj_len - curr_time - 1
+                )
                 samples_index.append((traj_name, curr_time, max_goal_distance))
 
         return samples_index, goals_index
@@ -239,8 +245,8 @@ class ViNT_Dataset(Dataset):
     def _compute_actions(self, traj_data, curr_time, goal_time):
         start_index = curr_time
         end_index = curr_time + self.len_traj_pred * self.waypoint_spacing + 1
-        yaw = traj_data["yaw"][start_index:end_index:self.waypoint_spacing]
-        positions = traj_data["position"][start_index:end_index:self.waypoint_spacing]
+        yaw = traj_data["yaw"][start_index : end_index : self.waypoint_spacing]
+        positions = traj_data["position"][start_index : end_index : self.waypoint_spacing]
         goal_pos = traj_data["position"][min(goal_time, len(traj_data["position"]) - 1)]
 
         if len(yaw.shape) == 2:
@@ -249,35 +255,54 @@ class ViNT_Dataset(Dataset):
         if yaw.shape != (self.len_traj_pred + 1,):
             const_len = self.len_traj_pred + 1 - yaw.shape[0]
             yaw = np.concatenate([yaw, np.repeat(yaw[-1], const_len)])
-            positions = np.concatenate([positions, np.repeat(positions[-1][None], const_len, axis=0)], axis=0)
+            positions = np.concatenate(
+                [positions, np.repeat(positions[-1][None], const_len, axis=0)], axis=0
+            )
 
-        assert yaw.shape == (self.len_traj_pred + 1,), f"{yaw.shape} and {(self.len_traj_pred + 1,)} should be equal"
-        assert positions.shape == (self.len_traj_pred + 1, 2), f"{positions.shape} and {(self.len_traj_pred + 1, 2)} should be equal"
+        assert yaw.shape == (
+            self.len_traj_pred + 1,
+        ), f"{yaw.shape} and {(self.len_traj_pred + 1,)} should be equal"
+        assert positions.shape == (
+            self.len_traj_pred + 1,
+            2,
+        ), f"{positions.shape} and {(self.len_traj_pred + 1, 2)} should be equal"
 
         waypoints = to_local_coords(positions, positions[0], yaw[0])
         goal_pos = to_local_coords(goal_pos, positions[0], yaw[0])
 
-        assert waypoints.shape == (self.len_traj_pred + 1, 2), f"{waypoints.shape} and {(self.len_traj_pred + 1, 2)} should be equal"
+        assert waypoints.shape == (
+            self.len_traj_pred + 1,
+            2,
+        ), f"{waypoints.shape} and {(self.len_traj_pred + 1, 2)} should be equal"
 
         if self.learn_angle:
             yaw = yaw[1:] - yaw[0]
             actions = np.concatenate([waypoints[1:], yaw[:, None]], axis=-1)
         else:
             actions = waypoints[1:]
-        
-        if self.normalize:
-            actions[:, :2] /= self.data_config["metric_waypoint_spacing"] * self.waypoint_spacing
-            goal_pos /= self.data_config["metric_waypoint_spacing"] * self.waypoint_spacing
 
-        assert actions.shape == (self.len_traj_pred, self.num_action_params), f"{actions.shape} and {(self.len_traj_pred, self.num_action_params)} should be equal"
+        if self.normalize:
+            actions[:, :2] /= (
+                self.data_config["metric_waypoint_spacing"] * self.waypoint_spacing
+            )
+            goal_pos /= (
+                self.data_config["metric_waypoint_spacing"] * self.waypoint_spacing
+            )
+
+        assert actions.shape == (
+            self.len_traj_pred,
+            self.num_action_params,
+        ), f"{actions.shape} and {(self.len_traj_pred, self.num_action_params)} should be equal"
 
         return actions, goal_pos
-    
+
     def _get_trajectory(self, trajectory_name):
         if trajectory_name in self.trajectory_cache:
             return self.trajectory_cache[trajectory_name]
         else:
-            with open(os.path.join(self.data_folder, trajectory_name, "traj_data.pkl"), "rb") as f:
+            with open(
+                os.path.join(self.data_folder, trajectory_name, "traj_data.pkl"), "rb"
+            ) as f:
                 traj_data = pickle.load(f)
             self.trajectory_cache[trajectory_name] = traj_data
             return traj_data
@@ -292,13 +317,15 @@ class ViNT_Dataset(Dataset):
         Returns:
             Tuple of tensors containing the context, observation, goal, transformed context, transformed observation, transformed goal, distance label, and action label
                 obs_image (torch.Tensor): tensor of shape [3, H, W] containing the image of the robot's observation
-                goal_image (torch.Tensor): tensor of shape [3, H, W] containing the subgoal image 
+                goal_image (torch.Tensor): tensor of shape [3, H, W] containing the subgoal image
                 dist_label (torch.Tensor): tensor of shape (1,) containing the distance labels from the observation to the goal
                 action_label (torch.Tensor): tensor of shape (5, 2) or (5, 4) (if training with angle) containing the action labels from the observation to the goal
                 which_dataset (torch.Tensor): index of the datapoint in the dataset [for identifying the dataset for visualization when using multiple datasets]
         """
         f_curr, curr_time, max_goal_dist = self.index_to_data[i]
-        f_goal, goal_time, goal_is_negative = self._sample_goal(f_curr, curr_time, max_goal_dist)
+        f_goal, goal_time, goal_is_negative = self._sample_goal(
+            f_curr, curr_time, max_goal_dist
+        )
 
         # Load images
         context = []
@@ -315,9 +342,7 @@ class ViNT_Dataset(Dataset):
         else:
             raise ValueError(f"Invalid context type {self.context_type}")
 
-        obs_image = torch.cat([
-            self._load_image(f, t) for f, t in context
-        ])
+        obs_image = torch.cat([self._load_image(f, t) for f, t in context])
 
         # Load goal image
         goal_image = self._load_image(f_goal, goal_time)
@@ -333,22 +358,24 @@ class ViNT_Dataset(Dataset):
 
         # Compute actions
         actions, goal_pos = self._compute_actions(curr_traj_data, curr_time, goal_time)
-        
+
         # Compute distances
         if goal_is_negative:
             distance = self.max_dist_cat
         else:
             distance = (goal_time - curr_time) // self.waypoint_spacing
-            assert (goal_time - curr_time) % self.waypoint_spacing == 0, f"{goal_time} and {curr_time} should be separated by an integer multiple of {self.waypoint_spacing}"
-        
+            assert (
+                goal_time - curr_time
+            ) % self.waypoint_spacing == 0, f"{goal_time} and {curr_time} should be separated by an integer multiple of {self.waypoint_spacing}"
+
         actions_torch = torch.as_tensor(actions, dtype=torch.float32)
         if self.learn_angle:
             actions_torch = calculate_sin_cos(actions_torch)
-        
+
         action_mask = (
-            (distance < self.max_action_distance) and
-            (distance > self.min_action_distance) and
-            (not goal_is_negative)
+            (distance < self.max_action_distance)
+            and (distance > self.min_action_distance)
+            and (not goal_is_negative)
         )
 
         return (

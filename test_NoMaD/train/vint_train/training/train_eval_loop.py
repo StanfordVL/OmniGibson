@@ -17,6 +17,7 @@ from torchvision import transforms
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 from diffusers.training_utils import EMAModel
 
+
 def train_eval_loop(
     train_model: bool,
     model: nn.Module,
@@ -69,9 +70,7 @@ def train_eval_loop(
 
     for epoch in range(current_epoch, current_epoch + epochs):
         if train_model:
-            print(
-            f"Start ViNT Training Epoch {epoch}/{current_epoch + epochs - 1}"
-            )
+            print(f"Start ViNT Training Epoch {epoch}/{current_epoch + epochs - 1}")
             train(
                 model=model,
                 optimizer=optimizer,
@@ -120,7 +119,7 @@ def train_eval_loop(
             "model": model,
             "optimizer": optimizer,
             "avg_total_test_loss": np.mean(avg_total_test_loss),
-            "scheduler": scheduler
+            "scheduler": scheduler,
         }
         # log average eval loss
         wandb.log({}, commit=False)
@@ -131,10 +130,13 @@ def train_eval_loop(
                 scheduler.step(np.mean(avg_total_test_loss))
             else:
                 scheduler.step()
-        wandb.log({
-            "avg_total_test_loss": np.mean(avg_total_test_loss),
-            "lr": optimizer.param_groups[0]["lr"],
-        }, commit=False)
+        wandb.log(
+            {
+                "avg_total_test_loss": np.mean(avg_total_test_loss),
+                "lr": optimizer.param_groups[0]["lr"],
+            },
+            commit=False,
+        )
 
         numbered_path = os.path.join(project_folder, f"{epoch}.pth")
         torch.save(checkpoint, latest_path)
@@ -144,10 +146,11 @@ def train_eval_loop(
     wandb.log({})
     print()
 
+
 def train_eval_loop_nomad(
     train_model: bool,
     model: nn.Module,
-    optimizer: Adam, 
+    optimizer: Adam,
     lr_scheduler: torch.optim.lr_scheduler._LRScheduler,
     noise_scheduler: DDPMScheduler,
     train_loader: DataLoader,
@@ -193,13 +196,11 @@ def train_eval_loop_nomad(
         eval_freq: frequency of evaluation
     """
     latest_path = os.path.join(project_folder, f"latest.pth")
-    ema_model = EMAModel(model=model,power=0.75)
-    
+    ema_model = EMAModel(model=model, parameters=model.parameters(), power=0.75)
+
     for epoch in range(current_epoch, current_epoch + epochs):
         if train_model:
-            print(
-            f"Start ViNT DP Training Epoch {epoch}/{current_epoch + epochs - 1}"
-            )
+            print(f"Start ViNT DP Training Epoch {epoch}/{current_epoch + epochs - 1}")
             train_nomad(
                 model=model,
                 ema_model=ema_model,
@@ -240,8 +241,7 @@ def train_eval_loop_nomad(
         latest_scheduler_path = os.path.join(project_folder, f"scheduler_latest.pth")
         torch.save(lr_scheduler.state_dict(), latest_scheduler_path)
 
-
-        if (epoch + 1) % eval_freq == 0: 
+        if (epoch + 1) % eval_freq == 0:
             for dataset_type in test_dataloaders:
                 print(
                     f"Start {dataset_type} ViNT DP Testing Epoch {epoch}/{current_epoch + epochs - 1}"
@@ -263,9 +263,12 @@ def train_eval_loop_nomad(
                     use_wandb=use_wandb,
                     eval_fraction=eval_fraction,
                 )
-        wandb.log({
-            "lr": optimizer.param_groups[0]["lr"],
-        }, commit=False)
+        wandb.log(
+            {
+                "lr": optimizer.param_groups[0]["lr"],
+            },
+            commit=False,
+        )
 
         if lr_scheduler is not None:
             lr_scheduler.step()
@@ -273,14 +276,17 @@ def train_eval_loop_nomad(
         # log average eval loss
         wandb.log({}, commit=False)
 
-        wandb.log({
-            "lr": optimizer.param_groups[0]["lr"],
-        }, commit=False)
+        wandb.log(
+            {
+                "lr": optimizer.param_groups[0]["lr"],
+            },
+            commit=False,
+        )
 
-        
     # Flush the last set of eval logs
     wandb.log({})
     print()
+
 
 def load_model(model, model_type, checkpoint: dict) -> None:
     """Load model from checkpoint."""
@@ -306,10 +312,11 @@ def count_parameters(model):
     table = PrettyTable(["Modules", "Parameters"])
     total_params = 0
     for name, parameter in model.named_parameters():
-        if not parameter.requires_grad: continue
+        if not parameter.requires_grad:
+            continue
         params = parameter.numel()
         table.add_row([name, params])
-        total_params+=params
+        total_params += params
     # print(table)
     print(f"Total Trainable Params: {total_params/1e6:.2f}M")
     return total_params
