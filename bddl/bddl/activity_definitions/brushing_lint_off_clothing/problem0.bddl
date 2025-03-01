@@ -3,11 +3,11 @@
 
     (:objects
         dust.n.01_1 - dust.n.01
-     	sweater.n.01_1 sweater.n.01_2 sweater.n.01_3 sweater.n.01_4 - sweater.n.01
-    	floor.n.01_1 - floor.n.01
-    	bed.n.01_1 - bed.n.01
-    	scrub_brush.n.01_1 - scrub_brush.n.01
-    	agent.n.01_1 - agent.n.01
+        sweater.n.01_1 sweater.n.01_2 sweater.n.01_3 sweater.n.01_4 - sweater.n.01
+        floor.n.01_1 - floor.n.01
+        bed.n.01_1 bed.n.01_* - bed.n.01
+        scrub_brush.n.01_1 - scrub_brush.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 

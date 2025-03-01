@@ -3,11 +3,11 @@
 
     (:objects
         rag.n.01_1 - rag.n.01
-        clothes_dryer.n.01_1 - clothes_dryer.n.01
+        clothes_dryer.n.01_1 clothes_dryer.n.01_* - clothes_dryer.n.01
         water.n.06_1 - water.n.06
         bleaching_agent.n.01_1 - bleaching_agent.n.01
         bleaching_agent__atomizer.n.01_1 - bleaching_agent__atomizer.n.01
-        washer.n.03_1 - washer.n.03
+        washer.n.03_1 washer.n.03_* - washer.n.03
         dust.n.01_1 - dust.n.01
         mold.n.05_1 - mold.n.05
         floor.n.01_1 - floor.n.01

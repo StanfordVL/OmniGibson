@@ -2,8 +2,8 @@
     (:domain omnigibson)
 
     (:objects
-        cash_register.n.01_1 - cash_register.n.01
-        checkout.n.03_1 - checkout.n.03
+        cash_register.n.01_1 cash_register.n.01_* - cash_register.n.01
+        checkout.n.03_1 checkout.n.03_* - checkout.n.03
         lettuce.n.03_1 - lettuce.n.03
         grocery_shelf.n.01_1 - grocery_shelf.n.01
         spinach.n.02_1 - spinach.n.02

@@ -2,16 +2,16 @@
     (:domain omnigibson)
 
     (:objects
-     	french_toast.n.01_1 - french_toast.n.01
-    	oven.n.01_1 - oven.n.01
-    	plate.n.04_1 - plate.n.04
-    	breakfast_table.n.01_1 - breakfast_table.n.01
-    	maple_syrup.n.01_1 - maple_syrup.n.01
-    	maple_syrup__jar.n.01_1 - maple_syrup__jar.n.01
-    	cinnamon.n.03_1 - cinnamon.n.03
-        cinnamon__shaker.n.01_1 - cinnamon__shaker.n.01 
-    	floor.n.01_1 - floor.n.01
-    	agent.n.01_1 - agent.n.01
+        french_toast.n.01_1 - french_toast.n.01
+        oven.n.01_1 - oven.n.01
+        plate.n.04_1 - plate.n.04
+        breakfast_table.n.01_1 breakfast_table.n.01_* - breakfast_table.n.01
+        maple_syrup.n.01_1 - maple_syrup.n.01
+        maple_syrup__jar.n.01_1 - maple_syrup__jar.n.01
+        cinnamon.n.03_1 - cinnamon.n.03
+        cinnamon__shaker.n.01_1 - cinnamon__shaker.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 

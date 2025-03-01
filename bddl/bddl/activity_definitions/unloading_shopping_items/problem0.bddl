@@ -2,19 +2,19 @@
     (:domain omnigibson)
 
     (:objects
-     	carton.n.02_1 carton.n.02_2 - carton.n.02
-    	floor.n.01_1 - floor.n.01
-    	cabinet.n.01_1 - cabinet.n.01
-    	bottle__of__lotion.n.01_1 - bottle__of__lotion.n.01
-    	bottle__of__detergent.n.01_1 - bottle__of__detergent.n.01
-    	picture_frame.n.01_1 picture_frame.n.01_2 picture_frame.n.01_3 - picture_frame.n.01
-    	notebook.n.01_1 notebook.n.01_2 notebook.n.01_3 - notebook.n.01
-    	painting.n.01_1 painting.n.01_2 - painting.n.01
-    	plastic_art.n.01_1 - plastic_art.n.01
-    	lampshade.n.01_1 lampshade.n.01_2 - lampshade.n.01
-    	globe.n.03_1 - globe.n.03
-    	console_table.n.01_1 - console_table.n.01
-    	agent.n.01_1 - agent.n.01
+        carton.n.02_1 carton.n.02_2 - carton.n.02
+        floor.n.01_1 - floor.n.01
+        cabinet.n.01_1 cabinet.n.01_* - cabinet.n.01
+        bottle__of__lotion.n.01_1 - bottle__of__lotion.n.01
+        bottle__of__detergent.n.01_1 - bottle__of__detergent.n.01
+        picture_frame.n.01_1 picture_frame.n.01_2 picture_frame.n.01_3 - picture_frame.n.01
+        notebook.n.01_1 notebook.n.01_2 notebook.n.01_3 - notebook.n.01
+        painting.n.01_1 painting.n.01_2 - painting.n.01
+        plastic_art.n.01_1 - plastic_art.n.01
+        lampshade.n.01_1 lampshade.n.01_2 - lampshade.n.01
+        globe.n.03_1 - globe.n.03
+        console_table.n.01_1 console_table.n.01_* - console_table.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 

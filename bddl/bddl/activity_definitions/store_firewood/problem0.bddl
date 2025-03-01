@@ -2,10 +2,10 @@
     (:domain omnigibson)
 
     (:objects
-     	firewood.n.01_1 firewood.n.01_2 firewood.n.01_3 - firewood.n.01
-    	floor.n.01_1 - floor.n.01
-    	table.n.02_1 - table.n.02
-    	agent.n.01_1 - agent.n.01
+        firewood.n.01_1 firewood.n.01_2 firewood.n.01_3 - firewood.n.01
+        floor.n.01_1 - floor.n.01
+        table.n.02_1 table.n.02_* - table.n.02
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 

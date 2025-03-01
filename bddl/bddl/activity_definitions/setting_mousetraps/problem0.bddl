@@ -2,12 +2,12 @@
     (:domain omnigibson)
 
     (:objects
-     	mousetrap.n.01_1 mousetrap.n.01_2 mousetrap.n.01_3 mousetrap.n.01_4 - mousetrap.n.01
-    	sink.n.01_1 - sink.n.01
-    	floor.n.01_1 floor.n.01_2 - floor.n.01
-    	toilet.n.02_1 - toilet.n.02
+        mousetrap.n.01_1 mousetrap.n.01_2 mousetrap.n.01_3 mousetrap.n.01_4 - mousetrap.n.01
+        sink.n.01_1 - sink.n.01
+        floor.n.01_1 floor.n.01_2 floor.n.01_* - floor.n.01
+        toilet.n.02_1 toilet.n.02_* - toilet.n.02
         bed.n.01_1 - bed.n.01
-    	agent.n.01_1 - agent.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 

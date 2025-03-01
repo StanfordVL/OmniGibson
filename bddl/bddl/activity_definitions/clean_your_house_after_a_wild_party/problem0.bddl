@@ -4,9 +4,9 @@
     (:objects
         plate.n.04_1 plate.n.04_2 plate.n.04_3 - plate.n.04
         beer_bottle.n.01_1 beer_bottle.n.01_2 - beer_bottle.n.01
-        countertop.n.01_1 - countertop.n.01
-        floor.n.01_1 floor.n.01_2 floor.n.01_3 - floor.n.01
-        coffee_table.n.01_1 - coffee_table.n.01
+        countertop.n.01_1 countertop.n.01_* - countertop.n.01
+        floor.n.01_1 floor.n.01_2 floor.n.01_3 floor.n.01_* - floor.n.01
+        coffee_table.n.01_1 coffee_table.n.01_* - coffee_table.n.01
         cup.n.01_1 cup.n.01_2 cup.n.01_3 - cup.n.01
         sink.n.01_1 sink.n.01_2 - sink.n.01
         recycling_bin.n.01_1 recycling_bin.n.01_2 - recycling_bin.n.01
@@ -23,8 +23,8 @@
         adhesive_material.n.01_1 - adhesive_material.n.01
         dust.n.01_1 - dust.n.01
         stain.n.01_1 - stain.n.01
-        toilet.n.02_1 - toilet.n.02
-        dishwasher.n.01_1 - dishwasher.n.01
+        toilet.n.02_1 toilet.n.02_* - toilet.n.02
+        dishwasher.n.01_1 dishwasher.n.01_* - dishwasher.n.01
         agent.n.01_1 - agent.n.01
     )
     

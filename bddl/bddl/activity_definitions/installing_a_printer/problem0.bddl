@@ -2,9 +2,9 @@
     (:domain omnigibson)
 
     (:objects
-     	printer.n.03_1 - printer.n.03
-    	floor.n.01_1 - floor.n.01
-    	table.n.02_1 - table.n.02
+        printer.n.03_1 - printer.n.03
+        floor.n.01_1 - floor.n.01
+        table.n.02_1 table.n.02_* - table.n.02
         agent.n.01_1 - agent.n.01
     )
     

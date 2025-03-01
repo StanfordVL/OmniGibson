@@ -9,8 +9,8 @@
         breakfast_table.n.01_1 - breakfast_table.n.01
         tablefork.n.01_1 tablefork.n.01_2 tablefork.n.01_3 - tablefork.n.01
         cabinet.n.01_1 - cabinet.n.01
-        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-        dishwasher.n.01_1 - dishwasher.n.01
+        electric_refrigerator.n.01_1 electric_refrigerator.n.01_* - electric_refrigerator.n.01
+        dishwasher.n.01_1 dishwasher.n.01_* - dishwasher.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )

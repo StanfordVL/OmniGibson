@@ -2,13 +2,13 @@
     (:domain omnigibson)
 
     (:objects
-     	arepa.n.01_1 - arepa.n.01
-    	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
-    	cooking_oil.n.01_1 - cooking_oil.n.01
-    	griddle.n.01_1 - griddle.n.01
-    	floor.n.01_1 - floor.n.01
-    	agent.n.01_1 - agent.n.01
-        countertop.n.01_1 - countertop.n.01
+        arepa.n.01_1 - arepa.n.01
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        cooking_oil.n.01_1 - cooking_oil.n.01
+        griddle.n.01_1 - griddle.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+        countertop.n.01_1 countertop.n.01_* - countertop.n.01
         stove.n.01_1 - stove.n.01
     )
     

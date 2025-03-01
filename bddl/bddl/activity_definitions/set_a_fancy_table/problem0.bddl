@@ -3,7 +3,7 @@
 
     (:objects
         napkin.n.01_1 - napkin.n.01
-        breakfast_table.n.01_1 - breakfast_table.n.01
+        breakfast_table.n.01_1 breakfast_table.n.01_* - breakfast_table.n.01
         place_mat.n.01_1 - place_mat.n.01
         wineglass.n.01_1 - wineglass.n.01
         tablespoon.n.02_1 - tablespoon.n.02
@@ -53,6 +53,8 @@
     (:goal 
         (and
             (ontop ?place_mat.n.01_1 ?breakfast_table.n.01_1)
+            (ontop ?wine_bottle.n.01_1 ?breakfast_table.n.01_1) 
+            (ontop ?vase.n.01_1 ?breakfast_table.n.01_1)
             (ontop ?plate.n.04_1 ?place_mat.n.01_1)
             (ontop ?napkin.n.01_1 ?plate.n.04_1)
             (folded ?napkin.n.01_1)
@@ -67,10 +69,8 @@
             )
             (ontop ?saucer.n.02_1 ?place_mat.n.01_1)
             (ontop ?table_knife.n.01_1 ?saucer.n.02_1)
-            (ontop ?wine_bottle.n.01_1 ?breakfast_table.n.01_1) 
             (nextto ?wineglass.n.01_1 ?plate.n.04_1)
             (nextto ?water_glass.n.02_1 ?wineglass.n.01_1)
-            (ontop ?vase.n.01_1 ?breakfast_table.n.01_1)
             (nextto ?candlestick.n.01_1 ?vase.n.01_1)
             (forall 
                 (?dip.n.07 - dip.n.07)
