@@ -1686,44 +1686,44 @@ def generate_multi_resolution_checkerboard_grid(extent, edge_sizes=(0.001, 0.01,
     last_size_vert_idxes = None
     for cell_size, area_size in zip(edge_sizes[:-1], edge_sizes[1:]):
         # First, create the vertices for the area. These are named after the quadrants.
-        new_1 = (area_size, area_size, 0)
-        new_2 = (-area_size, area_size, 0)
-        new_3 = (-area_size, -area_size, 0)
-        new_4 = (area_size, -area_size, 0)
-        vertices.extend([new_1, new_2, new_3, new_4])
+        outer_top_right = (area_size, area_size, 0)
+        outer_top_left = (-area_size, area_size, 0)
+        outer_bottom_left = (-area_size, -area_size, 0)
+        outer_bottom_right = (area_size, -area_size, 0)
+        vertices.extend([outer_top_right, outer_top_left, outer_bottom_left, outer_bottom_right])
 
         # Get the indices of the 3d coordinates for the area vertices
-        new_1_idx = len(vertices) - 4
-        new_2_idx = len(vertices) - 3
-        new_3_idx = len(vertices) - 2
-        new_4_idx = len(vertices) - 1
+        outer_top_right_idx = len(vertices) - 4
+        outer_top_left_idx = len(vertices) - 3
+        outer_bottom_left_idx = len(vertices) - 2
+        outer_bottom_right_idx = len(vertices) - 1
 
         if last_size_vert_idxes is None:
             # If this is the first iteration, we only have the area vertices. Connect them in two
             # triangles to form the area.
-            face_vert_indices.extend([[new_1_idx, new_2_idx, new_3_idx], [new_1_idx, new_3_idx, new_4_idx]])
+            face_vert_indices.extend([[outer_top_right_idx, outer_top_left_idx, outer_bottom_left_idx], [outer_top_right_idx, outer_bottom_left_idx, outer_bottom_right_idx]])
 
-            # For this case we can just get the indices of the UV coordinates for the area vertices.
+            # For this case we can just convert directly to a square in the UV space.
             repetitions = area_size / cell_size
-            new_1_uv = (repetitions, repetitions)
-            new_2_uv = (0, repetitions)
-            new_3_uv = (0, 0)
-            new_4_uv = (repetitions, 0)
-            face_uvs.extend([[new_1_uv, new_2_uv, new_3_uv], [new_1_uv, new_3_uv, new_4_uv]])
+            outer_top_right_uv = (repetitions, repetitions)
+            outer_top_left_uv = (0, repetitions)
+            outer_bottom_left_uv = (0, 0)
+            nev_bottom_right_uv = (repetitions, 0)
+            face_uvs.extend([[outer_top_right_uv, outer_top_left_uv, outer_bottom_left_uv], [outer_top_right_uv, outer_bottom_left_uv, nev_bottom_right_uv]])
         else:
-            # Otherwise, we have to connect the area to the previous area. We do this by connecting
+            # Otherwise, we have to connect this scale's' area to the previous area. We do this by connecting
             # the vertices of the previous area to the vertices of the current area in triangles.
-            old_1_idx, old_2_idx, old_3_idx, old_4_idx = last_size_vert_idxes
+            inner_top_right_idx, inner_top_left_idx, inner_bottom_left_idx, inner_bottom_right_idx = last_size_vert_idxes
 
             area_face_verts = [
-                [old_1_idx, new_1_idx, new_2_idx],
-                [old_1_idx, new_2_idx, old_2_idx],
-                [old_2_idx, new_2_idx, new_3_idx],
-                [old_2_idx, new_3_idx, old_3_idx],
-                [old_3_idx, new_3_idx, new_4_idx],
-                [old_3_idx, new_4_idx, old_4_idx],
-                [old_4_idx, new_4_idx, new_1_idx],
-                [old_4_idx, new_1_idx, old_1_idx],
+                [inner_top_right_idx, outer_top_right_idx, outer_top_left_idx],
+                [inner_top_right_idx, outer_top_left_idx, inner_top_left_idx],
+                [inner_top_left_idx, outer_top_left_idx, outer_bottom_left_idx],
+                [inner_top_left_idx, outer_bottom_left_idx, inner_bottom_left_idx],
+                [inner_bottom_left_idx, outer_bottom_left_idx, outer_bottom_right_idx],
+                [inner_bottom_left_idx, outer_bottom_right_idx, inner_bottom_right_idx],
+                [inner_bottom_right_idx, outer_bottom_right_idx, outer_top_right_idx],
+                [inner_bottom_right_idx, outer_top_right_idx, inner_top_right_idx],
             ]
             face_vert_indices.extend(area_face_verts)
 
@@ -1732,28 +1732,27 @@ def generate_multi_resolution_checkerboard_grid(extent, edge_sizes=(0.001, 0.01,
             # and subtract that from the UV coordinates of the new vertices.
             for single_face_verts in area_face_verts:
                 # Get the face vertices
-                v1i, v2i, v3i = single_face_verts
-                v1, v2, v3 = vertices[v1i], vertices[v2i], vertices[v3i]
+                v1_idx, v2_idx, v3_idx = single_face_verts
+                v1, v2, v3 = vertices[v1_idx], vertices[v2_idx], vertices[v3_idx]
 
                 # Get 0-based coordinates by adding the minimum along each dimension to each vertex
                 min_x = min(v1[0], v2[0], v3[0])
                 min_y = min(v1[1], v2[1], v3[1])
+
                 # Adjust the min x and min y to avoid changing the parity of any coordinates (to maintain the checkerboard pattern)
                 min_x = min_x - (min_x % cell_size)
                 min_y = min_y - (min_y % cell_size)
-                # Adjust the vertices
-                v1 = (v1[0] - min_x, v1[1] - min_y, 0)
-                v2 = (v2[0] - min_x, v2[1] - min_y, 0)
-                v3 = (v3[0] - min_x, v3[1] - min_y, 0)
 
-                # Adjust UV coordinates to maintain the checkerboard pattern
-                v1_uv = (v1[0] / cell_size, v1[1] / cell_size)
-                v2_uv = (v2[0] / cell_size, v2[1] / cell_size)
-                v3_uv = (v3[0] / cell_size, v3[1] / cell_size)
+                # Compute the UV coordinates by subtracting the offset and scaling
+                v1_uv = ((v1[0] - min_x) / cell_size, (v1[1] - min_y) / cell_size)
+                v2_uv = ((v2[0] - min_x) / cell_size, (v2[1] - min_y) / cell_size)
+                v3_uv = ((v3[0] - min_x) / cell_size, (v3[1] - min_y) / cell_size)
 
                 # Add the UV indices to the list
                 face_uvs.append([v1_uv, v2_uv, v3_uv])
-        last_size_vert_idxes = [new_1_idx, new_2_idx, new_3_idx, new_4_idx]
+        
+        # Record where the outer vertices are, for use as the inner vertices next pass.
+        last_size_vert_idxes = [outer_top_right_idx, outer_top_left_idx, outer_bottom_left_idx, outer_bottom_right_idx]
 
     return th.tensor(vertices), th.tensor(face_vert_indices, dtype=int), th.tensor(face_uvs)
 

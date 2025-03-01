@@ -42,6 +42,12 @@ from omnigibson.utils.usd_utils import CollisionAPI, add_asset_to_stage
 # Create module logger
 log = create_module_logger(module_name=__name__)
 
+# Create settings for this module
+m = create_module_macros(module_path=__file__)
+
+# The path of the skybox texture, relative to the assets directory
+m.SKYBOX_TEXTURE_PATH = "models/background/sky.jpg"
+
 # Global dicts that will contain mappings
 REGISTERED_SCENES = dict()
 
@@ -74,7 +80,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 pre-loaded scene state from that json.
                 None results in no additional objects being loaded into the scene
             use_floor_plane (bool): whether to load a flat floor plane into the simulator
-            floor_plane_size (float): size of the visible floor plane to load into the simulator
+            floor_plane_size (float): size of the visible floor plane to load into the simulator, in meters
             floor_plane_visible (bool): whether to render the additionally added floor plane
             floor_plane_color (3-array): if @floor_plane_visible is True, this determines the (R,G,B) color assigned
                 to the generated floor plane
@@ -84,8 +90,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 1cm, and 1m respectively. Will be ignored if @floor_plane_grid is False.
             use_skybox (bool): whether to load a skybox into the simulator
             use_skybox_texture (Union[str, bool]): whether to use a texture for the skybox or not. False will disable the
-                texture and expose the skybox color, True will use the default texture, and a string will use the
-                specified texture.
+                texture and expose the skybox color, True will use the texture from the SKYBOX_TEXTURE_PATH macro.
             skybox_color_temperature (float): Color temperature of the skybox if @use_skybox is True. This is the color of the
                 light emitted by the skybox in Kelvin, and the color of the skybox itself if no texture is used.
         """
@@ -104,11 +109,7 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self._floor_plane_color = floor_plane_color
         self._floor_plane_grid_resolutions = floor_plane_grid_resolutions if floor_plane_grid else None
         self._use_skybox = use_skybox
-        self._skybox_texture_path = None
-        if isinstance(use_skybox_texture, str):
-            self._skybox_texture_path = use_skybox_texture
-        elif use_skybox_texture:
-            self._skybox_texture_path = os.path.join(gm.ASSET_PATH, "models/background/sky.jpg")
+        self._skybox_texture_path = os.path.join(gm.ASSET_PATH, m.SKYBOX_TEXTURE_PATH) if use_skybox_texture else None
         self._skybox_color_temperature = skybox_color_temperature
         self._transition_rule_api = None
         self._available_systems = None
