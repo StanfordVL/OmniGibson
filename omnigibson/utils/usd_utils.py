@@ -1701,7 +1701,12 @@ def generate_multi_resolution_checkerboard_grid(extent, edge_sizes=(0.001, 0.01,
         if last_size_vert_idxes is None:
             # If this is the first iteration, we only have the area vertices. Connect them in two
             # triangles to form the area.
-            face_vert_indices.extend([[outer_top_right_idx, outer_top_left_idx, outer_bottom_left_idx], [outer_top_right_idx, outer_bottom_left_idx, outer_bottom_right_idx]])
+            face_vert_indices.extend(
+                [
+                    [outer_top_right_idx, outer_top_left_idx, outer_bottom_left_idx],
+                    [outer_top_right_idx, outer_bottom_left_idx, outer_bottom_right_idx],
+                ]
+            )
 
             # For this case we can just convert directly to a square in the UV space.
             repetitions = area_size / cell_size
@@ -1709,11 +1714,18 @@ def generate_multi_resolution_checkerboard_grid(extent, edge_sizes=(0.001, 0.01,
             outer_top_left_uv = (0, repetitions)
             outer_bottom_left_uv = (0, 0)
             nev_bottom_right_uv = (repetitions, 0)
-            face_uvs.extend([[outer_top_right_uv, outer_top_left_uv, outer_bottom_left_uv], [outer_top_right_uv, outer_bottom_left_uv, nev_bottom_right_uv]])
+            face_uvs.extend(
+                [
+                    [outer_top_right_uv, outer_top_left_uv, outer_bottom_left_uv],
+                    [outer_top_right_uv, outer_bottom_left_uv, nev_bottom_right_uv],
+                ]
+            )
         else:
             # Otherwise, we have to connect this scale's' area to the previous area. We do this by connecting
             # the vertices of the previous area to the vertices of the current area in triangles.
-            inner_top_right_idx, inner_top_left_idx, inner_bottom_left_idx, inner_bottom_right_idx = last_size_vert_idxes
+            inner_top_right_idx, inner_top_left_idx, inner_bottom_left_idx, inner_bottom_right_idx = (
+                last_size_vert_idxes
+            )
 
             area_face_verts = [
                 [inner_top_right_idx, outer_top_right_idx, outer_top_left_idx],
@@ -1750,7 +1762,7 @@ def generate_multi_resolution_checkerboard_grid(extent, edge_sizes=(0.001, 0.01,
 
                 # Add the UV indices to the list
                 face_uvs.append([v1_uv, v2_uv, v3_uv])
-        
+
         # Record where the outer vertices are, for use as the inner vertices next pass.
         last_size_vert_idxes = [outer_top_right_idx, outer_top_left_idx, outer_bottom_left_idx, outer_bottom_right_idx]
 
