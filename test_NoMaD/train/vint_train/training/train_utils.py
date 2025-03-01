@@ -32,6 +32,8 @@ from torch.optim import Adam
 from torchvision import transforms
 import torchvision.transforms.functional as TF
 import matplotlib.pyplot as plt
+import copy
+
 
 # LOAD DATA CONFIG
 with open(os.path.join(os.path.dirname(__file__), "../data/data_config.yaml"), "r") as f:
@@ -724,8 +726,12 @@ def train_nomad(
             wandb.log({"diffusion_loss": diffusion_loss.item()})
 
             if i % print_log_freq == 0:
+
+                model_with_ema = copy.deepcopy(model)
+                ema_model.copy_to(model_with_ema.parameters())
+
                 losses = _compute_losses_nomad(
-                    ema_model.averaged_model,
+                    model_with_ema,
                     noise_scheduler,
                     batch_obs_images,
                     batch_goal_images,
@@ -752,8 +758,11 @@ def train_nomad(
                     wandb.log(data_log, commit=True)
 
             if image_log_freq != 0 and i % image_log_freq == 0:
+                model_with_ema = copy.deepcopy(model)
+                ema_model.copy_to(model_with_ema.parameters())
+
                 visualize_diffusion_action_distribution(
-                    ema_model.averaged_model,
+                    model_with_ema,
                     noise_scheduler,
                     batch_obs_images,
                     batch_goal_images,
@@ -774,6 +783,7 @@ def train_nomad(
 
 def evaluate_nomad(
     eval_type: str,
+    model: nn.Module,
     ema_model: EMAModel,
     dataloader: DataLoader,
     transform: transforms,
@@ -810,8 +820,16 @@ def evaluate_nomad(
         use_wandb (bool): whether to use wandb for logging
     """
     goal_mask_prob = torch.clip(torch.tensor(goal_mask_prob), 0, 1)
-    ema_model = ema_model.averaged_model
-    ema_model.eval()
+
+    # With these lines
+    import copy
+
+    model_for_eval = copy.deepcopy(model)
+    ema_model.copy_to(model_for_eval.parameters())
+    model_for_eval.eval()
+
+    # ema_model = ema_model.averaged_model
+    # ema_model.eval()
 
     num_batches = len(dataloader)
 
@@ -880,14 +898,14 @@ def evaluate_nomad(
             goal_mask = torch.ones_like(rand_goal_mask).long().to(device)
             no_mask = torch.zeros_like(rand_goal_mask).long().to(device)
 
-            rand_mask_cond = ema_model(
+            rand_mask_cond = model_for_eval(
                 "vision_encoder",
                 obs_img=batch_obs_images,
                 goal_img=batch_goal_images,
                 input_goal_mask=rand_goal_mask,
             )
 
-            obsgoal_cond = ema_model(
+            obsgoal_cond = model_for_eval(
                 "vision_encoder",
                 obs_img=batch_obs_images,
                 goal_img=batch_goal_images,
@@ -895,7 +913,7 @@ def evaluate_nomad(
             )
             obsgoal_cond = obsgoal_cond.flatten(start_dim=1)
 
-            goal_mask_cond = ema_model(
+            goal_mask_cond = model_for_eval(
                 "vision_encoder",
                 obs_img=batch_obs_images,
                 goal_img=batch_goal_images,
@@ -921,7 +939,7 @@ def evaluate_nomad(
 
             ### RANDOM MASK ERROR ###
             # Predict the noise residual
-            rand_mask_noise_pred = ema_model(
+            rand_mask_noise_pred = model_for_eval(
                 "noise_pred_net",
                 sample=noisy_actions,
                 timestep=timesteps,
@@ -933,7 +951,7 @@ def evaluate_nomad(
 
             ### NO MASK ERROR ###
             # Predict the noise residual
-            no_mask_noise_pred = ema_model(
+            no_mask_noise_pred = model_for_eval(
                 "noise_pred_net",
                 sample=noisy_actions,
                 timestep=timesteps,
@@ -945,7 +963,7 @@ def evaluate_nomad(
 
             ### GOAL MASK ERROR ###
             # predict the noise residual
-            goal_mask_noise_pred = ema_model(
+            goal_mask_noise_pred = model_for_eval(
                 "noise_pred_net",
                 sample=noisy_actions,
                 timestep=timesteps,
@@ -965,7 +983,7 @@ def evaluate_nomad(
 
             if i % print_log_freq == 0 and print_log_freq != 0:
                 losses = _compute_losses_nomad(
-                    ema_model,
+                    model_for_eval,
                     noise_scheduler,
                     batch_obs_images,
                     batch_goal_images,
@@ -993,7 +1011,7 @@ def evaluate_nomad(
 
             if image_log_freq != 0 and i % image_log_freq == 0:
                 visualize_diffusion_action_distribution(
-                    ema_model,
+                    model_for_eval,
                     noise_scheduler,
                     batch_obs_images,
                     batch_goal_images,

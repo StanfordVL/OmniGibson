@@ -16,6 +16,7 @@ from torchvision import transforms
 
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler
 from diffusers.training_utils import EMAModel
+import copy
 
 
 def train_eval_loop(
@@ -221,10 +222,19 @@ def train_eval_loop_nomad(
             )
             lr_scheduler.step()
 
+        # Change these lines
+        model_with_ema = copy.deepcopy(model)
+        ema_model.copy_to(model_with_ema.parameters())
+
         numbered_path = os.path.join(project_folder, f"ema_{epoch}.pth")
-        torch.save(ema_model.averaged_model.state_dict(), numbered_path)
+        torch.save(model_with_ema.state_dict(), numbered_path)
         numbered_path = os.path.join(project_folder, f"ema_latest.pth")
         print(f"Saved EMA model to {numbered_path}")
+
+        # numbered_path = os.path.join(project_folder, f"ema_{epoch}.pth")
+        # torch.save(ema_model.averaged_model.state_dict(), numbered_path)
+        # numbered_path = os.path.join(project_folder, f"ema_latest.pth")
+        # print(f"Saved EMA model to {numbered_path}")
 
         numbered_path = os.path.join(project_folder, f"{epoch}.pth")
         torch.save(model.state_dict(), numbered_path)
@@ -249,6 +259,7 @@ def train_eval_loop_nomad(
                 loader = test_dataloaders[dataset_type]
                 evaluate_nomad(
                     eval_type=dataset_type,
+                    model=model,
                     ema_model=ema_model,
                     dataloader=loader,
                     transform=transform,
