@@ -9,6 +9,7 @@ runnable examples.
 import inspect
 import math
 import random
+import time
 
 import cv2
 import gymnasium as gym
@@ -77,9 +78,9 @@ m.MAX_STEPS_FOR_SETTLING = 500
 
 m.MAX_STEPS_FOR_JOINT_MOTION = 10
 
-m.MAX_CARTESIAN_HAND_STEP = 0.002
+m.MAX_CARTESIAN_HAND_STEP = 0.07  # 0.002
 m.MAX_STEPS_FOR_HAND_MOVE_JOINT = 500
-m.MAX_STEPS_FOR_HAND_MOVE_IK = 1000
+m.MAX_STEPS_FOR_HAND_MOVE_IK = 50  # 1000
 m.MAX_STEPS_FOR_GRASP_OR_RELEASE = 250
 m.MAX_STEPS_FOR_WAYPOINT_NAVIGATION = 500
 m.MAX_ATTEMPTS_FOR_OPEN_CLOSE = 20
@@ -89,7 +90,7 @@ m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 200
 m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_FOR_CORRECT_ROOM = 20
 m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_IN_ROOM = 60
 m.MAX_ATTEMPTS_FOR_SAMPLING_PLACE_POSE = 50
-m.PREDICATE_SAMPLING_Z_OFFSET = 0.02
+m.PREDICATE_SAMPLING_Z_OFFSET = 0.1
 m.BASE_POSE_SAMPLING_LOWER_BOUND = 0.0
 m.BASE_POSE_SAMPLING_UPPER_BOUND = 1.5
 
@@ -166,7 +167,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             "The StarterSemanticActionPrimitive is a work-in-progress and is only provided as an example. "
             "It currently only works with Tiago and R1 with their HolonomicBaseJointController/JointControllers set to absolute position mode."
         )
+        st = time.time()
         super().__init__(env, robot)
+        print(f"init: {time.time() - st}")
+        st = time.time()
         self.controller_functions = {
             StarterSemanticActionPrimitiveSet.GRASP: self._grasp,
             StarterSemanticActionPrimitiveSet.PLACE_ON_TOP: self._place_on_top,
@@ -187,6 +191,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
             )
         )
+        print(f"curobo motion generator init: {time.time() - st}")
+        st = time.time()
 
         self._task_relevant_objects_only = task_relevant_objects_only
 
@@ -216,6 +222,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         self._curobo_batch_size = curobo_batch_size
         self.debug_visual_marker = debug_visual_marker
+        print(f"Everything else in starter semantic action primitives: {time.time() - st}")
 
     @property
     def arm(self):
@@ -1771,9 +1778,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         target_pose = eef_pose
 
-        obj_rooms = (
-            obj.in_rooms if obj.in_rooms else [self.robot.scene._seg_map.get_room_instance_by_point(target_pose[0][:2])]
-        )
+        # obj_rooms = (
+        #     obj.in_rooms if obj.in_rooms else [self.robot.scene._seg_map.get_room_instance_by_point(target_pose[0][:2])]
+        # )
 
         attempt = 0
         if not skip_obstacle_update:
@@ -1794,8 +1801,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     )
 
                     # Check room
-                    if self.robot.scene._seg_map.get_room_instance_by_point(candidate_2d_pose[:2]) in obj_rooms:
-                        break
+                    # if self.robot.scene._seg_map.get_room_instance_by_point(candidate_2d_pose[:2]) in obj_rooms:
+                    #     break
                 candidate_poses.append(candidate_2d_pose)
 
             # Normally candidate_poses will have length equal to self._curobo_batch_size
@@ -1903,11 +1910,19 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 _, _, bb_extents, bb_pos_in_base = held_obj.get_base_aligned_bbox()
                 bb_orn_in_base = th.tensor([0, 0, 0, 1], dtype=th.float32)
 
-            sampling_results = sample_cuboid_for_predicate(pred_map[predicate], target_obj, bb_extents)
-            if sampling_results[0][0] is None:
-                continue
+            # sampling_results = sample_cuboid_for_predicate(pred_map[predicate], target_obj, bb_extents)
+            # if sampling_results[0][0] is None:
+            #     print("found no sampling_results")
+            #     continue
+
+            # import pdb; pdb.set_trace()
+            rotation = th.tensor([0, 0, 0, 1], dtype=th.float32)
+            # rotation = held_obj.get_position_orientation()[1]
+            sampling_results = [(target_obj.get_position_orientation()[0], None, rotation, None, None)]
             sampled_bb_center = sampling_results[0][0] + th.tensor([0, 0, m.PREDICATE_SAMPLING_Z_OFFSET])
             sampled_bb_orn = sampling_results[0][2]
+
+
 
             # Tobj_in_world @ Tbbox_in_obj = Tbbox_in_world
             # Tobj_in_world = Tbbox_in_world @ inv(Tbbox_in_obj)
@@ -1915,10 +1930,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 T.pose2mat((bb_pos_in_base, bb_orn_in_base))
             )
 
+
             # Check that the pose is near one of the poses in the near_poses list if provided.
+            print("near_poses", near_poses)
             if near_poses:
                 sampled_pos = th.tensor([sampled_obj_pose[0]])
                 if not th.any(th.norm(near_poses - sampled_pos, dim=1) < near_poses_threshold):
+                    print("found no near_poses")
                     continue
 
             # Return the pose
