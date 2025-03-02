@@ -65,7 +65,9 @@ def end_trajectory(traj_folder, data):
 from omnigibson.utils.ui_utils import KeyboardRobotController
 
 
-def run_control_loop(env, robot, camera_key, traj_folder, data, max_steps=1000):
+def run_control_loop(
+    env: og.Environment, robot, camera_key, traj_folder, data, max_steps=1000
+):
     # Create a keyboard controller (or use your own method)
     controller = KeyboardRobotController(robot=robot)
     controller.print_keyboard_teleop_info()
@@ -74,6 +76,7 @@ def run_control_loop(env, robot, camera_key, traj_folder, data, max_steps=1000):
     while step < max_steps:
         # Get control action from teleop
         action = controller.get_teleop_action()
+        print(f"action = {action}")
 
         # Step the environment with the chosen action
         states, _, terminated, truncated, _ = env.step({robot.name: action})
@@ -81,9 +84,9 @@ def run_control_loop(env, robot, camera_key, traj_folder, data, max_steps=1000):
 
         # Capture data from this step
         capture_step(traj_folder, data, robot_state, camera_key)
-        print(
-            f"Step {step}: Position: {robot_state['proprio'][:2]}, Yaw: {robot_state['proprio'][3]}"
-        )
+        # print(
+        #     f"Step {step}: Position: {robot_state['proprio'][:2]}, Yaw: {robot_state['proprio'][3]}"
+        # )
 
         step += 1
 

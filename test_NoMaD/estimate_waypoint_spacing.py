@@ -32,6 +32,9 @@ def compute_waypoint_spacing(traj_folder):
     # Compute Euclidean distances between consecutive positions
     diffs = np.diff(positions, axis=0)
     distances = np.linalg.norm(diffs, axis=1)
+    for i, dist in enumerate(distances):
+        print(f"Waypoint {i}: {dist:.3f} m")
+
     avg_spacing = np.mean(distances)
     return avg_spacing
 

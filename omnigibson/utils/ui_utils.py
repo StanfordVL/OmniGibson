@@ -37,7 +37,15 @@ def print_icon():
         ("                 ", "\\  \\", "/", "___\\  ", "", "", "\\   /"),
         ("                  ", "\\__________", "", "", "", "", "\\_/  "),
     ]
-    for lgrey_text0, grey_text0, lgrey_text1, grey_text1, red_text0, lgrey_text2, red_text1 in raw_texts:
+    for (
+        lgrey_text0,
+        grey_text0,
+        lgrey_text1,
+        grey_text1,
+        red_text0,
+        lgrey_text2,
+        red_text1,
+    ) in raw_texts:
         lgrey_text0 = colored(lgrey_text0, "light_grey", attrs=["bold"])
         grey_text0 = colored(grey_text0, "light_grey", attrs=["bold", "dark"])
         lgrey_text1 = colored(lgrey_text1, "light_grey", attrs=["bold"])
@@ -45,7 +53,15 @@ def print_icon():
         red_text0 = colored(red_text0, "light_red", attrs=["bold"])
         lgrey_text2 = colored(lgrey_text2, "light_grey", attrs=["bold"])
         red_text1 = colored(red_text1, "light_red", attrs=["bold"])
-        print(lgrey_text0 + grey_text0 + lgrey_text1 + grey_text1 + red_text0 + lgrey_text2 + red_text1)
+        print(
+            lgrey_text0
+            + grey_text0
+            + lgrey_text1
+            + grey_text1
+            + red_text0
+            + lgrey_text2
+            + red_text1
+        )
 
 
 def print_logo():
@@ -109,7 +125,9 @@ class KeyboardEventHandler:
         appwindow = lazy.omni.appwindow.get_default_app_window()
         input_interface = lazy.carb.input.acquire_input_interface()
         keyboard = appwindow.get_keyboard()
-        cls._CALLBACK_ID = input_interface.subscribe_to_keyboard_events(keyboard, cls._meta_callback)
+        cls._CALLBACK_ID = input_interface.subscribe_to_keyboard_events(
+            keyboard, cls._meta_callback
+        )
 
     @classmethod
     def reset(cls):
@@ -180,11 +198,15 @@ def suppress_omni_log(channels):
         # For some reason, all enabled states always return False even if the logging is clearly enabled for the
         # given channel, so we assume all channels are enabled
         # We do, however, check what behavior was assigned to this channel, since we force an override during this context
-        channel_behavior = {channel: log.get_channel_enabled(channel)[2] for channel in channels}
+        channel_behavior = {
+            channel: log.get_channel_enabled(channel)[2] for channel in channels
+        }
 
         # Suppress the channels
         for channel in channels:
-            log.set_channel_enabled(channel, False, lazy.omni.log.SettingBehavior.OVERRIDE)
+            log.set_channel_enabled(
+                channel, False, lazy.omni.log.SettingBehavior.OVERRIDE
+            )
 
     yield
 
@@ -210,7 +232,9 @@ def suppress_loggers(logger_names):
     """
     if not gm.DEBUG:
         # Store prior states so we can restore them after this context exits
-        logger_levels = {name: logging.getLogger(name).getEffectiveLevel() for name in logger_names}
+        logger_levels = {
+            name: logging.getLogger(name).getEffectiveLevel() for name in logger_names
+        }
 
         # Suppress the loggers (only output fatal messages)
         for name in logger_names:
@@ -244,7 +268,9 @@ def disclaimer(msg):
     """
     if gm.SHOW_DISCLAIMERS:
         print("****** DISCLAIMER ******")
-        print("Isaac Sim / Omniverse has some significant limitations and bugs in its current release.")
+        print(
+            "Isaac Sim / Omniverse has some significant limitations and bugs in its current release."
+        )
         print(
             "This message has popped up because a potential feature in OmniGibson relies upon a feature in Omniverse that "
             "is yet to be released publically. Currently, the expected behavior may not be fully functional, but "
@@ -282,7 +308,9 @@ def choose_from_options(options, name, random_selection=False):
 
     if not random_selection:
         try:
-            s = input("Choose a {} (enter a number from 1 to {}): ".format(name, len(options)))
+            s = input(
+                "Choose a {} (enter a number from 1 to {}): ".format(name, len(options))
+            )
             # parse input into a number within range
             k = min(max(int(s), 1), len(options)) - 1
         except ValueError:
@@ -318,7 +346,9 @@ class CameraMover:
         self._appwindow = lazy.omni.appwindow.get_default_app_window()
         self._input = lazy.carb.input.acquire_input_interface()
         self._keyboard = self._appwindow.get_keyboard()
-        self._sub_keyboard = self._input.subscribe_to_keyboard_events(self._keyboard, self._sub_keyboard_event)
+        self._sub_keyboard = self._input.subscribe_to_keyboard_events(
+            self._keyboard, self._sub_keyboard_event
+        )
 
     def clear(self):
         """
@@ -434,7 +464,9 @@ class CameraMover:
         video_writer.close()
         og.log.info(f"Saved camera trajectory video to {fpath}.")
 
-    def record_trajectory_from_waypoints(self, waypoints, per_step_distance, fps, steps_per_frame=1, fpath=None):
+    def record_trajectory_from_waypoints(
+        self, waypoints, per_step_distance, fps, steps_per_frame=1, fpath=None
+    ):
         """
         Moves the viewer camera through the waypoints specified by @waypoints and records the resulting trajectory to
         an mp4 video file on disk.
@@ -452,10 +484,15 @@ class CameraMover:
         # Create splines and their derivatives
         n_waypoints = len(waypoints)
         if n_waypoints < 3:
-            og.log.error("Cannot generate trajectory from waypoints with less than 3 waypoints!")
+            og.log.error(
+                "Cannot generate trajectory from waypoints with less than 3 waypoints!"
+            )
             return
 
-        splines = [CubicSpline(range(n_waypoints), waypoints[:, i], bc_type="clamped") for i in range(3)]
+        splines = [
+            CubicSpline(range(n_waypoints), waypoints[:, i], bc_type="clamped")
+            for i in range(3)
+        ]
         dsplines = [spline.derivative() for spline in splines]
 
         # Function help get arc derivative
@@ -470,7 +507,9 @@ class CameraMover:
             interpolated_points = th.zeros((path_length, 3))
             for i in range(path_length):
                 curr_step = step + (i / path_length)
-                interpolated_points[i, :] = th.tensor([spline(curr_step) for spline in splines])
+                interpolated_points[i, :] = th.tensor(
+                    [spline(curr_step) for spline in splines]
+                )
             return interpolated_points
 
         # Iterate over all waypoints and infer the resulting trajectory, recording the resulting poses
@@ -491,7 +530,9 @@ class CameraMover:
                 poses.append([positions[j], quat])
 
         # Record the generated trajectory
-        self.record_trajectory(poses=poses, fps=fps, steps_per_frame=steps_per_frame, fpath=fpath)
+        self.record_trajectory(
+            poses=poses, fps=fps, steps_per_frame=steps_per_frame, fpath=fpath
+        )
 
     def set_delta(self, delta):
         """
@@ -551,7 +592,10 @@ class CameraMover:
             or event.type == lazy.carb.input.KeyboardEventType.KEY_REPEAT
         ):
 
-            if event.type == lazy.carb.input.KeyboardEventType.KEY_PRESS and event.input in self.input_to_function:
+            if (
+                event.type == lazy.carb.input.KeyboardEventType.KEY_PRESS
+                and event.input in self.input_to_function
+            ):
                 self.input_to_function[event.input]()
 
             else:
@@ -595,28 +639,42 @@ class KeyboardRobotController:
                 self.joint_idx_to_controller[i] = controller
 
         # Other persistent variables we need to keep track of
-        self.joint_names = [name for name in robot.joints.keys()]  # Ordered list of joint names belonging to the robot
-        self.joint_types = [joint.joint_type for joint in robot.joints.values()]  # Ordered list of joint types
-        self.joint_command_idx = None  # Indices of joints being directly controlled in the action array
-        self.joint_control_idx = None  # Indices of joints being directly controlled in the actual joint array
-        self.active_joint_command_idx_idx = (
-            0  # Which index within the joint_command_idx variable is being controlled by the user
+        self.joint_names = [
+            name for name in robot.joints.keys()
+        ]  # Ordered list of joint names belonging to the robot
+        self.joint_types = [
+            joint.joint_type for joint in robot.joints.values()
+        ]  # Ordered list of joint types
+        self.joint_command_idx = (
+            None  # Indices of joints being directly controlled in the action array
         )
+        self.joint_control_idx = (
+            None  # Indices of joints being directly controlled in the actual joint array
+        )
+        self.active_joint_command_idx_idx = 0  # Which index within the joint_command_idx variable is being controlled by the user
         self.current_joint = -1  # Active joint being controlled for joint control
         self.ik_arms = []  # List of arm controller names to be controlled by IK
         self.active_arm_idx = 0  # Which index within self.ik_arms is actively being controlled (only relevant for IK)
-        self.binary_grippers = []  # Grippers being controlled using multi-finger binary controller
-        self.active_gripper_idx = 0  # Which index within self.binary_grippers is actively being controlled
-        self.gripper_direction = None  # Flips between -1 and 1, per arm controlled by multi-finger binary control
-        self.persistent_gripper_action = (
-            None  # Persistent gripper commands, per arm controlled by multi-finger binary control
+        self.binary_grippers = (
+            []
+        )  # Grippers being controlled using multi-finger binary controller
+        self.active_gripper_idx = (
+            0  # Which index within self.binary_grippers is actively being controlled
         )
+        self.gripper_direction = None  # Flips between -1 and 1, per arm controlled by multi-finger binary control
+        self.persistent_gripper_action = None  # Persistent gripper commands, per arm controlled by multi-finger binary control
         # i.e.: if using binary gripper control and when no keypress is active, the gripper action should still the last executed gripper action
         self.keypress_mapping = None  # Maps omni keybindings to information for controlling various parts of the robot
         self.current_keypress = None  # Current key that is being pressed
-        self.active_action = None  # Current action information based on the current keypress
-        self.toggling_gripper = False  # Whether we should toggle the gripper during the next action
-        self.custom_keymapping = None  # Dictionary mapping custom keys to custom callback functions / info
+        self.active_action = (
+            None  # Current action information based on the current keypress
+        )
+        self.toggling_gripper = (
+            False  # Whether we should toggle the gripper during the next action
+        )
+        self.custom_keymapping = (
+            None  # Dictionary mapping custom keys to custom callback functions / info
+        )
 
         # Populate the keypress mapping dictionary
         self.populate_keypress_mapping()
@@ -631,7 +689,9 @@ class KeyboardRobotController:
         appwindow = lazy.omni.appwindow.get_default_app_window()
         input_interface = lazy.carb.input.acquire_input_interface()
         keyboard = appwindow.get_keyboard()
-        sub_keyboard = input_interface.subscribe_to_keyboard_events(keyboard, self.keyboard_event_handler)
+        sub_keyboard = input_interface.subscribe_to_keyboard_events(
+            keyboard, self.keyboard_event_handler
+        )
 
     def register_custom_keymapping(self, key, description, callback_fn):
         """
@@ -645,7 +705,10 @@ class KeyboardRobotController:
 
                 callback_fn() -> None
         """
-        self.custom_keymapping[key] = {"description": description, "callback": callback_fn}
+        self.custom_keymapping[key] = {
+            "description": description,
+            "callback": callback_fn,
+        }
 
     def generate_ik_keypress_mapping(self, controller_info):
         """
@@ -660,18 +723,54 @@ class KeyboardRobotController:
         """
         mapping = {}
 
-        mapping[lazy.carb.input.KeyboardInput.UP] = {"idx": controller_info["start_idx"] + 0, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.DOWN] = {"idx": controller_info["start_idx"] + 0, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.RIGHT] = {"idx": controller_info["start_idx"] + 1, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.LEFT] = {"idx": controller_info["start_idx"] + 1, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.P] = {"idx": controller_info["start_idx"] + 2, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.SEMICOLON] = {"idx": controller_info["start_idx"] + 2, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.N] = {"idx": controller_info["start_idx"] + 3, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.B] = {"idx": controller_info["start_idx"] + 3, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.O] = {"idx": controller_info["start_idx"] + 4, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.U] = {"idx": controller_info["start_idx"] + 4, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.V] = {"idx": controller_info["start_idx"] + 5, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.C] = {"idx": controller_info["start_idx"] + 5, "val": -0.5}
+        mapping[lazy.carb.input.KeyboardInput.UP] = {
+            "idx": controller_info["start_idx"] + 0,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.DOWN] = {
+            "idx": controller_info["start_idx"] + 0,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.RIGHT] = {
+            "idx": controller_info["start_idx"] + 1,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.LEFT] = {
+            "idx": controller_info["start_idx"] + 1,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.P] = {
+            "idx": controller_info["start_idx"] + 2,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.SEMICOLON] = {
+            "idx": controller_info["start_idx"] + 2,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.N] = {
+            "idx": controller_info["start_idx"] + 3,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.B] = {
+            "idx": controller_info["start_idx"] + 3,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.O] = {
+            "idx": controller_info["start_idx"] + 4,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.U] = {
+            "idx": controller_info["start_idx"] + 4,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.V] = {
+            "idx": controller_info["start_idx"] + 5,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.C] = {
+            "idx": controller_info["start_idx"] + 5,
+            "val": -0.5,
+        }
 
         return mapping
 
@@ -688,18 +787,54 @@ class KeyboardRobotController:
         """
         mapping = {}
 
-        mapping[lazy.carb.input.KeyboardInput.UP] = {"idx": controller_info["start_idx"] + 0, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.DOWN] = {"idx": controller_info["start_idx"] + 0, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.RIGHT] = {"idx": controller_info["start_idx"] + 1, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.LEFT] = {"idx": controller_info["start_idx"] + 1, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.P] = {"idx": controller_info["start_idx"] + 2, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.SEMICOLON] = {"idx": controller_info["start_idx"] + 2, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.N] = {"idx": controller_info["start_idx"] + 3, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.B] = {"idx": controller_info["start_idx"] + 3, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.O] = {"idx": controller_info["start_idx"] + 4, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.U] = {"idx": controller_info["start_idx"] + 4, "val": -0.5}
-        mapping[lazy.carb.input.KeyboardInput.V] = {"idx": controller_info["start_idx"] + 5, "val": 0.5}
-        mapping[lazy.carb.input.KeyboardInput.C] = {"idx": controller_info["start_idx"] + 5, "val": -0.5}
+        mapping[lazy.carb.input.KeyboardInput.UP] = {
+            "idx": controller_info["start_idx"] + 0,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.DOWN] = {
+            "idx": controller_info["start_idx"] + 0,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.RIGHT] = {
+            "idx": controller_info["start_idx"] + 1,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.LEFT] = {
+            "idx": controller_info["start_idx"] + 1,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.P] = {
+            "idx": controller_info["start_idx"] + 2,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.SEMICOLON] = {
+            "idx": controller_info["start_idx"] + 2,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.N] = {
+            "idx": controller_info["start_idx"] + 3,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.B] = {
+            "idx": controller_info["start_idx"] + 3,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.O] = {
+            "idx": controller_info["start_idx"] + 4,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.U] = {
+            "idx": controller_info["start_idx"] + 4,
+            "val": -0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.V] = {
+            "idx": controller_info["start_idx"] + 5,
+            "val": 0.5,
+        }
+        mapping[lazy.carb.input.KeyboardInput.C] = {
+            "idx": controller_info["start_idx"] + 5,
+            "val": -0.5,
+        }
 
         return mapping
 
@@ -719,8 +854,14 @@ class KeyboardRobotController:
         self.custom_keymapping = {}
 
         # Add mapping for joint control directions (no index because these are inferred at runtime)
-        self.keypress_mapping[lazy.carb.input.KeyboardInput.RIGHT_BRACKET] = {"idx": None, "val": 0.1}
-        self.keypress_mapping[lazy.carb.input.KeyboardInput.LEFT_BRACKET] = {"idx": None, "val": -0.1}
+        self.keypress_mapping[lazy.carb.input.KeyboardInput.RIGHT_BRACKET] = {
+            "idx": None,
+            "val": 0.1,
+        }
+        self.keypress_mapping[lazy.carb.input.KeyboardInput.LEFT_BRACKET] = {
+            "idx": None,
+            "val": -0.1,
+        }
 
         # Iterate over all controller info and populate mapping
         for component, info in self.controller_info.items():
@@ -730,16 +871,32 @@ class KeyboardRobotController:
                     self.joint_command_idx.append(cmd_idx)
                 self.joint_control_idx += info["dofs"].tolist()
             elif info["name"] == "DifferentialDriveController":
-                self.keypress_mapping[lazy.carb.input.KeyboardInput.I] = {"idx": info["start_idx"] + 0, "val": 0.4}
-                self.keypress_mapping[lazy.carb.input.KeyboardInput.K] = {"idx": info["start_idx"] + 0, "val": -0.4}
-                self.keypress_mapping[lazy.carb.input.KeyboardInput.L] = {"idx": info["start_idx"] + 1, "val": -0.2}
-                self.keypress_mapping[lazy.carb.input.KeyboardInput.J] = {"idx": info["start_idx"] + 1, "val": 0.2}
+                self.keypress_mapping[lazy.carb.input.KeyboardInput.I] = {
+                    "idx": info["start_idx"] + 0,
+                    "val": 0.4,
+                }
+                self.keypress_mapping[lazy.carb.input.KeyboardInput.K] = {
+                    "idx": info["start_idx"] + 0,
+                    "val": -0.4,
+                }
+                self.keypress_mapping[lazy.carb.input.KeyboardInput.L] = {
+                    "idx": info["start_idx"] + 1,
+                    "val": -0.2,
+                }
+                self.keypress_mapping[lazy.carb.input.KeyboardInput.J] = {
+                    "idx": info["start_idx"] + 1,
+                    "val": 0.2,
+                }
             elif info["name"] == "InverseKinematicsController":
                 self.ik_arms.append(component)
-                self.keypress_mapping.update(self.generate_ik_keypress_mapping(controller_info=info))
+                self.keypress_mapping.update(
+                    self.generate_ik_keypress_mapping(controller_info=info)
+                )
             elif info["name"] == "OperationalSpaceController":
                 self.ik_arms.append(component)
-                self.keypress_mapping.update(self.generate_osc_keypress_mapping(controller_info=info))
+                self.keypress_mapping.update(
+                    self.generate_osc_keypress_mapping(controller_info=info)
+                )
             elif info["name"] == "MultiFingerGripperController":
                 if info["command_dim"] > 1:
                     for i in range(info["command_dim"]):
@@ -747,15 +904,23 @@ class KeyboardRobotController:
                         self.joint_command_idx.append(cmd_idx)
                     self.joint_control_idx += info["dofs"].tolist()
                 else:
-                    self.keypress_mapping[lazy.carb.input.KeyboardInput.T] = {"idx": info["start_idx"], "val": 1.0}
+                    self.keypress_mapping[lazy.carb.input.KeyboardInput.T] = {
+                        "idx": info["start_idx"],
+                        "val": 1.0,
+                    }
                     self.gripper_direction[component] = 1.0
                     self.persistent_gripper_action[component] = 1.0
                     self.binary_grippers.append(component)
             elif info["name"] == "NullJointController":
                 # We won't send actions if using a null gripper controller
-                self.keypress_mapping[lazy.carb.input.KeyboardInput.T] = {"idx": None, "val": None}
+                self.keypress_mapping[lazy.carb.input.KeyboardInput.T] = {
+                    "idx": None,
+                    "val": None,
+                }
             else:
-                raise ValueError("Unknown controller name received: {}".format(info["name"]))
+                raise ValueError(
+                    "Unknown controller name received: {}".format(info["name"])
+                )
 
     def keyboard_event_handler(self, event, *args, **kwargs):
         # Check if we've received a key press or repeat
@@ -766,21 +931,32 @@ class KeyboardRobotController:
 
             # Handle special cases
             if (
-                event.input in {lazy.carb.input.KeyboardInput.KEY_1, lazy.carb.input.KeyboardInput.KEY_2}
+                event.input
+                in {
+                    lazy.carb.input.KeyboardInput.KEY_1,
+                    lazy.carb.input.KeyboardInput.KEY_2,
+                }
                 and len(self.joint_control_idx) > 1
             ):
                 # Update joint and print out new joint being controlled
                 self.active_joint_command_idx_idx = (
                     max(0, self.active_joint_command_idx_idx - 1)
                     if event.input == lazy.carb.input.KeyboardInput.KEY_1
-                    else min(len(self.joint_control_idx) - 1, self.active_joint_command_idx_idx + 1)
+                    else min(
+                        len(self.joint_control_idx) - 1,
+                        self.active_joint_command_idx_idx + 1,
+                    )
                 )
                 print(
                     f"Now controlling joint {self.joint_names[self.joint_control_idx[self.active_joint_command_idx_idx]]}"
                 )
 
             elif (
-                event.input in {lazy.carb.input.KeyboardInput.KEY_3, lazy.carb.input.KeyboardInput.KEY_4}
+                event.input
+                in {
+                    lazy.carb.input.KeyboardInput.KEY_3,
+                    lazy.carb.input.KeyboardInput.KEY_4,
+                }
                 and len(self.ik_arms) > 1
             ):
                 # Update arm, update keypress mapping, and print out new arm being controlled
@@ -790,11 +966,17 @@ class KeyboardRobotController:
                     else min(len(self.ik_arms) - 1, self.active_arm_idx + 1)
                 )
                 new_arm = self.ik_arms[self.active_arm_idx]
-                self.keypress_mapping.update(self.generate_ik_keypress_mapping(self.controller_info[new_arm]))
+                self.keypress_mapping.update(
+                    self.generate_ik_keypress_mapping(self.controller_info[new_arm])
+                )
                 print(f"Now controlling arm {new_arm} EEF")
 
             elif (
-                event.input in {lazy.carb.input.KeyboardInput.KEY_5, lazy.carb.input.KeyboardInput.KEY_6}
+                event.input
+                in {
+                    lazy.carb.input.KeyboardInput.KEY_5,
+                    lazy.carb.input.KeyboardInput.KEY_6,
+                }
                 and len(self.binary_grippers) > 1
             ):
                 # Update gripper, update keypress mapping, and print out new gripper being controlled
@@ -803,7 +985,9 @@ class KeyboardRobotController:
                     if event.input == lazy.carb.input.KeyboardInput.KEY_5
                     else min(len(self.binary_grippers) - 1, self.active_gripper_idx + 1)
                 )
-                print(f"Now controlling gripper {self.binary_grippers[self.active_gripper_idx]} with binary toggling")
+                print(
+                    f"Now controlling gripper {self.binary_grippers[self.active_gripper_idx]} with binary toggling"
+                )
 
             elif event.input == lazy.carb.input.KeyboardInput.M:
                 # Render the sensor modalities from the robot's camera and lidar
@@ -882,7 +1066,10 @@ class KeyboardRobotController:
                     action[idx] = val
 
         # Possibly set the persistent gripper action
-        if len(self.binary_grippers) > 0 and self.keypress_mapping[lazy.carb.input.KeyboardInput.T]["val"] is not None:
+        if (
+            len(self.binary_grippers) > 0
+            and self.keypress_mapping[lazy.carb.input.KeyboardInput.T]["val"] is not None
+        ):
 
             for i, binary_gripper in enumerate(self.binary_grippers):
                 # Possibly update the stored value if the toggle gripper key has been pressed and
@@ -899,9 +1086,9 @@ class KeyboardRobotController:
                     self.toggling_gripper = False
 
                 # Set the persistent action
-                action[self.controller_info[binary_gripper]["start_idx"]] = self.persistent_gripper_action[
-                    binary_gripper
-                ]
+                action[self.controller_info[binary_gripper]["start_idx"]] = (
+                    self.persistent_gripper_action[binary_gripper]
+                )
 
         # Print out the user what is being pressed / controlled
         sys.stdout.write("\033[K")
@@ -944,12 +1131,15 @@ class KeyboardRobotController:
         print_command("v, c", "rotate arm eef about z-axis")
         print()
         print("Boolean Gripper Control")
-        print_command("5, 6", "toggle between the different gripper(s) using binary control")
+        print_command(
+            "5, 6", "toggle between the different gripper(s) using binary control"
+        )
         print_command("t", "toggle gripper (open/close)")
         print()
         print("Sensor Rendering")
         print_command(
-            "m", "render the onboard sensor modalities (RGB, Depth, Normals, Instance Segmentation, Occupancy Map)"
+            "m",
+            "render the onboard sensor modalities (RGB, Depth, Normals, Instance Segmentation, Occupancy Map)",
         )
         print()
         if len(self.custom_keymapping) > 0:
