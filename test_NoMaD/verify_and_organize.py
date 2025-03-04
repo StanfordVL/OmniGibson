@@ -125,7 +125,7 @@ def main():
     parser.add_argument(
         "--dataset_root",
         type=str,
-        default="./omnigibson_dataset",
+        default="./omnigibson_dataset_sampled",
         help="Root directory of the collected dataset (each subfolder is a trajectory).",
     )
     parser.add_argument(

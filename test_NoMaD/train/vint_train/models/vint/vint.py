@@ -3,11 +3,13 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import List, Dict, Optional, Tuple
 from efficientnet_pytorch import EfficientNet
-from vint_train.models.base_model import BaseModel
-from vint_train.models.vint.self_attention import MultiLayerDecoder
 
-# from train.vint_train.models.base_model import BaseModel
-# from train.vint_train.models.vint.self_attention import MultiLayerDecoder
+# For training, the import statement should be as follows:
+# from vint_train.models.base_model import BaseModel
+# from vint_train.models.vint.self_attention import MultiLayerDecoder
+
+from train.vint_train.models.base_model import BaseModel
+from train.vint_train.models.vint.self_attention import MultiLayerDecoder
 
 
 class ViNT(BaseModel):

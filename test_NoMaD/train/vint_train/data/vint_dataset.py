@@ -155,7 +155,8 @@ class ViNT_Dataset(Dataset):
                 desc=f"Building LMDB cache for {self.dataset_name}",
             )
             # with lmdb.open(cache_filename, map_size=2**40) as image_cache:
-            with lmdb.open(cache_filename, map_size=2**36) as image_cache:
+            # with lmdb.open(cache_filename, map_size=2**36) as image_cache: 64 gb
+            with lmdb.open(cache_filename, map_size=2**36) as image_cache:  # 34 gb
                 with image_cache.begin(write=True) as txn:
                     for traj_name, time in tqdm_iterator:
                         image_path = get_data_path(self.data_folder, traj_name, time)

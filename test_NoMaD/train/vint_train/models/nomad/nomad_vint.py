@@ -4,9 +4,12 @@ import torch.nn.functional as F
 import torchvision
 from typing import List, Dict, Optional, Tuple, Callable
 from efficientnet_pytorch import EfficientNet
-from vint_train.models.vint.self_attention import PositionalEncoding
 
-# from train.vint_train.models.vint.self_attention import PositionalEncoding
+# from vint_train.models.vint.self_attention import PositionalEncoding
+from train.vint_train.models.vint.self_attention import PositionalEncoding
+import os
+
+os.environ["PYTORCH_CUDA_ALLOC_CONF"] = "expandable_segments:True"
 
 
 class NoMaD_ViNT(nn.Module):

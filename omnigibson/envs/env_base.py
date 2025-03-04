@@ -59,14 +59,20 @@ class Environment(gym.Env, GymObservable, Recreatable):
         self.in_vec_env = in_vec_env
 
         # Convert config file(s) into a single parsed dict
-        configs = configs if isinstance(configs, list) or isinstance(configs, tuple) else [configs]
+        configs = (
+            configs
+            if isinstance(configs, list) or isinstance(configs, tuple)
+            else [configs]
+        )
 
         # Initial default config
         self.config = self.default_config
 
         # Merge in specified configs
         for config in configs:
-            merge_nested_dicts(base_dict=self.config, extra_dict=parse_config(config), inplace=True)
+            merge_nested_dicts(
+                base_dict=self.config, extra_dict=parse_config(config), inplace=True
+            )
 
         # Store settings and other initialized values
         self._automatic_reset = self.env_config["automatic_reset"]
@@ -91,7 +97,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
             assert (
                 og.sim.initial_rendering_dt == rendering_dt
             ), f"Rendering frequency mismatch! Expected {rendering_dt}, got {og.sim.initial_rendering_dt}"
-            assert og.sim.device == self.device, f"Device mismatch! Expected {self.device}, got {og.sim.device}"
+            assert (
+                og.sim.device == self.device
+            ), f"Device mismatch! Expected {self.device}, got {og.sim.device}"
             assert (
                 og.sim.viewer_width == viewer_width
             ), f"Viewer width mismatch! Expected {viewer_width}, got {og.sim.viewer_width}"
@@ -146,14 +154,20 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 modifications to be made without having to specify entire configs during each reload.
         """
         # Convert config file(s) into a single parsed dict
-        configs = [configs] if isinstance(configs, dict) or isinstance(configs, str) else configs
+        configs = (
+            [configs]
+            if isinstance(configs, dict) or isinstance(configs, str)
+            else configs
+        )
 
         # Initial default config
         new_config = self.default_config
 
         # Merge in specified configs
         for config in configs:
-            merge_nested_dicts(base_dict=new_config, extra_dict=parse_config(config), inplace=True)
+            merge_nested_dicts(
+                base_dict=new_config, extra_dict=parse_config(config), inplace=True
+            )
 
         # Either merge in or overwrite the old config
         if overwrite_old:
@@ -184,7 +198,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Reset bookkeeping variables
         self._reset_variables()  # Reset episode variables
-        self._current_episode = 0  # Manually set this to 0 since resetting actually increments this
+        self._current_episode = (
+            0  # Manually set this to 0 since resetting actually increments this
+        )
 
         # - Potentially overwrite the USD entry for the scene if none is specified and we're online sampling -
 
@@ -269,15 +285,25 @@ class Environment(gym.Env, GymObservable, Recreatable):
             for i, robot_config in enumerate(self.robots_config):
                 # Add a name for the robot if necessary
                 if "name" not in robot_config:
-                    robot_config["name"] = "robot_" + "".join(random.choices(string.ascii_lowercase, k=6))
+                    robot_config["name"] = "robot_" + "".join(
+                        random.choices(string.ascii_lowercase, k=6)
+                    )
 
-                position, orientation = robot_config.pop("position", None), robot_config.pop("orientation", None)
+                position, orientation = robot_config.pop(
+                    "position", None
+                ), robot_config.pop("orientation", None)
                 pose_frame = robot_config.pop("pose_frame", "scene")
                 if position is not None:
-                    position = position if isinstance(position, th.Tensor) else th.tensor(position, dtype=th.float32)
+                    position = (
+                        position
+                        if isinstance(position, th.Tensor)
+                        else th.tensor(position, dtype=th.float32)
+                    )
                 if orientation is not None:
                     orientation = (
-                        orientation if isinstance(orientation, th.Tensor) else th.tensor(orientation, dtype=th.float32)
+                        orientation
+                        if isinstance(orientation, th.Tensor)
+                        else th.tensor(orientation, dtype=th.float32)
                     )
 
                 # Make sure robot exists, grab its corresponding kwargs, and create / import the robot
@@ -289,7 +315,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 )
                 # Import the robot into the simulator
                 self.scene.add_object(robot)
-                robot.set_position_orientation(position=position, orientation=orientation, frame=pose_frame)
+                robot.set_position_orientation(
+                    position=position, orientation=orientation, frame=pose_frame
+                )
 
         assert og.sim.is_stopped(), "Simulator must be stopped after loading robots!"
 
@@ -303,7 +331,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
             if "name" not in obj_config:
                 obj_config["name"] = f"obj{i}"
             # Pop the desired position and orientation
-            position, orientation = obj_config.pop("position", None), obj_config.pop("orientation", None)
+            position, orientation = obj_config.pop("position", None), obj_config.pop(
+                "orientation", None
+            )
             # Make sure robot exists, grab its corresponding kwargs, and create / import the robot
             obj = create_class_from_registry_and_config(
                 cls_name=obj_config["type"],
@@ -313,7 +343,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
             )
             # Import the robot into the simulator and set the pose
             self.scene.add_object(obj)
-            obj.set_position_orientation(position=position, orientation=orientation, frame="scene")
+            obj.set_position_orientation(
+                position=position, orientation=orientation, frame="scene"
+            )
 
         assert og.sim.is_stopped(), "Simulator must be stopped after loading objects!"
 
@@ -321,7 +353,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         Load any additional custom external sensors into the scene
         """
-        assert og.sim.is_stopped(), "Simulator must be stopped before loading external sensors!"
+        assert (
+            og.sim.is_stopped()
+        ), "Simulator must be stopped before loading external sensors!"
         sensors_config = self.env_config["external_sensors"]
         if sensors_config is not None:
             self._external_sensors = dict()
@@ -334,7 +368,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 if "relative_prim_path" not in sensor_config:
                     sensor_config["relative_prim_path"] = f"/{sensor_config['name']}"
                 # Pop the desired position and orientation
-                position, orientation = sensor_config.pop("position", None), sensor_config.pop("orientation", None)
+                position, orientation = sensor_config.pop(
+                    "position", None
+                ), sensor_config.pop("orientation", None)
                 pose_frame = sensor_config.pop("pose_frame", "scene")
                 # Pop whether or not to include this sensor in the observation
                 include_in_obs = sensor_config.pop("include_in_obs", True)
@@ -343,11 +379,15 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 # Load an initialize this sensor
                 sensor.load(self.scene)
                 sensor.initialize()
-                sensor.set_position_orientation(position=position, orientation=orientation, frame=pose_frame)
+                sensor.set_position_orientation(
+                    position=position, orientation=orientation, frame=pose_frame
+                )
                 self._external_sensors[sensor.name] = sensor
                 self._external_sensors_include_in_obs[sensor.name] = include_in_obs
 
-        assert og.sim.is_stopped(), "Simulator must be stopped after loading external sensors!"
+        assert (
+            og.sim.is_stopped()
+        ), "Simulator must be stopped after loading external sensors!"
 
     def _load_observation_space(self):
         # Grab robot(s) and task obs spaces
@@ -383,7 +423,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # If we want to flatten it, modify the observation space by recursively searching through all
         if self._flatten_obs_space:
-            self.observation_space = gym.spaces.Dict(recursively_generate_flat_dict(dic=obs_space))
+            self.observation_space = gym.spaces.Dict(
+                recursively_generate_flat_dict(dic=obs_space)
+            )
 
         return self.observation_space
 
@@ -391,7 +433,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         """
         Load action space for each robot
         """
-        action_space = gym.spaces.Dict({robot.name: robot.action_space for robot in self.robots})
+        action_space = gym.spaces.Dict(
+            {robot.name: robot.action_space for robot in self.robots}
+        )
 
         # Convert into flattened 1D Box space if requested
         if self._flatten_action_space:
@@ -510,7 +554,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
             external_obs = dict()
             external_info = dict()
             for sensor_name, sensor in self._external_sensors.items():
-                assert self._external_sensors_include_in_obs is not None, "External sensors must be included in obs!"
+                assert (
+                    self._external_sensors_include_in_obs is not None
+                ), "External sensors must be included in obs!"
                 if not self._external_sensors_include_in_obs[sensor_name]:
                     continue
 
@@ -531,7 +577,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
         Returns:
             SceneGraph: Current scene graph
         """
-        assert self._scene_graph_builder is not None, "Scene graph builder must be specified in config!"
+        assert (
+            self._scene_graph_builder is not None
+        ), "Scene graph builder must be specified in config!"
         return self._scene_graph_builder.get_scene_graph()
 
     def _populate_info(self, info):
@@ -595,7 +643,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
                     truncated = True
                 else:
                     terminated = True
-        assert (terminated or truncated) == done, "Terminated and truncated must match done!"
+        assert (
+            terminated or truncated
+        ) == done, "Terminated and truncated must match done!"
 
         # Increment step
         self._current_step += 1
@@ -647,7 +697,8 @@ class Environment(gym.Env, GymObservable, Recreatable):
         rgb_sensors = [
             x
             for x in self._external_sensors.values()
-            if isinstance(x, VisionSensor) and (x.modalities == "all" or "rgb" in x.modalities)
+            if isinstance(x, VisionSensor)
+            and (x.modalities == "all" or "rgb" in x.modalities)
         ]
         if not rgb_sensors:
             return None
@@ -688,10 +739,14 @@ class Environment(gym.Env, GymObservable, Recreatable):
                 check_obs = recursively_generate_compatible_dict(dic=obs)
                 if not self.observation_space.contains(check_obs):
                     exp_obs = dict()
-                    for key, value in recursively_generate_flat_dict(dic=self.observation_space).items():
+                    for key, value in recursively_generate_flat_dict(
+                        dic=self.observation_space
+                    ).items():
                         exp_obs[key] = ("obs_space", key, value.dtype, value.shape)
                     real_obs = dict()
-                    for key, value in recursively_generate_flat_dict(dic=check_obs).items():
+                    for key, value in recursively_generate_flat_dict(
+                        dic=check_obs
+                    ).items():
                         if isinstance(value, th.Tensor):
                             real_obs[key] = ("obs", key, value.dtype, value.shape)
                         else:
@@ -718,7 +773,9 @@ class Environment(gym.Env, GymObservable, Recreatable):
                             log.error(f"Expected: {exp_obs[k]}")
                             log.error(f"Received: {real_obs[k]}")
 
-                    raise ValueError("Observation space does not match returned observations!")
+                    raise ValueError(
+                        "Observation space does not match returned observations!"
+                    )
 
             return obs, {}
 

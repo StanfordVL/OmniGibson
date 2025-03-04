@@ -8,19 +8,7 @@ import yaml
 import torch
 import torch.nn as nn
 
-# from train.vint_train.visualizing.visualize_utils import (
-#     to_numpy,
-#     numpy_to_img,
-#     VIZ_IMAGE_SIZE,
-#     RED,
-#     GREEN,
-#     BLUE,
-#     CYAN,
-#     YELLOW,
-#     MAGENTA,
-# )
-
-from vint_train.visualizing.visualize_utils import (
+from train.vint_train.visualizing.visualize_utils import (
     to_numpy,
     numpy_to_img,
     VIZ_IMAGE_SIZE,
@@ -31,6 +19,18 @@ from vint_train.visualizing.visualize_utils import (
     YELLOW,
     MAGENTA,
 )
+
+# from vint_train.visualizing.visualize_utils import (
+#     to_numpy,
+#     numpy_to_img,
+#     VIZ_IMAGE_SIZE,
+#     RED,
+#     GREEN,
+#     BLUE,
+#     CYAN,
+#     YELLOW,
+#     MAGENTA,
+# )
 
 
 # load data_config.yaml

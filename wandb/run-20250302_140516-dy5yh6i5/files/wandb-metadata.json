@@ -1,0 +1,41 @@
+{
+  "os": "Windows-10-10.0.22631-SP0",
+  "python": "CPython 3.10.16",
+  "startedAt": "2025-03-02T19:05:16.704944Z",
+  "program": "C:\\Users\\Joonkyung\\Desktop\\python_ws\\OmniGibson\\test_NoMaD\\train\\train.py",
+  "codePath": "test_NoMaD\\train\\train.py",
+  "git": {
+    "commit": "66d4eebb5ddb6fb6f1221724db42bd44ffefe91b"
+  },
+  "email": "wnsrud0901@naver.com",
+  "root": "C:\\Users\\Joonkyung\\Desktop\\python_ws\\OmniGibson",
+  "host": "DESKTOP-DNDHVJ7",
+  "executable": "C:\\Users\\Joonkyung\\anaconda3\\envs\\omnigibson\\python.exe",
+  "codePathLocal": "test_NoMaD\\train\\train.py",
+  "cpu_count": 8,
+  "cpu_count_logical": 16,
+  "gpu": "NVIDIA GeForce RTX 4060 Laptop GPU",
+  "gpu_count": 1,
+  "disk": {
+    "/": {
+      "total": "1023420657664",
+      "used": "774503841792"
+    }
+  },
+  "memory": {
+    "total": "33492422656"
+  },
+  "cpu": {
+    "count": 8,
+    "countLogical": 16
+  },
+  "gpu_nvidia": [
+    {
+      "name": "NVIDIA GeForce RTX 4060 Laptop GPU",
+      "memoryTotal": "8585740288",
+      "cudaCores": 3072,
+      "architecture": "Ada"
+    }
+  ],
+  "cudaVersion": "12.6"
+}

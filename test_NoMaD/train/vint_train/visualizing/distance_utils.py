@@ -3,8 +3,9 @@ import wandb
 import numpy as np
 from typing import List, Optional, Tuple
 
-# from train.vint_train.visualizing.visualize_utils import numpy_to_img
-from vint_train.visualizing.visualize_utils import numpy_to_img
+from train.vint_train.visualizing.visualize_utils import numpy_to_img
+
+# from vint_train.visualizing.visualize_utils import numpy_to_img
 import matplotlib.pyplot as plt
 
 

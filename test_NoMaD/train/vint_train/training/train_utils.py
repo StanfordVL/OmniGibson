@@ -8,17 +8,21 @@ from typing import List, Optional, Dict
 import tqdm
 import itertools
 
-# from train.vint_train.visualizing.action_utils import visualize_traj_pred, plot_trajs_and_points
-# from train.vint_train.visualizing.distance_utils import visualize_dist_pred
-# from train.vint_train.visualizing.visualize_utils import to_numpy, from_numpy
-# from train.vint_train.training.logger import Logger
-# from train.vint_train.data.data_utils import VISUALIZATION_IMAGE_SIZE
+from train.vint_train.visualizing.action_utils import (
+    visualize_traj_pred,
+    plot_trajs_and_points,
+)
+from train.vint_train.visualizing.distance_utils import visualize_dist_pred
+from train.vint_train.visualizing.visualize_utils import to_numpy, from_numpy
+from train.vint_train.training.logger import Logger
+from train.vint_train.data.data_utils import VISUALIZATION_IMAGE_SIZE
 
-from vint_train.visualizing.action_utils import visualize_traj_pred, plot_trajs_and_points
-from vint_train.visualizing.distance_utils import visualize_dist_pred
-from vint_train.visualizing.visualize_utils import to_numpy, from_numpy
-from vint_train.training.logger import Logger
-from vint_train.data.data_utils import VISUALIZATION_IMAGE_SIZE
+# For training
+# from vint_train.visualizing.action_utils import visualize_traj_pred, plot_trajs_and_points
+# from vint_train.visualizing.distance_utils import visualize_dist_pred
+# from vint_train.visualizing.visualize_utils import to_numpy, from_numpy
+# from vint_train.training.logger import Logger
+# from vint_train.data.data_utils import VISUALIZATION_IMAGE_SIZE
 
 
 from diffusers.schedulers.scheduling_ddpm import DDPMScheduler

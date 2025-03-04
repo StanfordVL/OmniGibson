@@ -104,10 +104,10 @@ datasets:
   #   goals_per_obs: 1 # How many goals to sample per observation
   #   negative_mining: True
 
-  omnigibson_dataset:
-    data_folder: "./omnigibson_dataset" # Path to your collected dataset
-    train: "data/data_splits/omnigibson_dataset/train/" # Path to the train split
-    test: "data/data_splits/omnigibson_dataset/test/" # Path to the test split
+  omnigibson_dataset_sampled:
+    data_folder: "./omnigibson_dataset_sampled" # Path to your collected dataset
+    train: "data/data_splits/omnigibson_dataset_sampled/train/" # Path to the train split
+    test: "data/data_splits/omnigibson_dataset_sampled/test/" # Path to the test split
     end_slack: 0 # Number of timesteps to cut off at the end of each trajectory (if needed)
     goals_per_obs: 1 # Number of goal samples per observation
     negative_mining: True # Enable negative mining (as described in the ViNG paper)

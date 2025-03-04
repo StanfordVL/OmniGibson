@@ -76,7 +76,6 @@ def run_control_loop(
     while step < max_steps:
         # Get control action from teleop
         action = controller.get_teleop_action()
-        print(f"action = {action}")
 
         # Step the environment with the chosen action
         states, _, terminated, truncated, _ = env.step({robot.name: action})

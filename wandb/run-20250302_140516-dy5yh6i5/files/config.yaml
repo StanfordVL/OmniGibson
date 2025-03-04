@@ -1,0 +1,162 @@
+_wandb:
+    value:
+        cli_version: 0.19.7.dev1
+        m: []
+        python_version: 3.10.16
+        t:
+            "1":
+                - 1
+                - 41
+                - 49
+                - 55
+                - 83
+            "2":
+                - 1
+                - 41
+                - 49
+                - 55
+                - 83
+            "3":
+                - 17
+                - 23
+                - 55
+            "4": 3.10.16
+            "5": 0.19.7.dev1
+            "8":
+                - 3
+                - 5
+            "12": 0.19.7.dev1
+            "13": windows-amd64
+action:
+    value:
+        max_dist_cat: 20
+        min_dist_cat: 3
+alpha:
+    value: "1e-4"
+attn_unet:
+    value: false
+batch_size:
+    value: 64
+beta:
+    value: 0.1
+clipping:
+    value: false
+close_far_threshold:
+    value: 10
+cond_predict_scale:
+    value: false
+context_size:
+    value: 3
+context_type:
+    value: temporal
+cyclic_period:
+    value: 10
+datasets:
+    value:
+        omnigibson_dataset_sampled:
+            data_folder: ./omnigibson_dataset_sampled
+            end_slack: 0
+            goals_per_obs: 1
+            negative_mining: true
+            test: data/data_splits/omnigibson_dataset_sampled/test/
+            train: data/data_splits/omnigibson_dataset_sampled/train/
+distance:
+    value:
+        max_dist_cat: 20
+        min_dist_cat: 0
+down_dims:
+    value:
+        - 64
+        - 128
+        - 256
+encoding_size:
+    value: 256
+epochs:
+    value: 100
+eval_batch_size:
+    value: 64
+eval_fraction:
+    value: 0.25
+eval_freq:
+    value: 1
+goal_encoding_size:
+    value: 1024
+goal_mask_prob:
+    value: 0.5
+goal_type:
+    value: image
+gpu_ids:
+    value:
+        - 0
+image_log_freq:
+    value: 1000
+image_size:
+    value:
+        - 96
+        - 96
+learn_angle:
+    value: false
+len_traj_pred:
+    value: 8
+load_run:
+    value: nomad/pretrained
+lr:
+    value: "1e-4"
+max_norm:
+    value: 1
+mha_ff_dim_factor:
+    value: 4
+mha_num_attention_heads:
+    value: 4
+mha_num_attention_layers:
+    value: 4
+model_type:
+    value: nomad
+normalize:
+    value: true
+num_diffusion_iters:
+    value: 10
+num_images_log:
+    value: 8
+num_workers:
+    value: 4
+obs_encoder:
+    value: efficientnet-b0
+obs_encoding_size:
+    value: 1024
+obs_type:
+    value: image
+optimizer:
+    value: adamw
+pairwise_test_freq:
+    value: 0
+plateau_factor:
+    value: 0.5
+plateau_patience:
+    value: 3
+print_log_freq:
+    value: 100
+project_folder:
+    value: logs\nomad\nomad_2025_03_02_14_05_14
+project_name:
+    value: nomad
+run_name:
+    value: nomad_2025_03_02_14_05_14
+scheduler:
+    value: cosine
+seed:
+    value: 0
+train:
+    value: true
+train_subset:
+    value: 1
+use_wandb:
+    value: true
+vision_encoder:
+    value: nomad_vint
+wandb_log_freq:
+    value: 10
+warmup:
+    value: true
+warmup_epochs:
+    value: 4
