@@ -309,6 +309,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             try:
                 # If we're not holding anything, release the hand so it doesn't stick to anything else.
                 if not self._get_obj_in_hand():
+                    print("Opening gripper, since we're not holding anything")
                     yield from self._execute_release()
             except ActionPrimitiveError:
                 pass
@@ -609,6 +610,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         indented_print("Checking grasp")
         obj_in_hand = self._get_obj_in_hand()
         if obj_in_hand is None:
+            print("Grasp completed, but no object detected in hand after executing grasp", {"target object": obj.name})
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.POST_CONDITION_ERROR,
                 "Grasp completed, but no object detected in hand after executing grasp",
@@ -623,6 +625,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 "An unexpected object was detected in hand after executing grasp. Consider releasing it",
                 {"expected object": obj.name, "actual object": self._get_obj_in_hand().name},
             )
+        print("self._get_obj_in_hand() 648", self._get_obj_in_hand())
 
     def _place_on_top(self, obj):
         """
@@ -693,6 +696,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             th.tensor or None: Action array for one step for the robot to place or None if place completed
         """
         if obj is None or not isinstance(obj, BaseObject):
+            print("You need to provide an object to place the object in your hand on", {"provided object": obj})
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PRE_CONDITION_ERROR,
                 "You need to provide an object to place the object in your hand on",
@@ -703,6 +707,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         obj_in_hand = self._get_obj_in_hand()
         if obj_in_hand is None:
+            print("You need to be grasping an object first to place it somewhere.")
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PRE_CONDITION_ERROR,
                 "You need to be grasping an object first to place it somewhere.",
@@ -738,6 +743,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 break
 
         if not target_in_reach and valid_navigation_pose is None:
+            print("Could not find a valid pose to place the object", {"target object": obj.name})
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PLANNING_ERROR,
                 "Could not find a valid pose to place the object",
@@ -747,18 +753,23 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         yield from self._execute_release()
 
         if self._get_obj_in_hand() is not None:
+            print("Could not release object - the object is still in your hand", {"object": self._get_obj_in_hand().name})
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.EXECUTION_ERROR,
                 "Could not release object - the object is still in your hand",
                 {"object": self._get_obj_in_hand().name},
             )
 
-        if not obj_in_hand.states[predicate].get_value(obj):
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.EXECUTION_ERROR,
-                "Failed to place object at the desired place (probably dropped). The object was still released, so you need to grasp it again to continue",
-                {"dropped object": obj_in_hand.name, "target object": obj.name},
-            )
+        if self.robot.grasping_mode == "sticky":
+            # We don't need this; it's not working for assisted grasp. we check the OnTop predicate anyway in the env.
+            if not obj_in_hand.states[predicate].get_value(obj):
+                print("Failed to place object at the desired place (probably dropped). The object was still released, so you need to grasp it again to continue",
+                      {"dropped object": obj_in_hand.name, "target object": obj.name})
+                raise ActionPrimitiveError(
+                    ActionPrimitiveError.Reason.EXECUTION_ERROR,
+                    "Failed to place object at the desired place (probably dropped). The object was still released, so you need to grasp it again to continue",
+                    {"dropped object": obj_in_hand.name, "target object": obj.name},
+                )
 
     def _convert_cartesian_to_joint_space(self, target_pose):
         """
@@ -1340,6 +1351,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             elif limit_type == "lower" and self._get_obj_in_hand() is not None:
                 # If we are grasping an object, we should stop when object is detected in hand
                 break
+                # print("detected obj in hand while closing gripper")
 
     def _execute_grasp(self):
         """
@@ -1922,14 +1934,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             sampled_bb_center = sampling_results[0][0] + th.tensor([0, 0, m.PREDICATE_SAMPLING_Z_OFFSET])
             sampled_bb_orn = sampling_results[0][2]
 
-
-
             # Tobj_in_world @ Tbbox_in_obj = Tbbox_in_world
             # Tobj_in_world = Tbbox_in_world @ inv(Tbbox_in_obj)
             sampled_obj_pose = T.pose2mat((sampled_bb_center, sampled_bb_orn)) @ T.pose_inv(
                 T.pose2mat((bb_pos_in_base, bb_orn_in_base))
             )
-
 
             # Check that the pose is near one of the poses in the near_poses list if provided.
             print("near_poses", near_poses)

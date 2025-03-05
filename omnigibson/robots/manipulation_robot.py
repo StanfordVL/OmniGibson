@@ -1493,6 +1493,7 @@ class ManipulationRobot(BaseRobot):
         # Return immediately if ag_data is None
         if ag_data is None:
             return
+        # import pdb; pdb.set_trace()
         ag_obj, ag_link = ag_data
         # Get the appropriate joint type
         joint_type = self._get_assisted_grasp_joint_type(ag_obj, ag_link)
@@ -1574,10 +1575,11 @@ class ManipulationRobot(BaseRobot):
             controller = self._controllers[f"gripper_{arm}"]
             controlled_joints = controller.dof_idx
             control = cb.to_torch(controller.control)
-            threshold = th.mean(
-                th.stack([self.joint_lower_limits[controlled_joints], self.joint_upper_limits[controlled_joints]]),
-                dim=0,
-            )
+            # threshold = th.mean(
+            #     th.stack([self.joint_lower_limits[controlled_joints], self.joint_upper_limits[controlled_joints]]),
+            #     dim=0,
+            # )
+            threshold = 0.1 * self.joint_lower_limits[controlled_joints] + 0.9 * self.joint_upper_limits[controlled_joints]
             if control is None:
                 applying_grasp = False
             elif self._grasping_direction == "lower":
@@ -1601,6 +1603,7 @@ class ManipulationRobot(BaseRobot):
                         self._update_constraint_cloth(arm=arm)
 
                     if not applying_grasp:
+                        print("releasing grasp!")
                         self._release_grasp(arm=arm)
             elif applying_grasp:
                 self._establish_grasp(arm=arm, ag_data=self._calculate_in_hand_object(arm=arm))
