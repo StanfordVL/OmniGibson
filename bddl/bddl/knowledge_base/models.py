@@ -218,6 +218,8 @@ class Object(Model):
     meta_links_fk: ManyToMany = ManyToManyField(MetaLink, "on_objects")
     # roomobject counts of this object
     roomobjects_fk: OneToMany = OneToManyField("RoomObject", "object")
+    # QA complaints for this object
+    complaints_fk: OneToMany = OneToManyField("Complaint", "object")
 
     # attachment pairs this object participates in
     female_attachment_pairs_fk: ManyToMany = ManyToManyField(AttachmentPair, "female_objects")
@@ -963,3 +965,30 @@ class RoomObject(Model):
     def __str__(self):
         clutter_substr = "clutter" if self.clutter else "nonclutter"
         return f"{str(self.room)}_{self.object.name}_{clutter_substr}"
+
+@dataclass(eq=False, order=False)
+class ComplaintType(Model):
+    message: str
+
+    complaints_fk: OneToMany = OneToManyField("Complaint", "complaint_type")
+
+    class Meta:
+        pk = "message"
+        ordering = ["message"]
+
+    def objects(self):
+        return [complaint.object for complaint in self.complaints]
+
+@dataclass(eq=False, order=False)
+class Complaint(Model):
+    id: str = UUIDField()
+    object_fk: ManyToOne = ManyToOneField(Object, "complaints")
+    complaint_type_fk: ManyToOne = ManyToOneField(ComplaintType, "complaints")
+    content: str = ""
+
+    class Meta:
+        pk = "id"
+        ordering = ["name"]
+
+    def __str__(self):
+        return f"{self.object.name} - {self.complaint_type.message}: {self.content}"

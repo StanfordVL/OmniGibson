@@ -42,6 +42,7 @@ class KnowledgeBaseProcessor():
         self.create_scenes()
         self.create_tasks()
         self.create_transitions()
+        self.create_complaints()
         self.post_complete_operation()
     
 
@@ -382,6 +383,28 @@ class KnowledgeBaseProcessor():
                         machine = Synset.get(name=synset_name)
                         transition.machine_synsets.add(machine)
 
+    def create_complaints():
+        with open(GENERATED_DATA_DIR / "complaints.json", "r") as f:
+            complaints = json.load(f)
+
+        for complaint in complaints:
+            if complaint["processed"]:
+                continue
+            complaint_model_id = complaint["object"].split("-")[1]
+            complaint_message = complaint["message"]
+            complaint_content = complaint["complaint"]
+
+            # Check if the model ID exists
+            obj = Object.get(name=complaint_model_id)
+            if obj is None:
+                logger.warning(f"Complained object {complaint_model_id} does not exist in the database. Skipping.")
+                continue
+
+            # Create the relevant objects
+            complaint_type, created = Synset.get_or_create(message=complaint_message)
+            Complaint.create(object=obj, complaint_type=complaint_type, content=complaint_content)
+
+    # TODO: Move to cached property on Synset
     def generate_synset_state(self):
         synsets = []
         substances = {s.name for s in Synset.all_objects() if "substance" in s.property_names}
