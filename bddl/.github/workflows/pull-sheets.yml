@@ -67,6 +67,20 @@ jobs:
     - name: Copy over ig_pipeline files
       run: cp ig_pipeline/artifacts/pipeline/{combined_room_object_list,combined_room_object_list_future,object_inventory,object_inventory_future}.json bddl/bddl/generated_data
 
+    - name: Combine complaint files from ig_pipeline
+      run: |
+        python3 -c "
+        import glob, json
+        files = glob.glob('ig_pipeline/cad/*/*/complaints.json')
+        combined = []
+        for file in files:
+            with open(file) as f:
+                combined.extend(json.load(f))
+        combined.sort()
+        with open('bddl/bddl/generated_data/complaints.json', 'w') as f:
+            json.dump(combined, f, indent=2)
+        "
+
     - name: Install BDDL
       working-directory: bddl
       run: pip install -e .
