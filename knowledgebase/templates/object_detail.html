@@ -31,4 +31,7 @@
   {% with G=object.category.synset.subgraph, center_node=object.category.synset %}
     {% include "synset_graph_module.html" %}
   {% endwith %}
+
+  {% from "table_modules/complaint_table.html" import render_complaint_table %}
+  {{ render_complaint_table(object.complaints, enable_search=False, enable_csv=False) }}
 {% endblock %}

@@ -14,6 +14,7 @@ error_url_patterns = [
   ("missingderivativesynsets/", MissingDerivativeSynsetView, "missing_derivative_synset_list"),
   ("nonleafcategories/", NonLeafCategoryListView, "non_leaf_category_list"),
   ("missingobjectattachmentpairs/", MissingObjectAttachmentPairListView, "missing_object_attachment_pair_list"),
+  ("complainttypes/", ComplaintTypeListView, "complaint_type_list"),
 ]
 
 urlpatterns = [
@@ -32,6 +33,7 @@ urlpatterns = [
   ("objects/<name>/", ObjectDetailView, "object_detail"),
   ("transitions/<name>/", TransitionDetailView, "transition_detail"),
   ("attachments/<name>/", AttachmentPairDetailView, "attachment_pair_detail"),
+  ("complainttypes/<message>/", ComplaintTypeDetailView, "complaint_type_detail"),
 ]
 
 app = create_app()

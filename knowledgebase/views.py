@@ -3,7 +3,7 @@ import io
 import re
 from flask.views import View
 from flask import render_template, send_file, url_for, jsonify
-from bddl.knowledge_base import Task, Scene, Synset, Category, Object, TransitionRule, AttachmentPair, Property, SynsetState
+from bddl.knowledge_base import Task, Scene, Synset, Category, Object, TransitionRule, AttachmentPair, Property, SynsetState, ComplaintType
 
 from . import profile_utils
 
@@ -159,6 +159,24 @@ class TransitionListView(ListView):
     context_object_name = "transition_list"
 
 
+class AttachmentPairListView(ListView):
+    model = AttachmentPair
+    context_object_name = "attachment_pair_list"
+
+
+class MissingObjectAttachmentPairListView(AttachmentPairListView):
+    page_title = inspect.getdoc(AttachmentPair.view_attachment_pairs_with_missing_objects)
+
+    def get_queryset(self):
+        return AttachmentPair.view_attachment_pairs_with_missing_objects()
+
+
+class ComplaintTypeListView(ListView):
+    page_title = "Unresolved QA Complaints"
+    model = ComplaintType
+    context_object_name = "complaint_type_list"
+
+
 class TaskDetailView(DetailView):
     model = Task
     context_object_name = "task"
@@ -201,16 +219,11 @@ class TransitionDetailView(DetailView):
     slug_url_kwarg = "name"
 
 
-class AttachmentPairListView(ListView):
-    model = AttachmentPair
-    context_object_name = "attachment_pair_list"
-
-
-class MissingObjectAttachmentPairListView(AttachmentPairListView):
-    page_title = inspect.getdoc(AttachmentPair.view_attachment_pairs_with_missing_objects)
-
-    def get_queryset(self):
-        return AttachmentPair.view_attachment_pairs_with_missing_objects()
+class ComplaintTypeDetailView(DetailView):
+    model = ComplaintType
+    context_object_name = "complaint_type"
+    slug_field = "message"
+    slug_url_kwarg = "message"
 
 
 class AttachmentPairDetailView(DetailView):
