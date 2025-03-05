@@ -31,26 +31,10 @@ gm.ENABLE_TRANSITION_RULES = False
 gm.ENABLE_FLATCACHE = False
 gm.DATASET_PATH = r"D:\fillable-10-21"
 
-ORIENTATION_EDITS_FILE = "orientation_edits.zip"
-
 BATCH_SIZE = 100
 
 META_PATTERN = re.compile('(particlesink|lights|particlesource|togglebutton|heatsource|attachment)_.*_.*_link')
 
-def get_orientation_edits():
-    orientation_edits = {}
-    zip_path = ORIENTATION_EDITS_FILE
-    with ZipFS(zip_path) as orientation_zip_fs:
-        for item in orientation_zip_fs.glob("recorded_orientation/*/*.json"):
-            model = fs.path.splitext(fs.path.basename(item.path))[0]
-            orientation = json.loads(orientation_zip_fs.readtext(item.path))[0]
-            if np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
-                continue
-            orientation_edits[model] = orientation
-
-    return orientation_edits
-
-ORIENTATION_EDITS = get_orientation_edits()
 
 def view_object(cat, mdl):
     if og.sim:
@@ -61,8 +45,7 @@ def view_object(cat, mdl):
     if og.sim.is_playing():
         og.sim.stop()
 
-    # Find out if there's an orientation edit for this object
-    orn = [0, 0, 0, 1] if mdl not in ORIENTATION_EDITS else R.from_quat(ORIENTATION_EDITS[mdl]).inv().as_quat().tolist()
+    orn = [0, 0, 0, 1]
 
     cfg = {
         "scene": {

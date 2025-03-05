@@ -30,26 +30,11 @@ gm.ENABLE_FLATCACHE = False
 gm.DATASET_PATH = r"D:\fillable-10-21"
 
 ASSIGNMENT_FILE = os.path.join(gm.DATASET_PATH, "fillable_assignments_2.json")
-ORIENTATION_EDITS_FILE = "orientation_edits.zip"
 
 MAX_BBOX = 0.3
 
 DRAWING_MESHES = []
 
-def get_orientation_edits():
-    orientation_edits = {}
-    zip_path = ORIENTATION_EDITS_FILE
-    with ZipFS(zip_path) as orientation_zip_fs:
-        for item in orientation_zip_fs.glob("recorded_orientation/*/*.json"):
-            model = fs.path.splitext(fs.path.basename(item.path))[0]
-            orientation = json.loads(orientation_zip_fs.readtext(item.path))[0]
-            if np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
-                continue
-            orientation_edits[model] = orientation
-
-    return orientation_edits
-
-ORIENTATION_EDITS = get_orientation_edits()
 
 def get_assignments():
     if not os.path.exists(ASSIGNMENT_FILE):
@@ -434,9 +419,7 @@ def view_object(cat, mdl):
     if og.sim.is_playing():
         og.sim.stop()
 
-    # Find out if there's an orientation edit for this object
-    # TODO: Remove this after the accidentally twice-rotated objects are fixed
-    orn = [0, 0, 0, 1] if mdl not in ORIENTATION_EDITS else R.from_quat(ORIENTATION_EDITS[mdl]).inv().as_quat().tolist()
+    orn = [0, 0, 0, 1]
 
     cfg = {
         "scene": {
@@ -499,7 +482,7 @@ def view_object(cat, mdl):
     print("Press U to indicate we should remove the fillable annotation from the object.")
 
     dip_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_dip.obj"
-    if dip_path.exists() and mdl not in ORIENTATION_EDITS:
+    if dip_path.exists():
         # Find the scale the mesh was generated at
         scale = np.minimum(1, MAX_BBOX / np.max(np.asarray(fillable.native_bbox)))
 
@@ -526,7 +509,7 @@ def view_object(cat, mdl):
         print("Press B to toggle visibility of the dip (red) mesh.")
 
     ray_path = pathlib.Path(gm.DATASET_PATH) / "objects" / cat / mdl / "fillable_ray.obj"
-    if ray_path.exists() and mdl not in ORIENTATION_EDITS:
+    if ray_path.exists():
         ray_mesh = trimesh.load(ray_path, force="mesh")
 
         # Draw the mesh
@@ -547,7 +530,7 @@ def view_object(cat, mdl):
         print("Press N to toggle visibility of the ray (blue) mesh.")
 
     # Now the combined version
-    if dip_path.exists() and ray_path.exists() and mdl not in ORIENTATION_EDITS:
+    if dip_path.exists() and ray_path.exists():
         # Check if either mesh contains the entire other mesh
         combined_mesh = trimesh.convex.convex_hull(np.concatenate([dip_mesh.vertices, ray_mesh.vertices], axis=0))
         if not np.allclose(combined_mesh.volume, dip_mesh.volume, rtol=1e-3) and not np.allclose(combined_mesh.volume, ray_mesh.volume, rtol=1e-3):

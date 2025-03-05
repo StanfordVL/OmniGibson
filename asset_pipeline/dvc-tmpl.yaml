@@ -161,7 +161,6 @@ stages:
     deps:
     - cad/#{combined}/artifacts/meshes.zip
     - cad/#{combined}/artifacts/object_list.json
-    - metadata/orientation_edits.zip
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
