@@ -9,7 +9,7 @@
   <tbody>
     {% for ct in complaint_types %}
     <tr>
-      <td><a href="{{ url_for('complaint_type_detail', message=ct.message) }}">{{ ct.message }}</a></td>
+      <td><a href="{{ url_for('complaint_type_detail', id=ct.id) }}">{{ ct.message }}</a></td>
       <td>{{ ct.objects|length }}</td>
     </tr>
     {% endfor %}

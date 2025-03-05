@@ -222,8 +222,8 @@ class TransitionDetailView(DetailView):
 class ComplaintTypeDetailView(DetailView):
     model = ComplaintType
     context_object_name = "complaint_type"
-    slug_field = "message"
-    slug_url_kwarg = "message"
+    slug_field = "id"
+    slug_url_kwarg = "id"
 
 
 class AttachmentPairDetailView(DetailView):

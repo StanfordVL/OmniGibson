@@ -10,7 +10,7 @@
   <tbody>
     {% for complaint in complaints %}
     <tr>
-      <td><a href="{{ url_for('complaint_type_detail', message=complaint.complaint_type.message) }}">{{ complaint.complaint_type.message }}</a></td>
+      <td><a href="{{ url_for('complaint_type_detail', id=complaint.complaint_type.id) }}">{{ complaint.complaint_type.message }}</a></td>
       <td><a href="{{ url_for('object_detail', name=complaint.object.name) }}">{{ complaint.object }}</a></td>
       <td>{{ complaint.content }}</td>
     </tr>
