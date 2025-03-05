@@ -406,7 +406,7 @@ class KnowledgeBaseProcessor():
                 logger.warning(f"Complained object {complaint_model_id} does not exist in the database. Skipping.")
                 continue
 
-            Complaint.create(object=obj, complaint_type=complaint_type, prompt_additional_info=complaint_additional_info, response=complaint_content)
+            Complaint.create(object=obj, complaint_type=complaint_type, prompt_additional_info=complaint_additional_info, response=complaint_response)
 
     # TODO: Move to cached property on Synset
     def generate_synset_state(self):
