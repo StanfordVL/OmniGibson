@@ -11,7 +11,9 @@ from bddl.knowledge_base.models import Property, \
   RoomSynsetRequirement, \
   Room, \
   RoomObject, \
-  AttachmentPair
+  AttachmentPair, \
+  ComplaintType, \
+  Complaint
 
 from bddl.knowledge_base.utils import SynsetState
 

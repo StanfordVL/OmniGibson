@@ -976,6 +976,7 @@ class ComplaintType(Model):
         pk = "message"
         ordering = ["message"]
 
+    @cached_property
     def objects(self):
         return [complaint.object for complaint in self.complaints]
 

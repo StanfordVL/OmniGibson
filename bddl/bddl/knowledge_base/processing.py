@@ -383,7 +383,7 @@ class KnowledgeBaseProcessor():
                         machine = Synset.get(name=synset_name)
                         transition.machine_synsets.add(machine)
 
-    def create_complaints():
+    def create_complaints(self):
         with open(GENERATED_DATA_DIR / "complaints.json", "r") as f:
             complaints = json.load(f)
 
@@ -401,7 +401,7 @@ class KnowledgeBaseProcessor():
                 continue
 
             # Create the relevant objects
-            complaint_type, created = Synset.get_or_create(message=complaint_message)
+            complaint_type, created = ComplaintType.get_or_create(message=complaint_message)
             Complaint.create(object=obj, complaint_type=complaint_type, content=complaint_content)
 
     # TODO: Move to cached property on Synset
