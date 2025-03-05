@@ -969,7 +969,7 @@ class RoomObject(Model):
 @dataclass(eq=False, order=False)
 class ComplaintType(Model):
     id: str = UUIDField()
-    message: str
+    message: str = ""
 
     complaints_fk: OneToMany = OneToManyField("Complaint", "complaint_type")
 
