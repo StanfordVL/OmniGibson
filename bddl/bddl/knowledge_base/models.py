@@ -247,7 +247,7 @@ class Object(Model):
     @cached_property
     def image_url(self):
         model_id = self.name.split("-")[-1]
-        return f"https://cvgl.stanford.edu/b1k/object_images/{model_id}.webp"
+        return f"https://svl.stanford.edu/b1k/object_images/{model_id}.webp"
 
     def fully_supports_synset(self, synset, ignore=None) -> bool:
         all_required = synset.required_meta_links

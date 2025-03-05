@@ -15,7 +15,7 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1) 
+        (inroom cash_register.n.01_1 grocery_store) 
         (inside pen.n.01_1 grocery_shelf.n.01_1) 
         (inside pencil.n.01_1 grocery_shelf.n.01_1) 
         (inside tape.n.01_1 grocery_shelf.n.01_1) 
