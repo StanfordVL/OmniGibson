@@ -968,32 +968,28 @@ class RoomObject(Model):
 
 @dataclass(eq=False, order=False)
 class ComplaintType(Model):
-    id: str = UUIDField()
-    message: str = ""
-
+    name: str
     complaints_fk: OneToMany = OneToManyField("Complaint", "complaint_type")
 
     class Meta:
-        pk = "id"
-        ordering = ["message"]
+        pk = "name"
+        ordering = ["name"]
 
     @cached_property
     def objects(self):
         return [complaint.object for complaint in self.complaints]
-    
-    def __str__(self):
-        return self.message
 
 @dataclass(eq=False, order=False)
 class Complaint(Model):
     id: str = UUIDField()
     object_fk: ManyToOne = ManyToOneField(Object, "complaints")
     complaint_type_fk: ManyToOne = ManyToOneField(ComplaintType, "complaints")
-    content: str = ""
+    prompt_additional_info: str = ""  # provided by the QA script as part of the prompt
+    response: str = ""   # provided by the QAing user
 
     class Meta:
         pk = "id"
-        ordering = ["name"]
+        ordering = ["id"]
 
     def __str__(self):
-        return f"{self.object.name} - {self.complaint_type.message}: {self.content}"
+        return f"{self.object.name} - {self.complaint_type.name}: {self.response}"

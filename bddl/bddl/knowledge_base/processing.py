@@ -390,9 +390,10 @@ class KnowledgeBaseProcessor():
         for complaint in complaints:
             if complaint["processed"]:
                 continue
+            complaint_type_name = complaint["type"]
             complaint_model_id = complaint["object"].split("-")[1]
-            complaint_message = complaint["message"]
-            complaint_content = complaint["complaint"]
+            complaint_additional_info = complaint["additional_info"]
+            complaint_response = complaint["complaint"]
 
             # Check if the model ID exists
             obj = Object.get(name=complaint_model_id)
@@ -401,12 +402,8 @@ class KnowledgeBaseProcessor():
                 continue
 
             # Create the relevant objects
-            complaint_types_with_message = [ct for ct in ComplaintType.all_objects() if ct.message == complaint_message]
-            if len(complaint_types_with_message) == 0:
-                complaint_type = ComplaintType.create(message=complaint_message)
-            else:
-                complaint_type, = complaint_types_with_message
-            Complaint.create(object=obj, complaint_type=complaint_type, content=complaint_content)
+            complaint_type, created = ComplaintType.get_or_create(name=complaint_type_name)
+            Complaint.create(object=obj, complaint_type=complaint_type, prompt_additional_info=complaint_additional_info, response=complaint_content)
 
     # TODO: Move to cached property on Synset
     def generate_synset_state(self):
