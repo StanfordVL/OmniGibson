@@ -1,27 +1,106 @@
 [
     {
-        "object": "car-qesxhu",
-        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
-        "complaint": "there should be revolute joints to make this openable and fillable",
+        "object": "fairy_light-waitum",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "fairy_light-waitum",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hammock-sullco",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-dpcrak",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "door-lvncak",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "handles dont work",
-        "processed": false
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
     },
     {
         "object": "door-xdcuws",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "handles dont work",
-        "processed": false
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "driveway-ywqsrg",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "glass_lantern-engbrg",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "glass_lantern-engbrg",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "glass_lantern-onfjnh",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "glass_lantern-onfjnh",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "rail_fence-eoeeeo",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floors-umakgq",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true
     },
     {
         "object": "gate-izmteu",
         "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
         "complaint": "two parts",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "gate-izmteu",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -33,23 +112,9 @@
         "new": true
     },
     {
-        "object": "glass_lantern-engbrg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "needs glass",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "glass_lantern-zjuwnf",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "needs glass",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "hammock-sullco",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "are all hammocks supposed to be cloth? some part of it is not cloth",
+        "object": "gate-vqjuvg",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -75,45 +140,10 @@
         "new": true
     },
     {
-        "object": "rail_fence-akeroe",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "has small grey artifacts in wood at bottom",
+        "object": "pot_plant-mkhbtk",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "tray-zcmnji",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "fillable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-pukiiv",
-        "message": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "walls-nkmpkr",
-        "message": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "walls-zucmsf",
-        "message": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "walls-songzm",
-        "message": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
-        "complaint": "See message",
-        "processed": true,
         "new": true
     }
 ]

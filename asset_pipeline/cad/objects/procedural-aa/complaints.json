@@ -1,98 +1,337 @@
 [
     {
-        "object": "baking_powder_jar-lgopij",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "baking_powder_jar-lgopij",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label going through glass",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "beef_broth_carton-ecqxgd",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "looks more like a gas tank, not sure if it's a carton",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "bleaching_agent_atomizer-arxjfa",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "top not transparent but looks fine",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "burlap_bag-endfho",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "fillable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "butter_package-qixpto",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "butter_package-qixpto",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label going thorugh glass",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cayenne_shaker-ueytzu",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "can not see texture inside",
+        "object": "catsup_bottle-qfvqfm",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "chicken_broth_carton-ztripg",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: not fillable",
-        "processed": true
-    },
-    {
-        "object": "chicken_broth_carton-ztripg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "lacks texture",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "chicken_soup_carton-ooyqcr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "this looks like a gas tank",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "chickpea_can-jeqtzg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not fully visible",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cocoa_box-kxwgoo",
+        "message": "QC: category",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "coconut_oil_jar-phimqa",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cream_carton-lfjmos",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "frosting_jar-ztyxyi",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "honey_jar-dhgtvg",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hot_sauce_bottle-qvpthd",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "margarine_box-owqbsb",
+        "message": "QC: category",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "milk_carton-icvmix",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "oil_bottle-yoxfyu",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "olive_oil_bottle-zfvhus",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "salsa_bottle-kydilb",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "soda_can-xbkwbi",
+        "message": "QC: category",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "soy_sauce_bottle-saujjl",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "white_sauce_bottle-gtwngf",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "baking_powder_jar-lgopij",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "barbecue_sauce_bottle-gfxrnj",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "barbecue_sauce_bottle-gfxrnj",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "butter_package-qixpto",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true
     },
     {
         "object": "chocolate_sauce_bottle-yegrkf",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: True\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier, particleSource",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true
     },
     {
-        "object": "clove_jar-cqdioi",
+        "object": "coffee_bean_jar-loduxu",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cornstarch_jar-dhseui",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cream_cheese_box-hfclfn",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "fabric_softener_bottle-uyixwc",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "feta_box-qxnzpx",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "granola_box-yzeuqo",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "granulated_sugar_jar-qwthua",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hummus_box-jvnqly",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "hydrogen_peroxide_bottle-luhnej",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "lemon_juice_bottle-qsdqik",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "maple_syrup_jar-wigtue",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pasta_box-jaypjo",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "refried_beans_can-dafdgk",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "rubbing_alcohol_atomizer-kbnobp",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sodium_carbonate_jar-vxtjjn",
         "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
         "complaint": "openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sodium_carbonate_jar-vxtjjn",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "squeeze_bottle-uzmhdn",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "sugar_syrup_bottle-kdlbbq",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "water_atomizer-lfarai",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "wine_sauce_bottle-vqtevv",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "yeast_jar-vmajcm",
+        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "complaint": "openable",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "yeast_shaker-kdbnge",
+        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+        "complaint": "black inside. does not look like yeast",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "yogurt_carton-ahbhsd",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "burlap_bag-endfho",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cleansing_bottle-ovjhuf",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -104,23 +343,9 @@
         "new": true
     },
     {
-        "object": "cocoa_box-kxwgoo",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "can't see cocoa label",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cocoa_powder_box-cjmtvq",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: cocoa_powder__box.n.01 (custom synset)\nDefinition: (hypernyms: container.n.01): any object that can be used to hold things (especially a large metal boxlike object of standardized dimensions that can be loaded from one form of transport to another)\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "ss",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cocoa_powder_box-cjmtvq",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
+        "object": "clove_jar-cqdioi",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -132,51 +357,9 @@
         "new": true
     },
     {
-        "object": "coconut_oil_jar-phimqa",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not fully visible",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "conditioner_atomizer-quqgcu",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "wrong center of mass, will tip over",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cooking_oil_bottle-cfdond",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: cooking_oil_bottle\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "cannot see label clearly",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "coriander_shaker-sqkgqg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "glass doesn't seem to be transparent",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cornstarch_jar-dhseui",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cornstarch_jar-dhseui",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label going through glass",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cream_carton-lfjmos",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not visible, more like a jar than carton?",
+        "object": "cocoa_powder_box-cjmtvq",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -188,55 +371,6 @@
         "new": true
     },
     {
-        "object": "deodorant_atomizer-utjfug",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "fertilizer_atomizer-lhbpcq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "top plastic part is not showing as transparent",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "feta_box-qxnzpx",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "feta_box-qxnzpx",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label going through glass",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "frosting_jar-ztyxyi",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "frosting_jar-ztyxyi",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label going through glass",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "gelatin_box-oxknkz",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
         "object": "gelatin_box-oxknkz",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "label going through glass",
@@ -244,23 +378,16 @@
         "new": true
     },
     {
-        "object": "glaze_bottle-zdxagk",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: True\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier, particleSource",
+        "object": "gelatin_box-oxknkz",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
     {
-        "object": "herbicide_bottle-aeslmf",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: herbicide__bottle.n.01 (custom synset)\nDefinition: (hypernyms: vessel.n.03): an object used as a container (especially for liquids)\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "0",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "honey_jar-dhgtvg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not visible",
+        "object": "hinged_jar-kijnrj",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -272,16 +399,23 @@
         "new": true
     },
     {
-        "object": "instant_coffee_jar-ycgxwb",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not visible",
+        "object": "ice_cream_carton-lulzdz",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
     {
         "object": "jelly_bean_jar-nftsal",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "jelly_jar-lrjoro",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -293,58 +427,9 @@
         "new": true
     },
     {
-        "object": "lemon_juice_bottle-qsdqik",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not fully visible",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "lime_juice_bottle-bnekjp",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not fully visible",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "maple_syrup_jar-wigtue",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not fully visible",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "margarine_box-owqbsb",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "margarine_box-owqbsb",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "can't see labels",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "mustard_bottle-lgxfyv",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: True\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier, particleSource",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "nutmeg_shaker-truuld",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "can not see texture inside",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "oat_box-xdhysb",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
+        "object": "jimmies_jar-oqyoos",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -356,16 +441,9 @@
         "new": true
     },
     {
-        "object": "oil_bottle-yoxfyu",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not visible",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "olive_oil_bottle-zfvhus",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label not fully visible",
+        "object": "oat_box-xdhysb",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -384,93 +462,23 @@
         "new": true
     },
     {
-        "object": "saddle_soap_bottle-ugqdao",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: saddle_soap__bottle.n.01 (custom synset)\nDefinition: (hypernyms: vessel.n.03): an object used as a container (especially for liquids)\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[5~\u001b[5~",
+        "object": "raisin_box-yowyst",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
     {
-        "object": "sage_shaker-eerlcy",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: sage_shaker\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "bad texture for volume inside. all black",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "sage_shaker-eerlcy",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "bad texture for volume inside. all black",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "soap_bottle-hamffy",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "toggleable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "soap_bottle-hamffy",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "wrong toggleable annotation",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "soda_can-xbkwbi",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "soda_can-xbkwbi",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "can't see label",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "sodium_carbonate_jar-vxtjjn",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
+        "object": "sesame_oil_bottle-bupgpj",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
     {
         "object": "spray_bottle-asztxi",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "spray_can-buxqkr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "bad label?",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "sugar_syrup_bottle-kdlbbq",
-        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: rigidBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
-        "complaint": "\u001b[6~\u001b[6~\u001b[6~\u001b[6~",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "thyme_shaker-kuuwti",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "black texture for inside. bad",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "tomato_sauce_jar-krfzqk",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "label only partially visible",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -482,6 +490,13 @@
         "new": true
     },
     {
+        "object": "vanilla_bottle-drevku",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "vinegar_bottle-ykysuc",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "label looks off",
@@ -489,30 +504,23 @@
         "new": true
     },
     {
+        "object": "vinegar_bottle-ykysuc",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "water_bottle-lzdzkk",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah_2",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "water_bottle-lzdzkk",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "bad texture (even in 3dsmax)",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "yeast_jar-vmajcm",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "yeast_shaker-kdbnge",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: yeast__shaker.n.01 (custom synset)\nDefinition: (hypernyms: container.n.01): any object that can be used to hold things (especially a large metal boxlike object of standardized dimensions that can be loaded from one form of transport to another)\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "is not yeast",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "yeast_shaker-kdbnge",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "black inside. does not look like yeast",
         "processed": false,
         "new": true
     }

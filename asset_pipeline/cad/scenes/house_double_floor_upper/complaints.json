@@ -1,214 +1,78 @@
 [
     {
-        "object": "alarm_clock-trwyaq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "bed-siuxgz",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: bed\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "bed_mattress",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "beer_bottle-nigfha",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "bad texture - all white. 3ds max image also bad - shows all black",
-        "processed": false,
-        "new": true
-    },
-    {
         "object": "blanket-corgks",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: blanket.n.01\nDefinition: bedding that keeps a person warm in bed\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[6~",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "blanket-uwbyty",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not fully unfolded",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "blanket-yscwot",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: blanket.n.01\nDefinition: bedding that keeps a person warm in bed\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "0",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
-    },
-    {
-        "object": "blanket-yscwot",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not fully unfolded",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "bottom_cabinet-ncgmqr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: does not model door handle",
-        "processed": true
-    },
-    {
-        "object": "bottom_cabinet-qwskbo",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: no handles",
-        "processed": true
-    },
-    {
-        "object": "ceilings-49b9eq",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: holes not perpendicular",
-        "processed": true
-    },
-    {
-        "object": "ceilings-fv7o0b",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "ceiling mesh holes not rectangular",
-        "processed": true
-    },
-    {
-        "object": "ceilings-laeuzw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "requires splitting",
-        "processed": true
     },
     {
         "object": "curtain-didlbp",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
     },
     {
         "object": "curtain-zmodhv",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "desk-aduafr",
-        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
-        "complaint": "looks like drawer could be openable",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
-    },
-    {
-        "object": "desk-iotfzl",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: desk.n.01\nDefinition: a piece of furniture with a writing surface and usually drawers or other compartments\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[F",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "door-dlncrt",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: does not model door handle well",
-        "processed": true
-    },
-    {
-        "object": "door-pxhbim",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no handle",
-        "processed": true
     },
     {
         "object": "downlight-oxglnt",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "floor_lamp-mqfdjk",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: floor_lamp.n.01\nDefinition: a lamp that stands on the floor\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[3~table_lamp",
+        "object": "downlight-vlplia",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "floor_lamp-drpann",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "floor_lamp-mqfdjk",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: floor_lamp\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "table_lamp",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
-        "object": "floor_lamp-ogolip",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: floor_lamp.n.01\nDefinition: a lamp that stands on the floor\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[6~\u001b[6~\u001b[6~\u001b[6~",
+        "object": "folderal-ydrlth",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
-        "object": "flower-xxvkkw",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: flower.n.02\nDefinition: reproductive organ of angiosperm plants especially one having showy or colorful parts\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "folder-ejxdjr",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: folder.n.02\nDefinition: covering that is folded over to protect the contents\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "not sure what this is but definitely not a folder",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "folder-ejxdjr",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: folder\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "not sure what this is but definitely not a folder",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "folder-ejxdjr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not sure what this is",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "decoration-ydrlth",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "maybe remove this object. too tricky",
-        "processed": false
-    },
-    {
-        "object": "hardback-ajpulw",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: hardback.n.01\nDefinition: a book with cardboard or cloth or leather covers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[5~",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "hardback-bvqdte",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: hardback.n.01\nDefinition: a book with cardboard or cloth or leather covers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "'",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "hardback-csgebz",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: hardback.n.01\nDefinition: a book with cardboard or cloth or leather covers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[6",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "hardback-csjnvj",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: hardback.n.01\nDefinition: a book with cardboard or cloth or leather covers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\t",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "hardback-cvotie",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: hardback.n.01\nDefinition: a book with cardboard or cloth or leather covers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[6",
+        "object": "hardback-fhwnhz",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
@@ -220,70 +84,254 @@
         "new": true
     },
     {
-        "object": "hardback-orkzoz",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: hardback.n.01\nDefinition: a book with cardboard or cloth or leather covers\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[",
+        "object": "hardback-grxiqn",
+        "message": "QC: category",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
-        "object": "magazine-mtveio",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: magazine.n.02\nDefinition: product consisting of a paperback periodic publication as a physical object\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "notebook.n.01",
+        "object": "hardback-zgeveh",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
-        "object": "magazine-mtveio",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: magazine\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "notebook",
+        "object": "magazine-kbzalg",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
-        "object": "magazine_rack-szdjbr",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: magazine_rack.n.01\nDefinition: a rack for displaying magazines\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "folder.n.02",
+        "object": "magazine-kbzalg",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
-        "object": "magazine_rack-szdjbr",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: magazine_rack\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "folder",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "mirror-ovdinr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "mirror-ovdinr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
+        "object": "mug-lgxhsc",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "mug-yiamah",
-        "message": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
-        "complaint": "extra plate at the bottom, need to detach",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
         "new": true
     },
     {
         "object": "nightstand-roxnbe",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: missing handle",
-        "processed": true
+        "message": "QC: handle",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
     },
     {
-        "object": "nightstand-roxnbe",
-        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
-        "complaint": "seems like drawer is openable",
+        "object": "nightstand-uzxrlg",
+        "message": "QC: handle",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "picture-aicjaq",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "picture-hdcvfu",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "picture-ngyduh",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "picture-nxjgqw",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "picture-nxqoed",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "picture-trqgni",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "picture-xnuynn",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "picture_frame-htwjfo",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-avbnnx",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-avbnnx",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-cegpja",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-dohvvk",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-hltkbe",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-klcxyf",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-onrszv",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-xayqcu",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-xsfcrp",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-yorsom",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-zpsuqe",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "walls-zpsuqe",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "alarm_clock-trwyaq",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "ceilings-pcpvvu",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "door-dlncrt",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "door-pevmgl",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "door-pevmgl",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "door-pxhbim",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "door-pxhbim",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "furniture_sink-ojjqku",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true
     },
@@ -295,111 +343,169 @@
         "new": true
     },
     {
-        "object": "picture-abtgvz",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
-        "processed": false
-    },
-    {
-        "object": "picture-aicjaq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
+        "object": "serving_cart-vvtcby",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true
     },
     {
-        "object": "picture-bzmdxc",
+        "object": "shelf-sapyzl",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "shelf-sapyzl",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "statue-bpqnof",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "statue-cgzwut",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "statue-eyepsu",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "statue-hhipck",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "statue-oaxifo",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "statue-ssooxw",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "table_lamp-erfbgw",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "picture-fdtxut",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "no thickness",
         "processed": false
     },
     {
-        "object": "picture-fdtxut",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: photograph.n.01\nDefinition: a representation of a person or scene in the form of a print or transparent slide; recorded by a camera on light-sensitive material\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "map.n.01",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "picture-fdtxut",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: picture\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "map",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "picture-hdcvfu",
+        "object": "table_lamp-htmtsr",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
+        "complaint": "center of mass needs to be annotated",
         "processed": false,
         "new": true
     },
     {
-        "object": "picture-hsbtqi",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: photograph.n.01\nDefinition: a representation of a person or scene in the form of a print or transparent slide; recorded by a camera on light-sensitive material\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "map.n.01",
+        "object": "table_lamp-htmtsr",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true
     },
     {
-        "object": "picture-hsbtqi",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: picture\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "map",
+        "object": "table_lamp-htmtsr",
+        "message": "QC: unknown",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true
     },
     {
-        "object": "picture-jovfqj",
+        "object": "table_lamp-lshxmu",
+        "message": "QC: unknown",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "table_lamp-vbjpad",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "table_lamp-vbjpad",
+        "message": "QC: unknown",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "table_lamp-wbcgev",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "table_lamp-wbcgev",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "table_lamp-wbcgev",
+        "message": "QC: unknown",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "beer_bottle-nigfha",
         "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
+        "complaint": "bad texture - all white. 3ds max image also bad - shows all black",
         "processed": false,
         "new": true
     },
     {
-        "object": "picture-ngyduh",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
+        "object": "centerpiece-gakixx",
+        "message": "QC: category",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
     {
-        "object": "picture-nxjgqw",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
+        "object": "desk-aduafr",
+        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
+        "complaint": "looks like drawer could be openable",
         "processed": false,
         "new": true
     },
     {
-        "object": "picture-nxqoed",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
+        "object": "desk-aduafr",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
     {
-        "object": "picture-trqgni",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "picture-xnuynn",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "picture_frame-htwjfo",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent",
+        "object": "floors-gfgnbf",
+        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+        "complaint": "See message",
         "processed": false,
         "new": true
     },
@@ -418,6 +524,13 @@
         "new": true
     },
     {
+        "object": "pillow-poyzyt",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true
+    },
+    {
         "object": "pot_plant-mqhlkf",
         "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pot_plant\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
         "complaint": "pot_tree ?",
@@ -425,473 +538,23 @@
         "new": true
     },
     {
-        "object": "pot_plant-mqhlkf",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "dirt is black and not filling the pot",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "railing-pqzbbb",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "cart-vvtcby",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: does not model door handles",
-        "processed": true
-    },
-    {
-        "object": "shelf-sapyzl",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
         "object": "shower-giialz",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "showerhead-afoeoa",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "showerhead-svuhzb",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "statue-bpqnof",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "should have transparency",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-erfbgw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "table_lamp-erfbgw",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "center of mass needs to be annotated",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-htmtsr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "center of mass needs to be annotated",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-lshxmu",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "center of mass needs to be annotated",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-vbjpad",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "center of mass needs to be annotated",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-wbcgev",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "center of mass needs to be annotated",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "tray-iaaiyi",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "fillable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-3ttxki",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "may need to be split into two - where is this?",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
     {
         "object": "wall_socket-zyzufw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "window-etjpqr",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: window.n.01\nDefinition: a framework of wood or metal that contains a glass windowpane and is built into a wall or roof to admit light or air\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[A",
+        "message": "QC: unknown",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
     {
-        "object": "window-etjpqr",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "window-etjpqr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "can't see through window",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-klcxyf",
-        "message": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-pqbutt",
-        "message": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-jamapi",
-        "message": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-avbnnx",
-        "message": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-zpsuqe",
-        "message": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-xayqcu",
-        "message": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-hltkbe",
-        "message": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "floors-gfgnbf",
-        "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ndfsrm",
-        "message": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-onrszv",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-pohzfc",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-tcrhve",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "floors-gfgnbf",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ynhwyn",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ispfoo",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-qwwinf",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-avbnnx",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-klcxyf",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-kuhhbl",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ndfsrm",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ogrxqz",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-iobzfe",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-nnxsjd",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-zpsuqe",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-pffhuv",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-orjpqs",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-yorsom",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-keugzu",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-rstyxz",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-xayqcu",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-jamapi",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-vtwnqs",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-xsfcrp",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ynporc",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ynporc",
-        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ynhwyn",
-        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-nvykqp",
-        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-hltkbe",
-        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-ispfoo",
-        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "walls-pqbutt",
-        "message": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-erfbgw",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-htmtsr",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-lshxmu",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-vbjpad",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-wbcgev",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "floor_lamp-drpann",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "floor_lamp-mqfdjk",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "floor_lamp-ogolip",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
+        "object": "keyboard-mzskhj",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah_2",
         "processed": false,
         "new": true
     }

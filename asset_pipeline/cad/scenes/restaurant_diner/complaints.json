@@ -1,9 +1,31 @@
 [
     {
-        "object": "beer_tap-vgaluf",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": false
+        "object": "bottle_of_catsup-ahoiqe",
+        "message": "QC: category",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "bottle_of_mustard-qbbqat",
+        "message": "QC: category",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "cake_stand-tpchsr",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "straight_chair-nntxvr",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true
     },
     {
         "object": "beer_tap-vgaluf",
@@ -13,34 +35,51 @@
         "new": true
     },
     {
-        "object": "bottle_of_mustard-qbbqat",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "toggleable, particleSource ?",
+        "object": "ceilings-wrjaul",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true
     },
     {
-        "object": "cloche-rnkvca",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: handle not modeled well",
-        "processed": false
+        "object": "ceilings-wumywu",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
     },
     {
         "object": "door-adejun",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "door-adejun",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: does not model door handle",
-        "processed": true
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
     },
     {
         "object": "fire_extinguisher-jgdvdl",
         "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
         "complaint": "particleApplier",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "pepper_shaker-stbqbt",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "salt_shaker-qowouj",
+        "message": "QC: metalink",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true
+    },
+    {
+        "object": "coatrack-tcnxtu",
+        "message": "QC: collision",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -52,15 +91,9 @@
         "new": true
     },
     {
-        "object": "menu-ugplzr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "pay_phone-poyfzg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "object not stable",
+        "object": "jar_of_sugar-vrmrci",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     },
@@ -68,7 +101,7 @@
         "object": "popcorn_machine-ignowl",
         "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "unconnected vmesh pieces",
-        "processed": true
+        "processed": false
     },
     {
         "object": "popcorn_machine-ignowl",
@@ -85,57 +118,9 @@
         "new": true
     },
     {
-        "object": "taboret-ysrhuw",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: taboret.n.01\nDefinition: a low stool in the shape of a drum\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[6~\u001b[6~",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "tray-mhhoga",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "fillable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "wall_mounted_tv-hviblz",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "not watertight",
-        "processed": true
-    },
-    {
-        "object": "window-caymim",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "window-iueiur",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "openable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "floors-qqbcva",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "floors-cxcxqq",
-        "message": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
-        "complaint": "See message",
-        "processed": false,
-        "new": true
-    },
-    {
         "object": "popcorn_machine-ignowl",
-        "message": "FILLABLE: something wrong with the link here. does it have any meshes at all?",
-        "complaint": "See message",
+        "message": "QC: appearance",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true
     }
