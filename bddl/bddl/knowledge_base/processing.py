@@ -401,7 +401,11 @@ class KnowledgeBaseProcessor():
                 continue
 
             # Create the relevant objects
-            complaint_type, created = ComplaintType.get_or_create(message=complaint_message)
+            complaint_types_with_message = [ct for ct in ComplaintType.all_objects() if ct.message == complaint_message]
+            if len(complaint_types_with_message) == 0:
+                complaint_type = ComplaintType.create(message=complaint_message)
+            else:
+                complaint_type, = complaint_types_with_message
             Complaint.create(object=obj, complaint_type=complaint_type, content=complaint_content)
 
     # TODO: Move to cached property on Synset

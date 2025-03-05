@@ -968,17 +968,21 @@ class RoomObject(Model):
 
 @dataclass(eq=False, order=False)
 class ComplaintType(Model):
+    id: str = UUIDField()
     message: str
 
     complaints_fk: OneToMany = OneToManyField("Complaint", "complaint_type")
 
     class Meta:
-        pk = "message"
+        pk = "id"
         ordering = ["message"]
 
     @cached_property
     def objects(self):
         return [complaint.object for complaint in self.complaints]
+    
+    def __str__(self):
+        return self.message
 
 @dataclass(eq=False, order=False)
 class Complaint(Model):
