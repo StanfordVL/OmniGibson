@@ -33,7 +33,7 @@ urlpatterns = [
   ("objects/<name>/", ObjectDetailView, "object_detail"),
   ("transitions/<name>/", TransitionDetailView, "transition_detail"),
   ("attachments/<name>/", AttachmentPairDetailView, "attachment_pair_detail"),
-  ("complainttypes/<id>/", ComplaintTypeDetailView, "complaint_type_detail"),
+  ("complainttypes/<name>/", ComplaintTypeDetailView, "complaint_type_detail"),
 ]
 
 app = create_app()

@@ -172,7 +172,7 @@ class MissingObjectAttachmentPairListView(AttachmentPairListView):
 
 
 class ComplaintTypeListView(ListView):
-    page_title = "Unresolved QA Complaints"
+    page_title = "Unresolved QA Complaint Types"
     model = ComplaintType
     context_object_name = "complaint_type_list"
 
@@ -222,8 +222,8 @@ class TransitionDetailView(DetailView):
 class ComplaintTypeDetailView(DetailView):
     model = ComplaintType
     context_object_name = "complaint_type"
-    slug_field = "id"
-    slug_url_kwarg = "id"
+    slug_field = "name"
+    slug_url_kwarg = "name"
 
 
 class AttachmentPairDetailView(DetailView):
