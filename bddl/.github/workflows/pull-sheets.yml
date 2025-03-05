@@ -76,7 +76,7 @@ jobs:
         for file in files:
             with open(file) as f:
                 combined.extend(json.load(f))
-        combined.sort(key=lambda x: (x['object'], x['message'], x['complaint'], x['processed']))
+        combined.sort(key=lambda x: (x['object'], x['type'], x['additional_info'], x['complaint'], x['processed']))
         with open('bddl/bddl/generated_data/complaints.json', 'w') as f:
             json.dump(combined, f, indent=2)
         "

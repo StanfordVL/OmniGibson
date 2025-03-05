@@ -388,12 +388,17 @@ class KnowledgeBaseProcessor():
             complaints = json.load(f)
 
         for complaint in complaints:
-            if complaint["processed"]:
-                continue
             complaint_type_name = complaint["type"]
             complaint_model_id = complaint["object"].split("-")[1]
             complaint_additional_info = complaint["additional_info"]
             complaint_response = complaint["complaint"]
+
+            # Create the relevant complaint type (even if we are processed we want to show all types)
+            complaint_type, created = ComplaintType.get_or_create(name=complaint_type_name)
+
+            # Skip processed complaints
+            if complaint["processed"]:
+                continue
 
             # Check if the model ID exists
             obj = Object.get(name=complaint_model_id)
@@ -401,8 +406,6 @@ class KnowledgeBaseProcessor():
                 logger.warning(f"Complained object {complaint_model_id} does not exist in the database. Skipping.")
                 continue
 
-            # Create the relevant objects
-            complaint_type, created = ComplaintType.get_or_create(name=complaint_type_name)
             Complaint.create(object=obj, complaint_type=complaint_type, prompt_additional_info=complaint_additional_info, response=complaint_content)
 
     # TODO: Move to cached property on Synset
