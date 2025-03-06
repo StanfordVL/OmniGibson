@@ -7,10 +7,11 @@ import re
 import torch as th
 
 import omnigibson as og
-from omnigibson.envs.env_base import Environment
-from omnigibson.utils.video_logging_utils import VideoLogger
 from omnigibson.action_primitives.lang_semantic_action_primitives import (
     LangSemanticActionPrimitivesV2)
+from omnigibson.envs.env_base import Environment
+from omnigibson.object_states import OnTop
+from omnigibson.utils.video_logging_utils import VideoLogger
 
 
 # TODO: remove this by fixing vid_logger
@@ -29,7 +30,7 @@ class CutPourPkgInBowlEnv(Environment):
     def __init__(self, out_dir, obj_to_grasp_name, in_vec_env=False):
         self.configs = self.load_configs()
         self.obj_names = self.get_manipulable_objects()
-        self.furniture_names = ["coffee_table_pick", "coffee_table_place", "pad"]  # stuff not intended to be moved
+        self.furniture_names = ["coffee_table_pick", "coffee_table_place", "pad", "pad2"]  # stuff not intended to be moved
 
         args = dotdict(
             vid_downscale_factor=2,
@@ -51,6 +52,16 @@ class CutPourPkgInBowlEnv(Environment):
         self.grasped_obj_names = []
         super()._reset_variables()
 
+    # def step(self, action):
+    #     """Zero out actions for the unused arm"""
+    #     unused_arm_name = list(
+    #         set(["left", "right"]) - set([self.robots[0].default_arm]))[0]
+    #     unused_arm_idxs = self.robots[0].arm_control_idx[unused_arm_name]
+    #     # set to reset joint positions
+    #     action[unused_arm_idxs] = th.tensor(
+    #         [0.9052, -0.4281, 2.2350, 1.6463, 0.7687, -0.7946, -1.0891])
+    #     return super().step(action)
+
     def _post_step(self, action):
         obs, _, terminated, truncated, info = super()._post_step(action)
         reward = self.get_reward(obs, info)
@@ -61,8 +72,8 @@ class CutPourPkgInBowlEnv(Environment):
         return self.scene.object_registry("name", obj_name)
 
     def get_reward(self, obs, info):
-        obj_pos_list = self.get_obj_poses(
-            self.get_manipulable_objects())["pos"]
+        obj_name = ["box", "package"][-1]
+        obj_pos_list = self.get_obj_poses([obj_name])["pos"]
         place_pos_list = self.get_obj_poses(['pad'])["pos"]
         assert len(obj_pos_list) == len(place_pos_list) == 1
 
@@ -79,7 +90,7 @@ class CutPourPkgInBowlEnv(Environment):
         # compute place rew
         no_obj_grasped = (
             self.robots[0]._ag_obj_in_hand[self.robots[0].default_arm] is None)
-        obj_on_dest_obj = self.is_placed_on("box", "pad")
+        obj_on_dest_obj = self.is_placed_on(obj_name, "pad")
         place_success = obj_on_dest_obj and no_obj_grasped
         # print("obj_on_dest_obj", obj_on_dest_obj, "no_obj_grasped", no_obj_grasped)
 
@@ -127,7 +138,7 @@ class CutPourPkgInBowlEnv(Environment):
     def get_place_obj_name_on_furn(self, furn_name):
         # objects in order of where they should be placed
         self.furn_name_to_obj_names = dict(
-            coffee_table_place=["pad"],
+            coffee_table_place=["pad", "pad2"],
         )
         # Find an object on the furniture that a new obj can be placed on.
         for dest_obj_name in self.furn_name_to_obj_names[furn_name]:
@@ -143,7 +154,7 @@ class CutPourPkgInBowlEnv(Environment):
         config_filename = os.path.join(og.example_config_path, "tiago_primitives.yaml")
         configs = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
-        configs["robots"][0]["grasping_mode"] = ["sticky", "assisted"][-1]
+        configs["robots"][0]["grasping_mode"] = ["sticky", "assisted"][0]
 
         configs["scene"]["scene_model"] = "Rs_int"
         configs["scene"]["load_object_categories"] = ["floors", "walls", "coffee_table"]
@@ -166,7 +177,24 @@ class CutPourPkgInBowlEnv(Environment):
                 "rgba": [1.0, 0, 0, 1.0],
                 "scale": [0.15, 0.07, 0.15],
                 # "size": 0.05,
-                "position": [1.0, 0.5, 0.5],
+                "position": [1.2, 0.8, 0.65],
+                "orientation": [0, 0, 0, 1],
+            },
+            {
+                "type": "PrimitiveObject",
+                "name": "package",
+                "primitive_type": "Cube",
+                "manipulable": True,
+                # "scale": [0.15, 0.07, 0.15],
+                # "radius": 0.06,
+                # "height": 0.30,
+                # "position": [1.0, 0.3, 0.5],
+                # "orientation": [0, 0, 0, 1],
+                "rgba": [1.0, 0, 0, 1.0],
+                "scale": [0.15, 0.15, 0.2],
+                # coffee table "position": [-0.3, -0.9, 0.57],
+                # this worked for forward grasp "position": [1.0, 0.6, 0.65],
+                "position": [1.1, 0.6, 0.65],
                 "orientation": [0, 0, 0, 1],
             },
             {
@@ -175,7 +203,17 @@ class CutPourPkgInBowlEnv(Environment):
                 "primitive_type": "Disk",
                 "rgba": [0.0, 0, 1.0, 1.0],
                 "radius": 0.12,
-                "position": [-0.3, -0.9, 0.5],
+                # coffee table "position": [-0.3, -0.9, 0.45],
+                "position": [1.1, 0.6, 0.55],
+            },
+            {
+                "type": "PrimitiveObject",
+                "name": "pad2",
+                "primitive_type": "Disk",
+                "rgba": [0.0, 1.0, 1.0, 1.0],
+                "radius": 0.12,
+                # coffee table "position": [-0.3, -1.2, 0.45],
+                "position": [1.1, 0.3, 0.55],
             },
             {
                 "type": "DatasetObject",
@@ -200,6 +238,7 @@ class PrimitivesEnv:
         self.furniture_names = self.env.furniture_names
         self.task_ids = self.env.task_ids
         self.scene = self.env.scene
+        self.robot = self.env.robots[0]
         self.action_primitives = LangSemanticActionPrimitivesV2(
             self,
             self.env.robots[0],
@@ -208,13 +247,13 @@ class PrimitivesEnv:
 
         self.skill_name_to_fn_map = dict(
             pickplace=self.action_primitives._pick_place,
-            # pick_pour_place=self.action_primitives._pick_pour_place,
+            pick_pour_place=self.action_primitives._pick_pour_place,
         )
         self.set_skill_names_params()
         self._load_action_space()
 
     def set_skill_names_params(self):
-        self.skill_names = ["pickplace"]  # ["say", "pick_pour_place", "pickplace", "converse", "no_op"]
+        self.skill_names = ["pick_pour_place", "pickplace"]  # ["say", "pick_pour_place", "pickplace", "converse", "no_op"]
         self.skill_name_to_param_domain = dict(
             # say=[
             #     ("pick_open_place", "package", "onto countertop"),
@@ -224,9 +263,9 @@ class PrimitivesEnv:
             #     ("pickplace", "plate", "onto countertop"),
             #     ("pick_pour_place", ("package", "plate"), "onto countertop"),
             # ],
-            # pick_pour_place=[
-            #     ("package", "plate", "countertop"),
-            # ],
+            pick_pour_place=[
+                ("package", "pad2", "pad"),
+            ],
             pickplace=[
                 # ("knife", "countertop"),
                 # ("package", "countertop"),
@@ -244,11 +283,28 @@ class PrimitivesEnv:
         self.act_hist = np.zeros(self.max_path_len - 1) - 1  # init to all -1s
         # since 0 is an action
         self.act_hist_skill_params = []
-        obs, info = self.env.reset(**kwargs)
+
+        # the OG env base reset doesn't really do anything important
+        # (mainly just resets unused vars)
+        # obs, info = self.env.reset(**kwargs)
+        self.env.scene.reset()
+
+        # Randomize the robot pose
+        # floor = self.get_obj_by_name("floors_ptwlei_0")
+        # self.env.robots[0].states[OnTop].set_value(floor, True)
+
+        # Randomize the apple pose on top of the breakfast table
+        # coffee_table_pick = self.get_obj_by_name("coffee_table_pick")
+        # self.get_obj_by_name("box").states[OnTop].set_value(
+        #     coffee_table_pick, True)
 
         obs, info = self.get_obs()
 
         self.objs_in_robot_hand = []  # TODO: use for grasp/place primitives?
+
+        box_pos = self.env.get_obj_poses(["box"])["pos"]
+        robot_pos = info['base_pos']
+        print("box_pos", box_pos, "robot_pos", robot_pos)
 
         return obs, info
 

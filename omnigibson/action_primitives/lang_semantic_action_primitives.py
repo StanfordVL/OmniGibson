@@ -79,6 +79,79 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
 
         return success, total_num_env_steps
 
+    def _pick_pour_place(self, obj_name, cont_name, dest_obj_name):
+        assert self.robot.grasping_mode == "sticky", ("_pick_pour_place not yet supported for assisted grasp")
+
+        obj = self.env.get_obj_by_name(obj_name)
+
+        if dest_obj_name == "coffee_table_place":
+            # convert destination from coffee_table_place --> "pad" on the
+            # coffee table, for ex.
+            dest_obj_name = self.env.get_place_obj_name_on_furn(dest_obj_name)
+        dest_obj = self.env.get_obj_by_name(dest_obj_name)
+
+        direction = ["forward", "backward"][0]
+
+        grasp_num_env_steps, _ = 0, 0
+        print("Start executing grasp")
+        st = time.time()
+        grasp_num_env_steps, _ = self.execute_controller(
+            self.apply_ref(
+                StarterSemanticActionPrimitiveSet.GRASP,
+                obj,
+                direction,  # direction
+                do_robot_reset=False))
+        print(f"Finish executing grasp. time: {time.time() - st}")
+
+        print("Start lifting obj a bit")
+        st = time.time()
+        if direction == "forward":
+            delta_xyz = [-0.05, 0.0, 0.1]
+        elif direction == "backward":
+            delta_xyz = [0.05, 0.0, 0.1]
+        else:
+            raise NotImplementedError
+
+        lift_num_env_steps, _ = 0, 0
+        # lift_num_env_steps, _ = self.execute_controller(
+        #     self.apply_ref(
+        #         StarterSemanticActionPrimitiveSet.REACH,
+        #         delta_xyz,
+        #         direction,  # direction
+        #         do_robot_reset=False))
+        print(f"Finish lifting obj. time: {time.time() - st}")
+
+        # TODO: Pour obj on cont (create primitive for this)
+        pour_num_env_steps, r = 0, 0
+        pour_num_env_steps, _ = self.execute_controller(
+            self.apply_ref(
+                StarterSemanticActionPrimitiveSet.POUR,
+                do_robot_reset=False))
+        print(f"Finish pouring obj. time: {time.time() - st}")
+
+        # Place obj on dest_obj
+        place_num_env_steps, r = 0, 0
+        # TODO: add the direction arg to the things in _place_with_predicate
+        print("Start executing place")
+        st = time.time()
+        place_num_env_steps, r = self.execute_controller(
+            self.apply_ref(StarterSemanticActionPrimitiveSet.PLACE_ON_TOP, dest_obj))
+        print(f"Finish executing place. time: {time.time() - st}")
+
+        success = bool(r)
+        total_num_env_steps = (
+            grasp_num_env_steps
+            + lift_num_env_steps
+            + pour_num_env_steps
+            + place_num_env_steps)
+
+        print("grasp_num_env_steps", grasp_num_env_steps)
+        print("place_num_env_steps", place_num_env_steps)
+        print("total_num_env_steps", total_num_env_steps)
+
+        # revert back to old grasping mode. TODO: remove this.
+        return success, total_num_env_steps
+
     def execute_controller(self, ctrl_gen):
         num_env_steps = 0
         for i, action in enumerate(ctrl_gen):

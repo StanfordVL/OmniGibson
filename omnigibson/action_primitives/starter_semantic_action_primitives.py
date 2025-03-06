@@ -130,6 +130,8 @@ class StarterSemanticActionPrimitiveSet(IntEnum):
     )
     TOGGLE_ON = auto(), "Toggle an object on"
     TOGGLE_OFF = auto(), "Toggle an object off"
+    REACH = auto(), "lift the gripper higher in some direction"
+    POUR = auto(), "Rotate the gripper 90 deg to pour an object, then rotate back."
 
 
 # (TODO) execution failure: overwrite_head_action might move the head that causes self-collision with curobo-generated motion plans (at the time of curobo planning, it assumes the head doesn't move).
@@ -181,6 +183,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             StarterSemanticActionPrimitiveSet.RELEASE: self._execute_release,
             StarterSemanticActionPrimitiveSet.TOGGLE_ON: self._toggle_on,
             StarterSemanticActionPrimitiveSet.TOGGLE_OFF: self._toggle_off,
+            StarterSemanticActionPrimitiveSet.REACH: self._reach,
+            StarterSemanticActionPrimitiveSet.POUR: self._pour,
         }
         self._motion_generator = (
             None
@@ -279,7 +283,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action = StarterSemanticActionPrimitiveSet(action_idx)
         return self.apply_ref(action, target_obj)
 
-    def apply_ref(self, primitive, *args, attempts=5):
+    def apply_ref(self, primitive, *args, attempts=5, do_robot_reset=True):
         """
         Yields action for robot to execute the primitive with the given arguments.
 
@@ -287,6 +291,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             primitive (StarterSemanticActionPrimitiveSet): Primitive to execute
             args: Arguments for the primitive
             attempts (int): Number of attempts to make before raising an error
+            do_robot_reset (bool): Whether or not to do arm retract
 
         Yields:
             th.tensor or None: Action array for one step for the robot to execute the primitve or None if primitive completed
@@ -300,11 +305,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         for _ in range(attempts):
             # Attempt
             success = False
-            try:
-                yield from ctrl(*args)
-                success = True
-            except ActionPrimitiveError as e:
-                errors.append(e)
+            # try:
+            yield from ctrl(*args)
+            success = True
+            # except ActionPrimitiveError as e:
+            #     errors.append(e)
 
             try:
                 # If we're not holding anything, release the hand so it doesn't stick to anything else.
@@ -314,14 +319,17 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             except ActionPrimitiveError:
                 pass
 
-            try:
-                # Make sure we retract the arms after every step
-                yield from self._reset_robot()
-            except ActionPrimitiveError:
-                pass
+            if do_robot_reset:
+                try:
+                    print("Reset robot (retract arms) 320")
+                    # Make sure we retract the arms after every step
+                    yield from self._reset_robot()
+                except ActionPrimitiveError as e:
+                    print(f"While Resetting, got error: {e}")
 
             try:
                 # Settle before returning.
+                print("settling robot 325")
                 yield from self._settle_robot()
             except ActionPrimitiveError:
                 pass
@@ -497,7 +505,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             action[self.robot.controller_action_idx["arm_{}".format(self.arm)][2]] = speed
             yield self._postprocess_action(action)
 
-    def _sample_grasp_pose(self, obj):
+    def _sample_grasp_pose(self, obj, direction="down"):
+        # TODO: enable all references to use direction arg.
         """
         Samples an eef grasp pose for the object
 
@@ -508,16 +517,18 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             Tuple[th.tensor, th.tensor]: Pregrasp pose and grasp pose of the robot eef in the world frame
         """
         indented_print("Sampling grasp pose")
-        grasp_poses = get_grasp_poses_for_object_sticky(obj)
+        grasp_poses = get_grasp_poses_for_object_sticky(obj, direction)
         grasp_pos, grasp_quat = random.choice(grasp_poses)
 
         # Identity quaternion for top-down grasping (x-forward, y-right, z-down)
-        approach_dir = T.quat2mat(grasp_quat) @ th.tensor([0.0, 0.0, -1.0])
+        dir_vec = th.tensor([0.0, 0.0, -1.0])
+        grasp_approach_scale = 1.0
+        approach_dir = T.quat2mat(grasp_quat) @ dir_vec
 
         avg_finger_offset = th.mean(
             th.tensor([length for length in self.robot.eef_to_fingertip_lengths[self.arm].values()])
         )
-        pregrasp_offset = avg_finger_offset + m.GRASP_APPROACH_DISTANCE
+        pregrasp_offset = avg_finger_offset + grasp_approach_scale * m.GRASP_APPROACH_DISTANCE
 
         pregrasp_pos = grasp_pos - approach_dir * pregrasp_offset
 
@@ -527,10 +538,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         pregrasp_pose = (pregrasp_pos, grasp_quat)
         grasp_pose = (grasp_pos, grasp_quat)
+        print("pregrasp_pose", pregrasp_pose)
+        print("grasp_pose", grasp_pose)
 
         return pregrasp_pose, grasp_pose
 
-    def _grasp(self, obj):
+    def _grasp(self, obj, direction="down"):
         """
         Yields action for the robot to navigate to object if needed, then to grasp it
 
@@ -572,11 +585,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         indented_print("Opening hand before grasping")
         yield from self._execute_release()
 
-        pregrasp_pose, grasp_pose = self._sample_grasp_pose(obj)
+        pregrasp_pose, grasp_pose = self._sample_grasp_pose(obj, direction)
 
         # If the pre-grasp pose is too far, navigate.
         indented_print("Navigating to grasp pose if needed")
-        yield from self._navigate_if_needed(obj, eef_pose=pregrasp_pose)
+        yield from self._navigate_if_needed(obj, direction, eef_pose=pregrasp_pose)
 
         indented_print("Moving hand to grasp pose")
         yield from self._move_hand(pregrasp_pose)
@@ -626,6 +639,98 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 {"expected object": obj.name, "actual object": self._get_obj_in_hand().name},
             )
         print("self._get_obj_in_hand() 648", self._get_obj_in_hand())
+
+    def _reach(self, delta_xyz, direction):
+        # simple primitive that moves in a hard-coded delta direction after a forward grasp.
+        cur_grasp_pose = self.robot.get_eef_pose()
+        delta_xyz = th.tensor(delta_xyz)
+        grasp_pose = (cur_grasp_pose[0] + delta_xyz, cur_grasp_pose[1])
+
+        xyz_constraint_list = (1 - delta_xyz.ne(0).int()).tolist()
+        motion_constraint = [1, 1, 1] + xyz_constraint_list
+
+        if direction in ["forward", "backward"]:
+            if self.robot.grasping_mode == "sticky":
+                yield from self._move_hand(
+                    grasp_pose, motion_constraint=motion_constraint,
+                    stop_on_ag=True)
+            elif self.robot.grasping_mode == "assisted":
+                yield from self._move_hand(
+                    grasp_pose, motion_constraint=motion_constraint)
+        else:
+            raise NotImplementedError
+
+    def _pour(self):
+        # simple primitive that rotates the gripper pose after a forward grasp.
+
+        # # Step 1. Rotate to pour grasped object
+        # orig_grasp_pose = self.robot.get_eef_pose()
+        # # make copy; we need tensors later.
+        # import pdb; pdb.set_trace()
+        # orig_grasp_pose = (
+        #     orig_grasp_pose[0].clone().detach(), orig_grasp_pose[1].clone().detach())
+        # rotation_quat = T.euler2quat(th.tensor([th.pi / 2, 0, 0], dtype=th.float32))
+        # new_grasp_quat = T.quat_multiply(orig_grasp_pose[1], rotation_quat)
+        # delta_xyz = th.tensor([0, 0, 0.05])
+        # grasp_pose = (orig_grasp_pose[0] + delta_xyz, new_grasp_quat)
+        # motion_constraint = [1, 1, 1, 1, 0, 0]  # penalize x-axis motion. allow yz-plane motion
+
+        # if direction in ["forward", "backward"]:
+        #     if self.robot.grasping_mode == "sticky":
+        #         yield from self._move_hand(
+        #             grasp_pose, motion_constraint=motion_constraint,
+        #             stop_on_ag=True)
+        #     elif self.robot.grasping_mode == "assisted":
+        #         yield from self._move_hand(
+        #             grasp_pose, motion_constraint=motion_constraint)
+        # else:
+        #     raise NotImplementedError
+        # print("done with pouring rotate wrist (step 1)")
+
+        # # Step 2. Rotate back to original position
+        # grasp_pose = orig_grasp_pose
+        # if direction in ["forward", "backward"]:
+        #     if self.robot.grasping_mode == "sticky":
+        #         yield from self._move_hand(
+        #             grasp_pose, motion_constraint=motion_constraint,
+        #             stop_on_ag=True)
+        #     elif self.robot.grasping_mode == "assisted":
+        #         yield from self._move_hand(
+        #             grasp_pose, motion_constraint=motion_constraint)
+        # else:
+        #     raise NotImplementedError
+
+        # print("done with pouring rotate wrist back to original (step 2)")
+
+        steps = 30
+        speed = -3.1
+
+        import pdb; pdb.set_trace()
+        # Step 1. Rotate to pour grasped object
+        for _ in range(steps):
+            print("stepping in pouring")
+            action = self._empty_action()
+            wrist_idx_cw = self.robot.controller_action_idx[
+                "arm_{}".format(self.arm)][-1]
+            action[wrist_idx_cw] = speed
+            post_act = self._postprocess_action(action)
+            yield post_act
+        print("done with pouring rotate wrist (step 1)")
+
+        import pdb; pdb.set_trace()
+        speed = 0.0
+        # Step 2. Rotate back to original position
+        for _ in range(steps):
+            print("stepping in pouring")
+            action = self._empty_action()
+            wrist_idx_ccw = self.robot.controller_action_idx[
+                "arm_{}".format(self.arm)][-1]
+            action[wrist_idx_ccw] = speed
+            post_act = self._postprocess_action(action)
+            yield post_act
+
+        # TODO: to make this more principled, store original wrist position and move back to it.
+        print("done with pouring rotate wrist back to original (step 2)")
 
     def _place_on_top(self, obj):
         """
@@ -721,6 +826,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             obj_pose = self._sample_pose_with_object_and_predicate(predicate, obj_in_hand, obj, world_aligned=True)
             hand_pose = self._get_hand_pose_for_object_pose(obj_pose)
 
+            print("obj_pose", obj_pose)
+            print("hand_pose", hand_pose)
+            import pdb; pdb.set_trace()
+
             # First check if we can directly move the hand there
             # We want to plan with the fingers at their upper (open) limits to avoid collisions
             # because later we will open-loop open the gripper with _execute_release after placing.
@@ -728,6 +837,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             target_in_reach = self._target_in_reach_of_robot(
                 hand_pose, initial_joint_pos=initial_joint_pos, skip_obstacle_update=True
             )
+            print("target_in_reach", target_in_reach)
             if target_in_reach:
                 yield from self._move_hand(hand_pose)
                 break
@@ -1609,7 +1719,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             cv2.imshow("SceneGraph", img)
             cv2.waitKey(1)
 
-    def _navigate_if_needed(self, obj, eef_pose=None):
+    def _navigate_if_needed(self, obj, direction="down", eef_pose=None):
         """
         Yields action to navigate the robot to be in range of the object if it not in the range
 
@@ -1623,15 +1733,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self._motion_generator.update_obstacles()
 
         if eef_pose is None:
-            eef_pose, _ = self._sample_grasp_pose(obj)
+            eef_pose, _ = self._sample_grasp_pose(obj, direction)
 
         if self._target_in_reach_of_robot(eef_pose, skip_obstacle_update=True):
             # No need to navigate.
             return
 
-        yield from self._navigate_to_obj(obj, eef_pose=eef_pose, skip_obstacle_update=True)
+        yield from self._navigate_to_obj(obj, direction, eef_pose=eef_pose, skip_obstacle_update=True)
 
-    def _navigate_to_obj(self, obj, eef_pose=None, skip_obstacle_update=False):
+    def _navigate_to_obj(self, obj, direction="down", eef_pose=None, skip_obstacle_update=False):
         """
         Yields action to navigate the robot to be in range of the pose
 
@@ -1642,7 +1752,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             th.tensor or None: Action array for one step for the robot to navigate in range or None if it is done navigating
         """
-        pose = self._sample_pose_near_object(obj, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update)
+        pose = self._sample_pose_near_object(obj, direction, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update)
         if pose is None:
             raise ActionPrimitiveError(
                 ActionPrimitiveError.Reason.PLANNING_ERROR,
@@ -1761,6 +1871,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     def _sample_pose_near_object(
         self,
         obj,
+        direction="down",
         eef_pose=None,
         plan_with_open_gripper=False,
         sampling_attempts=m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT,
@@ -1786,7 +1897,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         avg_arm_workspace_range = th.mean(self.robot.arm_workspace_range[self.arm])
 
         if eef_pose is None:
-            eef_pose, _ = self._sample_grasp_pose(obj)
+            eef_pose, _ = self._sample_grasp_pose(obj, direction)
 
         target_pose = eef_pose
 
@@ -1888,7 +1999,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     #     )
 
     def _sample_pose_with_object_and_predicate(
-        self, predicate, held_obj, target_obj, world_aligned=False, near_poses=None, near_poses_threshold=None
+        self, predicate, held_obj, target_obj, world_aligned=False, near_poses=None, near_poses_threshold=None, direction="down"
     ):
         """
         Returns a pose for the held object relative to the target object that satisfies the predicate

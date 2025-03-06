@@ -51,17 +51,16 @@ def main(args):
     print(f"time for 100 sim steps: {time.time() - st}")
     st = time.time()
     env.make_video()
-    env.scene.reset()
     obs, info = env.reset()
     print(f"time for env reset: {time.time() - st}")
 
-    # Randomize the rbot pose
+    # Randomize the robot pose
     # robot.states[OnTop].set_value(floor, True)
 
     # Randomize the apple pose on top of the breakfast table
     # apple.states[OnTop].set_value(breakfast_table, True)
 
-    data_collector.collect_trajs(n=2)
+    data_collector.collect_trajs(n=args.n)
     total_num_env_steps_list = data_collector.primitive_int_to_num_env_steps_list_map[0]
 
     avg_num_ts = np.nanmean(np.array(total_num_env_steps_list, dtype=np.float64))
