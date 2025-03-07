@@ -478,6 +478,30 @@ class SanityCheck:
         if int(row.name_instance_id) == 0:
             self.validate_meta_links(row)
 
+        if obj.material is not None:
+            recursive_materials = set()
+            def _recursively_get_materials(mtl):
+                recursive_materials.add(mtl)
+                for i in range(rt.getNumSubMtls(mtl)):
+                    sub_mtl = rt.getSubMtl(mtl, i + 1)
+                    if sub_mtl is not None:
+                        _recursively_get_materials(sub_mtl)
+            _recursively_get_materials(obj.material)
+
+            # Check the found materials for any materials that are not VrayMtl or MultiMaterial
+            for mat in recursive_materials:
+                allowed_material_types = {rt.MultiMaterial, rt.VrayMtl}
+                if mat == obj.material:
+                    # The top level material can also be a Shell_Material
+                    allowed_material_types.add(rt.Shell_Material)
+                elif rt.classOf(obj.material) == rt.Shell_Material and mat == obj.material.bakedMaterial:
+                    # If the top level material is a Shell_Material, then the baked material should be physical
+                    allowed_material_types = {rt.PhysicalMaterial}
+                self.expect(
+                    rt.classOf(mat) in allowed_material_types,
+                    f"{row.object_name} material tree contains {mat} with disallowed type {rt.classOf(mat)}. It should be one of {allowed_material_types}.",
+                )
+
     def validate_cloth(self, row):
         # A cloth object should consist of a single connected component
         obj = row.object._obj
