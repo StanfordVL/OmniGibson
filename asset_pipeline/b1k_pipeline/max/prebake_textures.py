@@ -32,7 +32,7 @@ btt = rt.BakeToTexture
 EXPORT_TEXTURES = False
 USE_UNWRELLA = True
 USE_NATIVE_EXPORT = False
-IMG_SIZE = 1024
+IMG_SIZE = 4096
 HQ_IMG_SIZE = 4096
 HQ_IMG_CATEGORIES = {"floors"}
 NEW_UV_CHANNEL = 99
@@ -274,18 +274,7 @@ class TextureBaker:
         if rt.classOf(obj.material) == rt.Shell_Material:
             obj.material = obj.material.originalMaterial
 
-        # vray = rt.renderers.current
-        # vray.camera_autoExposure = False
-        # vray.options_lights = False
-        # vray.options_hiddenLights = False
-        rt.sceneexposurecontrol.exposurecontrol = None
-
-        start_time = time.time()
-
         print("prepare_texture_baking", obj.name)
-
-        # Clear the baking list first.
-        btt.deleteAllMaps()
 
         for i, map_name in enumerate(CHANNEL_MAPPING.keys()):
             texture_map = btt.addMapByClassId(obj, self.MAP_NAME_TO_IDS[map_name])
@@ -308,7 +297,7 @@ class TextureBaker:
             texture_map.imageWidth = img_size
             texture_map.imageHeight = img_size
             texture_map.edgePadding = 4
-            texture_map.fileType = "png"
+            texture_map.fileType = "jpeg"
 
             # Set the apply color mapping option
             if texture_map.getOptionsCount() > 0:
@@ -320,21 +309,7 @@ class TextureBaker:
             # Mapping from the original channel (of VRay, Corona, etc) to the new channel of PhysicalMaterial
             texture_map.setTargetMapSlot(CHANNEL_MAPPING[map_name])
 
-        btt.outputPath = self.bakery
-        btt.autoCloseProgressDialog = True
-        btt.showFrameBuffer = False
-        btt.alwaysOverwriteExistingFiles = True
-
-        # Do the actual baking
-        print("start baking")
-        assert btt.bake(), "baking failed"
-        print("finish baking")
-        end_time = time.time()
-        self.baking_times[obj.name] = end_time - start_time
-
-        # Clear the baking list again.
-        btt.deleteAllMaps()
-
+    def postprocess_texture_baking(self, obj, siblings):
         # Set the object to render the baked material
         obj.material.renderMtlIndex = 1
 
@@ -342,9 +317,31 @@ class TextureBaker:
         for sibling in siblings:
             sibling.material = obj.material
 
-        # TODO: Do any additional necessary work on the material.
-
         rt.update(obj)
+
+    def texture_baking(self):
+        # vray = rt.renderers.current
+        # vray.camera_autoExposure = False
+        # vray.options_lights = False
+        # vray.options_hiddenLights = False
+        rt.sceneexposurecontrol.exposurecontrol = None
+
+        # Bake textures
+        btt.outputPath = self.bakery
+        btt.autoCloseProgressDialog = True
+        btt.showFrameBuffer = False
+        btt.alwaysOverwriteExistingFiles = True
+
+        # Do the actual baking
+        start_time = time.time()
+        print("start baking")
+        assert btt.bake(), "baking failed"
+        print("finish baking")
+        end_time = time.time()
+        self.baking_times["total"] = end_time - start_time
+
+        # Clear the baking list again.
+        btt.deleteAllMaps()
 
     def run(self):
         # assert rt.classOf(rt.renderers.current) == rt.V_Ray_5__update_2_3, f"Renderer should be set to V-Ray 5.2.3 CPU instead of {rt.classOf(rt.renderers.current)}"
@@ -353,8 +350,12 @@ class TextureBaker:
         # Remove lights from all materials
         unlight_all_mats()
 
+        # Remove the texture baking list
+        btt.deleteAllMaps()
+
         objs = self.get_process_objs()
         failures = {}
+        postprocessing = []  # (obj, siblings)
         for i, obj in enumerate(objs):
             try:
                 print(f"{i+1} / {len(objs)} total")
@@ -368,9 +369,18 @@ class TextureBaker:
 
                 # TODO: Can we bake all at once?
                 self.uv_unwrapping(obj)
-                self.texture_baking(obj)
+                to_postprocess = self.prepare_texture_baking(obj)
+                if to_postprocess:
+                    postprocessing.append((obj, to_postprocess))
             except Exception as e:
                 failures[obj.name] = traceback.format_exc()
+
+        # Bake
+        self.texture_baking()
+
+        # Postprocessing
+        for obj, siblings in postprocessing:
+            self.postprocess_texture_baking(obj, siblings)
 
         failure_msg = "\n".join(f"{obj}: {err}" for obj, err in failures.items())
         assert len(failures) == 0, f"Some objects could not be exported:\n{failure_msg}"
