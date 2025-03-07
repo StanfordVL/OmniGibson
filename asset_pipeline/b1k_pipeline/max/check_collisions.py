@@ -147,7 +147,7 @@ def import_bad_model_originals(model_id):
     return imported_meshes
 
 
-def prepare_scene():
+def prepare_scene(use_clutter=False):
     # Get all the collision meshes in the scene that belong to lower, instance-zero meshes
     scene = trimesh.Scene()
 
@@ -245,7 +245,7 @@ def prepare_scene():
 
         # For now, skip clutter
         loose_key = parsed_name.group("loose")
-        if loose_key and "C" in loose_key:
+        if loose_key and "C" in loose_key and not use_clutter:
             continue
 
         # Only use the base link to get everything else's position
@@ -271,8 +271,8 @@ def prepare_scene():
     return scene
 
 
-def check_collisions(scene):
-    cm, _ = trimesh.collision.scene_to_collision(scene)
+def check_collisions(scene, use_clutter=False):
+    cm, _ = trimesh.collision.scene_to_collision(scene, use_clutter=use_clutter)
     _, collision_data = cm.in_collision_internal(return_data=True)
 
     # Then go through every object in the scene and find out which links can be reached from the base_link
@@ -342,13 +342,16 @@ def check_collisions(scene):
 
 
 def main():
+    opts = rt.maxops.mxsCmdLineArgs
+    use_clutter = opts[rt.name("clutter")] == "true"
+
     scene = None
     error = None
     collisions = []
     try:
         scene = prepare_scene()
         scene.export(r"D:\physics.ply")
-        collisions = check_collisions(scene)
+        collisions = check_collisions(scene, use_clutter=use_clutter)
         for left, right, depth in collisions:
             print(f"Collision between {left} and {right}: {depth} mm")
     except Exception as e:

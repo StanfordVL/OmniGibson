@@ -62,6 +62,27 @@ stages:
     outs:
     - artifacts/pipeline/check_collisions.success
 
+  check_collisions_with_clutter:
+    # List the objects found in the entry.
+    foreach: ${scenes_unfiltered}
+    do:
+      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/check_collisions.py clutter=true'
+      deps:
+      - b1k_pipeline/max/check_collisions.py
+      - cad/${item}/processed.max
+      # - artifacts/pipeline/sanitycheck.success
+      outs:
+      - cad/${item}/artifacts/check_collisions_with_clutter.json
+
+  check_collisions_with_clutter_success:
+    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/check_collisions_with_clutter.json artifacts/pipeline/check_collisions_with_clutter.success scenes'
+    deps:
+    - cad/#{scenes}/artifacts/check_collisions_with_clutter.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/check_collisions_with_clutter.success
+
   validate_meta_links:
     # Validate exported scene, e.g. physics stability.
     cmd: 'python -m b1k_pipeline.validate_meta_links'
