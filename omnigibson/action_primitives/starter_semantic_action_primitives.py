@@ -644,7 +644,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # simple primitive that moves in a hard-coded delta direction after a forward grasp.
         cur_grasp_pose = self.robot.get_eef_pose()
         delta_xyz = th.tensor(delta_xyz)
-        grasp_pose = (cur_grasp_pose[0] + delta_xyz, cur_grasp_pose[1])
+
+        # rotate gripper
+        # rotation_quat = T.euler2quat(th.tensor([th.pi / 3, 0, 0], dtype=th.float32))
+        # new_grasp_quat = T.quat_multiply(rotation_quat, cur_grasp_pose[1])
+        new_grasp_quat = cur_grasp_pose[1]
+
+        grasp_pose = (cur_grasp_pose[0] + delta_xyz, new_grasp_quat)
 
         xyz_constraint_list = (1 - delta_xyz.ne(0).int()).tolist()
         motion_constraint = [1, 1, 1] + xyz_constraint_list
@@ -660,20 +666,28 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         else:
             raise NotImplementedError
 
-    def _pour(self):
+    def _pour(self, direction="forward"):
         # simple primitive that rotates the gripper pose after a forward grasp.
+
+        # wrist_idx = self.robot.controller_action_idx["arm_{}".format(self.arm)][-1]
+        # wrist_qpos = self.robot.get_joint_positions()[wrist_idx]
+        # print("wrist_qpos 668", wrist_qpos)
 
         # # Step 1. Rotate to pour grasped object
         # orig_grasp_pose = self.robot.get_eef_pose()
         # # make copy; we need tensors later.
+        # # orig_grasp_pose = (
+        # #     orig_grasp_pose[0].clone().detach(), orig_grasp_pose[1].clone().detach())
+        # rotation_quat = T.euler2quat(th.tensor([th.pi / 3, 0, 0], dtype=th.float32))
+        # new_grasp_quat = T.quat_multiply(rotation_quat, orig_grasp_pose[1])
+        # delta_xyz = th.tensor([0, 0, 0])
         # import pdb; pdb.set_trace()
-        # orig_grasp_pose = (
-        #     orig_grasp_pose[0].clone().detach(), orig_grasp_pose[1].clone().detach())
-        # rotation_quat = T.euler2quat(th.tensor([th.pi / 2, 0, 0], dtype=th.float32))
-        # new_grasp_quat = T.quat_multiply(orig_grasp_pose[1], rotation_quat)
-        # delta_xyz = th.tensor([0, 0, 0.05])
         # grasp_pose = (orig_grasp_pose[0] + delta_xyz, new_grasp_quat)
-        # motion_constraint = [1, 1, 1, 1, 0, 0]  # penalize x-axis motion. allow yz-plane motion
+        # # motion_constraint = [0, 0, 0, 0, 0, 0]  # penalize x-axis motion. allow yz-plane motion
+        # motion_constraint = None
+
+        # # indented_print("Navigating to grasp pose if needed")
+        # # yield from self._navigate_if_needed(self._get_obj_in_hand(), direction, eef_pose=grasp_pose)
 
         # if direction in ["forward", "backward"]:
         #     if self.robot.grasping_mode == "sticky":
@@ -686,6 +700,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # else:
         #     raise NotImplementedError
         # print("done with pouring rotate wrist (step 1)")
+
+        orig_wrist_qpos = self.robot.get_joint_positions()[21]
+        print("wrist_qpos 697", orig_wrist_qpos)
 
         # # Step 2. Rotate back to original position
         # grasp_pose = orig_grasp_pose
@@ -702,35 +719,43 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         # print("done with pouring rotate wrist back to original (step 2)")
 
-        steps = 30
-        speed = -3.1
+        steps = 25
+        target_wrist_qpos = orig_wrist_qpos - (th.pi / 2)
 
-        import pdb; pdb.set_trace()
+        # import pdb; pdb.set_trace()
         # Step 1. Rotate to pour grasped object
         for _ in range(steps):
-            print("stepping in pouring")
-            action = self._empty_action()
+            wrist_qpos = self.robot.get_joint_positions()[21]
+            print("stepping in pouring. wrist qpos:", wrist_qpos)
+            action = self._empty_action(follow_arm_targets=False)
             wrist_idx_cw = self.robot.controller_action_idx[
                 "arm_{}".format(self.arm)][-1]
-            action[wrist_idx_cw] = speed
+            action[wrist_idx_cw] = target_wrist_qpos
             post_act = self._postprocess_action(action)
             yield post_act
         print("done with pouring rotate wrist (step 1)")
+        wrist_idx = self.robot.controller_action_idx["arm_{}".format(self.arm)][-1]
+        wrist_qpos = self.robot.get_joint_positions()[wrist_idx]
+        print("Final pour wrist qpos:", wrist_qpos)
 
-        import pdb; pdb.set_trace()
-        speed = 0.0
-        # Step 2. Rotate back to original position
+        # Step 2. Rotate to move wrist back
+        target_wrist_qpos = orig_wrist_qpos
         for _ in range(steps):
-            print("stepping in pouring")
-            action = self._empty_action()
-            wrist_idx_ccw = self.robot.controller_action_idx[
+            wrist_qpos = self.robot.get_joint_positions()[21]
+            print("stepping in pouring. wrist qpos:", wrist_qpos)
+            action = self._empty_action(follow_arm_targets=False)
+            wrist_idx_cw = self.robot.controller_action_idx[
                 "arm_{}".format(self.arm)][-1]
-            action[wrist_idx_ccw] = speed
+            action[wrist_idx_cw] = target_wrist_qpos
             post_act = self._postprocess_action(action)
             yield post_act
+        print("done with pouring rotate wrist (step 1)")
+        wrist_idx = self.robot.controller_action_idx["arm_{}".format(self.arm)][-1]
+        wrist_qpos = self.robot.get_joint_positions()[wrist_idx]
+        print("Final pour wrist qpos:", wrist_qpos)
 
-        # TODO: to make this more principled, store original wrist position and move back to it.
-        print("done with pouring rotate wrist back to original (step 2)")
+        # # TODO: to make this more principled, store original wrist position and move back to it.
+        # print("done with pouring rotate wrist back to original (step 2)")
 
     def _place_on_top(self, obj):
         """
@@ -828,7 +853,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
             print("obj_pose", obj_pose)
             print("hand_pose", hand_pose)
-            import pdb; pdb.set_trace()
 
             # First check if we can directly move the hand there
             # We want to plan with the fingers at their upper (open) limits to avoid collisions

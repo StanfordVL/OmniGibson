@@ -40,8 +40,11 @@ def main(args):
 
     st = time.time()
     max_path_len = 1
-    task_env = CutPourPkgInBowlEnv(out_dir="/home/albert/dev/OmniGibson/out_videos", obj_to_grasp_name="box")
-    env = PrimitivesEnv(task_env, max_path_len=max_path_len)
+    task_env = CutPourPkgInBowlEnv(
+        out_dir="/home/albert/dev/OmniGibson/out_videos", obj_to_grasp_name="box",
+        vid_speedup=args.vid_speedup)
+    env = PrimitivesEnv(
+        task_env, max_path_len=max_path_len, debug=args.debug)
     data_collector = ScriptedDataCollector(env, "CutPourPkgInBowlEnv", max_path_len=max_path_len, args=args)
     print(f"time to init env: {time.time() - st}")
 
@@ -73,5 +76,10 @@ if __name__ == "__main__":
         "--out-dir", type=str, default="/home/albert/dev/OmniGibson/out_hdf5")
     parser.add_argument(
         "--n", type=int, default=1)
+    parser.add_argument(
+        "--debug", default=False, action="store_true")
+    parser.add_argument(
+        "--vid-speedup", type=int, default=2)
     args = parser.parse_args()
+    args.no_vid = bool(args.vid_speedup == 0)
     main(args)

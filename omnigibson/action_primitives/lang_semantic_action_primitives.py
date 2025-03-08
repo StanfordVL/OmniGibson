@@ -48,6 +48,7 @@ m.MOVE_HAND_POS_THRESHOLD = 0.02
 
 class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
     def __init__(self, *args, **kwargs):
+        self.debug = kwargs.pop('debug')
         return super().__init__(*args, **kwargs)
 
     def _pick_place(self, obj_name, dest_obj_name):
@@ -94,35 +95,40 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
 
         grasp_num_env_steps, _ = 0, 0
         print("Start executing grasp")
+        # import pdb; pdb.set_trace()
+        print("obj.mass", obj.mass)
         st = time.time()
-        grasp_num_env_steps, _ = self.execute_controller(
-            self.apply_ref(
-                StarterSemanticActionPrimitiveSet.GRASP,
-                obj,
-                direction,  # direction
-                do_robot_reset=False))
+        if not self.debug:
+            grasp_num_env_steps, _ = self.execute_controller(
+                self.apply_ref(
+                    StarterSemanticActionPrimitiveSet.GRASP,
+                    obj,
+                    direction,  # direction
+                    do_robot_reset=False))
         print(f"Finish executing grasp. time: {time.time() - st}")
 
         print("Start lifting obj a bit")
         st = time.time()
         if direction == "forward":
-            delta_xyz = [-0.05, 0.0, 0.1]
+            delta_xyz = [-0.05, 0.0, 0.05]
         elif direction == "backward":
             delta_xyz = [0.05, 0.0, 0.1]
         else:
             raise NotImplementedError
 
         lift_num_env_steps, _ = 0, 0
-        # lift_num_env_steps, _ = self.execute_controller(
-        #     self.apply_ref(
-        #         StarterSemanticActionPrimitiveSet.REACH,
-        #         delta_xyz,
-        #         direction,  # direction
-        #         do_robot_reset=False))
+        if not self.debug:
+            lift_num_env_steps, _ = self.execute_controller(
+                self.apply_ref(
+                    StarterSemanticActionPrimitiveSet.REACH,
+                    delta_xyz,
+                    direction,  # direction
+                    do_robot_reset=False))
         print(f"Finish lifting obj. time: {time.time() - st}")
 
         # TODO: Pour obj on cont (create primitive for this)
         pour_num_env_steps, r = 0, 0
+        # if not self.debug:
         pour_num_env_steps, _ = self.execute_controller(
             self.apply_ref(
                 StarterSemanticActionPrimitiveSet.POUR,
@@ -159,7 +165,7 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
             # self.env.env is the task env that takes low-level actions
             _, r, _, _, _ = self.env.env.step(action)
             # TODO: use the speedup feature in the vid_logger init kwargs
-            if i % 4 == 0:
+            if i % 1 == 0:
                 self.env.save_vid_logger_im()
             # print(f"reward: {r}")
             num_env_steps += 1

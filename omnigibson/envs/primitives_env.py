@@ -27,14 +27,14 @@ class CutPourPkgInBowlEnv(Environment):
     Environment that supports a language action space,
     and simulates a human agent as part of the step(...)
     """
-    def __init__(self, out_dir, obj_to_grasp_name, in_vec_env=False):
+    def __init__(self, out_dir, obj_to_grasp_name, in_vec_env=False, vid_speedup=2):
         self.configs = self.load_configs()
         self.obj_names = self.get_manipulable_objects()
         self.furniture_names = ["coffee_table_pick", "coffee_table_place", "pad", "pad2"]  # stuff not intended to be moved
 
         args = dotdict(
             vid_downscale_factor=2,
-            vid_speedup=2,
+            vid_speedup=vid_speedup,
             out_dir=out_dir,
         )
         self.vid_logger = VideoLogger(args, self)
@@ -45,6 +45,7 @@ class CutPourPkgInBowlEnv(Environment):
         )
 
         super().__init__(self.configs)
+        # self.get_obj_by_name("package").links['base_link'].mass = 0.001
         # ^ list of tuples (Union["human", "robot"], Utterance: str)
 
     def _reset_variables(self):
@@ -94,13 +95,17 @@ class CutPourPkgInBowlEnv(Environment):
         place_success = obj_on_dest_obj and no_obj_grasped
         # print("obj_on_dest_obj", obj_on_dest_obj, "no_obj_grasped", no_obj_grasped)
 
-        reward = float(bool(place_success))
+        # compute pour rew
+        # TODO: set a z_thresh for is_placed_on based on half the object's height
+        pour_success = self.is_placed_on("package_contents", "pad2")
+
+        reward = float(bool(pour_success))
         # if grasp_success or place_success:
         #     print(f"grasp_success: {grasp_success}. place_success {place_success}. reward {reward}")
         self.reward = reward
         return reward
 
-    def is_placed_on(self, obj_name, dest_obj_name):
+    def is_placed_on(self, obj_name, dest_obj_name, z_tol=0.09):
         if obj_name == dest_obj_name:
             return False
         obj_pos = self.get_obj_poses([obj_name])["pos"][0]
@@ -109,7 +114,7 @@ class CutPourPkgInBowlEnv(Environment):
         obj_xy_dist = th.norm(obj_pos[:2] - obj_place_pos[:2])
         # print("obj_z_dist", obj_z_dist, "obj_xy_dist", obj_xy_dist)
         placed_on = bool(
-            (obj_z_dist <= 0.09).item() and (obj_xy_dist <= 0.06).item())
+            (obj_z_dist <= z_tol).item() and (obj_xy_dist <= 0.06).item())
         return placed_on
 
     def make_video(self, prefix=""):
@@ -179,6 +184,7 @@ class CutPourPkgInBowlEnv(Environment):
                 # "size": 0.05,
                 "position": [1.2, 0.8, 0.65],
                 "orientation": [0, 0, 0, 1],
+                # "mass": 0.01,
             },
             {
                 "type": "PrimitiveObject",
@@ -195,6 +201,16 @@ class CutPourPkgInBowlEnv(Environment):
                 # coffee table "position": [-0.3, -0.9, 0.57],
                 # this worked for forward grasp "position": [1.0, 0.6, 0.65],
                 "position": [1.1, 0.6, 0.65],
+                "orientation": [0, 0, 0, 1],
+            },
+            {
+                "type": "PrimitiveObject",
+                "name": "package_contents",
+                "primitive_type": "Cube",
+                "manipulable": True,
+                "rgba": [1.0, 1.0, 0, 1.0],
+                "scale": [0.05, 0.05, 0.05],
+                "position": [1.1, 0.6, 0.9],
                 "orientation": [0, 0, 0, 1],
             },
             {
@@ -232,7 +248,7 @@ class PrimitivesEnv:
     """
     Discrete action space of primitives
     """
-    def __init__(self, env, max_path_len):
+    def __init__(self, env, max_path_len, debug=True):
         self.env = env
         self.max_path_len = max_path_len
         self.furniture_names = self.env.furniture_names
@@ -243,7 +259,8 @@ class PrimitivesEnv:
             self,
             self.env.robots[0],
             enable_head_tracking=False,
-            skip_curobo_initilization=False)
+            skip_curobo_initilization=debug,
+            debug=debug)
 
         self.skill_name_to_fn_map = dict(
             pickplace=self.action_primitives._pick_place,

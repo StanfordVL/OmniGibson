@@ -454,6 +454,8 @@ class ControllableObject(BaseObject):
 
         for name, controller in self._controllers.items():
             # Set command, then take a controller step
+            # if name == "arm_left":
+            #     import pdb; pdb.set_trace()
             controller.update_goal(
                 command=action[idx : idx + controller.command_dim], control_dict=self.get_control_dict()
             )
