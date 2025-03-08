@@ -146,14 +146,17 @@ class SegmentationMap(BaseMap):
             return None, None
 
         ins_id = self.room_ins_name_to_ins_id[room_instance]
-        valid_idx = th.tensor(th.where(self.room_ins_map == ins_id))
-        random_point_map = valid_idx[:, th.randint(valid_idx.shape[1])]
+        valid_idx = th.where(self.room_ins_map == ins_id)
+        randint =  th.randint(low=0, high=valid_idx[0].shape[0], size=(1,)).item()
+        random_point_map = th.tensor([valid_idx[0][randint], valid_idx[1][randint]])
+        # random_point_map = valid_idx[:, th.randint(valid_idx.shape[1])]
+        
 
         x, y = self.map_to_world(random_point_map)
         # assume only 1 floor
         floor = 0
         z = self.floor_heights[floor]
-        return floor, th.tensor([x, y, z])
+        return th.tensor([x, y, z])
 
     def get_room_type_by_point(self, xy):
         """

@@ -72,8 +72,8 @@ m.KP_ANGLE_VEL = {
 }
 
 m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.02
-m.MAX_PLANNING_ATTEMPTS = 100
-m.MAX_IK_FAILURES_BEFORE_RETURN = 50
+m.MAX_PLANNING_ATTEMPTS = 10
+m.MAX_IK_FAILURES_BEFORE_RETURN = 10
 
 m.MAX_STEPS_FOR_SETTLING = 500
 
@@ -192,7 +192,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 use_cuda_graph=False, # Set to False for use_batch_env=True
                 use_default_embodiment_only=False,
                 num_envs=self.num_envs,
-                use_batch_env=True,
+                use_batch_env=False, # IMPORTANT: Change to True later
                 warmup=False
             )
         )
@@ -226,6 +226,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         self._curobo_batch_size = curobo_batch_size
         self.debug_visual_marker = debug_visual_marker
+        
+        self.valid_envs = [True for _ in range(self.num_envs)]
 
     @property
     def arm(self, env_idx=0):
@@ -962,6 +964,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if not skip_obstacle_update:
             self._motion_generator.update_obstacles(ignore_objects=ignore_objects)
 
+        # breakpoint()
         successes, traj_paths = self._motion_generator.compute_trajectories(
             target_pos_list=target_pos,
             target_quat_list=target_quat,
@@ -982,6 +985,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ik_world_collision_check=True,
             emb_sel=embodiment_selection,
         )
+        print("Base MP success:", successes[0])
+        # if motion planning fails for any env set valid_env to False for that env
         # # Grab the first successful trajectory if found
         # success_idx = th.where(successes)[0].cpu()
         # if len(success_idx) == 0:
@@ -996,53 +1001,57 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         for idx, success in enumerate(successes[0]):
             if not success:
                 print(f"Env {idx} motion plan failed.")
+                self.valid_envs[idx] = False   
+                # continue
             traj_path = traj_paths[idx][0]
-            
-            # convert base joint positions from local robot frame to world frame
-            traj_path_poses = []
-            for traj_step in traj_path.position:
-                traj_step = traj_step.cpu()
-                traj_step_pos, traj_step_orn = th.cat((traj_step[:2], th.tensor([0.0]))), th.tensor(R.from_euler("z", traj_step[2]).as_matrix(), dtype=th.float32)
-                traj_step_pose = th.eye(4)
-                traj_step_pose[:3 , :3] = traj_step_orn
-                traj_step_pose[:3, 3] = traj_step_pos
-                traj_path_poses.append(traj_step_pose)
 
-            traj_path_poses = th.stack(traj_path_poses)
-            current_robot_pos, current_robot_orn = self.robot[idx].get_position_orientation()
-            current_robot_orn = th.tensor(R.from_quat(current_robot_orn).as_matrix(), dtype=th.float32)
-            current_robot_pose = th.eye(4)
-            current_robot_pose[:3 , :3] = current_robot_orn
-            current_robot_pose[:3, 3] = current_robot_pos
+            # # convert base joint positions from local robot frame to world frame
+            # traj_path_poses = []
+            # for traj_step in traj_path.position:
+            #     traj_step = traj_step.cpu()
+            #     traj_step_pos, traj_step_orn = th.cat((traj_step[:2], th.tensor([0.0]))), th.tensor(R.from_euler("z", traj_step[2]).as_matrix(), dtype=th.float32)
+            #     traj_step_pose = th.eye(4)
+            #     traj_step_pose[:3 , :3] = traj_step_orn
+            #     traj_step_pose[:3, 3] = traj_step_pos
+            #     traj_path_poses.append(traj_step_pose)
 
-            traj_path_poses_wrt_world = th.matmul(current_robot_pose, traj_path_poses)
+            # traj_path_poses = th.stack(traj_path_poses)
+            # current_robot_pos, current_robot_orn = self.robot[idx].get_position_orientation()
+            # current_robot_orn = th.tensor(R.from_quat(current_robot_orn).as_matrix(), dtype=th.float32)
+            # current_robot_pose = th.eye(4)
+            # current_robot_pose[:3 , :3] = current_robot_orn
+            # current_robot_pose[:3, 3] = current_robot_pos
 
-            traj_path_new = []
-            for traj_step in traj_path_poses_wrt_world:
-                traj_step_pos, traj_step_yaw = traj_step[:2, 3], R.from_matrix(traj_step[:3 , :3]).as_euler('xyz')[2]
-                traj_path_new.append(th.tensor([traj_step_pos[0], traj_step_pos[1], traj_step_yaw], dtype=th.float32))
-            
-            traj_path_new = th.stack(traj_path_new)
-            
-            traj_path_new = lazy.curobo.types.state.JointState(
-                    position=traj_path_new,
-                    velocity=traj_path.velocity,
-                    acceleration=traj_path.acceleration,
-                    jerk=traj_path.jerk,
-                    joint_names=traj_path.joint_names,
-                )
-            
-            # breakpoint()
-            
-            q_traj = self._motion_generator.path_to_joint_trajectory(
-                traj_path_new, get_full_js=True, emb_sel=embodiment_selection
-            ).cpu()
+            # traj_path_poses_wrt_world = th.matmul(current_robot_pose, traj_path_poses)
 
-            # (TODO) investigate why this is necessary to prevent jerky motion during execution
-            # Smooth out the trajectory
-            q_traj = th.stack(self._add_linearly_interpolated_waypoints(plan=q_traj, max_inter_dist=0.01))
+            # traj_path_new = []
+            # for traj_step in traj_path_poses_wrt_world:
+            #     traj_step_pos, traj_step_yaw = traj_step[:2, 3], R.from_matrix(traj_step[:3 , :3]).as_euler('xyz')[2]
+            #     traj_path_new.append(th.tensor([traj_step_pos[0], traj_step_pos[1], traj_step_yaw], dtype=th.float32))
+            
+            # traj_path_new = th.stack(traj_path_new)
+            
+            # traj_path_new = lazy.curobo.types.state.JointState(
+            #         position=traj_path_new,
+            #         velocity=traj_path.velocity,
+            #         acceleration=traj_path.acceleration,
+            #         jerk=traj_path.jerk,
+            #         joint_names=traj_path.joint_names,
+            #     )
+            
+            # if returned traj_path is None, use current joint positions as the trajectory
+            if traj_path is not None:
+                q_traj = self._motion_generator.path_to_joint_trajectory(
+                    traj_path, get_full_js=True, emb_sel=embodiment_selection
+                ).cpu()
+                # (TODO) investigate why this is necessary to prevent jerky motion during execution
+                # Smooth out the trajectory
+                q_traj = th.stack(self._add_linearly_interpolated_waypoints(plan=q_traj, max_inter_dist=0.01))
+            else:
+                q_traj = self.robot[idx].get_joint_positions().unsqueeze(dim=0)
+
             q_trajs.append(q_traj)
-
+        
         # The shape of q_trajs is not homogenous i.e. could be (num_envs, traj_len, 27) where traj_len can vary based on the motion plan solution
         # Since, we execute per traj len step, it's best to pad trajectories so that trajectories in all envs have the same len
         max_traj_len = max([q_traj.shape[0] for q_traj in q_trajs])
@@ -1090,8 +1099,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                         joint_pos = q_trajs[env_idx][i]
                         action = self.robot[env_idx].q_to_action(joint_pos)
                         actions_all_env.append(action)
+                    # breakpoint()
                     # print("len(actions_all_env): ", len(actions_all_env))
-                    yield self._postprocess_action(actions_all_env)
+                    yield self._postprocess_action(th.stack(actions_all_env))
 
                     
                     # TODO: Modify this for vectorized env
@@ -1672,7 +1682,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             target_positions.append(target_pos)
             target_quats.append(target_quat)
 
-        print("base motion planning")
+        # print("base motion planning")
         q_trajs = self._plan_joint_motion(
             target_positions,
             target_quats,
@@ -1728,7 +1738,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         yield from self._navigate_to_obj(obj, eef_pose=eef_pose, skip_obstacle_update=True)
 
-    def _navigate_to_obj(self, obj_vec, eef_pose=None, skip_obstacle_update=False):
+    def _navigate_to_obj(self, obj_vec, eef_poses=None, skip_obstacle_update=False):
         """
         Yields action to navigate the robot to be in range of the pose
 
@@ -1741,9 +1751,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         """
         poses = []
         for env_idx in range(self.num_envs):            
-            pose = self._sample_pose_near_object(obj_vec[env_idx], env_idx=env_idx, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update)
-            poses.append(pose)
-            # breakpoint()
+            if eef_poses is not None:
+                pose = self._sample_pose_near_object(obj_vec[env_idx], env_idx=env_idx, eef_pose=eef_poses[env_idx], skip_obstacle_update=skip_obstacle_update)
+            else:
+                pose = self._sample_pose_near_object(obj_vec[env_idx], env_idx=env_idx, eef_pose=eef_poses, skip_obstacle_update=skip_obstacle_update)
             if pose is None:
                 # raise ActionPrimitiveError(
                 #     ActionPrimitiveError.Reason.PLANNING_ERROR,
@@ -1751,6 +1762,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 #     {"object": obj_vec[env_idx].name},
                 # )
                 print(f"Env {env_idx}: Could not find a valid pose near the object {obj_vec[env_idx].name}")
+                pos, orn = self.robot[env_idx].get_position_orientation()
+                yaw = R.from_quat(orn.numpy()).as_euler("xyz")[2]
+                pose = th.tensor([pos[0], pos[1], yaw], dtype=th.float32)
+                self.valid_envs[env_idx] = False
+            poses.append(pose)
+
+        # print("Poses for _navigate_to_obj: ", poses)
         yield from self._navigate_to_pose(poses, skip_obstacle_update=skip_obstacle_update)
 
     def _navigate_to_pose_direct(self, pose_2d, low_precision=False):
@@ -2127,7 +2145,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             skip_obstacle_update=skip_obstacle_update,
             attached_obj=attached_obj,
         )[env_idx].cpu()
-        print("Is there collision for sampled base pose? ", invalid_results)
+        # print("Is there collision for sampled base pose? ", invalid_results)
 
         # For each candidate that passed collision check, verify reachability
         for i in range(len(candidate_poses)):

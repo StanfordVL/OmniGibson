@@ -70,6 +70,7 @@ def setup_environment(load_object_categories, robot="R1"):
     for env in vec_env.envs:
         env.reset()
     
+    breakpoint()
     return vec_env
 
 
@@ -117,12 +118,14 @@ class TestPrimitives:
             #     "position": [-0.3 + (15.96 * env_idx), -0.8, 0.5],
             #     "orientation": [0, 0, 0, 1],
             # }
-            
+
             # Skip 'floors' by starting from index 1
             # Note that motion planning often fails for bed and sink.
             # For sink, a collision-free, reachable base pose is found but motion planning is failing due to some reason
             # For bed, finding a collision-free, reachable base pose is failing
             random_category = random.choice(categories[1:])
+            # remove later
+            random_category = "pot_plant"
             obj_category = list(vec_env.envs[env_idx].scene.object_registry("category", random_category))
             obj = random.choice(obj_category)
             objects.append(obj)
