@@ -208,7 +208,7 @@ stages:
   check_collisions_with_clutter:
     do:
       cmd: python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/check_collisions.py
-        --clutter
+        clutter=true
       deps:
       - b1k_pipeline/max/check_collisions.py
       - cad/${item}/processed.max

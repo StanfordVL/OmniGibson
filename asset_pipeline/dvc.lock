@@ -15998,15 +15998,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: c3443f84f367a2010bb54fd72b369f42
+      size: 13324
     - path: cad/scenes/house_single_floor/processed.max
-      md5: 224d5806ef049136dfd9f2dd22b1c5e7
-      size: 660210406
+      md5: b3703fbb483509f4034b690a69826a3e
+      size: 647657804
     outs:
     - path: cad/scenes/house_single_floor/artifacts/check_collisions.json
-      md5: 0406601c4050606074af4affa9fa37f7
-      size: 3472
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/restaurant_brunch:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_brunch/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16151,15 +16151,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: c3443f84f367a2010bb54fd72b369f42
+      size: 13324
     - path: cad/scenes/Pomaria_1_int/processed.max
-      md5: 8144496492de6442dbaf3ed9d692c620
-      size: 55732262
+      md5: daddb5acfaaec6efa91579d0e36b3ead
+      size: 53997550
     outs:
     - path: cad/scenes/Pomaria_1_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Merom_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_1_int/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16277,15 +16277,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: c3443f84f367a2010bb54fd72b369f42
+      size: 13324
     - path: cad/scenes/Wainscott_1_int/processed.max
-      md5: a887ac762eb1d6f9bce9ec6f1e620359
-      size: 65894280
+      md5: af58fb59648469eaf6ff1c182c185634
+      size: 63782940
     outs:
     - path: cad/scenes/Wainscott_1_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/office_cubicles_left:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_cubicles_left/processed.max
       b1k_pipeline/max/check_collisions.py
