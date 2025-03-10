@@ -23,7 +23,7 @@ from omnigibson.action_primitives.curobo_vectorized import CuRoboEmbodimentSelec
 th.manual_seed(3)
 np.random.seed(3)
 # Set the number of envs here!
-num_envs = 1
+num_envs = 5
 
 configs = []
 for i in range(num_envs):
@@ -74,15 +74,15 @@ base_pos_list = [[-3.0, 2.0], [1.0, -1.0]]
 base_yaw_list = [-180, 90]
 base_pos_per_env, base_quat_per_env = [], []
 for idx, robot in enumerate(robots):
-    # base_yaw = np.random.uniform(-math.pi, math.pi)
+    base_yaw = np.random.uniform(-math.pi, math.pi)
     # remove later
-    base_yaw = base_yaw_list[idx]
-    base_yaw = 0.0
+    # base_yaw = base_yaw_list[idx]
+    # base_yaw = 0.0
     base_quat = R.from_euler("z", base_yaw, degrees=True).as_quat()
-    # base_pos = np.random.uniform(-1.0, 1.0, size=2)
+    base_pos = np.random.uniform(-3.0, 1.0, size=2)
     # remove later
-    base_pos = base_pos_list[idx]
-    base_pos = [0.0, 0.0]    
+    # base_pos = base_pos_list[idx]
+    # base_pos = [0.0, 0.0]    
     
     base_pos_per_env.append(base_pos)
     base_quat_per_env.append(base_quat)
@@ -102,8 +102,8 @@ cmg = CuRoboMotionGenerator(
     collision_activation_distance=0.03,  # Use larger activation distance for better reproducibility
     use_default_embodiment_only=False,
     num_envs=num_envs,
-    use_batch_env=False,
-    warmup=False
+    use_batch_env=True,
+    warmup=True
 )
 
 
@@ -124,7 +124,7 @@ for _ in range(n_samples):
         random_quat = R.from_euler("z", random_yaw, degrees=False).as_quat()
         random_quat = th.tensor(random_quat, dtype=th.float32)
         # remove later
-        random_quat = th.tensor([0.0, 0.0, 0.0, 1.0], dtype=th.float32)
+        # random_quat = th.tensor([0.0, 0.0, 0.0, 1.0], dtype=th.float32)
         target_pos_dict = {
             robot.base_footprint_link_name: random_pt,
         }
@@ -160,7 +160,7 @@ for idx in range(len(target_pos_list)):
     results, traj_paths = cmg.compute_trajectories(
         target_pos_list=target_pos_list[idx].copy(),
         target_quat_list=target_quat_list[idx].copy(),
-        is_local=False,
+        is_local=True,
         max_attempts=20,
         timeout=60.0,
         ik_fail_return=20,
@@ -176,9 +176,10 @@ for idx in range(len(target_pos_list)):
     )
     successes = results[0].success
     print(f"Idx {idx}. successes: ", successes)
+    print("target_pos: ", target_pos_list[idx])
     print("pos_err, rot_err, feasible: ", results[0].position_error, results[0].rotation_error, results[0].feasible, results[0].status)
 
-    for env in vec_env.envs:
+    for env_idx, env in enumerate(vec_env.envs):
         robot = env.scene.robots[0]
         marker = env.scene.object_registry("name", "base_marker")
         target_pos = target_pos_list[idx][env_idx][robot.base_footprint_link_name]
@@ -186,10 +187,52 @@ for idx in range(len(target_pos_list)):
         marker.set_position_orientation(position=target_pos, frame="scene")
         for _ in range(20): og.sim.step()
 
-    # breakpoint()
 
     all_traj_paths.append(traj_paths)
     all_successes.append(successes)
+
+
+    q_trajs = []
+    for idx, success in enumerate(successes):
+        traj_path = traj_paths[idx][0]
+        q_traj = cmg.path_to_joint_trajectory(
+                        traj_path, get_full_js=True, emb_sel=emb_sel, env_idx=idx
+                    ).cpu()
+        q_trajs.append(q_traj)
+
+    # padding
+    max_traj_len = max([q_traj.shape[0] for q_traj in q_trajs])
+    for i in range(len(q_trajs)):
+        current_traj_len = q_trajs[i].shape[0]
+        if current_traj_len < max_traj_len:
+            num_repeats = max_traj_len - current_traj_len
+            q_trajs[i] = th.cat([q_trajs[i], q_trajs[i][-1].repeat(num_repeats, 1)])
+
+    q_trajs = th.stack(q_trajs)
+
+    # breakpoint()
+    all_actions = []
+    for i in range(len(q_trajs[0])):
+        actions_all_env = []
+        for env_idx in range(len(q_trajs)):
+            joint_pos = q_trajs[env_idx][i]
+            action = robots[env_idx].q_to_action(joint_pos)
+            actions_all_env.append(action)
+        vec_env.step(actions_all_env)
+        all_actions.append(actions_all_env)
+
+    # breakpoint()
+
+    for env_idx, robot in enumerate(robots):
+        # If scene is reset, the robot also goes back to the init base pose.
+        vec_env.envs[env_idx].scene.reset()
+        robot.set_position_orientation(position=th.tensor([base_pos_per_env[env_idx][0], base_pos_per_env[env_idx][1], 0.0]), frame="scene", orientation=base_quat_per_env[env_idx])
+
+        for _ in range(20): og.sim.step()
+        
+        # Make sure robot is kept still for better determinism before planning
+        robot.keep_still()
+        og.sim.step_physics()
 
 all_successes = th.stack(all_successes)
 all_successes = all_successes.squeeze()

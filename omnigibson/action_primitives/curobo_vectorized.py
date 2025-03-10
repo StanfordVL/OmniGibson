@@ -153,27 +153,31 @@ class CuRoboMotionGenerator:
             if isinstance(robots[0], HolonomicBaseRobot):
                 self.update_joint_limits(robot_cfg_obj, emb_sel)
 
+            maximum_trajectory_dt = 10.0
+            if emb_sel == CuRoboEmbodimentSelection.BASE:
+                maximum_trajectory_dt = 60.0
+
             motion_kwargs = dict(
                 trajopt_tsteps=32,
                 collision_checker_type=lazy.curobo.geom.sdf.world.CollisionCheckerType.MESH,
                 use_cuda_graph=use_cuda_graph,
                 num_ik_seeds=128,
                 num_batch_ik_seeds=128,
-                num_batch_trajopt_seeds=8, # I think increasing this will increasing motion planning success rate. Although this also increases VRAM usage 
+                num_batch_trajopt_seeds=4, # I think increasing this will increasing motion planning success rate. Although this also increases VRAM usage 
                 num_trajopt_noisy_seeds=1, 
                 ik_opt_iters=100,
                 optimize_dt=True,
-                num_trajopt_seeds=8, # I think increasing this will increase motion planning success rate. I am not sure this affects, nevertheless I am keeping it consistent with num_batch_trajopt_seeds
+                num_trajopt_seeds=4, # I think increasing this will increase motion planning success rate. I am not sure this affects, nevertheless I am keeping it consistent with num_batch_trajopt_seeds
                 num_graph_seeds=4,
                 interpolation_dt=0.03,
                 collision_activation_distance=collision_activation_distance,
                 self_collision_check=True,
-                maximum_trajectory_dt=None,
+                maximum_trajectory_dt=maximum_trajectory_dt, # Changed this from None. Inceasing this value helped improve motion planning success rate for "base" embodiment
                 fixed_iters_trajopt=True,
                 finetune_trajopt_iters=100,
                 finetune_dt_scale=1.05,
-                position_threshold=0.01,    # change later to 0.005
-                rotation_threshold=0.1,     # change later to 0.05
+                position_threshold=0.01,    # Originally 0.005
+                rotation_threshold=0.1,     # Originally 0.05
             )
             if motion_cfg_kwargs is not None:
                 motion_kwargs.update(motion_cfg_kwargs)
@@ -277,7 +281,6 @@ class CuRoboMotionGenerator:
                         obj_pose = T.pose2mat(collision_mesh.get_position_orientation())
                         pose = robot_transform @ obj_pose
                         if emb_sel == CuRoboEmbodimentSelection.ARM:
-                            print("11111111111111111111111111111111111")
                             # transform obstacles by the transformation that transforms roboti to robot0 in the scene0/world frame
                             custom_T = self.custom_transform(idx)
                             pose = custom_T @ pose
@@ -811,6 +814,7 @@ class CuRoboMotionGenerator:
         full_js = full_js.get_ordered_joint_state(self.mg[emb_sel].kinematics.joint_names)
         # full_js = full_js.get_ordered_joint_state(self.mg["default"].kinematics.joint_names)
 
+        # breakpoint()
         # Attach object to robot if requested
         attached_info = self._attach_objects_to_robot(
             attached_obj=attached_obj,
@@ -965,14 +969,14 @@ class CuRoboMotionGenerator:
             #     main_ik_goal_batch.quaternion[0] = main_ik_goal_batch.quaternion[1]
             #     breakpoint()
 
-            # remove later
-            if emb_sel == "base":
-                for i in range(main_ik_goal_batch.shape[0]):
-                    main_ik_goal_batch.position[i] = main_ik_goal_batch.position[0] 
-                    main_ik_goal_batch.quaternion[i] = main_ik_goal_batch.quaternion[0]
+            # # In case we think navigate_to_obj for other envs is not working properly 
+            # if emb_sel == "base":
+            #     for i in range(main_ik_goal_batch.shape[0]):
+            #         main_ik_goal_batch.position[i] = main_ik_goal_batch.position[0] 
+            #         main_ik_goal_batch.quaternion[i] = main_ik_goal_batch.quaternion[0]
 
             plan_fn = self.plan_batch if not ik_only else self.solve_ik_batch
-            breakpoint()
+            # breakpoint()
             result, success, joint_state = plan_fn(
                 full_js, main_ik_goal_batch, plan_cfg, link_poses=ik_goal_batch_by_link, emb_sel=emb_sel
             )
@@ -1115,13 +1119,19 @@ class CuRoboMotionGenerator:
             list: List of attached object information for detachment
         """
         if attached_obj is None:
-            return []
+            return []            
 
         attached_info = []
-        for ee_link_name, obj in attached_obj.items():
-            assert isinstance(obj, RigidPrim), "attached_object should be a RigidPrim object"
-            obj_paths = [geom.prim_path for geom in obj.collision_meshes.values()]
-            assert len(obj_paths) <= 32, f"Expected obj_paths to be at most 32, got: {len(obj_paths)}"
+        for ee_link_name in attached_obj[0].keys():
+            # obj = attached_obj[0][ee_link_name]
+            # assert isinstance(obj, RigidPrim), "attached_object should be a RigidPrim object"
+            
+            obj_paths_all_env = []
+            for env_idx in range(len(attached_obj)):
+                obj = attached_obj[env_idx][ee_link_name]            
+                obj_paths = [geom.prim_path for geom in obj.collision_meshes.values()]
+                assert len(obj_paths) <= 32, f"Expected obj_paths to be at most 32, got: {len(obj_paths)}"
+                obj_paths_all_env.append(obj_paths)
 
             # NOTE: we are currently only using the robot in scene 0 in the following code becuase curobo does not support multiple robots
             # as of now. We will need to update this code when curobo supports multiple robots. 
@@ -1130,11 +1140,12 @@ class CuRoboMotionGenerator:
             quaternion = quaternion[[3, 0, 1, 2]]
             ee_pose = lazy.curobo.types.math.Pose(position=position, quaternion=quaternion).to(self._tensor_args)
 
-            scale = m.DEFAULT_ATTACHED_OBJECT_SCALE if attached_obj_scale is None else attached_obj_scale[ee_link_name]
+            scale = m.DEFAULT_ATTACHED_OBJECT_SCALE if attached_obj_scale is None else attached_obj_scale[0][ee_link_name]
 
+            # breakpoint()
             self.mg[emb_sel].attach_objects_to_robot(
                 joint_state=cu_js_batch,
-                object_names=obj_paths,
+                object_names=obj_paths_all_env,
                 ee_pose=ee_pose,
                 link_name=self.robots[0].curobo_attached_object_link_names[ee_link_name],
                 scale=scale,
@@ -1142,8 +1153,13 @@ class CuRoboMotionGenerator:
                 merge_meshes=True,
             )
 
+            # breakpoint()
+            # for idx in range(len(self.robots)):
+            #     self.save_visualization(self.robots[idx].get_joint_positions(), idx, f"test_{idx}.obj") 
+
+
             attached_info.append(
-                {"obj_paths": obj_paths, "link_name": self.robots[0].curobo_attached_object_link_names[ee_link_name]}
+                {"obj_paths": obj_paths_all_env, "link_name": self.robots[0].curobo_attached_object_link_names[ee_link_name]}
             )
 
         return attached_info

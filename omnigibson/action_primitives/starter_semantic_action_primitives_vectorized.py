@@ -72,8 +72,8 @@ m.KP_ANGLE_VEL = {
 }
 
 m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.02
-m.MAX_PLANNING_ATTEMPTS = 10
-m.MAX_IK_FAILURES_BEFORE_RETURN = 10
+m.MAX_PLANNING_ATTEMPTS = 15
+m.MAX_IK_FAILURES_BEFORE_RETURN = 15
 
 m.MAX_STEPS_FOR_SETTLING = 500
 
@@ -148,6 +148,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         curobo_batch_size=1,
         debug_visual_marker=None,
         skip_curobo_initilization=False,
+        ignore_failed_mp=True,
     ):
         """
         Initializes a StarterSemanticActionPrimitives generator.
@@ -192,8 +193,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 use_cuda_graph=False, # Set to False for use_batch_env=True
                 use_default_embodiment_only=False,
                 num_envs=self.num_envs,
-                use_batch_env=False, # IMPORTANT: Change to True later
-                warmup=False
+                use_batch_env=True,
+                warmup=True
             )
         )
 
@@ -228,6 +229,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self.debug_visual_marker = debug_visual_marker
         
         self.valid_envs = [True for _ in range(self.num_envs)]
+        self.ignore_failed_mp = ignore_failed_mp
 
     @property
     def arm(self, env_idx=0):
@@ -1038,9 +1040,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             #         jerk=traj_path.jerk,
             #         joint_names=traj_path.joint_names,
             #     )
+
+            # If ignore_failed_mp is set to True, we want to ignore the failed motion plans and only execute the successful ones.
+            # To ignore the failed motion plan, we set the q_traj for that plan to the current joint positions (so, stay where you are)
+            if self.ignore_failed_mp:
+                traj_valid_condition = traj_path is not None and success and self.valid_envs[idx]
+            else: 
+                traj_valid_condition = traj_path
             
-            # if returned traj_path is None, use current joint positions as the trajectory
-            if traj_path is not None:
+            if traj_valid_condition:
                 q_traj = self._motion_generator.path_to_joint_trajectory(
                     traj_path, get_full_js=True, emb_sel=embodiment_selection
                 ).cpu()
@@ -1048,9 +1056,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 # Smooth out the trajectory
                 q_traj = th.stack(self._add_linearly_interpolated_waypoints(plan=q_traj, max_inter_dist=0.01))
             else:
+                print(f"idx {idx} motion plan or env failed. so, keepign the robot still.")
                 q_traj = self.robot[idx].get_joint_positions().unsqueeze(dim=0)
 
             q_trajs.append(q_traj)
+            print(f'env {idx} length of MP actions:', len(q_traj))
         
         # The shape of q_trajs is not homogenous i.e. could be (num_envs, traj_len, 27) where traj_len can vary based on the motion plan solution
         # Since, we execute per traj len step, it's best to pad trajectories so that trajectories in all envs have the same len

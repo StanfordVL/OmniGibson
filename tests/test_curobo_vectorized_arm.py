@@ -23,7 +23,7 @@ from omnigibson.action_primitives.curobo_vectorized import CuRoboEmbodimentSelec
 th.manual_seed(3)
 np.random.seed(3)
 # Set the number of envs here!
-num_envs = 2
+num_envs = 5
 
 configs = []
 for i in range(num_envs):
@@ -64,13 +64,13 @@ base_pos_list = [[-3.0, 2.0], [1.0, -1.0]]
 base_yaw_list = [-180, 90]
 base_pos_per_env, base_quat_per_env = [], []
 for idx, robot in enumerate(robots):
-    # base_yaw = np.random.uniform(-math.pi, math.pi)
+    base_yaw = np.random.uniform(-math.pi, math.pi)
     # remove later
-    base_yaw = base_yaw_list[idx]
+    # base_yaw = base_yaw_list[idx]
     base_quat = R.from_euler("z", base_yaw, degrees=True).as_quat()
-    # base_pos = np.random.uniform(-1.0, 1.0, size=2)
+    base_pos = np.random.uniform(-1.0, 1.0, size=2)
     # remove later
-    base_pos = base_pos_list[idx]    
+    # base_pos = base_pos_list[idx]    
     
     base_pos_per_env.append(base_pos)
     base_quat_per_env.append(base_quat)
