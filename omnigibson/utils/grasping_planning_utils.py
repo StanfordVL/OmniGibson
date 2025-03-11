@@ -39,7 +39,8 @@ def get_grasp_poses_for_object_sticky(target_obj, direction="down"):
         grasp_offset = th.tensor([0, 0, bbox_extent_world[2] / 2])
         grasp_euler = [0, 0, 0]
     elif direction == "forward":
-        grasp_offset = th.tensor([-bbox_extent_world[0] / 2, 0, 0])
+        # decrease z a bit since it's grasping the large package too high.
+        grasp_offset = th.tensor([-bbox_extent_world[0] / 2, 0, -bbox_extent_world[0] / 4])
         grasp_euler = [0, -th.pi / 2, 0]
     elif direction == "backward":
         grasp_offset = th.tensor([bbox_extent_world[0] / 2, 0, 0])

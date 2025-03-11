@@ -52,6 +52,9 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         return super().__init__(*args, **kwargs)
 
     def _pick_place(self, obj_name, dest_obj_name):
+        # needed for setting grasp reward properly
+        self.env.env.obj_to_grasp_name = obj_name
+
         pick_obj = self.env.get_obj_by_name(obj_name)
         if dest_obj_name == "coffee_table_place":
             # convert destination from coffee_table_place --> "pad" on the
@@ -83,6 +86,9 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
     def _pick_pour_place(self, obj_name, cont_name, dest_obj_name):
         assert self.robot.grasping_mode == "sticky", ("_pick_pour_place not yet supported for assisted grasp")
 
+        # needed for setting grasp reward properly
+        self.env.env.obj_to_grasp_name = obj_name
+
         obj = self.env.get_obj_by_name(obj_name)
 
         if dest_obj_name == "coffee_table_place":
@@ -108,21 +114,11 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         print(f"Finish executing grasp. time: {time.time() - st}")
 
         print("Start lifting obj a bit")
-        st = time.time()
-        if direction == "forward":
-            delta_xyz = [-0.05, 0.0, 0.05]
-        elif direction == "backward":
-            delta_xyz = [0.05, 0.0, 0.1]
-        else:
-            raise NotImplementedError
-
         lift_num_env_steps, _ = 0, 0
         if not self.debug:
             lift_num_env_steps, _ = self.execute_controller(
                 self.apply_ref(
-                    StarterSemanticActionPrimitiveSet.REACH,
-                    delta_xyz,
-                    direction,  # direction
+                    StarterSemanticActionPrimitiveSet.RAISE_TRUNK,
                     do_robot_reset=False))
         print(f"Finish lifting obj. time: {time.time() - st}")
 
@@ -165,8 +161,7 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
             # self.env.env is the task env that takes low-level actions
             _, r, _, _, _ = self.env.env.step(action)
             # TODO: use the speedup feature in the vid_logger init kwargs
-            if i % 1 == 0:
-                self.env.save_vid_logger_im()
+            self.env.save_vid_logger_im()
             # print(f"reward: {r}")
             num_env_steps += 1
         return num_env_steps, r

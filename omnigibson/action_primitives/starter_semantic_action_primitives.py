@@ -92,7 +92,7 @@ m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_IN_ROOM = 60
 m.MAX_ATTEMPTS_FOR_SAMPLING_PLACE_POSE = 50
 m.PREDICATE_SAMPLING_Z_OFFSET = 0.1
 m.BASE_POSE_SAMPLING_LOWER_BOUND = 0.0
-m.BASE_POSE_SAMPLING_UPPER_BOUND = 1.5
+m.BASE_POSE_SAMPLING_UPPER_BOUND = 1.4  # 1.5
 
 m.GRASP_APPROACH_DISTANCE = 0.01
 m.OPEN_GRASP_APPROACH_DISTANCE = 0.4
@@ -130,7 +130,7 @@ class StarterSemanticActionPrimitiveSet(IntEnum):
     )
     TOGGLE_ON = auto(), "Toggle an object on"
     TOGGLE_OFF = auto(), "Toggle an object off"
-    REACH = auto(), "lift the gripper higher in some direction"
+    RAISE_TRUNK = auto(), "raise trunk so object above table by enough to enable pouring"
     POUR = auto(), "Rotate the gripper 90 deg to pour an object, then rotate back."
 
 
@@ -183,7 +183,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             StarterSemanticActionPrimitiveSet.RELEASE: self._execute_release,
             StarterSemanticActionPrimitiveSet.TOGGLE_ON: self._toggle_on,
             StarterSemanticActionPrimitiveSet.TOGGLE_OFF: self._toggle_off,
-            StarterSemanticActionPrimitiveSet.REACH: self._reach,
+            StarterSemanticActionPrimitiveSet.RAISE_TRUNK: self._raise_trunk,
             StarterSemanticActionPrimitiveSet.POUR: self._pour,
         }
         self._motion_generator = (
@@ -640,122 +640,70 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         print("self._get_obj_in_hand() 648", self._get_obj_in_hand())
 
-    def _reach(self, delta_xyz, direction):
-        # simple primitive that moves in a hard-coded delta direction after a forward grasp.
-        cur_grasp_pose = self.robot.get_eef_pose()
-        delta_xyz = th.tensor(delta_xyz)
+    def _raise_trunk(self):
+        orig_trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+        print("trunk_qpos 670", orig_trunk_qpos)
 
-        # rotate gripper
-        # rotation_quat = T.euler2quat(th.tensor([th.pi / 3, 0, 0], dtype=th.float32))
-        # new_grasp_quat = T.quat_multiply(rotation_quat, cur_grasp_pose[1])
-        new_grasp_quat = cur_grasp_pose[1]
-
-        grasp_pose = (cur_grasp_pose[0] + delta_xyz, new_grasp_quat)
-
-        xyz_constraint_list = (1 - delta_xyz.ne(0).int()).tolist()
-        motion_constraint = [1, 1, 1] + xyz_constraint_list
-
-        if direction in ["forward", "backward"]:
-            if self.robot.grasping_mode == "sticky":
-                yield from self._move_hand(
-                    grasp_pose, motion_constraint=motion_constraint,
-                    stop_on_ag=True)
-            elif self.robot.grasping_mode == "assisted":
-                yield from self._move_hand(
-                    grasp_pose, motion_constraint=motion_constraint)
-        else:
-            raise NotImplementedError
+        steps = 100
+        tol = 0.01
+        target_trunk_qpos = orig_trunk_qpos + 0.1  # max 0.35, min 0.0. It starts at 0.35 at reset.
+        # Step 0. Increase base height
+        for _ in range(steps):
+            action = self._empty_action(follow_arm_targets=False)
+            trunk_idx = self.robot.controller_action_idx['trunk']
+            action[trunk_idx] = target_trunk_qpos
+            post_act = self._postprocess_action(action)
+            trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+            if th.abs(trunk_qpos - target_trunk_qpos) < tol:
+                return
+            print("raising trunk height. trunk qpos:", trunk_qpos)
+            yield post_act
 
     def _pour(self, direction="forward"):
-        # simple primitive that rotates the gripper pose after a forward grasp.
-
-        # wrist_idx = self.robot.controller_action_idx["arm_{}".format(self.arm)][-1]
-        # wrist_qpos = self.robot.get_joint_positions()[wrist_idx]
-        # print("wrist_qpos 668", wrist_qpos)
-
-        # # Step 1. Rotate to pour grasped object
-        # orig_grasp_pose = self.robot.get_eef_pose()
-        # # make copy; we need tensors later.
-        # # orig_grasp_pose = (
-        # #     orig_grasp_pose[0].clone().detach(), orig_grasp_pose[1].clone().detach())
-        # rotation_quat = T.euler2quat(th.tensor([th.pi / 3, 0, 0], dtype=th.float32))
-        # new_grasp_quat = T.quat_multiply(rotation_quat, orig_grasp_pose[1])
-        # delta_xyz = th.tensor([0, 0, 0])
-        # import pdb; pdb.set_trace()
-        # grasp_pose = (orig_grasp_pose[0] + delta_xyz, new_grasp_quat)
-        # # motion_constraint = [0, 0, 0, 0, 0, 0]  # penalize x-axis motion. allow yz-plane motion
-        # motion_constraint = None
-
-        # # indented_print("Navigating to grasp pose if needed")
-        # # yield from self._navigate_if_needed(self._get_obj_in_hand(), direction, eef_pose=grasp_pose)
-
-        # if direction in ["forward", "backward"]:
-        #     if self.robot.grasping_mode == "sticky":
-        #         yield from self._move_hand(
-        #             grasp_pose, motion_constraint=motion_constraint,
-        #             stop_on_ag=True)
-        #     elif self.robot.grasping_mode == "assisted":
-        #         yield from self._move_hand(
-        #             grasp_pose, motion_constraint=motion_constraint)
-        # else:
-        #     raise NotImplementedError
-        # print("done with pouring rotate wrist (step 1)")
-
         orig_wrist_qpos = self.robot.get_joint_positions()[21]
-        print("wrist_qpos 697", orig_wrist_qpos)
+        print("wrist_qpos 677", orig_wrist_qpos)
 
-        # # Step 2. Rotate back to original position
-        # grasp_pose = orig_grasp_pose
-        # if direction in ["forward", "backward"]:
-        #     if self.robot.grasping_mode == "sticky":
-        #         yield from self._move_hand(
-        #             grasp_pose, motion_constraint=motion_constraint,
-        #             stop_on_ag=True)
-        #     elif self.robot.grasping_mode == "assisted":
-        #         yield from self._move_hand(
-        #             grasp_pose, motion_constraint=motion_constraint)
-        # else:
-        #     raise NotImplementedError
-
-        # print("done with pouring rotate wrist back to original (step 2)")
+        # steps = 100
+        # target_trunk_qpos = 0.35  # max 0.35, min 0.0. It starts at 0.35 at reset.
+        # # Step 0. Increase base height
+        # for _ in range(steps):
+        #     action = self._empty_action(follow_arm_targets=False)
+        #     trunk_idx = self.robot.controller_action_idx['trunk']
+        #     action[trunk_idx] = target_trunk_qpos
+        #     post_act = self._postprocess_action(action)
+        #     trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+        #     print("raising trunk height. trunk qpos:", trunk_qpos)
+        #     yield post_act
 
         steps = 25
         target_wrist_qpos = orig_wrist_qpos - (th.pi / 2)
+        print("target_wrist_qpos", target_wrist_qpos)
 
         # import pdb; pdb.set_trace()
         # Step 1. Rotate to pour grasped object
         for _ in range(steps):
+            action = self._empty_action(follow_arm_targets=False)
+            wrist_idx = self.robot.controller_action_idx[
+                "arm_{}".format(self.arm)][-1]
+            action[wrist_idx] = target_wrist_qpos
+            post_act = self._postprocess_action(action)
             wrist_qpos = self.robot.get_joint_positions()[21]
             print("stepping in pouring. wrist qpos:", wrist_qpos)
-            action = self._empty_action(follow_arm_targets=False)
-            wrist_idx_cw = self.robot.controller_action_idx[
-                "arm_{}".format(self.arm)][-1]
-            action[wrist_idx_cw] = target_wrist_qpos
-            post_act = self._postprocess_action(action)
             yield post_act
         print("done with pouring rotate wrist (step 1)")
-        wrist_idx = self.robot.controller_action_idx["arm_{}".format(self.arm)][-1]
-        wrist_qpos = self.robot.get_joint_positions()[wrist_idx]
-        print("Final pour wrist qpos:", wrist_qpos)
 
         # Step 2. Rotate to move wrist back
         target_wrist_qpos = orig_wrist_qpos
         for _ in range(steps):
+            action = self._empty_action(follow_arm_targets=False)
+            wrist_idx = self.robot.controller_action_idx[
+                "arm_{}".format(self.arm)][-1]
+            action[wrist_idx] = target_wrist_qpos
+            post_act = self._postprocess_action(action)
             wrist_qpos = self.robot.get_joint_positions()[21]
             print("stepping in pouring. wrist qpos:", wrist_qpos)
-            action = self._empty_action(follow_arm_targets=False)
-            wrist_idx_cw = self.robot.controller_action_idx[
-                "arm_{}".format(self.arm)][-1]
-            action[wrist_idx_cw] = target_wrist_qpos
-            post_act = self._postprocess_action(action)
             yield post_act
-        print("done with pouring rotate wrist (step 1)")
-        wrist_idx = self.robot.controller_action_idx["arm_{}".format(self.arm)][-1]
-        wrist_qpos = self.robot.get_joint_positions()[wrist_idx]
-        print("Final pour wrist qpos:", wrist_qpos)
-
-        # # TODO: to make this more principled, store original wrist position and move back to it.
-        # print("done with pouring rotate wrist back to original (step 2)")
+        print("done with pouring rotate wrist (step 2)")
 
     def _place_on_top(self, obj):
         """

@@ -103,18 +103,30 @@ class CutPourPkgInBowlEnv(Environment):
         # if grasp_success or place_success:
         #     print(f"grasp_success: {grasp_success}. place_success {place_success}. reward {reward}")
         self.reward = reward
+        if pour_success:
+            print("pour_success", pour_success)
         return reward
 
-    def is_placed_on(self, obj_name, dest_obj_name, z_tol=0.09):
+    def is_placed_on(self, obj_name, dest_obj_name):
         if obj_name == dest_obj_name:
             return False
         obj_pos = self.get_obj_poses([obj_name])["pos"][0]
         obj_place_pos = self.get_obj_poses([dest_obj_name])["pos"][0]
         obj_z_dist = th.norm(obj_pos[2] - obj_place_pos[2])
         obj_xy_dist = th.norm(obj_pos[:2] - obj_place_pos[:2])
-        # print("obj_z_dist", obj_z_dist, "obj_xy_dist", obj_xy_dist)
+
+        # Set z_tol and xy_tol based on object size
+        obj_bbox_min, obj_bbox_max = self.get_obj_by_name(obj_name).aabb
+        z_tol = 0.6 * (obj_bbox_max - obj_bbox_min)[2]
+        dest_obj_bbox_min, dest_obj_bbox_max = (
+            self.get_obj_by_name(dest_obj_name).aabb)
+        xy_tol = 0.5 * th.norm(dest_obj_bbox_max[:2] - dest_obj_bbox_min[:2])
+
         placed_on = bool(
-            (obj_z_dist <= z_tol).item() and (obj_xy_dist <= 0.06).item())
+            (obj_z_dist <= z_tol).item() and (obj_xy_dist <= xy_tol).item())
+        if obj_name == "package_contents" and len(self.grasped_obj_names) > 0:
+            print(f"obj_z_dist{obj_z_dist.item()} <? {z_tol.item()}. obj_xy_dist {obj_xy_dist.item()} <? {xy_tol.item()}")
+
         return placed_on
 
     def make_video(self, prefix=""):
