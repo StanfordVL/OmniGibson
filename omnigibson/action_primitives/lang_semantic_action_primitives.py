@@ -105,7 +105,7 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         print("obj.mass", obj.mass)
         st = time.time()
         if not self.debug:
-            grasp_num_env_steps, _ = self.execute_controller(
+            grasp_num_env_steps, r = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.GRASP,
                     obj,
@@ -114,18 +114,17 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         print(f"Finish executing grasp. time: {time.time() - st}")
 
         print("Start lifting obj a bit")
-        lift_num_env_steps, _ = 0, 0
-        if not self.debug:
-            lift_num_env_steps, _ = self.execute_controller(
-                self.apply_ref(
-                    StarterSemanticActionPrimitiveSet.RAISE_TRUNK,
-                    do_robot_reset=False))
+        lift_num_env_steps, r = 0, 0
+        # if not self.debug:
+        #     lift_num_env_steps, r = self.execute_controller(
+        #         self.apply_ref(
+        #             StarterSemanticActionPrimitiveSet.RAISE_TRUNK,
+        #             do_robot_reset=False))
         print(f"Finish lifting obj. time: {time.time() - st}")
 
         # TODO: Pour obj on cont (create primitive for this)
         pour_num_env_steps, r = 0, 0
-        # if not self.debug:
-        pour_num_env_steps, _ = self.execute_controller(
+        pour_num_env_steps, r = self.execute_controller(
             self.apply_ref(
                 StarterSemanticActionPrimitiveSet.POUR,
                 do_robot_reset=False))
@@ -136,8 +135,10 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         # TODO: add the direction arg to the things in _place_with_predicate
         print("Start executing place")
         st = time.time()
+        # place_num_env_steps, r = self.execute_controller(
+        #     self.apply_ref(StarterSemanticActionPrimitiveSet.PLACE_ON_TOP, dest_obj))
         place_num_env_steps, r = self.execute_controller(
-            self.apply_ref(StarterSemanticActionPrimitiveSet.PLACE_ON_TOP, dest_obj))
+            self.apply_ref(StarterSemanticActionPrimitiveSet.RELEASE))
         print(f"Finish executing place. time: {time.time() - st}")
 
         success = bool(r)
@@ -162,7 +163,6 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
             _, r, _, _, _ = self.env.env.step(action)
             # TODO: use the speedup feature in the vid_logger init kwargs
             self.env.save_vid_logger_im()
-            # print(f"reward: {r}")
             num_env_steps += 1
         return num_env_steps, r
 

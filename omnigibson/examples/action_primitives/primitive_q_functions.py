@@ -64,10 +64,13 @@ def main(args):
     # apple.states[OnTop].set_value(breakfast_table, True)
 
     data_collector.collect_trajs(n=args.n)
-    total_num_env_steps_list = data_collector.primitive_int_to_num_env_steps_list_map[0]
-
-    avg_num_ts = np.nanmean(np.array(total_num_env_steps_list, dtype=np.float64))
-    print("total_num_env_steps_list", total_num_env_steps_list, f"Avg: {avg_num_ts}")
+    for primitive_int, total_num_env_steps_list in (
+            data_collector.primitive_int_to_num_env_steps_list_map.items()):
+        avg_num_ts = np.nanmean(np.array(total_num_env_steps_list, dtype=np.float64))
+        print(
+            "total_num_env_steps_list for primitive {primitive_int}",
+            total_num_env_steps_list,
+            f"Avg: {avg_num_ts}")
 
 
 if __name__ == "__main__":

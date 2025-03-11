@@ -103,8 +103,6 @@ class CutPourPkgInBowlEnv(Environment):
         # if grasp_success or place_success:
         #     print(f"grasp_success: {grasp_success}. place_success {place_success}. reward {reward}")
         self.reward = reward
-        if pour_success:
-            print("pour_success", pour_success)
         return reward
 
     def is_placed_on(self, obj_name, dest_obj_name):
@@ -124,8 +122,8 @@ class CutPourPkgInBowlEnv(Environment):
 
         placed_on = bool(
             (obj_z_dist <= z_tol).item() and (obj_xy_dist <= xy_tol).item())
-        if obj_name == "package_contents" and len(self.grasped_obj_names) > 0:
-            print(f"obj_z_dist{obj_z_dist.item()} <? {z_tol.item()}. obj_xy_dist {obj_xy_dist.item()} <? {xy_tol.item()}")
+        # if obj_name == "package_contents" and len(self.grasped_obj_names) > 0:
+        #     print(f"obj_z_dist{obj_z_dist.item()} <? {z_tol.item()}. obj_xy_dist {obj_xy_dist.item()} <? {xy_tol.item()}")
 
         return placed_on
 

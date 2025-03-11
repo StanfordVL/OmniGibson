@@ -655,29 +655,37 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             post_act = self._postprocess_action(action)
             trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
             if th.abs(trunk_qpos - target_trunk_qpos) < tol:
-                return
+                break
             print("raising trunk height. trunk qpos:", trunk_qpos)
             yield post_act
 
     def _pour(self, direction="forward"):
+        # Step 1: Raise trunk to get obj off the table surface
+        orig_trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+        # print("trunk_qpos 670", orig_trunk_qpos)
+
+        steps = 100
+        tol = 0.01
+        target_trunk_qpos = orig_trunk_qpos + 0.1  # max 0.35, min 0.0. It starts at 0.35 at reset.
+        # Step 0. Increase base height
+        for _ in range(steps):
+            action = self._empty_action(follow_arm_targets=False)
+            trunk_idx = self.robot.controller_action_idx['trunk']
+            action[trunk_idx] = target_trunk_qpos
+            post_act = self._postprocess_action(action)
+            trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+            if th.abs(trunk_qpos - target_trunk_qpos) < tol:
+                break
+            yield post_act
+        print(f"raised trunk height (step 1): {orig_trunk_qpos.item()} --> {trunk_qpos.item()}")
+
         orig_wrist_qpos = self.robot.get_joint_positions()[21]
-        print("wrist_qpos 677", orig_wrist_qpos)
+        # print("wrist_qpos 677", orig_wrist_qpos)
 
-        # steps = 100
-        # target_trunk_qpos = 0.35  # max 0.35, min 0.0. It starts at 0.35 at reset.
-        # # Step 0. Increase base height
-        # for _ in range(steps):
-        #     action = self._empty_action(follow_arm_targets=False)
-        #     trunk_idx = self.robot.controller_action_idx['trunk']
-        #     action[trunk_idx] = target_trunk_qpos
-        #     post_act = self._postprocess_action(action)
-        #     trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
-        #     print("raising trunk height. trunk qpos:", trunk_qpos)
-        #     yield post_act
-
+        # Step 2: Rotate gripper to pour obj
         steps = 25
         target_wrist_qpos = orig_wrist_qpos - (th.pi / 2)
-        print("target_wrist_qpos", target_wrist_qpos)
+        # print("target_wrist_qpos", target_wrist_qpos)
 
         # import pdb; pdb.set_trace()
         # Step 1. Rotate to pour grasped object
@@ -688,11 +696,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             action[wrist_idx] = target_wrist_qpos
             post_act = self._postprocess_action(action)
             wrist_qpos = self.robot.get_joint_positions()[21]
-            print("stepping in pouring. wrist qpos:", wrist_qpos)
             yield post_act
-        print("done with pouring rotate wrist (step 1)")
+        print(f"done with pouring rotate wrist (step 2): {orig_wrist_qpos.item()} --> {wrist_qpos.item()}")
 
-        # Step 2. Rotate to move wrist back
+        # Step 3: Rotate gripper back to reset obj angle
         target_wrist_qpos = orig_wrist_qpos
         for _ in range(steps):
             action = self._empty_action(follow_arm_targets=False)
@@ -701,9 +708,24 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             action[wrist_idx] = target_wrist_qpos
             post_act = self._postprocess_action(action)
             wrist_qpos = self.robot.get_joint_positions()[21]
-            print("stepping in pouring. wrist qpos:", wrist_qpos)
             yield post_act
-        print("done with pouring rotate wrist (step 2)")
+        print("done with pouring rotate wrist (step 3): wrist_qpos:", wrist_qpos)
+
+        # Step 4: Return base to former height
+        steps = 100
+        tol = 0.01
+        target_trunk_qpos = orig_trunk_qpos  # max 0.35, min 0.0. It starts at 0.35 at reset.
+        trunk_qpos_pre_lowering = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+        for _ in range(steps):
+            action = self._empty_action(follow_arm_targets=False)
+            trunk_idx = self.robot.controller_action_idx['trunk']
+            action[trunk_idx] = target_trunk_qpos
+            post_act = self._postprocess_action(action)
+            trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+            if th.abs(trunk_qpos - target_trunk_qpos) < tol:
+                break
+            yield post_act
+        print(f"lowered trunk height (step 4): {trunk_qpos_pre_lowering.item()} --> {trunk_qpos.item()}")
 
     def _place_on_top(self, obj):
         """
