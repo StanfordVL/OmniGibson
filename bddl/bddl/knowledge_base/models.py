@@ -657,7 +657,7 @@ class Task(Model):
 
     @cached_property
     def uses_transition(self):
-        return len(relevant_transitions) > 0
+        return len(self.relevant_transitions) > 0
 
     @cached_property
     def uses_visual_substance(self):
