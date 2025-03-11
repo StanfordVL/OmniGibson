@@ -289,7 +289,7 @@ class Synset(Model):
     # all it's parents in the synset graph (NOTE: this does not include self)
     parents_fk: ManyToMany = ManyToManyField("Synset", "children")
     children_fk: ManyToMany = ManyToManyField("Synset", "parents")
-    # all ancestors (NOTE: this includes self)
+    # all ancestors (NOTE: this does NOT include self)
     ancestors_fk: ManyToMany = ManyToManyField("Synset", "descendants")
     descendants_fk: ManyToMany = ManyToManyField("Synset", "ancestors")
     # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
@@ -655,22 +655,27 @@ class Task(Model):
                 ret += scene_ret[:-2] + "."
         return ret
 
+    @cached_property
     def uses_transition(self):
-        return any(pred.name == "future" for pred in self.uses_predicates)
+        return len(relevant_transitions) > 0
 
+    @cached_property
     def uses_visual_substance(self):
         return any(
             "visualSubstance" in synset.property_names for synset in self.synsets
         )
 
+    @cached_property
     def uses_physical_substance(self):
         return any(
             "physicalSubstance" in synset.property_names for synset in self.synsets
         )
 
+    @cached_property
     def uses_attachment(self):
         return any(pred.name == "attached" for pred in self.uses_predicates)
 
+    @cached_property
     def uses_cloth(self):
         return any(
             pred.name in ["folded", "draped", "unfolded"]
