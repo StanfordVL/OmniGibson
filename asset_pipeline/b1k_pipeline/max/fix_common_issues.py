@@ -508,10 +508,10 @@ def processFile(filename: pathlib.Path):
     # load_vray_renderer()
 
     # Remove shell materials that might show up under multi materials
-    remove_nested_shell_materials(filename)
+    # remove_nested_shell_materials(filename)
 
     # Fix any bad materials
-    convert_materials_to_vray(filename)
+    # convert_materials_to_vray(filename)
 
     # Remove root_level meta links
     # remove_root_level_meta_links(filename)
@@ -575,7 +575,7 @@ def processFile(filename: pathlib.Path):
     # match_instance_materials()
 
     # Prebake textures
-    # b1k_pipeline.max.prebake_textures.process_open_file()
+    b1k_pipeline.max.prebake_textures.process_open_file()
 
     # Update visibility settings
     update_visibilities()
@@ -588,7 +588,7 @@ def processFile(filename: pathlib.Path):
 
 def fix_common_issues_in_all_files():
     candidates = [
-        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\objects\*\processed.max")
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):
