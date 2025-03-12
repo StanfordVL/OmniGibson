@@ -52,8 +52,9 @@ class CutPourPkgInBowlEnv(Environment):
         # ^ list of tuples (Union["human", "robot"], Utterance: str)
 
     def _reset_variables(self):
-        self.make_video()
+        # self.make_video()
         self.grasped_obj_names = []
+        self.parent_map = {}
         super()._reset_variables()
 
     def _post_step(self, action):
@@ -92,6 +93,13 @@ class CutPourPkgInBowlEnv(Environment):
         # TODO: set a z_thresh for is_placed_on based on half the object's height
         pour_success = self.is_placed_on("package_contents", "pad2")
 
+        parent_map = self.get_parent_objs_of_objs(self.obj_names + self.furniture_names)
+        if parent_map != self.parent_map:
+            for k in set(parent_map.keys()).union(self.parent_map.keys()):
+                if parent_map.get(k) != self.parent_map.get(k):
+                    print(f"parent_map[{k}]: {self.parent_map.get(k)} --> {parent_map.get(k)}")
+        self.parent_map = parent_map
+
         reward = float(bool(pour_success))
         # if grasp_success or place_success:
         #     print(f"grasp_success: {grasp_success}. place_success {place_success}. reward {reward}")
@@ -103,22 +111,47 @@ class CutPourPkgInBowlEnv(Environment):
             return False
         obj_pos = self.get_obj_poses([obj_name])["pos"][0]
         obj_place_pos = self.get_obj_poses([dest_obj_name])["pos"][0]
-        obj_z_dist = th.norm(obj_pos[2] - obj_place_pos[2])
+        obj_z_signed_dist = obj_pos[2] - obj_place_pos[2]
         obj_xy_dist = th.norm(obj_pos[:2] - obj_place_pos[:2])
 
-        # Set z_tol and xy_tol based on object size
+        # Set z_tol and xy_tol based on object size, since obj_pos is the 3D centroid
         obj_bbox_min, obj_bbox_max = self.get_obj_by_name(obj_name).aabb
-        z_tol = 0.6 * (obj_bbox_max - obj_bbox_min)[2]
-        dest_obj_bbox_min, dest_obj_bbox_max = (
-            self.get_obj_by_name(dest_obj_name).aabb)
+        obj_height = (obj_bbox_max - obj_bbox_min)[2]
+        dest_obj_bbox_min, dest_obj_bbox_max = self.get_obj_by_name(dest_obj_name).aabb
+        dest_obj_height = (dest_obj_bbox_max - dest_obj_bbox_min)[2]
+        z_tol = 0.6 * (obj_height + dest_obj_height)
         xy_tol = 0.5 * th.norm(dest_obj_bbox_max[:2] - dest_obj_bbox_min[:2])
 
         placed_on = bool(
-            (obj_z_dist <= z_tol).item() and (obj_xy_dist <= xy_tol).item())
+            (0 < obj_z_signed_dist <= z_tol).item() and (obj_xy_dist <= xy_tol).item())
         # if obj_name == "package_contents" and len(self.grasped_obj_names) > 0:
         #     print(f"obj_z_dist{obj_z_dist.item()} <? {z_tol.item()}. obj_xy_dist {obj_xy_dist.item()} <? {xy_tol.item()}")
 
         return placed_on
+
+    def get_parent_objs_of_objs(self, query_names):
+        query_to_parent_name_map = {}
+        valid_parent_names = self.obj_names + self.furniture_names
+        for q in query_names:
+            candidate_parents_of_q = []
+            for candidate_parent in valid_parent_names:
+                candidate_parent_z = self.get_obj_poses([candidate_parent])['pos'][0][2]
+                if self.is_placed_on(q, candidate_parent):
+                    candidate_parents_of_q.append((candidate_parent, candidate_parent_z))
+
+            # make the parent "world" if no parent candidates found
+            if len(candidate_parents_of_q) == 0:
+                candidate_parents_of_q.append(("world", 0.0))
+
+            # choose highest z object as the parent.
+            parent_of_q = sorted(
+                candidate_parents_of_q, key=lambda x: x[1], reverse=True)
+            # ^ returns a list of (candidate_parent_name, parent_z),
+            # in descending order.
+            query_to_parent_name_map[q] = parent_of_q[0][0]
+            # ^ highest-z candidate parent name
+
+        return query_to_parent_name_map
 
     def make_video(self, prefix=""):
         # TODO: get proper_rew_folder here
@@ -318,6 +351,13 @@ class PrimitivesEnv:
         # (mainly just resets unused vars)
         # obs, info = self.env.reset(**kwargs)
         self.env.scene.reset()
+        self.env._reset_variables()
+
+        # done to make sure parent_map has correct reading on reset()
+        print("stepping to reset")
+        for _ in range(20):
+            og.sim.step()
+        print("done stepping to reset")
 
         # Randomize the robot pose
         # floor = self.get_obj_by_name("floors_ptwlei_0")
@@ -377,6 +417,10 @@ class PrimitivesEnv:
         obj_pos_list = self.env.get_obj_poses(obj_names)["pos"]
         for obj_name, obj_pos in zip(obj_names, obj_pos_list):
             info['obj_name_to_pos_map'][obj_name] = obj_pos
+
+        # dict mapping obj to the highest obj it is on top of
+        info['obj_name_to_parent_obj_name_map'] = (
+            self.env.get_parent_objs_of_objs(obj_names))
 
         info['obj_name_to_attr_map'] = {}
         for obj_name in obj_names:
@@ -446,15 +490,18 @@ class SymbState:
         self.obj_names = self.env.get_manipulable_objects()
         self.furniture_names = self.env.furniture_names
         self.d = {}
-        for name in self.obj_names + self.furniture_names:
-            obj_symb_state_dict = {
-                "pos": np.array(info['obj_name_to_pos_map'][name])}
-            obj_states = info['obj_name_to_attr_map'][name]
+        self.obj_attrs = ["obj_type", "parent_obj", "parent_obj_pos", "ori"]
+        for obj_furn_name in self.obj_names + self.furniture_names:
+            obj_symb_state_dict = dict()
+            for attr_name in self.obj_attrs:
+                obj_symb_state_dict[attr_name] = self.encode(
+                    attr_name, obj_furn_name, obs, info)
+            obj_states = info['obj_name_to_attr_map'][obj_furn_name]
             if 'openable' in obj_states:
                 obj_symb_state_dict['opened'] = obj_states['openable']
             else:
                 obj_symb_state_dict['opened'] = False
-            self.d[name] = obj_symb_state_dict
+            self.d[obj_furn_name] = obj_symb_state_dict
 
         self.d.update(dict(
             agent=dict(
@@ -463,11 +510,45 @@ class SymbState:
             human=dict(pos=info['human_pos']),
         ))
 
+    def encode(self, attr_name, obj_furn_name, obs, info):
+        """
+        Convert a variety of attribute values into a vector encoding for
+        obj `obj_name`
+        """
+        if attr_name == "obj_type":
+            # One-hot encoding of the object w/ name attr_val
+            domain = self.obj_names + self.furniture_names
+            idx = domain.index(obj_furn_name)
+            encoding = np.zeros(len(domain),)
+            encoding[idx] = 1.0
+        elif attr_name == "parent_obj":
+            # One-hot encoding of the object w/ name attr_val
+            domain = self.obj_names + self.furniture_names + ["world"]
+            idx = domain.index(info['obj_name_to_parent_obj_name_map'][obj_furn_name])
+            encoding = np.zeros(len(domain),)
+            encoding[idx] = 1.0
+        elif attr_name == "parent_obj_pos":
+            parent_obj_furn_name = info['obj_name_to_parent_obj_name_map'][obj_furn_name]
+            if parent_obj_furn_name == "world":
+                parent_pos = np.array([0., 0., 0.])
+            else:
+                parent_pos = info['obj_name_to_pos_map'][parent_obj_furn_name]
+            encoding = np.array(parent_pos)
+        elif attr_name == "ori":
+            # summarize the object pose in one float
+            bbox_min, bbox_max = self.env.get_obj_by_name(obj_furn_name).aabb
+            length, width, height = (bbox_max - bbox_min)
+            tallness_ratio = height / max(length, width)
+            encoding = tallness_ratio
+        else:
+            raise NotImplementedError
+        return encoding
+
     def vectorize(self):
         """returns vector version of dictionary state."""
         obj_vec_state = []
         for obj_name in self.obj_names:
-            for key in ["pos", "opened"]:
+            for key in self.obj_attrs + ["opened"]:
                 state_val = self.d[obj_name][key]
                 if not isinstance(state_val, np.ndarray):
                     state_val = np.array([float(state_val)])
@@ -476,7 +557,7 @@ class SymbState:
 
         furniture_vec_state = []
         for furniture_name in self.furniture_names:
-            for key in ["pos", "opened"]:
+            for key in self.obj_attrs + ["opened"]:
                 state_val = self.d[furniture_name][key]
                 if not isinstance(state_val, np.ndarray):
                     state_val = np.array([float(state_val)])
