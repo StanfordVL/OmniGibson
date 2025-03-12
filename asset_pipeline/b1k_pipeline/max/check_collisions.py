@@ -271,8 +271,8 @@ def prepare_scene(use_clutter=False):
     return scene
 
 
-def check_collisions(scene, use_clutter=False):
-    cm, _ = trimesh.collision.scene_to_collision(scene, use_clutter=use_clutter)
+def check_collisions(scene):
+    cm, _ = trimesh.collision.scene_to_collision(scene)
     _, collision_data = cm.in_collision_internal(return_data=True)
 
     # Then go through every object in the scene and find out which links can be reached from the base_link
@@ -349,9 +349,9 @@ def main():
     error = None
     collisions = []
     try:
-        scene = prepare_scene()
+        scene = prepare_scene(use_clutter=use_clutter)
         scene.export(r"D:\physics.ply")
-        collisions = check_collisions(scene, use_clutter=use_clutter)
+        collisions = check_collisions(scene)
         for left, right, depth in collisions:
             print(f"Collision between {left} and {right}: {depth} mm")
     except Exception as e:
