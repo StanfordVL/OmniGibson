@@ -248,12 +248,16 @@ class Environment(gym.Env, GymObservable, Recreatable):
         assert og.sim.is_stopped(), "Simulator must be stopped before loading scene!"
 
         # Create the scene from our scene config
-        self._scene = create_class_from_registry_and_config(
-            cls_name=self.scene_config["type"],
-            cls_registry=REGISTERED_SCENES,
-            cfg=self.scene_config,
-            cls_type_descriptor="scene",
-        )
+        if self.scene_config["scene_model"] == "empty":
+            from omnigibson.scenes import Scene
+            self._scene = Scene()
+        else:
+            self._scene = create_class_from_registry_and_config(
+                cls_name=self.scene_config["type"],
+                cls_registry=REGISTERED_SCENES,
+                cfg=self.scene_config,
+                cls_type_descriptor="scene",
+            )
         og.sim.import_scene(self._scene)
         assert og.sim.is_stopped(), "Simulator must be stopped after loading scene!"
 

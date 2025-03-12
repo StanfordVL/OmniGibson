@@ -28,6 +28,7 @@ class CutPourPkgInBowlEnv(Environment):
     and simulates a human agent as part of the step(...)
     """
     def __init__(self, out_dir, obj_to_grasp_name, in_vec_env=False, vid_speedup=2):
+        self.scene_model_type = ["Rs_int", "empty"][-1]
         self.configs = self.load_configs()
         self.obj_names = self.get_manipulable_objects()
         self.furniture_names = ["coffee_table_pick", "coffee_table_place", "pad", "pad2"]  # stuff not intended to be moved
@@ -40,9 +41,11 @@ class CutPourPkgInBowlEnv(Environment):
         self.vid_logger = VideoLogger(args, self)
         self.obj_to_grasp_name = obj_to_grasp_name
         self.task_ids = [0]
-        self.obj_name_to_id_map = dict(
-            coffee_table_place="coffee_table_fqluyq_0",
-        )
+        self.obj_name_to_id_map = dict()
+        if self.scene_model_type != "empty":
+            self.obj_name_to_id_map.update(dict(
+                coffee_table_place="coffee_table_fqluyq_0",
+            ))
 
         super().__init__(self.configs)
         # self.get_obj_by_name("package").links['base_link'].mass = 0.001
@@ -52,16 +55,6 @@ class CutPourPkgInBowlEnv(Environment):
         self.make_video()
         self.grasped_obj_names = []
         super()._reset_variables()
-
-    # def step(self, action):
-    #     """Zero out actions for the unused arm"""
-    #     unused_arm_name = list(
-    #         set(["left", "right"]) - set([self.robots[0].default_arm]))[0]
-    #     unused_arm_idxs = self.robots[0].arm_control_idx[unused_arm_name]
-    #     # set to reset joint positions
-    #     action[unused_arm_idxs] = th.tensor(
-    #         [0.9052, -0.4281, 2.2350, 1.6463, 0.7687, -0.7946, -1.0891])
-    #     return super().step(action)
 
     def _post_step(self, action):
         obs, _, terminated, truncated, info = super()._post_step(action)
@@ -171,9 +164,8 @@ class CutPourPkgInBowlEnv(Environment):
 
         configs["robots"][0]["grasping_mode"] = ["sticky", "assisted"][0]
 
-        configs["scene"]["scene_model"] = "Rs_int"
-        configs["scene"]["load_object_categories"] = ["floors", "walls", "coffee_table"]
-        # config["scene"]["not_load_object_categories"] = ["ceilings", "carpet"]
+        configs["scene"]["scene_model"] = self.scene_model_type
+        configs["scene"]["load_object_categories"] = ["floors", "coffee_table"]
         configs["objects"] = [
             # {
             #     "type": "DatasetObject",
@@ -250,6 +242,17 @@ class CutPourPkgInBowlEnv(Environment):
                 "orientation": [0, 0, 0, 1],
             },
         ]
+
+        if self.scene_model_type == "empty":
+            # load the coffee table; it's not part of the scene, unlike Rs_int
+            configs["objects"].append({
+                "type": "DatasetObject",
+                "name": "coffee_table_place",
+                "category": "coffee_table",
+                "model": "fqluyq",
+                "position": [-0.477, -1.22, 0.257],
+                "orientation": [0, 0, 0.707, 0.707],
+            })
 
         return configs
 
