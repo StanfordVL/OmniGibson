@@ -361,7 +361,7 @@ def main():
     output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    filename = output_dir / "check_collisions.json"
+    filename = output_dir / ("check_collisions.json" if not use_clutter else "check_collisions_with_clutter.json")
     results = {
         "success": not error and len(collisions) == 0,
         "collisions": collisions,

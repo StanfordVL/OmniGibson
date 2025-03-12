@@ -15622,29 +15622,29 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/grocery_store_cafe/processed.max
-      md5: 09027fa068146631a42c017413175228
-      size: 151075768
+      md5: 346445eb155d956772dab1ba9b9488d1
+      size: 149047726
     outs:
     - path: cad/scenes/grocery_store_cafe/artifacts/check_collisions.json
-      md5: 38e0bea58e1fdc8839badc1eac5a518e
-      size: 287
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Beechwood_0_garden/processed.max
-      md5: 14c79405c1f26388fcdbbafcd376731b
-      size: 249588970
+      md5: 8c12065d786d1a0db984210ce53a8dda
+      size: 246344464
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/check_collisions.json
-      md5: b0b41ec194d2ec7136decacc07fc9e6e
-      size: 5592
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/public_restroom_futuristic:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_futuristic/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -15678,43 +15678,43 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Wainscott_0_int/processed.max
-      md5: af88d9f8cbf3c0b67bae0366772283aa
-      size: 86735056
+      md5: e8886fb5755ad4c7cddb4f97b8509e57
+      size: 84316978
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Benevolence_2_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_2_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Benevolence_2_int/processed.max
-      md5: aacac881a736f8bc31490f09bd493aca
-      size: 40312424
+      md5: 9a2ab9ae2d03cb72cbc978b3023d1e4b
+      size: 39097324
     outs:
     - path: cad/scenes/Benevolence_2_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/school_chemistry:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_chemistry/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/school_chemistry/processed.max
-      md5: f74a4343eb05e90b0a4bc88377953a80
-      size: 142567166
+      md5: 725396306f360ea62e7d6d8540e8dd8b
+      size: 140110812
     outs:
     - path: cad/scenes/school_chemistry/artifacts/check_collisions.json
-      md5: ca3097b517a728c23808b93b910c23ec
-      size: 1348
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/public_restroom_brown:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_brown/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -15748,29 +15748,29 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/restaurant_asian/processed.max
-      md5: 9006778d973efa353e1d320903e7c3e7
-      size: 88104348
+      md5: 2ef137b2b3276238a04f3194b2f0322a
+      size: 86502694
     outs:
     - path: cad/scenes/restaurant_asian/artifacts/check_collisions.json
-      md5: 9585633f8c9c7076b960187b8bc0d01d
-      size: 4743
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Pomaria_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Pomaria_0_int/processed.max
-      md5: 212455919f3e1df4b2bf74991605a336
-      size: 26886546
+      md5: dfe430537e78c798caaf49e3f581c608
+      size: 25673512
     outs:
     - path: cad/scenes/Pomaria_0_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/grocery_store_asian:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_asian/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -15832,15 +15832,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/hotel_gym_spa/processed.max
-      md5: a0440b3f3cf04fbfc2fdf6bfa7ac16c8
-      size: 168521286
+      md5: f6d058d378ace26ecaf2495fe160f9ac
+      size: 165675426
     outs:
     - path: cad/scenes/hotel_gym_spa/artifacts/check_collisions.json
-      md5: 45e8f890efe204768a54f85818328117
-      size: 3689
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Wainscott_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -15874,43 +15874,43 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/processed.max
-      md5: f7e2b4fc27686689a20614ab04013478
-      size: 103091446
+      md5: 2c96966c9c79fa051f2deef9d33812b0
+      size: 100688280
     outs:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/check_collisions.json
-      md5: 406dc4188441853071220038c2ab23bf
+      md5: 679442fb49ecc4f9b7314076c5b2f9c8
       size: 659
   check_collisions@scenes/grocery_store_convenience:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_convenience/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/grocery_store_convenience/processed.max
-      md5: d14a53f1db875fc93bac83e99fbebeda
-      size: 29958388
+      md5: 67b5a4a3c05b3d7269c3e08080e1c350
+      size: 27356706
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/check_collisions.json
-      md5: dfa7dff221b65e902b9ae84591a4b5d3
-      size: 2616
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/office_bike:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_bike/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/office_bike/processed.max
-      md5: 2045b3ce58752338d3785a9b47fd30ac
-      size: 168623238
+      md5: f6acc37aaf8ae17f2c60ce666113f653
+      size: 167609728
     outs:
     - path: cad/scenes/office_bike/artifacts/check_collisions.json
-      md5: b29a0229fda12f1099e97c64bdc22351
-      size: 929
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/hall_arch_wood:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_arch_wood/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -15984,15 +15984,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/house_double_floor_lower/processed.max
-      md5: 83e682c21dbe65b9e03dd4bf0da5a8bc
-      size: 264118576
+      md5: bfcd3b68806c96b2a070782b0cbfc6ce
+      size: 260605156
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/check_collisions.json
-      md5: bf0a7d63caf1ec2dd9f926466c7bf628
-      size: 3469
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16025,43 +16025,43 @@ stages:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Rs_garden/processed.max b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Rs_garden/processed.max
-      md5: 3c3277b51745ca743b98ccf23dd6cd76
-      size: 117395672
+      md5: 2827e7f9e182e9c69319c4cd19145ed8
+      size: 115552154
     outs:
     - path: cad/scenes/Rs_garden/artifacts/check_collisions.json
-      md5: d30a8658f670881ce416f88ac447407f
-      size: 4540
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Ihlen_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Ihlen_0_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Ihlen_0_int/processed.max
-      md5: 98020f735a394085d11c2ec71541b755
-      size: 47709812
+      md5: 07e61059565075e111652bbcfc1b532a
+      size: 46739508
     outs:
     - path: cad/scenes/Ihlen_0_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Beechwood_0_int/processed.max
-      md5: 4ffcbc51228c4ceb8a8425a58f4531d3
-      size: 104560460
+      md5: 45ee233c94fe797d41454a2b88e57907
+      size: 102063500
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Benevolence_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_1_int/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16095,29 +16095,29 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/school_geography/processed.max
-      md5: b3da10b314c76d8892e16e40a0aff63e
-      size: 95819222
+      md5: 11d5ab911954aff7caf459361a251ff2
+      size: 94682720
     outs:
     - path: cad/scenes/school_geography/artifacts/check_collisions.json
-      md5: 4bf5dad73125efe06ac423b12424d73e
-      size: 714
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Beechwood_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_1_int/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Beechwood_1_int/processed.max
-      md5: 39abe5c2f12ec61fd95166373380a9be
-      size: 36769988
+      md5: e92f3446d5b1a609c39adfbebfd3637a
+      size: 34652914
     outs:
     - path: cad/scenes/Beechwood_1_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/hall_conference_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_conference_large/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16137,15 +16137,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/restaurant_cafeteria/processed.max
-      md5: 92c30f8f0967ad2b0c66e60fca997df6
-      size: 129963150
+      md5: b7affff1b681aadb2180d063af0f27fd
+      size: 128317498
     outs:
     - path: cad/scenes/restaurant_cafeteria/artifacts/check_collisions.json
-      md5: 4fa75bff9c025648c38585dc27facdb0
-      size: 2411
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Pomaria_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_1_int/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16179,15 +16179,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/public_restroom_blue/processed.max
-      md5: d66c408a7bcd12110ab187d0094e8e57
-      size: 10832942
+      md5: 5ccc6cc08e4c0ff0d0d59a1e2b6da3fa
+      size: 10481664
     outs:
     - path: cad/scenes/public_restroom_blue/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/commercial_kitchen_pans:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/commercial_kitchen_pans/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16207,15 +16207,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/hall_glass_ceiling/processed.max
-      md5: 9ff1bfe2cb703bb6ba6258fc7003e280
-      size: 22021264
+      md5: ed24d10efc9db6226fea65d88e65b59a
+      size: 21819392
     outs:
     - path: cad/scenes/hall_glass_ceiling/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Pomaria_2_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_2_int/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16235,29 +16235,29 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Benevolence_0_int/processed.max
-      md5: 695787769d228c017ec87a5614a1ec9d
-      size: 12577278
+      md5: 1a25134453508338c12e16558d7face2
+      size: 12103454
     outs:
     - path: cad/scenes/Benevolence_0_int/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/house_double_floor_upper:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_double_floor_upper/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/house_double_floor_upper/processed.max
-      md5: 38cac853033fa5c49d2f1e21f9e38b35
-      size: 214365492
+      md5: a31a45c13e94d29b4b047c995b3f6b57
+      size: 210237626
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/check_collisions.json
-      md5: 08ea229afc01b905ca3a7c35deaed9f9
-      size: 8995
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Pomaria_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16277,8 +16277,8 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: c3443f84f367a2010bb54fd72b369f42
-      size: 13324
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Wainscott_1_int/processed.max
       md5: af58fb59648469eaf6ff1c182c185634
       size: 63782940
@@ -16305,29 +16305,29 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/public_restroom_white/processed.max
-      md5: e0ffd12b8f53726704c30e6ecf8caafa
-      size: 23002920
+      md5: f7b81e0d09d444d67c54f28e99e963c4
+      size: 22671360
     outs:
     - path: cad/scenes/public_restroom_white/artifacts/check_collisions.json
-      md5: a7b6c319e9fa5b6ea03b3b1114c19bce
-      size: 1138
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/Merom_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/Merom_0_garden/processed.max
-      md5: 3b076f890890926350c7cd3fd7250d8b
-      size: 119349518
+      md5: 1406cd2d8c9f31225b37104f44e8b4b7
+      size: 117382206
     outs:
     - path: cad/scenes/Merom_0_garden/artifacts/check_collisions.json
-      md5: 086964af68ca9b51e7e9faaed17e2613
-      size: 711
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/public_restroom_marble:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_marble/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16347,15 +16347,15 @@ stages:
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
-      md5: 456ba3acd33167bd646aa4f2212bcf47
-      size: 13125
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
     - path: cad/scenes/hall_train_station/processed.max
-      md5: 39d3da6b2cbb021dfb10d52b81ab6c99
-      size: 60429074
+      md5: ed1ae4b4ba4b9c22ffe29ae2af7f618b
+      size: 59998208
     outs:
     - path: cad/scenes/hall_train_station/artifacts/check_collisions.json
-      md5: 44b6fc829253e718d28ed79b9e475142
-      size: 68
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
   check_collisions@scenes/grocery_store_half_stocked:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_half_stocked/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -16455,3 +16455,367 @@ stages:
     - path: cad/objects/school_objects-aa/artifacts/meshes.zip
       md5: 12a38a30b3febb75cef65da2c78e78f1
       size: 131084549
+  check_collisions_with_clutter@scenes/Benevolence_0_int:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_0_int/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/Benevolence_0_int/processed.max
+      md5: 1a25134453508338c12e16558d7face2
+      size: 12103454
+    outs:
+    - path: cad/scenes/Benevolence_0_int/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/hall_train_station:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_train_station/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/hall_train_station/processed.max
+      md5: ed1ae4b4ba4b9c22ffe29ae2af7f618b
+      size: 59998208
+    outs:
+    - path: cad/scenes/hall_train_station/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/school_chemistry:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_chemistry/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/school_chemistry/processed.max
+      md5: 725396306f360ea62e7d6d8540e8dd8b
+      size: 140110812
+    outs:
+    - path: cad/scenes/school_chemistry/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/Pomaria_0_int:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_int/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/Pomaria_0_int/processed.max
+      md5: dfe430537e78c798caaf49e3f581c608
+      size: 25673512
+    outs:
+    - path: cad/scenes/Pomaria_0_int/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/office_vendor_machine:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_vendor_machine/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/office_vendor_machine/processed.max
+      md5: fced53f095764f7e4f6f981e70a69e2d
+      size: 81104232
+    outs:
+    - path: cad/scenes/office_vendor_machine/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/grocery_store_asian:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_asian/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/grocery_store_asian/processed.max
+      md5: 6a639adfff507398297de7e97f617ba9
+      size: 169724018
+    outs:
+    - path: cad/scenes/grocery_store_asian/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/office_cubicles_right:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_cubicles_right/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/office_cubicles_right/processed.max
+      md5: 6af9da1d021a42831a84eb8a8b38c224
+      size: 56029530
+    outs:
+    - path: cad/scenes/office_cubicles_right/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/grocery_store_half_stocked:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_half_stocked/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/grocery_store_half_stocked/processed.max
+      md5: c435524d62f55e41212e24d1c73e6c1b
+      size: 24306810
+    outs:
+    - path: cad/scenes/grocery_store_half_stocked/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/Pomaria_0_garden:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_garden/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/Pomaria_0_garden/processed.max
+      md5: 1cf6c31441d544eda48b1153bebfe99b
+      size: 188156434
+    outs:
+    - path: cad/scenes/Pomaria_0_garden/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/office_cubicles_left:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_cubicles_left/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/office_cubicles_left/processed.max
+      md5: a831f5db5eec7d0bec6ccf85636aee80
+      size: 75530330
+    outs:
+    - path: cad/scenes/office_cubicles_left/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/public_restroom_brown:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_brown/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/public_restroom_brown/processed.max
+      md5: 3747dde74b08c1cb7d7cd347340d6990
+      size: 6438912
+    outs:
+    - path: cad/scenes/public_restroom_brown/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/hotel_suite_large:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hotel_suite_large/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/hotel_suite_large/processed.max
+      md5: 2874a5bd452943d29279e6911c3f193e
+      size: 131654228
+    outs:
+    - path: cad/scenes/hotel_suite_large/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/Beechwood_0_int:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/Beechwood_0_int/processed.max
+      md5: 45ee233c94fe797d41454a2b88e57907
+      size: 102063500
+    outs:
+    - path: cad/scenes/Beechwood_0_int/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/Benevolence_2_int:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_2_int/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/Benevolence_2_int/processed.max
+      md5: 9a2ab9ae2d03cb72cbc978b3023d1e4b
+      size: 39097324
+    outs:
+    - path: cad/scenes/Benevolence_2_int/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/Ihlen_1_int:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Ihlen_1_int/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/Ihlen_1_int/processed.max
+      md5: 49540e10f8628de7d6adbe1729fd1786
+      size: 50743638
+    outs:
+    - path: cad/scenes/Ihlen_1_int/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/public_restroom_futuristic:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_futuristic/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/public_restroom_futuristic/processed.max
+      md5: 30a5cda912e72c80b9fc976c9aa16af8
+      size: 12185600
+    outs:
+    - path: cad/scenes/public_restroom_futuristic/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/restaurant_hotel:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_hotel/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/restaurant_hotel/processed.max
+      md5: df35ebfcb4e25c47b3aaa3a1b3c01771
+      size: 84811536
+    outs:
+    - path: cad/scenes/restaurant_hotel/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/commercial_kitchen_pans:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/commercial_kitchen_pans/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/commercial_kitchen_pans/processed.max
+      md5: 38e135e9c183b49b64cd5bee0a704ab7
+      size: 88219528
+    outs:
+    - path: cad/scenes/commercial_kitchen_pans/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/restaurant_brunch:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_brunch/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/restaurant_brunch/processed.max
+      md5: fde837be3d81c14bf002827b0484aea1
+      size: 188596042
+    outs:
+    - path: cad/scenes/restaurant_brunch/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/Wainscott_0_int:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_int/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/Wainscott_0_int/processed.max
+      md5: e8886fb5755ad4c7cddb4f97b8509e57
+      size: 84316978
+    outs:
+    - path: cad/scenes/Wainscott_0_int/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/restaurant_urban:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_urban/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/restaurant_urban/processed.max
+      md5: 5fe506af2f4792fc919d54be8a21d81d
+      size: 202678706
+    outs:
+    - path: cad/scenes/restaurant_urban/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/Beechwood_1_int:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_1_int/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/Beechwood_1_int/processed.max
+      md5: e92f3446d5b1a609c39adfbebfd3637a
+      size: 34652914
+    outs:
+    - path: cad/scenes/Beechwood_1_int/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/house_single_floor:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/house_single_floor/processed.max
+      md5: b3703fbb483509f4034b690a69826a3e
+      size: 647657804
+    outs:
+    - path: cad/scenes/house_single_floor/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/office_bike:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_bike/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/office_bike/processed.max
+      md5: f6acc37aaf8ae17f2c60ce666113f653
+      size: 167609728
+    outs:
+    - path: cad/scenes/office_bike/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/hall_arch_wood:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_arch_wood/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/hall_arch_wood/processed.max
+      md5: 0147e07017156e243987f27df860d574
+      size: 12308480
+    outs:
+    - path: cad/scenes/hall_arch_wood/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
+  check_collisions_with_clutter@scenes/restaurant_asian:
+    cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_asian/processed.max
+      b1k_pipeline/max/check_collisions.py clutter=true
+    deps:
+    - path: b1k_pipeline/max/check_collisions.py
+      md5: 62ab056f6ae4ff098b34cc776f9f10c2
+      size: 13387
+    - path: cad/scenes/restaurant_asian/processed.max
+      md5: 2ef137b2b3276238a04f3194b2f0322a
+      size: 86502694
+    outs:
+    - path: cad/scenes/restaurant_asian/artifacts/check_collisions_with_clutter.json
+      md5: cb6c0c4264beb1c81f59a5c1e5c100ae
+      size: 520
