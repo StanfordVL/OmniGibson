@@ -25,7 +25,7 @@ ROBOT_CONFIG_PATH = os.path.join(MODEL_DEPLOY_PATH, "config", "robot.yaml")
 # Robot parameters
 with open(ROBOT_CONFIG_PATH, "r") as f:
     robot_config = yaml.safe_load(f)
-RATE = 10  # 1  # robot_config["frame_rate"]
+RATE = 50  # 1  # robot_config["frame_rate"]
 
 # ---------------------------------------------------------------------------
 # NOTE: Hard-coded max velocities here. If your `robot.yaml` has different
@@ -34,8 +34,8 @@ RATE = 10  # 1  # robot_config["frame_rate"]
 # MAX_V = robot_config["max_v"]
 # MAX_W = robot_config["max_w"]
 # ---------------------------------------------------------------------------
-MAX_V = 0.31  # 0.31 m/s = 1.12 km/h
-MAX_W = 1.90  # 1.90 rad/s = 108.8 deg/s
+MAX_V = 0.4  # 0.31  # 0.31 m/s = 1.12 km/h
+MAX_W = 0.2  # 1.90  # 1.90 rad/s = 108.8 deg/s
 
 # Timestep for stepping the robot.
 # If your environment or robot_config prescribes a certain step time, use it:
