@@ -273,7 +273,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     # Example of direct usage (hard-coded for 'nomad'):
     model_config_path = os.path.join(MODEL_TRAIN_PATH, "config", "nomad.yaml")
     # ckpt_path = os.path.join(MODEL_DEPLOY_PATH, "model_weights", "nomad.pth")
-    ckpt_path = os.path.join(MODEL_DEPLOY_PATH, "model_weights", "nomad.pth")
+    ckpt_path = os.path.join(MODEL_DEPLOY_PATH, "model_weights", "latest.pth")
     with open(model_config_path, "r") as f:
         model_params = yaml.safe_load(f)
         print(f"[INFO] Successfully loaded model config from {model_config_path}")
