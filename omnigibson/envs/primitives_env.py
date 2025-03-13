@@ -4,6 +4,7 @@ import yaml
 
 import numpy as np
 import re
+from scipy.spatial.transform import Rotation as Rot
 import torch as th
 
 import omnigibson as og
@@ -31,7 +32,9 @@ class CutPourPkgInBowlEnv(Environment):
         self.scene_model_type = ["Rs_int", "empty"][-1]
         self.configs = self.load_configs()
         self.obj_names = self.get_manipulable_objects()
-        self.furniture_names = ["coffee_table_pick", "coffee_table_place", "pad", "pad2"]  # stuff not intended to be moved
+        self.furniture_names = [
+            "coffee_table", "shelf", "pad", "pad2"]  # stuff not intended to be moved
+        self.reward_mode = "pour"
 
         args = dotdict(
             vid_downscale_factor=2,
@@ -44,11 +47,15 @@ class CutPourPkgInBowlEnv(Environment):
         self.obj_name_to_id_map = dict()
         if self.scene_model_type != "empty":
             self.obj_name_to_id_map.update(dict(
-                coffee_table_place="coffee_table_fqluyq_0",
+                # coffee_table_place="coffee_table_fqluyq_0",
             ))
 
         super().__init__(self.configs)
-        # self.get_obj_by_name("package").links['base_link'].mass = 0.001
+
+        # prevent the shelf from tipping over from friction w/ package
+        self.get_obj_by_name("package").links['base_link'].mass = 0.1
+        self.get_obj_by_name("package_contents").links['base_link'].mass = 0.05
+        self.get_obj_by_name("shelf").links['base_link'].mass = 100.0
         # ^ list of tuples (Union["human", "robot"], Utterance: str)
 
     def _reset_variables(self):
@@ -72,6 +79,8 @@ class CutPourPkgInBowlEnv(Environment):
         place_pos_list = self.get_obj_poses(['pad'])["pos"]
         assert len(obj_pos_list) == len(place_pos_list) == 1
 
+        rew_dict = {}
+
         # compute grasped rew
         for obj_name in [self.obj_to_grasp_name]:
             obj_grasped_now = self.robots[0]._ag_obj_in_hand[self.robots[0].default_arm]
@@ -87,12 +96,14 @@ class CutPourPkgInBowlEnv(Environment):
             self.robots[0]._ag_obj_in_hand[self.robots[0].default_arm] is None)
         obj_on_dest_obj = self.is_placed_on(obj_name, "pad")
         place_success = obj_on_dest_obj and no_obj_grasped
+        rew_dict["place"] = float(bool(place_success))
         # print("obj_on_dest_obj", obj_on_dest_obj, "no_obj_grasped", no_obj_grasped)
 
         # compute pour rew
-        # TODO: set a z_thresh for is_placed_on based on half the object's height
         pour_success = self.is_placed_on("package_contents", "pad2")
+        rew_dict["pour"] = float(bool(pour_success))
 
+        # print out what objects got newly placed on what other objects
         parent_map = self.get_parent_objs_of_objs(self.obj_names + self.furniture_names)
         if parent_map != self.parent_map:
             for k in set(parent_map.keys()).union(self.parent_map.keys()):
@@ -100,9 +111,9 @@ class CutPourPkgInBowlEnv(Environment):
                     print(f"parent_map[{k}]: {self.parent_map.get(k)} --> {parent_map.get(k)}")
         self.parent_map = parent_map
 
-        reward = float(bool(pour_success))
-        # if grasp_success or place_success:
-        #     print(f"grasp_success: {grasp_success}. place_success {place_success}. reward {reward}")
+        # if place_success or pour_success:
+        #     print("rew_dict", rew_dict)
+        reward = rew_dict[self.reward_mode]
         self.reward = reward
         return reward
 
@@ -179,7 +190,7 @@ class CutPourPkgInBowlEnv(Environment):
     def get_place_obj_name_on_furn(self, furn_name):
         # objects in order of where they should be placed
         self.furn_name_to_obj_names = dict(
-            coffee_table_place=["pad", "pad2"],
+            coffee_table=["pad", "pad2"],
         )
         # Find an object on the furniture that a new obj can be placed on.
         for dest_obj_name in self.furn_name_to_obj_names[furn_name]:
@@ -197,45 +208,53 @@ class CutPourPkgInBowlEnv(Environment):
 
         configs["robots"][0]["grasping_mode"] = ["sticky", "assisted"][0]
 
+        # place objects depending on the furniture they start on
+        package_parent = ["shelf", "coffee_table"][0]
+        shelf_loc = "left"
+        shelf_loc_to_xyz_map = dict(
+            back=np.array([-1.0, 0.0, 0.93]),
+            left=np.array([1.3, 2.0, 0.93]),
+        )
+        shelf_xyz = shelf_loc_to_xyz_map[shelf_loc]
+        shelf_loc_to_ori_map = dict(
+            back=[0, 0, 0, 1],
+            left=[0, 0, 1, 0],
+        )
+        shelf_ori = shelf_loc_to_ori_map[shelf_loc]
+        shelf_loc_to_package_xyz_offset_map = dict(
+            back=np.array([0.25, 0., -0.075]),
+            left=np.array([-0.25, 0., -0.075]),
+        )
+        if package_parent == "coffee_table":
+            package_xyz = np.array([1.1, 0.6, 0.9])
+        elif package_parent == "shelf":
+            package_xyz = shelf_xyz + shelf_loc_to_package_xyz_offset_map[shelf_loc]
+        package_contents_xyz = package_xyz + np.array([0, 0, 0.26])
+        shelf_xyz = list(shelf_xyz)
+        package_xyz = list(package_xyz)
+        package_contents_xyz = list(package_contents_xyz)
+
         configs["scene"]["scene_model"] = self.scene_model_type
         configs["scene"]["load_object_categories"] = ["floors", "coffee_table"]
         configs["objects"] = [
             # {
-            #     "type": "DatasetObject",
-            #     "name": "apple",
-            #     "category": "apple",
-            #     "model": "agveuv",
-            #     "position": [1.0, 0.5, 0.46],
-            #     "orientation": [0, 0, 0, 1],
+            #     "type": "PrimitiveObject",
+            #     "name": "box",
+            #     "primitive_type": "Cube",
             #     "manipulable": True,
+            #     "rgba": [1.0, 0, 0, 1.0],
+            #     "scale": [0.15, 0.07, 0.15],
+            #     "position": [1.2, 0.8, 0.65],
+            #     "orientation": [0, 0, 0, 1],
             # },
-            {
-                "type": "PrimitiveObject",
-                "name": "box",
-                "primitive_type": "Cube",
-                "manipulable": True,
-                "rgba": [1.0, 0, 0, 1.0],
-                "scale": [0.15, 0.07, 0.15],
-                # "size": 0.05,
-                "position": [1.2, 0.8, 0.65],
-                "orientation": [0, 0, 0, 1],
-                # "mass": 0.01,
-            },
             {
                 "type": "PrimitiveObject",
                 "name": "package",
                 "primitive_type": "Cube",
                 "manipulable": True,
-                # "scale": [0.15, 0.07, 0.15],
-                # "radius": 0.06,
-                # "height": 0.30,
-                # "position": [1.0, 0.3, 0.5],
-                # "orientation": [0, 0, 0, 1],
                 "rgba": [1.0, 0, 0, 1.0],
                 "scale": [0.15, 0.15, 0.2],
-                # coffee table "position": [-0.3, -0.9, 0.57],
-                # this worked for forward grasp "position": [1.0, 0.6, 0.65],
-                "position": [1.1, 0.6, 0.65],
+                "position": package_xyz,
                 "orientation": [0, 0, 0, 1],
             },
             {
@@ -245,7 +264,7 @@ class CutPourPkgInBowlEnv(Environment):
                 "manipulable": True,
                 "rgba": [1.0, 1.0, 0, 1.0],
                 "scale": [0.05, 0.05, 0.05],
-                "position": [1.1, 0.6, 0.9],
+                "position": package_contents_xyz,
                 "orientation": [0, 0, 0, 1],
             },
             {
@@ -268,24 +287,34 @@ class CutPourPkgInBowlEnv(Environment):
             },
             {
                 "type": "DatasetObject",
-                "name": "coffee_table_pick",
+                "name": "coffee_table",
                 "category": "coffee_table",
                 "model": "zisekv",
                 "position": [1.2, 0.6, 0.4],
                 "orientation": [0, 0, 0, 1],
             },
+            {
+                "type": "DatasetObject",
+                "name": "shelf",
+                "category": "grocery_shelf",
+                "model": "xzusqq",
+                "position": shelf_xyz,
+                "orientation": shelf_ori,
+                "scale": [1.0, 1.0, 1.5],
+            },
         ]
 
         if self.scene_model_type == "empty":
             # load the coffee table; it's not part of the scene, unlike Rs_int
-            configs["objects"].append({
-                "type": "DatasetObject",
-                "name": "coffee_table_place",
-                "category": "coffee_table",
-                "model": "fqluyq",
-                "position": [-0.477, -1.22, 0.257],
-                "orientation": [0, 0, 0.707, 0.707],
-            })
+            # configs["objects"].append({
+            #     "type": "DatasetObject",
+            #     "name": "coffee_table_place",
+            #     "category": "coffee_table",
+            #     "model": "fqluyq",
+            #     "position": [-0.477, -1.22, 0.257],
+            #     "orientation": [0, 0, 0.707, 0.707],
+            # })
+            pass
 
         return configs
 
@@ -309,7 +338,7 @@ class PrimitivesEnv:
             debug=debug)
 
         self.skill_name_to_fn_map = dict(
-            pickplace=self.action_primitives._pick_place,
+            pickplace=self.action_primitives._pick_place_forward,
             pick_pour_place=self.action_primitives._pick_pour_place,
         )
         self.set_skill_names_params()
@@ -332,7 +361,7 @@ class PrimitivesEnv:
             pickplace=[
                 # ("knife", "countertop"),
                 # ("package", "countertop"),
-                ("box", "coffee_table_place"),
+                ("package", "coffee_table"),
             ],
             # converse=[
             #     ("",),  # args provided in lang_act arg
@@ -351,6 +380,8 @@ class PrimitivesEnv:
         # (mainly just resets unused vars)
         # obs, info = self.env.reset(**kwargs)
         self.env.scene.reset()
+        self.set_rand_R_pose()
+
         self.env._reset_variables()
 
         # done to make sure parent_map has correct reading on reset()
@@ -359,24 +390,61 @@ class PrimitivesEnv:
             og.sim.step()
         print("done stepping to reset")
 
-        # Randomize the robot pose
-        # floor = self.get_obj_by_name("floors_ptwlei_0")
-        # self.env.robots[0].states[OnTop].set_value(floor, True)
-
         # Randomize the apple pose on top of the breakfast table
-        # coffee_table_pick = self.get_obj_by_name("coffee_table_pick")
+        # coffee_table = self.get_obj_by_name("coffee_table")
         # self.get_obj_by_name("box").states[OnTop].set_value(
-        #     coffee_table_pick, True)
+        #     coffee_table, True)
 
         obs, info = self.get_obs()
 
         self.objs_in_robot_hand = []  # TODO: use for grasp/place primitives?
 
-        box_pos = self.env.get_obj_poses(["box"])["pos"]
-        robot_pos = info['base_pos']
-        print("box_pos", box_pos, "robot_pos", robot_pos)
+        # box_pos = self.env.get_obj_poses(["box"])["pos"]
+        # robot_pos = info['base_pos']
+        # print("box_pos", box_pos, "robot_pos", robot_pos)
 
         return obs, info
+
+    def set_rand_R_pose(self):
+        # Randomize the robot pose (only works on Rs_int)
+        # floor = self.get_obj_by_name("floors_ptwlei_0")
+        # self.env.robots[0].states[OnTop].set_value(floor, True)
+
+        furn_to_R_pos_range_map = {}
+        # Create robot position ranges in front of each main furniture
+        main_furn_names = ["shelf", "coffee_table"]
+        for furn in main_furn_names:
+            furn_min_xyz, furn_max_xyz = self.env.get_obj_by_name(furn).aabb
+            x_margin = 1.0
+            sample_region_x_size = 1.0
+            sample_region_min = np.array(
+                [furn_min_xyz[0] - x_margin - sample_region_x_size,
+                 furn_min_xyz[1],
+                 0.])
+            sample_region_max = np.array(
+                [furn_min_xyz[0] - x_margin,
+                 furn_max_xyz[1],
+                 0.])
+            furn_to_R_pos_range_map[furn] = (sample_region_min, sample_region_max)
+
+        rand_furn_name = np.random.choice(main_furn_names)
+        region_min_xyz, region_max_xyz = furn_to_R_pos_range_map[
+            rand_furn_name]
+        R_pos = np.random.uniform(region_min_xyz, region_max_xyz)
+        # R_pos = np.array([0, 0, 0])
+
+        # Sample robot orientation
+        default_quat = np.array([0, 0, 0, 1])
+        z_angle = np.random.uniform(-90, 90)
+        z_rot_quat = Rot.from_euler("z", z_angle, degrees=True).as_quat()
+        R_ori = (
+            Rot.from_quat(z_rot_quat) * Rot.from_quat(default_quat)).as_quat()
+        # R_ori = np.array([0, 0, 0, 1])
+
+        self.env.robots[0].set_position_orientation(
+            position=R_pos, orientation=R_ori)
+
+        return R_pos, R_ori
 
     def step(self, action):
         # action is an index in (0, self.action_space_discrete_size - 1)
@@ -446,6 +514,9 @@ class PrimitivesEnv:
         obs['symb_state'] = symb_state.vectorize()
 
         return obs, info
+
+    def set_reward_mode(self, rew_mode):
+        self.env.reward_mode = rew_mode
 
     def _load_action_space(self):
         # TODO: clean this up later with self.load_observation_space

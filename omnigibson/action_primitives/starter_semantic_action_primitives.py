@@ -132,6 +132,7 @@ class StarterSemanticActionPrimitiveSet(IntEnum):
     TOGGLE_OFF = auto(), "Toggle an object off"
     RAISE_TRUNK = auto(), "raise trunk so object above table by enough to enable pouring"
     POUR = auto(), "Rotate the gripper 90 deg to pour an object, then rotate back."
+    MOVE_BASE_BACK = auto(), "Move base backward"
 
 
 # (TODO) execution failure: overwrite_head_action might move the head that causes self-collision with curobo-generated motion plans (at the time of curobo planning, it assumes the head doesn't move).
@@ -185,6 +186,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             StarterSemanticActionPrimitiveSet.TOGGLE_OFF: self._toggle_off,
             StarterSemanticActionPrimitiveSet.RAISE_TRUNK: self._raise_trunk,
             StarterSemanticActionPrimitiveSet.POUR: self._pour,
+            StarterSemanticActionPrimitiveSet.MOVE_BASE_BACK: self._move_base_backward,
         }
         self._motion_generator = (
             None
@@ -283,7 +285,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         action = StarterSemanticActionPrimitiveSet(action_idx)
         return self.apply_ref(action, target_obj)
 
-    def apply_ref(self, primitive, *args, attempts=5, do_robot_reset=True):
+    def apply_ref(self, primitive, *args, attempts=5, do_robot_reset=True, ignore_primitive_errors=False):
         """
         Yields action for robot to execute the primitive with the given arguments.
 
@@ -305,11 +307,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         for _ in range(attempts):
             # Attempt
             success = False
-            # try:
-            yield from ctrl(*args)
-            success = True
-            # except ActionPrimitiveError as e:
-            #     errors.append(e)
+            if ignore_primitive_errors:
+                try:
+                    yield from ctrl(*args)
+                    success = True
+                except ActionPrimitiveError as e:
+                    errors.append(e)
+            else:
+                yield from ctrl(*args)
+                success = True
 
             try:
                 # If we're not holding anything, release the hand so it doesn't stick to anything else.
@@ -455,7 +461,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
     # TODO: Figure out how to generalize out of this "backing out" behavior.
     def _move_base_backward(self, steps=5, speed=0.2):
         """
-        Yields action for the robot to move base so the eef is in the target pose using the planner
+        Yields action for the robot to move base -x in world frame
 
         Args:
             steps (int): steps to move base
@@ -464,10 +470,33 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             th.tensor or None: Action array for one step for the robot to move base or None if its at the target pose
         """
+        def get_base_vel_xy_action():
+            _, robot_quat = self.robot.get_position_orientation()
+
+            world_forward = th.tensor([1., 0., 0.])
+            world_left = th.tensor([0., 1., 0.])
+
+            robot_forward = T.quat_apply(robot_quat, world_forward)
+            robot_left = T.quat_apply(robot_quat, world_left)
+
+            # Desired direction is mostly -x in the world frame (-1, 0, 0)
+            desired_direction = th.tensor([-0.9, -0.3, 0.])
+
+            # Project desired direction onto the robot's frame
+            action_x = th.dot(desired_direction, robot_forward)
+            action_y = th.dot(desired_direction, robot_left)
+
+            vel_xy = th.tensor([action_x, action_y])
+            vel_xy = speed * (vel_xy / th.norm(vel_xy))
+
+            return vel_xy
+
+        vel_xy = get_base_vel_xy_action()
         for _ in range(steps):
-            action = self._empty_action()
-            action[self.robot.controller_action_idx["gripper_{}".format(self.arm)]] = 1.0
-            action[self.robot.base_control_idx[0]] = -speed
+            action = self._empty_action(follow_arm_targets=False)
+            # action[self.robot.controller_action_idx["gripper_{}".format(self.arm)]] = 1.0
+            action[self.robot.base_control_idx[0]] = vel_xy[0]
+            action[self.robot.base_control_idx[1]] = vel_xy[1]
             yield self._postprocess_action(action)
 
     def _move_hand_backward(self, steps=5, speed=0.2):
@@ -640,13 +669,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         print("self._get_obj_in_hand() 648", self._get_obj_in_hand())
 
-    def _raise_trunk(self):
+    def _raise_trunk(self, height_increase):
         orig_trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
         print("trunk_qpos 670", orig_trunk_qpos)
 
-        steps = 100
+        steps = 50
         tol = 0.01
-        target_trunk_qpos = orig_trunk_qpos + 0.1  # max 0.35, min 0.0. It starts at 0.35 at reset.
+        target_trunk_qpos = orig_trunk_qpos + height_increase  # max 0.35, min 0.0. It starts at 0.35 at reset.
         # Step 0. Increase base height
         for _ in range(steps):
             action = self._empty_action(follow_arm_targets=False)
@@ -656,17 +685,17 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
             if th.abs(trunk_qpos - target_trunk_qpos) < tol:
                 break
-            print("raising trunk height. trunk qpos:", trunk_qpos)
             yield post_act
+        print(f"raised trunk height: {orig_trunk_qpos.item()} --> {trunk_qpos.item()}")
 
-    def _pour(self, direction="forward"):
+    def _pour(self, direction="forward", height_increase=0.1):
         # Step 1: Raise trunk to get obj off the table surface
         orig_trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
         # print("trunk_qpos 670", orig_trunk_qpos)
 
         steps = 100
         tol = 0.01
-        target_trunk_qpos = orig_trunk_qpos + 0.1  # max 0.35, min 0.0. It starts at 0.35 at reset.
+        target_trunk_qpos = max(0.35, orig_trunk_qpos + height_increase)  # max 0.35, min 0.0. It starts at 0.35 at reset.
         # Step 0. Increase base height
         for _ in range(steps):
             action = self._empty_action(follow_arm_targets=False)
@@ -2036,7 +2065,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             rotation = th.tensor([0, 0, 0, 1], dtype=th.float32)
             # rotation = held_obj.get_position_orientation()[1]
             sampling_results = [(target_obj.get_position_orientation()[0], None, rotation, None, None)]
-            sampled_bb_center = sampling_results[0][0] + th.tensor([0, 0, m.PREDICATE_SAMPLING_Z_OFFSET])
+            obj_height = held_obj.aabb[1][2] - held_obj.aabb[0][2]
+            sampled_bb_center = (
+                sampling_results[0][0]
+                + th.tensor([0, 0, m.PREDICATE_SAMPLING_Z_OFFSET + 0.5 * obj_height]))
             sampled_bb_orn = sampling_results[0][2]
 
             # Tobj_in_world @ Tbbox_in_obj = Tbbox_in_world
