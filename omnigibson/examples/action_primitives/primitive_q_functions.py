@@ -68,7 +68,7 @@ def main(args):
             data_collector.primitive_int_to_num_env_steps_list_map.items()):
         avg_num_ts = np.nanmean(np.array(total_num_env_steps_list, dtype=np.float64))
         print(
-            "total_num_env_steps_list for primitive {primitive_int}",
+            f"total_num_env_steps_list for primitive {primitive_int}",
             total_num_env_steps_list,
             f"Avg: {avg_num_ts}")
 

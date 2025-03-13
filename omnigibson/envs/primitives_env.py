@@ -466,11 +466,13 @@ class PrimitivesEnv:
             *orig_params)
         print("after skill")
 
+        return self.post_step(skill_info)
+
+    def post_step(self, skill_info={}):
         obs, info = self.get_obs()
         info.update(skill_info)
         reward = self.get_reward(obs, info)
         terminated = False
-
         return obs, reward, terminated, info
 
     def get_reward(self, obs, info):

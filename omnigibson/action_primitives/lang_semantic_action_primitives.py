@@ -99,6 +99,7 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
                     steps,
                     speed,
                     do_robot_reset=False))
+            raise NotImplementedError
 
         pick_obj = self.env.get_obj_by_name(obj_name)
         if dest_obj_name == "coffee_table":
@@ -160,11 +161,13 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         success = bool(r)
         total_num_env_steps = (
             grasp_num_env_steps
-            + backup_num_steps
             + raise_trunk_num_steps
+            + backup_num_steps
             + place_num_env_steps)
 
         print("grasp_num_env_steps", grasp_num_env_steps)
+        print("raise_trunk_num_steps", raise_trunk_num_steps)
+        print("backup_num_steps", backup_num_steps)
         print("place_num_env_steps", place_num_env_steps)
         print("total_num_env_steps", total_num_env_steps)
 
