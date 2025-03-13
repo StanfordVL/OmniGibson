@@ -1,5 +1,6 @@
 import gym
 import os
+import time
 import yaml
 
 import numpy as np
@@ -202,14 +203,21 @@ class CutPourPkgInBowlEnv(Environment):
                 return dest_obj_name
         raise ValueError("All candidate place positions already have objects on them.")
 
-    def load_configs(self):
+    def load_configs(self, skill_name="pickplace"):
+        assert skill_name in ["pickplace", "pick_pour_place"]
         config_filename = os.path.join(og.example_config_path, "tiago_primitives.yaml")
         configs = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
         configs["robots"][0]["grasping_mode"] = ["sticky", "assisted"][0]
 
         # place objects depending on the furniture they start on
-        package_parent = ["shelf", "coffee_table"][0]
+        if skill_name == "pickplace":
+            package_parent = "shelf"
+        elif skill_name == "pick_pour_place":
+            package_parent = "coffee_table"
+        else:
+            raise NotImplementedError
+        # package_parent = ["shelf", "coffee_table"][0]
         shelf_loc = "left"
         shelf_loc_to_xyz_map = dict(
             back=np.array([-1.0, 0.0, 0.93]),
@@ -229,6 +237,8 @@ class CutPourPkgInBowlEnv(Environment):
             package_xyz = np.array([1.1, 0.6, 0.9])
         elif package_parent == "shelf":
             package_xyz = shelf_xyz + shelf_loc_to_package_xyz_offset_map[shelf_loc]
+        else:
+            raise NotImplementedError
         package_contents_xyz = package_xyz + np.array([0, 0, 0.26])
         shelf_xyz = list(shelf_xyz)
         package_xyz = list(package_xyz)
@@ -445,6 +455,19 @@ class PrimitivesEnv:
             position=R_pos, orientation=R_ori)
 
         return R_pos, R_ori
+
+    def pre_step_obj_loading(self, action):
+        st = time.time()
+        skill_name, _ = self.skill_name_param_action_space[action]
+        configs = self.env.load_configs(skill_name=skill_name)
+        for obj_dict in configs['objects']:
+            init_obj_pose = (
+                obj_dict['position'], obj_dict.get("orientation", [0, 0, 0, 1]))
+            obj = self.env.get_obj_by_name(obj_dict['name'])
+            obj.set_position_orientation(*init_obj_pose)
+        for _ in range(20):
+            og.sim.step()
+        print(f"Done loading objects pre_step. time: {time.time() - st}")
 
     def step(self, action):
         # action is an index in (0, self.action_space_discrete_size - 1)
