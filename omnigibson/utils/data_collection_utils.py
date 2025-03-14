@@ -1,6 +1,7 @@
 import collections
 import json
 import os
+import time
 
 import datetime
 import h5py
@@ -97,7 +98,8 @@ class ScriptedDataCollector:
         obs, info = self.env.reset(return_info=True)
 
         for t in range(self.max_path_len):
-            action = [0][t]  # Put the plan here. TODO: make sure env action space maps to primitives.
+            stf = time.time()
+            action = [1][t]  # Put the plan here. TODO: make sure env action space maps to primitives.
             finished_step = False
 
             self.env.pre_step_obj_loading(action)
@@ -116,6 +118,7 @@ class ScriptedDataCollector:
                     skill_info['num_env_steps'] = MAX_TS
                     next_obs, r, done, next_info = self.env.post_step(skill_info)
                     next_info['skill_success'] = bool(r)
+            print(f"Total time to execute trajectory: {time.time() - stf}")
 
             self.add_transition(
                 traj_dict, obs, action, r, next_obs, done, info, next_info,

@@ -52,6 +52,7 @@ class CutPourPkgInBowlEnv(Environment):
             ))
 
         super().__init__(self.configs)
+        og.sim.viewer_camera.set_position_orientation(*self.configs['camera_pose'])
 
         # prevent the shelf from tipping over from friction w/ package
         self.get_obj_by_name("package").links['base_link'].mass = 0.1
@@ -122,22 +123,33 @@ class CutPourPkgInBowlEnv(Environment):
         if obj_name == dest_obj_name:
             return False
         obj_pos = self.get_obj_poses([obj_name])["pos"][0]
+        obj_pos_min_z = self.get_obj_by_name(obj_name).aabb[0][2]
         obj_place_pos = self.get_obj_poses([dest_obj_name])["pos"][0]
-        obj_z_signed_dist = obj_pos[2] - obj_place_pos[2]
+        obj_place_min, obj_place_max = self.get_obj_by_name(dest_obj_name).aabb
+        obj_place_max_z = obj_place_max[2]
+        obj_z_signed_dist = obj_pos_min_z - obj_place_max_z
         obj_xy_dist = th.norm(obj_pos[:2] - obj_place_pos[:2])
 
         # Set z_tol and xy_tol based on object size, since obj_pos is the 3D centroid
-        obj_bbox_min, obj_bbox_max = self.get_obj_by_name(obj_name).aabb
-        obj_height = (obj_bbox_max - obj_bbox_min)[2]
+        # obj_bbox_min, obj_bbox_max = self.get_obj_by_name(obj_name).aabb
+        # obj_height = (obj_bbox_max - obj_bbox_min)[2]
         dest_obj_bbox_min, dest_obj_bbox_max = self.get_obj_by_name(dest_obj_name).aabb
-        dest_obj_height = (dest_obj_bbox_max - dest_obj_bbox_min)[2]
-        z_tol = 0.6 * (obj_height + dest_obj_height)
+        # dest_obj_height = (dest_obj_bbox_max - dest_obj_bbox_min)[2]
+        # z_tol = 0.6 * (obj_height + dest_obj_height)
+        z_tol = 0.02  # top of dest_obj and bottom of obj must be within z_tol
         xy_tol = 0.5 * th.norm(dest_obj_bbox_max[:2] - dest_obj_bbox_min[:2])
 
         placed_on = bool(
-            (0 < obj_z_signed_dist <= z_tol).item() and (obj_xy_dist <= xy_tol).item())
-        # if obj_name == "package_contents" and len(self.grasped_obj_names) > 0:
-        #     print(f"obj_z_dist{obj_z_dist.item()} <? {z_tol.item()}. obj_xy_dist {obj_xy_dist.item()} <? {xy_tol.item()}")
+            (-0.01 < obj_z_signed_dist <= z_tol).item() and (obj_xy_dist <= xy_tol).item())
+        # some objects get cut off if we use 0.0 instead of -0.01
+
+        if dest_obj_name == "shelf":
+            placed_on = bool(th.all(
+                (obj_place_min <= obj_pos) & (obj_pos <= obj_place_max)))
+
+        # if obj_name in ["package_contents", "package"]:
+        #     # if obj_name in ["package_contents", "package"] and len(self.grasped_obj_names) > 0:
+        #     print(f"{obj_name}: 0 <?= obj_z_dist{obj_z_signed_dist} <? {z_tol}. obj_xy_dist {obj_xy_dist} <? {xy_tol}")
 
         return placed_on
 
@@ -151,16 +163,24 @@ class CutPourPkgInBowlEnv(Environment):
                 if self.is_placed_on(q, candidate_parent):
                     candidate_parents_of_q.append((candidate_parent, candidate_parent_z))
 
+            # if "shelf" is one of >=2 candidates, don't choose shelf.
+            cand_parent_names = [name for name, _ in candidate_parents_of_q]
+            if len(cand_parent_names) > 1 and "shelf" in cand_parent_names:
+                # remove shelf from being possible candidate parent; choose from the other objs
+                candidate_parents_of_q = [
+                    (name, z) for name, z in candidate_parents_of_q if name != "shelf"]
+
             # make the parent "world" if no parent candidates found
             if len(candidate_parents_of_q) == 0:
                 candidate_parents_of_q.append(("world", 0.0))
 
             # choose highest z object as the parent.
-            parent_of_q = sorted(
+            parents_of_q = sorted(
                 candidate_parents_of_q, key=lambda x: x[1], reverse=True)
             # ^ returns a list of (candidate_parent_name, parent_z),
             # in descending order.
-            query_to_parent_name_map[q] = parent_of_q[0][0]
+
+            query_to_parent_name_map[q] = parents_of_q[0][0]
             # ^ highest-z candidate parent name
 
         return query_to_parent_name_map
@@ -218,31 +238,63 @@ class CutPourPkgInBowlEnv(Environment):
         else:
             raise NotImplementedError
         # package_parent = ["shelf", "coffee_table"][0]
-        shelf_loc = "left"
-        shelf_loc_to_xyz_map = dict(
+        config_name = "ahg"
+        config_name_to_shelf_xyz_map = dict(
             back=np.array([-1.0, 0.0, 0.93]),
             left=np.array([1.3, 2.0, 0.93]),
+            ahg=np.array([17.09, 1.80, 0.93]),
         )
-        shelf_xyz = shelf_loc_to_xyz_map[shelf_loc]
-        shelf_loc_to_ori_map = dict(
+        shelf_xyz = config_name_to_shelf_xyz_map[config_name]
+        config_name_to_ori_map = dict(
             back=[0, 0, 0, 1],
             left=[0, 0, 1, 0],
+            ahg=[0, 0, 1, 0],
         )
-        shelf_ori = shelf_loc_to_ori_map[shelf_loc]
-        shelf_loc_to_package_xyz_offset_map = dict(
+        shelf_ori = config_name_to_ori_map[config_name]
+        config_name_to_package_xyz_offset_map = dict(
             back=np.array([0.25, 0., -0.075]),
             left=np.array([-0.25, 0., -0.075]),
+            ahg=np.array([-0.25, 0., -0.075]),
         )
         if package_parent == "coffee_table":
             package_xyz = np.array([1.1, 0.6, 0.9])
         elif package_parent == "shelf":
-            package_xyz = shelf_xyz + shelf_loc_to_package_xyz_offset_map[shelf_loc]
+            package_xyz = shelf_xyz + config_name_to_package_xyz_offset_map[config_name]
         else:
             raise NotImplementedError
         package_contents_xyz = package_xyz + np.array([0, 0, 0.26])
         shelf_xyz = list(shelf_xyz)
         package_xyz = list(package_xyz)
         package_contents_xyz = list(package_contents_xyz)
+
+        coffee_table_xyz_map = dict(
+            back=np.array([1.2, 0.6, 0.4]),
+            left=np.array([1.2, 0.6, 0.4]),
+            ahg=np.array([4.44, 3.53, 0.4]),
+        )
+
+        coffee_table_xyz = coffee_table_xyz_map[config_name]
+        pad_xyz = coffee_table_xyz + np.array([-0.1, 0.0, 0.12])
+        pad2_xyz = pad_xyz + np.array([0.0, -0.3, 0.0])
+        coffee_table_xyz = list(coffee_table_xyz)
+        pad_xyz = list(pad_xyz)
+        pad2_xyz = list(pad2_xyz)
+
+        # camera params
+        config_name_to_camera_xyz_map = dict(
+            back=th.tensor([-0.2010, -2.7257, 1.0654]),
+            left=th.tensor([-0.2010, -2.7257, 1.0654]),
+            # ahg=th.tensor([8.7, -15, 1.0]),  # good for level view
+            ahg=th.tensor([8.7, -15, 4.0]),  # good for level view
+        )
+        config_name_to_camera_ori_map = dict(
+            back=th.tensor([0.6820, -0.0016, -0.0017, 0.7314]),
+            left=th.tensor([0.6820, -0.0016, -0.0017, 0.7314]),
+            ahg=th.tensor([0.707, 0, 0, 0.707]),
+        )
+        configs['camera_pose'] = (
+            config_name_to_camera_xyz_map[config_name],
+            config_name_to_camera_ori_map[config_name])
 
         configs["scene"]["scene_model"] = self.scene_model_type
         configs["scene"]["load_object_categories"] = ["floors", "coffee_table"]
@@ -284,7 +336,7 @@ class CutPourPkgInBowlEnv(Environment):
                 "rgba": [0.0, 0, 1.0, 1.0],
                 "radius": 0.12,
                 # coffee table "position": [-0.3, -0.9, 0.45],
-                "position": [1.1, 0.6, 0.55],
+                "position": pad_xyz,
             },
             {
                 "type": "PrimitiveObject",
@@ -293,14 +345,14 @@ class CutPourPkgInBowlEnv(Environment):
                 "rgba": [0.0, 1.0, 1.0, 1.0],
                 "radius": 0.12,
                 # coffee table "position": [-0.3, -1.2, 0.45],
-                "position": [1.1, 0.3, 0.55],
+                "position": pad2_xyz,
             },
             {
                 "type": "DatasetObject",
                 "name": "coffee_table",
                 "category": "coffee_table",
                 "model": "zisekv",
-                "position": [1.2, 0.6, 0.4],
+                "position": coffee_table_xyz,
                 "orientation": [0, 0, 0, 1],
             },
             {
@@ -313,6 +365,39 @@ class CutPourPkgInBowlEnv(Environment):
                 "scale": [1.0, 1.0, 1.5],
             },
         ]
+        if config_name == "ahg":
+            wall_rgba = [0.8, 0.8, 0.8, 1.0]
+            configs["objects"].extend([
+                # Walls matching AHG 2.202
+                # TODO: do a function to load these walls
+                {
+                    "type": "PrimitiveObject",
+                    "name": "wall_00",
+                    "primitive_type": "Cube",
+                    "rgba": wall_rgba,
+                    "scale": [0.2, 6.85, 1.0],
+                    "position": [17.6, 3.4, 0.5],
+                    "orientation": [0, 0, 0, 1],
+                },
+                {
+                    "type": "PrimitiveObject",
+                    "name": "wall_01",
+                    "primitive_type": "Cube",
+                    "rgba": wall_rgba,
+                    "scale": [17.48, 0.2, 1.0],
+                    "position": [8.75, 7.0, 0.5],
+                    "orientation": [0, 0, 0, 1],
+                },
+                {
+                    "type": "PrimitiveObject",
+                    "name": "wall_02",
+                    "primitive_type": "Cube",
+                    "rgba": wall_rgba,
+                    "scale": [0.2, 6.85, 1.0],
+                    "position": [-0.1, 3.4, 0.5],
+                    "orientation": [0, 0, 0, 1],
+                },
+            ])
 
         if self.scene_model_type == "empty":
             # load the coffee table; it's not part of the scene, unlike Rs_int
