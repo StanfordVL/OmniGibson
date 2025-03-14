@@ -81,8 +81,6 @@ def edit_problem(bddl_fn, start_line, end_line):
         inner_expr
     ]
 
-    from pprint import pprint
-    pprint(exist_wrapped)
     goal_str = build_goal(exist_wrapped)
     final_str = add_bddl_whitespace(string=goal_str, save=False)
 
