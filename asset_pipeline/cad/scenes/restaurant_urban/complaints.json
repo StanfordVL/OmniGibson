@@ -56,6 +56,13 @@
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
     },
     {
+        "object": "floor_lamp-lcmuvd",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "hamper-iofciz",
         "complaint": "0",
         "processed": true,
@@ -587,6 +594,13 @@
         "additional_info": ""
     },
     {
+        "object": "table_knife-jxdfyy",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
+    },
+    {
         "object": "table_lamp-ykhxso",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
@@ -619,6 +633,13 @@
         "additional_info": ""
     },
     {
+        "object": "table_lamp-ykhxso",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "floors-nvnauj",
         "complaint": "See message",
         "processed": true,
@@ -633,6 +654,20 @@
         "new": true,
         "type": "structurethickness",
         "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
+    },
+    {
+        "object": "pot_plant-jtkcip",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
+        "object": "pot_plant-tbsjnw",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "room_light-frjwas",

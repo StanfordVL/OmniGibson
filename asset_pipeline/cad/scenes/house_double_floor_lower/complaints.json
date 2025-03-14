@@ -55,6 +55,13 @@
         "additional_info": ""
     },
     {
+        "object": "floor_lamp-uivlzf",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "flower-qokboq",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
@@ -933,6 +940,13 @@
         "additional_info": ""
     },
     {
+        "object": "carving_knife-icxnkd",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
+    },
+    {
         "object": "carving_knife-oxvnsa",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
@@ -941,12 +955,26 @@
         "additional_info": ""
     },
     {
+        "object": "carving_knife-oxvnsa",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
+    },
+    {
         "object": "carving_knife-xsjhji",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true,
         "type": "metalink",
         "additional_info": ""
+    },
+    {
+        "object": "carving_knife-xsjhji",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
     },
     {
         "object": "decorative_sign-xzsmxq",
@@ -1099,6 +1127,13 @@
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
+        "object": "mirror-edxfnt",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "MIRROR: This object is a mirror. Please ensure that the object is reflective."
+    },
+    {
         "object": "motion_sensor-aecflf",
         "complaint": "wensi: bad object, missing bavk",
         "processed": true,
@@ -1184,6 +1219,13 @@
         "new": true,
         "type": "appearance",
         "additional_info": ""
+    },
+    {
+        "object": "table_knife-nvwmkx",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
     },
     {
         "object": "teaspoon-wzsvzv",
@@ -1298,6 +1340,20 @@
         "additional_info": ""
     },
     {
+        "object": "pot_plant-mfnact",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
+        "object": "pot_plant-nwuuca",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "pot_plant-usrbxb",
         "complaint": "plant is black",
         "processed": true,
@@ -1312,6 +1368,13 @@
         "new": true,
         "type": "appearance",
         "additional_info": ""
+    },
+    {
+        "object": "pot_plant-usrbxb",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "room_light-kiuayi",
@@ -1336,6 +1399,13 @@
         "new": true,
         "type": "appearance",
         "additional_info": ""
+    },
+    {
+        "object": "standing_mirror-wwkuuf",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "MIRROR: This object is a mirror. Please ensure that the object is reflective."
     },
     {
         "object": "top_cabinet-tynnnw",
@@ -1386,6 +1456,13 @@
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
+        "object": "fixed_window-kvdqep",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes."
+    },
+    {
         "object": "window-lhzwtz",
         "complaint": "openable",
         "processed": true,
@@ -1400,6 +1477,13 @@
         "new": true,
         "type": "appearance",
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "fixed_window-lhzwtz",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes."
     },
     {
         "object": "playground-xdlcdi",

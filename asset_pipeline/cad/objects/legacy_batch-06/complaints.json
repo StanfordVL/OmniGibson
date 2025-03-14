@@ -82,6 +82,13 @@
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
     },
     {
+        "object": "floor_lamp-fanocp",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "floor_lamp-imgsrd",
         "complaint": "don't know how the physics would work",
         "processed": true,
@@ -97,6 +104,13 @@
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
     },
     {
+        "object": "floor_lamp-imgsrd",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "floor_lamp-jcbvfi",
         "complaint": "See message",
         "processed": true,
@@ -105,12 +119,26 @@
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
     },
     {
+        "object": "floor_lamp-jcbvfi",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "floor_lamp-jqsuky",
         "complaint": "See message",
         "processed": true,
         "new": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "floor_lamp-jqsuky",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "floor_lamp-lqdmym",
@@ -126,6 +154,13 @@
         "new": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "floor_lamp-lqdmym",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "floor_lamp-pfuqec",
@@ -152,6 +187,13 @@
         "additional_info": ""
     },
     {
+        "object": "floor_lamp-pfuqec",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "floor_lamp-vdxlda",
         "complaint": "\u001b[6~",
         "processed": true,
@@ -166,6 +208,13 @@
         "new": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "floor_lamp-vdxlda",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "sink-ejooms",
@@ -473,6 +522,13 @@
         "additional_info": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
     },
     {
+        "object": "microwave-abzvij",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes."
+    },
+    {
         "object": "microwave-bfbeeb",
         "complaint": "wrong microwave",
         "processed": true,
@@ -494,6 +550,13 @@
         "additional_info": "Was at least one of the collision mesh candidates acceptable?"
     },
     {
+        "object": "microwave-bfbeeb",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes."
+    },
+    {
         "object": "microwave-hjjxmi",
         "complaint": " wro",
         "processed": true,
@@ -508,6 +571,13 @@
         "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
+        "object": "microwave-hjjxmi",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes."
+    },
+    {
         "object": "microwave-rtfebu",
         "complaint": "wrong microwave",
         "processed": true,
@@ -515,11 +585,25 @@
         "additional_info": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
     },
     {
+        "object": "microwave-rtfebu",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes."
+    },
+    {
         "object": "microwave-snsqrt",
         "complaint": "wrong microwave",
         "processed": true,
         "type": "category",
         "additional_info": "Confirm object synset assignment.\nObject assigned to synset: microwave.n.01\nDefinition: a short electromagnetic wave (longer than infrared but shorter than radio waves); used for radar and microwave ovens and for transmitting telephone, facsimile, video and data\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
+    },
+    {
+        "object": "microwave-snsqrt",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes."
     },
     {
         "object": "microwave-vuezel",
@@ -534,6 +618,13 @@
         "processed": true,
         "type": "appearance",
         "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "microwave-vuezel",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes."
     },
     {
         "object": "notebook-ffdjzp",
@@ -612,6 +703,13 @@
         "additional_info": ""
     },
     {
+        "object": "standing_tv-bkyguk",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "standing_tv-blyapt",
         "complaint": "no def",
         "processed": true,
@@ -625,6 +723,13 @@
         "new": true,
         "type": "unknown",
         "additional_info": ""
+    },
+    {
+        "object": "standing_tv-blyapt",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "standing_tv-ghxsoy",
@@ -642,6 +747,13 @@
         "additional_info": ""
     },
     {
+        "object": "standing_tv-ghxsoy",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "standing_tv-gjlztf",
         "complaint": "no def",
         "processed": true,
@@ -655,6 +767,13 @@
         "new": true,
         "type": "unknown",
         "additional_info": ""
+    },
+    {
+        "object": "standing_tv-gjlztf",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "standing_tv-lkpsai",
@@ -672,6 +791,13 @@
         "additional_info": ""
     },
     {
+        "object": "standing_tv-lkpsai",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "standing_tv-sbxgwj",
         "complaint": "no def",
         "processed": true,
@@ -687,6 +813,13 @@
         "additional_info": ""
     },
     {
+        "object": "standing_tv-sbxgwj",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "standing_tv-udotid",
         "complaint": "no def",
         "processed": true,
@@ -700,6 +833,13 @@
         "new": true,
         "type": "unknown",
         "additional_info": ""
+    },
+    {
+        "object": "standing_tv-udotid",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "standing_tv-wbkvxr",
@@ -723,6 +863,13 @@
         "new": true,
         "type": "unknown",
         "additional_info": ""
+    },
+    {
+        "object": "standing_tv-wbkvxr",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "tablespoon-huudhe",

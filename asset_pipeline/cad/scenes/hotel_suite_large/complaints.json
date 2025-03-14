@@ -277,6 +277,13 @@
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
+        "object": "mirror-ddmyjg",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "MIRROR: This object is a mirror. Please ensure that the object is reflective."
+    },
+    {
         "object": "outline_vase-pqsamn",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
@@ -412,6 +419,13 @@
         "additional_info": ""
     },
     {
+        "object": "table_knife-eebpap",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
+    },
+    {
         "object": "table_lamp-uzrovn",
         "complaint": "not watertight",
         "processed": true,
@@ -451,6 +465,13 @@
         "additional_info": ""
     },
     {
+        "object": "table_lamp-uzrovn",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "teapot-jlalfc",
         "complaint": "hole not accurate enough",
         "processed": true,
@@ -473,12 +494,26 @@
         "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
     },
     {
+        "object": "pot_plant-asnsgf",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "pot_plant-opykqm",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
         "processed": false,
         "new": true,
         "type": "appearance",
         "additional_info": ""
+    },
+    {
+        "object": "pot_plant-opykqm",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "pot_plant-stawgx",
@@ -495,6 +530,20 @@
         "new": true,
         "type": "appearance",
         "additional_info": ""
+    },
+    {
+        "object": "pot_plant-stawgx",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
+        "object": "pot_plant-xzoovy",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "pot_plant-kfdaui",

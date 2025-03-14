@@ -8,6 +8,13 @@
         "additional_info": ""
     },
     {
+        "object": "swivel_chair-lhkkri",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "walls-auxobz",
         "complaint": "See message",
         "processed": true,
@@ -432,6 +439,13 @@
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
     },
     {
+        "object": "monitor-kmltvq",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "table_lamp-ehjsdz",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
@@ -446,6 +460,13 @@
         "new": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-ehjsdz",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "floors-curkiw",

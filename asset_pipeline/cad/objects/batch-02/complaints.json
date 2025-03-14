@@ -270,6 +270,13 @@
         "additional_info": "Confirm reasonable bounding box size:\n64.36cm, 64.38cm, 73.56cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
     },
     {
+        "object": "swivel_chair-pkpcew",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "syringe-gagwke",
         "complaint": "white texture",
         "processed": true,
@@ -686,6 +693,13 @@
         "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
+        "object": "monitor-qvpbge",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "notebook-yibctu",
         "complaint": "if the cover is not articulated, should remove it",
         "processed": true,
@@ -775,6 +789,13 @@
         "new": true,
         "type": "metalink",
         "additional_info": ""
+    },
+    {
+        "object": "pruner-lucqrs",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
     },
     {
         "object": "storage_box-izcglf",
@@ -1012,6 +1033,13 @@
         "additional_info": ""
     },
     {
+        "object": "table_lamp-ajrzlq",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "bookcase-ftzmow",
         "complaint": "should be bookshelf.n.01",
         "processed": true,
@@ -1113,6 +1141,13 @@
         "additional_info": ""
     },
     {
+        "object": "chainsaw-xfihoe",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
+    },
+    {
         "object": "desk-iufjhy",
         "complaint": "drawers need to be articulated",
         "processed": false,
@@ -1176,11 +1211,25 @@
         "additional_info": ""
     },
     {
+        "object": "pot_plant-cqqyzp",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "pot_plant-jgkozi",
         "complaint": "1/2",
         "processed": true,
         "type": "scale",
         "additional_info": "Confirm reasonable bounding box size:\n7.25cm, 8.26cm, 11.34cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "pot_plant-jgkozi",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "power_washer-pkhrip",

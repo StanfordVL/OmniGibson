@@ -70,5 +70,12 @@
         "new": true,
         "type": "structurethickness",
         "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
+    },
+    {
+        "object": "pot_plant-irtlsj",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     }
 ]

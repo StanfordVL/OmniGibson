@@ -16,6 +16,13 @@
         "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
     },
     {
+        "object": "floor_lamp-smfygn",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "ceilings-hcukpe",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
@@ -78,6 +85,13 @@
         "new": true,
         "type": "unknown",
         "additional_info": ""
+    },
+    {
+        "object": "pot_plant-irdjit",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "showerhead-psscka",
