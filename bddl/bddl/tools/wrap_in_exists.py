@@ -19,6 +19,7 @@ def edit_problem(bddl_fn, start_line, end_line):
     
     block = "".join(lines[start_line - 1:end_line])
     wrapped_string = f"(and {block})"
+    print(wrapped_string)
     parsed = scan_tokens(string=wrapped_string)
     if not (isinstance(parsed, list) and parsed[0] == "and"):
         raise ValueError("Unexpected format from scan_tokens.")
@@ -27,12 +28,12 @@ def edit_problem(bddl_fn, start_line, end_line):
     object_instances = set()
     def extract_instances(expr):
         if isinstance(expr, list):
-            if all(isinstance(item, str) for item in expr):
+            if all(isinstance(item, str) for item in expr):      # HACK for finding atomic formulae
                 if len(expr) == 2:
-                    print("unary")
                     object_instances.add(expr[1].strip("?"))
-                elif len(expr) == 3:
-                    object_instances.add(expr[2].strip("?"))
+                elif (len(expr) == 3) and (expr[1] != "-"):      # HACK for finding atomic formulae
+                    scene_inst = expr[1 if expr[0] in ["contains", "saturated", "covered", "filled"] else 2].strip("?")
+                    object_instances.add(scene_inst)
             else: 
                 for sub in expr: 
                     extract_instances(sub)
@@ -40,7 +41,7 @@ def edit_problem(bddl_fn, start_line, end_line):
     extract_instances(parsed_output)
 
     if len(object_instances) != 1:
-        raise ValueError(f"Lines contain multiple scene object instances: {object_instances}")
+        raise ValueError(f"Lines {start_line} {end_line} contain multiple scene object instances: {object_instances}")
     object_instance = next(iter(object_instances))
 
     if not re.fullmatch(ver.OBJECT_INSTANCE_RE, object_instance):
@@ -80,6 +81,8 @@ def edit_problem(bddl_fn, start_line, end_line):
         inner_expr
     ]
 
+    from pprint import pprint
+    pprint(exist_wrapped)
     goal_str = build_goal(exist_wrapped)
     final_str = add_bddl_whitespace(string=goal_str, save=False)
 
@@ -98,8 +101,10 @@ def edit_problem(bddl_fn, start_line, end_line):
 
 
 if __name__ == "__main__": 
+    # Main
     bddl_fn = sys.argv[1]
     start_line, end_line = sys.argv[2].split("-")
-    # start_line, end_line = 55, 57
-    # edit_problem(get_definition_filename("set_a_fancy_table", 0), 55, 57)
     edit_problem(bddl_fn, int(start_line), int(end_line))
+
+    # Debug
+    # edit_problem(get_definition_filename("adding_chemicals_to_lawn", 0), 26, 27)
