@@ -3,6 +3,7 @@ from bddl.parsing import scan_tokens, add_bddl_whitespace, build_goal
 import bddl.bddl_verification as ver
 import re
 from bddl.config import get_definition_filename
+from bddl.activity import Conditions
 
 
 def edit_problem(bddl_fn, start_line, end_line): 
@@ -39,16 +40,21 @@ def edit_problem(bddl_fn, start_line, end_line):
                     extract_instances(sub)
 
     extract_instances(parsed_output)
+    activity = bddl_fn.split("/")[-2]
+    conds = Conditions(activity, 0, "omnigibson")
+    inroom_cats = [re.match(ver.OBJECT_CAT_AND_INST_RE, cond[1]).group(0) for cond in conds.parsed_initial_conditions if cond[0] == "inroom"]
 
-    if len(object_instances) != 1:
-        raise ValueError(f"Lines {start_line} {end_line} contain multiple scene object instances: {object_instances}")
-    object_instance = next(iter(object_instances))
+    # Just get the relevant instances that are actually scene objects, else ignore them 
+    scene_instances = [inst for inst in object_instances if any(inroom_cat in inst for inroom_cat in inroom_cats)]
+    if len(scene_instances) != 1:
+        raise ValueError(f"Lines {start_line} {end_line} contain multiple scene object instances: {scene_instances}")
+    final_instance = next(iter(scene_instances))
 
-    if not re.fullmatch(ver.OBJECT_INSTANCE_RE, object_instance):
-        print(object_instance)
+    if not re.fullmatch(ver.OBJECT_INSTANCE_RE, final_instance):
+        print(final_instance)
         raise ValueError("Lines contain scene categories, not just instances.")
     
-    m = re.search(ver.OBJECT_CAT_AND_INST_RE, object_instance)
+    m = re.search(ver.OBJECT_CAT_AND_INST_RE, final_instance)
     if not m: 
         raise ValueError("Failed to extract object category from instance")
     object_cat = m.group(0)
@@ -59,7 +65,7 @@ def edit_problem(bddl_fn, start_line, end_line):
             out = [replace_instance(sub) for sub in expr]
             return out
         elif isinstance(expr, str):
-            if expr.strip("?") == object_instance:
+            if expr.strip("?") == final_instance:
                 return "?" + object_cat
             else:
                 return expr 
