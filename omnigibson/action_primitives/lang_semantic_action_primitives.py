@@ -91,6 +91,32 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         self.env.set_reward_mode("place")
 
         num_steps_dict = {}
+        num_steps_dict['teleport_aerial_dist'] = 0  # add to this everytime we teleport
+        num_steps_dict['teleport_speed'] = 0.01
+
+        pick_obj = self.env.get_obj_by_name(obj_name)
+        if dest_obj_name == "coffee_table":
+            # convert destination from coffee_table --> "pad" on the
+            # coffee table, for ex.
+            dest_obj_name = self.env.get_place_obj_name_on_furn(dest_obj_name)
+        dest_obj = self.env.get_obj_by_name(dest_obj_name)
+
+        # Navigate to region in front of parent of obj_name
+        teleport_robot = True
+        st = time.time()
+        grasp_furn_name = (
+            self.env.env.get_parent_objs_of_objs([obj_name])[obj_name])
+        print(f"\tStart teleporting to grasp furniture: {grasp_furn_name}...")
+        R_pos_pre, _ = self.robot.get_position_orientation()
+        R_pos_post, _ = self.env.set_rand_R_pose(
+            furn_name=grasp_furn_name, step_env=True)
+        nav_to_pick_teleport_dist = th.norm(R_pos_post - R_pos_pre).item()
+        num_steps_dict['teleport_aerial_dist'] += (
+            nav_to_pick_teleport_dist)
+        num_steps_dict['nav_to_pick_teleport_inferred_steps'] = int(
+            nav_to_pick_teleport_dist
+            / num_steps_dict['teleport_speed'])
+        print(f"Finish moving to grasp furniture. time: {time.time() - st}")
 
         if self.debug:
             steps = 30
@@ -102,17 +128,13 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
                     speed,
                     do_robot_reset=False))
 
-        pick_obj = self.env.get_obj_by_name(obj_name)
-        if dest_obj_name == "coffee_table":
-            # convert destination from coffee_table --> "pad" on the
-            # coffee table, for ex.
-            dest_obj_name = self.env.get_place_obj_name_on_furn(dest_obj_name)
-        dest_obj = self.env.get_obj_by_name(dest_obj_name)
-
         print("Start executing grasp")
+        if obj_name in ["package"]:
+            direction = "forward"
+        else:
+            direction = "down"
         st = time.time()
         if not self.debug:
-            direction = "forward"
             num_steps_dict['grasp_steps'], _ = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.GRASP,
@@ -122,16 +144,16 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         print(f"Finish executing grasp. time: {time.time() - st}")
 
         # Raise torso
-        print("Start raising trunk")
-        st = time.time()
-        height_increase = 0.1
-        if not self.debug:
+        if direction == "forward" and not self.debug:
+            print("Start raising trunk")
+            st = time.time()
+            height_increase = 0.1
             num_steps_dict['raise_trunk_steps'], r = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.RAISE_TRUNK,
                     height_increase,
                     do_robot_reset=False))
-        print(f"Done raising trunk. time: {time.time() - st}")
+            print(f"Done raising trunk. time: {time.time() - st}")
 
         # store grasp pose so we can return to it
         post_grasp_pose_action = self._empty_action(follow_arm_targets=False)
@@ -139,7 +161,6 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         # move base toward coffee table
         print("Start moving base toward place location")
         st = time.time()
-        teleport_robot = True
         if not teleport_robot:
             # moves base backwards
             steps = 400
@@ -154,16 +175,12 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         else:
             print("\tteleporting...")
             R_pos_pre, _ = self.robot.get_position_orientation()
-            # R_pos = np.array([2, 0, 0])
-            # self.robot.set_position_orientation(
-            #     position=R_pos, orientation=R_ori)
-            # for _ in range(50):
-            #     og.sim.step()
             R_pos_post, _ = self.env.set_rand_R_pose(furn_name="coffee_table", step_env=True)
-            num_steps_dict['teleport_aerial_dist'] = th.norm(R_pos_post - R_pos_pre).item()
-            num_steps_dict['teleport_speed'] = 0.01
+            nav_to_place_teleport_dist = th.norm(R_pos_post - R_pos_pre).item()
+            num_steps_dict['teleport_aerial_dist'] += (
+                nav_to_place_teleport_dist)
             num_steps_dict['nav_to_place_teleport_inferred_steps'] = int(
-                num_steps_dict['teleport_aerial_dist']
+                nav_to_place_teleport_dist
                 / num_steps_dict['teleport_speed'])
         print(f"Done navigating to place. time: {time.time() - st}")
 
@@ -173,11 +190,12 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
 
         # arm position droops while traveling long distances
         # move it back to the position it was at once it grasped the object
-        print("moving arm back to post grasp pose")
-        st = time.time()
-        reset_arm_num_steps, r = self.execute_controller(
-            move_to_pose(post_grasp_pose_action))
-        print(f"done moving arm back to post grasp pose. time: {time.time() - st}")
+        if not self.debug:
+            print("moving arm back to post grasp pose")
+            st = time.time()
+            reset_arm_num_steps, r = self.execute_controller(
+                move_to_pose(post_grasp_pose_action))
+            print(f"done moving arm back to post grasp pose. time: {time.time() - st}")
 
         # Place on coffee table
         print("Start executing place")
@@ -213,18 +231,33 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         self.env.set_reward_mode("pour")
 
         num_steps_dict = {}
+        num_steps_dict['teleport_aerial_dist'] = 0.0
+        num_steps_dict['teleport_speed'] = 0.01
 
         obj = self.env.get_obj_by_name(obj_name)
 
-        if dest_obj_name == "coffee_table":
-            # convert destination from coffee_table --> "pad" on the
-            # coffee table, for ex.
-            dest_obj_name = self.env.get_place_obj_name_on_furn(dest_obj_name)
-        dest_obj = self.env.get_obj_by_name(dest_obj_name)
-
         direction = ["forward", "backward"][0]
 
-        grasp_num_env_steps, _ = 0, 0
+        # Navigate to region in front of parent of obj_name
+        teleport_robot = True
+        st = time.time()
+        grasp_furn_name = obj_name
+        while grasp_furn_name not in self.env.main_furn_names:
+            # trace parents upward until parent is a main furniture
+            grasp_furn_name = self.env.env.get_parent_objs_of_objs(
+                [grasp_furn_name])[grasp_furn_name]
+        print(f"\tStart teleporting to grasp furniture: {grasp_furn_name}...")
+        R_pos_pre, _ = self.robot.get_position_orientation()
+        R_pos_post, _ = self.env.set_rand_R_pose(
+            furn_name=grasp_furn_name, step_env=True)
+        nav_to_pick_teleport_dist = th.norm(R_pos_post - R_pos_pre).item()
+        num_steps_dict['teleport_aerial_dist'] += (
+            nav_to_pick_teleport_dist)
+        num_steps_dict['nav_to_pick_teleport_inferred_steps'] = int(
+            nav_to_pick_teleport_dist
+            / num_steps_dict['teleport_speed'])
+        print(f"Finish moving to grasp furniture. time: {time.time() - st}")
+
         print("Start executing grasp")
         # import pdb; pdb.set_trace()
         print("obj.mass", obj.mass)
@@ -234,7 +267,7 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.GRASP,
                     obj,
-                    direction,  # direction
+                    direction,
                     do_robot_reset=False))
         print(f"Finish executing grasp. time: {time.time() - st}")
 

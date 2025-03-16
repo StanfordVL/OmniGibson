@@ -97,11 +97,14 @@ class ScriptedDataCollector:
 
         obs, info = self.env.reset(return_info=True)
 
+        assert self.max_path_len == 1  # <-- needed since we are overriding obs at one of the first lines in for-loop below
         for t in range(self.max_path_len):
             stf = time.time()
-            action = [1][t]  # Put the plan here. TODO: make sure env action space maps to primitives.
+            action = [3][t]
 
-            self.env.pre_step_obj_loading(action)
+            # update state (assume previous primitives have already been completed)
+            obs, info = self.env.pre_step_obj_loading(action)
+
             if self.args.no_vid:
                 next_obs, r, done, next_info = self.env.step(action)
             else:

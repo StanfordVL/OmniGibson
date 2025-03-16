@@ -33,8 +33,10 @@ class CutPourPkgInBowlEnv(Environment):
         self.scene_model_type = ["Rs_int", "empty"][-1]
         self.configs = self.load_configs()
         self.obj_names = self.get_manipulable_objects()
-        self.furniture_names = [
-            "coffee_table", "shelf", "sink", "pad", "pad2"]  # stuff not intended to be moved
+        self.non_manipulable_obj_names = [
+            "coffee_table", "shelf", "sink", "pad", "pad2", "pad3"]
+        self.main_furn_names = [
+            "coffee_table", "shelf", "sink"]
         self.reward_mode = "pour"
 
         args = dotdict(
@@ -57,6 +59,8 @@ class CutPourPkgInBowlEnv(Environment):
         # prevent the shelf from tipping over from friction w/ package
         self.get_obj_by_name("package").links['base_link'].mass = 0.1
         self.get_obj_by_name("package_contents").links['base_link'].mass = 0.05
+        self.get_obj_by_name("scissors").links['base_link'].mass = 0.1
+        self.get_obj_by_name("bowl").links['base_link'].mass = 0.1
         self.get_obj_by_name("shelf").links['base_link'].mass = 100.0
         self.get_obj_by_name("sink").links['base_link'].mass = 100.0
         # ^ list of tuples (Union["human", "robot"], Utterance: str)
@@ -65,7 +69,23 @@ class CutPourPkgInBowlEnv(Environment):
         # self.make_video()
         self.grasped_obj_names = []
         self.parent_map = {}
+
+        # Reset symbolic state: set everything to closed
+        self.obj_name_to_attr_map = {}
+        obj_names = self.get_manipulable_objects() + self.non_manipulable_obj_names
+        for obj_name in obj_names:
+            self.obj_name_to_attr_map[obj_name] = {"openable": False}
+
         super()._reset_variables()
+
+    def set_attr_state(self, obj_name, attr_name, val):
+        # Used to set symbolic state for opened
+        assert attr_name == "openable"
+        assert val in [True, False]
+        self.obj_name_to_attr_map[obj_name][attr_name] = val
+
+    def get_attr_state(self, obj_name, attr_name):
+        return self.obj_name_to_attr_map[obj_name][attr_name]
 
     def _post_step(self, action):
         obs, _, terminated, truncated, info = super()._post_step(action)
@@ -103,11 +123,13 @@ class CutPourPkgInBowlEnv(Environment):
         # print("obj_on_dest_obj", obj_on_dest_obj, "no_obj_grasped", no_obj_grasped)
 
         # compute pour rew
-        pour_success = self.is_placed_on("package_contents", "pad2")
+        pour_success = (
+            self.get_attr_state("package", "openable")
+            and self.is_placed_on("package_contents", "bowl"))
         rew_dict["pour"] = float(bool(pour_success))
 
         # print out what objects got newly placed on what other objects
-        parent_map = self.get_parent_objs_of_objs(self.obj_names + self.furniture_names)
+        parent_map = self.get_parent_objs_of_objs(self.obj_names + self.non_manipulable_obj_names)
         if parent_map != self.parent_map:
             for k in set(parent_map.keys()).union(self.parent_map.keys()):
                 if parent_map.get(k) != self.parent_map.get(k):
@@ -156,7 +178,7 @@ class CutPourPkgInBowlEnv(Environment):
 
     def get_parent_objs_of_objs(self, query_names):
         query_to_parent_name_map = {}
-        valid_parent_names = self.obj_names + self.furniture_names
+        valid_parent_names = self.obj_names + self.non_manipulable_obj_names
         for q in query_names:
             candidate_parents_of_q = []
             for candidate_parent in valid_parent_names:
@@ -212,7 +234,7 @@ class CutPourPkgInBowlEnv(Environment):
     def get_place_obj_name_on_furn(self, furn_name):
         # objects in order of where they should be placed
         self.furn_name_to_obj_names = dict(
-            coffee_table=["pad", "pad2"],
+            coffee_table=["pad", "pad2", "pad3"],
         )
         # Find an object on the furniture that a new obj can be placed on.
         for dest_obj_name in self.furn_name_to_obj_names[furn_name]:
@@ -224,25 +246,31 @@ class CutPourPkgInBowlEnv(Environment):
                 return dest_obj_name
         raise ValueError("All candidate place positions already have objects on them.")
 
-    def load_configs(self, skill_name="pickplace"):
-        assert skill_name in ["pickplace", "pick_pour_place"]
+    def load_configs(self, R_step_idx=0):
         config_filename = os.path.join(og.example_config_path, "tiago_primitives.yaml")
         configs = yaml.load(open(config_filename, "r"), Loader=yaml.FullLoader)
 
         configs["robots"][0]["grasping_mode"] = ["sticky", "assisted"][0]
 
         # place objects depending on the furniture they start on
-        if skill_name == "pickplace":
-            package_parent = "shelf"
-        elif skill_name == "pick_pour_place":
-            package_parent = "coffee_table"
-        else:
-            raise NotImplementedError
-        # package_parent = ["shelf", "coffee_table"][0]
+        # map the obj_name to the parent_name that we initialize the obj on top of.
+        init_obj_to_parent_map = dict(
+            bowl="sink",
+            package="shelf",
+            scissors="sink",
+        )
+        if R_step_idx >= 1:
+            init_obj_to_parent_map["bowl"] = "pad"
+        if R_step_idx >= 2:
+            init_obj_to_parent_map["package"] = "pad2"
+        if R_step_idx >= 3:
+            # we make sure package is open in pre_step_obj_loading()
+            init_obj_to_parent_map["scissors"] = "pad3"
+
         config_name = "ahg"
         configs['config_name'] = config_name
 
-        # shelf, package
+        # shelf, coffee_table, pads
         config_name_to_shelf_xyz_map = dict(
             back=np.array([-1.0, 0.0, 0.93]),
             left=np.array([1.3, 2.0, 0.93]),
@@ -255,23 +283,6 @@ class CutPourPkgInBowlEnv(Environment):
             ahg=[0, 0, 1, 0],
         )
         shelf_ori = config_name_to_ori_map[config_name]
-        config_name_to_package_xyz_offset_map = dict(
-            back=np.array([0.25, 0., -0.075]),
-            left=np.array([-0.25, 0., -0.075]),
-            ahg=np.array([-0.25, 0., -0.075]),
-        )
-        if package_parent == "coffee_table":
-            package_xyz = np.array([1.1, 0.6, 0.9])
-        elif package_parent == "shelf":
-            package_xyz = shelf_xyz + config_name_to_package_xyz_offset_map[config_name]
-        else:
-            raise NotImplementedError
-        package_contents_xyz = package_xyz + np.array([0, 0, 0.26])
-        shelf_xyz = list(shelf_xyz)
-        package_xyz = list(package_xyz)
-        package_contents_xyz = list(package_contents_xyz)
-
-        # Coffee table, pad, pad2
         coffee_table_xyz_map = dict(
             back=np.array([1.2, 0.6, 0.4]),
             left=np.array([1.2, 0.6, 0.4]),
@@ -282,36 +293,89 @@ class CutPourPkgInBowlEnv(Environment):
             left=np.array([0, 0, 0, 1]),
             ahg=np.array([0, 0, 0, 1]),  # np.array([0, 0, 0.707, 0.707]),
         )
-
         coffee_table_xyz = coffee_table_xyz_map[config_name]
-        pad_xyz = coffee_table_xyz + np.array([-0.1, 0.0, 0.12])
-        pad2_xyz = pad_xyz + np.array([0.0, -0.3, 0.0])
+        pad2_xyz = coffee_table_xyz + np.array([-0.1, 0.0, 0.12])
+        pad_xyz = pad2_xyz + np.array([0.0, -0.3, 0.0])
+        pad3_xyz = pad2_xyz + np.array([0.0, 0.3, 0.0])
         coffee_table_xyz = list(coffee_table_xyz)
         pad_xyz = list(pad_xyz)
         pad2_xyz = list(pad2_xyz)
+        pad3_xyz = list(pad3_xyz)
         coffee_table_ori = coffee_table_ori_map[config_name]
 
-        # Sink, bowl, scissors
+        # Sink
         if config_name == "ahg":
             sink_xyz = np.array([17.09, 4.90, 0.5])
             sink_ori = np.array([0, 0, -0.707, 0.707])
-            bowl_xyz = sink_xyz + np.array([-0.2, -0.8, 0.5])
+        else:
+            pass
+
+        # Bowl
+        if config_name == "ahg":
+            bowl_parent = init_obj_to_parent_map["bowl"]
+            if bowl_parent == "sink":
+                bowl_xyz = sink_xyz + np.array([-0.2, -0.8, 0.5])
+            elif bowl_parent == "pad":
+                bowl_xyz = pad_xyz + np.array([0, 0, 0.04])
+            else:
+                raise NotImplementedError
             bowl_ori = np.array([0, 0, 0, 1])
-            scissors_xyz = sink_xyz + np.array([-0.2, 0.8, 0.5])
+        else:
+            pass
+
+        # package
+        config_name_to_package_xyz_offset_map = dict(
+            back=np.array([0.25, 0., -0.075]),
+            left=np.array([-0.25, 0., -0.075]),
+            ahg=np.array([-0.25, 0., -0.075]),
+        )
+        package_parent = init_obj_to_parent_map["package"]
+        if config_name == "ahg":
+            if package_parent == "shelf":
+                package_xyz = (
+                    shelf_xyz + config_name_to_package_xyz_offset_map[config_name])
+            elif package_parent == "pad2":
+                package_xyz = pad2_xyz + np.array([0, 0, 0.12])
+            else:
+                raise NotImplementedError
+        else:
+            if init_obj_to_parent_map["package"] == "coffee_table":
+                package_xyz = np.array([1.1, 0.6, 0.9])
+            elif package_parent == "shelf":
+                package_xyz = (
+                    shelf_xyz + config_name_to_package_xyz_offset_map[config_name])
+            else:
+                raise NotImplementedError
+        package_contents_xyz = package_xyz + np.array([0, 0, 0.26])
+        shelf_xyz = list(shelf_xyz)
+        package_xyz = list(package_xyz)
+        package_contents_xyz = list(package_contents_xyz)
+
+        # Scissors
+        if config_name == "ahg":
+            scissors_parent = init_obj_to_parent_map["scissors"]
+            if scissors_parent == "sink":
+                scissors_xyz = sink_xyz + np.array([-0.2, 0.8, 0.5])
+            elif scissors_parent == "pad3":
+                scissors_xyz = pad3_xyz + np.array([0, 0, 0.12])
+            else:
+                raise NotImplementedError
             scissors_ori = np.array([0, 0, 0, 1])
+        else:
+            pass
 
         # camera params
         config_name_to_camera_xyz_map = dict(
             back=th.tensor([-0.2010, -2.7257, 1.0654]),
             left=th.tensor([-0.2010, -2.7257, 1.0654]),
-            # ahg=th.tensor([8.7, -15, 1.0]),  # good for level view
-            ahg=th.tensor([8.7, -15, 4.0]),  # good for level view
-            # head-on view for ahg kitchen section: th.tensor([13, 3.5, 1.0])
+            # ahg=th.tensor([8.7, -15, 4.0]),  # good for entire room view
+            ahg=th.tensor([1.0, 3.5, 1.0]),  # +x view for ahg kitchen section
         )
         config_name_to_camera_ori_map = dict(
             back=th.tensor([0.6820, -0.0016, -0.0017, 0.7314]),
             left=th.tensor([0.6820, -0.0016, -0.0017, 0.7314]),
-            ahg=th.tensor([.5, -.5, -.5, .5]),  # th.tensor([0.707, 0, 0, 0.707]),
+            # ahg=th.tensor([0.707, 0, 0, 0.707]),
+            ahg=th.tensor([.5, -.5, -.5, .5]), # +x view direction
         )
         configs['camera_pose'] = (
             config_name_to_camera_xyz_map[config_name],
@@ -363,10 +427,19 @@ class CutPourPkgInBowlEnv(Environment):
                 "type": "PrimitiveObject",
                 "name": "pad2",
                 "primitive_type": "Disk",
-                "rgba": [0.0, 1.0, 1.0, 1.0],
+                "rgba": [0.0, 0.5, 1.0, 1.0],
                 "radius": 0.12,
                 # coffee table "position": [-0.3, -1.2, 0.45],
                 "position": pad2_xyz,
+            },
+            {
+                "type": "PrimitiveObject",
+                "name": "pad3",
+                "primitive_type": "Disk",
+                "rgba": [0.0, 1.0, 1.0, 1.0],
+                "radius": 0.12,
+                # coffee table "position": [-0.3, -1.2, 0.45],
+                "position": pad3_xyz,
             },
             {
                 "type": "DatasetObject",
@@ -375,6 +448,7 @@ class CutPourPkgInBowlEnv(Environment):
                 "model": "zisekv",
                 "position": coffee_table_xyz,
                 "orientation": coffee_table_ori,
+                "scale": [1.0, 1.5, 1.0],
             },
             {
                 "type": "DatasetObject",
@@ -434,10 +508,11 @@ class CutPourPkgInBowlEnv(Environment):
                 {
                     "type": "PrimitiveObject",
                     "name": "bowl",
-                    "primitive_type": "Cube",
+                    "primitive_type": "Cylinder",
                     "manipulable": True,
                     "rgba": [0.0, 1.0, 0, 1.0],
-                    "scale": [0.15, 0.15, 0.2],
+                    "radius": 0.12,
+                    "height": 0.04,
                     "position": bowl_xyz,
                     "orientation": bowl_ori,
                 },
@@ -475,7 +550,8 @@ class PrimitivesEnv:
     def __init__(self, env, max_path_len, debug=True):
         self.env = env
         self.max_path_len = max_path_len
-        self.furniture_names = self.env.furniture_names
+        self.non_manipulable_obj_names = self.env.non_manipulable_obj_names
+        self.main_furn_names = self.env.main_furn_names
         self.task_ids = self.env.task_ids
         self.scene = self.env.scene
         self.robot = self.env.robots[0]
@@ -494,7 +570,7 @@ class PrimitivesEnv:
         self._load_action_space()
 
     def set_skill_names_params(self):
-        self.skill_names = ["pick_pour_place", "pickplace"]  # ["say", "pick_pour_place", "pickplace", "converse", "no_op"]
+        self.skill_names = ["pickplace", "pick_pour_place"]  # ["say", "pick_pour_place", "pickplace", "converse", "no_op"]
         self.skill_name_to_param_domain = dict(
             # say=[
             #     ("pick_open_place", "package", "onto countertop"),
@@ -505,14 +581,14 @@ class PrimitivesEnv:
             #     ("pick_pour_place", ("package", "plate"), "onto countertop"),
             # ],
             pick_pour_place=[
-                ("package", "pad2", "pad"),
+                ("package", "bowl", "coffee_table"),
             ],
             pickplace=[
                 # ("knife", "countertop"),
                 # ("package", "countertop"),
+                ("scissors", "coffee_table"),
                 ("package", "coffee_table"),
                 ("bowl", "coffee_table"),
-                ("scissors", "coffee_table"),
                 # TODO: change the order of these primitives to match minibehavior.
             ],
             # converse=[
@@ -564,8 +640,7 @@ class PrimitivesEnv:
 
         furn_to_R_pos_range_map = {}
         # Create robot position ranges in front of each main furniture
-        main_furn_names = ["shelf", "coffee_table", "sink"]
-        for furn in main_furn_names:
+        for furn in self.main_furn_names:
             furn_min_xyz, furn_max_xyz = self.env.get_obj_by_name(furn).aabb
             x_margin = 1.0
             sample_region_x_size = 1.0
@@ -580,11 +655,9 @@ class PrimitivesEnv:
             furn_to_R_pos_range_map[furn] = (sample_region_min, sample_region_max)
 
         if furn_name is None:
-            rand_furn_name = np.random.choice(main_furn_names)
-            if self.env.configs['config_name'] == "ahg":
-                rand_furn_name = "shelf"
+            rand_furn_name = np.random.choice(self.main_furn_names)
         else:
-            assert furn_name in main_furn_names
+            assert furn_name in self.main_furn_names
             rand_furn_name = furn_name
         region_min_xyz, region_max_xyz = furn_to_R_pos_range_map[
             rand_furn_name]
@@ -613,8 +686,22 @@ class PrimitivesEnv:
 
     def pre_step_obj_loading(self, action):
         st = time.time()
-        skill_name, _ = self.skill_name_param_action_space[action]
-        configs = self.env.load_configs(skill_name=skill_name)
+        skill_name, skill_params = self.skill_name_param_action_space[action]
+
+        R_plan_order = [
+            ("pickplace", ("bowl", "coffee_table")),
+            ("pickplace", ("package", "coffee_table")),
+            ("pickplace", ("scissors", "coffee_table")),
+            ("pick_pour_place", ("package", "bowl", "coffee_table")),
+        ]
+
+        R_step_idx = R_plan_order.index((skill_name, skill_params))
+
+        configs = self.env.load_configs(R_step_idx=R_step_idx)
+        if R_step_idx >= 3:
+            # Assume human has already opened package if we're on the last step
+            self.env.set_attr_state("package", "openable", True)
+
         for obj_dict in configs['objects']:
             init_obj_pose = (
                 obj_dict['position'], obj_dict.get("orientation", [0, 0, 0, 1]))
@@ -623,6 +710,10 @@ class PrimitivesEnv:
         for _ in range(20):
             og.sim.step()
         print(f"Done loading objects pre_step. time: {time.time() - st}")
+
+        obs, info = self.get_obs()
+
+        return obs, info
 
     def step(self, action):
         # action is an index in (0, self.action_space_discrete_size - 1)
@@ -661,7 +752,7 @@ class PrimitivesEnv:
 
         # Add to info
         info['obj_name_to_pos_map'] = {}
-        obj_names = self.get_manipulable_objects() + self.furniture_names
+        obj_names = self.get_manipulable_objects() + self.non_manipulable_obj_names
         obj_pos_list = self.env.get_obj_poses(obj_names)["pos"]
         for obj_name, obj_pos in zip(obj_names, obj_pos_list):
             info['obj_name_to_pos_map'][obj_name] = obj_pos
@@ -670,10 +761,7 @@ class PrimitivesEnv:
         info['obj_name_to_parent_obj_name_map'] = (
             self.env.get_parent_objs_of_objs(obj_names))
 
-        info['obj_name_to_attr_map'] = {}
-        for obj_name in obj_names:
-            info['obj_name_to_attr_map'][obj_name] = {"openable": False}
-
+        info['obj_name_to_attr_map'] = self.env.obj_name_to_attr_map
         info['human_pos'] = np.array([0, 0])
 
         state_dict = {}
@@ -739,10 +827,10 @@ class SymbState:
         """
         self.env = env
         self.obj_names = self.env.get_manipulable_objects()
-        self.furniture_names = self.env.furniture_names
+        self.non_manipulable_obj_names = self.env.non_manipulable_obj_names
         self.d = {}
         self.obj_attrs = ["obj_type", "parent_obj", "parent_obj_pos", "ori"]
-        for obj_furn_name in self.obj_names + self.furniture_names:
+        for obj_furn_name in self.obj_names + self.non_manipulable_obj_names:
             obj_symb_state_dict = dict()
             for attr_name in self.obj_attrs:
                 obj_symb_state_dict[attr_name] = self.encode(
@@ -768,13 +856,13 @@ class SymbState:
         """
         if attr_name == "obj_type":
             # One-hot encoding of the object w/ name attr_val
-            domain = self.obj_names + self.furniture_names
+            domain = self.obj_names + self.non_manipulable_obj_names
             idx = domain.index(obj_furn_name)
             encoding = np.zeros(len(domain),)
             encoding[idx] = 1.0
         elif attr_name == "parent_obj":
             # One-hot encoding of the object w/ name attr_val
-            domain = self.obj_names + self.furniture_names + ["world"]
+            domain = self.obj_names + self.non_manipulable_obj_names + ["world"]
             idx = domain.index(info['obj_name_to_parent_obj_name_map'][obj_furn_name])
             encoding = np.zeros(len(domain),)
             encoding[idx] = 1.0
@@ -807,7 +895,7 @@ class SymbState:
         obj_vec_state = np.concatenate(obj_vec_state)
 
         furniture_vec_state = []
-        for furniture_name in self.furniture_names:
+        for furniture_name in self.non_manipulable_obj_names:
             for key in self.obj_attrs + ["opened"]:
                 state_val = self.d[furniture_name][key]
                 if not isinstance(state_val, np.ndarray):
