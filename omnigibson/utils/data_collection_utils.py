@@ -36,7 +36,7 @@ class ScriptedDataCollector:
             "terminals", "infos", "next_infos", "num_steps_info"]
         self.obs_keys = ["state", "symb_state"]
         self.next_obs_keys = ["state", "symb_state"]
-        self.task_ids = env.task_ids
+        self.task_ids = list(range(self.env.action_space_discrete_size))
 
         self.primitive_int_to_rew_list_map = {}
         self.primitive_int_to_num_env_steps_list_map = {}
@@ -89,7 +89,8 @@ class ScriptedDataCollector:
         traj_dict["next_infos"].append(next_info)
         traj_dict["num_steps_info"].append(num_steps_info)
 
-    def collect_single_traj(self, task_id=0):
+    def collect_single_traj(self, action=0):
+        assert action in range(self.env.action_space_discrete_size)
         # may be an unsuccessful traj
         # Init traj datastructures
         MAX_TS = 10000
@@ -100,7 +101,6 @@ class ScriptedDataCollector:
         assert self.max_path_len == 1  # <-- needed since we are overriding obs at one of the first lines in for-loop below
         for t in range(self.max_path_len):
             stf = time.time()
-            action = [3][t]
 
             # update state (assume previous primitives have already been completed)
             obs, info = self.env.pre_step_obj_loading(action)
@@ -155,7 +155,7 @@ class ScriptedDataCollector:
             self.print_success_rate_by_skill()
 
         self.env.make_video()
-        self.save_single_demo_hdf5(traj_dict, task_id)
+        self.save_single_demo_hdf5(traj_dict, action)
 
     def save_single_demo_hdf5(self, traj_dict, task_id):
         # Create single-demo hdf5 file.
@@ -220,8 +220,9 @@ class ScriptedDataCollector:
         os.makedirs(f"{self.out_dir}", exist_ok=True)
         self.demo_fpaths = []
 
-        for i in tqdm(range(n)):
-            self.collect_single_traj(task_id=self.task_ids[0])
+        for action in self.task_ids:
+            for i in tqdm(range(n)):
+                self.collect_single_traj(action=action)
 
         self.env.reset()
 
@@ -230,7 +231,8 @@ class ScriptedDataCollector:
         env_info = {}
         print("self.demo_fpaths", self.demo_fpaths)
         out_path = concat_hdf5(
-            self.demo_fpaths, self.out_dir, env_info, self.env_name)
+            self.demo_fpaths, self.out_dir, env_info, self.env_name,
+            self.env.skill_name_param_action_space)
 
         print("TaskID --> # trajs collected", self.task_id_to_num_trajs_map)
 
@@ -240,7 +242,7 @@ class ScriptedDataCollector:
         for action, rew_list in self.primitive_int_to_rew_list_map.items():
             num_trajs += len(rew_list)
             if len(rew_list):
-                out_str += f"- {action}: {np.sum(rew_list)}/{len(rew_list)}"
+                out_str += f"- {action}: {np.sum(rew_list)}/{len(rew_list)}\n"
         if num_trajs:
             print(out_str)
         return out_str
@@ -255,7 +257,8 @@ def get_timestamp_str(divider='-', datetime_divider='T'):
 
 def concat_hdf5(
         hdf5_list, out_dir, env_info, env_name,
-        save_orig_hdf5_list=False, demo_attrs_to_del=[]):
+        save_orig_hdf5_list=False, demo_attrs_to_del=[],
+        action_to_skill_params_map=[]):
     timestamp = get_timestamp_str()
     out_path = os.path.join(out_dir, f"scripted_{env_name}_{timestamp}.hdf5")
     f_out = h5py.File(out_path, mode='w')
@@ -275,20 +278,6 @@ def concat_hdf5(
                 task_idx_grp = f_out[f'data/{task_idx}']
             task_idx = int(task_idx)
             for demo_id in h5fr[f'data/{task_idx}'].keys():
-                # Set lang_list under task_idx grp
-                # if "lang_list" not in task_idx_grp.attrs.keys():
-                #     if "lang_list" in h5fr[f'data/{task_idx}'].attrs.keys():
-                #         task_idx_grp.attrs["lang_list"] = (
-                #             h5fr[f'data/{task_idx}'].attrs["lang_list"])
-                #     else:
-                #         task_idx_grp.attrs["lang_list"] = [
-                #             str(x) for x in (
-                #                 h5fr[f'data/{task_idx}/{demo_id}']
-                #                 .attrs['lang_list'])]
-                # if "is_multistep" not in task_idx_grp.attrs.keys():
-                #     task_idx_grp.attrs["is_multistep"] = h5fr[
-                #         f'data/{task_idx}'].attrs["is_multistep"]
-
                 task_idx_traj_num = task_idx_to_num_eps_map[task_idx]
                 h5fr.copy(
                     f"data/{task_idx}/{demo_id}", task_idx_grp,
@@ -307,6 +296,7 @@ def concat_hdf5(
     grp.attrs["date"] = "{}-{}-{}".format(now.month, now.day, now.year)
     grp.attrs["time"] = "{}:{}:{}".format(now.hour, now.minute, now.second)
     grp.attrs["env"] = env_name
+    grp.attrs["action_to_skill_params_map"] = action_to_skill_params_map
     if env_args is not None:
         grp.attrs["env_args"] = env_args
     grp.attrs["env_info"] = str(env_info)

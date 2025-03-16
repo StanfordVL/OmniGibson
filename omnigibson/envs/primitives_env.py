@@ -305,7 +305,7 @@ class CutPourPkgInBowlEnv(Environment):
 
         # Sink
         if config_name == "ahg":
-            sink_xyz = np.array([17.09, 4.90, 0.5])
+            sink_xyz = np.array([17.09, 4.90, 0.4])
             sink_ori = np.array([0, 0, -0.707, 0.707])
         else:
             pass
@@ -314,7 +314,7 @@ class CutPourPkgInBowlEnv(Environment):
         if config_name == "ahg":
             bowl_parent = init_obj_to_parent_map["bowl"]
             if bowl_parent == "sink":
-                bowl_xyz = sink_xyz + np.array([-0.2, -0.8, 0.5])
+                bowl_xyz = sink_xyz + np.array([-0.2, -0.8, 0.4])
             elif bowl_parent == "pad":
                 bowl_xyz = pad_xyz + np.array([0, 0, 0.04])
             else:
@@ -355,9 +355,9 @@ class CutPourPkgInBowlEnv(Environment):
         if config_name == "ahg":
             scissors_parent = init_obj_to_parent_map["scissors"]
             if scissors_parent == "sink":
-                scissors_xyz = sink_xyz + np.array([-0.2, 0.8, 0.5])
+                scissors_xyz = sink_xyz + np.array([-0.2, 0.8, 0.4])
             elif scissors_parent == "pad3":
-                scissors_xyz = pad3_xyz + np.array([0, 0, 0.12])
+                scissors_xyz = pad3_xyz + np.array([0, 0, 0.1])
             else:
                 raise NotImplementedError
             scissors_ori = np.array([0, 0, 0, 1])
@@ -501,7 +501,7 @@ class CutPourPkgInBowlEnv(Environment):
                     "model": "egwapq",
                     "position": sink_xyz,
                     "orientation": sink_ori,
-                    "scale": [0.8, 1.0, 0.65],
+                    "scale": [0.8, 1.0, 0.5],
                 },
 
                 # bowl and scissors
@@ -522,7 +522,7 @@ class CutPourPkgInBowlEnv(Environment):
                     "primitive_type": "Cube",
                     "manipulable": True,
                     "rgba": [1.0, 0.0, 1.0, 1.0],
-                    "scale": [0.15, 0.15, 0.2],
+                    "scale": [0.1, 0.1, 0.1],
                     "position": scissors_xyz,
                     "orientation": scissors_ori,
                 },
@@ -572,31 +572,14 @@ class PrimitivesEnv:
     def set_skill_names_params(self):
         self.skill_names = ["pickplace", "pick_pour_place"]  # ["say", "pick_pour_place", "pickplace", "converse", "no_op"]
         self.skill_name_to_param_domain = dict(
-            # say=[
-            #     ("pick_open_place", "package", "onto countertop"),
-            #     ("pick_open_place", "package", "with knife, onto countertop"),
-            #     ("pickplace", "knife", "onto countertop"),
-            #     ("pickplace", "package", "onto countertop"),
-            #     ("pickplace", "plate", "onto countertop"),
-            #     ("pick_pour_place", ("package", "plate"), "onto countertop"),
-            # ],
-            pick_pour_place=[
-                ("package", "bowl", "coffee_table"),
-            ],
             pickplace=[
-                # ("knife", "countertop"),
-                # ("package", "countertop"),
                 ("scissors", "coffee_table"),
                 ("package", "coffee_table"),
                 ("bowl", "coffee_table"),
-                # TODO: change the order of these primitives to match minibehavior.
             ],
-            # converse=[
-            #     ("",),  # args provided in lang_act arg
-            # ],
-            # no_op=[
-            #     ("",),
-            # ],
+            pick_pour_place=[
+                ("package", "bowl", "coffee_table"),
+            ],
         )
 
     def reset(self, **kwargs):

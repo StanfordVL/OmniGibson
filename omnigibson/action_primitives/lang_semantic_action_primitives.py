@@ -202,7 +202,10 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         st = time.time()
         if not self.debug:
             num_steps_dict['place_steps'], r = self.execute_controller(
-                self.apply_ref(StarterSemanticActionPrimitiveSet.PLACE_ON_TOP, dest_obj))
+                self.apply_ref(
+                    StarterSemanticActionPrimitiveSet.PLACE_ON_TOP,
+                    dest_obj,
+                    do_robot_reset=False))
         print(f"Finish executing place. time: {time.time() - st}")
 
         # calculate totals, with and without teleport
@@ -296,7 +299,9 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         # place_num_env_steps, r = self.execute_controller(
         #     self.apply_ref(StarterSemanticActionPrimitiveSet.PLACE_ON_TOP, dest_obj))
         num_steps_dict['place_steps'], r = self.execute_controller(
-            self.apply_ref(StarterSemanticActionPrimitiveSet.RELEASE))
+            self.apply_ref(
+                StarterSemanticActionPrimitiveSet.RELEASE,
+                do_robot_reset=False))
         print(f"Finish executing place. time: {time.time() - st}")
 
         # calculate totals, with and without teleport
