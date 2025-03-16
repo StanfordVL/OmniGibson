@@ -480,7 +480,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             robot_left = T.quat_apply(robot_quat, world_left)
 
             # Desired direction is mostly -x in the world frame (-1, 0, 0)
-            desired_direction = th.tensor([-0.9, -0.3, 0.])
+            desired_direction = th.tensor([-1, 0., 0.])  # th.tensor([-0.9, -0.3, 0.])
 
             # Project desired direction onto the robot's frame
             action_x = th.dot(desired_direction, robot_forward)
@@ -871,7 +871,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
 
             if valid_navigation_pose is not None:
+                print("trying to navigate to pose")
                 yield from self._navigate_to_pose(valid_navigation_pose, skip_obstacle_update=True)
+                print("done navigating to pose")
                 yield from self._move_hand(hand_pose)
                 break
 
@@ -1762,6 +1764,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # No need to navigate.
             return
 
+        # TODO: try skip_obstacle_update.
+        # make sure direction is = "front" when this is called
         yield from self._navigate_to_obj(obj, direction, eef_pose=eef_pose, skip_obstacle_update=True)
 
     def _navigate_to_obj(self, obj, direction="down", eef_pose=None, skip_obstacle_update=False):

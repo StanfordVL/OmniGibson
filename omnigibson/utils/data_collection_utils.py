@@ -33,7 +33,7 @@ class ScriptedDataCollector:
 
         self.ds_keys = [
             "observations", "actions", "rewards", "next_observations",
-            "terminals", "infos", "next_infos", "num_env_steps"]
+            "terminals", "infos", "next_infos", "num_steps_info"]
         self.obs_keys = ["state", "symb_state"]
         self.next_obs_keys = ["state", "symb_state"]
         self.task_ids = env.task_ids
@@ -67,7 +67,7 @@ class ScriptedDataCollector:
             done,
             info,
             next_info,
-            num_env_steps,
+            num_steps_info,
     ):
         for obs_key in self.obs_keys:
             if isinstance(obs_dict[obs_key], list):
@@ -87,7 +87,7 @@ class ScriptedDataCollector:
         traj_dict["terminals"].append(done)
         traj_dict["infos"].append(info)
         traj_dict["next_infos"].append(next_info)
-        traj_dict["num_env_steps"].append(num_env_steps)
+        traj_dict["num_steps_info"].append(num_steps_info)
 
     def collect_single_traj(self, task_id=0):
         # may be an unsuccessful traj
@@ -100,36 +100,44 @@ class ScriptedDataCollector:
         for t in range(self.max_path_len):
             stf = time.time()
             action = [1][t]  # Put the plan here. TODO: make sure env action space maps to primitives.
-            finished_step = False
 
             self.env.pre_step_obj_loading(action)
             if self.args.no_vid:
                 next_obs, r, done, next_info = self.env.step(action)
-                finished_step = True
             else:
                 try:
                     next_obs, r, done, next_info = self.env.step(action)
-                    finished_step = True
                 except Exception as e:
                     print(f"env step failed on action {action}")
                     print(f"Got error:\n{e}")
                     skill_info = {}
                     skill_info['skill_success'] = False
-                    skill_info['num_env_steps'] = MAX_TS
+                    skill_info['num_steps_info'] = dict(
+                        total_env_steps=MAX_TS,
+                        total_env_steps_wo_teleport=MAX_TS,
+                    )
+
+                    skill_name, _ = self.env.skill_name_param_action_space[action]
+                    if skill_name == "pickplace":  # TODO fix this to get the primitive name
+                        skill_info['num_steps_info'].update(dict(
+                            nav_to_place_teleport_aerial_dist=np.nan,
+                            nav_to_place_teleport_speed=0.01,
+                            nav_to_place_teleport_inferred_steps=np.nan,
+                        ))
                     next_obs, r, done, next_info = self.env.post_step(skill_info)
                     next_info['skill_success'] = bool(r)
             print(f"Total time to execute trajectory: {time.time() - stf}")
 
             self.add_transition(
                 traj_dict, obs, action, r, next_obs, done, info, next_info,
-                next_info['num_env_steps'])
+                next_info['num_steps_info'])
             obs = next_obs
             info = next_info
 
             # store skill reward and timesteps.
             skill_success = bool(info['skill_success'])
             assert skill_success == r
-            num_env_steps = info['num_env_steps']
+            num_env_steps = info['num_steps_info']['total_env_steps']
 
             if action not in self.primitive_int_to_rew_list_map:
                 self.primitive_int_to_rew_list_map[action] = []
@@ -180,14 +188,26 @@ class ScriptedDataCollector:
         ep_grp.create_dataset(
             "terminals", data=np.stack(traj_dict["terminals"]))
         ep_grp.create_dataset(
-            "num_env_steps", data=np.stack(traj_dict["num_env_steps"]))
+            "num_env_steps", data=np.stack(
+                [x["total_env_steps"] for x in traj_dict["num_steps_info"]]))
+        ep_grp.create_dataset(
+            "num_env_steps_wo_teleport", data=np.stack(
+                [x.get("total_env_steps_wo_teleport", x["total_env_steps"])
+                 for x in traj_dict["num_steps_info"]]))
+        ep_grp.create_dataset(
+            "teleport_aerial_dist", data=np.stack(
+                [x.get("teleport_aerial_dist", 0)
+                 for x in traj_dict["num_steps_info"]]))
 
-        # save info and next_info
+        # save info, next_info, and num_steps_info
         infos_grp = ep_grp.create_group("infos")
         infos_grp.attrs["dicts_by_ts"] = str(traj_dict["infos"]).replace(
             "array(", "np.array(")
         next_infos_grp = ep_grp.create_group("next_infos")
         next_infos_grp.attrs["dicts_by_ts"] = str(traj_dict["next_infos"]).replace(
+            "array(", "np.array(")
+        num_steps_infos_grp = ep_grp.create_group("num_steps_info")
+        num_steps_infos_grp.attrs["dicts_by_ts"] = str(traj_dict["num_steps_info"]).replace(
             "array(", "np.array(")
 
         self.demo_fpaths.append(demo_file_name)

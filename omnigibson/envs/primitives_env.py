@@ -34,7 +34,7 @@ class CutPourPkgInBowlEnv(Environment):
         self.configs = self.load_configs()
         self.obj_names = self.get_manipulable_objects()
         self.furniture_names = [
-            "coffee_table", "shelf", "pad", "pad2"]  # stuff not intended to be moved
+            "coffee_table", "shelf", "sink", "pad", "pad2"]  # stuff not intended to be moved
         self.reward_mode = "pour"
 
         args = dotdict(
@@ -58,6 +58,7 @@ class CutPourPkgInBowlEnv(Environment):
         self.get_obj_by_name("package").links['base_link'].mass = 0.1
         self.get_obj_by_name("package_contents").links['base_link'].mass = 0.05
         self.get_obj_by_name("shelf").links['base_link'].mass = 100.0
+        self.get_obj_by_name("sink").links['base_link'].mass = 100.0
         # ^ list of tuples (Union["human", "robot"], Utterance: str)
 
     def _reset_variables(self):
@@ -143,7 +144,7 @@ class CutPourPkgInBowlEnv(Environment):
             (-0.01 < obj_z_signed_dist <= z_tol).item() and (obj_xy_dist <= xy_tol).item())
         # some objects get cut off if we use 0.0 instead of -0.01
 
-        if dest_obj_name == "shelf":
+        if dest_obj_name in ["shelf", "sink"]:
             placed_on = bool(th.all(
                 (obj_place_min <= obj_pos) & (obj_pos <= obj_place_max)))
 
@@ -239,6 +240,9 @@ class CutPourPkgInBowlEnv(Environment):
             raise NotImplementedError
         # package_parent = ["shelf", "coffee_table"][0]
         config_name = "ahg"
+        configs['config_name'] = config_name
+
+        # shelf, package
         config_name_to_shelf_xyz_map = dict(
             back=np.array([-1.0, 0.0, 0.93]),
             left=np.array([1.3, 2.0, 0.93]),
@@ -267,10 +271,16 @@ class CutPourPkgInBowlEnv(Environment):
         package_xyz = list(package_xyz)
         package_contents_xyz = list(package_contents_xyz)
 
+        # Coffee table, pad, pad2
         coffee_table_xyz_map = dict(
             back=np.array([1.2, 0.6, 0.4]),
             left=np.array([1.2, 0.6, 0.4]),
             ahg=np.array([4.44, 3.53, 0.4]),
+        )
+        coffee_table_ori_map = dict(
+            back=np.array([0, 0, 0, 1]),
+            left=np.array([0, 0, 0, 1]),
+            ahg=np.array([0, 0, 0, 1]),  # np.array([0, 0, 0.707, 0.707]),
         )
 
         coffee_table_xyz = coffee_table_xyz_map[config_name]
@@ -279,6 +289,16 @@ class CutPourPkgInBowlEnv(Environment):
         coffee_table_xyz = list(coffee_table_xyz)
         pad_xyz = list(pad_xyz)
         pad2_xyz = list(pad2_xyz)
+        coffee_table_ori = coffee_table_ori_map[config_name]
+
+        # Sink, bowl, scissors
+        if config_name == "ahg":
+            sink_xyz = np.array([17.09, 4.90, 0.5])
+            sink_ori = np.array([0, 0, -0.707, 0.707])
+            bowl_xyz = sink_xyz + np.array([-0.2, -0.8, 0.5])
+            bowl_ori = np.array([0, 0, 0, 1])
+            scissors_xyz = sink_xyz + np.array([-0.2, 0.8, 0.5])
+            scissors_ori = np.array([0, 0, 0, 1])
 
         # camera params
         config_name_to_camera_xyz_map = dict(
@@ -286,11 +306,12 @@ class CutPourPkgInBowlEnv(Environment):
             left=th.tensor([-0.2010, -2.7257, 1.0654]),
             # ahg=th.tensor([8.7, -15, 1.0]),  # good for level view
             ahg=th.tensor([8.7, -15, 4.0]),  # good for level view
+            # head-on view for ahg kitchen section: th.tensor([13, 3.5, 1.0])
         )
         config_name_to_camera_ori_map = dict(
             back=th.tensor([0.6820, -0.0016, -0.0017, 0.7314]),
             left=th.tensor([0.6820, -0.0016, -0.0017, 0.7314]),
-            ahg=th.tensor([0.707, 0, 0, 0.707]),
+            ahg=th.tensor([.5, -.5, -.5, .5]),  # th.tensor([0.707, 0, 0, 0.707]),
         )
         configs['camera_pose'] = (
             config_name_to_camera_xyz_map[config_name],
@@ -353,7 +374,7 @@ class CutPourPkgInBowlEnv(Environment):
                 "category": "coffee_table",
                 "model": "zisekv",
                 "position": coffee_table_xyz,
-                "orientation": [0, 0, 0, 1],
+                "orientation": coffee_table_ori,
             },
             {
                 "type": "DatasetObject",
@@ -396,6 +417,39 @@ class CutPourPkgInBowlEnv(Environment):
                     "scale": [0.2, 6.85, 1.0],
                     "position": [-0.1, 3.4, 0.5],
                     "orientation": [0, 0, 0, 1],
+                },
+
+                # Sink
+                {
+                    "type": "DatasetObject",
+                    "name": "sink",
+                    "category": "sink",
+                    "model": "egwapq",
+                    "position": sink_xyz,
+                    "orientation": sink_ori,
+                    "scale": [0.8, 1.0, 0.65],
+                },
+
+                # bowl and scissors
+                {
+                    "type": "PrimitiveObject",
+                    "name": "bowl",
+                    "primitive_type": "Cube",
+                    "manipulable": True,
+                    "rgba": [0.0, 1.0, 0, 1.0],
+                    "scale": [0.15, 0.15, 0.2],
+                    "position": bowl_xyz,
+                    "orientation": bowl_ori,
+                },
+                {
+                    "type": "PrimitiveObject",
+                    "name": "scissors",
+                    "primitive_type": "Cube",
+                    "manipulable": True,
+                    "rgba": [1.0, 0.0, 1.0, 1.0],
+                    "scale": [0.15, 0.15, 0.2],
+                    "position": scissors_xyz,
+                    "orientation": scissors_ori,
                 },
             ])
 
@@ -457,6 +511,9 @@ class PrimitivesEnv:
                 # ("knife", "countertop"),
                 # ("package", "countertop"),
                 ("package", "coffee_table"),
+                ("bowl", "coffee_table"),
+                ("scissors", "coffee_table"),
+                # TODO: change the order of these primitives to match minibehavior.
             ],
             # converse=[
             #     ("",),  # args provided in lang_act arg
@@ -481,7 +538,7 @@ class PrimitivesEnv:
 
         # done to make sure parent_map has correct reading on reset()
         print("stepping to reset")
-        for _ in range(20):
+        for _ in range(50):  # wait for robot and objects to settle
             og.sim.step()
         print("done stepping to reset")
 
@@ -500,14 +557,14 @@ class PrimitivesEnv:
 
         return obs, info
 
-    def set_rand_R_pose(self):
+    def set_rand_R_pose(self, furn_name=None, step_env=False):
         # Randomize the robot pose (only works on Rs_int)
         # floor = self.get_obj_by_name("floors_ptwlei_0")
         # self.env.robots[0].states[OnTop].set_value(floor, True)
 
         furn_to_R_pos_range_map = {}
         # Create robot position ranges in front of each main furniture
-        main_furn_names = ["shelf", "coffee_table"]
+        main_furn_names = ["shelf", "coffee_table", "sink"]
         for furn in main_furn_names:
             furn_min_xyz, furn_max_xyz = self.env.get_obj_by_name(furn).aabb
             x_margin = 1.0
@@ -522,15 +579,21 @@ class PrimitivesEnv:
                  0.])
             furn_to_R_pos_range_map[furn] = (sample_region_min, sample_region_max)
 
-        rand_furn_name = np.random.choice(main_furn_names)
+        if furn_name is None:
+            rand_furn_name = np.random.choice(main_furn_names)
+            if self.env.configs['config_name'] == "ahg":
+                rand_furn_name = "shelf"
+        else:
+            assert furn_name in main_furn_names
+            rand_furn_name = furn_name
         region_min_xyz, region_max_xyz = furn_to_R_pos_range_map[
             rand_furn_name]
         R_pos = np.random.uniform(region_min_xyz, region_max_xyz)
-        # R_pos = np.array([0, 0, 0])
+        # R_pos = np.array([1.0, 0, 0])
 
         # Sample robot orientation
         default_quat = np.array([0, 0, 0, 1])
-        z_angle = np.random.uniform(-90, 90)
+        z_angle = np.random.uniform(-45, 45)
         z_rot_quat = Rot.from_euler("z", z_angle, degrees=True).as_quat()
         R_ori = (
             Rot.from_quat(z_rot_quat) * Rot.from_quat(default_quat)).as_quat()
@@ -538,6 +601,13 @@ class PrimitivesEnv:
 
         self.env.robots[0].set_position_orientation(
             position=R_pos, orientation=R_ori)
+
+        if step_env:
+            for _ in range(50):
+                og.sim.step()
+
+        # actual robot pos after settling
+        R_pos, R_ori = self.env.robots[0].get_position_orientation()
 
         return R_pos, R_ori
 
@@ -570,7 +640,7 @@ class PrimitivesEnv:
         # print(f"Executing: {skill_name}{params}")
         skill_info = {}
         print("before skill")
-        skill_info['skill_success'], skill_info['num_env_steps'] = skill(
+        skill_info['skill_success'], skill_info['num_steps_info'] = skill(
             *orig_params)
         print("after skill")
 

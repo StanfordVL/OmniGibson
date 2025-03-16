@@ -90,16 +90,17 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         self.env.env.obj_to_grasp_name = obj_name
         self.env.set_reward_mode("place")
 
+        num_steps_dict = {}
+
         if self.debug:
             steps = 30
             speed = 0.01
-            backup_num_steps, r = self.execute_controller(
+            num_steps_dict['move_back_steps'], r = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.MOVE_BASE_BACK,
                     steps,
                     speed,
                     do_robot_reset=False))
-            raise NotImplementedError
 
         pick_obj = self.env.get_obj_by_name(obj_name)
         if dest_obj_name == "coffee_table":
@@ -110,10 +111,9 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
 
         print("Start executing grasp")
         st = time.time()
-        grasp_num_env_steps, _ = 0, 0
         if not self.debug:
             direction = "forward"
-            grasp_num_env_steps, _ = self.execute_controller(
+            num_steps_dict['grasp_steps'], _ = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.GRASP,
                     pick_obj,
@@ -125,53 +125,85 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         print("Start raising trunk")
         st = time.time()
         height_increase = 0.1
-        raise_trunk_num_steps, _ = 0, 0
         if not self.debug:
-            raise_trunk_num_steps, r = self.execute_controller(
+            num_steps_dict['raise_trunk_steps'], r = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.RAISE_TRUNK,
                     height_increase,
                     do_robot_reset=False))
         print(f"Done raising trunk. time: {time.time() - st}")
 
-        # move base backwards
-        print("Start moving base backwards")
+        # store grasp pose so we can return to it
+        post_grasp_pose_action = self._empty_action(follow_arm_targets=False)
+
+        # move base toward coffee table
+        print("Start moving base toward place location")
         st = time.time()
-        steps = 60
-        speed = 0.01
-        backup_num_steps, _ = 0, 0
-        if not self.debug:
-            backup_num_steps, r = self.execute_controller(
-                self.apply_ref(
-                    StarterSemanticActionPrimitiveSet.MOVE_BASE_BACK,
-                    steps,
-                    speed,
-                    do_robot_reset=False))
-        print(f"Done moving base backwards. time: {time.time() - st}")
+        teleport_robot = True
+        if not teleport_robot:
+            # moves base backwards
+            steps = 400
+            speed = 0.04
+            if not self.debug:
+                num_steps_dict['backup_steps'], r = self.execute_controller(
+                    self.apply_ref(
+                        StarterSemanticActionPrimitiveSet.MOVE_BASE_BACK,
+                        steps,
+                        speed,
+                        do_robot_reset=False))
+        else:
+            print("\tteleporting...")
+            R_pos_pre, _ = self.robot.get_position_orientation()
+            # R_pos = np.array([2, 0, 0])
+            # self.robot.set_position_orientation(
+            #     position=R_pos, orientation=R_ori)
+            # for _ in range(50):
+            #     og.sim.step()
+            R_pos_post, _ = self.env.set_rand_R_pose(furn_name="coffee_table", step_env=True)
+            num_steps_dict['teleport_aerial_dist'] = th.norm(R_pos_post - R_pos_pre).item()
+            num_steps_dict['teleport_speed'] = 0.01
+            num_steps_dict['nav_to_place_teleport_inferred_steps'] = int(
+                num_steps_dict['teleport_aerial_dist']
+                / num_steps_dict['teleport_speed'])
+        print(f"Done navigating to place. time: {time.time() - st}")
+
+        def move_to_pose(pose_action):
+            for _ in range(40):
+                yield self._postprocess_action(pose_action)
+
+        # arm position droops while traveling long distances
+        # move it back to the position it was at once it grasped the object
+        print("moving arm back to post grasp pose")
+        st = time.time()
+        reset_arm_num_steps, r = self.execute_controller(
+            move_to_pose(post_grasp_pose_action))
+        print(f"done moving arm back to post grasp pose. time: {time.time() - st}")
 
         # Place on coffee table
         print("Start executing place")
         st = time.time()
-        place_num_env_steps, _ = 0, 0
         if not self.debug:
-            place_num_env_steps, r = self.execute_controller(
+            num_steps_dict['place_steps'], r = self.execute_controller(
                 self.apply_ref(StarterSemanticActionPrimitiveSet.PLACE_ON_TOP, dest_obj))
         print(f"Finish executing place. time: {time.time() - st}")
 
+        # calculate totals, with and without teleport
+        total_env_steps = 0
+        total_env_steps_wo_teleport = 0
+        for k, v in num_steps_dict.items():
+            if "_steps" in k:
+                total_env_steps += v
+                if "teleport" not in k:
+                    total_env_steps_wo_teleport += v
+
+        num_steps_dict['total_env_steps'] = total_env_steps
+        num_steps_dict['total_env_steps_wo_teleport'] = total_env_steps_wo_teleport
+
+        print("num_steps_dict", num_steps_dict)
+
         success = bool(r)
-        total_num_env_steps = (
-            grasp_num_env_steps
-            + raise_trunk_num_steps
-            + backup_num_steps
-            + place_num_env_steps)
 
-        print("grasp_num_env_steps", grasp_num_env_steps)
-        print("raise_trunk_num_steps", raise_trunk_num_steps)
-        print("backup_num_steps", backup_num_steps)
-        print("place_num_env_steps", place_num_env_steps)
-        print("total_num_env_steps", total_num_env_steps)
-
-        return success, total_num_env_steps
+        return success, num_steps_dict
 
     def _pick_pour_place(self, obj_name, cont_name, dest_obj_name):
         assert self.robot.grasping_mode == "sticky", ("_pick_pour_place not yet supported for assisted grasp")
@@ -179,6 +211,8 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         # needed for setting grasp reward properly
         self.env.env.obj_to_grasp_name = obj_name
         self.env.set_reward_mode("pour")
+
+        num_steps_dict = {}
 
         obj = self.env.get_obj_by_name(obj_name)
 
@@ -196,7 +230,7 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         print("obj.mass", obj.mass)
         st = time.time()
         if not self.debug:
-            grasp_num_env_steps, r = self.execute_controller(
+            num_steps_dict['grasp_steps'], r = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.GRASP,
                     obj,
@@ -205,10 +239,9 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         print(f"Finish executing grasp. time: {time.time() - st}")
 
         print("Start lifting obj a bit")
-        lift_num_env_steps, r = 0, 0
         if self.debug:
             height_increase = 0.1
-            lift_num_env_steps, r = self.execute_controller(
+            num_steps_dict['lift_steps'], r = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.RAISE_TRUNK,
                     height_increase,
@@ -216,38 +249,41 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         print(f"Finish lifting obj. time: {time.time() - st}")
 
         # TODO: Pour obj on cont (create primitive for this)
-        pour_num_env_steps, r = 0, 0
         if not self.debug:
-            pour_num_env_steps, r = self.execute_controller(
+            num_steps_dict['pour_steps'], r = self.execute_controller(
                 self.apply_ref(
                     StarterSemanticActionPrimitiveSet.POUR,
                     do_robot_reset=False))
         print(f"Finish pouring obj. time: {time.time() - st}")
 
         # Place obj on dest_obj
-        place_num_env_steps, r = 0, 0
         # TODO: add the direction arg to the things in _place_with_predicate
         print("Start executing place")
         st = time.time()
         # place_num_env_steps, r = self.execute_controller(
         #     self.apply_ref(StarterSemanticActionPrimitiveSet.PLACE_ON_TOP, dest_obj))
-        place_num_env_steps, r = self.execute_controller(
+        num_steps_dict['place_steps'], r = self.execute_controller(
             self.apply_ref(StarterSemanticActionPrimitiveSet.RELEASE))
         print(f"Finish executing place. time: {time.time() - st}")
 
-        success = bool(r)
-        total_num_env_steps = (
-            grasp_num_env_steps
-            + lift_num_env_steps
-            + pour_num_env_steps
-            + place_num_env_steps)
+        # calculate totals, with and without teleport
+        total_env_steps = 0
+        total_env_steps_wo_teleport = 0
+        for k, v in num_steps_dict.items():
+            if "_steps" in k:
+                total_env_steps += v
+                if "teleport" not in k:
+                    total_env_steps_wo_teleport += v
 
-        print("grasp_num_env_steps", grasp_num_env_steps)
-        print("place_num_env_steps", place_num_env_steps)
-        print("total_num_env_steps", total_num_env_steps)
+        num_steps_dict['total_env_steps'] = total_env_steps
+        num_steps_dict['total_env_steps_wo_teleport'] = total_env_steps_wo_teleport
+
+        print("num_steps_dict", num_steps_dict)
+
+        success = bool(r)
 
         # revert back to old grasping mode. TODO: remove this.
-        return success, total_num_env_steps
+        return success, num_steps_dict
 
     def execute_controller(self, ctrl_gen):
         num_env_steps = 0
