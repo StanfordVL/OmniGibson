@@ -312,6 +312,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     yield from ctrl(*args)
                     success = True
                 except ActionPrimitiveError as e:
+                    print(f"ActionPrimitiveError while executing primitive: {e}")
                     errors.append(e)
             else:
                 yield from ctrl(*args)
@@ -325,13 +326,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             except ActionPrimitiveError:
                 pass
 
-            if do_robot_reset:
+            if success and do_robot_reset:
+                st = time.time()
                 try:
                     print("Reset robot (retract arms) 320")
                     # Make sure we retract the arms after every step
                     yield from self._reset_robot()
                 except ActionPrimitiveError as e:
                     print(f"While Resetting, got error: {e}")
+                print(f"Reset time: {time.time() - st}")
 
             try:
                 # Settle before returning.

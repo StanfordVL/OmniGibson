@@ -37,7 +37,6 @@ class CutPourPkgInBowlEnv(Environment):
             "coffee_table", "shelf", "sink", "pad", "pad2", "pad3"]
         self.main_furn_names = [
             "coffee_table", "shelf", "sink"]
-        self.reward_mode = "pour"
 
         args = dotdict(
             vid_downscale_factor=2,
@@ -63,12 +62,20 @@ class CutPourPkgInBowlEnv(Environment):
         self.get_obj_by_name("bowl").links['base_link'].mass = 0.1
         self.get_obj_by_name("shelf").links['base_link'].mass = 100.0
         self.get_obj_by_name("sink").links['base_link'].mass = 100.0
-        # ^ list of tuples (Union["human", "robot"], Utterance: str)
+
+        # used for calculating rewards
+        self.R_plan_order = [
+            ("pickplace", ("bowl", "coffee_table")),
+            ("pickplace", ("package", "coffee_table")),
+            ("pickplace", ("scissors", "coffee_table")),
+            ("pick_pour_place", ("package", "bowl", "coffee_table")),
+        ]
 
     def _reset_variables(self):
         # self.make_video()
         self.grasped_obj_names = []
         self.parent_map = {}
+        self.rew_dict = {}
 
         # Reset symbolic state: set everything to closed
         self.obj_name_to_attr_map = {}
@@ -96,39 +103,43 @@ class CutPourPkgInBowlEnv(Environment):
         obj_name = self.obj_name_to_id_map.get(obj_name, obj_name)
         return self.scene.object_registry("name", obj_name)
 
+    def get_obj_in_hand(self):
+        return self.robots[0]._ag_obj_in_hand[self.robots[0].default_arm]
+
     def get_reward(self, obs, info):
-        obj_name = ["box", "package"][-1]
-        obj_pos_list = self.get_obj_poses([obj_name])["pos"]
-        place_pos_list = self.get_obj_poses(['pad'])["pos"]
-        assert len(obj_pos_list) == len(place_pos_list) == 1
-
-        rew_dict = {}
-
-        # compute grasped rew
-        for obj_name in [self.obj_to_grasp_name]:
-            obj_grasped_now = self.robots[0]._ag_obj_in_hand[self.robots[0].default_arm]
-            # print(f"obj_grasped_now {obj_grasped_now}")
+        def get_grasp_rew(obj_name):
+            # Not used; only a diagnostic
+            obj_grasped_now = self.get_obj_in_hand()
+            # for obj_name in [self.obj_to_grasp_name]:
+            #     # print(f"obj_grasped_now {obj_grasped_now}")
+            #     grasp_success = (
+            #         (obj_name in self.grasped_obj_names)
+            #         or (obj_grasped_now and obj_grasped_now.name == self.obj_to_grasp_name))
+            #     if grasp_success and obj_name not in self.grasped_obj_names:
+            #         self.grasped_obj_names.append(obj_name)
             grasp_success = (
                 (obj_name in self.grasped_obj_names)
-                or (obj_grasped_now and obj_grasped_now.name == self.obj_to_grasp_name))
-            if grasp_success and obj_name not in self.grasped_obj_names:
-                self.grasped_obj_names.append(obj_name)
+                or (obj_grasped_now and obj_grasped_now.name == obj_name))
+            return float(grasp_success)
 
-        # compute place rew
-        no_obj_grasped = (
-            self.robots[0]._ag_obj_in_hand[self.robots[0].default_arm] is None)
-        obj_on_dest_obj = self.is_placed_on(obj_name, "pad")
-        place_success = obj_on_dest_obj and no_obj_grasped
-        rew_dict["place"] = float(bool(place_success))
-        # print("obj_on_dest_obj", obj_on_dest_obj, "no_obj_grasped", no_obj_grasped)
+        def get_pickplace_rew(obj_name, dest_obj_name):
+            obj_grasped_now = self.get_obj_in_hand()
+            not_grasping_obj = (
+                obj_grasped_now is None or obj_grasped_now.name != obj_name)
+            obj_on_dest_obj = self.is_placed_on(obj_name, dest_obj_name)
+            place_success = obj_on_dest_obj and not_grasping_obj
+            return float(bool(place_success))
 
-        # compute pour rew
-        pour_success = (
-            self.get_attr_state("package", "openable")
-            and self.is_placed_on("package_contents", "bowl"))
-        rew_dict["pour"] = float(bool(pour_success))
+        def get_pick_pour_place_rew(
+                pour_obj_name, pour_dest_obj_name, place_dest_obj_name):
+            assert pour_obj_name == "package" and pour_dest_obj_name == "bowl"
+            pour_success = (
+                self.get_attr_state(pour_obj_name, "openable")
+                and self.is_directly_placed_on(
+                    "package_contents", pour_dest_obj_name))
+            return float(bool(pour_success))
 
-        # print out what objects got newly placed on what other objects
+        # Diagnostic: print out what objects got newly placed on what other objects
         parent_map = self.get_parent_objs_of_objs(self.obj_names + self.non_manipulable_obj_names)
         if parent_map != self.parent_map:
             for k in set(parent_map.keys()).union(self.parent_map.keys()):
@@ -136,13 +147,47 @@ class CutPourPkgInBowlEnv(Environment):
                     print(f"parent_map[{k}]: {self.parent_map.get(k)} --> {parent_map.get(k)}")
         self.parent_map = parent_map
 
-        # if place_success or pour_success:
-        #     print("rew_dict", rew_dict)
-        reward = rew_dict[self.reward_mode]
+        # Return reward for a specific primitive.
+        # if no primitive provided, default to pouring reward
+        cur_skill_name_params = info.get(
+            "skill_name_params",
+            ("pick_pour_place", ("package", "bowl", "coffee_table")))
+
+        rew_dict = {}
+        for skill_name, skill_params in self.R_plan_order:
+            skill_param_rew_fn = eval(f"get_{skill_name}_rew")
+            rew = skill_param_rew_fn(*skill_params)
+            rew_dict[(skill_name, skill_params)] = rew
+
+        # Diagnostic: print out what rewards changed
+        if rew_dict != self.rew_dict:
+            for k in set(rew_dict.keys()).union(self.rew_dict.keys()):
+                if rew_dict.get(k) != self.rew_dict.get(k):
+                    str_to_print = f"cur_skill_name_params: {cur_skill_name_params}\n"
+                    str_to_print += f"\trew_dict[{k}]: {self.rew_dict.get(k)} --> {rew_dict.get(k)}"
+                    print(str_to_print)
+        self.rew_dict = rew_dict
+
+        reward = rew_dict[cur_skill_name_params]
         self.reward = reward
         return reward
 
     def is_placed_on(self, obj_name, dest_obj_name):
+        """
+        Sees if there is a path from obj to dest_obj where each
+        edge (u, v) in the path satisfies is_directly_placed_on(u, v)
+        """
+        if dest_obj_name == "world":
+            return True
+        assert obj_name != dest_obj_name
+        parent_name = obj_name
+        while parent_name != dest_obj_name:
+            if parent_name == "world":
+                return False
+            parent_name = self.parent_map[parent_name]
+        return True
+
+    def is_directly_placed_on(self, obj_name, dest_obj_name):
         if obj_name == dest_obj_name:
             return False
         obj_pos = self.get_obj_poses([obj_name])["pos"][0]
@@ -183,7 +228,7 @@ class CutPourPkgInBowlEnv(Environment):
             candidate_parents_of_q = []
             for candidate_parent in valid_parent_names:
                 candidate_parent_z = self.get_obj_poses([candidate_parent])['pos'][0][2]
-                if self.is_placed_on(q, candidate_parent):
+                if self.is_directly_placed_on(q, candidate_parent):
                     candidate_parents_of_q.append((candidate_parent, candidate_parent_z))
 
             # if "shelf" is one of >=2 candidates, don't choose shelf.
@@ -240,7 +285,7 @@ class CutPourPkgInBowlEnv(Environment):
         for dest_obj_name in self.furn_name_to_obj_names[furn_name]:
             dest_obj_taken = False  # True if there's an obj on top of it already
             for obj_name in self.get_manipulable_objects():
-                obj_on_dest_obj = self.is_placed_on(obj_name, dest_obj_name)
+                obj_on_dest_obj = self.is_directly_placed_on(obj_name, dest_obj_name)
                 dest_obj_taken = dest_obj_taken or obj_on_dest_obj
             if not dest_obj_taken:
                 return dest_obj_name
@@ -314,7 +359,7 @@ class CutPourPkgInBowlEnv(Environment):
         if config_name == "ahg":
             bowl_parent = init_obj_to_parent_map["bowl"]
             if bowl_parent == "sink":
-                bowl_xyz = sink_xyz + np.array([-0.2, -0.8, 0.4])
+                bowl_xyz = sink_xyz + np.array([-0.2, -0.6, 0.4])
             elif bowl_parent == "pad":
                 bowl_xyz = pad_xyz + np.array([0, 0, 0.04])
             else:
@@ -355,7 +400,7 @@ class CutPourPkgInBowlEnv(Environment):
         if config_name == "ahg":
             scissors_parent = init_obj_to_parent_map["scissors"]
             if scissors_parent == "sink":
-                scissors_xyz = sink_xyz + np.array([-0.2, 0.8, 0.4])
+                scissors_xyz = sink_xyz + np.array([-0.2, 0.6, 0.4])
             elif scissors_parent == "pad3":
                 scissors_xyz = pad3_xyz + np.array([0, 0, 0.1])
             else:
@@ -501,7 +546,7 @@ class CutPourPkgInBowlEnv(Environment):
                     "model": "egwapq",
                     "position": sink_xyz,
                     "orientation": sink_ori,
-                    "scale": [0.8, 1.0, 0.5],
+                    "scale": [0.6, 1.0, 0.55],
                 },
 
                 # bowl and scissors
@@ -671,14 +716,7 @@ class PrimitivesEnv:
         st = time.time()
         skill_name, skill_params = self.skill_name_param_action_space[action]
 
-        R_plan_order = [
-            ("pickplace", ("bowl", "coffee_table")),
-            ("pickplace", ("package", "coffee_table")),
-            ("pickplace", ("scissors", "coffee_table")),
-            ("pick_pour_place", ("package", "bowl", "coffee_table")),
-        ]
-
-        R_step_idx = R_plan_order.index((skill_name, skill_params))
+        R_step_idx = self.env.R_plan_order.index((skill_name, skill_params))
 
         configs = self.env.load_configs(R_step_idx=R_step_idx)
         if R_step_idx >= 3:
@@ -714,13 +752,14 @@ class PrimitivesEnv:
         # print(f"Executing: {skill_name}{params}")
         skill_info = {}
         print("before skill")
-        skill_info['skill_success'], skill_info['num_steps_info'] = skill(
-            *orig_params)
+        skill_info['num_steps_info'] = skill(*orig_params)
         print("after skill")
 
-        return self.post_step(skill_info)
+        return self.post_step(action, skill_info)
 
-    def post_step(self, skill_info={}):
+    def post_step(self, action, skill_info={}):
+        skill_info['skill_name_params'] = (
+            self.skill_name_param_action_space[action])
         obs, info = self.get_obs()
         info.update(skill_info)
         reward = self.get_reward(obs, info)
@@ -766,9 +805,6 @@ class PrimitivesEnv:
 
         return obs, info
 
-    def set_reward_mode(self, rew_mode):
-        self.env.reward_mode = rew_mode
-
     def _load_action_space(self):
         # TODO: clean this up later with self.load_observation_space
         # or with gym.Box
@@ -799,6 +835,9 @@ class PrimitivesEnv:
 
     def get_manipulable_objects(self):
         return self.env.get_manipulable_objects()
+
+    def get_obj_in_hand(self):
+        return self.env.get_obj_in_hand()
 
 
 class SymbState:

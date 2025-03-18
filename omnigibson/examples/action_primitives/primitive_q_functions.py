@@ -83,6 +83,9 @@ if __name__ == "__main__":
         "--debug", default=False, action="store_true")
     parser.add_argument(
         "--vid-speedup", type=int, default=2)
+    parser.add_argument(
+        "--task-ids", type=str, default="")  # comma separated list of task ids
     args = parser.parse_args()
+    args.task_ids = eval(f"[{args.task_ids}]")
     args.no_vid = bool(args.vid_speedup == 0)
     main(args)

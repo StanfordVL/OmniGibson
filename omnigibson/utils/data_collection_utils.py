@@ -36,7 +36,10 @@ class ScriptedDataCollector:
             "terminals", "infos", "next_infos", "num_steps_info"]
         self.obs_keys = ["state", "symb_state"]
         self.next_obs_keys = ["state", "symb_state"]
-        self.task_ids = list(range(self.env.action_space_discrete_size))
+        if args.task_ids:
+            self.task_ids = args.task_ids
+        else:
+            self.task_ids = list(range(self.env.action_space_discrete_size))
 
         self.primitive_int_to_rew_list_map = {}
         self.primitive_int_to_num_env_steps_list_map = {}
@@ -114,7 +117,6 @@ class ScriptedDataCollector:
                     print(f"env step failed on action {action}")
                     print(f"Got error:\n{e}")
                     skill_info = {}
-                    skill_info['skill_success'] = False
                     skill_info['num_steps_info'] = dict(
                         total_env_steps=MAX_TS,
                         total_env_steps_wo_teleport=MAX_TS,
@@ -127,8 +129,8 @@ class ScriptedDataCollector:
                             nav_to_place_teleport_speed=0.01,
                             nav_to_place_teleport_inferred_steps=np.nan,
                         ))
-                    next_obs, r, done, next_info = self.env.post_step(skill_info)
-                    next_info['skill_success'] = bool(r)
+                    next_obs, r, done, next_info = self.env.post_step(
+                        action, skill_info)
             print(f"Total time to execute trajectory: {time.time() - stf}")
 
             self.add_transition(
@@ -138,8 +140,7 @@ class ScriptedDataCollector:
             info = next_info
 
             # store skill reward and timesteps.
-            skill_success = bool(info['skill_success'])
-            assert skill_success == r
+            skill_success = bool(r > 0.0)
             num_env_steps = info['num_steps_info']['total_env_steps']
 
             if action not in self.primitive_int_to_rew_list_map:
@@ -220,8 +221,8 @@ class ScriptedDataCollector:
         os.makedirs(f"{self.out_dir}", exist_ok=True)
         self.demo_fpaths = []
 
-        for action in self.task_ids:
-            for i in tqdm(range(n)):
+        for i in tqdm(range(n)):
+            for action in self.task_ids:
                 self.collect_single_traj(action=action)
 
         self.env.reset()
