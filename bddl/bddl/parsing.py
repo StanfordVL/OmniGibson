@@ -473,7 +473,6 @@ def construct_bddl_from_parsed(behavior_activity, activity_definition, parsed_ob
 
 
 def build_goal(goal_expr):
-    print(goal_expr)
     if len(goal_expr) > 1 and type(goal_expr[1]) == list:
         return f"({goal_expr[0]} {' '.join([build_goal(subexpr) for subexpr in goal_expr[1:]])})"
     else: 
