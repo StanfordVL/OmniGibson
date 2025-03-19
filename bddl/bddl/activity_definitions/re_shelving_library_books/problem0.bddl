@@ -28,14 +28,24 @@
     
     (:goal 
         (and 
-            (ontop ?book.n.02_1 ?bookcase.n.01_1) 
-            (ontop ?book.n.02_2 ?bookcase.n.01_1) 
-            (ontop ?book.n.02_3 ?bookcase.n.01_1) 
-            (ontop ?book.n.02_4 ?bookcase.n.01_1) 
-            (ontop ?book.n.02_5 ?table.n.02_1) 
-            (ontop ?book.n.02_6 ?table.n.02_1) 
-            (ontop ?book.n.02_7 ?table.n.02_1) 
-            (ontop ?book.n.02_8 ?table.n.02_1)
+            (exists 
+                (?bookcase.n.01 - bookcase.n.01) 
+                (and 
+                    (ontop ?book.n.02_1 ?bookcase.n.01) 
+                    (ontop ?book.n.02_2 ?bookcase.n.01) 
+                    (ontop ?book.n.02_3 ?bookcase.n.01) 
+                    (ontop ?book.n.02_4 ?bookcase.n.01)
+                )
+            )
+            (exists 
+                (?table.n.02 - table.n.02) 
+                (and 
+                    (ontop ?book.n.02_5 ?table.n.02) 
+                    (ontop ?book.n.02_6 ?table.n.02) 
+                    (ontop ?book.n.02_7 ?table.n.02) 
+                    (ontop ?book.n.02_8 ?table.n.02)
+                )
+            )
         )
     )
 )

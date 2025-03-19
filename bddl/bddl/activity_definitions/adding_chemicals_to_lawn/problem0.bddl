@@ -22,10 +22,15 @@
         (inroom lawn.n.01_* garden)
     )
     
-    (:goal 
-        (and 
-            (covered ?lawn.n.01_1 ?fertilizer.n.01_1) 
-            (covered ?lawn.n.01_1 ?herbicide.n.01_1)
+    (:goal
+        (and
+            (exists 
+                (?lawn.n.01 - lawn.n.01) 
+                (and 
+                    (covered ?lawn.n.01 ?fertilizer.n.01_1) 
+                    (covered ?lawn.n.01 ?herbicide.n.01_1)
+                )
+            )
         )
     )
 )

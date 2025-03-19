@@ -26,8 +26,13 @@
     
     (:goal 
         (and 
-            (contains ?pool.n.01_1 ?sodium_carbonate.n.01_1) 
-            (contains ?pool.n.01_1 ?disinfectant.n.01_1)
+            (exists 
+                (?pool.n.01 - pool.n.01) 
+                (and 
+                    (contains ?pool.n.01 ?sodium_carbonate.n.01_1) 
+                    (contains ?pool.n.01 ?disinfectant.n.01_1)
+                )
+            )
         )
     )
 )

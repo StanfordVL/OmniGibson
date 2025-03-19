@@ -24,8 +24,13 @@
     
     (:goal 
         (and 
-            (inside ?sheet.n.03_1 ?washer.n.03_1) 
-            (contains ?washer.n.03_1 ?fabric_softener.n.01_1)
+            (exists 
+                (?washer.n.03 - washer.n.03) 
+                (and 
+                    (inside ?sheet.n.03_1 ?washer.n.03) 
+                    (contains ?washer.n.03 ?fabric_softener.n.01_1)
+                )
+            )
         )
     )
 )

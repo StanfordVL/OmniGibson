@@ -20,7 +20,10 @@
     
     (:goal 
         (and 
-            (covered ?lawn.n.01_1 ?pesticide.n.01_1)
+            (exists 
+                (?lawn.n.01 - lawn.n.01) 
+                (covered ?lawn.n.01 ?pesticide.n.01_1)
+            )
         )
     )
 )
