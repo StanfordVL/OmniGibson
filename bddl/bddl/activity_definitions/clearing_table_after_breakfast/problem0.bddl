@@ -61,24 +61,6 @@
             (or 
                 (ontop ?french_toast.n.01_1 ?french_toast.n.01_2) 
                 (ontop ?french_toast.n.01_2 ?french_toast.n.01_1)
-<<<<<<< Updated upstream
-            ) 
-            (filled ?pitcher.n.02_1 ?chocolate_milk.n.01_1) 
-            (inside ?pitcher.n.02_1 ?electric_refrigerator.n.01_1) 
-            (forn 
-                (2) 
-                (?plate.n.04 - plate.n.04) 
-                (or 
-                    (nextto ?plate.n.04 ?sink.n.01_1) 
-                    (inside ?plate.n.04 ?sink.n.01_1)
-                )
-            ) 
-            (forall 
-                (?mug.n.04 - mug.n.04) 
-                (or 
-                    (nextto ?mug.n.04 ?sink.n.01_1) 
-                    (inside ?mug.n.04 ?sink.n.01_1)
-=======
             )
             (filled ?pitcher.n.02_1 ?chocolate_milk.n.01_1)
             (exists 
@@ -99,7 +81,6 @@
                             (inside ?mug.n.04 ?sink.n.01)
                         )
                     )
->>>>>>> Stashed changes
                 )
             )
         )
