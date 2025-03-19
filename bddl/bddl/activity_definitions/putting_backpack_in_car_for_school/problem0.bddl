@@ -1,4 +1,4 @@
-(define (problem putting_backpack_in_car_for_school-0)
+(define (problem putting_backpack_in_car_for_school_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,14 +17,14 @@
         (inside book.n.02_1 backpack.n.01_1) 
         (inside pencil_box.n.01_1 backpack.n.01_1) 
         (inroom floor.n.01_1 garden) 
-        (inroom table.n.02_1 bedroom)
+        (inroom table.n.02_1 bedroom) 
         (inroom floor.n.01_2 bedroom) 
         (ontop agent.n.01_1 floor.n.01_2)
     )
     
     (:goal 
         (and 
-            (inside ?backpack.n.01_1 ?car.n.01_1) 
+            (inside ?backpack.n.01_1 ?car.n.01_1)
         )
     )
 )

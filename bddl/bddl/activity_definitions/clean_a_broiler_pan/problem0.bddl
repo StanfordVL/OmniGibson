@@ -1,4 +1,4 @@
-(define (problem clean_a_broiler_pan-0)
+(define (problem clean_a_broiler_pan_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,14 +19,15 @@
         (ontop sponge.n.01_1 countertop.n.01_1) 
         (covered grill.n.02_1 stain.n.01_1) 
         (inroom grill.n.02_1 kitchen) 
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (ontop dish_rack.n.01_1 countertop.n.01_1)
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (ontop dish_rack.n.01_1 countertop.n.01_1) 
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
-        (inroom countertop.n.01_1 kitchen)
-        (inroom floor.n.01_1 kitchen)
-        (inroom sink.n.01_1 kitchen)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom countertop.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen) 
+        (inroom sink.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom grill.n.02_* kitchen)
     )
     
     (:goal 

@@ -1,4 +1,4 @@
-(define (problem putting_away_purchased_clothes-0)
+(define (problem putting_away_purchased_clothes_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,41 +13,42 @@
     )
     
     (:init 
-        (ontop trouser.n.01_1 floor.n.01_1)
-        (ontop jersey.n.03_1 bed.n.01_1)
-        (ontop sweater.n.01_1 bed.n.01_1)
-        (attached hanger.n.02_1 wardrobe.n.01_1)
-        (attached hanger.n.02_2 wardrobe.n.01_1)
-        (attached hanger.n.02_3 wardrobe.n.01_1)
+        (ontop trouser.n.01_1 floor.n.01_1) 
+        (ontop jersey.n.03_1 bed.n.01_1) 
+        (ontop sweater.n.01_1 bed.n.01_1) 
+        (attached hanger.n.02_1 wardrobe.n.01_1) 
+        (attached hanger.n.02_2 wardrobe.n.01_1) 
+        (attached hanger.n.02_3 wardrobe.n.01_1) 
         (inroom floor.n.01_1 closet) 
         (inroom bed.n.01_1 bedroom) 
         (inroom wardrobe.n.01_1 closet) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wardrobe.n.01_* closet)
     )
     
     (:goal 
         (and 
             (forpairs 
-                (?trouser.n.01 - trouser.n.01)
-                (?hanger.n.02 - hanger.n.02)
+                (?trouser.n.01 - trouser.n.01) 
+                (?hanger.n.02 - hanger.n.02) 
                 (and 
-                    (draped ?trouser.n.01 ?hanger.n.02)
+                    (draped ?trouser.n.01 ?hanger.n.02) 
                     (attached ?hanger.n.02 ?wardrobe.n.01_1)
                 )
-            )
+            ) 
             (forpairs 
-                (?jersey.n.03 - jersey.n.03)
-                (?hanger.n.02 - hanger.n.02)
+                (?jersey.n.03 - jersey.n.03) 
+                (?hanger.n.02 - hanger.n.02) 
                 (and 
-                    (draped ?jersey.n.03 ?hanger.n.02)
+                    (draped ?jersey.n.03 ?hanger.n.02) 
                     (attached ?hanger.n.02 ?wardrobe.n.01_1)
                 )
-            )
+            ) 
             (forpairs 
-                (?sweater.n.01 - sweater.n.01)
-                (?hanger.n.02 - hanger.n.02)
+                (?sweater.n.01 - sweater.n.01) 
+                (?hanger.n.02 - hanger.n.02) 
                 (and 
-                    (draped ?sweater.n.01 ?hanger.n.02)
+                    (draped ?sweater.n.01 ?hanger.n.02) 
                     (attached ?hanger.n.02 ?wardrobe.n.01_1)
                 )
             )

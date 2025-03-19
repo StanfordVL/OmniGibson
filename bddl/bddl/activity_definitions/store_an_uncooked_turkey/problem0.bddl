@@ -1,4 +1,4 @@
-(define (problem store_an_uncooked_turkey-0)
+(define (problem store_an_uncooked_turkey_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,16 +12,17 @@
     
     (:init 
         (ontop turkey.n.04_1 countertop.n.01_1) 
-        (ontop cookie_sheet.n.01_1 countertop.n.01_1)
+        (ontop cookie_sheet.n.01_1 countertop.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom electric_refrigerator.n.01_* kitchen)
     )
     
     (:goal 
         (and 
-            (ontop ?turkey.n.04_1 ?cookie_sheet.n.01_1)
+            (ontop ?turkey.n.04_1 ?cookie_sheet.n.01_1) 
             (inside ?cookie_sheet.n.01_1 ?electric_refrigerator.n.01_1)
         )
     )

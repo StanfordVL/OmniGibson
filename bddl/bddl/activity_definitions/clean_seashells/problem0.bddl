@@ -1,4 +1,4 @@
-(define (problem clean_seashells-0)
+(define (problem clean_seashells_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,11 +13,11 @@
     )
     
     (:init 
-        (covered seashell.n.01_1 sand.n.04_1)
+        (covered seashell.n.01_1 sand.n.04_1) 
         (ontop seashell.n.01_1 countertop.n.01_1) 
-        (covered seashell.n.01_2 sand.n.04_1)
+        (covered seashell.n.01_2 sand.n.04_1) 
         (ontop seashell.n.01_2 countertop.n.01_1) 
-        (covered seashell.n.01_3 sand.n.04_1)
+        (covered seashell.n.01_3 sand.n.04_1) 
         (ontop seashell.n.01_3 countertop.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
@@ -30,7 +30,7 @@
     (:goal 
         (and 
             (forall 
-                (?seashell.n.01 - seashell.n.01)
+                (?seashell.n.01 - seashell.n.01) 
                 (not 
                     (covered ?seashell.n.01 ?sand.n.04_1)
                 )

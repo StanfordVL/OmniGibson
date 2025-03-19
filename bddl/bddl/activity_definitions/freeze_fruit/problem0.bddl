@@ -1,4 +1,4 @@
-(define (problem freeze_fruit-0)
+(define (problem freeze_fruit_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,12 +22,13 @@
         (inside apple.n.01_2 bowl.n.01_1) 
         (ontop tray.n.01_1 countertop.n.01_1) 
         (ontop strawberry.n.01_1 tray.n.01_1) 
-        (ontop strawberry.n.01_2 tray.n.01_1)
-        (inroom floor.n.01_1 kitchen)
+        (ontop strawberry.n.01_2 tray.n.01_1) 
+        (inroom floor.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom electric_refrigerator.n.01_* kitchen)
     )
     
     (:goal 
@@ -41,7 +42,7 @@
                 (?strawberry.n.01 - strawberry.n.01) 
                 (?tupperware.n.01 - tupperware.n.01) 
                 (inside ?strawberry.n.01 ?tupperware.n.01)
-            )
+            ) 
             (forall 
                 (?apple.n.01 - apple.n.01) 
                 (frozen ?apple.n.01)
@@ -49,11 +50,11 @@
             (forall 
                 (?strawberry.n.01 - strawberry.n.01) 
                 (frozen ?strawberry.n.01)
-            )
+            ) 
             (forall 
                 (?tupperware.n.01 - tupperware.n.01) 
                 (inside ?tupperware.n.01 ?electric_refrigerator.n.01_1)
-            ) 
+            )
         )
     )
 )

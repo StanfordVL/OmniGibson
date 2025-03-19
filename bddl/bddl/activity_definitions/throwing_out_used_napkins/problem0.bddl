@@ -1,4 +1,4 @@
-(define (problem throwing_out_used_napkins-0)
+(define (problem throwing_out_used_napkins_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,10 +15,11 @@
         (ontop napkin.n.01_2 countertop.n.01_1) 
         (ontop ashcan.n.01_1 floor.n.01_1) 
         (covered napkin.n.01_1 stain.n.01_1) 
-        (covered napkin.n.01_2 stain.n.01_1)
-        (inroom countertop.n.01_1 kitchen)
+        (covered napkin.n.01_2 stain.n.01_1) 
+        (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* kitchen)
     )
     
     (:goal 

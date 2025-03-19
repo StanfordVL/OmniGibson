@@ -1,4 +1,4 @@
-(define (problem shoveling_snow-0)
+(define (problem shoveling_snow_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,15 +19,17 @@
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* garden) 
+        (inroom lawn.n.01_* garden)
     )
     
     (:goal 
         (and 
             (not 
-                (covered ?lawn.n.01_1 ?snow.n.01_1)             
-            )
-            (covered ?floor.n.01_1 ?granulated_salt.n.01_1) 
+                (covered ?lawn.n.01_1 ?snow.n.01_1)
+            ) 
+            (covered ?floor.n.01_1 ?granulated_salt.n.01_1)
         )
     )
 )

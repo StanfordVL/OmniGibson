@@ -1,4 +1,4 @@
-(define (problem scrubbing_bathroom_floor-0)
+(define (problem scrubbing_bathroom_floor_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,8 @@
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* bathroom)
     )
     
     (:goal 

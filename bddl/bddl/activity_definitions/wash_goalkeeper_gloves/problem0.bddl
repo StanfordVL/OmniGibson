@@ -1,4 +1,4 @@
-(define (problem wash_goalkeeper_gloves-0)
+(define (problem wash_goalkeeper_gloves_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,24 +16,23 @@
     
     (:init 
         (ontop goalkeeper_gloves.n.01_1 floor.n.01_1) 
-        (covered goalkeeper_gloves.n.01_1 mud.n.03_1)
+        (covered goalkeeper_gloves.n.01_1 mud.n.03_1) 
         (ontop goalkeeper_gloves.n.01_2 floor.n.01_1) 
-        (covered goalkeeper_gloves.n.01_2 mud.n.03_1)
+        (covered goalkeeper_gloves.n.01_2 mud.n.03_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop hand_towel.n.01_1 washer.n.03_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
         (filled bucket.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom washer.n.03_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
-    
     )
     
     (:goal 
         (and 
             (forall 
-                (?goalkeeper_gloves.n.01 - goalkeeper_gloves.n.01)
+                (?goalkeeper_gloves.n.01 - goalkeeper_gloves.n.01) 
                 (not 
                     (covered ?goalkeeper_gloves.n.01 ?mud.n.03_1)
                 )

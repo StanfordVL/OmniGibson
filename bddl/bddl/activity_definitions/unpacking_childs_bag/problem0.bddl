@@ -1,4 +1,4 @@
-(define (problem unpacking_childs_bag-0)
+(define (problem unpacking_childs_bag_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,15 +12,16 @@
         bed.n.01_1 - bed.n.01
     )
     
-    (:init
+    (:init 
         (ontop backpack.n.01_1 bed.n.01_1) 
-        (inside pen.n.01_1 backpack.n.01_1)
-        (inside pencil.n.01_1 backpack.n.01_1)
-        (inside crayon.n.01_1 backpack.n.01_1)
-        (inroom desk.n.01_1 childs_room)
-        (inroom bed.n.01_1 childs_room)
-        (inroom floor.n.01_1 childs_room)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inside pen.n.01_1 backpack.n.01_1) 
+        (inside pencil.n.01_1 backpack.n.01_1) 
+        (inside crayon.n.01_1 backpack.n.01_1) 
+        (inroom desk.n.01_1 childs_room) 
+        (inroom bed.n.01_1 childs_room) 
+        (inroom floor.n.01_1 childs_room) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom desk.n.01_* childs_room)
     )
     
     (:goal 
@@ -32,13 +33,13 @@
             (forall 
                 (?pencil.n.01 - pencil.n.01) 
                 (ontop ?pencil.n.01 ?desk.n.01_1)
-            )
+            ) 
             (forall 
                 (?crayon.n.01 - crayon.n.01) 
                 (ontop ?crayon.n.01 ?desk.n.01_1)
             ) 
-            (nextto ?backpack.n.01_1 ?desk.n.01_1)
-            (not
+            (nextto ?backpack.n.01_1 ?desk.n.01_1) 
+            (not 
                 (open ?backpack.n.01_1)
             )
         )

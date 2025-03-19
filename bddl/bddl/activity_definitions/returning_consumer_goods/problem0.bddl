@@ -1,4 +1,4 @@
-(define (problem returning_consumer_goods-0)
+(define (problem returning_consumer_goods_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,20 +13,21 @@
     
     (:init 
         (ontop money.n.01_1 checkout.n.03_1) 
-        (inside bottle__of__soda.n.01_1 sack.n.01_1)
-        (inside bottle__of__soda.n.01_2 sack.n.01_1)
-        (ontop sack.n.01_1 checkout.n.03_1)
-        (ontop carryall.n.01_1 checkout.n.03_1)
+        (inside bottle__of__soda.n.01_1 sack.n.01_1) 
+        (inside bottle__of__soda.n.01_2 sack.n.01_1) 
+        (ontop sack.n.01_1 checkout.n.03_1) 
+        (ontop carryall.n.01_1 checkout.n.03_1) 
         (inroom floor.n.01_1 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom checkout.n.03_* grocery_store)
     )
     
     (:goal 
         (and 
             (inside ?money.n.01_1 ?carryall.n.01_1) 
             (forall 
-                (?bottle__of__soda.n.01 - bottle__of__soda.n.01)
+                (?bottle__of__soda.n.01 - bottle__of__soda.n.01) 
                 (ontop ?bottle__of__soda.n.01 ?checkout.n.03_1)
             )
         )

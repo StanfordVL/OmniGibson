@@ -1,4 +1,4 @@
-(define (problem putting_on_tags_car-0)
+(define (problem putting_on_tags_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,16 +10,16 @@
     )
     
     (:init 
-        (ontop car.n.01_1 floor.n.01_1)
+        (ontop car.n.01_1 floor.n.01_1) 
         (ontop gummed_label.n.01_1 floor.n.01_1) 
-        (ontop license_plate.n.01_1 floor.n.01_1)
+        (ontop license_plate.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (attached ?gummed_label.n.01_1 ?license_plate.n.01_1) 
+            (attached ?gummed_label.n.01_1 ?license_plate.n.01_1)
         )
     )
 )

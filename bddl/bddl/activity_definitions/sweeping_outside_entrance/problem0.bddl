@@ -1,4 +1,4 @@
-(define (problem sweeping_outside_entrance-0)
+(define (problem sweeping_outside_entrance_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,18 +22,19 @@
         (ontop broom.n.01_1 driveway.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom driveway.n.01_* garden)
     )
     
     (:goal 
         (and 
             (forall 
-                (?entire_leaf.n.01 - entire_leaf.n.01)
+                (?entire_leaf.n.01 - entire_leaf.n.01) 
                 (inside ?entire_leaf.n.01 ?ashcan.n.01_1)
-            )
-            (inside ?wreath.n.01_1 ?ashcan.n.01_1)
+            ) 
+            (inside ?wreath.n.01_1 ?ashcan.n.01_1) 
             (not 
-                (covered ?driveway.n.01_1 ?dust.n.01_1) 
+                (covered ?driveway.n.01_1 ?dust.n.01_1)
             )
         )
     )

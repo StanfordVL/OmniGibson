@@ -1,4 +1,4 @@
-(define (problem sweeping_porch-0)
+(define (problem sweeping_porch_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,19 +17,20 @@
         (ontop ashcan.n.01_2 floor.n.01_1) 
         (covered floor.n.01_1 bunchgrass.n.01_1) 
         (ontop broom.n.01_1 driveway.n.01_1) 
-        (covered floor.n.01_1 sand.n.04_1)
+        (covered floor.n.01_1 sand.n.04_1) 
         (ontop bucket.n.01_1 driveway.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* garden)
     )
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?floor.n.01_1 ?bunchgrass.n.01_1)
-            )
-            (not
+            ) 
+            (not 
                 (covered ?floor.n.01_1 ?sand.n.04_1)
             )
         )

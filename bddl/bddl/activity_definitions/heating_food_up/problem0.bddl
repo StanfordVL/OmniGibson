@@ -1,4 +1,4 @@
-(define (problem heating_food_up-0)
+(define (problem heating_food_up_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,19 +12,20 @@
     )
     
     (:init 
-        (inside hamburger.n.01_1 electric_refrigerator.n.01_1)
+        (inside hamburger.n.01_1 electric_refrigerator.n.01_1) 
         (frozen hamburger.n.01_1) 
-        (ontop plate.n.04_1 countertop.n.01_1)
+        (ontop plate.n.04_1 countertop.n.01_1) 
         (inroom microwave.n.02_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom electric_refrigerator.n.01_1 kitchen)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom countertop.n.01_* kitchen)
     )
     
     (:goal 
-        (and  
-            (hot ?hamburger.n.01_1)
+        (and 
+            (hot ?hamburger.n.01_1) 
             (ontop ?hamburger.n.01_1 ?countertop.n.01_1)
         )
     )

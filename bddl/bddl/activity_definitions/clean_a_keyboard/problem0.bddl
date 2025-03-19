@@ -1,4 +1,4 @@
-(define (problem clean_a_keyboard-0)
+(define (problem clean_a_keyboard_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,7 +17,7 @@
         (covered keyboard.n.01_1 stain.n.01_1) 
         (ontop rag.n.01_1 keyboard.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
         (ontop keyboard.n.01_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
@@ -29,7 +29,7 @@
         (and 
             (not 
                 (covered ?keyboard.n.01_1 ?stain.n.01_1)
-            ) 
+            )
         )
     )
 )

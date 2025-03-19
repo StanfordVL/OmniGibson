@@ -1,4 +1,4 @@
-(define (problem clean_whiskey_stones-0)
+(define (problem clean_whiskey_stones_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,8 +16,8 @@
     )
     
     (:init 
-        (covered whiskey_stone.n.01_1 whiskey.n.01_1)
-        (covered whiskey_stone.n.01_2 whiskey.n.01_1)
+        (covered whiskey_stone.n.01_1 whiskey.n.01_1) 
+        (covered whiskey_stone.n.01_2 whiskey.n.01_1) 
         (ontop dishtowel.n.01_1 countertop.n.01_1) 
         (ontop whiskey_stone.n.01_1 countertop.n.01_1) 
         (ontop whiskey_stone.n.01_2 countertop.n.01_1) 
@@ -35,15 +35,15 @@
         (and 
             (forall 
                 (?whiskey_stone.n.01 - whiskey_stone.n.01) 
-                (and
+                (and 
                     (not 
                         (covered ?whiskey_stone.n.01 ?whiskey.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?whiskey_stone.n.01 ?water.n.06_1)
                     )
                 )
-            ) 
+            )
         )
     )
 )

@@ -1,4 +1,4 @@
-(define (problem fold_towels-0)
+(define (problem fold_towels_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,13 +14,13 @@
     
     (:init 
         (ontop hamper.n.02_1 floor.n.01_1) 
-        (ontop hand_towel.n.01_1 washer.n.03_1)
-        (ontop hand_towel.n.01_2 washer.n.03_1)
-        (ontop bath_towel.n.01_1 clothes_dryer.n.01_1)
-        (inside rag.n.01_1 clothes_dryer.n.01_1)
+        (ontop hand_towel.n.01_1 washer.n.03_1) 
+        (ontop hand_towel.n.01_2 washer.n.03_1) 
+        (ontop bath_towel.n.01_1 clothes_dryer.n.01_1) 
+        (inside rag.n.01_1 clothes_dryer.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom washer.n.03_1 utility_room) 
-        (inroom clothes_dryer.n.01_1 utility_room)
+        (inroom clothes_dryer.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -43,7 +43,7 @@
                 (?hand_towel.n.01 - hand_towel.n.01) 
                 (inside ?hand_towel.n.01 ?hamper.n.02_1)
             ) 
-            (inside ?rag.n.01_1 ?hamper.n.02_1) 
+            (inside ?rag.n.01_1 ?hamper.n.02_1)
         )
     )
 )

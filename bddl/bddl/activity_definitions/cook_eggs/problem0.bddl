@@ -1,4 +1,4 @@
-(define (problem cook_eggs-0)
+(define (problem cook_eggs_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,8 +17,8 @@
         (ontop frying_pan.n.01_1 stove.n.01_1) 
         (inside raw_egg.n.01_1 bowl.n.01_1) 
         (inside raw_egg.n.01_2 bowl.n.01_1) 
-        (inside bowl.n.01_1 electric_refrigerator.n.01_1)
-        (insource sink.n.01_1 water.n.06_1)
+        (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom stove.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 

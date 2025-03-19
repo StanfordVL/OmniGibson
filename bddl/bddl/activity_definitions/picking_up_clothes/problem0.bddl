@@ -1,4 +1,4 @@
-(define (problem picking_up_clothes-0)
+(define (problem picking_up_clothes_0)
     (:domain omnigibson)
 
     (:objects
@@ -9,22 +9,23 @@
     )
     
     (:init 
-        (inroom wardrobe.n.01_1 closet)
+        (inroom wardrobe.n.01_1 closet) 
         (ontop dress.n.01_1 floor.n.01_1) 
         (ontop dress.n.01_2 floor.n.01_1) 
         (ontop dress.n.01_3 floor.n.01_1) 
         (ontop dress.n.01_4 floor.n.01_1) 
         (ontop dress.n.01_5 floor.n.01_1) 
         (inroom floor.n.01_1 childs_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wardrobe.n.01_* closet)
     )
     
     (:goal 
         (and 
             (forall 
-                (?dress.n.01 - dress.n.01)
+                (?dress.n.01 - dress.n.01) 
                 (and 
-                    (folded ?dress.n.01)
+                    (folded ?dress.n.01) 
                     (inside ?dress.n.01 ?wardrobe.n.01_1)
                 )
             )

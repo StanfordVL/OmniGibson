@@ -1,4 +1,4 @@
-(define (problem cleaning_fishing_gear-0)
+(define (problem cleaning_fishing_gear_0)
     (:domain omnigibson)
 
     (:objects
@@ -31,7 +31,7 @@
         (and 
             (not 
                 (covered ?fishing_rod.n.01_1 ?stain.n.01_1)
-            ) 
+            )
         )
     )
 )

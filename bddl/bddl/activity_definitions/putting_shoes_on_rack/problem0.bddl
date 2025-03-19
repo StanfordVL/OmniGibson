@@ -1,4 +1,4 @@
-(define (problem putting_shoes_on_rack-0)
+(define (problem putting_shoes_on_rack_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,17 +16,18 @@
         (ontop sandal.n.01_2 floor.n.01_1) 
         (inroom floor.n.01_1 entryway) 
         (inroom shoe_rack.n.01_1 entryway) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom shoe_rack.n.01_* entryway)
     )
     
     (:goal 
         (and 
             (forall 
-                (?sandal.n.01 - sandal.n.01)
+                (?sandal.n.01 - sandal.n.01) 
                 (ontop ?sandal.n.01 ?shoe_rack.n.01_1)
-            )
+            ) 
             (forall 
-                (?gym_shoe.n.01 - gym_shoe.n.01)
+                (?gym_shoe.n.01 - gym_shoe.n.01) 
                 (ontop ?gym_shoe.n.01 ?shoe_rack.n.01_1)
             )
         )

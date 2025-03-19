@@ -1,4 +1,4 @@
-(define (problem clean_a_light_bulb-0)
+(define (problem clean_a_light_bulb_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,7 +13,7 @@
     
     (:init 
         (covered light_bulb.n.01_1 dust.n.01_1) 
-        (attached light_bulb.n.01_1 table_lamp.n.01_1)
+        (attached light_bulb.n.01_1 table_lamp.n.01_1) 
         (ontop table_lamp.n.01_1 coffee_table.n.01_1) 
         (ontop rag.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 

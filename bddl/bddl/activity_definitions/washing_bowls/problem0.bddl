@@ -1,4 +1,4 @@
-(define (problem washing_bowls-0)
+(define (problem washing_bowls_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,16 +17,16 @@
     )
     
     (:init 
-        (ontop bowl.n.01_1 sink.n.01_1)
-        (ontop bowl.n.01_2 sink.n.01_1)
-        (ontop sponge.n.01_1 sink.n.01_1)
+        (ontop bowl.n.01_1 sink.n.01_1) 
+        (ontop bowl.n.01_2 sink.n.01_1) 
+        (ontop sponge.n.01_1 sink.n.01_1) 
         (covered bowl.n.01_1 stain.n.01_1) 
-        (covered bowl.n.01_1 milk.n.01_1)
+        (covered bowl.n.01_1 milk.n.01_1) 
         (covered bowl.n.01_2 stain.n.01_1) 
-        (covered bowl.n.01_2 broth.n.01_1)
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
-        (insource sink.n.01_1 water.n.06_1)
+        (covered bowl.n.01_2 broth.n.01_1) 
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
@@ -36,14 +36,14 @@
     (:goal 
         (and 
             (forall 
-                (?bowl.n.01 - bowl.n.01)
-                (and
+                (?bowl.n.01 - bowl.n.01) 
+                (and 
                     (not 
                         (covered ?bowl.n.01 ?stain.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?bowl.n.01 ?broth.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?bowl.n.01 ?milk.n.01_1)
                     )

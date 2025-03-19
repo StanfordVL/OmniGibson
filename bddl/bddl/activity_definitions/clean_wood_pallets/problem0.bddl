@@ -1,4 +1,4 @@
-(define (problem clean_wood_pallets-0)
+(define (problem clean_wood_pallets_0)
     (:domain omnigibson)
 
     (:objects
@@ -30,9 +30,9 @@
     )
     
     (:goal 
-        (and
+        (and 
             (forall 
-                (?pallet.n.02 - pallet.n.02)
+                (?pallet.n.02 - pallet.n.02) 
                 (not 
                     (covered ?pallet.n.02 ?stain.n.01_1)
                 )

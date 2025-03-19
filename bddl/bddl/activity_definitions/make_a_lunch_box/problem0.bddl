@@ -1,4 +1,4 @@
-(define (problem make_a_lunch_box-0)
+(define (problem make_a_lunch_box_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,7 +18,8 @@
         (ontop plastic_wrap.n.01_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom countertop.n.01_* kitchen)
     )
     
     (:goal 

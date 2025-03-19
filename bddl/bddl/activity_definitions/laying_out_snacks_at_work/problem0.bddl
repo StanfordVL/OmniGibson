@@ -1,4 +1,4 @@
-(define (problem laying_out_snacks_at_work-0)
+(define (problem laying_out_snacks_at_work_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,7 +19,8 @@
         (inroom conference_table.n.01_1 meeting_room) 
         (inroom cabinet.n.01_1 meeting_room) 
         (inroom floor.n.01_1 meeting_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom conference_table.n.01_* meeting_room)
     )
     
     (:goal 

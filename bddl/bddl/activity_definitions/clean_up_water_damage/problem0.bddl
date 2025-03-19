@@ -1,4 +1,4 @@
-(define (problem clean_up_water_damage-0)
+(define (problem clean_up_water_damage_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,7 +18,8 @@
         (covered cabinet.n.01_1 mold.n.05_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* kitchen)
     )
     
     (:goal 

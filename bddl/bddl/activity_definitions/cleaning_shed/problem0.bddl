@@ -1,4 +1,4 @@
-(define (problem cleaning_shed-0)
+(define (problem cleaning_shed_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,8 +23,9 @@
         (ontop trowel.n.01_1 floor.n.01_1) 
         (ontop leaf_blower.n.01_1 floor.n.01_1) 
         (covered leaf_blower.n.01_1 dust.n.01_1) 
-        (ontop agent.n.01_1 floor.n.01_1)
-        (inroom floor.n.01_1 garden)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 garden) 
+        (inroom floor.n.01_* garden)
     )
     
     (:goal 
@@ -34,9 +35,9 @@
                 (covered ?leaf_blower.n.01_1 ?dust.n.01_1)
             ) 
             (nextto ?leaf_blower.n.01_1 ?vacuum.n.04_1) 
-            (nextto ?chicken_wire.n.01_1 ?leaf_blower.n.01_1)
+            (nextto ?chicken_wire.n.01_1 ?leaf_blower.n.01_1) 
             (nextto ?broom.n.01_1 ?rake.n.03_1) 
-            (nextto ?rake.n.03_1 ?shovel.n.01_1) 
+            (nextto ?rake.n.03_1 ?shovel.n.01_1)
         )
     )
 )

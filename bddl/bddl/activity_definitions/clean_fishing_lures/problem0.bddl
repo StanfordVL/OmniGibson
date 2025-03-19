@@ -1,4 +1,4 @@
-(define (problem clean_fishing_lures-0)
+(define (problem clean_fishing_lures_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,7 @@
         (ontop bait.n.01_1 countertop.n.01_1) 
         (ontop bait.n.01_2 countertop.n.01_1) 
         (ontop bait.n.01_3 countertop.n.01_1) 
-        (ontop scrub_brush.n.01_1 countertop.n.01_1)
+        (ontop scrub_brush.n.01_1 countertop.n.01_1) 
         (covered bait.n.01_1 stain.n.01_1) 
         (covered bait.n.01_2 stain.n.01_1) 
         (covered bait.n.01_3 stain.n.01_1) 
@@ -24,14 +24,14 @@
         (inroom sink.n.01_1 bathroom) 
         (inroom countertop.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
-        (ontop agent.n.01_1 floor.n.01_1) 
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
             (forall 
-                (?bait.n.01 - bait.n.01)
-                (and
+                (?bait.n.01 - bait.n.01) 
+                (and 
                     (not 
                         (covered ?bait.n.01 ?stain.n.01_1)
                     )

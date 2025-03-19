@@ -1,4 +1,4 @@
-(define (problem clean_scallops-0)
+(define (problem clean_scallops_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,9 +16,9 @@
     
     (:init 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
-        (covered scallop.n.02_1 sand.n.04_1)
-        (covered scallop.n.02_2 sand.n.04_1)
-        (covered scallop.n.02_3 sand.n.04_1)
+        (covered scallop.n.02_1 sand.n.04_1) 
+        (covered scallop.n.02_2 sand.n.04_1) 
+        (covered scallop.n.02_3 sand.n.04_1) 
         (inside scallop.n.02_1 tupperware.n.01_1) 
         (inside scallop.n.02_2 tupperware.n.01_1) 
         (inside scallop.n.02_3 tupperware.n.01_1) 

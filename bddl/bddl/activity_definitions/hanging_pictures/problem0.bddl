@@ -1,4 +1,4 @@
-(define (problem hanging_pictures-0)
+(define (problem hanging_pictures_0)
     (:domain omnigibson)
 
     (:objects
@@ -9,10 +9,11 @@
     )
     
     (:init 
-        (ontop picture_frame.n.01_1 floor.n.01_1)
+        (ontop picture_frame.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 corridor) 
-        (inroom wall_nail.n.01_1 corridor)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom wall_nail.n.01_1 corridor) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall_nail.n.01_* corridor)
     )
     
     (:goal 

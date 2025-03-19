@@ -1,4 +1,4 @@
-(define (problem roast_nuts-0)
+(define (problem roast_nuts_0)
     (:domain omnigibson)
 
     (:objects
@@ -39,9 +39,9 @@
         ) 
         (inside cookie_sheet.n.01_1 cabinet.n.01_1) 
         (filled granulated_sugar__sack.n.01_1 granulated_sugar.n.01_1) 
-        (inside granulated_sugar__sack.n.01_1 cabinet.n.01_1)
+        (inside granulated_sugar__sack.n.01_1 cabinet.n.01_1) 
         (filled olive_oil__bottle.n.01_1 olive_oil.n.01_1) 
-        (inside olive_oil__bottle.n.01_1 cabinet.n.01_1)
+        (inside olive_oil__bottle.n.01_1 cabinet.n.01_1) 
         (inside bowl.n.01_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
@@ -54,12 +54,12 @@
         (and 
             (forall 
                 (?walnut.n.01 - walnut.n.01) 
-                (and
-                    (cooked ?walnut.n.01)
-                    (covered ?walnut.n.01 ?granulated_sugar.n.01_1)
+                (and 
+                    (cooked ?walnut.n.01) 
+                    (covered ?walnut.n.01 ?granulated_sugar.n.01_1) 
                     (covered ?walnut.n.01_1 ?olive_oil.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

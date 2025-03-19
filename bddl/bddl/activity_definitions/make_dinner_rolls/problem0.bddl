@@ -1,4 +1,4 @@
-(define (problem make_dinner_rolls-0)
+(define (problem make_dinner_rolls_0)
     (:domain omnigibson)
 
     (:objects
@@ -30,8 +30,8 @@
         (inside flour__sack.n.01_1 cabinet.n.01_1) 
         (insource yeast__shaker.n.01_1 yeast.n.01_1) 
         (inside yeast__shaker.n.01_1 cabinet.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
         (filled sugar__sack.n.01_1 granulated_sugar.n.01_1) 
         (inside sugar__sack.n.01_1 cabinet.n.01_1) 
         (inside butter.n.01_1 butter__package.n.01_1) 

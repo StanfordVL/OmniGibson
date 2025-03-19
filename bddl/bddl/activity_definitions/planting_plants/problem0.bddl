@@ -1,4 +1,4 @@
-(define (problem planting_plants-0)
+(define (problem planting_plants_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,9 +15,9 @@
         (ontop pottable__cactus.n.01_1 lawn.n.01_1) 
         (ontop pottable__daffodil.n.01_1 lawn.n.01_1) 
         (ontop pottable__daffodil.n.01_2 lawn.n.01_1) 
-        (ontop pot.n.04_1 driveway.n.01_1)
-        (ontop pot.n.04_2 driveway.n.01_1)
-        (ontop pot.n.04_3 driveway.n.01_1)
+        (ontop pot.n.04_1 driveway.n.01_1) 
+        (ontop pot.n.04_2 driveway.n.01_1) 
+        (ontop pot.n.04_3 driveway.n.01_1) 
         (inroom lawn.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
@@ -27,12 +27,12 @@
     (:goal 
         (and 
             (forpairs 
-                (?pottable__daffodil.n.01 - pottable__daffodil.n.01)
-                (?pot.n.04 - pot.n.04)
+                (?pottable__daffodil.n.01 - pottable__daffodil.n.01) 
+                (?pot.n.04 - pot.n.04) 
                 (inside ?pottable__daffodil.n.01 ?pot.n.04)
-            )
+            ) 
             (exists 
-                (?pot.n.04 - pot.n.04)
+                (?pot.n.04 - pot.n.04) 
                 (inside ?pottable__cactus.n.01_1 ?pot.n.04)
             )
         )

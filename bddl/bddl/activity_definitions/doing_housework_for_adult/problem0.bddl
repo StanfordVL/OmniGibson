@@ -1,4 +1,4 @@
-(define (problem doing_housework_for_adult-0)
+(define (problem doing_housework_for_adult_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,44 +18,47 @@
     )
     
     (:init 
-        (ontop vacuum.n.04_1 floor.n.01_1)
-        (covered rug.n.01_1 lint.n.01_1)
-        (covered rug.n.01_1 dust.n.01_1)
-        (covered window.n.01_1 dust.n.01_1)
-        (ontop pillow.n.01_1 floor.n.01_1)
-        (ontop pillow.n.01_2 floor.n.01_1)
-        (ontop rug.n.01_1 floor.n.01_1)
-        (ontop mug.n.04_1 coffee_table.n.01_1)
-        (ontop mug.n.04_2 coffee_table.n.01_1)
-        (ontop rag.n.01_1 coffee_table.n.01_1)
+        (ontop vacuum.n.04_1 floor.n.01_1) 
+        (covered rug.n.01_1 lint.n.01_1) 
+        (covered rug.n.01_1 dust.n.01_1) 
+        (covered window.n.01_1 dust.n.01_1) 
+        (ontop pillow.n.01_1 floor.n.01_1) 
+        (ontop pillow.n.01_2 floor.n.01_1) 
+        (ontop rug.n.01_1 floor.n.01_1) 
+        (ontop mug.n.04_1 coffee_table.n.01_1) 
+        (ontop mug.n.04_2 coffee_table.n.01_1) 
+        (ontop rag.n.01_1 coffee_table.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_2) 
-        (inroom sofa.n.01_1 living_room)
+        (inroom sofa.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
         (inroom floor.n.01_2 kitchen) 
-        (inroom window.n.01_1 kitchen)
+        (inroom window.n.01_1 kitchen) 
         (inroom coffee_table.n.01_1 living_room) 
-        (inroom sink.n.01_1 kitchen)
+        (inroom sink.n.01_1 kitchen) 
+        (inroom sofa.n.01_* living_room) 
+        (inroom window.n.01_* kitchen) 
+        (inroom sink.n.01_* kitchen)
     )
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?rug.n.01_1 ?lint.n.01_1)
-            )
-            (not
+            ) 
+            (not 
                 (covered ?rug.n.01_1 ?dust.n.01_1)
-            )
+            ) 
             (forall 
-                (?pillow.n.01 - pillow.n.01)
+                (?pillow.n.01 - pillow.n.01) 
                 (ontop ?pillow.n.01 ?sofa.n.01_1)
-            )
-            (not
+            ) 
+            (not 
                 (covered ?window.n.01_1 ?dust.n.01_1)
-            )
-            (forall
-                (?mug.n.04 - mug.n.04)
-                (or
-                    (inside ?mug.n.04 ?sink.n.01_1)
+            ) 
+            (forall 
+                (?mug.n.04 - mug.n.04) 
+                (or 
+                    (inside ?mug.n.04 ?sink.n.01_1) 
                     (nextto ?mug.n.04 ?sink.n.01_1)
                 )
             )

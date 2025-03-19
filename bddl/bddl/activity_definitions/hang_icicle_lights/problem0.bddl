@@ -1,4 +1,4 @@
-(define (problem hang_icicle_lights-0)
+(define (problem hang_icicle_lights_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,11 +10,12 @@
     )
     
     (:init 
-        (ontop icicle_lights.n.01_1 coffee_table.n.01_1)
-        (inroom floor.n.01_1 living_room)
-        (inroom wall_nail.n.01_1 living_room)
-        (inroom coffee_table.n.01_1 living_room)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop icicle_lights.n.01_1 coffee_table.n.01_1) 
+        (inroom floor.n.01_1 living_room) 
+        (inroom wall_nail.n.01_1 living_room) 
+        (inroom coffee_table.n.01_1 living_room) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall_nail.n.01_* living_room)
     )
     
     (:goal 

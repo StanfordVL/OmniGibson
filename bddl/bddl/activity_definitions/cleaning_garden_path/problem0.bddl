@@ -1,4 +1,4 @@
-(define (problem cleaning_garden_path-0)
+(define (problem cleaning_garden_path_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,12 +17,13 @@
         (ontop paper.n.01_1 driveway.n.01_1) 
         (ontop paper.n.01_2 driveway.n.01_1) 
         (ontop paper.n.01_3 driveway.n.01_1) 
-        (covered driveway.n.01_1 dust.n.01_1)
+        (covered driveway.n.01_1 dust.n.01_1) 
         (ontop ashcan.n.01_1 driveway.n.01_1) 
         (ontop broom.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom driveway.n.01_* garden)
     )
     
     (:goal 
@@ -31,7 +32,7 @@
                 (?paper.n.01 - paper.n.01) 
                 (inside ?paper.n.01 ?ashcan.n.01_1)
             ) 
-            (inside ?plastic_bag.n.01_1 ?ashcan.n.01_1)
+            (inside ?plastic_bag.n.01_1 ?ashcan.n.01_1) 
             (not 
                 (covered ?driveway.n.01_1 ?dust.n.01_1)
             )

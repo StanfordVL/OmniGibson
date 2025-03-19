@@ -1,4 +1,4 @@
-(define (problem washing_floor-0)
+(define (problem washing_floor_0)
     (:domain omnigibson)
 
     (:objects
@@ -29,7 +29,8 @@
         (inroom toilet.n.02_1 bathroom) 
         (inroom bed.n.01_1 bedroom) 
         (inroom sink.n.01_1 bathroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* bathroom)
     )
     
     (:goal 
@@ -43,4 +44,3 @@
         )
     )
 )
-

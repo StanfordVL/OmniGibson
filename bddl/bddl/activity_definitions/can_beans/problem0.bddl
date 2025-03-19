@@ -1,4 +1,4 @@
-(define (problem can_beans-0)
+(define (problem can_beans_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,20 +14,21 @@
     (:init 
         (ontop stockpot.n.01_1 countertop.n.01_1) 
         (filled stockpot.n.01_1 black_bean.n.01_1) 
-        (inside canister.n.02_1 cabinet.n.01_1)
-        (inside canister.n.02_2 cabinet.n.01_1)
+        (inside canister.n.02_1 cabinet.n.01_1) 
+        (inside canister.n.02_2 cabinet.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* kitchen)
     )
     
     (:goal 
         (and 
-            (forall
-                (?canister.n.02 - canister.n.02)
-                (and
-                    (filled ?canister.n.02 ?black_bean.n.01_1)
+            (forall 
+                (?canister.n.02 - canister.n.02) 
+                (and 
+                    (filled ?canister.n.02 ?black_bean.n.01_1) 
                     (inside ?canister.n.02 ?cabinet.n.01_1)
                 )
             )

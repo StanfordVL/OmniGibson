@@ -1,4 +1,4 @@
-(define (problem packing_cleaning_suppies_into_car-0)
+(define (problem packing_cleaning_suppies_into_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,17 +15,18 @@
         (ontop car.n.01_1 driveway.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (ontop backpack.n.01_1 driveway.n.01_1) 
-        (ontop scrub_brush.n.01_1 driveway.n.01_1)
+        (ontop scrub_brush.n.01_1 driveway.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom driveway.n.01_* garden)
     )
     
     (:goal 
         (and 
-            (ontop ?car.n.01_1 ?driveway.n.01_1)
-            (inside ?rag.n.01_1 ?backpack.n.01_1)
-            (inside ?backpack.n.01_1 ?car.n.01_1)
+            (ontop ?car.n.01_1 ?driveway.n.01_1) 
+            (inside ?rag.n.01_1 ?backpack.n.01_1) 
+            (inside ?backpack.n.01_1 ?car.n.01_1) 
             (inside ?scrub_brush.n.01_1 ?car.n.01_1)
         )
     )

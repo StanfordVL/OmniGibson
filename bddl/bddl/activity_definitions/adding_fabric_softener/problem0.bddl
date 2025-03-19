@@ -1,4 +1,4 @@
-(define (problem adding_fabric_softener-0)
+(define (problem adding_fabric_softener_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,13 +17,14 @@
         (filled fabric_softener__bottle.n.01_1 fabric_softener.n.01_1) 
         (ontop fabric_softener__bottle.n.01_1 floor.n.01_1) 
         (inroom washer.n.03_1 utility_room) 
-        (inroom floor.n.01_1 utility_room)
+        (inroom floor.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom washer.n.03_* utility_room)
     )
     
     (:goal 
         (and 
-            (inside ?sheet.n.03_1 ?washer.n.03_1)
+            (inside ?sheet.n.03_1 ?washer.n.03_1) 
             (contains ?washer.n.03_1 ?fabric_softener.n.01_1)
         )
     )

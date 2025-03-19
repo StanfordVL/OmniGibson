@@ -1,4 +1,4 @@
-(define (problem wash_duvets-0)
+(define (problem wash_duvets_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,20 +16,21 @@
     )
     
     (:init 
-        (ontop hamper.n.02_1 floor.n.01_1)
+        (ontop hamper.n.02_1 floor.n.01_1) 
         (inside quilt.n.01_1 hamper.n.02_1) 
         (covered quilt.n.01_1 stain.n.01_1) 
-        (inside quilt.n.01_2 hamper.n.02_1)
-        (covered quilt.n.01_2 stain.n.01_1)
+        (inside quilt.n.01_2 hamper.n.02_1) 
+        (covered quilt.n.01_2 stain.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
-        (ontop detergent__bottle.n.01_1 clothes_dryer.n.01_1)
-        (ontop tennis_ball.n.01_1 clothes_dryer.n.01_1)
-        (ontop tennis_ball.n.01_2 clothes_dryer.n.01_1)
+        (ontop detergent__bottle.n.01_1 clothes_dryer.n.01_1) 
+        (ontop tennis_ball.n.01_1 clothes_dryer.n.01_1) 
+        (ontop tennis_ball.n.01_2 clothes_dryer.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom washer.n.03_1 utility_room) 
-        (inroom clothes_dryer.n.01_1 utility_room)
-        (ontop agent.n.01_1 floor.n.01_1)
-        (future water.n.06_1)
+        (inroom clothes_dryer.n.01_1 utility_room) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (future water.n.06_1) 
+        (inroom clothes_dryer.n.01_* utility_room)
     )
     
     (:goal 
@@ -47,7 +48,7 @@
                 (saturated ?quilt.n.01_2 ?water.n.06_1)
             ) 
             (forall 
-                (?tennis_ball.n.01 - tennis_ball.n.01)
+                (?tennis_ball.n.01 - tennis_ball.n.01) 
                 (inside ?tennis_ball.n.01 ?clothes_dryer.n.01_1)
             )
         )

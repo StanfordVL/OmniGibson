@@ -1,12 +1,12 @@
-(define (problem prepare_a_hanging_basket-0)
+(define (problem prepare_a_hanging_basket_0)
     (:domain omnigibson)
 
     (:objects
-     	pottable__marigold.n.01_1 pottable__marigold.n.01_2 pottable__marigold.n.01_3 - pottable__marigold.n.01
-    	floor.n.01_1 - floor.n.01
-    	pot.n.04_1 - pot.n.04
-    	trowel.n.01_1 - trowel.n.01
-    	agent.n.01_1 - agent.n.01
+        pottable__marigold.n.01_1 pottable__marigold.n.01_2 pottable__marigold.n.01_3 - pottable__marigold.n.01
+        floor.n.01_1 - floor.n.01
+        pot.n.04_1 - pot.n.04
+        trowel.n.01_1 - trowel.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 
@@ -24,7 +24,7 @@
             (forall 
                 (?pottable__marigold.n.01 - pottable__marigold.n.01) 
                 (inside ?pottable__marigold.n.01 ?pot.n.04_1)
-            ) 
+            )
         )
     )
 )

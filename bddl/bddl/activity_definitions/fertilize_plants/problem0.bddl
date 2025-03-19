@@ -1,4 +1,4 @@
-(define (problem fertilize_plants-0)
+(define (problem fertilize_plants_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,9 +20,9 @@
     )
     
     (:goal 
-        (and
-            (forall
-                (?pot_plant.n.01 - pot_plant.n.01)
+        (and 
+            (forall 
+                (?pot_plant.n.01 - pot_plant.n.01) 
                 (covered ?pot_plant.n.01 ?fertilizer.n.01_1)
             )
         )

@@ -1,4 +1,4 @@
-(define (problem clean_potatoes-0)
+(define (problem clean_potatoes_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,15 +13,15 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
-        (covered potato.n.01_1 dirt.n.02_1)
-        (covered potato.n.01_2 dirt.n.02_1)
-        (covered potato.n.01_3 dirt.n.02_1)
-        (covered potato.n.01_4 dirt.n.02_1)
-        (ontop potato.n.01_1 chopping_board.n.01_1)
-        (ontop potato.n.01_2 chopping_board.n.01_1)
-        (ontop potato.n.01_3 chopping_board.n.01_1)
-        (ontop potato.n.01_4 chopping_board.n.01_1)
+    (:init 
+        (covered potato.n.01_1 dirt.n.02_1) 
+        (covered potato.n.01_2 dirt.n.02_1) 
+        (covered potato.n.01_3 dirt.n.02_1) 
+        (covered potato.n.01_4 dirt.n.02_1) 
+        (ontop potato.n.01_1 chopping_board.n.01_1) 
+        (ontop potato.n.01_2 chopping_board.n.01_1) 
+        (ontop potato.n.01_3 chopping_board.n.01_1) 
+        (ontop potato.n.01_4 chopping_board.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
@@ -34,8 +34,8 @@
     (:goal 
         (and 
             (forall 
-                (?potato.n.01 - potato.n.01)
-                (not
+                (?potato.n.01 - potato.n.01) 
+                (not 
                     (covered ?potato.n.01 ?dirt.n.02_1)
                 )
             )

@@ -1,4 +1,4 @@
-(define (problem polishing_silver-0)
+(define (problem polishing_silver_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,7 +22,8 @@
         (inside tablespoon.n.02_4 cabinet.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* kitchen)
     )
     
     (:goal 

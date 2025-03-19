@@ -1,4 +1,4 @@
-(define (problem make_lemon_or_lime_water-0)
+(define (problem make_lemon_or_lime_water_0)
     (:domain omnigibson)
 
     (:objects
@@ -36,9 +36,9 @@
     
     (:goal 
         (and 
-            (filled ?water_glass.n.02_1 ?water.n.06_1)
+            (filled ?water_glass.n.02_1 ?water.n.06_1) 
             (forall 
-                (?ice_cube.n.01 - ice_cube.n.01)
+                (?ice_cube.n.01 - ice_cube.n.01) 
                 (inside ?ice_cube.n.01 ?water_glass.n.02_1)
             )
         )

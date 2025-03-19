@@ -1,4 +1,4 @@
-(define (problem picking_vegetables_in_garden-0)
+(define (problem picking_vegetables_in_garden_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,10 +13,10 @@
     )
     
     (:init 
-        (inroom rail_fence.n.01_1 garden)
-        (ontop artichoke.n.02_1 lawn.n.01_1)
-        (ontop chard.n.02_1 lawn.n.01_1)
-        (ontop beet.n.02_1 lawn.n.01_1)
+        (inroom rail_fence.n.01_1 garden) 
+        (ontop artichoke.n.02_1 lawn.n.01_1) 
+        (ontop chard.n.02_1 lawn.n.01_1) 
+        (ontop beet.n.02_1 lawn.n.01_1) 
         (ontop wicker_basket.n.01_1 lawn.n.01_1) 
         (ontop wicker_basket.n.01_2 lawn.n.01_1) 
         (inroom lawn.n.01_1 garden) 
@@ -25,17 +25,17 @@
     )
     
     (:goal 
-        (and
+        (and 
             (exists 
-                (?wicker_basket.n.01 - wicker_basket.n.01)
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (inside ?artichoke.n.02_1 ?wicker_basket.n.01)
-            )
+            ) 
             (exists 
-                (?wicker_basket.n.01 - wicker_basket.n.01)
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (inside ?chard.n.02_1 ?wicker_basket.n.01)
-            )
+            ) 
             (exists 
-                (?wicker_basket.n.01 - wicker_basket.n.01)
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (inside ?beet.n.02_1 ?wicker_basket.n.01)
             )
         )

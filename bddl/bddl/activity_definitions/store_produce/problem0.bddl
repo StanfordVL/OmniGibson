@@ -1,4 +1,4 @@
-(define (problem store_produce-0)
+(define (problem store_produce_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,18 +18,19 @@
         (ontop sack.n.01_1 floor.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom electric_refrigerator.n.01_* kitchen)
     )
     
     (:goal 
         (and 
             (forall 
-                (?pomegranate.n.02 - pomegranate.n.02)
-                (inside ?pomegranate.n.02 ?electric_refrigerator.n.01_1) 
-            )
+                (?pomegranate.n.02 - pomegranate.n.02) 
+                (inside ?pomegranate.n.02 ?electric_refrigerator.n.01_1)
+            ) 
             (forall 
-                (?mango.n.02 - mango.n.02)
-                (inside ?mango.n.02 ?electric_refrigerator.n.01_1) 
+                (?mango.n.02 - mango.n.02) 
+                (inside ?mango.n.02 ?electric_refrigerator.n.01_1)
             )
         )
     )

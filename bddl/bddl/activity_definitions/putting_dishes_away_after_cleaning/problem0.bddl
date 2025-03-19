@@ -1,4 +1,4 @@
-(define (problem putting_dishes_away_after_cleaning-0)
+(define (problem putting_dishes_away_after_cleaning_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,7 +22,8 @@
         (inroom countertop.n.01_2 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* kitchen)
     )
     
     (:goal 

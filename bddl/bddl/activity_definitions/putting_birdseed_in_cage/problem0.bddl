@@ -1,4 +1,4 @@
-(define (problem putting_birdseed_in_cage-0)
+(define (problem putting_birdseed_in_cage_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,7 @@
         (ontop pot_plant.n.01_1 floor.n.01_1) 
         (ontop bowl.n.01_1 floor.n.01_1) 
         (filled bird_feed__bag.n.01_1 bird_feed.n.01_1) 
-        (ontop bird_feed__bag.n.01_1 floor.n.01_1)
+        (ontop bird_feed__bag.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

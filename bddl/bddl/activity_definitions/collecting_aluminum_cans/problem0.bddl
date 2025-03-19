@@ -1,11 +1,11 @@
-(define (problem collecting_aluminum_cans-0)
+(define (problem collecting_aluminum_cans_0)
     (:domain omnigibson)
 
     (:objects
-     	can__of__soda.n.01_1 can__of__soda.n.01_2 can__of__soda.n.01_3 can__of__soda.n.01_4 can__of__soda.n.01_5 can__of__soda.n.01_6 - can__of__soda.n.01
-    	bed.n.01_1 - bed.n.01
-    	floor.n.01_1 - floor.n.01
-    	bucket.n.01_1 - bucket.n.01
+        can__of__soda.n.01_1 can__of__soda.n.01_2 can__of__soda.n.01_3 can__of__soda.n.01_4 can__of__soda.n.01_5 can__of__soda.n.01_6 - can__of__soda.n.01
+        bed.n.01_1 - bed.n.01
+        floor.n.01_1 - floor.n.01
+        bucket.n.01_1 - bucket.n.01
         agent.n.01_1 - agent.n.01
     )
     

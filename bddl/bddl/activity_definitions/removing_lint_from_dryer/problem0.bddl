@@ -1,4 +1,4 @@
-(define (problem removing_lint_from_dryer-0)
+(define (problem removing_lint_from_dryer_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,13 +15,13 @@
     
     (:init 
         (covered lint_screen.n.01_1 lint.n.01_1) 
-        (ontop scrub_brush.n.01_1 clothes_dryer.n.01_1)
-        (ontop lint_screen.n.01_1 clothes_dryer.n.01_1)
+        (ontop scrub_brush.n.01_1 clothes_dryer.n.01_1) 
+        (ontop lint_screen.n.01_1 clothes_dryer.n.01_1) 
         (ontop vacuum.n.04_1 floor.n.01_1) 
         (covered lint_screen.n.01_1 dust.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom washer.n.03_1 utility_room) 
-        (inroom clothes_dryer.n.01_1 utility_room)
+        (inroom clothes_dryer.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

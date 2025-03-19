@@ -1,4 +1,4 @@
-(define (problem preserving_vegetables-0)
+(define (problem preserving_vegetables_0)
     (:domain omnigibson)
 
     (:objects
@@ -24,10 +24,10 @@
         (ontop carrot.n.03_2 chopping_board.n.01_1) 
         (ontop mason_jar.n.01_1 countertop.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
-        (ontop carving_knife.n.01_1 countertop.n.01_1)
-        (filled vinegar__bottle.n.01_1 vinegar.n.01_1)
-        (ontop vinegar__bottle.n.01_1 countertop.n.01_1)
-        (future diced__carrot.n.01_1)
+        (ontop carving_knife.n.01_1 countertop.n.01_1) 
+        (filled vinegar__bottle.n.01_1 vinegar.n.01_1) 
+        (ontop vinegar__bottle.n.01_1 countertop.n.01_1) 
+        (future diced__carrot.n.01_1) 
         (inroom stove.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -36,9 +36,9 @@
     
     (:goal 
         (and 
-            (real ?diced__carrot.n.01_1)
+            (real ?diced__carrot.n.01_1) 
             (contains ?mason_jar.n.01_1 ?vinegar.n.01_1) 
-            (filled ?mason_jar.n.01_1 ?diced__carrot.n.01_1)
+            (filled ?mason_jar.n.01_1 ?diced__carrot.n.01_1) 
             (hot ?mason_jar.n.01_1)
         )
     )

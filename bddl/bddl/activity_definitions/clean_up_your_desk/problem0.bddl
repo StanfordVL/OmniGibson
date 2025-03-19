@@ -1,4 +1,4 @@
-(define (problem clean_up_your_desk-0)
+(define (problem clean_up_your_desk_0)
     (:domain omnigibson)
 
     (:objects
@@ -27,41 +27,43 @@
         (ontop mail.n.04_1 notebook.n.01_1) 
         (ontop mail.n.04_2 desk.n.01_1) 
         (ontop folder.n.02_1 desk.n.01_1) 
-        (ontop folder.n.02_2 floor.n.01_1)
+        (ontop folder.n.02_2 floor.n.01_1) 
         (ontop shears.n.01_1 floor.n.01_1) 
         (ontop pencil.n.01_1 desk.n.01_1) 
-        (ontop pen.n.01_1 desk.n.01_1)
+        (ontop pen.n.01_1 desk.n.01_1) 
         (ontop pen.n.01_2 floor.n.01_1) 
         (ontop stapler.n.01_1 shelf.n.01_1) 
         (ontop laptop.n.01_1 desk.n.01_1) 
         (ontop tray.n.01_1 desk.n.01_1) 
         (ontop paperback_book.n.01_1 desk.n.01_1) 
-        (ontop paperback_book.n.01_2 floor.n.01_1)
-        (ontop pencil_box.n.01_1 desk.n.01_1)
+        (ontop paperback_book.n.01_2 floor.n.01_1) 
+        (ontop pencil_box.n.01_1 desk.n.01_1) 
         (inroom cabinet.n.01_1 private_office) 
         (inroom shelf.n.01_1 private_office) 
         (inroom desk.n.01_1 private_office) 
-        (inroom swivel_chair.n.01_1 private_office)
-        (inroom floor.n.01_1 private_office)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom swivel_chair.n.01_1 private_office) 
+        (inroom floor.n.01_1 private_office) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom desk.n.01_* private_office) 
+        (inroom shelf.n.01_* private_office)
     )
     
     (:goal 
         (and 
             (forall 
                 (?mail.n.04 - mail.n.04) 
-                (or
-                    (ontop ?mail.n.04 ?tray.n.01_1)
-                    (ontop ?mail.n.04 ?mail.n.04_1)
+                (or 
+                    (ontop ?mail.n.04 ?tray.n.01_1) 
+                    (ontop ?mail.n.04 ?mail.n.04_1) 
                     (ontop ?mail.n.04 ?mail.n.04_2)
                 )
             ) 
             (forall 
                 (?folder.n.02 - folder.n.02) 
-                (or
-                    (ontop ?folder.n.02 ?shelf.n.01_1)
-                    (ontop ?folder.n.02 ?desk.n.01_1)
-                    (ontop ?folder.n.02 ?folder.n.02_1)
+                (or 
+                    (ontop ?folder.n.02 ?shelf.n.01_1) 
+                    (ontop ?folder.n.02 ?desk.n.01_1) 
+                    (ontop ?folder.n.02 ?folder.n.02_1) 
                     (ontop ?folder.n.02 ?folder.n.02_2)
                 )
             ) 
@@ -79,8 +81,8 @@
             (ontop ?tray.n.01_1 ?desk.n.01_1) 
             (ontop ?notebook.n.01_1 ?desk.n.01_1) 
             (ontop ?pencil_box.n.01_1 ?desk.n.01_1) 
-            (ontop ?laptop.n.01_1 ?desk.n.01_1)
-            (not
+            (ontop ?laptop.n.01_1 ?desk.n.01_1) 
+            (not 
                 (open ?laptop.n.01_1)
             )
         )

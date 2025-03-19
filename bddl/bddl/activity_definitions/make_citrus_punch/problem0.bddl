@@ -1,4 +1,4 @@
-(define (problem make_citrus_punch-0)
+(define (problem make_citrus_punch_0)
     (:domain omnigibson)
 
     (:objects
@@ -25,7 +25,7 @@
         (filled beer_bottle.n.01_1 ginger_beer.n.01_1) 
         (ontop beer_bottle.n.01_1 countertop.n.01_1) 
         (filled lemonade__bottle.n.01_1 lemonade.n.01_1) 
-        (ontop lemonade__bottle.n.01_1 countertop.n.01_1)
+        (ontop lemonade__bottle.n.01_1 countertop.n.01_1) 
         (ontop wooden_spoon.n.02_1 countertop.n.01_1) 
         (filled pineapple_juice__carton.n.01_1 pineapple_juice.n.01_1) 
         (ontop pineapple_juice__carton.n.01_1 countertop.n.01_1) 

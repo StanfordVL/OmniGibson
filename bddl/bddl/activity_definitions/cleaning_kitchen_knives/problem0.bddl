@@ -1,4 +1,4 @@
-(define (problem cleaning_kitchen_knives-0)
+(define (problem cleaning_kitchen_knives_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,19 +17,19 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
+    (:init 
         (covered carving_knife.n.01_1 barbecue_sauce.n.01_1) 
         (covered carving_knife.n.01_2 breadcrumb.n.01_1) 
-        (covered table_knife.n.01_1 melted__butter.n.01_1)
-        (ontop carving_knife.n.01_1 countertop.n.01_1)
+        (covered table_knife.n.01_1 melted__butter.n.01_1) 
+        (ontop carving_knife.n.01_1 countertop.n.01_1) 
         (ontop carving_knife.n.01_2 countertop.n.01_1) 
-        (ontop table_knife.n.01_1 countertop.n.01_1)
+        (ontop table_knife.n.01_1 countertop.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop sponge.n.01_1 countertop.n.01_1) 
         (not 
             (covered sponge.n.01_1 water.n.06_1)
-        )
+        ) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -40,25 +40,25 @@
     (:goal 
         (and 
             (forall 
-                (?carving_knife.n.01 - carving_knife.n.01)
+                (?carving_knife.n.01 - carving_knife.n.01) 
                 (and 
                     (not 
                         (covered ?carving_knife.n.01 ?barbecue_sauce.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?carving_knife.n.01 ?breadcrumb.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?carving_knife.n.01 ?melted__butter.n.01_1)
                     )
                 )
-            )
-            (not
+            ) 
+            (not 
                 (covered ?table_knife.n.01_1 ?barbecue_sauce.n.01_1)
-            )
+            ) 
             (not 
                 (covered ?table_knife.n.01_1 ?breadcrumb.n.01_1)
-            )
+            ) 
             (not 
                 (covered ?table_knife.n.01_1 ?melted__butter.n.01_1)
             )

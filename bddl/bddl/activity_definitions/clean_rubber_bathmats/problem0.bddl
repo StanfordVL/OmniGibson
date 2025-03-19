@@ -1,4 +1,4 @@
-(define (problem clean_rubber_bathmats-0)
+(define (problem clean_rubber_bathmats_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,12 +16,12 @@
     )
     
     (:init 
-        (ontop mat.n.01_1 sink.n.01_1)
+        (ontop mat.n.01_1 sink.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
-        (ontop detergent__bottle.n.01_1 floor.n.01_1)
-        (covered mat.n.01_1 mildew.n.02_1)
-        (insource sink.n.01_1 water.n.06_1)
+        (ontop detergent__bottle.n.01_1 floor.n.01_1) 
+        (covered mat.n.01_1 mildew.n.02_1) 
+        (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1) 
         (ontop disinfectant__bottle.n.01_1 floor.n.01_1) 

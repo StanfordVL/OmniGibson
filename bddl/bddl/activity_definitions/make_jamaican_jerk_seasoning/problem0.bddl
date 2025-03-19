@@ -1,4 +1,4 @@
-(define (problem make_jamaican_jerk_seasoning-0)
+(define (problem make_jamaican_jerk_seasoning_0)
     (:domain omnigibson)
 
     (:objects
@@ -26,9 +26,9 @@
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (insource cayenne__shaker.n.01_1 cayenne.n.02_1) 
         (ontop cayenne__shaker.n.01_1 countertop.n.01_1) 
-        (inside clove.n.03_1 electric_refrigerator.n.01_1)
-        (inside clove.n.03_2 electric_refrigerator.n.01_1)
-        (ontop teaspoon.n.02_1 countertop.n.01_1)
+        (inside clove.n.03_1 electric_refrigerator.n.01_1) 
+        (inside clove.n.03_2 electric_refrigerator.n.01_1) 
+        (ontop teaspoon.n.02_1 countertop.n.01_1) 
         (ontop blender.n.01_1 countertop.n.01_1) 
         (ontop bowl.n.01_1 countertop.n.01_1) 
         (future jerk_seasoning.n.01_1) 

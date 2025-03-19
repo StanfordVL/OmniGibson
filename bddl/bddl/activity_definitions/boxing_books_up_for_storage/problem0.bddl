@@ -1,12 +1,12 @@
-(define (problem boxing_books_up_for_storage-0)
+(define (problem boxing_books_up_for_storage_0)
     (:domain omnigibson)
 
     (:objects
-     	book.n.02_1 book.n.02_2 book.n.02_3 book.n.02_4 book.n.02_5 book.n.02_6 book.n.02_7 - book.n.02
-    	floor.n.01_1 - floor.n.01
-    	bookcase.n.01_1 - bookcase.n.01
-    	carton.n.02_1 - carton.n.02
-    	agent.n.01_1 - agent.n.01
+        book.n.02_1 book.n.02_2 book.n.02_3 book.n.02_4 book.n.02_5 book.n.02_6 book.n.02_7 - book.n.02
+        floor.n.01_1 - floor.n.01
+        bookcase.n.01_1 - bookcase.n.01
+        carton.n.02_1 - carton.n.02
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 

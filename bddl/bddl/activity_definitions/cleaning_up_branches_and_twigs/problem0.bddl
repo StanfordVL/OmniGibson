@@ -1,4 +1,4 @@
-(define (problem cleaning_up_branches_and_twigs-0)
+(define (problem cleaning_up_branches_and_twigs_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,24 +11,25 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
+    (:init 
         (ontop branch.n.02_1 grill.n.02_1) 
         (ontop branch.n.02_2 lawn.n.01_1) 
-        (ontop branch.n.02_3 lawn.n.01_1)
+        (ontop branch.n.02_3 lawn.n.01_1) 
         (ontop ashcan.n.01_1 lawn.n.01_1) 
         (ontop pruner.n.02_1 lawn.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (inroom floor.n.01_1 garden)
-        (inroom lawn.n.01_1 garden)
-        (inroom grill.n.02_1 garden)
+        (inroom floor.n.01_1 garden) 
+        (inroom lawn.n.01_1 garden) 
+        (inroom grill.n.02_1 garden) 
+        (inroom lawn.n.01_* garden)
     )
     
     (:goal 
         (and 
             (forall 
-                (?branch.n.02 - branch.n.02)
+                (?branch.n.02 - branch.n.02) 
                 (inside ?branch.n.02 ?ashcan.n.01_1)
-            )
+            ) 
             (ontop ?ashcan.n.01_1 ?lawn.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem polish_cymbals-0)
+(define (problem polish_cymbals_0)
     (:domain omnigibson)
 
     (:objects
@@ -25,8 +25,8 @@
         (filled vinegar__bottle.n.01_1 vinegar.n.01_1) 
         (ontop lemon_juice__bottle.n.01_1 floor.n.01_1) 
         (ontop vinegar__bottle.n.01_1 floor.n.01_1) 
-        (filled polish__bottle.n.01_1 polish.n.03_1)
-        (ontop polish__bottle.n.01_1 floor.n.01_1)
+        (filled polish__bottle.n.01_1 polish.n.03_1) 
+        (ontop polish__bottle.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 empty_room) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -35,11 +35,11 @@
     (:goal 
         (and 
             (forall 
-                (?cymbal.n.01 - cymbal.n.01)
-                (and
+                (?cymbal.n.01 - cymbal.n.01) 
+                (and 
                     (not 
                         (covered ?cymbal.n.01 ?stain.n.01_1)
-                    )
+                    ) 
                     (covered ?cymbal.n.01 ?polish.n.03_1)
                 )
             )

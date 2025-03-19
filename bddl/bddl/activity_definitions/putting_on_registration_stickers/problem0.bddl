@@ -1,4 +1,4 @@
-(define (problem putting_on_registration_stickers-0)
+(define (problem putting_on_registration_stickers_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,8 +11,8 @@
     
     (:init 
         (ontop license_plate.n.01_1 floor.n.01_1) 
-        (ontop gummed_label.n.01_1 floor.n.01_1)
-        (ontop car.n.01_1 floor.n.01_1)
+        (ontop gummed_label.n.01_1 floor.n.01_1) 
+        (ontop car.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

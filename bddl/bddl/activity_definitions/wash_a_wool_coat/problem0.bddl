@@ -1,4 +1,4 @@
-(define (problem wash_a_wool_coat-0)
+(define (problem wash_a_wool_coat_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,15 +16,15 @@
     )
     
     (:init 
-        (ontop wool_coat.n.01_1 clothes_dryer.n.01_1)
-        (covered wool_coat.n.01_1 dust.n.01_1)
-        (covered wool_coat.n.01_1 lint.n.01_1)
+        (ontop wool_coat.n.01_1 clothes_dryer.n.01_1) 
+        (covered wool_coat.n.01_1 dust.n.01_1) 
+        (covered wool_coat.n.01_1 lint.n.01_1) 
         (ontop scrub_brush.n.01_1 washer.n.03_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
-        (ontop detergent__bottle.n.01_1 washer.n.03_1)
-        (ontop hand_towel.n.01_1 clothes_dryer.n.01_1)
+        (ontop detergent__bottle.n.01_1 washer.n.03_1) 
+        (ontop hand_towel.n.01_1 clothes_dryer.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
-        (inroom clothes_dryer.n.01_1 utility_room)
+        (inroom clothes_dryer.n.01_1 utility_room) 
         (inroom washer.n.03_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -36,7 +36,7 @@
             ) 
             (not 
                 (covered ?wool_coat.n.01_1 ?lint.n.01_1)
-            ) 
+            )
         )
     )
 )

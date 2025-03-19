@@ -1,4 +1,4 @@
-(define (problem folding_clean_laundry-0)
+(define (problem folding_clean_laundry_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,12 +15,13 @@
         (ontop tablecloth.n.01_1 bed.n.01_1) 
         (ontop sock.n.01_1 bed.n.01_1) 
         (ontop sock.n.01_2 bed.n.01_1) 
-        (ontop trouser.n.01_1 bed.n.01_1)
-        (ontop dishtowel.n.01_1 bed.n.01_1)
+        (ontop trouser.n.01_1 bed.n.01_1) 
+        (ontop dishtowel.n.01_1 bed.n.01_1) 
         (ontop dishtowel.n.01_2 bed.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom bed.n.01_1 bedroom) 
-        (inroom floor.n.01_1 bedroom)
+        (inroom floor.n.01_1 bedroom) 
+        (inroom bed.n.01_* bedroom)
     )
     
     (:goal 
@@ -30,8 +31,8 @@
                 (?sock.n.01 - sock.n.01) 
                 (folded ?sock.n.01)
             ) 
-            (folded ?trouser.n.01_1)
-            (forall
+            (folded ?trouser.n.01_1) 
+            (forall 
                 (?dishtowel.n.01 - dishtowel.n.01) 
                 (folded ?dishtowel.n.01)
             ) 
@@ -39,9 +40,9 @@
             (forall 
                 (?dishtowel.n.01 - dishtowel.n.01) 
                 (ontop ?dishtowel.n.01 ?bed.n.01_1)
-            )
-            (ontop ?trouser.n.01_1 ?bed.n.01_1)
-            (forall
+            ) 
+            (ontop ?trouser.n.01_1 ?bed.n.01_1) 
+            (forall 
                 (?sock.n.01 - sock.n.01) 
                 (ontop ?sock.n.01 ?bed.n.01_1)
             )

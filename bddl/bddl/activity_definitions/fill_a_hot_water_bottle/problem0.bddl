@@ -1,4 +1,4 @@
-(define (problem fill_a_hot_water_bottle-0)
+(define (problem fill_a_hot_water_bottle_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,14 +18,14 @@
         (inroom floor.n.01_1 kitchen) 
         (inroom microwave.n.02_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
-        (inroom countertop.n.01_1 kitchen)
-        (future cooked__water.n.01_1)
+        (inroom countertop.n.01_1 kitchen) 
+        (future cooked__water.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?cooked__water.n.01_1)
+            (real ?cooked__water.n.01_1) 
             (filled ?water_bottle.n.01_1 ?cooked__water.n.01_1)
         )
     )

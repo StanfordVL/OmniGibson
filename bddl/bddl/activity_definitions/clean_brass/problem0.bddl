@@ -1,4 +1,4 @@
-(define (problem clean_brass-0)
+(define (problem clean_brass_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,7 +15,7 @@
         (inside brass.n.02_1 bookcase.n.01_1) 
         (inside rag.n.01_1 bookcase.n.01_1) 
         (filled polish__bottle.n.01_1 polish.n.03_1) 
-        (inside polish__bottle.n.01_1 bookcase.n.01_1)
+        (inside polish__bottle.n.01_1 bookcase.n.01_1) 
         (inroom bookcase.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)

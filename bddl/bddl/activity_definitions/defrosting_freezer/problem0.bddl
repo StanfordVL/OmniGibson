@@ -1,4 +1,4 @@
-(define (problem defrosting_freezer-0)
+(define (problem defrosting_freezer_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,11 +15,11 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
+    (:init 
         (ontop dustpan.n.02_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (ontop scraper.n.01_1 countertop.n.01_1) 
-        (ontop towel.n.01_1 countertop.n.01_1)
+        (ontop towel.n.01_1 countertop.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (inside crayfish.n.02_1 electric_refrigerator.n.01_1) 
         (inside crayfish.n.02_2 electric_refrigerator.n.01_1) 
@@ -28,7 +28,10 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom electric_refrigerator.n.01_* kitchen) 
+        (inroom countertop.n.01_* kitchen) 
+        (inroom sink.n.01_* kitchen)
     )
     
     (:goal 

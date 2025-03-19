@@ -1,4 +1,4 @@
-(define (problem clean_an_office_chair-0)
+(define (problem clean_an_office_chair_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,19 +12,20 @@
     
     (:init 
         (ontop hand_towel.n.01_1 floor.n.01_1) 
-        (covered swivel_chair.n.01_1 dust.n.01_1)
-        (covered swivel_chair.n.01_1 lint.n.01_1)
-        (inroom swivel_chair.n.01_1 shared_office)
+        (covered swivel_chair.n.01_1 dust.n.01_1) 
+        (covered swivel_chair.n.01_1 lint.n.01_1) 
+        (inroom swivel_chair.n.01_1 shared_office) 
         (inroom floor.n.01_1 shared_office) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom swivel_chair.n.01_* shared_office)
     )
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?swivel_chair.n.01_1 ?dust.n.01_1)
-            )
-            (not
+            ) 
+            (not 
                 (covered ?swivel_chair.n.01_1 ?lint.n.01_1)
             )
         )

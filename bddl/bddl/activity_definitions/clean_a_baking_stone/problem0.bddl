@@ -1,4 +1,4 @@
-(define (problem clean_a_baking_stone-0)
+(define (problem clean_a_baking_stone_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,15 +17,15 @@
     
     (:init 
         (ontop rag.n.01_1 countertop.n.01_1) 
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (ontop cookie_sheet.n.01_1 countertop.n.01_1) 
-        (covered cookie_sheet.n.01_1 stain.n.01_1)
+        (covered cookie_sheet.n.01_1 stain.n.01_1) 
         (covered cookie_sheet.n.01_1 crumb.n.03_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom sink.n.01_1 kitchen) 
-        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen)
     )
     
@@ -33,7 +33,7 @@
         (and 
             (not 
                 (covered ?cookie_sheet.n.01_1 ?stain.n.01_1)
-            )
+            ) 
             (not 
                 (covered ?cookie_sheet.n.01_1 ?crumb.n.03_1)
             )

@@ -1,4 +1,4 @@
-(define (problem cook_pasta-0)
+(define (problem cook_pasta_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,15 +20,15 @@
     )
     
     (:init 
-        (future cooked__noodle.n.01_1)
+        (future cooked__noodle.n.01_1) 
         (filled pasta__box.n.01_1 noodle.n.01_1) 
-        (inside pasta__box.n.01_1 cabinet.n.01_1)
+        (inside pasta__box.n.01_1 cabinet.n.01_1) 
         (inside bowl.n.01_1 cabinet.n.01_1) 
         (inside stockpot.n.01_1 cabinet.n.01_1) 
         (inside lid.n.02_1 cabinet.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (inside salt__shaker.n.01_1 cabinet.n.01_1)
-        (future seawater.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (inside salt__shaker.n.01_1 cabinet.n.01_1) 
+        (future seawater.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -39,7 +39,7 @@
     
     (:goal 
         (and 
-            (real ?seawater.n.01_1)
+            (real ?seawater.n.01_1) 
             (real ?cooked__noodle.n.01_1)
         )
     )

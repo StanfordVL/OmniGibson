@@ -1,4 +1,4 @@
-(define (problem planting_trees-0)
+(define (problem planting_trees_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,20 +19,21 @@
         (inside acorn.n.01_3 sack.n.01_1) 
         (inside acorn.n.01_4 sack.n.01_1) 
         (inside acorn.n.01_5 sack.n.01_1) 
-        (filled soil__bag.n.01_1 soil.n.02_1)
+        (filled soil__bag.n.01_1 soil.n.02_1) 
         (ontop soil__bag.n.01_1 floor.n.01_1) 
         (ontop shovel.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom lawn.n.01_* garden)
     )
     
     (:goal 
         (and 
             (forall 
-                (?acorn.n.01 - acorn.n.01)
+                (?acorn.n.01 - acorn.n.01) 
                 (and 
-                    (ontop ?acorn.n.01 ?lawn.n.01_1)
+                    (ontop ?acorn.n.01 ?lawn.n.01_1) 
                     (covered ?acorn.n.01 ?soil.n.02_1)
                 )
             )

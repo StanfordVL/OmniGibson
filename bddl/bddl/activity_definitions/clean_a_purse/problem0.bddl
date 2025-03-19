@@ -1,4 +1,4 @@
-(define (problem clean_a_purse-0)
+(define (problem clean_a_purse_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,11 +15,11 @@
     )
     
     (:init 
-        (covered bag.n.04_1 stain.n.01_1)
+        (covered bag.n.04_1 stain.n.01_1) 
         (inside rag.n.01_1 cabinet.n.01_1) 
-        (ontop bag.n.04_1 floor.n.01_1)
+        (ontop bag.n.04_1 floor.n.01_1) 
         (filled saddle_soap__bottle.n.01_1 saddle_soap.n.01_1) 
-        (inside saddle_soap__bottle.n.01_1 cabinet.n.01_1)
+        (inside saddle_soap__bottle.n.01_1 cabinet.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 

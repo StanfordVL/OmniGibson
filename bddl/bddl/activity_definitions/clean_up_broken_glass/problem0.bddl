@@ -1,4 +1,4 @@
-(define (problem clean_up_broken_glass-0)
+(define (problem clean_up_broken_glass_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,13 +15,14 @@
         (ontop broom.n.01_1 floor.n.01_1) 
         (ontop dustpan.n.02_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (ontop recycling_bin.n.01_1 floor.n.01_1)
-        (inroom floor.n.01_1 kitchen)
+        (ontop recycling_bin.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 kitchen) 
+        (inroom floor.n.01_* kitchen)
     )
     
     (:goal 
         (and 
-            (inside ?broken__glass.n.01_1 ?recycling_bin.n.01_1)
+            (inside ?broken__glass.n.01_1 ?recycling_bin.n.01_1) 
             (not 
                 (ontop ?broken__glass.n.01_1 ?floor.n.01_1)
             )

@@ -1,4 +1,4 @@
-(define (problem cook_ramen_noodles-0)
+(define (problem cook_ramen_noodles_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,7 @@
     (:init 
         (ontop ramen.n.01_1 countertop.n.01_1) 
         (inside stockpot.n.01_1 cabinet.n.01_1) 
-        (insource sink.n.01_1 water.n.06_1)
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 

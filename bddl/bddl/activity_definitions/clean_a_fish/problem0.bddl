@@ -1,4 +1,4 @@
-(define (problem clean_a_fish-0)
+(define (problem clean_a_fish_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,13 +15,13 @@
     
     (:init 
         (ontop trout.n.01_1 chopping_board.n.01_1) 
-        (covered trout.n.01_1 sand.n.04_1)
+        (covered trout.n.01_1 sand.n.04_1) 
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom sink.n.01_1 kitchen)
+        (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen)
     )
     

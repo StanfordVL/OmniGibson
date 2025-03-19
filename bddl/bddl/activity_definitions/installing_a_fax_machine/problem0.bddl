@@ -1,4 +1,4 @@
-(define (problem installing_a_fax_machine-0)
+(define (problem installing_a_fax_machine_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,7 +15,8 @@
         ) 
         (inroom table.n.02_1 private_office) 
         (inroom floor.n.01_1 private_office) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom table.n.02_* private_office)
     )
     
     (:goal 

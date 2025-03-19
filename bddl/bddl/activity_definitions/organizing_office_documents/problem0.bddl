@@ -1,4 +1,4 @@
-(define (problem organizing_office_documents-0)
+(define (problem organizing_office_documents_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,17 +17,18 @@
         (inside post-it.n.01_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 private_office) 
         (inroom cabinet.n.01_1 private_office) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* private_office)
     )
     
     (:goal 
         (and 
             (forall 
-                (?legal_document.n.01 - legal_document.n.01)
+                (?legal_document.n.01 - legal_document.n.01) 
                 (inside ?legal_document.n.01 ?magazine_rack.n.01_1)
-            )
+            ) 
             (inside ?magazine_rack.n.01_1 ?cabinet.n.01_1) 
-            (ontop ?post-it.n.01_1 ?magazine_rack.n.01_1) 
+            (ontop ?post-it.n.01_1 ?magazine_rack.n.01_1)
         )
     )
 )

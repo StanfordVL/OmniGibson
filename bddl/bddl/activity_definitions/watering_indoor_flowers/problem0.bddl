@@ -1,4 +1,4 @@
-(define (problem watering_indoor_flowers-0)
+(define (problem watering_indoor_flowers_0)
     (:domain omnigibson)
 
     (:objects
@@ -26,7 +26,7 @@
     (:goal 
         (and 
             (forall 
-                (?pot_plant.n.01 - pot_plant.n.01)
+                (?pot_plant.n.01 - pot_plant.n.01) 
                 (covered ?pot_plant.n.01 ?water.n.06_1)
             )
         )

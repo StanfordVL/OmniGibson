@@ -1,4 +1,4 @@
-(define (problem store_tulip_bulbs-0)
+(define (problem store_tulip_bulbs_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,7 +17,8 @@
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom electric_refrigerator.n.01_* kitchen)
     )
     
     (:goal 
@@ -26,7 +27,7 @@
                 (?tulip.n.01 - tulip.n.01) 
                 (inside ?tulip.n.01 ?packing_box.n.02_1)
             ) 
-            (inside ?packing_box.n.02_1 ?electric_refrigerator.n.01_1) 
+            (inside ?packing_box.n.02_1 ?electric_refrigerator.n.01_1)
         )
     )
 )

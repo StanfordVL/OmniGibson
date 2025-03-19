@@ -1,4 +1,4 @@
-(define (problem store_vodka-0)
+(define (problem store_vodka_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,7 +13,8 @@
         (ontop bottle__of__vodka.n.01_2 floor.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* kitchen)
     )
     
     (:goal 

@@ -1,4 +1,4 @@
-(define (problem setting_up_bedroom_for_guest-0)
+(define (problem setting_up_bedroom_for_guest_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,7 +14,8 @@
         (ontop blanket.n.01_1 floor.n.01_1) 
         (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom bed.n.01_* bedroom)
     )
     
     (:goal 

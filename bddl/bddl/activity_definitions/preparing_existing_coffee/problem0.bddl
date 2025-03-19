@@ -1,4 +1,4 @@
-(define (problem preparing_existing_coffee-0)
+(define (problem preparing_existing_coffee_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,12 +19,12 @@
     
     (:init 
         (filled milk__carton.n.01_1 low-fat_milk.n.01_1) 
-        (inside milk__carton.n.01_1 electric_refrigerator.n.01_1)
-        (inside mug.n.04_1 cabinet.n.01_1)
+        (inside milk__carton.n.01_1 electric_refrigerator.n.01_1) 
+        (inside mug.n.04_1 cabinet.n.01_1) 
         (filled bowl.n.01_1 granulated_sugar.n.01_1) 
-        (ontop bowl.n.01_1 countertop.n.01_1)
-        (filled mason_jar.n.01_1 drip_coffee.n.01_1)
-        (inside mason_jar.n.01_1 electric_refrigerator.n.01_1)
+        (ontop bowl.n.01_1 countertop.n.01_1) 
+        (filled mason_jar.n.01_1 drip_coffee.n.01_1) 
+        (inside mason_jar.n.01_1 electric_refrigerator.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
@@ -35,8 +35,8 @@
     
     (:goal 
         (and 
-            (filled ?mug.n.04_1 ?drip_coffee.n.01_1)
-            (contains ?mug.n.04_1 ?low-fat_milk.n.01_1)
+            (filled ?mug.n.04_1 ?drip_coffee.n.01_1) 
+            (contains ?mug.n.04_1 ?low-fat_milk.n.01_1) 
             (contains ?mug.n.04_1 ?granulated_sugar.n.01_1)
         )
     )

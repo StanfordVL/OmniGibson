@@ -1,4 +1,4 @@
-(define (problem clean_a_hamper-0)
+(define (problem clean_a_hamper_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,7 +15,7 @@
         (covered hamper.n.02_1 stain.n.01_1) 
         (ontop hamper.n.02_1 floor.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
-        (ontop detergent__bottle.n.01_1 floor.n.01_1)
+        (ontop detergent__bottle.n.01_1 floor.n.01_1) 
         (inroom washer.n.03_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)

@@ -1,4 +1,4 @@
-(define (problem set_up_a_guinea_pig_cage-0)
+(define (problem set_up_a_guinea_pig_cage_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,22 +16,23 @@
     
     (:init 
         (ontop hutch.n.01_1 floor.n.01_1) 
-        (filled pellet_food__bag.n.01_1 pellet_food.n.01_1)
-        (ontop pellet_food__bag.n.01_1 floor.n.01_1)
+        (filled pellet_food__bag.n.01_1 pellet_food.n.01_1) 
+        (ontop pellet_food__bag.n.01_1 floor.n.01_1) 
         (ontop water_bottle.n.01_1 coffee_table.n.01_1) 
-        (ontop bowl.n.01_1 coffee_table.n.01_1)
-        (filled carton.n.02_1 hay.n.01_1)
-        (ontop carton.n.02_1 floor.n.01_1)
+        (ontop bowl.n.01_1 coffee_table.n.01_1) 
+        (filled carton.n.02_1 hay.n.01_1) 
+        (ontop carton.n.02_1 floor.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom coffee_table.n.01_* living_room)
     )
     
     (:goal 
         (and 
             (ontop ?hutch.n.01_1 ?coffee_table.n.01_1) 
-            (filled ?bowl.n.01_1 ?pellet_food.n.01_1)
-            (inside ?bowl.n.01_1 ?hutch.n.01_1)
+            (filled ?bowl.n.01_1 ?pellet_food.n.01_1) 
+            (inside ?bowl.n.01_1 ?hutch.n.01_1) 
             (inside ?water_bottle.n.01_1 ?hutch.n.01_1) 
             (covered ?hutch.n.01_1 ?hay.n.01_1)
         )

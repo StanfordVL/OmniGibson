@@ -1,4 +1,4 @@
-(define (problem make_biscuits-0)
+(define (problem make_biscuits_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,14 +23,14 @@
         agent.n.01_1 - agent.n.01
         floor.n.01_1 - floor.n.01
     )
-
+    
     (:init 
         (filled flour__sack.n.01_1 flour.n.01_1) 
         (inside flour__sack.n.01_1 cabinet.n.01_1) 
         (filled baking_powder__jar.n.01_1 baking_powder.n.01_1) 
         (inside baking_powder__jar.n.01_1 cabinet.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
         (filled shortening__carton.n.01_1 shortening.n.01_1) 
         (inside shortening__carton.n.01_1 electric_refrigerator.n.01_1) 
         (filled milk__carton.n.01_1 whole_milk.n.01_1) 

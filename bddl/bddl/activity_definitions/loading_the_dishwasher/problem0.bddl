@@ -1,4 +1,4 @@
-(define (problem loading_the_dishwasher-0)
+(define (problem loading_the_dishwasher_0)
     (:domain omnigibson)
 
     (:objects
@@ -28,7 +28,8 @@
         (inroom dishwasher.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom dishwasher.n.01_* kitchen)
     )
     
     (:goal 
@@ -45,4 +46,3 @@
         )
     )
 )
-

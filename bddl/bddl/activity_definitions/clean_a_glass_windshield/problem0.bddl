@@ -1,4 +1,4 @@
-(define (problem clean_a_glass_windshield-0)
+(define (problem clean_a_glass_windshield_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,10 +13,10 @@
     )
     
     (:init 
-        (saturated rag.n.01_1 water.n.06_1)
+        (saturated rag.n.01_1 water.n.06_1) 
         (covered windshield.n.01_1 stain.n.01_1) 
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (ontop windshield.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
@@ -27,7 +27,7 @@
         (and 
             (not 
                 (covered ?windshield.n.01_1 ?stain.n.01_1)
-            ) 
+            )
         )
     )
 )

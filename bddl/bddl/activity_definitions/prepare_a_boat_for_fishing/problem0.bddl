@@ -1,4 +1,4 @@
-(define (problem prepare_a_boat_for_fishing-0)
+(define (problem prepare_a_boat_for_fishing_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,16 +18,16 @@
     )
     
     (:init 
-        (covered boat.n.01_1 stain.n.01_1)
-        (ontop boat.n.01_1 driveway.n.01_1)
+        (covered boat.n.01_1 stain.n.01_1) 
+        (ontop boat.n.01_1 driveway.n.01_1) 
         (ontop fishing_gear.n.01_1 driveway.n.01_1) 
         (ontop fishing_rod.n.01_1 driveway.n.01_1) 
         (ontop bucket.n.01_1 driveway.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 driveway.n.01_1) 
         (inside rag.n.01_1 bucket.n.01_1) 
-        (insource sink.n.01_1 water.n.06_1)
-        (inroom sink.n.01_1 bathroom)
+        (insource sink.n.01_1 water.n.06_1) 
+        (inroom sink.n.01_1 bathroom) 
         (inroom driveway.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -38,7 +38,7 @@
             (not 
                 (covered ?boat.n.01_1 ?stain.n.01_1)
             ) 
-            (inside ?fishing_gear.n.01_1 ?boat.n.01_1)
+            (inside ?fishing_gear.n.01_1 ?boat.n.01_1) 
             (inside ?fishing_rod.n.01_1 ?boat.n.01_1)
         )
     )

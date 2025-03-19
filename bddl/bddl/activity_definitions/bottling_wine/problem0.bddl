@@ -1,4 +1,4 @@
-(define (problem bottling_wine-0)
+(define (problem bottling_wine_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,11 +19,11 @@
         (ontop wine_bottle.n.01_1 countertop.n.01_1) 
         (ontop wine_bottle.n.01_2 countertop.n.01_1) 
         (ontop wine_bottle.n.01_3 countertop.n.01_1) 
-        (ontop wine_bottle.n.01_4 countertop.n.01_1)
-        (inside cork.n.04_1 cabinet.n.01_1)
-        (inside cork.n.04_2 cabinet.n.01_1)
-        (inside cork.n.04_3 cabinet.n.01_1)
-        (inside cork.n.04_4 cabinet.n.01_1)
+        (ontop wine_bottle.n.01_4 countertop.n.01_1) 
+        (inside cork.n.04_1 cabinet.n.01_1) 
+        (inside cork.n.04_2 cabinet.n.01_1) 
+        (inside cork.n.04_3 cabinet.n.01_1) 
+        (inside cork.n.04_4 cabinet.n.01_1) 
         (filled bucket.n.01_1 red_wine.n.01_1) 
         (inroom floor.n.01_1 dining_room) 
         (inroom floor.n.01_2 kitchen) 
@@ -32,13 +32,12 @@
         (inroom cabinet.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_2)
-    
     )
     
     (:goal 
         (and 
             (forpairs 
-                (?cork.n.04 - cork.n.04)
+                (?cork.n.04 - cork.n.04) 
                 (?wine_bottle.n.01 - wine_bottle.n.01) 
                 (attached ?cork.n.04 ?wine_bottle.n.01)
             ) 

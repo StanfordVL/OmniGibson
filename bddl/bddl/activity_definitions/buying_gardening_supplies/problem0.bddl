@@ -1,4 +1,4 @@
-(define (problem buying_gardening_supplies-0)
+(define (problem buying_gardening_supplies_0)
     (:domain omnigibson)
 
     (:objects
@@ -35,8 +35,9 @@
         (inroom grocery_shelf.n.01_2 grocery_store) 
         (inroom grocery_shelf.n.01_3 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
-        (ontop agent.n.01_1 floor.n.01_1)
-    
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cash_register.n.01_* grocery_store) 
+        (inroom checkout.n.03_* grocery_store)
     )
     
     (:goal 
@@ -52,9 +53,7 @@
             (forall 
                 (?money.n.01 - money.n.01) 
                 (nextto ?money.n.01 ?cash_register.n.01_1)
-    
-            ) 
+            )
         )
-    
     )
 )

@@ -1,4 +1,4 @@
-(define (problem make_bento-0)
+(define (problem make_bento_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,7 @@
         (inside sushi.n.01_4 electric_refrigerator.n.01_1) 
         (inside pickle.n.01_1 electric_refrigerator.n.01_1) 
         (inside pickle.n.01_2 electric_refrigerator.n.01_1) 
-        (filled bowl.n.01_1 white_rice.n.01_1)
+        (filled bowl.n.01_1 white_rice.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -32,13 +32,13 @@
     (:goal 
         (and 
             (forall 
-                (?sushi.n.01 - sushi.n.01)
+                (?sushi.n.01 - sushi.n.01) 
                 (inside ?sushi.n.01 ?tupperware.n.01_1)
-            )
+            ) 
             (forall 
-                (?pickle.n.01 - pickle.n.01)
+                (?pickle.n.01 - pickle.n.01) 
                 (inside ?pickle.n.01 ?tupperware.n.01_1)
-            )
+            ) 
             (contains ?tupperware.n.01_1 ?white_rice.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem clean_pennies-0)
+(define (problem clean_pennies_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,11 +18,11 @@
     
     (:init 
         (ontop penny.n.02_1 sink.n.01_1) 
-        (ontop rag.n.01_1 sink.n.01_1)
+        (ontop rag.n.01_1 sink.n.01_1) 
         (filled bowl.n.01_1 vinegar.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop bowl.n.01_1 sink.n.01_1)
-        (ontop salt__shaker.n.01_1 sink.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop bowl.n.01_1 sink.n.01_1) 
+        (ontop salt__shaker.n.01_1 sink.n.01_1) 
         (ontop hand_towel.n.01_1 sink.n.01_1) 
         (covered penny.n.02_1 stain.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 

@@ -1,4 +1,4 @@
-(define (problem collecting_dishes_from_around_house-0)
+(define (problem collecting_dishes_from_around_house_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,22 +12,23 @@
     )
     
     (:init 
-        (ontop mug.n.04_1 coffee_table.n.01_1)
-        (ontop mug.n.04_2 coffee_table.n.01_1)
+        (ontop mug.n.04_1 coffee_table.n.01_1) 
+        (ontop mug.n.04_2 coffee_table.n.01_1) 
         (ontop bowl.n.01_1 console_table.n.01_1) 
-        (inroom coffee_table.n.01_1 living_room)
+        (inroom coffee_table.n.01_1 living_room) 
         (inroom console_table.n.01_1 bedroom) 
-        (inroom floor.n.01_1 living_room)
-        (inroom sink.n.01_1 kitchen)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom floor.n.01_1 living_room) 
+        (inroom sink.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom sink.n.01_* kitchen)
     )
     
     (:goal 
         (and 
             (forall 
-                (?mug.n.04 - mug.n.04)
+                (?mug.n.04 - mug.n.04) 
                 (inside ?mug.n.04 ?sink.n.01_1)
-            )
+            ) 
             (inside ?bowl.n.01_1 ?sink.n.01_1)
         )
     )

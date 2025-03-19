@@ -1,4 +1,4 @@
-(define (problem clean_synthetic_hiking_gear-0)
+(define (problem clean_synthetic_hiking_gear_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,17 +21,17 @@
     
     (:init 
         (covered sleeping_bag.n.01_1 stain.n.01_1) 
-        (covered hiking_boot.n.01_1 dust.n.01_1)
-        (covered hiking_boot.n.01_2 dust.n.01_1)
+        (covered hiking_boot.n.01_1 dust.n.01_1) 
+        (covered hiking_boot.n.01_2 dust.n.01_1) 
         (covered vest.n.01_1 dust.n.01_1) 
         (ontop vest.n.01_1 countertop.n.01_1) 
-        (ontop sleeping_bag.n.01_1 floor.n.01_1)
-        (ontop hiking_boot.n.01_1 floor.n.01_1)
-        (ontop hiking_boot.n.01_2 floor.n.01_1)
+        (ontop sleeping_bag.n.01_1 floor.n.01_1) 
+        (ontop hiking_boot.n.01_1 floor.n.01_1) 
+        (ontop hiking_boot.n.01_2 floor.n.01_1) 
         (ontop scrub_brush.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom washer.n.03_1 utility_room) 
         (inroom sink.n.01_1 utility_room) 
@@ -44,13 +44,13 @@
         (and 
             (not 
                 (covered ?sleeping_bag.n.01_1 ?stain.n.01_1)
-            )
+            ) 
             (forall 
-                (?hiking_boot.n.01 - hiking_boot.n.01)
+                (?hiking_boot.n.01 - hiking_boot.n.01) 
                 (not 
                     (covered ?hiking_boot.n.01 ?dust.n.01_1)
                 )
-            )
+            ) 
             (not 
                 (covered ?vest.n.01_1 ?dust.n.01_1)
             )

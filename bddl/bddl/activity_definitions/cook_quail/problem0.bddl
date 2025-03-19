@@ -1,4 +1,4 @@
-(define (problem cook_quail-0)
+(define (problem cook_quail_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,13 +15,13 @@
     )
     
     (:init 
-        (ontop dutch_oven.n.02_1 shelf.n.01_1)
+        (ontop dutch_oven.n.02_1 shelf.n.01_1) 
         (not 
             (cooked quail.n.01_1)
         ) 
         (inside quail.n.01_1 electric_refrigerator.n.01_1) 
-        (filled olive_oil__bottle.n.01_1 olive_oil.n.01_1)
-        (ontop olive_oil__bottle.n.01_1 countertop.n.01_1)
+        (filled olive_oil__bottle.n.01_1 olive_oil.n.01_1) 
+        (ontop olive_oil__bottle.n.01_1 countertop.n.01_1) 
         (inroom oven.n.01_1 kitchen) 
         (inroom shelf.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 

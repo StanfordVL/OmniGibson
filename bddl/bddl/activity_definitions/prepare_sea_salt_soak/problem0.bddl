@@ -1,4 +1,4 @@
-(define (problem prepare_sea_salt_soak-0)
+(define (problem prepare_sea_salt_soak_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,11 +18,11 @@
     
     (:init 
         (ontop cup.n.01_1 bed.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
-        (future seawater.n.01_1)
-        (insource sink.n.01_1 water.n.06_1)
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
+        (future seawater.n.01_1) 
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 
         (inroom bed.n.01_1 bedroom) 
         (inroom microwave.n.02_1 kitchen) 
@@ -33,7 +33,7 @@
     
     (:goal 
         (and 
-            (real ?seawater.n.01_1)
+            (real ?seawater.n.01_1) 
             (filled ?cup.n.01_1 ?seawater.n.01_1)
         )
     )

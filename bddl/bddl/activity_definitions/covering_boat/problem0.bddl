@@ -1,4 +1,4 @@
-(define (problem covering_boat-0)
+(define (problem covering_boat_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,7 +17,8 @@
         (ontop rope.n.01_2 driveway.n.01_1) 
         (inroom driveway.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom driveway.n.01_* garden)
     )
     
     (:goal 

@@ -1,4 +1,4 @@
-(define (problem clean_a_couch-0)
+(define (problem clean_a_couch_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,8 @@
         (covered sofa.n.01_1 dust.n.01_1) 
         (inroom sofa.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom sofa.n.01_* living_room)
     )
     
     (:goal 

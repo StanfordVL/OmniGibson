@@ -1,4 +1,4 @@
-(define (problem clean_a_pizza_stone-0)
+(define (problem clean_a_pizza_stone_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,7 @@
         (ontop cookie_sheet.n.01_1 sink.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -36,7 +36,7 @@
             ) 
             (not 
                 (covered ?cookie_sheet.n.01_1 ?crumb.n.03_1)
-            ) 
+            )
         )
     )
 )

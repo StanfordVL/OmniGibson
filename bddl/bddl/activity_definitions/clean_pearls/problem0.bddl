@@ -1,4 +1,4 @@
-(define (problem clean_pearls-0)
+(define (problem clean_pearls_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,14 +20,14 @@
     (:init 
         (inside rag.n.01_1 cabinet.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (inside liquid_soap__bottle.n.01_1 cabinet.n.01_1)
+        (inside liquid_soap__bottle.n.01_1 cabinet.n.01_1) 
         (inside pearl.n.01_1 bowl.n.01_1) 
         (inside pearl.n.01_2 bowl.n.01_1) 
-        (ontop bowl.n.01_1 washer.n.03_1)
+        (ontop bowl.n.01_1 washer.n.03_1) 
         (covered pearl.n.01_1 stain.n.01_1) 
-        (covered pearl.n.01_1 baby_oil.n.01_1)
+        (covered pearl.n.01_1 baby_oil.n.01_1) 
         (covered pearl.n.01_2 stain.n.01_1) 
-        (covered pearl.n.01_2 baby_oil.n.01_1)
+        (covered pearl.n.01_2 baby_oil.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 
@@ -39,14 +39,14 @@
     (:goal 
         (and 
             (forall 
-                (?pearl.n.01 - pearl.n.01)
+                (?pearl.n.01 - pearl.n.01) 
                 (and 
                     (not 
                         (covered ?pearl.n.01 ?stain.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?pearl.n.01 ?baby_oil.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?pearl.n.01 ?water.n.06_1)
                     )

@@ -1,4 +1,4 @@
-(define (problem hanging_blinds-0)
+(define (problem hanging_blinds_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,10 +11,11 @@
     
     (:init 
         (ontop window_blind.n.01_1 table.n.02_1) 
-        (inroom wall_nail.n.01_1 living_room)
-        (inroom floor.n.01_1 living_room)
+        (inroom wall_nail.n.01_1 living_room) 
+        (inroom floor.n.01_1 living_room) 
         (inroom table.n.02_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall_nail.n.01_* living_room)
     )
     
     (:goal 

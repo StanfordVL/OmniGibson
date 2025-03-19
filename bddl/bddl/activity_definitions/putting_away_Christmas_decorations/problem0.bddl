@@ -1,4 +1,4 @@
-(define (problem putting_away_Christmas_decorations-0)
+(define (problem putting_away_Christmas_decorations_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,8 @@
         (ontop ribbon.n.01_3 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom cabinet.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* living_room)
     )
     
     (:goal 

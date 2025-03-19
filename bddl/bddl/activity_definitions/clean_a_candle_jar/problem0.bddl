@@ -1,4 +1,4 @@
-(define (problem clean_a_candle_jar-0)
+(define (problem clean_a_candle_jar_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,21 +17,21 @@
     
     (:init 
         (ontop mason_jar.n.01_1 countertop.n.01_1) 
-        (ontop paper_towel.n.01_1 countertop.n.01_1)
+        (ontop paper_towel.n.01_1 countertop.n.01_1) 
         (covered mason_jar.n.01_1 wax_remnant.n.01_1) 
-        (ontop table_knife.n.01_1 countertop.n.01_1)
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
-        (insource sink.n.01_1 water.n.06_1)
+        (ontop table_knife.n.01_1 countertop.n.01_1) 
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?mason_jar.n.01_1 ?wax_remnant.n.01_1)
             )
         )

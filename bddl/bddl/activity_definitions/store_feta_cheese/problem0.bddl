@@ -1,4 +1,4 @@
-(define (problem store_feta_cheese-0)
+(define (problem store_feta_cheese_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,7 +18,8 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom electric_refrigerator.n.01_* kitchen)
     )
     
     (:goal 

@@ -1,4 +1,4 @@
-(define (problem cleaning_the_yard-0)
+(define (problem cleaning_the_yard_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,7 +14,7 @@
     )
     
     (:init 
-        (ontop scrub.n.01_1 lawn.n.01_1)
+        (ontop scrub.n.01_1 lawn.n.01_1) 
         (ontop entire_leaf.n.01_1 lawn.n.01_1) 
         (ontop ashcan.n.01_1 lawn.n.01_1) 
         (ontop entire_leaf.n.01_2 lawn.n.01_1) 
@@ -32,13 +32,13 @@
     (:goal 
         (and 
             (forall 
-                (?entire_leaf.n.01 - entire_leaf.n.01)
+                (?entire_leaf.n.01 - entire_leaf.n.01) 
                 (inside ?entire_leaf.n.01 ?ashcan.n.01_1)
-            )
+            ) 
             (forall 
-                (?weed.n.01 - weed.n.01)
+                (?weed.n.01 - weed.n.01) 
                 (inside ?weed.n.01 ?compost_bin.n.01_1)
-            )
+            ) 
             (nextto ?compost_bin.n.01_1 ?ashcan.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem polish_copper-0)
+(define (problem polish_copper_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,12 +14,12 @@
     
     (:init 
         (inside rag.n.01_1 cabinet.n.01_1) 
-        (ontop copper_pot.n.01_1 clothes_dryer.n.01_1)
-        (filled polish__bottle.n.01_1 polish.n.03_1)
-        (inside polish__bottle.n.01_1 cabinet.n.01_1)
+        (ontop copper_pot.n.01_1 clothes_dryer.n.01_1) 
+        (filled polish__bottle.n.01_1 polish.n.03_1) 
+        (inside polish__bottle.n.01_1 cabinet.n.01_1) 
         (inroom cabinet.n.01_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 
-        (inroom clothes_dryer.n.01_1 utility_room)
+        (inroom clothes_dryer.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

@@ -1,4 +1,4 @@
-(define (problem putting_out_clean_towels-0)
+(define (problem putting_out_clean_towels_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,9 +19,9 @@
     
     (:goal 
         (and 
-            (folded ?hand_towel.n.01_1)
-            (folded ?bath_towel.n.01_1)
-            (inside ?hand_towel.n.01_1 ?wicker_basket.n.01_1)
+            (folded ?hand_towel.n.01_1) 
+            (folded ?bath_towel.n.01_1) 
+            (inside ?hand_towel.n.01_1 ?wicker_basket.n.01_1) 
             (inside ?bath_towel.n.01_1 ?wicker_basket.n.01_1)
         )
     )

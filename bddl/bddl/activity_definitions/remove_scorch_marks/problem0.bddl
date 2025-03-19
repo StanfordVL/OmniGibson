@@ -1,4 +1,4 @@
-(define (problem remove_scorch_marks-0)
+(define (problem remove_scorch_marks_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,7 @@
     
     (:init 
         (inside emery_paper.n.01_1 cabinet.n.01_1) 
-        (filled vinegar__bottle.n.01_1 vinegar.n.01_1)
+        (filled vinegar__bottle.n.01_1 vinegar.n.01_1) 
         (inside vinegar__bottle.n.01_1 cabinet.n.01_1) 
         (ontop jersey.n.03_1 floor.n.01_1) 
         (covered jersey.n.03_1 stain.n.01_1) 

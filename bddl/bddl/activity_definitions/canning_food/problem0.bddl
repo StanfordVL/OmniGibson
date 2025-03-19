@@ -1,4 +1,4 @@
-(define (problem canning_food-0)
+(define (problem canning_food_0)
     (:domain omnigibson)
 
     (:objects
@@ -27,42 +27,43 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future diced__pineapple.n.01_1)
-        (future diced__steak.n.01_1)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (future diced__pineapple.n.01_1) 
+        (future diced__steak.n.01_1) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* kitchen)
     )
     
     (:goal 
         (and 
-            (real ?diced__steak.n.01_1)
-            (real ?diced__pineapple.n.01_1)
-            (exists
-                (?hinged_jar.n.01 - hinged_jar.n.01)
+            (real ?diced__steak.n.01_1) 
+            (real ?diced__pineapple.n.01_1) 
+            (exists 
+                (?hinged_jar.n.01 - hinged_jar.n.01) 
                 (and 
-                    (filled ?hinged_jar.n.01 ?diced__steak.n.01_1)
-                    (not
+                    (filled ?hinged_jar.n.01 ?diced__steak.n.01_1) 
+                    (not 
                         (contains ?hinged_jar.n.01 ?diced__pineapple.n.01_1)
                     )
                 )
-            )
-            (exists
-                (?hinged_jar.n.01 - hinged_jar.n.01)
+            ) 
+            (exists 
+                (?hinged_jar.n.01 - hinged_jar.n.01) 
                 (and 
-                    (filled ?hinged_jar.n.01 ?diced__pineapple.n.01_1)
-                    (not
+                    (filled ?hinged_jar.n.01 ?diced__pineapple.n.01_1) 
+                    (not 
                         (contains ?hinged_jar.n.01 ?diced__steak.n.01_1)
                     )
                 )
-            )
+            ) 
             (forall 
                 (?hinged_jar.n.01 - hinged_jar.n.01) 
-                (and
-                    (inside ?hinged_jar.n.01 ?cabinet.n.01_1)
-                    (not
+                (and 
+                    (inside ?hinged_jar.n.01 ?cabinet.n.01_1) 
+                    (not 
                         (open ?hinged_jar.n.01)
                     )
                 )
-            ) 
+            )
         )
     )
 )

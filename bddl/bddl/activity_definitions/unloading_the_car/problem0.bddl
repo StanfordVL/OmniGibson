@@ -1,4 +1,4 @@
-(define (problem unloading_the_car-0)
+(define (problem unloading_the_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,7 +19,7 @@
     (:goal 
         (and 
             (forall 
-                (?bag.n.06 - bag.n.06)
+                (?bag.n.06 - bag.n.06) 
                 (not 
                     (inside ?bag.n.06 ?car.n.01_1)
                 )

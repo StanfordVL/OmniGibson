@@ -1,4 +1,4 @@
-(define (problem getting_package_from_post_office-0)
+(define (problem getting_package_from_post_office_0)
     (:domain omnigibson)
 
     (:objects
@@ -25,16 +25,17 @@
         (inside mail.n.04_1 cabinet.n.01_2) 
         (inside mail.n.04_2 cabinet.n.01_2) 
         (inroom floor.n.01_1 shared_office) 
-        (inroom desk.n.01_1 private_office)
-        (inroom cabinet.n.01_1 shared_office)
-        (inroom cabinet.n.01_2 shared_office)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom desk.n.01_1 private_office) 
+        (inroom cabinet.n.01_1 shared_office) 
+        (inroom cabinet.n.01_2 shared_office) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom desk.n.01_* private_office)
     )
     
     (:goal 
         (and 
-            (exists
-                (?package.n.02 - package.n.02)
+            (exists 
+                (?package.n.02 - package.n.02) 
                 (ontop ?package.n.02 ?desk.n.01_1)
             )
         )

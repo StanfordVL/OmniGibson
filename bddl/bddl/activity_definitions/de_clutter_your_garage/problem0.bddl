@@ -1,4 +1,4 @@
-(define (problem de_clutter_your_garage-0)
+(define (problem de_clutter_your_garage_0)
     (:domain omnigibson)
 
     (:objects
@@ -29,7 +29,10 @@
         (inroom cabinet.n.01_1 garage) 
         (inroom bookcase.n.01_1 garage) 
         (inroom floor.n.01_1 garage) 
-        (inroom door.n.01_1 garage)
+        (inroom door.n.01_1 garage) 
+        (inroom door.n.01_* garage) 
+        (inroom bookcase.n.01_* garage) 
+        (inroom cabinet.n.01_* garage)
     )
     
     (:goal 
@@ -40,8 +43,8 @@
             ) 
             (nextto ?bicycle.n.01_1 ?door.n.01_1) 
             (nextto ?carton.n.02_1 ?door.n.01_1) 
-            (inside ?tennis_racket.n.01_1 ?bookcase.n.01_1)
-            (inside ?hockey_stick.n.01_1 ?bookcase.n.01_1)
+            (inside ?tennis_racket.n.01_1 ?bookcase.n.01_1) 
+            (inside ?hockey_stick.n.01_1 ?bookcase.n.01_1) 
             (inside ?shovel.n.01_1 ?cabinet.n.01_1)
         )
     )

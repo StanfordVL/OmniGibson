@@ -1,4 +1,4 @@
-(define (problem clean_eggs-0)
+(define (problem clean_eggs_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,9 +17,9 @@
         (inside egg.n.02_1 tupperware.n.01_1) 
         (inside egg.n.02_2 tupperware.n.01_1) 
         (inside egg.n.02_3 tupperware.n.01_1) 
-        (covered egg.n.02_1 dust.n.01_1)
-        (covered egg.n.02_2 dust.n.01_1)
-        (covered egg.n.02_3 dust.n.01_1)
+        (covered egg.n.02_1 dust.n.01_1) 
+        (covered egg.n.02_2 dust.n.01_1) 
+        (covered egg.n.02_3 dust.n.01_1) 
         (ontop tupperware.n.01_1 countertop.n.01_1) 
         (ontop bowl.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
@@ -33,10 +33,10 @@
         (and 
             (forall 
                 (?egg.n.02 - egg.n.02) 
-                (not
+                (not 
                     (covered ?egg.n.02 ?dust.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

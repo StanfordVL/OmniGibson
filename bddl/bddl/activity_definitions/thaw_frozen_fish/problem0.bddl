@@ -1,4 +1,4 @@
-(define (problem thaw_frozen_fish-0)
+(define (problem thaw_frozen_fish_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,8 +14,8 @@
     (:init 
         (ontop crayfish.n.02_1 plate.n.04_1) 
         (ontop crayfish.n.02_2 plate.n.04_1) 
-        (frozen crayfish.n.02_1)
-        (frozen crayfish.n.02_2)
+        (frozen crayfish.n.02_1) 
+        (frozen crayfish.n.02_2) 
         (inside plate.n.04_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom microwave.n.02_1 kitchen) 
@@ -27,7 +27,7 @@
     (:goal 
         (and 
             (forall 
-                (?crayfish.n.02 - crayfish.n.02)
+                (?crayfish.n.02 - crayfish.n.02) 
                 (not 
                     (frozen ?crayfish.n.02)
                 )

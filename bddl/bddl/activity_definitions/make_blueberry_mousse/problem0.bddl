@@ -1,4 +1,4 @@
-(define (problem make_blueberry_mousse-0)
+(define (problem make_blueberry_mousse_0)
     (:domain omnigibson)
 
     (:objects
@@ -32,7 +32,7 @@
         (inside lemon_juice__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (filled sugar__sack.n.01_1 granulated_sugar.n.01_1) 
         (ontop sugar__sack.n.01_1 countertop.n.01_1) 
-        (filled tupperware.n.01_1 blueberry.n.02_1)
+        (filled tupperware.n.01_1 blueberry.n.02_1) 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (ontop saucepan.n.01_1 countertop.n.01_1) 
         (inside gelatin.n.02_1 gelatin__box.n.01_1) 

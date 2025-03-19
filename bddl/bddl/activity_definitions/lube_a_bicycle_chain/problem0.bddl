@@ -1,4 +1,4 @@
-(define (problem lube_a_bicycle_chain-0)
+(define (problem lube_a_bicycle_chain_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,7 +13,7 @@
     
     (:init 
         (filled lubricant__bottle.n.01_1 lubricant.n.01_1) 
-        (ontop lubricant__bottle.n.01_1 floor.n.01_1)
+        (ontop lubricant__bottle.n.01_1 floor.n.01_1) 
         (ontop bicycle_chain.n.01_1 floor.n.01_1) 
         (ontop sponge.n.01_1 floor.n.01_1) 
         (covered bicycle_chain.n.01_1 dust.n.01_1) 
@@ -25,7 +25,7 @@
         (and 
             (not 
                 (covered ?bicycle_chain.n.01_1 ?dust.n.01_1)
-            )
+            ) 
             (covered ?bicycle_chain.n.01_1 ?lubricant.n.01_1)
         )
     )

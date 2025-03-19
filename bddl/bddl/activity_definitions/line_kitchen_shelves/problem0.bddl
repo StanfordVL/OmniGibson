@@ -1,4 +1,4 @@
-(define (problem line_kitchen_shelves-0)
+(define (problem line_kitchen_shelves_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,8 +20,8 @@
     (:goal 
         (and 
             (forpairs 
-                (?lining.n.01 - lining.n.01)
-                (?cabinet.n.01 - cabinet.n.01)
+                (?lining.n.01 - lining.n.01) 
+                (?cabinet.n.01 - cabinet.n.01) 
                 (inside ?lining.n.01 ?cabinet.n.01)
             )
         )

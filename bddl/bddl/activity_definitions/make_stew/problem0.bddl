@@ -1,4 +1,4 @@
-(define (problem make_stew-0)
+(define (problem make_stew_0)
     (:domain omnigibson)
 
     (:objects
@@ -29,7 +29,7 @@
         (inside vidalia_onion.n.01_1 wicker_basket.n.01_1) 
         (inside vidalia_onion.n.01_2 wicker_basket.n.01_1) 
         (ontop wicker_basket.n.01_1 countertop.n.01_1) 
-        (filled tupperware.n.01_2 pea.n.01_1)
+        (filled tupperware.n.01_2 pea.n.01_1) 
         (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (filled tupperware.n.01_1 ground_beef.n.01_1) 
         (inside tupperware.n.01_2 electric_refrigerator.n.01_1) 

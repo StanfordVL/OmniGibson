@@ -1,4 +1,4 @@
-(define (problem setting_the_fire-0)
+(define (problem setting_the_fire_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,18 +17,19 @@
         (ontop cigar_lighter.n.01_1 floor.n.01_1) 
         (inroom wood_fireplace.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wood_fireplace.n.01_* living_room)
     )
     
     (:goal 
         (and 
             (forall 
                 (?firewood.n.01 - firewood.n.01) 
-                (and
-                    (on_fire ?firewood.n.01)
+                (and 
+                    (on_fire ?firewood.n.01) 
                     (inside ?firewood.n.01 ?wood_fireplace.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

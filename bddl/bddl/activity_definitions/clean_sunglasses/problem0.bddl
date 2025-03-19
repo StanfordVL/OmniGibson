@@ -1,4 +1,4 @@
-(define (problem clean_sunglasses-0)
+(define (problem clean_sunglasses_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,9 +11,9 @@
     )
     
     (:init 
-        (covered sunglasses.n.02_1 dust.n.01_1)
+        (covered sunglasses.n.02_1 dust.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
-        (ontop sunglasses.n.02_1 countertop.n.01_1)
+        (ontop sunglasses.n.02_1 countertop.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -21,7 +21,7 @@
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?sunglasses.n.02_1 ?dust.n.01_1)
             )
         )

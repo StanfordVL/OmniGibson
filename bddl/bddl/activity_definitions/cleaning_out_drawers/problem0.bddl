@@ -1,4 +1,4 @@
-(define (problem cleaning_out_drawers-0)
+(define (problem cleaning_out_drawers_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,8 @@
         (inroom cabinet.n.01_2 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom sink.n.01_* kitchen)
     )
     
     (:goal 

@@ -1,4 +1,4 @@
-(define (problem unpacking_car_for_trip-0)
+(define (problem unpacking_car_for_trip_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,7 +20,8 @@
         (inside baseball_glove.n.01_1 car.n.01_1) 
         (inroom bookcase.n.01_1 living_room) 
         (inroom floor.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom bookcase.n.01_* living_room)
     )
     
     (:goal 
@@ -28,7 +29,7 @@
             (inside ?packing_box.n.02_1 ?bookcase.n.01_1) 
             (inside ?baseball_glove.n.01_1 ?bookcase.n.01_1) 
             (nextto ?golf_club.n.02_1 ?bookcase.n.01_1) 
-            (inside ?bag.n.06_1 ?bookcase.n.01_1) 
+            (inside ?bag.n.06_1 ?bookcase.n.01_1)
         )
     )
 )

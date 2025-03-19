@@ -1,15 +1,15 @@
-(define (problem clean_a_watch-0)
+(define (problem clean_a_watch_0)
     (:domain omnigibson)
 
     (:objects
-     	watch.n.01_1 - watch.n.01
-    	countertop.n.01_1 - countertop.n.01
-    	tissue.n.02_1 - tissue.n.02
-    	dirt.n.02_1 - dirt.n.02
-    	water.n.06_1 - water.n.06
-    	sink.n.01_1 - sink.n.01
-    	floor.n.01_1 - floor.n.01
-    	agent.n.01_1 - agent.n.01
+        watch.n.01_1 - watch.n.01
+        countertop.n.01_1 - countertop.n.01
+        tissue.n.02_1 - tissue.n.02
+        dirt.n.02_1 - dirt.n.02
+        water.n.06_1 - water.n.06
+        sink.n.01_1 - sink.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 
@@ -27,7 +27,7 @@
         (and 
             (not 
                 (covered ?watch.n.01_1 ?dirt.n.02_1)
-            ) 
+            )
         )
     )
 )

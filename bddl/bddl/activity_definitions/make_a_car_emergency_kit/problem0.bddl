@@ -1,4 +1,4 @@
-(define (problem make_a_car_emergency_kit-0)
+(define (problem make_a_car_emergency_kit_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,7 +20,8 @@
         (ontop inhaler.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom coffee_table.n.01_* living_room)
     )
     
     (:goal 

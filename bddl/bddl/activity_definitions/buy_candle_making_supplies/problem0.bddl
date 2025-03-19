@@ -1,4 +1,4 @@
-(define (problem buy_candle_making_supplies-0)
+(define (problem buy_candle_making_supplies_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,24 +13,25 @@
     )
     
     (:init 
-        (ontop paraffin.n.01_1 grocery_shelf.n.01_1)
+        (ontop paraffin.n.01_1 grocery_shelf.n.01_1) 
         (ontop candlestick.n.01_1 grocery_shelf.n.01_1) 
-        (inside candlestick.n.01_2 grocery_shelf.n.01_1)
+        (inside candlestick.n.01_2 grocery_shelf.n.01_1) 
         (inside money.n.01_1 shopping_cart.n.01_1) 
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shopping_cart.n.01_1 grocery_store) 
         (inroom grocery_shelf.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom checkout.n.03_* grocery_store)
     )
     
     (:goal 
         (and 
-            (forall
-                (?candlestick.n.01 - candlestick.n.01)
+            (forall 
+                (?candlestick.n.01 - candlestick.n.01) 
                 (ontop ?candlestick.n.01 ?checkout.n.03_1)
-            )
-            (ontop ?paraffin.n.01_1 ?checkout.n.03_1)
+            ) 
+            (ontop ?paraffin.n.01_1 ?checkout.n.03_1) 
             (ontop ?money.n.01_1 ?checkout.n.03_1)
         )
     )

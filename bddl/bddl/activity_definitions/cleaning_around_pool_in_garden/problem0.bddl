@@ -1,4 +1,4 @@
-(define (problem cleaning_around_pool_in_garden-0)
+(define (problem cleaning_around_pool_in_garden_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,11 +12,12 @@
     
     (:init 
         (covered driveway.n.01_1 dust.n.01_1) 
-        (ontop broom.n.01_1 floor.n.01_1)
-        (inroom pool.n.01_1 garden)
+        (ontop broom.n.01_1 floor.n.01_1) 
+        (inroom pool.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom driveway.n.01_* garden)
     )
     
     (:goal 

@@ -1,4 +1,4 @@
-(define (problem clean_wooden_blocks-0)
+(define (problem clean_wooden_blocks_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,13 +22,13 @@
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (ontop chopping_block.n.01_1 countertop.n.01_1) 
-        (ontop chopping_block.n.01_2 countertop.n.01_1)
+        (ontop chopping_block.n.01_2 countertop.n.01_1) 
         (ontop sponge.n.01_1 countertop.n.01_1) 
         (ontop paper_towel.n.01_1 countertop.n.01_1) 
         (covered chopping_block.n.01_1 dust.n.01_1) 
         (covered chopping_block.n.01_2 dust.n.01_1) 
-        (covered chopping_block.n.01_2 stain.n.01_1)
-        (insource sink.n.01_1 water.n.06_1)
+        (covered chopping_block.n.01_2 stain.n.01_1) 
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -38,11 +38,11 @@
     (:goal 
         (and 
             (forall 
-                (?chopping_block.n.01 - chopping_block.n.01)
+                (?chopping_block.n.01 - chopping_block.n.01) 
                 (and 
                     (not 
                         (covered ?chopping_block.n.01 ?stain.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?chopping_block.n.01 ?dust.n.01_1)
                     )

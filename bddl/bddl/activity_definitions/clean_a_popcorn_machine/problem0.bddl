@@ -1,4 +1,4 @@
-(define (problem clean_a_popcorn_machine-0)
+(define (problem clean_a_popcorn_machine_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,15 +15,15 @@
     )
     
     (:init 
-        (covered popper.n.03_1 stain.n.01_1)
+        (covered popper.n.03_1 stain.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)        
-        (ontop popper.n.03_1 floor.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
+        (ontop popper.n.03_1 floor.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom sink.n.01_1 kitchen)
+        (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen)
     )
     

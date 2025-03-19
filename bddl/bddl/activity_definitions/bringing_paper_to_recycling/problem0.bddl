@@ -1,4 +1,4 @@
-(define (problem bringing_paper_to_recycling-0)
+(define (problem bringing_paper_to_recycling_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,7 +11,7 @@
     (:init 
         (ontop paper.n.01_1 floor.n.01_1) 
         (ontop paper.n.01_2 floor.n.01_1) 
-        (ontop paper.n.01_3 floor.n.01_1)
+        (ontop paper.n.01_3 floor.n.01_1) 
         (ontop recycling_bin.n.01_1 floor.n.01_1) 
         (open recycling_bin.n.01_1) 
         (inroom floor.n.01_1 corridor) 
@@ -23,8 +23,8 @@
             (forall 
                 (?paper.n.01 - paper.n.01) 
                 (inside ?paper.n.01 ?recycling_bin.n.01_1)
-            )
-            (not
+            ) 
+            (not 
                 (open ?recycling_bin.n.01_1)
             )
         )

@@ -1,4 +1,4 @@
-(define (problem make_spa_water-0)
+(define (problem make_spa_water_0)
     (:domain omnigibson)
 
     (:objects
@@ -37,7 +37,7 @@
     
     (:goal 
         (and 
-            (real ?diced__cucumber.n.01_1)
+            (real ?diced__cucumber.n.01_1) 
             (filled ?pitcher.n.02_1 ?water.n.06_1) 
             (contains ?pitcher.n.02_1 ?diced__cucumber.n.01_1) 
             (forall 

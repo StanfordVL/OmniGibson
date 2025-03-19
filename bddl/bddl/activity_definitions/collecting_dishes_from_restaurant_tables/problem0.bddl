@@ -1,4 +1,4 @@
-(define (problem collecting_dishes_from_restaurant_tables-0)
+(define (problem collecting_dishes_from_restaurant_tables_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,8 @@
         (inroom breakfast_table.n.01_2 dining_room) 
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 dining_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom sink.n.01_* kitchen)
     )
     
     (:goal 

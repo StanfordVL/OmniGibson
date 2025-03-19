@@ -1,4 +1,4 @@
-(define (problem organizing_skating_stuff-0)
+(define (problem organizing_skating_stuff_0)
     (:domain omnigibson)
 
     (:objects
@@ -30,15 +30,15 @@
     (:goal 
         (and 
             (forall 
-                (?lace.n.01 - lace.n.01)
+                (?lace.n.01 - lace.n.01) 
                 (inside ?lace.n.01 ?toy_box.n.01_1)
-            )
+            ) 
             (forall 
-                (?ice_skate.n.01 - ice_skate.n.01)
+                (?ice_skate.n.01 - ice_skate.n.01) 
                 (inside ?ice_skate.n.01 ?toy_box.n.01_1)
-            )
-            (inside ?helmet.n.01_1 ?toy_box.n.01_1)
-            (inside ?puck.n.02_1 ?toy_box.n.01_1)
+            ) 
+            (inside ?helmet.n.01_1 ?toy_box.n.01_1) 
+            (inside ?puck.n.02_1 ?toy_box.n.01_1) 
             (nextto ?hockey_stick.n.01_1 ?toy_box.n.01_1)
         )
     )

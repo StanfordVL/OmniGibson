@@ -1,4 +1,4 @@
-(define (problem hanging_flags-0)
+(define (problem hanging_flags_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,7 +11,7 @@
     
     (:init 
         (attached pole.n.01_1 wall_nail.n.01_1) 
-        (ontop national_flag.n.01_1 floor.n.01_1)
+        (ontop national_flag.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom wall_nail.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)

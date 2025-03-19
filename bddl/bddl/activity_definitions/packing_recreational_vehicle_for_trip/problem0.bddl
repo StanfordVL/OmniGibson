@@ -1,4 +1,4 @@
-(define (problem packing_recreational_vehicle_for_trip-0)
+(define (problem packing_recreational_vehicle_for_trip_0)
     (:domain omnigibson)
 
     (:objects
@@ -33,15 +33,15 @@
     (:goal 
         (and 
             (forall 
-                (?bagel.n.01 - bagel.n.01)
+                (?bagel.n.01 - bagel.n.01) 
                 (inside ?bagel.n.01 ?recreational_vehicle.n.01_1)
-            )
+            ) 
             (forall 
-                (?wicker_basket.n.01 - wicker_basket.n.01)
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (inside ?wicker_basket.n.01 ?recreational_vehicle.n.01_1)
-            )
-            (inside ?pocketknife.n.01_1 ?recreational_vehicle.n.01_1)
-            (inside ?wire.n.02_1 ?recreational_vehicle.n.01_1)
+            ) 
+            (inside ?pocketknife.n.01_1 ?recreational_vehicle.n.01_1) 
+            (inside ?wire.n.02_1 ?recreational_vehicle.n.01_1) 
             (inside ?charger.n.02_1 ?recreational_vehicle.n.01_1)
         )
     )

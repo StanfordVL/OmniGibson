@@ -1,4 +1,4 @@
-(define (problem gathering_nuts-0)
+(define (problem gathering_nuts_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,7 +10,7 @@
     )
     
     (:init 
-        (ontop walnut.n.01_1 floor.n.01_1)
+        (ontop walnut.n.01_1 floor.n.01_1) 
         (ontop walnut.n.01_2 floor.n.01_1) 
         (ontop walnut.n.01_3 floor.n.01_1) 
         (ontop walnut.n.01_4 floor.n.01_1) 
@@ -24,24 +24,22 @@
         (inroom tree.n.01_1 garden) 
         (inroom tree.n.01_2 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
-    
     )
     
     (:goal 
         (and 
             (forall 
-                (?walnut.n.01 - walnut.n.01)
+                (?walnut.n.01 - walnut.n.01) 
                 (exists 
-                    (?bucket.n.01 - bucket.n.01)
+                    (?bucket.n.01 - bucket.n.01) 
                     (inside ?walnut.n.01 ?bucket.n.01)
                 )
-            )
+            ) 
             (forpairs 
                 (?tree.n.01 - tree.n.01) 
                 (?bucket.n.01 - bucket.n.01) 
                 (nextto ?bucket.n.01 ?tree.n.01)
-    
-            ) 
+            )
         )
     )
 )

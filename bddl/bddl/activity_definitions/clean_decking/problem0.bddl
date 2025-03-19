@@ -1,4 +1,4 @@
-(define (problem clean_decking-0)
+(define (problem clean_decking_0)
     (:domain omnigibson)
 
     (:objects
@@ -27,28 +27,29 @@
         (ontop entire_leaf.n.01_5 board.n.02_1) 
         (ontop watering_can.n.01_1 floor.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
         (insource bleaching_agent__atomizer.n.01_1 bleaching_agent.n.01_1) 
-        (ontop bleaching_agent__atomizer.n.01_1 floor.n.01_1)
-        (covered board.n.02_1 mud.n.03_1)
+        (ontop bleaching_agent__atomizer.n.01_1 floor.n.01_1) 
+        (covered board.n.02_1 mud.n.03_1) 
         (insource watering_can.n.01_1 water.n.06_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
-        (ontop ashcan.n.01_1 floor.n.01_1)
+        (ontop ashcan.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom rail_fence.n.01_1 garden) 
+        (inroom floor.n.01_* garden)
     )
     
     (:goal 
         (and 
             (forall 
-                (?entire_leaf.n.01 - entire_leaf.n.01)
+                (?entire_leaf.n.01 - entire_leaf.n.01) 
                 (inside ?entire_leaf.n.01 ?ashcan.n.01_1)
-            )
-            (covered ?board.n.02_1 ?bleaching_agent.n.01_1)
+            ) 
+            (covered ?board.n.02_1 ?bleaching_agent.n.01_1) 
             (not 
                 (covered ?board.n.02_1 ?mud.n.03_1)
-            )
+            ) 
             (ontop ?board.n.02_1 ?floor.n.01_1)
         )
     )

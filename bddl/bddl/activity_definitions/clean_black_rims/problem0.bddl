@@ -1,4 +1,4 @@
-(define (problem clean_black_rims-0)
+(define (problem clean_black_rims_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,10 +14,10 @@
     
     (:init 
         (ontop car.n.01_1 driveway.n.01_1) 
-        (ontop car_wheel.n.01_1 floor.n.01_1)
-        (ontop car_wheel.n.01_2 car_wheel.n.01_1)
-        (ontop car_wheel.n.01_3 car_wheel.n.01_2)
-        (ontop car_wheel.n.01_4 floor.n.01_1)
+        (ontop car_wheel.n.01_1 floor.n.01_1) 
+        (ontop car_wheel.n.01_2 car_wheel.n.01_1) 
+        (ontop car_wheel.n.01_3 car_wheel.n.01_2) 
+        (ontop car_wheel.n.01_4 floor.n.01_1) 
         (saturated sponge.n.01_1 liquid_soap.n.01_1) 
         (ontop sponge.n.01_1 driveway.n.01_1) 
         (covered car_wheel.n.01_1 dust.n.01_1) 
@@ -36,7 +36,7 @@
                 (not 
                     (covered ?car_wheel.n.01 ?dust.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

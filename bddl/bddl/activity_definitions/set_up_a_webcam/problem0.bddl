@@ -1,4 +1,4 @@
-(define (problem set_up_a_webcam-0)
+(define (problem set_up_a_webcam_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,7 +15,7 @@
         (ontop monitor.n.04_1 desk.n.01_1) 
         (ontop mouse.n.04_1 desk.n.01_1) 
         (ontop keyboard.n.01_1 desk.n.01_1) 
-        (ontop webcam.n.02_1 desk.n.01_1)
+        (ontop webcam.n.02_1 desk.n.01_1) 
         (inroom desk.n.01_1 shared_office) 
         (inroom floor.n.01_1 shared_office) 
         (ontop agent.n.01_1 floor.n.01_1)

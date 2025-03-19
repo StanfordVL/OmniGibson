@@ -1,4 +1,4 @@
-(define (problem cleaning_lawnmowers-0)
+(define (problem cleaning_lawnmowers_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,8 +21,8 @@
         (ontop rag.n.01_1 floor.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (insource watering_can.n.01_1 water.n.06_1)
-        (inroom floor.n.01_1 garden) 
+        (insource watering_can.n.01_1 water.n.06_1) 
+        (inroom floor.n.01_1 garden)
     )
     
     (:goal 
@@ -32,7 +32,7 @@
             ) 
             (not 
                 (covered ?lawn_mower.n.01_1 ?dirt.n.02_1)
-            ) 
+            )
         )
     )
 )

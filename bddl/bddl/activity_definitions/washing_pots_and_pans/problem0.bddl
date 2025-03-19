@@ -1,4 +1,4 @@
-(define (problem washing_pots_and_pans-0)
+(define (problem washing_pots_and_pans_0)
     (:domain omnigibson)
 
     (:objects
@@ -27,7 +27,7 @@
         (ontop pan.n.01_3 countertop.n.01_2) 
         (covered pan.n.01_3 stain.n.01_1) 
         (ontop scrub_brush.n.01_1 countertop.n.01_2) 
-        (ontop bar_soap.n.01_1 sink.n.01_1)
+        (ontop bar_soap.n.01_1 sink.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom cabinet.n.01_2 kitchen) 
         (inroom sink.n.01_1 kitchen) 
@@ -62,7 +62,7 @@
                         (inside ?kettle.n.01 ?cabinet.n.01)
                     )
                 )
-            )
+            ) 
             (forall 
                 (?teapot.n.01 - teapot.n.01) 
                 (and 

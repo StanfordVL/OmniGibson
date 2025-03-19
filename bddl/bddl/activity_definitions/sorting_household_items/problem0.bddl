@@ -1,4 +1,4 @@
-(define (problem sorting_household_items-0)
+(define (problem sorting_household_items_0)
     (:domain omnigibson)
 
     (:objects
@@ -26,24 +26,25 @@
         (inside toothbrush.n.01_1 wicker_basket.n.01_2) 
         (inroom floor.n.01_1 bathroom) 
         (inroom cabinet.n.01_1 bathroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* bathroom)
     )
     
     (:goal 
         (and 
             (forall 
-                (?bottle__of__detergent.n.01 - bottle__of__detergent.n.01)
+                (?bottle__of__detergent.n.01 - bottle__of__detergent.n.01) 
                 (inside ?bottle__of__detergent.n.01 ?cabinet.n.01_1)
-            )
-            (nextto ?bottle__of__detergent.n.01_1 ?bottle__of__detergent.n.01_2)
+            ) 
+            (nextto ?bottle__of__detergent.n.01_1 ?bottle__of__detergent.n.01_2) 
             (exists 
-                (?bottle__of__detergent.n.01 - bottle__of__detergent.n.01)
+                (?bottle__of__detergent.n.01 - bottle__of__detergent.n.01) 
                 (nextto ?soap_dish.n.01_1 ?bottle__of__detergent.n.01)
-            )
+            ) 
             (inside ?sanitary_napkin.n.01_1 ?cabinet.n.01_1) 
             (nextto ?deodorant__atomizer.n.01_1 ?sanitary_napkin.n.01_1) 
             (nextto ?lipstick.n.01_1 ?cabinet.n.01_1) 
-            (nextto ?toothbrush.n.01_1 ?lipstick.n.01_1) 
+            (nextto ?toothbrush.n.01_1 ?lipstick.n.01_1)
         )
     )
 )

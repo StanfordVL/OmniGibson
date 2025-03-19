@@ -1,4 +1,4 @@
-(define (problem disposing_of_trash_for_adult-0)
+(define (problem disposing_of_trash_for_adult_0)
     (:domain omnigibson)
 
     (:objects
@@ -35,10 +35,10 @@
             (inside ?magazine.n.02_2 ?ashcan.n.01_1) 
             (inside ?paper_towel.n.01_1 ?ashcan.n.01_1) 
             (inside ?straw.n.04_1 ?ashcan.n.01_1) 
-            (inside ?plastic_wrap.n.01_1 ?ashcan.n.01_1)
+            (inside ?plastic_wrap.n.01_1 ?ashcan.n.01_1) 
             (not 
                 (inside ?tray.n.01_1 ?ashcan.n.01_1)
             )
-        ) 
+        )
     )
 )

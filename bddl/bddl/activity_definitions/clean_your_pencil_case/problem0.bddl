@@ -1,4 +1,4 @@
-(define (problem clean_your_pencil_case-0)
+(define (problem clean_your_pencil_case_0)
     (:domain omnigibson)
 
     (:objects
@@ -31,7 +31,7 @@
         (and 
             (not 
                 (covered ?pencil_box.n.01_1 ?dust.n.01_1)
-            ) 
+            )
         )
     )
 )

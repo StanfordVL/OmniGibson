@@ -1,4 +1,4 @@
-(define (problem clean_your_baseboard_radiators-0)
+(define (problem clean_your_baseboard_radiators_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,11 +12,11 @@
     )
     
     (:init 
-        (ontop radiator.n.02_1 floor.n.01_1)
-        (ontop radiator.n.02_2 floor.n.01_1)
+        (ontop radiator.n.02_1 floor.n.01_1) 
+        (ontop radiator.n.02_2 floor.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
-        (covered radiator.n.02_2 dust.n.01_1)
-        (covered radiator.n.02_1 dust.n.01_1)
+        (covered radiator.n.02_2 dust.n.01_1) 
+        (covered radiator.n.02_1 dust.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom sink.n.01_1 utility_room) 
         (insource sink.n.01_1 water.n.06_1) 
@@ -26,7 +26,7 @@
     (:goal 
         (and 
             (forall 
-                (?radiator.n.02 - radiator.n.02)
+                (?radiator.n.02 - radiator.n.02) 
                 (not 
                     (covered ?radiator.n.02 ?dust.n.01_1)
                 )

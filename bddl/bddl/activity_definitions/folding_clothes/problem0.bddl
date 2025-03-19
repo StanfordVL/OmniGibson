@@ -1,4 +1,4 @@
-(define (problem folding_clothes-0)
+(define (problem folding_clothes_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,28 +15,29 @@
     
     (:init 
         (ontop short_pants.n.01_1 bed.n.01_1) 
-        (ontop blouse.n.01_1 bed.n.01_1)
-        (ontop trouser.n.01_1 bed.n.01_1)
+        (ontop blouse.n.01_1 bed.n.01_1) 
+        (ontop trouser.n.01_1 bed.n.01_1) 
         (ontop dress.n.01_1 bed.n.01_1) 
         (ontop brassiere.n.01_1 bed.n.01_1) 
         (ontop tank_top.n.01_1 bed.n.01_1) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
         (inroom bed.n.01_1 bedroom) 
-        (inroom floor.n.01_1 bedroom)
+        (inroom floor.n.01_1 bedroom) 
+        (inroom bed.n.01_* bedroom)
     )
     
     (:goal 
         (and 
             (folded ?short_pants.n.01_1) 
-            (folded ?blouse.n.01_1)
-            (folded ?trouser.n.01_1)
+            (folded ?blouse.n.01_1) 
+            (folded ?trouser.n.01_1) 
             (folded ?dress.n.01_1) 
             (folded ?brassiere.n.01_1) 
             (folded ?tank_top.n.01_1) 
-            (ontop ?trouser.n.01_1 ?bed.n.01_1)
-            (ontop ?short_pants.n.01_1 ?bed.n.01_1)
-            (ontop ?blouse.n.01_1 ?bed.n.01_1)
-            (ontop ?tank_top.n.01_1 ?bed.n.01_1)
+            (ontop ?trouser.n.01_1 ?bed.n.01_1) 
+            (ontop ?short_pants.n.01_1 ?bed.n.01_1) 
+            (ontop ?blouse.n.01_1 ?bed.n.01_1) 
+            (ontop ?tank_top.n.01_1 ?bed.n.01_1) 
             (ontop ?dress.n.01_1 ?bed.n.01_1) 
             (ontop ?brassiere.n.01_1 ?bed.n.01_1)
         )

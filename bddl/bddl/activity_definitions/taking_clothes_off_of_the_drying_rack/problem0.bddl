@@ -1,4 +1,4 @@
-(define (problem taking_clothes_off_of_the_drying_rack-0)
+(define (problem taking_clothes_off_of_the_drying_rack_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,7 +11,7 @@
     )
     
     (:init 
-        (draped blouse.n.01_1 coatrack.n.01_1)
+        (draped blouse.n.01_1 coatrack.n.01_1) 
         (draped tank_top.n.01_1 coatrack.n.01_1) 
         (ontop hamper.n.02_1 floor.n.01_1) 
         (ontop coatrack.n.01_1 floor.n.01_1) 
@@ -21,7 +21,7 @@
     
     (:goal 
         (and 
-            (inside ?tank_top.n.01_1 ?hamper.n.02_1)
+            (inside ?tank_top.n.01_1 ?hamper.n.02_1) 
             (inside ?blouse.n.01_1 ?hamper.n.02_1)
         )
     )

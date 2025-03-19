@@ -1,4 +1,4 @@
-(define (problem clean_vinyl_shutters-0)
+(define (problem clean_vinyl_shutters_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,14 +14,14 @@
     )
     
     (:init 
-        (covered shutter.n.02_1 tarnish.n.02_1)
-        (covered shutter.n.02_2 tarnish.n.02_1)
-        (ontop shutter.n.02_1 floor.n.01_1)
-        (ontop shutter.n.02_2 floor.n.01_1)
+        (covered shutter.n.02_1 tarnish.n.02_1) 
+        (covered shutter.n.02_2 tarnish.n.02_1) 
+        (ontop shutter.n.02_1 floor.n.01_1) 
+        (ontop shutter.n.02_2 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (filled bucket.n.01_1 water.n.06_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -29,8 +29,8 @@
     
     (:goal 
         (and 
-            (forall
-                (?shutter.n.02 - shutter.n.02)
+            (forall 
+                (?shutter.n.02 - shutter.n.02) 
                 (not 
                     (covered ?shutter.n.02 ?tarnish.n.02_1)
                 )

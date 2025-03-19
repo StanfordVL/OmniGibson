@@ -1,4 +1,4 @@
-(define (problem clean_a_trombone-0)
+(define (problem clean_a_trombone_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,7 +23,7 @@
         (and 
             (not 
                 (covered ?trombone.n.01_1 ?debris.n.01_1)
-            ) 
+            )
         )
     )
 )

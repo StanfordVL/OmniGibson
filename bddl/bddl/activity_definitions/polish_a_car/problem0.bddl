@@ -1,4 +1,4 @@
-(define (problem polish_a_car-0)
+(define (problem polish_a_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -34,7 +34,7 @@
             (not 
                 (covered ?car.n.01_1 ?incision.n.01_1)
             ) 
-            (covered ?car.n.01_1 ?polish.n.03_1) 
+            (covered ?car.n.01_1 ?polish.n.03_1)
         )
     )
 )

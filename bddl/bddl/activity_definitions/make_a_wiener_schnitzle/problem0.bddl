@@ -1,4 +1,4 @@
-(define (problem make_a_wiener_schnitzle-0)
+(define (problem make_a_wiener_schnitzle_0)
     (:domain omnigibson)
 
     (:objects
@@ -34,8 +34,8 @@
         (ontop flour__sack.n.01_1 countertop.n.01_1) 
         (inside raw_egg.n.01_1 bowl.n.01_1) 
         (ontop bowl.n.01_1 countertop.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
         (filled cup.n.01_1 breadcrumb.n.01_1) 
         (ontop frying_pan.n.01_1 countertop.n.01_1) 
         (ontop cup.n.01_1 countertop.n.01_1) 

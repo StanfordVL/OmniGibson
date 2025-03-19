@@ -1,4 +1,4 @@
-(define (problem saute_vegetables-0)
+(define (problem saute_vegetables_0)
     (:domain omnigibson)
 
     (:objects
@@ -56,7 +56,7 @@
         (not 
             (cooked asparagus.n.02_9)
         ) 
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
+        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (inside green_bean.n.01_1 sack.n.01_1) 
         (not 
             (cooked green_bean.n.01_1)
@@ -85,37 +85,37 @@
         (not 
             (cooked green_bean.n.01_7)
         ) 
-        (inside sack.n.01_1 electric_refrigerator.n.01_1)
+        (inside sack.n.01_1 electric_refrigerator.n.01_1) 
         (inside butter.n.01_1 electric_refrigerator.n.01_1) 
         (insource rosemary__shaker.n.01_1 rosemary.n.02_1) 
-        (inside rosemary__shaker.n.01_1 cabinet.n.01_1)
+        (inside rosemary__shaker.n.01_1 cabinet.n.01_1) 
         (ontop frying_pan.n.01_1 stove.n.01_1) 
         (inside spatula.n.01_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
-        (future melted__butter.n.01_1)
+        (future melted__butter.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?melted__butter.n.01_1)
+            (real ?melted__butter.n.01_1) 
             (forall 
                 (?asparagus.n.02 - asparagus.n.02) 
-                (and
-                    (cooked ?asparagus.n.02)
+                (and 
+                    (cooked ?asparagus.n.02) 
                     (covered ?asparagus.n.02 ?rosemary.n.02_1)
                 )
             ) 
             (forall 
                 (?green_bean.n.01 - green_bean.n.01) 
-                (and
-                    (cooked ?green_bean.n.01)
+                (and 
+                    (cooked ?green_bean.n.01) 
                     (covered ?green_bean.n.01 ?melted__butter.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

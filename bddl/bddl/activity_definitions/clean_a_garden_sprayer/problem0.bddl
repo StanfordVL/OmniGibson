@@ -1,4 +1,4 @@
-(define (problem clean_a_garden_sprayer-0)
+(define (problem clean_a_garden_sprayer_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,8 +19,8 @@
         (ontop pesticide__atomizer.n.01_1 floor.n.01_1) 
         (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1) 
         (ontop disinfectant__bottle.n.01_1 driveway.n.01_1) 
-        (ontop sponge.n.01_1 driveway.n.01_1)
-        (ontop bucket.n.01_1 driveway.n.01_1)
+        (ontop sponge.n.01_1 driveway.n.01_1) 
+        (ontop bucket.n.01_1 driveway.n.01_1) 
         (filled bucket.n.01_1 water.n.06_1) 
         (covered pesticide__atomizer.n.01_1 stain.n.01_1) 
         (inroom lawn.n.01_1 garden) 
@@ -33,7 +33,7 @@
         (and 
             (not 
                 (covered ?pesticide__atomizer.n.01_1 ?stain.n.01_1)
-            ) 
+            )
         )
     )
 )

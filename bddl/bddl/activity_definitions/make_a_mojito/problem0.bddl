@@ -1,4 +1,4 @@
-(define (problem make_a_mojito-0)
+(define (problem make_a_mojito_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,11 +22,11 @@
     
     (:init 
         (inside soda_water__bottle.n.01_1 electric_refrigerator.n.01_1) 
-        (filled soda_water__bottle.n.01_1 soda_water.n.03_1)
+        (filled soda_water__bottle.n.01_1 soda_water.n.03_1) 
         (filled rum__bottle.n.01_1 rum.n.01_1) 
         (inside rum__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (filled granulated_sugar__sack.n.01_1 granulated_sugar.n.01_1) 
-        (ontop granulated_sugar__sack.n.01_1 countertop.n.01_1)
+        (ontop granulated_sugar__sack.n.01_1 countertop.n.01_1) 
         (inside mint.n.04_1 electric_refrigerator.n.01_1) 
         (inside lime.n.06_1 electric_refrigerator.n.01_1) 
         (inside ice_cube.n.01_1 goblet.n.01_1) 
@@ -36,22 +36,22 @@
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future half__lime.n.01_1)
-        (future half__lime.n.01_2)
+        (future half__lime.n.01_1) 
+        (future half__lime.n.01_2) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?half__lime.n.01_1)
-            (real ?half__lime.n.01_2)
-            (filled ?goblet.n.01_1 ?soda_water.n.03_1)
-            (contains ?goblet.n.01_1 ?rum.n.01_1)
-            (contains ?goblet.n.01_1 ?granulated_sugar.n.01_1)
+            (real ?half__lime.n.01_1) 
+            (real ?half__lime.n.01_2) 
+            (filled ?goblet.n.01_1 ?soda_water.n.03_1) 
+            (contains ?goblet.n.01_1 ?rum.n.01_1) 
+            (contains ?goblet.n.01_1 ?granulated_sugar.n.01_1) 
             (forall 
-                (?half__lime.n.01 - half__lime.n.01)
+                (?half__lime.n.01 - half__lime.n.01) 
                 (inside ?half__lime.n.01 ?goblet.n.01_1)
-            )
+            ) 
             (inside ?mint.n.04_1 ?goblet.n.01_1)
         )
     )

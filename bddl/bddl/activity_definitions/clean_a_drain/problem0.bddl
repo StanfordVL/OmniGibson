@@ -1,4 +1,4 @@
-(define (problem clean_a_drain-0)
+(define (problem clean_a_drain_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,12 +15,13 @@
     (:init 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (covered sink.n.01_1 mildew.n.02_1) 
-        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom sink.n.01_1 bathroom) 
-        (inroom floor.n.01_1 bathroom)
+        (inroom floor.n.01_1 bathroom) 
+        (inroom sink.n.01_* bathroom)
     )
     
     (:goal 

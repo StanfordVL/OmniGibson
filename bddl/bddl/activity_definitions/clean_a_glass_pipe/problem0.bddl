@@ -1,4 +1,4 @@
-(define (problem clean_a_glass_pipe-0)
+(define (problem clean_a_glass_pipe_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,13 +17,13 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
-        (inside pipe.n.01_1 sack.n.01_1)
-        (covered pipe.n.01_1 adhesive_material.n.01_1)
-        (covered pipe.n.01_1 stain.n.01_1)
-        (covered pipe.n.01_1 sodium_carbonate.n.01_1)
+    (:init 
+        (inside pipe.n.01_1 sack.n.01_1) 
+        (covered pipe.n.01_1 adhesive_material.n.01_1) 
+        (covered pipe.n.01_1 stain.n.01_1) 
+        (covered pipe.n.01_1 sodium_carbonate.n.01_1) 
         (insource rubbing_alcohol__atomizer.n.01_1 rubbing_alcohol.n.01_1) 
-        (ontop rubbing_alcohol__atomizer.n.01_1 floor.n.01_1)
+        (ontop rubbing_alcohol__atomizer.n.01_1 floor.n.01_1) 
         (ontop sack.n.01_1 floor.n.01_1) 
         (inside pipe_cleaner.n.01_1 sack.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
@@ -35,7 +35,7 @@
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?pipe.n.01_1 ?stain.n.01_1)
             ) 
             (not 

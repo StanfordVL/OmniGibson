@@ -1,4 +1,4 @@
-(define (problem stripping_furniture-0)
+(define (problem stripping_furniture_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,14 +16,14 @@
     
     (:init 
         (ontop newspaper.n.03_1 floor.n.01_1) 
-        (covered table.n.02_1 house_paint.n.01_1)
-        (filled solvent__bottle.n.01_1 solvent.n.01_1)
-        (ontop solvent__bottle.n.01_1 table.n.02_1)
-        (ontop scraper.n.01_1 table.n.02_1)
-        (ontop scrub_brush.n.01_1 table.n.02_1)
+        (covered table.n.02_1 house_paint.n.01_1) 
+        (filled solvent__bottle.n.01_1 solvent.n.01_1) 
+        (ontop solvent__bottle.n.01_1 table.n.02_1) 
+        (ontop scraper.n.01_1 table.n.02_1) 
+        (ontop scrub_brush.n.01_1 table.n.02_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
-        (ontop table.n.02_1 floor.n.01_1)
+        (ontop table.n.02_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

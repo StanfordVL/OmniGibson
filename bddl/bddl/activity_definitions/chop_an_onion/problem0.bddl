@@ -1,4 +1,4 @@
-(define (problem chop_an_onion-0)
+(define (problem chop_an_onion_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,16 +16,17 @@
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (ontop vidalia_onion.n.01_1 chopping_board.n.01_1) 
-        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future diced__vidalia_onion.n.01_1)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (future diced__vidalia_onion.n.01_1) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom sink.n.01_* kitchen)
     )
     
     (:goal 
         (and 
-            (real ?diced__vidalia_onion.n.01_1)
+            (real ?diced__vidalia_onion.n.01_1) 
             (inside ?carving_knife.n.01_1 ?sink.n.01_1) 
             (inside ?chopping_board.n.01_1 ?sink.n.01_1)
         )

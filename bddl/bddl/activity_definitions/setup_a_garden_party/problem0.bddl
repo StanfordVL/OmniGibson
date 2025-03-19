@@ -1,4 +1,4 @@
-(define (problem setup_a_garden_party-0)
+(define (problem setup_a_garden_party_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,14 +21,15 @@
         (ontop goblet.n.01_1 serving_cart.n.01_1) 
         (ontop goblet.n.01_2 serving_cart.n.01_1) 
         (ontop goblet.n.01_3 serving_cart.n.01_1) 
-        (ontop carving_knife.n.01_1 serving_cart.n.01_1)
+        (ontop carving_knife.n.01_1 serving_cart.n.01_1) 
         (filled tupperware.n.01_1 diced__watermelon.n.01_1) 
-        (ontop tupperware.n.01_1 coffee_table.n.01_1)
+        (ontop tupperware.n.01_1 coffee_table.n.01_1) 
         (ontop platter.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop serving_cart.n.01_1 floor.n.01_1) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom coffee_table.n.01_* garden)
     )
     
     (:goal 
@@ -39,7 +40,7 @@
                 (?goblet.n.01 - goblet.n.01) 
                 (ontop ?goblet.n.01 ?coffee_table.n.01_1)
             ) 
-            (contains ?platter.n.01_1 ?diced__watermelon.n.01_1)
+            (contains ?platter.n.01_1 ?diced__watermelon.n.01_1) 
             (ontop ?platter.n.01_1 ?coffee_table.n.01_1)
         )
     )

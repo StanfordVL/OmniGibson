@@ -1,4 +1,4 @@
-(define (problem drape_window_scarves-0)
+(define (problem drape_window_scarves_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,9 +10,9 @@
     )
     
     (:init 
-        (ontop curtain.n.01_1 floor.n.01_1)
-        (attached curtain_rod.n.01_1 wall_nail.n.01_1)
-        (inroom floor.n.01_1 bedroom)
+        (ontop curtain.n.01_1 floor.n.01_1) 
+        (attached curtain_rod.n.01_1 wall_nail.n.01_1) 
+        (inroom floor.n.01_1 bedroom) 
         (inroom wall_nail.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

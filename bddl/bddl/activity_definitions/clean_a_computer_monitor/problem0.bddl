@@ -1,4 +1,4 @@
-(define (problem clean_a_computer_monitor-0)
+(define (problem clean_a_computer_monitor_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,11 +14,11 @@
     
     (:init 
         (ontop rag.n.01_1 floor.n.01_1) 
-        (insource sink.n.01_1 water.n.06_1)
-        (covered monitor.n.04_1 dust.n.01_1)  
+        (insource sink.n.01_1 water.n.06_1) 
+        (covered monitor.n.04_1 dust.n.01_1) 
         (inroom sink.n.01_1 bathroom) 
-        (inroom table.n.02_1 computer_lab)
-        (ontop monitor.n.04_1 table.n.02_1)
+        (inroom table.n.02_1 computer_lab) 
+        (ontop monitor.n.04_1 table.n.02_1) 
         (inroom floor.n.01_1 computer_lab) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

@@ -1,4 +1,4 @@
-(define (problem clean_a_gravestone-0)
+(define (problem clean_a_gravestone_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,7 +18,7 @@
         (ontop sponge.n.01_1 floor.n.01_1) 
         (ontop gravestone.n.01_1 floor.n.01_2) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
-        (ontop detergent__bottle.n.01_1 floor.n.01_1)
+        (ontop detergent__bottle.n.01_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
@@ -30,7 +30,7 @@
         (and 
             (not 
                 (covered ?gravestone.n.01_1 ?mold.n.05_1)
-            ) 
+            )
         )
     )
 )

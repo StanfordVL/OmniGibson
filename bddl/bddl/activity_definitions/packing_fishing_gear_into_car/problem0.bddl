@@ -1,4 +1,4 @@
-(define (problem packing_fishing_gear_into_car-0)
+(define (problem packing_fishing_gear_into_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,11 +15,11 @@
     
     (:init 
         (ontop car.n.01_1 driveway.n.01_1) 
-        (inside fishing_rod.n.01_1 skiff.n.01_1)
-        (ontop skiff.n.01_1 driveway.n.01_1)
-        (inside bait.n.01_1 bowl.n.01_1)
-        (inside bowl.n.01_1 skiff.n.01_1)
-        (inside fishing_gear.n.01_1 skiff.n.01_1)
+        (inside fishing_rod.n.01_1 skiff.n.01_1) 
+        (ontop skiff.n.01_1 driveway.n.01_1) 
+        (inside bait.n.01_1 bowl.n.01_1) 
+        (inside bowl.n.01_1 skiff.n.01_1) 
+        (inside fishing_gear.n.01_1 skiff.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -28,9 +28,9 @@
     (:goal 
         (and 
             (and 
-                (inside ?fishing_rod.n.01_1 ?car.n.01_1)
-                (inside ?bait.n.01_1 ?bowl.n.01_1)
-                (inside ?bowl.n.01_1 ?car.n.01_1)
+                (inside ?fishing_rod.n.01_1 ?car.n.01_1) 
+                (inside ?bait.n.01_1 ?bowl.n.01_1) 
+                (inside ?bowl.n.01_1 ?car.n.01_1) 
                 (inside ?fishing_gear.n.01_1 ?car.n.01_1)
             )
         )

@@ -1,4 +1,4 @@
-(define (problem buying_fast_food-0)
+(define (problem buying_fast_food_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,8 +19,8 @@
         (ontop credit_card.n.01_1 checkout.n.03_1) 
         (inside hamburger.n.01_1 grocery_shelf.n.01_1) 
         (inside hamburger.n.01_2 grocery_shelf.n.01_1) 
-        (inside french_fries.n.02_1 grocery_shelf.n.01_2)
-        (inside french_fries.n.02_2 grocery_shelf.n.01_2)
+        (inside french_fries.n.02_1 grocery_shelf.n.01_2) 
+        (inside french_fries.n.02_2 grocery_shelf.n.01_2) 
         (inside can__of__soda.n.01_1 grocery_shelf.n.01_3) 
         (inside can__of__soda.n.01_2 grocery_shelf.n.01_3) 
         (ontop shopping_basket.n.01_1 checkout.n.03_1) 
@@ -29,21 +29,23 @@
         (inroom grocery_shelf.n.01_1 grocery_store) 
         (inroom grocery_shelf.n.01_2 grocery_store) 
         (inroom grocery_shelf.n.01_3 grocery_store) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cash_register.n.01_* grocery_store) 
+        (inroom checkout.n.03_* grocery_store)
     )
     
     (:goal 
         (and 
             (nextto ?credit_card.n.01_1 ?cash_register.n.01_1) 
             (forall 
-                (?hamburger.n.01 - hamburger.n.01)
+                (?hamburger.n.01 - hamburger.n.01) 
                 (inside ?hamburger.n.01 ?shopping_basket.n.01_1)
-            )
+            ) 
             (forall 
-                (?can__of__soda.n.01 - can__of__soda.n.01)
+                (?can__of__soda.n.01 - can__of__soda.n.01) 
                 (ontop ?can__of__soda.n.01 ?checkout.n.03_1)
-            )
-            (inside ?french_fries.n.02_1 ?shopping_basket.n.01_1)
+            ) 
+            (inside ?french_fries.n.02_1 ?shopping_basket.n.01_1) 
             (ontop ?shopping_basket.n.01_1 ?checkout.n.03_1)
         )
     )

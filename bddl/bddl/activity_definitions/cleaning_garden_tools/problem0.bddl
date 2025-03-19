@@ -1,4 +1,4 @@
-(define (problem cleaning_garden_tools-0)
+(define (problem cleaning_garden_tools_0)
     (:domain omnigibson)
 
     (:objects
@@ -34,20 +34,21 @@
         (ontop rake.n.03_1 floor.n.01_1) 
         (ontop glove.n.02_1 floor.n.01_1) 
         (ontop glove.n.02_2 floor.n.01_1) 
-        (covered glove.n.02_1 mud.n.03_1)
-        (covered glove.n.02_2 mud.n.03_1)
-        (inside scrub_brush.n.01_1 carton.n.02_1)
+        (covered glove.n.02_1 mud.n.03_1) 
+        (covered glove.n.02_2 mud.n.03_1) 
+        (inside scrub_brush.n.01_1 carton.n.02_1) 
         (ontop pot_plant.n.01_1 floor.n.01_1) 
         (ontop pot_plant.n.01_2 floor.n.01_1) 
-        (inside steel_wool.n.01_1 carton.n.02_1)
-        (ontop carton.n.02_1 floor.n.01_1)
+        (inside steel_wool.n.01_1 carton.n.02_1) 
+        (ontop carton.n.02_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (ontop watering_can.n.01_1 floor.n.01_1)
-        (insource watering_can.n.01_1 water.n.06_1)
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (inside liquid_soap__bottle.n.01_1 carton.n.02_1)
-        (inroom rail_fence.n.01_1 garden)
+        (ontop watering_can.n.01_1 floor.n.01_1) 
+        (insource watering_can.n.01_1 water.n.06_1) 
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (inside liquid_soap__bottle.n.01_1 carton.n.02_1) 
+        (inroom rail_fence.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
+        (inroom rail_fence.n.01_* garden)
     )
     
     (:goal 
@@ -69,11 +70,11 @@
             ) 
             (nextto ?rake.n.03_1 ?rail_fence.n.01_1) 
             (forall 
-                (?glove.n.02 - glove.n.02)
-                (and
-                    (not
+                (?glove.n.02 - glove.n.02) 
+                (and 
+                    (not 
                         (covered ?glove.n.02 ?mud.n.03_1)
-                    )
+                    ) 
                     (inside ?glove.n.02 ?carton.n.02_1)
                 )
             )

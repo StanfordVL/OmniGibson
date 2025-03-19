@@ -1,4 +1,4 @@
-(define (problem collecting_berries-0)
+(define (problem collecting_berries_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,11 +10,11 @@
     )
     
     (:init 
-        (attached blackberry.n.01_1 scrub.n.01_1)
-        (attached blackberry.n.01_2 scrub.n.01_1)
-        (attached blackberry.n.01_3 scrub.n.01_1)
+        (attached blackberry.n.01_1 scrub.n.01_1) 
+        (attached blackberry.n.01_2 scrub.n.01_1) 
+        (attached blackberry.n.01_3 scrub.n.01_1) 
         (ontop wicker_basket.n.01_1 floor.n.01_1) 
-        (inroom scrub.n.01_1 garden)
+        (inroom scrub.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -22,7 +22,7 @@
     (:goal 
         (and 
             (forall 
-                (?blackberry.n.01 - blackberry.n.01)
+                (?blackberry.n.01 - blackberry.n.01) 
                 (inside ?blackberry.n.01 ?wicker_basket.n.01_1)
             )
         )

@@ -1,4 +1,4 @@
-(define (problem cleaning_up_after_an_event-0)
+(define (problem cleaning_up_after_an_event_0)
     (:domain omnigibson)
 
     (:objects
@@ -24,10 +24,10 @@
         (ontop cup.n.01_2 floor.n.01_1) 
         (ontop cup.n.01_3 electric_refrigerator.n.01_1) 
         (ontop cup.n.01_4 dishwasher.n.01_1) 
-        (ontop hotdog.n.02_1 sink.n.01_1)
-        (ontop bottle__of__apple_juice.n.01_1 sink.n.01_1)
+        (ontop hotdog.n.02_1 sink.n.01_1) 
+        (ontop bottle__of__apple_juice.n.01_1 sink.n.01_1) 
         (ontop broom.n.01_1 floor.n.01_1) 
-        (ontop sponge.n.01_1 sink.n.01_1)
+        (ontop sponge.n.01_1 sink.n.01_1) 
         (not 
             (covered sponge.n.01_1 water.n.06_1)
         ) 
@@ -40,7 +40,11 @@
         (inroom sink.n.01_1 kitchen) 
         (inroom dishwasher.n.01_1 kitchen) 
         (inroom window.n.01_1 kitchen) 
-        (inroom cabinet.n.01_1 kitchen)
+        (inroom cabinet.n.01_1 kitchen) 
+        (inroom electric_refrigerator.n.01_* kitchen) 
+        (inroom window.n.01_* kitchen) 
+        (inroom dishwasher.n.01_* kitchen) 
+        (inroom sink.n.01_* kitchen)
     )
     
     (:goal 

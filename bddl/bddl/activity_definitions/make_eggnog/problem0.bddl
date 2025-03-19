@@ -1,4 +1,4 @@
-(define (problem make_eggnog-0)
+(define (problem make_eggnog_0)
     (:domain omnigibson)
 
     (:objects
@@ -33,7 +33,7 @@
         (inside nutmeg__shaker.n.01_1 cabinet.n.01_1) 
         (insource cinnamon__shaker.n.01_1 cinnamon.n.03_1) 
         (inside cinnamon__shaker.n.01_1 cabinet.n.01_1) 
-        (insource vanilla__bottle.n.01_1 vanilla.n.02_1)
+        (insource vanilla__bottle.n.01_1 vanilla.n.02_1) 
         (inside vanilla__bottle.n.01_1 cabinet.n.01_1) 
         (filled rum__bottle.n.01_1 rum.n.01_1) 
         (inside rum__bottle.n.01_1 electric_refrigerator.n.01_1) 

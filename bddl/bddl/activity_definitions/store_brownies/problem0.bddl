@@ -1,4 +1,4 @@
-(define (problem store_brownies-0)
+(define (problem store_brownies_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,19 +18,20 @@
         (ontop brownie.n.03_4 tray.n.01_1) 
         (ontop brownie.n.03_5 tray.n.01_1) 
         (ontop tray.n.01_1 countertop.n.01_1) 
-        (ontop tupperware.n.01_1 countertop.n.01_1)
+        (ontop tupperware.n.01_1 countertop.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
-        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom electric_refrigerator.n.01_* kitchen)
     )
     
     (:goal 
         (and 
             (forall 
-                (?brownie.n.03 - brownie.n.03)
+                (?brownie.n.03 - brownie.n.03) 
                 (inside ?brownie.n.03 ?tupperware.n.01_1)
-            )
+            ) 
             (inside ?tupperware.n.01_1 ?electric_refrigerator.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem clean_deer_antlers-0)
+(define (problem clean_deer_antlers_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,12 +16,13 @@
         (covered antler.n.01_1 dust.n.01_1) 
         (inroom wall_nail.n.01_1 corridor) 
         (inroom floor.n.01_1 corridor) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall_nail.n.01_* corridor)
     )
     
     (:goal 
         (and 
-            (attached ?antler.n.01_1 ?wall_nail.n.01_1)
+            (attached ?antler.n.01_1 ?wall_nail.n.01_1) 
             (not 
                 (covered ?antler.n.01_1 ?dust.n.01_1)
             )

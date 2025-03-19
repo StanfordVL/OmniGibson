@@ -1,4 +1,4 @@
-(define (problem vacuuming_vehicles-0)
+(define (problem vacuuming_vehicles_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,7 +14,8 @@
         (ontop vacuum.n.04_1 floor.n.01_1) 
         (covered car.n.01_1 dust.n.01_1) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* living_room)
     )
     
     (:goal 

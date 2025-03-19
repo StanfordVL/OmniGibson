@@ -1,4 +1,4 @@
-(define (problem cook_kielbasa-0)
+(define (problem cook_kielbasa_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,7 +18,7 @@
         (not 
             (cooked kielbasa.n.01_1)
         ) 
-        (insource sink.n.01_1 water.n.06_1)
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 

@@ -1,4 +1,4 @@
-(define (problem putting_away_cleaning_supplies-0)
+(define (problem putting_away_cleaning_supplies_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,8 @@
         (ontop bottle__of__bleach_agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom cabinet.n.01_1 utility_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cabinet.n.01_* utility_room)
     )
     
     (:goal 

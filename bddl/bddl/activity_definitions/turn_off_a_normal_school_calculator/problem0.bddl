@@ -1,4 +1,4 @@
-(define (problem turn_off_a_normal_school_calculator-0)
+(define (problem turn_off_a_normal_school_calculator_0)
     (:domain omnigibson)
 
     (:objects
@@ -9,10 +9,10 @@
     )
     
     (:init 
-        (ontop calculator.n.02_1 desk.n.01_1)
+        (ontop calculator.n.02_1 desk.n.01_1) 
         (toggled_on calculator.n.02_1) 
-        (inroom desk.n.01_1 classroom)
-        (inroom floor.n.01_1 classroom)
+        (inroom desk.n.01_1 classroom) 
+        (inroom floor.n.01_1 classroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -20,7 +20,7 @@
         (and 
             (not 
                 (toggled_on ?calculator.n.02_1)
-            ) 
+            )
         )
     )
 )

@@ -1,4 +1,4 @@
-(define (problem cleaning_cups_in_living_room-0)
+(define (problem cleaning_cups_in_living_room_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,9 +20,9 @@
         (covered wineglass.n.01_1 dust.n.01_1) 
         (covered wineglass.n.01_2 dust.n.01_1) 
         (covered wineglass.n.01_3 dust.n.01_1) 
-        (covered wineglass.n.01_1 red_wine.n.01_1)
-        (covered wineglass.n.01_2 red_wine.n.01_1)
-        (covered wineglass.n.01_3 white_wine.n.01_1)
+        (covered wineglass.n.01_1 red_wine.n.01_1) 
+        (covered wineglass.n.01_2 red_wine.n.01_1) 
+        (covered wineglass.n.01_3 white_wine.n.01_1) 
         (inroom table.n.02_1 living_room) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -32,13 +32,13 @@
         (and 
             (forall 
                 (?wineglass.n.01 - wineglass.n.01) 
-                (and
+                (and 
                     (not 
                         (covered ?wineglass.n.01 ?dust.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?wineglass.n.01 ?white_wine.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?wineglass.n.01 ?red_wine.n.01_1)
                     )

@@ -1,4 +1,4 @@
-(define (problem wash_an_infant_car_seat-0)
+(define (problem wash_an_infant_car_seat_0)
     (:domain omnigibson)
 
     (:objects
@@ -25,8 +25,8 @@
         (covered infant_car_seat.n.01_1 dirt.n.02_1) 
         (ontop sponge.n.01_1 floor.n.01_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1)
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 bathroom) 
         (inroom floor.n.01_2 garage) 
@@ -47,7 +47,7 @@
             ) 
             (not 
                 (covered ?infant_car_seat.n.01_1 ?dirt.n.02_1)
-            ) 
+            )
         )
     )
 )

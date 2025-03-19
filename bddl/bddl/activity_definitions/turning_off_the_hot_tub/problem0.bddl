@@ -1,4 +1,4 @@
-(define (problem turning_off_the_hot_tub-0)
+(define (problem turning_off_the_hot_tub_0)
     (:domain omnigibson)
 
     (:objects
@@ -9,11 +9,12 @@
     )
     
     (:init 
-        (toggled_on hot_tub.n.02_1)
-        (filled hot_tub.n.02_1 water.n.06_1)
-        (inroom hot_tub.n.02_1 spa)
+        (toggled_on hot_tub.n.02_1) 
+        (filled hot_tub.n.02_1 water.n.06_1) 
+        (inroom hot_tub.n.02_1 spa) 
         (inroom floor.n.01_1 spa) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom hot_tub.n.02_* spa)
     )
     
     (:goal 

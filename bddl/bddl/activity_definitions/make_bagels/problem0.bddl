@@ -1,4 +1,4 @@
-(define (problem make_bagels-0)
+(define (problem make_bagels_0)
     (:domain omnigibson)
 
     (:objects
@@ -31,8 +31,8 @@
         (filled flour__sack.n.01_1 flour.n.01_1) 
         (ontop flour__sack.n.01_1 countertop.n.01_1) 
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
         (filled honey__jar.n.01_1 honey.n.01_1) 
         (ontop honey__jar.n.01_1 countertop.n.01_1) 
         (filled yeast__jar.n.01_1 yeast.n.01_1) 

@@ -1,4 +1,4 @@
-(define (problem clean_a_backpack-0)
+(define (problem clean_a_backpack_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,19 +17,19 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
-        (filled detergent__bottle.n.01_1 detergent.n.02_1)
-        (ontop detergent__bottle.n.01_1 floor.n.01_1)
-        (ontop backpack.n.01_1 floor.n.01_1)
-        (ontop bucket.n.01_1 floor.n.01_1)
-        (ontop rag.n.01_1 clothes_dryer.n.01_1)
-        (ontop hand_towel.n.01_1 washer.n.03_1)
-        (ontop sponge.n.01_1 clothes_dryer.n.01_1)
+    (:init 
+        (filled detergent__bottle.n.01_1 detergent.n.02_1) 
+        (ontop detergent__bottle.n.01_1 floor.n.01_1) 
+        (ontop backpack.n.01_1 floor.n.01_1) 
+        (ontop bucket.n.01_1 floor.n.01_1) 
+        (ontop rag.n.01_1 clothes_dryer.n.01_1) 
+        (ontop hand_towel.n.01_1 washer.n.03_1) 
+        (ontop sponge.n.01_1 clothes_dryer.n.01_1) 
         (filled bucket.n.01_1 water.n.06_1) 
-        (covered backpack.n.01_1 dust.n.01_1)
+        (covered backpack.n.01_1 dust.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
         (inroom washer.n.03_1 utility_room) 
-        (inroom clothes_dryer.n.01_1 utility_room)
+        (inroom clothes_dryer.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -37,7 +37,7 @@
         (and 
             (not 
                 (covered ?backpack.n.01_1 ?dust.n.01_1)
-            ) 
+            )
         )
     )
 )

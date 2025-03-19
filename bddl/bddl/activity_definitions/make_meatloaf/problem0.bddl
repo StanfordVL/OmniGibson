@@ -1,4 +1,4 @@
-(define (problem make_meatloaf-0)
+(define (problem make_meatloaf_0)
     (:domain omnigibson)
 
     (:objects
@@ -37,7 +37,7 @@
         (ontop bowl.n.01_1 countertop.n.01_1) 
         (filled brown_sugar__sack.n.01_1 brown_sugar.n.01_1) 
         (inside brown_sugar__sack.n.01_1 cabinet.n.01_1) 
-        (insource catsup__bottle.n.01_1 catsup.n.01_1)
+        (insource catsup__bottle.n.01_1 catsup.n.01_1) 
         (inside catsup__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (inroom oven.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 

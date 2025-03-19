@@ -1,4 +1,4 @@
-(define (problem make_hot_cocoa-0)
+(define (problem make_hot_cocoa_0)
     (:domain omnigibson)
 
     (:objects
@@ -34,11 +34,11 @@
         (inside marshmallow.n.01_2 sack.n.01_1) 
         (inside marshmallow.n.01_3 sack.n.01_1) 
         (inside sack.n.01_1 electric_refrigerator.n.01_1) 
-        (insource vanilla__bottle.n.01_1 vanilla.n.02_1)
+        (insource vanilla__bottle.n.01_1 vanilla.n.02_1) 
         (inside vanilla__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (ontop saucepan.n.01_1 countertop.n.01_2) 
-        (ontop mug.n.04_1 countertop.n.01_2)
-        (ontop teaspoon.n.02_1 countertop.n.01_2)
+        (ontop mug.n.04_1 countertop.n.01_2) 
+        (ontop teaspoon.n.02_1 countertop.n.01_2) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -51,7 +51,7 @@
     (:goal 
         (and 
             (real ?cocoa.n.01_1) 
-            (contains ?mug.n.04_1 ?cocoa.n.01_1)
+            (contains ?mug.n.04_1 ?cocoa.n.01_1) 
             (forall 
                 (?marshmallow.n.01 - marshmallow.n.01) 
                 (inside ?marshmallow.n.01 ?mug.n.04_1)

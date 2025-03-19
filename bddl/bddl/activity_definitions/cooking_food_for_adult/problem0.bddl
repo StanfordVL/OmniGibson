@@ -1,4 +1,4 @@
-(define (problem cooking_food_for_adult-0)
+(define (problem cooking_food_for_adult_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,12 +20,12 @@
         (inside steak.n.01_1 electric_refrigerator.n.01_1) 
         (not 
             (cooked steak.n.01_1)
-        )
-        (insource thyme__shaker.n.01_1 thyme.n.02_1)
+        ) 
+        (insource thyme__shaker.n.01_1 thyme.n.02_1) 
         (ontop thyme__shaker.n.01_1 countertop.n.01_1) 
         (ontop plate.n.04_1 countertop.n.01_1) 
         (filled cooking_oil__bottle.n.01_1 cooking_oil.n.01_1) 
-        (ontop cooking_oil__bottle.n.01_1 countertop.n.01_1)
+        (ontop cooking_oil__bottle.n.01_1 countertop.n.01_1) 
         (ontop frying_pan.n.01_1 stove.n.01_1) 
         (inroom stove.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -36,9 +36,9 @@
     
     (:goal 
         (and 
-            (cooked ?steak.n.01_1)
-            (ontop ?steak.n.01_1 ?plate.n.04_1)
-            (covered ?steak.n.01_1 ?cooking_oil.n.01_1)
+            (cooked ?steak.n.01_1) 
+            (ontop ?steak.n.01_1 ?plate.n.04_1) 
+            (covered ?steak.n.01_1 ?cooking_oil.n.01_1) 
             (covered ?steak.n.01_1 ?thyme.n.02_1)
         )
     )

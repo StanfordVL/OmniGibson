@@ -1,4 +1,4 @@
-(define (problem outfit_a_basic_toolbox-0)
+(define (problem outfit_a_basic_toolbox_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,17 +19,18 @@
         (ontop flashlight.n.01_1 floor.n.01_1) 
         (ontop allen_wrench.n.01_1 floor.n.01_1) 
         (ontop screwdriver.n.01_1 floor.n.01_1) 
-        (inroom floor.n.01_1 empty_room)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom floor.n.01_1 empty_room) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* empty_room)
     )
     
     (:goal 
         (and 
-            (inside ?drill.n.01_1 ?toolbox.n.01_1)
-            (inside ?pliers.n.01_1 ?toolbox.n.01_1)
-            (inside ?flashlight.n.01_1 ?toolbox.n.01_1)
-            (inside ?allen_wrench.n.01_1 ?toolbox.n.01_1)
-            (inside ?screwdriver.n.01_1 ?toolbox.n.01_1)
+            (inside ?drill.n.01_1 ?toolbox.n.01_1) 
+            (inside ?pliers.n.01_1 ?toolbox.n.01_1) 
+            (inside ?flashlight.n.01_1 ?toolbox.n.01_1) 
+            (inside ?allen_wrench.n.01_1 ?toolbox.n.01_1) 
+            (inside ?screwdriver.n.01_1 ?toolbox.n.01_1) 
             (ontop ?toolbox.n.01_1 ?floor.n.01_1)
         )
     )

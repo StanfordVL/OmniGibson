@@ -1,4 +1,4 @@
-(define (problem clean_a_mousepad-0)
+(define (problem clean_a_mousepad_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,7 +14,7 @@
     (:init 
         (covered mousepad.n.01_1 dust.n.01_1) 
         (ontop rag.n.01_1 mousepad.n.01_1) 
-        (ontop mousepad.n.01_1 sink.n.01_1)
+        (ontop mousepad.n.01_1 sink.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
@@ -25,7 +25,7 @@
         (and 
             (not 
                 (covered ?mousepad.n.01_1 ?dust.n.01_1)
-            ) 
+            )
         )
     )
 )

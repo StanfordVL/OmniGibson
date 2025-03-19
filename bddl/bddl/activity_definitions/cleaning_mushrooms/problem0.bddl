@@ -1,4 +1,4 @@
-(define (problem cleaning_mushrooms-0)
+(define (problem cleaning_mushrooms_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,7 @@
         (covered mushroom.n.05_5 dust.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (ontop mixing_bowl.n.01_1 countertop.n.01_1) 
-        (filled mixing_bowl.n.01_1 water.n.06_1)  
+        (filled mixing_bowl.n.01_1 water.n.06_1) 
         (ontop mushroom.n.05_1 chopping_board.n.01_1) 
         (ontop mushroom.n.05_2 chopping_board.n.01_1) 
         (ontop mushroom.n.05_3 chopping_board.n.01_1) 
@@ -40,7 +40,7 @@
                 (not 
                     (covered ?mushroom.n.05 ?dust.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

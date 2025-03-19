@@ -1,4 +1,4 @@
-(define (problem pour_beer-0)
+(define (problem pour_beer_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,9 +19,9 @@
         (ontop beer_bottle.n.01_2 countertop.n.01_1) 
         (ontop beer_bottle.n.01_3 countertop.n.01_1) 
         (ontop beer_bottle.n.01_4 countertop.n.01_1) 
-        (ontop beer_glass.n.01_1 countertop.n.01_1)
-        (ontop beer_glass.n.01_2 countertop.n.01_1)
-        (ontop beer_glass.n.01_3 countertop.n.01_1)
+        (ontop beer_glass.n.01_1 countertop.n.01_1) 
+        (ontop beer_glass.n.01_2 countertop.n.01_1) 
+        (ontop beer_glass.n.01_3 countertop.n.01_1) 
         (inroom countertop.n.01_1 bar) 
         (inroom floor.n.01_1 bar) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -30,7 +30,7 @@
     (:goal 
         (and 
             (forall 
-                (?beer_glass.n.01 - beer_glass.n.01)
+                (?beer_glass.n.01 - beer_glass.n.01) 
                 (filled ?beer_glass.n.01 ?beer.n.01_1)
             )
         )

@@ -1,4 +1,4 @@
-(define (problem cook_eggplant-0)
+(define (problem cook_eggplant_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,28 +21,28 @@
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (ontop carving_knife.n.01_1 chopping_board.n.01_1) 
         (inside eggplant.n.01_1 electric_refrigerator.n.01_1) 
-        (inside feta.n.01_1 feta__box.n.01_1)
-        (inside feta__box.n.01_1 electric_refrigerator.n.01_1)
+        (inside feta.n.01_1 feta__box.n.01_1) 
+        (inside feta__box.n.01_1 electric_refrigerator.n.01_1) 
         (not 
             (cooked eggplant.n.01_1)
         ) 
-        (inroom oven.n.01_1 kitchen)
+        (inroom oven.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future half__eggplant.n.01_1)
-        (future half__eggplant.n.01_2)
+        (future half__eggplant.n.01_1) 
+        (future half__eggplant.n.01_2) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?half__eggplant.n.01_1)
-            (real ?half__eggplant.n.01_2)
+            (real ?half__eggplant.n.01_1) 
+            (real ?half__eggplant.n.01_2) 
             (forall 
-                (?half__eggplant.n.01 - half__eggplant.n.01)
+                (?half__eggplant.n.01 - half__eggplant.n.01) 
                 (and 
-                    (cooked ?half__eggplant.n.01)
+                    (cooked ?half__eggplant.n.01) 
                     (ontop ?feta.n.01_1 ?half__eggplant.n.01)
                 )
             )

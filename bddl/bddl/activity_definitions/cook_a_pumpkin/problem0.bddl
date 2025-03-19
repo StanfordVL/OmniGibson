@@ -1,4 +1,4 @@
-(define (problem cook_a_pumpkin-0)
+(define (problem cook_a_pumpkin_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,12 +19,12 @@
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (inside pumpkin.n.02_1 electric_refrigerator.n.01_1) 
         (inside butter.n.01_1 tupperware.n.01_1) 
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
+        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (not 
             (cooked pumpkin.n.02_1)
-        )
-        (ontop casserole.n.02_1 countertop.n.01_1)
-        (future melted__butter.n.01_1)
+        ) 
+        (ontop casserole.n.02_1 countertop.n.01_1) 
+        (future melted__butter.n.01_1) 
         (inroom oven.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -34,8 +34,8 @@
     
     (:goal 
         (and 
-            (real ?melted__butter.n.01_1)
-            (cooked ?pumpkin.n.02_1)
+            (real ?melted__butter.n.01_1) 
+            (cooked ?pumpkin.n.02_1) 
             (covered ?pumpkin.n.02_1 ?melted__butter.n.01_1)
         )
     )

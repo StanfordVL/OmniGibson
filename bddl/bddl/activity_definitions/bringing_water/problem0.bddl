@@ -1,4 +1,4 @@
-(define (problem bringing_water-0)
+(define (problem bringing_water_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,18 +11,19 @@
     
     (:init 
         (ontop water_bottle.n.01_1 floor.n.01_2) 
-        (ontop water_bottle.n.01_2 floor.n.01_2)
+        (ontop water_bottle.n.01_2 floor.n.01_2) 
         (inroom floor.n.01_2 garden) 
         (inroom cabinet.n.01_1 kitchen) 
-        (inroom floor.n.01_1 kitchen)
-        (inroom lawn.n.01_1 garden)
-        (ontop agent.n.01_1 floor.n.01_2)
+        (inroom floor.n.01_1 kitchen) 
+        (inroom lawn.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_2) 
+        (inroom cabinet.n.01_* kitchen)
     )
     
     (:goal 
         (and 
-            (forall
-                (?water_bottle.n.01 - water_bottle.n.01)
+            (forall 
+                (?water_bottle.n.01 - water_bottle.n.01) 
                 (inside ?water_bottle.n.01 ?cabinet.n.01_1)
             )
         )

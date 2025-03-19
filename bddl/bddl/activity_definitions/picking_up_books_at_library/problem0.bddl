@@ -1,4 +1,4 @@
-(define (problem picking_up_books_at_library-0)
+(define (problem picking_up_books_at_library_0)
     (:domain omnigibson)
 
     (:objects
@@ -24,12 +24,12 @@
     (:goal 
         (and 
             (forall 
-                (?book.n.02 - book.n.02)
-                (inside ?book.n.02 ?backpack.n.01_1)   
-            )
+                (?book.n.02 - book.n.02) 
+                (inside ?book.n.02 ?backpack.n.01_1)
+            ) 
             (forall 
-                (?paperback_book.n.01 - paperback_book.n.01)
-                (inside ?paperback_book.n.01 ?backpack.n.01_1)   
+                (?paperback_book.n.01 - paperback_book.n.01) 
+                (inside ?paperback_book.n.01 ?backpack.n.01_1)
             )
         )
     )

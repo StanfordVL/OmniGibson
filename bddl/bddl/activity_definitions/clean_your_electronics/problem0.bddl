@@ -1,4 +1,4 @@
-(define (problem clean_your_electronics-0)
+(define (problem clean_your_electronics_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,7 +22,8 @@
         (inroom television_receiver.n.01_1 bedroom) 
         (inroom desk.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom television_receiver.n.01_* bedroom)
     )
     
     (:goal 

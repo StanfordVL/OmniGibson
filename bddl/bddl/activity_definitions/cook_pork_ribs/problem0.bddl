@@ -1,4 +1,4 @@
-(define (problem cook_pork_ribs-0)
+(define (problem cook_pork_ribs_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,18 +16,18 @@
     )
     
     (:init 
-        (insource barbecue_sauce__bottle.n.01_1 barbecue_sauce.n.01_1)
-        (ontop barbecue_sauce__bottle.n.01_1 countertop.n.01_1)
+        (insource barbecue_sauce__bottle.n.01_1 barbecue_sauce.n.01_1) 
+        (ontop barbecue_sauce__bottle.n.01_1 countertop.n.01_1) 
         (not 
             (cooked rib.n.03_1)
         ) 
         (not 
             (cooked rib.n.03_2)
-        )
-        (inside rib.n.03_1 electric_refrigerator.n.01_1)
-        (inside rib.n.03_2 electric_refrigerator.n.01_1)
-        (ontop chopping_board.n.01_1 countertop.n.01_1)
-        (ontop tongs.n.01_1 countertop.n.01_1)
+        ) 
+        (inside rib.n.03_1 electric_refrigerator.n.01_1) 
+        (inside rib.n.03_2 electric_refrigerator.n.01_1) 
+        (ontop chopping_board.n.01_1 countertop.n.01_1) 
+        (ontop tongs.n.01_1 countertop.n.01_1) 
         (inroom grill.n.02_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -39,9 +39,9 @@
     (:goal 
         (and 
             (forall 
-                (?rib.n.03 - rib.n.03)
+                (?rib.n.03 - rib.n.03) 
                 (and 
-                    (cooked ?rib.n.03)
+                    (cooked ?rib.n.03) 
                     (covered ?rib.n.03 ?barbecue_sauce.n.01_1)
                 )
             )

@@ -1,4 +1,4 @@
-(define (problem cook_mustard_greens-0)
+(define (problem cook_mustard_greens_0)
     (:domain omnigibson)
 
     (:objects
@@ -43,7 +43,7 @@
             (forall 
                 (?mustard.n.03 - mustard.n.03) 
                 (cooked ?mustard.n.03)
-            ) 
+            )
         )
     )
 )

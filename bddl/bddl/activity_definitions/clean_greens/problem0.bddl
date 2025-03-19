@@ -1,4 +1,4 @@
-(define (problem clean_greens-0)
+(define (problem clean_greens_0)
     (:domain omnigibson)
 
     (:objects
@@ -31,13 +31,13 @@
         (and 
             (forall 
                 (?chard.n.02 - chard.n.02) 
-                (and
-                    (inside ?chard.n.02 ?bowl.n.01_1)
+                (and 
+                    (inside ?chard.n.02 ?bowl.n.01_1) 
                     (not 
                         (covered ?chard.n.02 ?dirt.n.02_1)
                     )
                 )
-            ) 
+            )
         )
     )
 )

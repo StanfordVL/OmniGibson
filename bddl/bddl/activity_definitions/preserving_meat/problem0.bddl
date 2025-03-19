@@ -1,4 +1,4 @@
-(define (problem preserving_meat-0)
+(define (problem preserving_meat_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,7 +15,7 @@
     
     (:init 
         (filled tupperware.n.01_1 diced__chicken.n.01_1) 
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
+        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (insource salt__shaker.n.01_1 salt.n.02_1) 
         (ontop hinged_jar.n.01_1 countertop.n.01_1) 
         (ontop salt__shaker.n.01_1 countertop.n.01_1) 
@@ -29,8 +29,8 @@
     (:goal 
         (and 
             (contains ?hinged_jar.n.01_1 ?diced__chicken.n.01_1) 
-            (contains ?hinged_jar.n.01_1 ?salt.n.02_1)
-            (not
+            (contains ?hinged_jar.n.01_1 ?salt.n.02_1) 
+            (not 
                 (open ?hinged_jar.n.01_1)
             )
         )

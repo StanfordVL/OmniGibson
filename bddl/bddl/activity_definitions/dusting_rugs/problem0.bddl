@@ -1,4 +1,4 @@
-(define (problem dusting_rugs-0)
+(define (problem dusting_rugs_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,12 +13,12 @@
     (:init 
         (covered rug.n.01_1 dust.n.01_1) 
         (covered rug.n.01_2 dust.n.01_1) 
-        (ontop rug.n.01_1 floor.n.01_1)
-        (ontop rug.n.01_2 floor.n.01_1)
+        (ontop rug.n.01_1 floor.n.01_1) 
+        (ontop rug.n.01_2 floor.n.01_1) 
         (ontop scrub_brush.n.01_1 breakfast_table.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (inroom breakfast_table.n.01_1 bedroom)
-        (inroom floor.n.01_1 bedroom) 
+        (inroom breakfast_table.n.01_1 bedroom) 
+        (inroom floor.n.01_1 bedroom)
     )
     
     (:goal 
@@ -28,7 +28,7 @@
                 (not 
                     (covered ?rug.n.01 ?dust.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

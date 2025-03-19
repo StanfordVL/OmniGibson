@@ -1,4 +1,4 @@
-(define (problem de_ice_a_car-0)
+(define (problem de_ice_a_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,17 +22,17 @@
         (ontop ice.n.01_2 car.n.01_1) 
         (ontop ice.n.01_3 car.n.01_1) 
         (inroom tree.n.01_1 garden) 
-        (ontop space_heater.n.01_1 floor.n.01_1)
+        (ontop space_heater.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
-        (inroom driveway.n.01_1 garden)
+        (inroom driveway.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (forall
-                (?ice.n.01 - ice.n.01)
-                (not
+            (forall 
+                (?ice.n.01 - ice.n.01) 
+                (not 
                     (ontop ?ice.n.01 ?car.n.01_1)
                 )
             )

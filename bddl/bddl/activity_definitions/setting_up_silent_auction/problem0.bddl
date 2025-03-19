@@ -1,4 +1,4 @@
-(define (problem setting_up_silent_auction-0)
+(define (problem setting_up_silent_auction_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,10 +15,10 @@
     )
     
     (:init 
-        (inside bust.n.03_1 carton.n.02_1)
-        (inside painting.n.01_1 carton.n.02_1)
-        (inside portrait.n.02_1 carton.n.02_1)
-        (ontop carton.n.02_1 floor.n.01_1)
+        (inside bust.n.03_1 carton.n.02_1) 
+        (inside painting.n.01_1 carton.n.02_1) 
+        (inside portrait.n.02_1 carton.n.02_1) 
+        (ontop carton.n.02_1 floor.n.01_1) 
         (inside clipboard.n.01_1 carton.n.02_1) 
         (inside clipboard.n.01_2 carton.n.02_1) 
         (inside clipboard.n.01_3 carton.n.02_1) 
@@ -28,13 +28,14 @@
         (ontop card.n.04_4 table.n.02_1) 
         (ontop card.n.04_5 table.n.02_1) 
         (inroom table.n.02_1 shared_office) 
-        (inroom swivel_chair.n.01_1 shared_office)
-        (inroom swivel_chair.n.01_2 shared_office)
-        (inroom swivel_chair.n.01_3 shared_office)
-        (inroom swivel_chair.n.01_4 shared_office)
-        (inroom swivel_chair.n.01_5 shared_office)
+        (inroom swivel_chair.n.01_1 shared_office) 
+        (inroom swivel_chair.n.01_2 shared_office) 
+        (inroom swivel_chair.n.01_3 shared_office) 
+        (inroom swivel_chair.n.01_4 shared_office) 
+        (inroom swivel_chair.n.01_5 shared_office) 
         (inroom floor.n.01_1 shared_office) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom table.n.02_* shared_office)
     )
     
     (:goal 
@@ -56,8 +57,8 @@
                 (?clipboard.n.01 - clipboard.n.01) 
                 (nextto ?portrait.n.02_1 ?clipboard.n.01)
             ) 
-            (ontop ?bust.n.03_1 ?table.n.02_1)
-            (ontop ?painting.n.01_1 ?table.n.02_1)
+            (ontop ?bust.n.03_1 ?table.n.02_1) 
+            (ontop ?painting.n.01_1 ?table.n.02_1) 
             (ontop ?portrait.n.02_1 ?table.n.02_1)
         )
     )

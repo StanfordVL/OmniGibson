@@ -1,4 +1,4 @@
-(define (problem packing_documents_into_car-0)
+(define (problem packing_documents_into_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,7 +17,7 @@
         (inside legal_document.n.01_1 carton.n.02_1) 
         (inside legal_document.n.01_3 carton.n.02_1) 
         (inside legal_document.n.01_2 carton.n.02_1) 
-        (inside book.n.02_1 carton.n.02_1)
+        (inside book.n.02_1 carton.n.02_1) 
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -25,10 +25,10 @@
     
     (:goal 
         (and 
-            (forall
-                (?legal_document.n.01 - legal_document.n.01)
+            (forall 
+                (?legal_document.n.01 - legal_document.n.01) 
                 (inside ?legal_document.n.01 ?car.n.01_1)
-            )
+            ) 
             (inside ?book.n.02_1 ?car.n.01_1)
         )
     )

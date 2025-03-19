@@ -1,4 +1,4 @@
-(define (problem store_a_fur_coat-0)
+(define (problem store_a_fur_coat_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,17 +11,18 @@
     )
     
     (:init 
-        (inroom bed.n.01_1 bedroom)
-        (ontop fur_coat.n.01_1 bed.n.01_1)
-        (attached hanger.n.02_1 wardrobe.n.01_1)
+        (inroom bed.n.01_1 bedroom) 
+        (ontop fur_coat.n.01_1 bed.n.01_1) 
+        (attached hanger.n.02_1 wardrobe.n.01_1) 
         (inroom floor.n.01_1 closet) 
         (inroom wardrobe.n.01_1 closet) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wardrobe.n.01_* closet)
     )
     
     (:goal 
         (and 
-            (draped ?fur_coat.n.01_1 ?hanger.n.02_1)
+            (draped ?fur_coat.n.01_1 ?hanger.n.02_1) 
             (attached ?hanger.n.02_1 ?wardrobe.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem clean_a_flat_iron-0)
+(define (problem clean_a_flat_iron_0)
     (:domain omnigibson)
 
     (:objects
@@ -30,7 +30,7 @@
     
     (:goal 
         (and 
-            (covered ?iron.n.04_1 ?disinfectant.n.01_1)
+            (covered ?iron.n.04_1 ?disinfectant.n.01_1) 
             (not 
                 (covered ?iron.n.04_1 ?dust.n.01_1)
             )

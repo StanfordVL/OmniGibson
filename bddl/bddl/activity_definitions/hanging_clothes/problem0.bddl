@@ -1,4 +1,4 @@
-(define (problem hanging_clothes-0)
+(define (problem hanging_clothes_0)
     (:domain omnigibson)
 
     (:objects
@@ -28,15 +28,15 @@
     (:goal 
         (and 
             (exists 
-                (?hanger.n.02 - hanger.n.02)
+                (?hanger.n.02 - hanger.n.02) 
                 (draped ?sweater.n.01_1 ?hanger.n.02)
-            )
+            ) 
             (exists 
-                (?hanger.n.02 - hanger.n.02)
+                (?hanger.n.02 - hanger.n.02) 
                 (draped ?dress.n.01_1 ?hanger.n.02)
-            )
+            ) 
             (exists 
-                (?hanger.n.02 - hanger.n.02)
+                (?hanger.n.02 - hanger.n.02) 
                 (draped ?skirt.n.01_1 ?hanger.n.02)
             )
         )

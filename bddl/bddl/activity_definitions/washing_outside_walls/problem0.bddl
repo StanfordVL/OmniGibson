@@ -1,4 +1,4 @@
-(define (problem washing_outside_walls-0)
+(define (problem washing_outside_walls_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,12 +17,13 @@
         (covered wall.n.01_1 stain.n.01_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
-        (filled bucket.n.01_1 water.n.06_1)
-        (ontop bucket.n.01_1 floor.n.01_1)
-        (ontop swab.n.02_1 floor.n.01_1)
+        (filled bucket.n.01_1 water.n.06_1) 
+        (ontop bucket.n.01_1 floor.n.01_1) 
+        (ontop swab.n.02_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall.n.01_* garden)
     )
     
     (:goal 
@@ -30,7 +31,7 @@
             (and 
                 (not 
                     (covered ?wall.n.01_1 ?stain.n.01_1)
-                ) 
+                )
             )
         )
     )

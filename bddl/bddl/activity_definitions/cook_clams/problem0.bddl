@@ -1,4 +1,4 @@
-(define (problem cook_clams-0)
+(define (problem cook_clams_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,9 +19,9 @@
     (:init 
         (ontop saucepan.n.01_1 stove.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
-        (inside clam.n.03_1 bowl.n.01_1)
-        (inside clam.n.03_2 bowl.n.01_1)
-        (inside clam.n.03_3 bowl.n.01_1)
+        (inside clam.n.03_1 bowl.n.01_1) 
+        (inside clam.n.03_2 bowl.n.01_1) 
+        (inside clam.n.03_3 bowl.n.01_1) 
         (not 
             (cooked clam.n.03_1)
         ) 
@@ -31,10 +31,10 @@
         (not 
             (cooked clam.n.03_3)
         ) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
-        (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1)
-        (inside lemon_juice__bottle.n.01_1 electric_refrigerator.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
+        (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
+        (inside lemon_juice__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (inroom stove.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
@@ -45,10 +45,10 @@
     (:goal 
         (and 
             (forall 
-                (?clam.n.03 - clam.n.03)
-                (and
-                    (cooked ?clam.n.03)
-                    (covered ?clam.n.03 ?salt.n.02_1)
+                (?clam.n.03 - clam.n.03) 
+                (and 
+                    (cooked ?clam.n.03) 
+                    (covered ?clam.n.03 ?salt.n.02_1) 
                     (covered ?clam.n.03 ?lemon_juice.n.01_1)
                 )
             )

@@ -1,4 +1,4 @@
-(define (problem clean_white_wall_tires-0)
+(define (problem clean_white_wall_tires_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,10 +14,10 @@
     )
     
     (:init 
-        (covered whitewall_tire.n.01_1 mud.n.03_1)
-        (covered whitewall_tire.n.01_2 mud.n.03_1)
-        (covered whitewall_tire.n.01_3 mud.n.03_1)
-        (covered whitewall_tire.n.01_4 mud.n.03_1)
+        (covered whitewall_tire.n.01_1 mud.n.03_1) 
+        (covered whitewall_tire.n.01_2 mud.n.03_1) 
+        (covered whitewall_tire.n.01_3 mud.n.03_1) 
+        (covered whitewall_tire.n.01_4 mud.n.03_1) 
         (ontop whitewall_tire.n.01_1 floor.n.01_1) 
         (ontop whitewall_tire.n.01_2 floor.n.01_1) 
         (ontop whitewall_tire.n.01_3 floor.n.01_1) 
@@ -38,7 +38,7 @@
                 (not 
                     (covered ?whitewall_tire.n.01 ?mud.n.03_1)
                 )
-            ) 
+            )
         )
     )
 )

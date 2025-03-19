@@ -1,4 +1,4 @@
-(define (problem clean_tennis_balls-0)
+(define (problem clean_tennis_balls_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,11 +18,11 @@
     (:init 
         (covered tennis_ball.n.01_1 stain.n.01_1) 
         (covered tennis_ball.n.01_2 stain.n.01_1) 
-        (covered tennis_ball.n.01_1 mud.n.03_1)
-        (covered tennis_ball.n.01_2 mud.n.03_1)
+        (covered tennis_ball.n.01_1 mud.n.03_1) 
+        (covered tennis_ball.n.01_2 mud.n.03_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
-        (ontop liquid_soap__bottle.n.01_1 sink.n.01_1)
+        (ontop liquid_soap__bottle.n.01_1 sink.n.01_1) 
         (inside tennis_ball.n.01_1 bucket.n.01_1) 
         (inside tennis_ball.n.01_2 bucket.n.01_1) 
         (inside sponge.n.01_1 bucket.n.01_1) 
@@ -35,11 +35,11 @@
     (:goal 
         (and 
             (forall 
-                (?tennis_ball.n.01 - tennis_ball.n.01)
-                (and
+                (?tennis_ball.n.01 - tennis_ball.n.01) 
+                (and 
                     (not 
                         (covered ?tennis_ball.n.01 ?stain.n.01_1)
-                    )
+                    ) 
                     (not 
                         (covered ?tennis_ball.n.01 ?mud.n.03_1)
                     )

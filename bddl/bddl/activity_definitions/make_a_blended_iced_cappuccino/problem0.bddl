@@ -1,4 +1,4 @@
-(define (problem make_a_blended_iced_cappuccino-0)
+(define (problem make_a_blended_iced_cappuccino_0)
     (:domain omnigibson)
 
     (:objects
@@ -29,7 +29,7 @@
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (filled instant_coffee__jar.n.01_1 instant_coffee.n.01_1) 
         (inside instant_coffee__jar.n.01_1 cabinet.n.01_1) 
-        (filled sugar__sack.n.01_1 cane_sugar.n.02_1)
+        (filled sugar__sack.n.01_1 cane_sugar.n.02_1) 
         (inside sugar__sack.n.01_1 cabinet.n.01_1) 
         (filled milk__carton.n.01_1 chocolate_milk.n.01_1) 
         (inside milk__carton.n.01_1 electric_refrigerator.n.01_1) 
@@ -38,7 +38,7 @@
         (inside ice_cube.n.01_3 bowl.n.01_1) 
         (ontop cup.n.01_1 countertop.n.01_1) 
         (ontop blender.n.01_1 countertop.n.01_1) 
-        (ontop coffee_maker.n.01_1 countertop.n.01_1)
+        (ontop coffee_maker.n.01_1 countertop.n.01_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 

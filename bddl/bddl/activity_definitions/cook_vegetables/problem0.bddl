@@ -1,4 +1,4 @@
-(define (problem cook_vegetables-0)
+(define (problem cook_vegetables_0)
     (:domain omnigibson)
 
     (:objects
@@ -32,8 +32,8 @@
         (inside broccoli.n.02_1 electric_refrigerator.n.01_1) 
         (inside brussels_sprouts.n.01_1 electric_refrigerator.n.01_1) 
         (inside spinach.n.02_1 electric_refrigerator.n.01_1) 
-        (insource parmesan__shaker.n.01_1 parmesan.n.01_1)
-        (inside parmesan__shaker.n.01_1 electric_refrigerator.n.01_1)
+        (insource parmesan__shaker.n.01_1 parmesan.n.01_1) 
+        (inside parmesan__shaker.n.01_1 electric_refrigerator.n.01_1) 
         (inside casserole.n.02_1 cabinet.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -44,14 +44,14 @@
     
     (:goal 
         (and 
-            (cooked ?brussels_sprouts.n.01_1)
-            (cooked ?broccoli.n.02_1)
-            (cooked ?spinach.n.02_1)
-            (covered ?brussels_sprouts.n.01_1 ?parmesan.n.01_1)
-            (covered ?spinach.n.02_1 ?parmesan.n.01_1)
-            (covered ?broccoli.n.02_1 ?parmesan.n.01_1)
-            (covered ?brussels_sprouts.n.01_1 ?olive_oil.n.01_1)
-            (covered ?broccoli.n.02_1 ?olive_oil.n.01_1)
+            (cooked ?brussels_sprouts.n.01_1) 
+            (cooked ?broccoli.n.02_1) 
+            (cooked ?spinach.n.02_1) 
+            (covered ?brussels_sprouts.n.01_1 ?parmesan.n.01_1) 
+            (covered ?spinach.n.02_1 ?parmesan.n.01_1) 
+            (covered ?broccoli.n.02_1 ?parmesan.n.01_1) 
+            (covered ?brussels_sprouts.n.01_1 ?olive_oil.n.01_1) 
+            (covered ?broccoli.n.02_1 ?olive_oil.n.01_1) 
             (covered ?spinach.n.02_1 ?olive_oil.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem unpacking_suitcase-0)
+(define (problem unpacking_suitcase_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,12 +16,14 @@
         (ontop carton.n.02_1 floor.n.01_1) 
         (inside sock.n.01_1 carton.n.02_1) 
         (inside sock.n.01_2 carton.n.02_1) 
-        (inside bottle__of__perfume.n.01_1 carton.n.02_1)
+        (inside bottle__of__perfume.n.01_1 carton.n.02_1) 
         (inside toothbrush.n.01_1 carton.n.02_1) 
         (inside notebook.n.01_1 carton.n.02_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom sofa.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom sofa.n.01_* living_room) 
+        (inroom floor.n.01_* living_room)
     )
     
     (:goal 
@@ -31,7 +33,7 @@
                 (?sock.n.01 - sock.n.01) 
                 (ontop ?sock.n.01 ?sofa.n.01_1)
             ) 
-            (ontop ?bottle__of__perfume.n.01_1 ?sofa.n.01_1)
+            (ontop ?bottle__of__perfume.n.01_1 ?sofa.n.01_1) 
             (ontop ?toothbrush.n.01_1 ?sofa.n.01_1) 
             (ontop ?notebook.n.01_1 ?sofa.n.01_1)
         )

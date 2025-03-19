@@ -1,4 +1,4 @@
-(define (problem cooking_breakfast-0)
+(define (problem cooking_breakfast_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,16 +21,16 @@
     (:init 
         (inside raw_egg.n.01_1 bowl.n.01_1) 
         (inside raw_egg.n.01_2 bowl.n.01_2) 
-        (inside bowl.n.01_1 electric_refrigerator.n.01_1)
-        (inside bowl.n.01_2 electric_refrigerator.n.01_1)
+        (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
+        (inside bowl.n.01_2 electric_refrigerator.n.01_1) 
         (inside butter.n.01_1 electric_refrigerator.n.01_1) 
         (ontop frying_pan.n.01_1 countertop.n.01_1) 
-        (ontop saucepan.n.01_1 countertop.n.01_1)
-        (ontop wooden_spoon.n.02_1 countertop.n.01_1)
+        (ontop saucepan.n.01_1 countertop.n.01_1) 
+        (ontop wooden_spoon.n.02_1 countertop.n.01_1) 
         (inside bratwurst.n.01_1 electric_refrigerator.n.01_1) 
         (inside bratwurst.n.01_2 electric_refrigerator.n.01_1) 
         (ontop plate.n.04_1 countertop.n.01_1) 
-        (future melted__butter.n.01_1)
+        (future melted__butter.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
@@ -40,20 +40,20 @@
     
     (:goal 
         (and 
-            (real ?melted__butter.n.01_1)
+            (real ?melted__butter.n.01_1) 
             (forall 
-                (?raw_egg.n.01 - raw_egg.n.01)
+                (?raw_egg.n.01 - raw_egg.n.01) 
                 (and 
-                    (cooked ?raw_egg.n.01)
+                    (cooked ?raw_egg.n.01) 
                     (ontop ?raw_egg.n.01 ?plate.n.04_1)
                 )
-            )
+            ) 
             (forall 
-                (?bratwurst.n.01 - bratwurst.n.01)
+                (?bratwurst.n.01 - bratwurst.n.01) 
                 (and 
-                    (cooked ?bratwurst.n.01)
-                    (ontop ?bratwurst.n.01 ?plate.n.04_1)   
-                    (covered ?bratwurst.n.01 ?melted__butter.n.01_1)             
+                    (cooked ?bratwurst.n.01) 
+                    (ontop ?bratwurst.n.01 ?plate.n.04_1) 
+                    (covered ?bratwurst.n.01 ?melted__butter.n.01_1)
                 )
             )
         )

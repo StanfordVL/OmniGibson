@@ -1,4 +1,4 @@
-(define (problem make_limeade-0)
+(define (problem make_limeade_0)
     (:domain omnigibson)
 
     (:objects
@@ -26,8 +26,8 @@
         (filled lime_juice__bottle.n.01_1 lime_juice.n.01_1) 
         (inside lime_juice__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (ontop pitcher.n.02_1 countertop.n.01_1) 
-        (ontop wooden_spoon.n.02_1 countertop.n.01_1)
-        (inside ice_cube.n.01_1 bowl.n.01_1)
+        (ontop wooden_spoon.n.02_1 countertop.n.01_1) 
+        (inside ice_cube.n.01_1 bowl.n.01_1) 
         (inside ice_cube.n.01_2 bowl.n.01_1) 
         (inside ice_cube.n.01_3 bowl.n.01_1) 
         (inside ice_cube.n.01_4 bowl.n.01_1) 

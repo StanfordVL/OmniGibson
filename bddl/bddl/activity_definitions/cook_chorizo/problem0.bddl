@@ -1,4 +1,4 @@
-(define (problem cook_chorizo-0)
+(define (problem cook_chorizo_0)
     (:domain omnigibson)
 
     (:objects
@@ -49,7 +49,7 @@
         (not 
             (hot chorizo.n.01_5)
         ) 
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
+        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (inroom stove.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -60,9 +60,9 @@
     (:goal 
         (and 
             (forall 
-                (?chorizo.n.01 - chorizo.n.01)
+                (?chorizo.n.01 - chorizo.n.01) 
                 (and 
-                    (cooked ?chorizo.n.01)
+                    (cooked ?chorizo.n.01) 
                     (hot ?chorizo.n.01)
                 )
             )

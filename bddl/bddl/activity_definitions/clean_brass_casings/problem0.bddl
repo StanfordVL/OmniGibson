@@ -1,4 +1,4 @@
-(define (problem clean_brass_casings-0)
+(define (problem clean_brass_casings_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,12 +13,12 @@
     )
     
     (:init 
-        (ontop jacket.n.05_1 coffee_table.n.01_1)
-        (covered jacket.n.05_1 stain.n.01_1)
-        (ontop jacket.n.05_2 coffee_table.n.01_1)
-        (covered jacket.n.05_2 stain.n.01_1)
-        (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1)
-        (ontop lemon_juice__bottle.n.01_1 coffee_table.n.01_1)
+        (ontop jacket.n.05_1 coffee_table.n.01_1) 
+        (covered jacket.n.05_1 stain.n.01_1) 
+        (ontop jacket.n.05_2 coffee_table.n.01_1) 
+        (covered jacket.n.05_2 stain.n.01_1) 
+        (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
+        (ontop lemon_juice__bottle.n.01_1 coffee_table.n.01_1) 
         (ontop rag.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
@@ -28,7 +28,7 @@
     (:goal 
         (and 
             (forall 
-                (?jacket.n.05 - jacket.n.05)
+                (?jacket.n.05 - jacket.n.05) 
                 (not 
                     (covered ?jacket.n.05 ?stain.n.01_1)
                 )

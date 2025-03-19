@@ -1,4 +1,4 @@
-(define (problem make_cinnamon_toast-0)
+(define (problem make_cinnamon_toast_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,12 +22,13 @@
         (ontop plate.n.04_1 breakfast_table.n.01_1) 
         (filled maple_syrup__jar.n.01_1 maple_syrup.n.01_1) 
         (ontop maple_syrup__jar.n.01_1 breakfast_table.n.01_1) 
-        (insource cinnamon__shaker.n.01_1 cinnamon.n.03_1)
-        (ontop cinnamon__shaker.n.01_1 breakfast_table.n.01_1)
+        (insource cinnamon__shaker.n.01_1 cinnamon.n.03_1) 
+        (ontop cinnamon__shaker.n.01_1 breakfast_table.n.01_1) 
         (inroom breakfast_table.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom breakfast_table.n.01_* kitchen)
     )
     
     (:goal 

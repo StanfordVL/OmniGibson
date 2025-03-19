@@ -1,4 +1,4 @@
-(define (problem making_coffee-0)
+(define (problem making_coffee_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,7 +18,7 @@
         (filled coffee_bean__jar.n.01_1 coffee_bean.n.01_1) 
         (ontop coffee_bean__jar.n.01_1 countertop.n.01_1) 
         (ontop coffee_maker.n.01_1 countertop.n.01_1) 
-        (ontop mug.n.04_1 countertop.n.01_1)
+        (ontop mug.n.04_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 

@@ -1,4 +1,4 @@
-(define (problem clean_a_company_office-0)
+(define (problem clean_a_company_office_0)
     (:domain omnigibson)
 
     (:objects
@@ -45,41 +45,42 @@
         (inroom desk.n.01_1 shared_office) 
         (inroom desk.n.01_2 shared_office) 
         (inroom floor.n.01_1 shared_office) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* shared_office)
     )
     
     (:goal 
         (and 
             (forall 
-                (?computer.n.01 - computer.n.01)
-                (not
+                (?computer.n.01 - computer.n.01) 
+                (not 
                     (covered ?computer.n.01 ?dust.n.01_1)
                 )
-            )
+            ) 
             (forall 
-                (?desk.n.01 - desk.n.01)
-                (not
+                (?desk.n.01 - desk.n.01) 
+                (not 
                     (covered ?desk.n.01 ?dust.n.01_1)
                 )
-            )
+            ) 
             (forall 
-                (?mouse.n.04 - mouse.n.04)
-                (not
+                (?mouse.n.04 - mouse.n.04) 
+                (not 
                     (covered ?mouse.n.04 ?dust.n.01_1)
                 )
-            )
+            ) 
             (forall 
-                (?keyboard.n.01 - keyboard.n.01)
-                (not
+                (?keyboard.n.01 - keyboard.n.01) 
+                (not 
                     (covered ?keyboard.n.01 ?dust.n.01_1)
                 )
-            )
-            (inside ?sheet.n.02_1 ?carton.n.02_1)
-            (inside ?pen.n.01_1 ?carton.n.02_1)
-            (inside ?legal_document.n.01_1 ?carton.n.02_1)
-            (inside ?book.n.02_1 ?carton.n.02_1)
-            (inside ?folder.n.02_1 ?carton.n.02_1)
-            (ontop ?recycling_bin.n.01_1 ?floor.n.01_1)
+            ) 
+            (inside ?sheet.n.02_1 ?carton.n.02_1) 
+            (inside ?pen.n.01_1 ?carton.n.02_1) 
+            (inside ?legal_document.n.01_1 ?carton.n.02_1) 
+            (inside ?book.n.02_1 ?carton.n.02_1) 
+            (inside ?folder.n.02_1 ?carton.n.02_1) 
+            (ontop ?recycling_bin.n.01_1 ?floor.n.01_1) 
             (ontop ?carton.n.02_1 ?floor.n.01_1)
         )
     )

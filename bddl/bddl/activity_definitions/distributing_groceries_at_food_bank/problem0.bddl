@@ -1,4 +1,4 @@
-(define (problem distributing_groceries_at_food_bank-0)
+(define (problem distributing_groceries_at_food_bank_0)
     (:domain omnigibson)
 
     (:objects
@@ -44,25 +44,25 @@
     (:goal 
         (and 
             (forpairs 
-                (?packing_box.n.02 - packing_box.n.02)
-                (?carton__of__milk.n.01 - carton__of__milk.n.01)
+                (?packing_box.n.02 - packing_box.n.02) 
+                (?carton__of__milk.n.01 - carton__of__milk.n.01) 
                 (inside ?carton__of__milk.n.01 ?packing_box.n.02)
             ) 
             (forpairs 
-                (?packing_box.n.02 - packing_box.n.02)
-                (?pack__of__pasta.n.01 - pack__of__pasta.n.01)
+                (?packing_box.n.02 - packing_box.n.02) 
+                (?pack__of__pasta.n.01 - pack__of__pasta.n.01) 
                 (inside ?pack__of__pasta.n.01 ?packing_box.n.02)
             ) 
             (forpairs 
-                (?packing_box.n.02 - packing_box.n.02)
-                (?bottle__of__apple_juice.n.01 - bottle__of__apple_juice.n.01)
+                (?packing_box.n.02 - packing_box.n.02) 
+                (?bottle__of__apple_juice.n.01 - bottle__of__apple_juice.n.01) 
                 (inside ?bottle__of__apple_juice.n.01 ?packing_box.n.02)
             ) 
             (forpairs 
-                (?packing_box.n.02 - packing_box.n.02)
-                (?canned_food.n.01 - canned_food.n.01)
+                (?packing_box.n.02 - packing_box.n.02) 
+                (?canned_food.n.01 - canned_food.n.01) 
                 (inside ?canned_food.n.01 ?packing_box.n.02)
-            ) 
+            )
         )
     )
 )

@@ -1,4 +1,4 @@
-(define (problem packing_meal_for_delivery-0)
+(define (problem packing_meal_for_delivery_0)
     (:domain omnigibson)
 
     (:objects
@@ -24,10 +24,10 @@
         (ontop hamburger.n.01_3 countertop.n.01_1) 
         (ontop hamburger.n.01_4 countertop.n.01_1) 
         (ontop backpack.n.01_1 countertop.n.01_1) 
-        (ontop sack.n.01_1 countertop.n.01_1)
-        (ontop sack.n.01_2 countertop.n.01_1)
-        (ontop sack.n.01_3 countertop.n.01_1)
-        (ontop sack.n.01_4 countertop.n.01_1)
+        (ontop sack.n.01_1 countertop.n.01_1) 
+        (ontop sack.n.01_2 countertop.n.01_1) 
+        (ontop sack.n.01_3 countertop.n.01_1) 
+        (ontop sack.n.01_4 countertop.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -39,13 +39,13 @@
     
     (:goal 
         (and 
-            (forpairs
-                (?hamburger.n.01 - hamburger.n.01)
-                (?sack.n.01 - sack.n.01)
+            (forpairs 
+                (?hamburger.n.01 - hamburger.n.01) 
+                (?sack.n.01 - sack.n.01) 
                 (inside ?hamburger.n.01 ?sack.n.01)
-            )
+            ) 
             (forall 
-                (?sack.n.01 - sack.n.01)
+                (?sack.n.01 - sack.n.01) 
                 (inside ?sack.n.01 ?backpack.n.01_1)
             )
         )

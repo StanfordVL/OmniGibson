@@ -1,4 +1,4 @@
-(define (problem unloading_shopping_items-0)
+(define (problem unloading_shopping_items_0)
     (:domain omnigibson)
 
     (:objects
@@ -37,7 +37,9 @@
         (inroom floor.n.01_1 living_room) 
         (inroom console_table.n.01_1 living_room) 
         (inroom cabinet.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom console_table.n.01_* living_room) 
+        (inroom cabinet.n.01_* living_room)
     )
     
     (:goal 

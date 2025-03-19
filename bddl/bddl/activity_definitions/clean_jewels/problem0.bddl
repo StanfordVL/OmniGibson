@@ -1,4 +1,4 @@
-(define (problem clean_jewels-0)
+(define (problem clean_jewels_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,13 +16,13 @@
     )
     
     (:init 
-        (ontop stool.n.01_1 floor.n.01_1)
-        (ontop bowl.n.01_1 stool.n.01_1)
-        (inside diamond.n.01_1 bowl.n.01_1)
-        (inside diamond.n.01_2 bowl.n.01_1)
-        (inside diamond.n.01_3 bowl.n.01_1)
+        (ontop stool.n.01_1 floor.n.01_1) 
+        (ontop bowl.n.01_1 stool.n.01_1) 
+        (inside diamond.n.01_1 bowl.n.01_1) 
+        (inside diamond.n.01_2 bowl.n.01_1) 
+        (inside diamond.n.01_3 bowl.n.01_1) 
         (insource ammonia_water__atomizer.n.01_1 ammonia_water.n.01_1) 
-        (ontop ammonia_water__atomizer.n.01_1 floor.n.01_1)
+        (ontop ammonia_water__atomizer.n.01_1 floor.n.01_1) 
         (ontop toothbrush.n.01_1 stool.n.01_1) 
         (covered diamond.n.01_1 stain.n.01_1) 
         (covered diamond.n.01_2 stain.n.01_1) 

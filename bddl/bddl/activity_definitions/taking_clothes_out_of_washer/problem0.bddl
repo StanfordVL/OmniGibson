@@ -1,4 +1,4 @@
-(define (problem taking_clothes_out_of_washer-0)
+(define (problem taking_clothes_out_of_washer_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,35 +14,36 @@
     
     (:init 
         (inside jersey.n.03_1 washer.n.03_1) 
-        (saturated jersey.n.03_1 water.n.06_1)
+        (saturated jersey.n.03_1 water.n.06_1) 
         (inside jersey.n.03_2 washer.n.03_1) 
-        (saturated jersey.n.03_2 water.n.06_1)
+        (saturated jersey.n.03_2 water.n.06_1) 
         (inside undergarment.n.01_1 washer.n.03_1) 
-        (saturated undergarment.n.01_1 water.n.06_1)
-        (inside undergarment.n.01_2 washer.n.03_1)
-        (saturated undergarment.n.01_2 water.n.06_1)
+        (saturated undergarment.n.01_1 water.n.06_1) 
+        (inside undergarment.n.01_2 washer.n.03_1) 
+        (saturated undergarment.n.01_2 water.n.06_1) 
         (inside sock.n.01_1 washer.n.03_1) 
-        (saturated sock.n.01_1 water.n.06_1)
+        (saturated sock.n.01_1 water.n.06_1) 
         (inside sock.n.01_2 washer.n.03_1) 
-        (saturated sock.n.01_2 water.n.06_1)
+        (saturated sock.n.01_2 water.n.06_1) 
         (inroom washer.n.03_1 utility_room) 
-        (inroom clothes_dryer.n.01_1 utility_room)
+        (inroom clothes_dryer.n.01_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom clothes_dryer.n.01_* utility_room)
     )
     
     (:goal 
         (and 
             (forall 
-                (?jersey.n.03 - jersey.n.03)
+                (?jersey.n.03 - jersey.n.03) 
                 (inside ?jersey.n.03 ?clothes_dryer.n.01_1)
-            )
+            ) 
             (forall 
-                (?undergarment.n.01 - undergarment.n.01)
+                (?undergarment.n.01 - undergarment.n.01) 
                 (inside ?undergarment.n.01 ?clothes_dryer.n.01_1)
-            )
+            ) 
             (forall 
-                (?sock.n.01 - sock.n.01)
+                (?sock.n.01 - sock.n.01) 
                 (inside ?sock.n.01 ?clothes_dryer.n.01_1)
             )
         )

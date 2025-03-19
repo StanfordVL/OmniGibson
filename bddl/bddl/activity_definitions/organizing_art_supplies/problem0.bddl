@@ -1,4 +1,4 @@
-(define (problem organizing_art_supplies-0)
+(define (problem organizing_art_supplies_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,17 +21,18 @@
         (ontop pen.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom sofa.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom sofa.n.01_* living_room)
     )
     
     (:goal 
         (and 
-            (inside ?pencil.n.01_1 ?carryall.n.01_1)
-            (inside ?paintbrush.n.01_1 ?carryall.n.01_1)
-            (forall
-                (?pen.n.01 - pen.n.01)
+            (inside ?pencil.n.01_1 ?carryall.n.01_1) 
+            (inside ?paintbrush.n.01_1 ?carryall.n.01_1) 
+            (forall 
+                (?pen.n.01 - pen.n.01) 
                 (inside ?pen.n.01 ?carryall.n.01_1)
-            )
+            ) 
             (ontop ?carryall.n.01_1 ?sofa.n.01_1)
         )
     )

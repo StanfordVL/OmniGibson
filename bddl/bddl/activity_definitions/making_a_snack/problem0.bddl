@@ -1,4 +1,4 @@
-(define (problem making_a_snack-0)
+(define (problem making_a_snack_0)
     (:domain omnigibson)
 
     (:objects
@@ -31,39 +31,39 @@
         (inside tortilla_chip.n.01_10 sack.n.01_1) 
         (inside tortilla_chip.n.01_11 sack.n.01_1) 
         (inside tortilla_chip.n.01_12 sack.n.01_1) 
-        (ontop sack.n.01_1 countertop.n.01_1)
-        (filled tupperware.n.01_1 diced__beefsteak_tomato.n.01_1)
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
-        (filled tupperware.n.01_2 grated_cheese.n.01_1)
-        (inside tupperware.n.01_2 electric_refrigerator.n.01_1)
-        (filled tupperware.n.01_3 cooked__black_bean.n.01_1)
-        (inside tupperware.n.01_3 electric_refrigerator.n.01_1)
+        (ontop sack.n.01_1 countertop.n.01_1) 
+        (filled tupperware.n.01_1 diced__beefsteak_tomato.n.01_1) 
+        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
+        (filled tupperware.n.01_2 grated_cheese.n.01_1) 
+        (inside tupperware.n.01_2 electric_refrigerator.n.01_1) 
+        (filled tupperware.n.01_3 cooked__black_bean.n.01_1) 
+        (inside tupperware.n.01_3 electric_refrigerator.n.01_1) 
         (ontop platter.n.01_1 electric_refrigerator.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom microwave.n.02_1 kitchen)
-        (future cooked__diced__beefsteak_tomato.n.01_1)
-        (future melted__grated_cheese.n.01_1)
+        (inroom microwave.n.02_1 kitchen) 
+        (future cooked__diced__beefsteak_tomato.n.01_1) 
+        (future melted__grated_cheese.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
             (or 
-                (real ?diced__beefsteak_tomato.n.01_1)
+                (real ?diced__beefsteak_tomato.n.01_1) 
                 (real ?cooked__diced__beefsteak_tomato.n.01_1)
-            )
-            (real ?melted__grated_cheese.n.01_1)
-            (forall
-                (?tortilla_chip.n.01 - tortilla_chip.n.01)
-                (and
-                    (ontop ?tortilla_chip.n.01 ?platter.n.01_1)
-                    (or
-                        (covered ?tortilla_chip.n.01 ?diced__beefsteak_tomato.n.01_1)
+            ) 
+            (real ?melted__grated_cheese.n.01_1) 
+            (forall 
+                (?tortilla_chip.n.01 - tortilla_chip.n.01) 
+                (and 
+                    (ontop ?tortilla_chip.n.01 ?platter.n.01_1) 
+                    (or 
+                        (covered ?tortilla_chip.n.01 ?diced__beefsteak_tomato.n.01_1) 
                         (covered ?tortilla_chip.n.01 ?cooked__diced__beefsteak_tomato.n.01_1)
-                    )
-                    (covered ?tortilla_chip.n.01 ?melted__grated_cheese.n.01_1)
+                    ) 
+                    (covered ?tortilla_chip.n.01 ?melted__grated_cheese.n.01_1) 
                     (covered ?tortilla_chip.n.01 ?cooked__black_bean.n.01_1)
                 )
             )

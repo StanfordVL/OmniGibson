@@ -1,4 +1,4 @@
-(define (problem putting_towels_in_bathroom-0)
+(define (problem putting_towels_in_bathroom_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,17 +11,18 @@
     )
     
     (:init 
-        (ontop bath_towel.n.01_1 bed.n.01_1)
-        (ontop hand_towel.n.01_1 bed.n.01_1)
-        (inroom floor.n.01_1 bedroom)
-        (inroom bed.n.01_1 bedroom)
+        (ontop bath_towel.n.01_1 bed.n.01_1) 
+        (ontop hand_towel.n.01_1 bed.n.01_1) 
+        (inroom floor.n.01_1 bedroom) 
+        (inroom bed.n.01_1 bedroom) 
         (inroom towel_rack.n.01_1 bathroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom towel_rack.n.01_* bathroom)
     )
     
     (:goal 
         (and 
-            (draped ?bath_towel.n.01_1 ?towel_rack.n.01_1)
+            (draped ?bath_towel.n.01_1 ?towel_rack.n.01_1) 
             (draped ?hand_towel.n.01_1 ?towel_rack.n.01_1)
         )
     )

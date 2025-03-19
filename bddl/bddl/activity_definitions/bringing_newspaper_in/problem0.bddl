@@ -1,4 +1,4 @@
-(define (problem bringing_newspaper_in-0)
+(define (problem bringing_newspaper_in_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,12 +14,13 @@
         (inroom driveway.n.01_1 garden) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom coffee_table.n.01_* living_room)
     )
     
     (:goal 
         (and 
-            (ontop ?newspaper.n.03_1 ?coffee_table.n.01_1) 
+            (ontop ?newspaper.n.03_1 ?coffee_table.n.01_1)
         )
     )
 )

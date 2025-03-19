@@ -1,4 +1,4 @@
-(define (problem clean_copper_wire-0)
+(define (problem clean_copper_wire_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,14 +18,14 @@
     )
     
     (:init 
-        (covered copper_wire.n.01_1 rust.n.01_1)
+        (covered copper_wire.n.01_1 rust.n.01_1) 
         (ontop copper_wire.n.01_1 countertop.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
-        (filled cornstarch__jar.n.01_1 cornstarch.n.01_1)
-        (ontop cornstarch__jar.n.01_1 countertop.n.01_1)
-        (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1)
-        (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
+        (filled cornstarch__jar.n.01_1 cornstarch.n.01_1) 
+        (ontop cornstarch__jar.n.01_1 countertop.n.01_1) 
+        (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
+        (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 

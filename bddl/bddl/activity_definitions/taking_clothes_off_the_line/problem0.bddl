@@ -1,4 +1,4 @@
-(define (problem taking_clothes_off_the_line-0)
+(define (problem taking_clothes_off_the_line_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,7 +17,7 @@
         (ontop hamper.n.02_1 floor.n.01_1) 
         (draped tank_top.n.01_1 clothesline.n.01_1) 
         (draped blouse.n.01_1 clothesline.n.01_1) 
-        (draped trouser.n.01_1 clothesline.n.01_1)
+        (draped trouser.n.01_1 clothesline.n.01_1) 
         (draped undergarment.n.01_1 clothesline.n.01_1) 
         (draped undergarment.n.01_2 clothesline.n.01_1) 
         (inroom floor.n.01_1 garden) 
@@ -27,10 +27,10 @@
     (:goal 
         (and 
             (inside ?tank_top.n.01_1 ?hamper.n.02_1) 
-            (inside ?trouser.n.01_1 ?hamper.n.02_1)
-            (inside ?blouse.n.01_1 ?hamper.n.02_1)
+            (inside ?trouser.n.01_1 ?hamper.n.02_1) 
+            (inside ?blouse.n.01_1 ?hamper.n.02_1) 
             (forall 
-                (?undergarment.n.01 - undergarment.n.01)
+                (?undergarment.n.01 - undergarment.n.01) 
                 (inside ?undergarment.n.01 ?hamper.n.02_1)
             )
         )

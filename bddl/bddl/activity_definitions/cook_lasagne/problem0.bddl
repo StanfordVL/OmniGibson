@@ -1,4 +1,4 @@
-(define (problem cook_lasagne-0)
+(define (problem cook_lasagne_0)
     (:domain omnigibson)
 
     (:objects
@@ -9,13 +9,14 @@
     )
     
     (:init 
-        (ontop lasagna.n.01_1 oven.n.01_1)
+        (ontop lasagna.n.01_1 oven.n.01_1) 
         (not 
             (cooked lasagna.n.01_1)
         ) 
         (inroom oven.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom oven.n.01_* kitchen)
     )
     
     (:goal 
@@ -23,7 +24,7 @@
             (exists 
                 (?lasagna.n.01 - lasagna.n.01) 
                 (ontop ?lasagna.n.01 ?oven.n.01_1)
-            )
+            ) 
             (forall 
                 (?lasagna.n.01 - lasagna.n.01) 
                 (cooked ?lasagna.n.01_1)

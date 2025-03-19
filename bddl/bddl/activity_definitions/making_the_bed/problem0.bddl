@@ -1,4 +1,4 @@
-(define (problem making_the_bed-0)
+(define (problem making_the_bed_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,17 +10,18 @@
     )
     
     (:init 
-        (ontop pillow.n.01_1 floor.n.01_1)
-        (ontop blanket.n.01_1 floor.n.01_1)
-        (inroom bed.n.01_1 bedroom)
+        (ontop pillow.n.01_1 floor.n.01_1) 
+        (ontop blanket.n.01_1 floor.n.01_1) 
+        (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom bed.n.01_* bedroom)
     )
     
     (:goal 
         (and 
-            (ontop ?pillow.n.01_1 ?bed.n.01_1)
-            (overlaid ?blanket.n.01_1 ?bed.n.01_1) 
+            (ontop ?pillow.n.01_1 ?bed.n.01_1) 
+            (overlaid ?blanket.n.01_1 ?bed.n.01_1)
         )
     )
 )

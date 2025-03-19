@@ -1,4 +1,4 @@
-(define (problem sorting_volunteer_materials-0)
+(define (problem sorting_volunteer_materials_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,7 +22,7 @@
         (ontop notebook.n.01_1 breakfast_table.n.01_1) 
         (ontop notebook.n.01_2 notebook.n.01_1) 
         (ontop catalog.n.01_1 breakfast_table.n.01_1) 
-        (ontop catalog.n.01_2 catalog.n.01_1)
+        (ontop catalog.n.01_2 catalog.n.01_1) 
         (ontop rubber_boot.n.01_1 floor.n.01_1) 
         (ontop rubber_boot.n.01_2 floor.n.01_1) 
         (ontop apron.n.01_2 floor.n.01_1) 
@@ -41,37 +41,37 @@
     (:goal 
         (and 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
-                (and
+                (?packing_box.n.02 - packing_box.n.02) 
+                (and 
                     (forall 
-                        (?notebook.n.01 - notebook.n.01)
+                        (?notebook.n.01 - notebook.n.01) 
                         (inside ?notebook.n.01 ?packing_box.n.02)
-                    )
+                    ) 
                     (forall 
                         (?catalog.n.01 - catalog.n.01) 
                         (inside ?catalog.n.01 ?packing_box.n.02)
-                    ) 
+                    )
                 )
-            )
+            ) 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
-                (and
+                (?packing_box.n.02 - packing_box.n.02) 
+                (and 
                     (forall 
                         (?apron.n.01 - apron.n.01) 
-                        (and
-                            (inside ?apron.n.01 ?packing_box.n.02)
+                        (and 
+                            (inside ?apron.n.01 ?packing_box.n.02) 
                             (folded ?apron.n.01)
                         )
                     ) 
                     (forall 
                         (?glove.n.02 - glove.n.02) 
                         (inside ?glove.n.02 ?packing_box.n.02)
-                    ) 
+                    )
                 )
-            )
-            (exists
-                (?packing_box.n.02 - packing_box.n.02)
-                (and
+            ) 
+            (exists 
+                (?packing_box.n.02 - packing_box.n.02) 
+                (and 
                     (forall 
                         (?rubber_boot.n.01 - rubber_boot.n.01) 
                         (inside ?rubber_boot.n.01 ?packing_box.n.02)
@@ -83,7 +83,7 @@
                     (forall 
                         (?water_bottle.n.01 - water_bottle.n.01) 
                         (inside ?water_bottle.n.01 ?packing_box.n.02)
-                    ) 
+                    )
                 )
             )
         )

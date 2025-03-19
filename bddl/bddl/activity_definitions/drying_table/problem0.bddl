@@ -1,4 +1,4 @@
-(define (problem drying_table-0)
+(define (problem drying_table_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,18 +11,19 @@
     )
     
     (:init 
-        (inside dishtowel.n.01_1 cabinet.n.01_1)
-        (covered coffee_table.n.01_1 water.n.06_1)
+        (inside dishtowel.n.01_1 cabinet.n.01_1) 
+        (covered coffee_table.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom cabinet.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom coffee_table.n.01_* living_room)
     )
     
     (:goal 
         (and 
             (and 
-                (not
+                (not 
                     (covered ?coffee_table.n.01_1 ?water.n.06_1)
                 )
             )

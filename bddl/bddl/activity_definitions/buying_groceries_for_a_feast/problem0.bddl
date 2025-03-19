@@ -1,4 +1,4 @@
-(define (problem buying_groceries_for_a_feast-0)
+(define (problem buying_groceries_for_a_feast_0)
     (:domain omnigibson)
 
     (:objects
@@ -27,8 +27,9 @@
         (inroom grocery_shelf.n.01_1 grocery_store) 
         (inroom grocery_shelf.n.01_2 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
-        (inroom checkout.n.03_1 grocery_store)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom checkout.n.03_1 grocery_store) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cash_register.n.01_* grocery_store)
     )
     
     (:goal 

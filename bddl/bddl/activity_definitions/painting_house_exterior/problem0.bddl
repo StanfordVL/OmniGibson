@@ -1,4 +1,4 @@
-(define (problem painting_house_exterior-0)
+(define (problem painting_house_exterior_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,10 +11,11 @@
     
     (:init 
         (insource spray_paint__can.n.01_1 spray_paint.n.01_1) 
-        (ontop spray_paint__can.n.01_1 floor.n.01_1)
+        (ontop spray_paint__can.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall.n.01_* garden)
     )
     
     (:goal 

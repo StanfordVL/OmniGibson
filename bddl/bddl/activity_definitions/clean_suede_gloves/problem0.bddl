@@ -1,4 +1,4 @@
-(define (problem clean_suede_gloves-0)
+(define (problem clean_suede_gloves_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,8 +13,8 @@
     )
     
     (:init 
-        (covered kid_glove.n.01_1 stain.n.01_1)
-        (ontop kid_glove.n.01_1 stool.n.01_1)
+        (covered kid_glove.n.01_1 stain.n.01_1) 
+        (ontop kid_glove.n.01_1 stool.n.01_1) 
         (filled vinegar__bottle.n.01_1 vinegar.n.01_1) 
         (ontop hand_towel.n.01_1 stool.n.01_1) 
         (ontop vinegar__bottle.n.01_1 stool.n.01_2) 
@@ -25,8 +25,8 @@
     )
     
     (:goal 
-        (and
-            (not
+        (and 
+            (not 
                 (covered ?kid_glove.n.01_1 ?stain.n.01_1)
             )
         )

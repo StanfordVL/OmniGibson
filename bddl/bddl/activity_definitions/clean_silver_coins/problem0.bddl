@@ -1,17 +1,17 @@
-(define (problem clean_silver_coins-0)
+(define (problem clean_silver_coins_0)
     (:domain omnigibson)
 
     (:objects
-     	rag.n.01_1 - rag.n.01
-    	countertop.n.01_1 - countertop.n.01
-    	polish.n.03_1 - polish.n.03
-    	polish__bottle.n.01_1 - polish__bottle.n.01
-    	dirt.n.02_1 - dirt.n.02
-    	silver.n.02_1 - silver.n.02
-    	water.n.06_1 - water.n.06
-    	sink.n.01_1 - sink.n.01
-    	floor.n.01_1 - floor.n.01
-    	agent.n.01_1 - agent.n.01
+        rag.n.01_1 - rag.n.01
+        countertop.n.01_1 - countertop.n.01
+        polish.n.03_1 - polish.n.03
+        polish__bottle.n.01_1 - polish__bottle.n.01
+        dirt.n.02_1 - dirt.n.02
+        silver.n.02_1 - silver.n.02
+        water.n.06_1 - water.n.06
+        sink.n.01_1 - sink.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 

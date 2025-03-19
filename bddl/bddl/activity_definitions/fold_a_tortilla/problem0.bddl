@@ -1,4 +1,4 @@
-(define (problem fold_a_tortilla-0)
+(define (problem fold_a_tortilla_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,10 +11,10 @@
     
     (:init 
         (ontop plate.n.04_1 countertop.n.01_1) 
-        (ontop tortilla.n.01_1 countertop.n.01_1)
-        (ontop tortilla.n.01_2 countertop.n.01_1)
+        (ontop tortilla.n.01_1 countertop.n.01_1) 
+        (ontop tortilla.n.01_2 countertop.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

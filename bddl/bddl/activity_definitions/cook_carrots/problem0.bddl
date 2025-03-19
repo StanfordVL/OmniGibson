@@ -1,4 +1,4 @@
-(define (problem cook_carrots-0)
+(define (problem cook_carrots_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,24 +23,24 @@
         (inside carrot.n.03_6 electric_refrigerator.n.01_1) 
         (not 
             (cooked carrot.n.03_1)
-        )
+        ) 
         (not 
             (cooked carrot.n.03_2)
-        )
+        ) 
         (not 
             (cooked carrot.n.03_3)
-        )
+        ) 
         (not 
             (cooked carrot.n.03_4)
-        )
+        ) 
         (not 
             (cooked carrot.n.03_5)
-        )
+        ) 
         (not 
             (cooked carrot.n.03_6)
-        )
-        (insource sink.n.01_1 water.n.06_1)
-        (inroom sink.n.01_1 kitchen)
+        ) 
+        (insource sink.n.01_1 water.n.06_1) 
+        (inroom sink.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 

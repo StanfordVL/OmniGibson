@@ -1,4 +1,4 @@
-(define (problem picking_up_litter-0)
+(define (problem picking_up_litter_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,7 +19,8 @@
         (ontop tissue.n.02_3 floor.n.01_1) 
         (ontop recycling_bin.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (inroom floor.n.01_1 garden)
+        (inroom floor.n.01_1 garden) 
+        (inroom floor.n.01_* garden)
     )
     
     (:goal 

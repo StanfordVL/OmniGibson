@@ -1,4 +1,4 @@
-(define (problem changing_bulbs-0)
+(define (problem changing_bulbs_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,7 +11,7 @@
     )
     
     (:init 
-        (attached broken__light_bulb.n.01_1 table_lamp.n.01_1)
+        (attached broken__light_bulb.n.01_1 table_lamp.n.01_1) 
         (ontop light_bulb.n.01_1 coffee_table.n.01_1) 
         (ontop table_lamp.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 

@@ -1,4 +1,4 @@
-(define (problem fold_a_cloth_napkin-0)
+(define (problem fold_a_cloth_napkin_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,7 +13,7 @@
     (:init 
         (ontop napkin.n.01_1 breakfast_table.n.01_1) 
         (covered napkin.n.01_1 wrinkle.n.01_1) 
-        (ontop iron.n.04_1 breakfast_table.n.01_1)
+        (ontop iron.n.04_1 breakfast_table.n.01_1) 
         (inroom floor.n.01_1 dining_room) 
         (inroom breakfast_table.n.01_1 dining_room) 
         (ontop agent.n.01_1 floor.n.01_1)

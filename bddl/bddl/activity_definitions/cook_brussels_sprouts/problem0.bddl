@@ -1,4 +1,4 @@
-(define (problem cook_brussels_sprouts-0)
+(define (problem cook_brussels_sprouts_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,7 +20,7 @@
         (inside brussels_sprouts.n.01_6 tupperware.n.01_1) 
         (inside brussels_sprouts.n.01_7 tupperware.n.01_1) 
         (inside brussels_sprouts.n.01_8 tupperware.n.01_1) 
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
+        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
         (not 
             (cooked brussels_sprouts.n.01_1)
         ) 
@@ -45,7 +45,7 @@
         (not 
             (cooked brussels_sprouts.n.01_8)
         ) 
-        (ontop stockpot.n.01_1 stove.n.01_1)
+        (ontop stockpot.n.01_1 stove.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -55,7 +55,7 @@
     (:goal 
         (and 
             (forall 
-                (?brussels_sprouts.n.01 - brussels_sprouts.n.01)
+                (?brussels_sprouts.n.01 - brussels_sprouts.n.01) 
                 (cooked ?brussels_sprouts.n.01)
             )
         )

@@ -1,4 +1,4 @@
-(define (problem polishing_shoes-0)
+(define (problem polishing_shoes_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,7 +18,8 @@
         (ontop shoe.n.01_2 floor.n.01_1) 
         (inroom sink.n.01_1 bathroom) 
         (inroom floor.n.01_1 bathroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom sink.n.01_* bathroom)
     )
     
     (:goal 

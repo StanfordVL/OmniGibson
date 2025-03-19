@@ -1,4 +1,4 @@
-(define (problem emptying_trash_cans-0)
+(define (problem emptying_trash_cans_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,28 +23,29 @@
         (ontop sack.n.01_2 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* kitchen)
     )
     
     (:goal 
         (and 
             (forall 
-                (?sack.n.01 - sack.n.01)
+                (?sack.n.01 - sack.n.01) 
                 (ontop ?sack.n.01 ?floor.n.01_1)
-            )
+            ) 
             (forall 
                 (?rag.n.01 - rag.n.01) 
                 (exists 
-                    (?sack.n.01 - sack.n.01)
+                    (?sack.n.01 - sack.n.01) 
                     (inside ?rag.n.01 ?sack.n.01)
                 )
             ) 
             (exists 
-                (?sack.n.01 - sack.n.01)
+                (?sack.n.01 - sack.n.01) 
                 (inside ?newspaper.n.03_1 ?sack.n.01)
-            )
+            ) 
             (exists 
-                (?sack.n.01 - sack.n.01)
+                (?sack.n.01 - sack.n.01) 
                 (inside ?water_bottle.n.01_1 ?sack.n.01)
             )
         )

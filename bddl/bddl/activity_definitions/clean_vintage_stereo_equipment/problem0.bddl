@@ -1,4 +1,4 @@
-(define (problem clean_vintage_stereo_equipment-0)
+(define (problem clean_vintage_stereo_equipment_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,10 +10,10 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
-        (covered loudspeaker.n.01_1 dust.n.01_1)
-        (ontop loudspeaker.n.01_1 coffee_table.n.01_1)
-        (ontop hand_towel.n.01_1 coffee_table.n.01_1)
+    (:init 
+        (covered loudspeaker.n.01_1 dust.n.01_1) 
+        (ontop loudspeaker.n.01_1 coffee_table.n.01_1) 
+        (ontop hand_towel.n.01_1 coffee_table.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -21,7 +21,7 @@
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?loudspeaker.n.01_1 ?dust.n.01_1)
             )
         )

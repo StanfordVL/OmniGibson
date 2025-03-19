@@ -1,4 +1,4 @@
-(define (problem clean_a_lobster-0)
+(define (problem clean_a_lobster_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,15 +15,15 @@
     )
     
     (:init 
-        (covered lobster.n.01_1 mud.n.03_1)
+        (covered lobster.n.01_1 mud.n.03_1) 
         (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
-        (inside lobster.n.01_1 bowl.n.01_1)
-        (inside hand_towel.n.01_1 cabinet.n.01_1)
+        (inside lobster.n.01_1 bowl.n.01_1) 
+        (inside hand_towel.n.01_1 cabinet.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom electric_refrigerator.n.01_1 kitchen)
-        (inroom sink.n.01_1 kitchen)
-        (inroom cabinet.n.01_1 kitchen)
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom sink.n.01_1 kitchen) 
+        (inroom cabinet.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

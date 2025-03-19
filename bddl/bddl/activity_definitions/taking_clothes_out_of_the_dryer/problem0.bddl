@@ -1,4 +1,4 @@
-(define (problem taking_clothes_out_of_the_dryer-0)
+(define (problem taking_clothes_out_of_the_dryer_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,15 +15,15 @@
     
     (:init 
         (ontop hamper.n.02_1 floor.n.01_1) 
-        (inside sheet.n.03_1 clothes_dryer.n.01_1)
-        (inside sheet.n.03_2 clothes_dryer.n.01_1)
-        (inside brassiere.n.01_1 clothes_dryer.n.01_1)
-        (inside brassiere.n.01_2 clothes_dryer.n.01_1)
-        (inside sweater.n.01_1 clothes_dryer.n.01_1)
-        (inside bath_towel.n.01_1 clothes_dryer.n.01_1)
-        (inside bath_towel.n.01_2 clothes_dryer.n.01_1)
-        (inside tights.n.01_1 clothes_dryer.n.01_1)
-        (inroom clothes_dryer.n.01_1 utility_room)
+        (inside sheet.n.03_1 clothes_dryer.n.01_1) 
+        (inside sheet.n.03_2 clothes_dryer.n.01_1) 
+        (inside brassiere.n.01_1 clothes_dryer.n.01_1) 
+        (inside brassiere.n.01_2 clothes_dryer.n.01_1) 
+        (inside sweater.n.01_1 clothes_dryer.n.01_1) 
+        (inside bath_towel.n.01_1 clothes_dryer.n.01_1) 
+        (inside bath_towel.n.01_2 clothes_dryer.n.01_1) 
+        (inside tights.n.01_1 clothes_dryer.n.01_1) 
+        (inroom clothes_dryer.n.01_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -31,19 +31,19 @@
     (:goal 
         (and 
             (forall 
-                (?sheet.n.03 - sheet.n.03)
+                (?sheet.n.03 - sheet.n.03) 
                 (inside ?sheet.n.03 ?hamper.n.02_1)
-            )
+            ) 
             (forall 
-                (?brassiere.n.01 - brassiere.n.01)
+                (?brassiere.n.01 - brassiere.n.01) 
                 (inside ?brassiere.n.01 ?hamper.n.02_1)
-            )
+            ) 
             (forall 
-                (?bath_towel.n.01 - bath_towel.n.01)
+                (?bath_towel.n.01 - bath_towel.n.01) 
                 (inside ?bath_towel.n.01 ?hamper.n.02_1)
-            )
+            ) 
             (inside ?sweater.n.01_1 ?hamper.n.02_1) 
-            (inside ?tights.n.01_1 ?hamper.n.02_1) 
+            (inside ?tights.n.01_1 ?hamper.n.02_1)
         )
     )
 )

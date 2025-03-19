@@ -1,4 +1,4 @@
-(define (problem getting_a_drink-0)
+(define (problem getting_a_drink_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,7 +22,7 @@
         (inside ice_cube.n.01_2 bowl.n.01_1) 
         (inside ice_cube.n.01_3 bowl.n.01_1) 
         (inside ice_cube.n.01_4 bowl.n.01_1) 
-        (inside bowl.n.01_1 electric_refrigerator.n.01_1)
+        (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inside straw.n.04_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
@@ -33,11 +33,11 @@
     (:goal 
         (and 
             (filled ?water_glass.n.02_1 ?orange_juice.n.01_1) 
-            (forn
-                (2)
-                (?ice_cube.n.01 - ice_cube.n.01)
+            (forn 
+                (2) 
+                (?ice_cube.n.01 - ice_cube.n.01) 
                 (inside ?ice_cube.n.01 ?water_glass.n.02_1)
-            )
+            ) 
             (inside ?straw.n.04_1 ?water_glass.n.02_1)
         )
     )

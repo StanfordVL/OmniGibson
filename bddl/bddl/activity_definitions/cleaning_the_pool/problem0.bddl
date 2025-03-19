@@ -1,4 +1,4 @@
-(define (problem cleaning_the_pool-0)
+(define (problem cleaning_the_pool_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,21 +13,22 @@
     )
     
     (:init 
-        (inroom pool.n.01_1 garden)
+        (inroom pool.n.01_1 garden) 
         (covered pool.n.01_1 stain.n.01_1) 
-        (ontop scrub_brush.n.01_1 floor.n.01_1)
-        (filled detergent__bottle.n.01_1 detergent.n.02_1)
-        (ontop detergent__bottle.n.01_1 floor.n.01_1)
-        (inroom floor.n.01_1 garage)
-        (inroom sink.n.01_1 bathroom)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop scrub_brush.n.01_1 floor.n.01_1) 
+        (filled detergent__bottle.n.01_1 detergent.n.02_1) 
+        (ontop detergent__bottle.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 garage) 
+        (inroom sink.n.01_1 bathroom) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom pool.n.01_* garden)
     )
     
     (:goal 
-        (and
-            (not
+        (and 
+            (not 
                 (covered ?pool.n.01_1 ?stain.n.01_1)
-            ) 
+            )
         )
     )
 )

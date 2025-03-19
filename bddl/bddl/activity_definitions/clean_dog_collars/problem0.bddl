@@ -1,4 +1,4 @@
-(define (problem clean_dog_collars-0)
+(define (problem clean_dog_collars_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,7 +15,7 @@
     (:init 
         (ontop dog_collar.n.01_1 floor.n.01_1) 
         (filled saddle_soap__bottle.n.01_1 saddle_soap.n.01_1) 
-        (ontop saddle_soap__bottle.n.01_1 floor.n.01_1)
+        (ontop saddle_soap__bottle.n.01_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (covered dog_collar.n.01_1 stain.n.01_1) 
         (inroom sink.n.01_1 bathroom) 
@@ -27,7 +27,7 @@
         (and 
             (not 
                 (covered ?dog_collar.n.01_1 ?stain.n.01_1)
-            ) 
+            )
         )
     )
 )

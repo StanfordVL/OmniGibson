@@ -1,4 +1,4 @@
-(define (problem organizing_boxes_in_garage-0)
+(define (problem organizing_boxes_in_garage_0)
     (:domain omnigibson)
 
     (:objects
@@ -24,7 +24,8 @@
         (inroom floor.n.01_1 garage) 
         (inroom bookcase.n.01_1 garage) 
         (inroom cabinet.n.01_1 garage) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* garage)
     )
     
     (:goal 

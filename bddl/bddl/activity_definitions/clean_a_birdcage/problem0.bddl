@@ -1,4 +1,4 @@
-(define (problem clean_a_birdcage-0)
+(define (problem clean_a_birdcage_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,9 +17,9 @@
     
     (:init 
         (ontop birdcage.n.01_1 floor.n.01_1) 
-        (covered birdcage.n.01_1 mildew.n.02_1)
+        (covered birdcage.n.01_1 mildew.n.02_1) 
         (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (not 
             (covered birdcage.n.01_1 disinfectant.n.01_1)
@@ -34,7 +34,7 @@
     
     (:goal 
         (and 
-            (covered ?birdcage.n.01_1 ?disinfectant.n.01_1)
+            (covered ?birdcage.n.01_1 ?disinfectant.n.01_1) 
             (not 
                 (covered ?birdcage.n.01_1 ?mildew.n.02_1)
             )

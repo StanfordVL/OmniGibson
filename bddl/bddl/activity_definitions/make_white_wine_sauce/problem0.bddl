@@ -1,4 +1,4 @@
-(define (problem make_white_wine_sauce-0)
+(define (problem make_white_wine_sauce_0)
     (:domain omnigibson)
 
     (:objects
@@ -41,7 +41,7 @@
     
     (:goal 
         (and 
-            (real ?cooked__wine_sauce.n.01_1)
+            (real ?cooked__wine_sauce.n.01_1) 
             (contains ?saucepan.n.01_1 ?cooked__wine_sauce.n.01_1)
         )
     )

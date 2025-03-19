@@ -1,4 +1,4 @@
-(define (problem clean_a_whiteboard-0)
+(define (problem clean_a_whiteboard_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,13 +14,14 @@
     
     (:init 
         (ontop paper_towel.n.01_1 desk.n.01_1) 
-        (insource rubbing_alcohol__atomizer.n.01_1 rubbing_alcohol.n.01_1)
-        (ontop rubbing_alcohol__atomizer.n.01_1 desk.n.01_1)
-        (covered display_panel.n.01_1 tarnish.n.02_1)
-        (inroom desk.n.01_1 classroom)
-        (inroom floor.n.01_1 classroom)
-        (inroom display_panel.n.01_1 classroom)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (insource rubbing_alcohol__atomizer.n.01_1 rubbing_alcohol.n.01_1) 
+        (ontop rubbing_alcohol__atomizer.n.01_1 desk.n.01_1) 
+        (covered display_panel.n.01_1 tarnish.n.02_1) 
+        (inroom desk.n.01_1 classroom) 
+        (inroom floor.n.01_1 classroom) 
+        (inroom display_panel.n.01_1 classroom) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom display_panel.n.01_* classroom)
     )
     
     (:goal 

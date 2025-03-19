@@ -1,4 +1,4 @@
-(define (problem make_mustard_herb_and_spice_seasoning-0)
+(define (problem make_mustard_herb_and_spice_seasoning_0)
     (:domain omnigibson)
 
     (:objects
@@ -30,13 +30,13 @@
         (inside sage__shaker.n.01_1 cabinet.n.01_1) 
         (insource cumin__shaker.n.01_1 cumin.n.02_1) 
         (inside cumin__shaker.n.01_1 cabinet.n.01_1) 
-        (ontop clove.n.03_1 chopping_board.n.01_1)
-        (ontop clove.n.03_2 chopping_board.n.01_1)
+        (ontop clove.n.03_1 chopping_board.n.01_1) 
+        (ontop clove.n.03_2 chopping_board.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (insource rosemary__shaker.n.01_1 rosemary.n.02_1) 
         (inside rosemary__shaker.n.01_1 cabinet.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_2)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_2) 
         (ontop blender.n.01_1 countertop.n.01_2) 
         (ontop bowl.n.01_1 countertop.n.01_2) 
         (future mustard_seasoning.n.01_1) 

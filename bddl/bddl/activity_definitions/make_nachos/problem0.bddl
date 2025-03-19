@@ -1,4 +1,4 @@
-(define (problem make_nachos-0)
+(define (problem make_nachos_0)
     (:domain omnigibson)
 
     (:objects
@@ -49,7 +49,7 @@
         (inside tupperware.n.01_2 electric_refrigerator.n.01_1) 
         (inside beefsteak_tomato.n.01_1 electric_refrigerator.n.01_1) 
         (inside green_onion.n.01_1 electric_refrigerator.n.01_1) 
-        (insource salsa__bottle.n.01_1 salsa.n.01_1)
+        (insource salsa__bottle.n.01_1 salsa.n.01_1) 
         (inside salsa__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (inside avocado.n.01_1 electric_refrigerator.n.01_1) 
         (insource paprika__shaker.n.01_1 paprika.n.02_1) 
@@ -115,7 +115,7 @@
                     ) 
                     (covered ?tortilla_chip.n.01_1 ?diced__avocado.n.01_1)
                 )
-            )
+            ) 
             (ontop ?tortilla_chip.n.01_1 ?cookie_sheet.n.01_1)
         )
     )

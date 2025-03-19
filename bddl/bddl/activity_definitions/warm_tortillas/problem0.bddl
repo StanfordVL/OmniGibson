@@ -1,4 +1,4 @@
-(define (problem warm_tortillas-0)
+(define (problem warm_tortillas_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,24 +13,24 @@
     )
     
     (:init 
-        (inside aluminum_foil.n.01_1 cabinet.n.01_1)
-        (unfolded aluminum_foil.n.01_1)
-        (inside tortilla.n.01_1 cabinet.n.01_1)
+        (inside aluminum_foil.n.01_1 cabinet.n.01_1) 
+        (unfolded aluminum_foil.n.01_1) 
+        (inside tortilla.n.01_1 cabinet.n.01_1) 
         (not 
             (hot tortilla.n.01_1)
         ) 
-        (inside tortilla.n.01_2 cabinet.n.01_1)
+        (inside tortilla.n.01_2 cabinet.n.01_1) 
         (not 
             (hot tortilla.n.01_2)
         ) 
-        (inside tortilla.n.01_3 cabinet.n.01_1)
+        (inside tortilla.n.01_3 cabinet.n.01_1) 
         (not 
             (hot tortilla.n.01_3)
         ) 
         (ontop griddle.n.01_1 stove.n.01_1) 
-        (ontop plate.n.04_1 stove.n.01_1)
-        (ontop plate.n.04_2 stove.n.01_1)
-        (ontop plate.n.04_3 stove.n.01_1)
+        (ontop plate.n.04_1 stove.n.01_1) 
+        (ontop plate.n.04_2 stove.n.01_1) 
+        (ontop plate.n.04_3 stove.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
@@ -41,15 +41,15 @@
         (and 
             (forall 
                 (?tortilla.n.01 - tortilla.n.01) 
-                (and
-                    (hot ?tortilla.n.01)
-                    (or
-                        (ontop ?tortilla.n.01 ?plate.n.04_1)
-                        (ontop ?tortilla.n.01 ?plate.n.04_2)
+                (and 
+                    (hot ?tortilla.n.01) 
+                    (or 
+                        (ontop ?tortilla.n.01 ?plate.n.04_1) 
+                        (ontop ?tortilla.n.01 ?plate.n.04_2) 
                         (ontop ?tortilla.n.01 ?plate.n.04_3)
                     )
                 )
-            ) 
+            )
         )
     )
 )

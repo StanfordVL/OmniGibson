@@ -1,4 +1,4 @@
-(define (problem putting_clothes_in_storage-0)
+(define (problem putting_clothes_in_storage_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,8 +14,8 @@
         (ontop carton.n.02_1 floor.n.01_1) 
         (ontop carton.n.02_2 floor.n.01_1) 
         (ontop carton.n.02_3 floor.n.01_1) 
-        (ontop coat.n.01_1 floor.n.01_1)
-        (ontop coat.n.01_2 floor.n.01_1)
+        (ontop coat.n.01_1 floor.n.01_1) 
+        (ontop coat.n.01_2 floor.n.01_1) 
         (ontop trouser.n.01_1 floor.n.01_1) 
         (ontop trouser.n.01_2 floor.n.01_1) 
         (ontop jersey.n.03_1 floor.n.01_1) 
@@ -27,47 +27,47 @@
     (:goal 
         (and 
             (exists 
-                (?carton.n.02 - carton.n.02)
+                (?carton.n.02 - carton.n.02) 
                 (forall 
-                    (?coat.n.01 - coat.n.01)
+                    (?coat.n.01 - coat.n.01) 
                     (and 
-                        (folded ?coat.n.01)
-                        (inside ?coat.n.01 ?carton.n.02)
+                        (folded ?coat.n.01) 
+                        (inside ?coat.n.01 ?carton.n.02) 
                         (not 
                             (inside ?trouser.n.01_1 ?carton.n.02)
-                        )
+                        ) 
                         (not 
                             (inside ?jersey.n.03_1 ?carton.n.02)
                         )
                     )
                 )
-            )
+            ) 
             (exists 
-                (?carton.n.02 - carton.n.02)
+                (?carton.n.02 - carton.n.02) 
                 (forall 
-                    (?trouser.n.01 - trouser.n.01)
+                    (?trouser.n.01 - trouser.n.01) 
                     (and 
-                        (folded ?trouser.n.01)
-                        (inside ?trouser.n.01 ?carton.n.02)
+                        (folded ?trouser.n.01) 
+                        (inside ?trouser.n.01 ?carton.n.02) 
                         (not 
                             (inside ?coat.n.01_1 ?carton.n.02)
-                        )
+                        ) 
                         (not 
                             (inside ?jersey.n.03_1 ?carton.n.02)
                         )
                     )
                 )
-            )
+            ) 
             (exists 
-                (?carton.n.02 - carton.n.02)
+                (?carton.n.02 - carton.n.02) 
                 (forall 
-                    (?jersey.n.03 - jersey.n.03)
+                    (?jersey.n.03 - jersey.n.03) 
                     (and 
-                        (folded ?jersey.n.03)
-                        (inside ?jersey.n.03 ?carton.n.02)
+                        (folded ?jersey.n.03) 
+                        (inside ?jersey.n.03 ?carton.n.02) 
                         (not 
                             (inside ?trouser.n.01_1 ?carton.n.02)
-                        )
+                        ) 
                         (not 
                             (inside ?coat.n.01_1 ?carton.n.02)
                         )

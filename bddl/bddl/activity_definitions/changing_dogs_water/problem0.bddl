@@ -1,4 +1,4 @@
-(define (problem changing_dogs_water-0)
+(define (problem changing_dogs_water_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,10 +11,11 @@
     
     (:init 
         (ontop bowl.n.01_1 floor.n.01_1) 
-        (insource sink.n.01_1 water.n.06_1)
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 living_room) 
-        (inroom sink.n.01_1 kitchen)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom sink.n.01_1 kitchen) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* living_room)
     )
     
     (:goal 

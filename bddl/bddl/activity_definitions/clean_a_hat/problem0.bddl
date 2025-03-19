@@ -1,4 +1,4 @@
-(define (problem clean_a_hat-0)
+(define (problem clean_a_hat_0)
     (:domain omnigibson)
 
     (:objects
@@ -25,7 +25,7 @@
         (and 
             (not 
                 (covered ?hat.n.01_1 ?dust.n.01_1)
-            ) 
+            )
         )
     )
 )

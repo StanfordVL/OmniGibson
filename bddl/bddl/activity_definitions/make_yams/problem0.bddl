@@ -1,4 +1,4 @@
-(define (problem make_yams-0)
+(define (problem make_yams_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,7 +15,7 @@
     (:init 
         (ontop stockpot.n.01_1 countertop.n.01_1) 
         (ontop yam.n.03_1 countertop.n.01_1) 
-        (ontop yam.n.03_2 countertop.n.01_1)
+        (ontop yam.n.03_2 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
@@ -27,7 +27,7 @@
     (:goal 
         (and 
             (forall 
-                (?yam.n.03 - yam.n.03)
+                (?yam.n.03 - yam.n.03) 
                 (cooked ?yam.n.03)
             )
         )

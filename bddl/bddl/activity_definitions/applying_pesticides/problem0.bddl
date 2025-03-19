@@ -1,4 +1,4 @@
-(define (problem applying_pesticides-0)
+(define (problem applying_pesticides_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,7 +14,8 @@
         (insource pesticide__atomizer.n.01_1 pesticide.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
-        (inroom lawn.n.01_1 garden)
+        (inroom lawn.n.01_1 garden) 
+        (inroom lawn.n.01_* garden)
     )
     
     (:goal 

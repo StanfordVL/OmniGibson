@@ -1,4 +1,4 @@
-(define (problem sanding_wood_furniture-0)
+(define (problem sanding_wood_furniture_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,7 +14,8 @@
         (inside emery_paper.n.01_1 bookcase.n.01_1) 
         (inroom bookcase.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom bookcase.n.01_* living_room)
     )
     
     (:goal 

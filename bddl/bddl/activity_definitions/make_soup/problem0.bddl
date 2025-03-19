@@ -1,4 +1,4 @@
-(define (problem make_soup-0)
+(define (problem make_soup_0)
     (:domain omnigibson)
 
     (:objects
@@ -40,8 +40,8 @@
         (not 
             (cooked chicken.n.01_1)
         ) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
         (insource rosemary__shaker.n.01_1 rosemary.n.02_1) 
         (inside rosemary__shaker.n.01_1 cabinet.n.01_1) 
         (inroom stove.n.01_1 kitchen) 
@@ -56,7 +56,7 @@
     
     (:goal 
         (and 
-            (real ?cooked__chicken_soup.n.01_1)
+            (real ?cooked__chicken_soup.n.01_1) 
             (contains ?stockpot.n.01_1 ?cooked__chicken_soup.n.01_1)
         )
     )

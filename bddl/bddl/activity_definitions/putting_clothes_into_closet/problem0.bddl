@@ -1,4 +1,4 @@
-(define (problem putting_clothes_into_closet-0)
+(define (problem putting_clothes_into_closet_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,24 +11,24 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
-        (ontop jersey.n.03_1 floor.n.01_1)
-        (ontop dress.n.01_1 floor.n.01_1)
-        (ontop vest.n.01_1 floor.n.01_1)
-        (attached hanger.n.02_1 wardrobe.n.01_1)
-        (attached hanger.n.02_2 wardrobe.n.01_1)
-        (attached hanger.n.02_3 wardrobe.n.01_1)
-        (attached hanger.n.02_4 wardrobe.n.01_1)
-        (inroom wardrobe.n.01_1 closet)
+    (:init 
+        (ontop jersey.n.03_1 floor.n.01_1) 
+        (ontop dress.n.01_1 floor.n.01_1) 
+        (ontop vest.n.01_1 floor.n.01_1) 
+        (attached hanger.n.02_1 wardrobe.n.01_1) 
+        (attached hanger.n.02_2 wardrobe.n.01_1) 
+        (attached hanger.n.02_3 wardrobe.n.01_1) 
+        (attached hanger.n.02_4 wardrobe.n.01_1) 
+        (inroom wardrobe.n.01_1 closet) 
         (inroom floor.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (draped ?vest.n.01_1 ?hanger.n.02_1)
-            (draped ?dress.n.01_1 ?hanger.n.02_1)
-            (draped ?jersey.n.03_1 ?hanger.n.02_1) 
+            (draped ?vest.n.01_1 ?hanger.n.02_1) 
+            (draped ?dress.n.01_1 ?hanger.n.02_1) 
+            (draped ?jersey.n.03_1 ?hanger.n.02_1)
         )
     )
 )

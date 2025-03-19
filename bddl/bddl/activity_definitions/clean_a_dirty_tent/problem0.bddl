@@ -1,4 +1,4 @@
-(define (problem clean_a_dirty_tent-0)
+(define (problem clean_a_dirty_tent_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,17 +13,17 @@
     
     (:init 
         (covered tent.n.01_1 stain.n.01_1) 
-        (ontop tent.n.01_1 floor.n.01_1)
+        (ontop tent.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (ontop sponge.n.01_1 floor.n.01_1)
-        (inroom floor.n.01_1 utility_room)
+        (ontop sponge.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_1 utility_room) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?tent.n.01_1 ?stain.n.01_1)
             )
         )

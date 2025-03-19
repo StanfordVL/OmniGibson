@@ -1,4 +1,4 @@
-(define (problem cleaning_debris_out_of_car-0)
+(define (problem cleaning_debris_out_of_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,8 +14,8 @@
     (:init 
         (ontop car.n.01_1 driveway.n.01_1) 
         (inside cup__of__yogurt.n.01_1 car.n.01_1) 
-        (inside bag__of__chips.n.01_1 car.n.01_1)
-        (ontop vacuum.n.04_1 driveway.n.01_1)
+        (inside bag__of__chips.n.01_1 car.n.01_1) 
+        (ontop vacuum.n.04_1 driveway.n.01_1) 
         (inroom driveway.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -25,7 +25,7 @@
         (and 
             (not 
                 (inside ?cup__of__yogurt.n.01_1 ?car.n.01_1)
-            )
+            ) 
             (not 
                 (inside ?bag__of__chips.n.01_1 ?car.n.01_1)
             )

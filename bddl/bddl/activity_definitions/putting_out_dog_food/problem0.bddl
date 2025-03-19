@@ -1,4 +1,4 @@
-(define (problem putting_out_dog_food-0)
+(define (problem putting_out_dog_food_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,16 +10,17 @@
     )
     
     (:init 
-        (filled dog_food__can.n.01_1 dog_food.n.01_1)
+        (filled dog_food__can.n.01_1 dog_food.n.01_1) 
         (ontop bowl.n.01_1 floor.n.01_1) 
-        (ontop dog_food__can.n.01_1 floor.n.01_1)
+        (ontop dog_food__can.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* living_room)
     )
     
     (:goal 
         (and 
-            (ontop ?bowl.n.01_1 ?floor.n.01_1)
+            (ontop ?bowl.n.01_1 ?floor.n.01_1) 
             (filled ?bowl.n.01_1 ?dog_food.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem make_a_candy_centerpiece-0)
+(define (problem make_a_candy_centerpiece_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,7 +14,7 @@
     (:init 
         (inside lollipop.n.02_1 cabinet.n.01_1) 
         (inside lollipop.n.02_2 cabinet.n.01_1) 
-        (inside lollipop.n.02_3 cabinet.n.01_1)
+        (inside lollipop.n.02_3 cabinet.n.01_1) 
         (inside candy_cane.n.01_1 cabinet.n.01_1) 
         (inside candy_cane.n.01_2 cabinet.n.01_1) 
         (inside ribbon.n.01_1 cabinet.n.01_1) 
@@ -31,9 +31,9 @@
                 (inside ?lollipop.n.02 ?vase.n.01_1)
             ) 
             (forall 
-                (?candy_cane.n.01 - candy_cane.n.01)
+                (?candy_cane.n.01 - candy_cane.n.01) 
                 (inside ?candy_cane.n.01 ?vase.n.01_1)
-            )
+            ) 
             (overlaid ?ribbon.n.01_1 ?vase.n.01_1)
         )
     )

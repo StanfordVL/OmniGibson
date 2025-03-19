@@ -1,4 +1,4 @@
-(define (problem stash_snacks_in_your_room-0)
+(define (problem stash_snacks_in_your_room_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,21 +19,24 @@
     (:init 
         (ontop chip.n.04_1 bed.n.01_1) 
         (ontop chip.n.04_2 bed.n.01_1) 
-        (ontop pack__of__chocolate_bar.n.01_1 bed.n.01_1)
-        (ontop pack__of__chocolate_bar.n.01_2 bed.n.01_1)
-        (ontop bag__of__jerky.n.01_1 bed.n.01_1)
-        (ontop bag__of__jerky.n.01_2 bed.n.01_1)
+        (ontop pack__of__chocolate_bar.n.01_1 bed.n.01_1) 
+        (ontop pack__of__chocolate_bar.n.01_2 bed.n.01_1) 
+        (ontop bag__of__jerky.n.01_1 bed.n.01_1) 
+        (ontop bag__of__jerky.n.01_2 bed.n.01_1) 
         (ontop chocolate_bar.n.01_1 bed.n.01_1) 
         (ontop granola_bar.n.01_1 bed.n.01_1) 
-        (ontop granola_bar.n.01_2 sack.n.01_1)
-        (ontop chocolate_biscuit.n.01_1 sack.n.01_1)
-        (ontop chocolate_biscuit.n.01_2 sack.n.01_1)
-        (ontop sack.n.01_1 table.n.02_1)
+        (ontop granola_bar.n.01_2 sack.n.01_1) 
+        (ontop chocolate_biscuit.n.01_1 sack.n.01_1) 
+        (ontop chocolate_biscuit.n.01_2 sack.n.01_1) 
+        (ontop sack.n.01_1 table.n.02_1) 
         (inroom bed.n.01_1 bedroom) 
         (inroom cabinet.n.01_1 bedroom) 
-        (inroom table.n.02_1 bedroom)
+        (inroom table.n.02_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom bed.n.01_* bedroom) 
+        (inroom table.n.02_* bedroom) 
+        (inroom cabinet.n.01_* bedroom)
     )
     
     (:goal 
@@ -43,11 +46,11 @@
                 (nextto ?chip.n.04 ?bed.n.01_1)
             ) 
             (forall 
-                (?pack__of__chocolate_bar.n.01 - pack__of__chocolate_bar.n.01)
+                (?pack__of__chocolate_bar.n.01 - pack__of__chocolate_bar.n.01) 
                 (inside ?pack__of__chocolate_bar.n.01 ?cabinet.n.01_1)
             ) 
             (forall 
-                (?bag__of__jerky.n.01 - bag__of__jerky.n.01)
+                (?bag__of__jerky.n.01 - bag__of__jerky.n.01) 
                 (inside ?bag__of__jerky.n.01 ?cabinet.n.01_1)
             ) 
             (forall 

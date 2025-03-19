@@ -1,4 +1,4 @@
-(define (problem buy_a_air_conditioner-0)
+(define (problem buy_a_air_conditioner_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,13 +16,14 @@
         (inroom checkout.n.03_1 grocery_store) 
         (inroom shopping_cart.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom checkout.n.03_* grocery_store)
     )
     
     (:goal 
         (and 
             (ontop ?money.n.01_1 ?checkout.n.03_1) 
-            (ontop ?air_conditioner.n.01_1 ?checkout.n.03_1) 
+            (ontop ?air_conditioner.n.01_1 ?checkout.n.03_1)
         )
     )
 )

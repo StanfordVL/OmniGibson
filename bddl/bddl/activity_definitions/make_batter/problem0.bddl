@@ -1,4 +1,4 @@
-(define (problem make_batter-0)
+(define (problem make_batter_0)
     (:domain omnigibson)
 
     (:objects
@@ -28,8 +28,8 @@
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (filled baking_powder__jar.n.01_1 baking_powder.n.01_1) 
         (ontop baking_powder__jar.n.01_1 countertop.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
         (filled milk__carton.n.01_1 whole_milk.n.01_1) 
         (ontop electric_mixer.n.01_1 countertop.n.01_2) 
         (ontop mixing_bowl.n.01_1 countertop.n.01_2) 

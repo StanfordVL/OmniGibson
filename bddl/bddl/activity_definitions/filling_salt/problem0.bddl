@@ -1,4 +1,4 @@
-(define (problem filling_salt-0)
+(define (problem filling_salt_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,10 +12,10 @@
     )
     
     (:init 
-        (inside funnel.n.02_1 cabinet.n.01_1)
+        (inside funnel.n.02_1 cabinet.n.01_1) 
         (inside mason_jar.n.01_1 cabinet.n.01_1) 
         (filled salt__bottle.n.01_1 granulated_salt.n.01_1) 
-        (inside salt__bottle.n.01_1 cabinet.n.01_1)
+        (inside salt__bottle.n.01_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)

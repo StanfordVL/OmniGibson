@@ -1,4 +1,4 @@
-(define (problem washing_walls-0)
+(define (problem washing_walls_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,11 +14,12 @@
     (:init 
         (covered wall.n.01_1 dirt.n.02_1) 
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
-        (ontop watering_can.n.01_1 floor.n.01_1)
-        (insource watering_can.n.01_1 water.n.06_1)
+        (ontop watering_can.n.01_1 floor.n.01_1) 
+        (insource watering_can.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall.n.01_* garden)
     )
     
     (:goal 
@@ -26,7 +27,7 @@
             (and 
                 (not 
                     (covered wall.n.01_1 dirt.n.02_1)
-                ) 
+                )
             )
         )
     )

@@ -1,4 +1,4 @@
-(define (problem cleaning_pet_bed-0)
+(define (problem cleaning_pet_bed_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,7 +13,7 @@
     
     (:init 
         (ontop pet_bed.n.01_1 floor.n.01_1) 
-        (covered pet_bed.n.01_1 hair.n.04_1)
+        (covered pet_bed.n.01_1 hair.n.04_1) 
         (covered pet_bed.n.01_1 petfood.n.01_1) 
         (ontop vacuum.n.04_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
@@ -28,7 +28,7 @@
             ) 
             (not 
                 (covered ?pet_bed.n.01_1 ?petfood.n.01_1)
-            ) 
+            )
         )
     )
 )

@@ -1,4 +1,4 @@
-(define (problem hard_boil_an_egg-0)
+(define (problem hard_boil_an_egg_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,11 +15,11 @@
     (:init 
         (ontop saucepot.n.01_1 stove.n.01_1) 
         (inside egg.n.02_1 electric_refrigerator.n.01_1) 
-        (insource sink.n.01_1 water.n.06_1)
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom stove.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom electric_refrigerator.n.01_1 kitchen)
-        (inroom sink.n.01_1 kitchen)
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom sink.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

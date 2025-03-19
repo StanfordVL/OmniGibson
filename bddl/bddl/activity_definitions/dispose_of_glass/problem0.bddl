@@ -1,4 +1,4 @@
-(define (problem dispose_of_glass-0)
+(define (problem dispose_of_glass_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,7 +13,7 @@
     
     (:init 
         (ontop water_glass.n.02_1 shelf.n.01_1) 
-        (ontop water_glass.n.02_2 floor.n.01_1)
+        (ontop water_glass.n.02_2 floor.n.01_1) 
         (ontop recycling_bin.n.01_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 bathroom) 
@@ -24,8 +24,8 @@
     
     (:goal 
         (and 
-            (forall
-                (?water_glass.n.02 - water_glass.n.02)
+            (forall 
+                (?water_glass.n.02 - water_glass.n.02) 
                 (inside ?water_glass.n.02 ?recycling_bin.n.01_1)
             )
         )

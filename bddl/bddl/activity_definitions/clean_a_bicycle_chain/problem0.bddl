@@ -1,4 +1,4 @@
-(define (problem clean_a_bicycle_chain-0)
+(define (problem clean_a_bicycle_chain_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,7 +22,7 @@
         (ontop glove.n.02_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (ontop liquid_soap__bottle.n.01_1 floor.n.01_1) 
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
         (inroom floor.n.01_1 utility_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -31,7 +31,7 @@
         (and 
             (not 
                 (covered ?bicycle.n.01_1 ?grease.n.01_1)
-            )
+            ) 
             (not 
                 (covered ?bicycle.n.01_1 ?dirt.n.02_1)
             )

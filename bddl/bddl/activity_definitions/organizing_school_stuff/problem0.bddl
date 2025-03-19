@@ -1,4 +1,4 @@
-(define (problem organizing_school_stuff-0)
+(define (problem organizing_school_stuff_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,7 @@
     )
     
     (:init 
-        (ontop marker.n.03_1 bed.n.01_1)
+        (ontop marker.n.03_1 bed.n.01_1) 
         (ontop pencil.n.01_1 bed.n.01_1) 
         (ontop pen.n.01_1 floor.n.01_1) 
         (ontop calculator.n.02_1 floor.n.01_1) 
@@ -26,7 +26,8 @@
         (inroom floor.n.01_1 bedroom) 
         (inroom bed.n.01_1 bedroom) 
         (inroom table.n.02_1 bedroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom bed.n.01_* bedroom)
     )
     
     (:goal 
@@ -36,7 +37,7 @@
                 (nextto ?folder.n.02_1 ?backpack.n.01_1) 
                 (nextto ?book.n.02_1 ?backpack.n.01_1)
             ) 
-            (inside ?marker.n.03_1 ?backpack.n.01_1)
+            (inside ?marker.n.03_1 ?backpack.n.01_1) 
             (inside ?pencil.n.01_1 ?backpack.n.01_1) 
             (inside ?pen.n.01_1 ?backpack.n.01_1) 
             (inside ?calculator.n.02_1 ?backpack.n.01_1) 

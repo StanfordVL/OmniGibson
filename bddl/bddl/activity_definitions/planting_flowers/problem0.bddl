@@ -1,4 +1,4 @@
-(define (problem planting_flowers-0)
+(define (problem planting_flowers_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,8 +12,8 @@
     )
     
     (:init 
-        (ontop carton.n.02_1 lawn.n.01_1)
-        (ontop carton.n.02_2 lawn.n.01_1)
+        (ontop carton.n.02_1 lawn.n.01_1) 
+        (ontop carton.n.02_2 lawn.n.01_1) 
         (inside pottable__dahlia.n.01_1 carton.n.02_1) 
         (inside pottable__dahlia.n.01_2 carton.n.02_1) 
         (inside pottable__dahlia.n.01_3 carton.n.02_1) 
@@ -22,14 +22,14 @@
         (inside pottable__marigold.n.01_2 carton.n.02_2) 
         (inside pottable__marigold.n.01_3 carton.n.02_2) 
         (inside pottable__marigold.n.01_4 carton.n.02_2) 
-        (ontop pot.n.04_1 lawn.n.01_1)
-        (ontop pot.n.04_2 lawn.n.01_1)
-        (ontop pot.n.04_3 lawn.n.01_1)
-        (ontop pot.n.04_4 lawn.n.01_1)
-        (ontop pot.n.04_5 lawn.n.01_1)
-        (ontop pot.n.04_6 lawn.n.01_1)
-        (ontop pot.n.04_7 lawn.n.01_1)
-        (ontop pot.n.04_8 lawn.n.01_1)
+        (ontop pot.n.04_1 lawn.n.01_1) 
+        (ontop pot.n.04_2 lawn.n.01_1) 
+        (ontop pot.n.04_3 lawn.n.01_1) 
+        (ontop pot.n.04_4 lawn.n.01_1) 
+        (ontop pot.n.04_5 lawn.n.01_1) 
+        (ontop pot.n.04_6 lawn.n.01_1) 
+        (ontop pot.n.04_7 lawn.n.01_1) 
+        (ontop pot.n.04_8 lawn.n.01_1) 
         (inroom lawn.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -38,13 +38,13 @@
     (:goal 
         (and 
             (forpairs 
-                (?pottable__dahlia.n.01 - pottable__dahlia.n.01)
-                (?pot.n.04 - pot.n.04)
+                (?pottable__dahlia.n.01 - pottable__dahlia.n.01) 
+                (?pot.n.04 - pot.n.04) 
                 (inside ?pottable__dahlia.n.01 ?pot.n.04)
-            )
+            ) 
             (forpairs 
-                (?pottable__marigold.n.01 - pottable__marigold.n.01)
-                (?pot.n.04 - pot.n.04)
+                (?pottable__marigold.n.01 - pottable__marigold.n.01) 
+                (?pot.n.04 - pot.n.04) 
                 (inside ?pottable__marigold.n.01 ?pot.n.04)
             )
         )

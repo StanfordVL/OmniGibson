@@ -1,4 +1,4 @@
-(define (problem make_gift_bags_for_baby_showers-0)
+(define (problem make_gift_bags_for_baby_showers_0)
     (:domain omnigibson)
 
     (:objects
@@ -24,7 +24,8 @@
         (inroom floor.n.01_1 living_room) 
         (inroom cabinet.n.01_1 living_room) 
         (inroom bookcase.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* living_room)
     )
     
     (:goal 
@@ -42,7 +43,7 @@
                 (?wafer.n.02 - wafer.n.02) 
                 (?sack.n.01 - sack.n.01) 
                 (inside ?wafer.n.02 ?sack.n.01)
-            ) 
+            )
         )
     )
 )

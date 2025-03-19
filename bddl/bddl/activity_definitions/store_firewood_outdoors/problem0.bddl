@@ -1,4 +1,4 @@
-(define (problem store_firewood_outdoors-0)
+(define (problem store_firewood_outdoors_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,21 +17,22 @@
         (ontop firewood.n.01_6 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom table.n.02_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom table.n.02_* garden)
     )
     
     (:goal 
         (and 
             (forall 
                 (?firewood.n.01 - firewood.n.01) 
-                (or
-                    (ontop ?firewood.n.01 ?table.n.02_1)
+                (or 
+                    (ontop ?firewood.n.01 ?table.n.02_1) 
                     (or 
-                        (ontop ?firewood.n.01 ?firewood.n.01_1)
-                        (ontop ?firewood.n.01 ?firewood.n.01_2)
-                        (ontop ?firewood.n.01 ?firewood.n.01_3)
-                        (ontop ?firewood.n.01 ?firewood.n.01_4)
-                        (ontop ?firewood.n.01 ?firewood.n.01_5)
+                        (ontop ?firewood.n.01 ?firewood.n.01_1) 
+                        (ontop ?firewood.n.01 ?firewood.n.01_2) 
+                        (ontop ?firewood.n.01 ?firewood.n.01_3) 
+                        (ontop ?firewood.n.01 ?firewood.n.01_4) 
+                        (ontop ?firewood.n.01 ?firewood.n.01_5) 
                         (ontop ?firewood.n.01 ?firewood.n.01_6)
                     )
                 )

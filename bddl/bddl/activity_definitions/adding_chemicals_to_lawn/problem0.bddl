@@ -1,4 +1,4 @@
-(define (problem adding_chemicals_to_lawn-0)
+(define (problem adding_chemicals_to_lawn_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,18 +12,19 @@
     )
     
     (:init 
-        (inroom floor.n.01_1 garden)
-        (inroom lawn.n.01_1 garden)
-        (ontop herbicide__bottle.n.01_1 floor.n.01_1)
+        (inroom floor.n.01_1 garden) 
+        (inroom lawn.n.01_1 garden) 
+        (ontop herbicide__bottle.n.01_1 floor.n.01_1) 
         (ontop fertilizer__atomizer.n.01_1 floor.n.01_1) 
-        (filled herbicide__bottle.n.01_1 herbicide.n.01_1)
-        (insource fertilizer__atomizer.n.01_1 fertilizer.n.01_1)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (filled herbicide__bottle.n.01_1 herbicide.n.01_1) 
+        (insource fertilizer__atomizer.n.01_1 fertilizer.n.01_1) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom lawn.n.01_* garden)
     )
     
-    (:goal
-        (and
-            (covered ?lawn.n.01_1 ?fertilizer.n.01_1)
+    (:goal 
+        (and 
+            (covered ?lawn.n.01_1 ?fertilizer.n.01_1) 
             (covered ?lawn.n.01_1 ?herbicide.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem make_beef_and_broccoli-0)
+(define (problem make_beef_and_broccoli_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,16 +22,16 @@
         (inside broccoli.n.02_1 electric_refrigerator.n.01_1) 
         (inside broccoli.n.02_2 electric_refrigerator.n.01_1) 
         (inside broccoli.n.02_3 electric_refrigerator.n.01_1) 
-        (inside clove.n.03_1 electric_refrigerator.n.01_1)
-        (inside clove.n.03_2 electric_refrigerator.n.01_1)
-        (insource soy_sauce__bottle.n.01_1 soy_sauce.n.01_1)
+        (inside clove.n.03_1 electric_refrigerator.n.01_1) 
+        (inside clove.n.03_2 electric_refrigerator.n.01_1) 
+        (insource soy_sauce__bottle.n.01_1 soy_sauce.n.01_1) 
         (inside soy_sauce__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (inroom oven.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future cooked__diced__steak.n.01_1)
-        (future cooked__diced__broccoli.n.01_1)
-        (future cooked__diced__clove.n.01_1)
+        (future cooked__diced__steak.n.01_1) 
+        (future cooked__diced__broccoli.n.01_1) 
+        (future cooked__diced__clove.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (not 
             (cooked steak.n.01_1)
@@ -47,22 +47,22 @@
         ) 
         (not 
             (cooked clove.n.03_1)
-        )
-        (not
+        ) 
+        (not 
             (cooked clove.n.03_2)
-        )
+        ) 
         (inside wok.n.01_1 oven.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?cooked__diced__clove.n.01_1)
-            (real ?cooked__diced__broccoli.n.01_1)
-            (real ?cooked__diced__steak.n.01_1)
+            (real ?cooked__diced__clove.n.01_1) 
+            (real ?cooked__diced__broccoli.n.01_1) 
+            (real ?cooked__diced__steak.n.01_1) 
             (contains ?wok.n.01_1 ?cooked__diced__steak.n.01_1) 
             (contains ?wok.n.01_1 ?cooked__diced__broccoli.n.01_1) 
             (contains ?wok.n.01_1 ?soy_sauce.n.01_1) 
-            (contains ?wok.n.01_1 ?cooked__diced__clove.n.01_1) 
+            (contains ?wok.n.01_1 ?cooked__diced__clove.n.01_1)
         )
     )
 )

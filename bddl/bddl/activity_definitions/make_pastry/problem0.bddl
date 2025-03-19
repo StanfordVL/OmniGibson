@@ -1,4 +1,4 @@
-(define (problem make_pastry-0)
+(define (problem make_pastry_0)
     (:domain omnigibson)
 
     (:objects
@@ -25,10 +25,10 @@
         (inside butter__package.n.01_1 electric_refrigerator.n.01_1) 
         (filled flour__sack.n.01_1 flour.n.01_1) 
         (ontop flour__sack.n.01_1 countertop.n.01_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
         (ontop food_processor.n.01_1 countertop.n.01_2) 
-        (ontop wooden_spoon.n.02_1 cabinet.n.01_1)
+        (ontop wooden_spoon.n.02_1 cabinet.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 

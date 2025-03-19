@@ -1,4 +1,4 @@
-(define (problem cook_sweet_potatoes-0)
+(define (problem cook_sweet_potatoes_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,18 +12,18 @@
     )
     
     (:init 
-        (ontop yam.n.03_1 plate.n.04_1)
-        (ontop yam.n.03_2 plate.n.04_2)
-        (ontop plate.n.04_1 oven.n.01_1)
-        (ontop plate.n.04_2 oven.n.01_1)
+        (ontop yam.n.03_1 plate.n.04_1) 
+        (ontop yam.n.03_2 plate.n.04_2) 
+        (ontop plate.n.04_1 oven.n.01_1) 
+        (ontop plate.n.04_2 oven.n.01_1) 
         (not 
             (cooked yam.n.03_1)
         ) 
         (not 
             (cooked yam.n.03_2)
         ) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 oven.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 oven.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -32,9 +32,9 @@
     (:goal 
         (and 
             (forall 
-                (?yam.n.03 - yam.n.03)
+                (?yam.n.03 - yam.n.03) 
                 (and 
-                    (cooked ?yam.n.03)
+                    (cooked ?yam.n.03) 
                     (covered ?yam.n.03 ?salt.n.02_1)
                 )
             )

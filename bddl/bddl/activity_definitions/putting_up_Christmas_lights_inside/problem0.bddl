@@ -1,4 +1,4 @@
-(define (problem putting_up_Christmas_lights_inside-0)
+(define (problem putting_up_Christmas_lights_inside_0)
     (:domain omnigibson)
 
     (:objects
@@ -9,17 +9,18 @@
     )
     
     (:init 
-        (ontop icicle_lights.n.01_1 floor.n.01_1)
+        (ontop icicle_lights.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom wall_nail.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall_nail.n.01_* living_room)
     )
     
     (:goal 
         (and 
             (forall 
                 (?icicle_lights.n.01 - icicle_lights.n.01) 
-                (attached ?icicle_lights.n.01_1 ?wall_nail.n.01_1) 
+                (attached ?icicle_lights.n.01_1 ?wall_nail.n.01_1)
             )
         )
     )

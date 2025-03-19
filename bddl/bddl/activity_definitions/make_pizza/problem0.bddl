@@ -1,4 +1,4 @@
-(define (problem make_pizza-0)
+(define (problem make_pizza_0)
     (:domain omnigibson)
 
     (:objects
@@ -42,14 +42,14 @@
         (inside tupperware.n.01_3 electric_refrigerator.n.01_1) 
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (ontop carving_knife.n.01_1 countertop.n.01_1) 
-        (insource marjoram__shaker.n.01_1 marjoram.n.02_1)
-        (ontop marjoram__shaker.n.01_1 countertop.n.01_2)
+        (insource marjoram__shaker.n.01_1 marjoram.n.02_1) 
+        (ontop marjoram__shaker.n.01_1 countertop.n.01_2) 
         (inside mushroom.n.05_1 tupperware.n.01_2) 
         (inside mushroom.n.05_2 tupperware.n.01_2) 
         (inside mushroom.n.05_3 tupperware.n.01_2) 
         (inside mushroom.n.05_4 tupperware.n.01_2) 
         (inside mushroom.n.05_5 tupperware.n.01_2) 
-        (inside tupperware.n.01_2 electric_refrigerator.n.01_1)
+        (inside tupperware.n.01_2 electric_refrigerator.n.01_1) 
         (ontop vidalia_onion.n.01_1 countertop.n.01_2) 
         (ontop cookie_sheet.n.01_1 countertop.n.01_2) 
         (future pizza.n.01_1) 

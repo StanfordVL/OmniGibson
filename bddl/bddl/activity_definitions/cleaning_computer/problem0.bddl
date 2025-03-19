@@ -1,4 +1,4 @@
-(define (problem cleaning_computer-0)
+(define (problem cleaning_computer_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,7 +23,7 @@
         (and 
             (not 
                 (covered ?desktop_computer.n.01_1 ?dust.n.01_1)
-            ) 
+            )
         )
     )
 )

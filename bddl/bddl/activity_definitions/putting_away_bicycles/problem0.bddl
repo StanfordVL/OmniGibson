@@ -1,4 +1,4 @@
-(define (problem putting_away_bicycles-0)
+(define (problem putting_away_bicycles_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,18 +14,19 @@
         (ontop bicycle.n.01_2 driveway.n.01_1) 
         (ontop tarpaulin.n.01_1 floor.n.01_1) 
         (ontop tarpaulin.n.01_2 floor.n.01_1) 
-        (inroom floor.n.01_1 garage)
-        (inroom driveway.n.01_1 garden)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom floor.n.01_1 garage) 
+        (inroom driveway.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* garage)
     )
     
     (:goal 
         (and 
             (forpairs 
-                (?bicycle.n.01 - bicycle.n.01)
-                (?tarpaulin.n.01 - tarpaulin.n.01)
+                (?bicycle.n.01 - bicycle.n.01) 
+                (?tarpaulin.n.01 - tarpaulin.n.01) 
                 (and 
-                    (ontop ?bicycle.n.01 ?floor.n.01_1)
+                    (ontop ?bicycle.n.01 ?floor.n.01_1) 
                     (overlaid ?tarpaulin.n.01 ?bicycle.n.01)
                 )
             )

@@ -1,4 +1,4 @@
-(define (problem clean_apples-0)
+(define (problem clean_apples_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,8 +17,8 @@
     (:init 
         (ontop apple.n.01_1 countertop.n.01_1) 
         (ontop apple.n.01_2 countertop.n.01_1) 
-        (filled vinegar__bottle.n.01_1 vinegar.n.01_1)
-        (ontop vinegar__bottle.n.01_1 countertop.n.01_1)
+        (filled vinegar__bottle.n.01_1 vinegar.n.01_1) 
+        (ontop vinegar__bottle.n.01_1 countertop.n.01_1) 
         (ontop rag.n.01_1 countertop.n.01_1) 
         (covered apple.n.01_1 dirt.n.02_1) 
         (covered apple.n.01_2 dirt.n.02_1) 
@@ -36,7 +36,7 @@
                 (not 
                     (covered ?apple.n.01 ?dirt.n.02_1)
                 )
-            ) 
+            )
         )
     )
 )

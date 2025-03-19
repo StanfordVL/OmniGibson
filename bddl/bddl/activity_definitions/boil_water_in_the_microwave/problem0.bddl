@@ -1,4 +1,4 @@
-(define (problem boil_water_in_the_microwave-0)
+(define (problem boil_water_in_the_microwave_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,15 +19,16 @@
         (inroom sink.n.01_1 kitchen) 
         (inroom microwave.n.02_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
-        (future cooked__water.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (future cooked__water.n.01_1) 
+        (inroom microwave.n.02_* kitchen)
     )
     
     (:goal 
         (and 
-            (real ?cooked__water.n.01_1)
+            (real ?cooked__water.n.01_1) 
             (filled ?mug.n.04_1 ?cooked__water.n.01_1) 
-            (inside ?mug.n.04_1 ?microwave.n.02_1) 
+            (inside ?mug.n.04_1 ?microwave.n.02_1)
         )
     )
 )

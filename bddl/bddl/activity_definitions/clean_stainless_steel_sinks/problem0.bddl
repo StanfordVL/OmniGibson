@@ -1,4 +1,4 @@
-(define (problem clean_stainless_steel_sinks-0)
+(define (problem clean_stainless_steel_sinks_0)
     (:domain omnigibson)
 
     (:objects
@@ -26,7 +26,8 @@
         (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 bathroom) 
-        (inroom sink.n.01_1 bathroom)
+        (inroom sink.n.01_1 bathroom) 
+        (inroom sink.n.01_* bathroom)
     )
     
     (:goal 

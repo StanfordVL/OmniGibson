@@ -1,10 +1,10 @@
-(define (problem cook_bacon-0)
+(define (problem cook_bacon_0)
     (:domain omnigibson)
 
     (:objects
         bacon.n.01_1 bacon.n.01_2 bacon.n.01_3 bacon.n.01_4 bacon.n.01_5 bacon.n.01_6 - bacon.n.01
         tray.n.01_1 - tray.n.01
-        electric_refrigerator.n.01_1 - electric_refrigerator.n.01 
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         stove.n.01_1 - stove.n.01
         griddle.n.01_1 - griddle.n.01
         floor.n.01_1 - floor.n.01
@@ -36,8 +36,8 @@
         (not 
             (cooked bacon.n.01_6)
         ) 
-        (inside tray.n.01_1 electric_refrigerator.n.01_1)
-        (ontop griddle.n.01_1 stove.n.01_1)
+        (inside tray.n.01_1 electric_refrigerator.n.01_1) 
+        (ontop griddle.n.01_1 stove.n.01_1) 
         (inroom stove.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
@@ -47,7 +47,7 @@
     (:goal 
         (and 
             (forall 
-                (?bacon.n.01 - bacon.n.01)
+                (?bacon.n.01 - bacon.n.01) 
                 (cooked ?bacon.n.01)
             )
         )

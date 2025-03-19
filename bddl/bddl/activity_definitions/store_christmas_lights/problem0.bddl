@@ -1,4 +1,4 @@
-(define (problem store_christmas_lights-0)
+(define (problem store_christmas_lights_0)
     (:domain omnigibson)
 
     (:objects
@@ -24,7 +24,7 @@
             (forall 
                 (?icicle_lights.n.01 - icicle_lights.n.01) 
                 (inside ?icicle_lights.n.01 ?packing_box.n.02_1)
-            ) 
+            )
         )
     )
 )

@@ -1,4 +1,4 @@
-(define (problem clean_a_tie-0)
+(define (problem clean_a_tie_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,15 +13,15 @@
         agent.n.01_1 - agent.n.01
     )
     
-    (:init
-        (covered necktie.n.01_1 stain.n.01_1)
-        (ontop necktie.n.01_1 clothes_dryer.n.01_1)
-        (ontop detergent__bottle.n.01_1 clothes_dryer.n.01_1)
+    (:init 
+        (covered necktie.n.01_1 stain.n.01_1) 
+        (ontop necktie.n.01_1 clothes_dryer.n.01_1) 
+        (ontop detergent__bottle.n.01_1 clothes_dryer.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
-        (inroom washer.n.03_1 utility_room)
-        (inroom clothes_dryer.n.01_1 utility_room)
+        (inroom washer.n.03_1 utility_room) 
+        (inroom clothes_dryer.n.01_1 utility_room) 
         (inroom floor.n.01_1 utility_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
         (future water.n.06_1)
     )
     
@@ -35,7 +35,7 @@
             ) 
             (not 
                 (saturated ?necktie.n.01_1 ?water.n.06_1)
-            ) 
+            )
         )
     )
 )

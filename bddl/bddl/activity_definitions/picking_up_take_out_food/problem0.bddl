@@ -1,4 +1,4 @@
-(define (problem picking_up_take_out_food-0)
+(define (problem picking_up_take_out_food_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,8 @@
         (inside hamburger.n.01_1 carton.n.02_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom table.n.02_1 dining_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom table.n.02_* dining_room)
     )
     
     (:goal 

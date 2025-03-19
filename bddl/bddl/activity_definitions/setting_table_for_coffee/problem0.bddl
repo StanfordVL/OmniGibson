@@ -1,4 +1,4 @@
-(define (problem setting_table_for_coffee-0)
+(define (problem setting_table_for_coffee_0)
     (:domain omnigibson)
 
     (:objects
@@ -32,13 +32,15 @@
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom breakfast_table.n.01_* dining_room) 
+        (inroom countertop.n.01_* kitchen)
     )
     
     (:goal 
         (and 
-            (filled ?pitcher.n.02_1 ?espresso.n.01_1)
-            (ontop ?pitcher.n.02_1 ?countertop.n.01_1)
+            (filled ?pitcher.n.02_1 ?espresso.n.01_1) 
+            (ontop ?pitcher.n.02_1 ?countertop.n.01_1) 
             (ontop ?box__of__cream.n.01_1 ?breakfast_table.n.01_1) 
             (forall 
                 (?napkin.n.01 - napkin.n.01) 
@@ -48,7 +50,7 @@
                 (?teaspoon.n.02 - teaspoon.n.02) 
                 (ontop ?teaspoon.n.02 ?breakfast_table.n.01_1)
             ) 
-            (ontop ?bowl.n.01_1 ?breakfast_table.n.01_1)
+            (ontop ?bowl.n.01_1 ?breakfast_table.n.01_1) 
             (filled ?bowl.n.01_1 ?granulated_sugar.n.01_1)
         )
     )

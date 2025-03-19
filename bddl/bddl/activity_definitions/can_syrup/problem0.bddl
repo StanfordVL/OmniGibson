@@ -1,4 +1,4 @@
-(define (problem can_syrup-0)
+(define (problem can_syrup_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,7 +22,7 @@
         (ontop stockpot.n.01_1 stove.n.01_1) 
         (not 
             (toggled_on stove.n.01_1)
-        )
+        ) 
         (filled stockpot.n.01_1 maple_syrup.n.01_1) 
         (inroom cabinet.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
@@ -33,12 +33,12 @@
     (:goal 
         (and 
             (forpairs 
-                (?lid.n.02 - lid.n.02)
-                (?mason_jar.n.01 - mason_jar.n.01)
+                (?lid.n.02 - lid.n.02) 
+                (?mason_jar.n.01 - mason_jar.n.01) 
                 (ontop ?lid.n.02 ?mason_jar.n.01)
-            )
+            ) 
             (forall 
-                (?mason_jar.n.01 - mason_jar.n.01)
+                (?mason_jar.n.01 - mason_jar.n.01) 
                 (filled ?mason_jar.n.01 ?maple_syrup.n.01_1)
             )
         )

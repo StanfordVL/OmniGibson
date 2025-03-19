@@ -1,4 +1,4 @@
-(define (problem clean_a_vacuum-0)
+(define (problem clean_a_vacuum_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,11 +18,11 @@
         (ontop vacuum.n.04_1 floor.n.01_1) 
         (ontop paper_towel.n.01_1 floor.n.01_1) 
         (ontop canister.n.02_1 floor.n.01_1) 
-        (covered canister.n.02_1 debris.n.01_1)
-        (covered vacuum.n.04_1 dust.n.01_1)
+        (covered canister.n.02_1 debris.n.01_1) 
+        (covered vacuum.n.04_1 dust.n.01_1) 
         (ontop ashcan.n.01_1 floor.n.01_1) 
-        (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1)
-        (ontop disinfectant__bottle.n.01_1 floor.n.01_1)
+        (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1) 
+        (ontop disinfectant__bottle.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 utility_room)
     )
@@ -31,11 +31,11 @@
         (and 
             (not 
                 (covered ?canister.n.02_1 ?debris.n.01_1)
-            )
+            ) 
             (not 
                 (covered ?vacuum.n.04_1 ?dust.n.01_1)
-            )
-            (covered ?canister.n.02_1 ?disinfectant.n.01_1)
+            ) 
+            (covered ?canister.n.02_1 ?disinfectant.n.01_1) 
             (covered ?vacuum.n.04_1 ?disinfectant.n.01_1)
         )
     )

@@ -1,4 +1,4 @@
-(define (problem preparing_lunch_box-0)
+(define (problem preparing_lunch_box_0)
     (:domain omnigibson)
 
     (:objects
@@ -31,9 +31,9 @@
     (:goal 
         (and 
             (forall 
-                (?half__apple.n.01 - half__apple.n.01)
+                (?half__apple.n.01 - half__apple.n.01) 
                 (inside ?half__apple.n.01 ?packing_box.n.02_1)
-            )
+            ) 
             (inside ?club_sandwich.n.01_1 ?packing_box.n.02_1) 
             (inside ?chocolate_chip_cookie.n.01_1 ?packing_box.n.02_1) 
             (inside ?water_bottle.n.01_1 ?packing_box.n.02_1)

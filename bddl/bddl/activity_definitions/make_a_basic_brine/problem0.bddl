@@ -1,4 +1,4 @@
-(define (problem make_a_basic_brine-0)
+(define (problem make_a_basic_brine_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,8 +16,8 @@
     
     (:init 
         (insource sink.n.01_1 water.n.06_1) 
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (ontop salt__shaker.n.01_1 countertop.n.01_1)
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (ontop salt__shaker.n.01_1 countertop.n.01_1) 
         (inroom stove.n.01_1 kitchen) 
         (ontop stockpot.n.01_1 countertop.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 

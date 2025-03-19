@@ -1,4 +1,4 @@
-(define (problem putting_in_a_hot_tub-0)
+(define (problem putting_in_a_hot_tub_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,11 +10,12 @@
     )
     
     (:init 
-        (ontop hot_tub.n.02_1 driveway.n.01_1)
+        (ontop hot_tub.n.02_1 driveway.n.01_1) 
         (inroom floor.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
-        (inroom driveway.n.01_1 garden)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom driveway.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom lawn.n.01_* garden)
     )
     
     (:goal 

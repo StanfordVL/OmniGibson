@@ -1,4 +1,4 @@
-(define (problem clean_a_sofa-0)
+(define (problem clean_a_sofa_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,16 +14,17 @@
         (ontop rag.n.01_1 sofa.n.01_1) 
         (ontop vacuum.n.04_1 sofa.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
-        (covered sofa.n.01_1 dust.n.01_1)
+        (covered sofa.n.01_1 dust.n.01_1) 
         (inroom floor.n.01_1 living_room) 
-        (inroom sofa.n.01_1 living_room)
+        (inroom sofa.n.01_1 living_room) 
+        (inroom sofa.n.01_* living_room)
     )
     
     (:goal 
         (and 
             (not 
                 (covered ?sofa.n.01_1 ?dust.n.01_1)
-            ) 
+            )
         )
     )
 )

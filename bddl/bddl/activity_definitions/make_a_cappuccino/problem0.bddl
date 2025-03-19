@@ -1,4 +1,4 @@
-(define (problem make_a_cappuccino-0)
+(define (problem make_a_cappuccino_0)
     (:domain omnigibson)
 
     (:objects
@@ -28,11 +28,11 @@
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (filled instant_coffee__jar.n.01_1 instant_coffee.n.01_1) 
         (ontop instant_coffee__jar.n.01_1 countertop.n.01_1) 
-        (filled mason_jar.n.01_1 cane_sugar.n.02_1)
+        (filled mason_jar.n.01_1 cane_sugar.n.02_1) 
         (ontop mason_jar.n.01_1 countertop.n.01_1) 
         (filled carafe.n.01_1 whole_milk.n.01_1) 
-        (filled carboy.n.01_1 foam.n.01_1)
-        (ontop carboy.n.01_1 countertop.n.01_1)
+        (filled carboy.n.01_1 foam.n.01_1) 
+        (ontop carboy.n.01_1 countertop.n.01_1) 
         (ontop coffee_maker.n.01_1 countertop.n.01_2) 
         (ontop teacup.n.02_1 countertop.n.01_2) 
         (ontop stirrer.n.02_1 countertop.n.01_3) 

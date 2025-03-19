@@ -1,4 +1,4 @@
-(define (problem packing_books_into_car-0)
+(define (problem packing_books_into_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,10 +23,10 @@
     
     (:goal 
         (and 
-            (forall
-                (?book.n.02 - book.n.02)
+            (forall 
+                (?book.n.02 - book.n.02) 
                 (inside ?book.n.02 ?car.n.01_1)
-            )
+            ) 
             (not 
                 (inside ?bag.n.06_1 ?car.n.01_1)
             )

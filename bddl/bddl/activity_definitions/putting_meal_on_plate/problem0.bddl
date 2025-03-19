@@ -1,4 +1,4 @@
-(define (problem putting_meal_on_plate-0)
+(define (problem putting_meal_on_plate_0)
     (:domain omnigibson)
 
     (:objects
@@ -31,7 +31,8 @@
         (inroom window.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom oven.n.01_* kitchen)
     )
     
     (:goal 
@@ -40,11 +41,11 @@
             (ontop ?porkchop.n.01_2 ?plate.n.04_2) 
             (hot ?porkchop.n.01_2) 
             (frozen ?porkchop.n.01_1) 
-            (or
-                (not
+            (or 
+                (not 
                     (open ?oven.n.01_1)
-                )
-                (not
+                ) 
+                (not 
                     (open ?oven.n.01_1)
                 )
             )

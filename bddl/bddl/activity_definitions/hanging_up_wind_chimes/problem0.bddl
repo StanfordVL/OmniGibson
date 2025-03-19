@@ -1,4 +1,4 @@
-(define (problem hanging_up_wind_chimes-0)
+(define (problem hanging_up_wind_chimes_0)
     (:domain omnigibson)
 
     (:objects
@@ -10,8 +10,8 @@
     )
     
     (:init 
-        (ontop wind_chime.n.01_1 floor.n.01_1)
-        (attached pole.n.01_1 wall_nail.n.01_1)
+        (ontop wind_chime.n.01_1 floor.n.01_1) 
+        (attached pole.n.01_1 wall_nail.n.01_1) 
         (inroom wall_nail.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)

@@ -1,4 +1,4 @@
-(define (problem sweeping_garage-0)
+(define (problem sweeping_garage_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,19 +14,20 @@
     (:init 
         (ontop broom.n.01_1 floor.n.01_1) 
         (ontop pallet.n.02_1 floor.n.01_1) 
-        (covered floor.n.01_1 sand.n.04_1)
-        (covered floor.n.01_1 dust.n.01_1)
+        (covered floor.n.01_1 sand.n.04_1) 
+        (covered floor.n.01_1 dust.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (inroom floor.n.01_1 garage) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* garage)
     )
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?floor.n.01_1 ?sand.n.04_1)
-            )
-            (not
+            ) 
+            (not 
                 (covered ?floor.n.01_1 ?dust.n.01_1)
             )
         )

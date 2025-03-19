@@ -1,4 +1,4 @@
-(define (problem preserving_fruit-0)
+(define (problem preserving_fruit_0)
     (:domain omnigibson)
 
     (:objects
@@ -31,19 +31,19 @@
         (inside strawberry.n.01_5 tupperware.n.01_1) 
         (inside strawberry.n.01_6 tupperware.n.01_1) 
         (inside strawberry.n.01_7 tupperware.n.01_1) 
-        (inside tupperware.n.01_1 electric_refrigerator.n.01_1)
-        (inside mint.n.04_1 electric_refrigerator.n.01_1)
+        (inside tupperware.n.01_1 electric_refrigerator.n.01_1) 
+        (inside mint.n.04_1 electric_refrigerator.n.01_1) 
         (filled granulated_sugar__sack.n.01_1 granulated_sugar.n.01_1) 
         (ontop granulated_sugar__sack.n.01_1 countertop.n.01_1) 
-        (ontop carving_knife.n.01_1 countertop.n.01_1)
+        (ontop carving_knife.n.01_1 countertop.n.01_1) 
         (inside saucepot.n.01_1 cabinet.n.01_1) 
         (inside soup_ladle.n.01_1 cabinet.n.01_1) 
         (ontop hinged_jar.n.01_1 countertop.n.01_1) 
         (open hinged_jar.n.01_1) 
-        (ontop blender.n.01_1 countertop.n.01_1)
-        (insource sink.n.01_1 water.n.06_1)
-        (future sugar_syrup.n.01_1)
-        (inroom sink.n.01_1 kitchen)
+        (ontop blender.n.01_1 countertop.n.01_1) 
+        (insource sink.n.01_1 water.n.06_1) 
+        (future sugar_syrup.n.01_1) 
+        (inroom sink.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
@@ -54,16 +54,16 @@
     
     (:goal 
         (and 
-            (real sugar_syrup.n.01_1)
+            (real sugar_syrup.n.01_1) 
             (forall 
-                (?strawberry.n.01 - strawberry.n.01)
+                (?strawberry.n.01 - strawberry.n.01) 
                 (and 
-                    (cooked ?strawberry.n.01)
+                    (cooked ?strawberry.n.01) 
                     (inside ?strawberry.n.01 ?hinged_jar.n.01_1)
                 )
-            )
-            (contains ?hinged_jar.n.01_1 ?sugar_syrup.n.01_1)
-            (not
+            ) 
+            (contains ?hinged_jar.n.01_1 ?sugar_syrup.n.01_1) 
+            (not 
                 (open ?hinged_jar.n.01_1)
             )
         )

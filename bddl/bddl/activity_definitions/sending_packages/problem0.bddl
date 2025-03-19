@@ -1,4 +1,4 @@
-(define (problem sending_packages-0)
+(define (problem sending_packages_0)
     (:domain omnigibson)
 
     (:objects
@@ -11,7 +11,7 @@
     
     (:init 
         (ontop package.n.02_1 coffee_table.n.01_1) 
-        (ontop package.n.02_2 coffee_table.n.01_1)
+        (ontop package.n.02_2 coffee_table.n.01_1) 
         (ontop mailbox.n.01_1 floor.n.01_1) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom floor.n.01_1 garden) 
@@ -23,13 +23,13 @@
         (and 
             (forall 
                 (?package.n.02 - package.n.02) 
-                (and
-                    (or
-                        (inside ?package.n.02 ?mailbox.n.01_1)
+                (and 
+                    (or 
+                        (inside ?package.n.02 ?mailbox.n.01_1) 
                         (nextto ?package.n.02 ?mailbox.n.01_1)
                     )
                 )
-            ) 
+            )
         )
     )
 )

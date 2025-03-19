@@ -1,4 +1,4 @@
-(define (problem buy_food_for_camping-0)
+(define (problem buy_food_for_camping_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,7 @@
     )
     
     (:init 
-        (inroom cash_register.n.01_1 grocery_store)
+        (inroom cash_register.n.01_1 grocery_store) 
         (ontop water_bottle.n.01_1 grocery_shelf.n.01_1) 
         (ontop water_bottle.n.01_2 grocery_shelf.n.01_1) 
         (ontop bottle__of__soda.n.01_1 grocery_shelf.n.01_1) 
@@ -36,40 +36,34 @@
         (inroom grocery_shelf.n.01_3 grocery_store) 
         (inroom grocery_shelf.n.01_4 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
-        (ontop agent.n.01_1 floor.n.01_1)
-    
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom cash_register.n.01_* grocery_store) 
+        (inroom checkout.n.03_* grocery_store)
     )
     
     (:goal 
-        (and
+        (and 
             (forall 
                 (?water_bottle.n.01 - water_bottle.n.01) 
                 (ontop ?water_bottle.n.01 ?checkout.n.03_1)
-    
             ) 
             (forall 
                 (?bottle__of__soda.n.01 - bottle__of__soda.n.01) 
                 (ontop ?bottle__of__soda.n.01 ?checkout.n.03_1)
-    
             ) 
             (forall 
                 (?chocolate_chip_cookie.n.01 - chocolate_chip_cookie.n.01) 
                 (ontop ?chocolate_chip_cookie.n.01 ?checkout.n.03_1)
-    
             ) 
             (forall 
                 (?hotdog.n.02 - hotdog.n.02) 
                 (ontop ?hotdog.n.02 ?checkout.n.03_1)
-    
             ) 
             (ontop ?canned_food.n.01_1 ?checkout.n.03_1) 
             (forall 
                 (?money.n.01 - money.n.01) 
                 (nextto ?money.n.01 ?cash_register.n.01_1)
-    
             )
-    
         )
-    
     )
 )

@@ -1,4 +1,4 @@
-(define (problem clean_geodes-0)
+(define (problem clean_geodes_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,17 +17,17 @@
     )
     
     (:init 
-        (ontop geode.n.01_1 countertop.n.01_1)
+        (ontop geode.n.01_1 countertop.n.01_1) 
         (ontop toothbrush.n.01_1 countertop.n.01_1) 
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (filled detergent__bottle.n.01_1 detergent.n.02_1)
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
-        (ontop detergent__bottle.n.01_1 countertop.n.01_1)
-        (covered geode.n.01_1 mud.n.03_1)
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (filled detergent__bottle.n.01_1 detergent.n.02_1) 
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
+        (ontop detergent__bottle.n.01_1 countertop.n.01_1) 
+        (covered geode.n.01_1 mud.n.03_1) 
         (insource sink.n.01_1 water.n.06_1) 
-        (inroom sink.n.01_1 kitchen)
+        (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

@@ -1,4 +1,4 @@
-(define (problem re_shelving_library_books-0)
+(define (problem re_shelving_library_books_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,9 @@
         (inroom table.n.02_1 living_room) 
         (inroom bookcase.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom table.n.02_* living_room) 
+        (inroom bookcase.n.01_* living_room)
     )
     
     (:goal 

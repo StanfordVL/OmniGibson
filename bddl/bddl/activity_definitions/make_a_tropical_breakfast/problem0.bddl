@@ -1,4 +1,4 @@
-(define (problem make_a_tropical_breakfast-0)
+(define (problem make_a_tropical_breakfast_0)
     (:domain omnigibson)
 
     (:objects
@@ -41,8 +41,8 @@
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom countertop.n.01_2 kitchen) 
-        (inroom cabinet.n.01_1 kitchen)
-        (inroom electric_refrigerator.n.01_1 kitchen)
+        (inroom cabinet.n.01_1 kitchen) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

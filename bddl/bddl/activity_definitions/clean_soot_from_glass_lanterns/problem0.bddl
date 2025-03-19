@@ -1,4 +1,4 @@
-(define (problem clean_soot_from_glass_lanterns-0)
+(define (problem clean_soot_from_glass_lanterns_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,7 +17,7 @@
     
     (:init 
         (ontop glass_lantern.n.01_1 floor.n.01_1) 
-        (covered glass_lantern.n.01_1 stain.n.01_1)
+        (covered glass_lantern.n.01_1 stain.n.01_1) 
         (insource vinegar__atomizer.n.01_1 vinegar.n.01_1) 
         (insource ammonia_water__atomizer.n.01_1 ammonia_water.n.01_1) 
         (insource water__atomizer.n.01_1 water.n.06_1) 
@@ -31,7 +31,7 @@
     
     (:goal 
         (and 
-            (not
+            (not 
                 (covered ?glass_lantern.n.01_1 ?stain.n.01_1)
             )
         )

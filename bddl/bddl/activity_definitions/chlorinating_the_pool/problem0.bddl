@@ -1,4 +1,4 @@
-(define (problem chlorinating_the_pool-0)
+(define (problem chlorinating_the_pool_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,17 +13,18 @@
     
     (:init 
         (filled chlorine__bottle.n.01_1 chlorine.n.01_1) 
-        (filled pool.n.01_1 water.n.06_1)
-        (ontop chlorine__bottle.n.01_1 floor.n.01_1)
+        (filled pool.n.01_1 water.n.06_1) 
+        (ontop chlorine__bottle.n.01_1 floor.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
-        (inroom pool.n.01_1 garden)
+        (inroom pool.n.01_1 garden) 
         (inroom floor.n.01_1 bathroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom pool.n.01_* garden)
     )
     
     (:goal 
         (and 
-            (covered ?pool.n.01_1 ?chlorine.n.01_1) 
+            (covered ?pool.n.01_1 ?chlorine.n.01_1)
         )
     )
 )

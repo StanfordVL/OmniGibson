@@ -1,4 +1,4 @@
-(define (problem freeze_meat-0)
+(define (problem freeze_meat_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,10 +21,10 @@
         (ontop steak.n.01_2 plate.n.04_1) 
         (ontop chicken.n.01_1 plate.n.04_2) 
         (ontop chicken.n.01_2 plate.n.04_2) 
-        (cooked steak.n.01_1)
-        (cooked steak.n.01_2)
-        (cooked chicken.n.01_1)
-        (cooked chicken.n.01_2)
+        (cooked steak.n.01_1) 
+        (cooked steak.n.01_2) 
+        (cooked chicken.n.01_1) 
+        (cooked chicken.n.01_2) 
         (ontop plate.n.04_1 countertop.n.01_1) 
         (ontop plate.n.04_2 countertop.n.01_1) 
         (ontop wax_paper.n.01_1 countertop.n.01_1) 
@@ -37,39 +37,39 @@
     )
     
     (:goal 
-        (and
-            (exists
-                (?tupperware.n.01 - tupperware.n.01)
+        (and 
+            (exists 
+                (?tupperware.n.01 - tupperware.n.01) 
                 (exists 
-                    (?wax_paper.n.01 - wax_paper.n.01)                    
-                    (forall
-                        (?steak.n.01 - steak.n.01)
-                        (and
-                            (inside ?steak.n.01 ?tupperware.n.01)
+                    (?wax_paper.n.01 - wax_paper.n.01) 
+                    (forall 
+                        (?steak.n.01 - steak.n.01) 
+                        (and 
+                            (inside ?steak.n.01 ?tupperware.n.01) 
                             (ontop ?wax_paper.n.01 ?steak.n.01_1)
                         )
                     )
                 )
-            )
-            (exists
-                (?tupperware.n.01 - tupperware.n.01)
-                (exists
-                    (?wax_paper.n.01 - wax_paper.n.01)
-                    (forall
-                        (?chicken.n.01 - chicken.n.01)
-                        (and
-                            (inside ?chicken.n.01 ?tupperware.n.01)
+            ) 
+            (exists 
+                (?tupperware.n.01 - tupperware.n.01) 
+                (exists 
+                    (?wax_paper.n.01 - wax_paper.n.01) 
+                    (forall 
+                        (?chicken.n.01 - chicken.n.01) 
+                        (and 
+                            (inside ?chicken.n.01 ?tupperware.n.01) 
                             (ontop ?wax_paper.n.01 ?chicken.n.01)
                         )
                     )
                 )
-            )
+            ) 
             (forall 
-                (?steak.n.01 - steak.n.01)
+                (?steak.n.01 - steak.n.01) 
                 (frozen ?steak.n.01)
-            )
+            ) 
             (forall 
-                (?chicken.n.01 - chicken.n.01)
+                (?chicken.n.01 - chicken.n.01) 
                 (frozen ?chicken.n.01)
             )
         )

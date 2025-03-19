@@ -1,4 +1,4 @@
-(define (problem halve_an_egg-0)
+(define (problem halve_an_egg_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,17 +13,17 @@
     (:init 
         (ontop carving_knife.n.01_1 countertop.n.01_1) 
         (ontop hard-boiled_egg.n.01_1 countertop.n.01_1) 
-        (cooked hard-boiled_egg.n.01_1)
+        (cooked hard-boiled_egg.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (future half__hard-boiled_egg.n.01_1)
-        (future half__hard-boiled_egg.n.01_2)
+        (future half__hard-boiled_egg.n.01_1) 
+        (future half__hard-boiled_egg.n.01_2) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?half__hard-boiled_egg.n.01_1)
+            (real ?half__hard-boiled_egg.n.01_1) 
             (real ?half__hard-boiled_egg.n.01_2)
         )
     )

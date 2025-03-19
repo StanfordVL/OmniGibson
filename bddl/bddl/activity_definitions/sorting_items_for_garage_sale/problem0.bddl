@@ -1,4 +1,4 @@
-(define (problem sorting_items_for_garage_sale-0)
+(define (problem sorting_items_for_garage_sale_0)
     (:domain omnigibson)
 
     (:objects
@@ -37,8 +37,8 @@
         (ontop cooking_utensil.n.01_2 floor.n.01_1) 
         (ontop tennis_racket.n.01_1 floor.n.01_1) 
         (ontop tennis_racket.n.01_2 tennis_racket.n.01_1) 
-        (ontop coat.n.01_1 floor.n.01_1)
-        (ontop coat.n.01_2 floor.n.01_1)
+        (ontop coat.n.01_1 floor.n.01_1) 
+        (ontop coat.n.01_2 floor.n.01_1) 
         (ontop blanket.n.01_1 floor.n.01_1) 
         (ontop gym_shoe.n.01_1 textbook.n.01_3) 
         (ontop gym_shoe.n.01_2 textbook.n.01_3) 
@@ -50,61 +50,61 @@
     (:goal 
         (and 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
-                (inside ?ball.n.01_1 ?packing_box.n.02) 
-            )
+                (?packing_box.n.02 - packing_box.n.02) 
+                (inside ?ball.n.01_1 ?packing_box.n.02)
+            ) 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
+                (?packing_box.n.02 - packing_box.n.02) 
                 (forall 
                     (?textbook.n.01 - textbook.n.01) 
                     (inside ?textbook.n.01 ?packing_box.n.02)
-                ) 
-            )
+                )
+            ) 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
+                (?packing_box.n.02 - packing_box.n.02) 
                 (forall 
                     (?cooking_utensil.n.01 - cooking_utensil.n.01) 
                     (inside ?cooking_utensil.n.01 ?packing_box.n.02)
-                ) 
-            )
+                )
+            ) 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
+                (?packing_box.n.02 - packing_box.n.02) 
                 (forall 
                     (?tennis_racket.n.01 - tennis_racket.n.01) 
                     (inside ?tennis_racket.n.01 ?packing_box.n.02)
-                ) 
-            )
+                )
+            ) 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
+                (?packing_box.n.02 - packing_box.n.02) 
                 (forall 
                     (?gym_shoe.n.01 - gym_shoe.n.01) 
                     (inside ?gym_shoe.n.01 ?packing_box.n.02)
-                ) 
-            )
+                )
+            ) 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
+                (?packing_box.n.02 - packing_box.n.02) 
                 (forall 
                     (?toaster.n.02 - toaster.n.02) 
                     (inside ?toaster.n.02 ?packing_box.n.02_2)
                 )
-            )
+            ) 
             (exists 
-                (?packing_box.n.02 - packing_box.n.02)
-                (and
+                (?packing_box.n.02 - packing_box.n.02) 
+                (and 
                     (inside ?blanket.n.01_1 ?packing_box.n.02) 
-                    (folded ?blanket.n.01_1)
+                    (folded ?blanket.n.01_1) 
                     (forall 
-                        (?coat.n.01 - coat.n.01)
-                        (and
-                            (inside ?coat.n.01 ?packing_box.n.02)
+                        (?coat.n.01 - coat.n.01) 
+                        (and 
+                            (inside ?coat.n.01 ?packing_box.n.02) 
                             (folded ?coat.n.01)
                         )
-                    ) 
+                    )
                 )
-            )
-            (forpairs
-                (?gummed_label.n.01 - gummed_label.n.01)
-                (?packing_box.n.02 - packing_box.n.02)
+            ) 
+            (forpairs 
+                (?gummed_label.n.01 - gummed_label.n.01) 
+                (?packing_box.n.02 - packing_box.n.02) 
                 (ontop ?gummed_label.n.01 ?packing_box.n.02)
             )
         )

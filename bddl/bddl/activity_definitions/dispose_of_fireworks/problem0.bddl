@@ -1,4 +1,4 @@
-(define (problem dispose_of_fireworks-0)
+(define (problem dispose_of_fireworks_0)
     (:domain omnigibson)
 
     (:objects
@@ -21,7 +21,7 @@
     (:goal 
         (and 
             (forall 
-                (?firework.n.01 - firework.n.01)
+                (?firework.n.01 - firework.n.01) 
                 (inside ?firework.n.01 ?ashcan.n.01_1)
             )
         )

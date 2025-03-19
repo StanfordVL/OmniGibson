@@ -1,4 +1,4 @@
-(define (problem clean_a_LED_screen-0)
+(define (problem clean_a_LED_screen_0)
     (:domain omnigibson)
 
     (:objects
@@ -14,14 +14,15 @@
         (ontop rag.n.01_1 floor.n.01_1) 
         (inroom television_receiver.n.01_1 living_room) 
         (inroom floor.n.01_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom television_receiver.n.01_* living_room)
     )
     
     (:goal 
         (and 
             (not 
                 (covered ?television_receiver.n.01_1 ?dust.n.01_1)
-            ) 
+            )
         )
     )
 )

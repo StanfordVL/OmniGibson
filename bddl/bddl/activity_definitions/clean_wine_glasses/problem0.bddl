@@ -1,4 +1,4 @@
-(define (problem clean_wine_glasses-0)
+(define (problem clean_wine_glasses_0)
     (:domain omnigibson)
 
     (:objects
@@ -42,7 +42,7 @@
                 (not 
                     (covered ?wineglass.n.01 ?stain.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

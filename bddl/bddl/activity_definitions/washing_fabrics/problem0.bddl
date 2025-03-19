@@ -1,4 +1,4 @@
-(define (problem washing_fabrics-0)
+(define (problem washing_fabrics_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,7 +17,7 @@
         (ontop garment.n.01_1 floor.n.01_1) 
         (ontop garment.n.01_2 floor.n.01_1) 
         (covered garment.n.01_1 stain.n.01_1) 
-        (covered garment.n.01_2 stain.n.01_1)
+        (covered garment.n.01_2 stain.n.01_1) 
         (ontop bucket.n.01_1 floor.n.01_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 floor.n.01_1) 
@@ -30,7 +30,7 @@
     (:goal 
         (and 
             (forall 
-                (?garment.n.01 - garment.n.01)
+                (?garment.n.01 - garment.n.01) 
                 (not 
                     (covered ?garment.n.01 ?stain.n.01_1)
                 )

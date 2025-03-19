@@ -1,4 +1,4 @@
-(define (problem changing_sheets-0)
+(define (problem changing_sheets_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,7 +13,9 @@
         (ontop sheet.n.03_1 bed.n.01_1) 
         (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* bedroom) 
+        (inroom bed.n.01_* bedroom)
     )
     
     (:goal 

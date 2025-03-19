@@ -1,4 +1,4 @@
-(define (problem clean_the_outside_of_a_house-0)
+(define (problem clean_the_outside_of_a_house_0)
     (:domain omnigibson)
 
     (:objects
@@ -26,7 +26,8 @@
         (inroom driveway.n.01_1 garden) 
         (inroom wall.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall.n.01_* garden)
     )
     
     (:goal 

@@ -1,4 +1,4 @@
-(define (problem cook_snap_peas-0)
+(define (problem cook_snap_peas_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,12 +15,12 @@
     )
     
     (:init 
-        (insource white_sauce__bottle.n.01_1 cheese_sauce.n.01_1)
-        (inside white_sauce__bottle.n.01_1 cabinet.n.01_1)
+        (insource white_sauce__bottle.n.01_1 cheese_sauce.n.01_1) 
+        (inside white_sauce__bottle.n.01_1 cabinet.n.01_1) 
         (inside pea_pod.n.01_1 bowl.n.01_1) 
         (inside pea_pod.n.01_2 bowl.n.01_1) 
         (inside pea_pod.n.01_3 bowl.n.01_1) 
-        (inside pea_pod.n.01_4 bowl.n.01_1)
+        (inside pea_pod.n.01_4 bowl.n.01_1) 
         (not 
             (cooked pea_pod.n.01_1)
         ) 
@@ -32,8 +32,8 @@
         ) 
         (not 
             (cooked pea_pod.n.01_4)
-        )
-        (inside bowl.n.01_1 electric_refrigerator.n.01_1)
+        ) 
+        (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inside casserole.n.02_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom oven.n.01_1 kitchen) 
@@ -45,9 +45,9 @@
     (:goal 
         (and 
             (forall 
-                (?pea_pod.n.01 - pea_pod.n.01)
+                (?pea_pod.n.01 - pea_pod.n.01) 
                 (and 
-                    (cooked ?pea_pod.n.01)
+                    (cooked ?pea_pod.n.01) 
                     (covered ?pea_pod.n.01 ?cheese_sauce.n.01_1)
                 )
             )

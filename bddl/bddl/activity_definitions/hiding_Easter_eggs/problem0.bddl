@@ -1,4 +1,4 @@
-(define (problem hiding_Easter_eggs-0)
+(define (problem hiding_Easter_eggs_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,8 +19,11 @@
         (inroom lawn.n.01_1 garden) 
         (inroom tree.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
-        (inroom scrub.n.01_1 garden)
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom scrub.n.01_1 garden) 
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom scrub.n.01_* garden) 
+        (inroom tree.n.01_* garden) 
+        (inroom lawn.n.01_* garden)
     )
     
     (:goal 

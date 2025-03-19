@@ -1,4 +1,4 @@
-(define (problem pack_for_the_pool-0)
+(define (problem pack_for_the_pool_0)
     (:domain omnigibson)
 
     (:objects
@@ -25,32 +25,32 @@
         (ontop cooler.n.01_1 sofa.n.01_1) 
         (ontop swimsuit.n.01_1 sofa.n.01_1) 
         (ontop life_jacket.n.01_1 coffee_table.n.01_1) 
-        (ontop carryall.n.01_1 coffee_table.n.01_1)
-        (inside water_bottle.n.01_1 cabinet.n.01_1)
-        (inside water_bottle.n.01_2 cabinet.n.01_1)
+        (ontop carryall.n.01_1 coffee_table.n.01_1) 
+        (inside water_bottle.n.01_1 cabinet.n.01_1) 
+        (inside water_bottle.n.01_2 cabinet.n.01_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom coffee_table.n.01_1 living_room) 
         (inroom sofa.n.01_1 living_room) 
-        (inroom cabinet.n.01_1 kitchen)
+        (inroom cabinet.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (inside ?money.n.01_1 ?carryall.n.01_1)
-            (inside ?lip_balm.n.01_1 ?carryall.n.01_1)
+            (inside ?money.n.01_1 ?carryall.n.01_1) 
+            (inside ?lip_balm.n.01_1 ?carryall.n.01_1) 
             (forall 
-                (?bath_towel.n.01 - bath_towel.n.01)
+                (?bath_towel.n.01 - bath_towel.n.01) 
                 (and 
-                    (folded ?bath_towel.n.01)
+                    (folded ?bath_towel.n.01) 
                     (inside ?bath_towel.n.01 ?carryall.n.01_1)
                 )
-            )
-            (inside ?life_jacket.n.01_1 ?carryall.n.01_1)
-            (folded ?swimsuit.n.01_1)
-            (inside ?swimsuit.n.01_1 ?carryall.n.01_1)
+            ) 
+            (inside ?life_jacket.n.01_1 ?carryall.n.01_1) 
+            (folded ?swimsuit.n.01_1) 
+            (inside ?swimsuit.n.01_1 ?carryall.n.01_1) 
             (forall 
-                (?water_bottle.n.01 - water_bottle.n.01)
+                (?water_bottle.n.01 - water_bottle.n.01) 
                 (inside ?water_bottle.n.01 ?cooler.n.01_1)
             )
         )

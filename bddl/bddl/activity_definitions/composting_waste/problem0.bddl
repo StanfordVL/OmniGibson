@@ -1,4 +1,4 @@
-(define (problem composting_waste-0)
+(define (problem composting_waste_0)
     (:domain omnigibson)
 
     (:objects
@@ -22,7 +22,7 @@
     (:goal 
         (and 
             (inside ?banana.n.02_1 ?compost_bin.n.01_1) 
-            (inside ?apple.n.01_1 ?compost_bin.n.01_1) 
+            (inside ?apple.n.01_1 ?compost_bin.n.01_1)
         )
     )
 )

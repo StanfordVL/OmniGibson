@@ -1,4 +1,4 @@
-(define (problem make_a_red_meat_sauce-0)
+(define (problem make_a_red_meat_sauce_0)
     (:domain omnigibson)
 
     (:objects
@@ -34,11 +34,11 @@
         (ontop chopping_board.n.01_1 countertop.n.01_1) 
         (filled ground_beef__package.n.01_1 ground_beef.n.01_1) 
         (inside ground_beef__package.n.01_1 electric_refrigerator.n.01_1) 
-        (inside basil.n.03_1 basil__jar.n.01_1)
-        (inside basil.n.03_2 basil__jar.n.01_1)
-        (inside basil.n.03_3 basil__jar.n.01_1)
-        (inside basil.n.03_4 basil__jar.n.01_1)
-        (ontop basil__jar.n.01_1 countertop.n.01_1)
+        (inside basil.n.03_1 basil__jar.n.01_1) 
+        (inside basil.n.03_2 basil__jar.n.01_1) 
+        (inside basil.n.03_3 basil__jar.n.01_1) 
+        (inside basil.n.03_4 basil__jar.n.01_1) 
+        (ontop basil__jar.n.01_1 countertop.n.01_1) 
         (insource rosemary__shaker.n.01_1 rosemary.n.02_1) 
         (ontop rosemary__shaker.n.01_1 countertop.n.01_1) 
         (ontop saucepan.n.01_1 countertop.n.01_1) 
@@ -53,7 +53,7 @@
     (:goal 
         (and 
             (real ?cooked__red_meat_sauce.n.01_1) 
-            (contains ?saucepan.n.01_1 ?cooked__red_meat_sauce.n.01_1) 
+            (contains ?saucepan.n.01_1 ?cooked__red_meat_sauce.n.01_1)
         )
     )
 )

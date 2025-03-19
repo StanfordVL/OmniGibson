@@ -1,4 +1,4 @@
-(define (problem packing_picnic_into_car-0)
+(define (problem packing_picnic_into_car_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,8 +23,8 @@
         (ontop blanket.n.01_1 driveway.n.01_1) 
         (inside beer_bottle.n.01_1 wicker_basket.n.01_1) 
         (inside beer_bottle.n.01_2 wicker_basket.n.01_1) 
-        (inside cupcake.n.01_1 wicker_basket.n.01_1)
-        (inside cupcake.n.01_2 wicker_basket.n.01_1)
+        (inside cupcake.n.01_1 wicker_basket.n.01_1) 
+        (inside cupcake.n.01_2 wicker_basket.n.01_1) 
         (inside water_bottle.n.01_1 wicker_basket.n.01_2) 
         (inside bottle__of__sunscreen.n.01_1 wicker_basket.n.01_2) 
         (ontop paper_towel.n.01_1 driveway.n.01_1) 
@@ -40,31 +40,31 @@
                 (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (inside ?wicker_basket.n.01 ?car.n.01_1)
             ) 
-            (inside ?paper_towel.n.01_1 ?car.n.01_1)
-            (inside ?blanket.n.01_1 ?car.n.01_1)
-            (exists
-                (?wicker_basket.n.01 - wicker_basket.n.01)
+            (inside ?paper_towel.n.01_1 ?car.n.01_1) 
+            (inside ?blanket.n.01_1 ?car.n.01_1) 
+            (exists 
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (inside ?water_bottle.n.01_1 ?wicker_basket.n.01)
-            )
-            (exists
-                (?wicker_basket.n.01 - wicker_basket.n.01)
+            ) 
+            (exists 
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (inside ?bottle__of__sunscreen.n.01_1 ?wicker_basket.n.01)
-            )
-            (exists
-                (?wicker_basket.n.01 - wicker_basket.n.01)
+            ) 
+            (exists 
+                (?wicker_basket.n.01 - wicker_basket.n.01) 
                 (inside ?carving_knife.n.01_1 ?wicker_basket.n.01)
-            )
-            (forall
-                (?beer_bottle.n.01 - beer_bottle.n.01)
-                (exists
-                    (?wicker_basket.n.01 - wicker_basket.n.01)
+            ) 
+            (forall 
+                (?beer_bottle.n.01 - beer_bottle.n.01) 
+                (exists 
+                    (?wicker_basket.n.01 - wicker_basket.n.01) 
                     (inside ?beer_bottle.n.01 ?wicker_basket.n.01)
                 )
-            )
-            (forall
-                (?cupcake.n.01 - cupcake.n.01)
-                (exists
-                    (?wicker_basket.n.01 - wicker_basket.n.01)
+            ) 
+            (forall 
+                (?cupcake.n.01 - cupcake.n.01) 
+                (exists 
+                    (?wicker_basket.n.01 - wicker_basket.n.01) 
                     (inside ?cupcake.n.01 ?wicker_basket.n.01)
                 )
             )

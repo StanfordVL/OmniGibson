@@ -1,10 +1,10 @@
-(define (problem fixing_mailbox-0)
+(define (problem fixing_mailbox_0)
     (:domain omnigibson)
 
     (:objects
-     	mailbox.n.01_1 - mailbox.n.01
-    	floor.n.01_1 - floor.n.01
-    	agent.n.01_1 - agent.n.01
+        mailbox.n.01_1 - mailbox.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
     )
     
     (:init 

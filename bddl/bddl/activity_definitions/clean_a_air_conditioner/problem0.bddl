@@ -1,4 +1,4 @@
-(define (problem clean_a_air_conditioner-0)
+(define (problem clean_a_air_conditioner_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,7 +17,7 @@
         ) 
         (ontop rag.n.01_1 breakfast_table.n.01_1) 
         (ontop air_conditioner.n.01_1 floor.n.01_1) 
-        (inroom breakfast_table.n.01_1 dining_room)
+        (inroom breakfast_table.n.01_1 dining_room) 
         (inroom floor.n.01_1 dining_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -26,7 +26,7 @@
         (and 
             (not 
                 (covered ?air_conditioner.n.01_1 ?dust.n.01_1)
-            ) 
+            )
         )
     )
 )

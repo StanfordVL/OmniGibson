@@ -1,4 +1,4 @@
-(define (problem wash_baby_bottles-0)
+(define (problem wash_baby_bottles_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,7 +23,7 @@
         (not 
             (covered bottle.n.03_2 disinfectant.n.01_1)
         ) 
-        (ontop bottle.n.03_3 sink.n.01_1)
+        (ontop bottle.n.03_3 sink.n.01_1) 
         (not 
             (covered bottle.n.03_3 disinfectant.n.01_1)
         ) 
@@ -35,26 +35,27 @@
         (not 
             (covered bottle.n.03_5 disinfectant.n.01_1)
         ) 
-        (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1)
-        (ontop disinfectant__bottle.n.01_1 countertop.n.01_1)
+        (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1) 
+        (ontop disinfectant__bottle.n.01_1 countertop.n.01_1) 
         (ontop scrub_brush.n.01_1 countertop.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom dishwasher.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom dishwasher.n.01_* kitchen)
     )
     
     (:goal 
         (and 
             (forall 
                 (?bottle.n.03 - bottle.n.03) 
-                (and
-                    (inside ?bottle.n.03 ?dishwasher.n.01_1)
+                (and 
+                    (inside ?bottle.n.03 ?dishwasher.n.01_1) 
                     (covered ?bottle.n.03 ?disinfectant.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

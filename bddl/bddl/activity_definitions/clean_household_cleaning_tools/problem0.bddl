@@ -1,4 +1,4 @@
-(define (problem clean_household_cleaning_tools-0)
+(define (problem clean_household_cleaning_tools_0)
     (:domain omnigibson)
 
     (:objects
@@ -39,10 +39,10 @@
         (not 
             (covered bucket.n.01_1 disinfectant.n.01_1)
         ) 
-        (covered broom.n.01_1 stain.n.01_1)
-        (covered swab.n.02_1 dust.n.01_1)
-        (covered mop_bucket.n.01_1 dust.n.01_1)
-        (covered bucket.n.01_1 dust.n.01_1)
+        (covered broom.n.01_1 stain.n.01_1) 
+        (covered swab.n.02_1 dust.n.01_1) 
+        (covered mop_bucket.n.01_1 dust.n.01_1) 
+        (covered bucket.n.01_1 dust.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
         (filled disinfectant__bottle.n.01_1 disinfectant.n.01_1) 
@@ -53,19 +53,19 @@
     
     (:goal 
         (and 
-            (covered ?broom.n.01_1 ?disinfectant.n.01_1)
+            (covered ?broom.n.01_1 ?disinfectant.n.01_1) 
             (not 
                 (covered ?broom.n.01_1 ?stain.n.01_1)
-            )
-            (covered ?swab.n.02_1 ?disinfectant.n.01_1)
+            ) 
+            (covered ?swab.n.02_1 ?disinfectant.n.01_1) 
             (not 
                 (covered ?swab.n.02_1 ?dust.n.01_1)
-            )
-            (covered ?mop_bucket.n.01_1 ?disinfectant.n.01_1)
+            ) 
+            (covered ?mop_bucket.n.01_1 ?disinfectant.n.01_1) 
             (not 
                 (covered ?mop_bucket.n.01_1 ?dust.n.01_1)
-            )
-            (covered ?bucket.n.01_1 ?disinfectant.n.01_1)
+            ) 
+            (covered ?bucket.n.01_1 ?disinfectant.n.01_1) 
             (not 
                 (covered ?bucket.n.01_1 ?dust.n.01_1)
             )

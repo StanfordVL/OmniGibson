@@ -1,4 +1,4 @@
-(define (problem cook_turkey_drumsticks-0)
+(define (problem cook_turkey_drumsticks_0)
     (:domain omnigibson)
 
     (:objects
@@ -28,12 +28,12 @@
         (ontop casserole.n.02_1 oven.n.01_1) 
         (inside turkey_leg.n.01_1 electric_refrigerator.n.01_1) 
         (inside turkey_leg.n.01_2 electric_refrigerator.n.01_1) 
-        (insource thyme__shaker.n.01_1 thyme.n.02_1)
-        (inside thyme__shaker.n.01_1 cabinet.n.01_1)
-        (insource salt__shaker.n.01_1 salt.n.02_1)
-        (inside salt__shaker.n.01_1 cabinet.n.01_1)
-        (insource pepper__shaker.n.01_1 black_pepper.n.02_1)
-        (inside pepper__shaker.n.01_1 cabinet.n.01_1)
+        (insource thyme__shaker.n.01_1 thyme.n.02_1) 
+        (inside thyme__shaker.n.01_1 cabinet.n.01_1) 
+        (insource salt__shaker.n.01_1 salt.n.02_1) 
+        (inside salt__shaker.n.01_1 cabinet.n.01_1) 
+        (insource pepper__shaker.n.01_1 black_pepper.n.02_1) 
+        (inside pepper__shaker.n.01_1 cabinet.n.01_1) 
         (ontop meat_thermometer.n.01_1 oven.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
@@ -45,11 +45,11 @@
     (:goal 
         (and 
             (forall 
-                (?turkey_leg.n.01 - turkey_leg.n.01)
+                (?turkey_leg.n.01 - turkey_leg.n.01) 
                 (and 
-                    (cooked ?turkey_leg.n.01)
-                    (covered ?turkey_leg.n.01 ?salt.n.02_1)
-                    (covered ?turkey_leg.n.01 ?thyme.n.02_1)
+                    (cooked ?turkey_leg.n.01) 
+                    (covered ?turkey_leg.n.01 ?salt.n.02_1) 
+                    (covered ?turkey_leg.n.01 ?thyme.n.02_1) 
                     (covered ?turkey_leg.n.01 ?black_pepper.n.02_1)
                 )
             )

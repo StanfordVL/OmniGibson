@@ -1,4 +1,4 @@
-(define (problem packing_moving_van-0)
+(define (problem packing_moving_van_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,33 +12,33 @@
     )
     
     (:init 
-        (ontop pickup.n.01_1 floor.n.01_1)
+        (ontop pickup.n.01_1 floor.n.01_1) 
         (ontop mattress.n.01_1 floor.n.01_1) 
         (ontop blanket.n.01_1 floor.n.01_1) 
         (ontop carton.n.02_1 floor.n.01_1) 
         (ontop carton.n.02_2 floor.n.01_1) 
         (ontop carton.n.02_3 floor.n.01_1) 
         (inroom floor.n.01_1 garden) 
-        (inroom chair.n.01_1 garden)
-        (inroom chair.n.01_2 garden)
+        (inroom chair.n.01_1 garden) 
+        (inroom chair.n.01_2 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (ontop ?mattress.n.01_1 ?pickup.n.01_1)
-            (ontop ?blanket.n.01_1 ?pickup.n.01_1)
+            (ontop ?mattress.n.01_1 ?pickup.n.01_1) 
+            (ontop ?blanket.n.01_1 ?pickup.n.01_1) 
             (forall 
                 (?carton.n.02 - carton.n.02) 
-                (and
-                    (ontop ?carton.n.02 ?pickup.n.01_1)
-                    (not
+                (and 
+                    (ontop ?carton.n.02 ?pickup.n.01_1) 
+                    (not 
                         (open ?carton.n.02)
                     )
                 )
-            )
+            ) 
             (forall 
-                (?chair.n.01 - chair.n.01)
+                (?chair.n.01 - chair.n.01) 
                 (ontop ?chair.n.01 ?pickup.n.01_1)
             )
         )

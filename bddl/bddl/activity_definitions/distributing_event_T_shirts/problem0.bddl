@@ -1,4 +1,4 @@
-(define (problem distributing_event_T_shirts-0)
+(define (problem distributing_event_T_shirts_0)
     (:domain omnigibson)
 
     (:objects
@@ -19,15 +19,15 @@
         (inside jersey.n.03_6 carton.n.02_1) 
         (inside jersey.n.03_7 carton.n.02_1) 
         (inside jersey.n.03_8 carton.n.02_1) 
-        (inroom floor.n.01_1 empty_room)
-        (ontop booth.n.01_1 floor.n.01_1)
+        (inroom floor.n.01_1 empty_room) 
+        (ontop booth.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (forall
-                (?jersey.n.03 - jersey.n.03)
+            (forall 
+                (?jersey.n.03 - jersey.n.03) 
                 (ontop ?jersey.n.03 ?booth.n.01_1)
             )
         )

@@ -1,4 +1,4 @@
-(define (problem clean_a_blender-0)
+(define (problem clean_a_blender_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,15 +15,15 @@
     )
     
     (:init 
-        (ontop blender.n.01_1 sink.n.01_1)
-        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1)
-        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1)
+        (ontop blender.n.01_1 sink.n.01_1) 
+        (filled liquid_soap__bottle.n.01_1 liquid_soap.n.01_1) 
+        (ontop liquid_soap__bottle.n.01_1 countertop.n.01_1) 
         (ontop sponge.n.01_1 countertop.n.01_1) 
         (covered blender.n.01_1 carrot_juice.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

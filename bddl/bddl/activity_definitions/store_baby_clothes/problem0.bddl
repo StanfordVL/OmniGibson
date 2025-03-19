@@ -1,4 +1,4 @@
-(define (problem store_baby_clothes-0)
+(define (problem store_baby_clothes_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,36 +16,37 @@
         (ontop bath_towel.n.01_1 bed.n.01_1) 
         (ontop diaper.n.01_1 bed.n.01_1) 
         (ontop diaper.n.01_2 bed.n.01_1) 
-        (ontop sock.n.01_1 bed.n.01_1)
+        (ontop sock.n.01_1 bed.n.01_1) 
         (ontop sock.n.01_2 bed.n.01_1) 
-        (ontop baby_shoe.n.01_1 floor.n.01_1)
-        (ontop baby_shoe.n.01_2 floor.n.01_1)
+        (ontop baby_shoe.n.01_1 floor.n.01_1) 
+        (ontop baby_shoe.n.01_2 floor.n.01_1) 
         (inroom bed.n.01_1 childs_room) 
         (inroom bookcase.n.01_1 childs_room) 
         (inroom floor.n.01_1 childs_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom bookcase.n.01_* childs_room)
     )
     
     (:goal 
         (and 
             (inside ?bath_towel.n.01_1 ?bookcase.n.01_1) 
-            (folded ?bath_towel.n.01_1)
+            (folded ?bath_towel.n.01_1) 
             (forall 
-                (?diaper.n.01 - diaper.n.01)
+                (?diaper.n.01 - diaper.n.01) 
                 (inside ?diaper.n.01 ?bookcase.n.01_1)
-            )
+            ) 
             (forall 
-                (?sock.n.01 - sock.n.01)
-                (and
-                    (folded ?sock.n.01)
+                (?sock.n.01 - sock.n.01) 
+                (and 
+                    (folded ?sock.n.01) 
                     (inside ?sock.n.01 ?bookcase.n.01_1)
                 )
-            )
-            (nextto ?sock.n.01_1 ?sock.n.01_2)
+            ) 
+            (nextto ?sock.n.01_1 ?sock.n.01_2) 
             (forall 
-                (?baby_shoe.n.01 - baby_shoe.n.01)
+                (?baby_shoe.n.01 - baby_shoe.n.01) 
                 (inside ?baby_shoe.n.01 ?bookcase.n.01_1)
-            )
+            ) 
             (touching ?baby_shoe.n.01_1 ?baby_shoe.n.01_2)
         )
     )

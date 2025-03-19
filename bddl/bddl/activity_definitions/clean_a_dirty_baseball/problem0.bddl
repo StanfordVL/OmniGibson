@@ -1,4 +1,4 @@
-(define (problem clean_a_dirty_baseball-0)
+(define (problem clean_a_dirty_baseball_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,7 +16,7 @@
     (:init 
         (ontop baseball.n.02_1 floor.n.01_1) 
         (ontop rag.n.01_1 floor.n.01_1) 
-        (covered baseball.n.02_1 mud.n.03_1)
+        (covered baseball.n.02_1 mud.n.03_1) 
         (not 
             (covered baseball.n.02_1 disinfectant.n.01_1)
         ) 
@@ -32,7 +32,7 @@
         (and 
             (not 
                 (covered ?baseball.n.02_1 ?mud.n.03_1)
-            )
+            ) 
             (covered ?baseball.n.02_1 ?disinfectant.n.01_1)
         )
     )

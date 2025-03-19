@@ -1,4 +1,4 @@
-(define (problem packing_bags_or_suitcase-0)
+(define (problem packing_bags_or_suitcase_0)
     (:domain omnigibson)
 
     (:objects
@@ -27,7 +27,9 @@
         (inroom floor.n.01_1 bedroom) 
         (inroom door.n.01_1 bedroom) 
         (inroom window.n.01_1 bedroom) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom floor.n.01_* bedroom) 
+        (inroom bed.n.01_* bedroom)
     )
     
     (:goal 

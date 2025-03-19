@@ -1,4 +1,4 @@
-(define (problem cook_arepas-0)
+(define (problem cook_arepas_0)
     (:domain omnigibson)
 
     (:objects
@@ -23,14 +23,15 @@
         (inroom stove.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom countertop.n.01_* kitchen)
     )
     
     (:goal 
         (and 
             (ontop ?arepa.n.01_1 ?griddle.n.01_1) 
-            (cooked ?arepa.n.01_1)
-            (ontop griddle.n.01_1 countertop.n.01_1) 
+            (cooked ?arepa.n.01_1) 
+            (ontop griddle.n.01_1 countertop.n.01_1)
         )
     )
 )

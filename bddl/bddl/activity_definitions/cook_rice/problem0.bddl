@@ -1,4 +1,4 @@
-(define (problem cook_rice-0)
+(define (problem cook_rice_0)
     (:domain omnigibson)
 
     (:objects
@@ -18,24 +18,24 @@
     
     (:init 
         (filled brown_rice__sack.n.01_1 brown_rice.n.01_1) 
-        (ontop crock_pot.n.01_1 floor.n.01_1)
+        (ontop crock_pot.n.01_1 floor.n.01_1) 
         (inside butter.n.01_1 electric_refrigerator.n.01_1) 
-        (ontop brown_rice__sack.n.01_1 floor.n.01_1)
-        (insource sink.n.01_1 water.n.06_1)
+        (ontop brown_rice__sack.n.01_1 floor.n.01_1) 
+        (insource sink.n.01_1 water.n.06_1) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom sink.n.01_1 kitchen)
+        (inroom sink.n.01_1 kitchen) 
         (inroom stove.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
-        (future melted__butter.n.01_1)
-        (future cooked__brown_rice.n.01_1)
+        (future melted__butter.n.01_1) 
+        (future cooked__brown_rice.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?melted__butter.n.01_1)
-            (real ?cooked__brown_rice.n.01_1)
-            (contains ?crock_pot.n.01_1 ?melted__butter.n.01_1)
+            (real ?melted__butter.n.01_1) 
+            (real ?cooked__brown_rice.n.01_1) 
+            (contains ?crock_pot.n.01_1 ?melted__butter.n.01_1) 
             (filled ?crock_pot.n.01_1 ?cooked__brown_rice.n.01_1)
         )
     )

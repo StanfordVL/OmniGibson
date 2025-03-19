@@ -1,4 +1,4 @@
-(define (problem raking_leaves-0)
+(define (problem raking_leaves_0)
     (:domain omnigibson)
 
     (:objects
@@ -39,7 +39,7 @@
     (:goal 
         (and 
             (forall 
-                (?entire_leaf.n.01 - entire_leaf.n.01)
+                (?entire_leaf.n.01 - entire_leaf.n.01) 
                 (inside ?entire_leaf.n.01 ?sack.n.01_1)
             )
         )

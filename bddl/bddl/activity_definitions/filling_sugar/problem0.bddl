@@ -1,4 +1,4 @@
-(define (problem filling_sugar-0)
+(define (problem filling_sugar_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,7 +15,7 @@
         (inside bowl.n.01_1 cabinet.n.01_1) 
         (filled sugar__sack.n.01_1 granulated_sugar.n.01_1) 
         (inside sugar__sack.n.01_1 cabinet.n.01_1) 
-        (inside teaspoon.n.02_1 cabinet.n.01_1)
+        (inside teaspoon.n.02_1 cabinet.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -23,7 +23,7 @@
     
     (:goal 
         (and 
-            (filled ?bowl.n.01_1 ?granulated_sugar.n.01_1)
+            (filled ?bowl.n.01_1 ?granulated_sugar.n.01_1) 
             (inside ?teaspoon.n.02_1 ?bowl.n.01_1)
         )
     )

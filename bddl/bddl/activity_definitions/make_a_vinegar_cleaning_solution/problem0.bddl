@@ -1,4 +1,4 @@
-(define (problem make_a_vinegar_cleaning_solution-0)
+(define (problem make_a_vinegar_cleaning_solution_0)
     (:domain omnigibson)
 
     (:objects
@@ -24,7 +24,7 @@
         (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1) 
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (ontop erlenmeyer_flask.n.01_1 countertop.n.01_1) 
-        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen) 
         (inroom sink.n.01_1 kitchen) 
         (future vinegar_cleaning_solution.n.01_1) 
         (inroom floor.n.01_1 kitchen) 

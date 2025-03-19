@@ -1,4 +1,4 @@
-(define (problem mailing_letters-0)
+(define (problem mailing_letters_0)
     (:domain omnigibson)
 
     (:objects
@@ -13,7 +13,7 @@
         (ontop envelope.n.01_1 sofa.n.01_1) 
         (ontop envelope.n.01_2 sofa.n.01_1) 
         (ontop envelope.n.01_3 sofa.n.01_1) 
-        (ontop mailbox.n.01_1 floor.n.01_1)
+        (ontop mailbox.n.01_1 floor.n.01_1) 
         (inroom sofa.n.01_1 living_room) 
         (inroom floor.n.01_1 garden) 
         (inroom floor.n.01_2 living_room) 
@@ -23,7 +23,7 @@
     (:goal 
         (and 
             (forall 
-                (?envelope.n.01 - envelope.n.01)
+                (?envelope.n.01 - envelope.n.01) 
                 (inside ?envelope.n.01 ?mailbox.n.01_1)
             )
         )

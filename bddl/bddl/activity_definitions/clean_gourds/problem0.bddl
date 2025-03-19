@@ -1,4 +1,4 @@
-(define (problem clean_gourds-0)
+(define (problem clean_gourds_0)
     (:domain omnigibson)
 
     (:objects
@@ -15,9 +15,9 @@
         (ontop gourd.n.02_1 countertop.n.01_1) 
         (ontop gourd.n.02_2 countertop.n.01_1) 
         (ontop gourd.n.02_3 countertop.n.01_1) 
-        (covered gourd.n.02_1 dust.n.01_1)
-        (covered gourd.n.02_2 dust.n.01_1)
-        (covered gourd.n.02_3 dust.n.01_1)
+        (covered gourd.n.02_1 dust.n.01_1) 
+        (covered gourd.n.02_2 dust.n.01_1) 
+        (covered gourd.n.02_3 dust.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)

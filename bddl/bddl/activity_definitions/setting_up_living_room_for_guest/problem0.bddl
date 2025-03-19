@@ -1,4 +1,4 @@
-(define (problem setting_up_living_room_for_guest-0)
+(define (problem setting_up_living_room_for_guest_0)
     (:domain omnigibson)
 
     (:objects
@@ -28,7 +28,9 @@
         (inroom floor.n.01_1 living_room) 
         (inroom bookcase.n.01_1 living_room) 
         (inroom table.n.02_1 living_room) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom table.n.02_* living_room) 
+        (inroom bookcase.n.01_* living_room)
     )
     
     (:goal 
@@ -43,7 +45,7 @@
                 (inside ?hardback.n.01 ?bookcase.n.01_1)
             ) 
             (inside ?rag.n.01_1 ?bookcase.n.01_1) 
-            (folded ?rag.n.01_1)
+            (folded ?rag.n.01_1) 
             (inside ?teddy.n.01_1 ?bookcase.n.01_1) 
             (not 
                 (covered ?table.n.02_1 ?dust.n.01_1)

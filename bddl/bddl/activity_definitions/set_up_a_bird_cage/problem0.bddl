@@ -1,4 +1,4 @@
-(define (problem set_up_a_bird_cage-0)
+(define (problem set_up_a_bird_cage_0)
     (:domain omnigibson)
 
     (:objects
@@ -17,8 +17,8 @@
         (ontop birdcage.n.01_1 breakfast_table.n.01_1) 
         (ontop bowl.n.01_1 breakfast_table.n.01_1) 
         (ontop bowl.n.01_2 breakfast_table.n.01_1) 
-        (ontop toy_figure.n.01_1 breakfast_table.n.01_1)
-        (ontop toy_figure.n.01_2 breakfast_table.n.01_1)
+        (ontop toy_figure.n.01_1 breakfast_table.n.01_1) 
+        (ontop toy_figure.n.01_2 breakfast_table.n.01_1) 
         (ontop apple.n.01_1 breakfast_table.n.01_1) 
         (insource sink.n.01_1 water.n.06_1) 
         (inroom sink.n.01_1 kitchen) 
@@ -30,29 +30,29 @@
     (:goal 
         (and 
             (exists 
-                (?bowl.n.01 - bowl.n.01)
+                (?bowl.n.01 - bowl.n.01) 
                 (and 
-                    (inside ?apple.n.01_1 ?bowl.n.01)
+                    (inside ?apple.n.01_1 ?bowl.n.01) 
                     (not 
                         (contains ?bowl.n.01 ?water.n.06_1)
                     )
                 )
-            )
+            ) 
             (exists 
-                (?bowl.n.01 - bowl.n.01)
+                (?bowl.n.01 - bowl.n.01) 
                 (and 
-                    (contains ?bowl.n.01 ?water.n.06_1)
+                    (contains ?bowl.n.01 ?water.n.06_1) 
                     (not 
                         (inside ?apple.n.01_1 ?bowl.n.01)
                     )
                 )
-            )
+            ) 
             (forall 
-                (?toy_figure.n.01 - toy_figure.n.01)
+                (?toy_figure.n.01 - toy_figure.n.01) 
                 (inside ?toy_figure.n.01 ?birdcage.n.01_1)
-            )
+            ) 
             (forall 
-                (?bowl.n.01 - bowl.n.01)
+                (?bowl.n.01 - bowl.n.01) 
                 (inside ?bowl.n.01 ?birdcage.n.01_1)
             )
         )

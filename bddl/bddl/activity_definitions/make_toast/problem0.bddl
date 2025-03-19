@@ -1,4 +1,4 @@
-(define (problem make_toast-0)
+(define (problem make_toast_0)
     (:domain omnigibson)
 
     (:objects
@@ -16,14 +16,14 @@
         (inside bread_slice.n.01_2 cabinet.n.01_1) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom cabinet.n.01_1 kitchen)
+        (inroom cabinet.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
             (forall 
-                (?bread_slice.n.01 - bread_slice.n.01)
+                (?bread_slice.n.01 - bread_slice.n.01) 
                 (cooked ?bread_slice.n.01)
             )
         )

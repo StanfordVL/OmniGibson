@@ -1,4 +1,4 @@
-(define (problem cook_a_crab-0)
+(define (problem cook_a_crab_0)
     (:domain omnigibson)
 
     (:objects
@@ -20,19 +20,19 @@
             (cooked crab.n.05_1)
         ) 
         (inside butter.n.01_1 bowl.n.01_1) 
-        (inside bowl.n.01_1 electric_refrigerator.n.01_1)
+        (inside bowl.n.01_1 electric_refrigerator.n.01_1) 
         (inside crab.n.05_1 electric_refrigerator.n.01_1) 
-        (future melted__butter.n.01_1)
+        (future melted__butter.n.01_1) 
         (inroom stove.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
-        (inroom cabinet.n.01_1 kitchen)
-        (inroom electric_refrigerator.n.01_1 kitchen)
+        (inroom cabinet.n.01_1 kitchen) 
+        (inroom electric_refrigerator.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (real ?melted__butter.n.01_1)
+            (real ?melted__butter.n.01_1) 
             (covered ?crab.n.05_1 ?melted__butter.n.01_1) 
             (inside ?crab.n.05_1 ?steamer.n.02_1) 
             (cooked ?crab.n.05_1)

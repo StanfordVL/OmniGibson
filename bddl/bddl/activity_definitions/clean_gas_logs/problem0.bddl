@@ -1,4 +1,4 @@
-(define (problem clean_gas_logs-0)
+(define (problem clean_gas_logs_0)
     (:domain omnigibson)
 
     (:objects
@@ -30,7 +30,7 @@
                 (not 
                     (covered ?log.n.01 ?dust.n.01_1)
                 )
-            ) 
+            )
         )
     )
 )

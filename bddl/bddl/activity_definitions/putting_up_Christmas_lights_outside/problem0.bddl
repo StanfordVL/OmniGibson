@@ -1,4 +1,4 @@
-(define (problem putting_up_Christmas_lights_outside-0)
+(define (problem putting_up_Christmas_lights_outside_0)
     (:domain omnigibson)
 
     (:objects
@@ -12,42 +12,43 @@
     
     (:init 
         (ontop rail_fence.n.01_1 floor.n.01_1) 
-        (ontop icicle_lights.n.01_1 floor.n.01_1)
-        (ontop icicle_lights.n.01_2 floor.n.01_1)
-        (ontop icicle_lights.n.01_3 floor.n.01_1)
-        (ontop icicle_lights.n.01_4 floor.n.01_1)
+        (ontop icicle_lights.n.01_1 floor.n.01_1) 
+        (ontop icicle_lights.n.01_2 floor.n.01_1) 
+        (ontop icicle_lights.n.01_3 floor.n.01_1) 
+        (ontop icicle_lights.n.01_4 floor.n.01_1) 
         (not 
             (toggled_on icicle_lights.n.01_1)
-        )
+        ) 
         (not 
             (toggled_on icicle_lights.n.01_2)
-        )
+        ) 
         (not 
             (toggled_on icicle_lights.n.01_3)
-        )
+        ) 
         (not 
             (toggled_on icicle_lights.n.01_4)
-        )
+        ) 
         (inroom floor.n.01_1 garden) 
-        (inroom scrub.n.01_1 garden)
-        (inroom scrub.n.01_2 garden)
+        (inroom scrub.n.01_1 garden) 
+        (inroom scrub.n.01_2 garden) 
         (inroom wall_nail.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (ontop agent.n.01_1 floor.n.01_1) 
+        (inroom wall_nail.n.01_* garden)
     )
     
     (:goal 
         (and 
             (forall 
-                (?scrub.n.01 - scrub.n.01)
+                (?scrub.n.01 - scrub.n.01) 
                 (exists 
-                    (?icicle_lights.n.01 - icicle_lights.n.01)
+                    (?icicle_lights.n.01 - icicle_lights.n.01) 
                     (ontop ?icicle_lights.n.01 ?scrub.n.01)
                 )
-            )
+            ) 
             (exists 
-                (?icicle_lights.n.01 - icicle_lights.n.01)
+                (?icicle_lights.n.01 - icicle_lights.n.01) 
                 (attached ?icicle_lights.n.01 ?wall_nail.n.01_1)
-            )
+            ) 
             (forall 
                 (?icicle_lights.n.01 - icicle_lights.n.01) 
                 (toggled_on ?icicle_lights.n.01)
