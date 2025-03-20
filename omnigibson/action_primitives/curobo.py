@@ -21,9 +21,9 @@ th.backends.cudnn.allow_tf32 = True
 m = create_module_macros(module_path=__file__)
 
 m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT = 5.0  # meters
-m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT = math.pi * 2  # radians
+m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT = math.pi * 2 # originally 2  # radians
 
-m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.005
+m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.005 # originally 0.005
 m.DEFAULT_ATTACHED_OBJECT_SCALE = 0.8
 
 
@@ -31,7 +31,7 @@ class CuRoboEmbodimentSelection(str, Enum):
     BASE = "base"
     ARM = "arm"
     DEFAULT = "default"
-    ARM_NO_TORSO = "arm_no_torso"
+    # ARM_NO_TORSO = "arm_no_torso"
 
 
 def create_world_mesh_collision(tensor_args, obb_cache_size=10, mesh_cache_size=2048, max_distance=0.05):
@@ -149,9 +149,9 @@ class CuRoboMotionGenerator:
 
             if isinstance(robot, HolonomicBaseRobot):
                 self.update_joint_limits(robot_cfg_obj, emb_sel)
-
+            
             motion_kwargs = dict(
-                trajopt_tsteps=32,
+                trajopt_tsteps=32, # originally 32
                 collision_checker_type=lazy.curobo.geom.sdf.world.CollisionCheckerType.MESH,
                 use_cuda_graph=use_cuda_graph,
                 num_ik_seeds=128,
@@ -760,6 +760,7 @@ class CuRoboMotionGenerator:
             result, success, joint_state = plan_fn(
                 cu_js_batch, main_ik_goal_batch, plan_cfg, link_poses=ik_goal_batch_by_link, emb_sel=emb_sel
             )
+            # breakpoint()
             if self.debug:
                 breakpoint()
 
@@ -772,7 +773,7 @@ class CuRoboMotionGenerator:
         self._detach_objects_from_robot(attached_info, emb_sel)
 
         if return_full_result:
-            return results
+            return results, paths
         else:
             return successes, paths
 

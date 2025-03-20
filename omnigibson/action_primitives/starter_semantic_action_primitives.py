@@ -15,6 +15,7 @@ import gymnasium as gym
 import torch as th
 from aenum import IntEnum, auto
 from matplotlib import pyplot as plt
+from scipy.spatial.transform import Rotation as R
 
 import omnigibson as og
 import omnigibson.utils.transform_utils as T
@@ -69,7 +70,7 @@ m.KP_ANGLE_VEL = {
     R1: 0.2,
 }
 
-m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.02
+m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.005 # originally 0.02
 m.MAX_PLANNING_ATTEMPTS = 100
 m.MAX_IK_FAILURES_BEFORE_RETURN = 50
 
@@ -90,8 +91,8 @@ m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_FOR_CORRECT_ROOM = 20
 m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_IN_ROOM = 60
 m.MAX_ATTEMPTS_FOR_SAMPLING_PLACE_POSE = 50
 m.PREDICATE_SAMPLING_Z_OFFSET = 0.02
-m.BASE_POSE_SAMPLING_LOWER_BOUND = 0.0
-m.BASE_POSE_SAMPLING_UPPER_BOUND = 1.5
+m.BASE_POSE_SAMPLING_LOWER_BOUND = 0.0 # originally 0.0
+m.BASE_POSE_SAMPLING_UPPER_BOUND = 0.8 # originally 1.5
 
 m.GRASP_APPROACH_DISTANCE = 0.01
 m.OPEN_GRASP_APPROACH_DISTANCE = 0.4
@@ -216,6 +217,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         self._curobo_batch_size = curobo_batch_size
         self.debug_visual_marker = debug_visual_marker
+        self.valid_env = True
 
     @property
     def arm(self):
@@ -943,7 +945,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if not skip_obstacle_update:
             self._motion_generator.update_obstacles(ignore_objects=ignore_objects)
 
-        successes, traj_paths = self._motion_generator.compute_trajectories(
+        results, traj_paths = self._motion_generator.compute_trajectories(
             target_pos=target_pos,
             target_quat=target_quat,
             initial_joint_pos=None,
@@ -953,7 +955,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ik_fail_return=m.MAX_IK_FAILURES_BEFORE_RETURN,
             enable_finetune_trajopt=True,
             finetune_attempts=1,
-            return_full_result=False,
+            return_full_result=True,
             success_ratio=1.0 / self._motion_generator.batch_size,
             attached_obj=attached_obj,
             attached_obj_scale=None,
@@ -963,24 +965,38 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ik_world_collision_check=True,
             emb_sel=embodiment_selection,
         )
+        successes = results[0].success 
+        print("successes", successes)
+
+        # # For debuggin. Remove later
+        # if False:
+        #     current_pos = self.robot.get_position_orientation()
+        #     self.robot.set_position_orientation(target_pos["base_footprint"][0], target_quat["base_footprint"][0])
+        #     for _ in range(30): og.sim.step()
+        #     breakpoint()
+        #     self.robot.set_position_orientation(current_pos[0], current_pos[1])
+        #     for _ in range(30): og.sim.step()
+
         # Grab the first successful trajectory if found
         success_idx = th.where(successes)[0].cpu()
         if len(success_idx) == 0:
-            # print("motion planning fails")
-            # breakpoint()
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "There is no accessible path from where you are to the desired pose. Try again",
-            )
+            print("Base motion planning failed")
+            self.valid_env = False
+            q_traj = self.robot.get_joint_positions().unsqueeze(dim=0)
+            # For debugging, if we do want to execute a failed MP!
+            # traj_path = traj_paths[0]
 
-        traj_path = traj_paths[success_idx[0]]
-        q_traj = self._motion_generator.path_to_joint_trajectory(
-            traj_path, get_full_js=True, emb_sel=embodiment_selection
-        ).cpu()
+        else: 
+            traj_path = traj_paths[success_idx[0]]
 
-        # (TODO) investigate why this is necessary to prevent jerky motion during execution
-        # Smooth out the trajectory
-        q_traj = th.stack(self._add_linearly_interpolated_waypoints(plan=q_traj, max_inter_dist=0.01))
+            q_traj = self._motion_generator.path_to_joint_trajectory(
+                traj_path, get_full_js=True, emb_sel=embodiment_selection
+            ).cpu()
+
+            # (TODO) investigate why this is necessary to prevent jerky motion during execution
+            # Smooth out the trajectory
+            q_traj = th.stack(self._add_linearly_interpolated_waypoints(plan=q_traj, max_inter_dist=0.01))
+
 
         return q_traj
 
@@ -989,7 +1005,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         q_traj,
         stop_on_contact=False,
         stop_on_ag=False,
-        ignore_failure=False,
+        ignore_failure=True,
         low_precision=False,
         ignore_physics=False,
     ):
@@ -1654,11 +1670,18 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         """
         pose = self._sample_pose_near_object(obj, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update)
         if pose is None:
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "Could not find a valid pose near the object",
-                {"object": obj.name},
-            )
+            print(f"Could not find a valid pose near the object {obj.name}")
+            # If a valid pose is not found, we use the current robot base pose. We're doing this so that minimal changes to code is needed to handle this scenario
+            pos, orn = self.robot.get_position_orientation()
+            yaw = R.from_quat(orn.numpy()).as_euler("xyz")[2]
+            pose = th.tensor([pos[0], pos[1], yaw], dtype=th.float32)
+            self.valid_env = False
+            # raise ActionPrimitiveError(
+            #     ActionPrimitiveError.Reason.PLANNING_ERROR,
+            #     "Could not find a valid pose near the object",
+            #     {"object": obj.name},
+            # )
+        print("pose to navigate to: ", pose)
         yield from self._navigate_to_pose(pose, skip_obstacle_update=skip_obstacle_update)
 
     def _navigate_to_pose_direct(self, pose_2d, low_precision=False):

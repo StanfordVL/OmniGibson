@@ -677,6 +677,8 @@ class DataPlaybackWrapper(DataWrapper):
         for i, (a, s, ss, r, te, tr) in enumerate(
             zip(action, state[1:], state_size[1:], reward, terminated, truncated)
         ):
+            # if i % 100 == 0:
+            #     breakpoint()
             if self.replay_state:
                 # Execute any transitions that should occur at this current step
                 if str(i) in transitions:
