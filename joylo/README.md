@@ -1,1 +1,2 @@
-# gello-plus-plus
+# GELLO for OmniGibson
+
