@@ -116,13 +116,12 @@ class OGRobotServer:
                     output_limits = [-th.tensor([0.75, 0.75, 1.0]), th.tensor([0.75, 0.75, 1.0])]
                 is_holonomic = issubclass(robot_cls, HolonomicBaseRobot)
                 controller_config["base"] = {
-                    "name": "JointController",
+                    "name": "HolonomicBaseJointController",
                     "motor_type": "velocity", #"position" if is_holonomic else "velocity",
                     "vel_kp": 150,
                     "command_input_limits": input_limits,
                     "command_output_limits": output_limits,
                     "use_impedances": False,
-                    "use_delta_commands": False, #True if is_holonomic else False,
                 }
 
         # Control trunk via IK
@@ -157,7 +156,7 @@ class OGRobotServer:
                         {
                             "sensor_type": "VisionSensor",
                             "name": "external_sensor0",
-                            "relative_prim_path": "/controllable__r1__robot0/base_link/external_sensor0",
+                            "relative_prim_path": "/controllable__r1__robot_r1/base_link/external_sensor0",
                             "modalities": [],
                             "sensor_kwargs": {
                                 "viewport_name": "Viewport",
@@ -431,7 +430,7 @@ class OGRobotServer:
         self.active_camera_id = 0
         LOCK_CAMERA_ATTR = "omni:kit:cameraLock"
         for cam_path in self.camera_paths:
-            cam_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(cam_path)
+            cam_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(cam_path)
             cam_prim.GetAttribute("horizontalAperture").Set(40.0)
 
             # Lock attributes afterewards as well to avoid external modification
@@ -513,7 +512,6 @@ class OGRobotServer:
                 name=f"{self.robot.name}:vis_cylinder_{axis}_mat",
             )
             mat.load(self.robot.scene)
-            mat.shader_force_populate(render=True)
             mat.diffuse_color_constant = th.as_tensor(color)
             mat.enable_opacity = True
             mat.opacity_constant = 0.5
@@ -530,7 +528,6 @@ class OGRobotServer:
         )
         sphere_color = np.array([252, 173, 76]) / 255.0
         sphere_mat.load(self.robot.scene)
-        sphere_mat.shader_force_populate(render=True)
         sphere_mat.diffuse_color_constant = th.as_tensor(sphere_color)
         sphere_mat.enable_opacity = True
         sphere_mat.opacity_constant = 0.1 if USE_VISUAL_SPHERES else 0.0
@@ -548,7 +545,6 @@ class OGRobotServer:
             )
             vert_color = np.array([252, 226, 76]) / 255.0
             vert_mat.load(self.robot.scene)
-            vert_mat.shader_force_populate(render=True)
             vert_mat.diffuse_color_constant = th.as_tensor(vert_color)
             vert_mat.enable_opacity = True
             vert_mat.opacity_constant = 0.3
@@ -627,7 +623,7 @@ class OGRobotServer:
                 self.vertical_visualizers[arm] = vis_geom
 
         # Make sure robot fingers are extra grippy
-        gripper_mat = lazy.omni.isaac.core.materials.PhysicsMaterial(
+        gripper_mat = lazy.isaacsim.core.api.materials.PhysicsMaterial(
             prim_path=f"{self.robot.prim_path}/Looks/gripper_mat",
             name="gripper_material",
             static_friction=4.0,
