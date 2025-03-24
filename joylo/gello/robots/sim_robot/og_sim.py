@@ -16,8 +16,10 @@ from omnigibson.robots.articulated_trunk_robot import ArticulatedTrunkRobot
 from omnigibson.tasks import BehaviorTask
 from omnigibson.sensors import VisionSensor
 from omnigibson.utils.usd_utils import create_primitive_mesh, absolute_prim_path_to_scene_relative, GripperRigidContactAPI, ControllableObjectViewAPI
+from omnigibson.utils.teleop_utils import OVXRSystem
 from omnigibson.prims import VisualGeomPrim
 from omnigibson.prims.material_prim import MaterialPrim
+from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.object_states import OnTop, Filled
 from omnigibson.utils.constants import PrimType
 import omnigibson.utils.transform_utils as T
@@ -31,6 +33,8 @@ USE_CLOTH = False
 USE_ARTICULATED = False
 USE_VISUAL_SPHERES = False
 FULL_SCENE = False
+
+USE_VR = False
 
 
 # Define configuration to pass to environment constructor
@@ -478,9 +482,10 @@ class OGRobotServer:
             settings.set("/app/show_developer_preference_section", True)
             settings.set("/app/player/useFixedTimeStepping", True)
 
-            # Set lower position iteration count for faster sim speed
-            og.sim._physics_context._physx_scene_api.GetMaxPositionIterationCountAttr().Set(8)
-            og.sim._physics_context._physx_scene_api.GetMaxVelocityIterationCountAttr().Set(1)
+            if not USE_VR:
+                # Set lower position iteration count for faster sim speed
+                og.sim._physics_context._physx_scene_api.GetMaxPositionIterationCountAttr().Set(8)
+                og.sim._physics_context._physx_scene_api.GetMaxVelocityIterationCountAttr().Set(1)
             isregistry = lazy.carb.settings.acquire_settings_interface()
             isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_NUM_THREADS, 16)
             # isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_MIN_FRAME_RATE, int(1 / og.sim.get_physics_dt()))
@@ -677,6 +682,38 @@ class OGRobotServer:
         keyboard = appwindow.get_keyboard()
         sub_keyboard = input_interface.subscribe_to_keyboard_events(keyboard, keyboard_event_handler)
 
+        # VR extension does not work with async rendering
+        if not USE_VR:
+            self._optimize_sim_settings()
+        
+        # Set up VR system
+        self.vr_system = None
+        self.camera_prims = []
+        if USE_VR:
+            for cam_path in self.camera_paths:
+                cam_prim = XFormPrim(
+                    relative_prim_path=absolute_prim_path_to_scene_relative(
+                        self.robot.scene, cam_path
+                    ),
+                    name=cam_path,
+                )
+                cam_prim.load(self.robot.scene)
+                self.camera_prims.append(cam_prim)
+            self.vr_system = OVXRSystem(
+                 robot=self.robot,
+                 show_control_marker=False,
+                 system="SteamVR",
+                 eef_tracking_mode="disabled",
+                 align_anchor_to=self.camera_prims[0],
+             )
+            self.vr_system.start()
+
+        self._zmq_server = ZMQRobotServer(robot=self, host=host, port=port)
+        self._zmq_server_thread = ZMQServerThread(self._zmq_server)
+    
+    def _optimize_sim_settings(self):
+        settings = lazy.carb.settings.get_settings()
+        
         # Use asynchronous rendering for faster performance
         # NOTE: This gets reset EVERY TIME the sim stops / plays!!
         # For some reason, need to turn on, then take one render step, then turn off, and then back on in order to
@@ -698,9 +735,6 @@ class OGRobotServer:
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", False)
         lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", True)
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
-
-        self._zmq_server = ZMQRobotServer(robot=self, host=host, port=port)
-        self._zmq_server_thread = ZMQServerThread(self._zmq_server)
 
     def num_dofs(self) -> int:
         return self.robot.n_joints
@@ -761,7 +795,8 @@ class OGRobotServer:
             obs[f"arm_{arm}_joint_velocities"] = joint_vel[arm_control_idx]
             obs[f"arm_{arm}_gripper_positions"] = joint_pos[self.robot.gripper_control_idx[arm]]
             obs[f"arm_{arm}_ee_pos_quat"] = th.concatenate(self.robot.eef_links[arm].get_position_orientation())
-            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm])
+            # When using VR, this expansive check makes the view glitch
+            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if not USE_VR else False
             obs[f"arm_{arm}_finger_max_contact"] = th.max(th.sum(th.square(finger_impulses[:, 2*i:2*(i+1), :]), dim=-1)).item()
 
             obs[f"{arm}_gripper"] = self._joint_cmd[f"{arm}_gripper"].item()
@@ -841,6 +876,10 @@ class OGRobotServer:
                     if not self._cam_switched:
                         self.active_camera_id = 1 - self.active_camera_id
                         og.sim.viewer_camera.active_camera_path = self.camera_paths[self.active_camera_id]
+                        if USE_VR:
+                            self.vr_system.set_anchor_with_prim(
+                                self.camera_prims[self.active_camera_id]
+                            )
                         self._cam_switched = True
                 else:
                     self._cam_switched = False
@@ -888,6 +927,8 @@ class OGRobotServer:
 
     def stop(self) -> None:
         self._zmq_server_thread.join()
+        if USE_VR:
+            self.vrsys.stop()
         og.shutdown()
 
     def __del__(self) -> None:
