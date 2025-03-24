@@ -928,7 +928,7 @@ class OGRobotServer:
     def stop(self) -> None:
         self._zmq_server_thread.join()
         if USE_VR:
-            self.vrsys.stop()
+            self.vr_system.stop()
         og.shutdown()
 
     def __del__(self) -> None:
