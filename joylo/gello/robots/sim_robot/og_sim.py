@@ -919,7 +919,6 @@ class OGRobotServer:
                 # If - is toggled from OFF -> ON, reset env
                 if self._joint_cmd["button_home"].item() != 0.0:
                     if self._env_reset_cooldown == 0:
-                        self.env.save_data()
                         self.reset()
                         self._env_reset_cooldown = 100
                 self._env_reset_cooldown = max(0, self._env_reset_cooldown - 1)
