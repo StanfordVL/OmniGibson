@@ -37,6 +37,7 @@ FULL_SCENE = False
 
 USE_VR = False
 
+SIMPLIFIED_TRUNK_CONTROL = True
 
 # Define configuration to pass to environment constructor
 
@@ -55,6 +56,10 @@ TASK_NAME = "stock_grocery_shelves"     # Should be one of https://behavior.stan
 ACTIVITY_DEFINITION_ID = 0              # Which definition of the task to use. Should be 0 since we only have 1 definition per task
 ACTIVITY_INSTANCE_ID = 0                # Which instance of the pre-sampled task. Should be 0 since we only have 1 instance sampled
 ROBOT_START_POSITION = [0.8, 0, 0]
+
+R1_UPRIGHT_TORSO_JOINT_POS = th.tensor([0.45, -0.4, 0.115, 0.0], dtype=th.float32) # For upper cabinets, shelves, etc.
+R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.84, 0.0], dtype=th.float32) # For bottom cabinets, dishwashers, etc.
+R1_GROUND_TORSO_JOINT_POS = th.tensor([1.735, -2.57, -2.1, 0.0], dtype=th.float32) # For ground object pick up
 
 LOAD_TASK = False   # If true, load a behavior task - otherwise load demo scene
 
@@ -393,12 +398,6 @@ class OGRobotServer:
             ]) * th.pi / 180
 
         self.env = og.Environment(configs=cfg)
-        self._recording_path = recording_path
-        if self._recording_path is not None:
-            self.env = DataCollectionWrapper(
-                env=self.env, output_path=self._recording_path, only_successes=False
-            )
-            self.env.is_recording = True
         self.robot = self.env.robots[0]
 
         if isinstance(self.env.task, BehaviorTask):
@@ -667,11 +666,17 @@ class OGRobotServer:
         self._current_trunk_tilt = None
         self._joint_state = None
         self._joint_cmd = None
+        
+        self._recording_path = recording_path
+        if self._recording_path is not None:
+            self.env = DataCollectionWrapper(
+                env=self.env, output_path=self._recording_path, viewport_camera_path=og.sim.viewer_camera.active_camera_path,only_successes=False, use_vr=USE_VR
+            )
 
         # Reset
         self.reset()
 
-        # Define R to reset
+        # Define R to reset and ESCAPE to stop
         def keyboard_event_handler(event, *args, **kwargs):
             # Check if we've received a key press or repeat
             if (
@@ -680,6 +685,8 @@ class OGRobotServer:
             ):
                 if event.input == lazy.carb.input.KeyboardInput.R:
                     self.reset()
+                elif event.input == lazy.carb.input.KeyboardInput.ESCAPE:
+                    self.stop()
 
             # Callback always needs to return True
             return True
@@ -835,48 +842,66 @@ class OGRobotServer:
             # Apply arm action + extra dimension from base.
             # TODO: How to handle once gripper is attached?
             if isinstance(self.robot, R1):
-                # default_trunk_pos = self.robot._default_joint_pos[self.robot.trunk_control_idx].clone()
-                # default_trunk_pos[-2] = self._joint_cmd["trunk"]
-                # action[self.robot.arm_action_idx["left"]] = th.concatenate([default_trunk_pos, self._joint_cmd["left_arm"].clone()])
+                # Apply arm action
                 left_act, right_act = self._joint_cmd["left_arm"].clone(), self._joint_cmd["right_arm"].clone()
                 left_act[0] += self._current_trunk_tilt * self._arm_shoulder_directions["left"]
                 right_act[0] += self._current_trunk_tilt * self._arm_shoulder_directions["right"]
                 action[self.robot.arm_action_idx["left"]] = left_act
                 action[self.robot.arm_action_idx["right"]] = right_act
+                
+                # Apply base action
                 action[self.robot.base_action_idx] = self._joint_cmd["base"].clone()
-                trunk_action = th.zeros(4)
-                # Add value from action to current desired translate / tilt
-                # self._current_trunk_translate += self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt()
-                # self._current_trunk_tilt += self._joint_cmd["trunk"][1].item() * og.sim.get_sim_step_dt()
-
-                self._current_trunk_translate = np.clip(self._current_trunk_translate + self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), 0.25, 0.65)
-                self._current_trunk_tilt = np.clip(self._current_trunk_tilt + self._joint_cmd["trunk"][1].item() * og.sim.get_sim_step_dt(), -np.pi / 2, np.pi / 2)
-
-                # Convert desired values into corresponding trunk joint positions
-                # Trunk link 1 is 0.4m, link 2 is 0.3m
-                # See https://www.mathworks.com/help/symbolic/derive-and-apply-inverse-kinematics-to-robot-arm.html
-                xe, ye = self._current_trunk_translate, 0.1
-                sol_sign = 1.0      # or -1.0
-                # xe, ye = 0.5, 0.1
-                l1, l2 = 0.4, 0.3
-                xe2 = xe**2
-                ye2 = ye**2
-                xeye = xe2 + ye2
-                l12 = l1**2
-                l22 = l2**2
-                l1l2 = l12 + l22
-                # test = -(l12**2) + 2*l12*l22 + 2*l12*(xe2+ye2) - l22**2 + 2*l22*(xe2+ye2) - xe2**2 - 2*xe2*ye2 - ye2**2
-                sigma1 = np.sqrt(-(l12**2) + 2*l12*l22 + 2*l12*xe2 + 2*l12*ye2 - l22**2 + 2*l22*xe2 + 2*l22*ye2 - xe2**2 - 2*xe2*ye2 - ye2**2)
-                theta1 = 2 * np.arctan2(2*l1*ye + sol_sign * sigma1, l1**2 + 2*l1*l2 - l2**2 + xeye)
-                theta2 = -sol_sign * 2 * np.arctan2(np.sqrt(l1l2 - xeye + 2*l1*l2), np.sqrt(-l1l2 + xeye + 2*l1*l2))
-                theta3 = (theta1 + theta2 - self._current_trunk_tilt)
-                theta4 = 0.0
-
-                # trunk_action[[2, 4]] = self._joint_cmd["trunk"].clone()
-                # action[self.robot.trunk_action_idx] = trunk_action
-                action[self.robot.trunk_action_idx] = th.tensor([theta1, theta2, theta3, theta4], dtype=th.float)
+                
+                # Apply gripper action
                 action[self.robot.gripper_action_idx["left"]] = self._joint_cmd["left_gripper"].clone()
                 action[self.robot.gripper_action_idx["right"]] = self._joint_cmd["right_gripper"].clone()
+                
+                # Apply trunk action
+                if not SIMPLIFIED_TRUNK_CONTROL:
+                    self._current_trunk_translate = np.clip(self._current_trunk_translate + self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), 0.25, 0.65)
+                    self._current_trunk_tilt = np.clip(self._current_trunk_tilt + self._joint_cmd["trunk"][1].item() * og.sim.get_sim_step_dt(), -np.pi / 2, np.pi / 2)
+                    
+                    # Convert desired values into corresponding trunk joint positions
+                    # Trunk link 1 is 0.4m, link 2 is 0.3m
+                    # See https://www.mathworks.com/help/symbolic/derive-and-apply-inverse-kinematics-to-robot-arm.html
+                    xe, ye = self._current_trunk_translate, 0.1
+                    sol_sign = 1.0      # or -1.0
+                    # xe, ye = 0.5, 0.1
+                    l1, l2 = 0.4, 0.3
+                    xe2 = xe**2
+                    ye2 = ye**2
+                    xeye = xe2 + ye2
+                    l12 = l1**2
+                    l22 = l2**2
+                    l1l2 = l12 + l22
+                    # test = -(l12**2) + 2*l12*l22 + 2*l12*(xe2+ye2) - l22**2 + 2*l22*(xe2+ye2) - xe2**2 - 2*xe2*ye2 - ye2**2
+                    sigma1 = np.sqrt(-(l12**2) + 2*l12*l22 + 2*l12*xe2 + 2*l12*ye2 - l22**2 + 2*l22*xe2 + 2*l22*ye2 - xe2**2 - 2*xe2*ye2 - ye2**2)
+                    theta1 = 2 * np.arctan2(2*l1*ye + sol_sign * sigma1, l1**2 + 2*l1*l2 - l2**2 + xeye)
+                    theta2 = -sol_sign * 2 * np.arctan2(np.sqrt(l1l2 - xeye + 2*l1*l2), np.sqrt(-l1l2 + xeye + 2*l1*l2))
+                    theta3 = (theta1 + theta2 - self._current_trunk_tilt)
+                    theta4 = 0.0
+
+                    action[self.robot.trunk_action_idx] = th.tensor([theta1, theta2, theta3, theta4], dtype=th.float)
+                else:
+                    self._current_trunk_translate = float(th.clamp(
+                        th.tensor(self._current_trunk_translate, dtype=th.float) - th.tensor(self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), dtype=th.float),
+                        0.0,
+                        2.0
+                    ))
+
+                    # Interpolate between the three pre-determined joint positions
+                    if self._current_trunk_translate <= 1.0:
+                        # Interpolate between upright and down positions
+                        interpolation_factor = self._current_trunk_translate
+                        interpolated_trunk_pos = (1 - interpolation_factor) * R1_UPRIGHT_TORSO_JOINT_POS + \
+                                                interpolation_factor * R1_DOWNWARD_TORSO_JOINT_POS
+                    else:
+                        # Interpolate between down and ground positions
+                        interpolation_factor = self._current_trunk_translate - 1.0
+                        interpolated_trunk_pos = (1 - interpolation_factor) * R1_DOWNWARD_TORSO_JOINT_POS + \
+                                                interpolation_factor * R1_GROUND_TORSO_JOINT_POS
+
+                    action[self.robot.trunk_action_idx] = interpolated_trunk_pos
 
                 # If L is toggled from OFF -> ON, toggle camera
                 if self._joint_cmd["button_b"].item() != 0.0:
@@ -934,9 +959,15 @@ class OGRobotServer:
         self.env.reset()
 
     def stop(self) -> None:
+        self._zmq_server_thread.terminate()
         self._zmq_server_thread.join()
+        
+        if self._recording_path is not None:
+            self.env.save_data()
+        
         if USE_VR:
             self.vr_system.stop()
+        
         og.shutdown()
 
     def __del__(self) -> None:

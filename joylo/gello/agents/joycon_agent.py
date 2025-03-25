@@ -28,7 +28,7 @@ class JoyconAgent(Agent):
             calibration_dir: str,
             deadzone_threshold: float = 0.1,
             max_translation: float = 0.1,
-            max_rotation: float = 0.5,
+            max_rotation: float = 0.1,
             max_trunk_translate: float = 0.1,
             max_trunk_tilt: float = 0.1,
             # default_trunk_translate: float = 0.0,
