@@ -1,5 +1,6 @@
 from dataclasses import dataclass
 from pathlib import Path
+from typing import Optional
 
 import tyro
 
@@ -14,6 +15,7 @@ class Args:
     robot_port: int = 6001
     hostname: str = "127.0.0.1"
     robot_ip: str = "192.168.1.10"
+    recording_path: Optional[str] = None
 
 
 def launch_robot_server(args: Args):
@@ -26,7 +28,7 @@ def launch_robot_server(args: Args):
         # Make sure sim is selected
         assert args.domain == "sim"
         from gello.robots.sim_robot.og_sim import OGRobotServer
-        server = OGRobotServer(robot=args.robot, port=port, host=args.hostname)
+        server = OGRobotServer(robot=args.robot, port=port, host=args.hostname, recording_path=args.recording_path)
         server.serve()
 
 

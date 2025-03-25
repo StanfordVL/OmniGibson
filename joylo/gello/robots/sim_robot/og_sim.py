@@ -1,7 +1,8 @@
 import pdb
-from typing import Dict
+from typing import Dict, Optional
 from gello.agents.ps3_controller import PS3Controller
 import omnigibson as og
+from omnigibson.envs import DataCollectionWrapper
 from omnigibson.macros import gm
 import omnigibson.lazy as lazy
 from omnigibson.utils.config_utils import parse_config
@@ -76,6 +77,7 @@ class OGRobotServer:
         config: str = None,
         host: str = "127.0.0.1",
         port: int = 5556,
+        recording_path: Optional[str] = None,
     ):
 
         # Infer how many arms the robot has, create configs for each arm
@@ -118,10 +120,9 @@ class OGRobotServer:
                 if issubclass(robot_cls, R1):
                     input_limits = [-th.ones(3), th.ones(3)]
                     output_limits = [-th.tensor([0.75, 0.75, 1.0]), th.tensor([0.75, 0.75, 1.0])]
-                is_holonomic = issubclass(robot_cls, HolonomicBaseRobot)
                 controller_config["base"] = {
                     "name": "HolonomicBaseJointController",
-                    "motor_type": "velocity", #"position" if is_holonomic else "velocity",
+                    "motor_type": "velocity",
                     "vel_kp": 150,
                     "command_input_limits": input_limits,
                     "command_output_limits": output_limits,
@@ -392,6 +393,12 @@ class OGRobotServer:
             ]) * th.pi / 180
 
         self.env = og.Environment(configs=cfg)
+        self._recording_path = recording_path
+        if self._recording_path is not None:
+            self.env = DataCollectionWrapper(
+                env=self.env, output_path=self._recording_path, only_successes=False
+            )
+            self.env.is_recording = True
         self.robot = self.env.robots[0]
 
         if isinstance(self.env.task, BehaviorTask):
@@ -887,6 +894,7 @@ class OGRobotServer:
                 # If - is toggled from OFF -> ON, reset env
                 if self._joint_cmd["button_home"].item() != 0.0:
                     if self._env_reset_cooldown == 0:
+                        self.env.save_data()
                         self.reset()
                         self._env_reset_cooldown = 100
                 self._env_reset_cooldown = max(0, self._env_reset_cooldown - 1)
