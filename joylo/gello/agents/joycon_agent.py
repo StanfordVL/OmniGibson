@@ -189,7 +189,7 @@ class JoyconAgent(Agent):
         base_trunk_vals[[4, 2]] = joystick_values["right"] * np.array([-self.max_trunk_tilt, -self.max_rotation])
  
             
-        # Left joycon up/down buttons control (base_dz)
+        # Left joycon up/down buttons control (trunk_dz or combined trunk dz and tilt)
         trunk_translate = 0.0
         if self.jc_left.get_button_up():
             trunk_translate = self.max_trunk_translate
