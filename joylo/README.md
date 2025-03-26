@@ -10,7 +10,7 @@ For hardware setup, please reference this [guide](https://behavior-robot-suite.g
 
 - Linux operating system
 - NVIDIA RTX-enabled GPU
-- External Bluetooth dongle (recommended: [[link needed](https://www.amazon.com/dp/B08DFBNG7F/ref=pe_386300_442618370_TE_dp_i1?th=1)])
+- External Bluetooth dongle (recommended: [[link](https://www.amazon.com/dp/B08DFBNG7F/ref=pe_386300_442618370_TE_dp_i1?th=1)])
 
 ### Step 1: Environment Setup
 
