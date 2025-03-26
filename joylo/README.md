@@ -147,3 +147,6 @@ python experiments/run_r1_gello.py --joint_config_file joint_config_{your specif
 - If JoyCons won't connect, try the command line method (Method 2 above)
 - Ensure you're using an external Bluetooth dongle, as built-in Bluetooth may not be compatible
 - Verify that udev rules are properly configured if devices aren't recognized
+
+## Joycon Button Mapping
+![image](https://github.com/user-attachments/assets/81ef65c2-44f9-4920-93c7-f4dee5bc2444)
