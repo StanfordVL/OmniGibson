@@ -58,8 +58,8 @@ ACTIVITY_DEFINITION_ID = 0              # Which definition of the task to use. S
 ACTIVITY_INSTANCE_ID = 0                # Which instance of the pre-sampled task. Should be 0 since we only have 1 instance sampled
 ROBOT_START_POSITION = [0.8, 0, 0]
 
-R1_UPRIGHT_TORSO_JOINT_POS = th.tensor([0.45, -0.4, 0.115, 0.0], dtype=th.float32) # For upper cabinets, shelves, etc.
-R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.84, 0.0], dtype=th.float32) # For bottom cabinets, dishwashers, etc.
+R1_UPRIGHT_TORSO_JOINT_POS = th.tensor([0.45, -0.4, 0.0, 0.0], dtype=th.float32) # For upper cabinets, shelves, etc.
+R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.94, 0.0], dtype=th.float32) # For bottom cabinets, dishwashers, etc.
 R1_GROUND_TORSO_JOINT_POS = th.tensor([1.735, -2.57, -2.1, 0.0], dtype=th.float32) # For ground object pick up
 
 LOAD_TASK = False   # If true, load a behavior task - otherwise load demo scene

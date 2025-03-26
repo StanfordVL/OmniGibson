@@ -28,7 +28,7 @@ class JoyconAgent(Agent):
             calibration_dir: str,
             deadzone_threshold: float = 0.1,
             max_translation: float = 0.1,
-            max_rotation: float = 0.1,
+            max_rotation: float = 0.5,
             max_trunk_translate: float = 0.1,
             max_trunk_tilt: float = 0.1,
             # default_trunk_translate: float = 0.0,
@@ -185,8 +185,8 @@ class JoyconAgent(Agent):
         # Left stick is (base_dx, base_dy)
         base_trunk_vals[:2] = joystick_values["left"] * self.max_translation * np.array([1.0, -1.0])
 
-        # Right stick is trunk_dry
-        base_trunk_vals[4] = joystick_values["right"][0] * -self.max_trunk_tilt
+        # Right stick is (trunk_dry, base_drz)
+        base_trunk_vals[[4, 2]] = joystick_values["right"] * np.array([-self.max_trunk_tilt, -self.max_rotation])
  
             
         # Left joycon up/down buttons control (trunk_dz or combined trunk dz and tilt)
@@ -196,14 +196,6 @@ class JoyconAgent(Agent):
         elif self.jc_left.get_button_down():
             trunk_translate = -self.max_trunk_translate
         base_trunk_vals[3] = trunk_translate
-
-        # Left joycon left/right buttons control base rotation (base_drz)
-        base_rotation = 0.0
-        if self.jc_left.get_button_left():
-            base_rotation = self.max_rotation  # Turn counterclockwise (positive)
-        elif self.jc_left.get_button_right():
-            base_rotation = -self.max_rotation  # Turn clockwise (negative)
-        base_trunk_vals[2] = base_rotation
 
         # Add all values to the values array
         vals += base_trunk_vals.tolist()
