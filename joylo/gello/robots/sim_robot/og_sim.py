@@ -24,6 +24,7 @@ from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.object_states import OnTop, Filled
 from omnigibson.utils.constants import PrimType
 import omnigibson.utils.transform_utils as T
+from omnigibson.utils.ui_utils import dock_window
 from gello.robots.sim_robot.zmq_server import ZMQRobotServer, ZMQServerThread
 from gello.dxl.franka_gello_joint_impedance import FRANKA_JOINT_LIMIT_HIGH, FRANKA_JOINT_LIMIT_LOW
 import torch as th
@@ -36,7 +37,7 @@ USE_VISUAL_SPHERES = False
 FULL_SCENE = False
 
 USE_VR = False
-
+MULTI_VIEW_MODE = True
 SIMPLIFIED_TRUNK_CONTROL = True
 
 # Define configuration to pass to environment constructor
@@ -74,6 +75,50 @@ gm.GUI_VIEWPORT_ONLY = True
 RESOLUTION = [1080, 1080]   # [H, W]
 USE_VERTICAL_VISUALIZERS = False
 
+def get_camera_config(name, relative_prim_path, position, orientation, resolution):
+    return {
+        "sensor_type": "VisionSensor",
+        "name": name,
+        "relative_prim_path": relative_prim_path,
+        "modalities": [],
+        "sensor_kwargs": {
+            "viewport_name": "Viewport",
+            "image_height": resolution[0],
+            "image_width": resolution[1],
+        },
+        "position": position,
+        "orientation": orientation,
+        "pose_frame": "parent",
+        "include_in_obs": False,
+    }
+
+def create_and_dock_viewport(parent_window, position, ratio, camera_path):
+    """Create and configure a viewport window.
+    
+    Args:
+        parent_window: Parent window to dock this viewport to
+        position: Docking position (LEFT, RIGHT, BOTTOM, etc.)
+        ratio: Size ratio for the docked window
+        camera_path: Path to the camera to set as active
+        
+    Returns:
+        The created viewport window
+    """
+    viewport = lazy.omni.kit.viewport.utility.create_viewport_window()
+    og.sim.render()
+    
+    dock_window(
+        space=lazy.omni.ui.Workspace.get_window(parent_window),
+        name=viewport.name,
+        location=position,
+        ratio=ratio,
+    )
+    og.sim.render()
+    
+    viewport.viewport_api.set_active_camera(camera_path)
+    og.sim.render()
+    
+    return viewport
 
 class OGRobotServer:
     def __init__(
@@ -163,24 +208,30 @@ class OGRobotServer:
                     "rendering_frequency": 30, #60 if gm.ENABLE_HQ_RENDERING else 30,
                     "physics_frequency": 120,
                     "external_sensors": [
-                        {
-                            "sensor_type": "VisionSensor",
-                            "name": "external_sensor0",
-                            "relative_prim_path": "/controllable__r1__robot_r1/base_link/external_sensor0",
-                            "modalities": [],
-                            "sensor_kwargs": {
-                                "viewport_name": "Viewport",
-                                "image_height": RESOLUTION[0],
-                                "image_width": RESOLUTION[1],
-                            },
-                            "position": [-0.4, 0, 2.0], #[-0.74, 0, 2.0],
-                            "orientation": [0.369, -0.369, -0.603, 0.603],
-                            "pose_frame": "parent",
-                            "include_in_obs": False,
-                        },
+                        get_camera_config(name="external_sensor0", 
+                                          relative_prim_path="/controllable__r1__robot_r1/base_link/external_sensor0", 
+                                          position=[-0.4, 0, 2.0], 
+                                          orientation=[0.369, -0.369, -0.603, 0.603], 
+                                          resolution=RESOLUTION),
                     ],
                 },
             }
+            
+            if MULTI_VIEW_MODE:
+                cfg["env"]["external_sensors"].append(
+                    get_camera_config(name="external_sensor1", 
+                                      relative_prim_path="/controllable__r1__robot_r1/base_link/external_sensor1", 
+                                      position=[-0.2, 0.6, 2.0], 
+                                      orientation=[-0.1930,  0.4163,  0.8062, -0.3734], 
+                                      resolution=RESOLUTION)
+                )
+                cfg["env"]["external_sensors"].append(
+                    get_camera_config(name="external_sensor2", 
+                                      relative_prim_path="/controllable__r1__robot_r1/base_link/external_sensor2", 
+                                      position=[-0.2, -0.6, 2.0], 
+                                      orientation=[ 0.4164, -0.1929, -0.3737,  0.8060], 
+                                      resolution=RESOLUTION)
+                )
 
             if LOAD_TASK:
                 # Load the enviornment for a particular task
@@ -399,6 +450,39 @@ class OGRobotServer:
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
+        
+        if MULTI_VIEW_MODE:
+            viewport_left_shoulder = create_and_dock_viewport(
+                "DockSpace", 
+                lazy.omni.ui.DockPosition.LEFT,
+                0.25,
+                self.env.external_sensors["external_sensor1"].prim_path
+            )
+            viewport_left_wrist = create_and_dock_viewport(
+                viewport_left_shoulder.name,
+                lazy.omni.ui.DockPosition.BOTTOM,
+                0.5,
+                f"{self.robot.links['left_eef_link'].prim_path}/Camera"
+            )
+            viewport_right_shoulder = create_and_dock_viewport(
+                "DockSpace",
+                lazy.omni.ui.DockPosition.RIGHT,
+                0.2,
+                self.env.external_sensors["external_sensor2"].prim_path
+            )
+            viewport_right_wrist = create_and_dock_viewport(
+                viewport_right_shoulder.name,
+                lazy.omni.ui.DockPosition.BOTTOM,
+                0.5,
+                f"{self.robot.links['right_eef_link'].prim_path}/Camera"
+            )
+            # Set resolution for all viewports
+            for viewport in [viewport_left_shoulder, viewport_left_wrist, 
+                            viewport_right_shoulder, viewport_right_wrist]:
+                viewport.viewport_api.set_texture_resolution((256, 256))
+                og.sim.render()
+            for _ in range(3):
+                og.sim.render()
 
         if isinstance(self.env.task, BehaviorTask):
             for bddl_obj in self.env.task.object_scope.values():
