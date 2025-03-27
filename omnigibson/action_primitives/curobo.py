@@ -122,7 +122,7 @@ class CuRoboMotionGenerator:
 
         # This will be shared across all MotionGen instances
         world_coll_checker = create_world_mesh_collision(
-            self._tensor_args, obb_cache_size=10, mesh_cache_size=2048, max_distance=0.05
+            self._tensor_args, obb_cache_size=10, mesh_cache_size=2048, max_distance=0.005 #This max distance is different from collision_activation_distance parameter in other places
         )
 
         usd_help = lazy.curobo.util.usd_helper.UsdHelper()
@@ -160,13 +160,14 @@ class CuRoboMotionGenerator:
                 num_trajopt_noisy_seeds=1,
                 ik_opt_iters=100,
                 optimize_dt=True,
-                num_trajopt_seeds=4,
-                num_graph_seeds=4,
+                num_trajopt_seeds=12, # originally 4
+                num_graph_seeds=4, # originally 4
                 interpolation_dt=0.03,
                 collision_activation_distance=collision_activation_distance,
                 self_collision_check=True,
                 maximum_trajectory_dt=None,
-                fixed_iters_trajopt=True,
+                # graph_trajopt_iters=500,
+                fixed_iters_trajopt=False,
                 finetune_trajopt_iters=100,
                 finetune_dt_scale=1.05,
                 position_threshold=0.005,
@@ -185,8 +186,8 @@ class CuRoboMotionGenerator:
             )
             self.mg[emb_sel] = lazy.curobo.wrap.reacher.motion_gen.MotionGen(motion_gen_config)
 
-        for mg in self.mg.values():
-            mg.warmup(enable_graph=False, warmup_js_trajopt=False, batch=batch_size)
+        # for mg in self.mg.values():
+        #     mg.warmup(enable_graph=False, warmup_js_trajopt=False, batch=batch_size)
 
     def update_joint_limits(self, robot_cfg_obj, emb_sel):
         joint_limits = robot_cfg_obj.kinematics.kinematics_config.joint_limits
@@ -600,7 +601,8 @@ class CuRoboMotionGenerator:
 
         # Define the plan config
         plan_cfg = lazy.curobo.wrap.reacher.motion_gen.MotionGenPlanConfig(
-            enable_graph=False,
+            enable_graph=True, # originally False
+            enable_opt=True,
             max_attempts=max_attempts,
             timeout=timeout,
             enable_graph_attempt=None,

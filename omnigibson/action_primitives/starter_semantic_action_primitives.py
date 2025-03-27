@@ -44,6 +44,7 @@ from omnigibson.utils.motion_planning_utils import detect_robot_collision_in_sim
 from omnigibson.utils.object_state_utils import sample_cuboid_for_predicate
 from omnigibson.utils.python_utils import multi_dim_linspace
 from omnigibson.utils.ui_utils import create_module_logger
+import omnigibson.lazy as lazy
 
 m = create_module_macros(module_path=__file__)
 
@@ -218,6 +219,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self._curobo_batch_size = curobo_batch_size
         self.debug_visual_marker = debug_visual_marker
         self.valid_env = True
+        self.err = "None"
 
     @property
     def arm(self):
@@ -931,6 +933,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         motion_constraint=None,
         skip_obstacle_update=False,
         ignore_objects=None,
+        markers=None,
+        sampled_base_poses=None,
+        pose_2d=None,
     ):
         # If an object is grasped, we need to pass it to the motion planner
         obj_in_hand = self._get_obj_in_hand()
@@ -980,9 +985,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # Grab the first successful trajectory if found
         success_idx = th.where(successes)[0].cpu()
         if len(success_idx) == 0:
-            print("Base motion planning failed")
+            print("Base motion planning failed", results[0].status)
             self.valid_env = False
+            self.err = "BaseMPFailed"
             q_traj = self.robot.get_joint_positions().unsqueeze(dim=0)
+
+            # For visualizing base poses
+            # markers["failure_base_marker"].set_position_orientation(position=target_pos["base_footprint"][0])
+            # sampled_base_poses["failure"].append(target_pos["base_footprint"][0])
+
             # For debugging, if we do want to execute a failed MP!
             # traj_path = traj_paths[0]
 
@@ -992,11 +1003,52 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             q_traj = self._motion_generator.path_to_joint_trajectory(
                 traj_path, get_full_js=True, emb_sel=embodiment_selection
             ).cpu()
+            
+            # In case using traj from curobo graph solver (and not curobo trajopt solver) reduce sampling rate
+            # q_traj = q_traj[::50]
 
             # (TODO) investigate why this is necessary to prevent jerky motion during execution
             # Smooth out the trajectory
             q_traj = th.stack(self._add_linearly_interpolated_waypoints(plan=q_traj, max_inter_dist=0.01))
 
+            # For visualizing base poses
+            # markers["success_base_marker"].set_position_orientation(position=target_pos["base_footprint"][0])
+            # sampled_base_poses["success"].append(target_pos["base_footprint"][0])
+
+        # ================== For testing js_plan i.e. joint space planning instead of ee space planning ==================
+        # retract_cfg = self._motion_generator.mg["base"].get_retract_config()
+        # start_state = lazy.curobo.types.state.JointState.from_position(retract_cfg.view(1, -1))
+        # goal_state = lazy.curobo.types.state.JointState.from_position(pose_2d.view(1, -1).cuda())
+        # result = self._motion_generator.mg["base"].plan_single_js(
+        #     start_state,
+        #     goal_state,
+        #     lazy.curobo.wrap.reacher.motion_gen.MotionGenPlanConfig(max_attempts=1, time_dilation_factor=0.5),
+        # )
+        # if len(success_idx) == 0:
+        #     print("Base motion planning failed", results[0].status)
+        #     self.valid_env = False
+        #     self.err = "BaseMPFailed"
+        #     # breakpoint()
+        #     # markers["failure_base_marker"].set_position_orientation(position=target_pos["base_footprint"][0])
+        #     sampled_base_poses["failure"].append(target_pos["base_footprint"][0])
+        #     q_traj = self.robot.get_joint_positions().unsqueeze(dim=0)
+        #     # For debugging, if we do want to execute a failed MP!
+        #     # traj_path = traj_paths[0]
+
+        # else: 
+        #     traj_path = traj_paths[success_idx[0]]
+
+        #     q_traj = self._motion_generator.path_to_joint_trajectory(
+        #         traj_path, get_full_js=True, emb_sel=embodiment_selection
+        #     ).cpu()
+
+        #     # (TODO) investigate why this is necessary to prevent jerky motion during execution
+        #     # Smooth out the trajectory
+        #     q_traj = th.stack(self._add_linearly_interpolated_waypoints(plan=q_traj, max_inter_dist=0.01))
+
+        #     # markers["success_base_marker"].set_position_orientation(position=target_pos["base_footprint"][0])
+        #     sampled_base_poses["success"].append(target_pos["base_footprint"][0])
+        # ================================================================================================================
 
         return q_traj
 
@@ -1583,7 +1635,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         else:
             raise ValueError(f"Unsupported frame: {frame}")
 
-    def _navigate_to_pose(self, pose_2d, skip_obstacle_update=False):
+    def _navigate_to_pose(self, pose_2d, skip_obstacle_update=False, markers=None, sampled_base_poses=None):
         """
         Yields the action to navigate robot to the specified 2d pose
 
@@ -1607,6 +1659,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             target_quat,
             embodiment_selection=CuRoboEmbodimentSelection.BASE,
             skip_obstacle_update=skip_obstacle_update,
+            markers=markers,
+            sampled_base_poses=sampled_base_poses,
+            pose_2d=pose_2d,
         )
         yield from self._execute_motion_plan(q_traj)
 
@@ -1657,7 +1712,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         yield from self._navigate_to_obj(obj, eef_pose=eef_pose, skip_obstacle_update=True)
 
-    def _navigate_to_obj(self, obj, eef_pose=None, skip_obstacle_update=False):
+    def _navigate_to_obj(self, obj, eef_pose=None, skip_obstacle_update=False, markers=None, sampled_base_poses=None):
         """
         Yields action to navigate the robot to be in range of the pose
 
@@ -1668,7 +1723,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             th.tensor or None: Action array for one step for the robot to navigate in range or None if it is done navigating
         """
-        pose = self._sample_pose_near_object(obj, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update)
+        pose = self._sample_pose_near_object(obj, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update, markers=markers)
         if pose is None:
             print(f"Could not find a valid pose near the object {obj.name}")
             # If a valid pose is not found, we use the current robot base pose. We're doing this so that minimal changes to code is needed to handle this scenario
@@ -1676,13 +1731,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             yaw = R.from_quat(orn.numpy()).as_euler("xyz")[2]
             pose = th.tensor([pos[0], pos[1], yaw], dtype=th.float32)
             self.valid_env = False
+            self.err = "NoValidPose"
             # raise ActionPrimitiveError(
             #     ActionPrimitiveError.Reason.PLANNING_ERROR,
             #     "Could not find a valid pose near the object",
             #     {"object": obj.name},
             # )
         print("pose to navigate to: ", pose)
-        yield from self._navigate_to_pose(pose, skip_obstacle_update=skip_obstacle_update)
+        yield from self._navigate_to_pose(pose, skip_obstacle_update=skip_obstacle_update, markers=markers, sampled_base_poses=sampled_base_poses)
 
     def _navigate_to_pose_direct(self, pose_2d, low_precision=False):
         """
@@ -1798,6 +1854,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         plan_with_open_gripper=False,
         sampling_attempts=m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT,
         skip_obstacle_update=False,
+        markers=None
     ):
         """
         Returns a 2d pose for the robot within in the range of the object and where the robot is not in collision with anything
@@ -1837,6 +1894,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # Update obstacle once before sampling
             self._motion_generator.update_obstacles()
         while attempt < sampling_attempts:
+            # print("attempt: ", attempt)
             candidate_poses = []
             for _ in range(self._curobo_batch_size):
                 candidate_2d_pose_correct_room = None
@@ -1858,6 +1916,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 if candidate_2d_pose_correct_room is not None:
                     candidate_poses.append(candidate_2d_pose_correct_room)
 
+            # breakpoint()
             # Normally candidate_poses will have length equal to self._curobo_batch_size
             # In case we are unable to find a valid pose in the room, we will have less than self._curobo_batch_size.
             # We skip the following steps if the list is empty.
@@ -1873,6 +1932,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 for i, res in enumerate(result):
                     if res:
                         indented_print("Found valid position near object.")
+                        # To visualize eef markers 
+                        # markers["left_eef_marker"].set_position_orientation(position=eef_pose["left"][0])
+                        # for _ in range(20): og.sim.step()
                         return candidate_poses[i]
 
             attempt += self._curobo_batch_size
@@ -2034,6 +2096,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             skip_obstacle_update=skip_obstacle_update,
             attached_obj=attached_obj,
         ).cpu()
+        # print("collision? ", invalid_results)
 
         # For each candidate that passed collision check, verify reachability
         for i in range(len(candidate_poses)):
@@ -2048,6 +2111,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     eef_pose, initial_joint_pos=candidate_joint_position, skip_obstacle_update=skip_obstacle_update
                 ):
                     invalid_results[i] = True
+                    # print("unreachable? ", invalid_results)
 
         return ~invalid_results
 

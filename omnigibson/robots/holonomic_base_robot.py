@@ -400,6 +400,59 @@ class HolonomicBaseRobot(LocomotionRobot):
         ), f"Action should have dimension {self.action_dim}, got {action.shape[0]}"
         return action
 
+    def action_to_q(self, action):
+        """
+        Converts an action to a target joint configuration that can be applied to this object.
+        """
+        # breakpoint()
+        n_joints = len(self.get_joint_positions())
+        qs = th.zeros(n_joints)
+        for name, controller in self.controllers.items():
+            if isinstance(controller, HolonomicBaseJointController):
+                command = action[self.base_action_idx]
+                # convert the command to the world frame
+                body_pose = self.get_position_orientation()
+                robot_wrt_world_rot_matrix = T.quat2mat(body_pose[1]) 
+                delta_pos = command[:2]
+                delta_q = command[2]
+                delta_translation_wrt_robot = th.tensor([delta_pos[0], delta_pos[1], 0.0])
+                delta_translation_wrt_world = robot_wrt_world_rot_matrix @ delta_translation_wrt_robot
+                final_robot_pos_wrt_world = body_pose[0] + delta_translation_wrt_world
+                
+                current_robot_yaw_wrt_world = wrap_angle(T.quat2euler(body_pose[1])[2])
+                final_robot_yaw_wrt_world = wrap_angle(current_robot_yaw_wrt_world + delta_q)
+                qs[0:2] = final_robot_pos_wrt_world[:2]
+                qs[5] = final_robot_yaw_wrt_world
+
+            elif isinstance(controller, MultiFingerGripperController):
+                command_left = action[self.gripper_action_idx["left"]]
+                command_right = action[self.gripper_action_idx["right"]]
+                if command_left > 0.5:
+                    qs[self.gripper_control_idx["left"]] = th.tensor([0.045, 0.045])
+                else:
+                    qs[self.gripper_control_idx["left"]] = th.tensor([0.0, 0.0])
+                
+                if command_right > 0.5:
+                    qs[self.gripper_control_idx["right"]] = th.tensor([0.045, 0.045])
+                else:
+                    qs[self.gripper_control_idx["right"]] = th.tensor([0.0, 0.0])
+            
+            elif name == "trunk":
+                command = action[self.trunk_action_idx]
+                qs[self.trunk_control_idx] = th.tensor(command)
+            elif name == "camera":
+                command = action[th.tensor([4, 5])]
+                qs[self.camera_control_idx] = th.tensor(command)
+            elif name == "arm_left":
+                command = action[self.arm_action_idx["left"]]
+                qs[self.arm_control_idx["left"]] = th.tensor(command)
+            elif name == "arm_right":
+                command = action[self.arm_action_idx["right"]]
+                qs[self.arm_control_idx["right"]] = th.tensor(command)
+        
+        return qs
+
+    
     def teleop_data_to_action(self, teleop_action) -> th.Tensor:
         action = ManipulationRobot.teleop_data_to_action(self, teleop_action)
         action[self.base_action_idx] = th.tensor(teleop_action.base).float() * 0.1

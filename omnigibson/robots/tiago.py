@@ -159,7 +159,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
         pos = th.zeros(self.n_dof)
         # Keep the current joint positions for the base joints
         pos[self.base_idx] = self.get_joint_positions()[self.base_idx]
-        pos[self.trunk_control_idx] = 0
+        pos[self.trunk_control_idx] = 0.0
         pos[self.camera_control_idx] = th.tensor([0.0, 0.0])
         for arm in self.arm_names:
             pos[self.gripper_control_idx[arm]] = th.tensor([0.045, 0.045])  # open gripper
@@ -239,7 +239,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
             controllers["gripper_{}".format(arm)] = "MultiFingerGripperController"
         return controllers
 
-    @property
+    @cached_property
     def arm_control_idx(self):
         # Add combined entry
         idxs = super().arm_control_idx
@@ -395,7 +395,7 @@ class Tiago(HolonomicBaseRobot, ArticulatedTrunkRobot, UntuckedArmPoseRobot, Act
             arm: [f"gripper_{arm}_right_finger_joint", f"gripper_{arm}_left_finger_joint"] for arm in self.arm_names
         }
 
-    @property
+    @cached_property
     def arm_workspace_range(self):
         return {
             "left": th.deg2rad(th.tensor([15, 75], dtype=th.float32)),
