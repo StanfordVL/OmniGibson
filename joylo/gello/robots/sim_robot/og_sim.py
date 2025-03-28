@@ -67,7 +67,19 @@ R1_UPRIGHT_TORSO_JOINT_POS = th.tensor([0.45, -0.4, 0.0, 0.0], dtype=th.float32)
 R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.94, 0.0], dtype=th.float32) # For bottom cabinets, dishwashers, etc.
 R1_GROUND_TORSO_JOINT_POS = th.tensor([1.735, -2.57, -2.1, 0.0], dtype=th.float32) # For ground object pick up
 
-LOAD_TASK = False   # If true, load a behavior task - otherwise load demo scene
+# Global whitelist of custom friction values
+FRICTIONS = {
+    "door": 0.1,
+    "dishwasher": 0.4,
+    "default": 0.1,
+}
+
+# Global whitelist of visual-only objects
+VISUAL_ONLY_CATEGORIES = {
+    "bush",
+    "tree",
+    "pot_plant",
+}
 
 gm.USE_NUMPY_CONTROLLER_BACKEND = True
 gm.USE_GPU_DYNAMICS = (USE_FLUID or USE_CLOTH)
@@ -547,7 +559,7 @@ class OGRobotServer:
         # lazy.carb.settings.get_settings().set_bool("/physics/suppressReadback", True)
 
         # Enable fractional cutout opacity so that we can use semi-translucent visualizers
-        lazy.carb.settings.get_settings().set_bool("/rtx/raytracing/fractionalCutoutOpacity", True)
+        lazy.carb.settings.get_settings().set_bool("/rtx/raytracing/fractionalCutoutOpacity", False) #True)
 
         # Other optimizations
         with og.sim.stopped():
@@ -606,7 +618,7 @@ class OGRobotServer:
             )
             mat.load(self.robot.scene)
             mat.diffuse_color_constant = th.as_tensor(color)
-            mat.enable_opacity = True
+            mat.enable_opacity = False #True
             mat.opacity_constant = 0.5
             mat.enable_emission = True
             mat.emissive_color = np.array(color)
@@ -728,11 +740,26 @@ class OGRobotServer:
                 for msh in link.collision_meshes.values():
                     msh.apply_physics_material(gripper_mat)
 
-        if isinstance(self.robot, R1):
-            og.sim.stop()
-            self.robot.base_footprint_link.mass = 250.0
-            og.sim.play()
-            self.env.reset()
+        # Modify physics further
+        with og.sim.stopped():
+            if isinstance(self.env.task, BehaviorTask):
+                for bddl_obj in self.env.task.object_scope.values():
+                    if not bddl_obj.is_system and bddl_obj.exists:
+                        for link in bddl_obj.wrapped_obj.links.values():
+                            link.ccd_enabled = True
+
+            # Make all joints for all objects have low friction
+            for obj in self.env.scene.objects:
+                if obj != self.robot:
+                    friction = FRICTIONS.get(obj.category, FRICTIONS["default"])
+                    for joint in obj.joints.values():
+                        joint.friction = friction
+                    if obj.category in VISUAL_ONLY_CATEGORIES:
+                        obj.visual_only = True
+                else:
+                    if isinstance(obj, R1):
+                        obj.base_footprint_link.mass = 250.0
+        self.env.reset()
 
         # TODO: Make this less hacky, how to make this programmatic?
         self.active_arm = "right"
@@ -831,6 +858,8 @@ class OGRobotServer:
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", False)
         lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", True)
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
+        
+        lazy.carb.settings.get_settings().set_bool("/rtx-transient/dlssg/enabled", True)
 
     def num_dofs(self) -> int:
         return self.robot.n_joints
