@@ -1,4 +1,5 @@
-import pdb
+import os
+import yaml
 from typing import Dict, Optional
 from gello.agents.ps3_controller import PS3Controller
 import omnigibson as og
@@ -52,11 +53,15 @@ SIMPLIFIED_TRUNK_CONTROL = True
 # in <PATH_TO_OMNIGIBSON>/omnigibson/data/og_dataset/scenes/<SCENE_NAME>/json/<SCENE_NAME>_task_<TASK_NAME>_<ACTIVITY_DEFINITION_ID>_<ACTIVITY_INSTANCE_ID>_template.json
 # However, we only have a single instance of each task that has already been sampled
 ROBOT = "R1"                            # This should always be our robot generally since GELLO is designed for this specific robot
-SCENE_MODEL = "grocery_store_asian"     # Should be one of https://behavior.stanford.edu/knowledgebase/scenes/index.html
-TASK_NAME = "stock_grocery_shelves"     # Should be one of https://behavior.stanford.edu/knowledgebase/tasks/index.html
+
+dir_path = os.path.dirname(os.path.abspath(__file__))
+task_cfg_path = os.path.join(dir_path, '..', '..', '..', 'sampled_task', 'available_tasks.yaml')
+with open(task_cfg_path, 'r') as file:
+    AVAILABLE_BEHAVIOR_TASKS = yaml.safe_load(file)
+
+LOAD_TASK = False   # If true, load a behavior task - otherwise load demo scene
 ACTIVITY_DEFINITION_ID = 0              # Which definition of the task to use. Should be 0 since we only have 1 definition per task
 ACTIVITY_INSTANCE_ID = 0                # Which instance of the pre-sampled task. Should be 0 since we only have 1 instance sampled
-ROBOT_START_POSITION = [0.8, 0, 0]
 
 R1_UPRIGHT_TORSO_JOINT_POS = th.tensor([0.45, -0.4, 0.0, 0.0], dtype=th.float32) # For upper cabinets, shelves, etc.
 R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.94, 0.0], dtype=th.float32) # For bottom cabinets, dishwashers, etc.
@@ -128,7 +133,11 @@ class OGRobotServer:
         host: str = "127.0.0.1",
         port: int = 5556,
         recording_path: Optional[str] = None,
+        task_name: Optional[str] = None,
     ):
+        self.task_name = task_name
+        if self.task_name is not None:
+            assert self.task_name in AVAILABLE_BEHAVIOR_TASKS, f"Task {self.task_name} not found in available tasks"
 
         # Infer how many arms the robot has, create configs for each arm
         controller_config = dict()
@@ -237,7 +246,7 @@ class OGRobotServer:
                 # Load the enviornment for a particular task
                 cfg["scene"] = {
                     "type": "InteractiveTraversableScene",
-                    "scene_model": SCENE_MODEL,
+                    "scene_model": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["scene_model"],
                     "load_room_types": None,            # Can speed up loading by specifying specific room types (e.g.: "kitchen")
                     "load_room_instances": None,        # Can speed up loading by specifying specific rooms (e.g.: "kitchen0")
                     "include_robots": False,            # Do not include the robot because we'll use R1 instead
@@ -245,7 +254,7 @@ class OGRobotServer:
 
                 cfg["task"] = {
                     "type": "BehaviorTask",
-                    "activity_name": TASK_NAME,
+                    "activity_name": self.task_name,
                     "activity_definition_id": ACTIVITY_DEFINITION_ID,
                     "activity_instance_id": ACTIVITY_INSTANCE_ID,
                     "predefined_problem": None,
@@ -394,7 +403,7 @@ class OGRobotServer:
             "controller_config": controller_config,
             "self_collisions": False,
             "obs_modalities": [],
-            "position": ROBOT_START_POSITION if LOAD_TASK else [0.0, 0.0, 0.0],
+            "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if LOAD_TASK else [0.0, 0.0, 0.0],
             "grasping_mode": "assisted",
             "sensor_config": {
                 "VisionSensor": {
@@ -484,18 +493,6 @@ class OGRobotServer:
                 og.sim.render()
             for _ in range(3):
                 og.sim.render()
-
-        if isinstance(self.env.task, BehaviorTask):
-            for bddl_obj in self.env.task.object_scope.values():
-                if not bddl_obj.is_system and bddl_obj.exists:
-                    for link in bddl_obj.wrapped_obj.links.values():
-                        link.ccd_enabled = True
-
-        # Make all joints for all objects have low friction
-        for obj in self.env.scene.objects:
-            if obj != self.robot:
-                for joint in obj.joints.values():
-                    joint.friction = 0.3
 
         # TODO:
         # Tune friction for small amount on cabinets to avoid drifting

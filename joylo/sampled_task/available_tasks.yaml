@@ -1,0 +1,19 @@
+cleaning_up_branches_and_twigs:
+  scene_model: house_single_floor
+  robot_start_position: [-10.0, 14.0, 0]
+
+opening_doors:
+  scene_model: house_single_floor
+  robot_start_position: [21.8, 10.69, 0]
+
+cook_brussels_sprouts:
+  scene_model: restaurant_diner
+  robot_start_position: [-6.4, -4.0, 0]
+
+unpacking_car_for_trip:
+  scene_model: Beechwood_0_garden
+  robot_start_position: [-1.2, 10.06, 0]
+
+bag_groceries:
+  scene_model: grocery_store_cafe
+  robot_start_position: [-5.25, 9.1, 0]
