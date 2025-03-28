@@ -46,13 +46,6 @@ class GeomPrim(XFormPrim):
         # This should not be called, because this prim cannot be instantiated from scratch!
         raise NotImplementedError("By default, a geom prim cannot be created from scratch.")
 
-    def _post_load(self):
-        # run super first
-        super()._post_load()
-
-        # By default, GeomPrim shows up in the rendering.
-        self.purpose = "default"
-
     @property
     def purpose(self):
         """
@@ -458,7 +451,7 @@ class CollisionGeomPrim(GeomPrim):
             if path == "":
                 return None
             else:
-                self._applied_physics_material = lazy.omni.isaac.core.materials.PhysicsMaterial(prim_path=path)
+                self._applied_physics_material = lazy.isaacsim.core.materials.PhysicsMaterial(prim_path=path)
                 return self._applied_physics_material
 
 

@@ -30,13 +30,18 @@ from omnigibson.utils.numpy_utils import vtarray_to_torch
 from omnigibson.utils.python_utils import classproperty
 from omnigibson.utils.sampling_utils import sample_cuboid_on_object
 from omnigibson.utils.ui_utils import suppress_omni_log
-from omnigibson.utils.usd_utils import FlatcacheAPI, absolute_prim_path_to_scene_relative, create_primitive_mesh
+from omnigibson.utils.usd_utils import (
+    FlatcacheAPI,
+    absolute_prim_path_to_scene_relative,
+    create_primitive_mesh,
+    delete_or_deactivate_prim,
+)
 
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
 
-m.APPLICATION_LINK_PREFIX = "particleapplier"
-m.REMOVAL_LINK_PREFIX = "particleremover"
+m.APPLICATION_META_LINK_TYPE = "particleapplier"
+m.REMOVAL_META_LINK_TYPE = "particleremover"
 
 # How many samples within the application area to generate per update step
 m.MAX_VISUAL_PARTICLES_APPLIED_PER_STEP = 2
@@ -157,14 +162,14 @@ def create_projection_visualization(
     if material is not None:
         prototype.material = material
     # Override the prototype used by the instancer
-    instancer_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(instancer_path)
+    instancer_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(instancer_path)
     instancer_prim.GetProperty("inputs:prototypes").SetTargets([prototype_path])
 
     # Destroy the old mat path since we don't use the sprites
-    lazy.omni.isaac.core.utils.prims.delete_prim(mat_path)
+    delete_or_deactivate_prim(mat_path)
 
     # Modify the settings of the emitter to match the desired shape from inputs
-    emitter_prim = lazy.omni.isaac.core.utils.prims.get_prim_at_path(emitter_path)
+    emitter_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(emitter_path)
     emitter_prim.GetProperty("inputs:active").Set(True)
     emitter_prim.GetProperty("inputs:rate").Set(m.PROJECTION_VISUALIZATION_RATE)
     emitter_prim.GetProperty("inputs:lifespan").Set(projection_height.item() / m.PROJECTION_VISUALIZATION_SPEED)
@@ -183,7 +188,7 @@ def create_projection_visualization(
             og.sim.render()
 
     # Return the particle system prim which "owns" everything
-    return lazy.omni.isaac.core.utils.prims.get_prim_at_path(system_path), emitter_prim
+    return lazy.isaacsim.core.utils.prims.get_prim_at_path(system_path), emitter_prim
 
 
 class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMixin):
@@ -348,11 +353,21 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
                 "height": 1.0,
                 "size": 1.0,
             }
-            mesh_prim_path = f"{self.link.prim_path}/mesh_0"
 
-            # Create a primitive shape if it doesn't already exist
-            pre_existing_mesh = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mesh_prim_path)
+            # See if the mesh exists at the latest dataset's target location
+            mesh_prim_path = f"{self.link.prim_path}/visuals/mesh_0"
+            pre_existing_mesh = lazy.isaacsim.core.utils.prims.get_prim_at_path(mesh_prim_path)
+
+            # If not, see if it exists in the legacy format's location
+            # TODO: Remove this after new dataset release
             if not pre_existing_mesh:
+                mesh_prim_path = f"{self.link.prim_path}/mesh_0"
+                pre_existing_mesh = lazy.isaacsim.core.utils.prims.get_prim_at_path(mesh_prim_path)
+
+            # Create a primitive mesh neither option exists
+            if not pre_existing_mesh:
+                mesh_prim_path = f"{self.link.prim_path}/visuals/mesh_0"
+
                 # Projection mesh params must be specified in order to determine scalings
                 assert self._projection_mesh_params is not None, (
                     f"Must specify projection_mesh_params for {self.obj.name}'s {self.__class__.__name__} "
@@ -410,7 +425,7 @@ class ParticleModifier(IntrinsicObjectState, LinkBasedStateMixin, UpdateStateMix
                 len(self.link.visual_meshes) == 1
             ), f"Expected only a single projection mesh for {self.link}, got: {len(self.link.visual_meshes)}"
 
-            # Make sure the mesh is translated so that its tip lies at the metalink origin, and rotated so the vector
+            # Make sure the mesh is translated so that its tip lies at the meta link origin, and rotated so the vector
             # from tip to tail faces the positive x axis
             z_offset = (
                 0.0
@@ -924,12 +939,12 @@ class ParticleRemover(ParticleModifier):
         return False
 
     @classproperty
-    def metalink_prefix(cls):
-        return m.REMOVAL_LINK_PREFIX
+    def meta_link_type(cls):
+        return m.REMOVAL_META_LINK_TYPE
 
     @classmethod
-    def requires_metalink(cls, **kwargs):
-        # No metalink required for adjacency
+    def requires_meta_link(cls, **kwargs):
+        # No meta link required for adjacency
         return kwargs.get("method", ParticleModifyMethod.ADJACENCY) != ParticleModifyMethod.ADJACENCY
 
     @property
@@ -1013,6 +1028,10 @@ class ParticleApplier(ParticleModifier):
         self.projection_system_prim = None
         self.projection_emitter = None
 
+        # TODO: particle visualization module has been deprecated since Isaac 4.2.0
+        # this is a placeholder to replace a part of the visualization code
+        self._projection_is_active = False
+
         # Run super
         super().__init__(obj=obj, method=method, conditions=conditions, projection_mesh_params=projection_mesh_params)
 
@@ -1025,7 +1044,9 @@ class ParticleApplier(ParticleModifier):
         # This will initialize the system if it's not initialized already.
         system = self.obj.scene.get_system(system_name)
 
-        if self.visualize:
+        # TODO: particle visualization module has been deprecated since Isaac 4.2.0
+        # We need to find a new way for this visualization; keeping this code for now for future reference
+        if self.visualize and False:
             assert self._projection_mesh_params["type"] in {
                 "Cylinder",
                 "Cone",
@@ -1046,11 +1067,9 @@ class ParticleApplier(ParticleModifier):
             projection_name = f"{name_prefix}_projection_visualization"
             projection_path = f"/OmniGraph/{projection_name}"
             projection_visualization_path = f"{self.link.prim_path}/projection_visualization"
-            if lazy.omni.isaac.core.utils.prims.is_prim_path_valid(projection_path):
-                self.projection_system = lazy.omni.isaac.core.utils.prims.get_prim_at_path(projection_path)
-                self.projection_emitter = lazy.omni.isaac.core.utils.prims.get_prim_at_path(
-                    f"{projection_path}/emitter"
-                )
+            if lazy.isaacsim.core.utils.prims.is_prim_path_valid(projection_path):
+                self.projection_system = lazy.isaacsim.core.utils.prims.get_prim_at_path(projection_path)
+                self.projection_emitter = lazy.isaacsim.core.utils.prims.get_prim_at_path(f"{projection_path}/emitter")
             else:
                 self.projection_system, self.projection_emitter = create_projection_visualization(
                     scene=self.obj.scene,
@@ -1197,7 +1216,10 @@ class ParticleApplier(ParticleModifier):
         if self.visualize and self._current_step == 0:
             # Only one system in our conditions, so next(iter()) suffices
             is_active = all(condition(self.obj) for condition in next(iter(self.conditions.values())))
-            self.projection_emitter.GetProperty("inputs:active").Set(is_active)
+            # TODO: particle visualization module has been deprecated since Isaac 4.2.0
+            # We need to find a new way for this visualization; keeping this code for now for future reference
+            # self.projection_emitter.GetProperty("inputs:active").Set(is_active)
+            self._projection_is_active = is_active
 
         # Run super
         super()._update()
@@ -1488,16 +1510,19 @@ class ParticleApplier(ParticleModifier):
 
     @property
     def projection_is_active(self):
-        # Only active if the projection mesh is enabled
-        return self.projection_emitter.GetProperty("inputs:active").Get()
+        # TODO: particle visualization module has been deprecated since Isaac 4.2.0
+        # We need to find a new way for this visualization; keeping this code for now for future reference
+        # # Only active if the projection mesh is enabled
+        # return self.projection_emitter.GetProperty("inputs:active").Get()
+        return self._projection_is_active
 
     @classproperty
-    def metalink_prefix(cls):
-        return m.APPLICATION_LINK_PREFIX
+    def meta_link_type(cls):
+        return m.APPLICATION_META_LINK_TYPE
 
     @classmethod
-    def requires_metalink(cls, **kwargs):
-        # No metalink required for adjacency
+    def requires_meta_link(cls, **kwargs):
+        # No meta link required for adjacency
         return kwargs.get("method", ParticleModifyMethod.ADJACENCY) != ParticleModifyMethod.ADJACENCY
 
     @classmethod
