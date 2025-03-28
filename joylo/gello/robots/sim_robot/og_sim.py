@@ -69,7 +69,7 @@ gm.USE_GPU_DYNAMICS = (USE_FLUID or USE_CLOTH)
 gm.ENABLE_FLATCACHE = not (USE_FLUID or USE_CLOTH)
 gm.ENABLE_OBJECT_STATES = True # True (FOR TASKS!)
 gm.ENABLE_TRANSITION_RULES = False
-gm.ENABLE_CCD = True
+gm.ENABLE_CCD = False
 gm.ENABLE_HQ_RENDERING = USE_FLUID
 gm.GUI_VIEWPORT_ONLY = True
 RESOLUTION = [1080, 1080]   # [H, W]
@@ -395,6 +395,7 @@ class OGRobotServer:
             "self_collisions": False,
             "obs_modalities": [],
             "position": ROBOT_START_POSITION if LOAD_TASK else [0.0, 0.0, 0.0],
+            "grasping_mode": "assisted",
             "sensor_config": {
                 "VisionSensor": {
                     "sensor_kwargs": {
@@ -486,7 +487,7 @@ class OGRobotServer:
 
         if isinstance(self.env.task, BehaviorTask):
             for bddl_obj in self.env.task.object_scope.values():
-                if not bddl_obj.is_system:
+                if not bddl_obj.is_system and bddl_obj.exists:
                     for link in bddl_obj.wrapped_obj.links.values():
                         link.ccd_enabled = True
 
@@ -494,7 +495,7 @@ class OGRobotServer:
         for obj in self.env.scene.objects:
             if obj != self.robot:
                 for joint in obj.joints.values():
-                    joint.friction = 0.0
+                    joint.friction = 0.3
 
         # TODO:
         # Tune friction for small amount on cabinets to avoid drifting
@@ -572,10 +573,10 @@ class OGRobotServer:
             settings.set("/app/show_developer_preference_section", True)
             settings.set("/app/player/useFixedTimeStepping", True)
 
-            if not USE_VR:
-                # Set lower position iteration count for faster sim speed
-                og.sim._physics_context._physx_scene_api.GetMaxPositionIterationCountAttr().Set(8)
-                og.sim._physics_context._physx_scene_api.GetMaxVelocityIterationCountAttr().Set(1)
+            # if not USE_VR:
+            #     # Set lower position iteration count for faster sim speed
+            #     og.sim._physics_context._physx_scene_api.GetMaxPositionIterationCountAttr().Set(8)
+            #     og.sim._physics_context._physx_scene_api.GetMaxVelocityIterationCountAttr().Set(1)
             isregistry = lazy.carb.settings.acquire_settings_interface()
             isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_NUM_THREADS, 16)
             # isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_MIN_FRAME_RATE, int(1 / og.sim.get_physics_dt()))
