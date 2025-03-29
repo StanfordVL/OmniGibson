@@ -23,7 +23,7 @@ m = create_module_macros(module_path=__file__)
 m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT = 5.0  # meters
 m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT = math.pi * 2 # originally 2  # radians
 
-m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.005 # originally 0.005
+m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.02 # originally 0.005
 m.DEFAULT_ATTACHED_OBJECT_SCALE = 0.8
 
 
@@ -122,7 +122,7 @@ class CuRoboMotionGenerator:
 
         # This will be shared across all MotionGen instances
         world_coll_checker = create_world_mesh_collision(
-            self._tensor_args, obb_cache_size=10, mesh_cache_size=2048, max_distance=0.005 #This max distance is different from collision_activation_distance parameter in other places
+            self._tensor_args, obb_cache_size=10, mesh_cache_size=2048, max_distance=0.02 #This max distance is different from collision_activation_distance parameter in other places
         )
 
         usd_help = lazy.curobo.util.usd_helper.UsdHelper()

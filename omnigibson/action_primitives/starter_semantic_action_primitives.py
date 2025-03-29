@@ -71,7 +71,7 @@ m.KP_ANGLE_VEL = {
     R1: 0.2,
 }
 
-m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.005 # originally 0.02
+m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.02 # originally 0.02
 m.MAX_PLANNING_ATTEMPTS = 100
 m.MAX_IK_FAILURES_BEFORE_RETURN = 50
 
@@ -988,7 +988,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             print("Base motion planning failed", results[0].status)
             self.valid_env = False
             self.err = "BaseMPFailed"
-            q_traj = self.robot.get_joint_positions().unsqueeze(dim=0)
+            # q_traj = self.robot.get_joint_positions().unsqueeze(dim=0)
+            q_traj = None
 
             # For visualizing base poses
             # markers["failure_base_marker"].set_position_orientation(position=target_pos["base_footprint"][0])
@@ -1663,6 +1664,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             sampled_base_poses=sampled_base_poses,
             pose_2d=pose_2d,
         )
+
+        # If no valid MP was found, yield None (don't return None, that does not work)
+        if q_traj is None:
+            yield None
+
         yield from self._execute_motion_plan(q_traj)
 
     # (TODO) add a function to draw curobo-generated plans.
@@ -1727,11 +1733,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if pose is None:
             print(f"Could not find a valid pose near the object {obj.name}")
             # If a valid pose is not found, we use the current robot base pose. We're doing this so that minimal changes to code is needed to handle this scenario
-            pos, orn = self.robot.get_position_orientation()
-            yaw = R.from_quat(orn.numpy()).as_euler("xyz")[2]
-            pose = th.tensor([pos[0], pos[1], yaw], dtype=th.float32)
+            # pos, orn = self.robot.get_position_orientation()
+            # yaw = R.from_quat(orn.numpy()).as_euler("xyz")[2]
+            # pose = th.tensor([pos[0], pos[1], yaw], dtype=th.float32)
             self.valid_env = False
-            self.err = "NoValidPose"
+            self.err = "BaseSamplingFailed"
+            yield None
             # raise ActionPrimitiveError(
             #     ActionPrimitiveError.Reason.PLANNING_ERROR,
             #     "Could not find a valid pose near the object",

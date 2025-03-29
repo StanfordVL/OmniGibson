@@ -14,10 +14,18 @@ seed = 1
 np.random.seed(seed)
 th.manual_seed(seed)
 
+add_distractors = False
+robot = "R1"
 
 with open("/home/arpit/test_projects/mimicgen/kwargs.pickle", "rb") as f:
     kwargs = pickle.load(f)
+    breakpoint()
     # kwargs["scene"] = {"type": "Scene"}
+    if robot == "R1":
+        kwargs["robots"][0]["type"] = "R1"
+        del kwargs["robots"][0]["reset_joint_pos"]
+    if add_distractors:
+        kwargs["scene"]["load_object_categories"].append("straight_chair")
 env = og.Environment(configs=kwargs)
 
 controller_config = {
@@ -76,7 +84,20 @@ for _ in range(10): og.sim.step()
 teacup = env.scene.object_registry("name", "teacup")
 breakfast_table = env.scene.object_registry("name", "breakfast_table")
 
-# breakpoint()
+
+# If we want to add distractor objects, set chair poses
+if add_distractors:
+    chair_0 = env.scene.object_registry("name", "straight_chair_amgwaw_0")
+    chair_0.set_position_orientation(position=th.tensor([-0.0725,  0.0028,  0.4485]), orientation=th.tensor([ 0.0016,  0.0020, -0.1448,  0.9895]))
+
+    chair_1 = env.scene.object_registry("name", "straight_chair_amgwaw_1")
+    chair_1.set_position_orientation(position=th.tensor([ 0.4266, -1.0887,  0.4484]), orientation=th.tensor([ 2.0414e-05, -1.7101e-03,  9.9991e-01, -1.3466e-02]))
+
+    chair_3 = env.scene.object_registry("name", "straight_chair_eospnr_0")
+    chair_3.set_position_orientation(position=th.tensor([-0.5871,  2.2136,  0.4930]))
+    chair_4 = env.scene.object_registry("name", "straight_chair_eospnr_1")
+    chair_4.set_position_orientation(position=th.tensor([-1.2552,  2.3325,  0.4930]))
+    for _ in range(20): og.sim.step()
 
 num_trials = 10
 num_base_mp_failures, num_base_sampling_failures = 0, 0
