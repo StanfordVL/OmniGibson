@@ -28,7 +28,7 @@ class JoyconAgent(Agent):
             calibration_dir: str,
             deadzone_threshold: float = 0.1,
             max_translation: float = 0.1,
-            max_rotation: float = 0.5,
+            max_rotation: float = 0.3,
             max_trunk_translate: float = 0.1,
             max_trunk_tilt: float = 0.1,
             # default_trunk_translate: float = 0.0,
@@ -183,7 +183,8 @@ class JoyconAgent(Agent):
         base_trunk_vals = np.zeros(5)
 
         # Left stick is (base_dx, base_dy)
-        base_trunk_vals[:2] = joystick_values["left"] * self.max_translation * np.array([1.0, -1.0])
+        base_speed = self.max_translation if not self.jc_left.get_button_l_stick() else self.max_translation * 2.0
+        base_trunk_vals[:2] = joystick_values["left"] * base_speed * np.array([1.0, -1.0])
 
         # Right stick is (trunk_dry, base_drz)
         base_trunk_vals[[4, 2]] = joystick_values["right"] * np.array([-self.max_trunk_tilt, -self.max_rotation])
