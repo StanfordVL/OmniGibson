@@ -194,4 +194,5 @@ python experiments/run_r1_gello.py --joint_config_file joint_config_{your specif
 - If JoyCons disconnect randomly during data collection, try connecting the Bluetooth dongle to a USB 2.0 port instead of USB 3.0
 
 ## Joycon Button Mapping
-![image](https://github.com/user-attachments/assets/81ef65c2-44f9-4920-93c7-f4dee5bc2444)
+![Screenshot 2025-03-28 at 11 04 39 PM](https://github.com/user-attachments/assets/29d33994-ea8f-4302-b37c-ebfe30fa8901)
+
