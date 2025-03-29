@@ -59,7 +59,7 @@ task_cfg_path = os.path.join(dir_path, '..', '..', '..', 'sampled_task', 'availa
 with open(task_cfg_path, 'r') as file:
     AVAILABLE_BEHAVIOR_TASKS = yaml.safe_load(file)
 
-LOAD_TASK = False   # If true, load a behavior task - otherwise load demo scene
+LOAD_TASK = True   # If true, load a behavior task - otherwise load demo scene
 ACTIVITY_DEFINITION_ID = 0              # Which definition of the task to use. Should be 0 since we only have 1 definition per task
 ACTIVITY_INSTANCE_ID = 0                # Which instance of the pre-sampled task. Should be 0 since we only have 1 instance sampled
 
