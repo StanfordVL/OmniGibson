@@ -22,9 +22,9 @@ for file in "$SRC_DIR"/*_template.json; do
     if [ -f "$dest_dir/$filename" ]; then
         echo "WARNING: $filename already exists in $dest_dir/ - skipping"
     else
-        echo "Moving $filename to $dest_dir/"
-        mv "$file" "$dest_dir/"
+        echo "Copying $filename to $dest_dir/"
+        cp "$file" "$dest_dir/"
     fi
 done
 
-echo "All JSON files have been moved to their corresponding directories."
+echo "All JSON files have been copied to their corresponding directories."

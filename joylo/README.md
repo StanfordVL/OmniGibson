@@ -46,7 +46,34 @@ cd OmniGibson/omnigibson/data/assets
 git lfs pull
 ```
 
-### Step 3: JoyLo Repository Setup
+3. Update dataset to the most recent version:
+```bash
+# Download the latest dataset
+wget https://storage.googleapis.com/gibson_scenes/og_dataset_1_2_0rc2.zip
+
+# Extract and replace the existing dataset
+cd OmniGibson
+# Optionally backup the original dataset
+mv omnigibson/data/og_dataset omnigibson/data/og_dataset_backup
+# Extract the new dataset to the correct location
+unzip path/to/og_dataset_1_2_0rc2.zip -d omnigibson/data/
+```
+
+### Step 3: BDDL Repository Setup
+
+1. To be compatible with the most recent task sampling, install the development version of BDDL:
+```bash
+# First, uninstall any existing BDDL installation
+pip uninstall bddl
+
+# Clone the repository and checkout the develop branch
+git clone https://github.com/StanfordVL/bddl.git
+cd bddl
+git checkout develop
+pip install -e .
+```
+
+### Step 4: JoyLo Repository Setup
 
 1. Clone the JoyLo repository:
 ```bash
@@ -60,7 +87,15 @@ pip install -r requirements.txt
 pip install -e .
 ```
 
-### Step 4: Nintendo JoyCon Configuration
+3. Populate task definitions:
+```bash
+# Run the script to copy sampled task JSON files to the dataset directory
+./populate_behavior_tasks.sh
+```
+
+All the sampled tasks are represented as JSON files in the `sampled_task` directory in this repo. You can check the names of all available tasks in the `available_tasks.yaml` file. Usually, tasks are stored in our dataset directory in public releases, but since we are still in the process of iterating on them, we temporarily keep them in this repo so that we can quickly update. OmniGibson still reads from the dataset directory, so we wrote the `populate_behavior_tasks.sh` shell script to help copy these sampled task JSON files over to the dataset directory.
+
+### Step 5: Nintendo JoyCon Configuration
 
 1. Install required packages:
 ```bash
@@ -101,7 +136,7 @@ sudo add-apt-repository universe
 sudo apt-get install blueman
 ```
 
-### Step 5: Connect JoyCons
+### Step 6: Connect JoyCons
 
 #### Method 1: Using Bluetooth Manager (Recommended)
 1. Ensure your external Bluetooth dongle is connected
@@ -121,14 +156,14 @@ connect <MAC_ADDRESS>
 ```
 2. Verify connection: JoyCon lights should be static (not flashing)
 
-### Step 6: Running the System
+### Step 7: Running the System
 
 1. Ensure JoyLo is powered on (with motors NOT connected to Dynamixel software)
 2. Ensure JoyCons are connected
 
-3. In one terminal, start the recording environment:
+3. In one terminal, start the recording environment with a specified task:
 ```bash
-python experiments/launch_nodes.py --recording_path /path/to/recording_file_name.hdf5
+python experiments/launch_nodes.py --recording_path /path/to/recording_file_name.hdf5 --task_name cleaning_up_branches_and_twigs
 ```
 
 4. In another terminal, run the JoyLo node:
@@ -141,12 +176,22 @@ python experiments/run_r1_gello.py --joint_config_file joint_config_{your specif
 - Press the home button on the right JoyCon to save an episode and reset the scene
 - To save all episodes and exit, focus your mouse on the OmniGibson window and press Escape
 - Recording file will be saved to the path specified in the launch_nodes.py command
+- Fast base motion mode: Activate by pressing down on the left joystick while moving it
+- Object visibility toggle: Press A button on the right JoyCon to toggle between hiding non-relevant objects and showing all objects
+- JoyCon connection stability: We have noticed that sometimes the JoyCon could disconnect randomly during data collection. A team member has reported that putting the Bluetooth dongle onto USB 2.0 is more stable than USB 3.0. We will look further into this issue.
+
+### Task Information
+
+- Available tasks are listed in `sampled_task/available_tasks.yaml`
+- Task definitions are stored as JSON files in the `sampled_task` directory
+- To learn about task definitions and expected goal conditions, check the corresponding `problem0.bddl` file in the BDDL repository for the task name. This file contains information about relevant objects, initial conditions, and goal conditions.
 
 ## Troubleshooting
 
 - If JoyCons won't connect, try the command line method (Method 2 above)
 - Ensure you're using an external Bluetooth dongle, as built-in Bluetooth may not be compatible
 - Verify that udev rules are properly configured if devices aren't recognized
+- If JoyCons disconnect randomly during data collection, try connecting the Bluetooth dongle to a USB 2.0 port instead of USB 3.0
 
 ## Joycon Button Mapping
 ![image](https://github.com/user-attachments/assets/81ef65c2-44f9-4920-93c7-f4dee5bc2444)

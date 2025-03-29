@@ -59,7 +59,7 @@ task_cfg_path = os.path.join(dir_path, '..', '..', '..', 'sampled_task', 'availa
 with open(task_cfg_path, 'r') as file:
     AVAILABLE_BEHAVIOR_TASKS = yaml.safe_load(file)
 
-LOAD_TASK = False   # If true, load a behavior task - otherwise load demo scene
+LOAD_TASK = True   # If true, load a behavior task - otherwise load demo scene
 ACTIVITY_DEFINITION_ID = 0              # Which definition of the task to use. Should be 0 since we only have 1 definition per task
 ACTIVITY_INSTANCE_ID = 0                # Which instance of the pre-sampled task. Should be 0 since we only have 1 instance sampled
 
@@ -149,6 +149,7 @@ class OGRobotServer:
     ):
         self.task_name = task_name
         if self.task_name is not None:
+            assert LOAD_TASK, "Task name provided but LOAD_TASK is False"
             assert self.task_name in AVAILABLE_BEHAVIOR_TASKS, f"Task {self.task_name} not found in available tasks"
 
         # Infer how many arms the robot has, create configs for each arm
@@ -768,6 +769,13 @@ class OGRobotServer:
         self.obs = {}
         self._arm_shoulder_directions = {"left": -1.0, "right": 1.0}
         self._cam_switched = False
+        
+        self.task_irrelevant_objects = []
+        self.irrelevant_objects_hidden = False
+        
+        if LOAD_TASK:
+            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values()]
+            self.task_irrelevant_objects = [obj for obj in self.env.scene.objects if obj not in task_objects and obj.category != "floors"]
 
         # Set variables that are set during reset call
         self._env_reset_cooldown = None
@@ -1026,6 +1034,15 @@ class OGRobotServer:
                         self._cam_switched = True
                 else:
                     self._cam_switched = False
+
+                # If button A is pressed, hide task-irrelevant objects
+                if self._joint_cmd["button_a"].item() != 0.0:
+                    if not self.irrelevant_objects_hidden:
+                        for obj in self.task_irrelevant_objects:
+                            obj.visible = not obj.visible
+                        self.irrelevant_objects_hidden = True
+                else:
+                    self.irrelevant_objects_hidden = False
 
                 # If - is toggled from OFF -> ON, reset env
                 if self._joint_cmd["button_home"].item() != 0.0:
