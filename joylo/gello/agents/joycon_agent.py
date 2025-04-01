@@ -31,6 +31,7 @@ class JoyconAgent(Agent):
             max_rotation: float = 0.3,
             max_trunk_translate: float = 0.1,
             max_trunk_tilt: float = 0.1,
+            enable_rumble: bool = True,
             # default_trunk_translate: float = 0.0,
             # default_trunk_tilt: float = 0.0,
     ):
@@ -56,6 +57,7 @@ class JoyconAgent(Agent):
                 "status": 1,                # -1 corresponds to closed, 1 to open
             },
         }
+        self.enable_rumble = enable_rumble
         self.rumble_info = {
             "left": None,
             "right": None,
@@ -95,52 +97,54 @@ class JoyconAgent(Agent):
         base_amp = 0.3 #0.37
         finger_b = RumbleData(finger_freq / 2, finger_freq, finger_amp).GetData()
         arm_b = RumbleData(arm_freq / 2, arm_freq, arm_amp).GetData()
-        cur_rumble_info = {
-            "left": None,
-            "right": None,
-        }
 
-        # Parse fingers, then arms, then trunk, then base
-        # This defines the rumble priority (in increasing order)
-
-        for arm in ["left", "right"]:
-            if obs[f"arm_{arm}_finger_max_contact"] > 0:
-                # print(obs[f"arm_{arm}_finger_max_contact"])
-                # Handle finger grasping haptic feedback
-                # finger_amp = #min(np.sqrt(obs[f"arm_{arm}_finger_max_contact"]) * 0.5, 0.6)
-                cur_rumble_info[arm] = finger_b
-
-            # Handle arm grasping haptic feedback
-            if obs[f"arm_{arm}_contact"]:
-                cur_rumble_info[arm] = arm_b
-
-        # Handle trunk collision haptic feedback
-        if obs[f"trunk_contact"]:
-            trunk_b = RumbleData(trunk_freq / 2, trunk_freq, trunk_amp).GetData()
-            cur_rumble_info["left"] = trunk_b
-            cur_rumble_info["right"] = trunk_b
-
-        # Handle base collision haptic feedback
-        if obs[f"base_contact"]:
-            base_b = RumbleData(base_freq / 2, base_freq, base_amp).GetData()
-            cur_rumble_info["left"] = base_b
-            cur_rumble_info["right"] = base_b
-
-        # Send values if active
-        for arm, joycon in zip(["left", "right"], [self.jc_left, self.jc_right]):
-            cur_val, previous_val = cur_rumble_info[arm], self.rumble_info[arm]
-            if cur_val:
-                # We should be active -- enable rumble if not already done
-                if previous_val is None:
-                    joycon.enable_vibration(True)
-                # Send rumble
-                joycon._send_rumble(cur_val)
-            # Otherwise -- should be off -- disable if we're previously on
-            elif previous_val is not None:
-                joycon.enable_vibration(False)
-
-        # Update rumble info
-        self.rumble_info = cur_rumble_info
+        if self.enable_rumble:
+            cur_rumble_info = {
+                "left": None,
+                "right": None,
+            }
+    
+            # Parse fingers, then arms, then trunk, then base
+            # This defines the rumble priority (in increasing order)
+    
+            for arm in ["left", "right"]:
+                if obs[f"arm_{arm}_finger_max_contact"] > 0:
+                    # print(obs[f"arm_{arm}_finger_max_contact"])
+                    # Handle finger grasping haptic feedback
+                    # finger_amp = #min(np.sqrt(obs[f"arm_{arm}_finger_max_contact"]) * 0.5, 0.6)
+                    cur_rumble_info[arm] = finger_b
+    
+                # Handle arm grasping haptic feedback
+                if obs[f"arm_{arm}_contact"]:
+                    cur_rumble_info[arm] = arm_b
+    
+            # Handle trunk collision haptic feedback
+            if obs[f"trunk_contact"]:
+                trunk_b = RumbleData(trunk_freq / 2, trunk_freq, trunk_amp).GetData()
+                cur_rumble_info["left"] = trunk_b
+                cur_rumble_info["right"] = trunk_b
+    
+            # Handle base collision haptic feedback
+            if obs[f"base_contact"]:
+                base_b = RumbleData(base_freq / 2, base_freq, base_amp).GetData()
+                cur_rumble_info["left"] = base_b
+                cur_rumble_info["right"] = base_b
+    
+            # Send values if active
+            for arm, joycon in zip(["left", "right"], [self.jc_left, self.jc_right]):
+                cur_val, previous_val = cur_rumble_info[arm], self.rumble_info[arm]
+                if cur_val:
+                    # We should be active -- enable rumble if not already done
+                    if previous_val is None:
+                        joycon.enable_vibration(True)
+                    # Send rumble
+                    joycon._send_rumble(cur_val)
+                # Otherwise -- should be off -- disable if we're previously on
+                elif previous_val is not None:
+                    joycon.enable_vibration(False)
+    
+            # Update rumble info
+            self.rumble_info = cur_rumble_info
 
         vals = []
 
