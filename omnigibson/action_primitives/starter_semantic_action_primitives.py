@@ -143,7 +143,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         enable_head_tracking=True,
         always_track_eef=False,
         task_relevant_objects_only=False,
-        curobo_batch_size=3,
+        curobo_batch_size=4,
         debug_visual_marker=None,
         skip_curobo_initilization=False,
     ):
@@ -817,46 +817,69 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         target_pos = {}
         target_quat = {}
+        batched = False
         for arm, pose in target_pose.items():
             target_pos[self.robot.eef_link_names[arm]] = pose[0]
             target_quat[self.robot.eef_link_names[arm]] = pose[1]
+            if len(pose[0].shape) == 2:
+                batched = True
 
-        target_pos = {k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_pos.items()}
-        target_quat = {
-            k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_quat.items()
-        }
+        if not batched:
+            target_pos = {
+                k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_pos.items()
+            }
+            target_quat = {
+                k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_quat.items()
+            }
+            max_attempts = math.ceil(m.MAX_PLANNING_ATTEMPTS / self._motion_generator.batch_size)
+            success_ratio = 1.0 / self._motion_generator.batch_size
+        else:
+            max_attempts = m.MAX_PLANNING_ATTEMPTS
+            success_ratio = 1.0
 
         successes, joint_states = self._motion_generator.compute_trajectories(
             target_pos=target_pos,
             target_quat=target_quat,
             initial_joint_pos=initial_joint_pos,
             is_local=False,
-            max_attempts=math.ceil(m.MAX_PLANNING_ATTEMPTS / self._motion_generator.batch_size),
+            max_attempts=max_attempts,
             timeout=60.0,
             ik_fail_return=m.MAX_IK_FAILURES_BEFORE_RETURN,
             enable_finetune_trajopt=False,
             finetune_attempts=0,
             return_full_result=False,
-            success_ratio=1.0 / self._motion_generator.batch_size,
+            success_ratio=success_ratio,
             attached_obj=None,
             attached_obj_scale=None,
             motion_constraint=None,
             skip_obstacle_update=skip_obstacle_update,
             ik_only=True,
-            ik_world_collision_check=True,
+            ik_world_collision_check=False,
             emb_sel=CuRoboEmbodimentSelection.ARM,
         )
 
-        # Grab the first successful joint state if found
-        success_idx = th.where(successes)[0].cpu()
-        if len(success_idx) == 0:
-            return None
+        if not batched:
+            # Grab the first successful joint state if found
+            success_idx = th.where(successes)[0].cpu()
+            if len(success_idx) == 0:
+                return None
+        else:
+            if not th.all(successes):
+                return None
 
-        joint_state = joint_states[success_idx[0]]
-        joint_pos = self._motion_generator.path_to_joint_trajectory(
-            joint_state, get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM
-        )
-        return joint_pos[self._manipulation_control_idx()].cpu()
+        if not batched:
+            joint_state = joint_states[success_idx[0]]
+            joint_pos = self._motion_generator.path_to_joint_trajectory(
+                joint_state, get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM
+            )
+            return joint_pos[self._manipulation_control_idx()].cpu()
+        else:
+            return [
+                self._motion_generator.path_to_joint_trajectory(
+                    joint_state, get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM
+                )[self._manipulation_control_idx()].cpu()
+                for joint_state in joint_states
+            ]
 
     def _move_hand(
         self,
@@ -1780,10 +1803,16 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         target_pose = eef_pose
 
+        for arm in target_pose:
+            if len(target_pose[arm][0].shape) == 1:
+                target_pose[arm] = (target_pose[arm][0].unsqueeze(0), target_pose[arm][1].unsqueeze(0))
+
+        target_position = target_pose[self.arm][0][0]
+
         obj_rooms = (
             obj.in_rooms
             if obj.in_rooms
-            else [self.robot.scene._seg_map.get_room_instance_by_point(target_pose[self.arm][0][:2])]
+            else [self.robot.scene._seg_map.get_room_instance_by_point(target_position[:2])]
         )
 
         attempt = 0
@@ -1799,8 +1828,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     yaw = th.rand(1) * (yaw_hi - yaw_lo) + yaw_lo
                     candidate_2d_pose = th.cat(
                         [
-                            target_pose[self.arm][0][0] + distance * th.cos(yaw),
-                            target_pose[self.arm][0][1] + distance * th.sin(yaw),
+                            target_position[0] + distance * th.cos(yaw),
+                            target_position[1] + distance * th.sin(yaw),
                             yaw + math.pi - avg_arm_workspace_range,
                         ]
                     )
