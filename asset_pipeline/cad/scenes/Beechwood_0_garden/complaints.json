@@ -222,12 +222,26 @@
         "additional_info": ""
     },
     {
+        "object": "pot_plant-ibvdwh",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "pot_plant-liqyem",
         "complaint": "plants are grey. 3dsmax shows grey too",
         "processed": false,
         "new": true,
         "type": "appearance",
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "pot_plant-liqyem",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "pot_plant-mkhbtk",
@@ -252,5 +266,12 @@
         "new": true,
         "type": "appearance",
         "additional_info": ""
+    },
+    {
+        "object": "pot_plant-mkhbtk",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     }
 ]

@@ -24,6 +24,13 @@
         "additional_info": ""
     },
     {
+        "object": "floor_lamp-hdfnqb",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
         "object": "specimen_bottle-vlplhs",
         "complaint": "not transparent",
         "processed": true,
@@ -288,12 +295,26 @@
         "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: mirror\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category."
     },
     {
+        "object": "mirror-rgbvxy",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "MIRROR: This object is a mirror. Please ensure that the object is reflective."
+    },
+    {
         "object": "monitor-mlyppp",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
         "new": true,
         "type": "metalink",
         "additional_info": ""
+    },
+    {
+        "object": "monitor-mlyppp",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "serving_cart-ouddxy",
@@ -390,6 +411,13 @@
         "new": true,
         "type": "structurethickness",
         "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
+    },
+    {
+        "object": "pot_plant-jrvtso",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "water_cooler-essxzr",

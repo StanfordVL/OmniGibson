@@ -28,7 +28,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-vrayconversion.success"
+PASS_FILENAME = "done-reflbake.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -574,8 +574,32 @@ def processFile(filename: pathlib.Path):
     # Apply the same material to all instances
     # match_instance_materials()
 
-    # Prebake textures
+    # Remove materials from meta links
+    for obj in rt.objects:
+        pn = b1k_pipeline.utils.parse_name(obj.name)
+        if not pn:
+            continue
+        if pn.group("meta_type"):
+            obj.material = None
+
+    # Temporary hack for rebaking just the reflection channel
+    baked_mtls_by_object = {}
+    for obj in rt.objects:
+        if obj.material and rt.classOf(obj.material) == rt.Shell_Material:
+            baked_mtls_by_object[obj] = obj.material.bakedMaterial
+            obj.material = obj.material.originalMaterial
+            assert rt.classOf(obj.material) != rt.Shell_Material, f"{obj} material should not be shell material before baking"
     b1k_pipeline.max.prebake_textures.process_open_file()
+    for obj, old_baked_mtl in baked_mtls_by_object.items():
+        # Make sure it got baked again
+        assert rt.classOf(obj.material) == rt.Shell_Material, f"{obj} material should be shell material after baking"
+        new_baked_mtl = obj.material.bakedMaterial
+
+        # Copy the new material's reflection channel to the old one's slot too
+        old_baked_mtl.reflectivity_map = new_baked_mtl.reflectivity_map
+
+        # Switch back to the old shell material
+        obj.material.bakedMaterial = old_baked_mtl
 
     # Update visibility settings
     update_visibilities()

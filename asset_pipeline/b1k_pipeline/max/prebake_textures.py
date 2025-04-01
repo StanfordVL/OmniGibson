@@ -44,14 +44,14 @@ NEW_UV_CHANNEL = 99
 
 # PhysicalMaterial
 CHANNEL_MAPPING = {
-    "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
-    "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
-    "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
-    # "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
-    # "VRaySelfIlluminationMap": "Emission Color Map",
+    # "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
+    # "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
+    # "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
+    # # "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
+    # # "VRaySelfIlluminationMap": "Emission Color Map",
     "VRayRawReflectionFilterMap": "Reflectivity Map",
-    "VRayRawRefractionFilterMap": "Transparency Map",
-    "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
+    # "VRayRawRefractionFilterMap": "Transparency Map",
+    # "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
 }
 # CHANNEL_MAPPING = {
 #     "Color": "Base Color Map",
@@ -139,7 +139,6 @@ class TextureBaker:
         self.MAP_NAME_TO_IDS = self.get_map_name_to_ids()
 
         self.unwrap_times = {}
-        self.baking_times = {}
 
         self.bakery = bakery
         os.makedirs(bakery, exist_ok=True)
@@ -260,9 +259,9 @@ class TextureBaker:
             return
 
         # Also skip objects whose material is not some kind of a Vray material
-        if "vray" not in str(rt.classOf(obj.material)).lower():
-            print(f"Skipping baking for {obj.name} as it is not a Vray material.")
-            return
+        # if "vray" not in str(rt.classOf(obj.material)).lower():
+        #     print(f"Skipping baking for {obj.name} as it is not a Vray material.")
+        #     return
 
         # Get the existing baseobject children that use the same material as this one
         siblings = []
@@ -301,7 +300,7 @@ class TextureBaker:
             texture_map.imageWidth = img_size
             texture_map.imageHeight = img_size
             texture_map.edgePadding = 4
-            texture_map.fileType = "jpeg"
+            texture_map.fileType = "png"
 
             # Set the apply color mapping option
             if texture_map.getOptionsCount() > 0:
@@ -313,6 +312,8 @@ class TextureBaker:
             # Mapping from the original channel (of VRay, Corona, etc) to the new channel of PhysicalMaterial
             texture_map.setTargetMapSlot(CHANNEL_MAPPING[map_name])
 
+        return siblings
+
     def postprocess_texture_baking(self, obj, siblings):
         # Set the object to render the baked material
         obj.material.renderMtlIndex = 1
@@ -320,6 +321,7 @@ class TextureBaker:
         # Update everything that has the same baseobject to use the same material
         for sibling in siblings:
             sibling.material = obj.material
+            rt.update(sibling)
 
         rt.update(obj)
 
@@ -342,7 +344,7 @@ class TextureBaker:
         assert btt.bake(), "baking failed"
         print("finish baking")
         end_time = time.time()
-        self.baking_times["total"] = end_time - start_time
+        print(f"baking took {end_time - start_time} seconds")
 
         # Clear the baking list again.
         btt.deleteAllMaps()
@@ -369,9 +371,10 @@ class TextureBaker:
 
             # TODO: Can we bake all at once?
             self.uv_unwrapping(obj)
-            to_postprocess = self.prepare_texture_baking(obj)
-            if to_postprocess:
-                postprocessing.append((obj, to_postprocess))
+            siblings = self.prepare_texture_baking(obj)
+            if siblings is None:  # not baking this object!
+                continue
+            postprocessing.append((obj, siblings))
 
         # Bake
         self.texture_baking()

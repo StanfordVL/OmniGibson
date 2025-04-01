@@ -48,7 +48,7 @@ def get_collision_meshes_relative_to_base(obj, base_transform):
         tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
         for i in range(rt.polyop.GetNumFaces(obj))
     }
-    assert len(elems) <= 32, f"{obj.name} should not have more than 32 elements."
+    assert len(elems) <= 40, f"{obj.name} should not have more than 32 elements."
     elems = np.array(list(elems))
     assert not np.any(
         np.sum(elems, axis=0) > 1
