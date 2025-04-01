@@ -29,6 +29,7 @@ PrebakeDataAttr = rt.execute(_prebake_data_str)
 
 btt = rt.BakeToTexture
 
+BATCH_MODE = False
 USE_UNWRELLA = True
 IMG_SIZE = 1024
 HQ_IMG_SIZE = 4096
@@ -374,14 +375,22 @@ class TextureBaker:
             siblings = self.prepare_texture_baking(obj)
             if siblings is None:  # not baking this object!
                 continue
-            postprocessing.append((obj, siblings))
 
-        # Bake
-        self.texture_baking()
+            if not BATCH_MODE:
+                # If we're not in batch mode, bake now.
+                self.texture_baking()
+                self.postprocess_texture_baking(obj, siblings)
+            else:
+                # Otherwise, queue for postprocessing for after baking.
+                postprocessing.append((obj, siblings))
 
-        # Postprocessing
-        for obj, siblings in postprocessing:
-            self.postprocess_texture_baking(obj, siblings)
+        if BATCH_MODE:
+            # Bake
+            self.texture_baking()
+
+            # Postprocessing
+            for obj, siblings in postprocessing:
+                self.postprocess_texture_baking(obj, siblings)
 
 
 def process_open_file():
