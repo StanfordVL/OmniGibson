@@ -122,6 +122,7 @@ def main(args):
             max_rotation=0.8,
             max_trunk_translate=0.2,
             max_trunk_tilt=0.4,
+            enable_rumble=True,
         )
 
     arm_agent = R1GelloAgent(
