@@ -81,6 +81,13 @@ VISUAL_ONLY_CATEGORIES = {
     "pot_plant",
 }
 
+# Global whitelist of task-relevant objects
+TASK_RELEVANT_CATEGORIES = {
+    "floors",
+    "driveway",
+    "lawn",
+}
+
 gm.USE_NUMPY_CONTROLLER_BACKEND = True
 gm.USE_GPU_DYNAMICS = (USE_FLUID or USE_CLOTH)
 gm.ENABLE_FLATCACHE = not (USE_FLUID or USE_CLOTH)
@@ -770,12 +777,23 @@ class OGRobotServer:
         self._arm_shoulder_directions = {"left": -1.0, "right": 1.0}
         self._cam_switched = False
         
+        self.task_relevant_objects = []
         self.task_irrelevant_objects = []
-        self.irrelevant_objects_hidden = False
-        
+        self.highlight_task_relevant_objects = False
+
         if LOAD_TASK:
-            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values()]
-            self.task_irrelevant_objects = [obj for obj in self.env.scene.objects if obj not in task_objects and obj.category != "floors"]
+            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() if bddl_obj.wrapped_obj is not None]
+            self.task_relevant_objects = [obj for obj in task_objects if obj.category != "agent"]
+            object_highlight_colors = lazy.omni.replicator.core.random_colours(N=len(self.task_relevant_objects))[:, :3].tolist()
+            
+            # Normalize colors from 0-255 to 0-1 range
+            normalized_colors = [[r/255, g/255, b/255] for r, g, b in object_highlight_colors]
+            
+            for obj, color in zip(self.task_relevant_objects, normalized_colors):
+                obj.set_highlight_properties(color=color)
+            self.task_irrelevant_objects = [obj for obj in self.env.scene.objects 
+                                        if obj not in task_objects 
+                                        and obj.category not in TASK_RELEVANT_CATEGORIES]
 
         # Set variables that are set during reset call
         self._env_reset_cooldown = None
@@ -1037,12 +1055,14 @@ class OGRobotServer:
 
                 # If button A is pressed, hide task-irrelevant objects
                 if self._joint_cmd["button_a"].item() != 0.0:
-                    if not self.irrelevant_objects_hidden:
+                    if not self.highlight_task_relevant_objects:
                         for obj in self.task_irrelevant_objects:
                             obj.visible = not obj.visible
-                        self.irrelevant_objects_hidden = True
+                        for obj in self.task_relevant_objects:
+                            obj.highlighted = not obj.highlighted
+                        self.highlight_task_relevant_objects = True
                 else:
-                    self.irrelevant_objects_hidden = False
+                    self.highlight_task_relevant_objects = False
 
                 # If - is toggled from OFF -> ON, reset env
                 if self._joint_cmd["button_home"].item() != 0.0:
