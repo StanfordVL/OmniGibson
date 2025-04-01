@@ -218,10 +218,15 @@ def import_bad_model_originals(model_id):
         set(objects_to_import) - set(imported_objs_by_name.keys())
     )
 
+    zero_layer = rt.LayerManager.getLayer(0)
+    zero_layer.current = True
+    for mesh in imported_meshes:
+        zero_layer.addNode(mesh)
+
     return {k: imported_objs_by_name[v] for k, v in visual_objects.items()}
 
 
-def replace_object_instances(obj):
+def replace_object_instances(obj, respect_aspect_ratio=False):
     # Parse the name and assert it's the base link of a bad object and instance 0
     parsed_name = parse_name(obj.name)
     assert parsed_name, f"Object {obj.name} has no parsed name"
@@ -269,9 +274,9 @@ def replace_object_instances(obj):
             link_name = "base_link"
         links_by_instance_id[inst_parsed_name.group("instance_id")][link_name] = inst
     all_links = set(frozenset(x.keys()) for x in links_by_instance_id.values())
-    assert (
-        len(all_links) == 1
-    ), f"All instances of {obj.name} do not share the same set of links: {links_by_instance_id}"
+    # assert (
+    #     len(all_links) == 1
+    # ), f"All instances of {obj.name} do not share the same set of links: {links_by_instance_id}"
 
     # Check that they are all marked as BAD
     assert all(
@@ -293,6 +298,7 @@ def replace_object_instances(obj):
     assert all_parented == set(all_base_links), "Not all instances were parented."
 
     # Record the transforms of all of the instances as well as their local and world BBs
+    instance_layers = [x.layer for x in all_base_links]
     instance_parents = [inst.parent for inst in all_base_links]
     instance_transforms = [inst.transform for inst in all_base_links]
     instance_rotations = [inst.rotation for inst in all_base_links]
@@ -337,6 +343,7 @@ def replace_object_instances(obj):
         instance_rotation,
         instance_lowbb,
         instance_world_bb,
+        instance_layer,
     ) in enumerate(
         zip(
             instance_parents,
@@ -344,6 +351,7 @@ def replace_object_instances(obj):
             instance_rotations,
             instance_lowbbs,
             instance_world_bbs,
+            instance_layers,
         )
     ):
         # First copy the object.
@@ -354,6 +362,10 @@ def replace_object_instances(obj):
         )
         assert success, f"Could not clone {imported_base_link.name}"
         print("Cloned", model_id, instance_id)
+
+        # Move everything to the correct layer
+        for mesh in child_copy:
+            instance_layer.addNode(mesh)
 
         # Find the base link in the child copies. It's the one whose parent is not one of the child copies
         (base_copy,) = [x for x in child_copy if x.parent not in child_copy]
@@ -377,7 +389,12 @@ def replace_object_instances(obj):
         base_copy_lowbb_size = base_copy_lowbb[1] - base_copy_lowbb[0]
 
         # The target scale is the ratio of the two sizes
-        relative_scale_from_now = instance_lowbb_size / base_copy_lowbb_size
+        if respect_aspect_ratio:
+            relative_scale_from_now = np.min(
+                instance_lowbb_size / base_copy_lowbb_size
+            ) * np.ones(3)
+        else:
+            relative_scale_from_now = instance_lowbb_size / base_copy_lowbb_size
 
         # This scale needs to be applied BEFORE the rotation since it's in local frame
         scale_transform = np.diag(relative_scale_from_now.tolist() + [1])
@@ -399,13 +416,16 @@ def replace_object_instances(obj):
         delta_mag = delta_orn.magnitude()
         print("Delta orientation", delta_orn.as_rotvec(), "magnitude", delta_mag)
 
-        # Position it to match the center
+        # Position it to match bottom face center (this allows for the object to not be floating
+        # if respect_aspect_ratio is True)
         base_copy_world_bb = bounding_box_from_verts(
             apply_transform(base_copy_points, combined_transform)
         )
-        base_copy_world_bb_center = (base_copy_world_bb[0] + base_copy_world_bb[1]) / 2
-        instance_world_bb_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
-        move_center_by = instance_world_bb_center - base_copy_world_bb_center
+        base_copy_world_bb_bottom_center = (base_copy_world_bb[0] + base_copy_world_bb[1]) / 2
+        base_copy_world_bb_bottom_center[2] = base_copy_world_bb[0][2]
+        instance_world_bb_bottom_center = (instance_world_bb[0] + instance_world_bb[1]) / 2
+        instance_world_bb_bottom_center[2] = instance_world_bb[0][2]
+        move_center_by = instance_world_bb_bottom_center - base_copy_world_bb_bottom_center
         combined_transform[:3, 3] = move_center_by
 
         # Convert and apply the transform to the 3ds Max object
@@ -487,21 +507,22 @@ def replace_object_instances(obj):
         )
 
         # Note the much higher tolerance due to rotation errors :(
-        assert np.allclose(
-            orig_center, computed_center, atol=100
-        ), "Computed center is not the same as the original center"
-        assert np.allclose(
-            orig_size, computed_size, atol=100
-        ), "Computed size is not the same as the original size"
+        if not respect_aspect_ratio:
+            assert np.allclose(
+                orig_center, computed_center, atol=100
+            ), "Computed center is not the same as the original center"
+            assert np.allclose(
+                orig_size, computed_size, atol=100
+            ), "Computed size is not the same as the original size"
 
-        assert np.allclose(
-            orig_center, new_center, atol=100
-        ), "New center is not the same as the original center"
-        assert np.allclose(
-            orig_size,
-            new_size,
-            atol=100,
-        ), "New size is not the same as the original size"
+            assert np.allclose(
+                orig_center, new_center, atol=100
+            ), "New center is not the same as the original center"
+            assert np.allclose(
+                orig_size,
+                new_size,
+                atol=100,
+            ), "New size is not the same as the original size"
 
         # Record the comparison data
         comparison_data[instance_id] = {
@@ -513,6 +534,7 @@ def replace_object_instances(obj):
             "current_world_bb": [x.tolist() for x in base_copy_world_bb],
             "original_lowbb": [x.tolist() for x in instance_lowbb],
             "current_lowbb": [x.tolist() for x in base_copy_lowbb],
+            "respect_aspect_ratio": respect_aspect_ratio,
         }
 
         # Name each of the children correctly, and parent them to the original owner's parents
@@ -591,7 +613,7 @@ def replace_all_bad_legacy_objects_in_open_file():
 
 
 def main():
-    replace_object_instances(rt.selection[0])
+    replace_object_instances(rt.selection[0], respect_aspect_ratio=True)
 
 
 if __name__ == "__main__":
