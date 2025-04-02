@@ -792,6 +792,8 @@ class OGRobotServer:
             self.task_irrelevant_objects = [obj for obj in self.env.scene.objects 
                                         if obj not in task_objects 
                                         and obj.category not in TASK_RELEVANT_CATEGORIES]
+            
+            self._setup_task_instruction_ui()
 
         # Set variables that are set during reset call
         self._env_reset_cooldown = None
@@ -884,6 +886,88 @@ class OGRobotServer:
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
         
         lazy.carb.settings.get_settings().set_bool("/rtx-transient/dlssg/enabled", True)
+
+    def _setup_task_instruction_ui(self):
+        """Set up the UI for displaying task instructions and goal status."""
+        if self.task_name is None:
+            return
+
+        self.bddl_goal_conditions = self.env.task.activity_natural_language_goal_conditions
+        
+        # Setup overlay window
+        main_viewport = og.sim.viewer_camera._viewport
+        main_viewport.dock_tab_bar_visible = False
+        og.sim.render()
+        self.overlay_window = lazy.omni.ui.Window(
+            main_viewport.name, 
+            width=0, 
+            height=0,
+            flags=lazy.omni.ui.WINDOW_FLAGS_NO_TITLE_BAR | 
+                lazy.omni.ui.WINDOW_FLAGS_NO_SCROLLBAR | 
+                lazy.omni.ui.WINDOW_FLAGS_NO_RESIZE
+        )
+        og.sim.render()
+
+        self.text_labels = []
+        with self.overlay_window.frame:
+            with lazy.omni.ui.ZStack():
+                # Bottom layer - transparent spacer
+                lazy.omni.ui.Spacer()
+                # Text container at top left
+                with lazy.omni.ui.VStack(alignment=lazy.omni.ui.Alignment.LEFT_TOP, spacing=0):
+                    lazy.omni.ui.Spacer(height=50)  # Top margin
+                    
+                    # Create labels for each goal condition
+                    for line in self.bddl_goal_conditions:
+                        with lazy.omni.ui.HStack(height=20):
+                            lazy.omni.ui.Spacer(width=50)  # Left margin
+                            label = lazy.omni.ui.Label(
+                                line,
+                                alignment=lazy.omni.ui.Alignment.LEFT_CENTER,
+                                style={
+                                    "color": 0xFF0000FF,  # Red color (ABGR)
+                                    "font_size": 25,
+                                    "margin": 0,
+                                    "padding": 0
+                                }
+                            )
+                            self.text_labels.append(label)
+        
+        # Initialize goal status tracking
+        self.previous_goal_status = {
+            'satisfied': [], 
+            'unsatisfied': list(range(len(self.bddl_goal_conditions)))
+        }
+        
+        # Force render to update the overlay
+        og.sim.render()
+
+    def _update_goal_status(self, goal_status):
+        """Update the UI based on goal status changes."""
+        if self.task_name is None:
+            return
+            
+        # Check if status has changed
+        status_changed = (set(goal_status['satisfied']) != set(self.previous_goal_status['satisfied']) or
+                        set(goal_status['unsatisfied']) != set(self.previous_goal_status['unsatisfied']))
+        
+        if status_changed:
+            # Update satisfied goals - make them green
+            for idx in goal_status['satisfied']:
+                if 0 <= idx < len(self.text_labels):
+                    current_style = self.text_labels[idx].style
+                    current_style.update({"color": 0xFF00FF00})  # Green (ABGR)
+                    self.text_labels[idx].set_style(current_style)
+            
+            # Update unsatisfied goals - make them red
+            for idx in goal_status['unsatisfied']:
+                if 0 <= idx < len(self.text_labels):
+                    current_style = self.text_labels[idx].style
+                    current_style.update({"color": 0xFF0000FF})  # Red (ABGR)
+                    self.text_labels[idx].set_style(current_style)
+            
+            # Store the current status for future comparison
+            self.previous_goal_status = goal_status.copy()
 
     def num_dofs(self) -> int:
         return self.robot.n_joints
@@ -1077,8 +1161,10 @@ class OGRobotServer:
             else:
                 action[self.robot.arm_action_idx[self.active_arm]] = self._joint_cmd[self.active_arm].clone()
 
-            # print(action)
-            self.env.step(action)
+            _, _, _, _, info = self.env.step(action)
+            
+            if self.task_name is not None:
+                self._update_goal_status(info['done']['goal_status'])
 
     def reset(self):
         # Reset internal variables
