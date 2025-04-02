@@ -59,7 +59,6 @@ task_cfg_path = os.path.join(dir_path, '..', '..', '..', 'sampled_task', 'availa
 with open(task_cfg_path, 'r') as file:
     AVAILABLE_BEHAVIOR_TASKS = yaml.safe_load(file)
 
-LOAD_TASK = True   # If true, load a behavior task - otherwise load demo scene
 ACTIVITY_DEFINITION_ID = 0              # Which definition of the task to use. Should be 0 since we only have 1 definition per task
 ACTIVITY_INSTANCE_ID = 0                # Which instance of the pre-sampled task. Should be 0 since we only have 1 instance sampled
 
@@ -156,7 +155,6 @@ class OGRobotServer:
     ):
         self.task_name = task_name
         if self.task_name is not None:
-            assert LOAD_TASK, "Task name provided but LOAD_TASK is False"
             assert self.task_name in AVAILABLE_BEHAVIOR_TASKS, f"Task {self.task_name} not found in available tasks"
 
         # Infer how many arms the robot has, create configs for each arm
@@ -262,7 +260,7 @@ class OGRobotServer:
                                       resolution=RESOLUTION)
                 )
 
-            if LOAD_TASK:
+            if self.task_name is not None:
                 # Load the enviornment for a particular task
                 cfg["scene"] = {
                     "type": "InteractiveTraversableScene",
@@ -423,7 +421,7 @@ class OGRobotServer:
             "controller_config": controller_config,
             "self_collisions": False,
             "obs_modalities": [],
-            "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if LOAD_TASK else [0.0, 0.0, 0.0],
+            "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0],
             "grasping_mode": "assisted",
             "sensor_config": {
                 "VisionSensor": {
@@ -781,7 +779,7 @@ class OGRobotServer:
         self.task_irrelevant_objects = []
         self.highlight_task_relevant_objects = False
 
-        if LOAD_TASK:
+        if self.task_name is not None:
             task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() if bddl_obj.wrapped_obj is not None]
             self.task_relevant_objects = [obj for obj in task_objects if obj.category != "agent"]
             object_highlight_colors = lazy.omni.replicator.core.random_colours(N=len(self.task_relevant_objects))[:, :3].tolist()
@@ -1064,7 +1062,7 @@ class OGRobotServer:
                 else:
                     self.highlight_task_relevant_objects = False
 
-                # If - is toggled from OFF -> ON, reset env
+                # If HOME button is press, reset env
                 if self._joint_cmd["button_home"].item() != 0.0:
                     if self._env_reset_cooldown == 0:
                         self.reset()
