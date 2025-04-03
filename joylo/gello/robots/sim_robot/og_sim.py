@@ -31,6 +31,8 @@ from gello.dxl.franka_gello_joint_impedance import FRANKA_JOINT_LIMIT_HIGH, FRAN
 import torch as th
 import numpy as np
 
+META_LINK_TASKS = ["cook_brussels_sprouts"]
+
 USE_FLUID = False
 USE_CLOTH = False
 USE_ARTICULATED = False
@@ -59,7 +61,6 @@ task_cfg_path = os.path.join(dir_path, '..', '..', '..', 'sampled_task', 'availa
 with open(task_cfg_path, 'r') as file:
     AVAILABLE_BEHAVIOR_TASKS = yaml.safe_load(file)
 
-LOAD_TASK = True   # If true, load a behavior task - otherwise load demo scene
 ACTIVITY_DEFINITION_ID = 0              # Which definition of the task to use. Should be 0 since we only have 1 definition per task
 ACTIVITY_INSTANCE_ID = 0                # Which instance of the pre-sampled task. Should be 0 since we only have 1 instance sampled
 
@@ -81,9 +82,15 @@ VISUAL_ONLY_CATEGORIES = {
     "pot_plant",
 }
 
+# Global whitelist of task-relevant objects
+TASK_RELEVANT_CATEGORIES = {
+    "floors",
+    "driveway",
+    "lawn",
+}
+
 gm.USE_NUMPY_CONTROLLER_BACKEND = True
 gm.USE_GPU_DYNAMICS = (USE_FLUID or USE_CLOTH)
-gm.ENABLE_FLATCACHE = not (USE_FLUID or USE_CLOTH)
 gm.ENABLE_OBJECT_STATES = True # True (FOR TASKS!)
 gm.ENABLE_TRANSITION_RULES = False
 gm.ENABLE_CCD = False
@@ -149,8 +156,9 @@ class OGRobotServer:
     ):
         self.task_name = task_name
         if self.task_name is not None:
-            assert LOAD_TASK, "Task name provided but LOAD_TASK is False"
             assert self.task_name in AVAILABLE_BEHAVIOR_TASKS, f"Task {self.task_name} not found in available tasks"
+        
+        gm.ENABLE_FLATCACHE = self.task_name not in META_LINK_TASKS
 
         # Infer how many arms the robot has, create configs for each arm
         controller_config = dict()
@@ -255,7 +263,7 @@ class OGRobotServer:
                                       resolution=RESOLUTION)
                 )
 
-            if LOAD_TASK:
+            if self.task_name is not None:
                 # Load the enviornment for a particular task
                 cfg["scene"] = {
                     "type": "InteractiveTraversableScene",
@@ -416,7 +424,7 @@ class OGRobotServer:
             "controller_config": controller_config,
             "self_collisions": False,
             "obs_modalities": [],
-            "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if LOAD_TASK else [0.0, 0.0, 0.0],
+            "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0],
             "grasping_mode": "assisted",
             "sensor_config": {
                 "VisionSensor": {
@@ -470,6 +478,9 @@ class OGRobotServer:
                 0, 0,  # 2 L gripper
                 0, 0,  # 2 R gripper
             ]) * th.pi / 180
+            
+            # Fingers MUST start open, or else generated AG spheres will be spawned incorrectly
+            cfg["robots"][0]["reset_joint_pos"][-4:] = 0.05
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
@@ -594,7 +605,7 @@ class OGRobotServer:
             ####
 
         # Add visualization cylinders at the end effector sites
-        vis_geoms = []
+        self.eef_cylinder_geoms = {}
         vis_geom_colors = [
             [1.0, 0, 0],
             [0, 1.0, 0],
@@ -660,6 +671,7 @@ class OGRobotServer:
 
         for arm in self.robot.arm_names:
             hand_link = self.robot.eef_links[arm]
+            self.eef_cylinder_geoms[arm] = []
             for axis, length, mat, prop_offset, quat_offset in zip(
                 ("x", "y", "z"),
                 vis_geom_lengths,
@@ -684,7 +696,7 @@ class OGRobotServer:
 
                 vis_geom.scale = th.tensor([vis_geom_width, vis_geom_width, length])
                 vis_geom.set_position_orientation(position=th.tensor([0, 0, length * prop_offset]), orientation=quat_offset, frame="parent")
-                vis_geoms.append(vis_geom)
+                self.eef_cylinder_geoms[arm].append(vis_geom)
 
             # Add vis sphere around EEF for reachability
             if USE_VISUAL_SPHERES:
@@ -770,12 +782,25 @@ class OGRobotServer:
         self._arm_shoulder_directions = {"left": -1.0, "right": 1.0}
         self._cam_switched = False
         
+        self.task_relevant_objects = []
         self.task_irrelevant_objects = []
-        self.irrelevant_objects_hidden = False
-        
-        if LOAD_TASK:
-            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values()]
-            self.task_irrelevant_objects = [obj for obj in self.env.scene.objects if obj not in task_objects and obj.category != "floors"]
+        self.highlight_task_relevant_objects = False
+
+        if self.task_name is not None:
+            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() if bddl_obj.wrapped_obj is not None]
+            self.task_relevant_objects = [obj for obj in task_objects if obj.category != "agent"]
+            object_highlight_colors = lazy.omni.replicator.core.random_colours(N=len(self.task_relevant_objects))[:, :3].tolist()
+            
+            # Normalize colors from 0-255 to 0-1 range
+            normalized_colors = [[r/255, g/255, b/255] for r, g, b in object_highlight_colors]
+            
+            for obj, color in zip(self.task_relevant_objects, normalized_colors):
+                obj.set_highlight_properties(color=color)
+            self.task_irrelevant_objects = [obj for obj in self.env.scene.objects 
+                                        if obj not in task_objects 
+                                        and obj.category not in TASK_RELEVANT_CATEGORIES]
+            
+            self._setup_task_instruction_ui()
 
         # Set variables that are set during reset call
         self._env_reset_cooldown = None
@@ -789,6 +814,8 @@ class OGRobotServer:
             self.env = DataCollectionWrapper(
                 env=self.env, output_path=self._recording_path, viewport_camera_path=og.sim.viewer_camera.active_camera_path,only_successes=False, use_vr=USE_VR
             )
+        
+        self._prev_grasp_status = {arm: False for arm in self.robot.arm_names}
 
         # Reset
         self.reset()
@@ -816,6 +843,14 @@ class OGRobotServer:
         # VR extension does not work with async rendering
         if not USE_VR:
             self._optimize_sim_settings()
+        
+        # For some reason, toggle buttons get warped in terms of their placement -- we have them snap to their original
+        # locations by setting their scale
+        from omnigibson.object_states import ToggledOn
+        for obj in self.env.scene.objects:
+            if ToggledOn in obj.states:
+                scale = obj.states[ToggledOn].visual_marker.scale
+                obj.states[ToggledOn].visual_marker.scale = scale
         
         # Set up VR system
         self.vr_system = None
@@ -868,6 +903,96 @@ class OGRobotServer:
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
         
         lazy.carb.settings.get_settings().set_bool("/rtx-transient/dlssg/enabled", True)
+
+    def _setup_task_instruction_ui(self):
+        """Set up the UI for displaying task instructions and goal status."""
+        if self.task_name is None:
+            return
+
+        self.bddl_goal_conditions = self.env.task.activity_natural_language_goal_conditions
+        
+        # Setup overlay window
+        main_viewport = og.sim.viewer_camera._viewport
+        main_viewport.dock_tab_bar_visible = False
+        og.sim.render()
+        self.overlay_window = lazy.omni.ui.Window(
+            main_viewport.name, 
+            width=0, 
+            height=0,
+            flags=lazy.omni.ui.WINDOW_FLAGS_NO_TITLE_BAR | 
+                lazy.omni.ui.WINDOW_FLAGS_NO_SCROLLBAR | 
+                lazy.omni.ui.WINDOW_FLAGS_NO_RESIZE
+        )
+        og.sim.render()
+
+        self.text_labels = []
+        with self.overlay_window.frame:
+            with lazy.omni.ui.ZStack():
+                # Bottom layer - transparent spacer
+                lazy.omni.ui.Spacer()
+                # Text container at top left
+                with lazy.omni.ui.VStack(alignment=lazy.omni.ui.Alignment.LEFT_TOP, spacing=0):
+                    lazy.omni.ui.Spacer(height=50)  # Top margin
+                    
+                    # Create labels for each goal condition
+                    for line in self.bddl_goal_conditions:
+                        with lazy.omni.ui.HStack(height=20):
+                            lazy.omni.ui.Spacer(width=50)  # Left margin
+                            label = lazy.omni.ui.Label(
+                                line,
+                                alignment=lazy.omni.ui.Alignment.LEFT_CENTER,
+                                style={
+                                    "color": 0xFF0000FF,  # Red color (ABGR)
+                                    "font_size": 25,
+                                    "margin": 0,
+                                    "padding": 0
+                                }
+                            )
+                            self.text_labels.append(label)
+        
+        # Initialize goal status tracking
+        self._prev_goal_status = {
+            'satisfied': [], 
+            'unsatisfied': list(range(len(self.bddl_goal_conditions)))
+        }
+        
+        # Force render to update the overlay
+        og.sim.render()
+
+    def _update_goal_status(self, goal_status):
+        """Update the UI based on goal status changes."""
+        if self.task_name is None:
+            return
+            
+        # Check if status has changed
+        status_changed = (set(goal_status['satisfied']) != set(self._prev_goal_status['satisfied']) or
+                        set(goal_status['unsatisfied']) != set(self._prev_goal_status['unsatisfied']))
+        
+        if status_changed:
+            # Update satisfied goals - make them green
+            for idx in goal_status['satisfied']:
+                if 0 <= idx < len(self.text_labels):
+                    current_style = self.text_labels[idx].style
+                    current_style.update({"color": 0xFF00FF00})  # Green (ABGR)
+                    self.text_labels[idx].set_style(current_style)
+            
+            # Update unsatisfied goals - make them red
+            for idx in goal_status['unsatisfied']:
+                if 0 <= idx < len(self.text_labels):
+                    current_style = self.text_labels[idx].style
+                    current_style.update({"color": 0xFF0000FF})  # Red (ABGR)
+                    self.text_labels[idx].set_style(current_style)
+            
+            # Store the current status for future comparison
+            self._prev_goal_status = goal_status.copy()
+    
+    def _update_grasp_status(self):
+        for arm in self.robot.arm_names:
+            is_grasping = self.robot.is_grasping(arm) > 0
+            if is_grasping != self._prev_grasp_status[arm]:
+                self._prev_grasp_status[arm] = is_grasping
+                for cylinder in self.eef_cylinder_geoms[arm]:
+                    cylinder.visible = not is_grasping
 
     def num_dofs(self) -> int:
         return self.robot.n_joints
@@ -1037,14 +1162,16 @@ class OGRobotServer:
 
                 # If button A is pressed, hide task-irrelevant objects
                 if self._joint_cmd["button_a"].item() != 0.0:
-                    if not self.irrelevant_objects_hidden:
+                    if not self.highlight_task_relevant_objects:
                         for obj in self.task_irrelevant_objects:
                             obj.visible = not obj.visible
-                        self.irrelevant_objects_hidden = True
+                        for obj in self.task_relevant_objects:
+                            obj.highlighted = not obj.highlighted
+                        self.highlight_task_relevant_objects = True
                 else:
-                    self.irrelevant_objects_hidden = False
+                    self.highlight_task_relevant_objects = False
 
-                # If - is toggled from OFF -> ON, reset env
+                # If HOME button is press, reset env
                 if self._joint_cmd["button_home"].item() != 0.0:
                     if self._env_reset_cooldown == 0:
                         self.reset()
@@ -1059,8 +1186,12 @@ class OGRobotServer:
             else:
                 action[self.robot.arm_action_idx[self.active_arm]] = self._joint_cmd[self.active_arm].clone()
 
-            # print(action)
-            self.env.step(action)
+            _, _, _, _, info = self.env.step(action)
+            
+            if self.task_name is not None:
+                self._update_goal_status(info['done']['goal_status'])
+            
+            self._update_grasp_status()
 
     def reset(self):
         # Reset internal variables

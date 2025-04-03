@@ -1,0 +1,5073 @@
+{
+    "metadata": {
+        "task": {
+            "inst_to_name": {
+                "agent.n.01_1": "robot_fdqrat",
+                "floor.n.01_1": "floors_ptwlei_0",
+                "openable_window.n.01_1": "openable_window_ithrgo_1",
+                "openable_window.n.01_2": "openable_window_ithrgo_2"
+            }
+        }
+    },
+    "state": {
+        "system_registry": {},
+        "object_registry": {
+            "bookcase_njwsoa_0": {
+                "root_link": {
+                    "pos": [
+                        1.3429266214370728,
+                        -3.9018969535827637,
+                        0.6436232924461365
+                    ],
+                    "ori": [
+                        0.0014101788401603699,
+                        -0.004005065653473139,
+                        0.7068926095962524,
+                        0.7073082327842712
+                    ],
+                    "lin_vel": [
+                        0.00036813929909840226,
+                        -0.00037811134825460613,
+                        -0.0004258953267708421
+                    ],
+                    "ang_vel": [
+                        0.0010715923272073269,
+                        0.001631322898901999,
+                        7.339722651522607e-05
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "bookcase_njwsoa_1": {
+                "root_link": {
+                    "pos": [
+                        -1.8680237531661987,
+                        -3.3513128757476807,
+                        0.8168973326683044
+                    ],
+                    "ori": [
+                        -0.00241190567612648,
+                        -0.004069835878908634,
+                        0.004678051453083754,
+                        0.9999778866767883
+                    ],
+                    "lin_vel": [
+                        -0.002376533579081297,
+                        -4.2694853618741035e-05,
+                        -0.00023290950048249215
+                    ],
+                    "ang_vel": [
+                        0.000814023136626929,
+                        0.00039679938345216215,
+                        -0.005803323350846767
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "bookcase_owvfik_0": {
+                "root_link": {
+                    "pos": [
+                        -1.0200141668319702,
+                        -3.799771547317505,
+                        0.36932286620140076
+                    ],
+                    "ori": [
+                        -8.831265404296573e-06,
+                        1.440795858798083e-05,
+                        0.7071155905723572,
+                        0.7070979475975037
+                    ],
+                    "lin_vel": [
+                        0.0017508214805275202,
+                        0.0037316225934773684,
+                        0.00141953956335783
+                    ],
+                    "ang_vel": [
+                        -0.012450813315808773,
+                        0.0019533864688128233,
+                        -0.00037205731496214867
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "bottom_cabinet_bamfsz_0": {
+                "root_link": {
+                    "pos": [
+                        -1.6406126022338867,
+                        3.2097208499908447,
+                        0.44413360953330994
+                    ],
+                    "ori": [
+                        -8.371897274628282e-05,
+                        -7.564682164229453e-05,
+                        -0.7071099877357483,
+                        0.7071035504341125
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    4.895508482150035e-06,
+                    7.69744747231016e-06,
+                    9.030070941662416e-06,
+                    9.974171007343102e-06
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "bottom_cabinet_bamfsz_1": {
+                "root_link": {
+                    "pos": [
+                        -1.7863768339157104,
+                        -0.46196478605270386,
+                        0.3532417416572571
+                    ],
+                    "ori": [
+                        -6.889613814564655e-06,
+                        -0.00013876984303351492,
+                        0.00751637015491724,
+                        0.9999717473983765
+                    ],
+                    "lin_vel": [
+                        6.701748134219088e-06,
+                        7.506766451115254e-06,
+                        -1.6350422811228782e-05
+                    ],
+                    "ang_vel": [
+                        5.852467074873857e-05,
+                        -7.053507033560891e-06,
+                        -2.624778244353365e-05
+                    ]
+                },
+                "joint_pos": [
+                    0.0,
+                    7.074684731378511e-07,
+                    1.254668177352869e-06,
+                    1.6762535324232886e-06
+                ],
+                "joint_vel": [
+                    -7.059882045723498e-05,
+                    -5.4099553381092846e-05,
+                    -4.746916965814307e-05,
+                    -3.525602733134292e-05
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "bottom_cabinet_dajebq_0": {
+                "root_link": {
+                    "pos": [
+                        -3.5546674728393555,
+                        1.309870719909668,
+                        0.6298827528953552
+                    ],
+                    "ori": [
+                        0.0001000211268546991,
+                        0.00016774242976680398,
+                        -0.7071069478988647,
+                        0.7071065902709961
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    0.1726086437702179,
+                    0.1961301565170288,
+                    0.16761603951454163,
+                    0.1895064413547516
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "bottom_cabinet_jhymlr_0": {
+                "root_link": {
+                    "pos": [
+                        1.6596403121948242,
+                        -1.4950358867645264,
+                        0.3782818615436554
+                    ],
+                    "ori": [
+                        -4.7126784920692444e-05,
+                        -5.145004251971841e-06,
+                        1.0,
+                        3.657303750514984e-06
+                    ],
+                    "lin_vel": [
+                        -0.0023857431951910257,
+                        0.00023807994148228317,
+                        0.00031497186864726245
+                    ],
+                    "ang_vel": [
+                        0.0002506927994545549,
+                        -0.0011840544175356627,
+                        0.0009104150230996311
+                    ]
+                },
+                "joint_pos": [
+                    0.10023445636034012,
+                    0.10116276144981384,
+                    0.10091985762119293,
+                    0.10085269063711166,
+                    0.10099804401397705,
+                    0.1010550856590271
+                ],
+                "joint_vel": [
+                    0.008260299451649189,
+                    0.007967829704284668,
+                    0.007689003832638264,
+                    0.007495257072150707,
+                    0.007228854112327099,
+                    0.006927496287971735
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "breakfast_table_skczfi_0": {
+                "root_link": {
+                    "pos": [
+                        1.4725966453552246,
+                        0.4147607684135437,
+                        0.5975857377052307
+                    ],
+                    "ori": [
+                        8.802860975265503e-06,
+                        1.7076563381124288e-06,
+                        0.9999783635139465,
+                        -0.006590691395103931
+                    ],
+                    "lin_vel": [
+                        -0.0003661293303593993,
+                        8.601693843957037e-05,
+                        -3.234380346839316e-05
+                    ],
+                    "ang_vel": [
+                        -7.068385457387194e-05,
+                        -0.0002918675309047103,
+                        -1.8222513972432353e-05
+                    ]
+                },
+                "non_kin": {}
+            },
+            "breakfast_table_skczfi_1": {
+                "root_link": {
+                    "pos": [
+                        0.1700219064950943,
+                        -3.765928030014038,
+                        0.5975853800773621
+                    ],
+                    "ori": [
+                        1.0827091500686947e-05,
+                        -9.282422070100438e-06,
+                        0.7070940732955933,
+                        0.7071195840835571
+                    ],
+                    "lin_vel": [
+                        -3.496924546197988e-05,
+                        0.0006273670587688684,
+                        -1.5220734894683119e-06
+                    ],
+                    "ang_vel": [
+                        -0.00046646426199004054,
+                        -0.00019797116692643613,
+                        0.00016611895989626646
+                    ]
+                },
+                "non_kin": {}
+            },
+            "coffee_table_fqluyq_0": {
+                "root_link": {
+                    "pos": [
+                        -0.47672024369239807,
+                        -1.2198190689086914,
+                        0.2613392770290375
+                    ],
+                    "ori": [
+                        -0.0008918996900320053,
+                        -0.0004214433138258755,
+                        0.9999964833259583,
+                        -0.002499829512089491
+                    ],
+                    "lin_vel": [
+                        -3.733004632522352e-05,
+                        -2.0473449694691226e-05,
+                        -1.3910976122133434e-05
+                    ],
+                    "ang_vel": [
+                        4.2128471250180155e-05,
+                        -2.323568878637161e-05,
+                        2.8370333893690258e-05
+                    ]
+                },
+                "non_kin": {}
+            },
+            "floor_lamp_vdxlda_0": {
+                "root_link": {
+                    "pos": [
+                        -1.849669337272644,
+                        0.014719921164214611,
+                        1.0062772035598755
+                    ],
+                    "ori": [
+                        8.494529902236536e-05,
+                        0.00010978565114783123,
+                        -6.3197217059496325e-06,
+                        1.0
+                    ],
+                    "lin_vel": [
+                        0.0008475974318571389,
+                        0.001868908992037177,
+                        -0.000204623764147982
+                    ],
+                    "ang_vel": [
+                        -0.0017468933947384357,
+                        0.0007534577744081616,
+                        0.0011315084993839264
+                    ]
+                },
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "laptop_nvulcs_0": {
+                "root_link": {
+                    "pos": [
+                        -0.5805985927581787,
+                        -1.514411449432373,
+                        0.4043225646018982
+                    ],
+                    "ori": [
+                        -0.0009954521665349603,
+                        -0.0004206899902783334,
+                        0.9999967217445374,
+                        0.0023258018773049116
+                    ],
+                    "lin_vel": [
+                        2.279735417687334e-05,
+                        -0.0001612834894331172,
+                        -2.7149168090545572e-05
+                    ],
+                    "ang_vel": [
+                        9.889309876598418e-05,
+                        -2.5895031285472214e-05,
+                        -0.00015621159400325269
+                    ]
+                },
+                "joint_pos": [
+                    2.1507179370772178e-10
+                ],
+                "joint_vel": [
+                    3.251030733508742e-08
+                ],
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "loudspeaker_bmpdyv_0": {
+                "root_link": {
+                    "pos": [
+                        1.6307204961776733,
+                        -0.9291359186172485,
+                        0.8762640357017517
+                    ],
+                    "ori": [
+                        0.004230061545968056,
+                        -0.004306092858314514,
+                        -0.7005766034126282,
+                        0.7135517001152039
+                    ],
+                    "lin_vel": [
+                        0.0036291664000600576,
+                        -0.001913126790896058,
+                        0.0004076461773365736
+                    ],
+                    "ang_vel": [
+                        0.012137586250901222,
+                        0.021830778568983078,
+                        0.007134522311389446
+                    ]
+                },
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "ottoman_ycfbsd_0": {
+                "root_link": {
+                    "pos": [
+                        -0.43159183859825134,
+                        -2.5184950828552246,
+                        0.2562640905380249
+                    ],
+                    "ori": [
+                        0.0014270133106037974,
+                        -0.002612367272377014,
+                        0.9999956488609314,
+                        4.1037787013920024e-05
+                    ],
+                    "lin_vel": [
+                        -6.813189975218847e-05,
+                        -0.0001248171756742522,
+                        -0.00013040701742284
+                    ],
+                    "ang_vel": [
+                        -4.8495166993234307e-05,
+                        -3.822476719506085e-05,
+                        4.4059601350454614e-05
+                    ]
+                },
+                "non_kin": {}
+            },
+            "pot_plant_jatssq_0": {
+                "root_link": {
+                    "pos": [
+                        -0.42170199751853943,
+                        -0.8406550288200378,
+                        0.44409480690956116
+                    ],
+                    "ori": [
+                        0.000549065473023802,
+                        -0.00814964808523655,
+                        0.0005578153068199754,
+                        0.9999665021896362
+                    ],
+                    "lin_vel": [
+                        -0.0003197651822119951,
+                        0.00017737565212883055,
+                        1.3469091754814144e-05
+                    ],
+                    "ang_vel": [
+                        -0.0004837278393097222,
+                        -0.0010124881519004703,
+                        0.0011548924958333373
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "pot_plant_jatssq_1": {
+                "root_link": {
+                    "pos": [
+                        1.615122675895691,
+                        -2.156834125518799,
+                        0.8193966150283813
+                    ],
+                    "ori": [
+                        -0.01483364962041378,
+                        -0.014917864464223385,
+                        -0.7134976983070374,
+                        0.7003417015075684
+                    ],
+                    "lin_vel": [
+                        -0.0051711746491491795,
+                        0.002574680373072624,
+                        -0.0006307588191702962
+                    ],
+                    "ang_vel": [
+                        -0.016264935955405235,
+                        -0.014388934709131718,
+                        0.00963686965405941
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "pot_plant_udqjui_0": {
+                "root_link": {
+                    "pos": [
+                        -0.9356079697608948,
+                        -0.4091455340385437,
+                        0.07115641236305237
+                    ],
+                    "ori": [
+                        -0.49317654967308044,
+                        -0.4726469814777374,
+                        0.7139247059822083,
+                        -0.15392625331878662
+                    ],
+                    "lin_vel": [
+                        -9.218562809110153e-06,
+                        4.4912894736626185e-06,
+                        -5.803465683129616e-06
+                    ],
+                    "ang_vel": [
+                        -4.262191941961646e-05,
+                        -5.986684118397534e-05,
+                        -2.604736073408276e-05
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "public_trash_can_zotrbg_0": {
+                "root_link": {
+                    "pos": [
+                        -1.7624856233596802,
+                        2.6273207664489746,
+                        0.20901983976364136
+                    ],
+                    "ori": [
+                        1.910678474814631e-05,
+                        -4.280883149476722e-05,
+                        0.7071070671081543,
+                        0.7071065902709961
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "sofa_mnfbbh_0": {
+                "root_link": {
+                    "pos": [
+                        -1.5375299453735352,
+                        -1.7218201160430908,
+                        0.37525004148483276
+                    ],
+                    "ori": [
+                        8.269620593637228e-06,
+                        -0.002600993262603879,
+                        0.0012353187194094062,
+                        0.9999958276748657
+                    ],
+                    "lin_vel": [
+                        -7.927673095764476e-07,
+                        9.169576173917449e-07,
+                        -1.93232858691772e-06
+                    ],
+                    "ang_vel": [
+                        1.6064608416854753e-06,
+                        -5.678863885805185e-07,
+                        2.9191080557211535e-06
+                    ]
+                },
+                "non_kin": {
+                    "ModifiedParticles": {
+                        "n_systems": 0
+                    },
+                    "Saturated": {
+                        "n_systems": 317,
+                        "default_limit": 1000000.0,
+                        "soya_milk": 400,
+                        "polish": 400,
+                        "acetone": 400,
+                        "cooked__chicken_broth": 400,
+                        "glaze": 400,
+                        "apple_juice": 400,
+                        "cooked__whole_milk": 400,
+                        "miso": 400,
+                        "scotch": 400,
+                        "fritter_batter": 400,
+                        "nitrogen": 400,
+                        "sangaree": 400,
+                        "risotto": 400,
+                        "soda_water": 400,
+                        "applesauce": 400,
+                        "peanut_oil": 400,
+                        "whipped_cream": 400,
+                        "cooked__cafe_au_lait": 400,
+                        "milkshake": 400,
+                        "cream_cheese": 400,
+                        "melted__cane_sugar": 400,
+                        "martini": 400,
+                        "espresso": 400,
+                        "herbicide": 400,
+                        "cooked__filling": 400,
+                        "bourbon": 400,
+                        "ginger_ale": 400,
+                        "cooked__catsup": 400,
+                        "ginger_beer": 400,
+                        "cooked__sour_cream": 400,
+                        "cooked__canola_oil": 400,
+                        "floor_wax": 400,
+                        "tomato_sauce": 400,
+                        "vanilla": 400,
+                        "lemonade": 400,
+                        "lamb_stew": 400,
+                        "peanut_butter": 400,
+                        "cooked__margarine": 400,
+                        "sugar_syrup": 400,
+                        "filling": 400,
+                        "cooked__blueberry_compote": 400,
+                        "cooked__jam": 400,
+                        "jelly": 400,
+                        "cooked__hummus": 400,
+                        "cooked__green_tea_latte": 400,
+                        "salsa": 400,
+                        "whole_milk": 400,
+                        "refried_beans": 400,
+                        "margarita": 400,
+                        "rum": 400,
+                        "sake": 400,
+                        "pesticide": 400,
+                        "cooked__petite_marmite": 400,
+                        "cooked__pesto": 400,
+                        "chocolate_milk": 400,
+                        "red_meat_sauce": 400,
+                        "lemon_water": 400,
+                        "cooked__espresso": 400,
+                        "lime_juice": 400,
+                        "cooked__peanut_butter": 400,
+                        "cappuccino": 400,
+                        "fish_stew": 400,
+                        "yogurt": 400,
+                        "fertilizer": 400,
+                        "cooked__beer": 400,
+                        "cooked__muffin_batter": 400,
+                        "nut_butter": 400,
+                        "cooked__cheese_pastry_filling": 400,
+                        "shortening": 400,
+                        "cooked__cocoa": 400,
+                        "lemon_stain_remover": 400,
+                        "cooked__cheese_sauce": 400,
+                        "cooked__vinegar": 400,
+                        "cooked__olive_oil": 400,
+                        "shampoo": 400,
+                        "worcester_sauce": 400,
+                        "coconut_milk": 400,
+                        "puree": 400,
+                        "gazpacho": 400,
+                        "cooked__barbecue_sauce": 400,
+                        "aioli": 400,
+                        "waffle_batter": 400,
+                        "cooked__miso": 400,
+                        "cooked__marinade": 400,
+                        "lubricant": 400,
+                        "cooked__shortening": 400,
+                        "brandy": 400,
+                        "smoothie": 400,
+                        "frosting": 400,
+                        "cooked__stuffing": 400,
+                        "butane": 400,
+                        "cooked__iced_chocolate": 400,
+                        "cooked__maple_syrup": 400,
+                        "brownie_batter": 400,
+                        "sour_cream": 400,
+                        "stuffing": 400,
+                        "soy_sauce": 400,
+                        "cream_soda": 400,
+                        "cooked__red_meat_sauce": 400,
+                        "cooked__soya_milk": 400,
+                        "carrot_juice": 400,
+                        "old_fashioned": 400,
+                        "molasses": 400,
+                        "cooked__chocolate_sauce": 400,
+                        "tequila": 400,
+                        "melted__granulated_sugar": 400,
+                        "orange_juice": 400,
+                        "cooked__whipped_cream": 400,
+                        "maple_syrup": 400,
+                        "cooked__tomato_sauce": 400,
+                        "cooked__peanut_oil": 400,
+                        "disinfectant": 400,
+                        "cooked__cider": 400,
+                        "cooked__vanilla": 400,
+                        "gin": 400,
+                        "bleaching_agent": 400,
+                        "beef_broth": 400,
+                        "cooked__corn_syrup": 400,
+                        "green_tea_latte": 400,
+                        "hydrogen_peroxide": 400,
+                        "melted__bleu": 400,
+                        "cooked__brownie_batter": 400,
+                        "rubbing_alcohol": 400,
+                        "cooked__lime_juice": 400,
+                        "melted__chocolate": 400,
+                        "pancake_batter": 400,
+                        "chowder": 400,
+                        "hair_spray": 400,
+                        "almond_oil": 400,
+                        "foam": 400,
+                        "iced_chocolate": 400,
+                        "cherry_filling": 400,
+                        "melted__cheddar": 400,
+                        "conditioner": 400,
+                        "guacamole": 400,
+                        "chicken_curry": 400,
+                        "cooked__cream_cheese": 400,
+                        "cooked__limeade": 400,
+                        "pop": 400,
+                        "marinara": 400,
+                        "cranberry_juice": 400,
+                        "cooked__bouillon": 400,
+                        "cooked__lemonade": 400,
+                        "cooked__red_wine": 400,
+                        "cooked__onion_ring_batter": 400,
+                        "cooked__chicken_soup": 400,
+                        "cooked__salsa": 400,
+                        "cooked__risotto": 400,
+                        "hummus": 400,
+                        "cooked__cooking_oil": 400,
+                        "acid": 400,
+                        "cooked__sugar_syrup": 400,
+                        "white_wine": 400,
+                        "red_wine": 400,
+                        "melted__butter": 400,
+                        "cooked__cherry_filling": 400,
+                        "cooked__lamb_stew": 400,
+                        "cooked__almond_oil": 400,
+                        "muffin_batter": 400,
+                        "sludge": 400,
+                        "cooked__wine_sauce": 400,
+                        "cornbread_batter": 400,
+                        "melted__feta": 400,
+                        "cooked__jelly": 400,
+                        "onion_ring_batter": 400,
+                        "cooked__cornbread_batter": 400,
+                        "grout": 400,
+                        "beer": 400,
+                        "margarine": 400,
+                        "pineapple_juice": 400,
+                        "beef_stew": 400,
+                        "tomato_juice": 400,
+                        "detergent": 400,
+                        "cooked__eggnog": 400,
+                        "hot_sauce": 400,
+                        "beaten_egg": 400,
+                        "cooked__coconut_oil": 400,
+                        "bouillon": 400,
+                        "melted__mozzarella": 400,
+                        "cooked__mayonnaise": 400,
+                        "cooked__soy_sauce": 400,
+                        "mojito": 400,
+                        "antifreeze": 400,
+                        "cafe_au_lait": 400,
+                        "catsup": 400,
+                        "custard": 400,
+                        "blueberry_mousse": 400,
+                        "cooked__cranberry_juice": 400,
+                        "liqueur": 400,
+                        "cooked__roux": 400,
+                        "hot_toddy": 400,
+                        "cooked__orange_juice": 400,
+                        "cooked__guacamole": 400,
+                        "cooked__coca_cola": 400,
+                        "cooked__refried_beans": 400,
+                        "cooked__yogurt": 400,
+                        "canola_oil": 400,
+                        "tea": 400,
+                        "cooked__pancake_batter": 400,
+                        "ammonia_water": 400,
+                        "sunscreen": 400,
+                        "lotion": 400,
+                        "antifungal": 400,
+                        "vodka": 400,
+                        "seawater": 400,
+                        "mushroom_sauce": 400,
+                        "cooked__heavy_cream": 400,
+                        "cooked__fritter_batter": 400,
+                        "dye": 400,
+                        "mustard": 400,
+                        "mayonnaise": 400,
+                        "melted__white_chocolate": 400,
+                        "saddle_soap": 400,
+                        "chlorine": 400,
+                        "cider": 400,
+                        "cooked__lemon_water": 400,
+                        "deodorant": 400,
+                        "roux": 400,
+                        "isopropanol": 400,
+                        "low_fat_milk": 400,
+                        "meringue": 400,
+                        "blueberry_compote": 400,
+                        "cooked__marinara": 400,
+                        "sap": 400,
+                        "cooked__egg_white": 400,
+                        "marinade": 400,
+                        "barbecue_sauce": 400,
+                        "chicken_broth": 400,
+                        "lemon_juice": 400,
+                        "liquid_soap": 400,
+                        "petite_marmite": 400,
+                        "buttermilk": 400,
+                        "cooked__coconut_milk": 400,
+                        "jam": 400,
+                        "cooked__beef_broth": 400,
+                        "sealant": 400,
+                        "melted__grated_cheese": 400,
+                        "cooked__frosting": 400,
+                        "fruit_punch": 400,
+                        "melted__swiss_cheese": 400,
+                        "cooked__chicken_curry": 400,
+                        "tonic": 400,
+                        "asphalt": 400,
+                        "cooked__beaten_egg": 400,
+                        "toilet_soap": 400,
+                        "cooked__gravy": 400,
+                        "heavy_cream": 400,
+                        "oatmeal": 400,
+                        "champagne": 400,
+                        "coloring": 400,
+                        "cooked__lemon_juice": 400,
+                        "mashed_potato": 400,
+                        "cooked__beef_stew": 400,
+                        "perfume": 400,
+                        "cooked__honey": 400,
+                        "cooked__water": 400,
+                        "cooked__meringue": 400,
+                        "wine_sauce": 400,
+                        "cooked__hot_sauce": 400,
+                        "cooked__molasses": 400,
+                        "melted__parmesan": 400,
+                        "vinegar_cleaning_solution": 400,
+                        "vaseline": 400,
+                        "cooked__nut_butter": 400,
+                        "iced_cappuccino": 400,
+                        "cooked__custard": 400,
+                        "cooked__mustard": 400,
+                        "cooked__blueberry_mousse": 400,
+                        "limeade": 400,
+                        "cooked__gazpacho": 400,
+                        "tomato_paste": 400,
+                        "eggnog": 400,
+                        "honey": 400,
+                        "cooked__sesame_oil": 400,
+                        "cooked__waffle_batter": 400,
+                        "gravy": 400,
+                        "cocoa": 400,
+                        "fabric_softener": 400,
+                        "cooked__iced_cappuccino": 400,
+                        "toothpaste": 400,
+                        "cooked__drip_coffee": 400,
+                        "egg_white": 400,
+                        "chicken_soup": 400,
+                        "gasoline": 400,
+                        "cheese_pastry_filling": 400,
+                        "cooked__white_wine": 400,
+                        "cooked__worcester_sauce": 400,
+                        "corn_syrup": 400,
+                        "drip_coffee": 400,
+                        "vinegar": 400,
+                        "cooked__mashed_potato": 400,
+                        "cheese_sauce": 400,
+                        "coca_cola": 400,
+                        "chocolate_sauce": 400,
+                        "pesto": 400,
+                        "cooked__milkshake": 400,
+                        "nectar": 400,
+                        "cooked__tomato_paste": 400,
+                        "papaya_juice": 400,
+                        "perspiration": 400,
+                        "water": 400,
+                        "mud": 40,
+                        "mold": 40,
+                        "mildew": 40,
+                        "baby_oil": 400,
+                        "coconut_oil": 400,
+                        "cooking_oil": 400,
+                        "essential_oil": 400,
+                        "linseed_oil": 400,
+                        "olive_oil": 400,
+                        "sesame_oil": 400,
+                        "stain": 40,
+                        "ink": 400,
+                        "alga": 40,
+                        "spray_paint": 40,
+                        "house_paint": 40,
+                        "calcium_carbonate": 400
+                    },
+                    "ParticleRemover": {
+                        "current_step": 0
+                    }
+                }
+            },
+            "standing_tv_udotid_0": {
+                "root_link": {
+                    "pos": [
+                        1.5394749641418457,
+                        -1.602553367614746,
+                        0.8303275108337402
+                    ],
+                    "ori": [
+                        -0.006069637835025787,
+                        -6.083130938350223e-05,
+                        0.9999407529830933,
+                        0.0090355034917593
+                    ],
+                    "lin_vel": [
+                        -0.0037024791818112135,
+                        -0.0004822881892323494,
+                        -0.00047834831639193
+                    ],
+                    "ang_vel": [
+                        0.00732133025303483,
+                        0.0003541921905707568,
+                        -0.005559019278734922
+                    ]
+                },
+                "joint_pos": [
+                    0.0
+                ],
+                "joint_vel": [
+                    0.0014046868309378624
+                ],
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "straight_chair_amgwaw_0": {
+                "root_link": {
+                    "pos": [
+                        1.525193452835083,
+                        1.052615761756897,
+                        0.4484519362449646
+                    ],
+                    "ori": [
+                        -0.0011413246393203735,
+                        -0.0012737605720758438,
+                        -0.6700208783149719,
+                        0.7423403263092041
+                    ],
+                    "lin_vel": [
+                        2.1439045667648315e-05,
+                        -7.308696513064206e-05,
+                        -1.7185111573780887e-05
+                    ],
+                    "ang_vel": [
+                        0.00011439969239290804,
+                        2.1175301299081184e-05,
+                        -2.3332870114245452e-05
+                    ]
+                },
+                "non_kin": {}
+            },
+            "straight_chair_amgwaw_1": {
+                "root_link": {
+                    "pos": [
+                        1.5742870569229126,
+                        -0.18290193378925323,
+                        0.4484519958496094
+                    ],
+                    "ori": [
+                        0.0012300163507461548,
+                        -0.0011886293068528175,
+                        0.7165803909301758,
+                        0.6975024342536926
+                    ],
+                    "lin_vel": [
+                        -5.8356621593702585e-05,
+                        0.0002075303200399503,
+                        -4.4966476707486436e-05
+                    ],
+                    "ang_vel": [
+                        -0.00033400519168935716,
+                        -0.00013447106175590307,
+                        -1.5913163224468008e-05
+                    ]
+                },
+                "non_kin": {}
+            },
+            "straight_chair_amgwaw_2": {
+                "root_link": {
+                    "pos": [
+                        0.9672564268112183,
+                        0.3747194707393646,
+                        0.4484519362449646
+                    ],
+                    "ori": [
+                        0.00012296251952648163,
+                        -0.0017059363890439272,
+                        0.06827550381422043,
+                        0.9976650476455688
+                    ],
+                    "lin_vel": [
+                        -5.177508501219563e-05,
+                        -5.120533751323819e-05,
+                        -6.6932375375472475e-06
+                    ],
+                    "ang_vel": [
+                        4.43670287495479e-05,
+                        -9.506418427918106e-05,
+                        -5.707443506253185e-06
+                    ]
+                },
+                "non_kin": {}
+            },
+            "straight_chair_eospnr_0": {
+                "root_link": {
+                    "pos": [
+                        -0.4041535556316376,
+                        1.1010082960128784,
+                        0.49295374751091003
+                    ],
+                    "ori": [
+                        9.685755486543712e-08,
+                        -1.862645504502325e-08,
+                        0.7103732228279114,
+                        0.7038252353668213
+                    ],
+                    "lin_vel": [
+                        -0.00011225690832361579,
+                        -0.0002119487035088241,
+                        -4.87274955958128e-05
+                    ],
+                    "ang_vel": [
+                        0.0002561674336902797,
+                        -0.00014513079077005386,
+                        -9.212008444592357e-05
+                    ]
+                },
+                "non_kin": {}
+            },
+            "straight_chair_eospnr_1": {
+                "root_link": {
+                    "pos": [
+                        -1.2552359104156494,
+                        1.1008763313293457,
+                        0.49295392632484436
+                    ],
+                    "ori": [
+                        -9.685755486543712e-08,
+                        3.6135315895080566e-07,
+                        0.703632652759552,
+                        0.7105638980865479
+                    ],
+                    "lin_vel": [
+                        -0.0002070374903269112,
+                        -0.0002456402871757746,
+                        -1.3759490684606135e-05
+                    ],
+                    "ang_vel": [
+                        0.00015319348312914371,
+                        -7.426674710586667e-05,
+                        -0.00023961260740179569
+                    ]
+                },
+                "non_kin": {}
+            },
+            "swivel_chair_qtqitn_0": {
+                "root_link": {
+                    "pos": [
+                        0.1172836422920227,
+                        -3.440619945526123,
+                        0.3830379545688629
+                    ],
+                    "ori": [
+                        -0.0014325305819511414,
+                        -0.0029036840423941612,
+                        -0.6511646509170532,
+                        0.7589296698570251
+                    ],
+                    "lin_vel": [
+                        -0.00021143598132766783,
+                        0.00013996109191793948,
+                        8.793807501206174e-05
+                    ],
+                    "ang_vel": [
+                        -0.00027475605020299554,
+                        -0.0004767834616359323,
+                        0.00011839907529065385
+                    ]
+                },
+                "non_kin": {}
+            },
+            "table_lamp_xbfgjc_0": {
+                "root_link": {
+                    "pos": [
+                        -0.34405291080474854,
+                        -3.9734890460968018,
+                        0.8975454568862915
+                    ],
+                    "ori": [
+                        0.14447635412216187,
+                        -0.12963557243347168,
+                        0.9445024728775024,
+                        -0.26502126455307007
+                    ],
+                    "lin_vel": [
+                        -6.618700717808679e-05,
+                        0.00011833837925223634,
+                        6.839005436631851e-06
+                    ],
+                    "ang_vel": [
+                        0.002533668652176857,
+                        -0.0009260562947019935,
+                        0.0016750560607761145
+                    ]
+                },
+                "joint_pos": [
+                    0.01518614124506712
+                ],
+                "joint_vel": [
+                    0.002642974955961108
+                ],
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "bed_zrumze_0": {
+                "root_link": {
+                    "pos": [
+                        -3.0744731426239014,
+                        -0.9240028262138367,
+                        0.401865154504776
+                    ],
+                    "ori": [
+                        -2.5807270503719337e-05,
+                        -1.4973719771660399e-05,
+                        0.7059829831123352,
+                        0.7082287669181824
+                    ]
+                },
+                "non_kin": {}
+            },
+            "bottom_cabinet_slgzfc_0": {
+                "root_link": {
+                    "pos": [
+                        1.673066258430481,
+                        2.195086717605591,
+                        0.424999862909317
+                    ],
+                    "ori": [
+                        6.5192584663975595e-09,
+                        3.2043320885577486e-08,
+                        1.0,
+                        -4.1909518699867476e-07
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    1.1916087691229982e-12,
+                    1.477190657121763e-12,
+                    0.0,
+                    8.674149072629422e-12
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "bottom_cabinet_slgzfc_1": {
+                "root_link": {
+                    "pos": [
+                        -1.7825933694839478,
+                        1.713455319404602,
+                        0.43999987840652466
+                    ],
+                    "ori": [
+                        3.5972337997236536e-08,
+                        -6.475602720712459e-09,
+                        -0.002696614945307374,
+                        0.9999963641166687
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    5.941857249280869e-13,
+                    4.21477430734285e-08,
+                    3.19219467388841e-20,
+                    4.2156589330488714e-08
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "carpet_ctclvd_0": {
+                "root_link": {
+                    "pos": [
+                        -0.4199647009372711,
+                        -1.2938669919967651,
+                        0.002372790826484561
+                    ],
+                    "ori": [
+                        2.4173390400505923e-08,
+                        2.4173381518721726e-08,
+                        0.7071066498756409,
+                        0.70710688829422
+                    ]
+                },
+                "non_kin": {
+                    "ModifiedParticles": {
+                        "n_systems": 0
+                    },
+                    "Saturated": {
+                        "n_systems": 317,
+                        "default_limit": 1000000.0,
+                        "soya_milk": 400,
+                        "polish": 400,
+                        "acetone": 400,
+                        "cooked__chicken_broth": 400,
+                        "glaze": 400,
+                        "apple_juice": 400,
+                        "cooked__whole_milk": 400,
+                        "miso": 400,
+                        "scotch": 400,
+                        "fritter_batter": 400,
+                        "nitrogen": 400,
+                        "sangaree": 400,
+                        "risotto": 400,
+                        "soda_water": 400,
+                        "applesauce": 400,
+                        "peanut_oil": 400,
+                        "whipped_cream": 400,
+                        "cooked__cafe_au_lait": 400,
+                        "milkshake": 400,
+                        "cream_cheese": 400,
+                        "melted__cane_sugar": 400,
+                        "martini": 400,
+                        "espresso": 400,
+                        "herbicide": 400,
+                        "cooked__filling": 400,
+                        "bourbon": 400,
+                        "ginger_ale": 400,
+                        "cooked__catsup": 400,
+                        "ginger_beer": 400,
+                        "cooked__sour_cream": 400,
+                        "cooked__canola_oil": 400,
+                        "floor_wax": 400,
+                        "tomato_sauce": 400,
+                        "vanilla": 400,
+                        "lemonade": 400,
+                        "lamb_stew": 400,
+                        "peanut_butter": 400,
+                        "cooked__margarine": 400,
+                        "sugar_syrup": 400,
+                        "filling": 400,
+                        "cooked__blueberry_compote": 400,
+                        "cooked__jam": 400,
+                        "jelly": 400,
+                        "cooked__hummus": 400,
+                        "cooked__green_tea_latte": 400,
+                        "salsa": 400,
+                        "whole_milk": 400,
+                        "refried_beans": 400,
+                        "margarita": 400,
+                        "rum": 400,
+                        "sake": 400,
+                        "pesticide": 400,
+                        "cooked__petite_marmite": 400,
+                        "cooked__pesto": 400,
+                        "chocolate_milk": 400,
+                        "red_meat_sauce": 400,
+                        "lemon_water": 400,
+                        "cooked__espresso": 400,
+                        "lime_juice": 400,
+                        "cooked__peanut_butter": 400,
+                        "cappuccino": 400,
+                        "fish_stew": 400,
+                        "yogurt": 400,
+                        "fertilizer": 400,
+                        "cooked__beer": 400,
+                        "cooked__muffin_batter": 400,
+                        "nut_butter": 400,
+                        "cooked__cheese_pastry_filling": 400,
+                        "shortening": 400,
+                        "cooked__cocoa": 400,
+                        "lemon_stain_remover": 400,
+                        "cooked__cheese_sauce": 400,
+                        "cooked__vinegar": 400,
+                        "cooked__olive_oil": 400,
+                        "shampoo": 400,
+                        "worcester_sauce": 400,
+                        "coconut_milk": 400,
+                        "puree": 400,
+                        "gazpacho": 400,
+                        "cooked__barbecue_sauce": 400,
+                        "aioli": 400,
+                        "waffle_batter": 400,
+                        "cooked__miso": 400,
+                        "cooked__marinade": 400,
+                        "lubricant": 400,
+                        "cooked__shortening": 400,
+                        "brandy": 400,
+                        "smoothie": 400,
+                        "frosting": 400,
+                        "cooked__stuffing": 400,
+                        "butane": 400,
+                        "cooked__iced_chocolate": 400,
+                        "cooked__maple_syrup": 400,
+                        "brownie_batter": 400,
+                        "sour_cream": 400,
+                        "stuffing": 400,
+                        "soy_sauce": 400,
+                        "cream_soda": 400,
+                        "cooked__red_meat_sauce": 400,
+                        "cooked__soya_milk": 400,
+                        "carrot_juice": 400,
+                        "old_fashioned": 400,
+                        "molasses": 400,
+                        "cooked__chocolate_sauce": 400,
+                        "tequila": 400,
+                        "melted__granulated_sugar": 400,
+                        "orange_juice": 400,
+                        "cooked__whipped_cream": 400,
+                        "maple_syrup": 400,
+                        "cooked__tomato_sauce": 400,
+                        "cooked__peanut_oil": 400,
+                        "disinfectant": 400,
+                        "cooked__cider": 400,
+                        "cooked__vanilla": 400,
+                        "gin": 400,
+                        "bleaching_agent": 400,
+                        "beef_broth": 400,
+                        "cooked__corn_syrup": 400,
+                        "green_tea_latte": 400,
+                        "hydrogen_peroxide": 400,
+                        "melted__bleu": 400,
+                        "cooked__brownie_batter": 400,
+                        "rubbing_alcohol": 400,
+                        "cooked__lime_juice": 400,
+                        "melted__chocolate": 400,
+                        "pancake_batter": 400,
+                        "chowder": 400,
+                        "hair_spray": 400,
+                        "almond_oil": 400,
+                        "foam": 400,
+                        "iced_chocolate": 400,
+                        "cherry_filling": 400,
+                        "melted__cheddar": 400,
+                        "conditioner": 400,
+                        "guacamole": 400,
+                        "chicken_curry": 400,
+                        "cooked__cream_cheese": 400,
+                        "cooked__limeade": 400,
+                        "pop": 400,
+                        "marinara": 400,
+                        "cranberry_juice": 400,
+                        "cooked__bouillon": 400,
+                        "cooked__lemonade": 400,
+                        "cooked__red_wine": 400,
+                        "cooked__onion_ring_batter": 400,
+                        "cooked__chicken_soup": 400,
+                        "cooked__salsa": 400,
+                        "cooked__risotto": 400,
+                        "hummus": 400,
+                        "cooked__cooking_oil": 400,
+                        "acid": 400,
+                        "cooked__sugar_syrup": 400,
+                        "white_wine": 400,
+                        "red_wine": 400,
+                        "melted__butter": 400,
+                        "cooked__cherry_filling": 400,
+                        "cooked__lamb_stew": 400,
+                        "cooked__almond_oil": 400,
+                        "muffin_batter": 400,
+                        "sludge": 400,
+                        "cooked__wine_sauce": 400,
+                        "cornbread_batter": 400,
+                        "melted__feta": 400,
+                        "cooked__jelly": 400,
+                        "onion_ring_batter": 400,
+                        "cooked__cornbread_batter": 400,
+                        "grout": 400,
+                        "beer": 400,
+                        "margarine": 400,
+                        "pineapple_juice": 400,
+                        "beef_stew": 400,
+                        "tomato_juice": 400,
+                        "detergent": 400,
+                        "cooked__eggnog": 400,
+                        "hot_sauce": 400,
+                        "beaten_egg": 400,
+                        "cooked__coconut_oil": 400,
+                        "bouillon": 400,
+                        "melted__mozzarella": 400,
+                        "cooked__mayonnaise": 400,
+                        "cooked__soy_sauce": 400,
+                        "mojito": 400,
+                        "antifreeze": 400,
+                        "cafe_au_lait": 400,
+                        "catsup": 400,
+                        "custard": 400,
+                        "blueberry_mousse": 400,
+                        "cooked__cranberry_juice": 400,
+                        "liqueur": 400,
+                        "cooked__roux": 400,
+                        "hot_toddy": 400,
+                        "cooked__orange_juice": 400,
+                        "cooked__guacamole": 400,
+                        "cooked__coca_cola": 400,
+                        "cooked__refried_beans": 400,
+                        "cooked__yogurt": 400,
+                        "canola_oil": 400,
+                        "tea": 400,
+                        "cooked__pancake_batter": 400,
+                        "ammonia_water": 400,
+                        "sunscreen": 400,
+                        "lotion": 400,
+                        "antifungal": 400,
+                        "vodka": 400,
+                        "seawater": 400,
+                        "mushroom_sauce": 400,
+                        "cooked__heavy_cream": 400,
+                        "cooked__fritter_batter": 400,
+                        "dye": 400,
+                        "mustard": 400,
+                        "mayonnaise": 400,
+                        "melted__white_chocolate": 400,
+                        "saddle_soap": 400,
+                        "chlorine": 400,
+                        "cider": 400,
+                        "cooked__lemon_water": 400,
+                        "deodorant": 400,
+                        "roux": 400,
+                        "isopropanol": 400,
+                        "low_fat_milk": 400,
+                        "meringue": 400,
+                        "blueberry_compote": 400,
+                        "cooked__marinara": 400,
+                        "sap": 400,
+                        "cooked__egg_white": 400,
+                        "marinade": 400,
+                        "barbecue_sauce": 400,
+                        "chicken_broth": 400,
+                        "lemon_juice": 400,
+                        "liquid_soap": 400,
+                        "petite_marmite": 400,
+                        "buttermilk": 400,
+                        "cooked__coconut_milk": 400,
+                        "jam": 400,
+                        "cooked__beef_broth": 400,
+                        "sealant": 400,
+                        "melted__grated_cheese": 400,
+                        "cooked__frosting": 400,
+                        "fruit_punch": 400,
+                        "melted__swiss_cheese": 400,
+                        "cooked__chicken_curry": 400,
+                        "tonic": 400,
+                        "asphalt": 400,
+                        "cooked__beaten_egg": 400,
+                        "toilet_soap": 400,
+                        "cooked__gravy": 400,
+                        "heavy_cream": 400,
+                        "oatmeal": 400,
+                        "champagne": 400,
+                        "coloring": 400,
+                        "cooked__lemon_juice": 400,
+                        "mashed_potato": 400,
+                        "cooked__beef_stew": 400,
+                        "perfume": 400,
+                        "cooked__honey": 400,
+                        "cooked__water": 400,
+                        "cooked__meringue": 400,
+                        "wine_sauce": 400,
+                        "cooked__hot_sauce": 400,
+                        "cooked__molasses": 400,
+                        "melted__parmesan": 400,
+                        "vinegar_cleaning_solution": 400,
+                        "vaseline": 400,
+                        "cooked__nut_butter": 400,
+                        "iced_cappuccino": 400,
+                        "cooked__custard": 400,
+                        "cooked__mustard": 400,
+                        "cooked__blueberry_mousse": 400,
+                        "limeade": 400,
+                        "cooked__gazpacho": 400,
+                        "tomato_paste": 400,
+                        "eggnog": 400,
+                        "honey": 400,
+                        "cooked__sesame_oil": 400,
+                        "cooked__waffle_batter": 400,
+                        "gravy": 400,
+                        "cocoa": 400,
+                        "fabric_softener": 400,
+                        "cooked__iced_cappuccino": 400,
+                        "toothpaste": 400,
+                        "cooked__drip_coffee": 400,
+                        "egg_white": 400,
+                        "chicken_soup": 400,
+                        "gasoline": 400,
+                        "cheese_pastry_filling": 400,
+                        "cooked__white_wine": 400,
+                        "cooked__worcester_sauce": 400,
+                        "corn_syrup": 400,
+                        "drip_coffee": 400,
+                        "vinegar": 400,
+                        "cooked__mashed_potato": 400,
+                        "cheese_sauce": 400,
+                        "coca_cola": 400,
+                        "chocolate_sauce": 400,
+                        "pesto": 400,
+                        "cooked__milkshake": 400,
+                        "nectar": 400,
+                        "cooked__tomato_paste": 400,
+                        "papaya_juice": 400,
+                        "perspiration": 400,
+                        "water": 400,
+                        "mud": 40,
+                        "mold": 40,
+                        "mildew": 40,
+                        "baby_oil": 400,
+                        "coconut_oil": 400,
+                        "cooking_oil": 400,
+                        "essential_oil": 400,
+                        "linseed_oil": 400,
+                        "olive_oil": 400,
+                        "sesame_oil": 400,
+                        "stain": 40,
+                        "ink": 400,
+                        "alga": 40,
+                        "spray_paint": 40,
+                        "house_paint": 40,
+                        "calcium_carbonate": 400
+                    },
+                    "Temperature": {
+                        "temperature": 23.0
+                    },
+                    "ParticleRemover": {
+                        "current_step": 0
+                    }
+                }
+            },
+            "carpet_ctclvd_1": {
+                "root_link": {
+                    "pos": [
+                        -2.9412171840667725,
+                        3.0338120460510254,
+                        0.002372790826484561
+                    ],
+                    "ori": [
+                        2.4173388624149084e-08,
+                        -2.4173383295078565e-08,
+                        -0.70710688829422,
+                        0.7071066498756409
+                    ]
+                },
+                "non_kin": {
+                    "ModifiedParticles": {
+                        "n_systems": 0
+                    },
+                    "Saturated": {
+                        "n_systems": 317,
+                        "default_limit": 1000000.0,
+                        "soya_milk": 400,
+                        "polish": 400,
+                        "acetone": 400,
+                        "cooked__chicken_broth": 400,
+                        "glaze": 400,
+                        "apple_juice": 400,
+                        "cooked__whole_milk": 400,
+                        "miso": 400,
+                        "scotch": 400,
+                        "fritter_batter": 400,
+                        "nitrogen": 400,
+                        "sangaree": 400,
+                        "risotto": 400,
+                        "soda_water": 400,
+                        "applesauce": 400,
+                        "peanut_oil": 400,
+                        "whipped_cream": 400,
+                        "cooked__cafe_au_lait": 400,
+                        "milkshake": 400,
+                        "cream_cheese": 400,
+                        "melted__cane_sugar": 400,
+                        "martini": 400,
+                        "espresso": 400,
+                        "herbicide": 400,
+                        "cooked__filling": 400,
+                        "bourbon": 400,
+                        "ginger_ale": 400,
+                        "cooked__catsup": 400,
+                        "ginger_beer": 400,
+                        "cooked__sour_cream": 400,
+                        "cooked__canola_oil": 400,
+                        "floor_wax": 400,
+                        "tomato_sauce": 400,
+                        "vanilla": 400,
+                        "lemonade": 400,
+                        "lamb_stew": 400,
+                        "peanut_butter": 400,
+                        "cooked__margarine": 400,
+                        "sugar_syrup": 400,
+                        "filling": 400,
+                        "cooked__blueberry_compote": 400,
+                        "cooked__jam": 400,
+                        "jelly": 400,
+                        "cooked__hummus": 400,
+                        "cooked__green_tea_latte": 400,
+                        "salsa": 400,
+                        "whole_milk": 400,
+                        "refried_beans": 400,
+                        "margarita": 400,
+                        "rum": 400,
+                        "sake": 400,
+                        "pesticide": 400,
+                        "cooked__petite_marmite": 400,
+                        "cooked__pesto": 400,
+                        "chocolate_milk": 400,
+                        "red_meat_sauce": 400,
+                        "lemon_water": 400,
+                        "cooked__espresso": 400,
+                        "lime_juice": 400,
+                        "cooked__peanut_butter": 400,
+                        "cappuccino": 400,
+                        "fish_stew": 400,
+                        "yogurt": 400,
+                        "fertilizer": 400,
+                        "cooked__beer": 400,
+                        "cooked__muffin_batter": 400,
+                        "nut_butter": 400,
+                        "cooked__cheese_pastry_filling": 400,
+                        "shortening": 400,
+                        "cooked__cocoa": 400,
+                        "lemon_stain_remover": 400,
+                        "cooked__cheese_sauce": 400,
+                        "cooked__vinegar": 400,
+                        "cooked__olive_oil": 400,
+                        "shampoo": 400,
+                        "worcester_sauce": 400,
+                        "coconut_milk": 400,
+                        "puree": 400,
+                        "gazpacho": 400,
+                        "cooked__barbecue_sauce": 400,
+                        "aioli": 400,
+                        "waffle_batter": 400,
+                        "cooked__miso": 400,
+                        "cooked__marinade": 400,
+                        "lubricant": 400,
+                        "cooked__shortening": 400,
+                        "brandy": 400,
+                        "smoothie": 400,
+                        "frosting": 400,
+                        "cooked__stuffing": 400,
+                        "butane": 400,
+                        "cooked__iced_chocolate": 400,
+                        "cooked__maple_syrup": 400,
+                        "brownie_batter": 400,
+                        "sour_cream": 400,
+                        "stuffing": 400,
+                        "soy_sauce": 400,
+                        "cream_soda": 400,
+                        "cooked__red_meat_sauce": 400,
+                        "cooked__soya_milk": 400,
+                        "carrot_juice": 400,
+                        "old_fashioned": 400,
+                        "molasses": 400,
+                        "cooked__chocolate_sauce": 400,
+                        "tequila": 400,
+                        "melted__granulated_sugar": 400,
+                        "orange_juice": 400,
+                        "cooked__whipped_cream": 400,
+                        "maple_syrup": 400,
+                        "cooked__tomato_sauce": 400,
+                        "cooked__peanut_oil": 400,
+                        "disinfectant": 400,
+                        "cooked__cider": 400,
+                        "cooked__vanilla": 400,
+                        "gin": 400,
+                        "bleaching_agent": 400,
+                        "beef_broth": 400,
+                        "cooked__corn_syrup": 400,
+                        "green_tea_latte": 400,
+                        "hydrogen_peroxide": 400,
+                        "melted__bleu": 400,
+                        "cooked__brownie_batter": 400,
+                        "rubbing_alcohol": 400,
+                        "cooked__lime_juice": 400,
+                        "melted__chocolate": 400,
+                        "pancake_batter": 400,
+                        "chowder": 400,
+                        "hair_spray": 400,
+                        "almond_oil": 400,
+                        "foam": 400,
+                        "iced_chocolate": 400,
+                        "cherry_filling": 400,
+                        "melted__cheddar": 400,
+                        "conditioner": 400,
+                        "guacamole": 400,
+                        "chicken_curry": 400,
+                        "cooked__cream_cheese": 400,
+                        "cooked__limeade": 400,
+                        "pop": 400,
+                        "marinara": 400,
+                        "cranberry_juice": 400,
+                        "cooked__bouillon": 400,
+                        "cooked__lemonade": 400,
+                        "cooked__red_wine": 400,
+                        "cooked__onion_ring_batter": 400,
+                        "cooked__chicken_soup": 400,
+                        "cooked__salsa": 400,
+                        "cooked__risotto": 400,
+                        "hummus": 400,
+                        "cooked__cooking_oil": 400,
+                        "acid": 400,
+                        "cooked__sugar_syrup": 400,
+                        "white_wine": 400,
+                        "red_wine": 400,
+                        "melted__butter": 400,
+                        "cooked__cherry_filling": 400,
+                        "cooked__lamb_stew": 400,
+                        "cooked__almond_oil": 400,
+                        "muffin_batter": 400,
+                        "sludge": 400,
+                        "cooked__wine_sauce": 400,
+                        "cornbread_batter": 400,
+                        "melted__feta": 400,
+                        "cooked__jelly": 400,
+                        "onion_ring_batter": 400,
+                        "cooked__cornbread_batter": 400,
+                        "grout": 400,
+                        "beer": 400,
+                        "margarine": 400,
+                        "pineapple_juice": 400,
+                        "beef_stew": 400,
+                        "tomato_juice": 400,
+                        "detergent": 400,
+                        "cooked__eggnog": 400,
+                        "hot_sauce": 400,
+                        "beaten_egg": 400,
+                        "cooked__coconut_oil": 400,
+                        "bouillon": 400,
+                        "melted__mozzarella": 400,
+                        "cooked__mayonnaise": 400,
+                        "cooked__soy_sauce": 400,
+                        "mojito": 400,
+                        "antifreeze": 400,
+                        "cafe_au_lait": 400,
+                        "catsup": 400,
+                        "custard": 400,
+                        "blueberry_mousse": 400,
+                        "cooked__cranberry_juice": 400,
+                        "liqueur": 400,
+                        "cooked__roux": 400,
+                        "hot_toddy": 400,
+                        "cooked__orange_juice": 400,
+                        "cooked__guacamole": 400,
+                        "cooked__coca_cola": 400,
+                        "cooked__refried_beans": 400,
+                        "cooked__yogurt": 400,
+                        "canola_oil": 400,
+                        "tea": 400,
+                        "cooked__pancake_batter": 400,
+                        "ammonia_water": 400,
+                        "sunscreen": 400,
+                        "lotion": 400,
+                        "antifungal": 400,
+                        "vodka": 400,
+                        "seawater": 400,
+                        "mushroom_sauce": 400,
+                        "cooked__heavy_cream": 400,
+                        "cooked__fritter_batter": 400,
+                        "dye": 400,
+                        "mustard": 400,
+                        "mayonnaise": 400,
+                        "melted__white_chocolate": 400,
+                        "saddle_soap": 400,
+                        "chlorine": 400,
+                        "cider": 400,
+                        "cooked__lemon_water": 400,
+                        "deodorant": 400,
+                        "roux": 400,
+                        "isopropanol": 400,
+                        "low_fat_milk": 400,
+                        "meringue": 400,
+                        "blueberry_compote": 400,
+                        "cooked__marinara": 400,
+                        "sap": 400,
+                        "cooked__egg_white": 400,
+                        "marinade": 400,
+                        "barbecue_sauce": 400,
+                        "chicken_broth": 400,
+                        "lemon_juice": 400,
+                        "liquid_soap": 400,
+                        "petite_marmite": 400,
+                        "buttermilk": 400,
+                        "cooked__coconut_milk": 400,
+                        "jam": 400,
+                        "cooked__beef_broth": 400,
+                        "sealant": 400,
+                        "melted__grated_cheese": 400,
+                        "cooked__frosting": 400,
+                        "fruit_punch": 400,
+                        "melted__swiss_cheese": 400,
+                        "cooked__chicken_curry": 400,
+                        "tonic": 400,
+                        "asphalt": 400,
+                        "cooked__beaten_egg": 400,
+                        "toilet_soap": 400,
+                        "cooked__gravy": 400,
+                        "heavy_cream": 400,
+                        "oatmeal": 400,
+                        "champagne": 400,
+                        "coloring": 400,
+                        "cooked__lemon_juice": 400,
+                        "mashed_potato": 400,
+                        "cooked__beef_stew": 400,
+                        "perfume": 400,
+                        "cooked__honey": 400,
+                        "cooked__water": 400,
+                        "cooked__meringue": 400,
+                        "wine_sauce": 400,
+                        "cooked__hot_sauce": 400,
+                        "cooked__molasses": 400,
+                        "melted__parmesan": 400,
+                        "vinegar_cleaning_solution": 400,
+                        "vaseline": 400,
+                        "cooked__nut_butter": 400,
+                        "iced_cappuccino": 400,
+                        "cooked__custard": 400,
+                        "cooked__mustard": 400,
+                        "cooked__blueberry_mousse": 400,
+                        "limeade": 400,
+                        "cooked__gazpacho": 400,
+                        "tomato_paste": 400,
+                        "eggnog": 400,
+                        "honey": 400,
+                        "cooked__sesame_oil": 400,
+                        "cooked__waffle_batter": 400,
+                        "gravy": 400,
+                        "cocoa": 400,
+                        "fabric_softener": 400,
+                        "cooked__iced_cappuccino": 400,
+                        "toothpaste": 400,
+                        "cooked__drip_coffee": 400,
+                        "egg_white": 400,
+                        "chicken_soup": 400,
+                        "gasoline": 400,
+                        "cheese_pastry_filling": 400,
+                        "cooked__white_wine": 400,
+                        "cooked__worcester_sauce": 400,
+                        "corn_syrup": 400,
+                        "drip_coffee": 400,
+                        "vinegar": 400,
+                        "cooked__mashed_potato": 400,
+                        "cheese_sauce": 400,
+                        "coca_cola": 400,
+                        "chocolate_sauce": 400,
+                        "pesto": 400,
+                        "cooked__milkshake": 400,
+                        "nectar": 400,
+                        "cooked__tomato_paste": 400,
+                        "papaya_juice": 400,
+                        "perspiration": 400,
+                        "water": 400,
+                        "mud": 40,
+                        "mold": 40,
+                        "mildew": 40,
+                        "baby_oil": 400,
+                        "coconut_oil": 400,
+                        "cooking_oil": 400,
+                        "essential_oil": 400,
+                        "linseed_oil": 400,
+                        "olive_oil": 400,
+                        "sesame_oil": 400,
+                        "stain": 40,
+                        "ink": 400,
+                        "alga": 40,
+                        "spray_paint": 40,
+                        "house_paint": 40,
+                        "calcium_carbonate": 400
+                    },
+                    "Temperature": {
+                        "temperature": 23.0
+                    },
+                    "ParticleRemover": {
+                        "current_step": 0
+                    }
+                }
+            },
+            "countertop_tpuwys_0": {
+                "root_link": {
+                    "pos": [
+                        -0.8049724102020264,
+                        1.5344866514205933,
+                        1.058210015296936
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "dishwasher_xlmier_0": {
+                "root_link": {
+                    "pos": [
+                        -1.8229074478149414,
+                        3.130037784576416,
+                        1.0864630937576294
+                    ],
+                    "ori": [
+                        3.5244738683104515e-08,
+                        3.026798367500305e-08,
+                        0.0019834048580378294,
+                        0.9999980330467224
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    5.800957370710735e-12
+                ],
+                "joint_vel": [
+                    0.0
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    },
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "door_ktydvs_0": {
+                "root_link": {
+                    "pos": [
+                        -2.6002039909362793,
+                        1.55742347240448,
+                        1.1368556022644043
+                    ],
+                    "ori": [
+                        -0.5001166462898254,
+                        -0.4993499219417572,
+                        0.5016346573829651,
+                        -0.4988945424556732
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    2.0714712718472583e-06,
+                    0.000341931328875944
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {}
+            },
+            "door_lvgliq_0": {
+                "root_link": {
+                    "pos": [
+                        0.9993563890457153,
+                        3.5158188343048096,
+                        1.1511012315750122
+                    ],
+                    "ori": [
+                        -0.5017956495285034,
+                        0.49757587909698486,
+                        0.5031403303146362,
+                        0.49746274948120117
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    1.7935888081410667e-06,
+                    2.6192175095474113e-09
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {}
+            },
+            "electric_switch_wseglt_0": {
+                "root_link": {
+                    "pos": [
+                        -2.1429479122161865,
+                        1.7185553312301636,
+                        1.2002869844436646
+                    ],
+                    "ori": [
+                        -5.8324069129866984e-08,
+                        -6.639310629052986e-11,
+                        1.0,
+                        1.9464638967292558e-07
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "electric_switch_wseglt_1": {
+                "root_link": {
+                    "pos": [
+                        1.4368140697479248,
+                        1.4527850151062012,
+                        1.2002869844436646
+                    ],
+                    "ori": [
+                        3.9814043617525385e-08,
+                        -2.1058047749988873e-08,
+                        -0.7071069478988647,
+                        0.7071065902709961
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "electric_switch_wseglt_2": {
+                "root_link": {
+                    "pos": [
+                        -2.0166313648223877,
+                        0.3387432098388672,
+                        1.200287103652954
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "electric_switch_wseglt_3": {
+                "root_link": {
+                    "pos": [
+                        0.36079058051109314,
+                        1.6290998458862305,
+                        1.2002869844436646
+                    ],
+                    "ori": [
+                        -5.820766091346741e-10,
+                        -1.0772964742500335e-09,
+                        0.7071069478988647,
+                        0.7071065902709961
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "electric_switch_wseglt_4": {
+                "root_link": {
+                    "pos": [
+                        1.5029752254486084,
+                        3.456681966781616,
+                        1.2002869844436646
+                    ],
+                    "ori": [
+                        3.9814043617525385e-08,
+                        -2.1058047749988873e-08,
+                        -0.7071069478988647,
+                        0.7071065902709961
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "electric_switch_wseglt_5": {
+                "root_link": {
+                    "pos": [
+                        -2.1429498195648193,
+                        0.38194894790649414,
+                        1.2002869844436646
+                    ],
+                    "ori": [
+                        0.0,
+                        -2.3847152874623134e-07,
+                        1.0,
+                        1.9464638967292558e-07
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "fridge_xyejdx_0": {
+                "root_link": {
+                    "pos": [
+                        0.09982489049434662,
+                        3.145421266555786,
+                        0.7401731014251709
+                    ],
+                    "ori": [
+                        -1.1797528713941574e-06,
+                        -1.6675036818014632e-07,
+                        -0.7071073651313782,
+                        0.7071062326431274
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    4.616143033307806e-18,
+                    3.5366454440938485e-22
+                ],
+                "joint_vel": [
+                    4.075787711747847e-19,
+                    3.122661401562321e-23
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "furniture_sink_zexzrc_0": {
+                "root_link": {
+                    "pos": [
+                        -0.812127411365509,
+                        3.1134908199310303,
+                        0.3958643972873688
+                    ],
+                    "ori": [
+                        -1.955777406692505e-08,
+                        -7.548760921904929e-11,
+                        -0.7071074843406677,
+                        0.7071060538291931
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    },
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "microwave_abzvij_0": {
+                "root_link": {
+                    "pos": [
+                        -1.7710766792297363,
+                        3.1185638904571533,
+                        1.457619071006775
+                    ],
+                    "ori": [
+                        -0.00992614310234785,
+                        -0.01518545113503933,
+                        0.023062080144882202,
+                        0.9995694160461426
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    1.368509208836935e-22
+                ],
+                "joint_vel": [
+                    1.2044037211240382e-23
+                ],
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    },
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "mirror_pevdqu_0": {
+                "root_link": {
+                    "pos": [
+                        -2.3516957759857178,
+                        3.281257152557373,
+                        1.5399999618530273
+                    ],
+                    "ori": [
+                        -0.6462112665176392,
+                        0.28707367181777954,
+                        -0.28707388043403625,
+                        0.6462107300758362
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "AttachedTo": {
+                        "attached_obj_uuid": -1
+                    }
+                }
+            },
+            "openable_window_ithrgo_0": {
+                "root_link": {
+                    "pos": [
+                        -0.7426400780677795,
+                        3.5272388458251953,
+                        1.4766799211502075
+                    ],
+                    "ori": [
+                        0.5000001192092896,
+                        -0.49999910593032837,
+                        0.5000007748603821,
+                        0.5000001192092896
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    0.0,
+                    6.353710890749653e-10
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {}
+            },
+            "openable_window_ithrgo_1": {
+                "root_link": {
+                    "pos": [
+                        1.9242632389068604,
+                        -1.3722161054611206,
+                        1.476680040359497
+                    ],
+                    "ori": [
+                        0.7071048617362976,
+                        -0.001530364854261279,
+                        0.7071054577827454,
+                        0.0015312383184209466
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    0.007213311735540628,
+                    0.009445030242204666
+                ],
+                "joint_vel": [
+                    -1.5660844042552778e-15,
+                    1.7438496207087617e-15
+                ],
+                "non_kin": {}
+            },
+            "openable_window_ithrgo_2": {
+                "root_link": {
+                    "pos": [
+                        -0.1720893681049347,
+                        -4.095999717712402,
+                        1.4766799211502075
+                    ],
+                    "ori": [
+                        0.5000001192092896,
+                        -0.49999910593032837,
+                        0.5000007748603821,
+                        0.5000001192092896
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    0.008450139313936234,
+                    0.002597683109343052
+                ],
+                "joint_vel": [
+                    -2.291496231657188e-16,
+                    2.865047915929288e-17
+                ],
+                "non_kin": {}
+            },
+            "openable_window_ulnafj_0": {
+                "root_link": {
+                    "pos": [
+                        -4.015167713165283,
+                        -0.7962856292724609,
+                        1.6088018417358398
+                    ],
+                    "ori": [
+                        -0.7071062922477722,
+                        0.00044697156408801675,
+                        0.7071065902709961,
+                        0.000956568808760494
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    9.56503185989277e-07,
+                    5.60298583262886e-16
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {}
+            },
+            "oven_wuinhm_0": {
+                "root_link": {
+                    "pos": [
+                        -1.6611709594726562,
+                        2.137331247329712,
+                        0.601055383682251
+                    ],
+                    "ori": [
+                        -1.3271347576448989e-08,
+                        1.2179953934321475e-08,
+                        0.002341730985790491,
+                        0.9999972581863403
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    4.2155072321747866e-08,
+                    0.00013652531197294593,
+                    0.00043575960444286466,
+                    4.216676785517848e-08,
+                    4.216676785517848e-08
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    },
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "pedestal_sink_ksecxq_0": {
+                "root_link": {
+                    "pos": [
+                        -2.511200428009033,
+                        3.187181234359741,
+                        0.472187876701355
+                    ],
+                    "ori": [
+                        -2.980232594040899e-08,
+                        7.217749509180749e-09,
+                        0.928709089756012,
+                        -0.37080931663513184
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    },
+                    "ToggledOn": {
+                        "value": false,
+                        "hand_in_marker_steps": 0
+                    }
+                }
+            },
+            "picture_etixod_0": {
+                "root_link": {
+                    "pos": [
+                        -3.0649313926696777,
+                        -1.9343043565750122,
+                        1.5949468612670898
+                    ],
+                    "ori": [
+                        0.5038905143737793,
+                        0.4960789978504181,
+                        -0.5038903951644897,
+                        0.49607905745506287
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "picture_hhxttu_0": {
+                "root_link": {
+                    "pos": [
+                        1.8581860065460205,
+                        -0.002778128022328019,
+                        1.3701061010360718
+                    ],
+                    "ori": [
+                        0.70710289478302,
+                        -0.002357069170102477,
+                        -0.7071028351783752,
+                        -0.002357069868594408
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "picture_jpfyrq_0": {
+                "root_link": {
+                    "pos": [
+                        -2.0061237812042236,
+                        -2.2551486492156982,
+                        1.3701063394546509
+                    ],
+                    "ori": [
+                        -0.0023673006799072027,
+                        0.70710289478302,
+                        0.0023673013783991337,
+                        0.7071027159690857
+                    ]
+                },
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "shower_stall_invgma_0": {
+                "root_link": {
+                    "pos": [
+                        -3.5728378295898438,
+                        2.1534955501556396,
+                        0.9829766750335693
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        -0.002183658769354224,
+                        0.999997615814209
+                    ]
+                },
+                "non_kin": {}
+            },
+            "toilet_vtqdev_0": {
+                "root_link": {
+                    "pos": [
+                        -3.596611499786377,
+                        3.053987503051758,
+                        0.28037896752357483
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    0.03944515064358711,
+                    0.0
+                ],
+                "joint_vel": [
+                    0.0,
+                    0.0
+                ],
+                "non_kin": {}
+            },
+            "top_cabinet_fqhdne_0": {
+                "root_link": {
+                    "pos": [
+                        -1.862776756286621,
+                        2.494694709777832,
+                        1.994042992591858
+                    ],
+                    "ori": [
+                        0.00038332463009282947,
+                        -0.0035695063415914774,
+                        0.024976499378681183,
+                        0.9996815919876099
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    8.748673931131572e-22
+                ],
+                "joint_vel": [
+                    7.930211683085302e-23
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "top_cabinet_lsyzkh_0": {
+                "root_link": {
+                    "pos": [
+                        -1.1658906936645508,
+                        3.327624559402466,
+                        2.1037704944610596
+                    ],
+                    "ori": [
+                        0.01008845865726471,
+                        0.010052179917693138,
+                        -0.7057655453681946,
+                        0.70830237865448
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    8.751533520358562e-22
+                ],
+                "joint_vel": [
+                    7.844808339308627e-23
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "top_cabinet_lsyzkh_1": {
+                "root_link": {
+                    "pos": [
+                        -0.37600407004356384,
+                        3.327674627304077,
+                        2.1037750244140625
+                    ],
+                    "ori": [
+                        0.010088449344038963,
+                        0.010052187368273735,
+                        -0.7057654857635498,
+                        0.7083024978637695
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    9.472101574975272e-16
+                ],
+                "joint_vel": [
+                    0.0
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "top_cabinet_lsyzkh_2": {
+                "root_link": {
+                    "pos": [
+                        -1.2446295022964478,
+                        1.7287315130233765,
+                        2.1026229858398438
+                    ],
+                    "ori": [
+                        -0.010022765956819057,
+                        0.010117682628333569,
+                        0.7062481045722961,
+                        0.7078211903572083
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    4.580152769978316e-21
+                ],
+                "joint_vel": [
+                    4.1070665994735826e-22
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "top_cabinet_lsyzkh_3": {
+                "root_link": {
+                    "pos": [
+                        -0.41462939977645874,
+                        1.7287315130233765,
+                        2.102623224258423
+                    ],
+                    "ori": [
+                        -0.010022762231528759,
+                        0.010117686353623867,
+                        0.7062481045722961,
+                        0.7078211903572083
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    3.0160109791386188e-21
+                ],
+                "joint_vel": [
+                    2.7045430967987107e-22
+                ],
+                "non_kin": {
+                    "Temperature": {
+                        "temperature": 23.0
+                    }
+                }
+            },
+            "towel_rack_kqrmrh_0": {
+                "root_link": {
+                    "pos": [
+                        -2.184767007827759,
+                        2.467337131500244,
+                        1.3700419664382935
+                    ],
+                    "ori": [
+                        -2.1604940059205546e-13,
+                        -6.782146900141186e-20,
+                        1.0,
+                        -3.1391647326017846e-07
+                    ]
+                },
+                "non_kin": {}
+            },
+            "towel_rack_kqrmrh_1": {
+                "root_link": {
+                    "pos": [
+                        -3.2149665355682373,
+                        3.407100200653076,
+                        1.3700419664382935
+                    ],
+                    "ori": [
+                        1.527699678999933e-13,
+                        1.527700627676834e-13,
+                        -0.7071066498756409,
+                        0.70710688829422
+                    ]
+                },
+                "non_kin": {}
+            },
+            "ceilings_jfsbfp_0": {
+                "root_link": {
+                    "pos": [
+                        -3.0498788356781006,
+                        2.527891159057617,
+                        2.549999713897705
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "ceilings_phrrml_0": {
+                "root_link": {
+                    "pos": [
+                        -0.06987879425287247,
+                        -1.287109375,
+                        2.549999713897705
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "ceilings_rhfker_0": {
+                "root_link": {
+                    "pos": [
+                        1.2158854007720947,
+                        2.5133121013641357,
+                        2.549999952316284
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "ceilings_yimfml_0": {
+                "root_link": {
+                    "pos": [
+                        -0.7931072115898132,
+                        2.536679267883301,
+                        2.549999952316284
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "ceilings_zlhppj_0": {
+                "root_link": {
+                    "pos": [
+                        -3.0498788356781006,
+                        -0.24460941553115845,
+                        2.549999713897705
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "floors_avvnuv_0": {
+                "root_link": {
+                    "pos": [
+                        -3.0498788356781006,
+                        2.5278913974761963,
+                        -0.15000027418136597
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "floors_gjemfr_0": {
+                "root_link": {
+                    "pos": [
+                        1.2158854007720947,
+                        2.5133121013641357,
+                        -0.15000024437904358
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "floors_ifmioj_0": {
+                "root_link": {
+                    "pos": [
+                        -0.7931072115898132,
+                        2.536679267883301,
+                        -0.15000024437904358
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "floors_ptwlei_0": {
+                "root_link": {
+                    "pos": [
+                        -0.06987882405519485,
+                        -1.287109136581421,
+                        -0.15000025928020477
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "floors_ucjdgj_0": {
+                "root_link": {
+                    "pos": [
+                        -3.0498788356781006,
+                        -0.24460917711257935,
+                        -0.15000034868717194
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "walls_axhynp_0": {
+                "root_link": {
+                    "pos": [
+                        -1.233049750328064,
+                        3.5148379802703857,
+                        1.11394464969635
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "walls_bcjmdz_0": {
+                "root_link": {
+                    "pos": [
+                        1.9400326013565063,
+                        -0.25174951553344727,
+                        1.088196039199829
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "walls_dekben_0": {
+                "root_link": {
+                    "pos": [
+                        -0.04535660520195961,
+                        -4.115161895751953,
+                        1.0688008069992065
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "walls_exiopd_0": {
+                "root_link": {
+                    "pos": [
+                        -1.1345733404159546,
+                        1.54094398021698,
+                        1.143774390220642
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "walls_gxvfxw_0": {
+                "root_link": {
+                    "pos": [
+                        -2.0799880027770996,
+                        -0.2523879408836365,
+                        1.130429983139038
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "walls_gxynpx_0": {
+                "root_link": {
+                    "pos": [
+                        -3.062925100326538,
+                        -2.0301620960235596,
+                        1.1158838272094727
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "walls_xlgydu_0": {
+                "root_link": {
+                    "pos": [
+                        -4.019967079162598,
+                        0.7578846216201782,
+                        1.0950665473937988
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ]
+                },
+                "non_kin": {}
+            },
+            "robot_fdqrat": {
+                "root_link": {
+                    "pos": [
+                        -50.0,
+                        -50.0,
+                        -50.0
+                    ],
+                    "ori": [
+                        0.0,
+                        0.0,
+                        0.0,
+                        1.0
+                    ],
+                    "lin_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "ang_vel": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ]
+                },
+                "joint_pos": [
+                    50.058555603027344,
+                    49.9765739440918,
+                    50.00621032714844,
+                    -0.006001373752951622,
+                    -0.0010782111203297973,
+                    -2.380162239074707,
+                    -7.259588164743036e-05,
+                    -0.00022909430845174938,
+                    6.527309597004205e-05,
+                    2.360746293561533e-06,
+                    -9.319176569988485e-06,
+                    2.6704155970946886e-05,
+                    1.9060004949569702,
+                    1.9060022830963135,
+                    -0.990999162197113,
+                    -0.9910039901733398,
+                    1.5710009336471558,
+                    1.5709999799728394,
+                    0.9149996638298035,
+                    0.9149999022483826,
+                    -1.5709998607635498,
+                    -1.5709993839263916,
+                    0.04999993368983269,
+                    0.04999995604157448,
+                    0.049999892711639404,
+                    0.049999967217445374
+                ],
+                "joint_vel": [
+                    0.0005443744594231248,
+                    -0.0007947376579977572,
+                    -0.0009655352914705873,
+                    -0.0005896178772673011,
+                    -7.26055950508453e-05,
+                    0.00043928902596235275,
+                    0.0005220211460255086,
+                    -0.00010025691881310195,
+                    -1.4808541891397908e-05,
+                    0.0002810922160279006,
+                    0.0006595658487640321,
+                    0.0003915192501153797,
+                    -0.0010532212909311056,
+                    0.0008838839130476117,
+                    -0.0003261991369072348,
+                    0.0003159864281769842,
+                    0.0010180770186707377,
+                    0.0005721134366467595,
+                    -0.0002800088550429791,
+                    0.000345017877407372,
+                    -0.0009006246109493077,
+                    -0.000656522111967206,
+                    -2.306978785782121e-08,
+                    2.292954150107107e-06,
+                    1.5340057871071622e-05,
+                    5.025608061259845e-06
+                ],
+                "controllers": {
+                    "base": {
+                        "goal_is_valid": true,
+                        "goal": {
+                            "target": [
+                                0.0,
+                                0.0,
+                                0.0
+                            ]
+                        }
+                    },
+                    "trunk": {
+                        "goal_is_valid": true,
+                        "goal": {
+                            "target": [
+                                -7.331482629524544e-05,
+                                -0.0002285403897985816,
+                                6.452806701418012e-05,
+                                1.1637157513177954e-06
+                            ]
+                        }
+                    },
+                    "arm_left": {
+                        "goal_is_valid": true,
+                        "goal": {
+                            "target_pos": [
+                                0.5446584224700928,
+                                0.3968491852283478,
+                                1.4467427730560303
+                            ],
+                            "target_ori_mat": [
+                                [
+                                    -0.006706118583679199,
+                                    4.6987785026431084e-05,
+                                    0.9999775886535645
+                                ],
+                                [
+                                    0.0031187599524855614,
+                                    -0.999995231628418,
+                                    6.790366023778915e-05
+                                ],
+                                [
+                                    0.9999727010726929,
+                                    0.0031191452872008085,
+                                    0.006705820560455322
+                                ]
+                            ]
+                        },
+                        "control_filter": {
+                            "past_samples": [
+                                [
+                                    -9.150983714789618e-06,
+                                    1.9060008525848389,
+                                    -0.9909999966621399,
+                                    1.5710010528564453,
+                                    0.914999783039093,
+                                    -1.571000576019287
+                                ],
+                                [
+                                    -9.349904757982586e-06,
+                                    1.9060004949569702,
+                                    -0.9909998178482056,
+                                    1.5710008144378662,
+                                    0.914999783039093,
+                                    -1.571000337600708
+                                ]
+                            ],
+                            "current_idx": 0,
+                            "fully_filled": true
+                        }
+                    },
+                    "gripper_left": {
+                        "goal_is_valid": true,
+                        "goal": {
+                            "target": [
+                                0.0
+                            ]
+                        },
+                        "vel_filter": {
+                            "past_samples": [
+                                [
+                                    0.0,
+                                    0.0
+                                ],
+                                [
+                                    0.0,
+                                    0.0
+                                ],
+                                [
+                                    0.0,
+                                    0.0
+                                ],
+                                [
+                                    0.0,
+                                    0.0
+                                ],
+                                [
+                                    0.0,
+                                    0.0
+                                ]
+                            ],
+                            "current_idx": 1,
+                            "fully_filled": true
+                        }
+                    },
+                    "arm_right": {
+                        "goal_is_valid": true,
+                        "goal": {
+                            "target_pos": [
+                                0.5446640849113464,
+                                -0.3968367874622345,
+                                1.4439384937286377
+                            ],
+                            "target_ori_mat": [
+                                [
+                                    0.005933523178100586,
+                                    -2.875225618481636e-06,
+                                    0.9999822378158569
+                                ],
+                                [
+                                    -0.0046625761315226555,
+                                    -0.9999887943267822,
+                                    2.479017712175846e-05
+                                ],
+                                [
+                                    0.9999713897705078,
+                                    -0.004662641324102879,
+                                    -0.005933165550231934
+                                ]
+                            ]
+                        },
+                        "control_filter": {
+                            "past_samples": [
+                                [
+                                    2.6332172637921758e-05,
+                                    1.9060028791427612,
+                                    -0.9910038709640503,
+                                    1.5709995031356812,
+                                    0.9149995446205139,
+                                    -1.5709995031356812
+                                ],
+                                [
+                                    2.6405010430607945e-05,
+                                    1.9060028791427612,
+                                    -0.9910030364990234,
+                                    1.5709996223449707,
+                                    0.915000319480896,
+                                    -1.5709995031356812
+                                ]
+                            ],
+                            "current_idx": 0,
+                            "fully_filled": true
+                        }
+                    },
+                    "gripper_right": {
+                        "goal_is_valid": true,
+                        "goal": {
+                            "target": [
+                                0.0
+                            ]
+                        },
+                        "vel_filter": {
+                            "past_samples": [
+                                [
+                                    0.0,
+                                    0.0
+                                ],
+                                [
+                                    0.0,
+                                    0.0
+                                ],
+                                [
+                                    0.0,
+                                    0.0
+                                ],
+                                [
+                                    0.0,
+                                    0.0
+                                ],
+                                [
+                                    0.0,
+                                    0.0
+                                ]
+                            ],
+                            "current_idx": 1,
+                            "fully_filled": true
+                        }
+                    }
+                },
+                "non_kin": {}
+            }
+        }
+    },
+    "init_info": {
+        "class_module": "omnigibson.scenes.interactive_traversable_scene",
+        "class_name": "InteractiveTraversableScene",
+        "args": {
+            "scene_model": "Rs_int",
+            "scene_instance": null,
+            "scene_file": "/home/jdw/projects/repo/OmniGibson/omnigibson/data/og_dataset_1_2_0rc2/scenes/Rs_int/json/Rs_int_stable.json",
+            "trav_map_resolution": 0.1,
+            "default_erosion_radius": 0.0,
+            "trav_map_with_objects": true,
+            "num_waypoints": 10,
+            "waypoint_resolution": 0.2,
+            "seg_map_resolution": 1.0
+        }
+    },
+    "objects_info": {
+        "init_info": {
+            "bookcase_njwsoa_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bookcase_njwsoa_0",
+                    "category": "bookcase",
+                    "model": "njwsoa",
+                    "scale": [
+                        1.7627202272415161,
+                        1.7049239873886108,
+                        1.1364517211914062
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bookcase_njwsoa_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bookcase_njwsoa_1",
+                    "category": "bookcase",
+                    "model": "njwsoa",
+                    "scale": [
+                        2.051234006881714,
+                        1.5874587297439575,
+                        1.4423751831054688
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bookcase_owvfik_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bookcase_owvfik_0",
+                    "category": "bookcase",
+                    "model": "owvfik",
+                    "scale": [
+                        1.5755317211151123,
+                        1.5948255062103271,
+                        1.7201019525527954
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bottom_cabinet_bamfsz_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bottom_cabinet_bamfsz_0",
+                    "category": "bottom_cabinet",
+                    "model": "bamfsz",
+                    "scale": [
+                        1.432183861732483,
+                        1.6915137767791748,
+                        1.6014190912246704
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bottom_cabinet_bamfsz_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bottom_cabinet_bamfsz_1",
+                    "category": "bottom_cabinet",
+                    "model": "bamfsz",
+                    "scale": [
+                        0.9254348874092102,
+                        1.0425931215286255,
+                        1.273688554763794
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bottom_cabinet_dajebq_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bottom_cabinet_dajebq_0",
+                    "category": "bottom_cabinet",
+                    "model": "dajebq",
+                    "scale": [
+                        1.2926478385925293,
+                        1.0770456790924072,
+                        1.404546856880188
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "bedroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bottom_cabinet_jhymlr_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bottom_cabinet_jhymlr_0",
+                    "category": "bottom_cabinet",
+                    "model": "jhymlr",
+                    "scale": [
+                        2.3134634494781494,
+                        2.4062798023223877,
+                        2.0003678798675537
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "breakfast_table_skczfi_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "breakfast_table_skczfi_0",
+                    "category": "breakfast_table",
+                    "model": "skczfi",
+                    "scale": [
+                        1.5148195028305054,
+                        0.8021457195281982,
+                        1.536065697669983
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "breakfast_table_skczfi_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "breakfast_table_skczfi_1",
+                    "category": "breakfast_table",
+                    "model": "skczfi",
+                    "scale": [
+                        0.9822705388069153,
+                        1.1866328716278076,
+                        1.536065697669983
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "coffee_table_fqluyq_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "coffee_table_fqluyq_0",
+                    "category": "coffee_table",
+                    "model": "fqluyq",
+                    "scale": [
+                        1.1711920499801636,
+                        1.0265921354293823,
+                        0.9481316804885864
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "floor_lamp_vdxlda_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "floor_lamp_vdxlda_0",
+                    "category": "floor_lamp",
+                    "model": "vdxlda",
+                    "scale": [
+                        0.7401983141899109,
+                        0.8825197219848633,
+                        1.2626160383224487
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "laptop_nvulcs_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "laptop_nvulcs_0",
+                    "category": "laptop",
+                    "model": "nvulcs",
+                    "scale": [
+                        1.1082459688186646,
+                        1.151015043258667,
+                        0.43172094225883484
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "loudspeaker_bmpdyv_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "loudspeaker_bmpdyv_0",
+                    "category": "loudspeaker",
+                    "model": "bmpdyv",
+                    "scale": [
+                        2.3440001010894775,
+                        1.2055634260177612,
+                        1.6921428442001343
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "ottoman_ycfbsd_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "ottoman_ycfbsd_0",
+                    "category": "ottoman",
+                    "model": "ycfbsd",
+                    "scale": [
+                        1.5069565773010254,
+                        1.4774534702301025,
+                        1.1774935722351074
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "pot_plant_jatssq_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "pot_plant_jatssq_0",
+                    "category": "pot_plant",
+                    "model": "jatssq",
+                    "scale": [
+                        1.6543306112289429,
+                        1.461632251739502,
+                        0.5569085478782654
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "pot_plant_jatssq_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "pot_plant_jatssq_1",
+                    "category": "pot_plant",
+                    "model": "jatssq",
+                    "scale": [
+                        0.7775590419769287,
+                        0.907989501953125,
+                        0.8357152342796326
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "pot_plant_udqjui_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "pot_plant_udqjui_0",
+                    "category": "pot_plant",
+                    "model": "udqjui",
+                    "scale": [
+                        0.7480314373970032,
+                        0.814310610294342,
+                        0.8551926016807556
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "public_trash_can_zotrbg_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "public_trash_can_zotrbg_0",
+                    "category": "public_trash_can",
+                    "model": "zotrbg",
+                    "scale": [
+                        0.45192718505859375,
+                        0.45192718505859375,
+                        0.5320586562156677
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "sofa_mnfbbh_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "sofa_mnfbbh_0",
+                    "category": "sofa",
+                    "model": "mnfbbh",
+                    "scale": [
+                        0.9442055821418762,
+                        0.8167837262153625,
+                        0.8763179779052734
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "standing_tv_udotid_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "standing_tv_udotid_0",
+                    "category": "standing_tv",
+                    "model": "udotid",
+                    "scale": [
+                        0.4325197637081146,
+                        0.7535353302955627,
+                        0.6621373891830444
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "straight_chair_amgwaw_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "straight_chair_amgwaw_0",
+                    "category": "straight_chair",
+                    "model": "amgwaw",
+                    "scale": [
+                        0.8901687860488892,
+                        1.0601433515548706,
+                        1.0767478942871094
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "straight_chair_amgwaw_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "straight_chair_amgwaw_1",
+                    "category": "straight_chair",
+                    "model": "amgwaw",
+                    "scale": [
+                        0.8901687860488892,
+                        1.0601433515548706,
+                        1.0767478942871094
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "straight_chair_amgwaw_2": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "straight_chair_amgwaw_2",
+                    "category": "straight_chair",
+                    "model": "amgwaw",
+                    "scale": [
+                        0.8901687860488892,
+                        1.0601433515548706,
+                        1.0767478942871094
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "straight_chair_eospnr_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "straight_chair_eospnr_0",
+                    "category": "straight_chair",
+                    "model": "eospnr",
+                    "scale": [
+                        1.3230491876602173,
+                        1.317368745803833,
+                        1.2655857801437378
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "straight_chair_eospnr_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "straight_chair_eospnr_1",
+                    "category": "straight_chair",
+                    "model": "eospnr",
+                    "scale": [
+                        1.3230491876602173,
+                        1.317368745803833,
+                        1.2655857801437378
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "swivel_chair_qtqitn_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "swivel_chair_qtqitn_0",
+                    "category": "swivel_chair",
+                    "model": "qtqitn",
+                    "scale": [
+                        0.6274185180664062,
+                        0.6997532844543457,
+                        0.7365306615829468
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "table_lamp_xbfgjc_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "table_lamp_xbfgjc_0",
+                    "category": "table_lamp",
+                    "model": "xbfgjc",
+                    "scale": [
+                        1.3590326309204102,
+                        1.1551305055618286,
+                        1.3728127479553223
+                    ],
+                    "fixed_base": false,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bed_zrumze_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bed_zrumze_0",
+                    "category": "bed",
+                    "model": "zrumze",
+                    "scale": [
+                        1.1072770357131958,
+                        1.1105340719223022,
+                        1.409901738166809
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bedroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bottom_cabinet_slgzfc_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bottom_cabinet_slgzfc_0",
+                    "category": "bottom_cabinet",
+                    "model": "slgzfc",
+                    "scale": [
+                        1.1548038721084595,
+                        2.520932197570801,
+                        1.546757459640503
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "entryway_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "bottom_cabinet_slgzfc_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "bottom_cabinet_slgzfc_1",
+                    "category": "bottom_cabinet",
+                    "model": "slgzfc",
+                    "scale": [
+                        1.3905770778656006,
+                        0.376723051071167,
+                        1.6013273000717163
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "carpet_ctclvd_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "carpet_ctclvd_0",
+                    "category": "carpet",
+                    "model": "ctclvd",
+                    "scale": [
+                        2.344805955886841,
+                        1.0259640216827393,
+                        0.24480189383029938
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "carpet_ctclvd_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "carpet_ctclvd_1",
+                    "category": "carpet",
+                    "model": "ctclvd",
+                    "scale": [
+                        0.747193455696106,
+                        0.2696339190006256,
+                        0.24480189383029938
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "countertop_tpuwys_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "countertop_tpuwys_0",
+                    "category": "countertop",
+                    "model": "tpuwys",
+                    "scale": [
+                        1.7666583061218262,
+                        0.5878768563270569,
+                        1.3196852207183838
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0",
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "dishwasher_xlmier_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "dishwasher_xlmier_0",
+                    "category": "dishwasher",
+                    "model": "xlmier",
+                    "scale": [
+                        1.2022448778152466,
+                        1.1235343217849731,
+                        0.7561287879943848
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "door_ktydvs_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "door_ktydvs_0",
+                    "category": "door",
+                    "model": "ktydvs",
+                    "scale": [
+                        1.04920494556427,
+                        0.9485142230987549,
+                        0.9541216492652893
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bedroom_0",
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "door_lvgliq_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "door_lvgliq_0",
+                    "category": "door",
+                    "model": "lvgliq",
+                    "scale": [
+                        1.083775520324707,
+                        1.0875639915466309,
+                        0.7535495162010193
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "entryway_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "electric_switch_wseglt_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "electric_switch_wseglt_0",
+                    "category": "electric_switch",
+                    "model": "wseglt",
+                    "scale": [
+                        0.9988897442817688,
+                        0.9998173117637634,
+                        0.9999459385871887
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "electric_switch_wseglt_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "electric_switch_wseglt_1",
+                    "category": "electric_switch",
+                    "model": "wseglt",
+                    "scale": [
+                        0.9988897442817688,
+                        0.9998173117637634,
+                        0.9999459385871887
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "electric_switch_wseglt_2": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "electric_switch_wseglt_2",
+                    "category": "electric_switch",
+                    "model": "wseglt",
+                    "scale": [
+                        0.9988897442817688,
+                        0.9998173117637634,
+                        0.9999459385871887
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "electric_switch_wseglt_3": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "electric_switch_wseglt_3",
+                    "category": "electric_switch",
+                    "model": "wseglt",
+                    "scale": [
+                        0.9988897442817688,
+                        0.9998173117637634,
+                        0.9999459385871887
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "electric_switch_wseglt_4": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "electric_switch_wseglt_4",
+                    "category": "electric_switch",
+                    "model": "wseglt",
+                    "scale": [
+                        0.9988897442817688,
+                        0.9998173117637634,
+                        0.9999459385871887
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "entryway_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "electric_switch_wseglt_5": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "electric_switch_wseglt_5",
+                    "category": "electric_switch",
+                    "model": "wseglt",
+                    "scale": [
+                        0.9988897442817688,
+                        0.9998173117637634,
+                        0.9999459385871887
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bedroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "fridge_xyejdx_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "fridge_xyejdx_0",
+                    "category": "fridge",
+                    "model": "xyejdx",
+                    "scale": [
+                        1.0555732250213623,
+                        1.255197525024414,
+                        0.9015737175941467
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "furniture_sink_zexzrc_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "furniture_sink_zexzrc_0",
+                    "category": "furniture_sink",
+                    "model": "zexzrc",
+                    "scale": [
+                        1.015573501586914,
+                        0.6790862679481506,
+                        0.8438354134559631
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "microwave_abzvij_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "microwave_abzvij_0",
+                    "category": "microwave",
+                    "model": "abzvij",
+                    "scale": [
+                        1.319854736328125,
+                        1.2967232465744019,
+                        1.0082285404205322
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "mirror_pevdqu_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "mirror_pevdqu_0",
+                    "category": "mirror",
+                    "model": "pevdqu",
+                    "scale": [
+                        0.9630368947982788,
+                        1.1745414733886719,
+                        3.1343650817871094
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "openable_window_ithrgo_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "openable_window_ithrgo_0",
+                    "category": "openable_window",
+                    "model": "ithrgo",
+                    "scale": [
+                        0.9675118923187256,
+                        1.1063642501831055,
+                        1.31346595287323
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "openable_window_ithrgo_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "openable_window_ithrgo_1",
+                    "category": "openable_window",
+                    "model": "ithrgo",
+                    "scale": [
+                        0.9675118923187256,
+                        1.3681751489639282,
+                        1.671570062637329
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "openable_window_ithrgo_2": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "openable_window_ithrgo_2",
+                    "category": "openable_window",
+                    "model": "ithrgo",
+                    "scale": [
+                        0.9675118923187256,
+                        1.3681751489639282,
+                        2.0296742916107178
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "openable_window_ulnafj_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "openable_window_ulnafj_0",
+                    "category": "openable_window",
+                    "model": "ulnafj",
+                    "scale": [
+                        0.6482172012329102,
+                        1.82073175907135,
+                        1.6731712818145752
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bedroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "oven_wuinhm_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "oven_wuinhm_0",
+                    "category": "oven",
+                    "model": "wuinhm",
+                    "scale": [
+                        1.635878562927246,
+                        1.3271393775939941,
+                        1.4871869087219238
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "pedestal_sink_ksecxq_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "pedestal_sink_ksecxq_0",
+                    "category": "pedestal_sink",
+                    "model": "ksecxq",
+                    "scale": [
+                        0.6458792090415955,
+                        0.9212004542350769,
+                        0.9415335059165955
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "picture_etixod_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "picture_etixod_0",
+                    "category": "picture",
+                    "model": "etixod",
+                    "scale": [
+                        0.6087719798088074,
+                        0.48090043663978577,
+                        1.22816002368927
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bedroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "picture_hhxttu_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "picture_hhxttu_0",
+                    "category": "picture",
+                    "model": "hhxttu",
+                    "scale": [
+                        0.5612414479255676,
+                        0.618113100528717,
+                        1.1028404235839844
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "picture_jpfyrq_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "picture_jpfyrq_0",
+                    "category": "picture",
+                    "model": "jpfyrq",
+                    "scale": [
+                        0.508179247379303,
+                        0.8438358902931213,
+                        1.1028403043746948
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "shower_stall_invgma_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "shower_stall_invgma_0",
+                    "category": "shower_stall",
+                    "model": "invgma",
+                    "scale": [
+                        1.1289753913879395,
+                        1.206105351448059,
+                        0.9468503594398499
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "toilet_vtqdev_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "toilet_vtqdev_0",
+                    "category": "toilet",
+                    "model": "vtqdev",
+                    "scale": [
+                        1.4042425155639648,
+                        1.3223549127578735,
+                        1.3098530769348145
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "top_cabinet_fqhdne_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "top_cabinet_fqhdne_0",
+                    "category": "top_cabinet",
+                    "model": "fqhdne",
+                    "scale": [
+                        1.8757251501083374,
+                        2.117023229598999,
+                        1.8405827283859253
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "top_cabinet_lsyzkh_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "top_cabinet_lsyzkh_0",
+                    "category": "top_cabinet",
+                    "model": "lsyzkh",
+                    "scale": [
+                        1.5607668161392212,
+                        1.2891030311584473,
+                        1.8991570472717285
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "top_cabinet_lsyzkh_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "top_cabinet_lsyzkh_1",
+                    "category": "top_cabinet",
+                    "model": "lsyzkh",
+                    "scale": [
+                        1.562036395072937,
+                        1.4654600620269775,
+                        1.8991570472717285
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "top_cabinet_lsyzkh_2": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "top_cabinet_lsyzkh_2",
+                    "category": "top_cabinet",
+                    "model": "lsyzkh",
+                    "scale": [
+                        1.1925815343856812,
+                        1.428527593612671,
+                        1.8883804082870483
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "top_cabinet_lsyzkh_3": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "top_cabinet_lsyzkh_3",
+                    "category": "top_cabinet",
+                    "model": "lsyzkh",
+                    "scale": [
+                        1.1925815343856812,
+                        1.428527593612671,
+                        1.8883804082870483
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "towel_rack_kqrmrh_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "towel_rack_kqrmrh_0",
+                    "category": "towel_rack",
+                    "model": "kqrmrh",
+                    "scale": [
+                        1.4629719257354736,
+                        1.5068504810333252,
+                        0.6218834519386292
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "towel_rack_kqrmrh_1": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "towel_rack_kqrmrh_1",
+                    "category": "towel_rack",
+                    "model": "kqrmrh",
+                    "scale": [
+                        1.7215518951416016,
+                        1.707074522972107,
+                        0.6218834519386292
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "ceilings_jfsbfp_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "ceilings_jfsbfp_0",
+                    "category": "ceilings",
+                    "model": "jfsbfp",
+                    "scale": [
+                        1.0000121593475342,
+                        1.0000027418136597,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "ceilings_phrrml_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "ceilings_phrrml_0",
+                    "category": "ceilings",
+                    "model": "phrrml",
+                    "scale": [
+                        0.9999942779541016,
+                        0.9999986290931702,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "ceilings_rhfker_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "ceilings_rhfker_0",
+                    "category": "ceilings",
+                    "model": "rhfker",
+                    "scale": [
+                        1.0000056028366089,
+                        1.0000028610229492,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "entryway_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "ceilings_yimfml_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "ceilings_yimfml_0",
+                    "category": "ceilings",
+                    "model": "yimfml",
+                    "scale": [
+                        0.9999998807907104,
+                        1.0000027418136597,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "ceilings_zlhppj_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "ceilings_zlhppj_0",
+                    "category": "ceilings",
+                    "model": "zlhppj",
+                    "scale": [
+                        1.0000120401382446,
+                        0.9999980926513672,
+                        1.0000009536743164
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bedroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "floors_avvnuv_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "floors_avvnuv_0",
+                    "category": "floors",
+                    "model": "avvnuv",
+                    "scale": [
+                        1.0000121593475342,
+                        1.0000027418136597,
+                        1.000000238418579
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bathroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "floors_gjemfr_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "floors_gjemfr_0",
+                    "category": "floors",
+                    "model": "gjemfr",
+                    "scale": [
+                        1.0000056028366089,
+                        1.0000028610229492,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "entryway_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "floors_ifmioj_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "floors_ifmioj_0",
+                    "category": "floors",
+                    "model": "ifmioj",
+                    "scale": [
+                        0.9999998807907104,
+                        1.0000027418136597,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "kitchen_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "floors_ptwlei_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "floors_ptwlei_0",
+                    "category": "floors",
+                    "model": "ptwlei",
+                    "scale": [
+                        0.9999942779541016,
+                        0.9999987483024597,
+                        1.0000001192092896
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "living_room_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "floors_ucjdgj_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "floors_ucjdgj_0",
+                    "category": "floors",
+                    "model": "ucjdgj",
+                    "scale": [
+                        1.0000120401382446,
+                        0.9999980926513672,
+                        1.0000008344650269
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": [
+                        "bedroom_0"
+                    ],
+                    "bddl_object_scope": null
+                }
+            },
+            "walls_axhynp_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "walls_axhynp_0",
+                    "category": "walls",
+                    "model": "axhynp",
+                    "scale": [
+                        1.000001311302185,
+                        1.0000596046447754,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": "",
+                    "bddl_object_scope": null
+                }
+            },
+            "walls_bcjmdz_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "walls_bcjmdz_0",
+                    "category": "walls",
+                    "model": "bcjmdz",
+                    "scale": [
+                        1.000050663948059,
+                        1.0000009536743164,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": "",
+                    "bddl_object_scope": null
+                }
+            },
+            "walls_dekben_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "walls_dekben_0",
+                    "category": "walls",
+                    "model": "dekben",
+                    "scale": [
+                        1.0000019073486328,
+                        1.000043272972107,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": "",
+                    "bddl_object_scope": null
+                }
+            },
+            "walls_exiopd_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "walls_exiopd_0",
+                    "category": "walls",
+                    "model": "exiopd",
+                    "scale": [
+                        1.0000014305114746,
+                        1.0000420808792114,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": "",
+                    "bddl_object_scope": null
+                }
+            },
+            "walls_gxvfxw_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "walls_gxvfxw_0",
+                    "category": "walls",
+                    "model": "gxvfxw",
+                    "scale": [
+                        1.0000561475753784,
+                        1.0000009536743164,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": "",
+                    "bddl_object_scope": null
+                }
+            },
+            "walls_gxynpx_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "walls_gxynpx_0",
+                    "category": "walls",
+                    "model": "gxynpx",
+                    "scale": [
+                        1.0000041723251343,
+                        1.0000436305999756,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": "",
+                    "bddl_object_scope": null
+                }
+            },
+            "walls_xlgydu_0": {
+                "class_module": "omnigibson.objects.dataset_object",
+                "class_name": "DatasetObject",
+                "args": {
+                    "name": "walls_xlgydu_0",
+                    "category": "walls",
+                    "model": "xlgydu",
+                    "scale": [
+                        1.0000498294830322,
+                        1.000001311302185,
+                        1.0
+                    ],
+                    "fixed_base": true,
+                    "in_rooms": "",
+                    "bddl_object_scope": null
+                }
+            },
+            "robot_fdqrat": {
+                "class_module": "omnigibson.robots.r1",
+                "class_name": "R1",
+                "args": {
+                    "name": "robot_fdqrat",
+                    "obs_modalities": [
+                        "rgb"
+                    ],
+                    "grasping_mode": "physical",
+                    "default_reset_mode": "untuck"
+                }
+            }
+        }
+    }
+}
