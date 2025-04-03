@@ -43,6 +43,7 @@ ALLOWED_TAGS = {
     "glass",
     "openable",
     "openablebothsides",
+    "locked"
 }
 
 ALLOWED_PART_TAGS = {
