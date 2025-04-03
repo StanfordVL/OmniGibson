@@ -1,19 +1,55 @@
-cleaning_up_branches_and_twigs:
-  scene_model: house_single_floor
-  robot_start_position: [-10.0, 14.0, 0]
+######################################################
+# New OG Scenes to-be-verified:
 
-opening_doors:
-  scene_model: house_single_floor
-  robot_start_position: [21.8, 10.69, 0]
+# cleaning_up_branches_and_twigs:
+#   scene_model: house_single_floor
+#   robot_start_position: [-10.0, 14.0, 0]
 
+# opening_doors:
+#   scene_model: house_single_floor
+#   robot_start_position: [21.8, 10.69, 0]
+
+# cook_brussels_sprouts:
+#   scene_model: restaurant_diner
+#   robot_start_position: [-6.4, -4.0, 0]
+
+# unpacking_car_for_trip:
+#   scene_model: Beechwood_0_garden
+#   robot_start_position: [-1.2, 10.06, 0]
+
+# bag_groceries:
+#   scene_model: grocery_store_cafe
+#   robot_start_position: [-5.25, 9.1, 0]
+
+######################################################
+# IG Scenes to-be-verified:
+
+# de_clutter_your_garage:
+#   scene_model: Ihlen_0_int
+#   robot_start_position: [4.1475, 4.075, 0]
+
+# clean_up_after_a_dinner_party:
+#   scene_model: Ihlen_1_int
+#   robot_start_position: [-4.355, 0.916, 0]
+
+# cook_a_frozen_pie:
+#   scene_model: Ihlen_1_int
+#   robot_start_position: [-3.29, 4.829, 0]
+
+# opening_doors:
+#   scene_model: Merom_0_int
+#   robot_start_position: [3.855, 5.1893, 0]
+
+#####################################################
+# IG Scenes verified:
 cook_brussels_sprouts:
-  scene_model: restaurant_diner
-  robot_start_position: [-6.4, -4.0, 0]
+  scene_model: Merom_1_int
+  robot_start_position: [-1.2, 3.547, 0]
 
-unpacking_car_for_trip:
-  scene_model: Beechwood_0_garden
-  robot_start_position: [-1.2, 10.06, 0]
+opening_windows:
+  scene_model: Rs_int
+  robot_start_position: [0.06, -0.02, 0]
 
-bag_groceries:
-  scene_model: grocery_store_cafe
-  robot_start_position: [-5.25, 9.1, 0]
+picking_up_trash:
+  scene_model: Benevolence_1_int
+  robot_start_position: [-1.11849213, 0.51, 0]
