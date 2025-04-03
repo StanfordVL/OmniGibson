@@ -475,6 +475,9 @@ class OGRobotServer:
                 0, 0,  # 2 L gripper
                 0, 0,  # 2 R gripper
             ]) * th.pi / 180
+            
+            # Fingers MUST start open, or else generated AG spheres will be spawned incorrectly
+            cfg["robots"][0]["reset_joint_pos"][-4:] = 0.05
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
