@@ -363,6 +363,8 @@ class TextureBaker:
         objs = self.get_process_objs()
         postprocessing = []  # (obj, siblings)
         for i, obj in enumerate(objs):
+            print(f"{(i + 1)} / {len(objs)}: {obj.name}")
+
             rt.select([obj])
             rt.IsolateSelection.EnterIsolateSelectionMode()
 
