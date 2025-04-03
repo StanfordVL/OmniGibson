@@ -599,7 +599,7 @@ class OGRobotServer:
             ####
 
         # Add visualization cylinders at the end effector sites
-        vis_geoms = []
+        self.eef_cylinder_geoms = {}
         vis_geom_colors = [
             [1.0, 0, 0],
             [0, 1.0, 0],
@@ -665,6 +665,7 @@ class OGRobotServer:
 
         for arm in self.robot.arm_names:
             hand_link = self.robot.eef_links[arm]
+            self.eef_cylinder_geoms[arm] = []
             for axis, length, mat, prop_offset, quat_offset in zip(
                 ("x", "y", "z"),
                 vis_geom_lengths,
@@ -689,7 +690,7 @@ class OGRobotServer:
 
                 vis_geom.scale = th.tensor([vis_geom_width, vis_geom_width, length])
                 vis_geom.set_position_orientation(position=th.tensor([0, 0, length * prop_offset]), orientation=quat_offset, frame="parent")
-                vis_geoms.append(vis_geom)
+                self.eef_cylinder_geoms[arm].append(vis_geom)
 
             # Add vis sphere around EEF for reachability
             if USE_VISUAL_SPHERES:
@@ -807,6 +808,8 @@ class OGRobotServer:
             self.env = DataCollectionWrapper(
                 env=self.env, output_path=self._recording_path, viewport_camera_path=og.sim.viewer_camera.active_camera_path,only_successes=False, use_vr=USE_VR
             )
+        
+        self._prev_grasp_status = {arm: False for arm in self.robot.arm_names}
 
         # Reset
         self.reset()
@@ -934,7 +937,7 @@ class OGRobotServer:
                             self.text_labels.append(label)
         
         # Initialize goal status tracking
-        self.previous_goal_status = {
+        self._prev_goal_status = {
             'satisfied': [], 
             'unsatisfied': list(range(len(self.bddl_goal_conditions)))
         }
@@ -948,8 +951,8 @@ class OGRobotServer:
             return
             
         # Check if status has changed
-        status_changed = (set(goal_status['satisfied']) != set(self.previous_goal_status['satisfied']) or
-                        set(goal_status['unsatisfied']) != set(self.previous_goal_status['unsatisfied']))
+        status_changed = (set(goal_status['satisfied']) != set(self._prev_goal_status['satisfied']) or
+                        set(goal_status['unsatisfied']) != set(self._prev_goal_status['unsatisfied']))
         
         if status_changed:
             # Update satisfied goals - make them green
@@ -967,7 +970,15 @@ class OGRobotServer:
                     self.text_labels[idx].set_style(current_style)
             
             # Store the current status for future comparison
-            self.previous_goal_status = goal_status.copy()
+            self._prev_goal_status = goal_status.copy()
+    
+    def _update_grasp_status(self):
+        for arm in self.robot.arm_names:
+            is_grasping = self.robot.is_grasping(arm) > 0
+            if is_grasping != self._prev_grasp_status[arm]:
+                self._prev_grasp_status[arm] = is_grasping
+                for cylinder in self.eef_cylinder_geoms[arm]:
+                    cylinder.visible = not is_grasping
 
     def num_dofs(self) -> int:
         return self.robot.n_joints
@@ -1165,6 +1176,8 @@ class OGRobotServer:
             
             if self.task_name is not None:
                 self._update_goal_status(info['done']['goal_status'])
+            
+            self._update_grasp_status()
 
     def reset(self):
         # Reset internal variables
