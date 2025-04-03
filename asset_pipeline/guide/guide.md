@@ -81,14 +81,14 @@ Don’t forget to merge in this modifier as part of the below step.
 * If a warning dialog pops up, click Yes.  
 * Confirm on the Scene Explorer dialog (left-hand side menu) that instances of your object are still instances.
 
-![][image1.png]        ![][image2.png]
+![](image1.png)        ![](image2.png)
 
 ## 5\. Replace object copies with instances
 
 When there are multiple copies of the same object models, we naturally want to export this model once, and use the same model for each of its instances, rather than making multiple copies. To do this, 3ds Max needs to recognize that the repeated copies are instances of the main object and not new objects themselves. Such objects are known as “instances”.
 
 Start by enabling the Display \> Display Dependents option in the object list:  
-![][image3.png]
+![](image3.png)
 
 Now, individually click on every object that is used multiple times in the scene. If the copies are correctly marked as “instances”, they will also be highlighted in the list once you select any instance of the same object. If that does not happen, the multiple objects are copies and not instances, and they need to be replaced.
 
@@ -108,7 +108,7 @@ By this point, for each articulated object, you should have its fixed and moving
    1. For a prismatic joint, simply move the copy to its final (“upper”) position using your knowledge from Part B. Take care to make sure that the two objects are moved only along the desired joint axis, and not along any of the other two lateral axes.  
    2. For a revolute joint, you will need to rotate the copy to the final (“upper”) position. To rotate an object:  
       1. You first need to set a pivot around which you will perform the rotation. Use your knowledge from Part B to set this (temporary) pivot. Pick the pivot in such a way that the moving part will not collide with the fixed part, not only in its starting/final positions, but also along the way. For example, see in the below figure the right position and a few wrong positions for the pivot.  
-         ![][image4.png]  
+         ![](image4.png)  
       2. Then, using the rotate tool, rotate the moving part around the pivot. You can manually enter the amount (degrees) to rotate for many revolute joints, e.g. 90 degrees, so that the rotation is exact. See the “exact transforms” FAQ tip. **You should not apply a rotation of more than 180 degrees: in these cases, the URDF joint will follow the minor arc, producing undesirable results.**
 
 ## 7\. Annotate local coordinate frames
@@ -187,7 +187,7 @@ To annotate lights, you need to do two things: validate the properties and name 
 All lights in the scene need to be VrayLight objects. If you have PhysicalLight, TargetedLight, VrayIES, VrayAmbientLight, etc. objects (which SanityCheck will happily point out), ask for help.
 
 For each such light object, the settings should look like this:  
-![][image5.png]
+![](image5.png)
 
 That is:
 
@@ -222,7 +222,7 @@ Currently, annotations for the below meta links need to be dimensionless (e.g. *
   * Non-examples: microwave, stove, fridge (we only require objects to be inside these home appliances) 
 
 To create one, you can go to Create \> Helpers \> Point.  
-![][image6.png]
+![](image6.png)
 
 ### **Volumetric Meta Links**
 
@@ -236,7 +236,7 @@ The below meta links need to be geometries, e.g. they need to contain volume. Fo
 * **Mfillable:** the volume that will be checked for fluid particles when checking for the filled state.
 
 To create one, you can go to the Create Menu, and the Standard Primitives submenu for the volumetric primitives:  
-![][image7.png]
+![](image7.png)
 
 ### **Meta IDs**
 
@@ -304,10 +304,10 @@ This is the [spreadsheet](https://docs.google.com/spreadsheets/d/1fWrP4DC4WSqgTE
 If Column F says Fluid or Particle, we should look for objects that are the natural/native container for these substances. Here are some examples:
 
 Orange juice: [link](https://www.turbosquid.com/FullPreview/1637471)  
-​​![][image8.png]
+​​![](image8.png)
 
 Flour: [link](https://www.turbosquid.com/3d-models/3d-wheat-flour-brown-paper-bag-2lb-model-1719748)  
-![][image9.png]
+![](image9.png)
 
 A couple important notes (with decreasing importance):
 
@@ -315,14 +315,14 @@ A couple important notes (with decreasing importance):
 * Native format has to be 3DS MAX (except Corona renderer; V-ray, scanline and arnold are okay).   
   * Note: selecting format as “.max (3DS MAX)” does NOT guarantee that the native format is 3DS MAX. We want it to be the case, so you would need to double check the “NATIVE” format on the product page.
 
-  ![][image10.png]
+  ![](image10.png)
 
-  ![][image11.png]
+  ![](image11.png)
 
 * It should be affordable. Prioritize Free items. Our soft price cap is $20 per object. If you have to buy something more expensive, talk with us.   
-  ![][image12.png]  
+  ![](image12.png)  
 * **It should NOT be Editorial or Branded**. However, if you have to buy something editorial or branded, mark 1 in “Column I: is branded” of the spreadsheet. You will later edit the material in 3DS MAX to remove the brand.   
-  ![][image13.png]
+  ![](image13.png)
 
 ## 1\. Import files Into ig\_cad
 
