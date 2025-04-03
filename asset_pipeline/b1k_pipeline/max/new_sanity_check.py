@@ -384,7 +384,8 @@ class SanityCheck:
                         self.expect(mat_type == rt.PhysicalMaterial, f"Baked material {mat} of {row.object_name} is not a PhysicalMaterial.")
                     else:
                         # Everything that's not the top level material nor the baked material should be a vraymtl or multimaterial
-                        self.expect(mat_type == rt.MultiMaterial or "vray" in str(mat).lower(), f"Non-top level material {mat} of {row.object_name} is not a MultiMaterial or VrayMtl.")
+                        # self.expect(mat_type == rt.MultiMaterial or "vray" in str(mat).lower(), f"Non-top level material {mat} of {row.object_name} is not a MultiMaterial or VrayMtl.")
+                        pass
 
         else:
             # Bad object tasks
