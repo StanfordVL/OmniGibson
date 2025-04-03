@@ -592,7 +592,10 @@ def processFile(filename: pathlib.Path):
     b1k_pipeline.max.prebake_textures.process_open_file()
     for obj, old_baked_mtl in baked_mtls_by_object.items():
         # Make sure it got baked again
-        assert rt.classOf(obj.material) == rt.Shell_Material, f"{obj} material should be shell material after baking"
+        if not rt.classOf(obj.material) == rt.Shell_Material:
+            print(f"{obj} material is not shell material after baking - meaning this object was not baked.")
+            continue
+        
         new_baked_mtl = obj.material.bakedMaterial
 
         # Copy the new material's reflection channel to the old one's slot too
@@ -612,7 +615,7 @@ def processFile(filename: pathlib.Path):
 
 def fix_common_issues_in_all_files():
     candidates = [
-        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\objects\*\processed.max")
+        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):
