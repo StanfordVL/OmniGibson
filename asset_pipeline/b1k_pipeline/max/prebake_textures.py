@@ -45,14 +45,14 @@ NEW_UV_CHANNEL = 99
 
 # PhysicalMaterial
 CHANNEL_MAPPING = {
-    # "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
-    # "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
-    # "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
-    # # "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
-    # # "VRaySelfIlluminationMap": "Emission Color Map",
+    "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
+    "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
+    "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
+    # "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
+    # "VRaySelfIlluminationMap": "Emission Color Map",
     "VRayRawReflectionFilterMap": "Reflectivity Map",
-    # "VRayRawRefractionFilterMap": "Transparency Map",
-    # "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
+    "VRayRawRefractionFilterMap": "Transparency Map",
+    "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
 }
 # CHANNEL_MAPPING = {
 #     "Color": "Base Color Map",
