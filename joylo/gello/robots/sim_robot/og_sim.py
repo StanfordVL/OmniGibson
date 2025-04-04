@@ -500,6 +500,8 @@ class OGRobotServer:
             self.ghost = self.env.scene.object_registry("name", "ghost")
             for mat in self.ghost.materials:
                 mat.diffuse_color_constant = th.tensor([0.8, 0.0, 0.0], dtype=th.float32)
+            # for link in self.robot.links.values():
+            #     link.visible = False
 
         if MULTI_VIEW_MODE:
             viewport_left_shoulder = create_and_dock_viewport(
@@ -1201,18 +1203,10 @@ class OGRobotServer:
                         self.vertical_visualizers[arm].set_position_orientation(position=arm_position - th.tensor([0, 0, 1.0]), orientation=th.tensor([0, 0, 0, 1.0]), frame="world")
             else:
                 action[self.robot.arm_action_idx[self.active_arm]] = self._joint_cmd[self.active_arm].clone()
-
+        
             # Optionally update ghost robot
             if self.ghosting:
-                self.ghost.set_position_orientation(
-                    position=self.robot.get_position_orientation(frame="world")[0],
-                    orientation=self.robot.get_position_orientation(frame="world")[1],
-                )
-                for i in range(4):
-                    self.ghost.joints[f"torso_joint{i+1}"].set_pos(self.robot.joints[f"torso_joint{i+1}"].get_state()[0])
-                for arm in self.robot.arm_names:
-                    for i in range(6):
-                        self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(action[self.robot.arm_action_idx[arm]][i])
+                self._update_ghost_robot(action)
 
             _, _, _, _, info = self.env.step(action)
             
@@ -1220,6 +1214,26 @@ class OGRobotServer:
                 self._update_goal_status(info['done']['goal_status'])
             
             self._update_grasp_status()
+
+    def _update_ghost_robot(self, action):
+        self.ghost.set_position_orientation(
+            position=self.robot.get_position_orientation(frame="world")[0],
+            orientation=self.robot.get_position_orientation(frame="world")[1],
+        )
+        for i in range(4):
+            self.ghost.joints[f"torso_joint{i+1}"].set_pos(self.robot.joints[f"torso_joint{i+1}"].get_state()[0])
+        for arm in self.robot.arm_names:
+            for i in range(6):
+                self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(action[self.robot.arm_action_idx[arm]][i])
+            # make arm visible if some joint difference is larger than the threshold
+            if th.norm(self.robot.joints[f"{arm}_arm_joint1"].get_state()[0] - action[self.robot.arm_action_idx[arm]][0]) > 0.01:
+                for link_name, link in self.ghost.links.items():
+                    if link_name.startswith(arm):
+                        link.visible = True
+            else:
+                for link_name, link in self.ghost.links.items():
+                    if link_name.startswith(arm):
+                        link.visible = False
 
     def reset(self):
         # Reset internal variables
