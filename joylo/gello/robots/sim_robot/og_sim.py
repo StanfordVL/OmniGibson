@@ -437,6 +437,7 @@ class OGRobotServer:
             },
         }]
 
+        self.ghosting = ghosting
         if ghosting:
             cfg["objects"].append({
                 "type": "USDObject",
@@ -496,9 +497,9 @@ class OGRobotServer:
         self.robot = self.env.robots[0]
 
         if self.ghosting:
-            self.ghost = self.env.object_registry("name", "ghost")
+            self.ghost = self.env.scene.object_registry("name", "ghost")
             for mat in self.ghost.materials:
-                mat.diffuse_color_constant = [0.8, 0.0, 0.0]
+                mat.diffuse_color_constant = th.tensor([0.8, 0.0, 0.0], dtype=th.float32)
 
         if MULTI_VIEW_MODE:
             viewport_left_shoulder = create_and_dock_viewport(
@@ -1203,14 +1204,15 @@ class OGRobotServer:
 
             # Optionally update ghost robot
             if self.ghosting:
-                self.ghost.joints["base_footprint_x_joint"].set_pos(action[self.robot.base_action_idx][0])
-                self.ghost.joints["base_footprint_y_joint"].set_pos(action[self.robot.base_action_idx][1])
-                self.ghost.joints["base_footprint_rz_joint"].set_pos(action[self.robot.base_action_idx][2])
+                self.ghost.set_position_orientation(
+                    position=self.robot.get_position_orientation(frame="world")[0],
+                    orientation=self.robot.get_position_orientation(frame="world")[1],
+                )
                 for i in range(4):
-                    self.ghost.joints[f"torso_joint{i+1}"].set_pos(action[self.robot.trunk_action_idx][i])
+                    self.ghost.joints[f"torso_joint{i+1}"].set_pos(self.robot.joints[f"torso_joint{i+1}"].get_state()[0])
                 for arm in self.robot.arm_names:
                     for i in range(6):
-                        self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(action[self.robot.gripper_action_idx[arm]][i])
+                        self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(action[self.robot.arm_action_idx[arm]][i])
 
             _, _, _, _, info = self.env.step(action)
             
