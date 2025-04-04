@@ -31,8 +31,6 @@ from gello.dxl.franka_gello_joint_impedance import FRANKA_JOINT_LIMIT_HIGH, FRAN
 import torch as th
 import numpy as np
 
-META_LINK_TASKS = ["cook_brussels_sprouts"]
-
 USE_FLUID = False
 USE_CLOTH = False
 USE_ARTICULATED = False
@@ -91,6 +89,7 @@ TASK_RELEVANT_CATEGORIES = {
 
 gm.USE_NUMPY_CONTROLLER_BACKEND = True
 gm.USE_GPU_DYNAMICS = (USE_FLUID or USE_CLOTH)
+gm.ENABLE_FLATCACHE = True
 gm.ENABLE_OBJECT_STATES = True # True (FOR TASKS!)
 gm.ENABLE_TRANSITION_RULES = False
 gm.ENABLE_CCD = False
@@ -157,8 +156,6 @@ class OGRobotServer:
         self.task_name = task_name
         if self.task_name is not None:
             assert self.task_name in AVAILABLE_BEHAVIOR_TASKS, f"Task {self.task_name} not found in available tasks"
-        
-        gm.ENABLE_FLATCACHE = self.task_name not in META_LINK_TASKS
 
         # Infer how many arms the robot has, create configs for each arm
         controller_config = dict()
