@@ -613,7 +613,7 @@ def replace_all_bad_legacy_objects_in_open_file():
 
 
 def main():
-    replace_object_instances(rt.selection[0], respect_aspect_ratio=True)
+    replace_object_instances(rt.selection[0], respect_aspect_ratio=False)
 
 
 if __name__ == "__main__":

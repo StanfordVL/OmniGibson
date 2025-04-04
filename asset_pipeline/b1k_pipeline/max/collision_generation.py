@@ -128,8 +128,8 @@ def run_vhacd(input_mesh, hull_count):
 
 HULL_COUNTS = [16]
 USE_METHODS = {
-    "coacd": run_coacd,
-    "vhacd": run_vhacd,
+#     "coacd": run_coacd,
+#     "vhacd": run_vhacd,
 }
 
 
