@@ -5468,7 +5468,10 @@
         "coffee_maker-fwlabx": "scenes/grocery_store_cafe",
         "digital_scale-ecdsib": "scenes/grocery_store_cafe",
         "display_case-dyiufq": "scenes/grocery_store_cafe",
+        "door-aleker": "scenes/grocery_store_cafe",
         "espresso_machine-qhrtyw": "scenes/grocery_store_cafe",
+        "fixed_window-eiqker": "scenes/grocery_store_cafe",
+        "fixed_window-omnmee": "scenes/grocery_store_cafe",
         "floors-ndfsiw": "scenes/grocery_store_cafe",
         "floors-pxxgzr": "scenes/grocery_store_cafe",
         "floors-sehwtc": "scenes/grocery_store_cafe",
@@ -5509,7 +5512,6 @@
         "pillar-xnxycq": "scenes/grocery_store_cafe",
         "plate-pyilfa": "scenes/grocery_store_cafe",
         "pot_plant-mypsrd": "scenes/grocery_store_cafe",
-        "rail_fence-mnegtc": "scenes/grocery_store_cafe",
         "reception_desk-vxombm": "scenes/grocery_store_cafe",
         "room_light-bypxxd": "scenes/grocery_store_cafe",
         "shelf-iruewm": "scenes/grocery_store_cafe",
@@ -14840,7 +14842,6 @@
         ],
         "bottom_cabinet-bamfsz": [
             "objects/legacy_batch-00",
-            "scenes/Beechwood_1_int",
             "scenes/Benevolence_2_int",
             "scenes/Ihlen_1_int",
             "scenes/Merom_1_int",
@@ -15012,7 +15013,8 @@
             "scenes/commercial_kitchen_pans"
         ],
         "bottom_cabinet-plccav": [
-            "objects/legacy_batch-00"
+            "objects/legacy_batch-00",
+            "scenes/grocery_store_cafe"
         ],
         "bottom_cabinet-pllcur": [
             "objects/legacy_batch-00"
@@ -15101,8 +15103,7 @@
             "objects/legacy_batch-00"
         ],
         "bottom_cabinet-yohygj": [
-            "objects/legacy_batch-00",
-            "scenes/grocery_store_cafe"
+            "objects/legacy_batch-00"
         ],
         "bottom_cabinet-yxfueo": [
             "objects/legacy_batch-00"
@@ -17508,7 +17509,9 @@
             "objects/legacy_batch-06"
         ],
         "multi_station_furniture_sink-yfaufu": [
-            "objects/legacy_batch-06"
+            "objects/legacy_batch-06",
+            "scenes/Beechwood_1_int",
+            "scenes/Benevolence_2_int"
         ],
         "notebook-aanuhi": [
             "objects/legacy_batch-06"
@@ -17538,9 +17541,6 @@
             "objects/legacy_batch-06",
             "scenes/Beechwood_0_garden",
             "scenes/Beechwood_0_int",
-            "scenes/Beechwood_1_int",
-            "scenes/Benevolence_0_int",
-            "scenes/Benevolence_2_int",
             "scenes/Ihlen_0_int",
             "scenes/Ihlen_1_int",
             "scenes/Pomaria_1_int",
@@ -17676,7 +17676,8 @@
             "objects/legacy_batch-06"
         ],
         "wall_mounted_sink-vbquye": [
-            "objects/legacy_batch-06"
+            "objects/legacy_batch-06",
+            "scenes/Benevolence_2_int"
         ],
         "wooden_spoon-aeubta": [
             "objects/legacy_batch-06"
@@ -22960,6 +22961,10 @@
         "floors-yvuaqk": [
             "scenes/Benevolence_0_int"
         ],
+        "wall_mounted_sink-buifoi": [
+            "scenes/Benevolence_0_int",
+            "scenes/hotel_gym_spa"
+        ],
         "walls-cqojjq": [
             "scenes/Benevolence_0_int"
         ],
@@ -26902,7 +26907,16 @@
         "display_case-dyiufq": [
             "scenes/grocery_store_cafe"
         ],
+        "door-aleker": [
+            "scenes/grocery_store_cafe"
+        ],
         "espresso_machine-qhrtyw": [
+            "scenes/grocery_store_cafe"
+        ],
+        "fixed_window-eiqker": [
+            "scenes/grocery_store_cafe"
+        ],
+        "fixed_window-omnmee": [
             "scenes/grocery_store_cafe"
         ],
         "floors-ndfsiw": [
@@ -27024,9 +27038,6 @@
             "scenes/grocery_store_cafe"
         ],
         "pot_plant-mypsrd": [
-            "scenes/grocery_store_cafe"
-        ],
-        "rail_fence-mnegtc": [
             "scenes/grocery_store_cafe"
         ],
         "reception_desk-vxombm": [
@@ -28449,9 +28460,6 @@
             "scenes/hotel_gym_spa"
         ],
         "vase-twknia": [
-            "scenes/hotel_gym_spa"
-        ],
-        "wall_mounted_sink-buifoi": [
             "scenes/hotel_gym_spa"
         ],
         "walls-affyzw": [
@@ -56702,10 +56710,20 @@
         "display_case-dyiufq": [
             "collision"
         ],
+        "door-aleker": [
+            "collision",
+            "joint"
+        ],
         "espresso_machine-qhrtyw": [
             "collision",
             "heatsource",
             "togglebutton"
+        ],
+        "fixed_window-eiqker": [
+            "collision"
+        ],
+        "fixed_window-omnmee": [
+            "collision"
         ],
         "floors-ndfsiw": [
             "collision"
@@ -56840,9 +56858,6 @@
             "fillable"
         ],
         "pot_plant-mypsrd": [
-            "collision"
-        ],
-        "rail_fence-mnegtc": [
             "collision"
         ],
         "reception_desk-vxombm": [
