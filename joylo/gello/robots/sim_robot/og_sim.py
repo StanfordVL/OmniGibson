@@ -153,6 +153,7 @@ class OGRobotServer:
         port: int = 5556,
         recording_path: Optional[str] = None,
         task_name: Optional[str] = None,
+        ghosting: bool = False,
     ):
         self.task_name = task_name
         if self.task_name is not None:
@@ -436,6 +437,15 @@ class OGRobotServer:
             },
         }]
 
+        if ghosting:
+            cfg["objects"] += {
+                "type": "USDObject",
+                "name": "ghost",
+                "usd_path": R1.usd_path,
+                "visual_only": True,
+                "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0],
+            }
+
         # If we're R1, don't use rigid trunk
         if robot == "R1":
             # cfg["robots"][0]["reset_joint_pos"] = th.tensor([
@@ -484,7 +494,12 @@ class OGRobotServer:
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
-        
+
+        if self.ghosting:
+            self.ghost = self.env.object_registry("name", "ghost")
+            for mat in self.ghost.materials:
+                mat.diffuse_color_constant = [0.8, 0.0, 0.0]
+
         if MULTI_VIEW_MODE:
             viewport_left_shoulder = create_and_dock_viewport(
                 "DockSpace", 
@@ -1185,6 +1200,17 @@ class OGRobotServer:
                         self.vertical_visualizers[arm].set_position_orientation(position=arm_position - th.tensor([0, 0, 1.0]), orientation=th.tensor([0, 0, 0, 1.0]), frame="world")
             else:
                 action[self.robot.arm_action_idx[self.active_arm]] = self._joint_cmd[self.active_arm].clone()
+
+            # Optionally update ghost robot
+            if self.ghosting:
+                self.ghost.joints["base_footprint_x_joint"].set_pos(action[self.robot.base_action_idx][0])
+                self.ghost.joints["base_footprint_y_joint"].set_pos(action[self.robot.base_action_idx][1])
+                self.ghost.joints["base_footprint_rz_joint"].set_pos(action[self.robot.base_action_idx][2])
+                for i in range(4):
+                    self.ghost.joints[f"torso_joint{i+1}"].set_pos(action[self.robot.trunk_action_idx][i])
+                for arm in self.robot.arm_names:
+                    for i in range(6):
+                        self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(action[self.robot.gripper_action_idx[arm]][i])
 
             _, _, _, _, info = self.env.step(action)
             
