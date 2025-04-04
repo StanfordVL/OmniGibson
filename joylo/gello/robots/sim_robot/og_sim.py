@@ -98,6 +98,7 @@ gm.ENABLE_HQ_RENDERING = USE_FLUID
 gm.GUI_VIEWPORT_ONLY = True
 RESOLUTION = [1080, 1080]   # [H, W]
 USE_VERTICAL_VISUALIZERS = False
+GHOST_APPEAR_THRESHOLD = 0.5
 
 def get_camera_config(name, relative_prim_path, position, orientation, resolution):
     return {
@@ -153,7 +154,7 @@ class OGRobotServer:
         port: int = 5556,
         recording_path: Optional[str] = None,
         task_name: Optional[str] = None,
-        ghosting: bool = False,
+        ghosting: bool = True,
     ):
         self.task_name = task_name
         if self.task_name is not None:
@@ -500,8 +501,8 @@ class OGRobotServer:
             self.ghost = self.env.scene.object_registry("name", "ghost")
             for mat in self.ghost.materials:
                 mat.diffuse_color_constant = th.tensor([0.8, 0.0, 0.0], dtype=th.float32)
-            # for link in self.robot.links.values():
-            #     link.visible = False
+            for link in self.ghost.links.values():
+                link.visible = False
 
         if MULTI_VIEW_MODE:
             viewport_left_shoulder = create_and_dock_viewport(
@@ -1226,7 +1227,9 @@ class OGRobotServer:
             for i in range(6):
                 self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(action[self.robot.arm_action_idx[arm]][i])
             # make arm visible if some joint difference is larger than the threshold
-            if th.norm(self.robot.joints[f"{arm}_arm_joint1"].get_state()[0] - action[self.robot.arm_action_idx[arm]][0]) > 0.01:
+            if th.norm(
+                self.robot.get_joint_positions()[self.robot.arm_control_idx[arm]] - action[self.robot.arm_action_idx[arm]]
+            ) > GHOST_APPEAR_THRESHOLD:
                 for link_name, link in self.ghost.links.items():
                     if link_name.startswith(arm):
                         link.visible = True
