@@ -31,12 +31,9 @@ from gello.dxl.franka_gello_joint_impedance import FRANKA_JOINT_LIMIT_HIGH, FRAN
 import torch as th
 import numpy as np
 
-META_LINK_TASKS = ["cook_brussels_sprouts"]
-
 USE_FLUID = False
 USE_CLOTH = False
 USE_ARTICULATED = False
-USE_VISUAL_SPHERES = False
 FULL_SCENE = False
 
 USE_VR = False
@@ -67,6 +64,8 @@ ACTIVITY_INSTANCE_ID = 0                # Which instance of the pre-sampled task
 R1_UPRIGHT_TORSO_JOINT_POS = th.tensor([0.45, -0.4, 0.0, 0.0], dtype=th.float32) # For upper cabinets, shelves, etc.
 R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.94, 0.0], dtype=th.float32) # For bottom cabinets, dishwashers, etc.
 R1_GROUND_TORSO_JOINT_POS = th.tensor([1.735, -2.57, -2.1, 0.0], dtype=th.float32) # For ground object pick up
+R1_WRIST_CAMERA_LOCAL_POS = th.tensor([0.1, 0.0, -0.1], dtype=th.float32) # Local position of the wrist camera relative to eef
+R1_WRIST_CAMERA_LOCAL_ORI = th.tensor([0.6830127018922194, 0.6830127018922193, 0.18301270189221927, 0.18301270189221946], dtype=th.float32) # Local orientation of the wrist camera relative to eef
 
 # Global whitelist of custom friction values
 FRICTIONS = {
@@ -91,13 +90,16 @@ TASK_RELEVANT_CATEGORIES = {
 
 gm.USE_NUMPY_CONTROLLER_BACKEND = True
 gm.USE_GPU_DYNAMICS = (USE_FLUID or USE_CLOTH)
+gm.ENABLE_FLATCACHE = True
 gm.ENABLE_OBJECT_STATES = True # True (FOR TASKS!)
 gm.ENABLE_TRANSITION_RULES = False
 gm.ENABLE_CCD = False
 gm.ENABLE_HQ_RENDERING = USE_FLUID
 gm.GUI_VIEWPORT_ONLY = True
 RESOLUTION = [1080, 1080]   # [H, W]
+USE_VISUAL_SPHERES = False
 USE_VERTICAL_VISUALIZERS = False
+USE_REACHABILITY_VISUALIZERS = True
 
 def get_camera_config(name, relative_prim_path, position, orientation, resolution):
     return {
@@ -157,8 +159,6 @@ class OGRobotServer:
         self.task_name = task_name
         if self.task_name is not None:
             assert self.task_name in AVAILABLE_BEHAVIOR_TASKS, f"Task {self.task_name} not found in available tasks"
-        
-        gm.ENABLE_FLATCACHE = self.task_name not in META_LINK_TASKS
 
         # Infer how many arms the robot has, create configs for each arm
         controller_config = dict()
@@ -485,51 +485,6 @@ class OGRobotServer:
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
         
-        if MULTI_VIEW_MODE:
-            viewport_left_shoulder = create_and_dock_viewport(
-                "DockSpace", 
-                lazy.omni.ui.DockPosition.LEFT,
-                0.25,
-                self.env.external_sensors["external_sensor1"].prim_path
-            )
-            viewport_left_wrist = create_and_dock_viewport(
-                viewport_left_shoulder.name,
-                lazy.omni.ui.DockPosition.BOTTOM,
-                0.5,
-                f"{self.robot.links['left_eef_link'].prim_path}/Camera"
-            )
-            viewport_right_shoulder = create_and_dock_viewport(
-                "DockSpace",
-                lazy.omni.ui.DockPosition.RIGHT,
-                0.2,
-                self.env.external_sensors["external_sensor2"].prim_path
-            )
-            viewport_right_wrist = create_and_dock_viewport(
-                viewport_right_shoulder.name,
-                lazy.omni.ui.DockPosition.BOTTOM,
-                0.5,
-                f"{self.robot.links['right_eef_link'].prim_path}/Camera"
-            )
-            # Set resolution for all viewports
-            for viewport in [viewport_left_shoulder, viewport_left_wrist, 
-                            viewport_right_shoulder, viewport_right_wrist]:
-                viewport.viewport_api.set_texture_resolution((256, 256))
-                og.sim.render()
-            for _ in range(3):
-                og.sim.render()
-
-        # TODO:
-        # Tune friction for small amount on cabinets to avoid drifting
-        # Debug ToggledOn
-        # Record demo for pick fruit from fridge and wash fruit in sink
-        # Add feature for saving / loading from checkpoint state
-        #       --> when state is loaded, gello freezes for a few seconds to move hands to desired location before resuming
-
-        eyes_cam_prim_path = f"{self.robot.links['eyes'].prim_path}/Camera"
-        og.sim.viewer_camera.active_camera_path = eyes_cam_prim_path
-        og.sim.viewer_camera.image_height = RESOLUTION[0]
-        og.sim.viewer_camera.image_width = RESOLUTION[1]
-
         obj = self.env.scene.object_registry("name", "obj")
 
         if USE_FLUID:
@@ -538,32 +493,14 @@ class OGRobotServer:
             for _ in range(50):
                 og.sim.step()
             self.env.scene.update_initial_state()
+        
+        # TODO:
+        # Tune friction for small amount on cabinets to avoid drifting
+        # Debug ToggledOn
+        # Record demo for pick fruit from fridge and wash fruit in sink
+        # Add feature for saving / loading from checkpoint state
+        #       --> when state is loaded, gello freezes for a few seconds to move hands to desired location before resuming
 
-        self.camera_paths = [
-            eyes_cam_prim_path,
-            self.env.external_sensors["external_sensor0"].prim_path,
-        ]
-        self.active_camera_id = 0
-        LOCK_CAMERA_ATTR = "omni:kit:cameraLock"
-        for cam_path in self.camera_paths:
-            cam_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(cam_path)
-            cam_prim.GetAttribute("horizontalAperture").Set(40.0)
-
-            # Lock attributes afterewards as well to avoid external modification
-            if cam_prim.HasAttribute(LOCK_CAMERA_ATTR):
-                attr = cam_prim.GetAttribute(LOCK_CAMERA_ATTR)
-            else:
-                attr = cam_prim.CreateAttribute(LOCK_CAMERA_ATTR, lazy.pxr.Sdf.ValueTypeNames.Bool)
-            attr.Set(True)
-
-        # self.robot.sensors["robot0:eyes:Camera:0"].horizontal_aperture = 40.0
-
-        # Disable all render products to save on speed
-        # See https://forums.developer.nvidia.com/t/speeding-up-simulation-2023-1-1/300072/6
-        for sensor in VisionSensor.SENSORS.values():
-            sensor.render_product.hydra_texture.set_updates_enabled(False)
-
-        #
         # # Disable mouse grabbing since we're only using the UI passively
         # lazy.carb.settings.get_settings().set_bool("/physics/mouseInteractionEnabled", False)
         # lazy.carb.settings.get_settings().set_bool("/physics/mouseGrab", False)
@@ -604,154 +541,8 @@ class OGRobotServer:
             # isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_MIN_FRAME_RATE, 30)
             ####
 
-        # Add visualization cylinders at the end effector sites
-        self.eef_cylinder_geoms = {}
-        vis_geom_colors = [
-            [1.0, 0, 0],
-            [0, 1.0, 0],
-            [0, 0, 1.0],
-        ]
-        vis_geom_width = 0.01
-        vis_geom_lengths = [0.25, 0.25, 0.5]                  # x,y,z
-        vis_geom_proportion_offsets = [0.0, 0.0, 0.5]       # x,y,z
-        vis_geom_quat_offsets = [
-            T.euler2quat(th.tensor([0.0, th.pi / 2, 0.0])),
-            T.euler2quat(th.tensor([-th.pi / 2, 0.0, 0.0])),
-            T.euler2quat(th.tensor([0.0, 0.0, 0.0])),
-        ]
-
-        # Create materials
-        vis_mats = []
-        for axis, color in zip(("x", "y", "z"), vis_geom_colors):
-            mat_prim_path = f"{self.robot.prim_path}/Looks/vis_cylinder_{axis}_mat"
-            mat = MaterialPrim(
-                relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
-                name=f"{self.robot.name}:vis_cylinder_{axis}_mat",
-            )
-            mat.load(self.robot.scene)
-            mat.diffuse_color_constant = th.as_tensor(color)
-            mat.enable_opacity = False #True
-            mat.opacity_constant = 0.5
-            mat.enable_emission = True
-            mat.emissive_color = np.array(color)
-            mat.emissive_intensity = 10000.0
-            vis_mats.append(mat)
-
-        # Create material for vis sphere
-        mat_prim_path = f"{self.robot.prim_path}/Looks/vis_sphere_mat"
-        sphere_mat = MaterialPrim(
-            relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
-            name=f"{self.robot.name}:vis_sphere_mat",
-        )
-        sphere_color = np.array([252, 173, 76]) / 255.0
-        sphere_mat.load(self.robot.scene)
-        sphere_mat.diffuse_color_constant = th.as_tensor(sphere_color)
-        sphere_mat.enable_opacity = True
-        sphere_mat.opacity_constant = 0.1 if USE_VISUAL_SPHERES else 0.0
-        sphere_mat.enable_emission = True
-        sphere_mat.emissive_color = np.array(sphere_color)
-        sphere_mat.emissive_intensity = 1000.0
-
-        # Create material for vertical cylinder
-        self.vertical_visualizers = dict()
-        if USE_VERTICAL_VISUALIZERS:
-            mat_prim_path = f"{self.robot.prim_path}/Looks/vis_vertical_mat"
-            vert_mat = MaterialPrim(
-                relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
-                name=f"{self.robot.name}:vis_vertical_mat",
-            )
-            vert_color = np.array([252, 226, 76]) / 255.0
-            vert_mat.load(self.robot.scene)
-            vert_mat.diffuse_color_constant = th.as_tensor(vert_color)
-            vert_mat.enable_opacity = True
-            vert_mat.opacity_constant = 0.3
-            vert_mat.enable_emission = True
-            vert_mat.emissive_color = np.array(vert_color)
-            vert_mat.emissive_intensity = 10000.0
-
-        for arm in self.robot.arm_names:
-            hand_link = self.robot.eef_links[arm]
-            self.eef_cylinder_geoms[arm] = []
-            for axis, length, mat, prop_offset, quat_offset in zip(
-                ("x", "y", "z"),
-                vis_geom_lengths,
-                vis_mats,
-                vis_geom_proportion_offsets,
-                vis_geom_quat_offsets,
-            ):
-                vis_prim_path = f"{hand_link.prim_path}/vis_cylinder_{axis}"
-                vis_prim = create_primitive_mesh(
-                    vis_prim_path,
-                    "Cylinder",
-                    extents=1.0
-                )
-                vis_geom = VisualGeomPrim(
-                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, vis_prim_path),
-                    name=f"{self.robot.name}:arm_{arm}:vis_cylinder_{axis}"
-                )
-                vis_geom.load(self.robot.scene)
-
-                # Attach a material to this prim
-                mat.bind(vis_geom.prim_path)
-
-                vis_geom.scale = th.tensor([vis_geom_width, vis_geom_width, length])
-                vis_geom.set_position_orientation(position=th.tensor([0, 0, length * prop_offset]), orientation=quat_offset, frame="parent")
-                self.eef_cylinder_geoms[arm].append(vis_geom)
-
-            # Add vis sphere around EEF for reachability
-            if USE_VISUAL_SPHERES:
-                vis_prim_path = f"{hand_link.prim_path}/vis_sphere"
-                vis_prim = create_primitive_mesh(
-                    vis_prim_path,
-                    "Sphere",
-                    extents=1.0
-                )
-                vis_geom = VisualGeomPrim(
-                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, vis_prim_path),
-                    name=f"{self.robot.name}:arm_{arm}:vis_sphere"
-                )
-                vis_geom.load(self.robot.scene)
-
-                # Attach a material to this prim
-                sphere_mat.bind(vis_geom.prim_path)
-
-                vis_geom.scale = th.ones(3) * 0.15
-                vis_geom.set_position_orientation(position=th.zeros(3), orientation=th.tensor([0, 0, 0, 1.0]), frame="parent")
-
-            if USE_VERTICAL_VISUALIZERS:
-                # Add vertical cylinder at EEF
-                vis_prim_path = f"{hand_link.prim_path}/vis_vertical"
-                vis_prim = create_primitive_mesh(
-                    vis_prim_path,
-                    "Cylinder",
-                    extents=1.0
-                )
-                vis_geom = VisualGeomPrim(
-                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, vis_prim_path),
-                    name=f"{self.robot.name}:arm_{arm}:vis_vertical"
-                )
-                
-                vis_geom.load(self.robot.scene)
-
-                # Attach a material to this prim
-                vert_mat.bind(vis_geom.prim_path)
-
-                vis_geom.scale = th.tensor([vis_geom_width, vis_geom_width, 2.0])
-                vis_geom.set_position_orientation(position=th.zeros(3), orientation=th.tensor([0, 0, 0, 1.0]), frame="parent")
-                self.vertical_visualizers[arm] = vis_geom
-
-        # Make sure robot fingers are extra grippy
-        gripper_mat = lazy.isaacsim.core.api.materials.PhysicsMaterial(
-            prim_path=f"{self.robot.prim_path}/Looks/gripper_mat",
-            name="gripper_material",
-            static_friction=4.0,
-            dynamic_friction=1.0,
-            restitution=None,
-        )
-        for arm, links in self.robot.finger_links.items():
-            for link in links:
-                for msh in link.collision_meshes.values():
-                    msh.apply_physics_material(gripper_mat)
+        self._setup_cameras()
+        self._setup_visualizers()
 
         # Modify physics further
         with og.sim.stopped():
@@ -903,6 +694,268 @@ class OGRobotServer:
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
         
         lazy.carb.settings.get_settings().set_bool("/rtx-transient/dlssg/enabled", True)
+    
+    def _setup_cameras(self):
+        if MULTI_VIEW_MODE:
+            viewport_left_shoulder = create_and_dock_viewport(
+                "DockSpace", 
+                lazy.omni.ui.DockPosition.LEFT,
+                0.25,
+                self.env.external_sensors["external_sensor1"].prim_path
+            )
+            viewport_left_wrist = create_and_dock_viewport(
+                viewport_left_shoulder.name,
+                lazy.omni.ui.DockPosition.BOTTOM,
+                0.5,
+                f"{self.robot.links['left_eef_link'].prim_path}/Camera"
+            )
+            viewport_right_shoulder = create_and_dock_viewport(
+                "DockSpace",
+                lazy.omni.ui.DockPosition.RIGHT,
+                0.2,
+                self.env.external_sensors["external_sensor2"].prim_path
+            )
+            viewport_right_wrist = create_and_dock_viewport(
+                viewport_right_shoulder.name,
+                lazy.omni.ui.DockPosition.BOTTOM,
+                0.5,
+                f"{self.robot.links['right_eef_link'].prim_path}/Camera"
+            )
+            # Set resolution for all viewports
+            for viewport in [viewport_left_shoulder, viewport_left_wrist, 
+                            viewport_right_shoulder, viewport_right_wrist]:
+                viewport.viewport_api.set_texture_resolution((256, 256))
+                og.sim.render()
+            for _ in range(3):
+                og.sim.render()
+
+        eyes_cam_prim_path = f"{self.robot.links['eyes'].prim_path}/Camera"
+        og.sim.viewer_camera.active_camera_path = eyes_cam_prim_path
+        og.sim.viewer_camera.image_height = RESOLUTION[0]
+        og.sim.viewer_camera.image_width = RESOLUTION[1]
+        
+        # Adjust wrist cameras
+        left_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(prim_path=f"{self.robot.links['left_eef_link'].prim_path}/Camera")
+        right_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(prim_path=f"{self.robot.links['right_eef_link'].prim_path}/Camera")
+        left_wrist_camera_prim.GetAttribute("xformOp:translate").Set(lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist()))
+        right_wrist_camera_prim.GetAttribute("xformOp:translate").Set(lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist()))
+        left_wrist_camera_prim.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())) # expects (w, x, y, z)
+        right_wrist_camera_prim.GetAttribute("xformOp:orient").Set(lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())) # expects (w, x, y, z)
+
+        self.camera_paths = [
+            eyes_cam_prim_path,
+            self.env.external_sensors["external_sensor0"].prim_path,
+        ]
+        self.active_camera_id = 0
+        LOCK_CAMERA_ATTR = "omni:kit:cameraLock"
+        for cam_path in self.camera_paths:
+            cam_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(cam_path)
+            cam_prim.GetAttribute("horizontalAperture").Set(40.0)
+
+            # Lock attributes afterewards as well to avoid external modification
+            if cam_prim.HasAttribute(LOCK_CAMERA_ATTR):
+                attr = cam_prim.GetAttribute(LOCK_CAMERA_ATTR)
+            else:
+                attr = cam_prim.CreateAttribute(LOCK_CAMERA_ATTR, lazy.pxr.Sdf.ValueTypeNames.Bool)
+            attr.Set(True)
+
+        # self.robot.sensors["robot0:eyes:Camera:0"].horizontal_aperture = 40.0
+
+        # Disable all render products to save on speed
+        # See https://forums.developer.nvidia.com/t/speeding-up-simulation-2023-1-1/300072/6
+        for sensor in VisionSensor.SENSORS.values():
+            sensor.render_product.hydra_texture.set_updates_enabled(False)
+    
+    def _setup_visualizers(self):
+        # Add visualization cylinders at the end effector sites
+        self.eef_cylinder_geoms = {}
+        vis_geom_colors = [
+            [1.0, 0, 0],
+            [0, 1.0, 0],
+            [0, 0, 1.0],
+        ]
+        vis_geom_width = 0.01
+        vis_geom_lengths = [0.25, 0.25, 0.5]                  # x,y,z
+        vis_geom_proportion_offsets = [0.0, 0.0, 0.5]       # x,y,z
+        vis_geom_quat_offsets = [
+            T.euler2quat(th.tensor([0.0, th.pi / 2, 0.0])),
+            T.euler2quat(th.tensor([-th.pi / 2, 0.0, 0.0])),
+            T.euler2quat(th.tensor([0.0, 0.0, 0.0])),
+        ]
+
+        # Create materials
+        vis_mats = []
+        for axis, color in zip(("x", "y", "z"), vis_geom_colors):
+            mat_prim_path = f"{self.robot.prim_path}/Looks/vis_cylinder_{axis}_mat"
+            mat = MaterialPrim(
+                relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
+                name=f"{self.robot.name}:vis_cylinder_{axis}_mat",
+            )
+            mat.load(self.robot.scene)
+            mat.diffuse_color_constant = th.as_tensor(color)
+            mat.enable_opacity = False #True
+            mat.opacity_constant = 0.5
+            mat.enable_emission = True
+            mat.emissive_color = np.array(color)
+            mat.emissive_intensity = 10000.0
+            vis_mats.append(mat)
+
+        # Create material for vis sphere
+        mat_prim_path = f"{self.robot.prim_path}/Looks/vis_sphere_mat"
+        sphere_mat = MaterialPrim(
+            relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
+            name=f"{self.robot.name}:vis_sphere_mat",
+        )
+        sphere_color = np.array([252, 173, 76]) / 255.0
+        sphere_mat.load(self.robot.scene)
+        sphere_mat.diffuse_color_constant = th.as_tensor(sphere_color)
+        sphere_mat.enable_opacity = True
+        sphere_mat.opacity_constant = 0.1 if USE_VISUAL_SPHERES else 0.0
+        sphere_mat.enable_emission = True
+        sphere_mat.emissive_color = np.array(sphere_color)
+        sphere_mat.emissive_intensity = 1000.0
+
+        # Create material for vertical cylinder
+        self.vertical_visualizers = dict()
+        if USE_VERTICAL_VISUALIZERS:
+            mat_prim_path = f"{self.robot.prim_path}/Looks/vis_vertical_mat"
+            vert_mat = MaterialPrim(
+                relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
+                name=f"{self.robot.name}:vis_vertical_mat",
+            )
+            vert_color = np.array([252, 226, 76]) / 255.0
+            vert_mat.load(self.robot.scene)
+            vert_mat.diffuse_color_constant = th.as_tensor(vert_color)
+            vert_mat.enable_opacity = True
+            vert_mat.opacity_constant = 0.3
+            vert_mat.enable_emission = True
+            vert_mat.emissive_color = np.array(vert_color)
+            vert_mat.emissive_intensity = 10000.0
+
+        for arm in self.robot.arm_names:
+            hand_link = self.robot.eef_links[arm]
+            self.eef_cylinder_geoms[arm] = []
+            for axis, length, mat, prop_offset, quat_offset in zip(
+                ("x", "y", "z"),
+                vis_geom_lengths,
+                vis_mats,
+                vis_geom_proportion_offsets,
+                vis_geom_quat_offsets,
+            ):
+                vis_prim_path = f"{hand_link.prim_path}/vis_cylinder_{axis}"
+                vis_prim = create_primitive_mesh(
+                    vis_prim_path,
+                    "Cylinder",
+                    extents=1.0
+                )
+                vis_geom = VisualGeomPrim(
+                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, vis_prim_path),
+                    name=f"{self.robot.name}:arm_{arm}:vis_cylinder_{axis}"
+                )
+                vis_geom.load(self.robot.scene)
+
+                # Attach a material to this prim
+                mat.bind(vis_geom.prim_path)
+
+                vis_geom.scale = th.tensor([vis_geom_width, vis_geom_width, length])
+                vis_geom.set_position_orientation(position=th.tensor([0, 0, length * prop_offset]), orientation=quat_offset, frame="parent")
+                self.eef_cylinder_geoms[arm].append(vis_geom)
+
+            # Add vis sphere around EEF for reachability
+            if USE_VISUAL_SPHERES:
+                vis_prim_path = f"{hand_link.prim_path}/vis_sphere"
+                vis_prim = create_primitive_mesh(
+                    vis_prim_path,
+                    "Sphere",
+                    extents=1.0
+                )
+                vis_geom = VisualGeomPrim(
+                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, vis_prim_path),
+                    name=f"{self.robot.name}:arm_{arm}:vis_sphere"
+                )
+                vis_geom.load(self.robot.scene)
+
+                # Attach a material to this prim
+                sphere_mat.bind(vis_geom.prim_path)
+
+                vis_geom.scale = th.ones(3) * 0.15
+                vis_geom.set_position_orientation(position=th.zeros(3), orientation=th.tensor([0, 0, 0, 1.0]), frame="parent")
+
+            if USE_VERTICAL_VISUALIZERS:
+                # Add vertical cylinder at EEF
+                vis_prim_path = f"{hand_link.prim_path}/vis_vertical"
+                vis_prim = create_primitive_mesh(
+                    vis_prim_path,
+                    "Cylinder",
+                    extents=1.0
+                )
+                vis_geom = VisualGeomPrim(
+                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, vis_prim_path),
+                    name=f"{self.robot.name}:arm_{arm}:vis_vertical"
+                )
+                
+                vis_geom.load(self.robot.scene)
+
+                # Attach a material to this prim
+                vert_mat.bind(vis_geom.prim_path)
+
+                vis_geom.scale = th.tensor([vis_geom_width, vis_geom_width, 2.0])
+                vis_geom.set_position_orientation(position=th.zeros(3), orientation=th.tensor([0, 0, 0, 1.0]), frame="parent")
+                self.vertical_visualizers[arm] = vis_geom
+
+        self.reachability_visualizers = dict()
+        if USE_REACHABILITY_VISUALIZERS:
+            # Create a square formation in front of the robot as reachability signal
+            torso_link = self.robot.links["torso_link4"]
+            beam_width = 0.005
+            square_distance = 0.6
+            square_width = 0.4
+            square_height = 0.3
+
+            # Create material for beams
+            beam_color = [0.7, 0.7, 0.7]
+            beam_mat_prim_path = f"{self.robot.prim_path}/Looks/square_beam_mat"
+            beam_mat = MaterialPrim(
+                relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, beam_mat_prim_path),
+                name=f"{self.robot.name}:square_beam_mat",
+            )
+            beam_mat.load(self.robot.scene)
+            beam_mat.diffuse_color_constant = th.as_tensor(beam_color)
+            beam_mat.enable_opacity = False
+            beam_mat.opacity_constant = 0.5
+            beam_mat.enable_emission = True
+            beam_mat.emissive_color = np.array(beam_color)
+            beam_mat.emissive_intensity = 10000.0
+
+            edges = [
+                # name, position, scale, orientation
+                ["top", [square_distance, 0, 0.3], [beam_width, beam_width, square_width], [0.0, th.pi/2, th.pi/2]],
+                ["bottom", [square_distance, 0, 0.0], [beam_width, beam_width, square_width], [0.0, th.pi/2, th.pi/2]],
+                ["left", [square_distance, 0.2, 0.15], [beam_width, beam_width, square_height], [0.0, 0.0, 0.0]],
+                ["right", [square_distance, -0.2, 0.15], [beam_width, beam_width, square_height], [0.0, 0.0, 0.0]]
+            ]
+
+            for name, position, scale, orientation in edges:
+                edge_prim_path = f"{torso_link.prim_path}/square_edge_{name}"
+                edge_prim = create_primitive_mesh(
+                    edge_prim_path,
+                    "Cylinder",
+                    extents=1.0
+                )
+                edge_geom = VisualGeomPrim(
+                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, edge_prim_path),
+                    name=f"{self.robot.name}:square_edge_{name}"
+                )
+                edge_geom.load(self.robot.scene)
+                beam_mat.bind(edge_geom.prim_path)
+                edge_geom.scale = th.tensor(scale)
+                edge_geom.set_position_orientation(
+                    position=th.tensor(position),
+                    orientation=T.euler2quat(th.tensor(orientation)),
+                    frame="parent"
+                )
+                self.reachability_visualizers[name] = edge_geom
+            self._prev_base_motion = False
 
     def _setup_task_instruction_ui(self):
         """Set up the UI for displaying task instructions and goal status."""
@@ -993,6 +1046,18 @@ class OGRobotServer:
                 self._prev_grasp_status[arm] = is_grasping
                 for cylinder in self.eef_cylinder_geoms[arm]:
                     cylinder.visible = not is_grasping
+    
+    def _update_reachability_visualizers(self):
+        if not USE_REACHABILITY_VISUALIZERS:
+            return
+
+        # Show visualizers only when there's nonzero base motion
+        has_base_motion = th.any(th.abs(self._joint_cmd["base"]) > 0.0)
+        
+        if has_base_motion != self._prev_base_motion:
+            self._prev_base_motion = has_base_motion
+            for edge in self.reachability_visualizers.values():
+                edge.visible = has_base_motion
 
     def num_dofs(self) -> int:
         return self.robot.n_joints
@@ -1192,6 +1257,7 @@ class OGRobotServer:
                 self._update_goal_status(info['done']['goal_status'])
             
             self._update_grasp_status()
+            self._update_reachability_visualizers()
 
     def reset(self):
         # Reset internal variables
