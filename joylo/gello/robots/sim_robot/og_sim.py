@@ -438,13 +438,13 @@ class OGRobotServer:
         }]
 
         if ghosting:
-            cfg["objects"] += {
+            cfg["objects"].append({
                 "type": "USDObject",
                 "name": "ghost",
-                "usd_path": R1.usd_path,
+                "usd_path": os.path.join(gm.ASSET_PATH, f"models/r1/usd/r1.usda"),
                 "visual_only": True,
                 "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0],
-            }
+            })
 
         # If we're R1, don't use rigid trunk
         if robot == "R1":
