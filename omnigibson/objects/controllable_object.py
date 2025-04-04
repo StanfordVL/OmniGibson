@@ -871,7 +871,7 @@ class ControllableObject(BaseObject):
         """
         raise NotImplementedError
 
-    @property
+    @cached_property
     def controller_action_idx(self):
         """
         Returns:

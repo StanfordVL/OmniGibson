@@ -19,7 +19,7 @@ robot = "R1"
 
 with open("/home/arpit/test_projects/mimicgen/kwargs.pickle", "rb") as f:
     kwargs = pickle.load(f)
-    breakpoint()
+    # breakpoint()
     # kwargs["scene"] = {"type": "Scene"}
     if robot == "R1":
         kwargs["robots"][0]["type"] = "R1"
@@ -42,7 +42,8 @@ env.robots[0].reload_controllers(controller_config=controller_config)
 env.robots[0]._grasping_mode = "sticky"
 robot = env.robots[0]
 robot.set_position_orientation(position=th.tensor([-1.0, 0.0, 0.0]))
-primitive = StarterSemanticActionPrimitives(env, env.robots[0], enable_head_tracking=True)
+# primitive = StarterSemanticActionPrimitives(env, env.robots[0], enable_head_tracking=True)
+primitive = StarterSemanticActionPrimitives(env, env.robots[0], enable_head_tracking=True, curobo_batch_size=10, arm_side="right")
 
 og.sim.viewer_camera.set_position_orientation(th.tensor([0.0077, 0.1327, 4.9984]), th.tensor([ 0.0108, -0.0106, -0.6998,  0.7142]))
 env._external_sensors["external_sensor0"].set_position_orientation(th.tensor([0.0077, 0.1327, 4.9984]), th.tensor([ 0.0108, -0.0106, -0.6998,  0.7142]))
@@ -99,7 +100,7 @@ if add_distractors:
     chair_4.set_position_orientation(position=th.tensor([-1.2552,  2.3325,  0.4930]))
     for _ in range(20): og.sim.step()
 
-num_trials = 10
+num_trials = 2
 num_base_mp_failures, num_base_sampling_failures = 0, 0
 for i in range(num_trials):
     print(f"========= Trial {i} =========")
