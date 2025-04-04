@@ -6,6 +6,16 @@ echo "Using dataset path: $DATASET_PATH"
 
 SRC_DIR="./sampled_task"
 
+FORCE=false
+while getopts "f" opt; do
+  case $opt in
+    f) FORCE=true ;;
+    *) echo "Usage: $0 [-f]" >&2
+       echo "  -f  Force overwrite of existing files" >&2
+       exit 1 ;;
+  esac
+done
+
 for file in "$SRC_DIR"/*_template.json; do
     filename=$(basename "$file")
     
@@ -19,10 +29,15 @@ for file in "$SRC_DIR"/*_template.json; do
     fi
     
     # Check if file already exists in destination
-    if [ -f "$dest_dir/$filename" ]; then
+    if [ -f "$dest_dir/$filename" ] && [ "$FORCE" = false ]; then
         echo "WARNING: $filename already exists in $dest_dir/ - skipping"
     else
-        echo "Copying $filename to $dest_dir/"
+        # If force is true, we'll overwrite without a warning
+        if [ -f "$dest_dir/$filename" ] && [ "$FORCE" = true ]; then
+            echo "Overwriting $filename in $dest_dir/"
+        else
+            echo "Copying $filename to $dest_dir/"
+        fi
         cp "$file" "$dest_dir/"
     fi
 done
