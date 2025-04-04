@@ -426,7 +426,13 @@ class CuRoboMotionGenerator:
             kc.fixed_transforms[link_idx] = cf_to_pf_pose
 
     def solve_ik_batch(
-        self, start_state, goal_pose, plan_config, link_poses=None, emb_sel=CuRoboEmbodimentSelection.DEFAULT
+        self,
+        start_state,
+        goal_pose,
+        plan_config,
+        link_poses=None,
+        eyes_targets=None,
+        emb_sel=CuRoboEmbodimentSelection.DEFAULT,
     ):
         """Find IK solutions to reach a batch of goal poses from a batch of start joint states.
 
@@ -467,7 +473,13 @@ class CuRoboMotionGenerator:
         return result, success, joint_state
 
     def plan_batch(
-        self, start_state, goal_pose, plan_config, link_poses=None, emb_sel=CuRoboEmbodimentSelection.DEFAULT
+        self,
+        start_state,
+        goal_pose,
+        plan_config,
+        link_poses=None,
+        eyes_targets=None,
+        emb_sel=CuRoboEmbodimentSelection.DEFAULT,
     ):
         """Plan a batch of trajectories from a batch of start joint states to a batch of goal poses.
 
@@ -485,7 +497,9 @@ class CuRoboMotionGenerator:
             bool: Whether the IK solution was successful for the batch.
             JointState: Joint state of the robot at the goal pose.
         """
-        result = self.mg[emb_sel].plan_batch(start_state, goal_pose, plan_config, link_poses=link_poses)
+        result = self.mg[emb_sel].plan_batch(
+            start_state, goal_pose, plan_config, link_poses=link_poses, eyes_targets=eyes_targets
+        )
         success = result.success
         if result.interpolated_plan is None:
             joint_state = [None] * goal_pose.batch
@@ -513,6 +527,8 @@ class CuRoboMotionGenerator:
         skip_obstacle_update=False,
         ik_only=False,
         ik_world_collision_check=True,
+        eyes_target_pos=None,
+        eyes_target_quat=None,
         emb_sel=CuRoboEmbodimentSelection.DEFAULT,
     ):
         """
@@ -555,6 +571,8 @@ class CuRoboMotionGenerator:
             skip_obstacle_update (bool): Whether to skip updating the obstacles in the world collision checker
             ik_only (bool): Whether to only run the IK solver and not the trajectory optimization
             ik_world_collision_check (bool): Whether to check for collisions in the world when running the IK solver for ik_only mode
+            eyes_target_pos (None or Dict[str, th.Tensor] or th.Tensor): If specified, the target position for the eyes to look at (visibility cost)
+            eyes_target_quat (None or Dict[str, th.Tensor] or th.Tensor): If specified, the target quaternion for the eyes to look at (visibility cost)
             emb_sel (CuRoboEmbodimentSelection): Which embodiment selection to use for computing trajectories
         Returns:
             2-tuple or list of MotionGenResult: If @return_full_result is True, will return a list of raw MotionGenResult
@@ -586,12 +604,25 @@ class CuRoboMotionGenerator:
             target_pos = {self.ee_link[emb_sel]: target_pos}
         if isinstance(target_quat, th.Tensor):
             target_quat = {self.ee_link[emb_sel]: target_quat}
-
         assert target_pos.keys() == target_quat.keys(), "Expected target_pos and target_quat to have the same keys!"
+
+        has_eyes_target = eyes_target_pos is not None and eyes_target_quat is not None
+        if has_eyes_target:
+            # If eyes_target_pos and eyes_target_quat are torch tensors, it's assumed that they correspond to the default eyes link
+            if isinstance(eyes_target_pos, th.Tensor):
+                eyes_target_pos = {"eyes": eyes_target_pos}
+            if isinstance(eyes_target_quat, th.Tensor):
+                eyes_target_quat = {"eyes": eyes_target_quat}
+            assert (
+                eyes_target_pos.keys() == eyes_target_quat.keys()
+            ), "Expected eyes_target_pos and eyes_target_quat to have the same keys!"
 
         # Make sure tensor shapes are (N, 3) and (N, 4)
         target_pos = {k: v if len(v.shape) == 2 else v.unsqueeze(0) for k, v in target_pos.items()}
         target_quat = {k: v if len(v.shape) == 2 else v.unsqueeze(0) for k, v in target_quat.items()}
+        if has_eyes_target:
+            eyes_target_pos = {k: v if len(v.shape) == 2 else v.unsqueeze(0) for k, v in eyes_target_pos.items()}
+            eyes_target_quat = {k: v if len(v.shape) == 2 else v.unsqueeze(0) for k, v in eyes_target_quat.items()}
 
         for link_name in target_pos.keys():
             target_pos_link = target_pos[link_name]
@@ -620,6 +651,35 @@ class CuRoboMotionGenerator:
 
             target_pos[link_name] = target_pos_link
             target_quat[link_name] = target_quat_link
+
+        if has_eyes_target:
+            for link_name in eyes_target_pos.keys():
+                eyes_target_pos_link = eyes_target_pos[link_name]
+                eyes_target_quat_link = eyes_target_quat[link_name]
+                if not is_local:
+                    # Convert target pose to base link *in the eyes of curobo*.
+                    # For stationary arms (e.g. Franka), it is @robot.root_link / @robot.base_footprint_link_name ("base_link")
+                    # For holonomic robots (e.g. Tiago, R1), it is @robot.root_link ("base_footprint_x"), not @robot.base_footprint_link_name ("base_link")
+                    curobo_base_link_name = self.base_link[emb_sel]
+                    robot_pos, robot_quat = self.robot.links[curobo_base_link_name].get_position_orientation()
+                    target_pose = th.zeros((eyes_target_pos_link.shape[0], 4, 4))
+                    target_pose[:, 3, 3] = 1.0
+                    target_pose[:, :3, :3] = T.quat2mat(eyes_target_quat_link)
+                    target_pose[:, :3, 3] = eyes_target_pos_link
+                    inv_robot_pose = T.pose_inv(T.pose2mat((robot_pos, robot_quat)))
+                    target_pose = inv_robot_pose.view(1, 4, 4) @ target_pose
+                    eyes_target_pos_link = target_pose[:, :3, 3]
+                    eyes_target_quat_link = T.mat2quat(target_pose[:, :3, :3])
+
+                # Map xyzw -> wxyz quat
+                eyes_target_quat_link = eyes_target_quat_link[:, [3, 0, 1, 2]]
+
+                # Make sure tensors are on device and contiguous
+                eyes_target_pos_link = self._tensor_args.to_device(eyes_target_pos_link).contiguous()
+                eyes_target_quat_link = self._tensor_args.to_device(eyes_target_quat_link).contiguous()
+
+                eyes_target_pos[link_name] = eyes_target_pos_link
+                eyes_target_quat[link_name] = eyes_target_quat_link
 
         # Define the plan config
         plan_cfg = lazy.curobo.wrap.reacher.motion_gen.MotionGenPlanConfig(
@@ -707,6 +767,12 @@ class CuRoboMotionGenerator:
                     if additional_link in target_pos
                     else rollout_fn._link_pose_convergence[additional_link].disable_cost()
                 )
+            if rollout_fn.eyes_target_cost is not None:
+                (
+                    rollout_fn.eyes_target_cost.enable_cost()
+                    if has_eyes_target
+                    else rollout_fn.eyes_target_cost.disable_cost()
+                )
 
         if ik_only:
             for rollout_fn in self.mg[emb_sel].ik_solver.get_all_rollout_instances():
@@ -768,6 +834,35 @@ class CuRoboMotionGenerator:
 
                 ik_goal_batch_by_link[link_name] = ik_goal_batch
 
+            eyes_target_batch_by_link = dict()
+            if has_eyes_target:
+                for link_name in eyes_target_pos.keys():
+                    eyes_target_pos_link = eyes_target_pos[link_name]
+                    eyes_target_quat_link = eyes_target_quat[link_name]
+
+                    batch_eyes_target_pos = eyes_target_pos_link[offset_idx : offset_idx + end_idx]
+                    batch_eyes_target_quat = eyes_target_quat_link[offset_idx : offset_idx + end_idx]
+
+                    # Pad the goal if we're in our final batch
+                    if using_remainder:
+                        new_batch_eyes_target_pos = self._tensor_args.to_device(th.zeros((self.batch_size, 3)))
+                        new_batch_eyes_target_pos[:end_idx] = batch_eyes_target_pos
+                        new_batch_eyes_target_pos[end_idx:] = batch_eyes_target_pos[-1]
+                        batch_eyes_target_pos = new_batch_eyes_target_pos
+                        new_batch_eyes_target_quat = self._tensor_args.to_device(th.zeros((self.batch_size, 4)))
+                        new_batch_eyes_target_quat[:end_idx] = batch_eyes_target_quat
+                        new_batch_eyes_target_quat[end_idx:] = batch_eyes_target_quat[-1]
+                        batch_eyes_target_quat = new_batch_eyes_target_quat
+
+                    # Create IK goal
+                    eyes_target_batch = lazy.curobo.types.math.Pose(
+                        position=batch_eyes_target_pos,
+                        quaternion=batch_eyes_target_quat,
+                        name=link_name,
+                    )
+
+                    eyes_target_batch_by_link[link_name] = eyes_target_batch
+
             # Run batched planning
             if self.debug:
                 self.mg[emb_sel].store_debug_in_result = True
@@ -779,9 +874,17 @@ class CuRoboMotionGenerator:
             if len(ik_goal_batch_by_link) == 0:
                 ik_goal_batch_by_link = None
 
+            if len(eyes_target_batch_by_link) == 0:
+                eyes_target_batch_by_link = None
+
             plan_fn = self.plan_batch if not ik_only else self.solve_ik_batch
             result, success, joint_state = plan_fn(
-                cu_js_batch, main_ik_goal_batch, plan_cfg, link_poses=ik_goal_batch_by_link, emb_sel=emb_sel
+                cu_js_batch,
+                main_ik_goal_batch,
+                plan_cfg,
+                link_poses=ik_goal_batch_by_link,
+                eyes_targets=eyes_target_batch_by_link,
+                emb_sel=emb_sel,
             )
             if self.debug:
                 breakpoint()
