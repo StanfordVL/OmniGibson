@@ -13,10 +13,14 @@ import random
 import cv2
 import gymnasium as gym
 import torch as th
+import numpy as np
 from aenum import IntEnum, auto
 from matplotlib import pyplot as plt
+from scipy.spatial.transform import Rotation as R
+import scipy.spatial.transform as tf
 
 import omnigibson as og
+import omnigibson.lazy as lazy
 import omnigibson.utils.transform_utils as T
 from omnigibson import object_states
 from omnigibson.action_primitives.action_primitive_set_base import (
@@ -231,6 +235,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self._curobo_batch_size = curobo_batch_size
         self.debug_visual_marker = debug_visual_marker
 
+        self.mp_err = "None"
+        self.target_eyes_pose = None
+        self.target_eyes_pose_arr = []
+
     @property
     def arm(self):
         assert isinstance(self.robot, ManipulationRobot), "Cannot use arm for non-manipulation robot"
@@ -238,8 +246,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
     def _postprocess_action(self, action):
         """Postprocesses action by applying head tracking."""
-        if self._enable_head_tracking:
-            action = self._overwrite_head_action(action)
+        # if self._enable_head_tracking:
+        #     action = self._overwrite_head_action(action)
         return action
 
     def get_action_space(self):
@@ -787,6 +795,167 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         return joint_pos
 
+    def sample_eyes_pos(self, source_pose, robot_pose):
+        """
+        Samples new origins within a cube centered around the given origin.
+        
+        :param origin: Tuple (x, y, z) representing the current origin.
+        :param cube_size: Side length of the cube.
+        :param num_samples: Number of samples to generate.
+        :return: NumPy array of shape (num_samples, 3) containing sampled positions.
+        """
+
+        eye_pose_wrt_world = source_pose
+        robot_pose_wrt_world = robot_pose
+        # breakpoint()
+        eye_pose_wrt_robot = th.linalg.inv(T.pose2mat(robot_pose_wrt_world)) @ T.pose2mat(eye_pose_wrt_world)
+        eye_pos_wrt_robot = eye_pose_wrt_robot[:3, 3]
+        
+        # Generate random samples within the cube range
+        x_sample = np.random.uniform(eye_pos_wrt_robot[0] + 0.1, eye_pos_wrt_robot[0] + 0.2)
+        y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.01, eye_pos_wrt_robot[1] + 0.01)
+        z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.2, eye_pos_wrt_robot[2] - 0.1)
+
+        sampled_eyes_pos_wrt_robot = np.array([x_sample, y_sample, z_sample])
+        sampled_eyes_pos_wrt_world = T.pose2mat(robot_pose_wrt_world) @ np.hstack([sampled_eyes_pos_wrt_robot, 1])
+
+        return sampled_eyes_pos_wrt_world[:3]
+    
+    def sample_eyes_orn(self, V, ref_quat=th.tensor([ 0.406, -0.406, -0.579,  0.579]), num_samples=100, max_angle=np.radians(30), anisotropy=(1, 1)):
+        V = np.asarray(V, dtype=np.float64)
+        if np.linalg.norm(V) == 0:
+            raise ValueError("V must be non-zero")
+        
+        z_axis = -V / np.linalg.norm(V)  # Desired local -Z axis
+
+        # If no reference, use identity (X = [1, 0, 0])
+        if ref_quat is None:
+            ref_x = np.array([1.0, 0.0, 0.0])
+        else:
+            ref_rot = R.from_quat(ref_quat)
+            ref_x = ref_rot.apply([1.0, 0.0, 0.0])  # Local X axis in base frame
+
+        # Project ref_x onto the plane orthogonal to z_axis
+        x_axis = ref_x - np.dot(ref_x, z_axis) * z_axis
+        norm = np.linalg.norm(x_axis)
+        if norm < 1e-6:
+            # ref_x was too aligned with z_axis, pick arbitrary orthogonal vector
+            x_axis = np.cross(z_axis, np.array([1.0, 0.0, 0.0]))
+            if np.linalg.norm(x_axis) < 1e-6:
+                x_axis = np.cross(z_axis, np.array([0.0, 1.0, 0.0]))
+        x_axis /= np.linalg.norm(x_axis)
+
+        # Compute Y to complete orthonormal frame
+        y_axis = np.cross(z_axis, x_axis)
+
+        # Compose rotation matrix with columns: [x, y, z]
+        rot_matrix = np.column_stack((x_axis, y_axis, z_axis))
+
+        rot = R.from_matrix(rot_matrix)
+        adjusted_base_quat = rot.as_quat()
+
+        sampled_quaternions = []
+        x_scale, y_scale = anisotropy
+
+        for _ in range(num_samples):
+            # To understand this: think of a plane perpendicular to the -z-axis of the eye frame. To obtain gaze that is close to the object, what we want is different vecotrs 
+            # that intersect the plane at different points within a circle. This is what apha and beta ensures. 
+            # beta corresponds to which direction from the origin, along the radius to sample the point (hence it is between 0 and 2pi) and
+            # alpha corresponds to how far from the origin, along the chosen direction, to sample the point (hence it is between 0 and max_angle)
+            alpha = np.random.uniform(0, max_angle)  # Random perturbation angle
+            beta = np.random.uniform(0, 2 * np.pi)  # Direction in x-y plane
+
+            # Perturb only in x and y to restrict roll (rotation around z)
+            perturb_axis = np.array([x_scale * np.cos(beta), y_scale * np.sin(beta), 0])
+            perturb_axis /= np.linalg.norm(perturb_axis)  # Normalize
+
+            # Generate perturbation quaternion
+            perturb_quat = tf.Rotation.from_rotvec(alpha * perturb_axis).as_quat()  
+
+            # Apply perturbation to adjusted base quaternion
+            new_quat = tf.Rotation.from_quat(adjusted_base_quat) * tf.Rotation.from_quat(perturb_quat)
+            new_quat = th.tensor(new_quat.as_quat(), dtype=th.float32)
+            sampled_quaternions.append(new_quat)
+
+        return sampled_quaternions
+    
+    def quaternion_angular_distance(self, q1, q2):
+        """
+        Computes the angular distance between two unit quaternions.
+        
+        :param q1: First quaternion (w, x, y, z).
+        :param q2: Second quaternion (w, x, y, z).
+        :return: Angular distance in radians.
+        """
+        dot_product = np.dot(q1, q2)
+        dot_product = np.clip(dot_product, -1.0, 1.0)  # Ensure numerical stability
+        return 2 * np.arccos(abs(dot_product))
+    
+    def _target_in_reach_of_robot_and_visible(self, target_pose, initial_joint_pos=None, skip_obstacle_update=False):
+        """
+        Determines whether the eef for the robot can reach the target pose in the world frame
+
+        Args:
+            target_pose (Tuple[th.tensor, th.tensor]): target pose to reach for the default end-effector in the world frame
+            skip_obstacle_update (bool): Whether to skip updating obstacles
+
+        Returns:
+            bool: Whether the default eef can reach the target pose
+        """
+        # sample pos and orn for the eyes link and check if IK solution exists
+        robot_joint_names = list(self.robot.joints.keys())
+        cu_js = lazy.curobo.types.state.JointState(position=self._motion_generator._tensor_args.to_device(initial_joint_pos), joint_names=robot_joint_names).get_ordered_joint_state(self._motion_generator.mg["default"].kinematics.joint_names)
+        retval = self._motion_generator.mg["default"].kinematics.compute_kinematics(cu_js, link_name="eyes")
+        eye_pos_for_sampled_base_pos = retval.ee_position.cpu()[0]
+        eye_quat_for_sampled_base_pos = retval.ee_quaternion.cpu()[0]
+        # convert quat from wxyz (curobo) to xyzw (OG)
+        eye_quat_for_sampled_base_pos = th.roll(eye_quat_for_sampled_base_pos, -1)
+        eye_pose_for_sampled_base_pose = (eye_pos_for_sampled_base_pos, eye_quat_for_sampled_base_pos)
+        obj_pos = self._tracking_object.get_position()
+
+        robot_pose2d_for_sampled_base = th.tensor([initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]])
+        robot_pose_for_sampled_base = self._get_robot_pose_from_2d_pose(robot_pose2d_for_sampled_base)
+        # breakpoint()
+
+        for _ in range(10):
+            sampled_eyes_pos = self.sample_eyes_pos(source_pose=eye_pose_for_sampled_base_pose, robot_pose=robot_pose_for_sampled_base)
+            eye_to_obj_vec = obj_pos - sampled_eyes_pos
+            print("dist: ", th.linalg.norm(eye_pos_for_sampled_base_pos - sampled_eyes_pos))
+            # from omnigibson.utils.ui_utils import draw_line
+            # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist())
+            # for _ in range(20): og.sim.step()
+            eye_to_obj_vec_wrt_robot = th.linalg.inv(T.pose2mat(robot_pose_for_sampled_base))[:3, :3] @ eye_to_obj_vec.to(th.float32)
+
+            # quat = eye_pose_wrt_world[1].numpy()
+            sampled_eyes_orn_wrt_robot_arr = self.sample_eyes_orn(eye_to_obj_vec_wrt_robot, num_samples=10, max_angle=np.radians(30), anisotropy=(1, 1))
+            # breakpoint()
+            for j in range(10):
+                sampled_eyes_orn_wrt_robot = sampled_eyes_orn_wrt_robot_arr[j]
+                sampled_eyes_orn_wrt_world = th.matmul(T.pose2mat(robot_pose_for_sampled_base)[:3, :3], T.quat2mat(sampled_eyes_orn_wrt_robot))
+                sampled_eyes_orn_wrt_world = T.mat2quat(sampled_eyes_orn_wrt_world)
+                target_pose["eyes"] = (th.tensor(sampled_eyes_pos, dtype=th.float32), th.tensor(sampled_eyes_orn_wrt_world))
+                print("angle: ", np.rad2deg(self.quaternion_angular_distance(eye_quat_for_sampled_base_pos, sampled_eyes_orn_wrt_world)))
+
+                # make sure target_pose has eyes and right_eef_link in keys
+                # breakpoint()
+
+                # TODO: Currently, the batch has same target pose. Each element in a batch does run independently, so it's still useful. 
+                # But, check if it's better for speed to have different target poses for each element in a batch.
+                retval = self._ik_solver_cartesian_to_joint_space(
+                    target_pose,
+                    initial_joint_pos=initial_joint_pos,
+                    skip_obstacle_update=skip_obstacle_update,
+                    # visibility_constraint=True,
+                )
+                print("retval: ", retval)
+                if retval is not None:
+                    # constraint_satisfied = True
+                    self.target_eyes_pose_arr.append(target_pose["eyes"])
+                    return True
+        
+        self.target_eyes_pose_arr.append(None)
+        return False
+    
     def _target_in_reach_of_robot(self, target_pose, initial_joint_pos=None, skip_obstacle_update=False):
         """
         Determines whether the eef for the robot can reach the target pose in the world frame
@@ -832,9 +1001,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         target_pos = {}
         target_quat = {}
         batched = False
-        for arm, pose in target_pose.items():
-            target_pos[self.robot.eef_link_names[arm]] = pose[0]
-            target_quat[self.robot.eef_link_names[arm]] = pose[1]
+        for eef, pose in target_pose.items():
+            if eef == "eyes":
+                target_pos[eef] = pose[0]
+                target_quat[eef] = pose[1]
+            elif eef in self.robot.eef_link_names:
+                target_pos[self.robot.eef_link_names[eef]] = pose[0]
+                target_quat[self.robot.eef_link_names[eef]] = pose[1]
+            
             if len(pose[0].shape) == 2:
                 batched = True
 
@@ -871,6 +1045,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ik_world_collision_check=False,
             emb_sel=CuRoboEmbodimentSelection.ARM,
         )
+        print("IK solver successes: ", successes)
 
         if not batched:
             # Grab the first successful joint state if found
@@ -980,7 +1155,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if not skip_obstacle_update:
             self._motion_generator.update_obstacles(ignore_objects=ignore_objects)
 
-        successes, traj_paths = self._motion_generator.compute_trajectories(
+        eyes_target_pos, eyes_target_quat = None, None
+        if self._enable_head_tracking:
+            obj_pose = self._tracking_object.get_position_orientation()
+            eyes_target_pos = obj_pose[0]
+            eyes_target_quat = obj_pose[1]
+
+        results, traj_paths = self._motion_generator.compute_trajectories(
             target_pos=target_pos,
             target_quat=target_quat,
             initial_joint_pos=None,
@@ -990,7 +1171,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ik_fail_return=m.MAX_IK_FAILURES_BEFORE_RETURN,
             enable_finetune_trajopt=True,
             finetune_attempts=1,
-            return_full_result=False,
+            return_full_result=True,
             success_ratio=1.0 / self._motion_generator.batch_size,
             attached_obj=attached_obj,
             attached_obj_scale=None,
@@ -999,24 +1180,26 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ik_only=False,
             ik_world_collision_check=True,
             emb_sel=embodiment_selection,
+            eyes_target_pos=eyes_target_pos, 
+            eyes_target_quat=eyes_target_quat
         )
         # Grab the first successful trajectory if found
+        successes = results[0].success 
+        print("Base motion planning successes: ", successes)
         success_idx = th.where(successes)[0].cpu()
         if len(success_idx) == 0:
-            # print("motion planning fails")
-            # breakpoint()
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "There is no accessible path from where you are to the desired pose. Try again",
+            print("Base motion planning failed", results[0].status)
+            self.mp_err = "BaseMPFailed"
+            q_traj = None            
+        else:
+            traj_path = traj_paths[success_idx[0]]
+            q_traj = (
+                self._motion_generator.path_to_joint_trajectory(traj_path, get_full_js=True, emb_sel=embodiment_selection)
+                .cpu()
+                .float()
             )
-
-        traj_path = traj_paths[success_idx[0]]
-        q_traj = (
-            self._motion_generator.path_to_joint_trajectory(traj_path, get_full_js=True, emb_sel=embodiment_selection)
-            .cpu()
-            .float()
-        )
-        q_traj = self._motion_generator.add_linearly_interpolated_waypoints(traj=q_traj, max_inter_dist=0.01)
+            q_traj = self._motion_generator.add_linearly_interpolated_waypoints(traj=q_traj, max_inter_dist=0.01)
+            self.mp_err = "None"
 
         return q_traj
 
@@ -1581,7 +1764,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         else:
             raise ValueError(f"Unsupported frame: {frame}")
 
-    def _navigate_to_pose(self, pose_2d, skip_obstacle_update=False):
+    def _navigate_to_pose(self, pose_2d, skip_obstacle_update=False, visibility_constraint=False):
         """
         Yields the action to navigate robot to the specified 2d pose
 
@@ -1598,14 +1781,22 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         target_pos = {self.robot.base_footprint_link_name: pose_3d[0]}
         target_quat = {self.robot.base_footprint_link_name: pose_3d[1]}
 
-        # print("base motion planning")
-        # breakpoint()
+        if visibility_constraint:
+            target_pos["eyes"] = self.target_eyes_pose[0]
+            target_quat["eyes"] = self.target_eyes_pose[1]
+        
+        print("Base motion planning")
         q_traj = self._plan_joint_motion(
             target_pos,
             target_quat,
             embodiment_selection=CuRoboEmbodimentSelection.BASE,
             skip_obstacle_update=skip_obstacle_update,
         )
+
+        # If no valid MP was found, yield None (don't return None, that does not work)
+        if q_traj is None:
+            yield None
+        
         yield from self._execute_motion_plan(q_traj)
 
     # (TODO) add a function to draw curobo-generated plans.
@@ -1655,7 +1846,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         yield from self._navigate_to_obj(obj, eef_pose=eef_pose, skip_obstacle_update=True)
 
-    def _navigate_to_obj(self, obj, eef_pose=None, skip_obstacle_update=False):
+    def _navigate_to_obj(self, obj, eef_pose=None, skip_obstacle_update=False, visibility_constraint=False):
         """
         Yields action to navigate the robot to be in range of the pose
 
@@ -1666,14 +1857,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             th.tensor or None: Action array for one step for the robot to navigate in range or None if it is done navigating
         """
-        pose = self._sample_pose_near_object(obj, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update)
+        pose = self._sample_pose_near_object(obj, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update, visibility_constraint=visibility_constraint)
         if pose is None:
-            raise ActionPrimitiveError(
-                ActionPrimitiveError.Reason.PLANNING_ERROR,
-                "Could not find a valid pose near the object",
-                {"object": obj.name},
-            )
-        yield from self._navigate_to_pose(pose, skip_obstacle_update=skip_obstacle_update)
+            print(f"Could not find a valid pose near the object {obj.name}")
+            self.mp_err = "BaseSamplingFailed"
+            yield None
+        
+        yield from self._navigate_to_pose(pose, skip_obstacle_update=skip_obstacle_update, visibility_constraint=visibility_constraint)
 
     def _navigate_to_pose_direct(self, pose_2d, low_precision=False):
         """
@@ -1789,6 +1979,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         plan_with_open_gripper=False,
         sampling_attempts=m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT,
         skip_obstacle_update=False,
+        visibility_constraint=False,
     ):
         """
         Returns a 2d pose for the robot within in the range of the object and where the robot is not in collision with anything
@@ -1835,6 +2026,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             self._motion_generator.update_obstacles()
         while attempt < sampling_attempts:
             candidate_poses = []
+            self.target_eyes_pose_arr = []
             for _ in range(self._curobo_batch_size):
                 candidate_2d_pose_correct_room = None
                 for _ in range(m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_FOR_CORRECT_ROOM):
@@ -1864,12 +2056,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     eef_pose=target_pose,
                     plan_with_open_gripper=plan_with_open_gripper,
                     skip_obstacle_update=True,
+                    visibility_constraint=visibility_constraint,
                 )
 
                 # If anything in result is true, return the pose
                 for i, res in enumerate(result):
                     if res:
                         indented_print("Found valid position near object.")
+                        if visibility_constraint:
+                            self.target_eyes_pose = self.target_eyes_pose_arr[i]
                         return candidate_poses[i]
 
             attempt += self._curobo_batch_size
@@ -1988,7 +2183,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             {"target object": target_obj.name, "object in hand": held_obj.name, "relation": pred_map[predicate]},
         )
 
-    def _validate_poses(self, candidate_poses, eef_pose=None, plan_with_open_gripper=False, skip_obstacle_update=False):
+    def _validate_poses(self, candidate_poses, eef_pose=None, plan_with_open_gripper=False, skip_obstacle_update=False, visibility_constraint=False):
         """
         Determines whether the robot can reach all poses on the objects and is not in collision at the specified 2d poses
 
@@ -2037,12 +2232,18 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if invalid_results[i].item():
                 continue
 
-            if eef_pose is not None:
+            if eef_pose is not None and not visibility_constraint:
                 # Use the candidate joint position as the initial joint position to update the lock joints in curobo
                 # This effectively moves the robot base in curobo when testing for arm reachability to the target eef_pose
                 candidate_joint_position = candidate_joint_positions[i]
                 if not self._target_in_reach_of_robot(
                     eef_pose, initial_joint_pos=candidate_joint_position, skip_obstacle_update=skip_obstacle_update
+                ):
+                    invalid_results[i] = True
+            elif eef_pose is not None and visibility_constraint:
+                candidate_joint_position = candidate_joint_positions[i]
+                if not self._target_in_reach_of_robot_and_visible(
+                    eef_pose, initial_joint_pos=candidate_joint_position, skip_obstacle_update=skip_obstacle_update,
                 ):
                     invalid_results[i] = True
 

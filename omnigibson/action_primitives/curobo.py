@@ -198,18 +198,18 @@ class CuRoboMotionGenerator:
             )
             self.mg[emb_sel] = lazy.curobo.wrap.reacher.motion_gen.MotionGen(motion_gen_config)
 
-        for mg in self.mg.values():
-            mg.warmup(enable_graph=False, warmup_js_trajopt=False, batch=batch_size, warmup_joint_delta=0.0)
+        # for mg in self.mg.values():
+        #     mg.warmup(enable_graph=False, warmup_js_trajopt=False, batch=batch_size, warmup_joint_delta=0.0)
 
-            # Make sure all cuda graphs have been warmed up
-            for solver in [mg.ik_solver, mg.trajopt_solver, mg.finetune_trajopt_solver]:
-                if solver.solver.use_cuda_graph_metrics:
-                    assert solver.solver.safety_rollout._metrics_cuda_graph_init
-                    if isinstance(solver, lazy.curobo.wrap.reacher.trajopt.TrajOptSolver):
-                        assert solver.interpolate_rollout._metrics_cuda_graph_init
-                for opt in solver.solver.optimizers:
-                    if opt.use_cuda_graph:
-                        assert opt.cu_opt_init
+        #     # Make sure all cuda graphs have been warmed up
+        #     for solver in [mg.ik_solver, mg.trajopt_solver, mg.finetune_trajopt_solver]:
+        #         if solver.solver.use_cuda_graph_metrics:
+        #             assert solver.solver.safety_rollout._metrics_cuda_graph_init
+        #             if isinstance(solver, lazy.curobo.wrap.reacher.trajopt.TrajOptSolver):
+        #                 assert solver.interpolate_rollout._metrics_cuda_graph_init
+        #         for opt in solver.solver.optimizers:
+        #             if opt.use_cuda_graph:
+        #                 assert opt.cu_opt_init
 
     def update_joint_limits(self, robot_cfg_obj, emb_sel):
         joint_limits = robot_cfg_obj.kinematics.kinematics_config.joint_limits
@@ -683,7 +683,8 @@ class CuRoboMotionGenerator:
 
         # Define the plan config
         plan_cfg = lazy.curobo.wrap.reacher.motion_gen.MotionGenPlanConfig(
-            enable_graph=False,
+            enable_graph=True,
+            enable_opt=True,
             max_attempts=max_attempts,
             timeout=timeout,
             enable_graph_attempt=None,
@@ -892,13 +893,13 @@ class CuRoboMotionGenerator:
             # Append results
             results.append(result)
             successes = th.concatenate([successes, success[:end_idx]])
-            paths += joint_state[:end_idx]
+            paths += joint_state
 
         # Detach attached object if it was attached
         self._detach_objects_from_robot(attached_info, emb_sel)
 
         if return_full_result:
-            return results
+            return results, paths
         else:
             return successes, paths
 
