@@ -126,7 +126,7 @@ def run_vhacd(input_mesh, hull_count):
             raise ValueError(f"VHACD failed with exit code {e.returncode}")
 
 
-HULL_COUNTS = [16]
+HULL_COUNTS = [16, 32]
 USE_METHODS = {
 #     "coacd": run_coacd,
 #     "vhacd": run_vhacd,
@@ -170,26 +170,6 @@ def _create_collision_obj_from_verts_faces(vertices, faces, parent, tag):
 def generate_collision_mesh(obj, preferred_method=None, preferred_hull_count=None):
     if rt.classOf(obj) != rt.Editable_Poly:
         return
-
-    parsed_name = parse_name(obj.name)
-    if not parsed_name:
-        return
-
-    # Does it already have a collision mesh? If so, move on.
-    for child in obj.children:
-        parsed_child_name = parse_name(child.name)
-        if not parsed_child_name:
-            continue
-
-        # Skip parts etc.
-        if parsed_child_name.group("mesh_basename") != parsed_name.group(
-            "mesh_basename"
-        ):
-            continue
-
-        if parsed_child_name.group("meta_type") == "collision":
-            # print("Collision mesh already exists for", obj.name, ", skipping.")
-            return
 
     # Get the vertices and faces
     verts = np.array(
@@ -299,11 +279,28 @@ def generate_all_missing_collision_meshes():
                 (model_id, link_name)
             ]
 
-        generate_collision_mesh(
-            obj,
-            preferred_method=preferred_method,
-            preferred_hull_count=preferred_hull_count,
-        )
+        # Does it already have a collision mesh? If so, move on.
+        for child in obj.children:
+            parsed_child_name = parse_name(child.name)
+            if not parsed_child_name:
+                continue
+
+            # Skip parts etc.
+            if parsed_child_name.group("mesh_basename") != parsed_name.group(
+                "mesh_basename"
+            ):
+                continue
+
+            if parsed_child_name.group("meta_type") == "collision":
+                print("Collision mesh already exists for", obj.name, ", skipping.")
+                break
+        else:
+            # Generate teh collision mesh if we didnt already find one.
+            generate_collision_mesh(
+                obj,
+                preferred_method=preferred_method,
+                preferred_hull_count=preferred_hull_count,
+            )
 
 
 def main():
