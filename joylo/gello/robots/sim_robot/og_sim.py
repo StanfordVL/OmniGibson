@@ -98,7 +98,8 @@ gm.ENABLE_HQ_RENDERING = USE_FLUID
 gm.GUI_VIEWPORT_ONLY = True
 RESOLUTION = [1080, 1080]   # [H, W]
 USE_VERTICAL_VISUALIZERS = False
-GHOST_APPEAR_THRESHOLD = 0.5
+GHOST_APPEAR_THRESHOLD = 0.1    # Threshold for showing ghost
+GHOST_APPEAR_TIME = 10 # Number of frames to wait before showing ghost
 
 def get_camera_config(name, relative_prim_path, position, orientation, resolution):
     return {
@@ -498,6 +499,7 @@ class OGRobotServer:
         self.robot = self.env.robots[0]
 
         if self.ghosting:
+            self._ghost_appear_counter = {arm: 0 for arm in self.robot.arm_names}
             self.ghost = self.env.scene.object_registry("name", "ghost")
             for mat in self.ghost.materials:
                 mat.diffuse_color_constant = th.tensor([0.8, 0.0, 0.0], dtype=th.float32)
@@ -1225,21 +1227,34 @@ class OGRobotServer:
             self.ghost.joints[f"torso_joint{i+1}"].set_pos(self.robot.joints[f"torso_joint{i+1}"].get_state()[0])
         for arm in self.robot.arm_names:
             for i in range(6):
-                self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(action[self.robot.arm_action_idx[arm]][i])
+                self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(th.clamp(
+                    action[self.robot.arm_action_idx[arm]][i], 
+                    min=self.ghost.joints[f"{arm}_arm_joint{i+1}"].lower_limit,
+                    max=self.ghost.joints[f"{arm}_arm_joint{i+1}"].upper_limit
+                ))
+            for i in range(2):
+                self.ghost.joints[f"{arm}_gripper_axis{i+1}"].set_pos(
+                    action[self.robot.gripper_action_idx[arm]][0], 
+                    normalized=True
+                )
             # make arm visible if some joint difference is larger than the threshold
-            if th.norm(
+            if th.max(th.abs(
                 self.robot.get_joint_positions()[self.robot.arm_control_idx[arm]] - action[self.robot.arm_action_idx[arm]]
-            ) > GHOST_APPEAR_THRESHOLD:
-                for link_name, link in self.ghost.links.items():
-                    if link_name.startswith(arm):
-                        link.visible = True
+            )) > GHOST_APPEAR_THRESHOLD:
+                self._ghost_appear_counter[arm] += 1
+                if self._ghost_appear_counter[arm] >= GHOST_APPEAR_TIME:
+                    for link_name, link in self.ghost.links.items():
+                        if link_name.startswith(arm):
+                            link.visible = True
             else:
+                self._ghost_appear_counter[arm] = 0
                 for link_name, link in self.ghost.links.items():
                     if link_name.startswith(arm):
                         link.visible = False
 
     def reset(self):
         # Reset internal variables
+        self._ghost_appear_counter = {arm: 0 for arm in self.robot.arm_names}
         self._env_reset_cooldown = 100
         self._current_trunk_translate = 0.5
         self._current_trunk_tilt = 0.0
