@@ -3,7 +3,7 @@
 
     (:objects
         car.n.01_1 - car.n.01
-        floor.n.01_1 - floor.n.01
+        lawn.n.01_1 - lawn.n.01
         packing_box.n.02_1 - packing_box.n.02
         bag.n.06_1 - bag.n.06
         golf_club.n.02_1 - golf_club.n.02
@@ -13,14 +13,14 @@
     )
     
     (:init 
-        (ontop car.n.01_1 floor.n.01_1) 
+        (ontop car.n.01_1 lawn.n.01_1) 
         (inside packing_box.n.02_1 car.n.01_1) 
         (inside bag.n.06_1 car.n.01_1) 
         (inside golf_club.n.02_1 car.n.01_1) 
         (inside baseball_glove.n.01_1 car.n.01_1) 
         (inroom bookcase.n.01_1 living_room) 
-        (inroom floor.n.01_1 garden) 
-        (ontop agent.n.01_1 floor.n.01_1)
+        (inroom lawn.n.01_1 garden) 
+        (ontop agent.n.01_1 lawn.n.01_1)
     )
     
     (:goal 

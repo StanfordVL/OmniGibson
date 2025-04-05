@@ -7,7 +7,6 @@
         door.n.01_1 - door.n.01
         bicycle.n.01_1 - bicycle.n.01
         tennis_racket.n.01_1 - tennis_racket.n.01
-        carton.n.02_1 - carton.n.02
         hockey_stick.n.01_1 - hockey_stick.n.01
         shovel.n.01_1 - shovel.n.01
         bookcase.n.01_1 - bookcase.n.01
@@ -22,7 +21,6 @@
         (ontop bicycle.n.01_1 floor.n.01_1) 
         (ontop tennis_racket.n.01_1 floor.n.01_1) 
         (ontop hockey_stick.n.01_1 floor.n.01_1) 
-        (ontop carton.n.02_1 floor.n.01_1) 
         (ontop shovel.n.01_1 floor.n.01_1) 
         (ontop ashcan.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1) 
@@ -36,12 +34,11 @@
         (and 
             (forall 
                 (?ski.n.01 - ski.n.01) 
-                (ontop ?ski.n.01 ?bookcase.n.01_1)
+                (inside ?ski.n.01 ?cabinet.n.01_1)
             ) 
             (nextto ?bicycle.n.01_1 ?door.n.01_1) 
-            (nextto ?carton.n.02_1 ?door.n.01_1) 
-            (inside ?tennis_racket.n.01_1 ?bookcase.n.01_1)
-            (inside ?hockey_stick.n.01_1 ?bookcase.n.01_1)
+            (nextto ?tennis_racket.n.01_1 ?bookcase.n.01_1)
+            (nextto ?hockey_stick.n.01_1 ?bookcase.n.01_1)
             (inside ?shovel.n.01_1 ?cabinet.n.01_1)
         )
     )
