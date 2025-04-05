@@ -6769,6 +6769,7 @@
         "armchair-qhcrgb": "scenes/house_single_floor",
         "ashtray-nfuxzd": "scenes/house_single_floor",
         "banana-wmglhc": "scenes/house_single_floor",
+        "bar-gjeoer": "scenes/house_single_floor",
         "bar-udatjt": "scenes/house_single_floor",
         "bar_soap-feqemg": "scenes/house_single_floor",
         "baseball-atulnw": "scenes/house_single_floor",
@@ -6776,6 +6777,7 @@
         "baseboard-axyzbi": "scenes/house_single_floor",
         "baseboard-dsajeh": "scenes/house_single_floor",
         "baseboard-gmhhek": "scenes/house_single_floor",
+        "baseboard-peorza": "scenes/house_single_floor",
         "bathtub-euxylv": "scenes/house_single_floor",
         "bathtub-pdcrfs": "scenes/house_single_floor",
         "beaker-qwoqqr": "scenes/house_single_floor",
@@ -6798,6 +6800,7 @@
         "bottle_of_shampoo-stjjjm": "scenes/house_single_floor",
         "bottle_of_water-lojipo": "scenes/house_single_floor",
         "bottom_cabinet-fancyy": "scenes/house_single_floor",
+        "bottom_cabinet-rkgjer": "scenes/house_single_floor",
         "boulder-vxbkjq": "scenes/house_single_floor",
         "bowl-bnobdx": "scenes/house_single_floor",
         "bowl-hitnkv": "scenes/house_single_floor",
@@ -6847,9 +6850,7 @@
         "coffee_table-rlsebe": "scenes/house_single_floor",
         "coffee_table-wgtaip": "scenes/house_single_floor",
         "countertop-fjkase": "scenes/house_single_floor",
-        "countertop-gjeoer": "scenes/house_single_floor",
         "countertop-ikwqer": "scenes/house_single_floor",
-        "countertop-rkgjer": "scenes/house_single_floor",
         "countertop-sjxber": "scenes/house_single_floor",
         "desk-bhkhxo": "scenes/house_single_floor",
         "desk-bvhpnd": "scenes/house_single_floor",
@@ -7232,7 +7233,6 @@
         "radiator-lwgvaq": "scenes/house_single_floor",
         "rail_fence-roemfr": "scenes/house_single_floor",
         "rail_fence-wvfgad": "scenes/house_single_floor",
-        "rail_fence-yzplpe": "scenes/house_single_floor",
         "railing-mkhabj": "scenes/house_single_floor",
         "range_hood-beanpv": "scenes/house_single_floor",
         "range_hood-uokzpw": "scenes/house_single_floor",
@@ -8624,8 +8624,6 @@
         "cloche-rnkvca": "scenes/restaurant_diner",
         "coatrack-tcnxtu": "scenes/restaurant_diner",
         "door-adejun": "scenes/restaurant_diner",
-        "door-ccyiwn": "scenes/restaurant_diner",
-        "door-jkisfk": "scenes/restaurant_diner",
         "fire_extinguisher-jgdvdl": "scenes/restaurant_diner",
         "fixed_window-caymim": "scenes/restaurant_diner",
         "fixed_window-iueiur": "scenes/restaurant_diner",
@@ -17108,7 +17106,8 @@
             "objects/legacy_batch-05"
         ],
         "openable_window-subxdn": [
-            "objects/legacy_batch-05"
+            "objects/legacy_batch-05",
+            "scenes/Beechwood_0_garden"
         ],
         "openable_window-tflzbx": [
             "objects/legacy_batch-05"
@@ -30825,6 +30824,9 @@
         "banana-wmglhc": [
             "scenes/house_single_floor"
         ],
+        "bar-gjeoer": [
+            "scenes/house_single_floor"
+        ],
         "bar-udatjt": [
             "scenes/house_single_floor"
         ],
@@ -30844,6 +30846,9 @@
             "scenes/house_single_floor"
         ],
         "baseboard-gmhhek": [
+            "scenes/house_single_floor"
+        ],
+        "baseboard-peorza": [
             "scenes/house_single_floor"
         ],
         "bathtub-euxylv": [
@@ -30915,6 +30920,9 @@
         "bottom_cabinet-qbdweu": [
             "scenes/house_single_floor",
             "scenes/school_biology"
+        ],
+        "bottom_cabinet-rkgjer": [
+            "scenes/house_single_floor"
         ],
         "boulder-vxbkjq": [
             "scenes/house_single_floor"
@@ -31063,13 +31071,7 @@
         "countertop-fjkase": [
             "scenes/house_single_floor"
         ],
-        "countertop-gjeoer": [
-            "scenes/house_single_floor"
-        ],
         "countertop-ikwqer": [
-            "scenes/house_single_floor"
-        ],
-        "countertop-rkgjer": [
             "scenes/house_single_floor"
         ],
         "countertop-sjxber": [
@@ -32213,9 +32215,6 @@
             "scenes/house_single_floor"
         ],
         "rail_fence-wvfgad": [
-            "scenes/house_single_floor"
-        ],
-        "rail_fence-yzplpe": [
             "scenes/house_single_floor"
         ],
         "railing-mkhabj": [
@@ -36414,12 +36413,6 @@
             "scenes/restaurant_diner"
         ],
         "coatrack-tcnxtu": [
-            "scenes/restaurant_diner"
-        ],
-        "door-ccyiwn": [
-            "scenes/restaurant_diner"
-        ],
-        "door-jkisfk": [
             "scenes/restaurant_diner"
         ],
         "fire_extinguisher-jgdvdl": [
@@ -61273,13 +61266,7 @@
         "countertop-fjkase": [
             "collision"
         ],
-        "countertop-gjeoer": [
-            "collision"
-        ],
         "countertop-ikwqer": [
-            "collision"
-        ],
-        "countertop-rkgjer": [
             "collision"
         ],
         "countertop-sjxber": [
@@ -62502,9 +62489,6 @@
         "rail_fence-wvfgad": [
             "collision"
         ],
-        "rail_fence-yzplpe": [
-            "collision"
-        ],
         "railing-mkhabj": [
             "collision"
         ],
@@ -62758,6 +62742,7 @@
         ],
         "table_lamp-jbjckk": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "table_lamp-qgdwbh": [
@@ -66997,14 +66982,6 @@
         ],
         "coatrack-tcnxtu": [
             "collision"
-        ],
-        "door-ccyiwn": [
-            "collision",
-            "joint"
-        ],
-        "door-jkisfk": [
-            "collision",
-            "joint"
         ],
         "fire_extinguisher-jgdvdl": [
             "collision",
