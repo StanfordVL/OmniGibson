@@ -82,7 +82,7 @@ VISUAL_ONLY_CATEGORIES = {
 }
 
 # Global whitelist of task-relevant objects
-TASK_RELEVANT_CATEGORIES = {
+EXTRA_TASK_RELEVANT_CATEGORIES = {
     "floors",
     "driveway",
     "lawn",
@@ -113,6 +113,7 @@ VIS_GEMO_COLORS = {
            th.tensor([0.5, 0.5, 1.0]),
     ]
 }
+BEACON_LENGTH = 5.0
 
 
 def get_camera_config(name, relative_prim_path, position, orientation, resolution):
@@ -611,20 +612,52 @@ class OGRobotServer:
         self.task_relevant_objects = []
         self.task_irrelevant_objects = []
         self.highlight_task_relevant_objects = False
+        self.object_beacons = {}
 
         if self.task_name is not None:
             task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() if bddl_obj.wrapped_obj is not None]
-            self.task_relevant_objects = [obj for obj in task_objects if obj.category != "agent"]
-            object_highlight_colors = lazy.omni.replicator.core.random_colours(N=len(self.task_relevant_objects))[:, :3].tolist()
+            self.task_relevant_objects = [obj for obj in task_objects if obj.category != "agent" and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
+            random_colors = lazy.omni.replicator.core.random_colours(N=len(self.task_relevant_objects))[:, :3].tolist()
             
             # Normalize colors from 0-255 to 0-1 range
-            normalized_colors = [[r/255, g/255, b/255] for r, g, b in object_highlight_colors]
+            self.object_highlight_colors = [[r/255, g/255, b/255] for r, g, b in random_colors]
             
-            for obj, color in zip(self.task_relevant_objects, normalized_colors):
+            for obj, color in zip(self.task_relevant_objects, self.object_highlight_colors):
                 obj.set_highlight_properties(color=color)
+                mat_prim_path = f"{obj.prim_path}/Looks/beacon_cylinder_mat"
+                mat = MaterialPrim(
+                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
+                    name=f"{obj.name}:beacon_cylinder_mat",
+                )
+                mat.load(self.robot.scene)
+                mat.diffuse_color_constant = th.tensor(color)
+                mat.enable_opacity = False #True
+                mat.opacity_constant = 0.5
+                mat.enable_emission = True
+                mat.emissive_color = color
+                mat.emissive_intensity = 10000.0
+                
+                vis_prim_path = f"{obj.prim_path}/beacon_cylinder"
+                vis_prim = create_primitive_mesh(
+                    vis_prim_path,
+                    "Cylinder",
+                    extents=1.0
+                )
+                beacon = VisualGeomPrim(
+                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, vis_prim_path),
+                    name=f"{obj.name}:beacon_cylinder"
+                )
+                beacon.load(self.robot.scene)
+                beacon.material = mat
+                beacon.scale = th.tensor([0.01, 0.01, BEACON_LENGTH])
+                beacon_pos = obj.aabb_center + th.tensor([0.0, 0.0, BEACON_LENGTH/2.0])
+                beacon.set_position_orientation(position=beacon_pos, orientation=T.euler2quat(th.tensor([0.0, 0.0, 0.0])))
+                
+                self.object_beacons[obj] = beacon
+                beacon.visible = False
             self.task_irrelevant_objects = [obj for obj in self.env.scene.objects 
                                         if obj not in task_objects 
-                                        and obj.category not in TASK_RELEVANT_CATEGORIES]
+                                        and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
             
             self._setup_task_instruction_ui()
 
@@ -1281,6 +1314,13 @@ class OGRobotServer:
                             obj.visible = not obj.visible
                         for obj in self.task_relevant_objects:
                             obj.highlighted = not obj.highlighted
+                            beacon = self.object_beacons[obj]
+                            beacon.set_position_orientation(
+                                position=obj.aabb_center + th.tensor([0, 0, BEACON_LENGTH / 2.0]),
+                                orientation=T.euler2quat(th.tensor([0, 0, 0])),
+                                frame="world"
+                            )
+                            beacon.visible = not beacon.visible
                         self.highlight_task_relevant_objects = True
                 else:
                     self.highlight_task_relevant_objects = False
