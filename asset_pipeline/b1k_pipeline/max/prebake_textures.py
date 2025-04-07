@@ -355,7 +355,7 @@ class TextureBaker:
         assert rt.execute("max modify mode")
 
         # Remove lights from all materials
-        unlight_all_mats()
+        # unlight_all_mats()
 
         # Remove the texture baking list
         btt.deleteAllMaps()

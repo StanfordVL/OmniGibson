@@ -575,12 +575,12 @@ def processFile(filename: pathlib.Path):
     # match_instance_materials()
 
     # Remove materials from meta links
-    for obj in rt.objects:
-        pn = b1k_pipeline.utils.parse_name(obj.name)
-        if not pn:
-            continue
-        if pn.group("meta_type"):
-            obj.material = None
+    # for obj in rt.objects:
+    #     pn = b1k_pipeline.utils.parse_name(obj.name)
+    #     if not pn:
+    #         continue
+    #     if pn.group("meta_type"):
+    #         obj.material = None
 
     # Temporary hack for rebaking just the reflection channel
     # baked_mtls_by_object = {}
