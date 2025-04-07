@@ -103,6 +103,18 @@ GHOST_APPEAR_THRESHOLD = 0.1    # Threshold for showing ghost
 GHOST_APPEAR_TIME = 10 # Number of frames to wait before showing ghost
 USE_REACHABILITY_VISUALIZERS = True
 
+VIS_GEMO_COLORS = {
+    False: [th.tensor([1.0, 0, 0]),
+            th.tensor([0, 1.0, 0]),
+            th.tensor([0, 0, 1.0]),
+    ],
+    True: [th.tensor([1.0, 0.5, 0.5]),
+           th.tensor([0.5, 1.0, 0.5]),
+           th.tensor([0.5, 0.5, 1.0]),
+    ]
+}
+
+
 def get_camera_config(name, relative_prim_path, position, orientation, resolution):
     return {
         "sensor_type": "VisionSensor",
@@ -628,6 +640,8 @@ class OGRobotServer:
             )
         
         self._prev_grasp_status = {arm: False for arm in self.robot.arm_names}
+        self._prev_in_hand_status = {arm: False for arm in self.robot.arm_names}
+        self._in_hand_clock = 0
 
         # Reset
         self.reset()
@@ -790,11 +804,6 @@ class OGRobotServer:
     def _setup_visualizers(self):
         # Add visualization cylinders at the end effector sites
         self.eef_cylinder_geoms = {}
-        vis_geom_colors = [
-            [1.0, 0, 0],
-            [0, 1.0, 0],
-            [0, 0, 1.0],
-        ]
         vis_geom_width = 0.01
         vis_geom_lengths = [0.25, 0.25, 0.5]                  # x,y,z
         vis_geom_proportion_offsets = [0.0, 0.0, 0.5]       # x,y,z
@@ -805,21 +814,23 @@ class OGRobotServer:
         ]
 
         # Create materials
-        vis_mats = []
-        for axis, color in zip(("x", "y", "z"), vis_geom_colors):
-            mat_prim_path = f"{self.robot.prim_path}/Looks/vis_cylinder_{axis}_mat"
-            mat = MaterialPrim(
-                relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
-                name=f"{self.robot.name}:vis_cylinder_{axis}_mat",
-            )
-            mat.load(self.robot.scene)
-            mat.diffuse_color_constant = th.as_tensor(color)
-            mat.enable_opacity = False #True
-            mat.opacity_constant = 0.5
-            mat.enable_emission = True
-            mat.emissive_color = np.array(color)
-            mat.emissive_intensity = 10000.0
-            vis_mats.append(mat)
+        self.vis_mats = {}
+        for arm in self.robot.arm_names:
+            self.vis_mats[arm] = []
+            for axis, color in zip(("x", "y", "z"), VIS_GEMO_COLORS[False]):
+                mat_prim_path = f"{self.robot.prim_path}/Looks/vis_cylinder_{arm}_{axis}_mat"
+                mat = MaterialPrim(
+                    relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
+                    name=f"{self.robot.name}:vis_cylinder_{arm}_{axis}_mat",
+                )
+                mat.load(self.robot.scene)
+                mat.diffuse_color_constant = color
+                mat.enable_opacity = False #True
+                mat.opacity_constant = 0.5
+                mat.enable_emission = True
+                mat.emissive_color = color.tolist()
+                mat.emissive_intensity = 10000.0
+                self.vis_mats[arm].append(mat)
 
         # Create material for vis sphere
         mat_prim_path = f"{self.robot.prim_path}/Looks/vis_sphere_mat"
@@ -859,7 +870,7 @@ class OGRobotServer:
             for axis, length, mat, prop_offset, quat_offset in zip(
                 ("x", "y", "z"),
                 vis_geom_lengths,
-                vis_mats,
+                self.vis_mats[arm],
                 vis_geom_proportion_offsets,
                 vis_geom_quat_offsets,
             ):
@@ -876,7 +887,7 @@ class OGRobotServer:
                 vis_geom.load(self.robot.scene)
 
                 # Attach a material to this prim
-                mat.bind(vis_geom.prim_path)
+                vis_geom.material = mat
 
                 vis_geom.scale = th.tensor([vis_geom_width, vis_geom_width, length])
                 vis_geom.set_position_orientation(position=th.tensor([0, 0, length * prop_offset]), orientation=quat_offset, frame="parent")
@@ -1059,6 +1070,21 @@ class OGRobotServer:
             
             # Store the current status for future comparison
             self._prev_goal_status = goal_status.copy()
+    
+    def _update_in_hand_status(self):
+        # Internal clock to check every n steps
+        if self._in_hand_clock % 20 == 0:
+            # Update the in-hand status of the robot's arms
+            for arm in self.robot.arm_names:
+                in_hand = len(self.robot._find_gripper_raycast_collisions(arm)) != 0
+                if in_hand != self._prev_in_hand_status[arm]:
+                    self._prev_in_hand_status[arm] = in_hand
+                    for idx, mat in enumerate(self.vis_mats[arm]):
+                        mat.diffuse_color_constant = VIS_GEMO_COLORS[in_hand][idx]
+            self._in_hand_clock = 0
+        # Increment the clock
+        self._in_hand_clock += 1
+            
     
     def _update_grasp_status(self):
         for arm in self.robot.arm_names:
@@ -1281,6 +1307,7 @@ class OGRobotServer:
             if self.task_name is not None:
                 self._update_goal_status(info['done']['goal_status'])
             
+            self._update_in_hand_status()
             self._update_grasp_status()
             self._update_reachability_visualizers()
 
