@@ -453,6 +453,8 @@ class OGRobotServer:
 
         self.ghosting = ghosting
         if ghosting:
+            if "objects" not in cfg:
+                cfg["objects"] = []
             cfg["objects"].append({
                 "type": "USDObject",
                 "name": "ghost",
