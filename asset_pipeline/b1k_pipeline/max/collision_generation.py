@@ -126,9 +126,9 @@ def run_vhacd(input_mesh, hull_count):
             raise ValueError(f"VHACD failed with exit code {e.returncode}")
 
 
-HULL_COUNTS = [16, 32]
+HULL_COUNTS = [16]
 USE_METHODS = {
-#     "coacd": run_coacd,
+      "coacd": run_coacd,
 #     "vhacd": run_vhacd,
 }
 
@@ -143,7 +143,10 @@ def _create_collision_obj_from_verts_faces(vertices, faces, parent, tag):
     collision_obj = rt.Editable_Mesh()
     rt.ConvertToPoly(collision_obj)
     parsed_name = parse_name(parent.name)
-    collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision{tag}"
+    if parsed_name:
+        collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision{tag}"
+    else:
+        collision_obj.name = parent.name + "-Mcollision"
     collision_obj.rotation = parent.rotation
     collision_obj.position = parent.position
 
