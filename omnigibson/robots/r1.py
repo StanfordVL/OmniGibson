@@ -242,7 +242,13 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
 
     @property
     def arm_workspace_range(self):
-        return {arm: th.deg2rad(th.tensor([-45, 45], dtype=th.float32)) for arm in self.arm_names}
+        # return {arm: th.deg2rad(th.tensor([-45, 45], dtype=th.float32)) for arm in self.arm_names}
+        # To improve reachability of each arms (we try to avoid object being dead in the centre)
+        ws_range = {    
+            "left": th.deg2rad(th.tensor([-55, 35], dtype=th.float32)),
+            "right": th.deg2rad(th.tensor([-35, 55], dtype=th.float32)),
+        }
+        return ws_range
 
     @property
     def disabled_collision_pairs(self):

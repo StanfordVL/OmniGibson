@@ -911,7 +911,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # convert quat from wxyz (curobo) to xyzw (OG)
         eye_quat_for_sampled_base_pos = th.roll(eye_quat_for_sampled_base_pos, -1)
         eye_pose_for_sampled_base_pose = (eye_pos_for_sampled_base_pos, eye_quat_for_sampled_base_pos)
-        obj_pos = self._tracking_object.get_position()
+        obj_pos = self._tracking_object.get_position_orientation()[0]
 
         robot_pose2d_for_sampled_base = th.tensor([initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]])
         robot_pose_for_sampled_base = self._get_robot_pose_from_2d_pose(robot_pose2d_for_sampled_base)
@@ -920,7 +920,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         for _ in range(10):
             sampled_eyes_pos = self.sample_eyes_pos(source_pose=eye_pose_for_sampled_base_pose, robot_pose=robot_pose_for_sampled_base)
             eye_to_obj_vec = obj_pos - sampled_eyes_pos
-            print("dist: ", th.linalg.norm(eye_pos_for_sampled_base_pos - sampled_eyes_pos))
+            # print("dist: ", th.linalg.norm(eye_pos_for_sampled_base_pos - sampled_eyes_pos))
             # from omnigibson.utils.ui_utils import draw_line
             # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist())
             # for _ in range(20): og.sim.step()
@@ -934,7 +934,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 sampled_eyes_orn_wrt_world = th.matmul(T.pose2mat(robot_pose_for_sampled_base)[:3, :3], T.quat2mat(sampled_eyes_orn_wrt_robot))
                 sampled_eyes_orn_wrt_world = T.mat2quat(sampled_eyes_orn_wrt_world)
                 target_pose["eyes"] = (th.tensor(sampled_eyes_pos, dtype=th.float32), th.tensor(sampled_eyes_orn_wrt_world))
-                print("angle: ", np.rad2deg(self.quaternion_angular_distance(eye_quat_for_sampled_base_pos, sampled_eyes_orn_wrt_world)))
+                # print("angle: ", np.rad2deg(self.quaternion_angular_distance(eye_quat_for_sampled_base_pos, sampled_eyes_orn_wrt_world)))
 
                 # make sure target_pose has eyes and right_eef_link in keys
                 # breakpoint()
@@ -947,7 +947,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     skip_obstacle_update=skip_obstacle_update,
                     # visibility_constraint=True,
                 )
-                print("retval: ", retval)
+                # print("retval: ", retval)
                 if retval is not None:
                     # constraint_satisfied = True
                     self.target_eyes_pose_arr.append(target_pose["eyes"])
@@ -1045,7 +1045,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ik_world_collision_check=False,
             emb_sel=CuRoboEmbodimentSelection.ARM,
         )
-        print("IK solver successes: ", successes)
+        # print("IK solver successes: ", successes)
 
         if not batched:
             # Grab the first successful joint state if found
@@ -1268,18 +1268,42 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                         indented_print(f"max base pos diff: {max_base_pos_diff}")
                         indented_print(f"max base angle diff: {max_base_orn_diff}")
                         # breakpoint()
-                        raise ActionPrimitiveError(
-                            ActionPrimitiveError.Reason.EXECUTION_ERROR,
-                            "Could not reach the target base joint positions. Try again",
-                        )
+                        # raise ActionPrimitiveError(
+                        #     ActionPrimitiveError.Reason.EXECUTION_ERROR,
+                        #     "Could not reach the target base joint positions. Try again",
+                        # )
+                        return
                     if not articulation_target_reached:
                         indented_print(f"max articulation joint diff: {max_articulation_joint_diff}")
                         # breakpoint()
-                        raise ActionPrimitiveError(
-                            ActionPrimitiveError.Reason.EXECUTION_ERROR,
-                            "Could not reach the target articulation joint positions. Try again",
-                        )
+                        # raise ActionPrimitiveError(
+                        #     ActionPrimitiveError.Reason.EXECUTION_ERROR,
+                        #     "Could not reach the target articulation joint positions. Try again",
+                        # )
+                        return
 
+    def _add_linearly_interpolated_waypoints(self, plan, max_inter_dist=0.01):
+        """
+        Adds waypoints to the plan so the distance between values in the plan never exceeds the max_inter_dist.
+
+        Args:
+            plan (Array of arrays): Planned path
+            max_inter_dist (float): Maximum distance between values in the plan
+
+        Returns:
+            Array of arrays: Planned path with additional waypoints
+        """
+        assert len(plan) > 1, "Plan must have at least 2 waypoints to interpolate"
+        interpolated_plan = []
+        for i in range(len(plan) - 1):
+            # Calculate maximum difference across all dimensions
+            max_diff = (plan[i + 1] - plan[i]).abs().max()
+            num_intervals = math.ceil(max_diff.item() / max_inter_dist)
+            interpolated_plan += multi_dim_linspace(plan[i], plan[i + 1], num_intervals, endpoint=False)
+
+        interpolated_plan.append(plan[-1])
+        return interpolated_plan
+    
     def _move_hand_direct_joint(self, joint_pos, stop_on_contact=False, ignore_failure=False):
         """
         Yields action for the robot to move its arm to reach the specified joint positions by directly actuating with no planner
@@ -2012,7 +2036,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if len(target_pose[arm][0].shape) == 1:
                 target_pose[arm] = (target_pose[arm][0].unsqueeze(0), target_pose[arm][1].unsqueeze(0))
 
-        target_position = target_pose[self.arm][0][0]
+        target_position = target_pose[arm][0][0]
 
         obj_rooms = (
             obj.in_rooms
@@ -2025,6 +2049,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # Update obstacle once before sampling
             self._motion_generator.update_obstacles()
         while attempt < sampling_attempts:
+            # print("attempt: ", attempt)
             candidate_poses = []
             self.target_eyes_pose_arr = []
             for _ in range(self._curobo_batch_size):
@@ -2230,6 +2255,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # For each candidate that passed collision check, verify reachability
         for i in range(len(candidate_poses)):
             if invalid_results[i].item():
+                # print("collision? ", invalid_results[i].item())
                 continue
 
             if eef_pose is not None and not visibility_constraint:
@@ -2240,12 +2266,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     eef_pose, initial_joint_pos=candidate_joint_position, skip_obstacle_update=skip_obstacle_update
                 ):
                     invalid_results[i] = True
+                    # print("unreachable? ", invalid_results[i].item())
             elif eef_pose is not None and visibility_constraint:
                 candidate_joint_position = candidate_joint_positions[i]
                 if not self._target_in_reach_of_robot_and_visible(
                     eef_pose, initial_joint_pos=candidate_joint_position, skip_obstacle_update=skip_obstacle_update,
                 ):
                     invalid_results[i] = True
+                    # print("unreachable? ", invalid_results[i].item())
 
         return ~invalid_results
 
