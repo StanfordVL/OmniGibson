@@ -39,6 +39,7 @@ VRAY_MAPPING = {
     "VRayRawRefractionFilterMap": "opacity",
     "VRaySelfIlluminationMap": "emission",
     "VRayAOMap": "ao",
+    "VRayRawReflectionFilterMap": "reflectivity",
 }
 
 MTL_MAPPING = {
@@ -47,6 +48,7 @@ MTL_MAPPING = {
     "map_Pr": "roughness",
     "map_Pm": "metalness",
     "map_Tf": "opacity",
+    "map_Ks": "reflectivity",
     # "map_Ke": "emission",
     # "map_Ks": "ao",
 }
