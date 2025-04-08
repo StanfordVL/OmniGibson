@@ -9205,6 +9205,9 @@ stages:
     - path: artifacts/pipeline/export_scenes.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
+    - path: b1k_pipeline/usd_conversion/make_maps.py
+      md5: b4947772760e68540bf2145a47ca4939
+      size: 8453
     - path: b1k_pipeline/usd_conversion/usdify_scenes.py
       md5: 6f117e83f323c934d1c4dfd71bb93636
       size: 4151
@@ -9213,8 +9216,8 @@ stages:
       size: 1249
     outs:
     - path: artifacts/parallels/scenes_json.zip
-      md5: aa9ebfd3ce120b9c7abe102cebfac8a1
-      size: 1556496
+      md5: 676a73cd5cf46df81c20d5a53d646c02
+      size: 4717957
     - path: artifacts/pipeline/usdify_scenes.json
       md5: 99914b932bd37a50b983c5e7c90ae93b
       size: 2

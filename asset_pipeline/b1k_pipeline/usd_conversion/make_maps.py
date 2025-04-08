@@ -7,7 +7,7 @@ from PIL import Image
 
 PIPELINE_ROOT = pathlib.Path(__file__).parents[2]
 
-RESOLUTION = 1.0
+RESOLUTION = 0.01
 Z_START = 2.  # Just above the typical robot height
 Z_END = -0.1  # Just below the floor
 HALF_Z = (Z_START + Z_END) / 2.

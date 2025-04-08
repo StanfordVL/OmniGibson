@@ -1609,6 +1609,7 @@ stages:
     - artifacts/pipeline/aggregate_metadata.success
     - b1k_pipeline/usd_conversion/usdify_scenes.py
     - b1k_pipeline/usd_conversion/usdify_scenes_process.py
+    - b1k_pipeline/usd_conversion/make_maps.py
     outs:
     - artifacts/parallels/scenes_json.zip
     - artifacts/pipeline/usdify_scenes.success
