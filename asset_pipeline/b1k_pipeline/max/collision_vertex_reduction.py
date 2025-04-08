@@ -174,7 +174,7 @@ def main():
             or "Mfillable" in obj.name
             or "Mopenfillable" in obj.name
         ), "Please select a collision or fillable object"
-    process_collision_obj(list(rt.selection))
+        process_convex_obj(obj)
 
     # process_all_convex_meshes()
 

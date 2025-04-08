@@ -88,7 +88,7 @@ def run_vhacd(input_mesh, hull_count):
             "-f",
             "flood",
             "-e",
-            "10",
+            "0.01",
             "-p",
             "true",
             "-l",
@@ -126,10 +126,10 @@ def run_vhacd(input_mesh, hull_count):
             raise ValueError(f"VHACD failed with exit code {e.returncode}")
 
 
-HULL_COUNTS = [16]
+HULL_COUNTS = [4, 16, 32]
 USE_METHODS = {
-      "coacd": run_coacd,
-#     "vhacd": run_vhacd,
+#       "coacd": run_coacd,
+#       "vhacd": run_vhacd,
 }
 
 
