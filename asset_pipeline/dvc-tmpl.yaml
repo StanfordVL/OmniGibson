@@ -28,7 +28,7 @@ stages:
       - cad/${item}/processed.max
       - b1k_pipeline/max/new_sanity_check.py
       - artifacts/pipeline/object_list.success
-      - artifacts/pipeline/object_inventory.json
+      # - artifacts/pipeline/object_inventory.json
       outs:
       - cad/${item}/artifacts/sanitycheck.json
 
@@ -61,6 +61,27 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/check_collisions.success
+
+  check_collisions_with_clutter:
+    # List the objects found in the entry.
+    foreach: ${scenes_unfiltered}
+    do:
+      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/check_collisions.py clutter=true'
+      deps:
+      - b1k_pipeline/max/check_collisions.py
+      - cad/${item}/processed.max
+      # - artifacts/pipeline/sanitycheck.success
+      outs:
+      - cad/${item}/artifacts/check_collisions_with_clutter.json
+
+  check_collisions_with_clutter_success:
+    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/check_collisions_with_clutter.json artifacts/pipeline/check_collisions_with_clutter.success scenes'
+    deps:
+    - cad/#{scenes}/artifacts/check_collisions_with_clutter.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/check_collisions_with_clutter.success
 
   validate_meta_links:
     # Validate exported scene, e.g. physics stability.
@@ -161,7 +182,6 @@ stages:
     deps:
     - cad/#{combined}/artifacts/meshes.zip
     - cad/#{combined}/artifacts/object_list.json
-    - metadata/orientation_edits.zip
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success

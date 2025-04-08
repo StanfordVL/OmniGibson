@@ -1,597 +1,1337 @@
 [
     {
         "object": "agave-bvlsig",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "agave-bvlsig",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "agave-cnlzlq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "agave-cnlzlq",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "auricularia-coecnm",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: auricularia.n.01\nDefinition: type genus of the Auriculariaceae\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
         "complaint": "\u001b[A",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "banana_bread-outrja",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "bap-enbbud",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "bap-pabfde",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "category",
+        "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: auricularia.n.01\nDefinition: type genus of the Auriculariaceae\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category."
     },
     {
         "object": "bean_curd-hekigc",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "bleu-wxahdr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "texture black",
+        "object": "bean_curd-hekigc",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "bread_slice-pgzsxe",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "all black",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "bread_slice-yremdf",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture. blue in 3dsmax",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cap-sjsles",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "wrong texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cap-xsxeij",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "wrong texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "carving_knife-ghhbgo",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "chanterelle-rwntzn",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black (even in 3dsmax)",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "cheddar-cheqcd",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "wrong texture",
+        "object": "chanterelle-rwntzn",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "cheddar-ewvbng",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "wrong texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "conch-dovqcj",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "cookie_stick-zlhayf",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "all black. 3dsmax shows all black which also seems wrong",
-        "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "copper_pot-gqemcq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no texture (but maybe it's okay)",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "copper_pot-gqemcq",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "copper_pot-gqemcq",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
     },
     {
         "object": "cutting_board-olftkr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "cutting_board-olftkr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "handle",
+        "additional_info": ""
     },
     {
         "object": "cutting_board-wagwoy",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "enchilada-dwvaig",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "black mesh",
+        "object": "cutting_board-wagwoy",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "garlic_bread-kjhxsq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_agave-npxccb",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_agave-qylfyr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_auricularia-ddjzqg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "texture black",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_auricularia-putkli",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "texture black",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_banana_bread-myxyfa",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_banana_bread-sooaaz",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_bean_curd-abzrit",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "missing texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_bean_curd-mdqpoj",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: half__bean_curd.n.01 (custom synset)\nDefinition: (hypernyms: curd.n.01): a coagulated liquid resembling milk curd\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "g",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_bean_curd-mdqpoj",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "missing texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_bleu-gpzeaz",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_bleu-nelbjr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_chanterelle-bsfuew",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_chanterelle-ftedsa",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_cheddar-cortmw",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_cheddar-zkwspo",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "new": true,
+        "type": "handle",
+        "additional_info": ""
     },
     {
         "object": "half_enchilada-cgrjfr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "bad texture (even in 3dsmax)",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_enchilada-cgrjfr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "half_enchilada-yyikja",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "bad texture (even in 3dsmax)",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "half_garlic_bread-smddfo",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
+        "object": "half_enchilada-yyikja",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_garlic_bread-vipzpb",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "half_mozzarella-luofri",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_mozzarella-luofri",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "half_mozzarella-yflmjs",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "half_pita-fmkiep",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture, no thickness",
+        "object": "half_snapper-rjsbgp",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_pita-mhwlwr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture, no thickness",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_ramen-argnww",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_ramen-mplogd",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
     },
     {
         "object": "half_tenderloin-hsxfzx",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_tenderloin-hsxfzx",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "half_tenderloin-zlimsu",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "half_venison-ixnagn",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
+        "object": "half_tenderloin-zlimsu",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "half_venison-mszwzw",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "half_zucchini-tncuen",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "wrong texture",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "infant_car_seat-nulroi",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
+        "object": "half_zucchini-tncuen",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "lemon_peel-mrvvpr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "lemon_peel-mrvvpr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "lemon_peel-qirncy",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "lemon_peel-qirncy",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "lemon_peel-sdvrmi",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "lint_screen-wnbcnn",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "missing texture",
+        "object": "lemon_peel-sdvrmi",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "liquid_carton-rsvypp",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black, no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "liquid_carton-rsvypp",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "liquid_carton-ykfkyq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black, no texture",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "mozzarella-rsiccz",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
+        "object": "liquid_carton-ykfkyq",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
-        "object": "pita-igejpf",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: pita.n.01\nDefinition: usually small round bread that can open into a pocket for filling\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D",
+        "object": "liquid_carton-ykfkyq",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
     },
     {
-        "object": "pita-igejpf",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "weird texture in both OG and 3dsmax",
+        "object": "mat-ieqyct",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "plant_pot-skbcqq",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: pot.n.04\nDefinition: a container in which plants are cultivated\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "0",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "plant_pot-skbcqq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "weird texture in both OG and 3dsmax",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "plant_pot-ygrtaz",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "weird texture in both OG and 3dsmax",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "pottable_beefsteak_tomato-rrjizb",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "pottable_chili-lpshnm",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "pottable_chili-lpshnm",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "pottable_chili-pwalol",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "pottable_chili-pwalol",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "ramen-ofnvor",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "bad texture (even in 3dsmax)",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "scoop_of_ice_cream-dodndj",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
+        "object": "ramen-ofnvor",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "scoop_of_ice_cream-kmbwth",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "scoop_of_ice_cream-trpctm",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "scoop_of_ice_cream-vdtzvz",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "scoop_of_ice_cream-zenrml",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "squeeze_bottle-cuvgtq",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "missing texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "squeeze_bottle-exfkfw",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "missing texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "squeeze_bottle-ikiwps",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "missing texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "squeeze_bottle-snyiat",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "missing texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "steak-jtgckm",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "tenderloin-gbyqap",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "black",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "venison-dhhbvg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "all black",
+        "object": "tenderloin-gbyqap",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "banana_bread-outrja",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "banana_bread-outrja",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "bread_slice-pgzsxe",
+        "complaint": "all black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "bread_slice-pgzsxe",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "bread_slice-yremdf",
+        "complaint": "no texture. blue in 3dsmax",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "bread_slice-yremdf",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "cap-sjsles",
+        "complaint": "wrong texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "cap-sjsles",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "cap-xsxeij",
+        "complaint": "wrong texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "cap-xsxeij",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "carving_knife-ghhbgo",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "carving_knife-ghhbgo",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "carving_knife-ghhbgo",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "carving_knife-ghhbgo",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "metalink",
+        "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it."
+    },
+    {
+        "object": "cheddar-cheqcd",
+        "complaint": "wrong texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "cheddar-cheqcd",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "cheddar-ewvbng",
+        "complaint": "wrong texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "cheddar-ewvbng",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "conch-dovqcj",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "conch-dovqcj",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "enchilada-dwvaig",
+        "complaint": "black mesh",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "enchilada-dwvaig",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_agave-npxccb",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_agave-npxccb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_agave-qylfyr",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_agave-qylfyr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_auricularia-ddjzqg",
+        "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_auricularia-ddjzqg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_auricularia-putkli",
+        "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_auricularia-putkli",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_banana_bread-myxyfa",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_banana_bread-myxyfa",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_banana_bread-sooaaz",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_banana_bread-sooaaz",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_bean_curd-abzrit",
+        "complaint": "missing texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_bean_curd-abzrit",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_bean_curd-mdqpoj",
+        "complaint": "g",
+        "processed": true,
+        "new": true,
+        "type": "category",
+        "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: half__bean_curd.n.01 (custom synset)\nDefinition: (hypernyms: curd.n.01): a coagulated liquid resembling milk curd\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category."
+    },
+    {
+        "object": "half_bean_curd-mdqpoj",
+        "complaint": "missing texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_bean_curd-mdqpoj",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_bleu-gpzeaz",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_bleu-gpzeaz",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_bleu-nelbjr",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_bleu-nelbjr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_cheddar-cortmw",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_cheddar-cortmw",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_cheddar-zkwspo",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_garlic_bread-smddfo",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_garlic_bread-smddfo",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_garlic_bread-vipzpb",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_garlic_bread-vipzpb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_pita-fmkiep",
+        "complaint": "no texture, no thickness",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_pita-fmkiep",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_pita-mhwlwr",
+        "complaint": "no texture, no thickness",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_pita-mhwlwr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_ramen-argnww",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_ramen-mplogd",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_ramen-mplogd",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_venison-ixnagn",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_venison-ixnagn",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_venison-mszwzw",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_venison-mszwzw",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "infant_car_seat-nulroi",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "infant_car_seat-nulroi",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "lint_screen-wnbcnn",
+        "complaint": "missing texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "lint_screen-wnbcnn",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "mozzarella-rsiccz",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "mozzarella-rsiccz",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "pottable_beefsteak_tomato-rrjizb",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "pottable_beefsteak_tomato-rrjizb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "pottable_beefsteak_tomato-rrjizb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "squeeze_bottle-cuvgtq",
+        "complaint": "missing texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "squeeze_bottle-cuvgtq",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "squeeze_bottle-exfkfw",
+        "complaint": "missing texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "squeeze_bottle-exfkfw",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "squeeze_bottle-ikiwps",
+        "complaint": "missing texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "squeeze_bottle-ikiwps",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "squeeze_bottle-snyiat",
+        "complaint": "missing texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "squeeze_bottle-snyiat",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "steak-jtgckm",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "steak-jtgckm",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "wine_bottle-hlzfxw",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "different texture from 3ds Max",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
         "object": "wine_bottle-vjdkci",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "different texture from 3ds max",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
         "object": "wine_bottle-zuctnl",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "different texture from 3ds max",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "bap-enbbud",
+        "complaint": "no texture",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "bap-enbbud",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "bap-pabfde",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "bap-pabfde",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "cookie_stick-zlhayf",
+        "complaint": "all black. 3dsmax shows all black which also seems wrong",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "cookie_stick-zlhayf",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "garlic_bread-kjhxsq",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "garlic_bread-kjhxsq",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_chanterelle-bsfuew",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_chanterelle-bsfuew",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "half_chanterelle-ftedsa",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_chanterelle-ftedsa",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "scoop_of_ice_cream-dodndj",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "scoop_of_ice_cream-dodndj",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "scoop_of_ice_cream-kmbwth",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "scoop_of_ice_cream-kmbwth",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "scoop_of_ice_cream-trpctm",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "scoop_of_ice_cream-trpctm",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "scoop_of_ice_cream-vdtzvz",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "scoop_of_ice_cream-zenrml",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "scoop_of_ice_cream-zenrml",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "category",
+        "additional_info": ""
+    },
+    {
+        "object": "scoop_of_ice_cream-zenrml",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "venison-dhhbvg",
+        "complaint": "all black",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "venison-dhhbvg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "bleu-wxahdr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah_2",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "bleu-wxahdr",
+        "complaint": "texture black",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "pita-igejpf",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah_2",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "pita-igejpf",
+        "complaint": "\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D",
+        "processed": true,
+        "new": true,
+        "type": "category",
+        "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: pita.n.01\nDefinition: usually small round bread that can open into a pocket for filling\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category."
+    },
+    {
+        "object": "pita-igejpf",
+        "complaint": "weird texture in both OG and 3dsmax",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "plant_pot-skbcqq",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah_2",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "plant_pot-skbcqq",
+        "complaint": "0",
+        "processed": true,
+        "new": true,
+        "type": "category",
+        "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: pot.n.04\nDefinition: a container in which plants are cultivated\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category."
+    },
+    {
+        "object": "plant_pot-skbcqq",
+        "complaint": "weird texture in both OG and 3dsmax",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "plant_pot-ygrtaz",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah_2",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "plant_pot-ygrtaz",
+        "complaint": "weird texture in both OG and 3dsmax",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     }
 ]

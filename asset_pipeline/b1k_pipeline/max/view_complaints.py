@@ -12,17 +12,8 @@ import textwrap
 rt = pymxs.runtime
 
 type_re = re.compile(r"([A-Z\-]+):")
-ignore_messages = ["SYNSET", "CATEGORY", "ABILITIES", "SUBSTANCE", "STRUCTURE-UNCLOSED"]
 def should_get_complaint(complaint):
     if complaint["processed"]:
-        return False
-        
-    complaint_type = "PREVIOUS PASS"
-    m = type_re.match(complaint["message"])
-    if m:
-        complaint_type = m.group(1)
-
-    if complaint_type in ignore_messages:
         return False
 
     return True

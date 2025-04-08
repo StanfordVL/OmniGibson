@@ -1,14 +1,16 @@
 [
     {
-        "object": "ceilings-hfacms",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: slightly unperpendicular corner",
-        "processed": true
+        "object": "walls-bgymrg",
+        "complaint": "wensi: remove baseboard",
+        "processed": true,
+        "type": "collision",
+        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
     },
     {
-        "object": "walls-bgymrg",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
-        "complaint": "wensi: remove baseboard",
-        "processed": true
+        "object": "ceilings-hfacms",
+        "complaint": "wensi: slightly unperpendicular corner",
+        "processed": true,
+        "type": "collision",
+        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
     }
 ]

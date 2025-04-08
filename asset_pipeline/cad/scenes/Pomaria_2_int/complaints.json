@@ -1,8 +1,9 @@
 [
     {
         "object": "ceilings-carllw",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "slightly unperpendicular corner",
-        "processed": true
+        "processed": true,
+        "type": "collision",
+        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
     }
 ]

@@ -1,558 +1,821 @@
 [
     {
         "object": "bag_of_rice-feerye",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: bag__of__rice.n.01 (custom synset)\nDefinition: (hypernyms: grocery.n.02): (usually plural) consumer goods sold by a grocer\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
         "complaint": "\u001b[",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "baking_sheet-yhurut",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "ammonia-daasuw",
-        "message": "Confirm reasonable bounding box size:\n2.89m, 2.89m, 5.49m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x10",
-        "processed": true
-    },
-    {
-        "object": "cranberry_juice_bottle-heoxnw",
-        "message": "Confirm reasonable bounding box size:\n23.46cm, 23.37cm, 69.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x3",
-        "processed": true
-    },
-    {
-        "object": "bottle_of_cranberry_juice-heoxnw",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "not transparent (can't see content inside)",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "category",
+        "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: bag__of__rice.n.01 (custom synset)\nDefinition: (hypernyms: grocery.n.02): (usually plural) consumer goods sold by a grocer\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category."
     },
     {
         "object": "sanitizer-ucqzck",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton;fluidsource?particleapplier?",
-        "processed": true
+        "processed": true,
+        "type": "metalink",
+        "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object."
     },
     {
         "object": "bottle_of_disinfectant-ucqzck",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
         "complaint": "particleSource, toggleable",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
     },
     {
         "object": "bottle_of_disinfectant-ucqzck",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "should be transparent",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
         "object": "lighter_fluid-qudpzo",
-        "message": "Confirm reasonable bounding box size:\n35.01m, 18.01m, 95.64m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "complaint": "x400",
-        "processed": true
-    },
-    {
-        "object": "bottle_of_liquid_soap-bhquvg",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier, toggleable",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "bottle_of_liquid_soap-bhquvg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "salsa-dvxotd",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "salsa-mavope",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "salsa-nafwlf",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n35.01m, 18.01m, 95.64m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
     },
     {
         "object": "bottle_of_sesame_oil-jipawg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "not transparent (cannot see content inside)",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "bowl-hpqjug",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "missing texture",
-        "processed": true
-    },
-    {
-        "object": "custard_bowl-kasebx",
-        "message": "Confirm reasonable bounding box size:\n9.56mm, 9.56mm, 5.50mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "1/10",
-        "processed": true
-    },
-    {
-        "object": "bread-pfggnm",
-        "message": "Confirm reasonable bounding box size:\n21.27cm, 21.13cm, 3.35cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x2",
-        "processed": true
-    },
-    {
-        "object": "bread-yedlgq",
-        "message": "Confirm reasonable bounding box size:\n22.03cm, 22.35cm, 4.66cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x2",
-        "processed": true
-    },
-    {
-        "object": "candied_yam-axmnvy",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
-    },
-    {
-        "object": "candied_yam-axmnvy",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
+        "object": "bottle_of_sesame_oil-jipawg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
-    },
-    {
-        "object": "candied_yam-ayqjzg",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
-    },
-    {
-        "object": "candied_yam-ayqjzg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "candied_yam-ivkukc",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
-    },
-    {
-        "object": "candied_yam-ivkukc",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "candied_yam-mztmgb",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
-    },
-    {
-        "object": "candied_yam-mztmgb",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "candied_yam-zzxnmn",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
-    },
-    {
-        "object": "rug-sehjcp",
-        "message": "Confirm reasonable bounding box size:\n2.50m, 2.01m, 2.22cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x10",
-        "processed": true
-    },
-    {
-        "object": "rug-sehjcp",
-        "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
-        "complaint": "cloth",
-        "processed": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "tire-lnbowh",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "no texture",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "duck-nletxg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "category",
+        "additional_info": ""
+    },
+    {
+        "object": "duck-nletxg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
     },
     {
         "object": "espresso_machine-tysouc",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton",
-        "processed": true
+        "processed": true,
+        "type": "metalink",
+        "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object."
     },
     {
         "object": "espresso_machine-tysouc",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: True\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
         "complaint": "heatSource",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "sprinkler-nodoxv",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "sprinkler-nodoxv",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "togglebutton;fluidsource",
-        "processed": true
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: True\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
     },
     {
         "object": "food_processor-gamkbo",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "complaint": "togglebutton",
-        "processed": true
+        "processed": true,
+        "type": "metalink",
+        "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object."
     },
     {
         "object": "food_processor-gamkbo",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "missing food processor base glass holder to put in the food.",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "skillet-hzspwg",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
         "object": "half_candied_yam-ckwhwm",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "half_candied_yam-ckwhwm",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "half_candied_yam-dqfxuu",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "texture black",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "ice_cube-czbfpm",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "ice_cube-dueotq",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "ice_cube-lkirej",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "ice_cube-pjgror",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "ice_cube-tqsquu",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "ice_cube-ujmgkb",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "ice_cube-xupugj",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "jar_of_sugar-rfzqei",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "should be glass",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "lily-jfeimu",
-        "message": "Confirm reasonable bounding box size:\n18.10cm, 22.52cm, 42.48cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x2",
-        "processed": true
-    },
-    {
-        "object": "lily-jtouad",
-        "message": "Confirm reasonable bounding box size:\n19.62cm, 21.52cm, 42.49cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x2",
-        "processed": true
+        "object": "half_candied_yam-dqfxuu",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "mac_and_cheese-gamhfg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "similar to salad, this is a collection of small objects, but maybe it's okay",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "paper_liners-yvuilk",
+        "complaint": "rigidBody",
+        "processed": true,
+        "new": true,
+        "type": "substanceness",
+        "additional_info": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: cloth.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change."
+    },
+    {
+        "object": "paper_liners-yvuilk",
+        "complaint": "cloth,particleRemover",
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
+    },
+    {
+        "object": "yoga_mat-podgkd",
+        "complaint": "rigidBody",
+        "processed": true,
+        "new": true,
+        "type": "substanceness",
+        "additional_info": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: cloth.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change."
+    },
+    {
+        "object": "yoga_mat-podgkd",
+        "complaint": "cloth",
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
+    },
+    {
+        "object": "yoga_mat-podgkd",
+        "complaint": "rolled_yoga_mat",
+        "processed": true,
+        "new": true,
+        "type": "category",
+        "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: yoga_mat\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category."
+    },
+    {
+        "object": "yoga_mat-podgkd",
+        "complaint": "rolled up but was marked as cloth. bad?",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "rolled_yoga_mat-podgkd",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
     },
     {
-        "object": "mint_leaf-asdasd",
-        "message": "Confirm reasonable bounding box size:\n0.92mm, 1.25mm, 2.30mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "1/10",
-        "processed": true
+        "object": "shorts-rlespi",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
-        "object": "mint_leaf-ujfdga",
-        "message": "Confirm reasonable bounding box size:\n1.06mm, 1.72mm, 3.01mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "1/10",
-        "processed": true
+        "object": "shorts-rlespi",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "shorts-rlespi",
+        "complaint": "cloth",
+        "processed": true,
+        "type": "softbody",
+        "additional_info": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body."
+    },
+    {
+        "object": "shorts-rlespi",
+        "complaint": "3",
+        "processed": true,
+        "new": true,
+        "type": "substanceness",
+        "additional_info": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: cloth.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change."
+    },
+    {
+        "object": "shorts-rlespi",
+        "complaint": "particleRemover",
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
+    },
+    {
+        "object": "shorts-rlespi",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "shorts-rlespi",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
     },
     {
         "object": "mushroom-jnfabw",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: mushroom\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
         "complaint": "maybe sliced_mushroom instead?",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "paper_liners-yvuilk",
-        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: cloth.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
-        "complaint": "rigidBody",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "paper_liners-yvuilk",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "cloth,particleRemover",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "plate-aewthq",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: plate.n.04\nDefinition: dish on which food is served or from which food is eaten\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
-        "complaint": "0",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "raincoat-wczokr",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "raincoat-wczokr",
-        "message": "Confirm reasonable bounding box size:\n5.50m, 1.62m, 9.29m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x10",
-        "processed": true
-    },
-    {
-        "object": "raincoat-wczokr",
-        "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
-        "complaint": "cloth",
-        "processed": true
-    },
-    {
-        "object": "shorts-rlespi",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "shorts-rlespi",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "shorts-rlespi",
-        "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
-        "complaint": "cloth",
-        "processed": true
-    },
-    {
-        "object": "shorts-rlespi",
-        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: cloth.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
-        "complaint": "3",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "shorts-rlespi",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleRemover",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "slotted_spoon-ucrzlb",
-        "message": "Confirm reasonable bounding box size:\n16.99cm, 13.17cm, 64.38cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "no texture",
-        "processed": false
-    },
-    {
-        "object": "sieve-ucrzlb",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "no texture",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "category",
+        "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: mushroom\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category."
     },
     {
         "object": "snow_globe-owteks",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "socks-vpafgj",
-        "message": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
-        "complaint": "cloth",
-        "processed": true
-    },
-    {
-        "object": "spatula-hkvsep",
-        "message": "Confirm reasonable bounding box size:\n15.16cm, 6.74cm, 70.27cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x2",
-        "processed": true
-    },
-    {
-        "object": "spatula-ymvrct",
-        "message": "Confirm reasonable bounding box size:\n14.05cm, 5.88cm, 70.01cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
-        "complaint": "x2",
-        "processed": true
-    },
-    {
-        "object": "spray_bottle-lwmelf",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "togglebutton;fluidsource;particleapplier",
-        "processed": true
-    },
-    {
-        "object": "spray_bottle-lwmelf",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "degreaser-miqtui",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "particleapplier;togglebutton",
-        "processed": true
-    },
-    {
-        "object": "spray_bottle-miqtui",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "spray_bottle-wegawe",
-        "message": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
-        "complaint": "togglebutton;fluidsource;particleapplier",
-        "processed": true
-    },
-    {
-        "object": "spray_bottle-wegawe",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
-        "complaint": "particleApplier",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "vase-hliauj",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": true
-    },
-    {
-        "object": "vase-hliauj",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "can not see bottom part",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "balsamic_vinegar-hbsbwt",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "questionable texture",
-        "processed": true
-    },
-    {
-        "object": "whisk-ovaccb",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
-        "complaint": "no texture",
-        "processed": false
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "whiskey_stone-hllvwu",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "no texture",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "whiskey_stone-hllvwu",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
         "object": "yoga_mat-ehrvce",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
         "complaint": "particleRemover",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
     },
     {
-        "object": "yoga_mat-podgkd",
-        "message": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: cloth.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
-        "complaint": "rigidBody",
-        "processed": false,
-        "new": true
+        "object": "baking_sheet-yhurut",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "yoga_mat-podgkd",
-        "message": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
+        "object": "bottle_of_liquid_soap-bhquvg",
+        "complaint": "particleApplier, toggleable",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
+    },
+    {
+        "object": "bottle_of_liquid_soap-bhquvg",
+        "complaint": "no texture",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "bottle_of_liquid_soap-bhquvg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "bowl-hpqjug",
+        "complaint": "missing texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "custard_bowl-kasebx",
+        "complaint": "1/10",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n9.56mm, 9.56mm, 5.50mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "bread-pfggnm",
+        "complaint": "x2",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n21.27cm, 21.13cm, 3.35cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "bread-yedlgq",
+        "complaint": "x2",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n22.03cm, 22.35cm, 4.66cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "candied_yam-axmnvy",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "candied_yam-axmnvy",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "candied_yam-axmnvy",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "candied_yam-ayqjzg",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "candied_yam-ayqjzg",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "candied_yam-ayqjzg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "candied_yam-ivkukc",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "candied_yam-ivkukc",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "candied_yam-ivkukc",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "candied_yam-mztmgb",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "candied_yam-mztmgb",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "candied_yam-mztmgb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "candied_yam-zzxnmn",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "candied_yam-zzxnmn",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "sprinkler-nodoxv",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "sprinkler-nodoxv",
+        "complaint": "togglebutton;fluidsource",
+        "processed": true,
+        "type": "metalink",
+        "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object."
+    },
+    {
+        "object": "fire_sprinkler-nodoxv",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "skillet-hzspwg",
+        "complaint": "no texture",
+        "processed": false,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "ice_cube-czbfpm",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "ice_cube-dueotq",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "ice_cube-lkirej",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "ice_cube-pjgror",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "ice_cube-tqsquu",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "ice_cube-ujmgkb",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "ice_cube-xupugj",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "lily-jfeimu",
+        "complaint": "x2",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n18.10cm, 22.52cm, 42.48cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "lily-jtouad",
+        "complaint": "x2",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n19.62cm, 21.52cm, 42.49cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "mop-qclfvj",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "joint",
+        "additional_info": ""
+    },
+    {
+        "object": "mop_bucket-xjzyfc",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "joint",
+        "additional_info": ""
+    },
+    {
+        "object": "pallet-autwkf",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
+    },
+    {
+        "object": "raincoat-wczokr",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "raincoat-wczokr",
+        "complaint": "x10",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n5.50m, 1.62m, 9.29m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "raincoat-wczokr",
         "complaint": "cloth",
-        "processed": false,
-        "new": true
+        "processed": true,
+        "type": "softbody",
+        "additional_info": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body."
     },
     {
-        "object": "yoga_mat-podgkd",
-        "message": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: yoga_mat\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
-        "complaint": "rolled_yoga_mat",
+        "object": "raincoat-wczokr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
     },
     {
-        "object": "yoga_mat-podgkd",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
-        "complaint": "rolled up but was marked as cloth. bad?",
+        "object": "slotted_spoon-ucrzlb",
+        "complaint": "no texture",
         "processed": false,
-        "new": true
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n16.99cm, 13.17cm, 64.38cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "sieve-ucrzlb",
+        "complaint": "no texture",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "socks-vpafgj",
+        "complaint": "cloth",
+        "processed": true,
+        "type": "softbody",
+        "additional_info": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body."
+    },
+    {
+        "object": "spatula-hkvsep",
+        "complaint": "x2",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n15.16cm, 6.74cm, 70.27cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "spatula-ymvrct",
+        "complaint": "x2",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n14.05cm, 5.88cm, 70.01cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "vase-hliauj",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "vase-hliauj",
+        "complaint": "can not see bottom part",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "whisk-ovaccb",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "ammonia-daasuw",
+        "complaint": "x10",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n2.89m, 2.89m, 5.49m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "salsa-dvxotd",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "salsa-mavope",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "salsa-nafwlf",
+        "complaint": "no texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "rug-sehjcp",
+        "complaint": "x10",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n2.50m, 2.01m, 2.22cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "rug-sehjcp",
+        "complaint": "cloth",
+        "processed": true,
+        "type": "softbody",
+        "additional_info": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body."
+    },
+    {
+        "object": "jar_of_sugar-rfzqei",
+        "complaint": "should be glass",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "jar_of_sugar-rfzqei",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "mint_leaf-asdasd",
+        "complaint": "1/10",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n0.92mm, 1.25mm, 2.30mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "mint_leaf-ujfdga",
+        "complaint": "1/10",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n1.06mm, 1.72mm, 3.01mm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "plate-aewthq",
+        "complaint": "0",
+        "processed": true,
+        "new": true,
+        "type": "category",
+        "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: plate.n.04\nDefinition: dish on which food is served or from which food is eaten\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category."
+    },
+    {
+        "object": "soda_cup-lpanoc",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "spray_bottle-lwmelf",
+        "complaint": "togglebutton;fluidsource;particleapplier",
+        "processed": true,
+        "type": "metalink",
+        "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object."
+    },
+    {
+        "object": "spray_bottle-lwmelf",
+        "complaint": "particleApplier",
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
+    },
+    {
+        "object": "degreaser-miqtui",
+        "complaint": "particleapplier;togglebutton",
+        "processed": true,
+        "type": "metalink",
+        "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object."
+    },
+    {
+        "object": "spray_bottle-miqtui",
+        "complaint": "particleApplier",
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
+    },
+    {
+        "object": "spray_bottle-wegawe",
+        "complaint": "togglebutton;fluidsource;particleapplier",
+        "processed": true,
+        "type": "metalink",
+        "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object."
+    },
+    {
+        "object": "spray_bottle-wegawe",
+        "complaint": "particleApplier",
+        "processed": true,
+        "new": true,
+        "type": "metalink",
+        "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: True\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'."
+    },
+    {
+        "object": "balsamic_vinegar-hbsbwt",
+        "complaint": "questionable texture",
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
+    },
+    {
+        "object": "cranberry_juice_bottle-heoxnw",
+        "complaint": "x3",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n23.46cm, 23.37cm, 69.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note."
+    },
+    {
+        "object": "bottle_of_cranberry_juice-heoxnw",
+        "complaint": "not transparent (can't see content inside)",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     }
 ]

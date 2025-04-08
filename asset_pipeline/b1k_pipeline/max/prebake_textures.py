@@ -29,12 +29,11 @@ PrebakeDataAttr = rt.execute(_prebake_data_str)
 
 btt = rt.BakeToTexture
 
-EXPORT_TEXTURES = False
+BATCH_MODE = False
 USE_UNWRELLA = True
-USE_NATIVE_EXPORT = False
 IMG_SIZE = 1024
 HQ_IMG_SIZE = 4096
-HQ_IMG_CATEGORIES = {"floors"}
+HQ_IMG_CATEGORIES = {"floors", "lawn", "driveway", "walls"}
 NEW_UV_CHANNEL = 99
 
 # PBRMetalRough
@@ -51,7 +50,8 @@ CHANNEL_MAPPING = {
     "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
     # "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
     # "VRaySelfIlluminationMap": "Emission Color Map",
-    "VRayRawRefractionFilterMap": "Transparency Color Map",  # or VRayRefractionFilterMap: Transparency Map
+    "VRayRawReflectionFilterMap": "Reflectivity Map",
+    "VRayRawRefractionFilterMap": "Transparency Map",
     "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
 }
 # CHANNEL_MAPPING = {
@@ -140,7 +140,6 @@ class TextureBaker:
         self.MAP_NAME_TO_IDS = self.get_map_name_to_ids()
 
         self.unwrap_times = {}
-        self.baking_times = {}
 
         self.bakery = bakery
         os.makedirs(bakery, exist_ok=True)
@@ -251,7 +250,7 @@ class TextureBaker:
         end_time = time.time()
         self.unwrap_times[obj.name] = end_time - start_time
 
-    def texture_baking(self, obj):
+    def prepare_texture_baking(self, obj):
         # If the object is already connected to a baked material, skip the baking process
         if (
             rt.classOf(obj.material) == rt.Shell_Material
@@ -259,6 +258,11 @@ class TextureBaker:
         ):
             print(f"Skipping baking for {obj.name} as it is already baked.")
             return
+
+        # Also skip objects whose material is not some kind of a Vray material
+        # if "vray" not in str(rt.classOf(obj.material)).lower():
+        #     print(f"Skipping baking for {obj.name} as it is not a Vray material.")
+        #     return
 
         # Get the existing baseobject children that use the same material as this one
         siblings = []
@@ -274,18 +278,7 @@ class TextureBaker:
         if rt.classOf(obj.material) == rt.Shell_Material:
             obj.material = obj.material.originalMaterial
 
-        # vray = rt.renderers.current
-        # vray.camera_autoExposure = False
-        # vray.options_lights = False
-        # vray.options_hiddenLights = False
-        rt.sceneexposurecontrol.exposurecontrol = None
-
-        start_time = time.time()
-
         print("prepare_texture_baking", obj.name)
-
-        # Clear the baking list first.
-        btt.deleteAllMaps()
 
         for i, map_name in enumerate(CHANNEL_MAPPING.keys()):
             texture_map = btt.addMapByClassId(obj, self.MAP_NAME_TO_IDS[map_name])
@@ -320,60 +313,86 @@ class TextureBaker:
             # Mapping from the original channel (of VRay, Corona, etc) to the new channel of PhysicalMaterial
             texture_map.setTargetMapSlot(CHANNEL_MAPPING[map_name])
 
-        btt.outputPath = self.bakery
-        btt.autoCloseProgressDialog = True
-        btt.showFrameBuffer = False
-        btt.alwaysOverwriteExistingFiles = True
+        return siblings
 
-        # Do the actual baking
-        print("start baking")
-        assert btt.bake(), "baking failed"
-        print("finish baking")
-        end_time = time.time()
-        self.baking_times[obj.name] = end_time - start_time
-
-        # Clear the baking list again.
-        btt.deleteAllMaps()
-
+    def postprocess_texture_baking(self, obj, siblings):
         # Set the object to render the baked material
         obj.material.renderMtlIndex = 1
 
         # Update everything that has the same baseobject to use the same material
         for sibling in siblings:
             sibling.material = obj.material
-
-        # TODO: Do any additional necessary work on the material.
+            rt.update(sibling)
 
         rt.update(obj)
+
+    def texture_baking(self):
+        # vray = rt.renderers.current
+        # vray.camera_autoExposure = False
+        # vray.options_lights = False
+        # vray.options_hiddenLights = False
+        rt.sceneexposurecontrol.exposurecontrol = None
+
+        # Bake textures
+        btt.outputPath = self.bakery
+        btt.autoCloseProgressDialog = True
+        btt.showFrameBuffer = False
+        btt.alwaysOverwriteExistingFiles = True
+
+        # Do the actual baking
+        start_time = time.time()
+        print("start baking")
+        assert btt.bake(), "baking failed"
+        print("finish baking")
+        end_time = time.time()
+        print(f"baking took {end_time - start_time} seconds")
+
+        # Clear the baking list again.
+        btt.deleteAllMaps()
 
     def run(self):
         # assert rt.classOf(rt.renderers.current) == rt.V_Ray_5__update_2_3, f"Renderer should be set to V-Ray 5.2.3 CPU instead of {rt.classOf(rt.renderers.current)}"
         assert rt.execute("max modify mode")
 
         # Remove lights from all materials
-        unlight_all_mats()
+        # unlight_all_mats()
+
+        # Remove the texture baking list
+        btt.deleteAllMaps()
 
         objs = self.get_process_objs()
-        failures = {}
+        postprocessing = []  # (obj, siblings)
         for i, obj in enumerate(objs):
-            try:
-                print(f"{i+1} / {len(objs)} total")
+            print(f"{(i + 1)} / {len(objs)}: {obj.name}")
 
-                rt.select([obj])
-                rt.IsolateSelection.EnterIsolateSelectionMode()
+            rt.select([obj])
+            rt.IsolateSelection.EnterIsolateSelectionMode()
 
-                obj.isHidden = False
-                for child in obj.children:
-                    child.isHidden = False
+            obj.isHidden = False
+            for child in obj.children:
+                child.isHidden = False
 
-                # TODO: Can we bake all at once?
-                self.uv_unwrapping(obj)
-                self.texture_baking(obj)
-            except Exception as e:
-                failures[obj.name] = traceback.format_exc()
+            # TODO: Can we bake all at once?
+            self.uv_unwrapping(obj)
+            siblings = self.prepare_texture_baking(obj)
+            if siblings is None:  # not baking this object!
+                continue
 
-        failure_msg = "\n".join(f"{obj}: {err}" for obj, err in failures.items())
-        assert len(failures) == 0, f"Some objects could not be exported:\n{failure_msg}"
+            if not BATCH_MODE:
+                # If we're not in batch mode, bake now.
+                self.texture_baking()
+                self.postprocess_texture_baking(obj, siblings)
+            else:
+                # Otherwise, queue for postprocessing for after baking.
+                postprocessing.append((obj, siblings))
+
+        if BATCH_MODE:
+            # Bake
+            self.texture_baking()
+
+            # Postprocessing
+            for obj, siblings in postprocessing:
+                self.postprocess_texture_baking(obj, siblings)
 
 
 def process_open_file():

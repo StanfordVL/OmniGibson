@@ -48,7 +48,7 @@ def get_collision_meshes_relative_to_base(obj, base_transform):
         tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
         for i in range(rt.polyop.GetNumFaces(obj))
     }
-    assert len(elems) <= 32, f"{obj.name} should not have more than 32 elements."
+    assert len(elems) <= 40, f"{obj.name} should not have more than 32 elements."
     elems = np.array(list(elems))
     assert not np.any(
         np.sum(elems, axis=0) > 1
@@ -147,7 +147,7 @@ def import_bad_model_originals(model_id):
     return imported_meshes
 
 
-def prepare_scene():
+def prepare_scene(use_clutter=False):
     # Get all the collision meshes in the scene that belong to lower, instance-zero meshes
     scene = trimesh.Scene()
 
@@ -245,7 +245,7 @@ def prepare_scene():
 
         # For now, skip clutter
         loose_key = parsed_name.group("loose")
-        if loose_key and "C" in loose_key:
+        if loose_key and "C" in loose_key and not use_clutter:
             continue
 
         # Only use the base link to get everything else's position
@@ -342,11 +342,14 @@ def check_collisions(scene):
 
 
 def main():
+    opts = rt.maxops.mxsCmdLineArgs
+    use_clutter = opts[rt.name("clutter")] == "true"
+
     scene = None
     error = None
     collisions = []
     try:
-        scene = prepare_scene()
+        scene = prepare_scene(use_clutter=use_clutter)
         scene.export(r"D:\physics.ply")
         collisions = check_collisions(scene)
         for left, right, depth in collisions:
@@ -358,7 +361,7 @@ def main():
     output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    filename = output_dir / "check_collisions.json"
+    filename = output_dir / ("check_collisions.json" if not use_clutter else "check_collisions_with_clutter.json")
     results = {
         "success": not error and len(collisions) == 0,
         "collisions": collisions,

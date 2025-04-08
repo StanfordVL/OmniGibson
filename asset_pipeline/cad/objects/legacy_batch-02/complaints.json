@@ -1,688 +1,1399 @@
 [
     {
         "object": "armchair-axudcx",
-        "message": "Confirm reasonable bounding box size:\n50.62cm, 59.26cm, 62.65cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n50.62cm, 59.26cm, 62.65cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
+    },
+    {
+        "object": "armchair-axudcx",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
     },
     {
         "object": "armchair-bslhmj",
-        "message": "Confirm reasonable bounding box size:\n57.88cm, 55.00cm, 61.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "seems too small average height is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n57.88cm, 55.00cm, 61.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-cyvmhv",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "I'm not sure it would stand upright, it's designed weirdly with no back support",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "armchair-cyvmhv",
-        "message": "Confirm reasonable bounding box size:\n46.88cm, 56.60cm, 67.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average height of an armchair is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n46.88cm, 56.60cm, 67.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-fsrprw",
-        "message": "Confirm reasonable bounding box size:\n51.47cm, 58.63cm, 62.55cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average height of an armchair is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n51.47cm, 58.63cm, 62.55cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-jmunen",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "i am not sure the physics would work with this armchair",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "armchair-jmunen",
-        "message": "Confirm reasonable bounding box size:\n66.95cm, 51.01cm, 53.99cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small armchair height is on average 76 to 102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n66.95cm, 51.01cm, 53.99cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
+    },
+    {
+        "object": "armchair-jmunen",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
     },
     {
         "object": "armchair-nckeqb",
-        "message": "Confirm reasonable bounding box size:\n53.62cm, 60.54cm, 58.82cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too smalle average armchair height is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n53.62cm, 60.54cm, 58.82cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-pmrcex",
-        "message": "Confirm reasonable bounding box size:\n48.38cm, 51.58cm, 70.60cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average armchair height is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n48.38cm, 51.58cm, 70.60cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-qgcjtr",
-        "message": "Confirm reasonable bounding box size:\n57.56cm, 59.22cm, 55.80cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average armchair height is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n57.56cm, 59.22cm, 55.80cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-qjwuus",
-        "message": "Confirm reasonable bounding box size:\n53.35cm, 50.59cm, 67.79cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average armchair height is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n53.35cm, 50.59cm, 67.79cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-rabzuf",
-        "message": "Confirm reasonable bounding box size:\n52.83cm, 56.75cm, 63.16cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average armchair height is 76-102 cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n52.83cm, 56.75cm, 63.16cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-tcxiue",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "not sure if the physics would allow it to stand",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "armchair-tcxiue",
-        "message": "Confirm reasonable bounding box size:\n57.44cm, 59.64cm, 56.02cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average armchair height is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n57.44cm, 59.64cm, 56.02cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-umbrpd",
-        "message": "Confirm reasonable bounding box size:\n62.58cm, 61.71cm, 44.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average height of an armchair is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n62.58cm, 61.71cm, 44.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-viphen",
-        "message": "Confirm reasonable bounding box size:\n41.76cm, 52.59cm, 74.10cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average height of an armchair is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n41.76cm, 52.59cm, 74.10cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-vtsoat",
-        "message": "Confirm reasonable bounding box size:\n64.81cm, 60.45cm, 43.03cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "shorter than average chair but it looks it too so i'm not sure",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n64.81cm, 60.45cm, 43.03cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-vzhxuf",
-        "message": "Confirm reasonable bounding box size:\n46.52cm, 52.18cm, 71.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average height of an armchair is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n46.52cm, 52.18cm, 71.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-xkacfd",
-        "message": "Confirm reasonable bounding box size:\n63.38cm, 57.38cm, 51.87cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average height of an armchair is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n63.38cm, 57.38cm, 51.87cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-xpcheg",
-        "message": "Confirm reasonable bounding box size:\n62.96cm, 58.47cm, 51.16cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small average height of an armchair is 76-102cm",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n62.96cm, 58.47cm, 51.16cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "armchair-xqovyv",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "missing its back",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-eoywpy",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "it's the name of a real board game so maybe change the brand name",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-frgdqh",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "not sure if the game name is real",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-fzyuip",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "tetris is the name of real game so we should change",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-gcfkqa",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real game so brand issues",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-gumkqh",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real game we should change ",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-ibzhzu",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real game so we should change appearance",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-iqfvfl",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real game brand",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-lzslbu",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real game brand",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-nfewft",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real game brand",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-ovttum",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real game brand",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-qdkyzl",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real brand game",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-qgvsnb",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real brand game ",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-rgvkmy",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real brand game",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-twkglv",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real brand game",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "board_game-vbamua",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "real brand game ",
-        "processed": true
-    },
-    {
-        "object": "breakfast_table-cjjayg",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "more like coffee table",
-        "processed": false
-    },
-    {
-        "object": "breakfast_table-dnsjnv",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "more like coffee table",
-        "processed": false
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "breakfast_table-hggsao",
-        "message": "Confirm reasonable bounding box size:\n81.62cm, 46.70cm, 34.01cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n81.62cm, 46.70cm, 34.01cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-idnnmz",
-        "message": "Confirm reasonable bounding box size:\n87.94cm, 35.98cm, 31.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small ",
-        "processed": true
-    },
-    {
-        "object": "breakfast_table-ixvmic",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "more like coffee table",
-        "processed": false
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n87.94cm, 35.98cm, 31.18cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-kpwegp",
-        "message": "Confirm reasonable bounding box size:\n78.08cm, 38.97cm, 35.39cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n78.08cm, 38.97cm, 35.39cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-kwmfdg",
-        "message": "Confirm reasonable bounding box size:\n85.05cm, 43.62cm, 29.37cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n85.05cm, 43.62cm, 29.37cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-lcsizg",
-        "message": "Confirm reasonable bounding box size:\n74.99cm, 49.92cm, 42.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n74.99cm, 49.92cm, 42.51cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-lnwggc",
-        "message": "Confirm reasonable bounding box size:\n65.10cm, 65.24cm, 38.81cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "maybe too small",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n65.10cm, 65.24cm, 38.81cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-lnwggc",
-        "message": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object.",
         "complaint": "\\",
-        "processed": true
+        "processed": true,
+        "type": "metalink",
+        "additional_info": "Confirm object meta links:\nMake sure these match mechanisms you expect from this object."
     },
     {
-        "object": "breakfast_table-metubv",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "more like coffee table",
-        "processed": false
+        "object": "breakfast_table-lwtcfh",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
     },
     {
         "object": "breakfast_table-mwsyqb",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "too short to be breakfast table?? Maybe coffee table?",
-        "processed": true
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
     },
     {
         "object": "breakfast_table-mwsyqb",
-        "message": "Confirm reasonable bounding box size:\n1.69m, 98.53cm, 91.34cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too big",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n1.69m, 98.53cm, 91.34cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-mwsyqb",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "Some gaps in table legs are blocked",
-        "processed": true
+        "processed": true,
+        "type": "collision",
+        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
+    },
+    {
+        "object": "breakfast_table-mwsyqb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "breakfast_table-mwsyqb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "joint",
+        "additional_info": ""
     },
     {
         "object": "breakfast_table-pllvrt",
-        "message": "Confirm reasonable bounding box size:\n84.46cm, 41.33cm, 34.05cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n84.46cm, 41.33cm, 34.05cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-skczfi",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "there seems to be a gap between boards",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "breakfast_table-skczfi",
-        "message": "Confirm reasonable bounding box size:\n86.15cm, 35.89cm, 35.90cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
-    },
-    {
-        "object": "breakfast_table-skseyx",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "coffee table",
-        "processed": false
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n86.15cm, 35.89cm, 35.90cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-uhrsex",
-        "message": "Confirm reasonable bounding box size:\n83.52cm, 41.76cm, 29.95cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
-    },
-    {
-        "object": "breakfast_table-wwsikw",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "looks like coffee table",
-        "processed": false
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n83.52cm, 41.76cm, 29.95cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "breakfast_table-zypvuv",
-        "message": "Confirm reasonable bounding box size:\n81.24cm, 51.54cm, 27.30cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "complaint": "too small",
-        "processed": true
-    },
-    {
-        "object": "alarm-dkwmmf",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: alarm.n.01\nDefinition: fear resulting from the awareness of danger\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
-        "complaint": "bad synset - needs other alarm",
-        "processed": true
-    },
-    {
-        "object": "alarm-dkwmmf",
-        "message": "Confirm reasonable bounding box size:\n55.12cm, 55.11cm, 20.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
-        "complaint": "too big",
-        "processed": true
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n81.24cm, 51.54cm, 27.30cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "table_lamp-awfehr",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "the pivot looks off\\",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "table_lamp-awfehr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "missing a link",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
         "object": "table_lamp-awfehr",
-        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_link_3, RevoluteJoint\n- j_link_2, RevoluteJoint\n- j_link_1, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "joint limits are off",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "joint",
+        "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_link_3, RevoluteJoint\n- j_link_2, RevoluteJoint\n- j_link_1, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here."
+    },
+    {
+        "object": "table_lamp-awfehr",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-awfehr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-awfehr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-awfehr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-awfehr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-awfehr",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-bhdxug",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-bhdxug",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-bhdxug",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-bhdxug",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-bhdxug",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-dkfwyb",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-dkfwyb",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-dkfwyb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-dkfwyb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-dkfwyb",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-dkfwyb",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-eosezn",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-eosezn",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-eosezn",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-htinka",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-htinka",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-htinka",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-htinka",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-htinka",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-htinka",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-jiuwwn",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-jiuwwn",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-jiuwwn",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-jiuwwn",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-jiuwwn",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-jiuwwn",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-kwkqot",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no texture, center of mass needs to be annotated",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-kwkqot",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-kwkqot",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-kwkqot",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "joint",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-kwkqot",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-kwkqot",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-kwkqot",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-lyjkje",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-lyjkje",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-lyjkje",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-lyjkje",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-lyjkje",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-lyjkje",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-midfvh",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no texture, center of mass needs to be annotated",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-midfvh",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-midfvh",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-midfvh",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "joint",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-midfvh",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-midfvh",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-ncgcgo",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no texture, center of mass needs to be annotated",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-ncgcgo",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-ncgcgo",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-ncgcgo",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "joint",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-ncgcgo",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-ncgcgo",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-pmekkr",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no texture, center of mass needs to be annotated",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-pmekkr",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-pmekkr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-pmekkr",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-pmekkr",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-pxdhzm",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "no texture, center of mass needs to be annotated",
+        "processed": true,
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-pxdhzm",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-pxdhzm",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
         "processed": false,
-        "new": true
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-pxdhzm",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-pxdhzm",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-tggobp",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-tggobp",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-tggobp",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-tggobp",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-tggobp",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-tggobp",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-tggobp",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-tnbwvj",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "rip physics",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "table_lamp-tnbwvj",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-tnbwvj",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-tnbwvj",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-tnbwvj",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-tnbwvj",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-tnbwvj",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-utsqrs",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-utsqrs",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-utsqrs",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-utsqrs",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-utsqrs",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-wdqvjl",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
         "object": "table_lamp-wdqvjl",
-        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_link_3, RevoluteJoint\n- j_link_0, RevoluteJoint\n- j_link_1, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "joint limit looks off",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "joint",
+        "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_link_3, RevoluteJoint\n- j_link_0, RevoluteJoint\n- j_link_1, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here."
+    },
+    {
+        "object": "table_lamp-wdqvjl",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-wdqvjl",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "joint",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wdqvjl",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wdqvjl",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wdqvjl",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-wslomg",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-wslomg",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-wslomg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wslomg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wslomg",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wslomg",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-wvysoe",
-        "message": "Confirm object synset assignment.\nObject assigned to synset: table_lamp.n.01\nDefinition: a lamp that sits on a table\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "complaint": "missing parts",
-        "processed": true
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: table_lamp.n.01\nDefinition: a lamp that sits on a table\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
     },
     {
         "object": "table_lamp-wvysoe",
-        "message": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
         "complaint": "missing parts",
-        "processed": true
+        "processed": true,
+        "type": "appearance",
+        "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary."
     },
     {
         "object": "table_lamp-wvysoe",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-wvysoe",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-wvysoe",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wvysoe",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "metalink",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wvysoe",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "collision",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-wvysoe",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-xbfgjc",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
+    },
+    {
+        "object": "table_lamp-xbfgjc",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-xbfgjc",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-xbfgjc",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
     },
     {
         "object": "table_lamp-zpqejt",
-        "message": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "complaint": "center of mass needs to be annotated, default joint position looks off",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "appearance",
+        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
         "object": "table_lamp-zpqejt",
-        "message": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_link_3, RevoluteJoint\n- j_link_5, RevoluteJoint\n- j_link_2, RevoluteJoint\n- j_link_4, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
         "complaint": "joint limits are off",
         "processed": true,
-        "new": true
+        "new": true,
+        "type": "joint",
+        "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_link_3, RevoluteJoint\n- j_link_5, RevoluteJoint\n- j_link_2, RevoluteJoint\n- j_link_4, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here."
+    },
+    {
+        "object": "table_lamp-zpqejt",
+        "complaint": "See message",
+        "processed": true,
+        "new": true,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
+    },
+    {
+        "object": "table_lamp-zpqejt",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "appearance",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-zpqejt",
+        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "processed": false,
+        "new": true,
+        "type": "unknown",
+        "additional_info": ""
+    },
+    {
+        "object": "table_lamp-zpqejt",
+        "complaint": "Auto-generated 2025",
+        "processed": false,
+        "type": "centerofmass",
+        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
+    },
+    {
+        "object": "breakfast_table-cjjayg",
+        "complaint": "more like coffee table",
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
+    },
+    {
+        "object": "breakfast_table-dnsjnv",
+        "complaint": "more like coffee table",
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
+    },
+    {
+        "object": "breakfast_table-ixvmic",
+        "complaint": "more like coffee table",
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
+    },
+    {
+        "object": "breakfast_table-metubv",
+        "complaint": "more like coffee table",
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
+    },
+    {
+        "object": "breakfast_table-skseyx",
+        "complaint": "coffee table",
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
+    },
+    {
+        "object": "breakfast_table-wwsikw",
+        "complaint": "looks like coffee table",
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: breakfast_table.n.01\nDefinition: a table where breakfast is eaten\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
+    },
+    {
+        "object": "alarm-dkwmmf",
+        "complaint": "bad synset - needs other alarm",
+        "processed": true,
+        "type": "category",
+        "additional_info": "Confirm object synset assignment.\nObject assigned to synset: alarm.n.01\nDefinition: fear resulting from the awareness of danger\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)"
+    },
+    {
+        "object": "alarm-dkwmmf",
+        "complaint": "too big",
+        "processed": true,
+        "type": "scale",
+        "additional_info": "Confirm reasonable bounding box size:\n55.12cm, 55.11cm, 20.85cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL."
     },
     {
         "object": "teddy_bear-ecvxmu",
-        "message": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: teddy.n.01\nDefinition: plaything consisting of a child's toy bear (usually plush and stuffed with soft materials)\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
         "complaint": "1",
-        "processed": false,
-        "new": true
-    },
-    {
-        "object": "table_lamp-awfehr",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
         "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-bhdxug",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-dkfwyb",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-eosezn",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-htinka",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-jiuwwn",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-kwkqot",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-lyjkje",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-midfvh",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-ncgcgo",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-pmekkr",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-pxdhzm",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-tggobp",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-tnbwvj",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-utsqrs",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-wdqvjl",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-wslomg",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-wvysoe",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-xbfgjc",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
-    },
-    {
-        "object": "table_lamp-zpqejt",
-        "message": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
-        "complaint": "See message",
-        "processed": true,
-        "new": true
+        "new": true,
+        "type": "category",
+        "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: teddy.n.01\nDefinition: plaything consisting of a child's toy bear (usually plush and stuffed with soft materials)\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category."
     }
 ]

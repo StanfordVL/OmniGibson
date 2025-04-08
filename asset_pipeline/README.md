@@ -1,137 +1,131 @@
 # ig_pipeline
-This repository contains a DVC-based pipeline for converting 3ds Max assets into OmniGibson assets, as well as the data pointers to fetch the 3ds Max files from Stanford clusters or Google Cloud.
+
+This repository contains a DVC-based pipeline for converting 3D assets, primarily from the BEHAVIOR-1K project's 3ds Max format, into USD format suitable for OmniGibson simulation. It also includes data pointers to fetch the raw 3ds Max files.
 
 ## Setup
-Currently, this pipeline requires:
 
-* A computer running Windows 10 or 11 with at least 32gb (preferably 64gb) of memory
-* 3ds Max 2022 installed (can be downloaded with a Student license on Autodesk's website)
-* V-Ray 5 installed (can be downloaded with a Free Trial from Chaos's website)
-* Git and conda installed
+**Requirements**:
 
-To start working with this pipeline, clone this repository to the `D:\ig_pipeline` path on the Windows computer. This path is currently hardcoded in a number of places and will be removed later.
+* Windows 10 or 11 with at least 32GB RAM (64GB recommended).
+* Autodesk 3ds Max 2022 (Student license available).
+* V-Ray 5 (Free trial available).
+* Git and Conda installed.
 
-Then, set up the conda environment `pipeline` by running the below command in Powershell:
-```powershell
-conda env create --file environment.yml
-```
+**Installation Steps**:
 
-Also download the necessary packages into the 3ds Max Python environment by running the below command (updating the 3ds Max installation path as necessary):
-
-```powershell
-& 'C:\Program Files\Autodesk\3ds Max 2022\Python37\python.exe' -m ensurepip
-```
-
-```powershell
-& 'C:\Program Files\Autodesk\3ds Max 2022\Python37\python.exe' -m pip install -r requirements_3dsmax.txt
-```
-
-Finally, import our 3ds Max export settings by copying the `configs/gw_objexp.ini` file into `%LocalAppData%\Autodesk\3dsMax\2022 - 64bit\ENU\en-US\plugcfg` on your machine, overwriting any existing file if necessary (if the folder doesn't exist, launch 3ds Max).
+1.  **Clone Repository:** Clone this repository to `D:\ig_pipeline`. **Note:** This path might be hardcoded in some scripts.
+2.  **Create Conda Environment:** Open PowerShell and run:
+    ```powershell
+    conda env create --file environment.yml
+    ```
+3.  **Install 3ds Max Python Packages:** Run the following commands in PowerShell (update the 3ds Max installation path if necessary):
+    ```powershell
+    & 'C:\Program Files\Autodesk\3ds Max 2022\Python37\python.exe' -m ensurepip
+    & 'C:\Program Files\Autodesk\3ds Max 2022\Python37\python.exe' -m pip install -r requirements_3dsmax.txt
+    ```
+4.  **Import 3ds Max Export Settings:** Copy `configs/gw_objexp.ini` to `%LocalAppData%\Autodesk\3dsMax\2022 - 64bit\ENU\en-US\plugcfg`, overwriting if necessary. Launch 3ds Max once if the folder doesn't exist.
 
 ## Pulling Raw BEHAVIOR-1K 3ds Max Files
-While it can be run on arbitrary 3ds Max files, this pipeline is designed to run on the 3ds Max files that are part of the BEHAVIOR-1K project. **Unfortunately, due to licensing issues, we are unable to release these raw model files to non-Stanford-affilliated users.**
 
-As a Stanford-affilliated user, you can pull the BEHAVIOR-1K raw files from our private Google Cloud Storage. You first need to log in with your Google account using the below command:
+This pipeline is primarily designed for the BEHAVIOR-1K 3ds Max files.
 
-```
-gcloud auth application-default login
-```
-
-Then, when you run the `dvc pull` command, it should pull all of the raw files from the Google Cloud Storage server.
+* **Licensing:** Due to licensing restrictions, raw BEHAVIOR-1K model files cannot be released to non-Stanford-affiliated users.
+* **Stanford Users:**
+    1.  Authenticate with Google Cloud:
+        ```powershell
+        gcloud auth application-default login
+        ```
+    2.  Pull the data using DVC:
+        ```powershell
+        dvc pull
+        ```
 
 ## Repository Structure
-This repository has the below structure:
 
 ```
 ig_pipeline/
-├─ b1k_pipeline/                -> Scripts that power the pipeline. See `scripts` section.
-│  ├─ max/                      -> Scripts that must be run within 3ds Max.
-├─ artifacts/                   -> Pipeline output directory.
-│  ├─ pipeline/                 -> Outputs from pipeline processes & things that won't be included in dataset.
-│  ├─ aggregate/                -> Outputs that will be included in final dataset (objects, scenes, metadata).
-│  ├─ b1k_dataset.zip           -> Final dataset ZIP file for publication.
-├─ cad/                         -> Directory containing raw 3ds Max files
-│  ├─ scenes/                   -> Directory containing raw 3ds Max files for scenes
-|  |  ├─ {scene_name}           -> Directory containing data for each scene.
-|  |  |  ├─ artifacts/          -> Directory containing pipeline outputs for just this scene.
-|  |  |  |  ├─ TBD
-|  |  |  ├─ textures/           -> Directory containing texture etc. files that are required by the .max files.
-|  |  |  ├─ raw.max             -> (Optional) 3ds Max file containing raw/original scene.
-|  |  |  ├─ processed.max       -> 3ds Max file containing scene with annotations (Main Input of Pipeline)
-│  ├─ objects/                  -> Directory containing raw 3ds Max files for objects, same format as scenes.
-├─ metadata/
-├─ notebooks/                   -> Notebooks for examining repo state, analyzing metadata, etc - see Notebooks section.
-├─ render_presets/              -> Render presets for 3ds Max to render baked textures, 
-├─ dvc-tmpl.yaml                -> Template for dvc.yaml file, used by generate_params script to generate dvc.yaml.
-├─ dvc.yaml                     -> DVC pipeline configuration with all stage definitions, generated by script.
-├─ dvc.lock                     -> Lockfile containing the dependency hashes for each current file in the repository.
-
+├── b1k_pipeline/                #-> Core pipeline scripts 
+│   ├── max/                     #-> Scripts run within 3ds Max 
+│   ├── usd_conversion/          #-> Scripts for URDF to USD conversion 
+│   └── ...                      #-> Other pipeline modules and utilities
+├── artifacts/                   #-> Pipeline output directory 
+│   ├── pipeline/                #-> Intermediate outputs 
+│   ├── aggregate/               #-> Aggregated outputs for the final dataset (objects, scenes, metadata) 
+│   ├── parallels/               #-> Outputs from parallel processing stages (e.g., zipped objects, scenes)
+│   └── og_dataset.zip           #-> Final dataset ZIP file 
+├── cad/                         #-> Directory containing raw 3ds Max files 
+│   ├── scenes/                  #-> Raw 3ds Max scene files 
+│   │   └── {scene_name}/        #-> Data for each scene 
+│   │       ├── artifacts/       #-> Scene-specific pipeline outputs [cite: 84, 85]
+│   │       ├── textures/        #-> Texture files required by .max files 
+│   │       ├── raw.max          #-> (Optional) Original raw scene file 
+│   │       └── processed.max    #-> Processed scene file with annotations (Pipeline Input) [cite: 85, 86]
+│   └── objects/                 #-> Raw 3ds Max object files (similar structure to scenes) 
+├── metadata/                    #-> Metadata files (e.g., mappings, parameters) 
+├── notebooks/                   #-> Jupyter notebooks for analysis, examination, etc. 
+├── render_presets/              #-> Render presets for 3ds Max 
+├── configs/                     #-> Configuration files (e.g., gw_objexp.ini) 
+├── dvc-tmpl.yaml                #-> Template for dvc.yaml, used by generate_params.py 
+├── dvc.yaml                     #-> DVC pipeline definition (generated by script) 
+├── dvc.lock                     #-> DVC lockfile with dependency hashes 
+├── environment.yml              #-> Conda environment definition 
+└── README.md                    #-> This file
 ```
 
 ## Stages
-```mermaid
-  graph TD;
-    aggregate_metadata --> pack_dataset
-    aggregate_objs --> aggregate_metadata
-    aggregate_objs --> export_scene
-    aggregate_objs --> pack_dataset
-    aggregate_scenes --> aggregate_metadata
-    aggregate_scenes --> pack_dataset
-    export_meshes --> export_meshes_success
-    export_meshes --> export_objs
-    export_meshes --> export_scene
-    export_meshes_success --> export_objs
-    export_meshes_success --> export_scene
-    export_objs --> aggregate_objs
-    export_objs --> export_objs_success
-    export_objs_success --> aggregate_objs
-    export_scene --> aggregate_scenes
-    export_scene --> validate_scene
-    object_inventory --> aggregate_objs
-    object_list --> export_meshes
-    object_list --> export_objs
-    object_list --> object_inventory
-    object_list --> object_list_success
-    object_list_success --> export_objs
-    object_list --> combined_room_object_list
-    sanitycheck --> sanitycheck_success
-    processed.max --> export_meshes
-    processed.max --> object_list
-    processed.max --> sanitycheck
-```
 
-Here is a description of all stages:
-| Stage Name                | Description                                                                                                                                                                | Requirements             |
-|---------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------|
-| sanitycheck               | Runs a suite of tests against the 3ds Max file and outputs results in JSON file.                                                                                           | 3ds Max                  |
-| sanitycheck_success       | Checks if sanitycheck was successful, outputs an empty .success file.                                                                                                      |                          |
-| object_list               | Outputs a list of meshes (3ds Max objects) and objects (in the iGibson sense) that aare found in the 3ds Max file.                                                         | 3ds Max                  |
-| object_list_success       | Checks if object_list was successful, outputs an empty .success file.                                                                                                      |                          |
-| object_inventory          | Aggregates object list files, makes a list of what objects are provided by which file, and checks if all required objects are provided, there are no name collisions, etc. |                          |
-| generate_object_images    | Renders images of each individual object in the 3ds Max file.                                                                                                              | 3ds Max                  |
-| export_meshes             | Runs UV unwrapping and texture baking and exports OBJ and MTL files for each mesh in 3ds Max file.                                                                         | 3ds Max                  |
-| export_meshes_success     | Checks if export_meshes was successful, outputs an empty .success file.                                                                                                    |                          |
-| export_objs               | Processes the meshes exported from 3ds Max and generates URDF objects with properly organized joints, links, metadata, etc.                                                |                          |
-| export_objs_success       | Checks if export_objs was successful, outputs an empty .success file.                                                                                                      |                          |
-| validate_objs             | Runs validation checks on the exported URDF objects. Currently not active.                                                                                                 |                          |
-| aggregate_objs            | Aggregates objects produced by each "target" into a single "objects" directory.                                                                                            |                          |
-| usdify_objs               | Converts objects into USD from URDF.                                                                                                                                       | Docker, WSL2, Windows 11 |
-| generate_scene_images     | Generates images of scenes from a number of fixed perspectives. Deprecated - use camera images.                                                                            | 3ds Max                  |
-| generate_camera_images    | Generates images of scenes from the camera viewpoints they contain.                                                                                                        | 3ds Max                  |
-| combined_room_object_list | Combines the room object lists (and combines any requested partial scenes' contents) and converts them into WordNet synset format.                                         |                          |
-| export_scene              | Using the exported meshes, creates a scene URDF file that references the appropriate objects.                                                                              |                          |
-| validate_scene            | Runs validation checks (e.g. physics stability) on scene files.                                                                                                            |                          |
-| aggregate_scenes          | Aggregates objects produced by each "target" into a single "scenes" directory.                                                                                             |                          |
-| aggregate_metadata        | Aggregates certain metadata produced by each "target" into a single "metadata" directory.                                                                                  |                          |
-| usdify_scenes             | Converts scenes into USD from URDF.                                                                                                                                        | Dpcker, WSL2, Windows 11 |
-| pack_dataset              | Packs the dataset into a ZIP file for distribution.                                                                                                                        |                          |
-| upload_dataset            | Uploads the dataset ZIP file onto Google Cloud Storage.                                                                                                                    |                          |
+The pipeline uses DVC (Data Version Control) to manage stages and dependencies. Key stages defined in `dvc.yaml` include:
+
+| Stage Name                          | Description                                                                                                                          | Requirements             |
+| :---------------------------------- | :----------------------------------------------------------------------------------------------------------------------------------- | :----------------------- |
+| `object_list`                       | Lists meshes and iGibson objects within a `.max` file.                                                                   | 3ds Max                  |
+| `object_list_success`               | Aggregates and checks `object_list` results.                                                                                         |                          |
+| `sanitycheck`                       | Runs tests against the `.max` file format and outputs results[cite: 146, 98].                                                         | 3ds Max                  |
+| `sanitycheck_success`               | Aggregates and checks `sanitycheck` results.                                                                               |                          |
+| `check_collisions`                  | Checks for collisions between objects within a scene file.                                                                 | 3ds Max                  |
+| `check_collisions_success`          | Aggregates and checks `check_collisions` results.                                                                                    |                          |
+| `check_collisions_with_clutter`     | Checks for collisions including clutter objects.                                                                         | 3ds Max                  |
+| `check_collisions_with_clutter_success` | Aggregates and checks `check_collisions_with_clutter` results.                                                                       |                          |
+| `validate_meta_links`               | Validates meta-links defined in `object_list` files[cite: 151, 152].                                                                  |                          |
+| `object_inventory`                  | Aggregates object lists, checks for required objects, name collisions, etc.                                                |                          |
+| `object_inventory_success`          | Checks `object_inventory` results.                                                                                                   |                          |
+| `export_meshes`                     | Exports OBJ/MTL files with baked textures for each mesh in the `.max` file[cite: 155, 110].                                           | 3ds Max                  |
+| `export_meshes_success`             | Aggregates and checks `export_meshes` results.                                                                             |                          |
+| `generate_max_object_images`        | Renders images of individual objects within the `.max` file.                                                                 | 3ds Max                  |
+| `aggregate_max_object_images`       | Aggregates the object images generated per-target[cite: 158, 172].                                                                    |                          |
+| `generate_max_object_images_success`| Aggregates and checks `generate_max_object_images` results.                                                                          |                          |
+| `export_objs_global`                | Processes exported meshes (OBJ/MTL) into URDF objects with joints, links, metadata[cite: 159, 114].                                   |                          |
+| `export_objs_global_success`        | Checks `export_objs_global` results.                                                                                     |                          |
+| `combined_room_object_list`         | Generates a combined list of objects per room across scenes, with synset mappings[cite: 161, 126].                                      |                          |
+| `export_scenes_global`              | Creates scene URDF files referencing exported meshes and objects[cite: 163, 128].                                                      |                          |
+| `export_scenes_global_success`      | Checks `export_scenes_global` results.                                                                                               |                          |
+| `validate_scenes`                   | Runs validation checks (e.g., physics stability) on exported scene files[cite: 164, 130].                                               |                          |
+| `validate_scenes_success`           | Checks `validate_scenes` results.                                                                                                    |                          |
+| `usdify_objects`                    | Converts URDF objects into USD format[cite: 165, 121].                                                                                | Docker, WSL2, Windows 11 |
+| `usdify_objects_success`            | Checks `usdify_objects` results.                                                                                         |                          |
+| `usdify_scenes`                     | Converts scene URDFs into USD format[cite: 166, 135].                                                                                 | Docker, WSL2, Windows 11 |
+| `generate_systems`                  | Generates USD system definitions (e.g., for substances) based on USD objects.                                              |                          |
+| `generate_systems_success`          | Checks `generate_systems` results.                                                                                       |                          |
+| `aggregate_fillable_volumes`        | Aggregates pre-generated fillable volume meshes based on annotations.                                                      |                          |
+| `collision_average_volumes`         | Calculates average collision volumes per category.                                                                         |                          |
+| `collision_average_volumes_success` | Checks `collision_average_volumes` results.                                                                                          |                          |
+| `aggregate_metadata`                | Aggregates various metadata files (object inventory, category mappings, etc.) into a single archive[cite: 169, 177].                 |                          |
+| `aggregate_metadata_success`        | Checks `aggregate_metadata` results.                                                                                                 |                          |
+| `pack_dataset`                      | Packages the final aggregated objects, scenes, and metadata into a ZIP file for distribution[cite: 170, 137, 248].                   |                          |
+| `patch_sampled`                     | (Optional) Patches the dataset zip files with sampled task data.                                                         | `sampled_tasks.zip`      |
+
+*(Note: Some stages from the original README like `generate_object_images`, `validate_objs`, `generate_scene_images`, `generate_camera_images` might be deprecated or replaced by newer stages like `generate_max_object_images` and USD-based validation)*.
 
 ## Scripts
-For details on the provided scripts, visit the [README of the b1k_pipeline module directory](./b1k_pipeline).
 
-## Running pipeline
-TBD
+Details on the scripts powering the pipeline can be found in the [b1k_pipeline module README](./b1k_pipeline).
+
+## Running Pipeline
+
+*(Execution details TBD)* 
 
 ## Contributing
-To contribute, changes need to be put on a PR and sent to Cem Gokmen (cgokmen) for review. For Stanford affilliates, any relevant data needs to be pushed onto the cvgl storage. For external users, instructions for access to your remote needs to be provided for us to be able to fetch the data.
+
+* Changes should be submitted via Pull Request to Cem Gokmen (cgokmen).
+* **Stanford Affiliates:** Ensure relevant data changes are pushed to the cvgl storage.
+* **External Users:** Provide instructions for accessing your remote storage so data can be fetched.

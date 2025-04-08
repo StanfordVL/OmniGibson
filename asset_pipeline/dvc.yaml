@@ -205,6 +205,82 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/check_collisions.success
+  check_collisions_with_clutter:
+    do:
+      cmd: python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/check_collisions.py
+        clutter=true
+      deps:
+      - b1k_pipeline/max/check_collisions.py
+      - cad/${item}/processed.max
+      outs:
+      - cad/${item}/artifacts/check_collisions_with_clutter.json
+    foreach: ${scenes_unfiltered}
+  check_collisions_with_clutter_success:
+    cmd: python -m b1k_pipeline.check_success_aggregate artifacts/check_collisions_with_clutter.json
+      artifacts/pipeline/check_collisions_with_clutter.success scenes
+    deps:
+    - cad/scenes/Beechwood_0_garden/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Beechwood_0_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Beechwood_1_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Benevolence_0_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Benevolence_1_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Benevolence_2_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Ihlen_0_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Ihlen_1_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Merom_0_garden/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Merom_0_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Merom_1_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Pomaria_0_garden/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Pomaria_0_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Pomaria_1_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Pomaria_2_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Rs_garden/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Rs_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Wainscott_0_garden/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Wainscott_0_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/Wainscott_1_int/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/commercial_kitchen_pans/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/gates_bedroom/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/grocery_store_asian/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/grocery_store_cafe/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/grocery_store_convenience/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/grocery_store_half_stocked/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/hall_arch_wood/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/hall_conference_large/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/hall_glass_ceiling/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/hall_train_station/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/hotel_gym_spa/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/hotel_suite_large/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/hotel_suite_small/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/house_double_floor_lower/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/house_double_floor_upper/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/house_single_floor/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/office_bike/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/office_cubicles_left/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/office_cubicles_right/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/office_large/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/office_vendor_machine/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/public_restroom_blue/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/public_restroom_brown/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/public_restroom_futuristic/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/public_restroom_marble/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/public_restroom_white/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/restaurant_asian/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/restaurant_brunch/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/restaurant_cafeteria/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/restaurant_diner/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/restaurant_hotel/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/restaurant_urban/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/school_biology/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/school_chemistry/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/school_computer_lab_and_infirmary/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/school_geography/artifacts/check_collisions_with_clutter.json
+    - cad/scenes/school_gym/artifacts/check_collisions_with_clutter.json
+    - b1k_pipeline/check_success_aggregate.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/check_collisions_with_clutter.success
   collision_average_volumes:
     cmd: python -m b1k_pipeline.collision_average_volumes
     deps:
@@ -835,7 +911,6 @@ stages:
     - cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
     - cad/scenes/school_geography/artifacts/object_list.json
     - cad/scenes/school_gym/artifacts/object_list.json
-    - metadata/orientation_edits.zip
     - artifacts/pipeline/object_list.success
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
@@ -1474,7 +1549,6 @@ stages:
       - cad/${item}/processed.max
       - b1k_pipeline/max/new_sanity_check.py
       - artifacts/pipeline/object_list.success
-      - artifacts/pipeline/object_inventory.json
       outs:
       - cad/${item}/artifacts/sanitycheck.json
     foreach: ${combined_unfiltered}

@@ -175,7 +175,7 @@ def apply_qa_fixes_in_all_files():
                 orientation = json.loads(orientation_zip_fs.readtext(item.path))[0]
                 if not np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
                     fixes[model]["orientation_old"] = orientation
-    for item in glob.glob(r"D:\ig_pipeline\qa-merged\*\*.json"):
+    for item in glob.glob(r"D:\ig_pipeline\qa-2025\*\*\*.json"):
         model = os.path.splitext(os.path.basename(item))[0]
         with open(item) as f:
             data = json.load(f)

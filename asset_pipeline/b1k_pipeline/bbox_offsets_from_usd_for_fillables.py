@@ -17,20 +17,6 @@ PIPELINE_ROOT = pathlib.Path(r"D:\ig_pipeline")
 MODE = "JSON"   # use one of "ATTRIBUTE", "USD" or "JSON"
 
 
-def get_orientation_edits():
-    orientation_edits = {}
-    zip_path = PIPELINE_ROOT / "metadata" / "orientation_edits.zip"
-    with ZipFS(zip_path) as orientation_zip_fs:
-        for item in orientation_zip_fs.glob("recorded_orientation/*/*.json"):
-            model = fs.path.splitext(fs.path.basename(item.path))[0]
-            orientation = json.loads(orientation_zip_fs.readtext(item.path))[0]
-            if np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
-                continue
-            orientation_edits[model] = orientation
-
-    return orientation_edits
-
-
 def _set_xform_properties(prim, pos, quat):
     properties_to_remove = [
         "xformOp:rotateX",
@@ -199,15 +185,13 @@ def main():
     input_usds.sort(key=lambda x: x.parts[-3])
     print(len(input_usds))
 
-    orientation_edits = get_orientation_edits()
-
     # Scale up
     futures = {}
     with tempfile.TemporaryDirectory() as tempdir:
       with ProcessPoolExecutor() as executor:
           for input_usd in tqdm(input_usds, desc="Queueing up jobs"):
               mdl = input_usd.parts[-3]
-              rot = R.identity() if mdl not in orientation_edits else R.from_quat(orientation_edits[mdl])
+              rot = R.identity()
               euler = np.rad2deg(rot.as_euler("xyz"))
               if not np.allclose(np.remainder(np.abs(euler), 90), 0, atol=5):
                   print("Non-axis aligned rotation detected for", mdl, euler.tolist())

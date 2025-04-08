@@ -1,8 +1,9 @@
 [
     {
         "object": "ceilings-ytbprd",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "ceiling",
-        "processed": true
+        "processed": true,
+        "type": "collision",
+        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
     }
 ]

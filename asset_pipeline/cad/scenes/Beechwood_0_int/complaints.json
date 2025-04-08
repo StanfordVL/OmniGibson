@@ -1,14 +1,16 @@
 [
     {
         "object": "ceilings-hzdavr",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "wensi: top corner not perpendicular",
-        "processed": true
+        "processed": true,
+        "type": "collision",
+        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
     },
     {
         "object": "ceilings-xqauyk",
-        "message": "Was at least one of the collision mesh candidates acceptable?",
         "complaint": "ceiling",
-        "processed": true
+        "processed": true,
+        "type": "collision",
+        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
     }
 ]

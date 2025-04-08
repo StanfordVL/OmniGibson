@@ -43,6 +43,7 @@ ALLOWED_TAGS = {
     "glass",
     "openable",
     "openablebothsides",
+    "locked"
 }
 
 ALLOWED_PART_TAGS = {
@@ -361,6 +362,31 @@ class SanityCheck:
                         f"{row.object_name} has no collision mesh. Create a collision mesh.",
                     )
 
+            # Validate materials
+            if obj.material is not None:
+                recursive_materials = set()
+                def _recursively_get_materials(mtl):
+                    recursive_materials.add(mtl)
+                    for i in range(rt.getNumSubMtls(mtl)):
+                        sub_mtl = rt.getSubMtl(mtl, i + 1)
+                        if sub_mtl is not None:
+                            _recursively_get_materials(sub_mtl)
+                _recursively_get_materials(obj.material)
+
+                # Check the found materials for any materials that are not VrayMtl or MultiMaterial
+                for mat in recursive_materials:
+                    mat_type = rt.classOf(mat)
+                    if mat == obj.material:
+                        # The top level material can be vray, shell, or multi
+                        self.expect(mat_type in (rt.MultiMaterial, rt.Shell_Material) or "vray" in str(mat).lower(), f"Top level material {mat} of {row.object_name} is not a MultiMaterial, Shell_Material, or VrayMtl.")
+                    elif rt.classOf(obj.material) == rt.Shell_Material and mat == obj.material.bakedMaterial:
+                        # If the top level material is a Shell_Material, then the baked material should be physical
+                        self.expect(mat_type == rt.PhysicalMaterial, f"Baked material {mat} of {row.object_name} is not a PhysicalMaterial.")
+                    else:
+                        # Everything that's not the top level material nor the baked material should be a vraymtl or multimaterial
+                        # self.expect(mat_type == rt.MultiMaterial or "vray" in str(mat).lower(), f"Non-top level material {mat} of {row.object_name} is not a MultiMaterial or VrayMtl.")
+                        pass
+
         else:
             # Bad object tasks
             # Validate bad objects to make sure that they do NOT have upper meshes or meta links
@@ -542,6 +568,7 @@ class SanityCheck:
             if len(rows_with_id_zero.index) > 0
             else rows.iloc[0]
         )
+        base_object = base.object._obj
 
         # Check that they have the same model ID and same category
         unique_model_ids = rows.groupby(
@@ -566,16 +593,17 @@ class SanityCheck:
         )
 
         # Check that they all have the same object offset rotation and pos/scale and shear.
-        desired_offset_pos = np.array(base.object.objectOffsetPos) / np.array(
-            base.object.objectOffsetScale
+        desired_offset_pos = np.array(base_object.objectOffsetPos) / np.array(
+            base_object.objectOffsetScale
         )
         desired_offset_rot_inv = Rotation.from_quat(
-            quat2arr(base.object.objectOffsetRot)
+            quat2arr(base_object.objectOffsetRot)
         ).inv()
-        desired_shear = compute_shear(base.object)
+        desired_shear = compute_shear(base_object)
         for _, row in rows.iterrows():
-            this_offset_pos = np.array(row.object.objectOffsetPos) / np.array(
-                row.object.objectOffsetScale
+            row_object = row.object._obj
+            this_offset_pos = np.array(row_object.objectOffsetPos) / np.array(
+                row_object.objectOffsetScale
             )
             pos_diff = this_offset_pos - desired_offset_pos
             self.expect(
@@ -583,21 +611,21 @@ class SanityCheck:
                 f"{row.object_name} has different pivot offset position (by {pos_diff}). Match pivots on each instance.",
             )
 
-            this_offset_rot = Rotation.from_quat(quat2arr(row.object.objectOffsetRot))
+            this_offset_rot = Rotation.from_quat(quat2arr(row_object.objectOffsetRot))
             rot_diff = (this_offset_rot * desired_offset_rot_inv).magnitude()
             self.expect(
                 np.allclose(rot_diff, 0, atol=1e-3),
                 f"{row.object_name} has different pivot offset rotation (by {rot_diff}). Match pivots on each instance.",
             )
 
-            this_shear = compute_shear(row.object)
+            this_shear = compute_shear(row_object)
             self.expect(
                 np.allclose(this_shear, desired_shear, atol=1e-3),
                 f"{row.object_name} has different shear. Match scaling axes on each instance.",
             )
 
             self.expect(
-                row.object.material == base.object.material,
+                row_object.material == base_object.material,
                 f"{row.object_name} has different material. Match materials on each instance.",
             )
 
