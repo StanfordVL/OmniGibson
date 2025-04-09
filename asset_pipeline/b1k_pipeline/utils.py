@@ -1,6 +1,7 @@
 import os
 import pathlib
 import re
+import sys
 
 import fs.path
 from fs.osfs import OSFS
@@ -34,6 +35,48 @@ def parse_portal_name(name):
 def get_targets(target_type):
     return list(params[target_type])
 
+class WriteOnly7ZipFS(TempFS):
+    """
+    A write-only filesystem that stores data in a temporary directory,
+    and upon closing, compresses it using 7zip into a final zip archive.
+    """
+
+    def __init__(self, zip_path, temp_fs=None, **kwargs):
+        """
+        Initialize the write-only 7zip-backed TempFS.
+
+        :param zip_path: Destination path for the resulting .zip file.
+        :param kwargs: Other arguments passed to TempFS.
+        """
+        self._temp_fs = temp_fs  # We keep this pointer to avoid deallocation of the tempfs
+        if self._temp_fs is not None:
+            kwargs["temp_dir"] = self._temp_fs.getsyspath("/")
+        super().__init__(**kwargs)
+        self._zip_path = os.path.abspath(zip_path)
+        self._closed = False
+
+    def close(self):
+        """
+        On close, compress the entire TempFS contents into a zip file using 7z.
+        """
+        if not self.isclosed():
+            temp_path = self.getsyspath("/")
+            try:
+                sevenzip_cmd = str((PIPELINE_ROOT / "7za.exe").resolve()) if sys.platform == "win32" else "7z"  # TODO: Make this work on Windows too
+                subprocess.run(
+                    [sevenzip_cmd, "a", self._zip_path, "."],
+                    cwd=temp_path,
+                    check=True,
+                    stdout=subprocess.PIPE,
+                    stderr=subprocess.PIPE
+                )
+                if not os.path.exists(self._zip_path):
+                    raise ValueError("7zip did not produce expected zip file.")
+            except subprocess.CalledProcessError as e:
+                raise ValueError(f"7zip failed: {e.stderr.decode().strip()}") from e
+            finally:
+                super().close()  # Flush and close TempFS
+
 class PipelineFS(OSFS):
     def __init__(self) -> None:
         super().__init__(PIPELINE_ROOT)
@@ -51,7 +94,11 @@ def ParallelZipFS(name, write=False, temp_fs=None):
     if not temp_fs:
         TMP_DIR.mkdir(exist_ok=True)
         temp_fs = TempFS(temp_dir=str(TMP_DIR))
-    return ZipFS(PIPELINE_ROOT / "artifacts/parallels" / name, write=write, temp_fs=temp_fs)
+    zip_filename = PIPELINE_ROOT / "artifacts/parallels" / name
+    if not write:
+        return ZipFS(zip_filename, write=False, temp_fs=temp_fs)
+    else:
+        return WriteOnly7ZipFS(zip_filename, temp_fs=temp_fs)
 
 def mat2arr(mat, dtype=np.float32):
     return np.array([
