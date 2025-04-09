@@ -5,6 +5,8 @@ from omnigibson.prims.joint_prim import JointPrim
 from omnigibson.prims.material_prim import MaterialPrim
 from omnigibson.prims.prim_base import BasePrim
 from omnigibson.prims.rigid_prim import RigidPrim
+from omnigibson.prims.rigid_dynamic_prim import RigidDynamicPrim
+from omnigibson.prims.rigid_kinematic_prim import RigidKinematicPrim
 from omnigibson.prims.xform_prim import XFormPrim
 
 __all__ = [
@@ -17,6 +19,8 @@ __all__ = [
     "JointPrim",
     "MaterialPrim",
     "RigidPrim",
+    "RigidDynamicPrim",
+    "RigidKinematicPrim",
     "VisualGeomPrim",
     "XFormPrim",
 ]
