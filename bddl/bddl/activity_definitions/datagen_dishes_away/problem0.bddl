@@ -1,0 +1,29 @@
+(define (problem datagen_dishes_away-0)
+    (:domain omnigibson)
+
+    (:objects
+        plate.n.01_1 plate.n.01_2 - plate.n.01
+        bar.n.01_1 - bar.n.01
+        shelf.n.01_1 - shelf.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (ontop plate.n.01_1 bar.n.01_1)
+        (ontop plate.n.01_2 bar.n.01_1)
+        (inroom bar.n.01_1 kitchen) 
+        (inroom shelf.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?plate.n.01 - plate.n.01)
+                (ontop ?plate.n.01 ?shelf.n.01_1)
+            )
+        )
+    )
+)
