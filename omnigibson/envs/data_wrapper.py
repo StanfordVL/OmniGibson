@@ -632,6 +632,13 @@ class DataPlaybackWrapper(DataWrapper):
 
         # Set scene file and disable online object sampling if BehaviorTask is being used
         config["scene"]["scene_file"] = json.loads(f["data"].attrs["scene_file"])
+
+        # Fix: hot swap R1 USD path
+        if "ghost" in config["scene"]["scene_file"]["objects_info"]["init_info"]:
+            config["scene"]["scene_file"]["objects_info"]["init_info"]["ghost"]["args"]["usd_path"] = os.path.join(
+                gm.ASSET_PATH, "models/r1/usd/r1.usda"
+            )
+
         if config["task"]["type"] == "BehaviorTask":
             config["task"]["online_object_sampling"] = False
 
@@ -697,6 +704,12 @@ class DataPlaybackWrapper(DataWrapper):
         # Store scene file so we can restore the data upon each episode reset
         self.input_hdf5 = h5py.File(input_path, "r")
         self.scene_file = json.loads(self.input_hdf5["data"].attrs["scene_file"])
+
+        # Fix: hot swap R1 USD path
+        if "ghost" in self.scene_file["objects_info"]["init_info"]:
+            self.scene_file["objects_info"]["init_info"]["ghost"]["args"]["usd_path"] = os.path.join(
+                gm.ASSET_PATH, "models/r1/usd/r1.usda"
+            )
 
         # Store additional variables
         self.n_render_iterations = n_render_iterations
