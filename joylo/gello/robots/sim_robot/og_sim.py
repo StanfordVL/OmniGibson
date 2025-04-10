@@ -26,6 +26,7 @@ from omnigibson.object_states import OnTop, Filled
 from omnigibson.utils.constants import PrimType
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.ui_utils import dock_window
+from omnigibson.objects.usd_object import USDObject
 from gello.robots.sim_robot.zmq_server import ZMQRobotServer, ZMQServerThread
 from gello.dxl.franka_gello_joint_impedance import FRANKA_JOINT_LIMIT_HIGH, FRANKA_JOINT_LIMIT_LOW
 import torch as th
@@ -452,18 +453,6 @@ class OGRobotServer:
             },
         }]
 
-        self.ghosting = ghosting
-        if ghosting:
-            if "objects" not in cfg:
-                cfg["objects"] = []
-            cfg["objects"].append({
-                "type": "USDObject",
-                "name": "ghost",
-                "usd_path": os.path.join(gm.ASSET_PATH, f"models/r1/usd/r1.usda"),
-                "visual_only": True,
-                "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0],
-            })
-
         # If we're R1, don't use rigid trunk
         if robot == "R1":
             # cfg["robots"][0]["reset_joint_pos"] = th.tensor([
@@ -512,10 +501,16 @@ class OGRobotServer:
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
-
+        
+        self.ghosting = ghosting
         if self.ghosting:
+            # Add ghost with scene.add_object(register=False)
+            self.ghost = USDObject(name="ghost", 
+                                   usd_path=os.path.join(gm.ASSET_PATH, f"models/r1/usd/r1.usda"), 
+                                   visual_only=True, 
+                                   position=AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0])
+            self.env.scene.add_object(self.ghost, register=False)
             self._ghost_appear_counter = {arm: 0 for arm in self.robot.arm_names}
-            self.ghost = self.env.scene.object_registry("name", "ghost")
             for mat in self.ghost.materials:
                 mat.diffuse_color_constant = th.tensor([0.8, 0.0, 0.0], dtype=th.float32)
             for link in self.ghost.links.values():
