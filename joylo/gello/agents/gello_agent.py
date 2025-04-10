@@ -91,7 +91,6 @@ class GelloAgent(Agent):
 
         # If using damping, make sure torque is enabled
         self._reset_qpos = start_joints if default_joints is None else np.array(default_joints)
-        self._warmup_count = 0
         self._reset_cooldown_active = False
         self._damping_motor_kp = damping_motor_kp
         self._damping_motor_kv = 2 * np.sqrt(self._damping_motor_kp) * 1.0
@@ -100,16 +99,23 @@ class GelloAgent(Agent):
         self._robot.set_operating_mode(OperatingMode.NONE)
         self._current_enabled = False
 
+        # Set default gains
+        self._robot._driver.set_gain(GainType.P, 500)
+        self._robot._driver.set_gain(GainType.I, 0)
+        self._robot._driver.set_gain(GainType.D, 200)
+
         # Call super method
         super().__init__()
 
     def enable_current_feedback(self):
-        self._robot.set_operating_mode(mode=OperatingMode.CURRENT)
-        self._current_enabled = True
+        if not self._current_enabled:
+            self._robot.set_operating_mode(mode=OperatingMode.CURRENT)
+            self._current_enabled = True
 
     def disable_current_feedback(self):
-        self._robot.set_operating_mode(mode=OperatingMode.NONE)
-        self._current_enabled = False
+        if self._current_enabled:
+            self._robot.set_operating_mode(mode=OperatingMode.NONE)
+            self._current_enabled = False
 
     def _gello_joints_to_obs_joints(self, joints: np.ndarray) -> np.ndarray:
         """
@@ -143,15 +149,16 @@ class GelloAgent(Agent):
     def reset(self):
         # Move arms back to their reset pose if any is specified
         if self._reset_qpos is not None:
-            self._robot.set_operating_mode(OperatingMode.POSITION)
+            self._robot.set_operating_mode(OperatingMode.EXTENDED_POSITION)
+            # Set non-zero I gain
+            self._robot._driver.set_gain(GainType.I, 150)
             self._robot.command_joint_state(self._reset_qpos)
             # Sleep for a little bit to let motors settle and reduce chance of overload
             time.sleep(1)
 
     def start(self):
         # Set default gains
-        self._robot._driver.set_gain(GainType.P, 1000)
-        self._robot._driver.set_gain(GainType.D, 5000)
+        self._robot._driver.set_gain(GainType.I, 0)
 
         # Set torque mode if we have a nonzero damping kp
         if self._damping_motor_kp != 0.0:
@@ -164,29 +171,23 @@ class GelloAgent(Agent):
         jnts = self._robot.get_joint_state()
         jnts_vel = self._robot.get_joint_velocities() # Values from the dynamixels
         if self._current_enabled:
-            
-            # Warmup time
-            if self._warmup_count < 10:
-                self._warmup_count += 1
+            # Disable controller if we're in cooldown
+            current_idxs = np.where(self._robot.operating_mode == OperatingMode.CURRENT)[0]
 
+            self._reset_cooldown_active = (obs["in_cooldown"] > 0)
+
+            if self._reset_cooldown_active or obs["reset_joints"]:
+                # Setpoint is reset position
+                joint_setpoint = self._reset_qpos
             else:
-                # Disable controller if we're in cooldown
-                current_idxs = np.where(self._robot.operating_mode == OperatingMode.CURRENT)[0]
+                # Setpoint is sim position, mapped to GELLO joints
+                joint_setpoint = self._obs_joints_to_gello_joints(obs)
 
-                self._reset_cooldown_active = (obs["env_reset_cooldown"] > 0)
+            # Compute joint errors and delegate to control function implemented by subclass
+            joint_error = np.rad2deg(joint_setpoint - jnts)
 
-                if self._reset_cooldown_active or obs["reset_joints"]:
-                    # Setpoint is reset position
-                    joint_setpoint = self._reset_qpos
-                else:
-                    # Setpoint is sim position, mapped to GELLO joints
-                    joint_setpoint = self._obs_joints_to_gello_joints(obs)
-
-                # Compute joint errors and delegate to control function implemented by subclass
-                joint_error = np.rad2deg(joint_setpoint - jnts)
-
-                current = self.compute_feedback_currents(joint_error, jnts_vel, obs)
-                self._robot.command_current(current[current_idxs], idxs=current_idxs)
+            current = self.compute_feedback_currents(joint_error, jnts_vel, obs)
+            self._robot.command_current(current[current_idxs], idxs=current_idxs)
 
         # Return GELLO joints in environment-compatible form (for the sim)
         return th.from_numpy(self._gello_joints_to_obs_joints(joints=jnts).astype(np.float32))

@@ -66,6 +66,9 @@ class R1GelloAgent(GelloAgent):
         # Stores joint offsets to apply dynamically (note: including motor redundancies!)
         self.joint_offsets = np.zeros(16)
 
+        # Whether we're waiting to resume or not
+        self._waiting_to_resume = False
+
         # No feedback by default
         self.default_operation_modes = np.array([OperatingMode.NONE for _ in range(16)])
 
@@ -96,7 +99,6 @@ class R1GelloAgent(GelloAgent):
         obs_jnts = np.concatenate([obs[f"arm_{arm}_joint_positions"].detach().cpu().numpy() for arm in ["left", "right"]])
         # Duplicate values for redundant motors
         return obs_jnts[[0, 0, 1, 1, 2, 3, 4, 5, 6, 6, 7, 7, 8, 9, 10, 11]] + self.joint_offsets
-    
 
     def compute_feedback_currents(self, joint_error, joint_vel, obs: Dict[str, np.ndarray]) -> np.ndarray:
         """
@@ -145,14 +147,12 @@ class R1GelloAgent(GelloAgent):
             raise ValueError(f"Unexpected joint feedback type: {self._motor_feedback_type}!")
         
         return current
-    
 
     def start(self):
-        super().start()
+        # super().start()
 
         # Set all joints to default operating modes
         self._robot.set_operating_mode(self.default_operation_modes)
-
 
     def act(self, obs: Dict) -> th.Tensor:
         # Run super first
@@ -161,129 +161,144 @@ class R1GelloAgent(GelloAgent):
         # Convert back to gello form
         gello_jnts = jnts.numpy()[[0, 0, 1, 1, 2, 3, 4, 5, 6, 6, 7, 7, 8, 9, 10, 11]]
 
-        active_operating_mode_idxs = np.array([], dtype=int)
-        operating_modes = np.zeros(len(gello_jnts), dtype=int)
-        active_commanded_jnt_idxs = np.array([], dtype=int)
-        commanded_jnts = gello_jnts + self.joint_offsets                # We include offsets because these are the raw commands to send to GELLO
+        # If we see that we're waiting to resume from the sim, reset the joints to the observed values
+        if obs["waiting_to_resume"] and not self._waiting_to_resume:
+            # Up signal -- track the current pose from the robot and reset to that qpos
+            reset_jnts = self._obs_joints_to_gello_joints(obs=obs)
+            self.set_reset_qpos(qpos=reset_jnts)
+            self.reset()
+            print("Waiting to resume from sim...")
+            self._waiting_to_resume = True
+        elif not obs["waiting_to_resume"] and self._waiting_to_resume:
+            # Down signal
+            self.start()
+            self._waiting_to_resume = False
 
-        # If we have a joycon agent, we possibly provide additional constraints to GELLO
-        if self.enable_locking_joints:
-            # Feedback case 1: - / + is pressed -- this will disable final motor current while locking
-            # all other joints' positions to allow for positional offsetting in the final joint
-            # Feedback case 2: L / R is pressed -- this will lock the final two joints of the given arm
-            # while freeing all the other joints to allow for easy elbow maneuvering
-            for arm, (lock_upper, lock_lower) in zip(
-                    ("left", "right"),
-                    (
-                        (self.joycon_agent.jc_left.get_button_minus(), self.joycon_agent.jc_left.get_button_l()),
-                        (self.joycon_agent.jc_right.get_button_plus(), self.joycon_agent.jc_right.get_button_r()),
-                    ),
-            ):
-                arm_info = self.arm_info[arm]
-                upper_currently_locked = arm_info["locked"]["upper"]
-                wrist_id = arm_info["gello_ids"][-1]
+        # Only compute action if we're not waiting to resume
+        if self._waiting_to_resume:
+            action = jnts
+        else:
+            active_operating_mode_idxs = np.array([], dtype=int)
+            operating_modes = np.zeros(len(gello_jnts), dtype=int)
+            active_commanded_jnt_idxs = np.array([], dtype=int)
+            commanded_jnts = gello_jnts + self.joint_offsets                # We include offsets because these are the raw commands to send to GELLO
 
-                if self._motor_feedback_type != MotorFeedbackConfig.NONE:
-                    # If using feedback, enable current control for the arms which are colliding
-                    if obs[f"arm_{arm}_contact"] and not arm_info["colliding"]:
-                            arm_info["colliding"] = True
+            # If we have a joycon agent, we possibly provide additional constraints to GELLO
+            if self.enable_locking_joints:
+                # Feedback case 1: - / + is pressed -- this will disable final motor current while locking
+                # all other joints' positions to allow for positional offsetting in the final joint
+                # Feedback case 2: L / R is pressed -- this will lock the final two joints of the given arm
+                # while freeing all the other joints to allow for easy elbow maneuvering
+                for arm, (lock_upper, lock_lower) in zip(
+                        ("left", "right"),
+                        (
+                            (self.joycon_agent.jc_left.get_button_minus(), self.joycon_agent.jc_left.get_button_l()),
+                            (self.joycon_agent.jc_right.get_button_plus(), self.joycon_agent.jc_right.get_button_r()),
+                        ),
+                ):
+                    arm_info = self.arm_info[arm]
+                    upper_currently_locked = arm_info["locked"]["upper"]
+                    wrist_id = arm_info["gello_ids"][-1]
 
-                            operating_modes[arm_info["gello_ids"]] = OperatingMode.CURRENT
+                    if self._motor_feedback_type != MotorFeedbackConfig.NONE:
+                        # If using feedback, enable current control for the arms which are colliding
+                        if obs[f"arm_{arm}_contact"] and not arm_info["colliding"]:
+                                arm_info["colliding"] = True
+
+                                operating_modes[arm_info["gello_ids"]] = OperatingMode.CURRENT
+                                active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
+
+                        elif not obs[f"arm_{arm}_contact"] and arm_info["colliding"]:
+                                arm_info["colliding"] = False
+
+                                operating_modes[arm_info["gello_ids"]] = self.default_operation_modes[arm_info["gello_ids"]]
+                                active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
+
+                    if lock_upper:
+                        if upper_currently_locked:
+                            # Already locked, do nothing
+                            pass
+                        else:
+                            # Just became locked, update this arm's operating mode (all joints for the arm except final
+                            # two should be using POSITION mode)
+                            operating_modes[arm_info["gello_ids"]] = [OperatingMode.EXTENDED_POSITION] * 7 + [OperatingMode.NONE]
                             active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
-                    elif not obs[f"arm_{arm}_contact"] and arm_info["colliding"]:
-                            arm_info["colliding"] = False
+                            # In addition, the final wrist joint should NOT change in the environment -- so keep track of
+                            # the current angle so we can apply an offset as long as the upper arm is locked
+                            # NOTE: This value will ALREADY have any pre-existing offset applied, which is expected
+                            # because the "freezing upper" effect is assumed to be cumulative
+                            arm_info["locked_wrist_angle"] = gello_jnts[arm_info["gello_ids"][-1]]
 
+                            # Add upper joint to commanded set of joint idxs
+                            active_commanded_jnt_idxs = np.concatenate([active_commanded_jnt_idxs, arm_info["gello_ids"][:-1]])
+
+                            # Finally, update our lock state
+                            arm_info["locked"]["upper"] = True
+
+                        # If we're locked, force the returned wrist value to be the locked value
+                        gello_jnts[wrist_id] = arm_info["locked_wrist_angle"]
+
+                    else:
+                        if not upper_currently_locked:
+                            # Already not locked, do nothing
+                            pass
+                        else:
+                            # Just became not locked, so update this arm's operating mode (all joints should be using
+                            # the default mode)
                             operating_modes[arm_info["gello_ids"]] = self.default_operation_modes[arm_info["gello_ids"]]
                             active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
-                if lock_upper:
-                    if upper_currently_locked:
-                        # Already locked, do nothing
-                        pass
+                            # Update the joint offset to include the difference between the locked wrist and the current
+                            # wrist qpos
+                            additional_wrist_offset = gello_jnts[wrist_id] - arm_info["locked_wrist_angle"]
+                            self.joint_offsets[wrist_id] += additional_wrist_offset
+
+                            # This offset hasn't been applied yet to the current joints, so apply it now (negative because
+                            # we're going from GELLO -> Env, whereas the offset captures the env -> GELLO delta)
+                            gello_jnts[wrist_id] -= additional_wrist_offset
+
+                            # Finally, update our lock state
+                            arm_info["locked"]["upper"] = False
+
+                    lower_currently_locked = arm_info["locked"]["lower"]
+                    if lock_lower:
+                        if lower_currently_locked:
+                            # Already locked, do nothing
+                            pass
+                        else:
+                            # Just became locked, update this arm's operating mode (final two joints should be using
+                            # POSITION mode)
+                            operating_modes[arm_info["gello_ids"]] = [OperatingMode.CURRENT] * 6 + [OperatingMode.EXTENDED_POSITION] * 2
+                            active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
+
+                            # Add lower joints to commanded set of joint idxs
+                            active_commanded_jnt_idxs = np.concatenate([active_commanded_jnt_idxs, arm_info["gello_ids"][-2:]])
+
+                            # Finally, update our lock state
+                            arm_info["locked"]["lower"] = True
+
                     else:
-                        # Just became locked, update this arm's operating mode (all joints for the arm except final
-                        # two should be using POSITION mode)
-                        operating_modes[arm_info["gello_ids"]] = [OperatingMode.POSITION] * 7 + [OperatingMode.NONE]
-                        active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
+                        if not lower_currently_locked:
+                            # Already not locked, do nothing
+                            pass
+                        else:
+                            # Just became not locked, so update this arm's operating mode (all joints should be using
+                            # the default mode)
+                            operating_modes[arm_info["gello_ids"]] = self.default_operation_modes[arm_info["gello_ids"]]
+                            active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
-                        # In addition, the final wrist joint should NOT change in the environment -- so keep track of
-                        # the current angle so we can apply an offset as long as the upper arm is locked
-                        # NOTE: This value will ALREADY have any pre-existing offset applied, which is expected
-                        # because the "freezing upper" effect is assumed to be cumulative
-                        arm_info["locked_wrist_angle"] = gello_jnts[arm_info["gello_ids"][-1]]
+                            # Finally, update our lock state
+                            arm_info["locked"]["lower"] = False
 
-                        # Add upper joint to commanded set of joint idxs
-                        active_commanded_jnt_idxs = np.concatenate([active_commanded_jnt_idxs, arm_info["gello_ids"][:-1]])
+                # Update our operating mode if requested
+                if len(active_operating_mode_idxs) > 0:
+                    self._robot.set_operating_mode(operating_modes[active_operating_mode_idxs], idxs=active_operating_mode_idxs)
 
-                        # Finally, update our lock state
-                        arm_info["locked"]["upper"] = True
+                # Command joints if requested
+                if len(active_commanded_jnt_idxs) > 0:
+                    self._robot.command_joint_state(commanded_jnts[active_commanded_jnt_idxs], idxs=active_commanded_jnt_idxs)
 
-                    # If we're locked, force the returned wrist value to be the locked value
-                    gello_jnts[wrist_id] = arm_info["locked_wrist_angle"]
+            action = th.from_numpy(gello_jnts[[0, 2, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15]])
 
-                else:
-                    if not upper_currently_locked:
-                        # Already not locked, do nothing
-                        pass
-                    else:
-                        # Just became not locked, so update this arm's operating mode (all joints should be using
-                        # the default mode)
-                        operating_modes[arm_info["gello_ids"]] = self.default_operation_modes[arm_info["gello_ids"]]
-                        active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
-
-                        # Update the joint offset to include the difference between the locked wrist and the current
-                        # wrist qpos
-                        additional_wrist_offset = gello_jnts[wrist_id] - arm_info["locked_wrist_angle"]
-                        self.joint_offsets[wrist_id] += additional_wrist_offset
-
-                        # This offset hasn't been applied yet to the current joints, so apply it now (negative because
-                        # we're going from GELLO -> Env, whereas the offset captures the env -> GELLO delta)
-                        gello_jnts[wrist_id] -= additional_wrist_offset
-
-                        # Finally, update our lock state
-                        arm_info["locked"]["upper"] = False
-
-                lower_currently_locked = arm_info["locked"]["lower"]
-                if lock_lower:
-                    if lower_currently_locked:
-                        # Already locked, do nothing
-                        pass
-                    else:
-                        # Just became locked, update this arm's operating mode (final two joints should be using
-                        # POSITION mode)
-                        operating_modes[arm_info["gello_ids"]] = [OperatingMode.CURRENT] * 6 + [OperatingMode.POSITION] * 2
-                        active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
-
-                        # Add lower joints to commanded set of joint idxs
-                        active_commanded_jnt_idxs = np.concatenate([active_commanded_jnt_idxs, arm_info["gello_ids"][-2:]])
-
-                        # Finally, update our lock state
-                        arm_info["locked"]["lower"] = True
-
-                else:
-                    if not lower_currently_locked:
-                        # Already not locked, do nothing
-                        pass
-                    else:
-                        # Just became not locked, so update this arm's operating mode (all joints should be using
-                        # the default mode)
-                        operating_modes[arm_info["gello_ids"]] = self.default_operation_modes[arm_info["gello_ids"]]
-                        active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
-
-                        # Finally, update our lock state
-                        arm_info["locked"]["lower"] = False
-
-                
-                    
-
-
-            # Update our operating mode if requested
-            if len(active_operating_mode_idxs) > 0:
-                self._robot.set_operating_mode(operating_modes[active_operating_mode_idxs], idxs=active_operating_mode_idxs)
-
-            # Command joints if requested
-            if len(active_commanded_jnt_idxs) > 0:
-                self._robot.command_joint_state(commanded_jnts[active_commanded_jnt_idxs], idxs=active_commanded_jnt_idxs)
-
-        return th.from_numpy(gello_jnts[[0, 2, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15]])
+        return action

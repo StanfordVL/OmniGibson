@@ -1,5 +1,6 @@
 import os
 import yaml
+import time
 from typing import Dict, Optional
 from gello.agents.ps3_controller import PS3Controller
 import omnigibson as og
@@ -66,6 +67,9 @@ R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.94, 0.0], dtype=th.float3
 R1_GROUND_TORSO_JOINT_POS = th.tensor([1.735, -2.57, -2.1, 0.0], dtype=th.float32) # For ground object pick up
 R1_WRIST_CAMERA_LOCAL_POS = th.tensor([0.1, 0.0, -0.1], dtype=th.float32) # Local position of the wrist camera relative to eef
 R1_WRIST_CAMERA_LOCAL_ORI = th.tensor([0.6830127018922194, 0.6830127018922193, 0.18301270189221927, 0.18301270189221946], dtype=th.float32) # Local orientation of the wrist camera relative to eef
+DEFAULT_TRUNK_TRANSLATE = 0.5
+DEFAULT_RESET_DELTA_SPEED = 10.0       # deg / sec
+N_COOLDOWN_SECS = 1.5
 
 # Global whitelist of custom friction values
 FRICTIONS = {
@@ -102,6 +106,47 @@ USE_VERTICAL_VISUALIZERS = False
 GHOST_APPEAR_THRESHOLD = 0.1    # Threshold for showing ghost
 GHOST_APPEAR_TIME = 10 # Number of frames to wait before showing ghost
 USE_REACHABILITY_VISUALIZERS = True
+
+
+def infer_trunk_translate_from_torso_qpos(qpos):
+    if qpos[0] > R1_DOWNWARD_TORSO_JOINT_POS[0]:
+        # This is the interpolation between downward and ground
+        translate = 1 + (qpos[0] - R1_DOWNWARD_TORSO_JOINT_POS[0]) / (
+                    R1_GROUND_TORSO_JOINT_POS[0] - R1_DOWNWARD_TORSO_JOINT_POS[0])
+
+    else:
+        # This is the interpolation between upright and downward
+        translate = (qpos[0] - R1_UPRIGHT_TORSO_JOINT_POS[0]) / (
+                    R1_DOWNWARD_TORSO_JOINT_POS[0] - R1_UPRIGHT_TORSO_JOINT_POS[0])
+
+    return translate.item()
+
+
+def infer_torso_qpos_from_trunk_translate(translate):
+    translate = min(max(translate, 0.0), 2.0)
+
+    # Interpolate between the three pre-determined joint positions
+    if translate <= 1.0:
+        # Interpolate between upright and down positions
+        interpolation_factor = translate
+        interpolated_trunk_pos = (1 - interpolation_factor) * R1_UPRIGHT_TORSO_JOINT_POS + \
+                                 interpolation_factor * R1_DOWNWARD_TORSO_JOINT_POS
+    else:
+        # Interpolate between down and ground positions
+        interpolation_factor = translate - 1.0
+        interpolated_trunk_pos = (1 - interpolation_factor) * R1_DOWNWARD_TORSO_JOINT_POS + \
+                                 interpolation_factor * R1_GROUND_TORSO_JOINT_POS
+
+    return interpolated_trunk_pos
+
+
+def print_color(*args, color=None, attrs=(), **kwargs):
+    import termcolor
+
+    if len(args) > 0:
+        args = tuple(termcolor.colored(arg, color=color, attrs=attrs) for arg in args)
+    print(*args, **kwargs)
+
 
 def get_camera_config(name, relative_prim_path, position, orientation, resolution):
     return {
@@ -147,6 +192,7 @@ def create_and_dock_viewport(parent_window, position, ratio, camera_path):
     og.sim.render()
     
     return viewport
+
 
 class OGRobotServer:
     def __init__(
@@ -481,7 +527,7 @@ class OGRobotServer:
             # Good start pose for GELLO
             cfg["robots"][0]["reset_joint_pos"] = th.tensor([
                 0, 0, 0, 0, 0, 0,   # 6 virtual base joints
-                30, -60, -30, 0,    # 4 trunk joints
+                0, 0, 0, 0,    # 4 trunk joints -- these will be programmatically added
                 33, -33,            # L, R arm joints
                 162, 162,
                 -108, -108,
@@ -491,9 +537,12 @@ class OGRobotServer:
                 0, 0,  # 2 L gripper
                 0, 0,  # 2 R gripper
             ]) * th.pi / 180
-            
+
             # Fingers MUST start open, or else generated AG spheres will be spawned incorrectly
             cfg["robots"][0]["reset_joint_pos"][-4:] = 0.05
+
+            # Update trunk qpos as well
+            cfg["robots"][0]["reset_joint_pos"][6:10] = infer_torso_qpos_from_trunk_translate(DEFAULT_TRUNK_TRANSLATE)
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
@@ -514,7 +563,7 @@ class OGRobotServer:
             for _ in range(50):
                 og.sim.step()
             self.env.scene.update_initial_state()
-        
+
         # TODO:
         # Tune friction for small amount on cabinets to avoid drifting
         # Debug ToggledOn
@@ -584,7 +633,7 @@ class OGRobotServer:
                 else:
                     if isinstance(obj, R1):
                         obj.base_footprint_link.mass = 250.0
-        self.env.reset()
+        # self.env.reset()
 
         # TODO: Make this less hacky, how to make this programmatic?
         self.active_arm = "right"
@@ -593,7 +642,14 @@ class OGRobotServer:
         self.obs = {}
         self._arm_shoulder_directions = {"left": -1.0, "right": 1.0}
         self._cam_switched = False
-        
+        self._button_toggled_state = {
+            "x": False,
+            "y": False,
+            "a": False,
+            "b": False,
+        }
+        self._waiting_to_resume = True
+
         self.task_relevant_objects = []
         self.task_irrelevant_objects = []
         self.highlight_task_relevant_objects = False
@@ -602,35 +658,41 @@ class OGRobotServer:
             task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() if bddl_obj.wrapped_obj is not None]
             self.task_relevant_objects = [obj for obj in task_objects if obj.category != "agent"]
             object_highlight_colors = lazy.omni.replicator.core.random_colours(N=len(self.task_relevant_objects))[:, :3].tolist()
-            
+
             # Normalize colors from 0-255 to 0-1 range
             normalized_colors = [[r/255, g/255, b/255] for r, g, b in object_highlight_colors]
-            
+
             for obj, color in zip(self.task_relevant_objects, normalized_colors):
                 obj.set_highlight_properties(color=color)
-            self.task_irrelevant_objects = [obj for obj in self.env.scene.objects 
-                                        if obj not in task_objects 
+            self.task_irrelevant_objects = [obj for obj in self.env.scene.objects
+                                        if obj not in task_objects
                                         and obj.category not in TASK_RELEVANT_CATEGORIES]
-            
+
             self._setup_task_instruction_ui()
 
         # Set variables that are set during reset call
-        self._env_reset_cooldown = None
+        self._reset_max_arm_delta = DEFAULT_RESET_DELTA_SPEED * (np.pi / 180) * og.sim.get_sim_step_dt()
+        self._resume_cooldown_time = None
+        self._in_cooldown = False
         self._current_trunk_translate = None
         self._current_trunk_tilt = None
         self._joint_state = None
         self._joint_cmd = None
-        
+
         self._recording_path = recording_path
         if self._recording_path is not None:
             self.env = DataCollectionWrapper(
                 env=self.env, output_path=self._recording_path, viewport_camera_path=og.sim.viewer_camera.active_camera_path,only_successes=False, use_vr=USE_VR
             )
-        
+
         self._prev_grasp_status = {arm: False for arm in self.robot.arm_names}
 
         # Reset
         self.reset()
+
+        # Take a single step
+        action = self.get_action()
+        self.env.step(action)
 
         # Define R to reset and ESCAPE to stop
         def keyboard_event_handler(event, *args, **kwargs):
@@ -641,6 +703,8 @@ class OGRobotServer:
             ):
                 if event.input == lazy.carb.input.KeyboardInput.R:
                     self.reset()
+                elif event.input == lazy.carb.input.KeyboardInput.X:
+                    self.resume_control()
                 elif event.input == lazy.carb.input.KeyboardInput.ESCAPE:
                     self.stop()
 
@@ -655,7 +719,7 @@ class OGRobotServer:
         # VR extension does not work with async rendering
         if not USE_VR:
             self._optimize_sim_settings()
-        
+
         # For some reason, toggle buttons get warped in terms of their placement -- we have them snap to their original
         # locations by setting their scale
         from omnigibson.object_states import ToggledOn
@@ -663,7 +727,7 @@ class OGRobotServer:
             if ToggledOn in obj.states:
                 scale = obj.states[ToggledOn].visual_marker.scale
                 obj.states[ToggledOn].visual_marker.scale = scale
-        
+
         # Set up VR system
         self.vr_system = None
         self.camera_prims = []
@@ -686,12 +750,12 @@ class OGRobotServer:
              )
             self.vr_system.start()
 
-        self._zmq_server = ZMQRobotServer(robot=self, host=host, port=port)
+        self._zmq_server = ZMQRobotServer(robot=self, host=host, port=port, verbose=False)
         self._zmq_server_thread = ZMQServerThread(self._zmq_server)
-    
+
     def _optimize_sim_settings(self):
         settings = lazy.carb.settings.get_settings()
-        
+
         # Use asynchronous rendering for faster performance
         # NOTE: This gets reset EVERY TIME the sim stops / plays!!
         # For some reason, need to turn on, then take one render step, then turn off, and then back on in order to
@@ -713,9 +777,9 @@ class OGRobotServer:
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", False)
         lazy.carb.settings.get_settings().set_bool("/app/asyncRendering", True)
         lazy.carb.settings.get_settings().set_bool("/app/asyncRenderingLowLatency", True)
-        
+
         lazy.carb.settings.get_settings().set_bool("/rtx-transient/dlssg/enabled", True)
-    
+
     def _setup_cameras(self):
         if MULTI_VIEW_MODE:
             viewport_left_shoulder = create_and_dock_viewport(
@@ -754,7 +818,7 @@ class OGRobotServer:
         og.sim.viewer_camera.active_camera_path = eyes_cam_prim_path
         og.sim.viewer_camera.image_height = RESOLUTION[0]
         og.sim.viewer_camera.image_width = RESOLUTION[1]
-        
+
         # Adjust wrist cameras
         left_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(prim_path=f"{self.robot.links['left_eef_link'].prim_path}/Camera")
         right_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(prim_path=f"{self.robot.links['right_eef_link'].prim_path}/Camera")
@@ -786,7 +850,7 @@ class OGRobotServer:
         # See https://forums.developer.nvidia.com/t/speeding-up-simulation-2023-1-1/300072/6
         for sensor in VisionSensor.SENSORS.values():
             sensor.render_product.hydra_texture.set_updates_enabled(False)
-    
+
     def _setup_visualizers(self):
         # Add visualization cylinders at the end effector sites
         self.eef_cylinder_geoms = {}
@@ -984,17 +1048,17 @@ class OGRobotServer:
             return
 
         self.bddl_goal_conditions = self.env.task.activity_natural_language_goal_conditions
-        
+
         # Setup overlay window
         main_viewport = og.sim.viewer_camera._viewport
         main_viewport.dock_tab_bar_visible = False
         og.sim.render()
         self.overlay_window = lazy.omni.ui.Window(
-            main_viewport.name, 
-            width=0, 
+            main_viewport.name,
+            width=0,
             height=0,
-            flags=lazy.omni.ui.WINDOW_FLAGS_NO_TITLE_BAR | 
-                lazy.omni.ui.WINDOW_FLAGS_NO_SCROLLBAR | 
+            flags=lazy.omni.ui.WINDOW_FLAGS_NO_TITLE_BAR |
+                lazy.omni.ui.WINDOW_FLAGS_NO_SCROLLBAR |
                 lazy.omni.ui.WINDOW_FLAGS_NO_RESIZE
         )
         og.sim.render()
@@ -1007,7 +1071,7 @@ class OGRobotServer:
                 # Text container at top left
                 with lazy.omni.ui.VStack(alignment=lazy.omni.ui.Alignment.LEFT_TOP, spacing=0):
                     lazy.omni.ui.Spacer(height=50)  # Top margin
-                    
+
                     # Create labels for each goal condition
                     for line in self.bddl_goal_conditions:
                         with lazy.omni.ui.HStack(height=20):
@@ -1023,10 +1087,10 @@ class OGRobotServer:
                                 }
                             )
                             self.text_labels.append(label)
-        
+
         # Initialize goal status tracking
         self._prev_goal_status = {
-            'satisfied': [], 
+            'satisfied': [],
             'unsatisfied': list(range(len(self.bddl_goal_conditions)))
         }
         
@@ -1037,11 +1101,11 @@ class OGRobotServer:
         """Update the UI based on goal status changes."""
         if self.task_name is None:
             return
-            
+
         # Check if status has changed
         status_changed = (set(goal_status['satisfied']) != set(self._prev_goal_status['satisfied']) or
                         set(goal_status['unsatisfied']) != set(self._prev_goal_status['unsatisfied']))
-        
+
         if status_changed:
             # Update satisfied goals - make them green
             for idx in goal_status['satisfied']:
@@ -1049,17 +1113,17 @@ class OGRobotServer:
                     current_style = self.text_labels[idx].style
                     current_style.update({"color": 0xFF00FF00})  # Green (ABGR)
                     self.text_labels[idx].set_style(current_style)
-            
+
             # Update unsatisfied goals - make them red
             for idx in goal_status['unsatisfied']:
                 if 0 <= idx < len(self.text_labels):
                     current_style = self.text_labels[idx].style
                     current_style.update({"color": 0xFF0000FF})  # Red (ABGR)
                     self.text_labels[idx].set_style(current_style)
-            
+
             # Store the current status for future comparison
             self._prev_goal_status = goal_status.copy()
-    
+
     def _update_grasp_status(self):
         for arm in self.robot.arm_names:
             is_grasping = self.robot.is_grasping(arm) > 0
@@ -1067,7 +1131,7 @@ class OGRobotServer:
                 self._prev_grasp_status[arm] = is_grasping
                 for cylinder in self.eef_cylinder_geoms[arm]:
                     cylinder.visible = not is_grasping
-    
+
     def _update_reachability_visualizers(self):
         if not USE_REACHABILITY_VISUALIZERS:
             return
@@ -1125,11 +1189,13 @@ class OGRobotServer:
 
         obs = dict()
         obs["active_arm"] = self.active_arm
-        obs["env_reset_cooldown"] = self._env_reset_cooldown
+        obs["in_cooldown"] = self._in_cooldown
         # obs["base_contact"] = any("groundPlane" not in c.body0 and "groundPlane" not in c.body1 for link in self.robot.base_links for c in link.contact_list())
         obs["base_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.non_floor_touching_base_links)
         obs["trunk_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.trunk_links)
         obs["reset_joints"] = bool(self._joint_cmd["button_y"][0].item())
+        obs["waiting_to_resume"] = self._waiting_to_resume
+
         for i, arm in enumerate(self.robot.arm_names):
             arm_control_idx = self.robot.arm_control_idx[arm]
             obs[f"arm_{arm}_control_idx"] = arm_control_idx
@@ -1145,7 +1211,6 @@ class OGRobotServer:
 
             obs[f"{arm}_gripper"] = self._joint_cmd[f"{arm}_gripper"].item()
 
-
         for arm in self.robot.arm_names:
             link_name = self.robot.eef_link_names[arm]
 
@@ -1160,129 +1225,169 @@ class OGRobotServer:
 
         self.obs = obs
 
+    def resume_control(self):
+        if self._waiting_to_resume:
+            self._waiting_to_resume = False
+            self._resume_cooldown_time = time.time() + N_COOLDOWN_SECS
+            self._in_cooldown = True
+
     def serve(self) -> None:
         # start the zmq server
         self._zmq_server_thread.start()
         while True:
             self._update_observations()
 
-            # Start an empty action
-            action = th.zeros(self.robot.action_dim)
-
-            # Apply arm action + extra dimension from base.
-            # TODO: How to handle once gripper is attached?
-            if isinstance(self.robot, R1):
-                # Apply arm action
-                left_act, right_act = self._joint_cmd["left_arm"].clone(), self._joint_cmd["right_arm"].clone()
-                left_act[0] += self._current_trunk_tilt * self._arm_shoulder_directions["left"]
-                right_act[0] += self._current_trunk_tilt * self._arm_shoulder_directions["right"]
-                action[self.robot.arm_action_idx["left"]] = left_act
-                action[self.robot.arm_action_idx["right"]] = right_act
-                
-                # Apply base action
-                action[self.robot.base_action_idx] = self._joint_cmd["base"].clone()
-                
-                # Apply gripper action
-                action[self.robot.gripper_action_idx["left"]] = self._joint_cmd["left_gripper"].clone()
-                action[self.robot.gripper_action_idx["right"]] = self._joint_cmd["right_gripper"].clone()
-                
-                # Apply trunk action
-                if not SIMPLIFIED_TRUNK_CONTROL:
-                    self._current_trunk_translate = np.clip(self._current_trunk_translate + self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), 0.25, 0.65)
-                    self._current_trunk_tilt = np.clip(self._current_trunk_tilt + self._joint_cmd["trunk"][1].item() * og.sim.get_sim_step_dt(), -np.pi / 2, np.pi / 2)
-                    
-                    # Convert desired values into corresponding trunk joint positions
-                    # Trunk link 1 is 0.4m, link 2 is 0.3m
-                    # See https://www.mathworks.com/help/symbolic/derive-and-apply-inverse-kinematics-to-robot-arm.html
-                    xe, ye = self._current_trunk_translate, 0.1
-                    sol_sign = 1.0      # or -1.0
-                    # xe, ye = 0.5, 0.1
-                    l1, l2 = 0.4, 0.3
-                    xe2 = xe**2
-                    ye2 = ye**2
-                    xeye = xe2 + ye2
-                    l12 = l1**2
-                    l22 = l2**2
-                    l1l2 = l12 + l22
-                    # test = -(l12**2) + 2*l12*l22 + 2*l12*(xe2+ye2) - l22**2 + 2*l22*(xe2+ye2) - xe2**2 - 2*xe2*ye2 - ye2**2
-                    sigma1 = np.sqrt(-(l12**2) + 2*l12*l22 + 2*l12*xe2 + 2*l12*ye2 - l22**2 + 2*l22*xe2 + 2*l22*ye2 - xe2**2 - 2*xe2*ye2 - ye2**2)
-                    theta1 = 2 * np.arctan2(2*l1*ye + sol_sign * sigma1, l1**2 + 2*l1*l2 - l2**2 + xeye)
-                    theta2 = -sol_sign * 2 * np.arctan2(np.sqrt(l1l2 - xeye + 2*l1*l2), np.sqrt(-l1l2 + xeye + 2*l1*l2))
-                    theta3 = (theta1 + theta2 - self._current_trunk_tilt)
-                    theta4 = 0.0
-
-                    action[self.robot.trunk_action_idx] = th.tensor([theta1, theta2, theta3, theta4], dtype=th.float)
+            # If X is toggled from OFF -> ON, either:
+            # (a) begin receiving commands, if currently paused, or
+            # (b) toggle camera, if actively running
+            button_x_state = self._joint_cmd["button_x"].item() != 0.0
+            if button_x_state and not self._button_toggled_state["x"]:
+                if self._waiting_to_resume:
+                    self.resume_control()
                 else:
-                    self._current_trunk_translate = float(th.clamp(
-                        th.tensor(self._current_trunk_translate, dtype=th.float) - th.tensor(self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), dtype=th.float),
-                        0.0,
-                        2.0
-                    ))
+                    self.active_camera_id = 1 - self.active_camera_id
+                    og.sim.viewer_camera.active_camera_path = self.camera_paths[self.active_camera_id]
+                    if USE_VR:
+                        self.vr_system.set_anchor_with_prim(
+                            self.camera_prims[self.active_camera_id]
+                        )
+            self._button_toggled_state["x"] = button_x_state
 
-                    # Interpolate between the three pre-determined joint positions
-                    if self._current_trunk_translate <= 1.0:
-                        # Interpolate between upright and down positions
-                        interpolation_factor = self._current_trunk_translate
-                        interpolated_trunk_pos = (1 - interpolation_factor) * R1_UPRIGHT_TORSO_JOINT_POS + \
-                                                interpolation_factor * R1_DOWNWARD_TORSO_JOINT_POS
-                    else:
-                        # Interpolate between down and ground positions
-                        interpolation_factor = self._current_trunk_translate - 1.0
-                        interpolated_trunk_pos = (1 - interpolation_factor) * R1_DOWNWARD_TORSO_JOINT_POS + \
-                                                interpolation_factor * R1_GROUND_TORSO_JOINT_POS
+            # If A is toggled from OFF -> ON, record checkpoint
+            button_a_state = self._joint_cmd["button_a"].item() != 0.0
+            if button_a_state and not self._button_toggled_state["a"]:
+                if self._recording_path is not None:
+                    self.env.update_checkpoint()
+                    print("Recorded checkpoint!")
+            self._button_toggled_state["a"] = button_a_state
 
-                    action[self.robot.trunk_action_idx] = interpolated_trunk_pos
+            # If B is toggled from OFF -> ON, rollback to checkpoint
+            button_b_state = self._joint_cmd["button_b"].item() != 0.0
+            if button_b_state and not self._button_toggled_state["b"]:
+                if self._recording_path is not None:
+                    print("Rolling back to latest checkpoint...watch out, GELLO will move on its own!")
+                    self.env.rollback_to_checkpoint()
+                    print("Finished rolling back!")
+                    self._waiting_to_resume = True
+            self._button_toggled_state["b"] = button_b_state
 
-                # If L is toggled from OFF -> ON, toggle camera
-                if self._joint_cmd["button_b"].item() != 0.0:
-                    if not self._cam_switched:
-                        self.active_camera_id = 1 - self.active_camera_id
-                        og.sim.viewer_camera.active_camera_path = self.camera_paths[self.active_camera_id]
-                        if USE_VR:
-                            self.vr_system.set_anchor_with_prim(
-                                self.camera_prims[self.active_camera_id]
-                            )
-                        self._cam_switched = True
+            # If home is toggled from OFF -> ON, reset env
+            if self._joint_cmd["button_home"].item() != 0.0:
+                if not self._in_cooldown:
+                    self.reset()
+
+            # Only decrement cooldown if we're not waiting to resume
+            if not self._waiting_to_resume:
+                if self._in_cooldown:
+                    print_color(f"\rIn cooldown!{' ' * 40}", end="", flush=True)
+                    self._in_cooldown = time.time() < self._resume_cooldown_time
                 else:
-                    self._cam_switched = False
+                    print_color(f"\rRunning!{' ' * 40}", end="", flush=True)
 
-                # If button A is pressed, hide task-irrelevant objects
-                if self._joint_cmd["button_a"].item() != 0.0:
-                    if not self.highlight_task_relevant_objects:
-                        for obj in self.task_irrelevant_objects:
-                            obj.visible = not obj.visible
-                        for obj in self.task_relevant_objects:
-                            obj.highlighted = not obj.highlighted
-                        self.highlight_task_relevant_objects = True
-                else:
-                    self.highlight_task_relevant_objects = False
+            # If waiting to resume, simply step sim without updating action
+            if self._waiting_to_resume:
+                og.sim.step()
+                print_color(f"\rPress X (keyboard or JoyCon) to resume sim!{' ' * 30}", end="", flush=True)
 
-                # If HOME button is press, reset env
-                if self._joint_cmd["button_home"].item() != 0.0:
-                    if self._env_reset_cooldown == 0:
-                        self.reset()
-                        self._env_reset_cooldown = 100
-                self._env_reset_cooldown = max(0, self._env_reset_cooldown - 1)
-
-                # Update vertical visualizers
-                if USE_VERTICAL_VISUALIZERS:
-                    for arm in ["left", "right"]:
-                        arm_position = self.robot.eef_links[arm].get_position_orientation(frame="world")[0]
-                        self.vertical_visualizers[arm].set_position_orientation(position=arm_position - th.tensor([0, 0, 1.0]), orientation=th.tensor([0, 0, 0, 1.0]), frame="world")
             else:
-                action[self.robot.arm_action_idx[self.active_arm]] = self._joint_cmd[self.active_arm].clone()
-        
-            # Optionally update ghost robot
-            if self.ghosting:
-                self._update_ghost_robot(action)
+                # Generate action and deploy
+                action = self.get_action()
+                _, _, _, _, info = self.env.step(action)
 
-            _, _, _, _, info = self.env.step(action)
-            
-            if self.task_name is not None:
-                self._update_goal_status(info['done']['goal_status'])
-            
-            self._update_grasp_status()
-            self._update_reachability_visualizers()
+                if self.task_name is not None:
+                    self._update_goal_status(info['done']['goal_status'])
+                self._update_grasp_status()
+                self._update_reachability_visualizers()
+
+    def get_action(self):
+        # Start an empty action
+        action = th.zeros(self.robot.action_dim)
+
+        # Apply arm action + extra dimension from base
+        if isinstance(self.robot, R1):
+            # Apply arm action
+            left_act, right_act = self._joint_cmd["left_arm"].clone(), self._joint_cmd["right_arm"].clone()
+
+            # If we're in cooldown, clip values based on max delta value
+            if self._in_cooldown:
+                robot_pos = self.robot.get_joint_positions()
+                robot_left_pos, robot_right_pos = [robot_pos[self.robot.arm_control_idx[arm]] for arm in ("left", "right")]
+                robot_left_delta = left_act - robot_left_pos
+                robot_right_delta = right_act - robot_right_pos
+                left_act = robot_left_pos + robot_left_delta.clip(-self._reset_max_arm_delta, self._reset_max_arm_delta)
+                right_act = robot_right_pos + robot_right_delta.clip(-self._reset_max_arm_delta, self._reset_max_arm_delta)
+
+            left_act[0] += self._current_trunk_tilt * self._arm_shoulder_directions["left"]
+            right_act[0] += self._current_trunk_tilt * self._arm_shoulder_directions["right"]
+            action[self.robot.arm_action_idx["left"]] = left_act
+            action[self.robot.arm_action_idx["right"]] = right_act
+
+            # Apply base action
+            action[self.robot.base_action_idx] = self._joint_cmd["base"].clone()
+
+            # Apply gripper action
+            action[self.robot.gripper_action_idx["left"]] = self._joint_cmd["left_gripper"].clone()
+            action[self.robot.gripper_action_idx["right"]] = self._joint_cmd["right_gripper"].clone()
+
+            # Apply trunk action
+            if not SIMPLIFIED_TRUNK_CONTROL:
+                raise NotImplementedError("This control is no longer supported!")
+                self._current_trunk_translate = np.clip(self._current_trunk_translate + self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), 0.25, 0.65)
+                self._current_trunk_tilt = np.clip(self._current_trunk_tilt + self._joint_cmd["trunk"][1].item() * og.sim.get_sim_step_dt(), -np.pi / 2, np.pi / 2)
+
+                # Convert desired values into corresponding trunk joint positions
+                # Trunk link 1 is 0.4m, link 2 is 0.3m
+                # See https://www.mathworks.com/help/symbolic/derive-and-apply-inverse-kinematics-to-robot-arm.html
+                xe, ye = self._current_trunk_translate, 0.1
+                sol_sign = 1.0      # or -1.0
+                # xe, ye = 0.5, 0.1
+                l1, l2 = 0.4, 0.3
+                xe2 = xe**2
+                ye2 = ye**2
+                xeye = xe2 + ye2
+                l12 = l1**2
+                l22 = l2**2
+                l1l2 = l12 + l22
+                # test = -(l12**2) + 2*l12*l22 + 2*l12*(xe2+ye2) - l22**2 + 2*l22*(xe2+ye2) - xe2**2 - 2*xe2*ye2 - ye2**2
+                sigma1 = np.sqrt(-(l12**2) + 2*l12*l22 + 2*l12*xe2 + 2*l12*ye2 - l22**2 + 2*l22*xe2 + 2*l22*ye2 - xe2**2 - 2*xe2*ye2 - ye2**2)
+                theta1 = 2 * np.arctan2(2*l1*ye + sol_sign * sigma1, l1**2 + 2*l1*l2 - l2**2 + xeye)
+                theta2 = -sol_sign * 2 * np.arctan2(np.sqrt(l1l2 - xeye + 2*l1*l2), np.sqrt(-l1l2 + xeye + 2*l1*l2))
+                theta3 = (theta1 + theta2 - self._current_trunk_tilt)
+                theta4 = 0.0
+
+                action[self.robot.trunk_action_idx] = th.tensor([theta1, theta2, theta3, theta4], dtype=th.float)
+            else:
+                self._current_trunk_translate = float(th.clamp(
+                    th.tensor(self._current_trunk_translate, dtype=th.float) - th.tensor(self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), dtype=th.float),
+                    0.0,
+                    2.0
+                ))
+                action[self.robot.trunk_action_idx] = infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
+
+            # If button A is pressed, hide task-irrelevant objects
+            if self._joint_cmd["button_a"].item() != 0.0:
+                if not self.highlight_task_relevant_objects:
+                    for obj in self.task_irrelevant_objects:
+                        obj.visible = not obj.visible
+                    for obj in self.task_relevant_objects:
+                        obj.highlighted = not obj.highlighted
+                    self.highlight_task_relevant_objects = True
+            else:
+                self.highlight_task_relevant_objects = False
+
+            # Update vertical visualizers
+            if USE_VERTICAL_VISUALIZERS:
+                for arm in ["left", "right"]:
+                    arm_position = self.robot.eef_links[arm].get_position_orientation(frame="world")[0]
+                    self.vertical_visualizers[arm].set_position_orientation(position=arm_position - th.tensor([0, 0, 1.0]), orientation=th.tensor([0, 0, 0, 1.0]), frame="world")
+        else:
+            action[self.robot.arm_action_idx[self.active_arm]] = self._joint_cmd[self.active_arm].clone()
+
+        # Optionally update ghost robot
+        if self.ghosting:
+            self._update_ghost_robot(action)
+
+        return action
 
     def _update_ghost_robot(self, action):
         self.ghost.set_position_orientation(
@@ -1294,13 +1399,13 @@ class OGRobotServer:
         for arm in self.robot.arm_names:
             for i in range(6):
                 self.ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(th.clamp(
-                    action[self.robot.arm_action_idx[arm]][i], 
+                    action[self.robot.arm_action_idx[arm]][i],
                     min=self.ghost.joints[f"{arm}_arm_joint{i+1}"].lower_limit,
                     max=self.ghost.joints[f"{arm}_arm_joint{i+1}"].upper_limit
                 ))
             for i in range(2):
                 self.ghost.joints[f"{arm}_gripper_axis{i+1}"].set_pos(
-                    action[self.robot.gripper_action_idx[arm]][0], 
+                    action[self.robot.gripper_action_idx[arm]][0],
                     normalized=True
                 )
             # make arm visible if some joint difference is larger than the threshold
@@ -1321,16 +1426,18 @@ class OGRobotServer:
     def reset(self):
         # Reset internal variables
         self._ghost_appear_counter = {arm: 0 for arm in self.robot.arm_names}
-        self._env_reset_cooldown = 100
-        self._current_trunk_translate = 0.5
+        self._resume_cooldown_time = time.time() + N_COOLDOWN_SECS
+        self._in_cooldown = True
+        self._current_trunk_translate = DEFAULT_TRUNK_TRANSLATE
         self._current_trunk_tilt = 0.0
+        self._waiting_to_resume = True
         self._joint_state = self.robot.reset_joint_pos
         self._joint_cmd = {
             f"{arm}_arm": self._joint_state[self.robot.arm_control_idx[arm]] for arm in self.robot.arm_names
         }
         if isinstance(self.robot, R1):
             for arm in self.robot.arm_names:
-                self._joint_cmd[f"{arm}_gripper"] = th.zeros(len(self.robot.gripper_action_idx[arm]))
+                self._joint_cmd[f"{arm}_gripper"] = th.ones(len(self.robot.gripper_action_idx[arm]))
                 self._joint_cmd["base"] = self._joint_state[self.robot.base_control_idx]
                 self._joint_cmd["trunk"] = th.zeros(2)
                 self._joint_cmd["button_x"] = th.zeros(1)
