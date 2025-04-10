@@ -666,7 +666,6 @@ class OGRobotServer:
 
         self.task_relevant_objects = []
         self.task_irrelevant_objects = []
-        self.highlight_task_relevant_objects = False
         self.object_beacons = {}
 
         if self.task_name is not None:
@@ -1299,37 +1298,53 @@ class OGRobotServer:
 
             # If X is toggled from OFF -> ON, either:
             # (a) begin receiving commands, if currently paused, or
-            # (b) toggle camera, if actively running
+            # (b) record checkpoint, if actively running
             button_x_state = self._joint_cmd["button_x"].item() != 0.0
             if button_x_state and not self._button_toggled_state["x"]:
                 if self._waiting_to_resume:
                     self.resume_control()
                 else:
-                    self.active_camera_id = 1 - self.active_camera_id
-                    og.sim.viewer_camera.active_camera_path = self.camera_paths[self.active_camera_id]
-                    if USE_VR:
-                        self.vr_system.set_anchor_with_prim(
-                            self.camera_prims[self.active_camera_id]
-                        )
+                    if self._recording_path is not None:
+                        self.env.update_checkpoint()
+                        print("Recorded checkpoint!")
             self._button_toggled_state["x"] = button_x_state
 
-            # If A is toggled from OFF -> ON, record checkpoint
-            button_a_state = self._joint_cmd["button_a"].item() != 0.0
-            if button_a_state and not self._button_toggled_state["a"]:
-                if self._recording_path is not None:
-                    self.env.update_checkpoint()
-                    print("Recorded checkpoint!")
-            self._button_toggled_state["a"] = button_a_state
-
-            # If B is toggled from OFF -> ON, rollback to checkpoint
-            button_b_state = self._joint_cmd["button_b"].item() != 0.0
-            if button_b_state and not self._button_toggled_state["b"]:
+            # If Y is toggled from OFF -> ON, rollback to checkpoint
+            button_y_state = self._joint_cmd["button_y"].item() != 0.0
+            if button_y_state and not self._button_toggled_state["y"]:
                 if self._recording_path is not None:
                     print("Rolling back to latest checkpoint...watch out, GELLO will move on its own!")
                     self.env.rollback_to_checkpoint()
                     print("Finished rolling back!")
                     self._waiting_to_resume = True
+            self._button_toggled_state["y"] = button_y_state
+
+            # If B is toggled from OFF -> ON, toggle camera
+            button_b_state = self._joint_cmd["button_b"].item() != 0.0
+            if button_b_state and not self._button_toggled_state["b"]:
+                self.active_camera_id = 1 - self.active_camera_id
+                og.sim.viewer_camera.active_camera_path = self.camera_paths[self.active_camera_id]
+                if USE_VR:
+                    self.vr_system.set_anchor_with_prim(
+                        self.camera_prims[self.active_camera_id]
+                    )
             self._button_toggled_state["b"] = button_b_state
+
+            # If A is toggled from OFF -> ON, toggle task-irrelevant object visibility
+            button_a_state = self._joint_cmd["button_a"].item() != 0.0
+            if button_a_state and not self._button_toggled_state["a"]:
+                for obj in self.task_irrelevant_objects:
+                    obj.visible = not obj.visible
+                for obj in self.task_relevant_objects:
+                    obj.highlighted = not obj.highlighted
+                    beacon = self.object_beacons[obj]
+                    beacon.set_position_orientation(
+                        position=obj.aabb_center + th.tensor([0, 0, BEACON_LENGTH / 2.0]),
+                        orientation=T.euler2quat(th.tensor([0, 0, 0])),
+                        frame="world"
+                    )
+                    beacon.visible = not beacon.visible
+            self._button_toggled_state["a"] = button_a_state
 
             # If home is toggled from OFF -> ON, reset env
             if self._joint_cmd["button_home"].item() != 0.0:
@@ -1424,35 +1439,6 @@ class OGRobotServer:
                     2.0
                 ))
                 action[self.robot.trunk_action_idx] = infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
-
-                # If button A is pressed, hide task-irrelevant objects
-                if self._joint_cmd["button_a"].item() != 0.0:
-                    if not self.highlight_task_relevant_objects:
-                        for obj in self.task_irrelevant_objects:
-                            obj.visible = not obj.visible
-                        for obj in self.task_relevant_objects:
-                            obj.highlighted = not obj.highlighted
-                            beacon = self.object_beacons[obj]
-                            beacon.set_position_orientation(
-                                position=obj.aabb_center + th.tensor([0, 0, BEACON_LENGTH / 2.0]),
-                                orientation=T.euler2quat(th.tensor([0, 0, 0])),
-                                frame="world"
-                            )
-                            beacon.visible = not beacon.visible
-                        self.highlight_task_relevant_objects = True
-                else:
-                    self.highlight_task_relevant_objects = False
-
-                # If button A is pressed, hide task-irrelevant objects
-                if self._joint_cmd["button_a"].item() != 0.0:
-                    if not self.highlight_task_relevant_objects:
-                        for obj in self.task_irrelevant_objects:
-                            obj.visible = not obj.visible
-                        for obj in self.task_relevant_objects:
-                            obj.highlighted = not obj.highlighted
-                        self.highlight_task_relevant_objects = True
-                else:
-                    self.highlight_task_relevant_objects = False
 
             # Update vertical visualizers
             if USE_VERTICAL_VISUALIZERS:
