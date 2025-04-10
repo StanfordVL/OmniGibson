@@ -163,8 +163,8 @@ class CuRoboMotionGenerator:
 
             if isinstance(robot, HolonomicBaseRobot):
                 self.update_joint_limits(robot_cfg_obj, emb_sel)
-                if isinstance(robot, R1):
-                    self.update_torso_joint_limits(robot_cfg_obj, emb_sel)
+                # if isinstance(robot, R1):
+                #     self.update_torso_joint_limits(robot_cfg_obj, emb_sel)
 
             motion_kwargs = dict(
                 trajopt_tsteps=32,
@@ -475,6 +475,27 @@ class CuRoboMotionGenerator:
         joint_state = [joint_state[i] for i in range(joint_state.shape[0])]
         return result, success, joint_state
 
+    # TODO: This is not tested yet. Test it!
+    def plan_js(
+        self,
+        start_state,
+        goal_pose,
+        plan_config,
+        link_poses=None,
+        eyes_targets=None,
+        emb_sel=CuRoboEmbodimentSelection.DEFAULT,
+    ):
+        result = self.mg[emb_sel].plan_single_js(
+            start_state, goal_pose, plan_config, link_poses=link_poses, eyes_targets=eyes_targets
+        )
+        success = result.success
+        if result.interpolated_plan is None:
+            joint_state = [None] * goal_pose.batch
+        else:
+            joint_state = result.get_paths()
+
+        return result, success, joint_state
+    
     def plan_batch(
         self,
         start_state,
@@ -1098,7 +1119,7 @@ class CuRoboMotionGenerator:
                 nominal_pos = th.tensor([5.2360e-01, -1.0472e+00, -5.2360e-01, 0.0])
                 # nominal_pos += th.tensor([0.2, -0.4, -0.2, 0.0])
                 joint_limit_offset = th.tensor([
-                    [-0.1, -1.8, -1.0, -0.54],
+                    [-0.1, -1.0, -1.0, -0.54],
                     [0.2, 0.1, 0.1, 0.54]
                     ])
                 min_torso_limit = nominal_pos + joint_limit_offset[0]
