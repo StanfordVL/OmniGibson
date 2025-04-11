@@ -10,18 +10,11 @@ import pymxs
 
 rt = pymxs.runtime
 
-type_re = re.compile(r"([A-Z\-]+):")
-ignore_messages = ["SYNSET", "CATEGORY", "ABILITIES", "SUBSTANCE", "STRUCTURE-UNCLOSED"]
 def should_get_complaint(complaint):
     if complaint["processed"]:
         return False
-        
-    complaint_type = "PREVIOUS PASS"
-    m = type_re.match(complaint["message"])
-    if m:
-        complaint_type = m.group(1)
 
-    if complaint_type in ignore_messages:
+    if complaint["type"] not in ("appearance", "collision", "handle"):
         return False
 
     return True
@@ -37,7 +30,7 @@ def main():
     with open(complaint_path, "r") as f:
         x = json.load(f)
 
-    selected_objs = list(rt.selection) if len(rt.selection) > 0 else list(rt.objects)
+    selected_objs = list(rt.selection) #  if len(rt.selection) > 0 else list(rt.objects)
     selected_names = [obj.name for obj in selected_objs]
     selected_obj_matches = [b1k_pipeline.utils.parse_name(name) for name in selected_names]
     selected_keys = {match.group('model_id') for match in selected_obj_matches if match is not None}

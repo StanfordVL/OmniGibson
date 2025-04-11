@@ -1,4 +1,3 @@
-import re
 import sys
 sys.path.append(r"D:\ig_pipeline")
 
@@ -11,9 +10,11 @@ import textwrap
 
 rt = pymxs.runtime
 
-type_re = re.compile(r"([A-Z\-]+):")
 def should_get_complaint(complaint):
     if complaint["processed"]:
+        return False
+
+    if complaint["type"] not in ("appearance", "collision", "handle"):
         return False
 
     return True
