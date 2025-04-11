@@ -149,7 +149,7 @@ class R1GelloAgent(GelloAgent):
         return current
 
     def start(self):
-        # super().start()
+        super().start()
 
         # Set all joints to default operating modes
         self._robot.set_operating_mode(self.default_operation_modes)
