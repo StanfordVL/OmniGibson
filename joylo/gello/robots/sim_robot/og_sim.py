@@ -647,7 +647,6 @@ class OGRobotServer:
                 else:
                     if isinstance(obj, R1):
                         obj.base_footprint_link.mass = 250.0
-        # self.env.reset()
 
         # TODO: Make this less hacky, how to make this programmatic?
         self.active_arm = "right"
