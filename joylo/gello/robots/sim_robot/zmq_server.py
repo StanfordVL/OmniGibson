@@ -21,8 +21,9 @@ class ZMQServerThread(threading.Thread):
 class ZMQRobotServer:
     """A class representing a ZMQ server for a robot."""
 
-    def __init__(self, robot: Robot, host: str = "127.0.0.1", port: int = 5556):
+    def __init__(self, robot: Robot, host: str = "127.0.0.1", port: int = 5556, verbose=True):
         self._robot = robot
+        self._verbose = verbose
         self._context = zmq.Context()
         self._socket = self._context.socket(zmq.REP)
         addr = f"tcp://{host}:{port}"
@@ -58,7 +59,8 @@ class ZMQRobotServer:
 
                 self._socket.send(pickle.dumps(result))
             except zmq.error.Again:
-                print("Timeout in ZMQLeaderServer serve")
+                if self._verbose:
+                    print("Timeout in ZMQLeaderServer serve")
                 # Timeout occurred, check if the stop event is set
 
     def stop(self) -> None:

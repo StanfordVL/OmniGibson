@@ -176,7 +176,7 @@ def main(args):
 
         if args.use_joycons:
             base_trunk_gripper_agent = JoyconAgent(
-                calibration_dir=f"{REPO_DIR}/configs"
+                calibration_dir=f"{REPO_DIR}/configs",
                 deadzone_threshold=0.2,
                 max_translation=0.5,
                 max_rotation=0.8,

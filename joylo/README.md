@@ -188,10 +188,13 @@ python experiments/run_r1_gello.py --joint_config_file joint_config_{your specif
 
 ## Troubleshooting
 
+### JoyCon connection issues
 - If JoyCons won't connect, try the command line method (Method 2 above)
 - Ensure you're using an external Bluetooth dongle, as built-in Bluetooth may not be compatible
 - Verify that udev rules are properly configured if devices aren't recognized
 - If JoyCons disconnect randomly during data collection, try connecting the Bluetooth dongle to a USB 2.0 port instead of USB 3.0
+- If the JoyCon is being used as a mouse, double check [this setting](https://askubuntu.com/a/891624) (or alternatively remove `50-joystick.conf` directly)
+- If the JoyCons are connected to Ubuntu in bluetooth but are still unable to be detected from Python, try `pip uninstall hidapi`, and then `pip install hid pyglm`, and then try again
 
 ## Joycon Button Mapping
 ![Screenshot 2025-03-28 at 11 04 39 PM](https://github.com/user-attachments/assets/29d33994-ea8f-4302-b37c-ebfe30fa8901)

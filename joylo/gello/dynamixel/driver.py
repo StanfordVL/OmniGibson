@@ -35,6 +35,7 @@ TORQUE_DISABLE = 0
 ADDR_OPERATING_MODE = 11
 LEN_OPERATING_MODE = 1
 LEN_GAIN = 2
+ADDR_MAX_VEL = 44
 
 
 # Control mode
@@ -275,7 +276,7 @@ class DynamixelDriver(DynamixelDriverProtocol):
 
             for idx, dxl_id, angle in zip(idxs, self._ids[idxs], joint_angles):
                 # Raise error if we're not the correct operating mode or torque is not enabled
-                if self._operating_mode[idx] not in {OperatingMode.POSITION, OperatingMode.CURRENT_BASED_POSITION}:
+                if self._operating_mode[idx] not in {OperatingMode.POSITION, OperatingMode.EXTENDED_POSITION, OperatingMode.CURRENT_BASED_POSITION}:
                     raise RuntimeError("OperatingMode must be set to either POSITION or CURRENT_BASED_POSITION in order to set joint positions")
 
                 if not self._torque_enabled[idx]:
@@ -410,6 +411,32 @@ class DynamixelDriver(DynamixelDriverProtocol):
                     print(dxl_error)
                     raise RuntimeError(
                         f"Failed to set gain at addr [{gain_type}] with value [{val}] for Dynamixel with ID {dxl_id}"
+                    )
+
+    def set_max_velocity(self, val: Union[int, Sequence[int]], idxs: Optional[Sequence[int]] = None):
+        idxs = np.arange(self._n_joints) if idxs is None else idxs
+
+        if not isinstance(val, Sequence):
+            val = [val] * len(idxs)
+        val = np.array(val)
+        # Convert rad / sec to RPM to unit scale (0.22888 rev / min per increment)
+        val = (val * 30 / (0.22888 * np.pi)).astype(int)
+
+        with self._lock:
+            if len(val) != len(idxs):
+                raise ValueError(
+                    "The length of gain values must match the number of servos"
+                )
+
+            for dxl_id, v in zip(self._ids[idxs], val):
+                dxl_comm_result, dxl_error = self._packetHandler.write4ByteTxRx(
+                    self._portHandler, dxl_id, ADDR_MAX_VEL, v,
+                )
+                if dxl_comm_result != COMM_SUCCESS or dxl_error != 0:
+                    print(dxl_comm_result)
+                    print(dxl_error)
+                    raise RuntimeError(
+                        f"Failed to set max velocity at addr [{ADDR_MAX_VEL}] with value [{val}] for Dynamixel with ID {dxl_id}"
                     )
 
     def _start_reading_thread(self):

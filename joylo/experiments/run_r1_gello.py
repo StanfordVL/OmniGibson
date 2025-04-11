@@ -41,7 +41,6 @@ class Args:
 
     gello_port: Optional[str] = None
     mock: bool = False
-    use_save_interface: bool = False
     damping_motor_kp: float = 0.3
     motor_feedback_type: str = "NONE"
     use_joycons: bool = True
@@ -139,20 +138,13 @@ def main(args):
     if base_trunk_gripper_agent is not None:
         agent_parts.append(base_trunk_gripper_agent)
 
+    # Create and start the agent
     agent = MultiControllerAgent(agents=agent_parts)
+    agent.start()
 
-    # going to start position
+    # First go to canonical start position
     print("Going to start position")
     agent.reset()
-
-    print_color("\nWaiting for environment...", color="magenta", attrs=("bold",))
-    obs = env.get_obs()
-
-    # Enable torque mode and move arms to current observed pose from environment
-    obs_jnts = np.concatenate([obs[f"arm_{arm}_joint_positions"].detach().cpu().numpy() for arm in ["left", "right"]])
-    obs_jnts = obs_jnts[[0, 0, 1, 1, 2, 3, 4, 5, 6, 6, 7, 7, 8, 9, 10, 11]]
-    arm_agent.set_reset_qpos(qpos=obs_jnts)
-    arm_agent.reset()
 
     print_color("*" * 40, color="magenta", attrs=("bold",))
     print_color("\nWelcome to GELLO!\n", color="magenta", attrs=("bold",))
@@ -167,24 +159,8 @@ def main(args):
     print_color(f"\t B: Toggle camera", color="magenta", attrs=("bold",))
     print_color(f"\t Home: Reset the environment", color="magenta", attrs=("bold",))
 
-    started = base_trunk_gripper_agent is None      # Only wait for start signal if we're using joycons
-    if not started:
-        # Wait for user to begin teleoperation
-        print_color("\nPress 'X' to begin teleoperation...", color="yellow", attrs=("bold",))
-        while not started:
-            started = base_trunk_gripper_agent.jc_right.get_button_x()
-
-    # Start the agent
-    agent.start()
-
-    if args.use_save_interface:
-        from gello.data_utils.keyboard_interface import KBReset
-
-        kb_interface = KBReset()
-
+    obs = env.get_obs()
     print_color("\nStart 🚀🚀🚀", color="green", attrs=("bold",))
-
-    save_path = None
     start_time = time.time()
     while True:
         num = time.time() - start_time
@@ -197,25 +173,6 @@ def main(args):
             flush=True,
         )
         action = agent.act(obs)
-        dt = datetime.datetime.now()
-        if args.use_save_interface:
-            state = kb_interface.update()
-            if state == "start":
-                dt_time = datetime.datetime.now()
-                save_path = (
-                    Path(args.data_dir).expanduser()
-                    / args.agent
-                    / dt_time.strftime("%m%d_%H%M%S")
-                )
-                save_path.mkdir(parents=True, exist_ok=True)
-                print(f"Saving to {save_path}")
-            elif state == "save":
-                assert save_path is not None, "something went wrong"
-                save_frame(save_path, dt, obs, action)
-            elif state == "normal":
-                save_path = None
-            else:
-                raise ValueError(f"Invalid state {state}")
         obs = env.step(action)
 
 
