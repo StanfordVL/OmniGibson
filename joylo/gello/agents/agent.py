@@ -27,6 +27,7 @@ class Agent(Protocol):
         """Executes any necessary starting protocols. Default merely sets the initialized variable"""
         self._started = True
 
+
 class DummyAgent(Agent):
     def __init__(self, num_dofs: int):
         self.num_dofs = num_dofs
