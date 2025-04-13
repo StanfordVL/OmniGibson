@@ -8,6 +8,7 @@ runnable examples.
 
 import inspect
 import math
+import time
 import random
 
 import cv2
@@ -103,7 +104,7 @@ m.MAX_STEPS_FOR_WAYPOINT_NAVIGATION = 500
 m.MAX_ATTEMPTS_FOR_OPEN_CLOSE = 20
 
 m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_WITH_OBJECT_AND_PREDICATE = 20
-m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 100
+m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_NEAR_OBJECT = 200
 m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_FOR_CORRECT_ROOM = 20
 m.MAX_ATTEMPTS_FOR_SAMPLING_POSE_IN_ROOM = 60
 m.MAX_ATTEMPTS_FOR_SAMPLING_PLACE_POSE = 50
@@ -813,9 +814,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         eye_pos_wrt_robot = eye_pose_wrt_robot[:3, 3]
         
         # Generate random samples within the cube range
-        x_sample = np.random.uniform(eye_pos_wrt_robot[0] + 0.1, eye_pos_wrt_robot[0] + 0.2)
-        y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.01, eye_pos_wrt_robot[1] + 0.01)
-        z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.2, eye_pos_wrt_robot[2] - 0.1)
+        x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.2)
+        y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.05, eye_pos_wrt_robot[1] + 0.05)
+        z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.2, eye_pos_wrt_robot[2])
 
         sampled_eyes_pos_wrt_robot = np.array([x_sample, y_sample, z_sample])
         sampled_eyes_pos_wrt_world = T.pose2mat(robot_pose_wrt_world) @ np.hstack([sampled_eyes_pos_wrt_robot, 1])
@@ -949,9 +950,54 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     # visibility_constraint=True,
                 )
                 # print("retval: ", retval)
+                # If reachibility satisfied (without collision check)
                 if retval is not None:
+                    
+                    # Set trunk positions obtainted from IK solving
+                    query_joint_pos = initial_joint_pos.clone()
+                    query_joint_pos[self.robot.trunk_control_idx] = retval[0][:4]
+                    
+                    # Set current arm joint positions (as arm positions won't be changed in the base mp)
+                    for arm in self.robot.arm_control_idx:
+                        arm_joint_pos = self.robot.get_joint_positions()[self.robot.arm_control_idx[arm]]
+                        query_joint_pos[self.robot.arm_control_idx[arm]] = arm_joint_pos
+                    
+                    # Check collision-free
+                    invalid_results = self._motion_generator.check_collisions(
+                        query_joint_pos,
+                        self_collision_check=False,
+                        skip_obstacle_update=skip_obstacle_update,
+                        attached_obj=None,          # if we pass an attaced object, leads to segmentation fault: https://github.com/mikedh/trimesh/issues/550
+                        attached_obj_scale=None,
+                    ).cpu()
+                    if invalid_results[0].item():
+                        # Collision detected, so skip this sample
+                        print("Collision detected, skipping sample")
+
+                        # # ========= remove later =============
+                        # temp_state = og.sim.dump_state()
+                        # temp_base_joints = [initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]]
+                        # temp_base_joints = th.stack(temp_base_joints)
+                        # self.robot.set_joint_positions(temp_base_joints, indices=self.robot.base_control_idx)
+
+                        # temp_trunk_joints = retval[0][:4]
+                        # self.robot.set_joint_positions(temp_trunk_joints, indices=self.robot.trunk_control_idx)
+
+                        # for _ in range(50): og.sim.step()
+
+                        # breakpoint()
+                        # og.sim.load_state(temp_state)
+                        # for _ in range(20): og.sim.step()
+
+                        # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
+                        # # self.robot.set_joint_positions(temp_js)
+
+                        # # ======================================
+                        continue
+                    
                     # constraint_satisfied = True
                     self.target_eyes_pose_arr.append(target_pose["eyes"])
+
                     return True
         
         self.target_eyes_pose_arr.append(None)
@@ -1030,6 +1076,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 target_pos[self.robot.eef_link_names[eef]] = target_pos[self.robot.eef_link_names[eef]].repeat(max_size-pose_size+1, 1)
                 target_quat[self.robot.eef_link_names[eef]] = target_quat[self.robot.eef_link_names[eef]].repeat(max_size-pose_size+1, 1)
 
+        # These parameters are specially for speedig up the IK solving here. Don't use it globally
+        ik_max_attempts = 50
+        ik_fail_return = 50
+        timeout = 60.0
+        
         if not batched:
             target_pos = {
                 k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_pos.items()
@@ -1037,20 +1088,21 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             target_quat = {
                 k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_quat.items()
             }
-            max_attempts = math.ceil(m.MAX_PLANNING_ATTEMPTS / self._motion_generator.batch_size)
+            max_attempts = math.ceil(ik_max_attempts / self._motion_generator.batch_size)
             success_ratio = 1.0 / self._motion_generator.batch_size
         else:
-            max_attempts = m.MAX_PLANNING_ATTEMPTS
+            max_attempts = ik_max_attempts
             success_ratio = 1.0
 
+        # breakpoint()
         successes, joint_states = self._motion_generator.compute_trajectories(
             target_pos=target_pos,
             target_quat=target_quat,
             initial_joint_pos=initial_joint_pos,
             is_local=False,
             max_attempts=max_attempts,
-            timeout=60.0,
-            ik_fail_return=m.MAX_IK_FAILURES_BEFORE_RETURN,
+            timeout=timeout,
+            ik_fail_return=ik_fail_return,
             enable_finetune_trajopt=False,
             finetune_attempts=0,
             return_full_result=False,
@@ -1071,6 +1123,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             if len(success_idx) == 0:
                 return None
         else:
+            # We want all of them to be successful because remeber that the target poses represent all the waypoints in the folloiwing manipulation phase
             if not th.all(successes):
                 return None
 
@@ -1081,6 +1134,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
             return joint_pos[self._manipulation_control_idx()].cpu()
         else:
+            # TODO: Check if this will work with right hand as manipulation control idx returns for the left hand
+            # self.temp_js = joint_states
             return [
                 self._motion_generator.path_to_joint_trajectory(
                     joint_state, get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM
@@ -1208,7 +1263,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         success_idx = th.where(successes)[0].cpu()
         if len(success_idx) == 0:
             print("Base motion planning failed", results[0].status)
-            self.mp_err = "BaseMPFailed"
+            if results[0].status.value == "IK Fail":
+                self.mp_err = "BaseMPIKFailed"
+            else:
+                self.mp_err = "BaseMPFailed"
             q_traj = None            
         else:
             traj_path = traj_paths[success_idx[0]]
@@ -1923,10 +1981,22 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             )
         pose = self._sample_pose_near_object(obj, eef_pose=eef_pose, skip_obstacle_update=skip_obstacle_update, visibility_constraint=visibility_constraint)
         
-        # Detach attached object if it was attached
-        self._motion_generator._detach_objects_from_robot(attached_info, emb_sel)
+        if self.attached_obj_info["attached_obj"] is not None:
+            # Detach attached object if it was attached
+            self._motion_generator._detach_objects_from_robot(attached_info, emb_sel)
         
         print("pose: ", pose)
+
+        # # remove later
+        # state_dict = og.sim.dump_state()
+        # pose3d = self._get_robot_pose_from_2d_pose(pose)
+        # self.robot.set_position_orientation(position=pose3d[0], orientation=pose3d[1])
+        # for _ in range(50): og.sim.step()
+        # breakpoint()
+        # og.sim.load_state(state_dict)
+        # for _ in range(50): og.sim.step()
+
+
         if pose is None:
             print(f"Could not find a valid pose near the object {obj.name}")
             self.mp_err = "BaseSamplingFailed"
@@ -2081,7 +2151,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         if isinstance(eef_pose, tuple):
             eef_pose = {arm_side: eef_pose}
-
+        
         target_pose = eef_pose
 
         for arm in target_pose:
@@ -2318,8 +2388,11 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             attached_obj_scale=None,
         ).cpu()
 
+
         # For each candidate that passed collision check, verify reachability
         for i in range(len(candidate_poses)):
+            # print(f"candidate base pose {i}: ", candidate_poses[i])
+            
             if invalid_results[i].item():
                 # print("collision? ", invalid_results[i].item())
                 self.target_eyes_pose_arr.append(None)

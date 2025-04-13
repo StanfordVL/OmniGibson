@@ -71,9 +71,11 @@ for _ in range(10): og.sim.step()
 teacup = env.scene.object_registry("name", "teacup")
 # breakfast_table = env.scene.object_registry("name", "breakfast_table")
 
-write_video = True
+write_video = False
 video_path = "debug_videos/hard_visibility_constraint"
 os.makedirs(video_path, exist_ok=True)
+
+breakpoint()
 
 for i in range(10):
     reset()

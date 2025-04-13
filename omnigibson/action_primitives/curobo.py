@@ -22,7 +22,7 @@ th.backends.cudnn.allow_tf32 = True
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
 
-m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT = 5.0  # meters
+m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT = 12.0  # meters
 m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT = math.pi * 2  # radians
 
 m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.005
@@ -170,8 +170,8 @@ class CuRoboMotionGenerator:
                 trajopt_tsteps=32,
                 collision_checker_type=lazy.curobo.geom.sdf.world.CollisionCheckerType.MESH,
                 use_cuda_graph=use_cuda_graph,
-                num_ik_seeds=128,
-                num_batch_ik_seeds=128,
+                num_ik_seeds=256,
+                num_batch_ik_seeds=256,
                 num_batch_trajopt_seeds=1,
                 num_trajopt_noisy_seeds=1,
                 ik_opt_iters=100,
@@ -466,6 +466,7 @@ class CuRoboMotionGenerator:
         )
         # If any of the IK seeds is successful
         success = result.success.any(dim=1)
+
         # Set non-successful error to infinity
         result.error[~result.success].fill_(float("inf"))
         # Get the index of the minimum error
@@ -792,6 +793,10 @@ class CuRoboMotionGenerator:
                     if additional_link in target_pos
                     else rollout_fn._link_pose_convergence[additional_link].disable_cost()
                 )
+                # if additional_link in target_pos and additional_link == "eyes":
+                #     rollout_fn._link_pose_costs[additional_link].weight *= 0.1 
+                #     rollout_fn._link_pose_convergence[additional_link].weight *= 0.1 
+            
             if rollout_fn.eyes_target_cost is not None:
                 (
                     rollout_fn.eyes_target_cost.enable_cost()
@@ -917,7 +922,7 @@ class CuRoboMotionGenerator:
             # Append results
             results.append(result)
             successes = th.concatenate([successes, success[:end_idx]])
-            paths += joint_state
+            paths += joint_state[:end_idx]
 
         # Detach attached object if it was attached
         self._detach_objects_from_robot(attached_info, emb_sel)
