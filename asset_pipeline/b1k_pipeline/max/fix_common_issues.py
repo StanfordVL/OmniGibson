@@ -22,7 +22,7 @@ import b1k_pipeline.max.extract_school_objects
 import b1k_pipeline.max.prebake_textures
 import b1k_pipeline.max.replace_bad_object
 import b1k_pipeline.max.collision_vertex_reduction
-import b1k_pipeline.max.collision_generation
+import b1k_pipeline.max.convex_decomposition
 import b1k_pipeline.max.match_links
 from b1k_pipeline.max.merge_collision import merge_collision
 
@@ -554,7 +554,7 @@ def processFile(filename: pathlib.Path):
     # run_bad_object_replacement_for_legacy_scenes(filename)
 
     # Generate all missing collision meshes
-    # b1k_pipeline.max.collision_generation.generate_all_missing_collision_meshes()
+    # b1k_pipeline.max.convex_decomposition.generate_all_missing_collision_meshes()
 
     # Reduce collision mesh vertex counts
     # b1k_pipeline.max.collision_vertex_reduction.process_all_convex_meshes()

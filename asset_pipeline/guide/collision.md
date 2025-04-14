@@ -47,6 +47,9 @@ The Convex Hull tool computes the convex hull of the selected mesh, or if an ele
 The validate collision tool checks that the selected collision mesh satisfies all of the requirements: naming, element count, and vertex count. It's a simplified, fast version of the collision mesh checks inside the file-level sanitycheck.
 
 ## Steps to Follow
+
+Quick note: if any of the steps below fail due to missing dependencies, you can install them by opening the `Scripting > Maxscript Listener` dialog, clicking `Python`, and running e.g. `import pip; pip.main(["install", "coacd"])` where `coacd` is the package you want to install. To run the line you need to press Shift + Enter.
+
 After reading all of the above, follow the below setup steps:
 
 1. `git pull` the ig_pipeline repository's `main` branch
