@@ -73,13 +73,6 @@ DEFAULT_RESET_DELTA_SPEED = 10.0       # deg / sec
 N_COOLDOWN_SECS = 1.5
 FLASHLIGHT_INTENSITY = 2000.0
 
-# Global whitelist of custom friction values
-FRICTIONS = {
-    "door": 0.1,
-    "dishwasher": 0.4,
-    "default": 0.1,
-}
-
 # Global whitelist of visual-only objects
 VISUAL_ONLY_CATEGORIES = {
     "bush",
@@ -636,9 +629,6 @@ class OGRobotServer:
             # Make all joints for all objects have low friction
             for obj in self.env.scene.objects:
                 if obj != self.robot:
-                    friction = FRICTIONS.get(obj.category, FRICTIONS["default"])
-                    for joint in obj.joints.values():
-                        joint.friction = friction
                     if obj.category in VISUAL_ONLY_CATEGORIES:
                         obj.visual_only = True
                 else:
