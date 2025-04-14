@@ -41,43 +41,61 @@
 #   robot_start_position: [3.855, 5.1893, 0]
 
 #####################################################
+# DataGen tasks:
+
+# datagen_tidy_table:
+#   scene_model: house_single_floor
+#   robot_start_position: [5.0, 1.5, 0]
+#   robot_start_orientation: [0.0000,  0.0000, -0.7071,  0.7071]
+
+#####################################################
 # IG Scenes verified:
 cook_brussels_sprouts:
   scene_model: Merom_1_int
   robot_start_position: [-1.2, 3.547, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 opening_windows:
   scene_model: Rs_int
   robot_start_position: [0.06, -0.02, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 picking_up_trash:
   scene_model: Benevolence_1_int
   robot_start_position: [-1.11849213, 0.51, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 organizing_file_cabinet:
   scene_model: Beechwood_0_int
   robot_start_position: [-0.777, -0.58, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 putting_dishes_away_after_cleaning:
   scene_model: Benevolence_1_int
   robot_start_position: [-0.40667, 0.553, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 store_daffodil_bulbs:
   scene_model: Benevolence_1_int
   robot_start_position: [-0.962, 0.552, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 clean_up_after_a_dinner_party:
   scene_model: Ihlen_1_int
   robot_start_position: [-4.35489, 0.9162, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 cook_a_frozen_pie:
   scene_model: Ihlen_1_int
   robot_start_position: [-3.29, 4.829, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 opening_doors:
   scene_model: Merom_0_int
   robot_start_position: [3.855, 5.1893, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]
 
 rearranging_furniture:
   scene_model: Pomaria_2_int
   robot_start_position: [-2.8833, 1.38, 0]
+  robot_start_orientation: [0.0, 0.0, 0.0, 1.0]

@@ -481,6 +481,7 @@ class OGRobotServer:
             "self_collisions": False,
             "obs_modalities": [],
             "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0],
+            "orientation": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_orientation"] if self.task_name is not None else [0.0, 0.0, 0.0, 1.0],
             "grasping_mode": "assisted",
             "sensor_config": {
                 "VisionSensor": {
