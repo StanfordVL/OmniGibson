@@ -287,23 +287,23 @@ for i in range(20):
 
     action_generator = primitive._navigate_to_obj(obj=teacup, visibility_constraint=True)
     
-    # retval = next(iter(action_generator))
+    retval = next(iter(action_generator))
 
-    for mp_action in action_generator:
-        if mp_action is None:
-            break
+    # for mp_action in action_generator:
+    #     if mp_action is None:
+    #         break
         
-        mp_action = mp_action.cpu().numpy()
-        obs, _, _, _, info = env.step(mp_action)
+    #     mp_action = mp_action.cpu().numpy()
+    #     obs, _, _, _, info = env.step(mp_action)
 
-        if write_video:
-            ego_img = obs[f"{robot_name}"][f"{robot_name}:eyes:Camera:0"]["rgb"].numpy()[:, :, :3]
-            viewer_img = og.sim.viewer_camera._get_obs()[0]['rgb'].numpy()[:, :, :3]
-            concatenated_img = hori_concatenate_image([ego_img, viewer_img])
-            video_writer.append_data(concatenated_img)
+    #     if write_video:
+    #         ego_img = obs[f"{robot_name}"][f"{robot_name}:eyes:Camera:0"]["rgb"].numpy()[:, :, :3]
+    #         viewer_img = og.sim.viewer_camera._get_obs()[0]['rgb'].numpy()[:, :, :3]
+    #         concatenated_img = hori_concatenate_image([ego_img, viewer_img])
+    #         video_writer.append_data(concatenated_img)
 
-    if write_video:
-        video_writer.close()
+    # if write_video:
+    #     video_writer.close()
     
     print("primitive.mp_err: ", primitive.mp_err)
     
@@ -354,8 +354,8 @@ for i in range(20):
     # for _ in range(50): og.sim.step()
     # breakpoint()
 
-    og.sim.load_state(init_state)
-    for _ in range(50): og.sim.step()
+    # og.sim.load_state(init_state)
+    # for _ in range(50): og.sim.step()
 
 print("base_sampling_failures, base_mp_ik_failures, base_mp_trajopt_failures, succ: ", base_sampling_failures, base_mp_ik_failures, base_mp_trajopt_failures, succ)
 
@@ -372,6 +372,16 @@ breakpoint()
 # regular hands + lower table: 1 2 0 17
 # new hands + modified eyes pos sampling range: 0 4 4 12
 # new hands + modified eyes pos sampling range + collision check after sampling: 2 0 0 18,  6 0 0 14
+# Full datagen: 
+# 1. 5 base sampling, 2 base mp ik, 1 base mp trajopt, 4 arm mp ik, 1 arm mp trajopt, 5 None
+# 2. 9 base sampling, 9 base mp ik, 0 base mp trajopt, 8 arm mp ik, 0 arm mp trajopt, 5 None
+
+# Base sampling testing:
+# 1. Arm mode with 0.2 range (original):
+# 2. Default mode: 6 base sampling failures out of 33
+# 3. Arm mode with 0.4 range: 9 base sampling failures out of 38
+# 4. Arm mode with 0.4 range and 10,10 loop: 3 base sampling failures out of 30
+# 5. "" + with anisotropy: 1 base sampling failures out of 52
 
 
 # with soft visibility constraint (1000 weight): 6 0 1 13
