@@ -71,6 +71,7 @@ R1_WRIST_CAMERA_LOCAL_ORI = th.tensor([0.6830127018922194, 0.6830127018922193, 0
 DEFAULT_TRUNK_TRANSLATE = 0.5
 DEFAULT_RESET_DELTA_SPEED = 10.0       # deg / sec
 N_COOLDOWN_SECS = 1.5
+FLASHLIGHT_INTENSITY = 2000.0
 
 # Global whitelist of custom friction values
 FRICTIONS = {
@@ -622,6 +623,7 @@ class OGRobotServer:
 
         self._setup_cameras()
         self._setup_visualizers()
+        self._setup_flashlights()
 
         # Modify physics further
         with og.sim.stopped():
@@ -655,6 +657,8 @@ class OGRobotServer:
             "y": False,
             "a": False,
             "b": False,
+            "left": False,
+            "right": False,
         }
         self._waiting_to_resume = True
 
@@ -1079,6 +1083,23 @@ class OGRobotServer:
                 )
                 self.reachability_visualizers[name] = edge_geom
             self._prev_base_motion = False
+    
+    def _setup_flashlights(self):
+        # Add flashlights to the robot eef
+        self.flashlights = {}
+        
+        for arm in self.robot.arm_names:
+            light_prim = getattr(lazy.pxr.UsdLux, "SphereLight").Define(og.sim.stage, f"{self.robot.links[f'{arm}_eef_link'].prim_path}/flashlight")
+            light_prim.GetRadiusAttr().Set(0.01)
+            light_prim.GetIntensityAttr().Set(FLASHLIGHT_INTENSITY)
+            light_prim.LightAPI().GetNormalizeAttr().Set(True)
+            
+            light_prim.ClearXformOpOrder()
+            translate_op = light_prim.AddTranslateOp()
+            translate_op.Set(lazy.pxr.Gf.Vec3d(-0.01, 0, -0.05))
+            light_prim.SetXformOpOrder([translate_op])
+            
+            self.flashlights[arm] = light_prim
 
     def _setup_task_instruction_ui(self):
         """Set up the UI for displaying task instructions and goal status."""
@@ -1207,11 +1228,11 @@ class OGRobotServer:
         # If R1, process manually
         state = joint_state.clone()
         if isinstance(self.robot, R1):
-            # [ 6DOF left arm, 6DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home buttons]
+            # [ 6DOF left arm, 6DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home, left arrow, right arrow buttons]
             start_idx = 0
             for component, dim in zip(
-                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_home"),
-                    (6, 6, 3, 2, 1, 1, 1, 1, 1, 1, 1),
+                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_home", "button_left", "button_right"),
+                    (6, 6, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1),
             ):
                 if start_idx >= len(state):
                     break
@@ -1344,6 +1365,24 @@ class OGRobotServer:
             if self._joint_cmd["button_home"].item() != 0.0:
                 if not self._in_cooldown:
                     self.reset()
+
+            # If left arrow is toggled from OFF -> ON, toggle flashlight on left eef
+            button_left_arrow_state = self._joint_cmd["button_left"].item() != 0.0
+            if button_left_arrow_state and not self._button_toggled_state["left"]:
+                if self.flashlights["left"].GetVisibilityAttr().Get() == "invisible":
+                    self.flashlights["left"].MakeVisible()
+                else:
+                    self.flashlights["left"].MakeInvisible()
+            self._button_toggled_state["left"] = button_left_arrow_state
+            
+            # If right arrow is toggled from OFF -> ON, toggle flashlight on right eef
+            button_right_arrow_state = self._joint_cmd["button_right"].item() != 0.0
+            if button_right_arrow_state and not self._button_toggled_state["right"]:
+                if self.flashlights["right"].GetVisibilityAttr().Get() == "invisible":
+                    self.flashlights["right"].MakeVisible()
+                else:
+                    self.flashlights["right"].MakeInvisible()
+            self._button_toggled_state["right"] = button_right_arrow_state
 
             # Only decrement cooldown if we're not waiting to resume
             if not self._waiting_to_resume:
@@ -1504,6 +1543,8 @@ class OGRobotServer:
                 self._joint_cmd["button_b"] = th.zeros(1)
                 self._joint_cmd["button_a"] = th.zeros(1)
                 self._joint_cmd["button_home"] = th.zeros(1)
+                self._joint_cmd["button_left"] = th.zeros(1)
+                self._joint_cmd["button_right"] = th.zeros(1)
 
         # Reset env
         self.env.reset()
