@@ -1276,29 +1276,30 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             else:
                 print("len(trajs): ", [len(t) for t in traj_paths])
                 self.mp_err = "BaseMPFailed"
+                q_traj = None 
                 # breakpoint()
-                # Sort traj by their len and then choose largest to smallest while checking that they satisfy the position and orientation constraint
-                # As this base MP failure mostly happens when the robot needs to go on the other side of the table, larger trajectories should generally be better
-                traj_paths = sorted(traj_paths, key=lambda x: len(x), reverse=True)
-                sorted_indices = [i[0] for i in sorted(enumerate(traj_paths), key=lambda x: len(x[1]), reverse=True)]
-                success_idx = -1
-                for idx in sorted_indices:
-                    if results[0].position_error[idx] < 0.01 and results[0].rotation_error[idx] < 0.1:
-                        success_idx = idx
-                        break
+                # # Sort traj by their len and then choose largest to smallest while checking that they satisfy the position and orientation constraint
+                # # As this base MP failure mostly happens when the robot needs to go on the other side of the table, larger trajectories should generally be better
+                # traj_paths = sorted(traj_paths, key=lambda x: len(x), reverse=True)
+                # sorted_indices = [i[0] for i in sorted(enumerate(traj_paths), key=lambda x: len(x[1]), reverse=True)]
+                # success_idx = -1
+                # for idx in sorted_indices:
+                #     if results[0].position_error[idx] < 0.01 and results[0].rotation_error[idx] < 0.1:
+                #         success_idx = idx
+                #         break
 
-                print("success_idx: ", success_idx, "len: ", len(traj_paths[success_idx]))
-                if success_idx == -1:
-                    print("No successful trajectory found")
-                    q_traj = None
-                else:
-                    traj_path = traj_paths[success_idx]          
-                    q_traj = (
-                        self._motion_generator.path_to_joint_trajectory(traj_path, get_full_js=True, emb_sel=embodiment_selection)
-                        .cpu()
-                        .float()
-                    )
-                    q_traj = self._motion_generator.add_linearly_interpolated_waypoints(traj=q_traj, max_inter_dist=0.01)
+                # print("success_idx: ", success_idx, "len: ", len(traj_paths[success_idx]))
+                # if success_idx == -1:
+                #     print("No successful trajectory found")
+                #     q_traj = None
+                # else:
+                #     traj_path = traj_paths[success_idx]          
+                #     q_traj = (
+                #         self._motion_generator.path_to_joint_trajectory(traj_path, get_full_js=True, emb_sel=embodiment_selection)
+                #         .cpu()
+                #         .float()
+                #     )
+                #     q_traj = self._motion_generator.add_linearly_interpolated_waypoints(traj=q_traj, max_inter_dist=0.01)
         
         else:
             traj_path = traj_paths[success_idx[0]]
@@ -1382,21 +1383,24 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     if not base_target_reached:
                         indented_print(f"max base pos diff: {max_base_pos_diff}")
                         indented_print(f"max base angle diff: {max_base_orn_diff}")
-                        self.mp_err = "BaseCollision"
+                        self.mp_err = "BaseMPCollision"
+                        yield None
                         # breakpoint()
                         # raise ActionPrimitiveError(
                         #     ActionPrimitiveError.Reason.EXECUTION_ERROR,
                         #     "Could not reach the target base joint positions. Try again",
                         # )
-                        return
+                        # return
                     if not articulation_target_reached:
                         indented_print(f"max articulation joint diff: {max_articulation_joint_diff}")
+                        self.mp_err = "BaseMPCollision"
+                        yield None
                         # breakpoint()
                         # raise ActionPrimitiveError(
                         #     ActionPrimitiveError.Reason.EXECUTION_ERROR,
                         #     "Could not reach the target articulation joint positions. Try again",
                         # )
-                        return
+                        # return
 
     def _add_linearly_interpolated_waypoints(self, plan, max_inter_dist=0.01):
         """
