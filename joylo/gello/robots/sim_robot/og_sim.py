@@ -101,8 +101,10 @@ USE_VERTICAL_VISUALIZERS = False
 GHOST_APPEAR_THRESHOLD = 0.1    # Threshold for showing ghost
 GHOST_APPEAR_TIME = 10 # Number of frames to wait before showing ghost
 USE_REACHABILITY_VISUALIZERS = True
+AUTO_CHECKPOINTING = True # checkpoint when 1) a new termination condition is met 2) some fixed amount of time has passed
+STEPS_TO_AUTO_CHECKPOINT = 6000 # Assuming 20 fps, this is about 5 minutes
 
-VIS_GEMO_COLORS = {
+VIS_GEOM_COLORS = {
     False: [th.tensor([1.0, 0, 0]),
             th.tensor([0, 1.0, 0]),
             th.tensor([0, 0, 1.0]),
@@ -721,7 +723,7 @@ class OGRobotServer:
 
         self._prev_grasp_status = {arm: False for arm in self.robot.arm_names}
         self._prev_in_hand_status = {arm: False for arm in self.robot.arm_names}
-        self._in_hand_clock = 0
+        self._frame_counter = 0
 
         # Reset
         self.reset()
@@ -903,7 +905,7 @@ class OGRobotServer:
         self.vis_mats = {}
         for arm in self.robot.arm_names:
             self.vis_mats[arm] = []
-            for axis, color in zip(("x", "y", "z"), VIS_GEMO_COLORS[False]):
+            for axis, color in zip(("x", "y", "z"), VIS_GEOM_COLORS[False]):
                 mat_prim_path = f"{self.robot.prim_path}/Looks/vis_cylinder_{arm}_{axis}_mat"
                 mat = MaterialPrim(
                     relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
@@ -1170,24 +1172,26 @@ class OGRobotServer:
                     current_style = self.text_labels[idx].style
                     current_style.update({"color": 0xFF0000FF})  # Red (ABGR)
                     self.text_labels[idx].set_style(current_style)
+            
+            # Update checkpoint if new goals are satisfied
+            if AUTO_CHECKPOINTING and len(goal_status['satisfied']) > self._prev_goal_status['satisfied']:
+                if self._recording_path is not None:
+                    self.env.update_checkpoint()
+                    print("Auto recorded checkpoint due to goal status change!")
 
             # Store the current status for future comparison
             self._prev_goal_status = goal_status.copy()
 
     def _update_in_hand_status(self):
         # Internal clock to check every n steps
-        if self._in_hand_clock % 20 == 0:
+        if self._frame_counter % 20 == 0:
             # Update the in-hand status of the robot's arms
             for arm in self.robot.arm_names:
                 in_hand = len(self.robot._find_gripper_raycast_collisions(arm)) != 0
                 if in_hand != self._prev_in_hand_status[arm]:
                     self._prev_in_hand_status[arm] = in_hand
                     for idx, mat in enumerate(self.vis_mats[arm]):
-                        mat.diffuse_color_constant = VIS_GEMO_COLORS[in_hand][idx]
-            self._in_hand_clock = 0
-        # Increment the clock
-        self._in_hand_clock += 1
-
+                        mat.diffuse_color_constant = VIS_GEOM_COLORS[in_hand][idx]
 
     def _update_grasp_status(self):
         for arm in self.robot.arm_names:
@@ -1208,6 +1212,16 @@ class OGRobotServer:
             self._prev_base_motion = has_base_motion
             for edge in self.reachability_visualizers.values():
                 edge.visible = has_base_motion
+    
+    def _update_checkpoint(self):
+        if not AUTO_CHECKPOINTING:
+            return
+        
+        if self._frame_counter % STEPS_TO_AUTO_CHECKPOINT == 0:
+            if self._recording_path is not None:
+                self.env.update_checkpoint()
+                print("Auto recorded checkpoint due to periodic save!")
+            self._frame_counter = 0
 
     def num_dofs(self) -> int:
         return self.robot.n_joints
@@ -1312,7 +1326,7 @@ class OGRobotServer:
                 else:
                     if self._recording_path is not None:
                         self.env.update_checkpoint()
-                        print("Recorded checkpoint!")
+                        print("Manually recorded checkpoint!")
             self._button_toggled_state["x"] = button_x_state
 
             # If Y is toggled from OFF -> ON, rollback to checkpoint
@@ -1398,6 +1412,8 @@ class OGRobotServer:
                 self._update_in_hand_status()
                 self._update_grasp_status()
                 self._update_reachability_visualizers()
+                self._update_checkpoint()
+                self._frame_counter += 1
 
     def get_action(self):
         # Start an empty action
