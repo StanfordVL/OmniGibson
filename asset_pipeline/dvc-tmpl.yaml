@@ -1,4 +1,15 @@
 stages:
+  file_manifest:
+    # Generate a file manifest that can be used to diff files for PRs
+    foreach: ${combined_unfiltered}
+    do:
+      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/file_manifest.py'
+      deps:
+      - b1k_pipeline/max/file_manifest.py
+      - cad/${item}/processed.max
+      outs:
+      - cad/${item}/artifacts/file_manifest.json
+  
   object_list:
     # List the objects found in the entry.
     foreach: ${combined_unfiltered}
