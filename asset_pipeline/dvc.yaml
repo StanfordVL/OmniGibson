@@ -1066,6 +1066,15 @@ stages:
     - b1k_pipeline/check_success.py
     outs:
     - artifacts/pipeline/export_scenes.success
+  file_manifest:
+    do:
+      cmd: python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/file_manifest.py
+      deps:
+      - b1k_pipeline/max/file_manifest.py
+      - cad/${item}/processed.max
+      outs:
+      - cad/${item}/artifacts/file_manifest.json
+    foreach: ${combined_unfiltered}
   generate_max_object_images:
     do:
       cmd: python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_max_object_images.py
