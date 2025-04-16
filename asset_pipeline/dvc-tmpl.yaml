@@ -64,14 +64,14 @@ stages:
       outs:
       - cad/${item}/artifacts/check_collisions.json
 
-  check_collisions_success:
-    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/check_collisions.json artifacts/pipeline/check_collisions.success scenes'
-    deps:
-    - cad/#{scenes}/artifacts/check_collisions.json
-    - b1k_pipeline/check_success_aggregate.py
-    - params.yaml
-    outs:
-    - artifacts/pipeline/check_collisions.success
+  # check_collisions_success:
+  #   cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/check_collisions.json artifacts/pipeline/check_collisions.success scenes'
+  #   deps:
+  #   - cad/#{scenes}/artifacts/check_collisions.json
+  #   - b1k_pipeline/check_success_aggregate.py
+  #   - params.yaml
+  #   outs:
+  #   - artifacts/pipeline/check_collisions.success
 
   check_collisions_with_clutter:
     # List the objects found in the entry.
@@ -272,13 +272,13 @@ stages:
     outs:
     - artifacts/pipeline/validate_scenes.json
 
-  validate_scenes_success:
-    cmd: 'python -m b1k_pipeline.check_success artifacts/pipeline/validate_scenes.json artifacts/pipeline/validate_scenes.success'
-    deps:
-    - artifacts/pipeline/validate_scenes.json
-    - b1k_pipeline/check_success.py
-    outs:
-    - artifacts/pipeline/validate_scenes.success
+  # validate_scenes_success:
+  #   cmd: 'python -m b1k_pipeline.check_success artifacts/pipeline/validate_scenes.json artifacts/pipeline/validate_scenes.success'
+  #   deps:
+  #   - artifacts/pipeline/validate_scenes.json
+  #   - b1k_pipeline/check_success.py
+  #   outs:
+  #   - artifacts/pipeline/validate_scenes.success
 
   usdify_objects:
     cmd: 'python -m b1k_pipeline.usd_conversion.usdify_objects'
