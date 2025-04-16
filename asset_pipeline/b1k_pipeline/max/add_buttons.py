@@ -37,10 +37,12 @@ ENTRYPOINTS = {
     "prereduce.py": "Apply vertex reduction without collapsing.",
     "randomize_obj_names.py": "Randomize objects named in the legacy format.",
     "renumber.py": "Renumber all objects in this file s.t. they're consecutive",
-    "resolve_complaints.py": "Resolve QA complaints for this file.",
     "replace_bad_object.py": "Replace bad object instances with copy of the same object from provider file.",
     "rpc_server.py": "Run RPC Server for DVC stages.",
-    "collision_generation.py": "Run CoACD and VHACD to generate collision mesh.",
+    "convex_decomposition.py": "Run CoACD and VHACD to generate collision mesh.",
+    "convex_hull.py": "Generate collision mesh from the convex hull of the selected object or faces.",
+    "validate_collision.py": "Validate the selected collision or fillable mesh.",
+    "triangulate.py": "Triangulate the selected object.",
     "select_mismatched_pivot.py": "Select groups of object instances whose pivots dont match.",
     "spherify.py": "Convert point helpers into spheres.",
     "switch_loose.py": "Switch visible object between different looseness options.",
@@ -48,30 +50,43 @@ ENTRYPOINTS = {
     "toggle_meta_visibility.py": "Toggle visibility of meta links.",
     "translate_ig_dataset.py": "Update names of iG2 objects to new format.",
     "view_complaints.py": "View QA complaints for this file.",
+    "resolve_complaints.py": "Resolve QA complaints for this file.",
 }
 
 
 def main():
-    # First delete all SVL-tools macros
-    # mss = rt.stringStream("")
-    # rt.macros.list(to=mss)
-    # matches = REMACRO.findall(str(mss))
-    # for category, filename in matches:
-    #     if category != "SVL_Tools":
-    #         continue
-    #     print("Removing", filename)
-    #     os.unlink(filename)
+    # Create the menu
+    if rt.menuMan.registerMenuContext(0x5f77dd6d):
+        this_dir = pathlib.Path(__file__).parent
 
-    # Then re-add everything.
-    this_dir = pathlib.Path(__file__).parent
-    for entrypoint, tooltip in ENTRYPOINTS.items():
-        script_name = entrypoint.replace(".py", "").replace("_", " ").title()
-        entrypoint_fullname = str((this_dir / entrypoint).absolute())
-        script = f'Python.ExecuteFile @"{entrypoint_fullname}"'
-        rt.macros.new("SVL_Tools", script_name, tooltip, script_name, script)
+        # Get the main menu bar
+        mainMenuBar = rt.menuMan.getMainMenuBar()
 
-    rt.MessageBox("Macros regenerated. Please restart 3ds Max.")
+        # Create a new menu
+        subMenu = rt.menuMan.createMenu("SVL")
 
+        for entrypoint, tooltip in ENTRYPOINTS.items():
+            # Create the script
+            script_name = entrypoint.replace(".py", "")
+            script_human_readable_name = script_name.replace("_", " ").title()
+            entrypoint_fullname = str((this_dir / entrypoint).absolute())
+            script = f'Python.ExecuteFile @"{entrypoint_fullname}"'
+            rt.macros.new("SVL_Tools", script_name, tooltip, script_human_readable_name, script)
+
+            # Create a menu item that calls the sample macroScript
+            testItem = rt.menuMan.createActionItem(script_name, "SVL_Tools")
+            assert testItem, "Failed to create action item " + script_human_readable_name
+            # Add the item to the menu
+            subMenu.addItem(testItem, -1)
+
+        # Create a new menu item with the menu as its sub-menu
+        subMenuItem = rt.menuMan.createSubMenuItem("SVL", subMenu)
+        # Compute the index of the next-to-last menu item in the main menu bar
+        subMenuIndex = mainMenuBar.numItems() - 1
+        # Add the sub-menu just at the second to last slot
+        mainMenuBar.addItem(subMenuItem, subMenuIndex)
+        # Redraw the menu bar with the new item
+        rt.menuMan.updateMenuBar()
 
 if __name__ == "__main__":
     main()

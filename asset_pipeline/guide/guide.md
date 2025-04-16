@@ -6,447 +6,341 @@ This section consists of a list of things you should know how to do. Watch the v
 
 If you think you prefer a general tutorial covering some of the below stuff and general familiarity with 3ds Max, take a look at this [50-min video](https://www.youtube.com/watch?v=YM9spHSNPpM). We have also curated a set of shorter videos for things that we think are important:
 
-1. Intro to the 3ds Max interface: [7min video](https://www.youtube.com/watch?v=D7LaYg5-pB0)  
-2. Moving / rotating camera: [4min video](https://www.youtube.com/watch?v=yZcJGej-pf0)  
-   1. We recommend that you set up your viewports such that you have 4 viewports: perspective, top, one of (left, right), one of (front, back). You can switch the “one of” options as needed. Use the viewport cube to easily rotate the viewports.  
-   2. Our scenes are large and complicated, and thus it’s hard to work with the left/right/front/back views since many objects will be stacked. To help with this, we recommend the use of Viewport Clipping, which lets you define two planes to act as bounds of the rendering area (e.g. anything that’s not between the two parallel planes will not be rendered). This way you can see slices of the scene cleanly. [See here](https://knowledge.autodesk.com/support/3ds-max/learn-explore/caas/sfdcarticles/sfdcarticles/Viewport-Clipping.html) for more info.  
-3. Moving / rotating objects: [6min video](https://www.youtube.com/watch?v=0Mz56Br2tIw)  
-4. Different selection modes (edge / border / element): You will need to use these especially when splitting / joining / etc objects. [Brief read](https://knowledge.autodesk.com/support/3ds-max/learn-explore/caas/CloudHelp/cloudhelp/2021/ENU/3DSMax-Modeling/files/GUID-409D36AC-1D17-4B24-851D-1C49C7E0B79D-htm.html).  
-5. Merging objects: [5min video](https://www.youtube.com/watch?v=0iSsUfzxy6o)  
-6. Splitting objects (when the object already consists of separate elements): [1min video](https://www.youtube.com/watch?v=eTbIs1vcaWY)   
-7. Cutting objects (with a slice plane): [3min video](https://www.youtube.com/watch?v=Z8Z_BM5Z6Uw)  
-8. Closing gaps: select the border of the gap, either using the Border or the Edge selection mode. Then click on the Cap button if in the Border mode or the Bridge button if in the Edge mode.  
-9. Setting pivots: [2min video](https://www.youtube.com/watch?v=Gd2B29CeZEg)  
-10. TODO: Using the snap-to-grid settings
+1.  Intro to the 3ds Max interface: [7min video](https://www.youtube.com/watch?v=D7LaYg5-pB0) 
+2.  Moving / rotating camera: [4min video](https://www.youtube.com/watch?v=yZcJGej-pf0) 
+    1.  We recommend that you set up your viewports such that you have 4 viewports: perspective, top, one of (left, right), one of (front, back). You can switch the “one of” options as needed. Use the viewport cube to easily rotate the viewports.
+    2.  Our scenes are large and complicated, and thus it’s hard to work with the left/right/front/back views since many objects will be stacked. To help with this, we recommend the use of Viewport Clipping, which lets you define two planes to act as bounds of the rendering area (e.g. anything that’s not between the two parallel planes will not be rendered). This way you can see slices of the scene cleanly. [See here](https://knowledge.autodesk.com/support/3ds-max/learn-explore/caas/sfdcarticles/sfdcarticles/Viewport-Clipping.html) for more info.
+3.  Moving / rotating objects: [6min video](https://www.youtube.com/watch?v=0Mz56Br2tIw) 
+4.  Different selection modes (edge / border / element): You will need to use these especially when splitting / joining / etc objects. [Brief read](https://knowledge.autodesk.com/support/3ds-max/learn-explore/caas/CloudHelp/cloudhelp/2021/ENU/3DSMax-Modeling/files/GUID-409D36AC-1D17-4B24-851D-1C49C7E0B79D-htm.html).
+5.  Merging objects (Attach tool): [5min video](https://www.youtube.com/watch?v=0iSsUfzxy6o) 
+6.  Splitting objects (Detach tool, when the object already consists of separate elements): [1min video](https://www.youtube.com/watch?v=eTbIs1vcaWY) 
+7.  Cutting objects (Slice Plane tool): [3min video](https://www.youtube.com/watch?v=Z8Z_BM5Z6Uw) 
+8.  Closing gaps: select the border of the gap, either using the Border or the Edge selection mode. Then click on the Cap button if in the Border mode or the Bridge button if in the Edge mode.
+9.  Setting pivots: [2min video](https://www.youtube.com/watch?v=Gd2B29CeZEg) 
+10. Using the snap-to-grid settings (TODO: Add details/link) 
 
 # B. Scene / Object Annotation Process
 
 ## 0\. Starting
 
-First, move into a branch: run \`git checkout \-b scene-name\` where scene-name is the name of the scene you will be working on. Mark the scene name in the [spreadsheet](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit?usp=sharing) and track your progress.
+First, move into a branch: run `git checkout -b scene-name` where scene-name is the name of the scene you will be working on. Mark the scene name in the [spreadsheet](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit?usp=sharing) and track your progress. Since we are sharing these computers with other students, make sure you use the correct branch (your branch!) before you start working, and also save progress (save, git commit, etc) at all times.
 
-Since we are sharing these computers with other students, make sure you use the correct branch (your branch\!) before you start working, and also save progress (save, git commit, etc) at all time.
+We don’t want to overwrite the raw scene file (`raw.max`). As soon as you open it, click **File > Save As** and save it as `processed.max` in the same directory. All your work should be done on `processed.max`.
 
-We don’t want to overwrite the raw scene. As soon as you open it, click Save As in the File menu and save it as processed.max in the same directory. **You should dvc add and then commit your file after \*every\* numbered step below.**
+**You should `dvc add` and then `git commit` your file after *every* numbered step below.** 
 
 ## 1\. Apply required scene modifications
 
 Any required modifications to the scene need to be applied first. This involves ensuring all of the following are true:
 
-* Any scene combination/edits have been completed in advance. For the B-1K dataset scenes, please chat with area leads for any particular requirements for your particular scene.  
-* The scene overall contains a natural boundary (e.g. walls) that is properly closed.  
-* The scene floor is flat.  
-* We should only include objects that are useful for our environment. E.g. if an object seems like it should be usable (e.g. a stack of pans) but cannot be used (because you cannot unstack them), we should remove this object.
+* Any scene combination/edits have been completed in advance. For the B-1K dataset scenes, please chat with area leads for any particular requirements for your particular scene.
+* The scene overall contains a natural boundary (e.g., walls) that is properly closed.
+* The scene floor is flat, generally at Z=0.
+* We should only include objects that are useful for our environment. E.g., if an object seems like it should be usable (e.g., a stack of pans) but cannot be used (because you cannot unstack them), we should remove this object.
 
 ## 2\. Check if all objects are properly segmented
 
 Check that each “object” is correctly identified as an object in the object list. This means you need to be able to select in the object list all the parts of that object. Some rules:
 
-* Every object needs to be matched to an object category in the iGibson object [category list](https://docs.google.com/spreadsheets/d/1JJob97Ovsv9HP1Xrs_LYPlTnJaumR2eMELImGykD22A/edit#gid=2141444742) (“Object Category B1K” tab, the “object” column) and be interchangeable with all other objects in the same category. If the right category exists for all of the objects in your scene, great, use that. Otherwise, talk to Cem and Eric about adding the categories. You can look inside the [iGibson dataset](https://github.com/StanfordVL/ig_dataset/tree/master/objects) online to see the other objects that fall into that category, to check if your object is roughly interchangeable.   
-  * If you end up creating a new category, please find an appropriate [WordNet synset](http://wordnetweb.princeton.edu/perl/webwn) for it and add it to the spreadsheet.   
-* Consider object randomization: one of the goals of iGibson is to be able to replace any object of a given type (e.g. “sink”) with any other object of that same type.  
-* Consider movement: any moving parts (e.g. a door frame vs the door leaf) should be separated  
-* Consider repetition: if there are 5 stalls in a restroom, they should be annotated as 5 objects rather than 1 object covering all 5\.
-
-To achieve this segmentation state, some objects might need to be split into parts (e.g. object already has the parts as separate “elements” and you just need to move the elements into their own objects) or cut (e.g. the parts are by default a single mesh that needs to be cut), and others might need to be combined. Use your knowledge from Part B to do this. You might also need to fill gaps.
+* Every object needs to be matched to an object category in the iGibson object [category list](https://docs.google.com/spreadsheets/d/1JJob97Ovsv9HP1Xrs_LYPlTnJaumR2eMELImGykD22A/edit#gid=2141444742) (“Object Category B1K” tab, the “object” column) and be interchangeable with all other objects in the same category. If the right category exists for all of the objects in your scene, great, use that. Otherwise, talk to Cem and Eric about adding the categories. You can look inside the [iGibson dataset](https://github.com/StanfordVL/ig_dataset/tree/master/objects) online to see the other objects that fall into that category, to check if your object is roughly interchangeable.
+* If you end up creating a new category, please find an appropriate [WordNet synset](http://wordnetweb.princeton.edu/perl/webwn) for it and add it to the spreadsheet.
+* Consider object randomization: one of the goals of iGibson is to be able to replace any object of a given type (e.g., “sink”) with any other object of that same type.
+* Consider movement: any moving parts (e.g., a door frame vs the door leaf) should be separated.
+* Consider repetition: if there are 5 stalls in a restroom, they should be annotated as 5 objects rather than 1 object covering all 5.
+* To achieve this segmentation state, some objects might need to be split into parts (e.g., object already has the parts as separate “elements” and you just need to move the elements into their own objects using the **Detach** tool) or cut (e.g., the parts are by default a single mesh that needs to be cut using the **Slice Plane** tool), and others might need to be combined (using the **Attach** tool). Use your knowledge from Part A to do this. You might also need to fill gaps.
 
 ### **Special Case: Walls, Floors and Ceilings**
 
 There are some specific requirements about the annotations of walls, floors and ceilings that need to be addressed.
 
-Each wall object needs to consist of a flat wall segment, e.g. there should not be any corners within the object. This is important because the tool we use to convert visual meshes to collision, VHACD, has a tendency to cut corners within each object, causing in unreachable areas and collision with scene objects. **Wall objects currently do not need to be assigned into a room.**
+Each wall object needs to consist of a flat wall segment, e.g., there should not be any corners within the object. This is important because the tool we use to convert visual meshes to collision meshes (VHACD) has a tendency to cut corners within each object, potentially causing unreachable areas and collision issues. **Wall objects currently do not need to be assigned into a room.** 
 
-Floor and ceiling objects are expected to be watertight meshes, with a thickness of at least 30cm, and floors need to have a flat surface at a height of Z=0. Ideal floor meshes should consist of very few vertices (\<20, exactly 8 for a cuboid shape, etc). This will mean some floors may need to be remeshed from scratch. **Floors and ceilings need to be assigned to rooms, and each room should have its own floors. The floor objects will be used to compute the room map as well as checking what room the robot is in.**
+Floor and ceiling objects are expected to be watertight meshes, with a thickness of at least 30cm, and floors need to have a flat top surface at a height of Z=0. Ideal floor meshes should consist of very few vertices (<20, exactly 8 for a cuboid shape, etc). This will mean some floors may need to be remeshed from scratch. **Floors and ceilings need to be assigned to rooms, and each room should have its own floor/ceiling objects. The floor objects will be used to compute the room map and determine the robot's room.** 
 
 ## 3\. Perform vertex reduction
 
-One of the goals of iGibson is to be able to provide fast simulation. To be able to do this, we need our objects to not be too complex. The mechanism to check for this is built into sanitycheck: no objects will be allowed to have more than 20,000 vertices.
+One of the goals of iGibson/OmniGibson is to provide fast simulation. Objects should not be overly complex geometrically. The pipeline's sanity check enforces a limit (currently **~100,000 vertices**, with a warning above 20,000). If an object exceeds this limit, you need to apply vertex reduction.
 
-If an object has more than 20,000 vertices, you need to apply vertex reduction. To do this, select the object, go to the modifiers tab, and from the modifier dropdown add the ProOptimizer modifier.
+To do this, select the object, go to the **Modifiers** tab, and from the modifier dropdown add the **ProOptimizer** modifier. Experiment with reducing the vertex count (e.g., try target counts like 20000, 10000, 5000). Ideally, pick the lowest count where the object still looks reasonably good. Ensure the **Keep Textures** option is checked. If in doubt, ask area leads.
 
-You can try values in different ranges (try 500, 1000, 5000, 10000 and 20000). Ideally we want to pick the lowest of the above options were the object still looks reasonably good. If in doubt, ask for help from area leads.
-
-Don’t forget to merge in this modifier as part of the below step.
+Don’t forget to merge/collapse this modifier as part of the next step.
 
 ## 4\. Flatten modifiers, convert to Editable Poly
 
-3ds Max supports multiple different types of objects (‘editable mesh’, ‘editable poly’, etc.) as well as “modifiers” on objects that dynamically change their shape and can be reverted. For our pipeline to work, all objects need to be of type editable poly, and all modifiers need to be merged into the mesh (e.g. “flattened”). For each object whose modifier stack does not consist of exactly a single “Editable Poly” entry, follow the below steps.
+3ds Max supports multiple object types and non-destructive "modifiers". For our pipeline, all final geometry objects must be of type **Editable Poly**, and all modifiers must be merged ("flattened") into the mesh. For each object whose modifier stack isn't just a single "Editable Poly" entry, follow these steps:
 
-**Important: Doing this using the method explained below will allow instances of your object to stay instances rather than being disconnected, reducing the total amount of work you will need to do later.**
+* Go to the **Modifiers** tab (right-hand panel, 2nd tab).
+* Using the dropdown, add an **Edit Poly** modifier.
+* Make sure the **Edit Poly** modifier is at the **top** of the modifier stack.
+* Right-click on the **Edit Poly** modifier and click **Collapse To**.
+* If a warning dialog pops up, click Yes.
+* Confirm in the **Scene Explorer** (left-hand panel) that instances of your object are still instances (check for italicized names). The collapse operation should preserve instancing if done correctly.
 
-* Go into the modifiers tab on the right-hand panel (2nd tab).  
-* Using the dropdown, add an Edit Poly modifier.  
-* Make sure that the Edit Poly modifier is added to the top of the modifier stack.  
-* Right click on the Edit Poly modifier and click Collapse To.  
-* If a warning dialog pops up, click Yes.  
-* Confirm on the Scene Explorer dialog (left-hand side menu) that instances of your object are still instances.
-
-![](image1.png)        ![](image2.png)
+![](image1.png) ![](image2.png) 
 
 ## 5\. Replace object copies with instances
 
-When there are multiple copies of the same object models, we naturally want to export this model once, and use the same model for each of its instances, rather than making multiple copies. To do this, 3ds Max needs to recognize that the repeated copies are instances of the main object and not new objects themselves. Such objects are known as “instances”.
+When multiple copies of the same model exist, they should be **instances**, not independent copies, for efficiency.
 
-Start by enabling the Display \> Display Dependents option in the object list:  
-![](image3.png)
+Enable **Display > Display Dependents** in the Scene Explorer (object list).
 
-Now, individually click on every object that is used multiple times in the scene. If the copies are correctly marked as “instances”, they will also be highlighted in the list once you select any instance of the same object. If that does not happen, the multiple objects are copies and not instances, and they need to be replaced.
+![](image3.png) 
 
-To do this, use the Clone-and-align tool (Tools \> Align \> Clone and Align). Pivots need to be in the same position and in the same orientation across the different objects (relative to their own object model) in order for the clone and align tool to work properly. Select the object you want to use as the main copy, then use the Pick List option to pick all of the clones to replace. Use the “Instance” mode and hit clone when ready. Close the tool, verify that in the list, the instances are correctly highlighted now, and one by one, remove the original clones (paying attention to make sure that the new instance matches the removed clone’s location exactly).
+Click on each object used multiple times. If its copies are true instances, they will also be highlighted (and likely have italicized names). If not, they are separate copies and must be replaced.
 
-You can also use the provided Clone-and-Align script to complete this process.
+Use the **Tools > Align > Clone and Align** tool or the provided `Clone and Align` script/button. Pivots must be identically positioned and oriented (relative to the object's local frame) for this to work correctly.
+
+1.  Select the object to use as the source/base copy.
+2.  Use the **Pick List** option in the Clone and Align tool to select all the copies you want to replace.
+3.  Choose **Instance** mode and click **Clone**.
+4.  Close the tool.
+5.  Verify in the Scene Explorer that the new objects are instances of the source.
+6.  Carefully delete the original copies, ensuring the new instances perfectly match their positions and orientations.
 
 ## 6\. Annotate moving parts (“links”)
 
-Many objects are “articulated”, e.g. they are not a single rigid body but consist of multiple rigid parts that are allowed to move relative to each other. For example, a door is an articulated object with a moving door leaf, a drawer unit is an articulated object with moving drawers, etc. \- support for such articulation is what puts the i in iGibson (“interactive”). To be able to simulate these articulations, iGibson needs some information about the joint connecting the different parts: the origin, the axis, the limits, etc. \- normally quite hard to annotate. Fortunately, our pipeline allows us to compute all of this information automatically \- all it needs is each articulated joint’s lower and upper positions.
+Articulated objects (like doors with moving leaves, drawers) have multiple rigid parts (links) connected by joints. Our pipeline computes joint details automatically if you provide the **lower** (closed) and **upper** (open) positions for each moving part. Ensure fixed and moving parts are separate objects (from step 2).
 
-By this point, for each articulated object, you should have its fixed and moving parts as separate objects, as requested for part 2\. Then, for each such object, do the following:
+For each moving part:
 
-1. Move the moving part so that it’s exactly at the “closed” position of the joint. Make a mental note that this is the “lower” position of the joint, for naming later.  
-2. Make a copy of the object using the Clone tool in the Edit menu (choose Instance as the cloning type).  
-3. Decide if the joint needs to be a prismatic (e.g. linear / translational) or revolute (e.g. rotational) joint. Note that it should be one of the two: in the below steps, you should *either* translate or rotate, *but not both*.  
-   1. For a prismatic joint, simply move the copy to its final (“upper”) position using your knowledge from Part B. Take care to make sure that the two objects are moved only along the desired joint axis, and not along any of the other two lateral axes.  
-   2. For a revolute joint, you will need to rotate the copy to the final (“upper”) position. To rotate an object:  
-      1. You first need to set a pivot around which you will perform the rotation. Use your knowledge from Part B to set this (temporary) pivot. Pick the pivot in such a way that the moving part will not collide with the fixed part, not only in its starting/final positions, but also along the way. For example, see in the below figure the right position and a few wrong positions for the pivot.  
-         ![](image4.png)  
-      2. Then, using the rotate tool, rotate the moving part around the pivot. You can manually enter the amount (degrees) to rotate for many revolute joints, e.g. 90 degrees, so that the rotation is exact. See the “exact transforms” FAQ tip. **You should not apply a rotation of more than 180 degrees: in these cases, the URDF joint will follow the minor arc, producing undesirable results.**
+1.  Position the moving part exactly at its **closed** state. This defines the **lower** position for naming.
+2.  Create a copy using **Edit > Clone** (choose **Instance** type).
+3.  Determine the joint type: **prismatic** (sliding) or **revolute** (rotating). Move the copy *only* along the correct axis/rotation.
+    1.  **Prismatic:** Translate the instance copy to its fully **open** ("upper") position. Ensure movement is purely along the joint's axis.
+    2.  **Revolute:** Rotate the instance copy to its fully **open** ("upper") position.
+        1.  Set a temporary pivot point for the rotation using **Hierarchy > Affect Pivot Only**. Choose the pivot carefully (e.g., the hinge center) so the part rotates naturally without intersecting the fixed part.
+            ![](image4.png) 
+        2.  Use the **Rotate** tool. You can often enter exact angles (e.g., 90 degrees).
+        3.  **CRITICAL:** Do not apply rotations greater than 180 degrees. The pipeline interprets the shorter arc. If >180 degrees is needed, adjust the "lower" position definition or consult leads.
 
-## 7\. Annotate local coordinate frames
+## 7\. Annotate local coordinate frames (Pivots)
 
-In iGibson, objects by default are expected to have their local coordinate frames set up such that they have the X axis (red arrow) facing forward, and the Z axis (blue arrow) facing upward. The third (Y) axis also needs to be in the correct position according to the right-hand rule (Z x X \= Y). Our next step involves making sure this is the case for all of our objects. In 3ds Max, we use the “Pivot” feature of each object to mark its local coordinate frame.
+Objects in OmniGibson use a standard coordinate frame: **X-axis forward, Z-axis upward** (right-handed system). We use the **Pivot** in 3ds Max to define this local frame for each object part (link).
 
-For each object in the scene:
+For each link (including fixed parts and both lower/upper copies of moving parts):
 
-* Select the object. If you are doing this for an object where multiple instances exist, you can select all of the instances. For articulated object parts, select both the lower and upper copies, and annotate with the closed position in mind.  
-* Go into the Pivot options \- these are in the right-hand toolbar, in the Hierarchy menu.  
-* Enable the Affect Pivot Only option.  
-* Click the Center To Object and Align To Object options to move the coordinate frame origin to a reasonable starting point.  
-* Then use the rotating tool so that the axes satisfy the above requirements.
+* Select the object(s). You can select all instances of a model or both lower/upper copies of an articulated link.
+* Go to the **Hierarchy** tab (right-hand toolbar).
+* Enable **Affect Pivot Only**.
+* Click **Center To Object** and **Align to Object** for a reasonable starting point.
+* Use the **Rotate** tool (while Affect Pivot Only is active) to orient the pivot gizmo so the **Red (X) arrow points forward** and the **Blue (Z) arrow points up** relative to the object's natural orientation.
+* Disable **Affect Pivot Only** when done.
 
 ## 8\. Rename objects
 
-Below is our naming scheme. Split each token with a \-:
+Use the following naming scheme, separating tokens with hyphens (`-`):
 
-* If the object has a bad model (e.g. a cabinet that has some fake drawers) \- start with the prefix B-. Note that this means you also need to provide a replacement object model ID from the dataset \- see the model ID part below.  
-* If the object does not lend itself well to randomization (e.g. hangers with different spaces between their hooks, console tables with different height shelves where things need to go) \- add prefix F- so that they are fixed and not randomized.  
-* If the object is loose (e.g. not a fixed object in this scene but a movable one) \- add prefix L-  
-  * This only applies to base links \- e.g. the fact that a door leaf is moving doesn’t require this since the door frame (the base link) does not move.  
-  * Typically in iGibson, furniture objects that you’d expect to be fixed IRL are marked as fixed, and smaller objects (e.g. soap dispenser, garbage can, etc.) are marked as “loose”. If you’re not sure if an object should be fixed or loose, talk to us.   
-* The object category, where separate words are separated using underscore (\_) characters. For example: bottom\_cabinet.  
-* The object model ID, a six-character lowercase ASCII string that should be unique to this model in the dataset. If there are multiple different models of objects of the same category (e.g. not multiple instances of the same model but different models altogether), they should get different model IDs. If the object is a bad model, the suggested replacement object’s ID (from any of the CAD files from the scene) should be inserted here.  
-* The object instance number, 0 by default. If there are multiple instances of the same model (e.g. multiple copies of the same toilet), they should have different numbers here, preferably in some reasonable order.  
-* The link name, if this link is not the base link of this object.  
-* The parent link name, if this link is a moving link. If the parent is the base link of the object, use base\_link.  
-* Joint type: P for prismatic (e.g. the object moves linearly), R for revolute (e.g. the object rotates around an axis), **New:** F for fixed (e.g. the object does not move relative to its parent)  
-* Joint side: “upper” if this instance marks the upper end of the joint, “lower” if it marks the lower end. By convention, we choose the lower end to be the end that keeps the object “closed”. **New:** For fixed joints, only a lower side should be specified.  
-* **New:** Meta link type (e.g. “Mwatersource”), should be alphanumeric with NO UNDERSCORES. (this is relevant only for meta links, see part 10\)  
-* **New:** Optional meta link id (e.g. “left”), should be alphanumeric with NO UNDERSCORES. (this is relevant only for meta links, see part 10\)  
-* **New:** Optional meta link sub-id (e.g. “0”), should be alphanumeric with NO UNDERSCORES. (this is relevant only for meta links, see part 10\)  
-* **New:** Optional tags (multiple allowed), \-Ttagname1-Ttagname2 etc. (see Tags section below)
+* Optional `B-`: Prefix for **bad models** (e.g., non-functional drawers). Requires a valid replacement model ID.
+* Optional `F-`: Prefix for objects that should be **fixed** in the scene and **not randomized** (e.g., unique shelves).
+* Optional `L-`: Prefix for **loose** (movable) objects. Applies only to the **base link**. Furniture is typically fixed; smaller objects are loose. Ask if unsure.
+* `category`: Object category (lowercase, `_` separator, e.g., `bottom_cabinet`).
+* `model_id`: **Unique 6-character lowercase ASCII string** identifying this specific model. Different models of the same category need different IDs. For `B-` objects, use the ID of the intended replacement model.
+* `instance_id`: Integer instance number (0-indexed). Use consecutively for multiple instances of the same model.
+* Optional `-link_name`: Name of the link if not the base (e.g., `-drawer`, `-leaf`). If base link, omit or use `-base_link`.
+* Optional `-parent_link_name`: Name of the parent link if this is a moving link. Use `base_link` if parent is the base.
+* Optional `-JointType`: `P` (prismatic), `R` (revolute), or `F` (fixed). Required for moving or fixed-but-separate links.
+* Optional `-JointSide`: `lower` (closed state) or `upper` (open state). For `F` joints, only `lower` is needed. Required for articulated links.
+* Optional `-L{light_id}`: For lights attached to this link (e.g., `-L0`, `-L1`).
+* Optional `-M{meta_type}`: For meta links (see step 10).
+* Optional `_{meta_id}`: Optional ID for grouping meta links (e.g., `_left`). Alphanumeric, no `_`. Defaults to `_0` if sub-ID exists but ID doesn't.
+* Optional `_{meta_subid}`: Optional sub-ID (integer, 0-indexed) for multi-part meta links. Alphanumeric, no `_`.
+* Optional `-T{tagname}`: Tags (multiple allowed, e.g., `-Topenable-Tglass`).
 
-Some examples:
+Examples:
 
-* B-L-bottom\_cabinet-0-0  
-* L-soap\_dispenser-0-0  
-* Sink-0-1  
-* door-0-0-base\_link  
-* door-0-0-leaf-base\_link-R-lower  
-* door-0-0-handle-leaf-R-lower  
-* cabinet-0-0-drawer-base\_link-P-lower-Topenable  
-* F-sink-0-0-Mfluidsource\_left
+* `B-L-bottom_cabinet-qwerdf-0` (Bad, loose cabinet instance 0)
+* `L-soap_dispenser-tyuigh-0` (Loose soap dispenser)
+* `sink-asdfgh-1` (Fixed sink instance 1)
+* `door-zxcvbn-0-base_link` (Base link of door)
+* `door-zxcvbn-0-leaf-base_link-R-lower` (Lower pose of door leaf, revolute joint from base)
+* `door-zxcvbn-0-handle-leaf-R-lower` (Handle fixed to door leaf, lower pose)
+* `cabinet-poiuyt-0-drawer-base_link-P-lower-Topenable` (Openable drawer, lower pose)
+* `F-sink-lkjhgf-0-Mfluidsource_left` (Fixed sink, fluid source meta link with ID `left`)
+* `bottle-mnbvcx-0-Mfillable_0_1` (Fillable meta link part 1 for bottle)
 
 ### **NEW: Tags**
 
-Tags are a new mechanism that allow us to add metadata to individual objects. Multiple tags can be added onto each object by appending the letter T followed by the tag name. For example, to apply the glass tag, \-Tglass can be added to an object.
+Add tags by appending `-Ttagname`. Supported tags:
 
-Below are the currently supported tags:
-
-* **Tsoft:** the object needs to be simulated as a soft body rather than a rigid body (e.g. cloth, towels, etc.). **Note that any object that has this tag should come in a default-unfolded shape.**  
-* **Tglass:** the object needs to be simulated as glass rather than using its current material. Note that this will apply to the entire object, so any object that is only partially glass needs to be segmented into separate links (with fixed joints) so that the entire thing doesn’t turn into glass.  
-* **Tlocked:** when placed on the base link of a scene object, the object’s articulations will be locked in their lower position in that scene. Prevents robots from falling out of unlocked doors.  
-* **Topenable:** on an object with multiple links, this link should be taken into account when computing the “openable” state (e.g. it’s not an irrelevant link like buttons etc.)  
-* **Topenable\_both\_sides:** on an openable object, the links are set up such that if they are both fully open, the object is semantically “closed”. This is mostly useful for things like sliding doors and windows, and is only helpful for two-pane ones and not more.  
-* **Tsubpart:** indicates a part/whole relationship where the part replaces the whole, e.g. when an object is sliced. Is only valid on an object that has another object as its parent. See part 10 for more details.  
-* **Textrapart:** indicates a part/whole relationship where the part should be added to the scene in addition to the whole, e.g. the pillow on a bed, **but is not connected to the whole with a joint (e.g. they will move separately)**. Is only valid on an object that has another object as its parent. See part 10 for more details.   
-* **Tconnectedpart:** indicates a part/whole relationship where the part should be added to the scene in addition to the whole **and connected to it using an**  , e.g. the cap on a bottle. Is only valid on an object that has another object as its parent. See part 10 for more details.
+* **Tsoft:** Needs soft body simulation (cloth, towels). Object mesh must be default-unfolded.
+* **Tglass:** Simulate as glass. Segment object if only partially glass.
+* **Tlocked:** (Apply to base link) Locks object articulation in this scene.
+* **Topenable:** This moving link contributes to the object's open/closed state.
+* **Topenable_both_sides:** For objects like two-pane sliding doors where fully open means "closed" semantically.
+* **Tsubpart:** Part replaces the whole upon interaction (e.g., slicing). Must be a child object.
+* **Textrapart:** Part added with the whole but moves independently (e.g., bed pillow). Must be a child object.
+* **Tconnectedpart:** Part added with the whole and connected via a breakable attachment (e.g., bottle cap). Must be a child object.
 
 ### **NEW: Container Category / Synset Considerations**
 
-Many original categories and synsets mapped *containers* of substances to the synsets corresponding to the substances themselves. This is problematic because in OmniGibson we have many substances and want to reserve the substance synsets for the actual substances.
+Containers (bottles, cans, etc.) holding substances need specific naming:
 
-As a result, for all containers (typically bottles / cans / etc.), we are creating custom synsets that reflect the fact that the container is a *container* of some *substance.* These synsets need to be named substance\_\_container.n.01, **(note: there are two underscores between the two parts)**, and the respective categories simply substance\_container (single underscore).
+* **Category:** `substance_container` (e.g., `lemon_juice_bottle`).
+* **Synset:** `substance__container.n.01` (e.g., `lemon_juice__bottle.n.01`) **(Note the double underscore)**.
 
-For example, a bottle of lemon juice can be put into a lemon\_juice\_bottle category which maps to a lemon\_juice\_\_bottle.n.01 synset. 
-
-Typical options for the container part include bag, box, bottle, and can. For anything else, reach out to area leads for approval.
+Common container types: `bag`, `box`, `bottle`, `jar`, `can`. Ask leads for others. This reserves substance-only synsets (e.g., `lemon_juice.n.01`) for the actual substance simulation.
 
 ## 9\. Annotate lights
 
-To annotate lights, you need to do two things: validate the properties and name the object correctly.
+Validate properties and name lights correctly.
 
-All lights in the scene need to be VrayLight objects. If you have PhysicalLight, TargetedLight, VrayIES, VrayAmbientLight, etc. objects (which SanityCheck will happily point out), ask for help.
-
-For each such light object, the settings should look like this:  
-![](image5.png)
-
-That is:
-
-* The type should be one of sphere, plane and disc. If this is not the case, ask for help.  
-* The targeted option should be DISABLED. If it is enabled, click the checkbox to disable it, and if a corresponding VrayTarget object exists in the scene, remove it.  
-* The units should be set to Luminous Power (lm). If something else is selected, switch this dropdown to this option. The multiplier should automatically get converted.  
-* The multiplier should be a number roughly around the **500-1000** ballpark. Typically 800 for a regular 80W lightbulb. If this is not the case, ask for help.
-
-Once the settings are all set, you need to name the object. Light sources need to be named such that they have the exact name of the object they will be attached to, plus a light identifier. For example, if the light source needs to be attached to *bottom\_cabinet-0-0* then it should be called *bottom\_cabinet-0-0-L0* where the 0 is the light index (and if there are multiple lights on this same object, that number should be incremented). If the light is attached to an articulated link, it should be named exactly as such: a light attached to *cabinet-0-0-drawer-base\_link-P-lower* will be called *cabinet-0-0-drawer-base\_link-P-lower-L0*.
-
-Note that lights attached to moving parts should **only** be annotated for the lower-side copy of the moving part.
+* **Type:** Must be **VrayLight**. Convert others or ask for help.
+* **Properties:** (See ![](image5.png) )
+    * **Type:** Sphere, Plane, or Disc.
+    * **Targeted:** MUST be **DISABLED**. Delete any associated `VrayTarget` objects.
+    * **Units:** Must be **Luminous Power (lm)**. Change if needed; multiplier should auto-convert.
+    * **Multiplier:** Should be roughly **500-1000 lm** (e.g., 800 for an 80W bulb). Adjust or ask if far off.
+* **Naming:** `{parent_object_full_name}-L{index}`.
+    * Example for light on `bottom_cabinet-asdfgh-0`: `bottom_cabinet-asdfgh-0-L0`.
+    * Example for light on `cabinet-poiuyt-0-drawer-base_link-P-lower`: `cabinet-poiuyt-0-drawer-base_link-P-lower-L0`.
+    * Use consecutive indices (0, 1, ...) for multiple lights on the same link.
+    * Attach lights only to the **lower** pose copy of articulated links.
 
 ## 10\. NEW: Annotate Parts and Meta Links
 
-Each object requires certain meta links to simulate its functionality in OmniGibson. For example, for a sink object to be functional, we need to annotate the water sources, drains, and toggle switches for each of its sink/drain combinations. Another example are objects that have parts: for example, a bottle might come with a separate cap object, or an apple object may be sliceable into parts. 
+Meta links define functional areas for simulation (e.g., water sources, buttons). Parts handle slicing or included-but-separate items (e.g., bottle caps).
 
-Before continuing into the details of meta links and parts, a quick note that meta links and parts need to be marked as **children** of the relevant object. To do this, you can drag the meta link or part in the Scene Explorer window and drop it on top of the related parent object.
+**Both meta links and parts MUST be children of their parent object in the Scene Explorer.** Drag-and-drop to set parentage.
 
-A meta link needs to be a primitive object. Meta links can either be dimensionless (contains a pose but no volume definition) or volumetric (contains a pose and a volume definition) based on the requirements of the feature. First, you need to know if the annotation is going to be volumetric or dimensionless.
+**Meta Links:** Must be primitive objects (Point, Box, Cylinder, Sphere, Cone).
 
-### **Dimensionless Meta Links**
+### **Dimensionless Meta Links (Point Helpers)**
 
-Currently, annotations for the below meta links need to be dimensionless (e.g. **Helper \> Point** objects):
+Use **Create > Helpers > Point** for these. The exact position and orientation matter.
 
-* **Mfluidsource:** the part(s) on the object where the relevant fluid is going to come out of  
-* **Mattachment:** the point(s) on the object where an attachment will happen.  
-  * You need to add a meta ID that matches the type in the list and a male/female option. For example, Mattachment\_displaywallM\_. **If the attachment type is labeled as pose in the list of attachment types, the attachment will only be created if the attachment meta links on the two objects fully line up (e.g. the orientation of the meta links is also important and will be taken into account).**  
-    * **bicycle-abc-0-Mattachment\_bikerackM**  
-    * **wardrobe-xyz-0-Mattachment\_hangerrackF\_0**  
-* **Mheatsource:** the part(s) on the object where heat will be coming out  
-  * Examples. stove, lighter  
-  * Non-examples: microwave, stove, fridge (we only require objects to be inside these home appliances) 
+* **Mfluidsource:** Where fluid originates (faucets, shower heads).
+* **Mattachment:** Attachment points. Needs Meta ID matching attachment type list + Gender (M/F), e.g., `Mattachment_bikerackM_0`. Pose matters if type is marked `pose` in list.
+* **Mheatsource:** Where heat originates (stove burner, lighter). Not needed for enclosed heaters like microwaves.
+* **Mcom:** Center of Mass override (optional, rarely needed).
 
-To create one, you can go to Create \> Helpers \> Point.  
-![](image6.png)
+### **Volumetric Meta Links (Geometric Primitives)**
 
-### **Volumetric Meta Links**
+Use **Create > Geometry > Standard Primitives** (Box, Cylinder, Sphere, Cone). Volume definition matters.
 
-The below meta links need to be geometries, e.g. they need to contain volume. For these ones, you can use one of the **Box**, **Cone**, **Sphere** and **Cylinder** primitives.
-
-* **Mtogglebutton:** the part(s) on the object where the robot can touch to toggle it on/off  
-* **Mparticleapplier:** the volume through which particles will be applied. This might be something like a cone for objects that spray out particles.  
-* **Mparticleremover:** the volume through which particles will be applied. This might be something like a box for objects like vacuums, where particles that enter the box will be removed.  
-* **Mfluidsink:** the volume which, any particles of water (or the other relevant fluids) that enter will be removed / deleted  
-* **Mslicer:** the volume such that if a sliceable object touches this object with the contact point falling within this volume, the sliceable object will be sliced.  
-* **Mfillable:** the volume that will be checked for fluid particles when checking for the filled state.
-
-To create one, you can go to the Create Menu, and the Standard Primitives submenu for the volumetric primitives:  
-![](image7.png)
+* **Mtogglebutton:** Area robot interacts with to toggle state.
+* **Mparticleapplier:** Volume for particle emission (e.g., spray cone).
+* **Mparticleremover:** Volume for particle removal (e.g., vacuum intake).
+* **Mfluidsink:** Volume for fluid removal (e.g., sink drain).
+* **Mslicer:** Volume defining the cutting area of a slicing object.
+* **Mfillable:** Volume used to check if container is filled. Generated automatically or manually refined.
+* **Mcollision:** Defines collision geometry. Usually generated automatically, can be manually created/edited.
 
 ### **Meta IDs**
 
-Some objects, such as a sink object that actually contains multiple sink/faucet pairs, might require multiple copies of a meta link. In the example of the sink, each faucet needs togglebutton and fluidsource meta links, and each drain needs a fluidsink meta link. Moreover, the meta links need to somehow be identified as a group such that the correct togglebutton will enable each nfluidsource.
-
-To do this, we use *meta IDs*, an alphanumeric suffix attached to the meta link. For example, we can name one meta link *Mtogglebutton\_left* and one faucet *Mfluidsource\_left*. This will let OmniGibson know that these together are a pair of links that are connected. If a meta ID is not specified, it will default to “0”.
+Use `_id` suffix to group related meta links (e.g., `_left` for a left faucet/button pair). Example: `Mtogglebutton_left`, `Mfluidsource_left`. Default ID is `_0` if not specified but a sub-ID exists.
 
 ### **Meta Sub-IDs**
 
-Some meta links on the other hand might not be best approximated with a single cylinder/cone/etc primitive. For example, many bottles have interior shapes that don’t match this shape. For these, we want to be able to annotate multiple primitives parts of the same meta-link. To do these, we simply name the parts of the meta link with both a meta ID (default 0\) and a meta sub ID (an integer, required consecutive, starting with zero). For example, two parts of a fillable meta link for a bottle can be called \-Mfillable\_0\_0 and \-Mfillable\_0\_1. **This feature is currently most useful for the fillable use case \- ask if you feel the need to use it for anything else.**
+Use `_subid` suffix (integer, 0-indexed, consecutive) for meta links composed of multiple primitives. Example: `Mfillable_0_0`, `Mfillable_0_1`. Primarily used for `Mfillable`.
 
 ### **Primitive-specific considerations**
 
-For now, the only primitive-specific consideration is that Cone primitives need to have their radius1 be zero and radius2 be nonzero. This means you should create the cone like a cylinder and then in the modify pane change the radii, because the default cone creation method only supports tapering radius2.
+* **Cone:** Must have `Radius1 = 0` and `Radius2 > 0`. Create like a cylinder then adjust radii in Modify panel.
 
 ### **Parts**
 
-For mechanisms like slicing, and also for importing “extra” objects that come with an object, we use parts. To annotate an object as a part of another, you can simply drag it under the parent object to make it its child, just like a meta link. If the part object is from another file, it can also be annotated as Bad. Part objects need to be Editable Poly. **They do not need to be named with any meta link information.**
+Must be **Editable Poly** objects, children of their parent. Can be `B-` if imported from another file. Do **not** include meta link info in their names. Apply one tag:
 
-There are three kinds of parts:
-
-* Subparts are parts that should replace the main object in the event of slicing, etc. \- **that is, the parent object and the parts should never exist together in simulation**. In this case, the part needs to be tagged \-Tsubpart  
-* Extra parts are parts that should be added into simulation along with the main object, despite being separate objects themselves. They will **not** be attached to the parent, e.g. they can move freely. For example, pillows on a bed, etc. \- these need to be tagged \-Textrapart  
-* Connected parts are parts that should be added into simulation along with the main object, and **connected to the main object using an attachment** that can be broken with adequate force. For example, a cap on a bottle. These need to be tagged \-Tconnectedpart
+* **-Tsubpart:** Replaces parent on interaction (e.g., slicing).
+* **-Textrapart:** Added with parent, moves independently (e.g., bed pillow).
+* **-Tconnectedpart:** Added with parent, connected via breakable attachment (e.g., bottle cap).
 
 ## 11\. NEW: Assign rooms
 
-In scene files, each object (including floors, ceilings, lights and cameras) need to be assigned into a room. Valid rooms types include: bar, bathroom, bedroom, biology\_lab, break\_room, chemistry\_lab, childs\_room, classroom, closet, computer\_lab, conference\_hall, copy\_room, corridor, dining\_room, empty\_room, entryway, exercise\_room, garage, garden, grocery\_store, gym, hammam, infirmary, kitchen, living\_room, lobby, locker\_room, meeting\_room, pantry\_room, phone\_room, playroom, private\_office, sauna, shared\_office, spa, staircase, storage\_room, television\_room, utility\_room. Each room should be named with a room type followed by an underscore and an index for that instance of that room type, e.g. living\_room\_0 or bathroom\_3.
+In **scene files**, assign objects (including floors, ceilings, lights, cameras) to rooms using **Layers**.
 
-To assign an object into a room, first create a layer with the name of the room in the layer manager, and drag the object onto that layer.
-
-Some objects, such as doors and windows, might need to be assigned into multiple rooms. In those cases, you can create a layer whose name is a comma-separated list of rooms: e.g. corridor\_0,living\_room\_0
-
-**Note that floors and ceilings are required to be per-room, e.g. there can be multiple floors/ceilings per room but never a floor or ceiling that extends to more than one room.**
-
-The exceptions to the room assignment requirement are walls (which we will annotate later) and exterior cameras etc. that don’t exactly fit in a room. These can be left in the 0 layer.
+* **Room Types:** Use one from the approved list (bar, bathroom, ..., utility_room).
+* **Layer Naming:** `{room_type}_{index}` (e.g., `living_room_0`, `bathroom_3`).
+* **Assignment:** Create layers with these names in the Layer Manager and drag objects onto the appropriate layer.
+* **Multi-Room Objects:** (e.g., doors, windows) Assign to a layer named with a comma-separated list: `room1_idx,room2_idx` (e.g., `corridor_0,living_room_0`).
+* **Floors/Ceilings:** MUST belong to exactly one room layer.
+* **Exceptions:** Walls, exterior cameras/lights can remain in the default `0` layer.
 
 ## 12\. Verify you are passing the sanity check
 
-Run the sanity check script to check that the object names are all valid, the instance setup is correct, and the categories are all whitelisted. The sanitycheck script has additional checks that it will perform and give you recommendations about. These need to be followed prior to being merged.
+Run the `new_sanity_check.py` script (via the toolbar button "Run Sanity Check"). Address all **ERRORS** reported. Review **WARNINGS** and fix if appropriate. The pipeline will fail if errors exist.
 
 ## 13\. Commit
 
-After you are done with all of the scenes above, save the file one last time, commit the changes again if there are any remaining.
+Save the `processed.max` file. Commit the changes using `dvc add cad/your/object/or/scene/processed.max` followed by `git commit`.
 
-## 14\. Thank you\!
+## 14\. Thank you!
 
-We are now one step closer to a very realistic household robotics simulator\!
+We are now one step closer to a very realistic household robotics simulator! 
 
 # C. Object Acquisition Process
 
 ## 0\. Shop
 
-The goal is to find objects of the task-relevant object categories on TurboSquid.
+Find 3ds Max models on TurboSquid for task-relevant object categories listed in the [spreadsheet](https://docs.google.com/spreadsheets/d/1fWrP4DC4WSqgTEdRjXiIHO_ipmbT_HsEZ3CYvlgx0Wc/edit#gid=363727863).
 
-This is the [spreadsheet](https://docs.google.com/spreadsheets/d/1fWrP4DC4WSqgTEdRjXiIHO_ipmbT_HsEZ3CYvlgx0Wc/edit#gid=363727863) that keeps track of all the task-relevant objects. You can access it with your Stanford account.
+* Use **Column A** for search terms.
+* Note **Column F** for special types (Fluid, Particle, Cloth) - find appropriate containers.
+* Fill in **Column H** (Purchase link) and **Column I** (Is Branded).
+* **Add the object to the TurboSquid shopping cart.** 
 
-* Column A: word (you should search it on TurboSquid or its synonym)  
-* Column F: Eric comment (whether something is fluid, particle system, cloth, etc)  
-* Column H: ​​Purchase link (you only need to go over the TRUE cell and copy/paste the TurboSquid purchase link to here)  
-* Column I: is branded (you should put 1 there if the object is Editorial or Branded)
+Requirements:
 
-**Please also add the object into TurboSquid shopping cart.**
+* High quality (check renders).
+* **Native Format:** Must be **3ds Max** (V-Ray, Scanline, Arnold renderers okay; **NO Corona**). Verify the "NATIVE" format on the product page, not just the file format filter.
+    ![](image10.png) ![](image11.png) 
+* Affordable (Prioritize Free, soft cap $20). Ask leads if >$20.
+    ![](image12.png) 
+* **No Editorial or Branded** if possible. If unavoidable, mark `1` in Column I; you'll need to remove branding later.
+    ![](image13.png) 
 
-If Column F says Fluid or Particle, we should look for objects that are the natural/native container for these substances. Here are some examples:
+## 1\. Import files Into `ig_pipeline/cad/objects`
 
-Orange juice: [link](https://www.turbosquid.com/FullPreview/1637471)  
-​​![](image8.png)
+Import the raw model into the repository correctly:
 
-Flour: [link](https://www.turbosquid.com/3d-models/3d-wheat-flour-brown-paper-bag-2lb-model-1719748)  
-![](image9.png)
-
-A couple important notes (with decreasing importance):
-
-* The quality should be high \- you can judge from the rendering result on their page  
-* Native format has to be 3DS MAX (except Corona renderer; V-ray, scanline and arnold are okay).   
-  * Note: selecting format as “.max (3DS MAX)” does NOT guarantee that the native format is 3DS MAX. We want it to be the case, so you would need to double check the “NATIVE” format on the product page.
-
-  ![](image10.png)
-
-  ![](image11.png)
-
-* It should be affordable. Prioritize Free items. Our soft price cap is $20 per object. If you have to buy something more expensive, talk with us.   
-  ![](image12.png)  
-* **It should NOT be Editorial or Branded**. However, if you have to buy something editorial or branded, mark 1 in “Column I: is branded” of the spreadsheet. You will later edit the material in 3DS MAX to remove the brand.   
-  ![](image13.png)
-
-## 1\. Import files Into ig\_cad
-
-Before we make any changes to the file, you need to import it into the ig\_cad repo. Follow the below steps to do that:
-
-1. Only for your first file, do the following:  
-   1. Check out the master branch (*git checkout master*).  
-   2. Check the status of your current repo (*git status*) and check that there are no changes in your working copy. If there are, clear them.  
-   3. Pull the latest master (*git pull*)  
-   4. Create your objects branch. **All of your objects should be added to a single branch, and you should commit after each time you add a new object and each time you finish working on another object.** You should name your branch {yourname}-objects, e.g. cem-objects. To do this, run *git checkout \-b yourname-objects*.  
-2. Make sure you are in your objects branch (*git checkout yourname-objects*).  
-3. Download the next model from Turbosquid. To do this:  
-   1. Click on the TurboSquid link in the [spreadsheet](https://docs.google.com/spreadsheets/d/1fWrP4DC4WSqgTEdRjXiIHO_ipmbT_HsEZ3CYvlgx0Wc/edit#gid=1576528389).  
-   2. Add the object to the cart.  
-   3. In the cart, see the download button. Click on that to start the download.  
-   4. Remove the object from the cart (we don’t want to accidentally re-buy it later).  
-   5. Save the downloaded file to a location that is not on the repo (e.g. your downloads folder). You can create an objects directory in your downloads folder to make this more manageable as we download hundreds of objects.  
-   6. Extract your object’s downloaded files to a location that is **not on the repo.** You can create an objects directory in your downloads folder to make this more manageable as we download hundreds of objects.  
-4. Open the file in 3ds Max. Make sure that the file loads fine without any texture or plugin errors. If you see any errors, let us know.  
-5. In the right-hand menu, go into the Utilities tab (wrench icon). Open the Resource Collector utility, if not open, by going into More \> Resource Collector.  
-6. In the resource collector, tick the *Collect Bitmaps*, *Copy* and *Update Materials* boxes. Then click the Browse button and navigate to the folder your raw.max file is in. Here, create a *textures* directory, and choose this directory. If these steps fail, instead go to file, click on archive, and select some directory. After archiving, unzip the file and in the resulting file navigate  all the way down to the folder containing assets. Copy these assets into the *textures* directory created earlier.  
-7. Click Begin.  
-8. Go into File \> Save As.  
-   1. Go into the ig\_cad repository, into the *objects* directory, create a directory for your object file. This directory should be named {category}-{[random2charstring](https://www.random.org/strings/)}. **Note that this 2 char string is not meant to match the object model ID, it is only to prevent duplicate files here.** The category can come from the spreadsheet. If you have a file that contains multiple object categori es, instead of the category name, you can put in an arbitrary name that covers all of your objects names. For example: *raw\_meats-xy*.  
-   2. Go into the directory you created.  
-   3. Save the file as raw.max.  
-9. Once resource collection finishes, save the file again by doing CTRL+S.  
-10. **IMPORTANT:** time to commit\!  
-    1. Go into ig\_cad, run *git status* and confirm that ONLY the folder you just added has changed.  
-    2. Run *git add \-A*  
-    3. **IMPORTANT:** run *git lfs status* and confirm that all of the files under textures/ show up here. (Cem: update on what to do here)  
-    4. Run *git commit* *\-m your commit message* to commit the files.  
-11. **IMPORTANT**: Go to the spreadsheet and put a 1 in the *“Raw File Added”* column on the spreadsheet.  
-12. Then go into the File \> Save As and resave the file as processed.max (make sure you are saving in the correct folder.  
-13. You are now ready to start working on the file\!
+1.  **First time only:**
+    1.  `git checkout main`.
+    2.  `git status` (ensure clean working directory).
+    3.  `git pull`.
+    4.  `git checkout -b yourname-objects` (Create your personal branch for all object additions). E.g., `cem-objects`.
+2.  Ensure you are on your branch (`git checkout yourname-objects`).
+3.  Download the model from TurboSquid:
+    1.  Use link from spreadsheet.
+    2.  Add to cart.
+    3.  Download via cart.
+    4.  **Remove from cart**.
+    5.  Save download to a folder **outside** the `ig_pipeline` repository (e.g., `Downloads/objects`).
+    6.  Extract files to the same **external** folder.
+4.  Open the `.max` file in 3ds Max. Check for texture/plugin errors. Report errors.
+5.  Go to **Utilities tab** (wrench icon) > **More... > Resource Collector**.
+6.  Check **Collect Bitmaps**, **Copy**, **Update Materials**. Click **Browse**, navigate to the *external* folder where you extracted the files, create a `textures` subfolder, and select it. (Alternative if this fails: use **File > Archive**, save somewhere, unzip, find textures in the unzipped archive, and copy them manually to the external `textures` folder).
+7.  Click **Begin** in Resource Collector.
+8.  Go to **File > Save As...**:
+    1.  Navigate to `ig_pipeline/cad/objects/`.
+    2.  Create a new folder: `{category}-{xy}` where `{category}` is from the spreadsheet and `{xy}` is a random 2-char string (just to avoid folder name clashes at this stage). Use a combined name if multiple categories, e.g., `raw_meats-xy`.
+    3.  Enter the new folder.
+    4.  Save as `raw.max`.
+9.  After Resource Collector finishes, **Save** again (CTRL+S).
+10. **IMPORTANT: Commit Raw File:**
+    1.  `git status` (Check only your new folder is listed).
+    2.  `git add -A`.
+    3.  **IMPORTANT:** `git lfs status` (Ensure all texture files are tracked by LFS). (If not, ensure `.gitattributes` is set up correctly and potentially run `git lfs track "cad/objects/{category}-{xy}/textures/**"` and re-add). 
+    4.  `git commit -m "Add raw model {category}-{xy}"`.
+11. **IMPORTANT**: Update spreadsheet: Mark `1` in **“Raw File Added”** column.
+12. In 3ds Max: **File > Save As...** `processed.max` in the *same* object folder.
+13. Ready to annotate `processed.max`.
 
 ## 2\. Annotate the objects in the file
 
-For any objects you see in the file, annotate them as usual using steps 2-10 from the scene guide above. **If there are multiple objects in the file you should still annotate them, as separate objects, and leave them in the same file.**
+Follow steps 2-10 from the Scene Annotation Process (Section B) for all objects in the `processed.max` file. If multiple distinct objects are in the file, annotate them all as separate objects within this file.
 
-**IMPORTANT:** For the model ID component of the name (the first number after the category), use a [random 6-character string](https://www.random.org/strings/) rather than just an integer (0).
+**IMPORTANT:** For the `model_id` part of the name, use a **random 6-character lowercase string**, not just `0`.
 
-## 3\. Commit the File
+## 3\. Commit the Processed File
 
-After completing steps 2-10, from the scene guide and saving, run *git status*. You should see only the *processed.max* file added. Add, commit and push the file.
-
-**IMPORTANT:** Go to the spreadsheet and put a 1 in the “Processing Completed” column on the spreadsheet.
+1.  Save `processed.max`.
+2.  `git status` (Should show only `processed.max` modified).
+3.  `dvc add cad/objects/{category}-{xy}/processed.max`
+4.  `git add cad/objects/{category}-{xy}/processed.max.dvc cad/objects/{category}-{xy}/.gitignore` (Add the DVC file and potentially a gitignore if DVC created one).
+5.  `git commit -m "Process object {category}-{xy}"`.
+6.  `git push` (Push your branch).
+7.  **IMPORTANT**: Update spreadsheet: Mark `1` in **“Processing Completed”** column.
 
 ## 4\. Repeat
 
-Keep doing the above for all of the files assigned to you\!
-
-# D. Scene Objects Category / Synset QA Process
-
-For synset QA, the goal is to individually examine each object to make sure the category and synset assigned is correct. Instructions:
-
-1. Open the next unprocessed scene in 3ds Max. The scene files are located in D:\\ig\_pipeline\\cad\\scenes\\{scene\_name}\\processed.max. You can start with the grocery store scenes.  
-2. If prompted for anything (e.g. “scene converter”) hit X if possible. If prompted for units, ask to keep system units. **Do not save any changes onto the scene files.**  
-3. Put the camera into Perspective mode by clicking on the first menu in top-left of 3d viewport, next to the \+, and picking Perspective (or just click on the viewport and press P).  
-4. Make sure the Wireframe mode is disabled in the rightmost (3rd) menu next to the \+ on the top left of the viewport. Enable “Edged Faces” if you want to see the edges.  
-5. Press F11 to open the scripting console to see messages.  
-6. Repeatedly until you see the “Scene complete. Move to next scene.” message, do the below:  
-   1. Click on the Object QA button on the top toolbar. The next object that is unprocessed will be selected. Hit Z to focus on the object.  
-      1. **Important:** As soon as you click Object QA, the **next** object, which is opened and shown to you, will be marked **as completed.** As a result, make sure you have evaluated and finished work on the last object you see prior to finishing a QA session.  
-   2. Read the category and synset assignment in the scripting console. Verify them per the “category/synset things to check for” list discussed below.  
-   3. Take the following actions for any problems:  
-      1. If the object can’t reasonably be mapped to anything (for example, we have a bowl of guacamole as a single rigid body), add the object to our [Deletion Queue](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit#gid=701868150) together with an explanation.  
-      2. If the category name is correct, but the synset assignment is incorrect:  
-         1. Decide on the appropriate synset, using the WordNet viewer if necessary.  
-         2. Go to the [Category Mapping table](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit#gid=184473071), find the correct row and update the synset mapping. Remove the \`approved\` column value so that this updated entry will also be reviewed.  
-      3. If the category name is incorrect:  
-         1. Go to the [Object Rename table](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit#gid=1314512120). Enter the object name (category-6digitmodelID) into the first column. Enter the new category name into the third column. Verify that the “new synset” entry is what you expect.  
-         2. If you need to update the synset too or add a synset for a new category, go to the [Category Mapping table](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit#gid=184473071), find the correct row if it exists and add/update the synset mapping. Remove the \`approved\` column value so that this updated entry will also be reviewed.  
-7. Once you see the Scene complete message, mark the scene’s Object QA as completed on the [Scene Annotation table](https://docs.google.com/spreadsheets/d/10L8wjNDvr1XYMMHas4IYYP9ZK7TfQHu--Kzoi0qhAe4/edit#gid=0). Commit the QA pass file on Git to prevent data loss.  
-8. Open the next scene file and repeat.
-
-Category/synset things to check for:
-
-* Per section B8: Many original categories and synsets mapped *containers* of substances to the synsets corresponding to the substances themselves. This is problematic because in OmniGibson we have many substances and want to reserve the substance synsets for the actual substances.  
-  As a result, for all containers (typically bottles / cans / etc.), we are creating custom synsets that reflect the fact that the container is a *container* of some *substance.* These synsets need to be named substance\_\_container.n.01, **(note: there are two underscores between the two parts)**, and the respective categories simply substance\_container (single underscore).  
-  For example, a bottle of lemon juice can be put into a lemon\_juice\_bottle category which maps to a lemon\_juice\_\_bottle.n.01 synset.   
-  Typical options for the container part include bag, box, bottle, jar and can. For anything else, reach out to area leads for approval.
-
-# E. Object QA Process
-
-Setup process:
-
-1. Open the GitHub Desktop app (make sure it's showing the ig\_pipeline branch)  
-2. Check if it shows anything that's uncommitted. If it does, create a new branch and commit all the current changes. To do this, you click on the Current Branch button on the top menu, click New Branch, call it something like ruohan-temp, then tell it to Bring Over your work. Then on the left side select everything, and click the Commit button on the bottom left. The left side changed files list should be empty now.  
-3. Then go back to the current branch menu up top and switch to main  
-4. Click on the Fetch Origin button to the right of that (or if it shows Pull, skip to next step)  
-5. Click on the Pull button (again to the right of the current branch menu)  
-6. Download the dataset from [this link](https://storage.googleapis.com/gibson_scenes/dataset-5-3.zip) and extract it to D:\\dataset-5-3. Check that you extracted it correctly (e.g. D:\\dataset-5-3 should directly contain directories called objects, scenes, metadata)  
-7. At this point you are ready to start the QA \- open a terminal window (“Windows Terminal”) and run the below:  
-   1. conda activate pipeline  
-   2. cd D:\\ig\_pipeline  
-   3. python \-m b1k\_pipeline.qa\_viewer D:\\dataset-5-3 .\\qa-logs\\pass-one.json
-
-This should launch the QA script with pybullet on the side (note that the pass-one record file lists some objects as already done which is intentional \- Mona did them).
-
-QA process:
-
-* The QA process will ask you a number of questions.  
-*   For each question if you don't type in a complaint (e.g. you just hit enter) that means there is nothing wrong for that object for that question.  
-* When you type something it gets recorded into a JSON file for that object which I will help you push later.   
-* You will get six questions:  
-  * the synset mapping  
-  * whether the object looks OK (e.g. no glaring visual issues)  
-  * whether it is roughly the right size (need to use some intuition for this)  
-  * whether it MUST be simulated as a soft body e.g. we CAN’T realistically have this object be a rigid body. For example, blankets, clothes, etc. MUST be soft, whereas things like flowers can reasonably be rigid  
-  * whether it has the right meta links (e.g. does it need a fillable volume? a water source? etc.)  
-  * whether it has the right articulations and the articulations all look OK  
-* For the first question (is synset OK) you should repeat the process from before, e.g. if the synset assignment is not OK then you can simply add the entry into the rename table \- you shouldn't put in a complaint on the QA system.  
-* For the fifth question:  
-  * fluidsource: whether this object should have a fluid source location (typically for infinite stuff like sinks, deodorants, etc.)  
-  * togglebutton: a toggle button for enabling heating/fluid functionality  
-  * heatsource: if this object should have a location-based heat source (e.g. like a stove, lighter, candle). not needed for stuff like microwaves and ovens where it suffices to be inside  
-  * particleapplier: whether this object should have a particle spraying location  
-  * particleremover: whether this object should have a particle removing location (useful for cleaning tools, vacuums, lawnmower, etc)  
-  * fluidsink: whether this object should have a region that removes particles on contact, like a sink drain  
-  * slicer: whether this object should have a region that slices objects upon contact  
-  * fillable: whether this object should have a volume that can be checked for "filled" \- we should be able to generate this requirement from the BDDLs and it's not possible for you to tell whether the object has a reachable inside so it's OK to skip  
-  * attachment: should this object have any attachment points (no need to do this, I have a list of stuff that do)  
-* After you answer the 6th question it will move onto the next object. Comments are recorded every time you hit enter, objects are marked as done when you finish all questions about an object.  
-* You can CTRL+C out any time and continue where you left off by running the same python  command.  
-* I simply used low-res v-hacd for the collision meshes currently so the objects may not have correct collision meshes \- that is not a problem.
-
+Continue acquiring and processing objects assigned to you.

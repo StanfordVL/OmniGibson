@@ -1,6 +1,4 @@
-import json
 import numpy as np
-from scipy.spatial import ConvexHull
 import coacd
 import trimesh
 import subprocess
@@ -12,7 +10,6 @@ rt = pymxs.runtime
 import os
 import sys
 import tempfile
-import glob
 
 sys.path.append(r"D:\ig_pipeline")
 
@@ -20,41 +17,6 @@ from b1k_pipeline.utils import parse_name
 from b1k_pipeline.max.collision_vertex_reduction import reduce_mesh
 
 VHACD_EXECUTABLE = r"D:\ig_pipeline\b1k_pipeline\vhacd2.exe"
-
-
-def load_collision_selections():
-    selections = {}
-    for fn in glob.glob(r"D:\ig_pipeline\cad\*\*\artifacts\collision_selection.json"):
-        with open(fn) as f:
-            file_contents = json.load(f)
-            for obj_name, selection in file_contents.items():
-                m = parse_name(obj_name)
-                assert m, f"Failed to parse name {obj_name}"
-                model_id = m.group("model_id")
-                link_name = m.group("link_name") or "base_link"
-
-                preferred_method = None
-                preferred_hull_count = None
-                if selection == "chull" or selection == "bbox":
-                    preferred_method = "chull"
-                elif selection.startswith("coacd"):
-                    preferred_method = "coacd"
-                    preferred_hull_count = int(selection.split("-c_")[-1])
-                elif selection.startswith("vhacd"):
-                    preferred_method = "vhacd"
-                    preferred_hull_count = int(selection.split("-h")[-1])
-                else:
-                    raise ValueError(f"Unknown selection method {selection}")
-
-                selections[(model_id, link_name)] = (
-                    preferred_method,
-                    preferred_hull_count,
-                )
-
-    return selections
-
-
-COLLISION_SELECTIONS = load_collision_selections()
 
 
 def run_coacd(input_mesh, hull_count):
@@ -126,27 +88,23 @@ def run_vhacd(input_mesh, hull_count):
             raise ValueError(f"VHACD failed with exit code {e.returncode}")
 
 
-HULL_COUNTS = [4, 16, 32]
+HULL_COUNTS = [4, 8, 16, 32]
 USE_METHODS = {
-#       "coacd": run_coacd,
-#       "vhacd": run_vhacd,
+       "coacd": run_coacd,
+       "vhacd": run_vhacd,
 }
 
 
 def _create_collision_obj_from_verts_faces(vertices, faces, parent, tag):
-    # print("vertices", vertices.shape)
-    # print("faces", faces.shape)
-    # print("parent", parent.name)
-    # print("tag", tag)
-
     # Create a new node for the collision mesh
     collision_obj = rt.Editable_Mesh()
     rt.ConvertToPoly(collision_obj)
     parsed_name = parse_name(parent.name)
-    if parsed_name:
-        collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision{tag}"
-    else:
-        collision_obj.name = parent.name + "-Mcollision"
+    # if parsed_name:
+    #     collision_obj.name = f"{parsed_name.group('mesh_basename')}-Mcollision{tag}"
+    # else:
+    #     collision_obj.name = parent.name + "-Mcollision"
+    collision_obj.name = "collisioncandidate" + tag
     collision_obj.rotation = parent.rotation
     collision_obj.position = parent.position
 
@@ -170,7 +128,7 @@ def _create_collision_obj_from_verts_faces(vertices, faces, parent, tag):
     return collision_obj
 
 
-def generate_collision_mesh(obj, preferred_method=None, preferred_hull_count=None):
+def generate_convex_decompositions(obj, preferred_method=None, preferred_hull_count=None):
     if rt.classOf(obj) != rt.Editable_Poly:
         return
 
@@ -178,10 +136,13 @@ def generate_collision_mesh(obj, preferred_method=None, preferred_hull_count=Non
     verts = np.array(
         [rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))]
     )
+    face_selection = rt.polyop.GetFaceSelection(obj)
+    if face_selection.isEmpty:
+        face_selection = rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj))
     faces = (
         np.array(
             rt.polyop.getFacesVerts(
-                obj, rt.execute("#{1..%d}" % rt.polyop.GetNumFaces(obj))
+                obj, face_selection
             )
         )
         - 1
@@ -193,9 +154,10 @@ def generate_collision_mesh(obj, preferred_method=None, preferred_hull_count=Non
 
     # Run the convex hull option
     tm = trimesh.Trimesh(vertices=verts, faces=faces)
+    tm.remove_unreferenced_vertices()
 
     if preferred_method is None or preferred_method == "chull":
-        chull = tm.convex_hull
+        chull = reduce_mesh(tm.convex_hull)
         # TODO: Quadric decimation
         convex_hull_obj = _create_collision_obj_from_verts_faces(
             chull.vertices,
@@ -273,15 +235,6 @@ def generate_all_missing_collision_meshes():
         if parsed_name.group("joint_side") == "upper":
             continue
 
-        # Find out if the object has a collision selection
-        model_id = parsed_name.group("model_id")
-        link_name = parsed_name.group("link_name") or "base_link"
-        preferred_method, preferred_hull_count = None, None
-        if (model_id, link_name) in COLLISION_SELECTIONS:
-            preferred_method, preferred_hull_count = COLLISION_SELECTIONS[
-                (model_id, link_name)
-            ]
-
         # Does it already have a collision mesh? If so, move on.
         for child in obj.children:
             parsed_child_name = parse_name(child.name)
@@ -299,16 +252,14 @@ def generate_all_missing_collision_meshes():
                 break
         else:
             # Generate teh collision mesh if we didnt already find one.
-            generate_collision_mesh(
+            generate_convex_decompositions(
                 obj,
-                preferred_method=preferred_method,
-                preferred_hull_count=preferred_hull_count,
             )
 
 
 def main():
     for obj in rt.selection:
-        generate_collision_mesh(obj)
+        generate_convex_decompositions(obj)
 
 
 if __name__ == "__main__":
