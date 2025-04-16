@@ -1154,5 +1154,14 @@
     "type": "category",
     "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: hanging_plant\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
     "id": 6483
+  },
+  {
+    "id": 6869,
+    "object": "fixed_window-ywetvt",
+    "type": "appearance",
+    "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
+    "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
   }
 ]

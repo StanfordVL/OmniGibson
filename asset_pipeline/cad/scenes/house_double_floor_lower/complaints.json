@@ -1689,5 +1689,23 @@
     "type": "collision",
     "additional_info": "Was at least one of the collision mesh candidates acceptable?",
     "id": 5170
+  },
+  {
+    "id": 6864,
+    "object": "fixed_window-lhzwtz",
+    "type": "appearance",
+    "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
+    "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 6886,
+    "object": "fixed_window-kvdqep",
+    "type": "appearance",
+    "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
+    "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
   }
 ]
