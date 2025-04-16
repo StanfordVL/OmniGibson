@@ -20,7 +20,7 @@ jobs:
           architecture: x64
 
       - name: Install DVC
-        run: pip install dvc[gs]
+        run: pip install dvc[gs]===3.42.0
         
       - name: Authenticate on Google Cloud
         uses: 'google-github-actions/auth@v1'
@@ -31,7 +31,5 @@ jobs:
         run: dvc pull artifacts/pipeline/object_inventory.json
 
       # dvc status returns empty dict JSON if everything is up to date. check that using jq.
-      - name: Check the status of the object inventory target
-        run: |
-          dvc status --json object_inventory
-          dvc status --json object_inventory | jq -e '. == {}'
+      - name: Check the status of the object inventory stage
+        run: python b1k_pipeline/check_dvc_stage_current.py object_inventory
