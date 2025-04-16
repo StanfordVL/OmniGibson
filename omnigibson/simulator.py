@@ -393,6 +393,8 @@ def _launch_simulator(*args, **kwargs):
             # Create world prim
             self.stage.DefinePrim("/World", "Xform")
 
+            # Cycle play / stop to validate sim.psi object to avoid getPhysXSceneStatistics errors
+            self.play()
             self.stop()
 
             for state in self.object_state_types_requiring_update:
@@ -644,7 +646,7 @@ def _launch_simulator(*args, **kwargs):
                 name="skybox",
                 category="background",
                 light_type="Dome",
-                intensity=1500,
+                intensity=2500,
                 fixed_base=True,
             )
             self._skybox.load(None)
