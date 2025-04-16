@@ -8,16 +8,18 @@
         sink.n.01_1 - sink.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
+        countertop.n.01_1 - countertop.n.01
     )
     
     (:init 
-        (ontop plate.n.04_1 sink.n.01_1)
-        (ontop plate.n.04_2 sink.n.01_1)
-        (ontop plate.n.04_3 sink.n.01_1)
+        (ontop plate.n.04_1 countertop.n.01_1)
+        (ontop plate.n.04_2 countertop.n.01_1)
+        (ontop plate.n.04_3 countertop.n.01_1)
         (ontop scrub_brush.n.01_1 sink.n.01_1)
         (covered plate.n.04_1 stain.n.01_1)
         (covered plate.n.04_2 stain.n.01_1)
         (covered plate.n.04_3 stain.n.01_1)
+        (inroom countertop.n.01_1 kitchen)
         (inroom sink.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen)
         (ontop agent.n.01_1 floor.n.01_1)
