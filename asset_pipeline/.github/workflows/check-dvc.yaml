@@ -33,4 +33,5 @@ jobs:
       # dvc status returns empty dict JSON if everything is up to date. check that using jq.
       - name: Check the status of the object inventory target
         run: |
-          dvc status --json object_inventory | tee /dev/tty | jq -e '. == {}'
+          dvc status --json object_inventory
+          dvc status --json object_inventory | jq -e '. == {}'
