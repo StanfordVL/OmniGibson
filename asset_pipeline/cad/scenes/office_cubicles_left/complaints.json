@@ -1,664 +1,748 @@
 [
-    {
-        "object": "desk_phone-kpxrpb",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "document-mougvz",
-        "complaint": "wensi: objecg missing baseboard",
-        "processed": true,
-        "type": "collision",
-        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
-    },
-    {
-        "object": "room_light-jnnhzm",
-        "complaint": "rectangular_light",
-        "processed": true,
-        "new": true,
-        "type": "category",
-        "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: room_light\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category."
-    },
-    {
-        "object": "room_light-jnnhzm",
-        "complaint": "light rectangle is apart from the light fixture",
-        "processed": true,
-        "new": true,
-        "type": "connectedness",
-        "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts."
-    },
-    {
-        "object": "room_light-jnnhzm",
-        "complaint": "light rectangle is apart from the light fixture",
-        "processed": true,
-        "new": true,
-        "type": "appearance",
-        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
-    },
-    {
-        "object": "room_light-nsjice",
-        "complaint": "rectangular_light",
-        "processed": true,
-        "new": true,
-        "type": "category",
-        "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: room_light\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category."
-    },
-    {
-        "object": "room_light-nsjice",
-        "complaint": "has artifacts on side of light. or i can't tell what the texture is",
-        "processed": true,
-        "new": true,
-        "type": "appearance",
-        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
-    },
-    {
-        "object": "swivel_chair-gfixyb",
-        "complaint": "Auto-generated 2025",
-        "processed": false,
-        "type": "centerofmass",
-        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
-    },
-    {
-        "object": "swivel_chair-ryznxk",
-        "complaint": "Auto-generated 2025",
-        "processed": false,
-        "type": "centerofmass",
-        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
-    },
-    {
-        "object": "swivel_chair-uauzsu",
-        "complaint": "Auto-generated 2025",
-        "processed": false,
-        "type": "centerofmass",
-        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
-    },
-    {
-        "object": "swivel_chair-ucawqa",
-        "complaint": "Auto-generated 2025",
-        "processed": false,
-        "type": "centerofmass",
-        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
-    },
-    {
-        "object": "walls-bwmadg",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-crydgh",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "category",
-        "additional_info": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category."
-    },
-    {
-        "object": "walls-ddqeze",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-eimtph",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-elcxze",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structuretriangulation",
-        "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator."
-    },
-    {
-        "object": "walls-fbdhsz",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-fmzgpb",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-fmzgpb",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "walls-hdgaqd",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-hmdsyk",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structureunclosed",
-        "additional_info": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume."
-    },
-    {
-        "object": "walls-iuloqw",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structuretriangulation",
-        "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator."
-    },
-    {
-        "object": "walls-ixenbe",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "walls-lvqeld",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structuretriangulation",
-        "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator."
-    },
-    {
-        "object": "walls-mfpqjg",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-mfpqjg",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structureunclosed",
-        "additional_info": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume."
-    },
-    {
-        "object": "walls-muwkdc",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "appearance",
-        "additional_info": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation."
-    },
-    {
-        "object": "walls-muwkdc",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-nfbxyk",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-ohtlts",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structuretriangulation",
-        "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator."
-    },
-    {
-        "object": "walls-oqwhij",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-oqwhij",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "walls-pqlfzl",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-qezwuh",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-sncalh",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structuretriangulation",
-        "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator."
-    },
-    {
-        "object": "walls-tdinuq",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-tsohkj",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "walls-uoulwl",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-upznaz",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-urpcxk",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-urpcxk",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structureunclosed",
-        "additional_info": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume."
-    },
-    {
-        "object": "walls-urpcxk",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "walls-vntmsm",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-vntmsm",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "walls-vtryow",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-wltliw",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-xnwlii",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-xobhmb",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-yznose",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "walls-zcdbxz",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structuretriangulation",
-        "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator."
-    },
-    {
-        "object": "walls-zqoqkq",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "ceilings-cxkvpr",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "ceilings-gpnify",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "ceilings-heevjg",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "ceilings-ipmtjd",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "door-xqxiyb",
-        "complaint": "no handle",
-        "processed": true,
-        "type": "collision",
-        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
-    },
-    {
-        "object": "door-xqxiyb",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "notepad-njeocp",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "collision",
-        "additional_info": ""
-    },
-    {
-        "object": "painting-lxirlt",
-        "complaint": "not watertight",
-        "processed": true,
-        "type": "collision",
-        "additional_info": "Was at least one of the collision mesh candidates acceptable?"
-    },
-    {
-        "object": "table_lamp-gycqmt",
-        "complaint": "center of mass needs to be annotated",
-        "processed": true,
-        "new": true,
-        "type": "appearance",
-        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
-    },
-    {
-        "object": "table_lamp-gycqmt",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "centerofmass",
-        "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass."
-    },
-    {
-        "object": "table_lamp-gycqmt",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "appearance",
-        "additional_info": ""
-    },
-    {
-        "object": "table_lamp-gycqmt",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "unknown",
-        "additional_info": ""
-    },
-    {
-        "object": "table_lamp-gycqmt",
-        "complaint": "Auto-generated 2025",
-        "processed": false,
-        "type": "centerofmass",
-        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
-    },
-    {
-        "object": "cubicle-deceti",
-        "complaint": "window part is not glass",
-        "processed": true,
-        "new": true,
-        "type": "appearance",
-        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
-    },
-    {
-        "object": "cubicle-hzalfx",
-        "complaint": "window part is not glass. artifacts on outer walls",
-        "processed": true,
-        "new": true,
-        "type": "appearance",
-        "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
-    },
-    {
-        "object": "floors-hgmnot",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-kraeyl",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-muywul",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-nhcbxy",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-ojzcvk",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
-        "new": true,
-        "type": "appearance",
-        "additional_info": ""
-    },
-    {
-        "object": "floors-oxwqrw",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-qtumre",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-tsqhlh",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-wmzbql",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-xmgdee",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structureconnectedness",
-        "additional_info": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects."
-    },
-    {
-        "object": "floors-xmgdee",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-xubdst",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-ydhbul",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "floors-znxlvq",
-        "complaint": "See message",
-        "processed": true,
-        "new": true,
-        "type": "structurethickness",
-        "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness."
-    },
-    {
-        "object": "mouse-pljjtu",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
-        "new": true,
-        "type": "metalink",
-        "additional_info": ""
-    },
-    {
-        "object": "pot_plant-dbjcic",
-        "complaint": "Auto-generated 2025",
-        "processed": false,
-        "type": "centerofmass",
-        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
-    },
-    {
-        "object": "pot_plant-iblutb",
-        "complaint": "Auto-generated 2025",
-        "processed": false,
-        "type": "centerofmass",
-        "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass."
-    },
-    {
-        "object": "printer-kqmlho",
-        "complaint": "\u001b[F",
-        "processed": true,
-        "new": true,
-        "type": "category",
-        "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: printer.n.03\nDefinition: a machine that prints\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category."
-    }
+  {
+    "object": "desk_phone-kpxrpb",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 5948
+  },
+  {
+    "object": "document-mougvz",
+    "complaint": "wensi: objecg missing baseboard",
+    "processed": true,
+    "type": "collision",
+    "additional_info": "Was at least one of the collision mesh candidates acceptable?",
+    "id": 5949
+  },
+  {
+    "object": "room_light-jnnhzm",
+    "complaint": "rectangular_light",
+    "processed": true,
+    "new": true,
+    "type": "category",
+    "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: room_light\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+    "id": 5950
+  },
+  {
+    "object": "room_light-jnnhzm",
+    "complaint": "light rectangle is apart from the light fixture",
+    "processed": true,
+    "new": true,
+    "type": "connectedness",
+    "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+    "id": 5951
+  },
+  {
+    "object": "room_light-jnnhzm",
+    "complaint": "light rectangle is apart from the light fixture",
+    "processed": true,
+    "new": true,
+    "type": "appearance",
+    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "id": 5952
+  },
+  {
+    "object": "room_light-nsjice",
+    "complaint": "rectangular_light",
+    "processed": true,
+    "new": true,
+    "type": "category",
+    "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: room_light\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
+    "id": 5953
+  },
+  {
+    "object": "room_light-nsjice",
+    "complaint": "has artifacts on side of light. or i can't tell what the texture is",
+    "processed": true,
+    "new": true,
+    "type": "appearance",
+    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "id": 5954
+  },
+  {
+    "object": "swivel_chair-gfixyb",
+    "complaint": "Auto-generated 2025",
+    "processed": false,
+    "type": "centerofmass",
+    "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
+    "id": 5955
+  },
+  {
+    "object": "swivel_chair-ryznxk",
+    "complaint": "Auto-generated 2025",
+    "processed": false,
+    "type": "centerofmass",
+    "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
+    "id": 5956
+  },
+  {
+    "object": "swivel_chair-uauzsu",
+    "complaint": "Auto-generated 2025",
+    "processed": false,
+    "type": "centerofmass",
+    "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
+    "id": 5957
+  },
+  {
+    "object": "swivel_chair-ucawqa",
+    "complaint": "Auto-generated 2025",
+    "processed": false,
+    "type": "centerofmass",
+    "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
+    "id": 5958
+  },
+  {
+    "object": "walls-bwmadg",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5959
+  },
+  {
+    "object": "walls-crydgh",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "category",
+    "additional_info": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
+    "id": 5960
+  },
+  {
+    "object": "walls-ddqeze",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5961
+  },
+  {
+    "object": "walls-eimtph",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5962
+  },
+  {
+    "object": "walls-elcxze",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structuretriangulation",
+    "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
+    "id": 5963
+  },
+  {
+    "object": "walls-fbdhsz",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5964
+  },
+  {
+    "object": "walls-fmzgpb",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5965
+  },
+  {
+    "object": "walls-fmzgpb",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 5966
+  },
+  {
+    "object": "walls-hdgaqd",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5967
+  },
+  {
+    "object": "walls-hmdsyk",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structureunclosed",
+    "additional_info": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+    "id": 5968
+  },
+  {
+    "object": "walls-iuloqw",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structuretriangulation",
+    "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
+    "id": 5969
+  },
+  {
+    "object": "walls-ixenbe",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 5970
+  },
+  {
+    "object": "walls-lvqeld",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structuretriangulation",
+    "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
+    "id": 5971
+  },
+  {
+    "object": "walls-mfpqjg",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5972
+  },
+  {
+    "object": "walls-mfpqjg",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structureunclosed",
+    "additional_info": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+    "id": 5973
+  },
+  {
+    "object": "walls-muwkdc",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "appearance",
+    "additional_info": "STRUCTURE-APPEARANCE: Something is wrong with how this object looks in simulation.",
+    "id": 5974
+  },
+  {
+    "object": "walls-muwkdc",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5975
+  },
+  {
+    "object": "walls-nfbxyk",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5976
+  },
+  {
+    "object": "walls-ohtlts",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structuretriangulation",
+    "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
+    "id": 5977
+  },
+  {
+    "object": "walls-oqwhij",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5978
+  },
+  {
+    "object": "walls-oqwhij",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 5979
+  },
+  {
+    "object": "walls-pqlfzl",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5980
+  },
+  {
+    "object": "walls-qezwuh",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5981
+  },
+  {
+    "object": "walls-sncalh",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structuretriangulation",
+    "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
+    "id": 5982
+  },
+  {
+    "object": "walls-tdinuq",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5983
+  },
+  {
+    "object": "walls-tsohkj",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 5984
+  },
+  {
+    "object": "walls-uoulwl",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5985
+  },
+  {
+    "object": "walls-upznaz",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5986
+  },
+  {
+    "object": "walls-urpcxk",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5987
+  },
+  {
+    "object": "walls-urpcxk",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structureunclosed",
+    "additional_info": "STRUCTURE-UNCLOSED: This object is not a closed mesh: at least one of its sides is open when it should be a solid volume.",
+    "id": 5988
+  },
+  {
+    "object": "walls-urpcxk",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 5989
+  },
+  {
+    "object": "walls-vntmsm",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5990
+  },
+  {
+    "object": "walls-vntmsm",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 5991
+  },
+  {
+    "object": "walls-vtryow",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5992
+  },
+  {
+    "object": "walls-wltliw",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5993
+  },
+  {
+    "object": "walls-xnwlii",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5994
+  },
+  {
+    "object": "walls-xobhmb",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5995
+  },
+  {
+    "object": "walls-yznose",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5996
+  },
+  {
+    "object": "walls-zcdbxz",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structuretriangulation",
+    "additional_info": "STRUCTURE-TRIANGULATION: This object seems to suffer from triangulation issues. Verify that this is fixed with new triangulator.",
+    "id": 5997
+  },
+  {
+    "object": "walls-zqoqkq",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 5998
+  },
+  {
+    "object": "ceilings-cxkvpr",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 5999
+  },
+  {
+    "object": "ceilings-gpnify",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 6000
+  },
+  {
+    "object": "ceilings-heevjg",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 6001
+  },
+  {
+    "object": "ceilings-ipmtjd",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 6002
+  },
+  {
+    "object": "door-xqxiyb",
+    "complaint": "no handle",
+    "processed": true,
+    "type": "collision",
+    "additional_info": "Was at least one of the collision mesh candidates acceptable?",
+    "id": 6003
+  },
+  {
+    "object": "door-xqxiyb",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 6004
+  },
+  {
+    "object": "notepad-njeocp",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "processed": false,
+    "new": true,
+    "type": "collision",
+    "additional_info": "",
+    "id": 6005
+  },
+  {
+    "object": "painting-lxirlt",
+    "complaint": "not watertight",
+    "processed": true,
+    "type": "collision",
+    "additional_info": "Was at least one of the collision mesh candidates acceptable?",
+    "id": 6006
+  },
+  {
+    "object": "table_lamp-gycqmt",
+    "complaint": "center of mass needs to be annotated",
+    "processed": true,
+    "new": true,
+    "type": "appearance",
+    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "id": 6007
+  },
+  {
+    "object": "table_lamp-gycqmt",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "centerofmass",
+    "additional_info": "CENTEROFMASS: This object is a lamp object. Those objects might have a tendency to tip over because the automatically generated center of mass does not represent the heavy base. Consider annotating a center of mass.",
+    "id": 6008
+  },
+  {
+    "object": "table_lamp-gycqmt",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "processed": false,
+    "new": true,
+    "type": "appearance",
+    "additional_info": "",
+    "id": 6009
+  },
+  {
+    "object": "table_lamp-gycqmt",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "processed": false,
+    "new": true,
+    "type": "unknown",
+    "additional_info": "",
+    "id": 6010
+  },
+  {
+    "object": "table_lamp-gycqmt",
+    "complaint": "Auto-generated 2025",
+    "processed": false,
+    "type": "centerofmass",
+    "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
+    "id": 6011
+  },
+  {
+    "object": "cubicle-deceti",
+    "complaint": "window part is not glass",
+    "processed": true,
+    "new": true,
+    "type": "appearance",
+    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "id": 6012
+  },
+  {
+    "object": "cubicle-hzalfx",
+    "complaint": "window part is not glass. artifacts on outer walls",
+    "processed": true,
+    "new": true,
+    "type": "appearance",
+    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "id": 6013
+  },
+  {
+    "object": "floors-hgmnot",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6014
+  },
+  {
+    "object": "floors-kraeyl",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6015
+  },
+  {
+    "object": "floors-muywul",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6016
+  },
+  {
+    "object": "floors-nhcbxy",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6017
+  },
+  {
+    "object": "floors-ojzcvk",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+    "processed": false,
+    "new": true,
+    "type": "appearance",
+    "additional_info": "",
+    "id": 6018
+  },
+  {
+    "object": "floors-oxwqrw",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6019
+  },
+  {
+    "object": "floors-qtumre",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6020
+  },
+  {
+    "object": "floors-tsqhlh",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6021
+  },
+  {
+    "object": "floors-wmzbql",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6022
+  },
+  {
+    "object": "floors-xmgdee",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structureconnectedness",
+    "additional_info": "STRUCTURE-MULTIPLE-PIECES: This object is made up of multiple pieces - it should be broken apart. Please consult w/ Cem on how to do this for things like pavers - we want those to be together, but we want large, disjoint flat pieces of floor to be separate objects.",
+    "id": 6023
+  },
+  {
+    "object": "floors-xmgdee",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6024
+  },
+  {
+    "object": "floors-xubdst",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6025
+  },
+  {
+    "object": "floors-ydhbul",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6026
+  },
+  {
+    "object": "floors-znxlvq",
+    "complaint": "See message",
+    "processed": true,
+    "new": true,
+    "type": "structurethickness",
+    "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
+    "id": 6027
+  },
+  {
+    "object": "mouse-pljjtu",
+    "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
+    "processed": false,
+    "new": true,
+    "type": "metalink",
+    "additional_info": "",
+    "id": 6028
+  },
+  {
+    "object": "pot_plant-dbjcic",
+    "complaint": "Auto-generated 2025",
+    "processed": false,
+    "type": "centerofmass",
+    "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
+    "id": 6029
+  },
+  {
+    "object": "pot_plant-iblutb",
+    "complaint": "Auto-generated 2025",
+    "processed": false,
+    "type": "centerofmass",
+    "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
+    "id": 6030
+  },
+  {
+    "object": "printer-kqmlho",
+    "complaint": "\u001b[F",
+    "processed": true,
+    "new": true,
+    "type": "category",
+    "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: printer.n.03\nDefinition: a machine that prints\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
+    "id": 6031
+  }
 ]
