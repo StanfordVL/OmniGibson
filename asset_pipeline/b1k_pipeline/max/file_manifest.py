@@ -70,7 +70,7 @@ def hash_attrs(obj):
     # it makes the files grow to tens of megabytes and makes them really hard to diff so we don't do that.
     # But if you want to, just return hash_dict instead of the hash to get the full information for
     # debugging.
-    return hash_single_thing(hash_dict)
+    return {"unified_hash": hash_single_thing(hash_dict)}
 
 def hash_material(root_mat):
     """
@@ -105,7 +105,7 @@ def hash_material(root_mat):
                     _recursively_hash_materials_and_textures(sub_texmap, partial_hash_dict["subtexmaps"][sub_texmap_slot_name])
 
     _recursively_hash_materials_and_textures(root_mat, hash_dict)
-    return hash_dict
+    return hash_single_thing(hash_dict)   # Here too it's possible to just return the dict rather than hashing it again.
 
 def main():
     # Go through all the objects and store their information.
