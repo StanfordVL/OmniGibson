@@ -145,36 +145,36 @@ stages:
     outs:
     - artifacts/pipeline/export_meshes.success
 
-  generate_max_object_images:
-    # List the objects found in the entry.
-    foreach: ${combined_unfiltered}
-    do:
-      cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_max_object_images.py'
-      deps:
-      - b1k_pipeline/max/generate_max_object_images.py
-      - cad/${item}/processed.max
-      - artifacts/pipeline/sanitycheck.success
-      outs:
-      - cad/${item}/artifacts/generate_max_object_images.json
-      - cad/${item}/artifacts/max_object_images.zip
+  # generate_max_object_images:
+  #   # List the objects found in the entry.
+  #   foreach: ${combined_unfiltered}
+  #   do:
+  #     cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_max_object_images.py'
+  #     deps:
+  #     - b1k_pipeline/max/generate_max_object_images.py
+  #     - cad/${item}/processed.max
+  #     - artifacts/pipeline/sanitycheck.success
+  #     outs:
+  #     - cad/${item}/artifacts/generate_max_object_images.json
+  #     - cad/${item}/artifacts/max_object_images.zip
 
-  generate_max_object_images_success:
-    cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json artifacts/pipeline/generate_max_object_images.success'
-    deps:
-    - cad/#{combined}/artifacts/generate_max_object_images.json
-    - b1k_pipeline/check_success_aggregate.py
-    - params.yaml
-    outs:
-    - artifacts/pipeline/generate_max_object_images.success
+  # generate_max_object_images_success:
+  #   cmd: 'python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json artifacts/pipeline/generate_max_object_images.success'
+  #   deps:
+  #   - cad/#{combined}/artifacts/generate_max_object_images.json
+  #   - b1k_pipeline/check_success_aggregate.py
+  #   - params.yaml
+  #   outs:
+  #   - artifacts/pipeline/generate_max_object_images.success
 
-  aggregate_max_object_images:
-    cmd: 'python -m b1k_pipeline.aggregate_max_object_images'
-    deps:
-    - b1k_pipeline/aggregate_max_object_images.py
-    - cad/#{combined}/artifacts/max_object_images.zip
-    - artifacts/pipeline/generate_max_object_images.success
-    outs:
-    - artifacts/pipeline/max_object_images.zip
+  # aggregate_max_object_images:
+  #   cmd: 'python -m b1k_pipeline.aggregate_max_object_images'
+  #   deps:
+  #   - b1k_pipeline/aggregate_max_object_images.py
+  #   - cad/#{combined}/artifacts/max_object_images.zip
+  #   - artifacts/pipeline/generate_max_object_images.success
+  #   outs:
+  #   - artifacts/pipeline/max_object_images.zip
 
   export_objs_global:
     # Process exported meshes into iGibson objects.
