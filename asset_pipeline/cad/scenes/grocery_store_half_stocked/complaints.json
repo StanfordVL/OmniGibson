@@ -401,14 +401,6 @@
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now."
     },
     {
-        "object": "carton_of_milk-atyqub",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
-        "new": true,
-        "type": "appearance",
-        "additional_info": ""
-    },
-    {
         "object": "ceilings-fonjvd",
         "complaint": "not watertight",
         "processed": true,
