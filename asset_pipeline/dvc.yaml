@@ -479,6 +479,105 @@ stages:
     - b1k_pipeline/check_success.py
     outs:
     - artifacts/pipeline/collision_average_volumes.success
+  combined_file_manifest:
+    cmd: python -m b1k_pipeline.combined_file_manifest
+    deps:
+    - cad/objects/batch-00/artifacts/file_manifest.json
+    - cad/objects/batch-01/artifacts/file_manifest.json
+    - cad/objects/batch-02/artifacts/file_manifest.json
+    - cad/objects/batch-03/artifacts/file_manifest.json
+    - cad/objects/batch-04/artifacts/file_manifest.json
+    - cad/objects/batch-05/artifacts/file_manifest.json
+    - cad/objects/batch-06/artifacts/file_manifest.json
+    - cad/objects/batch-07/artifacts/file_manifest.json
+    - cad/objects/batch-08/artifacts/file_manifest.json
+    - cad/objects/batch-09/artifacts/file_manifest.json
+    - cad/objects/batch-10/artifacts/file_manifest.json
+    - cad/objects/batch-11/artifacts/file_manifest.json
+    - cad/objects/batch-12/artifacts/file_manifest.json
+    - cad/objects/batch-13/artifacts/file_manifest.json
+    - cad/objects/custom-aa/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-00/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-01/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-02/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-03/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-04/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-05/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-06/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-07/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-08/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-09/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-10/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-11/artifacts/file_manifest.json
+    - cad/objects/legacy_batch-12/artifacts/file_manifest.json
+    - cad/objects/procedural-aa/artifacts/file_manifest.json
+    - cad/objects/school_objects-aa/artifacts/file_manifest.json
+    - cad/objects/substances-01/artifacts/file_manifest.json
+    - cad/objects/substances-02/artifacts/file_manifest.json
+    - cad/objects/task_relavant-ab/artifacts/file_manifest.json
+    - cad/objects/task_relevant-xy/artifacts/file_manifest.json
+    - cad/scenes/Beechwood_0_garden/artifacts/file_manifest.json
+    - cad/scenes/Beechwood_0_int/artifacts/file_manifest.json
+    - cad/scenes/Beechwood_1_int/artifacts/file_manifest.json
+    - cad/scenes/Benevolence_0_int/artifacts/file_manifest.json
+    - cad/scenes/Benevolence_1_int/artifacts/file_manifest.json
+    - cad/scenes/Benevolence_2_int/artifacts/file_manifest.json
+    - cad/scenes/Ihlen_0_int/artifacts/file_manifest.json
+    - cad/scenes/Ihlen_1_int/artifacts/file_manifest.json
+    - cad/scenes/Merom_0_garden/artifacts/file_manifest.json
+    - cad/scenes/Merom_0_int/artifacts/file_manifest.json
+    - cad/scenes/Merom_1_int/artifacts/file_manifest.json
+    - cad/scenes/Pomaria_0_garden/artifacts/file_manifest.json
+    - cad/scenes/Pomaria_0_int/artifacts/file_manifest.json
+    - cad/scenes/Pomaria_1_int/artifacts/file_manifest.json
+    - cad/scenes/Pomaria_2_int/artifacts/file_manifest.json
+    - cad/scenes/Rs_garden/artifacts/file_manifest.json
+    - cad/scenes/Rs_int/artifacts/file_manifest.json
+    - cad/scenes/Wainscott_0_garden/artifacts/file_manifest.json
+    - cad/scenes/Wainscott_0_int/artifacts/file_manifest.json
+    - cad/scenes/Wainscott_1_int/artifacts/file_manifest.json
+    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/file_manifest.json
+    - cad/scenes/commercial_kitchen_pans/artifacts/file_manifest.json
+    - cad/scenes/gates_bedroom/artifacts/file_manifest.json
+    - cad/scenes/grocery_store_asian/artifacts/file_manifest.json
+    - cad/scenes/grocery_store_cafe/artifacts/file_manifest.json
+    - cad/scenes/grocery_store_convenience/artifacts/file_manifest.json
+    - cad/scenes/grocery_store_half_stocked/artifacts/file_manifest.json
+    - cad/scenes/hall_arch_wood/artifacts/file_manifest.json
+    - cad/scenes/hall_conference_large/artifacts/file_manifest.json
+    - cad/scenes/hall_glass_ceiling/artifacts/file_manifest.json
+    - cad/scenes/hall_train_station/artifacts/file_manifest.json
+    - cad/scenes/hotel_gym_spa/artifacts/file_manifest.json
+    - cad/scenes/hotel_suite_large/artifacts/file_manifest.json
+    - cad/scenes/hotel_suite_small/artifacts/file_manifest.json
+    - cad/scenes/house_double_floor_lower/artifacts/file_manifest.json
+    - cad/scenes/house_double_floor_upper/artifacts/file_manifest.json
+    - cad/scenes/house_single_floor/artifacts/file_manifest.json
+    - cad/scenes/office_bike/artifacts/file_manifest.json
+    - cad/scenes/office_cubicles_left/artifacts/file_manifest.json
+    - cad/scenes/office_cubicles_right/artifacts/file_manifest.json
+    - cad/scenes/office_large/artifacts/file_manifest.json
+    - cad/scenes/office_vendor_machine/artifacts/file_manifest.json
+    - cad/scenes/public_restroom_blue/artifacts/file_manifest.json
+    - cad/scenes/public_restroom_brown/artifacts/file_manifest.json
+    - cad/scenes/public_restroom_futuristic/artifacts/file_manifest.json
+    - cad/scenes/public_restroom_marble/artifacts/file_manifest.json
+    - cad/scenes/public_restroom_white/artifacts/file_manifest.json
+    - cad/scenes/restaurant_asian/artifacts/file_manifest.json
+    - cad/scenes/restaurant_brunch/artifacts/file_manifest.json
+    - cad/scenes/restaurant_cafeteria/artifacts/file_manifest.json
+    - cad/scenes/restaurant_diner/artifacts/file_manifest.json
+    - cad/scenes/restaurant_hotel/artifacts/file_manifest.json
+    - cad/scenes/restaurant_urban/artifacts/file_manifest.json
+    - cad/scenes/school_biology/artifacts/file_manifest.json
+    - cad/scenes/school_chemistry/artifacts/file_manifest.json
+    - cad/scenes/school_computer_lab_and_infirmary/artifacts/file_manifest.json
+    - cad/scenes/school_geography/artifacts/file_manifest.json
+    - cad/scenes/school_gym/artifacts/file_manifest.json
+    - b1k_pipeline/combined_file_manifest.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/combined_file_manifest.json
   combined_room_object_list:
     cmd: python -m b1k_pipeline.combined_room_object_list
     deps:
