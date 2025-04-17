@@ -312,7 +312,7 @@ class OGRobotServer:
                 },
             }
             
-            if MULTI_VIEW_MODE:
+            if VIEWING_MODE == ViewingMode.MULTI_VIEW_1:
                 cfg["env"]["external_sensors"].append(
                     get_camera_config(name="external_sensor1", 
                                       relative_prim_path="/controllable__r1__robot_r1/base_link/external_sensor1", 
