@@ -660,8 +660,12 @@ class OGRobotServer:
         self.object_beacons = {}
 
         if self.task_name is not None:
-            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() if bddl_obj.wrapped_obj is not None]
-            self.task_relevant_objects = [obj for obj in task_objects if obj.category != "agent" and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
+            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() 
+                            if bddl_obj.wrapped_obj is not None]
+            self.task_relevant_objects = [obj for obj in task_objects 
+                                        if not isinstance(obj, BaseSystem)
+                                        and obj.category != "agent" 
+                                        and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
             random_colors = lazy.omni.replicator.core.random_colours(N=len(self.task_relevant_objects))[:, :3].tolist()
             
             # Normalize colors from 0-255 to 0-1 range
@@ -701,7 +705,8 @@ class OGRobotServer:
                 self.object_beacons[obj] = beacon
                 beacon.visible = False
             self.task_irrelevant_objects = [obj for obj in self.env.scene.objects
-                                        if obj not in task_objects
+                                        if not isinstance(obj, BaseSystem)
+                                        and obj not in task_objects
                                         and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
             
             self._setup_task_instruction_ui()
