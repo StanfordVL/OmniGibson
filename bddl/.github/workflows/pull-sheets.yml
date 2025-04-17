@@ -97,6 +97,11 @@ jobs:
       working-directory: bddl
       run: python -m bddl.data_generation.generate_datafiles
 
+    # We want to check if the knowledgebase imports correctly, and if not, we want to NOT do the pull
+    # because it will result in a permamently broken knowledgebase that blocks sampling and website.
+    - name: Test if knowledgebase loads OK
+      run: python -c "from bddl.knowledge_base import *"
+
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: "Sync Google Sheets data"
