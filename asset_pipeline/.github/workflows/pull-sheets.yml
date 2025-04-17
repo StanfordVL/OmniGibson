@@ -31,6 +31,10 @@ jobs:
       with:
         credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
+    - uses: webfactory/ssh-agent@v0.9.0
+      with:
+          ssh-private-key: ${{ secrets.SHEETS_DEPLOY_KEY }}
+
     - name: Refresh sheets data
       run: python -m b1k_pipeline.pull_sheets
 

@@ -379,5 +379,41 @@
     "type": "appearance",
     "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes.",
     "id": 4754
+  },
+  {
+    "id": 6858,
+    "object": "fixed_window-asrqdf",
+    "type": "appearance",
+    "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
+    "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 6863,
+    "object": "fixed_window-vsifsu",
+    "type": "appearance",
+    "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
+    "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 6868,
+    "object": "fixed_window-cmuvzz",
+    "type": "appearance",
+    "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
+    "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 6872,
+    "object": "fixed_window-vqbgzc",
+    "type": "appearance",
+    "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
+    "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
   }
 ]

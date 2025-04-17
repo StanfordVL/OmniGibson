@@ -9,7 +9,17 @@ stages:
       - cad/${item}/processed.max
       outs:
       - cad/${item}/artifacts/file_manifest.json
-  
+
+  combined_file_manifest:
+    # Combine the file manifest into a single file for diffing.
+    cmd: 'python -m b1k_pipeline.combined_file_manifest'
+    deps:
+    - cad/#{combined_unfiltered}/artifacts/file_manifest.json
+    - b1k_pipeline/combined_file_manifest.py
+    - params.yaml
+    outs:
+    - artifacts/pipeline/combined_file_manifest.json
+
   object_list:
     # List the objects found in the entry.
     foreach: ${combined_unfiltered}

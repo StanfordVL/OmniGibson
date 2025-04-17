@@ -92,5 +92,14 @@
     "type": "appearance",
     "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes.",
     "id": 4318
+  },
+  {
+    "id": 6879,
+    "object": "fixed_window-xdxisn",
+    "type": "appearance",
+    "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
+    "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
   }
 ]
