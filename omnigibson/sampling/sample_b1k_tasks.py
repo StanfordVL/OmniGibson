@@ -31,7 +31,7 @@ TASK_CUSTOM_LISTS = {
         "whitelist": {
             "pad.n.01": {
                 "sticky_note": ["tghqep"],
-            }
+            },
         },
         "blacklist": None,
     },
@@ -39,7 +39,7 @@ TASK_CUSTOM_LISTS = {
         "whitelist": {
             "wicker_basket.n.01": {
                 "wicker_basket": ["tsjvyu"],
-            }
+            },
         },
         "blacklist": None,
     },
@@ -47,7 +47,69 @@ TASK_CUSTOM_LISTS = {
         "whitelist": {
             "countertop.n.01": {
                 "bar": ["udatjt"],
-            }
+            },
+            "teacup.n.02": {
+                "teacup": ["kccqwj"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_cook_brussels_sprouts", "house_single_floor"): {
+        "whitelist": {
+            "countertop.n.01": {
+                "bar": ["udatjt"],
+            },
+            "burner.n.02": {
+                "burner": ["mjvqii"],
+            },
+            "brussels_sprouts.n.01": {
+                "brussels_sprouts": ["hkwyzk"],
+            },
+            "stockpot.n.01": {
+                "stockpot": ["grrcna"],
+            },
+            "tupperware.n.01": {
+                "tupperware": ["mkstwr"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_wash_dishes", "house_single_floor"): {
+        "whitelist": {
+            "countertop.n.01": {
+                "bar": ["gjeoer"],
+            },
+            "frying_pan.n.01": {
+                "frying_pan": ["jpzusm"],
+            },
+            "scrub_brush.n.01": {
+                "scrub_brush": ["hsejyi"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_dishes_away", "house_single_floor"): {
+        "whitelist": {
+            "countertop.n.01": {
+                "bar": ["gjeoer"],
+            },
+            "plate.n.04": {
+                "plate": ["akfjxx"],
+            },
+            "shelf.n.01": {
+                "shelf": ["pfusrd"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_pick", "Rs_int"): {
+        "whitelist": {
+            "breakfast_table.n.01": {
+                "breakfast_table": ["bhszwe"],
+            },
+            "coffee_cup.n.01": {
+                "coffee_cup": ["dkxddg"],
+            },
         },
         "blacklist": None,
     },
@@ -166,6 +228,7 @@ def main(random_selection=False, headless=False, short_exec=False):
             "scene_file": default_scene_fpath,
             "scene_model": args.scene_model,
             "seg_map_resolution": 0.1,
+            # "load_object_categories": ["floors"],
         },
         "robots": [
             {
