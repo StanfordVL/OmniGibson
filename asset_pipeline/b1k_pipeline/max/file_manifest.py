@@ -109,7 +109,6 @@ def hash_material(root_mat):
     return hash_dict
 
 def main():
-    for deep_mode in [False, True]:
     # Go through all the objects and store their information.
     file_manifest = []
     file_manifest_deep = []
