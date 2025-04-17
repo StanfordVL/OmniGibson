@@ -2142,8 +2142,8 @@ stages:
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
       hash: md5
-      md5: 647c42ab23c790c9b6d3146480289240
-      size: 1992934
+      md5: 84e3fa00eca23a80fa9a2f2b47384753
+      size: 1991588
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
