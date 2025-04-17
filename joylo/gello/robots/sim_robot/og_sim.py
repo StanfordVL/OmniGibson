@@ -2,6 +2,7 @@ import os
 import yaml
 import time
 from typing import Dict, Optional
+from enum import Enum
 from gello.agents.ps3_controller import PS3Controller
 import omnigibson as og
 from omnigibson.envs import DataCollectionWrapper
@@ -28,18 +29,24 @@ from omnigibson.utils.constants import PrimType
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.ui_utils import dock_window
 from omnigibson.objects.usd_object import USDObject
+from omnigibson.systems.system_base import BaseSystem
 from gello.robots.sim_robot.zmq_server import ZMQRobotServer, ZMQServerThread
 from gello.dxl.franka_gello_joint_impedance import FRANKA_JOINT_LIMIT_HIGH, FRANKA_JOINT_LIMIT_LOW
 import torch as th
 import numpy as np
+
+class ViewingMode(str, Enum):
+    SINGLE_VIEW = "single_view"
+    VR = "vr"
+    MULTI_VIEW_1 = "multi_view_1"
 
 USE_FLUID = False
 USE_CLOTH = False
 USE_ARTICULATED = False
 FULL_SCENE = False
 
-USE_VR = False
-MULTI_VIEW_MODE = True
+VIEWING_MODE = ViewingMode.MULTI_VIEW_1
+
 SIMPLIFIED_TRUNK_CONTROL = True
 
 # Define configuration to pass to environment constructor
@@ -607,7 +614,7 @@ class OGRobotServer:
             settings.set("/app/show_developer_preference_section", True)
             settings.set("/app/player/useFixedTimeStepping", True)
 
-            # if not USE_VR:
+            # if not VIEWING_MODE == ViewingMode.VR:
             #     # Set lower position iteration count for faster sim speed
             #     og.sim._physics_context._physx_scene_api.GetMaxPositionIterationCountAttr().Set(8)
             #     og.sim._physics_context._physx_scene_api.GetMaxVelocityIterationCountAttr().Set(1)
@@ -723,7 +730,7 @@ class OGRobotServer:
         self._recording_path = recording_path
         if self._recording_path is not None:
             self.env = DataCollectionWrapper(
-                env=self.env, output_path=self._recording_path, viewport_camera_path=og.sim.viewer_camera.active_camera_path,only_successes=False, use_vr=USE_VR
+                env=self.env, output_path=self._recording_path, viewport_camera_path=og.sim.viewer_camera.active_camera_path,only_successes=False, use_vr=VIEWING_MODE == ViewingMode.VR
             )
 
         self._prev_grasp_status = {arm: False for arm in self.robot.arm_names}
@@ -760,7 +767,7 @@ class OGRobotServer:
         sub_keyboard = input_interface.subscribe_to_keyboard_events(keyboard, keyboard_event_handler)
 
         # VR extension does not work with async rendering
-        if not USE_VR:
+        if not VIEWING_MODE == ViewingMode.VR:
             self._optimize_sim_settings()
 
         # For some reason, toggle buttons get warped in terms of their placement -- we have them snap to their original
@@ -774,7 +781,7 @@ class OGRobotServer:
         # Set up VR system
         self.vr_system = None
         self.camera_prims = []
-        if USE_VR:
+        if VIEWING_MODE == ViewingMode.VR:
             for cam_path in self.camera_paths:
                 cam_prim = XFormPrim(
                     relative_prim_path=absolute_prim_path_to_scene_relative(
@@ -824,7 +831,7 @@ class OGRobotServer:
         lazy.carb.settings.get_settings().set_bool("/rtx-transient/dlssg/enabled", True)
 
     def _setup_cameras(self):
-        if MULTI_VIEW_MODE:
+        if VIEWING_MODE == ViewingMode.MULTI_VIEW_1:
             viewport_left_shoulder = create_and_dock_viewport(
                 "DockSpace", 
                 lazy.omni.ui.DockPosition.LEFT,
@@ -1179,7 +1186,7 @@ class OGRobotServer:
                     self.text_labels[idx].set_style(current_style)
             
             # Update checkpoint if new goals are satisfied
-            if AUTO_CHECKPOINTING and len(goal_status['satisfied']) > self._prev_goal_status['satisfied']:
+            if AUTO_CHECKPOINTING and len(goal_status['satisfied']) > len(self._prev_goal_status['satisfied']):
                 if self._recording_path is not None:
                     self.env.update_checkpoint()
                     print("Auto recorded checkpoint due to goal status change!")
@@ -1290,7 +1297,7 @@ class OGRobotServer:
             obs[f"arm_{arm}_gripper_positions"] = joint_pos[self.robot.gripper_control_idx[arm]]
             obs[f"arm_{arm}_ee_pos_quat"] = th.concatenate(self.robot.eef_links[arm].get_position_orientation())
             # When using VR, this expansive check makes the view glitch
-            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if not USE_VR else False
+            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if VIEWING_MODE != ViewingMode.VR else False
             obs[f"arm_{arm}_finger_max_contact"] = th.max(th.sum(th.square(finger_impulses[:, 2*i:2*(i+1), :]), dim=-1)).item()
 
             obs[f"{arm}_gripper"] = self._joint_cmd[f"{arm}_gripper"].item()
@@ -1349,7 +1356,7 @@ class OGRobotServer:
             if button_b_state and not self._button_toggled_state["b"]:
                 self.active_camera_id = 1 - self.active_camera_id
                 og.sim.viewer_camera.active_camera_path = self.camera_paths[self.active_camera_id]
-                if USE_VR:
+                if VIEWING_MODE == ViewingMode.VR:
                     self.vr_system.set_anchor_with_prim(
                         self.camera_prims[self.active_camera_id]
                     )
@@ -1568,7 +1575,7 @@ class OGRobotServer:
         if self._recording_path is not None:
             self.env.save_data()
         
-        if USE_VR:
+        if VIEWING_MODE == ViewingMode.VR:
             self.vr_system.stop()
         
         og.shutdown()
