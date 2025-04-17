@@ -11,6 +11,7 @@ sys.path.append(r"D:\ig_pipeline")
 from b1k_pipeline.max.prebake_textures import hash_object
 
 OUTPUT_FILENAME = "file_manifest.json"
+OUTPUT_FILENAME_DEEP = "file_manifest_deep.json"
 
 class MaxscriptEncoder(json.JSONEncoder):
     def default(self, obj):
@@ -48,7 +49,7 @@ def should_skip_attr(k, v):
     # skipped and we'll get a different hash.
     if v is None:
         return True
-    if k in ["setmxsprop", "getmxsprop", "bitmap", "excludeList"]:
+    if k in ["setmxsprop", "getmxsprop", "bitmap", "excludeList", "brdf_newGTRAnisotropy"]:
         return True
     # These get hashed as part of the submtl / subtexmap searches.
     if rt.superClassOf(v) == rt.textureMap or rt.superClassOf(v) == rt.Material:
@@ -105,11 +106,13 @@ def hash_material(root_mat):
                     _recursively_hash_materials_and_textures(sub_texmap, partial_hash_dict["subtexmaps"][sub_texmap_slot_name])
 
     _recursively_hash_materials_and_textures(root_mat, hash_dict)
-    return hash_single_thing(hash_dict)   # Here too it's possible to just return the dict rather than hashing it again.
+    return hash_dict
 
 def main():
+    for deep_mode in [False, True]:
     # Go through all the objects and store their information.
     file_manifest = []
+    file_manifest_deep = []
     for obj in tqdm(list(rt.objects)):
         obj_id = obj.inode.handle
         obj_name = obj.name
@@ -123,7 +126,7 @@ def main():
         obj_mtl_hash = hash_material(obj.material) if obj.material else None
         obj_transform = str(obj.transform)
         obj_objecttransform = str(obj.objectTransform)
-        file_manifest.append({
+        file_manifest_deep.append({
             "id": obj_id,
             "name": obj_name,
             "parent": obj_parent,
@@ -134,9 +137,21 @@ def main():
             "transform": obj_transform,
             "objecttransform": obj_objecttransform,
         })
+        file_manifest.append({
+            "id": obj_id,
+            "name": obj_name,
+            "parent": obj_parent,
+            "layer": obj_layer,
+            "class": obj_class,
+            "hash": obj_hash if isinstance(obj_hash, str) else hash_single_thing(obj_hash),
+            "mtl_hash": hash_single_thing(obj_mtl_hash),
+            "transform": obj_transform,
+            "objecttransform": obj_objecttransform,
+        })
 
     # Sort the list by id
-    file_manifest.sort(key=lambda x: x["id"])
+    file_manifest_deep.sort(key=lambda x: x["name"])
+    file_manifest.sort(key=lambda x: x["name"])
 
     # Dump into a JSON file
     output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
@@ -145,6 +160,10 @@ def main():
     filename = output_dir / OUTPUT_FILENAME
     with open(filename, "w") as f:
         json.dump(file_manifest, f, indent=4)
+
+    filename_deep = output_dir / OUTPUT_FILENAME_DEEP
+    with open(filename, "w") as f:
+        json.dump(file_manifest_deep, f, indent=4)
 
 if __name__ == "__main__":
     main()

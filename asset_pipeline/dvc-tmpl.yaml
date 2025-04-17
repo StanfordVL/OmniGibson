@@ -9,6 +9,7 @@ stages:
       - cad/${item}/processed.max
       outs:
       - cad/${item}/artifacts/file_manifest.json
+      - cad/${item}/artifacts/file_manifest_deep.json
 
   combined_file_manifest:
     # Combine the file manifest into a single file for diffing.
