@@ -2,6 +2,7 @@ import os
 import yaml
 import time
 from typing import Dict, Optional
+from enum import Enum
 from gello.agents.ps3_controller import PS3Controller
 import omnigibson as og
 from omnigibson.envs import DataCollectionWrapper
@@ -27,18 +28,25 @@ from omnigibson.object_states import OnTop, Filled
 from omnigibson.utils.constants import PrimType
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.ui_utils import dock_window
+from omnigibson.objects.usd_object import USDObject
+from omnigibson.systems.system_base import BaseSystem
 from gello.robots.sim_robot.zmq_server import ZMQRobotServer, ZMQServerThread
 from gello.dxl.franka_gello_joint_impedance import FRANKA_JOINT_LIMIT_HIGH, FRANKA_JOINT_LIMIT_LOW
 import torch as th
 import numpy as np
+
+class ViewingMode(str, Enum):
+    SINGLE_VIEW = "single_view"
+    VR = "vr"
+    MULTI_VIEW_1 = "multi_view_1"
 
 USE_FLUID = False
 USE_CLOTH = False
 USE_ARTICULATED = False
 FULL_SCENE = False
 
-USE_VR = False
-MULTI_VIEW_MODE = True
+VIEWING_MODE = ViewingMode.MULTI_VIEW_1
+
 SIMPLIFIED_TRUNK_CONTROL = True
 
 # Define configuration to pass to environment constructor
@@ -70,13 +78,7 @@ R1_WRIST_CAMERA_LOCAL_ORI = th.tensor([0.6830127018922194, 0.6830127018922193, 0
 DEFAULT_TRUNK_TRANSLATE = 0.5
 DEFAULT_RESET_DELTA_SPEED = 10.0       # deg / sec
 N_COOLDOWN_SECS = 1.5
-
-# Global whitelist of custom friction values
-FRICTIONS = {
-    "door": 0.1,
-    "dishwasher": 0.4,
-    "default": 0.1,
-}
+FLASHLIGHT_INTENSITY = 2000.0
 
 # Global whitelist of visual-only objects
 VISUAL_ONLY_CATEGORIES = {
@@ -106,8 +108,10 @@ USE_VERTICAL_VISUALIZERS = False
 GHOST_APPEAR_THRESHOLD = 0.1    # Threshold for showing ghost
 GHOST_APPEAR_TIME = 10 # Number of frames to wait before showing ghost
 USE_REACHABILITY_VISUALIZERS = True
+AUTO_CHECKPOINTING = True # checkpoint when 1) a new termination condition is met 2) some fixed amount of time has passed
+STEPS_TO_AUTO_CHECKPOINT = 6000 # Assuming 20 fps, this is about 5 minutes
 
-VIS_GEMO_COLORS = {
+VIS_GEOM_COLORS = {
     False: [th.tensor([1.0, 0, 0]),
             th.tensor([0, 1.0, 0]),
             th.tensor([0, 0, 1.0]),
@@ -308,7 +312,7 @@ class OGRobotServer:
                 },
             }
             
-            if MULTI_VIEW_MODE:
+            if VIEWING_MODE == ViewingMode.MULTI_VIEW_1:
                 cfg["env"]["external_sensors"].append(
                     get_camera_config(name="external_sensor1", 
                                       relative_prim_path="/controllable__r1__robot_r1/base_link/external_sensor1", 
@@ -486,6 +490,7 @@ class OGRobotServer:
             "self_collisions": False,
             "obs_modalities": [],
             "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0],
+            "orientation": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_orientation"] if self.task_name is not None else [0.0, 0.0, 0.0, 1.0],
             "grasping_mode": "assisted",
             "sensor_config": {
                 "VisionSensor": {
@@ -496,18 +501,6 @@ class OGRobotServer:
                 },
             },
         }]
-
-        self.ghosting = ghosting
-        if ghosting:
-            if "objects" not in cfg:
-                cfg["objects"] = []
-            cfg["objects"].append({
-                "type": "USDObject",
-                "name": "ghost",
-                "usd_path": os.path.join(gm.ASSET_PATH, f"models/r1/usd/r1.usda"),
-                "visual_only": True,
-                "position": AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0],
-            })
 
         # If we're R1, don't use rigid trunk
         if robot == "R1":
@@ -560,10 +553,16 @@ class OGRobotServer:
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
-
+        
+        self.ghosting = ghosting
         if self.ghosting:
+            # Add ghost with scene.add_object(register=False)
+            self.ghost = USDObject(name="ghost", 
+                                   usd_path=os.path.join(gm.ASSET_PATH, f"models/r1/usd/r1.usda"), 
+                                   visual_only=True, 
+                                   position=AVAILABLE_BEHAVIOR_TASKS[self.task_name]["robot_start_position"] if self.task_name is not None else [0.0, 0.0, 0.0])
+            self.env.scene.add_object(self.ghost, register=False)
             self._ghost_appear_counter = {arm: 0 for arm in self.robot.arm_names}
-            self.ghost = self.env.scene.object_registry("name", "ghost")
             for mat in self.ghost.materials:
                 mat.diffuse_color_constant = th.tensor([0.8, 0.0, 0.0], dtype=th.float32)
             for link in self.ghost.links.values():
@@ -615,7 +614,7 @@ class OGRobotServer:
             settings.set("/app/show_developer_preference_section", True)
             settings.set("/app/player/useFixedTimeStepping", True)
 
-            # if not USE_VR:
+            # if not VIEWING_MODE == ViewingMode.VR:
             #     # Set lower position iteration count for faster sim speed
             #     og.sim._physics_context._physx_scene_api.GetMaxPositionIterationCountAttr().Set(8)
             #     og.sim._physics_context._physx_scene_api.GetMaxVelocityIterationCountAttr().Set(1)
@@ -627,6 +626,7 @@ class OGRobotServer:
 
         self._setup_cameras()
         self._setup_visualizers()
+        self._setup_flashlights()
 
         # Modify physics further
         with og.sim.stopped():
@@ -639,9 +639,6 @@ class OGRobotServer:
             # Make all joints for all objects have low friction
             for obj in self.env.scene.objects:
                 if obj != self.robot:
-                    friction = FRICTIONS.get(obj.category, FRICTIONS["default"])
-                    for joint in obj.joints.values():
-                        joint.friction = friction
                     if obj.category in VISUAL_ONLY_CATEGORIES:
                         obj.visual_only = True
                 else:
@@ -660,6 +657,8 @@ class OGRobotServer:
             "y": False,
             "a": False,
             "b": False,
+            "left": False,
+            "right": False,
         }
         self._waiting_to_resume = True
 
@@ -668,8 +667,12 @@ class OGRobotServer:
         self.object_beacons = {}
 
         if self.task_name is not None:
-            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() if bddl_obj.wrapped_obj is not None]
-            self.task_relevant_objects = [obj for obj in task_objects if obj.category != "agent" and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
+            task_objects = [bddl_obj.wrapped_obj for bddl_obj in self.env.task.object_scope.values() 
+                            if bddl_obj.wrapped_obj is not None]
+            self.task_relevant_objects = [obj for obj in task_objects 
+                                        if not isinstance(obj, BaseSystem)
+                                        and obj.category != "agent" 
+                                        and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
             random_colors = lazy.omni.replicator.core.random_colours(N=len(self.task_relevant_objects))[:, :3].tolist()
             
             # Normalize colors from 0-255 to 0-1 range
@@ -709,7 +712,8 @@ class OGRobotServer:
                 self.object_beacons[obj] = beacon
                 beacon.visible = False
             self.task_irrelevant_objects = [obj for obj in self.env.scene.objects
-                                        if obj not in task_objects
+                                        if not isinstance(obj, BaseSystem)
+                                        and obj not in task_objects
                                         and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
             
             self._setup_task_instruction_ui()
@@ -726,12 +730,12 @@ class OGRobotServer:
         self._recording_path = recording_path
         if self._recording_path is not None:
             self.env = DataCollectionWrapper(
-                env=self.env, output_path=self._recording_path, viewport_camera_path=og.sim.viewer_camera.active_camera_path,only_successes=False, use_vr=USE_VR
+                env=self.env, output_path=self._recording_path, viewport_camera_path=og.sim.viewer_camera.active_camera_path,only_successes=False, use_vr=VIEWING_MODE == ViewingMode.VR
             )
 
         self._prev_grasp_status = {arm: False for arm in self.robot.arm_names}
         self._prev_in_hand_status = {arm: False for arm in self.robot.arm_names}
-        self._in_hand_clock = 0
+        self._frame_counter = 0
 
         # Reset
         self.reset()
@@ -763,7 +767,7 @@ class OGRobotServer:
         sub_keyboard = input_interface.subscribe_to_keyboard_events(keyboard, keyboard_event_handler)
 
         # VR extension does not work with async rendering
-        if not USE_VR:
+        if not VIEWING_MODE == ViewingMode.VR:
             self._optimize_sim_settings()
 
         # For some reason, toggle buttons get warped in terms of their placement -- we have them snap to their original
@@ -777,7 +781,7 @@ class OGRobotServer:
         # Set up VR system
         self.vr_system = None
         self.camera_prims = []
-        if USE_VR:
+        if VIEWING_MODE == ViewingMode.VR:
             for cam_path in self.camera_paths:
                 cam_prim = XFormPrim(
                     relative_prim_path=absolute_prim_path_to_scene_relative(
@@ -827,7 +831,7 @@ class OGRobotServer:
         lazy.carb.settings.get_settings().set_bool("/rtx-transient/dlssg/enabled", True)
 
     def _setup_cameras(self):
-        if MULTI_VIEW_MODE:
+        if VIEWING_MODE == ViewingMode.MULTI_VIEW_1:
             viewport_left_shoulder = create_and_dock_viewport(
                 "DockSpace", 
                 lazy.omni.ui.DockPosition.LEFT,
@@ -913,7 +917,7 @@ class OGRobotServer:
         self.vis_mats = {}
         for arm in self.robot.arm_names:
             self.vis_mats[arm] = []
-            for axis, color in zip(("x", "y", "z"), VIS_GEMO_COLORS[False]):
+            for axis, color in zip(("x", "y", "z"), VIS_GEOM_COLORS[False]):
                 mat_prim_path = f"{self.robot.prim_path}/Looks/vis_cylinder_{arm}_{axis}_mat"
                 mat = MaterialPrim(
                     relative_prim_path=absolute_prim_path_to_scene_relative(self.robot.scene, mat_prim_path),
@@ -1084,6 +1088,23 @@ class OGRobotServer:
                 )
                 self.reachability_visualizers[name] = edge_geom
             self._prev_base_motion = False
+    
+    def _setup_flashlights(self):
+        # Add flashlights to the robot eef
+        self.flashlights = {}
+        
+        for arm in self.robot.arm_names:
+            light_prim = getattr(lazy.pxr.UsdLux, "SphereLight").Define(og.sim.stage, f"{self.robot.links[f'{arm}_eef_link'].prim_path}/flashlight")
+            light_prim.GetRadiusAttr().Set(0.01)
+            light_prim.GetIntensityAttr().Set(FLASHLIGHT_INTENSITY)
+            light_prim.LightAPI().GetNormalizeAttr().Set(True)
+            
+            light_prim.ClearXformOpOrder()
+            translate_op = light_prim.AddTranslateOp()
+            translate_op.Set(lazy.pxr.Gf.Vec3d(-0.01, 0, -0.05))
+            light_prim.SetXformOpOrder([translate_op])
+            
+            self.flashlights[arm] = light_prim
 
     def _setup_task_instruction_ui(self):
         """Set up the UI for displaying task instructions and goal status."""
@@ -1163,24 +1184,26 @@ class OGRobotServer:
                     current_style = self.text_labels[idx].style
                     current_style.update({"color": 0xFF0000FF})  # Red (ABGR)
                     self.text_labels[idx].set_style(current_style)
+            
+            # Update checkpoint if new goals are satisfied
+            if AUTO_CHECKPOINTING and len(goal_status['satisfied']) > len(self._prev_goal_status['satisfied']):
+                if self._recording_path is not None:
+                    self.env.update_checkpoint()
+                    print("Auto recorded checkpoint due to goal status change!")
 
             # Store the current status for future comparison
             self._prev_goal_status = goal_status.copy()
 
     def _update_in_hand_status(self):
         # Internal clock to check every n steps
-        if self._in_hand_clock % 20 == 0:
+        if self._frame_counter % 20 == 0:
             # Update the in-hand status of the robot's arms
             for arm in self.robot.arm_names:
                 in_hand = len(self.robot._find_gripper_raycast_collisions(arm)) != 0
                 if in_hand != self._prev_in_hand_status[arm]:
                     self._prev_in_hand_status[arm] = in_hand
                     for idx, mat in enumerate(self.vis_mats[arm]):
-                        mat.diffuse_color_constant = VIS_GEMO_COLORS[in_hand][idx]
-            self._in_hand_clock = 0
-        # Increment the clock
-        self._in_hand_clock += 1
-
+                        mat.diffuse_color_constant = VIS_GEOM_COLORS[in_hand][idx]
 
     def _update_grasp_status(self):
         for arm in self.robot.arm_names:
@@ -1201,6 +1224,16 @@ class OGRobotServer:
             self._prev_base_motion = has_base_motion
             for edge in self.reachability_visualizers.values():
                 edge.visible = has_base_motion
+    
+    def _update_checkpoint(self):
+        if not AUTO_CHECKPOINTING:
+            return
+        
+        if self._frame_counter % STEPS_TO_AUTO_CHECKPOINT == 0:
+            if self._recording_path is not None:
+                self.env.update_checkpoint()
+                print("Auto recorded checkpoint due to periodic save!")
+            self._frame_counter = 0
 
     def num_dofs(self) -> int:
         return self.robot.n_joints
@@ -1212,11 +1245,11 @@ class OGRobotServer:
         # If R1, process manually
         state = joint_state.clone()
         if isinstance(self.robot, R1):
-            # [ 6DOF left arm, 6DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home buttons]
+            # [ 6DOF left arm, 6DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home, left arrow, right arrow buttons]
             start_idx = 0
             for component, dim in zip(
-                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_home"),
-                    (6, 6, 3, 2, 1, 1, 1, 1, 1, 1, 1),
+                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_home", "button_left", "button_right"),
+                    (6, 6, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1),
             ):
                 if start_idx >= len(state):
                     break
@@ -1264,7 +1297,7 @@ class OGRobotServer:
             obs[f"arm_{arm}_gripper_positions"] = joint_pos[self.robot.gripper_control_idx[arm]]
             obs[f"arm_{arm}_ee_pos_quat"] = th.concatenate(self.robot.eef_links[arm].get_position_orientation())
             # When using VR, this expansive check makes the view glitch
-            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if not USE_VR else False
+            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if VIEWING_MODE != ViewingMode.VR else False
             obs[f"arm_{arm}_finger_max_contact"] = th.max(th.sum(th.square(finger_impulses[:, 2*i:2*(i+1), :]), dim=-1)).item()
 
             obs[f"{arm}_gripper"] = self._joint_cmd[f"{arm}_gripper"].item()
@@ -1305,7 +1338,7 @@ class OGRobotServer:
                 else:
                     if self._recording_path is not None:
                         self.env.update_checkpoint()
-                        print("Recorded checkpoint!")
+                        print("Manually recorded checkpoint!")
             self._button_toggled_state["x"] = button_x_state
 
             # If Y is toggled from OFF -> ON, rollback to checkpoint
@@ -1323,7 +1356,7 @@ class OGRobotServer:
             if button_b_state and not self._button_toggled_state["b"]:
                 self.active_camera_id = 1 - self.active_camera_id
                 og.sim.viewer_camera.active_camera_path = self.camera_paths[self.active_camera_id]
-                if USE_VR:
+                if VIEWING_MODE == ViewingMode.VR:
                     self.vr_system.set_anchor_with_prim(
                         self.camera_prims[self.active_camera_id]
                     )
@@ -1350,6 +1383,24 @@ class OGRobotServer:
                 if not self._in_cooldown:
                     self.reset()
 
+            # If left arrow is toggled from OFF -> ON, toggle flashlight on left eef
+            button_left_arrow_state = self._joint_cmd["button_left"].item() != 0.0
+            if button_left_arrow_state and not self._button_toggled_state["left"]:
+                if self.flashlights["left"].GetVisibilityAttr().Get() == "invisible":
+                    self.flashlights["left"].MakeVisible()
+                else:
+                    self.flashlights["left"].MakeInvisible()
+            self._button_toggled_state["left"] = button_left_arrow_state
+            
+            # If right arrow is toggled from OFF -> ON, toggle flashlight on right eef
+            button_right_arrow_state = self._joint_cmd["button_right"].item() != 0.0
+            if button_right_arrow_state and not self._button_toggled_state["right"]:
+                if self.flashlights["right"].GetVisibilityAttr().Get() == "invisible":
+                    self.flashlights["right"].MakeVisible()
+                else:
+                    self.flashlights["right"].MakeInvisible()
+            self._button_toggled_state["right"] = button_right_arrow_state
+
             # Only decrement cooldown if we're not waiting to resume
             if not self._waiting_to_resume:
                 if self._in_cooldown:
@@ -1373,6 +1424,8 @@ class OGRobotServer:
                 self._update_in_hand_status()
                 self._update_grasp_status()
                 self._update_reachability_visualizers()
+                self._update_checkpoint()
+                self._frame_counter += 1
 
     def get_action(self):
         # Start an empty action
@@ -1509,6 +1562,8 @@ class OGRobotServer:
                 self._joint_cmd["button_b"] = th.zeros(1)
                 self._joint_cmd["button_a"] = th.zeros(1)
                 self._joint_cmd["button_home"] = th.zeros(1)
+                self._joint_cmd["button_left"] = th.zeros(1)
+                self._joint_cmd["button_right"] = th.zeros(1)
 
         # Reset env
         self.env.reset()
@@ -1520,7 +1575,7 @@ class OGRobotServer:
         if self._recording_path is not None:
             self.env.save_data()
         
-        if USE_VR:
+        if VIEWING_MODE == ViewingMode.VR:
             self.vr_system.stop()
         
         og.shutdown()

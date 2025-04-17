@@ -217,13 +217,15 @@ class JoyconAgent(Agent):
             gripper_info["pressed"] = button_pressed
             vals.append(gripper_info["status"])
 
-        # Get X, Y, B, A, home buttons
+        # Get X, Y, B, A, home, left arrow, right arrow buttons
         vals.append(self.jc_right.get_button_x())
         vals.append(self.jc_right.get_button_y())
         vals.append(self.jc_right.get_button_b())
         vals.append(self.jc_right.get_button_a())
         vals.append(self.jc_right.get_button_home())
+        vals.append(self.jc_left.get_button_left())
+        vals.append(self.jc_left.get_button_right())
 
         # Compose values and return
-        # [base_x, base_y, base_r, trunk_translate, trunk_tilt, gripper_l, gripper_r, X, Y, B, A, home buttons]
+        # [base_x, base_y, base_r, trunk_translate, trunk_tilt, gripper_l, gripper_r, X, Y, B, A, home, left arrow, right arrow buttons]
         return th.Tensor(vals)
