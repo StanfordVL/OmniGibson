@@ -64,7 +64,7 @@ jobs:
           echo "Generating diff between base and PR file manifests..."
           # Use 'diff' command. It exits with 0 if no diff, 1 if diff, >1 if error.
           # We use '|| true' to ensure the workflow continues even if differences are found (exit code 1).
-          diff -u base/artifacts/pipeline/combined_file_manifest.json pr/artifacts/pipeline/combined_file_manifest.json > ${{ env.DIFF_FILE }} || true
+          diff -u5 base/artifacts/pipeline/combined_file_manifest.json pr/artifacts/pipeline/combined_file_manifest.json > ${{ env.DIFF_FILE }} || true
 
           # Check if diff file has content
           if [ -s "${{ env.DIFF_FILE }}" ]; then
@@ -120,7 +120,7 @@ jobs:
           message: |
             📊 **3ds Max File Manifest Diff Check**
 
-            ${{ steps.diff_step.outputs.diff_found == 'true' && format('Differences found between 3ds Max file manifests in base (`{1}`) and PR (`{2}`).', github.base_ref, github.head_ref) || format('No differences found between 3ds Max file manifests in base (`{1}`) and PR (`{2}`).', github.base_ref, github.head_ref) }}
+            ${{ steps.diff_step.outputs.diff_found == 'true' && format('Differences found between 3ds Max file manifests in base (`{0}`) and PR (`{1}`).', github.base_ref, github.head_ref) || format('No differences found between 3ds Max file manifests in base (`{0}`) and PR (`{1}`).', github.base_ref, github.head_ref) }}
 
             [**See details in the Job Summary →**](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
             ${{ steps.diff_step.outputs.diff_found == 'true' && format('\n[Download full diff artifact]({0}/{1}/actions/runs/{2}/artifacts/{3})', github.server_url, github.repository, github.run_id, 'command-output-diff') || '' }}
