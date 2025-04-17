@@ -1,4 +1,9 @@
 cad/*/*/artifacts/collision_selection.json merge=json-obj
 cad/*/*/complaints.json merge=json-list
 *.dvc merge=dvc
+*.rps      binary
+*.png      binary
+*.usd      binary
+*.exe      binary
+*.csv      -text
 * text eol=lf
