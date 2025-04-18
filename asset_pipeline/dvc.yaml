@@ -942,6 +942,7 @@ stages:
       - cad/${item}/processed.max
       outs:
       - cad/${item}/artifacts/file_manifest.json
+      - cad/${item}/artifacts/file_manifest_deep.json
     foreach: ${combined_unfiltered}
   generate_systems:
     cmd: python -m b1k_pipeline.generate_systems
