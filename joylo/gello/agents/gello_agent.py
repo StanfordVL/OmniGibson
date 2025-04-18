@@ -1,6 +1,7 @@
 import os
 from dataclasses import dataclass
 from typing import Dict, Optional, Sequence, Tuple
+from enum import Enum
 
 import torch as th
 import numpy as np
@@ -9,6 +10,15 @@ import time
 from gello.agents.agent import Agent
 from gello.robots.dynamixel import DynamixelRobot
 from gello.dynamixel.driver import OperatingMode, GainType
+
+class MotorFeedbackConfig(Enum):
+    """
+    Enum specifying different types of force feedback, which are used in
+    compute_feedback_currents
+    """
+    NONE = -1
+    JOINT_SPACE = 0
+    OPERATIONAL_SPACE = 1
 
 
 @dataclass

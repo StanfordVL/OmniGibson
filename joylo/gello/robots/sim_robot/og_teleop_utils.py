@@ -13,6 +13,8 @@ from omnigibson.utils.ui_utils import dock_window
 from omnigibson.utils import transform_utils as T
 from omnigibson.sensors import VisionSensor
 from omnigibson.objects.usd_object import USDObject
+from omnigibson.robots.r1 import R1
+from omnigibson.robots.r1pro import R1Pro
 
 from gello.robots.sim_robot.og_teleop_cfg import *
 
@@ -168,7 +170,7 @@ def setup_cameras(robot, external_sensors, resolution):
             viewport_left_shoulder.name,
             lazy.omni.ui.DockPosition.BOTTOM,
             0.5,
-            f"{robot.links['left_eef_link'].prim_path}/Camera"
+            f"{robot.links[WRIST_CAMERA_LINK_NAME[robot.__class__.__name__]['left']].prim_path}/Camera"
         )
         viewport_right_shoulder = create_and_dock_viewport(
             "DockSpace",
@@ -180,7 +182,7 @@ def setup_cameras(robot, external_sensors, resolution):
             viewport_right_shoulder.name,
             lazy.omni.ui.DockPosition.BOTTOM,
             0.5,
-            f"{robot.links['right_eef_link'].prim_path}/Camera"
+            f"{robot.links[WRIST_CAMERA_LINK_NAME[robot.__class__.__name__]['right']].prim_path}/Camera"
         )
         # Set resolution for all viewports
         for viewport in [viewport_left_shoulder, viewport_left_wrist, 
@@ -199,32 +201,42 @@ def setup_cameras(robot, external_sensors, resolution):
             og.sim.render()
 
     # Setup main camera view
-    eyes_cam_prim_path = f"{robot.links['eyes'].prim_path}/Camera"
+    eyes_cam_prim_path = f"{robot.links[HEAD_CAMERA_LINK_NAME[robot.__class__.__name__]].prim_path}/Camera"
     og.sim.viewer_camera.active_camera_path = eyes_cam_prim_path
     og.sim.viewer_camera.image_height = resolution[0]
     og.sim.viewer_camera.image_width = resolution[1]
 
-    # Adjust wrist cameras
-    left_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
-        prim_path=f"{robot.links['left_eef_link'].prim_path}/Camera"
-    )
-    right_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
-        prim_path=f"{robot.links['right_eef_link'].prim_path}/Camera"
-    )
+    # Adjust wrist cameras for R1
+    if isinstance(robot, R1) and not isinstance(robot, R1Pro):
+        left_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
+            prim_path=f"{robot.links[WRIST_CAMERA_LINK_NAME[robot.__class__.__name__]['left']].prim_path}/Camera"
+        )
+        right_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
+            prim_path=f"{robot.links[WRIST_CAMERA_LINK_NAME[robot.__class__.__name__]['right']].prim_path}/Camera"
+        )
+        
+        left_wrist_camera_prim.GetAttribute("xformOp:translate").Set(
+            lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist())
+        )
+        right_wrist_camera_prim.GetAttribute("xformOp:translate").Set(
+            lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist())
+        )
+        
+        left_wrist_camera_prim.GetAttribute("xformOp:orient").Set(
+            lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
+        ) # expects (w, x, y, z)
+        right_wrist_camera_prim.GetAttribute("xformOp:orient").Set(
+            lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
+        ) # expects (w, x, y, z)
     
-    left_wrist_camera_prim.GetAttribute("xformOp:translate").Set(
-        lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist())
-    )
-    right_wrist_camera_prim.GetAttribute("xformOp:translate").Set(
-        lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist())
-    )
-    
-    left_wrist_camera_prim.GetAttribute("xformOp:orient").Set(
-        lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
-    ) # expects (w, x, y, z)
-    right_wrist_camera_prim.GetAttribute("xformOp:orient").Set(
-        lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
-    ) # expects (w, x, y, z)
+    # Adjust head camera for R1Pro (TODO: fix this in assets)
+    if isinstance(robot, R1Pro):
+        head_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
+            prim_path=f"{robot.links[HEAD_CAMERA_LINK_NAME[robot.__class__.__name__]].prim_path}/Camera"
+        )
+        head_camera_prim.GetAttribute("xformOp:translate").Set(
+            lazy.pxr.Gf.Vec3d(*R1PRO_HEAD_CAMERA_LOCAL_POS.tolist())
+        )
 
     camera_paths = [
         eyes_cam_prim_path,
@@ -702,6 +714,12 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter):
     Returns:
         dict: Updated ghost_appear_counter
     """
+    if isinstance(robot, R1Pro):
+        robot_arm_dof = 7
+    elif isinstance(robot, R1):
+        robot_arm_dof = 6
+    else:
+        raise ValueError(f"Unknown robot type: {type(robot)}")
     ghost.set_position_orientation(
         position=robot.get_position_orientation(frame="world")[0],
         orientation=robot.get_position_orientation(frame="world")[1],
@@ -709,14 +727,14 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter):
     for i in range(4):
         ghost.joints[f"torso_joint{i+1}"].set_pos(robot.joints[f"torso_joint{i+1}"].get_state()[0])
     for arm in robot.arm_names:
-        for i in range(6):
+        for i in range(robot_arm_dof):
             ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(th.clamp(
                 action[robot.arm_action_idx[arm]][i],
                 min=ghost.joints[f"{arm}_arm_joint{i+1}"].lower_limit,
                 max=ghost.joints[f"{arm}_arm_joint{i+1}"].upper_limit
             ))
         for i in range(2):
-            ghost.joints[f"{arm}_gripper_axis{i+1}"].set_pos(
+            ghost.joints[f"{FINGER_LINK_NAME[robot.__class__.__name__][arm]}{i+1}"].set_pos(
                 action[robot.gripper_action_idx[arm]][0],
                 normalized=True
             )
@@ -1138,7 +1156,7 @@ def generate_robot_config(task_name=None, task_cfg=None):
         robot_config["orientation"] = task_cfg["robot_start_orientation"]
     
     # Add reset joint positions
-    joint_pos = R1_RESET_JOINT_POS.clone()
+    joint_pos = ROBOT_RESET_JOINT_POS[ROBOT_TYPE].clone()
     
     # NOTE: Fingers MUST start open, or else generated AG spheres will be spawned incorrectly
     joint_pos[-4:] = 0.05

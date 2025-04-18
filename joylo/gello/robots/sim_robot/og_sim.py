@@ -331,8 +331,16 @@ class OGRobotServer:
                 self._joint_cmd[component] = state[start_idx: start_idx + dim]
                 start_idx += dim
         elif isinstance(self.robot, R1Pro):
-            # 7Dof TODO: implement this for R1Pro
-            pass
+            # [ 7DOF left arm, 7DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home, left arrow, right arrow buttons]
+            start_idx = 0
+            for component, dim in zip(
+                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_home", "button_left", "button_right"),
+                    (7, 7, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+            ):
+                if start_idx >= len(state):
+                    break
+                self._joint_cmd[component] = state[start_idx: start_idx + dim]
+                start_idx += dim
         else:
             # Sort by component
             if component is None:
@@ -632,7 +640,7 @@ class OGRobotServer:
         self._joint_cmd = {
             f"{arm}_arm": self._joint_state[self.robot.arm_control_idx[arm]] for arm in self.robot.arm_names
         }
-        if isinstance(self.robot, R1):
+        if isinstance(self.robot, (R1, R1Pro)):
             for arm in self.robot.arm_names:
                 self._joint_cmd[f"{arm}_gripper"] = th.ones(len(self.robot.gripper_action_idx[arm]))
                 self._joint_cmd["base"] = self._joint_state[self.robot.base_control_idx]

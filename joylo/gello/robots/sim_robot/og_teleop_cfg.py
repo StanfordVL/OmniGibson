@@ -28,6 +28,9 @@ R1_GROUND_TORSO_JOINT_POS = th.tensor([1.735, -2.57, -2.1, 0.0], dtype=th.float3
 R1_WRIST_CAMERA_LOCAL_POS = th.tensor([0.1, 0.0, -0.1], dtype=th.float32)  # Local position of the wrist camera relative to eef
 R1_WRIST_CAMERA_LOCAL_ORI = th.tensor([0.6830127018922194, 0.6830127018922193, 0.18301270189221927, 0.18301270189221946], dtype=th.float32)  # Local orientation of the wrist camera relative to eef
 
+# R1 Pro robot-specific configurations
+R1PRO_HEAD_CAMERA_LOCAL_POS = th.tensor([0.06, 0.0, 0.045], dtype=th.float32)  # Local position of the head camera relative to head link
+
 # Default parameters
 DEFAULT_TRUNK_TRANSLATE = 0.5
 DEFAULT_RESET_DELTA_SPEED = 10.0  # deg / sec
@@ -137,19 +140,48 @@ R1_CONTROLLER_CONFIG = {
     }
 }
 
-# R1 robot reset joint positions
-R1_RESET_JOINT_POS = th.tensor([
-    0, 0, 0, 0, 0, 0,    # 6 virtual base joints
-    0, 0, 0, 0,          # 4 trunk joints -- these will be programmatically added
-    33, -33,             # L, R arm joints
-    162, 162,
-    -108, -108,
-    34, -34,
-    73, -73,
-    -65, 65,
-    0, 0,                # 2 L gripper
-    0, 0,                # 2 R gripper
-]) * th.pi / 180
+ROBOT_RESET_JOINT_POS = {
+    "R1": th.tensor([
+        0, 0, 0, 0, 0, 0,    # 6 virtual base joints
+        0, 0, 0, 0,          # 4 trunk joints -- these will be programmatically added
+        33, -33,             # L, R arm joints
+        162, 162,
+        -108, -108,
+        34, -34,
+        73, -73,
+        -65, 65,
+        0, 0,                # 2 L gripper
+        0, 0,                # 2 R gripper
+    ]) * th.pi / 180,
+    "R1Pro": th.zeros(28) * th.pi / 180,
+}
+
+WRIST_CAMERA_LINK_NAME = {
+    "R1": {
+        "left": "left_eef_link",
+        "right": "right_eef_link",
+    },
+    "R1Pro": {
+        "left": "left_realsense_link",
+        "right": "right_realsense_link",
+    },
+}
+
+HEAD_CAMERA_LINK_NAME = {
+    "R1": "eyes",
+    "R1Pro": "zed_link",
+}
+
+FINGER_LINK_NAME = {
+    "R1": {
+        "left": "left_gripper_axis",
+        "right": "right_gripper_axis",
+    },
+    "R1Pro": {
+        "left": "left_gripper_finger_joint",
+        "right": "right_gripper_finger_joint",
+    },
+}
 
 # Reachability visualizer settings
 REACHABILITY_VISUALIZER_CONFIG = {

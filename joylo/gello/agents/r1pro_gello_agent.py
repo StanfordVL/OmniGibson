@@ -1,18 +1,14 @@
-import os
-from dataclasses import dataclass
-from typing import Dict, Optional, Sequence, Tuple
+from typing import Dict, Optional
 
 import torch as th
 import numpy as np
-import time
 
 from gello.agents.joycon_agent import JoyconAgent
 from gello.agents.gello_agent import DynamixelRobotConfig, GelloAgent, MotorFeedbackConfig
-from gello.robots.dynamixel import DynamixelRobot
-from gello.dynamixel.driver import OperatingMode, GainType
+from gello.dynamixel.driver import OperatingMode
 
 
-class R1GelloAgent(GelloAgent):
+class R1ProGelloAgent(GelloAgent):
     def __init__(
         self,
         port: str,
@@ -31,7 +27,7 @@ class R1GelloAgent(GelloAgent):
                     "upper": False,
                     "lower": False,
                 },
-                "gello_ids": np.arange(8),
+                "gello_ids": np.arange(9),
                 "locked_wrist_angle": None,
                 "colliding": False
             },
@@ -40,7 +36,7 @@ class R1GelloAgent(GelloAgent):
                     "upper": False,
                     "lower": False,
                 },
-                "gello_ids": np.arange(8) + 8,
+                "gello_ids": np.arange(9) + 9,
                 "locked_wrist_angle": None,
                 "colliding": False
             },
@@ -53,13 +49,13 @@ class R1GelloAgent(GelloAgent):
         self.enable_locking_joints = enable_locking_joints and self.joycon_agent is not None
 
         # Stores joint offsets to apply dynamically (note: including motor redundancies!)
-        self.joint_offsets = np.zeros(16)
+        self.joint_offsets = np.zeros(18)
 
         # Whether we're waiting to resume or not
         self._waiting_to_resume = False
 
         # No feedback by default
-        self.default_operation_modes = np.array([OperatingMode.NONE for _ in range(16)])
+        self.default_operation_modes = np.array([OperatingMode.NONE for _ in range(18)])
 
         # Run super
         super().__init__(
@@ -71,8 +67,8 @@ class R1GelloAgent(GelloAgent):
         )
 
     def _gello_joints_to_obs_joints(self, joints: np.ndarray) -> np.ndarray:
-        # Filter out redundant motors at indices 1, 3, 9, 11
-        return (joints - self.joint_offsets)[[0, 2, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15]]
+        # Filter out redundant motors at idxs 1, 3, 10, 12
+        return (joints - self.joint_offsets)[[0, 2, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17]]
 
     def _obs_joints_to_gello_joints(self, obs: Dict) -> np.ndarray:
         """
@@ -87,7 +83,7 @@ class R1GelloAgent(GelloAgent):
         # Convert [left, right] arm qpos into single array
         obs_jnts = np.concatenate([obs[f"arm_{arm}_joint_positions"].detach().cpu().numpy() for arm in ["left", "right"]])
         # Duplicate values for redundant motors
-        return obs_jnts[[0, 0, 1, 1, 2, 3, 4, 5, 6, 6, 7, 7, 8, 9, 10, 11]] + self.joint_offsets
+        return obs_jnts[[0, 0, 1, 1, 2, 3, 4, 5, 6, 7, 7, 8, 8, 9, 10, 11, 12, 13]] + self.joint_offsets
 
     def compute_feedback_currents(self, joint_error, joint_vel, obs: Dict[str, np.ndarray]) -> np.ndarray:
         """
@@ -116,8 +112,8 @@ class R1GelloAgent(GelloAgent):
             
             # Duplicate the columns in the jacobian to handle duplicate joints
             # Only use velocyt part as we are intereted in position offset
-            J_left = obs["arm_left_jacobian"][:3, [0, 0, 1, 1, 2, 3, 4, 5]]
-            J_right = obs["arm_right_jacobian"][:3, [0, 0, 1, 1, 2, 3, 4, 5]]
+            J_left = obs["arm_left_jacobian"][:3, [0, 0, 1, 1, 2, 3, 4, 5, 6]]
+            J_right = obs["arm_right_jacobian"][:3, [0, 0, 1, 1, 2, 3, 4, 5, 6]]
 
             # Stack jacobians into block diagonal matrix so the whole computation
             # can be performat at once
@@ -148,7 +144,7 @@ class R1GelloAgent(GelloAgent):
         jnts = super().act(obs=obs)
 
         # Convert back to gello form
-        gello_jnts = jnts.numpy()[[0, 0, 1, 1, 2, 3, 4, 5, 6, 6, 7, 7, 8, 9, 10, 11]]
+        gello_jnts = jnts.numpy()[[0, 0, 1, 1, 2, 3, 4, 5, 6, 7, 7, 8, 8, 9, 10, 11, 12, 13]]
 
         # If we see that we're waiting to resume from the sim, reset the joints to the observed values
         if obs["waiting_to_resume"] and not self._waiting_to_resume:
@@ -209,8 +205,8 @@ class R1GelloAgent(GelloAgent):
                             pass
                         else:
                             # Just became locked, update this arm's operating mode (all joints for the arm except final
-                            # two should be using POSITION mode)
-                            operating_modes[arm_info["gello_ids"]] = [OperatingMode.EXTENDED_POSITION] * 7 + [OperatingMode.NONE]
+                            # one should be using POSITION mode)
+                            operating_modes[arm_info["gello_ids"]] = [OperatingMode.EXTENDED_POSITION] * 8 + [OperatingMode.NONE]
                             active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
                             # In addition, the final wrist joint should NOT change in the environment -- so keep track of
@@ -256,13 +252,13 @@ class R1GelloAgent(GelloAgent):
                             # Already locked, do nothing
                             pass
                         else:
-                            # Just became locked, update this arm's operating mode (final two joints should be using
+                            # Just became locked, update this arm's operating mode (final three joints should be using
                             # POSITION mode)
-                            operating_modes[arm_info["gello_ids"]] = [OperatingMode.CURRENT] * 6 + [OperatingMode.EXTENDED_POSITION] * 2
+                            operating_modes[arm_info["gello_ids"]] = [OperatingMode.CURRENT] * 6 + [OperatingMode.EXTENDED_POSITION] * 3
                             active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
                             # Add lower joints to commanded set of joint idxs
-                            active_commanded_jnt_idxs = np.concatenate([active_commanded_jnt_idxs, arm_info["gello_ids"][-2:]])
+                            active_commanded_jnt_idxs = np.concatenate([active_commanded_jnt_idxs, arm_info["gello_ids"][-3:]])
 
                             # Finally, update our lock state
                             arm_info["locked"]["lower"] = True
@@ -288,6 +284,6 @@ class R1GelloAgent(GelloAgent):
                 if len(active_commanded_jnt_idxs) > 0:
                     self._robot.command_joint_state(commanded_jnts[active_commanded_jnt_idxs], idxs=active_commanded_jnt_idxs)
 
-            action = th.from_numpy(gello_jnts[[0, 2, 4, 5, 6, 7, 8, 10, 12, 13, 14, 15]])
+            action = th.from_numpy(gello_jnts[[0, 2, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17]])
 
         return action
