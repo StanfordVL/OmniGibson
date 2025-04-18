@@ -56,7 +56,7 @@ cd OmniGibson
 # Optionally backup the original dataset
 mv omnigibson/data/og_dataset omnigibson/data/og_dataset_backup
 # Extract the new dataset to the correct location
-unzip path/to/og_dataset_1_2_0rc2.zip -d omnigibson/data/
+unzip path/to/og_dataset_1_2_0rc2.zip -d omnigibson/data/og_dataset
 ```
 
 ### Step 3: BDDL Repository Setup
