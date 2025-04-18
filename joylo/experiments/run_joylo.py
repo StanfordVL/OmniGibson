@@ -1,24 +1,23 @@
-import datetime
 import glob
 import time
 import yaml
 from dataclasses import dataclass
-from pathlib import Path
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Literal
 
-import torch as th
 import numpy as np
 import tyro
 
-from gello.agents.agent import BimanualAgent, DummyAgent, MultiControllerAgent
-from gello.agents.gello_agent import GelloAgent, DynamixelRobotConfig
-from gello.agents.r1_gello_agent import R1GelloAgent, MotorFeedbackConfig
+from gello.agents.agent import MultiControllerAgent
+from gello.agents.gello_agent import DynamixelRobotConfig, MotorFeedbackConfig
 from gello.agents.joycon_agent import JoyconAgent
-from gello.data_utils.format_obs import save_frame
 from gello.env import RobotEnv
 from gello.robots.robot import PrintRobot
 from gello.zmq_core.robot_node import ZMQClientRobot
 from gello import REPO_DIR
+
+# Import both agent types
+from gello.agents.r1_gello_agent import R1GelloAgent
+from gello.agents.r1pro_gello_agent import R1ProGelloAgent
 
 def print_color(*args, color=None, attrs=(), **kwargs):
     import termcolor
@@ -37,8 +36,13 @@ class Args:
     robot_type: str = None  # only needed for quest agent or spacemouse agent
     hz: int = 100
     start_joints: Optional[Tuple[float, ...]] = None
-    joint_config_file: str = "joint_config_black_gello.yaml"
-
+    
+    # Specify which robot to use: 'r1' or 'r1pro'
+    gello_model: Literal["r1", "r1pro"] = "r1pro"
+    
+    # Joint config defaults will be set based on gello_model
+    joint_config_file: Optional[str] = None
+    
     gello_port: Optional[str] = None
     mock: bool = False
     damping_motor_kp: float = 0.3
@@ -49,6 +53,15 @@ class Args:
 
 
 def main(args):
+    # Set default joint config file based on robot model if not explicitly provided
+    if args.joint_config_file is None:
+        if args.gello_model == "r1":
+            args.joint_config_file = "joint_config_black_gello.yaml"
+        elif args.gello_model == "r1pro":
+            args.joint_config_file = "joint_config_black_gello_pro.yaml"
+        else:
+            raise ValueError(f"Unsupported gello model {args.gello_model}")
+    
     if args.mock:
         robot_client = PrintRobot(8, dont_print=True)
         camera_clients = {}
@@ -87,30 +100,45 @@ def main(args):
     with open(f"{REPO_DIR}/configs/{args.joint_config_file}", "r") as file:
         joint_config = yaml.load(file, Loader=yaml.SafeLoader)
 
+    # Set appropriate number of joints based on robot model
+    if args.gello_model == "r1":
+        num_motors = 16
+    elif args.gello_model == "r1pro":
+        num_motors = 18
+    else:
+        raise ValueError(f"Unsupported gello model {args.gello_model}")
+        
     dynamixel_config = DynamixelRobotConfig(
-        joint_ids=tuple(np.arange(16).tolist()),
+        joint_ids=tuple(np.arange(num_motors).tolist()),
         joint_offsets=[np.deg2rad(x) for x in joint_config['joints']['offsets']],
         joint_signs=joint_config['joints']['signs'],
         gripper_config=None,  # (8, 202, 152),
     )
 
+    # Set appropriate default start_joints based on robot model
     start_joints = args.start_joints
     if start_joints is None:
-        # Neutral pose
-        start_joints = np.array([
-            np.pi/2, np.pi/2,
-            np.pi, np.pi,
-            -np.pi,
-            0,
-            0,
-            0,
-            -np.pi/2, -np.pi/2,
-            np.pi, np.pi,
-            -np.pi,
-            0,
-            0,
-            0,
-        ])
+        if args.gello_model == "r1":
+            # Neutral pose for R1
+            start_joints = np.array([
+                np.pi/2, np.pi/2,
+                np.pi, np.pi,
+                -np.pi,
+                0,
+                0,
+                0,
+                -np.pi/2, -np.pi/2,
+                np.pi, np.pi,
+                -np.pi,
+                0,
+                0,
+                0,
+            ])
+        elif args.gello_model == "r1pro":
+            # TODO: determine this for R1Pro
+            start_joints = np.zeros(num_motors)
+        else:
+            raise ValueError(f"Unsupported gello model {args.gello_model}")
 
     base_trunk_gripper_agent = None
     if args.use_joycons:
@@ -124,16 +152,32 @@ def main(args):
             enable_rumble=True,
         )
 
-    arm_agent = R1GelloAgent(
-        port=gello_port,
-        dynamixel_config=dynamixel_config,
-        start_joints=start_joints,
-        default_joints=None,
-        damping_motor_kp=args.damping_motor_kp,
-        motor_feedback_type=MotorFeedbackConfig[args.motor_feedback_type],
-        enable_locking_joints=True,
-        joycon_agent=base_trunk_gripper_agent,
-    )
+    # Create the appropriate agent based on the robot model
+    if args.gello_model == "r1":
+        arm_agent = R1GelloAgent(
+            port=gello_port,
+            dynamixel_config=dynamixel_config,
+            start_joints=start_joints,
+            default_joints=None,
+            damping_motor_kp=args.damping_motor_kp,
+            motor_feedback_type=MotorFeedbackConfig[args.motor_feedback_type],
+            enable_locking_joints=True,
+            joycon_agent=base_trunk_gripper_agent,
+        )
+    elif args.gello_model == "r1pro":
+        arm_agent = R1ProGelloAgent(
+            port=gello_port,
+            dynamixel_config=dynamixel_config,
+            start_joints=start_joints,
+            default_joints=None,
+            damping_motor_kp=args.damping_motor_kp,
+            motor_feedback_type=MotorFeedbackConfig[args.motor_feedback_type],
+            enable_locking_joints=True,
+            joycon_agent=base_trunk_gripper_agent,
+        )
+    else:
+        raise ValueError(f"Unsupported gello model {args.gello_model}")
+        
     agent_parts = [arm_agent]
     if base_trunk_gripper_agent is not None:
         agent_parts.append(base_trunk_gripper_agent)
@@ -147,13 +191,21 @@ def main(args):
     agent.reset()
 
     print_color("*" * 40, color="magenta", attrs=("bold",))
-    print_color("\nWelcome to GELLO!\n", color="magenta", attrs=("bold",))
-    print_color("R1 Teleoperation Commands:\n", color="magenta", attrs=("bold",))
+    print_color(f"\nWelcome to JoyLo ({args.gello_model.upper()})!\n", color="magenta", attrs=("bold",))
+    print_color(f"{args.gello_model.upper()} Teleoperation Commands:\n", color="magenta", attrs=("bold",))
     print_color(f"\t ZL / ZR: Toggle grasping", color="magenta", attrs=("bold",))
     print_color(f"\t Left Joystick (not pressed): Translate the robot base", color="magenta", attrs=("bold",))
     print_color(f"\t Right Joystick: Rotate the robot base + tilt the trunk torso", color="magenta", attrs=("bold",))
     print_color(f"\t Up / Down Button: Raise / Lower the trunk torso", color="magenta", attrs=("bold",))
-    print_color(f"\t L / R: Lock the lower two wrist joints while leaving the upper joints free", color="magenta", attrs=("bold",))
+    
+    # Lock behavior is slightly different between models
+    if args.gello_model == "r1":
+        print_color(f"\t L / R: Lock the lower two wrist joints while leaving the upper joints free", color="magenta", attrs=("bold",))
+    elif args.gello_model == "r1pro":
+        print_color(f"\t L / R: Lock the lower three wrist joints while leaving the upper joints free", color="magenta", attrs=("bold",))
+    else:
+        raise ValueError(f"Unsupported gello model {args.gello_model}")
+        
     print_color(f"\t - / +: Lock the upper joints while leaving the lower wrist roll joint free.\n\t\tThe wrist pose will NOT be tracked while held.", color="magenta", attrs=("bold",))
     print_color(f"\t Y: Move the robot towards its reset pose", color="magenta", attrs=("bold",))
     print_color(f"\t B: Toggle camera", color="magenta", attrs=("bold",))
