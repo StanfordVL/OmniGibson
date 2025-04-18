@@ -1263,6 +1263,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # Grab the first successful trajectory if found
         successes = results[0].success 
         print("Base motion planning successes: ", successes)
+        print("len(trajs): ", [len(t) for t in traj_paths])
         success_idx = th.where(successes)[0].cpu()
         if len(success_idx) == 0:
             print("Base motion planning failed", results[0].status)
@@ -1302,7 +1303,19 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 #     q_traj = self._motion_generator.add_linearly_interpolated_waypoints(traj=q_traj, max_inter_dist=0.01)
         
         else:
-            traj_path = traj_paths[success_idx[0]]
+            pick_shortest_traj = True
+            # Pick the lowest length traj_paths from all the success_idx
+            if pick_shortest_traj:
+                shortest_traj_idx = success_idx[0]
+                shortest_traj_len = len(traj_paths[shortest_traj_idx])
+                for idx in success_idx:
+                    if len(traj_paths[idx]) < shortest_traj_len:
+                        shortest_traj_idx = idx
+                        shortest_traj_len = len(traj_paths[idx])
+                traj_path = traj_paths[shortest_traj_idx]
+            else:            
+                traj_path = traj_paths[success_idx[0]]
+            
             print("pos error: ", results[0].position_error[success_idx[0]])
             print("orn error: ", results[0].rotation_error[success_idx[0]])
             print("feasible: ", results[0].feasible)

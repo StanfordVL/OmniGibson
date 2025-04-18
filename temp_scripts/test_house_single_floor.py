@@ -222,22 +222,28 @@ primitive = StarterSemanticActionPrimitives(env, env.robots[0], enable_head_trac
 
 # og.sim.viewer_camera.set_position_orientation(th.tensor([16.066,  3.745,  2.556]), th.tensor([0.256, 0.515, 0.732, 0.364]))
 
-bar = env.scene.object_registry("name", "bar_udatjt_0")
-teacup = env.scene.object_registry("name", "teacup")
-coffee_cup = env.scene.object_registry("name", "coffee_cup")
-teacup.states[object_states.OnTop].set_value(other=bar, new_value=True)
-coffee_cup.states[object_states.OnTop].set_value(other=bar, new_value=True)
+
+# og.clear()
+# og.sim.restore(scene_files=["/home/arpit/test_projects/OmniGibson/custom_scenes/house_single_floor_task_datagen_tidy_table_0_0_template.json"])
+# breakpoint()
+
+# bar = env.scene.object_registry("name", "bar_udatjt_0")
+# teacup = env.scene.object_registry("name", "teacup")
+# coffee_cup = env.scene.object_registry("name", "coffee_cup")
+# teacup.states[object_states.OnTop].set_value(other=bar, new_value=True)
+# coffee_cup.states[object_states.OnTop].set_value(other=bar, new_value=True)
+# sink = env.scene.object_registry("name", "drop_in_sink_awvzkn_0")
 
 breakpoint()
 
 for _ in range(100): og.sim.step()
 
-env.robots[0].set_position_orientation(position=th.tensor([9.0, 1.5,  1.0286]), orientation=th.tensor([-0.0000, 0.0000, 0.8734, -0.4870]))
+# env.robots[0].set_position_orientation(position=th.tensor([9.0, 1.5,  1.0286]), orientation=th.tensor([-0.0000, 0.0000, 0.8734, -0.4870]))
 
-for _ in range(100): og.sim.step()
+# for _ in range(100): og.sim.step()
 
 # curr_pose = robot.get_position_orientation()
-action_generator = primitive._navigate_to_obj(obj=teacup)
+action_generator = primitive._navigate_to_obj(obj=sink)
 
 for mp_action in action_generator:
     if mp_action is None:

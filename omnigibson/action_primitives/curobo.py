@@ -22,7 +22,7 @@ th.backends.cudnn.allow_tf32 = True
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
 
-m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT = 12.0  # meters
+m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT = 5.0  # meters
 m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT = math.pi * 2  # radians
 
 m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.005
@@ -221,20 +221,21 @@ class CuRoboMotionGenerator:
             if joint_name in joint_limits.joint_names:
                 joint_idx = joint_limits.joint_names.index(joint_name)
                 # Manually specify joint limits for the base_footprint_x/y/rz
+                # TODO: Make this more general for all tasks (each task requires different joint limit based on the scene and where the robot is spawned)
                 if self.robot.joints[joint_name].joint_type == JointType.JOINT_PRISMATIC:
-                    # joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT
-                    if joint_name == "base_footprint_x_joint":
-                        joint_limits.position[0][joint_idx] = 3.0
-                        joint_limits.position[1][joint_idx] = 10.0
-                    elif joint_name == "base_footprint_y_joint":
-                        joint_limits.position[0][joint_idx] = -3.0
-                        joint_limits.position[1][joint_idx] = 3.0  
+                    joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT
+                    # if joint_name == "base_footprint_x_joint":
+                    #     joint_limits.position[0][joint_idx] = 3.0
+                    #     joint_limits.position[1][joint_idx] = 10.0
+                    # elif joint_name == "base_footprint_y_joint":
+                    #     joint_limits.position[0][joint_idx] = -3.0
+                    #     joint_limits.position[1][joint_idx] = 3.0  
                 else:
                     # Needs to be -2pi to 2pi, instead of -pi to pi, otherwise the planning success rate is much lower
                     joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT
-                    joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
+                    # joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
 
-                # joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
+                joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
 
     def save_visualization(self, q, file_path, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
         # Update obstacles

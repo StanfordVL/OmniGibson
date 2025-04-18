@@ -804,6 +804,10 @@ class DataPlaybackWrapper(DataWrapper):
         for i, (a, s, ss, r, te, tr) in enumerate(
             zip(action, state[1:], state_size[1:], reward, terminated, truncated)
         ):
+            
+            # if i % 50 == 0:
+            #     breakpoint()
+            
             if self.replay_state:
                 # Execute any transitions that should occur at this current step
                 if str(i) in transitions:
@@ -856,7 +860,7 @@ class DataPlaybackWrapper(DataWrapper):
 
         return result
 
-    def playback_dataset(self, record_data=False, video_writers=None, video_rgb_keys=None, callback=None):
+    def playback_dataset(self, record_data=False, video_writers=None, video_rgb_keys=None, callback=None, demo_ids=None):
         """
         Playback all episodes from the input HDF5 file, and optionally record observation data if @record is True
 
@@ -865,18 +869,31 @@ class DataPlaybackWrapper(DataWrapper):
             video_writers (None or list of imageio.Writer): If specified, writer object that RGB frames will be written to
             video_rgb_keys (None or list of str): If specified, observation key representing the RGB frames to write to video.
                 If @video_writer is specified, this must also be specified!
+            demo_ids (None or list of int): If specified, a list of episode IDs to playback. If None, all episodes will be played
         """
         results = []
-        for episode_id in range(self.input_hdf5["data"].attrs["n_episodes"]):
-            results.append(
-                self.playback_episode(
-                    episode_id=episode_id,
-                    record_data=record_data,
-                    video_writers=video_writers,
-                    video_rgb_keys=video_rgb_keys,
-                    callback=callback,
+        if demo_ids is None:
+            for episode_id in range(self.input_hdf5["data"].attrs["n_episodes"]):
+                results.append(
+                    self.playback_episode(
+                        episode_id=episode_id,
+                        record_data=record_data,
+                        video_writers=video_writers,
+                        video_rgb_keys=video_rgb_keys,
+                        callback=callback,
+                    )
                 )
-            )
+        else:
+            for episode_id in demo_ids:
+                results.append(
+                        self.playback_episode(
+                            episode_id=episode_id,
+                            record_data=record_data,
+                            video_writers=video_writers,
+                            video_rgb_keys=video_rgb_keys,
+                            callback=callback,
+                        )
+                    )
         return results
 
     def create_video_writer(self, fpath, fps=30):
