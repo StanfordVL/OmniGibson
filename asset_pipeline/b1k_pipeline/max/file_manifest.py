@@ -161,7 +161,7 @@ def main():
         json.dump(file_manifest, f, indent=4)
 
     filename_deep = output_dir / OUTPUT_FILENAME_DEEP
-    with open(filename, "w") as f:
+    with open(filename_deep, "w") as f:
         json.dump(file_manifest_deep, f, indent=4)
 
 if __name__ == "__main__":
