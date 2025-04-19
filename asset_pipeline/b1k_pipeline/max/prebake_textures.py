@@ -64,7 +64,7 @@ CHANNEL_DATA_FORMAT_OVERRIDES = {
 # }
 
 RENDER_PRESET_FILENAME = str(
-    (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
+    (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "no_sampler_no_gi.rps").absolute()
 )
 
 allow_list = []
