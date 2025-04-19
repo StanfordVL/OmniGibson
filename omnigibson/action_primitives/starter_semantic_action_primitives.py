@@ -163,6 +163,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         always_track_eef=False,
         task_relevant_objects_only=False,
         curobo_batch_size=4,
+        curobo_use_cuda_graph=True,
         debug_visual_marker=None,
         skip_curobo_initilization=False,
     ):
@@ -203,6 +204,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             else CuRoboMotionGenerator(
                 robot=self.robot,
                 batch_size=curobo_batch_size,
+                use_cuda_graph=curobo_use_cuda_graph,
                 collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
             )
         )
