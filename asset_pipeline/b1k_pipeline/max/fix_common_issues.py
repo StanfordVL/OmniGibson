@@ -28,7 +28,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-reflbake.success"
+PASS_FILENAME = "done-iorbake.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -584,11 +584,11 @@ def processFile(filename: pathlib.Path):
 
     # Temporary hack for rebaking just the reflection channel
     # baked_mtls_by_object = {}
-    # for obj in rt.objects:
-    #     if obj.material and rt.classOf(obj.material) == rt.Shell_Material:
-    #         baked_mtls_by_object[obj] = obj.material.bakedMaterial
-    #         obj.material = obj.material.originalMaterial
-    #         assert rt.classOf(obj.material) != rt.Shell_Material, f"{obj} material should not be shell material before baking"
+    for obj in rt.objects:
+        if obj.material and rt.classOf(obj.material) == rt.Shell_Material:
+            # baked_mtls_by_object[obj] = obj.material.bakedMaterial
+            obj.material = obj.material.originalMaterial
+            assert rt.classOf(obj.material) != rt.Shell_Material, f"{obj} material should not be shell material before baking"
     b1k_pipeline.max.prebake_textures.process_open_file()
     # for obj, old_baked_mtl in baked_mtls_by_object.items():
     #     # Make sure it got baked again
@@ -605,10 +605,10 @@ def processFile(filename: pathlib.Path):
     #     obj.material.bakedMaterial = old_baked_mtl
 
     # Update visibility settings
-    update_visibilities()
+    # update_visibilities()
 
     # Save again.
-    rt.saveMaxFile(str(filename))
+    # rt.saveMaxFile(str(filename))
 
     with open(filename.parent / PASS_FILENAME, "w") as f:
         pass
