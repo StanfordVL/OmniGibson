@@ -212,9 +212,9 @@ class BaseR1GelloAgent(GelloAgent):
         """
         Handle joint locking based on joycon input.
         """
-        # Feedback case 1: - / + is pressed -- this will disable final motor current while locking
-        # all other joints' positions to allow for positional offsetting in the final joint
-        # Feedback case 2: L / R is pressed -- this will lock the final two joints of the given arm
+        # Feedback case 1: - / + is pressed -- this will disable final motor motor current while locking
+        # all other joints' positions to allow for positional offsetting in the final joint (NOTE: this only applies to R1)
+        # Feedback case 2: L / R is pressed -- this will lock the final two/three wrist joints of the given arm
         # while freeing all the other joints to allow for easy elbow maneuvering
         for arm, (lock_upper, lock_lower) in zip(
                 ("left", "right"),

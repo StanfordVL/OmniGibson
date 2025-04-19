@@ -319,7 +319,7 @@ class OGRobotServer:
         """
         # If R1, process manually
         state = joint_state.clone()
-        if isinstance(self.robot, R1):
+        if isinstance(self.robot, R1) and not isinstance(self.robot, R1Pro):
             # [ 6DOF left arm, 6DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home, left arrow, right arrow buttons]
             start_idx = 0
             for component, dim in zip(

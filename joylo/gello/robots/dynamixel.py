@@ -16,7 +16,7 @@ class DynamixelRobot(Robot):
         joint_signs: Optional[Sequence[int]] = None,
         real: bool = False,
         port: str = "/dev/ttyUSB0",
-        baudrate: int = 3000000,
+        baudrate: int = 2000000,
         gripper_config: Optional[Tuple[int, float, float]] = None,
         start_joints: Optional[np.ndarray] = None,
     ):

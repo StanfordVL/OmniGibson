@@ -127,7 +127,7 @@ class FakeDynamixelDriver(DynamixelDriverProtocol):
 
 class DynamixelDriver(DynamixelDriverProtocol):
     def __init__(
-        self, ids: Sequence[int], port: str = "/dev/ttyUSB0", baudrate: int = 3000000
+        self, ids: Sequence[int], port: str = "/dev/ttyUSB0", baudrate: int = 2000000
     ):
         """Initialize the DynamixelDriver class.
 

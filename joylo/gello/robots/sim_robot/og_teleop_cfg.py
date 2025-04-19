@@ -18,7 +18,7 @@ SIMPLIFIED_TRUNK_CONTROL = True
 
 # Robot parameters
 SUPPORTED_ROBOTS = ["R1", "R1Pro"]
-ROBOT_TYPE = "R1"  # This should always be our robot generally since GELLO is designed for this specific robot
+ROBOT_TYPE = "R1Pro"  # This should always be our robot generally since GELLO is designed for this specific robot
 ROBOT_NAME = "robot_r1"
 
 # R1 robot-specific configurations
