@@ -242,7 +242,7 @@ class BaseR1GelloAgent(GelloAgent):
                         active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
             # Handle upper arm locking
-            self._handle_upper_arm_locking(
+            operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs = self._handle_upper_arm_locking(
                 arm_info, 
                 upper_currently_locked, 
                 lock_upper,
@@ -254,7 +254,7 @@ class BaseR1GelloAgent(GelloAgent):
             )
 
             # Handle lower arm locking
-            self._handle_lower_arm_locking(
+            operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs = self._handle_lower_arm_locking(
                 arm_info, 
                 lock_lower,
                 operating_modes, 
@@ -333,6 +333,8 @@ class BaseR1GelloAgent(GelloAgent):
 
                 # Finally, update our lock state
                 arm_info["locked"]["upper"] = False
+        
+        return operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs
     
     def _handle_lower_arm_locking(
         self, 

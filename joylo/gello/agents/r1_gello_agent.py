@@ -102,3 +102,5 @@ class R1GelloAgent(BaseR1GelloAgent):
 
                 # Finally, update our lock state
                 arm_info["locked"]["lower"] = False
+        
+        return operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs
