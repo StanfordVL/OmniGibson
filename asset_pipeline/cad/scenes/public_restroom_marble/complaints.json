@@ -119,5 +119,14 @@
     "type": "appearance",
     "additional_info": "MIRROR: This object is a mirror. Please ensure that the object is reflective.",
     "id": 6313
+  },
+  {
+    "id": 7148,
+    "object": "downlight-jexffy",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
   }
 ]
