@@ -1,0 +1,28 @@
+joints:
+  # Configuration for all JoyLo Pro joints
+  # First 9 are the left arm, from shoulder to wrist
+  # Second 9 are the right arm, from shoulder to wrist
+  
+  # Offsets are in degrees, and are multiples of 90
+  offsets:
+    - 90
+    - 90
+    - 90
+    - 270
+    - 180
+    - 180
+    - 90
+    - 90
+    - 270
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+    - 0
+
+  signs: [-1, 1, 1, -1, -1, 1, -1, 1, 1, 
+          -1, 1, -1, 1, 1, 1, 1, 1, 1]
