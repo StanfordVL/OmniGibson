@@ -159,8 +159,8 @@ stages:
     deps:
     - path: b1k_pipeline/max/object_list.py
       hash: md5
-      md5: f1637ebe64f9862ecb8005e1715f4c87
-      size: 16225
+      md5: 24444f2e5ce1ce6f06384062c0e75128
+      size: 17702
     - path: cad/scenes/Merom_0_int/processed.max
       hash: md5
       md5: 99e46d9cce766ac32a24211def0bb2a7
@@ -168,8 +168,8 @@ stages:
     outs:
     - path: cad/scenes/Merom_0_int/artifacts/object_list.json
       hash: md5
-      md5: 1a6f95e503e0da34c2a50582b85f044f
-      size: 44700
+      md5: e38a620e95126b9f91ea44d9b911d468
+      size: 109673
   object_list@scenes/Merom_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_1_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -7280,8 +7280,8 @@ stages:
     deps:
     - path: b1k_pipeline/max/object_list.py
       hash: md5
-      md5: f1637ebe64f9862ecb8005e1715f4c87
-      size: 16225
+      md5: 24444f2e5ce1ce6f06384062c0e75128
+      size: 17702
     - path: cad/objects/batch-00/processed.max
       hash: md5
       md5: fc20048d121ffa53976f2eac55c04767
@@ -7289,8 +7289,8 @@ stages:
     outs:
     - path: cad/objects/batch-00/artifacts/object_list.json
       hash: md5
-      md5: bf9449d055f92b05f21d879bb335e643
-      size: 87451
+      md5: 64121bde49b90ec7e851e5533810ea5a
+      size: 172051
   object_list@objects/batch-01:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-01/processed.max b1k_pipeline/max/object_list.py
     deps:
@@ -7736,12 +7736,8 @@ stages:
       size: 0
     - path: b1k_pipeline/max/export_meshes.py
       hash: md5
-      md5: acf65d33e6a60d84848aae3def400727
-      size: 18415
-    - path: cad/objects/batch-00/artifacts/object_list.json
-      hash: md5
-      md5: bf9449d055f92b05f21d879bb335e643
-      size: 87451
+      md5: b32974ffe3a30994038f4f53a55381ae
+      size: 16849
     - path: cad/objects/batch-00/processed.max
       hash: md5
       md5: fc20048d121ffa53976f2eac55c04767
@@ -7753,8 +7749,8 @@ stages:
       size: 34
     - path: cad/objects/batch-00/artifacts/meshes.zip
       hash: md5
-      md5: 55cd363caa7919cb52cfd5ba597fd7ac
-      size: 286125932
+      md5: ea14bd9a3e7b08b1754a36aa0e0daef8
+      size: 38748205
   object_list@objects/task_relevant-xy:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/task_relevant-xy/processed.max
       b1k_pipeline/max/object_list.py
