@@ -440,7 +440,7 @@ def main():
                 continue
 
             # Get portal info
-            position = portal.position
+            position = np.array(portal.position)
             rotation = portal.rotation
             quat = quat2arr(rotation)
             scale = np.array(list(portal.scale))
