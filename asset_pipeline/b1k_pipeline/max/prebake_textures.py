@@ -45,12 +45,12 @@ NEW_UV_CHANNEL = 99
 
 # PhysicalMaterial
 CHANNEL_MAPPING = {
-    # "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
-    # "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
-    # "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
-    # "VRayRawReflectionFilterMap": "Reflectivity Map",
-    # "VRayRawRefractionFilterMap": "Transparency Map",
-    # "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
+    "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
+    "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
+    "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
+    "VRayRawReflectionFilterMap": "Reflectivity Map",
+    "VRayRawRefractionFilterMap": "Transparency Map",
+    "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
     "VRayMtlReflectIORBake": "IOR Map",
 }
 
@@ -308,10 +308,7 @@ class TextureBaker:
             texture_map.fileType = CHANNEL_DATA_FORMAT_OVERRIDES.get(map_name, "png")
 
             # Set the apply color mapping option
-            if texture_map.getOptionsCount() > 0:
-                assert (
-                    texture_map.getOptionName(1) == "Apply color mapping"
-                ), "Apply color mapping option not found"
+            if texture_map.getOptionsCount() > 0 and texture_map.getOptionName(1) == "Apply color mapping":
                 texture_map.setOptionValue(1, False)
 
             # Mapping from the original channel (of VRay, Corona, etc) to the new channel of PhysicalMaterial
