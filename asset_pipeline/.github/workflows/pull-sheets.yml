@@ -36,7 +36,7 @@ jobs:
           ssh-private-key: ${{ secrets.SHEETS_DEPLOY_KEY }}
 
     - name: Refresh sheets data
-      run: python -m b1k_pipeline.pull_sheets
+      run: python -m b1k_pipeline.sync_sheets
 
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
