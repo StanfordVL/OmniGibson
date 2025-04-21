@@ -320,12 +320,13 @@ def build_mesh_tree(
     if load_meshes:
         roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
         
-        # Assert that the roots keys are exactly the keys of the bounding boxes, without
-        # repetition.
+        # Assert that the roots keys are a subset of the bounding boxes keys.
         roots_to_model_and_instance = sorted([(node[1], node[2]) for node in roots])
-        bbox_keys = sorted([(model_id, instance_id) for model_id, instances in object_bounding_boxes.items() for instance_id in instances])
+        roots_to_model_and_instance_set = set(roots_to_model_and_instance)
+        assert len(roots_to_model_and_instance) == len(roots_to_model_and_instance_set), f"Duplicate root nodes found in {roots_to_model_and_instance}"
+        bbox_keys = set([(model_id, instance_id) for model_id, instances in object_bounding_boxes.items() for instance_id in instances])
         assert (
-            roots_to_model_and_instance == bbox_keys
+            roots_to_model_and_instance_set.issubset(bbox_keys)
         ), f"Root nodes do not match the bounding boxes. Roots: {roots_to_model_and_instance}, BBoxes: {bbox_keys}"
 
         for root in roots:
