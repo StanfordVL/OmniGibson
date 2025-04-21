@@ -217,17 +217,17 @@ def build_mesh_tree(
                 )
 
                 # Load the texture map paths and convert them to absolute paths
-                G.nodes[node_key]["texture_maps"] = {}
+                G.nodes[node_key]["material_maps"] = {}
                 bakery_fs = pipeline_fs.target(target).opendir("bakery")
-                for channel, path_rel_to_bakery in metadata["texture_maps"].items():
-                    G.nodes[node_key]["texture_maps"][channel] = bakery_fs.getsyspath(path_rel_to_bakery)
+                for channel, path_rel_to_bakery in metadata["material_maps"].items():
+                    G.nodes[node_key]["material_maps"][channel] = bakery_fs.getsyspath(path_rel_to_bakery)
 
                 # TODO: Remove this
                 # Temporarily add the IOR channel until we can get it from the JSON file
                 ior_map_filename = f"{mesh_name}_VRayMtlReflectIORBake.exr"
                 ior_map_full_path = bakery_fs.getsyspath(ior_map_filename)
                 assert os.path.exists(ior_map_full_path), f"IOR map {ior_map_full_path} does not exist."
-                G.nodes[node_key]["texture_maps"]["IOR Map"] = ior_map_full_path
+                G.nodes[node_key]["material_maps"]["IOR Map"] = ior_map_full_path
 
                 # Load convexmesh meta links
                 for cm_type in CONVEX_MESH_TYPES:
@@ -322,7 +322,7 @@ def build_mesh_tree(
         
         # Assert that the roots keys are exactly the keys of the bounding boxes, without
         # repetition.
-        roots_to_model_and_instance = sorted([(node[1], int(node[2])) for node in roots])
+        roots_to_model_and_instance = sorted([(node[1], node[2]) for node in roots])
         bbox_keys = sorted([(model_id, instance_id) for model_id, instances in object_bounding_boxes.items() for instance_id in instances])
         assert (
             roots_to_model_and_instance == bbox_keys
@@ -330,7 +330,7 @@ def build_mesh_tree(
 
         for root in roots:
             # First find the object bounding box.
-            G.nodes[root]["object_bounding_box"] = object_bounding_boxes[root[1]][int(root[2])]
+            G.nodes[root]["object_bounding_box"] = object_bounding_boxes[root[1]][root[2]]
             # Check that the bounding box orientation is the same as the canonical orientation
             # and pop the orientation to avoid confusion.
             bbox_orientation = G.nodes[root]["object_bounding_box"]["orientation"]

@@ -299,8 +299,8 @@ def process_link(
             original_material_filename = material_files[0]
 
             # Fix texture file paths if necessary.
-            texture_maps = G.nodes[link_node]["texture_maps"]
-            for map_channel, map_path in texture_maps:
+            material_maps = G.nodes[link_node]["material_maps"]
+            for map_channel, map_path in material_maps:
                 assert os.path.exists(map_path), f"Texture file {map_path} does not exist!"
 
                 # Convert the path to a dirname + filename so that we can use an OSFS
@@ -907,7 +907,7 @@ def main():
         cluster = LocalCluster()
         dask_client = cluster.get_client()
 
-        targets = get_targets("combined")[:1]
+        targets = ["scenes/Rs_int"]  # get_targets("combined")
 
         obj_futures = {}
 
