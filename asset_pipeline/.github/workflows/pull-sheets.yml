@@ -24,7 +24,7 @@ jobs:
         architecture: x64
 
     - name: Install requirements
-      run: pip install gspread
+      run: pip install gspread pandas
 
     - name: Authenticate on Google Cloud
       uses: 'google-github-actions/auth@v1'
@@ -36,7 +36,7 @@ jobs:
           ssh-private-key: ${{ secrets.SHEETS_DEPLOY_KEY }}
 
     - name: Refresh sheets data
-      run: python -m b1k_pipeline.pull_sheets
+      run: python -m b1k_pipeline.sync_sheets
 
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
