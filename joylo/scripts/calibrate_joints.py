@@ -20,11 +20,11 @@ class Args:
     port: str = "/dev/ttyUSB0"
     """The port that GELLO is connected to."""
 
-    baudrate: int = 3000000
+    baudrate: int = 2000000
     """The baudrate of the connected GELLO's dynamixel board."""
     
-    num_joints: int = 16
-    """The total number of joints on the gello"""
+    robot: str = "R1" # "R1" or "R1Pro"
+    """The robot type. This is used to determine the number of joints."""
     
 
 def pretty_print_list(items: list[float]) -> None:
@@ -42,7 +42,8 @@ def get_joint_angles_R(driver: DynamixelDriver) -> np.ndarray:
 
 
 def compute_joint_offsets_and_signs(joints_1: np.ndarray,
-                                    joints_2: np.ndarray) -> tuple[np.ndarray, np.ndarray]:
+                                    joints_2: np.ndarray,
+                                    robot_name: str)-> tuple[np.ndarray, np.ndarray],:
     """
     Computes the joints signs and offsets given the measured angles at two known positions 
     (for now, fixed in code to be a cannonical "zero" position, and a second "calibration" 
@@ -52,13 +53,18 @@ def compute_joint_offsets_and_signs(joints_1: np.ndarray,
         signs (np.ndarray)
         offsets (np.ndarray)
     """
-    # Hard-coded for now, could make an argument in the future
-    expected_positions_1 = np.array([0, 0, 45, 45, -45, 0, 0, 0,
-                                     0, 0, 45, 45, -45, 0, 0, 0])
-
-    expected_positions_2 = np.array([90, 90, 180, 180, -180, 90, 90, -90,
-                                    -90, -90, 180, 180, -180, -90, -90, 90])
-    
+    if robot_name == "R1":
+        # Hard-coded for now, could make an argument in the future
+        expected_positions_1 = np.array([0, 0, 45, 45, -45, 0, 0, 0,
+                                        0, 0, 45, 45, -45, 0, 0, 0])
+        expected_positions_2 = np.array([90, 90, 180, 180, -180, 90, 90, -90,
+                                        -90, -90, 180, 180, -180, -90, -90, 90])
+    elif robot_name == "R1Pro":
+        expected_positions_1 = np.zeros(18)
+        expected_positions_2 = np.array([-90, -90, 90, 90, 90, 90, -90, 60, 90,
+                                        -90, -90, -90, -90, 90, -90, -90, 60, -90])
+    else:
+        raise ValueError("Robot name must be either R1 or R1Pro")
 
     # Compute signs by comparing measured and expected delta between positions
     delta = joints_2 - joints_1
@@ -67,12 +73,12 @@ def compute_joint_offsets_and_signs(joints_1: np.ndarray,
     signs = np.sign(delta / expected_delta)
     
     # Compute offsets by subtracting expected position and accounting for sign
-    def round_to_90(x: np.ndarray) -> np.ndarray:
-        """ Round all elements to the nearest multiple of 90 degrees """
-        return 90 * np.rint(x / 90)
+    def round_to_60(x: np.ndarray) -> np.ndarray:
+        """ Round all elements to the nearest multiple of 60 degrees """
+        return 60 * np.rint(x / 60)
     
-    offsets_1 = round_to_90(joints_1 - signs * expected_positions_1)
-    offsets_2 = round_to_90(joints_2 - signs * expected_positions_2)
+    offsets_1 = round_to_60(joints_1 - signs * expected_positions_1)
+    offsets_2 = round_to_60(joints_2 - signs * expected_positions_2)
     
     # Exit if these offsets are not equal
     if not np.all(offsets_1 == offsets_2):
@@ -87,12 +93,15 @@ def compute_joint_offsets_and_signs(joints_1: np.ndarray,
             
 
 def main(args: Args) -> None:
-    joint_ids = list(range(args.num_joints))
+    assert args.robot in ["R1", "R1Pro"], "Robot type must be either R1 or R1Pro"
+    
+    num_joints = 18 if args.robot == "R1Pro" else 16
+    joint_ids = list(range(num_joints))
     driver = DynamixelDriver(ids=joint_ids, port=args.port, baudrate=args.baudrate)
 
     # Initialize arrays to store joint angles
-    joint_angles_pos_1 = np.zeros(args.num_joints)
-    joint_angles_pos_2 = np.zeros(args.num_joints)
+    joint_angles_pos_1 = np.zeros(num_joints)
+    joint_angles_pos_2 = np.zeros(num_joints)
 
     # Warm up dynamixel driver
     for _ in range(10):
@@ -124,7 +133,7 @@ def main(args: Args) -> None:
     joint_angles_pos_2[8:] = get_joint_angles_R(driver)
 
     # Compute offsets and angles 
-    signs, offsets = compute_joint_offsets_and_signs(joint_angles_pos_1, joint_angles_pos_2)
+    signs, offsets = compute_joint_offsets_and_signs(joint_angles_pos_1, joint_angles_pos_2, args.robot)
     # compute_joint_offsets_and_signs(J1, J2)
 
     print("")
