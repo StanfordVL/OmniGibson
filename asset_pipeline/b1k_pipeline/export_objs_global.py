@@ -31,25 +31,13 @@ logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
 
 CHANNEL_MAPPING = {
-    "VRayRawDiffuseFilterMap": "albedo",
-    "VRayNormalsMap": "normal",
-    "VRayMtlReflectGlossinessBake": "roughness",
-    "VRayMetalnessMap": "metalness",
-    "VRayRawRefractionFilterMap": "opacity",
-    "VRaySelfIlluminationMap": "emission",
-    "VRayAOMap": "ao",
-    "VRayRawReflectionFilterMap": "reflectivity",
-}
-
-MTL_MAPPING = {
-    "map_Kd": "albedo",
-    "map_bump": "normal",
-    "map_Pr": "roughness",
-    "map_Pm": "metalness",
-    "map_Tf": "opacity",
-    "map_Ks": "reflectivity",
-    # "map_Ke": "emission",
-    # "map_Ks": "ao",
+    "Base Color Map": ("diffuse", "map_Kd"),
+    "Bump Map": ("normal", "map_bump"),
+    "Roughness Map": ("roughness", "map_Pr"),
+    "Metalness Map": ("metalness", "map_Pm"),
+    "Transparency Map": ("refraction", "map_Tf"),
+    "Reflectivity Map": ("reflection", "map_Ks"),
+    "IOR Map": ("ior", "map_Ns"),
 }
 
 ALLOWED_PART_TAGS = {
@@ -322,7 +310,7 @@ def process_link(
                 src_map_fs = OSFS(src_map_dir)
 
                 assert map_channel in CHANNEL_MAPPING, f"Unknown channel {map_channel}"
-                dst_fname = CHANNEL_MAPPING[map_channel]
+                dst_fname, _ = CHANNEL_MAPPING[map_channel]
                 dst_texture_filename = f"{model_id}__{link_name}__{dst_fname}.png"
 
                 # Load the image
@@ -399,8 +387,8 @@ def process_link(
                 for line in f.readlines():
                     if "map_Kd material_0.png" in line:
                         line = ""
-                        for key in MTL_MAPPING:
-                            line += f"{key} ../../material/{model_id}__{link_name}__{MTL_MAPPING[key]}.png\n"
+                        for file_suffix, mtl_key in CHANNEL_MAPPING.values():
+                            line += f"{mtl_key} ../../material/{model_id}__{link_name}__{file_suffix}.png\n"
                     new_lines.append(line)
 
             with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:

@@ -1,5 +1,6 @@
 import csv
 import json
+import os
 import re
 
 import networkx as nx
@@ -220,6 +221,13 @@ def build_mesh_tree(
                 bakery_fs = pipeline_fs.target(target).opendir("bakery")
                 for channel, path_rel_to_bakery in metadata["texture_maps"].items():
                     G.nodes[node_key]["texture_maps"][channel] = bakery_fs.getsyspath(path_rel_to_bakery)
+
+                # TODO: Remove this
+                # Temporarily add the IOR channel until we can get it from the JSON file
+                ior_map_filename = f"{mesh_name}_VRayMtlReflectIORBake.exr"
+                ior_map_full_path = bakery_fs.getsyspath(ior_map_filename)
+                assert os.path.exists(ior_map_full_path), f"IOR map {ior_map_full_path} does not exist."
+                G.nodes[node_key]["texture_maps"]["IOR Map"] = ior_map_full_path
 
                 # Load convexmesh meta links
                 for cm_type in CONVEX_MESH_TYPES:
