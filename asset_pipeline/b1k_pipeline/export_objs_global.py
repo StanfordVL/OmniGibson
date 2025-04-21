@@ -1,5 +1,4 @@
 import collections
-from concurrent import futures
 import copy
 import io
 import json
@@ -9,6 +8,7 @@ import traceback
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
+from dask.distributed import LocalCluster, as_completed
 import fs.copy
 from fs.tempfs import TempFS
 from fs.osfs import OSFS
@@ -16,7 +16,6 @@ import networkx as nx
 import numpy as np
 import tqdm
 import trimesh
-import trimesh.voxel.creation
 from scipy.spatial.transform import Rotation as R
 from PIL import Image
 
@@ -31,7 +30,7 @@ from b1k_pipeline.utils import (
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
 
-VRAY_MAPPING = {
+CHANNEL_MAPPING = {
     "VRayRawDiffuseFilterMap": "albedo",
     "VRayNormalsMap": "normal",
     "VRayMtlReflectGlossinessBake": "roughness",
@@ -304,6 +303,7 @@ def process_link(
 
         # Check if a material got exported.
         material_files = [x for x in tfs.listdir("/") if x.endswith(".mtl")]
+        assert material_files, "No materials found after OBJ export! Not good."
         if material_files:
             assert (
                 len(material_files) == 1
@@ -311,34 +311,34 @@ def process_link(
             original_material_filename = material_files[0]
 
             # Fix texture file paths if necessary.
-            original_material_fs = G.nodes[link_node]["material_dir"]
-            if original_material_fs:
-                for src_texture_file in original_material_fs.listdir("/"):
-                    fname = src_texture_file
-                    # fname is in the same format as room_light-0-0_VRayAOMap.png
-                    vray_name = (
-                        fname[fname.index("VRay") : -4] if "VRay" in fname else None
-                    )
-                    if vray_name in VRAY_MAPPING:
-                        dst_fname = VRAY_MAPPING[vray_name]
-                    else:
-                        raise ValueError(f"Unknown texture map: {fname}")
+            texture_maps = G.nodes[link_node]["texture_maps"]
+            for map_channel, map_path in texture_maps:
+                assert os.path.exists(map_path), f"Texture file {map_path} does not exist!"
 
-                    dst_texture_file = f"{model_id}__{link_name}__{dst_fname}.png"
+                # Convert the path to a dirname + filename so that we can use an OSFS
+                # to copy the file.
+                src_map_dir = os.path.dirname(map_path)
+                src_map_filename = os.path.basename(map_path)
+                src_map_fs = OSFS(src_map_dir)
 
-                    # Load the image
-                    # TODO: Re-enable this after tuning it.
-                    # texture = Image.open(original_material_fs.open(src_texture_file, "rb"), formats=("png",))
-                    # existing_texture_res = texture.size[0]
-                    # if existing_texture_res > texture_res:
-                    #     texture = texture.resize((texture_res, texture_res), Image.BILINEAR)
-                    # texture.save(obj_link_material_folder_fs.open(dst_texture_file, "wb"), format="png")
-                    fs.copy.copy_file(
-                        original_material_fs,
-                        src_texture_file,
-                        obj_link_material_folder_fs,
-                        dst_texture_file,
-                    )
+                assert map_channel in CHANNEL_MAPPING, f"Unknown channel {map_channel}"
+                dst_fname = CHANNEL_MAPPING[map_channel]
+                dst_texture_filename = f"{model_id}__{link_name}__{dst_fname}.png"
+
+                # Load the image
+                # TODO: Re-enable this after tuning it.
+                # texture = Image.open(original_material_fs.open(src_texture_file, "rb"), formats=("png",))
+                # existing_texture_res = texture.size[0]
+                # if existing_texture_res > texture_res:
+                #     texture = texture.resize((texture_res, texture_res), Image.BILINEAR)
+                # texture.save(obj_link_material_folder_fs.open(dst_texture_file, "wb"), format="png")
+
+                fs.copy.copy_file(
+                    src_map_fs,
+                    src_map_filename,
+                    obj_link_material_folder_fs,
+                    dst_texture_filename,
+                )
 
         # Copy the OBJ into the right spot
         fs.copy.copy_file(
@@ -698,13 +698,12 @@ def process_link(
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
 
 
-def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
+def process_object(root_node, target, relevant_nodes, output_dir):
     try:
         obj_cat, obj_model, obj_inst_id, _ = root_node
 
         G = mesh_tree.build_mesh_tree(
-            mesh_list,
-            b1k_pipeline.utils.PipelineFS().target_output(target),
+            target,
             filter_nodes=relevant_nodes,
         )
 
@@ -749,16 +748,17 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
             with urdf_fs.open(f"{obj_model}.urdf", "wb") as f:
                 tree.write(f, xml_declaration=True)
 
-            bbox_size, base_link_offset, _, _ = compute_object_bounding_box(
-                G.nodes[root_node]
-            )
+            bbox_size = G[root_node]["bounding_box"]["extent"]
+            bbox_world_pos = G[root_node]["bounding_box"]["position"]
+            base_link_offset_in_world = bbox_world_pos - base_link_center
+            base_link_offset = R.from_quat(canonical_orientation).inv().apply(base_link_offset_in_world)
 
             # Compute part information
             for part_node_key in get_part_nodes(G, root_node):
                 # Get the part node bounding box
-                part_bb_size, _, part_bb_in_world_pos, part_bb_in_world_rot = (
-                    compute_object_bounding_box(G.nodes[part_node_key])
-                )
+                part_bb_size = G.nodes[part_node_key]["bounding_box"]["extent"]
+                part_bb_in_world_pos = G.nodes[part_node_key]["bounding_box"]["position"]
+                part_bb_in_world_rot = R.from_quat(G.nodes[part_node_key]["bounding_box"]["rotation"])
 
                 # Convert into our base link frame
                 our_transform = np.eye(4)
@@ -866,65 +866,48 @@ def process_object(root_node, target, mesh_list, relevant_nodes, output_dir):
         return exc
 
 
-def process_target(target, objects_path, executor):
-    with b1k_pipeline.utils.PipelineFS() as pipeline_fs, OSFS(
-        objects_path
-    ) as objects_fs:
-        with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
-            mesh_list = json.load(f)["meshes"]
+def process_target(target, objects_path, dask_client):
+    object_futures = {}
 
-        # Build the mesh tree using our mesh tree library. The scene code also uses this system.
-        G = mesh_tree.build_mesh_tree(
-            mesh_list, pipeline_fs.target_output(target), load_meshes=False
-        )
+    # Build the mesh tree using our mesh tree library. The scene code also uses this system.
+    G = mesh_tree.build_mesh_tree(target, load_meshes=False)
 
-        # Go through each object.
-        roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+    # Go through each object.
+    roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
-        # Only save the 0th instance.
-        saveable_roots = [
-            root_node
-            for root_node in roots
-            if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]
-        ]
-        object_futures = {}
-        for root_node in saveable_roots:
-            # Start processing the object. We start by creating an object-specific
-            # copy of the mesh tree (also including info about any parts)
-            relevant_nodes = set(nx.dfs_tree(G, root_node).nodes())
-            relevant_nodes |= {
-                node
-                for part_root_node in get_part_nodes(
-                    G, root_node
-                )  # Get every part root node
-                for node in nx.dfs_tree(G, part_root_node).nodes()
-            }  # Get the subtree of each part
+    # Only save the 0th instance.
+    saveable_roots = [
+        root_node
+        for root_node in roots
+        if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]
+    ]
+    for root_node in saveable_roots:
+        # Start processing the object. We start by creating an object-specific
+        # copy of the mesh tree (also including info about any parts)
+        relevant_nodes = set(nx.dfs_tree(G, root_node).nodes())
+        relevant_nodes |= {
+            node
+            for part_root_node in get_part_nodes(
+                G, root_node
+            )  # Get every part root node
+            for node in nx.dfs_tree(G, part_root_node).nodes()
+        }  # Get the subtree of each part
 
-            obj_cat, obj_model, obj_inst_id, _ = root_node
-            output_dirname = f"{obj_cat}/{obj_model}"
-            object_futures[
-                executor.submit(
-                    process_object,
-                    root_node,
-                    target,
-                    mesh_list,
-                    relevant_nodes,
-                    objects_fs.makedirs(output_dirname).getsyspath("/"),
-                )
-            ] = str(root_node)
+        obj_cat, obj_model, obj_inst_id, _ = root_node
+        output_dirname = f"{obj_cat}/{obj_model}"
+        output_dirname_abs = os.path.join(objects_path, output_dirname)
+        os.makedirs(output_dirname_abs, exist_ok=True)
+        object_futures[
+            dask_client.submit(
+                process_object,
+                root_node,
+                target,
+                relevant_nodes,
+                output_dirname_abs,
+            )
+        ] = str(root_node)
 
-        # Wait for all the futures - this acts as some kind of rate limiting on more futures being queued by blocking this thread
-        # futures.wait(object_futures.keys())
-
-        # Accumulate the errors
-        error_msg = ""
-        for future in futures.as_completed(object_futures.keys()):
-            root_node = object_futures[future]
-            exc = future.result()
-            if exc:
-                error_msg += f"{root_node}: {exc}\n\n"
-        if error_msg:
-            raise ValueError(error_msg)
+        return object_futures
 
 
 def main():
@@ -932,38 +915,23 @@ def main():
         objects_dir = archive_fs.makedir("objects").getsyspath("/")
         # Load the mesh list from the object list json.
         errors = {}
-        target_futures = {}
 
-        with futures.ThreadPoolExecutor(
-            max_workers=50
-        ) as target_executor, futures.ProcessPoolExecutor(
-            max_workers=16
-        ) as obj_executor:
-            targets = get_targets("combined")
-            for target in tqdm.tqdm(targets):
-                target_futures[
-                    target_executor.submit(
-                        process_target, target, objects_dir, obj_executor
-                    )
-                ] = target
+        cluster = LocalCluster()
+        dask_client = cluster.get_client()
 
-            with tqdm.tqdm(total=len(target_futures)) as object_pbar:
-                for future in futures.as_completed(target_futures.keys()):
-                    try:
-                        result = future.result()
-                    except:
-                        name = target_futures[future]
-                        errors[name] = traceback.format_exc()
+        targets = get_targets("combined")[:1]
 
-                    object_pbar.update(1)
+        obj_futures = {}
 
-                    remaining_targets = [
-                        v for k, v in target_futures.items() if not k.done()
-                    ]
-                    if len(remaining_targets) < 10:
-                        print("Remaining:", remaining_targets)
+        for target in tqdm.tqdm(targets, desc="Processing targets to queue objects"):
+            obj_futures.update(process_target(target, objects_dir, dask_client))
 
-            print("Time for executor shutdown")
+        for future in tqdm.tqdm(as_completed(obj_futures.keys()), total=len(obj_futures), desc="Processing objects"):
+            try:
+                future.result()
+            except:
+                name = obj_futures[future]
+                errors[name] = traceback.format_exc()
 
         print("Finished processing")
 

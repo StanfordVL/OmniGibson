@@ -5,7 +5,6 @@ import sys
 import numpy as np
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
-from fs.zipfs import ZipFS
 from fs.osfs import OSFS
 from scipy.spatial.transform import Rotation as R
 from concurrent import futures
@@ -13,7 +12,6 @@ import tqdm
 import traceback
 
 from b1k_pipeline.mesh_tree import build_mesh_tree
-from b1k_pipeline.export_objs_global import compute_object_bounding_box
 import b1k_pipeline.utils
 
 ALLOWED_PART_TAGS = {
@@ -126,9 +124,8 @@ def process_target(target, scenes_dir):
 
     # Get the mesh tree of each part.
     for partial_scene_name, portal_pose_in_parent in scene_parts.items():
-        partial_scene_output_fs = pipeline_fs.target_output(
-            "scenes/" + partial_scene_name
-        )
+        partial_scene_target_name = "scenes/" + partial_scene_name
+        partial_scene_output_fs = pipeline_fs.target_output(partial_scene_target_name)
 
         # Compute the incoming transform
         rel_transform = np.eye(4)
@@ -154,13 +151,9 @@ def process_target(target, scenes_dir):
                 rot_axis, [0, 0, 1]
             ), f"Relative transform should only be a Z rotation. Current axis: {rot_axis}"
 
-        # Load the mesh list from the object list json.
-        with partial_scene_output_fs.open("object_list.json", "r") as f:
-            mesh_list = json.load(f)["meshes"]
-
         # Build the mesh tree using our mesh tree library.
         # We don't need the upper side joints since we will only use these objects for bboxes.
-        G = build_mesh_tree(mesh_list, partial_scene_output_fs, load_upper=False)
+        G = build_mesh_tree(partial_scene_target_name, load_upper=False)
 
         # Go through each object.
         roots = [
@@ -209,9 +202,9 @@ def process_target(target, scenes_dir):
                 ] = canonical_orientation.as_quat()
 
             # Get the relevant bbox info.
-            bbox_size, _, bbox_world_center, bbox_world_rot = (
-                compute_object_bounding_box(G.nodes[root_node])
-            )
+            bbox_size = G.nodes[root_node]["bounding_box"]["extent"]
+            bbox_world_center = G.nodes[root_node]["bounding_box"]["position"]
+            bbox_world_rot = R.from_quat(G.nodes[root_node]["canonical_orientation"]) 
 
             # Apply the relevant transformation
             bbox_transform = np.eye(4)

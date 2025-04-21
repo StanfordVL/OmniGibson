@@ -41,8 +41,7 @@ def maybe_rename_category(cat, model):
 
 
 def build_mesh_tree(
-    mesh_list,
-    target_output_fs,
+    target,
     load_upper=True,
     load_bad=True,
     load_nonzero=True,
@@ -52,8 +51,19 @@ def build_mesh_tree(
 ):
     G = nx.DiGraph()
 
+    pipeline_fs = PipelineFS()
+    target_output_fs = pipeline_fs.target_output(target)
+
     # Open the mesh filesystems
     mesh_fs = ZipFS(target_output_fs.open("meshes.zip", "rb"))
+
+    # Load the object list for the file
+    with target_output_fs.open("object_list.json", "r") as f:
+        object_list = json.load(f)
+
+    # Get the mesh list and bboxes
+    mesh_list = object_list["meshes"]
+    object_bounding_boxes = object_list["bounding_boxes"]
 
     pbar = tqdm.tqdm(mesh_list) if show_progress else mesh_list
     for mesh_name in pbar:
@@ -191,9 +201,6 @@ def build_mesh_tree(
             G.nodes[node_key]["metadata"] = metadata
             G.nodes[node_key]["meta_links"] = meta_links
             G.nodes[node_key]["canonical_orientation"] = canonical_orientation
-            G.nodes[node_key]["material_dir"] = (
-                mesh_dir.opendir("material") if mesh_dir.exists("material") else None
-            )
 
             if load_meshes:
                 assert (
@@ -207,6 +214,12 @@ def build_mesh_tree(
                 G.nodes[node_key]["lower_points"] = (
                     trimesh.transformations.transform_points(lower_points, SCALE_MATRIX)
                 )
+
+                # Load the texture map paths and convert them to absolute paths
+                G.nodes[node_key]["texture_maps"] = {}
+                bakery_fs = pipeline_fs.target(target).opendir("bakery")
+                for channel, path_rel_to_bakery in metadata["texture_maps"].items():
+                    G.nodes[node_key]["texture_maps"][channel] = bakery_fs.getsyspath(path_rel_to_bakery)
 
                 # Load convexmesh meta links
                 for cm_type in CONVEX_MESH_TYPES:
@@ -298,7 +311,31 @@ def build_mesh_tree(
     # Create combined mesh for each root node and add some data.
     if load_meshes:
         roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+        
+        # Assert that the roots keys are exactly the keys of the bounding boxes, without
+        # repetition.
+        roots_to_model_and_instance = sorted([(node[1], int(node[2])) for node in roots])
+        bbox_keys = sorted([(model_id, instance_id) for model_id, instances in object_bounding_boxes.items() for instance_id in instances])
+        assert (
+            roots_to_model_and_instance == bbox_keys
+        ), f"Root nodes do not match the bounding boxes. Roots: {roots_to_model_and_instance}, BBoxes: {bbox_keys}"
+
         for root in roots:
+            # First find the object bounding box.
+            G.nodes[root]["object_bounding_box"] = object_bounding_boxes[root[1]][int(root[2])]
+            # Check that the bounding box orientation is the same as the canonical orientation
+            # and pop the orientation to avoid confusion.
+            bbox_orientation = G.nodes[root]["object_bounding_box"]["orientation"]
+            bbox_orientation = R.from_quat(bbox_orientation)
+            canonical_orientation = G.nodes[root]["canonical_orientation"]
+            canonical_orientation = R.from_quat(canonical_orientation)
+            delta_orientation = bbox_orientation.inv() * canonical_orientation
+            assert delta_orientation.magnitude() < 1e-5, f"Root node {root} has a bounding box with orientation {bbox_orientation.as_quat()} that does not match the canonical orientation {canonical_orientation.as_quat()}."
+            G.nodes[root]["object_bounding_box"] = {
+                "position": G.nodes[root]["object_bounding_box"]["position"],
+                "extent": G.nodes[root]["object_bounding_box"]["extent"],
+            }
+
             nodes = list(nx.dfs_preorder_nodes(G, root))
             meshes = [
                 G.nodes[node]["lower_mesh"]
