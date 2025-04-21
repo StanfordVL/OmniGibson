@@ -65,6 +65,12 @@ def build_mesh_tree(
     # Get the mesh list and bboxes
     mesh_list = object_list["meshes"]
     object_bounding_boxes = object_list["bounding_boxes"]
+    
+    # Invert the bbox rotations. 
+    # TODO: Remove .inv() after fixing the object_list wrong rotation.
+    for model_id, instances in object_bounding_boxes.items():
+        for instance_id, bbox in instances.items():
+            bbox["rotation"] = R.from_quat(bbox["rotation"]).inv().as_quat().tolist()
 
     pbar = tqdm.tqdm(mesh_list) if show_progress else mesh_list
     for mesh_name in pbar:
@@ -113,163 +119,166 @@ def build_mesh_tree(
         G.nodes[node_key]["is_randomization_fixed"] = is_randomization_fixed
         G.nodes[node_key]["tags"] = tags
 
-        # Get the path for the mesh
-        mesh_dir = mesh_fs.opendir(mesh_name)
-        mesh_fn = f"{mesh_name}.obj"
-        with mesh_dir.open(f"{mesh_name}.json", "r") as metadata_file:
-            metadata = json.load(metadata_file)
+        should_load_data = not is_broken and int(obj_inst_id) == 0
 
-        # Rename parts
-        renamed_parts = []
-        for part_name in metadata["parts"]:
-            part_name_parsed = parse_name(part_name)
-            part_cat = part_name_parsed.group("category")
-            part_model = part_name_parsed.group("model_id")
-            part_name_renamed = part_name.replace(
-                part_cat, maybe_rename_category(part_cat, part_model)
-            )
-            renamed_parts.append(part_name_renamed)
-        metadata["parts"] = renamed_parts
+        if should_load_data:
+            # Get the path for the mesh
+            mesh_dir = mesh_fs.opendir(mesh_name)
+            mesh_fn = f"{mesh_name}.obj"
+            with mesh_dir.open(f"{mesh_name}.json", "r") as metadata_file:
+                metadata = json.load(metadata_file)
 
-        # Grab orientation from metadata
-        canonical_orientation = metadata["orientation"]
-        del metadata["orientation"]
+            # Rename parts
+            renamed_parts = []
+            for part_name in metadata["parts"]:
+                part_name_parsed = parse_name(part_name)
+                part_cat = part_name_parsed.group("category")
+                part_model = part_name_parsed.group("model_id")
+                part_name_renamed = part_name.replace(
+                    part_cat, maybe_rename_category(part_cat, part_model)
+                )
+                renamed_parts.append(part_name_renamed)
+            metadata["parts"] = renamed_parts
 
-        # Grab meta links from metadata and delete original to avoid confusion
-        meta_links = metadata["meta_links"]
-        del metadata["meta_links"]
+            # Grab orientation from metadata
+            canonical_orientation = metadata["orientation"]
+            del metadata["orientation"]
 
-        # Apply the scaling factor.
-        for meta_type, meta_link_id_to_subid in meta_links.items():
-            for meta_link_subid_to_link in meta_link_id_to_subid.values():
-                for meta_link in meta_link_subid_to_link:
-                    meta_link["position"] = (
-                        np.array(meta_link["position"]) * SCALE_FACTOR
-                    )
+            # Grab meta links from metadata and delete original to avoid confusion
+            meta_links = metadata["meta_links"]
+            del metadata["meta_links"]
 
-                    # TODO: Remove this after it's fixed in export_meshes
-                    # Fix inverted meta link orientations
-                    meta_link["orientation"] = (
-                        R.from_quat(meta_link["orientation"]).inv().as_quat().tolist()
-                    )
-
-                    if "length" in meta_link:
-                        meta_link["length"] *= SCALE_FACTOR
-                    if "width" in meta_link:
-                        meta_link["width"] *= SCALE_FACTOR
-                    if "size" in meta_link:
-                        meta_link["size"] = (
-                            np.asarray(meta_link["size"]) * SCALE_FACTOR
-                        ).tolist()
-
-                        # Fix any negative sizes.
-                        z_negative = meta_link["size"][2] < 0
-                        meta_link["size"] = np.abs(meta_link["size"]).tolist()
-                        if z_negative and meta_link["type"] in (
-                            "box",
-                            "cylinder",
-                            "cone",
-                        ):
-                            # These objects are not symmetrical around the Z axis & need to be rotated
-                            new_orientation = R.from_quat(
-                                meta_link["orientation"]
-                            ) * R.from_euler("x", np.pi)
-                            meta_link["orientation"] = new_orientation.as_quat()
-
-                    # TODO: Remove this once it is moved to a better place
-                    # Apply the meta link scaling rules here
-                    if meta_type == "particleapplier":
-                        coefficient = (
-                            PARTICLE_APPLIER_CONE_LENGTH / meta_link["size"][2]
+            # Apply the scaling factor.
+            for meta_type, meta_link_id_to_subid in meta_links.items():
+                for meta_link_subid_to_link in meta_link_id_to_subid.values():
+                    for meta_link in meta_link_subid_to_link:
+                        meta_link["position"] = (
+                            np.array(meta_link["position"]) * SCALE_FACTOR
                         )
 
-                        if coefficient > 1:
+                        # TODO: Remove this after it's fixed in export_meshes
+                        # Fix inverted meta link orientations
+                        meta_link["orientation"] = (
+                            R.from_quat(meta_link["orientation"]).inv().as_quat().tolist()
+                        )
+
+                        if "length" in meta_link:
+                            meta_link["length"] *= SCALE_FACTOR
+                        if "width" in meta_link:
+                            meta_link["width"] *= SCALE_FACTOR
+                        if "size" in meta_link:
                             meta_link["size"] = (
-                                np.asarray(meta_link["size"]) * coefficient
+                                np.asarray(meta_link["size"]) * SCALE_FACTOR
                             ).tolist()
 
-        # Add the data for the position onto the node.
-        if joint_side == "upper":
-            assert (
-                "upper_points" not in G.nodes[node_key]
-            ), f"Found two upper meshes for {node_key}"
-            if load_meshes:
-                upper_points = load_points(mesh_dir, mesh_fn)
-                G.nodes[node_key]["upper_points"] = (
-                    trimesh.transformations.transform_points(upper_points, SCALE_MATRIX)
-                )
-        else:
-            G.nodes[node_key]["metadata"] = metadata
-            G.nodes[node_key]["meta_links"] = meta_links
-            G.nodes[node_key]["canonical_orientation"] = canonical_orientation
+                            # Fix any negative sizes.
+                            z_negative = meta_link["size"][2] < 0
+                            meta_link["size"] = np.abs(meta_link["size"]).tolist()
+                            if z_negative and meta_link["type"] in (
+                                "box",
+                                "cylinder",
+                                "cone",
+                            ):
+                                # These objects are not symmetrical around the Z axis & need to be rotated
+                                new_orientation = R.from_quat(
+                                    meta_link["orientation"]
+                                ) * R.from_euler("x", np.pi)
+                                meta_link["orientation"] = new_orientation.as_quat()
 
-            if load_meshes:
-                assert (
-                    "lower_mesh" not in G.nodes[node_key]
-                ), f"Found two lower meshes for {node_key}"
-                lower_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh")
-                lower_mesh.apply_transform(SCALE_MATRIX)
-                G.nodes[node_key]["lower_mesh"] = lower_mesh
-
-                lower_points = load_points(mesh_dir, mesh_fn)
-                G.nodes[node_key]["lower_points"] = (
-                    trimesh.transformations.transform_points(lower_points, SCALE_MATRIX)
-                )
-
-                # Load the texture map paths and convert them to absolute paths
-                G.nodes[node_key]["material_maps"] = {}
-                bakery_fs = pipeline_fs.target(target).opendir("bakery")
-                for channel, path_rel_to_bakery in metadata["material_maps"].items():
-                    G.nodes[node_key]["material_maps"][channel] = bakery_fs.getsyspath(path_rel_to_bakery)
-
-                # TODO: Remove this
-                # Temporarily add the IOR channel until we can get it from the JSON file
-                ior_map_filename = f"{mesh_name}_VRayMtlReflectIORBake.exr"
-                ior_map_full_path = bakery_fs.getsyspath(ior_map_filename)
-                assert os.path.exists(ior_map_full_path), f"IOR map {ior_map_full_path} does not exist."
-                G.nodes[node_key]["material_maps"]["IOR Map"] = ior_map_full_path
-
-                # Load convexmesh meta links
-                for cm_type in CONVEX_MESH_TYPES:
-                    # Check if a collision mesh exist in the same directory
-                    pattern_str = r"^.*-M" + cm_type + r"(?:_[A-Za-z0-9]+)?-(\d+).obj$"
-                    selection_matching_pattern = re.compile(pattern_str)
-                    cm_filenames = [
-                        x
-                        for x in mesh_dir.listdir("/")
-                        if selection_matching_pattern.fullmatch(x)
-                    ]
-                    
-                    if cm_filenames:
-                        # Match the files
-                        selection_matches = [
-                            (selection_matching_pattern.fullmatch(x), x)
-                            for x in cm_filenames
-                        ]
-                        indexed_matches = {
-                            int(match.group(1)): fn for match, fn in selection_matches if match
-                        }
-                        expected_keys = set(range(len(indexed_matches)))
-                        found_keys = set(indexed_matches.keys())
-                        assert (
-                            expected_keys == found_keys
-                        ), f"Missing {cm_type} meshes for {node_key}: {expected_keys - found_keys}"
-                        ordered_cm_filenames = [
-                            indexed_matches[i] for i in range(len(indexed_matches))
-                        ]
-
-                        convex_meshes = []
-                        for convex_mesh_filename in ordered_cm_filenames:
-                            convex_mesh = load_mesh(
-                                mesh_dir,
-                                convex_mesh_filename,
-                                force="mesh",
-                                process=False,
-                                skip_materials=True,
+                        # TODO: Remove this once it is moved to a better place
+                        # Apply the meta link scaling rules here
+                        if meta_type == "particleapplier":
+                            coefficient = (
+                                PARTICLE_APPLIER_CONE_LENGTH / meta_link["size"][2]
                             )
-                            convex_mesh.apply_transform(SCALE_MATRIX)
-                            convex_meshes.append(convex_mesh)
-                        G.nodes[node_key][f"{cm_type}_mesh"] = convex_meshes
+
+                            if coefficient > 1:
+                                meta_link["size"] = (
+                                    np.asarray(meta_link["size"]) * coefficient
+                                ).tolist()
+
+            # Add the data for the position onto the node.
+            if joint_side == "upper":
+                assert (
+                    "upper_points" not in G.nodes[node_key]
+                ), f"Found two upper meshes for {node_key}"
+                if load_meshes:
+                    upper_points = load_points(mesh_dir, mesh_fn)
+                    G.nodes[node_key]["upper_points"] = (
+                        trimesh.transformations.transform_points(upper_points, SCALE_MATRIX)
+                    )
+            else:
+                G.nodes[node_key]["metadata"] = metadata
+                G.nodes[node_key]["meta_links"] = meta_links
+                G.nodes[node_key]["canonical_orientation"] = canonical_orientation
+
+                if load_meshes:
+                    assert (
+                        "lower_mesh" not in G.nodes[node_key]
+                    ), f"Found two lower meshes for {node_key}"
+                    lower_mesh = load_mesh(mesh_dir, mesh_fn, process=False, force="mesh")
+                    lower_mesh.apply_transform(SCALE_MATRIX)
+                    G.nodes[node_key]["lower_mesh"] = lower_mesh
+
+                    lower_points = load_points(mesh_dir, mesh_fn)
+                    G.nodes[node_key]["lower_points"] = (
+                        trimesh.transformations.transform_points(lower_points, SCALE_MATRIX)
+                    )
+
+                    # Load the texture map paths and convert them to absolute paths
+                    G.nodes[node_key]["material_maps"] = {}
+                    bakery_fs = pipeline_fs.target(target).opendir("bakery")
+                    for channel, path_rel_to_bakery in metadata["material_maps"].items():
+                        G.nodes[node_key]["material_maps"][channel] = bakery_fs.getsyspath(path_rel_to_bakery)
+
+                    # TODO: Remove this
+                    # Temporarily add the IOR channel until we can get it from the JSON file
+                    ior_map_filename = f"{mesh_name}_VRayMtlReflectIORBake.exr"
+                    ior_map_full_path = bakery_fs.getsyspath(ior_map_filename)
+                    assert os.path.exists(ior_map_full_path), f"IOR map {ior_map_full_path} does not exist."
+                    G.nodes[node_key]["material_maps"]["IOR Map"] = ior_map_full_path
+
+                    # Load convexmesh meta links
+                    for cm_type in CONVEX_MESH_TYPES:
+                        # Check if a collision mesh exist in the same directory
+                        pattern_str = r"^.*-M" + cm_type + r"(?:_[A-Za-z0-9]+)?-(\d+).obj$"
+                        selection_matching_pattern = re.compile(pattern_str)
+                        cm_filenames = [
+                            x
+                            for x in mesh_dir.listdir("/")
+                            if selection_matching_pattern.fullmatch(x)
+                        ]
+                        
+                        if cm_filenames:
+                            # Match the files
+                            selection_matches = [
+                                (selection_matching_pattern.fullmatch(x), x)
+                                for x in cm_filenames
+                            ]
+                            indexed_matches = {
+                                int(match.group(1)): fn for match, fn in selection_matches if match
+                            }
+                            expected_keys = set(range(len(indexed_matches)))
+                            found_keys = set(indexed_matches.keys())
+                            assert (
+                                expected_keys == found_keys
+                            ), f"Missing {cm_type} meshes for {node_key}: {expected_keys - found_keys}"
+                            ordered_cm_filenames = [
+                                indexed_matches[i] for i in range(len(indexed_matches))
+                            ]
+
+                            convex_meshes = []
+                            for convex_mesh_filename in ordered_cm_filenames:
+                                convex_mesh = load_mesh(
+                                    mesh_dir,
+                                    convex_mesh_filename,
+                                    force="mesh",
+                                    process=False,
+                                    skip_materials=True,
+                                )
+                                convex_mesh.apply_transform(SCALE_MATRIX)
+                                convex_meshes.append(convex_mesh)
+                            G.nodes[node_key][f"{cm_type}_mesh"] = convex_meshes
 
         # Add the edge in from the parent
         if link_name != "base_link":
@@ -283,6 +292,7 @@ def build_mesh_tree(
 
     # Quick validation.
     for node, data in G.nodes(data=True):
+        should_load_data = not data["is_broken"] and int(node[2]) == 0
         needs_upper = False
         if node[-1] != "base_link":
             assert len(G.in_edges(node)) == 1, node
@@ -290,15 +300,15 @@ def build_mesh_tree(
             joint_type = d["joint_type"]
             needs_upper = load_upper and not data["is_broken"] and joint_type != "F"
         assert (
-            not load_meshes or not needs_upper or "upper_points" in data
+            not should_load_data or not load_meshes or not needs_upper or "upper_points" in data
         ), f"{node} does not have upper mesh."
         assert (
-            not load_meshes or "lower_mesh" in data
+            not should_load_data or not load_meshes or "lower_mesh" in data
         ), f"{node} does not have lower mesh."
         assert (
-            not load_meshes or "lower_points" in data
+            not should_load_data or not load_meshes or "lower_points" in data
         ), f"{node} does not have lower mesh."
-        assert "metadata" in data, f"{node} does not have metadata."
+        assert not should_load_data or "metadata" in data, f"{node} does not have metadata."
 
         if "upper_points" in data:
             lower_vertices = len(data["lower_points"])
@@ -316,35 +326,33 @@ def build_mesh_tree(
                 G.in_degree(node) != 0
             ), f"Non-base_link node {node} should not have in degree 0."
 
-    # Create combined mesh for each root node and add some data.
-    if load_meshes:
-        roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
-        
-        # Assert that the roots keys are a subset of the bounding boxes keys.
-        roots_to_model_and_instance = sorted([(node[1], node[2]) for node in roots])
-        roots_to_model_and_instance_set = set(roots_to_model_and_instance)
-        assert len(roots_to_model_and_instance) == len(roots_to_model_and_instance_set), f"Duplicate root nodes found in {roots_to_model_and_instance}"
-        bbox_keys = set([(model_id, instance_id) for model_id, instances in object_bounding_boxes.items() for instance_id in instances])
-        assert (
-            roots_to_model_and_instance_set.issubset(bbox_keys)
-        ), f"Root nodes do not match the bounding boxes. Roots: {roots_to_model_and_instance}, BBoxes: {bbox_keys}"
+    # Find roots to look them up in bounding boxes.
+    roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+    
+    # Assert that the roots keys are a subset of the bounding boxes keys.
+    roots_to_model_and_instance = sorted([(node[1], node[2]) for node in roots])
+    roots_to_model_and_instance_set = set(roots_to_model_and_instance)
+    assert len(roots_to_model_and_instance) == len(roots_to_model_and_instance_set), f"Duplicate root nodes found in {roots_to_model_and_instance}"
+    bbox_keys = set([(model_id, instance_id) for model_id, instances in object_bounding_boxes.items() for instance_id in instances])
+    assert (
+        roots_to_model_and_instance_set.issubset(bbox_keys)
+    ), f"Root nodes do not match the bounding boxes. Roots: {roots_to_model_and_instance}, BBoxes: {bbox_keys}"
 
-        for root in roots:
-            # First find the object bounding box.
-            G.nodes[root]["object_bounding_box"] = object_bounding_boxes[root[1]][root[2]]
-            # Check that the bounding box orientation is the same as the canonical orientation
-            # and pop the orientation to avoid confusion.
-            bbox_orientation = G.nodes[root]["object_bounding_box"]["rotation"]
-            bbox_orientation = R.from_quat(bbox_orientation).inv()  # TODO: Remove .inv() after fixing the object_list wrong rotation.
+    for root in roots:
+        # First find the object bounding box.
+        G.nodes[root]["object_bounding_box"] = object_bounding_boxes[root[1]][root[2]]
+
+        # Check that the bounding box orientation is the same as the canonical orientation when one is available.
+        bbox_orientation = G.nodes[root]["object_bounding_box"]["rotation"]
+        bbox_orientation = R.from_quat(bbox_orientation)
+        if "canonical_orientation" in G.nodes[root]:
             canonical_orientation = G.nodes[root]["canonical_orientation"]
             canonical_orientation = R.from_quat(canonical_orientation)
             delta_orientation = bbox_orientation.inv() * canonical_orientation
             assert delta_orientation.magnitude() < 1e-5, f"Root node {root} has a bounding box with orientation {bbox_orientation.as_quat()} that does not match the canonical orientation {canonical_orientation.as_quat()}."
-            G.nodes[root]["object_bounding_box"] = {
-                "position": G.nodes[root]["object_bounding_box"]["position"],
-                "extent": G.nodes[root]["object_bounding_box"]["extent"],
-            }
 
+        # Create combined mesh for each root node and add some data.
+        if load_meshes:
             nodes = list(nx.dfs_preorder_nodes(G, root))
             meshes = [
                 G.nodes[node]["lower_mesh"]

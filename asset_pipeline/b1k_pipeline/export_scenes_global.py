@@ -175,6 +175,11 @@ def process_target(target, scenes_dir):
             if obj_rooms == "0":
                 obj_rooms = ""
 
+            # Get the relevant bbox info.
+            bbox_size = G.nodes[root_node]["object_bounding_box"]["extent"]
+            bbox_world_center = G.nodes[root_node]["object_bounding_box"]["position"]
+            bbox_world_rot = R.from_quat(G.nodes[root_node]["object_bounding_box"]["rotation"]) 
+
             # Apply any manual corrections
             force_fixed = None
             pos_correction = np.array([0, 0, 0])
@@ -188,23 +193,13 @@ def process_target(target, scenes_dir):
                     OBJECT_CORRECTIONS[scene_name][correction_key]
                 )
                 if rot_frame == "world":
-                    canonical_orientation = R.from_euler(
+                    bbox_world_rot = R.from_euler(
                         "xyz", orn_correction
-                    ) * R.from_quat(G.nodes[root_node]["canonical_orientation"])
+                    ) * bbox_world_rot
                 elif rot_frame == "local":
-                    canonical_orientation = R.from_quat(
-                        G.nodes[root_node]["canonical_orientation"]
-                    ) * R.from_euler("xyz", orn_correction)
+                    bbox_world_rot = bbox_world_rot * R.from_euler("xyz", orn_correction)
                 else:
                     raise ValueError(f"Unknown rot_frame {rot_frame}")
-                G.nodes[root_node][
-                    "canonical_orientation"
-                ] = canonical_orientation.as_quat()
-
-            # Get the relevant bbox info.
-            bbox_size = G.nodes[root_node]["bounding_box"]["extent"]
-            bbox_world_center = G.nodes[root_node]["bounding_box"]["position"]
-            bbox_world_rot = R.from_quat(G.nodes[root_node]["canonical_orientation"]) 
 
             # Apply the relevant transformation
             bbox_transform = np.eye(4)

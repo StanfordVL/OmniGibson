@@ -217,25 +217,6 @@ def compute_link_aligned_bounding_boxes(G, root_node):
     return link_bounding_boxes
 
 
-def compute_object_bounding_box(root_node_data):
-    combined_mesh = root_node_data["combined_mesh"]
-    lower_mesh_center = get_mesh_center(root_node_data["lower_mesh"])
-    mesh_orientation = root_node_data["canonical_orientation"]
-    canonical_combined_mesh = transform_mesh(
-        combined_mesh, lower_mesh_center, mesh_orientation
-    )
-    base_link_offset = canonical_combined_mesh.bounding_box.centroid
-    bbox_size = canonical_combined_mesh.bounding_box.extents
-
-    # Compute the bbox world centroid
-    bbox_world_rotation = R.from_quat(mesh_orientation)
-    bbox_world_centroid = lower_mesh_center + bbox_world_rotation.apply(
-        base_link_offset
-    )
-
-    return bbox_size, base_link_offset, bbox_world_centroid, bbox_world_rotation
-
-
 def process_link(
     G,
     link_node,
@@ -736,17 +717,17 @@ def process_object(root_node, target, relevant_nodes, output_dir):
             with urdf_fs.open(f"{obj_model}.urdf", "wb") as f:
                 tree.write(f, xml_declaration=True)
 
-            bbox_size = G[root_node]["bounding_box"]["extent"]
-            bbox_world_pos = G[root_node]["bounding_box"]["position"]
+            bbox_size = G[root_node]["object_bounding_box"]["extent"]
+            bbox_world_pos = G[root_node]["object_bounding_box"]["position"]
             base_link_offset_in_world = bbox_world_pos - base_link_center
             base_link_offset = R.from_quat(canonical_orientation).inv().apply(base_link_offset_in_world)
 
             # Compute part information
             for part_node_key in get_part_nodes(G, root_node):
                 # Get the part node bounding box
-                part_bb_size = G.nodes[part_node_key]["bounding_box"]["extent"]
-                part_bb_in_world_pos = G.nodes[part_node_key]["bounding_box"]["position"]
-                part_bb_in_world_rot = R.from_quat(G.nodes[part_node_key]["bounding_box"]["rotation"])
+                part_bb_size = G.nodes[part_node_key]["object_bounding_box"]["extent"]
+                part_bb_in_world_pos = G.nodes[part_node_key]["object_bounding_box"]["position"]
+                part_bb_in_world_rot = R.from_quat(G.nodes[part_node_key]["object_bounding_box"]["rotation"])
 
                 # Convert into our base link frame
                 our_transform = np.eye(4)
