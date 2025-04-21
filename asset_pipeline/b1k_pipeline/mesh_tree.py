@@ -333,7 +333,7 @@ def build_mesh_tree(
             G.nodes[root]["object_bounding_box"] = object_bounding_boxes[root[1]][root[2]]
             # Check that the bounding box orientation is the same as the canonical orientation
             # and pop the orientation to avoid confusion.
-            bbox_orientation = G.nodes[root]["object_bounding_box"]["orientation"]
+            bbox_orientation = G.nodes[root]["object_bounding_box"]["rotation"]
             bbox_orientation = R.from_quat(bbox_orientation)
             canonical_orientation = G.nodes[root]["canonical_orientation"]
             canonical_orientation = R.from_quat(canonical_orientation)
