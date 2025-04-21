@@ -229,6 +229,9 @@ def build_mesh_tree(
                     G.nodes[node_key]["material_maps"] = {}
                     bakery_fs = pipeline_fs.target(target).opendir("bakery")
                     for channel, path_rel_to_bakery in metadata["material_maps"].items():
+                        # TODO: Remove this once it is corrected.
+                        if channel == "Transparency Color Map":
+                            channel = "Transparency Map"
                         G.nodes[node_key]["material_maps"][channel] = bakery_fs.getsyspath(path_rel_to_bakery)
 
                     # TODO: Remove this

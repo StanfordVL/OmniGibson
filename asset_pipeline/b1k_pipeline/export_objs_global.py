@@ -281,7 +281,7 @@ def process_link(
 
             # Fix texture file paths if necessary.
             material_maps = G.nodes[link_node]["material_maps"]
-            for map_channel, map_path in material_maps:
+            for map_channel, map_path in material_maps.items():
                 assert os.path.exists(map_path), f"Texture file {map_path} does not exist!"
 
                 # Convert the path to a dirname + filename so that we can use an OSFS
@@ -675,7 +675,7 @@ def process_object(root_node, target, relevant_nodes, output_dir):
             target,
             filter_nodes=relevant_nodes,
         )
-
+        
         with OSFS(output_dir) as output_fs:
             # Prepare the URDF tree
             tree_root = ET.Element("robot")
@@ -717,8 +717,8 @@ def process_object(root_node, target, relevant_nodes, output_dir):
             with urdf_fs.open(f"{obj_model}.urdf", "wb") as f:
                 tree.write(f, xml_declaration=True)
 
-            bbox_size = G[root_node]["object_bounding_box"]["extent"]
-            bbox_world_pos = G[root_node]["object_bounding_box"]["position"]
+            bbox_size = G.nodes[root_node]["object_bounding_box"]["extent"]
+            bbox_world_pos = G.nodes[root_node]["object_bounding_box"]["position"]
             base_link_offset_in_world = bbox_world_pos - base_link_center
             base_link_offset = R.from_quat(canonical_orientation).inv().apply(base_link_offset_in_world)
 
