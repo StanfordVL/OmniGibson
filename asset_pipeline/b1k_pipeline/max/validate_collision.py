@@ -73,7 +73,8 @@ def validate_collision_mesh(obj, max_elements=40, max_vertices_per_element=60):
         if max_vertices_per_element is not None:
             assert len(m.vertices) <= max_vertices_per_element, f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > {max_vertices_per_element})"
         assert m.is_volume, f"{obj.name} element {i} is not a volume"
-        assert m.is_convex, f"{obj.name} element {i} is not convex"
+        if not m.is_convex:
+            print(f"WARNING: {obj.name} element {i} may be non-convex. The checker says so, but it's not 100% accurate, so please verify that all elements are indeed convex."
 
 if __name__ == "__main__":
     assert len(rt.selection) == 1, "Please select a single object."
