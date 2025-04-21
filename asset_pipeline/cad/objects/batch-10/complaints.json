@@ -253,18 +253,18 @@
   {
     "object": "pork_rib-tkqvnq",
     "complaint": "no texture",
-    "processed": false,
+    "processed": true,
     "type": "appearance",
-    "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+    "additional_info": "Converted to a material complaint",
     "id": 1205
   },
   {
     "object": "pork_rib-tkqvnq",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 1206
   },
   {
@@ -377,7 +377,7 @@
     "complaint": "no texture",
     "processed": true,
     "type": "appearance",
-    "additional_info": "Confirm object visual appearance.\nRequirements:\n- make sure there is only one rigid body.\n- make sure the object has a valid texture or appearance.\n- make sure the object has all parts necessary.",
+    "additional_info": "Converted to a material complaint",
     "id": 1220
   },
   {
@@ -386,16 +386,16 @@
     "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "additional_info": "Converted to a material complaint",
     "id": 1221
   },
   {
     "object": "saxophone-kladff",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 1222
   },
   {
@@ -595,16 +595,16 @@
     "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "additional_info": "Converted to a material complaint",
     "id": 1245
   },
   {
     "object": "half_pork_rib-pwbysl",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 1246
   },
   {
@@ -613,16 +613,16 @@
     "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "additional_info": "Converted to a material complaint",
     "id": 1247
   },
   {
     "object": "half_pork_rib-xnujmn",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 1248
   },
   {
@@ -952,16 +952,16 @@
     "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "additional_info": "Converted to a material complaint",
     "id": 1287
   },
   {
     "object": "french_press-zidmyo",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 1288
   },
   {
@@ -971,5 +971,95 @@
     "type": "metalink",
     "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
     "id": 1289
+  },
+  {
+    "id": 6911,
+    "object": "seashell-iuoykx",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 6995,
+    "object": "pork_rib-tkqvnq",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7209,
+    "object": "suitcase-qthouj",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7295,
+    "object": "suitcase-njalke",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7372,
+    "object": "plug-mkfczr",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7396,
+    "object": "french_press-zidmyo",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7515,
+    "object": "half_pork_rib-xnujmn",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7682,
+    "object": "saxophone-kladff",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8187,
+    "object": "half_pork_rib-pwbysl",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8270,
+    "object": "suitcase-oqiwhb",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
   }
 ]

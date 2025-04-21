@@ -20,6 +20,10 @@ COMPLEX_FINGERPRINT = False
 MUST_HAVE_ROOM_ASSIGNMENT_CATEGORIES = {"wall_nail"}
 
 
+def quat2arr(q):
+    return np.array([q.x, q.y, q.z, q.w])
+
+
 def compute_moment_of_inertia(triangles, reference_point=None):
     """
     Compute the moment of inertia matrix for a triangle mesh around a reference point.
@@ -168,23 +172,20 @@ def main():
 
         # Check if this is the 0th instance and the lower mesh and not a meta link and not bad
         if (
-            match.group("instance_id") != "0"
-            or match.group("joint_side") == "upper"
+            match.group("joint_side") == "upper"
             or match.group("meta_type")
-            or match.group("bad")
         ):
             continue
 
         # Otherwise store the vertex and face info for the model ID
         model_id = match.group("model_id")
+        instance_id = int(match.group("instance_id"))
 
         # Record the orientation of the base link
         pivot = (
             None
             if match.group("link_name") and match.group("link_name") != "base_link"
-            else np.hstack(
-                [b1k_pipeline.utils.mat2arr(obj.transform), [[0], [0], [0], [1]]]
-            ).T
+            else obj.transform
         )
 
         # Get vertices and faces into numpy arrays for conversion
@@ -201,19 +202,52 @@ def main():
                 - 1
             )
             assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
-        pivots_and_mesh_parts[model_id].append(
-            (pivot, verts, faces, num_verts, num_faces)
+        pivots_and_mesh_parts[(model_id, instance_id)].append(
+            (pivot, obj, verts, faces, num_verts, num_faces)
         )
+
+    # Accumulate bounding boxes for each instance
+    bounding_boxes = defaultdict(dict)
+    for (model_id, instance_id), parts in pivots_and_mesh_parts.items():
+        # Find the pivot and get a copy that's position and rotation only.
+        possibly_scaled_pivot, = [x[0] for x in parts if x[0] is not None]
+        pivot = rt.Matrix3(1)
+        pivot.rotation = possibly_scaled_pivot.rotation
+        pivot.position = possibly_scaled_pivot.position
+
+        # Walk through the objs and get their bounding box w.r.t. the pivot
+        mins = []
+        maxes = []
+        for _, obj, _, _, _, _ in parts:
+            bbox_min, bbox_max = rt.NodeGetBoundingBox(obj, pivot)
+            mins.append(np.array(bbox_min))
+            maxes.append(np.array(bbox_max))
+        bbox_min = np.min(mins, axis=0)
+        bbox_max = np.max(maxes, axis=0)
+        bbox_extent = bbox_max - bbox_min
+        bbox_center_in_pivot = rt.Point3(*((bbox_max + bbox_min) / 2.0).tolist())
+
+        bbox_position_in_world = np.array(pivot.position) + np.array(bbox_center_in_pivot * pivot.rotation)
+        bbox_rotation_in_world = quat2arr(pivot.rotation)
+
+        bounding_boxes[model_id][instance_id] = {
+            "position": bbox_position_in_world.tolist(),
+            "rotation": bbox_rotation_in_world.tolist(),
+            "extent": bbox_extent.tolist(),
+        }
 
     # Accumulate the vertex and face counts and the moments of inertia
     mesh_fingerprints = {}
-    for model_id, parts in pivots_and_mesh_parts.items():
+    for (model_id, instance_id), parts in pivots_and_mesh_parts.items():
+        if instance_id != 0:
+            continue
+
         # Flatten the faces into a single array of triangles (keeping track of original vertex counts)
         vertex_count = 0
         face_count = 0
         triangle_subs = []
         pivots = []
-        for orientation, verts, faces, num_verts, num_faces in parts:
+        for orientation, _, verts, faces, num_verts, num_faces in parts:
             vertex_count += num_verts
             face_count += num_faces
             if COMPLEX_FINGERPRINT:
@@ -225,7 +259,10 @@ def main():
         assert (
             len(pivots) == 1
         ), f"Expected 1 orientation for {model_id}, got {len(pivots)}"
-        pivot = pivots[0]
+        max_pivot = pivots[0]
+        pivot = np.hstack(
+            [b1k_pipeline.utils.mat2arr(max_pivot), [[0], [0], [0], [1]]]
+        ).T
 
         flattened_moment_of_inertia = None
         pivot_to_centroid = None
@@ -358,6 +395,7 @@ def main():
         "attachment_pairs": attachment_pairs,
         "max_tree": max_tree,
         "object_counts": counts,
+        "bounding_boxes": bounding_boxes,
         "mesh_fingerprints": mesh_fingerprints,
         "error_invalid_name": sorted(nomatch),
         "error_bad_attachment": bad_attachments,
@@ -402,13 +440,13 @@ def main():
                 continue
 
             # Get portal info
-            position = list(portal.position)
+            position = np.array(portal.position)
             rotation = portal.rotation
-            quat = [rotation.x, rotation.y, rotation.z, rotation.w]
+            quat = quat2arr(rotation)
             scale = np.array(list(portal.scale))
-            size = list(np.array([portal.width, portal.length]) * scale[:2])
+            size = np.array([portal.width, portal.length]) * scale[:2]
 
-            portal_info = [position, quat, size]
+            portal_info = [position.tolist(), quat.tolist(), size.tolist()]
 
             # Process incoming portal
             if portal_match.group("partial_scene") is None:

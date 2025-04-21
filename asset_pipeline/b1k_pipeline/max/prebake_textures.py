@@ -48,19 +48,23 @@ CHANNEL_MAPPING = {
     "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
     "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
     "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
-    # "VRayAOMap": "Refl Color Map",  # Physical Material doesn't have a dedicated AO map
-    # "VRaySelfIlluminationMap": "Emission Color Map",
     "VRayRawReflectionFilterMap": "Reflectivity Map",
     "VRayRawRefractionFilterMap": "Transparency Map",
     "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
+    "VRayMtlReflectIORBake": "IOR Map",
 }
+
+CHANNEL_DATA_FORMAT_OVERRIDES = {
+    "VRayMtlReflectIORBake": "exr",
+}
+
 # CHANNEL_MAPPING = {
 #     "Color": "Base Color Map",
 #     "Normal": "Bump Map",
 # }
 
 RENDER_PRESET_FILENAME = str(
-    (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
+    (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "no_sampler_no_gi.rps").absolute()
 )
 
 allow_list = []
@@ -301,13 +305,10 @@ class TextureBaker:
             texture_map.imageWidth = img_size
             texture_map.imageHeight = img_size
             texture_map.edgePadding = 4
-            texture_map.fileType = "png"
+            texture_map.fileType = CHANNEL_DATA_FORMAT_OVERRIDES.get(map_name, "png")
 
             # Set the apply color mapping option
-            if texture_map.getOptionsCount() > 0:
-                assert (
-                    texture_map.getOptionName(1) == "Apply color mapping"
-                ), "Apply color mapping option not found"
+            if texture_map.getOptionsCount() > 0 and texture_map.getOptionName(1) == "Apply color mapping":
                 texture_map.setOptionValue(1, False)
 
             # Mapping from the original channel (of VRay, Corona, etc) to the new channel of PhysicalMaterial

@@ -272,28 +272,28 @@
   {
     "object": "sourdough-lourny",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 246
   },
   {
     "object": "sourdough-ltjltm",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 247
   },
   {
     "object": "sourdough-ndcexh",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 248
   },
   {
@@ -1486,5 +1486,275 @@
     "type": "category",
     "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: keyboard.n.01\nDefinition: device consisting of a set of keys on a piano or organ or typewriter or typesetting machine or computer or the like\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
     "id": 386
+  },
+  {
+    "id": 6912,
+    "object": "sourdough-lourny",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 6961,
+    "object": "half_doughnut-qhhrmz",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7057,
+    "object": "cinnamon_roll-xjlptd",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7156,
+    "object": "toast-nmxadm",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7202,
+    "object": "cupcake-outske",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7221,
+    "object": "postage_stamp-biqmtn",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7297,
+    "object": "sourdough-ndcexh",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7309,
+    "object": "cheese_tart-pyynjg",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7387,
+    "object": "donut-hfdwgc",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7439,
+    "object": "half_toast-gjpbgv",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7482,
+    "object": "mint-jezepy",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7505,
+    "object": "sourdough-ltjltm",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7544,
+    "object": "half_cinnamon_roll-mijkzq",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7596,
+    "object": "curtain-trwest",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7643,
+    "object": "half_muffin-ubimyt",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7710,
+    "object": "muffin-upcxno",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7713,
+    "object": "postage_stamp-yszkpy",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7760,
+    "object": "half_sourdough-flwdle",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7888,
+    "object": "half_sourdough-wgcbuy",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7929,
+    "object": "donut-euibpi",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7930,
+    "object": "half_muffin-ypzhst",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7953,
+    "object": "half_cheese_tart-txjdgi",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7976,
+    "object": "half_toast-xvqnvl",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8015,
+    "object": "cupcake-sutaow",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8017,
+    "object": "half_doughnut-qcuowh",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8037,
+    "object": "half_cupcake-ofuznw",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8062,
+    "object": "half_cupcake-opuxgd",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8066,
+    "object": "half_cinnamon_roll-tmlned",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8137,
+    "object": "cupcake-mbhweg",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 8294,
+    "object": "half_cheese_tart-jldqnm",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
   }
 ]
