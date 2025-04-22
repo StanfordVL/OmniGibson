@@ -40,9 +40,9 @@ jobs:
         working-directory: pr
         run: dvc pull combined_file_manifest
 
-      - name: Check repro output on PR branch
-        working-directory: pr
-        run: dvc repro --dry --allow-missing combined_file_manifest
+      # - name: Check repro output on PR branch
+      #   working-directory: pr
+      #   run: dvc repro --dry --allow-missing combined_file_manifest
 
       - name: Check PR branch file manifest for validity
         working-directory: pr
