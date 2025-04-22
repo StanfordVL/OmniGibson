@@ -161,8 +161,8 @@ class CuRoboMotionGenerator:
 
             if isinstance(robot, HolonomicBaseRobot):
                 self.update_joint_limits(robot_cfg_obj, emb_sel)
-                # if isinstance(robot, R1):
-                #     self.update_torso_joint_limits(robot_cfg_obj, emb_sel)
+                if isinstance(robot, R1):
+                    self.update_torso_joint_limits(robot_cfg_obj, emb_sel)
 
             motion_kwargs = dict(
                 trajopt_tsteps=32,
@@ -1138,7 +1138,7 @@ class CuRoboMotionGenerator:
 
                 nominal_pos = th.tensor([5.2360e-01, -1.0472e00, -5.2360e-01, 0.0])
                 # nominal_pos += th.tensor([0.2, -0.4, -0.2, 0.0])
-                joint_limit_offset = th.tensor([[-0.1, -1.0, -1.0, -0.54], [0.2, 0.1, 0.1, 0.54]])
+                joint_limit_offset = th.tensor([[-0.1, -1.0, -1.0, -0.84], [0.2, 0.1, 0.1, 0.84]])
                 min_torso_limit = nominal_pos + joint_limit_offset[0]
                 max_torso_limit = nominal_pos + joint_limit_offset[1]  # range 30 degrees, 0.27, range 15 degrees 0.135
 

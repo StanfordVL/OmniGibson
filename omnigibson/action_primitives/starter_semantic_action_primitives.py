@@ -167,6 +167,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         curobo_embodiment_types=None,
         debug_visual_marker=None,
         skip_curobo_initilization=False,
+        use_base_pose_hack=False,
     ):
         """
         Initializes a StarterSemanticActionPrimitives generator.
@@ -244,6 +245,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self.target_eyes_pose = None
         self.target_eyes_pose_arr = []
         self.attached_obj_info = {"attached_obj": None, "attached_obj_scale": None}
+        self.use_base_pose_hack = use_base_pose_hack
 
     @property
     def arm(self):
@@ -2275,15 +2277,24 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             candidate_poses = []
             self.target_eyes_pose_arr = []
             for _ in range(self._curobo_batch_size):
-                distance = (th.rand(1) * (distance_hi - distance_lo) + distance_lo).item()
-                yaw = th.rand(1) * (yaw_hi - yaw_lo) + yaw_lo
-                candidate_2d_pose = th.cat(
-                    [
-                        target_position[0] + distance * th.cos(yaw),
-                        target_position[1] + distance * th.sin(yaw),
-                        yaw + math.pi - avg_arm_workspace_range,
-                    ]
-                )
+                while True:
+                    distance = (th.rand(1) * (distance_hi - distance_lo) + distance_lo).item()
+                    yaw = th.rand(1) * (yaw_hi - yaw_lo) + yaw_lo
+                    candidate_2d_pose = th.cat(
+                        [
+                            target_position[0] + distance * th.cos(yaw),
+                            target_position[1] + distance * th.sin(yaw),
+                            yaw + math.pi - avg_arm_workspace_range,
+                        ]
+                    )
+
+                    # Hack to not allow sampling robot base poses on the other side of the table
+                    # print("candidate_2d_pose[0]", candidate_2d_pose[0])
+                    if self.use_base_pose_hack and candidate_2d_pose[0] > 1.0:
+                        continue
+                    else:
+                        break
+
                 candidate_poses.append(candidate_2d_pose)
 
             # Normally candidate_poses will have length equal to self._curobo_batch_size

@@ -1,6 +1,8 @@
 import colorsys
 
 import torch as th
+import numpy as np
+import open3d as o3d
 from PIL import Image, ImageDraw
 
 try:
@@ -285,3 +287,102 @@ def colorize_bboxes_3d(bbox_3d_data, rgb_image, camera_params):
     draw_lines_and_points_for_boxes(rgb, corners_2d)
 
     return th.tensor(rgb)
+
+def generate_point_cloud_from_depth(depth_image, intrinsic_matrix, mask, extrinsic_matrix):
+    """
+    Generate a point cloud from a depth image and intrinsic matrix.
+    
+    Parameters:
+    - depth_image: np.array, HxW depth image (in meters).
+    - intrinsic_matrix: np.array, 3x3 intrinsic matrix of the camera.
+    
+    Returns:
+    - point_cloud: Open3D point cloud.
+    """
+    
+    # Get image dimensions
+    height, width = depth_image.shape
+
+    # Create a meshgrid of pixel coordinates
+    u, v = np.meshgrid(np.arange(width), np.arange(height))
+
+    # Flatten the pixel coordinates and depth values
+    u_flat = u.flatten()
+    v_flat = v.flatten()
+    depth_flat = depth_image.flatten()
+    mask_flat = mask.flatten()
+
+    # # Filter points where the mask is 1
+    # valid_indices = np.where(mask_flat == 1)
+    
+    # Filter points where the mask is 1 AND depth is valid (not inf and not 0)
+    valid_indices = np.where(
+        (mask_flat == 1) & 
+        (np.isfinite(depth_flat)) &  # Remove inf values
+        (depth_flat > 0)             # Remove 0 or negative values
+    )[0]
+
+    # Apply the mask to the pixel coordinates and depth
+    u_valid = u_flat[valid_indices]
+    v_valid = v_flat[valid_indices]
+    depth_valid = depth_flat[valid_indices]
+
+    # Generate normalized pixel coordinates in homogeneous form
+    pixel_coords = np.vstack((u_valid, v_valid, np.ones_like(u_valid)))
+
+    # Compute inverse intrinsic matrix
+    intrinsic_inv = np.linalg.inv(intrinsic_matrix)
+
+    # Apply the inverse intrinsic matrix to get normalized camera coordinates
+    cam_coords = intrinsic_inv @ pixel_coords
+
+    # Multiply by depth to get 3D points in camera space
+    cam_coords *= depth_valid
+    # breakpoint()
+
+    # # Reshape the 3D coordinates
+    # x = cam_coords[0].reshape(height, width)
+    # y = cam_coords[1].reshape(height, width)
+    # z = depth_image
+
+    # # Stack the coordinates into a single 3D point array
+    # points = np.dstack((x, y, z)).reshape(-1, 3)
+
+    # breakpoint()
+    points = np.vstack((cam_coords[0], cam_coords[1], depth_valid)).T
+    # points = np.vstack((cam_coords[0], -depth_valid, -cam_coords[1])).T
+    # points = np.vstack((-cam_coords[1], -depth_valid, cam_coords[0])).T
+
+    # pad points so that the total number of points are 128*128
+    target_size=(height*width, 3)
+    N_i = points.shape[0]
+    pad_rows = target_size[0] - N_i
+    padding = ((0, pad_rows), (0, 0))
+    points = np.pad(points, padding, mode='edge')
+
+    # print("points shape: ", points.shape)
+
+    # remove later
+    # points = points[points[:, 2] > 0.5]
+    # print("points: ", points[:, 2])
+
+
+    # transform points to world frame
+    # make points homogeneous
+    points = np.hstack((points, np.ones((points.shape[0], 1))))
+    points = extrinsic_matrix @ points.T
+    points = points.T
+    # remove homogeneous coordinate
+    points = points[:, :3]
+
+    # Create an Open3D point cloud object
+    point_cloud = o3d.geometry.PointCloud()
+    point_cloud.points = o3d.utility.Vector3dVector(points)
+
+    return point_cloud
+
+def visualize_pcd(rgb, depth, intrinsic_matrix, extrinsic_matrix=np.eye(4)):    
+    mask = np.ones_like(depth)
+    o3d_pcd = generate_point_cloud_from_depth(depth, intrinsic_matrix, mask, extrinsic_matrix)
+    # show pcd in open3d
+    o3d.visualization.draw_geometries([o3d_pcd])
