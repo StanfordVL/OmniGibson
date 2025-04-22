@@ -196,3 +196,20 @@ python experiments/run_r1_gello.py --joint_config_file joint_config_{your specif
 ## Joycon Button Mapping
 ![Screenshot 2025-03-28 at 11 04 39 PM](https://github.com/user-attachments/assets/29d33994-ea8f-4302-b37c-ebfe30fa8901)
 
+## JoyLo Joint Calibration
+- JoyLo sets can be assembled in slightly different ways, resulting in different orientations of the motors and offsets between the physical motor positions and the joint positions in simulation. 
+- A script for automatically determining these joint signs and offsets is available in `scripts/calibrate_joints.py`
+
+### Example Usage
+```
+python scripts/calibrate_joints.py --robot R1 --gello_name {YOUR_GELLO_NAME_HERE}
+```
+(Make sure to specify the same `gello_name` argument when using your set to run the simulation).
+
+### Reference Positions
+The calibration script requires each arm to be placed in two fixed reference positions, called the "zero" and "calibration" positions. These are provided below for both the R1 (6-DOF) and R1-Pro (7-DOF) JoyLo variants.
+
+|                      | R1 (6-DOF) | R1-Pro (7-DOF) |
+|----------------------|----------- |----------------| 
+| Zero Position        | ![](imgs/R1_zero_L.jpg)![](imgs/R1_zero_R.jpg)  | ![](imgs/R1pro_zero_L.jpg)![](imgs/R1pro_zero_R.jpg)                |
+| Calibration Position | ![](imgs/R1_calibration_L.jpg)![](imgs/R1_calibration_R.jpg)  **NOTE: Take from the front - note the forwards orientation of the notch on the wrist joint**| ![](imgs/R1pro_calibration_L.jpg)![](imgs/R1pro_calibration_R.jpg) |
