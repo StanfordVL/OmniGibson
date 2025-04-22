@@ -208,7 +208,6 @@ class ObjectExporter:
             obj.position.x,
             obj.position.y,
             obj.position.z,
-            obj.position.w,
         ]
         metadata["orientation"] = [
             obj.rotation.x,
