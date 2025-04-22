@@ -45,9 +45,6 @@ def process_target(target):
         with PipelineFS() as pipeline_fs:
             errors = collections.defaultdict(list)
 
-            with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
-                mesh_list = json.load(f)["meshes"]
-
             with pipeline_fs.target_output(target).open("collision_selection.json", "r") as f:
                 collision_selection = json.load(f)
 
@@ -63,7 +60,7 @@ def process_target(target):
                 selected[(model, link)] = obj
 
             # Get the mesh tree
-            G = mesh_tree.build_mesh_tree(mesh_list, pipeline_fs.target_output(target), load_upper=False, load_bad=False, load_nonzero=False)
+            G = mesh_tree.build_mesh_tree(target, load_upper=False, load_bad=False, load_nonzero=False)
 
             # Check that each object matches at least one of the options
             for node in G.nodes:

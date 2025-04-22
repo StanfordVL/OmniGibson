@@ -433,19 +433,19 @@
   {
     "object": "pot_plant-dxypbs",
     "complaint": "bad texture. all grey",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "additional_info": "Converted to a material complaint",
     "id": 4156
   },
   {
     "object": "pot_plant-dxypbs",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 4157
   },
   {
@@ -459,10 +459,10 @@
   {
     "object": "pot_plant-eixiaq",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 4159
   },
   {
@@ -476,19 +476,19 @@
   {
     "object": "pot_plant-koloae",
     "complaint": "grey leaves and flowers",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
+    "additional_info": "Converted to a material complaint",
     "id": 4161
   },
   {
     "object": "pot_plant-koloae",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
-    "additional_info": "",
+    "additional_info": "Converted to a material complaint",
     "id": 4162
   },
   {
@@ -595,6 +595,42 @@
     "type": "appearance",
     "complaint": "Automatic complaint: window object has no glass part. Investigate & fix if necessary.",
     "additional_info": "Some legacy glass objects don't have a glass pane at all which needs to be added manually so that stuff can't go through the window. Other windows like in the gates bedroom are actually not glass in which case this complaint can be removed.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7092,
+    "object": "background-miopfw",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7115,
+    "object": "pot_plant-koloae",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7231,
+    "object": "pot_plant-eixiaq",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
+    "new": true,
+    "processed": false
+  },
+  {
+    "id": 7832,
+    "object": "pot_plant-dxypbs",
+    "type": "material",
+    "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
+    "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
     "processed": false
   }

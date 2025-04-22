@@ -1,3 +1,4 @@
+import pathlib
 import sys
 import traceback
 
@@ -129,12 +130,16 @@ class ObjectExporter:
                 continue
             if parsed_name.group("meta_type"):
                 continue
-
-            obj_dir = os.path.join(self.obj_out_dir, obj.name)
-            obj_file = os.path.join(obj_dir, obj.name + ".obj")
-            json_file = os.path.join(obj_dir, obj.name + ".json")
-            if os.path.exists(obj_file) and os.path.exists(json_file):
+            if int(parsed_name.group("instance_id")) != 0:
                 continue
+            if parsed_name.group("bad"):
+                continue
+
+            # obj_dir = os.path.join(self.obj_out_dir, obj.name)
+            # obj_file = os.path.join(obj_dir, obj.name + ".obj")
+            # json_file = os.path.join(obj_dir, obj.name + ".json")
+            # if os.path.exists(obj_file) and os.path.exists(json_file):
+            #     continue
             objs.append(obj)
 
         for light in rt.lights:
@@ -163,40 +168,18 @@ class ObjectExporter:
         # WARNING: we don't know how to set fine-grained setting of OBJ export. It always inherits the setting of the last export.
         obj_path = os.path.join(obj_dir, obj.name + ".obj")
 
-        # Decide if we want to export materials.
-        parsed_name = b1k_pipeline.utils.parse_name(obj.name)
-        instance_id_is_zero = int(parsed_name.group("instance_id")) == 0
-        not_upper = parsed_name.group("joint_side") != "upper"
-        not_bad = not parsed_name.group("bad")
-        should_export_material = instance_id_is_zero and not_upper and not_bad
-
         if USE_NATIVE_EXPORT:
-            # Update the object material to be the baked physicalmaterial rather than the shell material
-            # so that the exported mesh has the correct material. This is a limitation of the obj
-            # exporter. We don't save the object after we do this. We also don't do it to the siblings
-            # in order not to export material for them, e.g. as a way of turning off material export.
-            if should_export_material:
-                shell_mat = obj.material
-                assert (
-                    rt.classOf(shell_mat) == rt.Shell_Material
-                ), f"{obj.name} should have a Shell_Material"
-                baked_mat = shell_mat.bakedMaterial
-                assert (
-                    rt.classOf(baked_mat) == rt.PhysicalMaterial
-                ), f"{obj.name} should have a PhysicalMaterial as its baked material"
-                obj.material = baked_mat
-
             rt.select(obj)
 
             # rt.ObjExp.setIniName(os.path.join(os.path.parent(__file__), "gw_objexp.ini"))
-            assert (
-                rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "UseMapPath")
-                == "1"
-            ), "Map path not used."
-            assert (
-                rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "MapPath")
-                == "./material/"
-            ), "Wrong material path."
+            # assert (
+            #     rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "UseMapPath")
+            #     == "0"
+            # ), "Map path should be disabled."
+            # assert (
+            #     rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "MapPath")
+            #     == "./material/"
+            # ), "Wrong material path."
             assert (
                 rt.getIniSetting(rt.ObjExp.getIniName(), "Geometry", "FlipZyAxis")
                 == "0"
@@ -213,23 +196,48 @@ class ObjectExporter:
             save_mesh(obj, obj_path)
 
         assert os.path.exists(obj_path), f"Could not export object {obj.name}"
-        if should_export_material:
-            assert os.path.exists(
-                os.path.join(obj_dir, "material")
-            ), f"Could not export materials for object {obj.name}"
         self.export_obj_metadata(obj, obj_dir)
 
     def export_obj_metadata(self, obj, obj_dir):
         print("export_meshes_metadata", obj.name)
 
         metadata = {}
-        # Export the canonical orientation
+
+        # Export the canonical position and orientation
+        metadata["position"] = [
+            obj.position.x,
+            obj.position.y,
+            obj.position.z,
+        ]
         metadata["orientation"] = [
             obj.rotation.x,
             obj.rotation.y,
             obj.rotation.z,
             obj.rotation.w,
         ]
+
+        # Export information about the material
+        mtl = obj.material
+        assert rt.classOf(obj.material) == rt.Shell_Material, f"Material {obj.material} is not a shell material."
+        baked_mtl = mtl.bakedMaterial
+        metadata["material_maps"] = {}
+        for map_idx in range(rt.getNumSubTexmaps(baked_mtl)):
+            sub_texmap = rt.getSubTexmap(baked_mtl, map_idx + 1)
+            if sub_texmap is not None:
+                sub_texmap_slot_name = rt.getSubTexmapSlotName(baked_mtl, map_idx + 1)
+                assert rt.classOf(sub_texmap) == rt.Bitmaptexture, \
+                    f"Object {obj.name} baked material map {sub_texmap_slot_name} has unexpected type {rt.classOf(sub_texmap)}"
+                
+                # Use os.path.abspath which normalizes + absolutifies the paths but does not resolve symlinks unlike pathlib (problem with dvc)
+                map_path = pathlib.Path(os.path.abspath(sub_texmap.filename))
+                assert map_path.exists(), f"Object {obj.name} baked material map {sub_texmap_slot_name} does not exist at {map_path}"
+                bakery_path = pathlib.Path(os.path.abspath(os.path.join(rt.maxFilePath, "bakery")))
+
+                # Then switch to Pathlib which asserts that the path is a subpath before normalizing
+                metadata["material_maps"][sub_texmap_slot_name] = map_path.relative_to(bakery_path).as_posix()
+                
+        assert len(metadata["material_maps"]) > 0, f"Object {obj.name} has no maps."
+
         metadata["meta_links"] = defaultdict(
             lambda: defaultdict(lambda: defaultdict(dict))
         )
@@ -371,49 +379,11 @@ class ObjectExporter:
         with open(json_file, "w") as f:
             json.dump(metadata, f)
 
-    def fix_mtl_files(self, obj):
-        obj_dir = os.path.join(self.obj_out_dir, obj.name)
-        for file in os.listdir(obj_dir):
-            if file.endswith(".mtl"):
-                mtl_file = os.path.join(obj_dir, file)
-                new_lines = []
-                with open(mtl_file, "r") as f:
-                    for line in f.readlines():
-                        if "map" in line:
-                            line = line.replace("material\\", "material/")
-                            map_path = os.path.join(obj_dir, line.split(" ")[1].strip())
-                            # For some reason, pybullet won't load the texture files unless we save it again with OpenCV
-                            img = cv2.imread(map_path)
-                            # These two maps need to be flipped
-                            # glossiness -> roughness
-                            # translucency -> opacity
-                            if (
-                                "VRayMtlReflectGlossinessBake" in map_path
-                                or "VRayRawRefractionFilterMap" in map_path
-                            ):
-                                print(f"Flipping {os.path.basename(map_path)}")
-                                img = 1 - img.astype(float) / 255
-
-                                # Apply a sqrt here to glossiness to make it harder for things to be very shiny.
-                                if "VRayMtlReflectGlossinessBake" in map_path:
-                                    img = np.sqrt(img)
-
-                                img = (img * 255).astype(np.uint8)
-
-                            cv2.imwrite(map_path, img)
-
-                        new_lines.append(line)
-
-                with open(mtl_file, "w") as f:
-                    for line in new_lines:
-                        f.write(line)
-
     def run(self):
         # assert rt.classOf(rt.renderers.current) == rt.V_Ray_5__update_2_3, f"Renderer should be set to V-Ray 5.2.3 CPU instead of {rt.classOf(rt.renderers.current)}"
         assert rt.execute("max modify mode")
 
         objs = self.get_process_objs()
-        should_bake_current = 0
         failures = {}
         for i, obj in enumerate(objs):
             try:
@@ -424,7 +394,6 @@ class ObjectExporter:
                     child.isHidden = False
 
                 self.export_obj(obj)
-                self.fix_mtl_files(obj)
             except Exception as e:
                 failures[obj.name] = traceback.format_exc()
 

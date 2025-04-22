@@ -9,28 +9,24 @@ from b1k_pipeline.utils import PipelineFS, get_targets, parse_name
 
 
 def process_target(target):
-    with PipelineFS() as pipeline_fs:
-        with pipeline_fs.target_output(target).open("object_list.json", "r") as f:
-            mesh_list = json.load(f)["meshes"]
+    # Get the mesh tree
+    G = mesh_tree.build_mesh_tree(target, load_upper=False, load_bad=False, load_nonzero=False)
+    roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
-        # Get the mesh tree
-        G = mesh_tree.build_mesh_tree(mesh_list, pipeline_fs.target_output(target), load_upper=False, load_bad=False, load_nonzero=False)
-        roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
+    # Compute volumes from this target
+    volumes = defaultdict(list)
+    errors = {}
+    for node in roots:
+        try:
+            assert "combined_collision_mesh" in G.nodes[node], f"Node {node} does not have a combined collision mesh."
 
-        # Compute volumes from this target
-        volumes = defaultdict(list)
-        errors = {}
-        for node in roots:
-            try:
-                assert "combined_collision_mesh" in G.nodes[node], f"Node {node} does not have a combined collision mesh."
+            obj_volume = G.nodes[node]["combined_collision_mesh"].volume
+            assert obj_volume > 0, f"Node {node} has a non-positive volume: {obj_volume}"
+            volumes[node[0]].append(obj_volume)
+        except Exception as e:
+            errors[str(node)] = str(e)
 
-                obj_volume = G.nodes[node]["combined_collision_mesh"].volume
-                assert obj_volume > 0, f"Node {node} has a non-positive volume: {obj_volume}"
-                volumes[node[0]].append(obj_volume)
-            except Exception as e:
-                errors[str(node)] = str(e)
-
-        return volumes, errors
+    return volumes, errors
 
 def main():
     target_futures = {}
