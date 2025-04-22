@@ -132,8 +132,6 @@ class ObjectExporter:
                 continue
             if int(parsed_name.group("instance_id")) != 0:
                 continue
-            if parsed_name.group("joint_side") == "upper":
-                continue
             if parsed_name.group("bad"):
                 continue
 
@@ -205,7 +203,13 @@ class ObjectExporter:
 
         metadata = {}
 
-        # Export the canonical orientation
+        # Export the canonical position and orientation
+        metadata["position"] = [
+            obj.position.x,
+            obj.position.y,
+            obj.position.z,
+            obj.position.w,
+        ]
         metadata["orientation"] = [
             obj.rotation.x,
             obj.rotation.y,

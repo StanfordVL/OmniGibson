@@ -717,8 +717,8 @@ def process_object(root_node, target, relevant_nodes, output_dir):
             with urdf_fs.open(f"{obj_model}.urdf", "wb") as f:
                 tree.write(f, xml_declaration=True)
 
-            bbox_size = G.nodes[root_node]["object_bounding_box"]["extent"]
-            bbox_world_pos = G.nodes[root_node]["object_bounding_box"]["position"]
+            bbox_size = np.array(G.nodes[root_node]["object_bounding_box"]["extent"])
+            bbox_world_pos = np.array(G.nodes[root_node]["object_bounding_box"]["position"])
             base_link_offset_in_world = bbox_world_pos - base_link_center
             base_link_offset = R.from_quat(canonical_orientation).inv().apply(base_link_offset_in_world)
 
@@ -888,7 +888,7 @@ def main():
         cluster = LocalCluster()
         dask_client = cluster.get_client()
 
-        targets = ["scenes/Rs_int"]  # get_targets("combined")
+        targets = ["scenes/house_single_floor"]  # get_targets("combined")
 
         obj_futures = {}
 
