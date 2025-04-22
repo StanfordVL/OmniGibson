@@ -224,7 +224,6 @@ class BaseR1GelloAgent(GelloAgent):
                 ),
         ):
             arm_info = self.arm_info[arm]
-            upper_currently_locked = arm_info["locked"]["upper"]
             wrist_id = arm_info["gello_ids"][-1]
 
             if self._motor_feedback_type != MotorFeedbackConfig.NONE:
@@ -244,7 +243,6 @@ class BaseR1GelloAgent(GelloAgent):
             # Handle upper arm locking
             operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs = self._handle_upper_arm_locking(
                 arm_info, 
-                upper_currently_locked, 
                 lock_upper,
                 wrist_id, 
                 gello_jnts, 
@@ -273,7 +271,6 @@ class BaseR1GelloAgent(GelloAgent):
     def _handle_upper_arm_locking(
         self, 
         arm_info, 
-        upper_currently_locked, 
         lock_upper,
         wrist_id, 
         gello_jnts, 
@@ -282,59 +279,9 @@ class BaseR1GelloAgent(GelloAgent):
         active_commanded_jnt_idxs
     ):
         """
-        Handle upper arm locking.
-        This method may be overridden by subclasses if necessary.
+        Handle upper arm locking. This is specific to each model and should be implemented by subclasses.
         """
-        num_joints = len(arm_info["gello_ids"])
-        
-        if lock_upper:
-            if upper_currently_locked:
-                # Already locked, do nothing
-                pass
-            else:
-                # Just became locked, update this arm's operating mode (all joints for the arm except final
-                # one should be using POSITION mode)
-                operating_modes[arm_info["gello_ids"]] = [OperatingMode.EXTENDED_POSITION] * (num_joints - 1) + [OperatingMode.NONE]
-                active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
-
-                # In addition, the final wrist joint should NOT change in the environment -- so keep track of
-                # the current angle so we can apply an offset as long as the upper arm is locked
-                # NOTE: This value will ALREADY have any pre-existing offset applied, which is expected
-                # because the "freezing upper" effect is assumed to be cumulative
-                arm_info["locked_wrist_angle"] = gello_jnts[arm_info["gello_ids"][-1]]
-
-                # Add upper joint to commanded set of joint idxs
-                active_commanded_jnt_idxs = np.concatenate([active_commanded_jnt_idxs, arm_info["gello_ids"][:-1]])
-
-                # Finally, update our lock state
-                arm_info["locked"]["upper"] = True
-
-            # If we're locked, force the returned wrist value to be the locked value
-            gello_jnts[wrist_id] = arm_info["locked_wrist_angle"]
-
-        else:
-            if not upper_currently_locked:
-                # Already not locked, do nothing
-                pass
-            else:
-                # Just became not locked, so update this arm's operating mode (all joints should be using
-                # the default mode)
-                operating_modes[arm_info["gello_ids"]] = self.default_operation_modes[arm_info["gello_ids"]]
-                active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
-
-                # Update the joint offset to include the difference between the locked wrist and the current
-                # wrist qpos
-                additional_wrist_offset = gello_jnts[wrist_id] - arm_info["locked_wrist_angle"]
-                self.joint_offsets[wrist_id] += additional_wrist_offset
-
-                # This offset hasn't been applied yet to the current joints, so apply it now (negative because
-                # we're going from GELLO -> Env, whereas the offset captures the env -> GELLO delta)
-                gello_jnts[wrist_id] -= additional_wrist_offset
-
-                # Finally, update our lock state
-                arm_info["locked"]["upper"] = False
-        
-        return operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs
+        raise NotImplementedError("Subclasses must implement this method")
     
     def _handle_lower_arm_locking(
         self, 

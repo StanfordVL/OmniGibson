@@ -62,6 +62,51 @@ class R1ProGelloAgent(BaseR1GelloAgent):
         # Convert GELLO joints to observation form
         return th.from_numpy(gello_jnts[[0, 2, 4, 5, 6, 7, 8, 9, 11, 13, 14, 15, 16, 17]])
     
+    def _handle_upper_arm_locking(
+        self, 
+        arm_info, 
+        lock_upper,
+        wrist_id, 
+        gello_jnts, 
+        operating_modes, 
+        active_operating_mode_idxs, 
+        active_commanded_jnt_idxs
+    ):
+        """
+        Handle upper arm locking for R1 Pro.
+        """
+        upper_currently_locked = arm_info["locked"]["upper"]
+        if lock_upper:
+            if upper_currently_locked:
+                # Already locked, do nothing
+                pass
+            else:
+                # Just became locked, update this arm's operating mode (first five joints should be using
+                # POSITION mode)
+                operating_modes[arm_info["gello_ids"]] = [OperatingMode.EXTENDED_POSITION] * 5 + [OperatingMode.CURRENT] * 4
+                active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
+
+                # Add upper joints to commanded set of joint idxs
+                active_commanded_jnt_idxs = np.concatenate([active_commanded_jnt_idxs, arm_info["gello_ids"][:5]])
+
+                # Finally, update our lock state
+                arm_info["locked"]["upper"] = True
+
+        else:
+            if not upper_currently_locked:
+                # Already not locked, do nothing
+                pass
+            else:
+                # Just became not locked, so update this arm's operating mode (all joints should be using
+                # the default mode)
+                operating_modes[arm_info["gello_ids"]] = self.default_operation_modes[arm_info["gello_ids"]]
+                active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
+
+                # Finally, update our lock state
+                arm_info["locked"]["upper"] = False
+        
+        return operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs
+    
     def _handle_lower_arm_locking(
         self, 
         arm_info, 
@@ -71,7 +116,7 @@ class R1ProGelloAgent(BaseR1GelloAgent):
         active_commanded_jnt_idxs
     ):
         """
-        Handle lower arm locking for R1Pro model.
+        Handle lower arm locking for R1Pro.
         """
         lower_currently_locked = arm_info["locked"]["lower"]
         if lock_lower:
