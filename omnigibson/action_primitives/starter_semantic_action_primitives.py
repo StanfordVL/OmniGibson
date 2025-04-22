@@ -164,6 +164,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         task_relevant_objects_only=False,
         curobo_batch_size=4,
         curobo_use_cuda_graph=True,
+        curobo_embodiment_types=None,
         debug_visual_marker=None,
         skip_curobo_initilization=False,
     ):
@@ -206,6 +207,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 batch_size=curobo_batch_size,
                 use_cuda_graph=curobo_use_cuda_graph,
                 collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
+                embodiment_types=curobo_embodiment_types,
             )
         )
 

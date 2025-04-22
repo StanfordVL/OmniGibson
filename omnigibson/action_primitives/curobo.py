@@ -78,7 +78,7 @@ class CuRoboMotionGenerator:
         batch_size=2,
         use_cuda_graph=True,
         debug=False,
-        use_default_embodiment_only=False,
+        embodiment_types=None,
         collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
     ):
         """
@@ -94,7 +94,7 @@ class CuRoboMotionGenerator:
             batch_size (int): Size of batches for computing trajectories. This must be FIXED
             use_cuda_graph (bool): Whether to use CUDA graph for motion generation or not
             debug (bool): Whether to debug generation or not, setting this True will set use_cuda_graph to False implicitly
-            use_default_embodiment_only (bool): Whether to use only the default embodiment for the robot or not
+            embodiment_types (Nonr or set): If specified, a set of embodiment types to use for the robot. If None, will use all
             collision_activation_distance (float): Distance threshold at which a collision with the world is detected.
                 Increasing this value will make the motion planner more conservative in its planning with respect
                 to the underlying sphere representation of the robot. Note that this does not affect self-collisions detection.
@@ -113,10 +113,8 @@ class CuRoboMotionGenerator:
         robot_cfg_path_dict = robot.curobo_path if robot_cfg_path is None else robot_cfg_path
         if not isinstance(robot_cfg_path_dict, dict):
             robot_cfg_path_dict = {CuRoboEmbodimentSelection.DEFAULT: robot_cfg_path_dict}
-        if use_default_embodiment_only:
-            robot_cfg_path_dict = {
-                CuRoboEmbodimentSelection.DEFAULT: robot_cfg_path_dict[CuRoboEmbodimentSelection.DEFAULT]
-            }
+        if embodiment_types is not None:
+            robot_cfg_path_dict = {emb_sel: robot_cfg_path_dict[emb_sel] for emb_sel in embodiment_types}
         robot_usd_path = robot.usd_path if robot_usd_path is None else robot_usd_path
 
         # This will be shared across all MotionGen instances
@@ -185,8 +183,8 @@ class CuRoboMotionGenerator:
                 fixed_iters_trajopt=True,
                 finetune_trajopt_iters=100,
                 finetune_dt_scale=1.05,
-                position_threshold=0.01, # originally 0.005
-                rotation_threshold=0.1, # originally 0.05
+                position_threshold=0.01,  # originally 0.005
+                rotation_threshold=0.1,  # originally 0.05
             )
             if motion_cfg_kwargs is not None:
                 motion_kwargs.update(motion_cfg_kwargs)
@@ -201,18 +199,18 @@ class CuRoboMotionGenerator:
             )
             self.mg[emb_sel] = lazy.curobo.wrap.reacher.motion_gen.MotionGen(motion_gen_config)
 
-        # for mg in self.mg.values():
-        #     mg.warmup(enable_graph=False, warmup_js_trajopt=False, batch=batch_size, warmup_joint_delta=0.0)
+        for mg in self.mg.values():
+            mg.warmup(enable_graph=True, warmup_js_trajopt=False, batch=batch_size, warmup_joint_delta=0.001)
 
-        #     # Make sure all cuda graphs have been warmed up
-        #     for solver in [mg.ik_solver, mg.trajopt_solver, mg.finetune_trajopt_solver]:
-        #         if solver.solver.use_cuda_graph_metrics:
-        #             assert solver.solver.safety_rollout._metrics_cuda_graph_init
-        #             if isinstance(solver, lazy.curobo.wrap.reacher.trajopt.TrajOptSolver):
-        #                 assert solver.interpolate_rollout._metrics_cuda_graph_init
-        #         for opt in solver.solver.optimizers:
-        #             if opt.use_cuda_graph:
-        #                 assert opt.cu_opt_init
+            # Make sure all cuda graphs have been warmed up
+            for solver in [mg.ik_solver, mg.trajopt_solver, mg.finetune_trajopt_solver]:
+                if solver.solver.use_cuda_graph_metrics:
+                    assert solver.solver.safety_rollout._metrics_cuda_graph_init
+                    if isinstance(solver, lazy.curobo.wrap.reacher.trajopt.TrajOptSolver):
+                        assert solver.interpolate_rollout._metrics_cuda_graph_init
+                for opt in solver.solver.optimizers:
+                    if opt.use_cuda_graph:
+                        assert opt.cu_opt_init
 
     def update_joint_limits(self, robot_cfg_obj, emb_sel):
         joint_limits = robot_cfg_obj.kinematics.kinematics_config.joint_limits
@@ -229,7 +227,7 @@ class CuRoboMotionGenerator:
                     #     joint_limits.position[1][joint_idx] = 10.0
                     # elif joint_name == "base_footprint_y_joint":
                     #     joint_limits.position[0][joint_idx] = -3.0
-                    #     joint_limits.position[1][joint_idx] = 3.0  
+                    #     joint_limits.position[1][joint_idx] = 3.0
                 else:
                     # Needs to be -2pi to 2pi, instead of -pi to pi, otherwise the planning success rate is much lower
                     joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT
@@ -505,7 +503,7 @@ class CuRoboMotionGenerator:
             joint_state = result.get_paths()
 
         return result, success, joint_state
-    
+
     def plan_batch(
         self,
         start_state,
@@ -803,9 +801,9 @@ class CuRoboMotionGenerator:
                     else rollout_fn._link_pose_convergence[additional_link].disable_cost()
                 )
                 # if additional_link in target_pos and additional_link == "eyes":
-                #     rollout_fn._link_pose_costs[additional_link].weight *= 0.1 
-                #     rollout_fn._link_pose_convergence[additional_link].weight *= 0.1 
-            
+                #     rollout_fn._link_pose_costs[additional_link].weight *= 0.1
+                #     rollout_fn._link_pose_convergence[additional_link].weight *= 0.1
+
             if rollout_fn.eyes_target_cost is not None:
                 (
                     rollout_fn.eyes_target_cost.enable_cost()
@@ -1116,7 +1114,7 @@ class CuRoboMotionGenerator:
             )
 
     def update_torso_joint_limits(self, robot_cfg_obj, emb_sel):
-        joint_limits = robot_cfg_obj.kinematics.kinematics_config.joint_limits # [2, num_joints], related to emb_sel
+        joint_limits = robot_cfg_obj.kinematics.kinematics_config.joint_limits  # [2, num_joints], related to emb_sel
 
         # for ARM the joint limits
         # ['torso_joint1', 'torso_joint2', 'torso_joint3', 'torso_joint4', 'left_arm_joint1', 'left_arm_joint2', 'left_arm_joint3', 'left_arm_joint4', 'left_arm_joint5', 'left_arm_joint6', 'right_arm_joint1', 'right_arm_joint2', 'right_arm_joint3', 'right_arm_joint4', 'right_arm_joint5', 'right_arm_joint6']
@@ -1127,59 +1125,104 @@ class CuRoboMotionGenerator:
             if joint_name in joint_limits.joint_names:
                 joint_idx = joint_limits.joint_names.index(joint_name)
 
-                print('before clip', joint_name, 'type',self.robot.joints[joint_name].joint_type, 'limit:', joint_limits.position[0][joint_idx], joint_limits.position[1][joint_idx])
+                print(
+                    "before clip",
+                    joint_name,
+                    "type",
+                    self.robot.joints[joint_name].joint_type,
+                    "limit:",
+                    joint_limits.position[0][joint_idx],
+                    joint_limits.position[1][joint_idx],
+                )
                 # cur_torso_pos = self.robot.get_joint_positions()[6:10]
 
-                nominal_pos = th.tensor([5.2360e-01, -1.0472e+00, -5.2360e-01, 0.0])
+                nominal_pos = th.tensor([5.2360e-01, -1.0472e00, -5.2360e-01, 0.0])
                 # nominal_pos += th.tensor([0.2, -0.4, -0.2, 0.0])
-                joint_limit_offset = th.tensor([
-                    [-0.1, -1.0, -1.0, -0.54],
-                    [0.2, 0.1, 0.1, 0.54]
-                    ])
+                joint_limit_offset = th.tensor([[-0.1, -1.0, -1.0, -0.54], [0.2, 0.1, 0.1, 0.54]])
                 min_torso_limit = nominal_pos + joint_limit_offset[0]
-                max_torso_limit = nominal_pos + joint_limit_offset[1] # range 30 degrees, 0.27, range 15 degrees 0.135
+                max_torso_limit = nominal_pos + joint_limit_offset[1]  # range 30 degrees, 0.27, range 15 degrees 0.135
 
-                if joint_name == 'torso_joint1':
+                if joint_name == "torso_joint1":
                     joint_limits.position[0][joint_idx] = min_torso_limit[0]
                     joint_limits.position[1][joint_idx] = max_torso_limit[0]
-                elif joint_name == 'torso_joint2':
+                elif joint_name == "torso_joint2":
                     joint_limits.position[0][joint_idx] = min_torso_limit[1]
                     joint_limits.position[1][joint_idx] = max_torso_limit[1]
-                elif joint_name == 'torso_joint3':
+                elif joint_name == "torso_joint3":
                     joint_limits.position[0][joint_idx] = min_torso_limit[2]
                     joint_limits.position[1][joint_idx] = max_torso_limit[2]
-                elif joint_name == 'torso_joint4':
+                elif joint_name == "torso_joint4":
                     joint_limits.position[0][joint_idx] = min_torso_limit[3]
                     joint_limits.position[1][joint_idx] = max_torso_limit[3]
 
-                print('after clip', joint_name, 'type',self.robot.joints[joint_name].joint_type, 'limit:', joint_limits.position[0][joint_idx], joint_limits.position[1][joint_idx])
+                print(
+                    "after clip",
+                    joint_name,
+                    "type",
+                    self.robot.joints[joint_name].joint_type,
+                    "limit:",
+                    joint_limits.position[0][joint_idx],
+                    joint_limits.position[1][joint_idx],
+                )
 
         # set right arm joint limits
-        for joint_name in self.robot.arm_joint_names['right']:
+        for joint_name in self.robot.arm_joint_names["right"]:
             if joint_name in joint_limits.joint_names:
                 joint_idx = joint_limits.joint_names.index(joint_name)
 
-                print('before clip', joint_name, 'type',self.robot.joints[joint_name].joint_type, 'limit:', joint_limits.position[0][joint_idx], joint_limits.position[1][joint_idx])
+                print(
+                    "before clip",
+                    joint_name,
+                    "type",
+                    self.robot.joints[joint_name].joint_type,
+                    "limit:",
+                    joint_limits.position[0][joint_idx],
+                    joint_limits.position[1][joint_idx],
+                )
                 # cur_left_arm_pos = self.robot.get_joint_positions()[10:16]
                 # cur_right_arm_pos = self.robot.get_joint_positions()[16:22]
 
-                if joint_name == 'right_arm_joint3':
+                if joint_name == "right_arm_joint3":
                     joint_limits.position[1][joint_idx] -= 0.135
                     joint_limits.position[0][joint_idx] += 0.135
 
-                print('after clip', joint_name, 'type',self.robot.joints[joint_name].joint_type, 'limit:', joint_limits.position[0][joint_idx], joint_limits.position[1][joint_idx])
+                print(
+                    "after clip",
+                    joint_name,
+                    "type",
+                    self.robot.joints[joint_name].joint_type,
+                    "limit:",
+                    joint_limits.position[0][joint_idx],
+                    joint_limits.position[1][joint_idx],
+                )
 
         # set left arm joint limits
-        for joint_name in self.robot.arm_joint_names['left']:
+        for joint_name in self.robot.arm_joint_names["left"]:
             if joint_name in joint_limits.joint_names:
                 joint_idx = joint_limits.joint_names.index(joint_name)
 
-                print('before clip', joint_name, 'type',self.robot.joints[joint_name].joint_type, 'limit:', joint_limits.position[0][joint_idx], joint_limits.position[1][joint_idx])
+                print(
+                    "before clip",
+                    joint_name,
+                    "type",
+                    self.robot.joints[joint_name].joint_type,
+                    "limit:",
+                    joint_limits.position[0][joint_idx],
+                    joint_limits.position[1][joint_idx],
+                )
                 # cur_left_arm_pos = self.robot.get_joint_positions()[10:16]
                 # cur_right_arm_pos = self.robot.get_joint_positions()[16:22]
 
-                if joint_name == 'left_arm_joint3':
+                if joint_name == "left_arm_joint3":
                     joint_limits.position[1][joint_idx] -= 0.135
                     joint_limits.position[0][joint_idx] += 0.135
 
-                print('after clip', joint_name, 'type',self.robot.joints[joint_name].joint_type, 'limit:', joint_limits.position[0][joint_idx], joint_limits.position[1][joint_idx])
+                print(
+                    "after clip",
+                    joint_name,
+                    "type",
+                    self.robot.joints[joint_name].joint_type,
+                    "limit:",
+                    joint_limits.position[0][joint_idx],
+                    joint_limits.position[1][joint_idx],
+                )
