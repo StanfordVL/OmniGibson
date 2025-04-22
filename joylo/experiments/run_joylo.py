@@ -58,7 +58,7 @@ def main(args):
         if args.gello_model == "r1":
             args.joint_config_file = "joint_config_black_gello.yaml"
         elif args.gello_model == "r1pro":
-            args.joint_config_file = "joint_config_white_gello_pro.yaml"
+            args.joint_config_file = "joint_config_panda_pro.yaml"
         else:
             raise ValueError(f"Unsupported gello model {args.gello_model}")
     
