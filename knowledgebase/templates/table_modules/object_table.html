@@ -19,7 +19,7 @@
     <tr>
       <td><a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a></td>
       {% if enable_images %}
-      <td><img class="img-fluid" src="{{ object.image_url }}" alt="{{ object }} photo" /></td>
+      <td><img src="{{ object.image_url }}" alt="{{ object }} photo" style="max-width: 480px; height: auto;"/></td>
       {% endif %}
       <td>{{ object.category.name }}</td>
       <td>{{ object.category.synset.name }}</td>
