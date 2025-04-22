@@ -993,12 +993,12 @@ stages:
       size: 1320
     - path: cad/objects/batch-00/artifacts/object_list.json
       hash: md5
-      md5: cbcd5bfc33d908bcff0d6bad1832bab7
+      md5: 456c692d9b06a5d8e8b93fa8c22611d9
       size: 172071
     - path: cad/objects/batch-01/artifacts/object_list.json
       hash: md5
-      md5: cc75971d70c13021b11015a3522d14e1
-      size: 156836
+      md5: c8ceda659b67f19f4fd70fb1a51f6115
+      size: 157152
     - path: cad/objects/batch-02/artifacts/object_list.json
       hash: md5
       md5: 0cddd90c3f6a438e016e85529bb4d809
@@ -1037,11 +1037,11 @@ stages:
       size: 150049
     - path: cad/objects/batch-11/artifacts/object_list.json
       hash: md5
-      md5: f8c86bbeb2f7d61f7bf4c8ca6b2d0c6e
+      md5: 15c34940db13c88a00173c0c6f6ddce6
       size: 145968
     - path: cad/objects/batch-12/artifacts/object_list.json
       hash: md5
-      md5: 1c76381960cd87e6028c3c0f9165fa60
+      md5: c80e13bcdcdd32f319d9a00afac2e0e7
       size: 184947
     - path: cad/objects/batch-13/artifacts/object_list.json
       hash: md5
@@ -1769,12 +1769,12 @@ stages:
       size: 6573
     - path: cad/objects/batch-00/artifacts/object_list.json
       hash: md5
-      md5: cbcd5bfc33d908bcff0d6bad1832bab7
+      md5: 456c692d9b06a5d8e8b93fa8c22611d9
       size: 172071
     - path: cad/objects/batch-01/artifacts/object_list.json
       hash: md5
-      md5: cc75971d70c13021b11015a3522d14e1
-      size: 156836
+      md5: c8ceda659b67f19f4fd70fb1a51f6115
+      size: 157152
     - path: cad/objects/batch-02/artifacts/object_list.json
       hash: md5
       md5: 0cddd90c3f6a438e016e85529bb4d809
@@ -1813,11 +1813,11 @@ stages:
       size: 150049
     - path: cad/objects/batch-11/artifacts/object_list.json
       hash: md5
-      md5: f8c86bbeb2f7d61f7bf4c8ca6b2d0c6e
+      md5: 15c34940db13c88a00173c0c6f6ddce6
       size: 145968
     - path: cad/objects/batch-12/artifacts/object_list.json
       hash: md5
-      md5: 1c76381960cd87e6028c3c0f9165fa60
+      md5: c80e13bcdcdd32f319d9a00afac2e0e7
       size: 184947
     - path: cad/objects/batch-13/artifacts/object_list.json
       hash: md5
@@ -2142,8 +2142,8 @@ stages:
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
       hash: md5
-      md5: 84e3fa00eca23a80fa9a2f2b47384753
-      size: 1991588
+      md5: 3895388a1639e46cdbddd800241e62d3
+      size: 1991636
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -7088,12 +7088,12 @@ stages:
       size: 17762
     - path: cad/objects/batch-00/processed.max
       hash: md5
-      md5: fc20048d121ffa53976f2eac55c04767
-      size: 211760496
+      md5: 06d815fdcb5f286deba4835da3465dcc
+      size: 212325744
     outs:
     - path: cad/objects/batch-00/artifacts/object_list.json
       hash: md5
-      md5: cbcd5bfc33d908bcff0d6bad1832bab7
+      md5: 456c692d9b06a5d8e8b93fa8c22611d9
       size: 172071
   object_list@objects/batch-01:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-01/processed.max b1k_pipeline/max/object_list.py
@@ -7104,13 +7104,13 @@ stages:
       size: 17762
     - path: cad/objects/batch-01/processed.max
       hash: md5
-      md5: 689f1fc4fb5a16df9007145ec47de0dc
-      size: 188198880
+      md5: 2dfff0a8802a01bcd2b6938355889719
+      size: 189091522
     outs:
     - path: cad/objects/batch-01/artifacts/object_list.json
       hash: md5
-      md5: cc75971d70c13021b11015a3522d14e1
-      size: 156836
+      md5: c8ceda659b67f19f4fd70fb1a51f6115
+      size: 157152
   object_list@objects/batch-02:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-02/processed.max b1k_pipeline/max/object_list.py
     deps:
@@ -7120,8 +7120,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-02/processed.max
       hash: md5
-      md5: f960031332791dc070f791a526133c71
-      size: 229854026
+      md5: 88501d417098224924b4ea47e47358d4
+      size: 230735436
     outs:
     - path: cad/objects/batch-02/artifacts/object_list.json
       hash: md5
@@ -7136,8 +7136,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-03/processed.max
       hash: md5
-      md5: 0d9494fe3bb8cfbf34db9073cf387b35
-      size: 151587874
+      md5: aad18c9c50430e8e7df18d7d1ea568a3
+      size: 151792674
     outs:
     - path: cad/objects/batch-03/artifacts/object_list.json
       hash: md5
@@ -7152,8 +7152,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-04/processed.max
       hash: md5
-      md5: f5e5d2b82253743f03ad2556e4b8c6a4
-      size: 164772228
+      md5: 89e3b66a3910f51f1ea7103a33d64ee8
+      size: 165427588
     outs:
     - path: cad/objects/batch-04/artifacts/object_list.json
       hash: md5
@@ -7168,8 +7168,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-05/processed.max
       hash: md5
-      md5: 4f84a4574d1994d551e1cf23c8b47f7d
-      size: 163061736
+      md5: 28d21bf5107ba193933645d3ff5308b1
+      size: 163368532
     outs:
     - path: cad/objects/batch-05/artifacts/object_list.json
       hash: md5
@@ -7184,8 +7184,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-06/processed.max
       hash: md5
-      md5: c94109116fe5790c72a30b612cbedd7e
-      size: 188161632
+      md5: 6b3f5dce42445a21a59a23700b424efb
+      size: 188718808
     outs:
     - path: cad/objects/batch-06/artifacts/object_list.json
       hash: md5
@@ -7200,8 +7200,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-07/processed.max
       hash: md5
-      md5: b28d9fc7ed179316cdeb0f6c94660501
-      size: 186691640
+      md5: bb4d0bded12eeff17e48af620febf55c
+      size: 186926214
     outs:
     - path: cad/objects/batch-07/artifacts/object_list.json
       hash: md5
@@ -7216,8 +7216,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-08/processed.max
       hash: md5
-      md5: 6a4bb11c6a76e87044a5bd84fbbd36ed
-      size: 220145776
+      md5: 85999989e30aa3b112846c714332cb0b
+      size: 220440094
     outs:
     - path: cad/objects/batch-08/artifacts/object_list.json
       hash: md5
@@ -7232,8 +7232,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-09/processed.max
       hash: md5
-      md5: e2cb92a8efea19a94307d0710d2171ba
-      size: 140675482
+      md5: ffef051a85c187a1a135196d9135c169
+      size: 141138374
     outs:
     - path: cad/objects/batch-09/artifacts/object_list.json
       hash: md5
@@ -7248,8 +7248,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-10/processed.max
       hash: md5
-      md5: c22713992b28371089787686da48c544
-      size: 185157426
+      md5: 7d58af71b6abbdb8bb44951c11bbef06
+      size: 185915186
     outs:
     - path: cad/objects/batch-10/artifacts/object_list.json
       hash: md5
@@ -7264,12 +7264,12 @@ stages:
       size: 17762
     - path: cad/objects/batch-11/processed.max
       hash: md5
-      md5: faa2d77dbddcc0f45d42e4d15cdecc91
-      size: 177311742
+      md5: 4e6584f4b0f5c4c765db849ab66a7298
+      size: 177712762
     outs:
     - path: cad/objects/batch-11/artifacts/object_list.json
       hash: md5
-      md5: f8c86bbeb2f7d61f7bf4c8ca6b2d0c6e
+      md5: 15c34940db13c88a00173c0c6f6ddce6
       size: 145968
   object_list@objects/batch-12:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-12/processed.max b1k_pipeline/max/object_list.py
@@ -7280,12 +7280,12 @@ stages:
       size: 17762
     - path: cad/objects/batch-12/processed.max
       hash: md5
-      md5: 0fdafa2b78b6c0aebe81f7f728766981
-      size: 145880842
+      md5: a13d19421b2a0d9a70299f10bed4c571
+      size: 146839306
     outs:
     - path: cad/objects/batch-12/artifacts/object_list.json
       hash: md5
-      md5: 1c76381960cd87e6028c3c0f9165fa60
+      md5: c80e13bcdcdd32f319d9a00afac2e0e7
       size: 184947
   object_list@objects/batch-13:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-13/processed.max b1k_pipeline/max/object_list.py
@@ -7296,8 +7296,8 @@ stages:
       size: 17762
     - path: cad/objects/batch-13/processed.max
       hash: md5
-      md5: 2d677407533704b7229e458af0a4809e
-      size: 177983694
+      md5: cecde1413982dd74fb04e09030f7fef7
+      size: 178237646
     outs:
     - path: cad/objects/batch-13/artifacts/object_list.json
       hash: md5
@@ -18460,8 +18460,8 @@ stages:
       size: 17762
     - path: cad/objects/school_objects-aa/processed.max
       hash: md5
-      md5: d95d016807b2e960d1221606ba43845d
-      size: 93583534
+      md5: 28863dd961cd478bc655cf74eeceb65a
+      size: 93558272
     outs:
     - path: cad/objects/school_objects-aa/artifacts/object_list.json
       hash: md5
