@@ -19,11 +19,11 @@
   
   <h2>Directly Mapped Objects</h2>
   {% from "table_modules/object_table.html" import render_object_table %}
-  {{ render_object_table(synset.direct_matching_object, enable_search=False, enable_csv=False) }}
+  {{ render_object_table(synset.direct_matching_object, enable_search=False, enable_csv=False, enable_images=True) }}
   <br>
 
   <h2>All Descendant Objects (including Direct)</h2>
-  {{ render_object_table(synset.matching_objects, enable_search=False, enable_csv=False) }}
+  {{ render_object_table(synset.matching_objects, enable_search=False, enable_csv=False, enable_images=True) }}
   <br>
 
   <h2>Properties</h2>
