@@ -499,6 +499,49 @@ def convert_materials_to_vray(filename):
     #         found_bad = True       
     # #assert not found_bad, "Non-Vray material found"
 
+def update_texture_paths():
+    for obj in rt.objects:
+        mtl = obj.material
+        if not mtl or rt.classOf(mtl) != rt.Shell_Material:
+            continue
+        baked_mtl = mtl.bakedMaterial
+        for map_idx in range(rt.getNumSubTexmaps(baked_mtl)):
+            sub_texmap = rt.getSubTexmap(baked_mtl, map_idx + 1)
+            if sub_texmap is not None:
+                sub_texmap_slot_name = rt.getSubTexmapSlotName(baked_mtl, map_idx + 1)
+                assert rt.classOf(sub_texmap) == rt.Bitmaptexture, \
+                    f"Object {obj.name} baked material map {sub_texmap_slot_name} has unexpected type {rt.classOf(sub_texmap)}"
+                
+                # Use os.path.abspath which normalizes + absolutifies the paths but does not resolve symlinks unlike pathlib (problem with dvc)
+                map_path = pathlib.Path(os.path.abspath(sub_texmap.filename))
+                assert map_path.exists(), f"Object {obj.name} baked material map {sub_texmap_slot_name} does not exist at {map_path}"
+                bakery_path = pathlib.Path(os.path.abspath(os.path.join(rt.maxFilePath, "bakery")))
+
+                if bakery_path in map_path.parents:
+                    # This is the correct bakery path, so ignore this object
+                    continue
+
+                # Otherwise, we need to update the path. First, get the correct path and copy the file there.
+                correct_path = bakery_path / map_path.name
+                if correct_path.exists():
+                    # If the path already exists, check that it's the same file.
+                    with open(map_path, "rb") as f:
+                        map_hash = hashlib.md5(f.read()).hexdigest()
+                    with open(correct_path, "rb") as f:
+                        correct_hash = hashlib.md5(f.read()).hexdigest()
+                    if map_hash != correct_hash:
+                        print("\nHash mismatch for", map_path, "and", correct_path)
+                        print("Correct path hash is", correct_hash)
+                        print("Map path hash is", map_hash)
+                        raise ValueError(
+                            f"Hash mismatch for {map_path} and {correct_path}. Please check the files."
+                        )
+                    
+                else:
+                    shutil.copyfile(map_path, correct_path)
+
+                # Then update the path in the bitmap texture
+                sub_texmap.filename = str(correct_path)
 
 def processFile(filename: pathlib.Path):
     # Load file, fixing the units
@@ -592,7 +635,7 @@ def processFile(filename: pathlib.Path):
     #         # baked_mtls_by_object[obj] = obj.material.bakedMaterial
     #         obj.material = obj.material.originalMaterial
     #         assert rt.classOf(obj.material) != rt.Shell_Material, f"{obj} material should not be shell material before baking"
-    # b1k_pipeline.max.prebake_textures.process_open_file()
+    b1k_pipeline.max.prebake_textures.process_open_file()
     # for obj, old_baked_mtl in baked_mtls_by_object.items():
     #     # Make sure it got baked again
     #     if not rt.classOf(obj.material) == rt.Shell_Material:
@@ -608,48 +651,7 @@ def processFile(filename: pathlib.Path):
     #     obj.material.bakedMaterial = old_baked_mtl
 
     # Update baked texture paths if the baked textures are not in the same folder as the max file
-    for obj in rt.objects:
-        mtl = obj.material
-        if not mtl or rt.classOf(mtl) != rt.Shell_Material:
-            continue
-        baked_mtl = mtl.bakedMaterial
-        for map_idx in range(rt.getNumSubTexmaps(baked_mtl)):
-            sub_texmap = rt.getSubTexmap(baked_mtl, map_idx + 1)
-            if sub_texmap is not None:
-                sub_texmap_slot_name = rt.getSubTexmapSlotName(baked_mtl, map_idx + 1)
-                assert rt.classOf(sub_texmap) == rt.Bitmaptexture, \
-                    f"Object {obj.name} baked material map {sub_texmap_slot_name} has unexpected type {rt.classOf(sub_texmap)}"
-                
-                # Use os.path.abspath which normalizes + absolutifies the paths but does not resolve symlinks unlike pathlib (problem with dvc)
-                map_path = pathlib.Path(os.path.abspath(sub_texmap.filename))
-                assert map_path.exists(), f"Object {obj.name} baked material map {sub_texmap_slot_name} does not exist at {map_path}"
-                bakery_path = pathlib.Path(os.path.abspath(os.path.join(rt.maxFilePath, "bakery")))
-
-                if bakery_path in map_path.parents:
-                    # This is the correct bakery path, so ignore this object
-                    continue
-
-                # Otherwise, we need to update the path. First, get the correct path and copy the file there.
-                correct_path = bakery_path / map_path.name
-                if correct_path.exists():
-                    # If the path already exists, check that it's the same file.
-                    with open(map_path, "rb") as f:
-                        map_hash = hashlib.md5(f.read()).hexdigest()
-                    with open(correct_path, "rb") as f:
-                        correct_hash = hashlib.md5(f.read()).hexdigest()
-                    if map_hash != correct_hash:
-                        print("\nHash mismatch for", map_path, "and", correct_path)
-                        print("Correct path hash is", correct_hash)
-                        print("Map path hash is", map_hash)
-                        raise ValueError(
-                            f"Hash mismatch for {map_path} and {correct_path}. Please check the files."
-                        )
-                    
-                else:
-                    shutil.copyfile(map_path, correct_path)
-
-                # Then update the path in the bitmap texture
-                sub_texmap.filename = str(correct_path)
+    # update_texture_paths()
 
     # Update visibility settings
     # update_visibilities()
@@ -662,7 +664,7 @@ def processFile(filename: pathlib.Path):
 
 def fix_common_issues_in_all_files():
     candidates = [
-        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\school_objects-aa\processed.max")
+        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):

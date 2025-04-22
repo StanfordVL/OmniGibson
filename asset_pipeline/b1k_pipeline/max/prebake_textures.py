@@ -222,7 +222,7 @@ class TextureBaker:
         # Check if the object is already unwrapped with the same geometry
         current_hash = hash_object(obj)
         recorded_hash = get_recorded_uv_unwrapping_hash(obj)
-        if recorded_hash == current_hash:
+        if rt.polyop.getMapSupport(obj, 99) and recorded_hash == current_hash:
             print(f"Skipping unwrapping for {obj.name} as it has not changed.")
             return
 
