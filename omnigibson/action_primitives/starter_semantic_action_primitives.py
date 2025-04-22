@@ -1296,7 +1296,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # Grab the first successful trajectory if found
         successes = results[0].success
         print("Base motion planning successes: ", successes)
-        print("len(trajs): ", [len(t) for t in traj_paths])
+        # print("len(trajs): ", [len(t) for t in traj_paths])
         success_idx = th.where(successes)[0].cpu()
         if len(success_idx) == 0:
             print("Base motion planning failed", results[0].status)
@@ -1308,7 +1308,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 self.mp_err = "BaseMPIKFailed"
                 q_traj = None
             else:
-                print("len(trajs): ", [len(t) for t in traj_paths])
+                # print("len(trajs): ", [len(t) for t in traj_paths])
                 self.mp_err = "BaseMPFailed"
                 q_traj = None
                 # breakpoint()
