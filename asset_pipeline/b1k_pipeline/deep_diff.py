@@ -43,7 +43,7 @@ def main():
         object_diffs[target] = sorted(diff.affected_root_keys)
         full_diffs[target] = diff.pretty()
 
-    meta_type_diffs = sorted({parse_name(x).group("meta_type") for target_object_diffs in object_diffs.values() for x in target_object_diffs if parse_name(x)})
+    meta_type_diffs = sorted({str(parse_name(x).group("meta_type")) for target_object_diffs in object_diffs.values() for x in target_object_diffs if parse_name(x)})
 
     print("-------------------------------------------------")
     print("OBJECT DIFFS")
@@ -58,7 +58,7 @@ def main():
     print("BY TARGET:")
     for target in sorted(all_targets):
         target_objs = sorted(object_diffs[target])
-        target_meta_types = sorted({parse_name(x).group("meta_type") for x in target_objs if parse_name(x)})
+        target_meta_types = sorted({str(parse_name(x).group("meta_type")) for x in target_objs if parse_name(x)})
         target_mids = sorted(model_ids_from_objects(target_objs))
 
         print(f"\n\n-------------------------\n{target}")
