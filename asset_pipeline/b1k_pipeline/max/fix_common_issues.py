@@ -1,5 +1,8 @@
 import csv
+import hashlib
 import json
+import os
+import shutil
 import sys
 
 import numpy as np
@@ -28,7 +31,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-iorbake.success"
+PASS_FILENAME = "done-bakeryupdate.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -496,6 +499,49 @@ def convert_materials_to_vray(filename):
     #         found_bad = True       
     # #assert not found_bad, "Non-Vray material found"
 
+def update_texture_paths():
+    for obj in rt.objects:
+        mtl = obj.material
+        if not mtl or rt.classOf(mtl) != rt.Shell_Material:
+            continue
+        baked_mtl = mtl.bakedMaterial
+        for map_idx in range(rt.getNumSubTexmaps(baked_mtl)):
+            sub_texmap = rt.getSubTexmap(baked_mtl, map_idx + 1)
+            if sub_texmap is not None:
+                sub_texmap_slot_name = rt.getSubTexmapSlotName(baked_mtl, map_idx + 1)
+                assert rt.classOf(sub_texmap) == rt.Bitmaptexture, \
+                    f"Object {obj.name} baked material map {sub_texmap_slot_name} has unexpected type {rt.classOf(sub_texmap)}"
+                
+                # Use os.path.abspath which normalizes + absolutifies the paths but does not resolve symlinks unlike pathlib (problem with dvc)
+                map_path = pathlib.Path(os.path.abspath(sub_texmap.filename))
+                assert map_path.exists(), f"Object {obj.name} baked material map {sub_texmap_slot_name} does not exist at {map_path}"
+                bakery_path = pathlib.Path(os.path.abspath(os.path.join(rt.maxFilePath, "bakery")))
+
+                if bakery_path in map_path.parents:
+                    # This is the correct bakery path, so ignore this object
+                    continue
+
+                # Otherwise, we need to update the path. First, get the correct path and copy the file there.
+                correct_path = bakery_path / map_path.name
+                if correct_path.exists():
+                    # If the path already exists, check that it's the same file.
+                    with open(map_path, "rb") as f:
+                        map_hash = hashlib.md5(f.read()).hexdigest()
+                    with open(correct_path, "rb") as f:
+                        correct_hash = hashlib.md5(f.read()).hexdigest()
+                    if map_hash != correct_hash:
+                        print("\nHash mismatch for", map_path, "and", correct_path)
+                        print("Correct path hash is", correct_hash)
+                        print("Map path hash is", map_hash)
+                        raise ValueError(
+                            f"Hash mismatch for {map_path} and {correct_path}. Please check the files."
+                        )
+                    
+                else:
+                    shutil.copyfile(map_path, correct_path)
+
+                # Then update the path in the bitmap texture
+                sub_texmap.filename = str(correct_path)
 
 def processFile(filename: pathlib.Path):
     # Load file, fixing the units
@@ -584,11 +630,11 @@ def processFile(filename: pathlib.Path):
 
     # Temporary hack for rebaking just the reflection channel
     # baked_mtls_by_object = {}
-    for obj in rt.objects:
-        if obj.material and rt.classOf(obj.material) == rt.Shell_Material:
-            # baked_mtls_by_object[obj] = obj.material.bakedMaterial
-            obj.material = obj.material.originalMaterial
-            assert rt.classOf(obj.material) != rt.Shell_Material, f"{obj} material should not be shell material before baking"
+    # for obj in rt.objects:
+    #     if obj.material and rt.classOf(obj.material) == rt.Shell_Material:
+    #         # baked_mtls_by_object[obj] = obj.material.bakedMaterial
+    #         obj.material = obj.material.originalMaterial
+    #         assert rt.classOf(obj.material) != rt.Shell_Material, f"{obj} material should not be shell material before baking"
     b1k_pipeline.max.prebake_textures.process_open_file()
     # for obj, old_baked_mtl in baked_mtls_by_object.items():
     #     # Make sure it got baked again
@@ -604,11 +650,14 @@ def processFile(filename: pathlib.Path):
     #     # Switch back to the old shell material
     #     obj.material.bakedMaterial = old_baked_mtl
 
+    # Update baked texture paths if the baked textures are not in the same folder as the max file
+    # update_texture_paths()
+
     # Update visibility settings
     # update_visibilities()
 
     # Save again.
-    # rt.saveMaxFile(str(filename))
+    rt.saveMaxFile(str(filename))
 
     with open(filename.parent / PASS_FILENAME, "w") as f:
         pass

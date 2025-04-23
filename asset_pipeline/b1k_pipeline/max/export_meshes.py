@@ -132,8 +132,6 @@ class ObjectExporter:
                 continue
             if int(parsed_name.group("instance_id")) != 0:
                 continue
-            if parsed_name.group("joint_side") == "upper":
-                continue
             if parsed_name.group("bad"):
                 continue
 
@@ -174,10 +172,10 @@ class ObjectExporter:
             rt.select(obj)
 
             # rt.ObjExp.setIniName(os.path.join(os.path.parent(__file__), "gw_objexp.ini"))
-            assert (
-                rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "UseMapPath")
-                == "0"
-            ), "Map path should be disabled."
+            # assert (
+            #     rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "UseMapPath")
+            #     == "0"
+            # ), "Map path should be disabled."
             # assert (
             #     rt.getIniSetting(rt.ObjExp.getIniName(), "Material", "MapPath")
             #     == "./material/"
@@ -205,7 +203,12 @@ class ObjectExporter:
 
         metadata = {}
 
-        # Export the canonical orientation
+        # Export the canonical position and orientation
+        metadata["position"] = [
+            obj.position.x,
+            obj.position.y,
+            obj.position.z,
+        ]
         metadata["orientation"] = [
             obj.rotation.x,
             obj.rotation.y,
@@ -224,9 +227,15 @@ class ObjectExporter:
                 sub_texmap_slot_name = rt.getSubTexmapSlotName(baked_mtl, map_idx + 1)
                 assert rt.classOf(sub_texmap) == rt.Bitmaptexture, \
                     f"Object {obj.name} baked material map {sub_texmap_slot_name} has unexpected type {rt.classOf(sub_texmap)}"
-                map_path = pathlib.Path(sub_texmap.filename).resolve()
-                bakery_path = (pathlib.Path(rt.maxFilePath) / "bakery").resolve()
+                
+                # Use os.path.abspath which normalizes + absolutifies the paths but does not resolve symlinks unlike pathlib (problem with dvc)
+                map_path = pathlib.Path(os.path.abspath(sub_texmap.filename))
+                assert map_path.exists(), f"Object {obj.name} baked material map {sub_texmap_slot_name} does not exist at {map_path}"
+                bakery_path = pathlib.Path(os.path.abspath(os.path.join(rt.maxFilePath, "bakery")))
+
+                # Then switch to Pathlib which asserts that the path is a subpath before normalizing
                 metadata["material_maps"][sub_texmap_slot_name] = map_path.relative_to(bakery_path).as_posix()
+                
         assert len(metadata["material_maps"]) > 0, f"Object {obj.name} has no maps."
 
         metadata["meta_links"] = defaultdict(

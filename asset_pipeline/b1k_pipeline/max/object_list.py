@@ -185,9 +185,7 @@ def main():
         pivot = (
             None
             if match.group("link_name") and match.group("link_name") != "base_link"
-            else np.hstack(
-                [b1k_pipeline.utils.mat2arr(obj.transform), [[0], [0], [0], [1]]]
-            ).T
+            else obj.transform
         )
 
         # Get vertices and faces into numpy arrays for conversion
@@ -227,9 +225,9 @@ def main():
         bbox_min = np.min(mins, axis=0)
         bbox_max = np.max(maxes, axis=0)
         bbox_extent = bbox_max - bbox_min
-        bbox_center_in_pivot = (bbox_max + bbox_min) / 2.0
+        bbox_center_in_pivot = rt.Point3(*((bbox_max + bbox_min) / 2.0).tolist())
 
-        bbox_position_in_world = np.array(pivot.position) + bbox_center_in_pivot
+        bbox_position_in_world = np.array(pivot.position) + np.array(bbox_center_in_pivot * pivot.rotation)
         bbox_rotation_in_world = quat2arr(pivot.rotation)
 
         bounding_boxes[model_id][instance_id] = {
@@ -261,7 +259,10 @@ def main():
         assert (
             len(pivots) == 1
         ), f"Expected 1 orientation for {model_id}, got {len(pivots)}"
-        pivot = pivots[0]
+        max_pivot = pivots[0]
+        pivot = np.hstack(
+            [b1k_pipeline.utils.mat2arr(max_pivot), [[0], [0], [0], [1]]]
+        ).T
 
         flattened_moment_of_inertia = None
         pivot_to_centroid = None
@@ -439,7 +440,7 @@ def main():
                 continue
 
             # Get portal info
-            position = portal.position
+            position = np.array(portal.position)
             rotation = portal.rotation
             quat = quat2arr(rotation)
             scale = np.array(list(portal.scale))
