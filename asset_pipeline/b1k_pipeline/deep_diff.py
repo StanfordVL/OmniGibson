@@ -43,21 +43,34 @@ def main():
         object_diffs[target] = sorted(diff.affected_root_keys)
         full_diffs[target] = diff.pretty()
 
+    meta_type_diffs = sorted({parse_name(x).group("meta_type") for target_object_diffs in object_diffs.values() for x in target_object_diffs if parse_name(x)})
+
     print("-------------------------------------------------")
     print("OBJECT DIFFS")
     print("Unique edited obj names:", sum(len(vals) for vals in object_diffs.values()))
     print("Unique edited model IDs:", len({mid for objs in object_diffs.values() for mid in model_ids_from_objects(objs)}))
+    print("Unique edited meta types:", len(meta_type_diffs), meta_type_diffs)
     print("-------------------------------------------------")
+    print("All edited models:")
+    for mid in sorted({mid for objs in object_diffs.values() for mid in model_ids_from_objects(objs)}):
+        print("    " + str(mid))
+    print()
+    print("BY TARGET:")
     for target in sorted(all_targets):
         target_objs = sorted(object_diffs[target])
+        target_meta_types = sorted({parse_name(x).group("meta_type") for x in target_objs if parse_name(x)})
         target_mids = sorted(model_ids_from_objects(target_objs))
 
         print(f"\n\n-------------------------\n{target}")
-        print(f"Objects ({len(target_objs)})")
+        print("Unique edited obj names:", len(target_objs))
+        print("Unique edited model IDs:", len(target_mids))
+        print("Unique edited meta types:", len(target_meta_types), target_meta_types)
+
+        print("Objects:")
         for root in target_objs:
             print("    " + str(root))
 
-        print(f"Models ({len(target_mids)})")
+        print("Models:")
         for mid in target_mids:
             print("    " + str(mid))
 
