@@ -25,7 +25,7 @@ When you are going to edit a file, follow the below steps:
 9. Commit your change `git commit -m "what did you change?"`
 10. Push your change to both DVC and Git: `dvc push` and then `git push`
 11. Create a PR on the repository. Copy the link to the PR.
-12. **Only if you are not going to continue working on the file**, e.g. if your PR includes ALL the changes you are going to make to that file, paste the PR link on the "Unlock on PR" column (Column D) of the spreadsheet.
+12. **Only if you are not going to continue working on the file**, e.g. if your PR includes ALL the changes you are going to make to that file, paste the PR link on the "Unlock on PR" column (Column D) of the spreadsheet. **For every file that you have NOT done ANY work on (e.g. you DON'T have some partial work that you already started but haven't included in your PR), make sure that you RELEASE the file lock by deleting your name so other people can work on it during your off hours. You can always grab the lock again in the morning!**
 13. Cem will soon merge your PR, and after merging the PR, if you put the PR number on the column indicating you're done with the file, Cem will remove your name from the lock column, unlocking the file. **That means, before doing any further work on that file, you MUST repeat steps 1-5**!
 
 **Since multiple people will be editing the same files in quick succession, you need to make sure you have the most recent version of the file by doing a git/dvc merge+pull from `main` EVERY TIME you start work after obtaining a file lock!** Just obtaining the lock is not sufficient since if you don't pull you will not have the most recent changes.
