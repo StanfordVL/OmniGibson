@@ -327,6 +327,8 @@ class SanityCheck:
                 f"{row.object_name} is not rendering the baked material in the viewport. Select the baked material for viewport.",
             )
 
+            self.expect(rt.polyop.getMapSupport(obj, 99), f"{row.object_name} does not have a UVW map in channel 99. Reunwrap the object.")
+
             current_hash = hash_object(
                 obj,
                 verts=self.get_verts_for_obj(obj),
