@@ -3,16 +3,11 @@ import sys
 
 sys.path.append(r"D:\ig_pipeline")
 
-import glob
-import os
 import pathlib
 import json
 
 import pymxs
-import tqdm
 from scipy.spatial.transform import Rotation as R
-import fs.path
-from fs.zipfs import ZipFS
 import numpy as np
 
 import b1k_pipeline.utils
@@ -20,11 +15,6 @@ import b1k_pipeline.utils
 rt = pymxs.runtime
 local_coordsys = pymxs.runtime.Name("local")
 parent_coordsys = pymxs.runtime.Name("parent")
-
-
-
-def processed_fn(orig_fn: pathlib.Path):
-    return orig_fn.with_name(orig_fn.stem + '_autofix' + orig_fn.suffix)
 
 
 def rotate_pivot(tgt_obj, delta_rot_local):
@@ -62,11 +52,18 @@ def scale_pivot(tgt_obj, delta_scale):
         scale_pivot(c, delta_scale)
 
 
-def processFile(filename: pathlib.Path, fixes):
-    # Load file, fixing the units
-    assert rt.loadMaxFile(str(filename), useFileUnits=False, quiet=True)
-    # assert rt.units.systemScale == 1, "System scale not set to 1mm."
-    # assert rt.units.systemType == rt.Name("millimeters"), "System scale not set to 1mm."
+def apply_qa_fixes_in_open_file():
+    # Load the fixes
+    fixes = defaultdict(dict)
+    with open(r"D:\ig_pipeline\metadata\orientation_and_scale_edits.json") as f:
+        data = json.load(f)
+        for model, orientation in data["orientations"].items():
+            if not np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
+                fixes[model]["orientation"] = orientation
+        for model, scale in data["scales"].items():
+            if not np.allclose(scale, [1, 1, 1], atol=1e-3):
+                assert np.allclose(scale, scale[0], atol=1e-3), "Non-uniform scale not supported."
+                fixes[model]["scale"] = scale[0]
 
     # Prior to starting, let's get the minimum y value and add a bit of margin to it. This is
     # where we'll put our rescaled objects.
@@ -103,10 +100,8 @@ def processFile(filename: pathlib.Path, fixes):
         # Note that child links also get their pivots rotated here. Is that good? idk.
         # But we definitely don't want to rotate lights.
         if rt.ClassOf(obj) == rt.Editable_Poly:
-            if "orientation_old" in model_fixes:
-                rotate_pivot(obj, R.from_quat(model_fixes["orientation_old"]).inv())
-            if "orientation_new" in model_fixes:
-                rotate_pivot(obj, R.from_quat(model_fixes["orientation_new"]).inv())
+            if "orientation" in model_fixes:
+                rotate_pivot(obj, R.from_quat(model_fixes["orientation"]).inv())
 
         # Record the object for possible scale fixes. We're doing this only for root-level
         # objects. We will reparent these objects for the process of applying scale fixes.
@@ -119,7 +114,7 @@ def processFile(filename: pathlib.Path, fixes):
                 objects_by_model_and_id[key].append(obj)
 
     # Make a pass for scales, only for object files
-    if "objects" in str(filename):
+    if "objects" in pathlib.Path(rt.maxFilePath).parts:
         # Assert that all children have bases
         assert set(base_links_by_model_and_id.keys()).issuperset(set(objects_by_model_and_id.keys())), "Not all objects have base links."
 
@@ -159,43 +154,5 @@ def processFile(filename: pathlib.Path, fixes):
             for child in children:
                 child.parent = None
 
-    # Save again.
-    new_filename = processed_fn(filename)
-    rt.saveMaxFile(str(new_filename))
-
-
-def apply_qa_fixes_in_all_files():
-    # Precompile all the fix files
-    print("Loading fixes...")
-    fixes = defaultdict(dict)
-    with open(r"D:\ig_pipeline\metadata\orientation_edits.zip", "rb") as f:
-        with ZipFS(f) as orientation_zip_fs:
-            for item in orientation_zip_fs.glob("recorded_orientation/*/*.json"):
-                model = fs.path.splitext(fs.path.basename(item.path))[0]
-                orientation = json.loads(orientation_zip_fs.readtext(item.path))[0]
-                if not np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
-                    fixes[model]["orientation_old"] = orientation
-    for item in glob.glob(r"D:\ig_pipeline\qa-2025\*\*\*.json"):
-        model = os.path.splitext(os.path.basename(item))[0]
-        with open(item) as f:
-            data = json.load(f)
-            orientation = data["orientation"]
-            scale = data["scale"]
-            if not np.allclose(orientation, [0, 0, 0, 1], atol=1e-3):
-                fixes[model]["orientation_new"] = orientation
-            if not np.allclose(scale, [1, 1, 1], atol=1e-3):
-                assert np.allclose(scale, scale[0], atol=1e-3), "Non-uniform scale not supported."
-                fixes[model]["scale"] = scale[0]
-    print("Loaded fixes.")
-
-    candidates = [
-        pathlib.Path(x)
-        for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
-    ]
-    remaining = [x for x in candidates if not processed_fn(x).exists()]
-    for i, f in enumerate(tqdm.tqdm(remaining)):
-        processFile(f, fixes)
-
-
 if __name__ == "__main__":
-    apply_qa_fixes_in_all_files()
+    apply_qa_fixes_in_open_file()
