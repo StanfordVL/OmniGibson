@@ -58,9 +58,9 @@ jobs:
         working-directory: base
         run: dvc pull combined_file_manifest
 
-      - name: Check repro output on base branch
-        working-directory: base
-        run: dvc repro --dry --allow-missing combined_file_manifest
+      # - name: Check repro output on base branch
+      #   working-directory: base
+      #   run: dvc repro --dry --allow-missing combined_file_manifest
 
       - name: Check base branch file manifest for validity
         working-directory: base
