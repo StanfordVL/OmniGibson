@@ -21252,17 +21252,17 @@ stages:
       size: 6626
     - path: cad/objects/legacy_batch-03/processed.max
       hash: md5
-      md5: ace81a6fdb73694cef31aa7896975694
-      size: 304315232
+      md5: 93da780d34ecc00c437e322881a6584d
+      size: 301435744
     outs:
     - path: cad/objects/legacy_batch-03/artifacts/file_manifest.json
       hash: md5
-      md5: 45d4a9ff0f0b413ec0dd7e722d4ed018
-      size: 295944
+      md5: bb87882a29093ed4320a1b647fbc2264
+      size: 295906
     - path: cad/objects/legacy_batch-03/artifacts/file_manifest_deep.json
       hash: md5
-      md5: a8742e4f0a44f2615e8279b6a777bcf4
-      size: 2132592
+      md5: d310473ae12a02533f79f5efb2b9975f
+      size: 2132554
   file_manifest@objects/legacy_batch-04:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-04/processed.max
       b1k_pipeline/max/file_manifest.py
@@ -21488,8 +21488,8 @@ stages:
       size: 253672
     - path: cad/objects/legacy_batch-03/artifacts/file_manifest.json
       hash: md5
-      md5: 45d4a9ff0f0b413ec0dd7e722d4ed018
-      size: 295944
+      md5: bb87882a29093ed4320a1b647fbc2264
+      size: 295906
     - path: cad/objects/legacy_batch-04/artifacts/file_manifest.json
       hash: md5
       md5: 9b8ec4746f18db27adda989f7fe10959
@@ -21789,5 +21789,5 @@ stages:
     outs:
     - path: artifacts/pipeline/combined_file_manifest.json
       hash: md5
-      md5: 74fa92dffc44958f6c1afacb62ec3e86
-      size: 37215504
+      md5: 6be420801faa19a35d4cb38891a2a52d
+      size: 37214153
