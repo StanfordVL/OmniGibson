@@ -38,7 +38,7 @@ jobs:
 
       - name: Pull combined file manifest for PR branch
         working-directory: pr
-        run: dvc pull combined_file_manifest
+        run: dvc pull combined_file_manifest file_manifest
 
       # - name: Check repro output on PR branch
       #   working-directory: pr

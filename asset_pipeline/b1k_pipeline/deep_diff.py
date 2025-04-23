@@ -11,7 +11,9 @@ def main():
 
     for target in all_targets:
         print(f"\n\n{target}")
-        print(DeepDiff(base_manifest_by_target[target], pr_manifest_by_target[target]).pretty())
+        base_manifest = base_manifest_by_target[target] if target in base_manifest_by_target else []
+        pr_manifest = pr_manifest_by_target[target] if target in pr_manifest_by_target else []
+        print(DeepDiff(base_manifest, pr_manifest).pretty())
 
 if __name__ == "__main__":
     main()
