@@ -1,6 +1,5 @@
-# Script for automatically calibrating a gello
-# The "zero" position is shoulder flat and back, arm forward, and wrist notch out
-# The "calibration" position is arm down, notch forward, and joycon rotated out
+# Script for automatically calibrating a JoyLo set
+# Refer to the README for the correct arm positions for calibration
 
 from gello.dynamixel.driver import DynamixelDriver
 import numpy as np
@@ -33,17 +32,17 @@ def pretty_print_list(items: list[float]) -> None:
     print('')
 
 
-def get_joint_angles_L(driver: DynamixelDriver) -> np.ndarray:
-    return np.rad2deg(driver.get_joints()[:8])
+def get_joint_angles_L(driver: DynamixelDriver, num_joints_per_arm: int) -> np.ndarray:
+    return np.rad2deg(driver.get_joints()[:num_joints_per_arm])
 
 
-def get_joint_angles_R(driver: DynamixelDriver) -> np.ndarray:
-    return np.rad2deg(driver.get_joints()[8:])
+def get_joint_angles_R(driver: DynamixelDriver, num_joints_per_arm: int) -> np.ndarray:
+    return np.rad2deg(driver.get_joints()[num_joints_per_arm:])
 
 
 def compute_joint_offsets_and_signs(joints_1: np.ndarray,
                                     joints_2: np.ndarray,
-                                    robot_name: str)-> tuple[np.ndarray, np.ndarray],:
+                                    robot_name: str)-> tuple[np.ndarray, np.ndarray]:
     """
     Computes the joints signs and offsets given the measured angles at two known positions 
     (for now, fixed in code to be a cannonical "zero" position, and a second "calibration" 
@@ -61,7 +60,7 @@ def compute_joint_offsets_and_signs(joints_1: np.ndarray,
                                         -90, -90, 180, 180, -180, -90, -90, 90])
     elif robot_name == "R1Pro":
         expected_positions_1 = np.zeros(18)
-        expected_positions_2 = np.array([-90, -90, 90, 90, 90, 90, -90, 60, 90,
+        expected_positions_2 = np.array([-90, -90, 90, 90, -90, -90, 90, 60, 90,
                                         -90, -90, -90, -90, 90, -90, -90, 60, -90])
     else:
         raise ValueError("Robot name must be either R1 or R1Pro")
@@ -73,12 +72,12 @@ def compute_joint_offsets_and_signs(joints_1: np.ndarray,
     signs = np.sign(delta / expected_delta)
     
     # Compute offsets by subtracting expected position and accounting for sign
-    def round_to_60(x: np.ndarray) -> np.ndarray:
-        """ Round all elements to the nearest multiple of 60 degrees """
-        return 60 * np.rint(x / 60)
+    def round_to_90(x: np.ndarray) -> np.ndarray:
+        """ Round all elements to the nearest multiple of 90 degrees """
+        return 90 * np.rint(x / 90)
     
-    offsets_1 = round_to_60(joints_1 - signs * expected_positions_1)
-    offsets_2 = round_to_60(joints_2 - signs * expected_positions_2)
+    offsets_1 = round_to_90(joints_1 - signs * expected_positions_1)
+    offsets_2 = round_to_90(joints_2 - signs * expected_positions_2)
     
     # Exit if these offsets are not equal
     if not np.all(offsets_1 == offsets_2):
@@ -96,6 +95,8 @@ def main(args: Args) -> None:
     assert args.robot in ["R1", "R1Pro"], "Robot type must be either R1 or R1Pro"
     
     num_joints = 18 if args.robot == "R1Pro" else 16
+    num_joints_per_arm = num_joints // 2
+
     joint_ids = list(range(num_joints))
     driver = DynamixelDriver(ids=joint_ids, port=args.port, baudrate=args.baudrate)
 
@@ -116,25 +117,24 @@ def main(args: Args) -> None:
     print("Now Calibrating LEFT arm...")
     print("Place the LEFT arm in the zero position and press enter!", end ='')
     input()
-    joint_angles_pos_1[:8] = get_joint_angles_L(driver)
+    joint_angles_pos_1[:num_joints_per_arm] = get_joint_angles_L(driver, num_joints_per_arm)
 
     print("Place the LEFT arm in the calibration position and press enter!", end ='')
     input()
-    joint_angles_pos_2[:8] = get_joint_angles_L(driver)
+    joint_angles_pos_2[:num_joints_per_arm] = get_joint_angles_L(driver, num_joints_per_arm)
     
     # Gather data for the right arm
     print("\n\nNow Calibrating RIGHT arm...")
     print("\nPlace the RIGHT arm in the zero position and press enter...", end ='')
     input()
-    joint_angles_pos_1[8:] = get_joint_angles_R(driver)
+    joint_angles_pos_1[num_joints_per_arm:] = get_joint_angles_R(driver, num_joints_per_arm)
 
     print("Place the RIGHT arm in the calibration position and press enter!", end ='')
     input()
-    joint_angles_pos_2[8:] = get_joint_angles_R(driver)
+    joint_angles_pos_2[num_joints_per_arm:] = get_joint_angles_R(driver, num_joints_per_arm)
 
     # Compute offsets and angles 
     signs, offsets = compute_joint_offsets_and_signs(joint_angles_pos_1, joint_angles_pos_2, args.robot)
-    # compute_joint_offsets_and_signs(J1, J2)
 
     print("")
     print("Successfully calibrated your GELLO:")
