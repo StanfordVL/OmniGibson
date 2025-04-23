@@ -31,7 +31,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-bakeryupdate.success"
+PASS_FILENAME = "done-bakeryupdate2.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -543,6 +543,28 @@ def update_texture_paths():
                 # Then update the path in the bitmap texture
                 sub_texmap.filename = str(correct_path)
 
+def add_ior_maps():
+    for obj in rt.objects:
+        mtl = obj.material
+        if not mtl or rt.classOf(mtl) != rt.Shell_Material:
+            continue
+
+        baked_mtl = mtl.bakedMaterial
+        assert rt.classOf(baked_mtl) == rt.Physical_Material, \
+            f"Object {obj.name} baked material is not a Physical Material, but {rt.classOf(baked_mtl)}"
+        for map_idx in range(rt.getNumSubTexmaps(baked_mtl)):
+            if rt.getSubTexmapSlotName(baked_mtl, map_idx + 1) == "IOR Map":
+                ior_idx = map_idx + 1
+                break
+        else:
+            raise ValueError("Baked material {baked_mtl} does not have an IOR Map channel available!")
+        
+        if rt.getSubTexmap(baked_mtl, ior_idx) is not None:
+            continue
+
+        # Create a new bitmap and attach it as the IOR map.
+        
+
 def processFile(filename: pathlib.Path):
     # Load file, fixing the units
     print(f"\n\nProcessing {filename}")
@@ -664,7 +686,8 @@ def processFile(filename: pathlib.Path):
 
 def fix_common_issues_in_all_files():
     candidates = [
-        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max")
+        if x.parts[-2] in ("restaurant_brunch", "house_single_floor", "batch-07")
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):

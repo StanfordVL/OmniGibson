@@ -24,7 +24,7 @@ jobs:
           architecture: x64
 
       - name: Install DVC
-        run: pip install dvc[gs]===3.42.0 deepdiff
+        run: pip install dvc[gs]===3.42.0 deepdiff fs numpy trimesh pyyaml
         
       - name: Authenticate on Google Cloud
         uses: 'google-github-actions/auth@v1'
@@ -73,7 +73,7 @@ jobs:
           # Use 'diff' command. It exits with 0 if no diff, 1 if diff, >1 if error.
           # We use '|| true' to ensure the workflow continues even if differences are found (exit code 1).
           # diff -u5 base/artifacts/pipeline/combined_file_manifest.json pr/artifacts/pipeline/combined_file_manifest.json > ${{ env.DIFF_FILE }} || true
-          python pr/b1k_pipeline/deep_diff.py > ${{ env.DIFF_FILE }} || true
+          PYTHONPATH="pr:${PYTHONPATH}" python pr/b1k_pipeline/deep_diff.py > ${{ env.DIFF_FILE }}
 
           # Check if diff file has content
           if [ -s "${{ env.DIFF_FILE }}" ]; then
