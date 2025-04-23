@@ -2,7 +2,7 @@ import json
 import pathlib
 from deepdiff import DeepDiff
 
-from b1k_pipelinee.utils import parse_name
+from b1k_pipeline.utils import parse_name
 
 def model_ids_from_objects(objs):
     model_ids = set()

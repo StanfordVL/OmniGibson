@@ -73,7 +73,7 @@ jobs:
           # Use 'diff' command. It exits with 0 if no diff, 1 if diff, >1 if error.
           # We use '|| true' to ensure the workflow continues even if differences are found (exit code 1).
           # diff -u5 base/artifacts/pipeline/combined_file_manifest.json pr/artifacts/pipeline/combined_file_manifest.json > ${{ env.DIFF_FILE }} || true
-          python pr/b1k_pipeline/deep_diff.py > ${{ env.DIFF_FILE }} || true
+          python pr/b1k_pipeline/deep_diff.py > ${{ env.DIFF_FILE }}
 
           # Check if diff file has content
           if [ -s "${{ env.DIFF_FILE }}" ]; then
