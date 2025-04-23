@@ -19725,8 +19725,8 @@ stages:
     deps:
     - path: b1k_pipeline/max/file_manifest.py
       hash: md5
-      md5: 1d3592c0676246c6946fa4847efc3758
-      size: 6626
+      md5: 8d2ee55342350a120711b7f43ac6e13f
+      size: 6639
     - path: cad/objects/batch-08/processed.max
       hash: md5
       md5: 85999989e30aa3b112846c714332cb0b
@@ -19734,12 +19734,12 @@ stages:
     outs:
     - path: cad/objects/batch-08/artifacts/file_manifest.json
       hash: md5
-      md5: 78d2cf0ae940190020b411acf25ca747
+      md5: da326952f4e64e79525b63e28dde4029
       size: 180423
     - path: cad/objects/batch-08/artifacts/file_manifest_deep.json
       hash: md5
-      md5: fe32ca91a4af53635f1fa7e2025e82de
-      size: 1960292
+      md5: 930d4efcdb6d9985a0b743dc0871ccd8
+      size: 17817815
   file_manifest@scenes/school_geography:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_geography/processed.max
       b1k_pipeline/max/file_manifest.py
