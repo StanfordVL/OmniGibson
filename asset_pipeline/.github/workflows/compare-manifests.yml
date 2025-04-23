@@ -24,7 +24,7 @@ jobs:
           architecture: x64
 
       - name: Install DVC
-        run: pip install dvc[gs]===3.42.0 deepdiff
+        run: pip install dvc[gs]===3.42.0 deepdiff fs
         
       - name: Authenticate on Google Cloud
         uses: 'google-github-actions/auth@v1'
