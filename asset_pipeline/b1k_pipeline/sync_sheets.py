@@ -99,7 +99,7 @@ def main():
   # Save the JSONs again
   for target, complaints in complaints_by_file.items():
     with open(cad_dir / target / "complaints.json", "w", newline="\n") as f:
-      json.dump(complaints, f, indent=2)
+      json.dump(complaints, f, indent=4)
 
   # Update the spreadsheet
   complaint_sheet.update([df.columns.values.tolist()] + df.values.tolist())

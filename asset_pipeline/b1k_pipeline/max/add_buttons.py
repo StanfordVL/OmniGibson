@@ -51,6 +51,8 @@ ENTRYPOINTS = {
     "translate_ig_dataset.py": "Update names of iG2 objects to new format.",
     "view_complaints.py": "View QA complaints for this file.",
     "resolve_complaints.py": "Resolve QA complaints for this file.",
+    "wensi_view_complaints.py": "View Wensi's TODO complaints for this file.",
+    "wensi_resolve_complaints.py": "Resolve Wensi's TODO complaints for this file.",
 }
 
 
