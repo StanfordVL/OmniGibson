@@ -52,7 +52,7 @@ def main():
     print("-------------------------------------------------")
     for target in sorted(all_targets):
         target_objs = sorted(object_diffs[target])
-        target_mids = sorted(model_ids_from_objects(target_mids))
+        target_mids = sorted(model_ids_from_objects(target_objs))
 
         print(f"\n\n-------------------------\n{target}")
         print(f"Objects ({len(target_objs)})")
