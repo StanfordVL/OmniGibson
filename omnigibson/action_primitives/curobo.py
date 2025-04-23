@@ -77,6 +77,7 @@ class CuRoboMotionGenerator:
         motion_cfg_kwargs=None,
         batch_size=2,
         use_cuda_graph=True,
+        use_eyes_targets=True,
         debug=False,
         embodiment_types=None,
         collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
@@ -199,11 +200,26 @@ class CuRoboMotionGenerator:
             )
             self.mg[emb_sel] = lazy.curobo.wrap.reacher.motion_gen.MotionGen(motion_gen_config)
 
-        for mg in self.mg.values():
-            mg.warmup(enable_graph=True, warmup_js_trajopt=False, batch=batch_size, warmup_joint_delta=1e-6)
+        for emb_sel, mg in self.mg.items():
+            # DEFAULT mode will not be used at all
+            if emb_sel == CuRoboEmbodimentSelection.DEFAULT:
+                continue
+            # ARM mode will only be used for IK, not motion planning
+            ik_only = emb_sel == CuRoboEmbodimentSelection.ARM
+            mg.warmup(
+                enable_graph=True,
+                warmup_js_trajopt=False,
+                batch=batch_size,
+                warmup_joint_delta=1e-6,
+                ik_only=ik_only,
+                use_eyes_targets=use_eyes_targets,
+            )
 
             # Make sure all cuda graphs have been warmed up
             for solver in [mg.ik_solver, mg.trajopt_solver, mg.finetune_trajopt_solver]:
+                # ARM mode will only be used for IK, not motion planning
+                if emb_sel == CuRoboEmbodimentSelection.ARM and solver != mg.ik_solver:
+                    continue
                 if solver.solver.use_cuda_graph_metrics:
                     assert solver.solver.safety_rollout._metrics_cuda_graph_init
                     if isinstance(solver, lazy.curobo.wrap.reacher.trajopt.TrajOptSolver):

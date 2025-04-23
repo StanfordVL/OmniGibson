@@ -209,6 +209,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 use_cuda_graph=curobo_use_cuda_graph,
                 collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
                 embodiment_types=curobo_embodiment_types,
+                use_eyes_targets=enable_head_tracking,
             )
         )
 
