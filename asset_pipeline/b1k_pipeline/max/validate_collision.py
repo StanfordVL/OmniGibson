@@ -61,20 +61,36 @@ def validate_collision_mesh(obj, max_elements=40, max_vertices_per_element=60):
     assert len(faces) > 0, f"{obj.name} has no faces."
     assert all(len(f) == 3 for f in faces), f"{obj.name} has non-triangular faces. Apply the Triangulate script."
 
-    all_cmeshes = trimesh.Trimesh(vertices=verts, faces=faces, process=False)
-
     # Split the faces into elements
-    elems = all_cmeshes.split(only_watertight=False, repair=False)
+    faces_not_yet_found = np.zeros(faces.shape[0], dtype=bool)
+    elems = []
+    while not np.all(faces_not_yet_found):
+        next_not_found_face = int(np.where(~faces_not_yet_found)[0][0])
+        elem = np.array(rt.polyop.GetElementsUsingFace(obj, [next_not_found_face + 1]))
+        assert elem[next_not_found_face], "Searched face not found in element."
+        elems.append(elem)
+        faces_not_yet_found[elem] = True
+    elems = np.array(elems)
+    assert not np.any(
+        np.sum(elems.astype(int), axis=0) > 1
+    ), f"{obj.name} has same face appear in multiple elements"
     if max_elements is not None:
         assert len(elems) <= max_elements, f"{obj.name} should not have more than {max_elements} elements. Has {len(elems)} elements."
 
     # Iterate through the elements
-    for i, m in enumerate(elems):
+    for i, elem in enumerate(elems):
+        # Load the mesh into trimesh and assert convexity
+        relevant_faces = faces[elem]
+        m = trimesh.Trimesh(vertices=verts, faces=relevant_faces, process=False)
+        m.remove_unreferenced_vertices()
         if max_vertices_per_element is not None:
             assert len(m.vertices) <= max_vertices_per_element, f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > {max_vertices_per_element})"
         assert m.is_volume, f"{obj.name} element {i} is not a volume"
         if not m.is_convex:
             print(f"WARNING: {obj.name} element {i} may be non-convex. The checker says so, but it's not 100% accurate, so please verify that all elements are indeed convex.")
+        assert (
+            len(m.split()) == 1
+        ), f"{obj.name} element {i} has elements trimesh still finds splittable e.g. are not watertight / connected"
 
 if __name__ == "__main__":
     assert len(rt.selection) == 1, "Please select a single object."
@@ -83,4 +99,4 @@ if __name__ == "__main__":
         print("Collision mesh is VALID:", rt.selection[0].name)
     except Exception as e:
         print("Collision mesh is INVALID:", rt.selection[0].name)
-        print(e)
+        raise

@@ -4809,7 +4809,7 @@ stages:
       size: 2890
     - path: cad/objects/school_objects-aa/artifacts/sanitycheck.json
       hash: md5
-      md5: fdc25955303ed7fb7ff4b1d53f330b44
+      md5: 165bf0be541a63c95aef698affee7c20
       size: 555
     - path: cad/objects/substances-01/artifacts/sanitycheck.json
       hash: md5
@@ -18454,8 +18454,8 @@ stages:
       size: 17762
     - path: cad/objects/school_objects-aa/processed.max
       hash: md5
-      md5: 28863dd961cd478bc655cf74eeceb65a
-      size: 93558272
+      md5: d95d016807b2e960d1221606ba43845d
+      size: 93583534
     outs:
     - path: cad/objects/school_objects-aa/artifacts/object_list.json
       hash: md5
@@ -18475,12 +18475,12 @@ stages:
       size: 52427
     - path: cad/objects/school_objects-aa/processed.max
       hash: md5
-      md5: 28863dd961cd478bc655cf74eeceb65a
-      size: 93558272
+      md5: d95d016807b2e960d1221606ba43845d
+      size: 93583534
     outs:
     - path: cad/objects/school_objects-aa/artifacts/sanitycheck.json
       hash: md5
-      md5: fdc25955303ed7fb7ff4b1d53f330b44
+      md5: 165bf0be541a63c95aef698affee7c20
       size: 555
   export_meshes@objects/school_objects-aa:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/school_objects-aa/processed.max
@@ -18496,17 +18496,17 @@ stages:
       size: 16905
     - path: cad/objects/school_objects-aa/processed.max
       hash: md5
-      md5: 28863dd961cd478bc655cf74eeceb65a
-      size: 93558272
+      md5: d95d016807b2e960d1221606ba43845d
+      size: 93583534
     outs:
     - path: cad/objects/school_objects-aa/artifacts/export_meshes.json
       hash: md5
-      md5: 28f3a282a68cc8fc13450fe9537cf7fa
-      size: 118666
+      md5: 0673aba3aac68fbb6f5492680c24827f
+      size: 34
     - path: cad/objects/school_objects-aa/artifacts/meshes.zip
       hash: md5
-      md5: c5462a85eac2622ad650902529ddbfa6
-      size: 11299007
+      md5: ffadeab8ae864746e89f97c509911278
+      size: 12239565
   check_collisions_with_clutter@scenes/Benevolence_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_0_int/processed.max
       b1k_pipeline/max/check_collisions.py clutter=true
