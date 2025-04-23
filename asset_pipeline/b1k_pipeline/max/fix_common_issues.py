@@ -31,7 +31,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-bakeryupdate.success"
+PASS_FILENAME = "done-bakeryupdate2.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -686,7 +686,8 @@ def processFile(filename: pathlib.Path):
 
 def fix_common_issues_in_all_files():
     candidates = [
-        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max")
+        if x.parts[-2] in ("restaurant_brunch", "house_single_floor", "batch-07")
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):

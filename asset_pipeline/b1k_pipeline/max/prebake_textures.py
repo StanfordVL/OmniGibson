@@ -230,10 +230,16 @@ class TextureBaker:
 
         print("uv_unwrapping", obj.name)
 
+        rt.polyop.setMapSupport(obj, 99, False)
+        assert not rt.polyop.getMapSupport(obj, 99), f"Failed to clear UV channel 99 for {obj.name} prior to unwrapping"
         if USE_UNWRELLA:
             self.uv_unwrapping_unwrella(obj)
+            if not rt.polyop.getMapSupport(obj, 99):
+                print(f"Unwrella failed for {obj.name}, falling back to native unwrapping.")
+                self.uv_unwrapping_native(obj)
         else:
             self.uv_unwrapping_native(obj)
+        assert rt.polyop.getMapSupport(obj, 99), f"Could not unwrap UVs for object {obj.name}"
 
         # Flatten the modifier stack
         rt.maxOps.collapseNodeTo(obj, 1, True)
