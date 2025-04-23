@@ -25,8 +25,6 @@ def main():
     full_diffs = {}
     object_diffs = {}
     for target in sorted(all_targets):
-        print(f"\n\n-------------------------\n{target}")
-        
         # Load the manifests
         base_manifest = json.loads(base_manifest_by_target[target].read_text()) if target in base_manifest_by_target else []
         pr_manifest = json.loads(pr_manifest_by_target[target].read_text()) if target in pr_manifest_by_target else []
