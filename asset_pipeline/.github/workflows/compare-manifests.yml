@@ -24,7 +24,7 @@ jobs:
           architecture: x64
 
       - name: Install DVC
-        run: pip install dvc[gs]===3.42.0
+        run: pip install dvc[gs]===3.42.0 deepdiff
         
       - name: Authenticate on Google Cloud
         uses: 'google-github-actions/auth@v1'
@@ -56,7 +56,7 @@ jobs:
 
       - name: Pull combined file manifest for base branch
         working-directory: base
-        run: dvc pull combined_file_manifest
+        run: dvc pull combined_file_manifest file_manifest
 
       # - name: Check repro output on base branch
       #   working-directory: base
@@ -72,7 +72,8 @@ jobs:
           echo "Generating diff between base and PR file manifests..."
           # Use 'diff' command. It exits with 0 if no diff, 1 if diff, >1 if error.
           # We use '|| true' to ensure the workflow continues even if differences are found (exit code 1).
-          diff -u5 base/artifacts/pipeline/combined_file_manifest.json pr/artifacts/pipeline/combined_file_manifest.json > ${{ env.DIFF_FILE }} || true
+          # diff -u5 base/artifacts/pipeline/combined_file_manifest.json pr/artifacts/pipeline/combined_file_manifest.json > ${{ env.DIFF_FILE }} || true
+          python pr/b1k_pipeline/deep_diff.py > ${{ env.DIFF_FILE }} || true
 
           # Check if diff file has content
           if [ -s "${{ env.DIFF_FILE }}" ]; then
