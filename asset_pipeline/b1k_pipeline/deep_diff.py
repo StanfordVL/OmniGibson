@@ -1,3 +1,4 @@
+import json
 import pathlib
 from deepdiff import DeepDiff
 
@@ -11,8 +12,8 @@ def main():
 
     for target in all_targets:
         print(f"\n\n{target}")
-        base_manifest = base_manifest_by_target[target] if target in base_manifest_by_target else []
-        pr_manifest = pr_manifest_by_target[target] if target in pr_manifest_by_target else []
+        base_manifest = json.loads(base_manifest_by_target[target].read_text()) if target in base_manifest_by_target else []
+        pr_manifest = json.loads(pr_manifest_by_target[target].read_text()) if target in pr_manifest_by_target else []
         print(DeepDiff(base_manifest, pr_manifest).pretty())
 
 if __name__ == "__main__":
