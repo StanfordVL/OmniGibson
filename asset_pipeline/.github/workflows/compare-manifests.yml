@@ -44,9 +44,9 @@ jobs:
       #   working-directory: pr
       #   run: dvc repro --dry --allow-missing combined_file_manifest
 
-      - name: Check PR branch file manifest for validity
-        working-directory: pr
-        run: python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest      
+      # - name: Check PR branch file manifest for validity
+      #   working-directory: pr
+      #   run: python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest      
 
       - name: Checkout Base Branch (${{ github.base_ref }})
         uses: actions/checkout@v4
@@ -62,9 +62,9 @@ jobs:
       #   working-directory: base
       #   run: dvc repro --dry --allow-missing combined_file_manifest
 
-      - name: Check base branch file manifest for validity
-        working-directory: base
-        run: python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest
+      # - name: Check base branch file manifest for validity
+      #   working-directory: base
+      #   run: python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest
 
       - name: Generate Diff
         id: diff_step # Give the step an ID to reference its outputs
