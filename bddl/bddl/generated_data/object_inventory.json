@@ -7018,7 +7018,6 @@
         "paperback_book-aubynm": "scenes/house_single_floor",
         "paperback_book-bgtbdp": "scenes/house_single_floor",
         "paperback_book-bisnup": "scenes/house_single_floor",
-        "paperback_book-bjyvil": "scenes/house_single_floor",
         "paperback_book-bklqfz": "scenes/house_single_floor",
         "paperback_book-bobmzf": "scenes/house_single_floor",
         "paperback_book-chumjg": "scenes/house_single_floor",
@@ -31563,9 +31562,6 @@
         "paperback_book-bisnup": [
             "scenes/house_single_floor"
         ],
-        "paperback_book-bjyvil": [
-            "scenes/house_single_floor"
-        ],
         "paperback_book-bklqfz": [
             "scenes/house_single_floor"
         ],
@@ -38862,7 +38858,8 @@
             "collision"
         ],
         "lid-iuhvrv": [
-            "collision"
+            "collision",
+            "fillable"
         ],
         "lid-ppkjuy": [
             "collision"
@@ -38938,7 +38935,8 @@
         ],
         "pickup_truck-zppyty": [
             "attachment",
-            "collision"
+            "collision",
+            "fillable"
         ],
         "plate-nbuspz": [
             "collision",
@@ -61814,9 +61812,6 @@
             "collision"
         ],
         "paperback_book-bisnup": [
-            "collision"
-        ],
-        "paperback_book-bjyvil": [
             "collision"
         ],
         "paperback_book-bklqfz": [
