@@ -199,6 +199,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             StarterSemanticActionPrimitiveSet.TOGGLE_ON: self._toggle_on,
             StarterSemanticActionPrimitiveSet.TOGGLE_OFF: self._toggle_off,
         }
+
+        if isinstance(env.scene, og.scenes.interactive_traversable_scene.InteractiveTraversableScene):
+            scene_model = env.scene.scene_model.lower()
+        else:
+            scene_model = "empty"
+
         self._motion_generator = (
             None
             if skip_curobo_initilization
@@ -207,6 +213,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 batch_size=curobo_batch_size,
                 use_cuda_graph=curobo_use_cuda_graph,
                 collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
+                scene_model=scene_model,
             )
         )
 
@@ -1003,27 +1010,28 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     if invalid_results[0].item():
                         # Collision detected, so skip this sample
                         print("Collision detected, skipping sample")
+
+                        # # ========= remove later =============
+                        # temp_state = og.sim.dump_state()
+                        # temp_base_joints = [initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]]
+                        # temp_base_joints = th.stack(temp_base_joints)
+                        # self.robot.set_joint_positions(temp_base_joints, indices=self.robot.base_control_idx)
+
+                        # temp_trunk_joints = retval[0][:4]
+                        # self.robot.set_joint_positions(temp_trunk_joints, indices=self.robot.trunk_control_idx)
+
+                        # for _ in range(50): og.sim.step()
+
+                        # breakpoint()
+                        # og.sim.load_state(temp_state)
+                        # for _ in range(20): og.sim.step()
+
+                        # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
+                        # # self.robot.set_joint_positions(temp_js)
+
+                        # # ======================================
                         continue
 
-                    # # ========= remove later =============
-                    # temp_state = og.sim.dump_state()
-                    # temp_base_joints = [initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]]
-                    # temp_base_joints = th.stack(temp_base_joints)
-                    # self.robot.set_joint_positions(temp_base_joints, indices=self.robot.base_control_idx)
-
-                    # temp_trunk_joints = retval[0][:4]
-                    # self.robot.set_joint_positions(temp_trunk_joints, indices=self.robot.trunk_control_idx)
-
-                    # for _ in range(50): og.sim.step()
-
-                    # breakpoint()
-                    # og.sim.load_state(temp_state)
-                    # for _ in range(20): og.sim.step()
-
-                    # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
-                    # # self.robot.set_joint_positions(temp_js)
-
-                    # # ======================================
 
                     # constraint_satisfied = True
                     self.target_eyes_pose_arr.append(target_pose["eyes"])
@@ -1128,7 +1136,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             max_attempts = ik_max_attempts
             success_ratio = 1.0
 
-        # breakpoint()
         successes, joint_states = self._motion_generator.compute_trajectories(
             target_pos=target_pos,
             target_quat=target_quat,
@@ -1294,7 +1301,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # Grab the first successful trajectory if found
         successes = results[0].success
         print("Base motion planning successes: ", successes)
-        print("len(trajs): ", [len(t) for t in traj_paths])
+        # print("len(trajs): ", [len(t) for t in traj_paths])
         success_idx = th.where(successes)[0].cpu()
         if len(success_idx) == 0:
             print("Base motion planning failed", results[0].status)
@@ -1306,7 +1313,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 self.mp_err = "BaseMPIKFailed"
                 q_traj = None
             else:
-                print("len(trajs): ", [len(t) for t in traj_paths])
                 self.mp_err = "BaseMPFailed"
                 q_traj = None
                 # breakpoint()
@@ -2257,6 +2263,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             eef_pose = {self.arm: eef_pose}
 
         target_pose = eef_pose
+
 
         target_position = th.stack([eef_pose[arm_side][0] for arm_side in eef_pose.keys()]).mean(dim=(0, 1))
 

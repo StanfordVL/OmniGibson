@@ -261,3 +261,17 @@ class R1(HolonomicBaseRobot, ArticulatedTrunkRobot, MobileManipulationRobot):
             ["base_link", "wheel_link3"],
             ["torso_link2", "torso_link4"],
         ]
+    
+    # Using this as a temporary alternative for the OG function (as the OG function is not working)
+    def custom_is_grasping(self, arm, candidate_obj=None):
+        # open gripper: tensor([0.050, 0.050])
+        # closed gripper: tensor([0.000, 0.000])
+        if arm == "right":
+            gripper_qpos = self._get_proprioception_dict()['gripper_right_qpos']
+        elif arm == "left":
+            gripper_qpos = self._get_proprioception_dict()['gripper_left_qpos']
+        
+        if gripper_qpos[0] < 0.005 or gripper_qpos[0] > 0.045:
+            return th.tensor(False)
+        else:
+            return th.tensor(True)
