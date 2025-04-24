@@ -45846,7 +45846,8 @@
         ],
         "public_trash_can-xkqkbf": [
             "collision",
-            "fillable"
+            "fillable",
+            "openfillable"
         ],
         "public_trash_can-zotrbg": [
             "collision",
@@ -47215,12 +47216,14 @@
             "collision",
             "fillable",
             "joint",
+            "openfillable",
             "togglebutton"
         ],
         "washer-mrgspe": [
             "collision",
             "fillable",
             "joint",
+            "openfillable",
             "togglebutton"
         ],
         "washer-omeuop": [
@@ -47239,6 +47242,7 @@
             "collision",
             "fillable",
             "joint",
+            "openfillable",
             "togglebutton"
         ],
         "apricot-qmwmwm": [
@@ -48076,7 +48080,8 @@
         "carton-causya": [
             "collision",
             "fillable",
-            "joint"
+            "joint",
+            "openfillable"
         ],
         "carton_of_eggs-mimzbz": [
             "collision"
