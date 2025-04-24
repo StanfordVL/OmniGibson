@@ -7,10 +7,8 @@ from torch import nn
 from torch.utils.data import Dataset
 
 import omnigibson as og
-from omnigibson.envs.primitives_env import (
-    CutPourPkgInBowlEnv,
-    PrimitivesEnv,
-)
+from omnigibson.envs.cut_pour_pkg_in_bowl import CutPourPkgInBowlEnv
+from omnigibson.envs.primitives_env import PrimitivesEnv
 
 from omnigibson.utils.data_collection_utils import ScriptedDataCollector
 
