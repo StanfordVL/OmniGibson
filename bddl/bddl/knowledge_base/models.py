@@ -241,9 +241,8 @@ class Object(Model):
     def state(self):
         if self.ready:
             return SynsetState.MATCHED
-        elif self.planned:
+        else:
             return SynsetState.PLANNED
-        return SynsetState.UNMATCHED
 
     @cached_property
     def image_url(self):
@@ -318,18 +317,18 @@ class Synset(Model):
     @cached_property
     def state(self) -> SynsetState:
         if self.name == "entity.n.01":
-            self.state = SynsetState.MATCHED   # root synset is always legal
+            return SynsetState.MATCHED   # root synset is always legal
         elif "substance" in self.property_names:
-            self.state = SynsetState.SUBSTANCE
+            return SynsetState.SUBSTANCE
         elif self.parents:
             if len(self.matching_ready_objects) > 0:
-                self.state = SynsetState.MATCHED
+                return SynsetState.MATCHED
             elif len(self.matching_objects) > 0:
-                self.state = SynsetState.PLANNED
+                return SynsetState.PLANNED
             else:
-                self.state = SynsetState.UNMATCHED
+                return SynsetState.UNMATCHED
         else:
-            self.state = SynsetState.ILLEGAL
+            return SynsetState.ILLEGAL
 
     @cached_property
     def property_names(self):
