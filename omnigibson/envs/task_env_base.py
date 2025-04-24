@@ -52,7 +52,12 @@ class TaskEnv(Environment):
         self.obj_name_to_attr_map = {}
         obj_names = self.get_manipulable_objects() + self.non_manipulable_obj_names
         for obj_name in obj_names:
-            self.obj_name_to_attr_map[obj_name] = {"openable": False}
+            self.obj_name_to_attr_map[obj_name] = {
+                "openable": False,
+                "folded": False,
+                "wrapped": False,
+                "taped": False,
+            }
 
         super()._reset_variables()
 
@@ -61,7 +66,7 @@ class TaskEnv(Environment):
 
     def set_attr_state(self, obj_name, attr_name, val):
         # Used to set symbolic state for opened
-        assert attr_name == "openable"
+        assert attr_name in ["openable", "folded", "wrapped", "taped"]
         assert val in [True, False]
         self.obj_name_to_attr_map[obj_name][attr_name] = val
 

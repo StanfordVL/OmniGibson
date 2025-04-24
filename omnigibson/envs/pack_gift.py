@@ -8,75 +8,63 @@ import omnigibson as og
 from omnigibson.envs.task_env_base import TaskEnv
 
 
-class CutPourPkgInBowlEnv(TaskEnv):
+class PackGiftEnv(TaskEnv):
     """
     Environment that supports a language action space,
     and simulates a human agent as part of the step(...)
     """
     def __init__(self, out_dir, obj_to_grasp_name, in_vec_env=False, vid_speedup=2):
         self.non_manipulable_obj_names = [
-            "coffee_table", "shelf", "sink", "pad", "pad2", "pad3"]
+            "coffee_table", "shelf", "sink", "console_table"]
         self.main_furn_names = [
-            "coffee_table", "shelf", "sink"]
+            "coffee_table", "shelf", "sink", "console_table"]
         self.obj_to_grasp_name = obj_to_grasp_name
 
         super().__init__(out_dir, in_vec_env, vid_speedup)
 
     def get_skill_name_to_fn_map(self, action_primitives):
         skill_name_to_fn_map = dict(
-            pickplace=action_primitives._pick_place_forward,
+            pickplace=action_primitives._pick_place,
             pick_pour_place=action_primitives._pick_pour_place,
         )
         return skill_name_to_fn_map
 
     def set_obj_masses(self):
         # prevent the shelf from tipping over from friction w/ package
-        self.get_obj_by_name("package").links['base_link'].mass = 0.1
-        self.get_obj_by_name("package_contents").links['base_link'].mass = 0.05
-        self.get_obj_by_name("scissors").links['base_link'].mass = 0.1
-        self.get_obj_by_name("bowl").links['base_link'].mass = 0.1
+        # self.get_obj_by_name("package").links['base_link'].mass = 0.1
+        # self.get_obj_by_name("package_contents").links['base_link'].mass = 0.05
+        # self.get_obj_by_name("scissors").links['base_link'].mass = 0.1
+        # self.get_obj_by_name("bowl").links['base_link'].mass = 0.1
         self.get_obj_by_name("shelf").links['base_link'].mass = 100.0
         self.get_obj_by_name("sink").links['base_link'].mass = 100.0
+        self.get_obj_by_name("ribbons").links['base_link'].mass = 1.0
 
     def set_R_plan_order(self):
         # used for calculating rewards
         self.R_plan_order = [
-            ("pickplace", ("bowl", "coffee_table")),
-            ("pickplace", ("package", "coffee_table")),
-            ("pickplace", ("scissors", "coffee_table")),
-            ("pick_pour_place", ("package", "bowl", "coffee_table")),
+            ("fold", ("box_flaps", "")),
+            ("pickplace", ("tissue_paper", "box")),
+            ("pickplace", ("car", "box")),
+            ("pickplace", ("ribbons", "box")),
+            ("pickplace", ("gift_bow", "box")),
         ]
 
     def get_skill_names_params(self):
-        skill_names = ["pickplace", "pick_pour_place"]  # ["say", "pick_pour_place", "pickplace", "converse", "no_op"]
+        skill_names = ["fold", "pickplace"]  # ["say", "pick_pour_place", "pickplace", "converse", "no_op"]
         skill_name_to_param_domain = dict(
-            pickplace=[
-                ("scissors", "coffee_table"),
-                ("package", "coffee_table"),
-                ("bowl", "coffee_table"),
+            fold=[
+                ("box_flaps", ""),
             ],
-            pick_pour_place=[
-                ("package", "bowl", "coffee_table"),
+            pickplace=[
+                ("tissue_paper", "box"),
+                ("car", "box"),
+                ("ribbons", "box"),
+                ("gift_bow", "box"),
             ],
         )
         return skill_names, skill_name_to_param_domain
 
     def get_reward(self, obs, info):
-        def get_grasp_rew(obj_name):
-            # Not used; only a diagnostic
-            obj_grasped_now = self.get_obj_in_hand()
-            # for obj_name in [self.obj_to_grasp_name]:
-            #     # print(f"obj_grasped_now {obj_grasped_now}")
-            #     grasp_success = (
-            #         (obj_name in self.grasped_obj_names)
-            #         or (obj_grasped_now and obj_grasped_now.name == self.obj_to_grasp_name))
-            #     if grasp_success and obj_name not in self.grasped_obj_names:
-            #         self.grasped_obj_names.append(obj_name)
-            grasp_success = (
-                (obj_name in self.grasped_obj_names)
-                or (obj_grasped_now and obj_grasped_now.name == obj_name))
-            return float(grasp_success)
-
         def get_pickplace_rew(obj_name, dest_obj_name):
             obj_grasped_now = self.get_obj_in_hand()
             not_grasping_obj = (
@@ -85,13 +73,12 @@ class CutPourPkgInBowlEnv(TaskEnv):
             place_success = obj_on_dest_obj and not_grasping_obj
             return float(bool(place_success))
 
-        def get_pick_pour_place_rew(
-                pour_obj_name, pour_dest_obj_name, place_dest_obj_name):
-            assert pour_obj_name == "package" and pour_dest_obj_name == "bowl"
+        def get_fold_rew(obj_name, *args):
+            assert obj_name == "box_flaps"
             pour_success = (
-                self.get_attr_state(pour_obj_name, "openable")
+                self.get_attr_state("box", "folded")
                 and self.is_directly_placed_on(
-                    "package_contents", pour_dest_obj_name))
+                    "box", "coffee_table"))  # box didn't fall off table after being folded
             return float(bool(pour_success))
 
         # Diagnostic: print out what objects got newly placed on what other objects
@@ -106,7 +93,7 @@ class CutPourPkgInBowlEnv(TaskEnv):
         # if no primitive provided, default to pouring reward
         cur_skill_name_params = info.get(
             "skill_name_params",
-            ("pick_pour_place", ("package", "bowl", "coffee_table")))
+            ("pickplace", ("gift_bow", "box")))
 
         rew_dict = {}
         for skill_name, skill_params in self.R_plan_order:
@@ -136,17 +123,23 @@ class CutPourPkgInBowlEnv(TaskEnv):
         # place objects depending on the furniture they start on
         # map the obj_name to the parent_name that we initialize the obj on top of.
         init_obj_to_parent_map = dict(
-            bowl="sink",
-            package="shelf",
-            scissors="sink",
+            box='coffee_table',
+            lid='coffee_table',
+            tissue_paper='lid',
+            car='coffee_table',
+            gift_bow='coffee_table',
+            ribbons='console_table',
         )
-        if R_step_idx >= 1:
-            init_obj_to_parent_map["bowl"] = "pad"
+
         if R_step_idx >= 2:
-            init_obj_to_parent_map["package"] = "pad2"
+            init_obj_to_parent_map['tissue_paper'] = 'box'
         if R_step_idx >= 3:
-            # we make sure package is open in pre_step_obj_loading()
-            init_obj_to_parent_map["scissors"] = "pad3"
+            init_obj_to_parent_map['car'] = 'box'
+        if R_step_idx >= 4:
+            init_obj_to_parent_map['lid'] = 'box'
+            init_obj_to_parent_map['ribbons'] = 'lid'
+        if R_step_idx >= 5:
+            init_obj_to_parent_map['gift_bow'] = 'lid'
 
         config_name = "ahg"
         configs['config_name'] = config_name
@@ -175,14 +168,79 @@ class CutPourPkgInBowlEnv(TaskEnv):
             ahg=np.array([0, 0, 0, 1]),  # np.array([0, 0, 0.707, 0.707]),
         )
         coffee_table_xyz = coffee_table_xyz_map[config_name]
-        pad2_xyz = coffee_table_xyz + np.array([-0.1, 0.0, 0.12])
-        pad_xyz = pad2_xyz + np.array([0.0, -0.3, 0.0])
-        pad3_xyz = pad2_xyz + np.array([0.0, 0.3, 0.0])
+        coffee_table_surface_xyz = coffee_table_xyz + np.array([-0.1, 0.0, 0.2])
+        console_table_xyz = np.array([6.04, 4.63, 0.4])
+        console_table_surface_xyz = console_table_xyz + np.array([0.0, 0.0, 0.2])
+        console_table_ori = np.array([0, 0, 0, 1])
+
+        box_xyz = coffee_table_surface_xyz + np.array([0.0, -0.4, 0.0])
+        box_ori = np.array([0, 0, 0, 1])
+
+        # Lid
+        lid_parent = init_obj_to_parent_map["lid"]
+        if lid_parent == "coffee_table":
+            lid_xyz = coffee_table_surface_xyz + np.array([0.0, -0.1, 0.0])
+        elif lid_parent == "box":
+            lid_xyz = box_xyz + np.array([0.0, 0.0, 0.2])
+        else:
+            raise NotImplementedError
+        lid_ori = np.array([0, 0, 0, 1])
+
+        # tissue paper
+        tissue_paper_parent = init_obj_to_parent_map["tissue_paper"]
+        if tissue_paper_parent == "lid":
+            tissue_paper_xyz = coffee_table_surface_xyz + np.array([0.0, -0.1, 0.1])
+        elif tissue_paper_parent == "box":
+            tissue_paper_xyz = box_xyz + np.array([0.0, 0.0, 0.1])
+        else:
+            raise NotImplementedError
+        tissue_paper_ori = np.array([0.707, 0, 0, 0.707])
+
+        # car
+        car_parent = init_obj_to_parent_map["car"]
+        if car_parent == "coffee_table":
+            car_xyz = coffee_table_surface_xyz + np.array([0.0, 0.2, 0.0])
+        elif car_parent == "box":
+            car_xyz = box_xyz + np.array([0.0, 0.0, 0.15])
+        else:
+            raise NotImplementedError
+        car_ori = np.array([0, 0, 0, 1])
+
+        # ribbon
+        ribbons_parent = init_obj_to_parent_map["ribbons"]
+        if ribbons_parent == "console_table":
+            ribbons_xyz = console_table_surface_xyz + np.array([0, 0, 0.1])
+        elif ribbons_parent == "lid":
+            ribbons_xyz = lid_xyz + np.array([0, 0, 0.05])
+        else:
+            raise NotImplementedError
+        ribbons_ori = np.array([0, 0, 0, 1])
+        
+        # gift bow
+        gift_bow_parent = init_obj_to_parent_map["gift_bow"]
+        if gift_bow_parent == "coffee_table":
+            gift_bow_xyz = coffee_table_surface_xyz + np.array([0, 0.4, 0])
+        elif gift_bow_parent == "lid":
+            gift_bow_xyz = lid_xyz + np.array([0, 0, 0.1])
+        else:
+            raise NotImplementedError
+        gift_bow_ori = np.array([0, 0, 0, 1])
+
+        # pad2_xyz = coffee_table_xyz + np.array([-0.1, 0.0, 0.12])
+        # pad_xyz = pad2_xyz + np.array([0.0, -0.3, 0.0])
+        # pad3_xyz = pad2_xyz + np.array([0.0, 0.3, 0.0])
         coffee_table_xyz = list(coffee_table_xyz)
-        pad_xyz = list(pad_xyz)
-        pad2_xyz = list(pad2_xyz)
-        pad3_xyz = list(pad3_xyz)
         coffee_table_ori = coffee_table_ori_map[config_name]
+        console_table_xyz = list(console_table_xyz)
+        # pad_xyz = list(pad_xyz)
+        # pad2_xyz = list(pad2_xyz)
+        # pad3_xyz = list(pad3_xyz)
+        box_xyz = list(box_xyz)
+        lid_xyz = list(lid_xyz)
+        tissue_paper_xyz = list(tissue_paper_xyz)
+        car_xyz = list(car_xyz)
+        ribbons_xyz = list(ribbons_xyz)
+        gift_bow_xyz = list(gift_bow_xyz)
 
         # Sink
         if config_name == "ahg":
@@ -191,72 +249,22 @@ class CutPourPkgInBowlEnv(TaskEnv):
         else:
             pass
 
-        # Bowl
-        if config_name == "ahg":
-            bowl_parent = init_obj_to_parent_map["bowl"]
-            if bowl_parent == "sink":
-                bowl_xyz = sink_xyz + np.array([-0.2, -0.6, 0.4])
-            elif bowl_parent == "pad":
-                bowl_xyz = pad_xyz + np.array([0, 0, 0.04])
-            else:
-                raise NotImplementedError
-            bowl_ori = np.array([0, 0, 0, 1])
-        else:
-            pass
-
-        # package
-        config_name_to_package_xyz_offset_map = dict(
-            back=np.array([0.25, 0., -0.075]),
-            left=np.array([-0.25, 0., -0.075]),
-            ahg=np.array([-0.25, 0., -0.075]),
-        )
-        package_parent = init_obj_to_parent_map["package"]
-        if config_name == "ahg":
-            if package_parent == "shelf":
-                package_xyz = (
-                    shelf_xyz + config_name_to_package_xyz_offset_map[config_name])
-            elif package_parent == "pad2":
-                package_xyz = pad2_xyz + np.array([0, 0, 0.12])
-            else:
-                raise NotImplementedError
-        else:
-            if init_obj_to_parent_map["package"] == "coffee_table":
-                package_xyz = np.array([1.1, 0.6, 0.9])
-            elif package_parent == "shelf":
-                package_xyz = (
-                    shelf_xyz + config_name_to_package_xyz_offset_map[config_name])
-            else:
-                raise NotImplementedError
-        package_contents_xyz = package_xyz + np.array([0, 0, 0.26])
         shelf_xyz = list(shelf_xyz)
-        package_xyz = list(package_xyz)
-        package_contents_xyz = list(package_contents_xyz)
-
-        # Scissors
-        if config_name == "ahg":
-            scissors_parent = init_obj_to_parent_map["scissors"]
-            if scissors_parent == "sink":
-                scissors_xyz = sink_xyz + np.array([-0.2, 0.6, 0.4])
-            elif scissors_parent == "pad3":
-                scissors_xyz = pad3_xyz + np.array([0, 0, 0.1])
-            else:
-                raise NotImplementedError
-            scissors_ori = np.array([0, 0, 0, 1])
-        else:
-            pass
 
         # camera params
         config_name_to_camera_xyz_map = dict(
             back=th.tensor([-0.2010, -2.7257, 1.0654]),
             left=th.tensor([-0.2010, -2.7257, 1.0654]),
             # ahg=th.tensor([8.7, -15, 4.0]),  # good for entire room view
-            ahg=th.tensor([1.0, 3.5, 1.0]),  # +x view for ahg kitchen section
+            # ahg=th.tensor([1.0, 3.5, 1.0]),  # +x view for ahg kitchen section
+            ahg=th.tensor([8.0, 4.5, 1.0]),  # -x view for ahg living room section
         )
         config_name_to_camera_ori_map = dict(
             back=th.tensor([0.6820, -0.0016, -0.0017, 0.7314]),
             left=th.tensor([0.6820, -0.0016, -0.0017, 0.7314]),
             # ahg=th.tensor([0.707, 0, 0, 0.707]),
-            ahg=th.tensor([.5, -.5, -.5, .5]), # +x view direction
+            # ahg=th.tensor([.5, -.5, -.5, .5]), # +x view direction
+            ahg=th.tensor([.5, .5, .5, .5]), # -x view for ahg living room section
         )
         configs['camera_pose'] = (
             config_name_to_camera_xyz_map[config_name],
@@ -265,62 +273,67 @@ class CutPourPkgInBowlEnv(TaskEnv):
         configs["scene"]["scene_model"] = self.scene_model_type
         configs["scene"]["load_object_categories"] = ["floors", "coffee_table"]
         configs["objects"] = [
-            # {
-            #     "type": "PrimitiveObject",
-            #     "name": "box",
-            #     "primitive_type": "Cube",
-            #     "manipulable": True,
-            #     "rgba": [1.0, 0, 0, 1.0],
-            #     "scale": [0.15, 0.07, 0.15],
-            #     "position": [1.2, 0.8, 0.65],
-            #     "orientation": [0, 0, 0, 1],
-            # },
             {
-                "type": "PrimitiveObject",
-                "name": "package",
-                "primitive_type": "Cube",
+                "type": "DatasetObject",
+                "name": "box",
+                "category": "toy_box",
+                "model": "kvithq",
                 "manipulable": True,
-                "rgba": [1.0, 0, 0, 1.0],
-                "scale": [0.15, 0.15, 0.2],
-                "position": package_xyz,
-                "orientation": [0, 0, 0, 1],
+                "position": box_xyz,
+                "orientation": box_ori,
+                "scale": [2.0, 2.0, 2.0],
             },
             {
                 "type": "PrimitiveObject",
-                "name": "package_contents",
+                "name": "lid",
                 "primitive_type": "Cube",
+                "category": "toy_box",
+                "model": "kvithq",
                 "manipulable": True,
-                "rgba": [1.0, 1.0, 0, 1.0],
-                "scale": [0.05, 0.05, 0.05],
-                "position": package_contents_xyz,
-                "orientation": [0, 0, 0, 1],
+                "position": lid_xyz,
+                "orientation": lid_ori,
+                "rgba": [0.0, 0.3, 0.7, 1.0],
+                "scale": [0.3, 0.3, 0.03],
             },
             {
-                "type": "PrimitiveObject",
-                "name": "pad",
-                "primitive_type": "Disk",
-                "rgba": [0.0, 0, 1.0, 1.0],
-                "radius": 0.12,
-                # coffee table "position": [-0.3, -0.9, 0.45],
-                "position": pad_xyz,
+                "type": "DatasetObject",
+                "name": "tissue_paper",
+                "category": "wrapping_paper",  # "paper_liners",
+                "model": "hjbesb",  # "yvuilk",
+                "manipulable": True,
+                "position": tissue_paper_xyz,
+                "orientation": tissue_paper_ori,
+                "scale": [0.3, 0.3, 0.5],
             },
             {
-                "type": "PrimitiveObject",
-                "name": "pad2",
-                "primitive_type": "Disk",
-                "rgba": [0.0, 0.5, 1.0, 1.0],
-                "radius": 0.12,
-                # coffee table "position": [-0.3, -1.2, 0.45],
-                "position": pad2_xyz,
+                "type": "DatasetObject",
+                "name": "car",
+                "category": "toy_car",
+                "model": "nhtywr",
+                "manipulable": True,
+                "position": car_xyz,
+                "orientation": car_ori,
+                "scale": [0.2, 0.2, 0.2],
             },
             {
-                "type": "PrimitiveObject",
-                "name": "pad3",
-                "primitive_type": "Disk",
-                "rgba": [0.0, 1.0, 1.0, 1.0],
-                "radius": 0.12,
-                # coffee table "position": [-0.3, -1.2, 0.45],
-                "position": pad3_xyz,
+                "type": "DatasetObject",
+                "name": "ribbons",
+                "category": "ribbon",
+                "model": "apyxhw",
+                "manipulable": True,
+                "position": ribbons_xyz,
+                "orientation": ribbons_ori,
+                "scale": [0.5, 0.5, 0.5],
+            },
+            {
+                "type": "DatasetObject",
+                "name": "gift_bow",
+                "category": "bow",
+                "model": "fhchql",
+                "manipulable": True,
+                "position": gift_bow_xyz,
+                "orientation": gift_bow_ori,
+                "scale": [3.0, 3.0, 3.0],
             },
             {
                 "type": "DatasetObject",
@@ -330,6 +343,15 @@ class CutPourPkgInBowlEnv(TaskEnv):
                 "position": coffee_table_xyz,
                 "orientation": coffee_table_ori,
                 "scale": [1.0, 1.5, 1.0],
+            },
+            {
+                "type": "DatasetObject",
+                "name": "console_table",
+                "category": "coffee_table",
+                "model": "zisekv",
+                "position": console_table_xyz,
+                "orientation": console_table_ori,
+                "scale": [1.0, 1.0, 1.0],
             },
             {
                 "type": "DatasetObject",
@@ -383,29 +405,6 @@ class CutPourPkgInBowlEnv(TaskEnv):
                     "position": sink_xyz,
                     "orientation": sink_ori,
                     "scale": [0.6, 1.0, 0.55],
-                },
-
-                # bowl and scissors
-                {
-                    "type": "PrimitiveObject",
-                    "name": "bowl",
-                    "primitive_type": "Cylinder",
-                    "manipulable": True,
-                    "rgba": [0.0, 1.0, 0, 1.0],
-                    "radius": 0.12,
-                    "height": 0.04,
-                    "position": bowl_xyz,
-                    "orientation": bowl_ori,
-                },
-                {
-                    "type": "PrimitiveObject",
-                    "name": "scissors",
-                    "primitive_type": "Cube",
-                    "manipulable": True,
-                    "rgba": [1.0, 0.0, 1.0, 1.0],
-                    "scale": [0.1, 0.1, 0.1],
-                    "position": scissors_xyz,
-                    "orientation": scissors_ori,
                 },
             ])
 

@@ -8,6 +8,7 @@ from torch.utils.data import Dataset
 
 import omnigibson as og
 from omnigibson.envs.cut_pour_pkg_in_bowl import CutPourPkgInBowlEnv
+from omnigibson.envs.pack_gift import PackGiftEnv
 from omnigibson.envs.primitives_env import PrimitivesEnv
 
 from omnigibson.utils.data_collection_utils import ScriptedDataCollector
@@ -38,9 +39,17 @@ def main(args):
 
     st = time.time()
     max_path_len = 1
-    task_env = CutPourPkgInBowlEnv(
-        out_dir="/home/albert/dev/OmniGibson/out_videos", obj_to_grasp_name="box",
-        vid_speedup=args.vid_speedup)
+    task_env_kwargs = dict(
+        out_dir="/home/albert/dev/OmniGibson/out_videos",
+        obj_to_grasp_name="box",
+        vid_speedup=args.vid_speedup,
+    )
+    if args.env == "CutPourPkgInBowl":
+        task_env = CutPourPkgInBowlEnv(**task_env_kwargs)
+    elif args.env == "PackGift":
+        task_env = PackGiftEnv(**task_env_kwargs)
+    else:
+        raise NotImplementedError
     env = PrimitivesEnv(
         task_env, max_path_len=max_path_len, debug=args.debug)
     data_collector = ScriptedDataCollector(env, "CutPourPkgInBowlEnv", max_path_len=max_path_len, args=args)
@@ -79,6 +88,8 @@ if __name__ == "__main__":
         "--n", type=int, default=1)
     parser.add_argument(
         "--debug", default=False, action="store_true")
+    parser.add_argument(
+        "--env", choices=["CutPourPkgInBowl", "PackGift"], required=True)
     parser.add_argument(
         "--vid-speedup", type=int, default=2)
     parser.add_argument(

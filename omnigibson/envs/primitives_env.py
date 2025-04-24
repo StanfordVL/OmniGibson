@@ -29,25 +29,11 @@ class PrimitivesEnv:
             skip_curobo_initilization=debug,
             debug=debug)
 
-        self.skill_name_to_fn_map = dict(
-            pickplace=self.action_primitives._pick_place_forward,
-            pick_pour_place=self.action_primitives._pick_pour_place,
-        )
-        self.set_skill_names_params()
+        self.skill_name_to_fn_map = self.env.get_skill_name_to_fn_map(
+            self.action_primitives)
+        self.skill_names, self.skill_name_to_param_domain = (
+            self.env.get_skill_names_params())
         self._load_action_space()
-
-    def set_skill_names_params(self):
-        self.skill_names = ["pickplace", "pick_pour_place"]  # ["say", "pick_pour_place", "pickplace", "converse", "no_op"]
-        self.skill_name_to_param_domain = dict(
-            pickplace=[
-                ("scissors", "coffee_table"),
-                ("package", "coffee_table"),
-                ("bowl", "coffee_table"),
-            ],
-            pick_pour_place=[
-                ("package", "bowl", "coffee_table"),
-            ],
-        )
 
     def reset(self, **kwargs):
         self.act_hist = np.zeros(self.max_path_len - 1) - 1  # init to all -1s
@@ -58,7 +44,7 @@ class PrimitivesEnv:
         # (mainly just resets unused vars)
         # obs, info = self.env.reset(**kwargs)
         self.env.scene.reset()
-        self.set_rand_R_pose()
+        self.set_rand_R_pose(furn_name="coffee_table")  # randomize around coffee table.
 
         self.env._reset_variables()
 
@@ -141,9 +127,16 @@ class PrimitivesEnv:
         R_step_idx = self.env.R_plan_order.index((skill_name, skill_params))
 
         configs = self.env.load_configs(R_step_idx=R_step_idx)
-        if R_step_idx >= 3:
-            # Assume human has already opened package if we're on the last step
-            self.env.set_attr_state("package", "openable", True)
+        if self.env.__class__.__name__ == "CutPourPkgInBowlEnv":
+            if R_step_idx >= 3:
+                # Assume human has already opened package if we're on the last step
+                self.env.set_attr_state("package", "openable", True)
+        if self.env.__class__.__name__ == "PackGiftEnv":
+            if R_step_idx >= 1:
+                self.env.set_attr_state("box", "folded", True)
+            if R_step_idx >= 4:
+                self.env.set_attr_state("box", "wrapped", True)  # wrapped by ribbons
+                self.env.set_attr_state("box", "taped", True)  # tape applied to top of box
 
         for obj_dict in configs['objects']:
             init_obj_pose = (
@@ -280,10 +273,10 @@ class SymbState:
                 obj_symb_state_dict[attr_name] = self.encode(
                     attr_name, obj_furn_name, obs, info)
             obj_states = info['obj_name_to_attr_map'][obj_furn_name]
-            if 'openable' in obj_states:
-                obj_symb_state_dict['opened'] = obj_states['openable']
-            else:
-                obj_symb_state_dict['opened'] = False
+            obj_symb_state_dict['opened'] = obj_states.get('openable', False)
+            obj_symb_state_dict['folded'] = obj_states.get('folded', False)
+            obj_symb_state_dict['wrapped'] = obj_states.get('wrapped', False)
+            obj_symb_state_dict['taped'] = obj_states.get('taped', False)
             self.d[obj_furn_name] = obj_symb_state_dict
 
         self.d.update(dict(
