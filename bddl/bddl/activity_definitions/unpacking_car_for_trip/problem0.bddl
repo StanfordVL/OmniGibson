@@ -13,7 +13,7 @@
     )
     
     (:init 
-        (ontop car.n.01_1 lawn.n.01_1) 
+        (inroom car.n.01_1 garden)
         (inside packing_box.n.02_1 car.n.01_1) 
         (inside bag.n.06_1 car.n.01_1) 
         (inside golf_club.n.02_1 car.n.01_1) 

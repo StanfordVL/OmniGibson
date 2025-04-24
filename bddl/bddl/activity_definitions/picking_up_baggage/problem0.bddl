@@ -11,12 +11,11 @@
     )
     
     (:init
-        (ontop car.n.01_1 floor.n.01_2) 
+        (inroom car.n.01_1 garage)
         (ontop backpack.n.01_1 table.n.02_1) 
         (ontop bag.n.06_1 floor.n.01_1) 
         (inroom floor.n.01_1 bedroom) 
         (inroom table.n.02_1 bedroom) 
-        (inroom floor.n.01_2 garage)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
