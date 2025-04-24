@@ -206,19 +206,56 @@ class CuRoboMotionGenerator:
                 continue
             # ARM mode will only be used for IK, not motion planning
             ik_only = emb_sel == CuRoboEmbodimentSelection.ARM
-            mg.warmup(
-                enable_graph=True,
-                warmup_js_trajopt=False,
-                batch=batch_size,
-                warmup_joint_delta=1e-6,
+
+            # mg.warmup(
+            #     enable_graph=True,
+            #     warmup_js_trajopt=False,
+            #     batch=batch_size,
+            #     warmup_joint_delta=1e-6,
+            #     ik_only=ik_only,
+            #     use_eyes_targets=use_eyes_targets,
+            # )
+            target_pos, target_quat = {}, {}
+            for link_name in mg.kinematics.link_names:
+                target_pos[link_name], target_quat[link_name] = self.robot.links[link_name].get_position_orientation()
+
+            if use_eyes_targets:
+                eyes_pos, eyes_quat = self.robot.links["eyes"].get_position_orientation()
+                # Set the eyes targets to be one meter away from the eyes link in the minus z direction
+                # (i.e. the eyes are already looking at the target)
+                eyes_target_pos = eyes_pos + T.quat2mat(eyes_quat) @ th.tensor([0, 0, -1.0])
+                eyes_target_quat = th.tensor([0.0, 0.0, 0.0, 1.0])
+            else:
+                eyes_target_pos = None
+                eyes_target_quat = None
+
+            self.compute_trajectories(
+                target_pos=target_pos,
+                target_quat=target_quat,
+                initial_joint_pos=None,
+                is_local=False,
+                max_attempts=10,
+                timeout=60.0,
+                ik_fail_return=10,
+                enable_finetune_trajopt=False if ik_only else True,
+                finetune_attempts=0 if ik_only else 1,
+                return_full_result=False,
+                success_ratio=1.0,
+                attached_obj=None,
+                attached_obj_scale=None,
+                motion_constraint=None,
+                skip_obstacle_update=True,
                 ik_only=ik_only,
-                use_eyes_targets=use_eyes_targets,
+                ik_world_collision_check=False,
+                emb_sel=emb_sel,
+                eyes_target_pos=eyes_target_pos,
+                eyes_target_quat=eyes_target_quat,
             )
 
             # Make sure all cuda graphs have been warmed up
             for solver in [mg.ik_solver, mg.trajopt_solver, mg.finetune_trajopt_solver]:
                 # ARM mode will only be used for IK, not motion planning
-                if emb_sel == CuRoboEmbodimentSelection.ARM and solver != mg.ik_solver:
+                if ik_only and solver != mg.ik_solver:
                     continue
                 if solver.solver.use_cuda_graph_metrics:
                     assert solver.solver.safety_rollout._metrics_cuda_graph_init
