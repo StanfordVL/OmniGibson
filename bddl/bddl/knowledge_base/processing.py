@@ -87,8 +87,7 @@ class KnowledgeBaseProcessor():
         """
         put any post completion work (e.g. update stuff) here
         """
-        self.debug_print("Running post completion operations...")
-        self.generate_synset_state()
+        # self.debug_print("Running post completion operations...")
         # self.generate_object_images()
         # self.nuke_unused_synsets()
 
@@ -192,7 +191,6 @@ class KnowledgeBaseProcessor():
                     # safeguard to ensure currently available objects are also in future planned dataset
                     assert Object.exists(name=orig_id), f"{orig_id} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!"
                     obj = Object.get(name=orig_id)
-                    obj.ready = True
                     objs.append(obj)
 
         # Check that all of the renames have happened
@@ -407,26 +405,6 @@ class KnowledgeBaseProcessor():
                 continue
 
             Complaint.create(object=obj, complaint_type=complaint_type, prompt_additional_info=complaint_additional_info, response=complaint_response)
-
-    # TODO: Move to cached property on Synset
-    def generate_synset_state(self):
-        synsets = []
-        substances = {s.name for s in Synset.all_objects() if "substance" in s.property_names}
-        for synset in self.tqdm(Synset.all_objects()):
-            if synset.name == "entity.n.01": synset.state = SynsetState.MATCHED   # root synset is always legal
-            elif synset.name in substances:
-                synset.state = SynsetState.SUBSTANCE
-            elif synset.parents:
-                if len(synset.matching_ready_objects) > 0:
-                    synset.state = SynsetState.MATCHED
-                elif len(synset.matching_objects) > 0:
-                    synset.state = SynsetState.PLANNED
-                else:
-                    synset.state = SynsetState.UNMATCHED
-            else:
-                synset.state = SynsetState.ILLEGAL
-            synsets.append(synset)
-
 
     def nuke_unused_synsets(self):
         # Make repeated passes until we propagate far enough up

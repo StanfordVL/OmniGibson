@@ -206,10 +206,6 @@ class Object(Model):
     name: str
     # providing target
     provider: str = ""
-    # whether the object is in the current dataset
-    ready: bool = False
-    # whether the object is planned
-    planned: bool = True
     # the category that the object belongs to
     category_fk: ManyToOne = ManyToOneField(Category, "objects")
     # the category of the object prior to getting renamed
@@ -235,6 +231,11 @@ class Object(Model):
     @cache
     def matching_synset(self, synset) -> bool:
         return self.category.matching_synset(synset)
+
+    @cached_property
+    def ready(self) -> bool:
+        # An object is ready if it has no complaints.
+        return len(list(self.complaints)) == 0
 
     @cached_property
     def state(self):
@@ -292,8 +293,6 @@ class Synset(Model):
     # all ancestors (NOTE: this does NOT include self)
     ancestors_fk: ManyToMany = ManyToManyField("Synset", "descendants")
     descendants_fk: ManyToMany = ManyToManyField("Synset", "ancestors")
-    # state of the synset, one of STATE METADATA (pre computed to save webpage generation time)
-    state: SynsetState = field(default=SynsetState.ILLEGAL, repr=False)
 
     categories_fk: OneToMany = OneToManyField(Category, "synset")
     properties_fk: OneToMany = OneToManyField(Property, "synset")
@@ -315,6 +314,22 @@ class Synset(Model):
     class Meta:
         pk = "name"
         ordering = ["name"]
+
+    @cached_property
+    def state(self) -> SynsetState:
+        if self.name == "entity.n.01":
+            self.state = SynsetState.MATCHED   # root synset is always legal
+        elif "substance" in self.property_names:
+            self.state = SynsetState.SUBSTANCE
+        elif self.parents:
+            if len(self.matching_ready_objects) > 0:
+                self.state = SynsetState.MATCHED
+            elif len(self.matching_objects) > 0:
+                self.state = SynsetState.PLANNED
+            else:
+                self.state = SynsetState.UNMATCHED
+        else:
+            self.state = SynsetState.ILLEGAL
 
     @cached_property
     def property_names(self):
