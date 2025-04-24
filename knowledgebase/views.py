@@ -79,6 +79,13 @@ class NonSceneMatchedTaskListView(TaskListView):
         return Task.view_non_scene_matched()
 
 
+class ChallengeTaskListView(TaskListView):
+    page_title = inspect.getdoc(Task.view_challenge)
+
+    def get_queryset(self):
+        return Task.view_challenge()
+    
+
 class ObjectListView(ListView):
     model = Object
     context_object_name = "object_list"

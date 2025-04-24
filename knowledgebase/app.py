@@ -34,6 +34,7 @@ urlpatterns = [
   ("transitions/<name>/", TransitionDetailView, "transition_detail"),
   ("attachments/<name>/", AttachmentPairDetailView, "attachment_pair_detail"),
   ("complainttypes/<name>/", ComplaintTypeDetailView, "complaint_type_detail"),
+  ("challengetasks/", ChallengeTaskListView, "challenge_task_list"),
 ]
 
 app = create_app()
