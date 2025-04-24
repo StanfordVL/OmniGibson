@@ -556,6 +556,18 @@ def convert_baked_material_to_vray_and_add_ior():
     }
 
     for obj in rt.objects:
+        parsed_name = b1k_pipeline.utils.parse_name(obj.name)
+        if not parsed_name:
+            continue
+        if parsed_name.group("meta_type"):
+            continue
+        if parsed_name.group("instance_id") != "0":
+            continue
+        if parsed_name.group("bad"):
+            continue
+        if parsed_name.group("joint_side") == "upper":
+            continue
+
         mtl = obj.material
         if not mtl or rt.classOf(mtl) != rt.Shell_Material:
             continue
