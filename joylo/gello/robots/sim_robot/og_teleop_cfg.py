@@ -30,6 +30,7 @@ R1_WRIST_CAMERA_LOCAL_ORI = th.tensor([0.6830127018922194, 0.6830127018922193, 0
 
 # R1 Pro robot-specific configurations
 R1PRO_HEAD_CAMERA_LOCAL_POS = th.tensor([0.06, 0.0, 0.01], dtype=th.float32)  # Local position of the head camera relative to head link
+R1PRO_HEAD_CAMERA_LOCAL_ORI = th.tensor([-1.0, 0.0, 0.0, 0.0], dtype=th.float32)  # Local orientation of the head camera relative to head link
 
 # Default parameters
 DEFAULT_TRUNK_TRANSLATE = 0.5

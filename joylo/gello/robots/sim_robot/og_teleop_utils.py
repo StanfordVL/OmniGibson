@@ -231,11 +231,12 @@ def setup_cameras(robot, external_sensors, resolution):
     
     # Adjust head camera for R1Pro (TODO: fix this in assets)
     if isinstance(robot, R1Pro):
-        head_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
-            prim_path=f"{robot.links[HEAD_CAMERA_LINK_NAME[robot.__class__.__name__]].prim_path}/Camera"
-        )
+        head_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(prim_path=f"{robot.links[HEAD_CAMERA_LINK_NAME[robot.__class__.__name__]].prim_path}/Camera")
         head_camera_prim.GetAttribute("xformOp:translate").Set(
             lazy.pxr.Gf.Vec3d(*R1PRO_HEAD_CAMERA_LOCAL_POS.tolist())
+        )
+        head_camera_prim.GetAttribute("xformOp:orient").Set(
+            lazy.pxr.Gf.Quatd(*R1PRO_HEAD_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
         )
 
     camera_paths = [
