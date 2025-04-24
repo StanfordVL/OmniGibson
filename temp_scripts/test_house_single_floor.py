@@ -234,6 +234,31 @@ primitive = StarterSemanticActionPrimitives(env, env.robots[0], enable_head_trac
 # coffee_cup.states[object_states.OnTop].set_value(other=bar, new_value=True)
 # sink = env.scene.object_registry("name", "drop_in_sink_awvzkn_0")
 
+# Create teleop controller
+from omnigibson.utils.ui_utils import KeyboardRobotController, choose_from_options
+action_generator = KeyboardRobotController(robot=robot)
+
+# Register custom binding to reset the environment
+action_generator.register_custom_keymapping(
+    key=lazy.carb.input.KeyboardInput.R,
+    description="Reset the robot",
+    callback_fn=lambda: env.reset(),
+)
+
+# Other helpful user info
+print("Running demo.")
+print("Press ESC to quit")
+
+# Loop control until user quits
+max_steps = -1
+step = 0
+
+while step != max_steps:
+    action = action_generator.get_teleop_action()
+    env.step(action=action)
+    step += 1
+
+
 breakpoint()
 
 for _ in range(100): og.sim.step()

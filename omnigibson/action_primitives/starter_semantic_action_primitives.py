@@ -200,6 +200,12 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             StarterSemanticActionPrimitiveSet.TOGGLE_ON: self._toggle_on,
             StarterSemanticActionPrimitiveSet.TOGGLE_OFF: self._toggle_off,
         }
+
+        if isinstance(env.scene, og.scenes.interactive_traversable_scene.InteractiveTraversableScene):
+            scene_model = env.scene.scene_model.lower()
+        else:
+            scene_model = "empty"
+
         self._motion_generator = (
             None
             if skip_curobo_initilization
@@ -208,6 +214,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 batch_size=curobo_batch_size,
                 use_cuda_graph=curobo_use_cuda_graph,
                 collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
+                scene_model=scene_model,
                 embodiment_types=curobo_embodiment_types,
                 use_eyes_targets=enable_head_tracking,
             )
@@ -1061,25 +1068,25 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                         print("pre-grasp collision check failed, skipping sample")
                         continue
 
-                    # # ========= remove later =============
-                    # temp_state = og.sim.dump_state()
-                    # temp_base_joints = [initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]]
-                    # temp_base_joints = th.stack(temp_base_joints)
-                    # self.robot.set_joint_positions(temp_base_joints, indices=self.robot.base_control_idx)
+                        # # ========= remove later =============
+                        # temp_state = og.sim.dump_state()
+                        # temp_base_joints = [initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]]
+                        # temp_base_joints = th.stack(temp_base_joints)
+                        # self.robot.set_joint_positions(temp_base_joints, indices=self.robot.base_control_idx)
 
-                    # temp_trunk_joints = retval[0][:4]
-                    # self.robot.set_joint_positions(temp_trunk_joints, indices=self.robot.trunk_control_idx)
+                        # temp_trunk_joints = retval[0][:4]
+                        # self.robot.set_joint_positions(temp_trunk_joints, indices=self.robot.trunk_control_idx)
 
-                    # for _ in range(50): og.sim.step()
+                        # for _ in range(50): og.sim.step()
 
-                    # breakpoint()
-                    # og.sim.load_state(temp_state)
-                    # for _ in range(20): og.sim.step()
+                        # breakpoint()
+                        # og.sim.load_state(temp_state)
+                        # for _ in range(20): og.sim.step()
 
-                    # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
-                    # # self.robot.set_joint_positions(temp_js)
+                        # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
+                        # # self.robot.set_joint_positions(temp_js)
 
-                    # # ======================================
+                        # # ======================================
 
                     # constraint_satisfied = True
                     self.target_eyes_pose_arr.append(target_pose["eyes"])
@@ -1168,7 +1175,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             max_attempts = ik_max_attempts
             success_ratio = 1.0
 
-        # breakpoint()
         successes, joint_states = self._motion_generator.compute_trajectories(
             target_pos=target_pos,
             target_quat=target_quat,
@@ -1346,7 +1352,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 self.mp_err = "BaseMPIKFailed"
                 q_traj = None
             else:
-                # print("len(trajs): ", [len(t) for t in traj_paths])
                 self.mp_err = "BaseMPFailed"
                 q_traj = None
                 # breakpoint()

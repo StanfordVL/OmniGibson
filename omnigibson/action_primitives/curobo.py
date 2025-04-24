@@ -22,7 +22,11 @@ th.backends.cudnn.allow_tf32 = True
 # Create settings for this module
 m = create_module_macros(module_path=__file__)
 
-m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT = 5.0  # meters
+m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT = {
+    "rs_int": [[-5.0, 5.0], [-5.0, 5.0]],  # min-max x-axis, mim-max y-axis in meters
+    "empty": [[-5.0, 5.0], [-5.0, 5.0]],
+    "house_single_floor": [[3.0, 10.0], [-3.0, 3.0]],
+}
 m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT = math.pi * 2  # radians
 
 m.DEFAULT_COLLISION_ACTIVATION_DISTANCE = 0.005
@@ -81,6 +85,7 @@ class CuRoboMotionGenerator:
         debug=False,
         embodiment_types=None,
         collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
+        scene_model="house_single_floor",
     ):
         """
         Args:
@@ -99,6 +104,7 @@ class CuRoboMotionGenerator:
             collision_activation_distance (float): Distance threshold at which a collision with the world is detected.
                 Increasing this value will make the motion planner more conservative in its planning with respect
                 to the underlying sphere representation of the robot. Note that this does not affect self-collisions detection.
+            scene_model (str): This is used to set the base joint limits based on the scene.
         """
         # Only support one scene for now -- verify that this is the case
         assert len(og.sim.scenes) == 1
@@ -161,9 +167,9 @@ class CuRoboMotionGenerator:
             robot_cfg_obj = lazy.curobo.types.robot.RobotConfig.from_dict(robot_cfg_dict, self._tensor_args)
 
             if isinstance(robot, HolonomicBaseRobot):
-                self.update_joint_limits(robot_cfg_obj, emb_sel)
-                if isinstance(robot, R1):
-                    self.update_torso_joint_limits(robot_cfg_obj, emb_sel)
+                self.update_joint_limits(robot_cfg_obj, emb_sel, scene_model=scene_model)
+                # if isinstance(robot, R1):
+                #     self.update_torso_joint_limits(robot_cfg_obj, emb_sel)
 
             motion_kwargs = dict(
                 trajopt_tsteps=32,
@@ -265,7 +271,7 @@ class CuRoboMotionGenerator:
                     if opt.use_cuda_graph:
                         assert opt.cu_opt_init
 
-    def update_joint_limits(self, robot_cfg_obj, emb_sel):
+    def update_joint_limits(self, robot_cfg_obj, emb_sel, scene_model):
         joint_limits = robot_cfg_obj.kinematics.kinematics_config.joint_limits
         # breakpoint()
         for joint_name in self.robot.base_joint_names:
@@ -274,19 +280,23 @@ class CuRoboMotionGenerator:
                 # Manually specify joint limits for the base_footprint_x/y/rz
                 # TODO: Make this more general for all tasks (each task requires different joint limit based on the scene and where the robot is spawned)
                 if self.robot.joints[joint_name].joint_type == JointType.JOINT_PRISMATIC:
-                    joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT
-                    # if joint_name == "base_footprint_x_joint":
-                    #     joint_limits.position[0][joint_idx] = 3.0
-                    #     joint_limits.position[1][joint_idx] = 10.0
-                    # elif joint_name == "base_footprint_y_joint":
-                    #     joint_limits.position[0][joint_idx] = -3.0
-                    #     joint_limits.position[1][joint_idx] = 3.0
+                    # joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT
+                    print(
+                        " m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT[scene_model]: ",
+                        m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT[scene_model],
+                    )
+                    if joint_name == "base_footprint_x_joint":
+                        joint_limits.position[0][joint_idx] = m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT[scene_model][0][0]
+                        joint_limits.position[1][joint_idx] = m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT[scene_model][0][1]
+                    elif joint_name == "base_footprint_y_joint":
+                        joint_limits.position[0][joint_idx] = m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT[scene_model][1][0]
+                        joint_limits.position[1][joint_idx] = m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT[scene_model][1][1]
                 else:
                     # Needs to be -2pi to 2pi, instead of -pi to pi, otherwise the planning success rate is much lower
                     joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT
-                    # joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
+                    joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
 
-                joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
+                # joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
 
     def save_visualization(self, q, file_path, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
         # Update obstacles

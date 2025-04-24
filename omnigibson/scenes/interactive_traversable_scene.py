@@ -168,6 +168,8 @@ class InteractiveTraversableScene(TraversableScene):
         name = obj_info["args"]["name"]
         category = obj_info["args"].get("category", "object")
         in_rooms = obj_info["args"].get("in_rooms", None)
+        # This is a hack to load walls, fixed windows and floors for the given rooms
+        in_rooms = self.load_room_instances if obj_info["args"].get("category", "") in ["walls", "fixed_window", "floors"] else in_rooms
 
         if isinstance(in_rooms, str):
             assert "," not in in_rooms
@@ -191,6 +193,7 @@ class InteractiveTraversableScene(TraversableScene):
         )
 
         # This object is not located in one of the selected rooms, skip
+        if in_rooms is None: in_rooms = []
         valid_room = self.load_room_instances is None or len(set(self.load_room_instances) & set(in_rooms)) > 0
 
         # Check whether this is an agent and we allow agents
