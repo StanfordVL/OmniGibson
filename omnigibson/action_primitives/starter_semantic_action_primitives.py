@@ -8,7 +8,8 @@ runnable examples.
 
 import inspect
 import math
-import time
+
+# import time
 import random
 
 import cv2
@@ -883,7 +884,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         x_scale, y_scale = anisotropy
 
         for _ in range(num_samples):
-            # To understand this: think of a plane perpendicular to the -z-axis of the eye frame. To obtain gaze that is close to the object, what we want is different vecotrs
+            # To understand this: think of a plane perpendicular to the -z-axis of the eye frame.
+            # To obtain gaze that is close to the object, what we want is different vectors
             # that intersect the plane at different points within a circle. This is what apha and beta ensures.
             # beta corresponds to which direction from the origin, along the radius to sample the point (hence it is between 0 and 2pi) and
             # alpha corresponds to how far from the origin, along the chosen direction, to sample the point (hence it is between 0 and max_angle)
@@ -963,11 +965,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ] @ eye_to_obj_vec.to(th.float32)
 
             # quat = eye_pose_wrt_world[1].numpy()
-            # Anisotropy of (1,2) means that there is more sampling in the up-down direction of the camera than sideways. This is helpful because if the
-            # object is very close to robot body, the vector from the camera to the object is very "vertical" which leads to a lot of bending which could
-            # lead to collision of arms of robot with table
             sampled_eyes_orn_wrt_robot_arr = self.sample_eyes_orn(
-                eye_to_obj_vec_wrt_robot, num_samples=num_eyes_orn_samples, max_angle=np.radians(45), anisotropy=(1, 2)
+                eye_to_obj_vec_wrt_robot, num_samples=num_eyes_orn_samples, max_angle=np.radians(30), anisotropy=(1, 1)
             )
             # breakpoint()
             for j in range(num_eyes_orn_samples):
@@ -1296,8 +1295,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         ignore_objects=None,
     ):
         # If an object is grasped, we need to pass it to the motion planner
-        obj_in_hand = self._get_obj_in_hand()
-        attached_obj = {self.robot.eef_link_names[self.arm]: obj_in_hand.root_link} if obj_in_hand is not None else None
+        # obj_in_hand = self._get_obj_in_hand()
+        # attached_obj = {self.robot.eef_link_names[self.arm]: obj_in_hand.root_link} if obj_in_hand is not None else None
 
         # Aggregate target_pos and target_quat to match batch_size
         target_pos = {k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_pos.items()}
@@ -2130,8 +2129,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # Detach attached object if it was attached
             self._motion_generator._detach_objects_from_robot(attached_info, emb_sel)
 
-        print("pose: ", pose)
-
         # # remove later
         # state_dict = og.sim.dump_state()
         # pose3d = self._get_robot_pose_from_2d_pose(pose)
@@ -2145,6 +2142,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             print(f"Could not find a valid pose near the object {obj.name}")
             self.mp_err = "BaseSamplingFailed"
             yield None
+
+        print("base pose:", pose)
+        print("eyes pose", self.target_eyes_pose)
 
         # # remove later
         # yield None
@@ -2533,8 +2533,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         canonical_joint_positions = th.stack(canonical_joint_positions)
 
         # If an object is grasped, we need to pass it to the collision checker
-        obj_in_hand = self._get_obj_in_hand()
-        attached_obj = {self.robot.eef_link_names[self.arm]: obj_in_hand.root_link} if obj_in_hand is not None else None
+        # obj_in_hand = self._get_obj_in_hand()
+        # attached_obj = {self.robot.eef_link_names[self.arm]: obj_in_hand.root_link} if obj_in_hand is not None else None
 
         # Initial collision check of
         # - base joints: sampled base pose
