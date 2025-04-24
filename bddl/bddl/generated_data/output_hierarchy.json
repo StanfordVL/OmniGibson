@@ -19406,10 +19406,7 @@
                       "children": [
                         {
                           "name": "burner.n.02",
-                          "hasModel": true,
-                          "categories": [
-                            "burner"
-                          ]
+                          "hasModel": true
                         }
                       ]
                     },
@@ -20607,6 +20604,7 @@
                                               "name": "stove.n.01",
                                               "hasModel": true,
                                               "categories": [
+                                                "burner",
                                                 "stove"
                                               ]
                                             },
