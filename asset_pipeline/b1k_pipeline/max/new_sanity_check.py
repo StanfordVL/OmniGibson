@@ -681,7 +681,7 @@ class SanityCheck:
                     self.expect(len(m.vertices) <= max_vertices_per_element, f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > {max_vertices_per_element})")
                 self.expect(m.is_volume, f"{obj.name} element {i} is not a volume")
                 # self.expect(m.is_convex, f"{obj.name} element {i} may be non-convex. The checker says so, but it's not 100% accurate, so please verify that all elements are indeed convex.", level="WARNING")
-                self.expect(len(m.split()) == 1), f"{obj.name} element {i} has elements trimesh still finds splittable e.g. are not watertight / connected")
+                self.expect(len(m.split()) == 1, f"{obj.name} element {i} has elements trimesh still finds splittable e.g. are not watertight / connected")
 
         except Exception as e:
             self.expect(False, str(e))
