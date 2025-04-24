@@ -736,6 +736,15 @@ class Task(Model):
                 "reason_planned": result_partial,
             }
         return ret
+    
+    @cached_property
+    def matched_scenes(self) -> List[Scene]:
+        """Get the list of scenes that match the task"""
+        return [
+            scene
+            for scene, result in self.scene_matching_dict.items()
+            if result["matched_ready"]
+        ]
 
     @cached_property
     def scene_state(self) -> str:
