@@ -164,6 +164,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         task_relevant_objects_only=False,
         curobo_batch_size=4,
         curobo_use_cuda_graph=True,
+        curobo_embodiment_types=None,
         debug_visual_marker=None,
         skip_curobo_initilization=False,
         use_base_pose_hack=False,
@@ -214,6 +215,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 use_cuda_graph=curobo_use_cuda_graph,
                 collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
                 scene_model=scene_model,
+                embodiment_types=curobo_embodiment_types,
+                use_eyes_targets=enable_head_tracking,
             )
         )
 
@@ -2295,8 +2298,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
                     # Hack to not allow sampling robot base poses on the other side of the table
                     # print("candidate_2d_pose[0]", candidate_2d_pose[0])
-                    if self.use_base_pose_hack and candidate_2d_pose[0] > 1.0: continue
-                    else: break
+                    if self.use_base_pose_hack and candidate_2d_pose[0] > 1.0:
+                        continue
+                    else:
+                        break
 
                 candidate_poses.append(candidate_2d_pose)
 

@@ -6,7 +6,7 @@ from collections import defaultdict
 import torch as th
 
 import omnigibson as og
-from omnigibson.action_primitives.curobo import CuRoboMotionGenerator
+from omnigibson.action_primitives.curobo import CuRoboMotionGenerator, CuRoboEmbodimentSelection
 from omnigibson.macros import gm
 from omnigibson.robots.holonomic_base_robot import HolonomicBaseRobot
 from omnigibson.robots.locomotion_robot import LocomotionRobot
@@ -286,7 +286,7 @@ def test_curobo():
             debug=False,
             use_cuda_graph=True,
             collision_activation_distance=0.075,  # Use larger activation distance for better reproducibility
-            use_default_embodiment_only=True,
+            embodiment_types={CuRoboEmbodimentSelection.DEFAULT},
         )
 
         # Sample values for robot
