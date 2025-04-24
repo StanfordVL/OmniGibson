@@ -267,9 +267,9 @@ class IndexView(TemplateView):
         }
         # object metadata
         context["object_metadata"] = {
-            "ready": sum(1 for x in Object.all_objects() if x.ready),
-            "planned": sum(1 for x in Object.all_objects() if not x.ready and x.planned),
-            "error": sum(1 for x in Object.all_objects() if not x.planned),
+            "ready": sum(1 for x in Object.all_objects() if x.state == SynsetState.MATCHED),
+            "planned": sum(1 for x in Object.all_objects() if x.state == SynsetState.PLANNED),
+            "error": sum(1 for x in Object.all_objects() if x.state == SynsetState.UNMATCHED),
         }
         # scene metadata
         num_ready_scenes = sum([scene.any_ready for scene in Scene.all_objects()])
