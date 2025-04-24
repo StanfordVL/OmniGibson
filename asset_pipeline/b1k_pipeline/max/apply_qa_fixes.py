@@ -52,7 +52,7 @@ def scale_pivot(tgt_obj, delta_scale):
         scale_pivot(c, delta_scale)
 
 
-def apply_qa_fixes_in_open_file():
+def apply_qa_fixes_in_open_file(apply_scale=True, apply_orientation=True):
     # Load the fixes
     fixes = defaultdict(dict)
     with open(r"D:\ig_pipeline\metadata\orientation_and_scale_edits.json") as f:
@@ -99,9 +99,8 @@ def apply_qa_fixes_in_open_file():
         # Apply orientation fixes (the pivot needs to be rotated by the inverse of the fix)
         # Note that child links also get their pivots rotated here. Is that good? idk.
         # But we definitely don't want to rotate lights.
-        if rt.ClassOf(obj) == rt.Editable_Poly:
-            if "orientation" in model_fixes:
-                rotate_pivot(obj, R.from_quat(model_fixes["orientation"]).inv())
+        if apply_orientation and "orientation" in model_fixes and rt.ClassOf(obj) == rt.Editable_Poly:
+            rotate_pivot(obj, R.from_quat(model_fixes["orientation"]).inv())
 
         # Record the object for possible scale fixes. We're doing this only for root-level
         # objects. We will reparent these objects for the process of applying scale fixes.
@@ -114,7 +113,7 @@ def apply_qa_fixes_in_open_file():
                 objects_by_model_and_id[key].append(obj)
 
     # Make a pass for scales, only for object files
-    if "objects" in pathlib.Path(rt.maxFilePath).parts:
+    if apply_scale and "objects" in pathlib.Path(rt.maxFilePath).parts:
         # Assert that all children have bases
         assert set(base_links_by_model_and_id.keys()).issuperset(set(objects_by_model_and_id.keys())), "Not all objects have base links."
 
