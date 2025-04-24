@@ -2,7 +2,11 @@
 
 ## Hardware Setup
 
-For hardware setup, please reference this [guide](https://behavior-robot-suite.github.io/docs/sections/joylo/overview.html) from the [BEHAVIOR Robot Suite](https://behavior-robot-suite.github.io/).
+### 6 DoF R1
+For the 6dof version, please reference this [guide](https://behavior-robot-suite.github.io/docs/sections/joylo/overview.html) from the [BEHAVIOR Robot Suite](https://behavior-robot-suite.github.io/).
+
+### 7 DoF R1-Pro
+https://github.com/user-attachments/assets/d6d3ee59-dfac-4ece-92f4-ea44619a2d05
 
 ## Software Setup
 
@@ -216,3 +220,4 @@ The calibration script requires each arm to be placed in two fixed reference pos
 |----------------------|----------- |----------------| 
 | Zero Position        | ![](imgs/R1_zero_L.jpg)![](imgs/R1_zero_R.jpg)  | ![](imgs/R1pro_zero_L.jpg)![](imgs/R1pro_zero_R.jpg)                |
 | Calibration Position | ![](imgs/R1_calibration_L.jpg)![](imgs/R1_calibration_R.jpg)  **NOTE: Take from the front - note the forwards orientation of the notch on the wrist joint**| ![](imgs/R1pro_calibration_L.jpg)![](imgs/R1pro_calibration_R.jpg) |
+
