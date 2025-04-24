@@ -254,3 +254,7 @@ OBJECT_HIGHLIGHT_SPHERE = {
     "opacity": 0.5,
     "emissive_intensity": 10000.0,
 }
+
+INCLUDE_CONTACT_OBS = False
+INCLUDE_JACOBIAN_OBS = False
+GHOST_UPDATE_FREQ = 3

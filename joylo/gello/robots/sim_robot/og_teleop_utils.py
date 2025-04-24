@@ -652,7 +652,8 @@ def setup_ghost_robot(scene, task_cfg=None):
         name="ghost", 
         usd_path=os.path.join(gm.ASSET_PATH, f"models/{ROBOT_TYPE.lower()}/usd/{ROBOT_TYPE.lower()}.usda"), 
         visual_only=True, 
-        position=(task_cfg is not None and task_cfg["robot_start_position"]) or [0.0, 0.0, 0.0]
+        position=(task_cfg is not None and task_cfg["robot_start_position"]) or [0.0, 0.0, 0.0],
+        orientation=(task_cfg is not None and task_cfg["robot_start_orientation"]) or [0.0, 0.0, 0.0, 1.0],
     )
     scene.add_object(ghost, register=False)
     
@@ -701,7 +702,36 @@ def optimize_sim_settings():
     lazy.carb.settings.get_settings().set_bool("/rtx/raytracing/fractionalCutoutOpacity", False)
 
 
-def update_ghost_robot(ghost, robot, action, ghost_appear_counter):
+def setup_ghost_robot_info(ghost, robot):
+    if isinstance(robot, R1Pro):
+        robot_arm_dof = 7
+    elif isinstance(robot, R1):
+        robot_arm_dof = 6
+    else:
+        raise ValueError(f"Unknown robot type: {type(robot)}")
+    
+    # Aggregate joint indices for the ghost robot
+    joint_keys_list = list(ghost.joints.keys())
+    arm_action_idxs = []
+    arm_joint_idxs = []
+    for arm in robot.arm_names:
+        for i in range(robot_arm_dof):
+            arm_joint_idxs.append(joint_keys_list.index(f"{arm}_arm_joint{i+1}"))
+            arm_action_idxs.append(robot.arm_action_idx[arm][i])
+                    
+    ghost_info = {
+        "arm_action_idxs": th.tensor(arm_action_idxs, dtype=th.int),
+        "arm_joint_idxs": th.tensor(arm_joint_idxs, dtype=th.int),
+        "lower_limit": ghost.joint_lower_limits,
+        "upper_limit": ghost.joint_upper_limits,
+        "left_links": [link for link_name, link in ghost.links.items() if link_name.startswith("left")],
+        "right_links": [link for link_name, link in ghost.links.items() if link_name.startswith("right")],
+    }
+    
+    return ghost_info
+
+
+def update_ghost_robot(ghost, robot, action, ghost_appear_counter, ghost_info):
     """
     Update the ghost robot visualization based on current robot state and action
     
@@ -710,48 +740,40 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter):
         robot: Robot object
         action: Current action being applied
         ghost_appear_counter: Counter for ghost appearance timing
+        ghost_info: Dictionary of cached ghost information
         
     Returns:
         dict: Updated ghost_appear_counter
     """
-    if isinstance(robot, R1Pro):
-        robot_arm_dof = 7
-    elif isinstance(robot, R1):
-        robot_arm_dof = 6
-    else:
-        raise ValueError(f"Unknown robot type: {type(robot)}")
     ghost.set_position_orientation(
         position=robot.get_position_orientation(frame="world")[0],
         orientation=robot.get_position_orientation(frame="world")[1],
     )
-    for i in range(4):
-        ghost.joints[f"torso_joint{i+1}"].set_pos(robot.joints[f"torso_joint{i+1}"].get_state()[0])
+    
+    robot_qpos = robot.get_joint_positions()
+    ghost_qpos = robot_qpos.clone()
+    ghost_qpos[robot.base_idx] = 0.0
+    ghost_qpos[ghost_info["arm_joint_idxs"]] = action[ghost_info["arm_action_idxs"]]
+    ghost_qpos = ghost_qpos.clip(ghost_info["lower_limit"], ghost_info["upper_limit"])
+    
+    update = False
     for arm in robot.arm_names:
-        for i in range(robot_arm_dof):
-            ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(th.clamp(
-                action[robot.arm_action_idx[arm]][i],
-                min=ghost.joints[f"{arm}_arm_joint{i+1}"].lower_limit,
-                max=ghost.joints[f"{arm}_arm_joint{i+1}"].upper_limit
-            ))
-        for i in range(2):
-            ghost.joints[f"{FINGER_LINK_NAME[robot.__class__.__name__][arm]}{i+1}"].set_pos(
-                action[robot.gripper_action_idx[arm]][0],
-                normalized=True
-            )
         # make arm visible if some joint difference is larger than the threshold
         if th.max(th.abs(
-            robot.get_joint_positions()[robot.arm_control_idx[arm]] - action[robot.arm_action_idx[arm]]
+            robot_qpos[robot.arm_control_idx[arm]] - action[robot.arm_action_idx[arm]]
         )) > GHOST_APPEAR_THRESHOLD:
             ghost_appear_counter[arm] += 1
+            update = True
             if ghost_appear_counter[arm] >= GHOST_APPEAR_TIME:
-                for link_name, link in ghost.links.items():
-                    if link_name.startswith(arm):
-                        link.visible = True
+                for link in ghost_info[f"{arm}_links"]:
+                    link.visible = True
         else:
             ghost_appear_counter[arm] = 0
-            for link_name, link in ghost.links.items():
-                if link_name.startswith(arm):
-                    link.visible = False
+            for link in ghost_info[f"{arm}_links"]:
+                link.visible = False
+    
+    if update:
+        ghost.set_joint_positions(ghost_qpos, normalized=False, drive=False)
     
     return ghost_appear_counter
 
@@ -895,7 +917,7 @@ def update_checkpoint(env, frame_counter, recording_path=None):
     
     updated_counter = frame_counter + 1
     
-    if frame_counter % STEPS_TO_AUTO_CHECKPOINT == 0:
+    if updated_counter % STEPS_TO_AUTO_CHECKPOINT == 0:
         if recording_path is not None:
             env.update_checkpoint()
             print("Auto recorded checkpoint due to periodic save!")
@@ -978,7 +1000,7 @@ def generate_basic_environment_config(task_name=None, task_cfg=None):
             "type": "InteractiveTraversableScene",
             "scene_model": task_cfg["scene_model"],
             "load_room_types": None,
-            "load_room_instances": None,
+            "load_room_instances": task_cfg.get("load_room_instances", None),
             "include_robots": False,
         }
 

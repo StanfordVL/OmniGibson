@@ -83,7 +83,7 @@ class R1ProGelloAgent(BaseR1GelloAgent):
             else:
                 # Just became locked, update this arm's operating mode (first five joints should be using
                 # POSITION mode)
-                operating_modes[arm_info["gello_ids"]] = [OperatingMode.EXTENDED_POSITION] * 5 + [OperatingMode.CURRENT] * 4
+                operating_modes[arm_info["gello_ids"]] = [OperatingMode.EXTENDED_POSITION] * 5 + [OperatingMode.NONE] * 4
                 active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
                 # Add upper joints to commanded set of joint idxs
@@ -126,7 +126,7 @@ class R1ProGelloAgent(BaseR1GelloAgent):
             else:
                 # Just became locked, update this arm's operating mode (final three joints should be using
                 # POSITION mode)
-                operating_modes[arm_info["gello_ids"]] = [OperatingMode.CURRENT] * 6 + [OperatingMode.EXTENDED_POSITION] * 3
+                operating_modes[arm_info["gello_ids"]] = [OperatingMode.NONE] * 6 + [OperatingMode.EXTENDED_POSITION] * 3
                 active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
                 # Add lower joints to commanded set of joint idxs

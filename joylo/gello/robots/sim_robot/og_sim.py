@@ -66,7 +66,9 @@ class OGRobotServer:
         self.ghosting = ghosting
         if self.ghosting:
             self.ghost = utils.setup_ghost_robot(self.env.scene, self.task_cfg)
+            og.sim.step() # Initialize ghost robot
             self._ghost_appear_counter = {arm: 0 for arm in self.robot.arm_names}
+            self.ghost_info = utils.setup_ghost_robot_info(self.ghost, self.robot)
 
         # Handle fluid object if needed
         if USE_FLUID:
@@ -366,13 +368,13 @@ class OGRobotServer:
         # Loop over all arms and grab relevant joint info
         joint_pos = self.robot.get_joint_positions()
         joint_vel = self.robot.get_joint_velocities()
-        finger_impulses = GripperRigidContactAPI.get_all_impulses(self.env.scene.idx)
+        finger_impulses = GripperRigidContactAPI.get_all_impulses(self.env.scene.idx) if INCLUDE_CONTACT_OBS else None
 
         obs = dict()
         obs["active_arm"] = self.active_arm
         obs["in_cooldown"] = self._in_cooldown
-        obs["base_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.non_floor_touching_base_links)
-        obs["trunk_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.trunk_links)
+        obs["base_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.non_floor_touching_base_links) if INCLUDE_CONTACT_OBS else False
+        obs["trunk_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.trunk_links) if INCLUDE_CONTACT_OBS else False
         obs["reset_joints"] = bool(self._joint_cmd["button_y"][0].item())
         obs["waiting_to_resume"] = self._waiting_to_resume
 
@@ -386,22 +388,23 @@ class OGRobotServer:
             obs[f"arm_{arm}_gripper_positions"] = joint_pos[self.robot.gripper_control_idx[arm]]
             obs[f"arm_{arm}_ee_pos_quat"] = th.concatenate(self.robot.eef_links[arm].get_position_orientation())
             # When using VR, this expansive check makes the view glitch
-            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if VIEWING_MODE != ViewingMode.VR else False
-            obs[f"arm_{arm}_finger_max_contact"] = th.max(th.sum(th.square(finger_impulses[:, 2*i:2*(i+1), :]), dim=-1)).item()
+            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if VIEWING_MODE != ViewingMode.VR and INCLUDE_CONTACT_OBS else False
+            obs[f"arm_{arm}_finger_max_contact"] = th.max(th.sum(th.square(finger_impulses[:, 2*i:2*(i+1), :]), dim=-1)).item() if INCLUDE_CONTACT_OBS else 0.0
 
             obs[f"{arm}_gripper"] = self._joint_cmd[f"{arm}_gripper"].item()
 
-        for arm in self.robot.arm_names:
-            link_name = self.robot.eef_link_names[arm]
+        if INCLUDE_JACOBIAN_OBS:
+            for arm in self.robot.arm_names:
+                link_name = self.robot.eef_link_names[arm]
 
-            start_idx = 0 if self.robot.fixed_base else 6
-            link_idx = self.robot._articulation_view.get_body_index(link_name)
-            jacobian = ControllableObjectViewAPI.get_relative_jacobian(
-                self.robot.articulation_root_path
-            )[-(self.robot.n_links - link_idx), :, start_idx : start_idx + self.robot.n_joints]
-            
-            jacobian = jacobian[:, self.robot.arm_control_idx[arm]]
-            obs[f"arm_{arm}_jacobian"] = jacobian
+                start_idx = 0 if self.robot.fixed_base else 6
+                link_idx = self.robot._articulation_view.get_body_index(link_name)
+                jacobian = ControllableObjectViewAPI.get_relative_jacobian(
+                    self.robot.articulation_root_path
+                )[-(self.robot.n_links - link_idx), :, start_idx : start_idx + self.robot.n_joints]
+                
+                jacobian = jacobian[:, self.robot.arm_control_idx[arm]]
+                obs[f"arm_{arm}_jacobian"] = jacobian
 
         self.obs = obs
 
@@ -617,12 +620,13 @@ class OGRobotServer:
             action[self.robot.arm_action_idx[self.active_arm]] = self._joint_cmd[self.active_arm].clone()
 
         # Optionally update ghost robot
-        if self.ghosting:
+        if self.ghosting and self._frame_counter % GHOST_UPDATE_FREQ == 0:
             self._ghost_appear_counter = utils.update_ghost_robot(
                 self.ghost, 
                 self.robot, 
                 action, 
-                self._ghost_appear_counter
+                self._ghost_appear_counter,
+                self.ghost_info,
             )
 
         return action
