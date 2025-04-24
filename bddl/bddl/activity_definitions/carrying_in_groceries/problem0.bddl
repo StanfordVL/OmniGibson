@@ -16,7 +16,7 @@
     )
     
     (:init 
-        (ontop car.n.01_1 driveway.n.01_1) 
+        (inroom car.n.01_1 garden) 
         (inside carton.n.02_1 car.n.01_1)
         (inside bacon.n.01_1 carton.n.02_1)
         (inside beefsteak_tomato.n.01_1 carton.n.02_1)

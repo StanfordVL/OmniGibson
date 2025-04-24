@@ -13,7 +13,7 @@
     )
     
     (:init 
-        (ontop car.n.01_1 driveway.n.01_1) 
+        (inroom car.n.01_1 garden) 
         (ontop scraper.n.01_1 floor.n.01_1) 
         (not 
             (toggled_on space_heater.n.01_1)
