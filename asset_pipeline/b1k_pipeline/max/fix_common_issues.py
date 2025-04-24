@@ -563,14 +563,16 @@ def convert_baked_material_to_vray_and_add_ior():
         baked_mtl = mtl.bakedMaterial
         assert rt.classOf(baked_mtl) == rt.Physical_Material, \
             f"Object {obj.name} baked material is not a Physical Material, but {rt.classOf(baked_mtl)}"
-        
+
         maps = {}
         for map_idx in range(rt.getNumSubTexmaps(baked_mtl)):
             channel_name = rt.getSubTexmapSlotName(baked_mtl, map_idx + 1)
             sub_texmap = rt.getSubTexmap(baked_mtl, map_idx + 1)
             if sub_texmap is not None:
+                if channel_name == "Transparency Color Map":
+                    channel_name = "Transparency Map"
                 maps[channel_name] = sub_texmap
-        
+                
         # If there is no IOR map, try to guess it from the name
         if "IOR Map" not in maps:
             ior_map_filename = pathlib.Path(rt.maxFilePath) / "bakery" / f"{obj.name}_VRayMtlReflectIORBake.exr"
@@ -581,9 +583,11 @@ def convert_baked_material_to_vray_and_add_ior():
             ior_map.filename = str(ior_map_filename)
             ior_map.coords.mapChannel = 99
 
+            maps["IOR Map"] = ior_map
+
         # Check that we have ALL of the maps we need
-        missing_keys = set(MAP_TRANSLATION.keys()) - set(maps.keys())
-        assert not missing_keys, f"Missing maps {missing_keys} for object {obj.name}"
+        missing_keys = set(MAP_TRANSLATION.values()) - set(maps.keys())
+        assert not missing_keys, f"Missing maps {missing_keys} for object {obj.name}. Found only {set(maps.keys())}"
 
         # Start converting to the new material
         new_mtl = rt.VRayMtl()
@@ -596,11 +600,12 @@ def convert_baked_material_to_vray_and_add_ior():
                 continue
             assert channel_name not in converted_keys, f"Duplicate channel name {channel_name} for object {obj.name}"
 
-            new_mtl.setSubTexmap(map_idx + 1, maps[channel_name])
-            maps[channel_name].name = f"{obj.name}__baked__{channel_name}"
+            old_map = maps[MAP_TRANSLATION[channel_name]]
+            rt.setSubTexmap(new_mtl, map_idx + 1, old_map)
+            old_map.name = f"{obj.name}__baked__{channel_name}"
             converted_keys.add(channel_name)
         missing_converted_keys = set(MAP_TRANSLATION.keys()) - converted_keys
-        assert missing_converted_keys, f"Not all maps converted for object {obj.name}: {missing_converted_keys}"
+        assert not missing_converted_keys, f"Not all maps converted for object {obj.name}: {missing_converted_keys}"
 
         mtl.bakedMaterial = new_mtl
         
