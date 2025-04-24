@@ -14,6 +14,21 @@ def model_ids_from_objects(objs):
 
     return model_ids
 
+def get_meta_type(obj):
+    """
+    Get the meta type of an object.
+    :param obj: The object to get the meta type from.
+    :return: The meta type of the object.
+    """
+    pn = parse_name(obj)
+    assert pn, f"Could not parse object name {obj}"
+    if pn.group("meta_type"):
+        return pn.group("meta_type")
+    elif pn.group("light_id"):
+        return "light"
+    else:
+        return "None"
+
 def main():
     deep_glob = "cad/*/*/artifacts/file_manifest.json"  # maybe use _deep ?
     base_files = pathlib.Path("base").glob(deep_glob)
@@ -43,7 +58,7 @@ def main():
         object_diffs[target] = sorted(diff.affected_root_keys)
         full_diffs[target] = diff.pretty()
 
-    meta_type_diffs = sorted({str(parse_name(x).group("meta_type")) for target_object_diffs in object_diffs.values() for x in target_object_diffs if parse_name(x)})
+    meta_type_diffs = sorted({get_meta_type(x) for target_object_diffs in object_diffs.values() for x in target_object_diffs if parse_name(x)})
 
     print("-------------------------------------------------")
     print("OBJECT DIFFS")
@@ -58,7 +73,7 @@ def main():
     print("BY TARGET:")
     for target in sorted(all_targets):
         target_objs = sorted(object_diffs[target])
-        target_meta_types = sorted({str(parse_name(x).group("meta_type")) for x in target_objs if parse_name(x)})
+        target_meta_types = sorted({get_meta_type(x) for x in target_objs if parse_name(x)})
         target_mids = sorted(model_ids_from_objects(target_objs))
 
         print(f"\n\n-------------------------\n{target}")
