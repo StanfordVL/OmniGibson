@@ -1,3 +1,4 @@
+import traceback
 from pymxs import runtime as rt
 import trimesh
 import numpy as np
@@ -74,8 +75,8 @@ def validate_collision_mesh(obj, max_elements=40, max_vertices_per_element=60):
     assert not np.any(
         np.sum(elems.astype(int), axis=0) > 1
     ), f"{obj.name} has same face appear in multiple elements"
-    if max_elements is not None:
-        assert len(elems) <= max_elements, f"{obj.name} should not have more than {max_elements} elements. Has {len(elems)} elements."
+
+    elems_by_volume = []
 
     # Iterate through the elements
     for i, elem in enumerate(elems):
@@ -85,12 +86,27 @@ def validate_collision_mesh(obj, max_elements=40, max_vertices_per_element=60):
         m.remove_unreferenced_vertices()
         if max_vertices_per_element is not None:
             assert len(m.vertices) <= max_vertices_per_element, f"{obj.name} element {i} has too many vertices ({len(m.vertices)} > {max_vertices_per_element})"
-        assert m.is_volume, f"{obj.name} element {i} is not a volume"
+        if not m.is_volume:
+            # Get the element faces (True indices in `elem`) and select them in 3ds Max
+            element_faces = (np.where(elem)[0] + 1).tolist()
+            rt.polyop.setFaceSelection(obj, element_faces)
+            raise ValueError(f"{obj.name} element {i} is not a volume. It's now selected for your viewing.")
+        elems_by_volume.append((elem, m.volume))
         if not m.is_convex:
             print(f"WARNING: {obj.name} element {i} may be non-convex. The checker says so, but it's not 100% accurate, so please verify that all elements are indeed convex.")
         assert (
             len(m.split()) == 1
         ), f"{obj.name} element {i} has elements trimesh still finds splittable e.g. are not watertight / connected"
+
+    if max_elements is not None:
+        if len(elems) > max_elements:
+            # Select the smallest element
+            elems_by_volume.sort(key=lambda x: x[1])
+            elem, volume = elems_by_volume[0]
+            element_faces = (np.where(elem)[0] + 1).tolist()
+            rt.polyop.setFaceSelection(obj, element_faces)
+
+            raise ValueError(f"{obj.name} should not have more than {max_elements} elements. Has {len(elems)} elements. Selected the smallest element.")
 
 if __name__ == "__main__":
     assert len(rt.selection) == 1, "Please select a single object."
@@ -99,4 +115,4 @@ if __name__ == "__main__":
         print("Collision mesh is VALID:", rt.selection[0].name)
     except Exception as e:
         print("Collision mesh is INVALID:", rt.selection[0].name)
-        raise
+        print(traceback.format_exc())
