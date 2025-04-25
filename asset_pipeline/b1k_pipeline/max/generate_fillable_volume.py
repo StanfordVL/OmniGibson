@@ -14,6 +14,7 @@ import sys
 sys.path.append(r"D:\ig_pipeline")
 
 from b1k_pipeline.utils import parse_name
+from b1k_pipeline.max.collision_vertex_reduction import reduce_mesh
 
 REQUIRE_ADDITIONAL_BASE_POINTS = False
 
@@ -354,7 +355,7 @@ def sample_fillable_volume(
     tm_fillable = trimesh.Trimesh(vertices=np.array(mesh_points))
 
     # Return the convex hull of this mesh
-    return tm_fillable.convex_hull
+    return reduce_mesh(tm_fillable.convex_hull)
 
 
 def generate_fillable_mesh_from_seed(is_open):
