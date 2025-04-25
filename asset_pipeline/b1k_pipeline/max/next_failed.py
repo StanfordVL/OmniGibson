@@ -16,21 +16,18 @@ import b1k_pipeline.utils
 
 rt = pymxs.runtime
 
+file_name = "sanitycheck.json"
+# file_name = "object_list.json"
+# file_name = "export_meshes.json"
 
 def file_eligible(objdir):
-    objlist = objdir / "artifacts" / "object_list.json"
-    sanitycheck = objdir / "artifacts" / "sanitycheck.json"
+    sanitycheck = objdir / "artifacts" / file_name
 
-    if not objlist.exists() or not sanitycheck.exists():
+    if not sanitycheck.exists():
         print(
             f"{str(objdir)} is missing object list or sanitycheck. Unsure if it failed."
         )
         return False
-
-    with open(objlist, "r") as f:
-        x = json.load(f)
-        if not x["success"]:
-            return True
 
     with open(sanitycheck, "r") as f:
         x = json.load(f)
@@ -68,7 +65,7 @@ def next_failed():
             str(scene_file), useFileUnits=False, quiet=True
         ), f"Could not load {scene_file}"
 
-        sanitycheck_file = eligible_max[next_idx].parent / "artifacts" / "sanitycheck.json"
+        sanitycheck_file = eligible_max[next_idx].parent / "artifacts" / file_name
         print(sanitycheck_file.read_text())
 
 
