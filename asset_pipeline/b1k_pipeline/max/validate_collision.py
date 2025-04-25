@@ -11,9 +11,7 @@ from b1k_pipeline.utils import parse_name
 
 def get_verts_for_obj(obj):
     return np.array(
-        rt.polyop.getVerts(
-            obj.baseObject, rt.execute("#{1..%d}" % rt.polyop.getNumVerts(obj))
-        )
+        [rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))]
     )
 
 def get_faces_for_obj(obj):
@@ -62,6 +60,10 @@ def validate_collision_mesh(obj, max_elements=40, max_vertices_per_element=60):
     assert len(faces) > 0, f"{obj.name} has no faces."
     assert all(len(f) == 3 for f in faces), f"{obj.name} has non-triangular faces. Apply the Triangulate script."
 
+    assert not any(x < 0 for x in obj.scale), \
+        f"{obj.name} has negative scale, probably because you mirrored it. Apply the Reset Xform button from the Utilities tab of the right-side menu. " \
+            "Then return to the Modify tab, right click on the Xform modifier in the modifier stack and select Collapse To."
+
     # Split the faces into elements
     faces_not_yet_found = np.zeros(faces.shape[0], dtype=bool)
     elems = []
@@ -93,7 +95,7 @@ def validate_collision_mesh(obj, max_elements=40, max_vertices_per_element=60):
             raise ValueError(f"{obj.name} element {i} is not a volume. It's now selected for your viewing.")
         elems_by_volume.append((elem, m.volume))
         if not m.is_convex:
-            print(f"WARNING: {obj.name} element {i} may be non-convex. The checker says so, but it's not 100% accurate, so please verify that all elements are indeed convex.")
+            pass # print(f"WARNING: {obj.name} element {i} may be non-convex. The checker says so, but it's not 100% accurate, so please verify that all elements are indeed convex.")
         assert (
             len(m.split()) == 1
         ), f"{obj.name} element {i} has elements trimesh still finds splittable e.g. are not watertight / connected"
@@ -109,10 +111,14 @@ def validate_collision_mesh(obj, max_elements=40, max_vertices_per_element=60):
             raise ValueError(f"{obj.name} should not have more than {max_elements} elements. Has {len(elems)} elements. Selected the smallest element.")
 
 if __name__ == "__main__":
-    assert len(rt.selection) == 1, "Please select a single object."
-    try:
-        validate_collision_mesh(rt.selection[0])
-        print("Collision mesh is VALID:", rt.selection[0].name)
-    except Exception as e:
-        print("Collision mesh is INVALID:", rt.selection[0].name)
-        print(traceback.format_exc())
+    # assert len(rt.selection) == 1, "Please select a single object."
+    objs = list(rt.selection)
+    if not objs:
+        objs = [x for x in rt.objects if "Mcollision" in x.name]
+    for obj in objs:
+        try:
+            validate_collision_mesh(obj)
+            print("Collision mesh is VALID:", obj.name)
+        except Exception as e:
+            print("Collision mesh is INVALID:", obj.name)
+            print(traceback.format_exc())
