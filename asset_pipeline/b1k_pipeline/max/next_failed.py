@@ -68,6 +68,9 @@ def next_failed():
             str(scene_file), useFileUnits=False, quiet=True
         ), f"Could not load {scene_file}"
 
+        sanitycheck_file = eligible_max[next_idx].parent / "artifacts" / "sanitycheck.json"
+        print(sanitycheck_file.read_text())
+
 
 def next_failed_button():
     try:
