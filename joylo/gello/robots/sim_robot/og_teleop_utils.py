@@ -669,39 +669,60 @@ def setup_ghost_robot(scene, task_cfg=None):
     return ghost
 
 
-def optimize_sim_settings():
+def optimize_sim_settings(vr_mode=False):
     """Apply optimized simulation settings for better performance"""
     settings = lazy.carb.settings.get_settings()
 
-    # Use asynchronous rendering for faster performance
-    # NOTE: This gets reset EVERY TIME the sim stops / plays!!
-    # For some reason, need to turn on, then take one render step, then turn off, and then back on in order to
-    # avoid viewport freezing...not sure why
-    settings.set_bool("/app/asyncRendering", True)
-    og.sim.render()
-    settings.set_bool("/app/asyncRendering", False)
-    settings.set_bool("/app/asyncRendering", True)
-    settings.set_bool("/app/asyncRenderingLowLatency", True)
+    if not vr_mode:
+        # Use asynchronous rendering for faster performance
+        # NOTE: This gets reset EVERY TIME the sim stops / plays!!
+        # For some reason, need to turn on, then take one render step, then turn off, and then back on in order to
+        # avoid viewport freezing...not sure why
+        settings.set_bool("/app/asyncRendering", True)
+        og.sim.render()
+        settings.set_bool("/app/asyncRendering", False)
+        settings.set_bool("/app/asyncRendering", True)
+        settings.set_bool("/app/asyncRenderingLowLatency", True)
 
-    # Must ALWAYS be set after sim plays because omni overrides these values
-    settings.set("/app/runLoops/main/rateLimitEnabled", False)
-    settings.set("/app/runLoops/main/rateLimitUseBusyLoop", False)
+        # Must ALWAYS be set after sim plays because omni overrides these values
+        settings.set("/app/runLoops/main/rateLimitEnabled", False)
+        settings.set("/app/runLoops/main/rateLimitUseBusyLoop", False)
 
-    # Use asynchronous rendering for faster performance (repeat to ensure it takes effect)
-    settings.set_bool("/app/asyncRendering", True)
-    settings.set_bool("/app/asyncRenderingLowLatency", True)
-    settings.set_bool("/app/asyncRendering", False)
-    settings.set_bool("/app/asyncRenderingLowLatency", False)
-    settings.set_bool("/app/asyncRendering", True)
-    settings.set_bool("/app/asyncRenderingLowLatency", True)
+        # Use asynchronous rendering for faster performance (repeat to ensure it takes effect)
+        settings.set_bool("/app/asyncRendering", True)
+        settings.set_bool("/app/asyncRenderingLowLatency", True)
+        settings.set_bool("/app/asyncRendering", False)
+        settings.set_bool("/app/asyncRenderingLowLatency", False)
+        settings.set_bool("/app/asyncRendering", True)
+        settings.set_bool("/app/asyncRenderingLowLatency", True)
 
-    # Additional RTX settings
-    settings.set_bool("/rtx-transient/dlssg/enabled", True)
-    
-    # Disable fractional cutout opacity for speed
-    # Alternatively, turn this on so that we can use semi-translucent visualizers
-    lazy.carb.settings.get_settings().set_bool("/rtx/raytracing/fractionalCutoutOpacity", False)
+        # Additional RTX settings
+        settings.set_bool("/rtx-transient/dlssg/enabled", True)
 
+        # Disable fractional cutout opacity for speed
+        # Alternatively, turn this on so that we can use semi-translucent visualizers
+        lazy.carb.settings.get_settings().set_bool("/rtx/raytracing/fractionalCutoutOpacity", False)
+
+    # Does this improve things?
+    # See https://docs.omniverse.nvidia.com/kit/docs/omni.timeline/latest/TIME_STEPPING.html#synchronizing-wall-clock-time-and-simulation-time
+    # Obtain the main timeline object
+    timeline = lazy.omni.timeline.get_timeline_interface()
+
+    # Configure Kit to not wait for wall clock time to catch up between updates
+    # This setting is effective only with Fixed time stepping
+    timeline.set_play_every_frame(True)
+
+    # The following setting has the exact same effect as set_play_every_frame
+    settings.set("/app/player/useFastMode", True)
+    settings.set("/app/show_developer_preference_section", True)
+    settings.set("/app/player/useFixedTimeStepping", True)
+
+    for run_loop in ["present", "main", "rendering_0"]:
+        settings.set(f"/app/runLoops/{run_loop}/rateLimitEnabled", False)
+        settings.set(f"/app/runLoops/{run_loop}/rateLimitFrequency", 120)
+        settings.set(f"/app/runLoops/{run_loop}/rateLimitUseBusyLoop", False)
+    settings.set("/exts/omni.kit.renderer.core/present/enabled", True)
+    settings.set("/app/vsync", True)
 
 def setup_ghost_robot_info(ghost, robot):
     if isinstance(robot, R1Pro):
@@ -1020,6 +1041,7 @@ def generate_basic_environment_config(task_name=None, task_cfg=None):
             "reward_config": {
                 "r_potential": 1.0,
             },
+            "include_obs": False,
         }
     elif FULL_SCENE:
         cfg["scene"] = {

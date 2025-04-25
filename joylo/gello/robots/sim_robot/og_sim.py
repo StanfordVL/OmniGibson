@@ -125,32 +125,14 @@ class OGRobotServer:
 
         # Experimental optimizations
         with og.sim.stopped():
-            # Does this improve things?
-            # See https://docs.omniverse.nvidia.com/kit/docs/omni.timeline/latest/TIME_STEPPING.html#synchronizing-wall-clock-time-and-simulation-time
-            # Obtain the main timeline object
-            timeline = lazy.omni.timeline.get_timeline_interface()
-
-            # Configure Kit to not wait for wall clock time to catch up between updates
-            # This setting is effective only with Fixed time stepping
-            timeline.set_play_every_frame(True)
-
-            # Acquire the settings interface
-            settings = lazy.carb.settings.acquire_settings_interface()
-
-            # The following setting has the exact same effect as set_play_every_frame
-            settings.set("/app/player/useFastMode", True)
-
-            settings.set("/app/show_developer_preference_section", True)
-            settings.set("/app/player/useFixedTimeStepping", True)
-
             # # Set lower position iteration count for faster sim speed
             # og.sim._physics_context._physx_scene_api.GetMaxPositionIterationCountAttr().Set(8)
             # og.sim._physics_context._physx_scene_api.GetMaxVelocityIterationCountAttr().Set(1)
             isregistry = lazy.carb.settings.acquire_settings_interface()
-            isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_NUM_THREADS, 16)
+            isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_NUM_THREADS, 0)
             # isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_MIN_FRAME_RATE, int(1 / og.sim.get_physics_dt()))
             # isregistry.set_int(lazy.omni.physx.bindings._physx.SETTING_MIN_FRAME_RATE, 30)
-            
+
             # Enable CCD for all task-relevant objects
             if isinstance(self.env.task, BehaviorTask):
                 for bddl_obj in self.env.task.object_scope.values():
@@ -166,6 +148,9 @@ class OGRobotServer:
                     if isinstance(obj, (R1, R1Pro)):
                         obj.base_footprint_link.mass = 250.0
 
+        # Set optimized settings
+        utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
+
         # Reset environment to initialize
         self.reset()
 
@@ -175,10 +160,6 @@ class OGRobotServer:
 
         # Set up keyboard handlers
         self._setup_keyboard_handlers()
-
-        # VR extension does not work with async rendering
-        if not VIEWING_MODE == ViewingMode.VR:
-            utils.optimize_sim_settings()
 
         # Set up VR system if needed
         self._setup_vr()
@@ -325,8 +306,8 @@ class OGRobotServer:
             # [ 6DOF left arm, 6DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home, left arrow, right arrow buttons]
             start_idx = 0
             for component, dim in zip(
-                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_home", "button_left", "button_right"),
-                    (6, 6, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_capture", "button_home", "button_left", "button_right"),
+                    (6, 6, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
             ):
                 if start_idx >= len(state):
                     break
@@ -336,8 +317,8 @@ class OGRobotServer:
             # [ 7DOF left arm, 7DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home, left arrow, right arrow buttons]
             start_idx = 0
             for component, dim in zip(
-                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_home", "button_left", "button_right"),
-                    (7, 7, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_capture", "button_home", "button_left", "button_right"),
+                    (7, 7, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
             ):
                 if start_idx >= len(state):
                     break
@@ -467,6 +448,7 @@ class OGRobotServer:
             if self._recording_path is not None:
                 print("Rolling back to latest checkpoint...watch out, GELLO will move on its own!")
                 self.env.rollback_to_checkpoint()
+                utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
                 print("Finished rolling back!")
                 self._waiting_to_resume = True
         self._button_toggled_state["y"] = button_y_state
@@ -497,6 +479,11 @@ class OGRobotServer:
                 )
                 beacon.visible = not beacon.visible
         self._button_toggled_state["a"] = button_a_state
+
+        # If capture is toggled from OFF -> ON, breakpoint
+        if self._joint_cmd["button_capture"].item() != 0.0:
+            if not self._in_cooldown:
+                breakpoint()
 
         # If home is toggled from OFF -> ON, reset env
         if self._joint_cmd["button_home"].item() != 0.0:
@@ -653,6 +640,7 @@ class OGRobotServer:
                 self._joint_cmd["button_y"] = th.zeros(1)
                 self._joint_cmd["button_b"] = th.zeros(1)
                 self._joint_cmd["button_a"] = th.zeros(1)
+                self._joint_cmd["button_capture"] = th.zeros(1)
                 self._joint_cmd["button_home"] = th.zeros(1)
                 self._joint_cmd["button_left"] = th.zeros(1)
                 self._joint_cmd["button_right"] = th.zeros(1)
