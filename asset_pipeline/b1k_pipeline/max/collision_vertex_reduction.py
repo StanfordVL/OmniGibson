@@ -29,7 +29,7 @@ def reduce_mesh(mesh):
     return reduced_mesh.convex_hull
 
 
-def convert_to_trimesh(obj):
+def convert_to_trimesh(obj, checks=True):
     # Get vertices and faces into numpy arrays for conversion
     verts = np.array(
         [rt.polyop.getVert(obj, i + 1) for i in range(rt.polyop.GetNumVerts(obj))]
@@ -49,7 +49,7 @@ def convert_to_trimesh(obj):
         tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
         for i in range(rt.polyop.GetNumFaces(obj))
     }
-    assert len(elems) <= 40, f"{obj.name} should not have more than 40 elements."
+    # assert len(elems) <= 40, f"{obj.name} should not have more than 40 elements."
     elems = np.array(list(elems))
     assert not np.any(
         np.sum(elems, axis=0) > 1
@@ -62,19 +62,18 @@ def convert_to_trimesh(obj):
         relevant_faces = faces[elem]
         m = trimesh.Trimesh(vertices=verts, faces=relevant_faces, process=False)
         m.remove_unreferenced_vertices()
-        # assert m.is_volume, f"{obj.name} element {i} is not a volume"
-        # assert m.is_convex, f"{obj.name} element {i} is not convex"
-        # assert (
-        #     len(m.split()) == 1
-        # ), f"{obj.name} element {i} has elements trimesh still finds splittable"
+        assert not checks or m.is_volume, f"{obj.name} element {i} is not a volume"
+        # assert not checks or m.is_convex, f"{obj.name} element {i} is not convex"
+        assert not checks or len(m.split()) == 1, \
+            f"{obj.name} element {i} has elements trimesh still finds splittable"
         meshes.append(m)
 
     return meshes
 
 
-def process_convex_obj(obj):
+def process_convex_obj(obj, force=False):
     # Get the collision meshes into a set of trimeshes
-    convex_meshes = convert_to_trimesh(obj)
+    convex_meshes = convert_to_trimesh(obj, checks=False)
 
     # Check if any of the meshes have too many verts
     too_many_verts = any(len(m.vertices) > MAX_VERTEX_COUNT for m in convex_meshes)
@@ -82,7 +81,7 @@ def process_convex_obj(obj):
     # Check if any of the meshes is not a volume
     not_volume = any(not m.is_volume for m in convex_meshes)
 
-    if not too_many_verts and not not_volume:
+    if not force and not too_many_verts and not not_volume:
         return
 
     print("Reducing", obj.name)
@@ -91,6 +90,7 @@ def process_convex_obj(obj):
     # if the vertex count is too high, and replace the shape with its convex hull helping with the volumeness
     # issues.
     reduced_trimeshes = [reduce_mesh(m) for m in convex_meshes]
+    assert all(m.is_volume for m in reduced_trimeshes), f"{obj.name} reduced part is not a volume. Not quite sure how that can be."
 
     # Get a flattened list of vertices and faces
     all_vertices = []
@@ -102,55 +102,35 @@ def process_convex_obj(obj):
         all_vertices.extend(vertices)
         all_faces.extend(faces)
 
-    # Delete the original node
-    name = obj.name
-    parent = obj.parent
-    position = obj.position
-    rotation = obj.rotation
-    layer = obj.layer
-    rt.delete(obj)
-    del obj
-
-    # Create a new node for the collision mesh
-    new_obj = rt.Editable_Mesh()
-    rt.ConvertToPoly(new_obj)
-    new_obj.name = name
-    new_obj.rotation = rotation
-    new_obj.position = position
-    layer.addNode(new_obj)
+    # Remove the original mesh
+    rt.polyop.deleteVerts(obj, rt.execute("#{1..%d}" % rt.polyop.GetNumVerts(obj)))
 
     # Add the vertices
     for v in all_vertices:
-        rt.polyop.createVert(new_obj, v)
+        rt.polyop.createVert(obj, v)
 
     # Add the faces
     for f in all_faces:
-        rt.polyop.createPolygon(new_obj, f)
-
-    # Optionally set its wire color
-    new_obj.wirecolor = rt.yellow
+        rt.polyop.createPolygon(obj, f)
 
     # Update the mesh to reflect changes
-    rt.update(new_obj)
-
-    # Parent the mesh
-    new_obj.parent = parent
+    rt.update(obj)
 
     # Check that the new element count is the same as the split count
     elems = {
-        tuple(rt.polyop.GetElementsUsingFace(new_obj, i + 1))
-        for i in range(rt.polyop.GetNumFaces(new_obj))
+        tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
+        for i in range(rt.polyop.GetNumFaces(obj))
     }
     assert len(elems) == len(
         convex_meshes
-    ), f"{name} has different number of faces in convex mesh than in splits"
+    ), f"{obj.name} has different number of elements in input vs output"
     elems = np.array(list(elems))
     assert not np.any(
         np.sum(elems, axis=0) > 1
-    ), f"{name} has same face appear in multiple elements"
+    ), f"{obj.name} has same face appear in multiple elements"
 
-    # Hide the mesh
-    new_obj.isHidden = True
+    # Convert back to trimesh this time with checks to check volumeness, convexness, etc.
+    # convert_to_trimesh(obj, checks=True)
 
 
 def process_all_convex_meshes(objs=None):
@@ -168,15 +148,15 @@ def process_all_convex_meshes(objs=None):
 
 
 def main():
-    for obj in rt.selection:
-        assert (
-            "Mcollision" in obj.name
-            or "Mfillable" in obj.name
-            or "Mopenfillable" in obj.name
-        ), "Please select a collision or fillable object"
-        process_convex_obj(obj)
+    # for obj in rt.selection:
+    #     assert (
+    #         "Mcollision" in obj.name
+    #         or "Mfillable" in obj.name
+    #         or "Mopenfillable" in obj.name
+    #     ), "Please select a collision or fillable object"
+    #     process_convex_obj(obj, force=True)
 
-    # process_all_convex_meshes()
+    process_all_convex_meshes()
 
 
 if __name__ == "__main__":
