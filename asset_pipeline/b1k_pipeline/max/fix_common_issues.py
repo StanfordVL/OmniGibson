@@ -32,7 +32,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-ior-vray-scale.success"
+PASS_FILENAME = "done-fixfillables.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -682,7 +682,7 @@ def processFile(filename: pathlib.Path):
     # b1k_pipeline.max.convex_decomposition.generate_all_missing_collision_meshes()
 
     # Reduce collision mesh vertex counts
-    # b1k_pipeline.max.collision_vertex_reduction.process_all_convex_meshes()
+    b1k_pipeline.max.collision_vertex_reduction.process_all_convex_meshes()
 
     # Match links
     # b1k_pipeline.max.match_links.process_all_objects()
@@ -730,10 +730,10 @@ def processFile(filename: pathlib.Path):
     #     obj.material.bakedMaterial = old_baked_mtl
 
     # Update baked texture paths if the baked textures are not in the same folder as the max file
-    convert_baked_material_to_vray_and_add_ior()
+    # convert_baked_material_to_vray_and_add_ior()
 
     # Apply the orientation and scale changes
-    b1k_pipeline.max.apply_qa_fixes.apply_qa_fixes_in_open_file()
+    # b1k_pipeline.max.apply_qa_fixes.apply_qa_fixes_in_open_file()
 
     # Update visibility settings
     update_visibilities()
@@ -745,8 +745,39 @@ def processFile(filename: pathlib.Path):
         pass
 
 def fix_common_issues_in_all_files():
+    TGTS = {
+        "legacy_batch-00",
+        "legacy_batch-02",
+        "legacy_batch-04",
+        "legacy_batch-05",
+        "legacy_batch-06",
+        "legacy_batch-07",
+        "school_objects-aa",
+        "Beechwood_0_garden",
+        "Beechwood_0_int",
+        "Beechwood_1_int",
+        "Benevolence_1_int",
+        "Ihlen_0_int",
+        "Ihlen_1_int",
+        "Merom_0_garden",
+        "Merom_0_int",
+        "Merom_1_int",
+        "Pomaria_0_garden",
+        "Pomaria_0_int",
+        "Pomaria_1_int",
+        "Rs_garden",
+        "Rs_int",
+        "Wainscott_0_garden",
+        "Wainscott_0_int",
+        "Wainscott_1_int",
+        "commercial_kitchen_fire_extinguisher",
+        "grocery_store_asian",
+        "grocery_store_convenience",
+        "house_double_floor_lower",
+        "office_large",
+    }
     candidates = [
-        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max")
+        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max") if x.parts[-2] in TGTS
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):
