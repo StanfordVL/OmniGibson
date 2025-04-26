@@ -488,7 +488,6 @@ class OGRobotServer:
         # If home is toggled from OFF -> ON, reset env
         if self._joint_cmd["button_home"].item() != 0.0:
             if not self._in_cooldown:
-                breakpoint()
                 self.reset()
 
         # If left arrow is toggled from OFF -> ON, toggle flashlight on left eef

@@ -38,7 +38,7 @@ class Args:
     start_joints: Optional[Tuple[float, ...]] = None
     
     # Specify which robot to use: 'r1' or 'r1pro'
-    gello_model: Literal["r1", "r1pro"] = "r1"
+    gello_model: Literal["r1", "r1pro"] = "r1pro"
     
     # Joint config defaults will be set based on gello_model
     joint_config_file: Optional[str] = None

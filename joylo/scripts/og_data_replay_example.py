@@ -92,9 +92,9 @@ def replay_hdf5_file(hdf_input_path):
     video_rgb_keys = []
     
     # Create video writer for robot cameras
-    robot_camera_names = ['robot_r1::robot_r1:left_eef_link:Camera:0::rgb', 
-                        'robot_r1::robot_r1:right_eef_link:Camera:0::rgb', 
-                        'robot_r1::robot_r1:eyes:Camera:0::rgb']
+    robot_camera_names = ['robot_r1::robot_r1:left_realsense_link:Camera:0::rgb', 
+                        'robot_r1::robot_r1:right_realsense_link:Camera:0::rgb', 
+                        'robot_r1::robot_r1:zed_link:Camera:0::rgb']
     for robot_camera_name in robot_camera_names:
         video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{robot_camera_name}.mp4"))
         video_rgb_keys.append(robot_camera_name)
