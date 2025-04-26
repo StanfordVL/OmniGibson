@@ -15,7 +15,7 @@ from bddl.knowledge_base.models import *
 from bddl.knowledge_base.utils import *
 
 
-BDDL_DIR = pathlib.Path(bddl.__file__).parent
+BDDL_DIR = pathlib.Path(__file__).parent.parent
 GENERATED_DATA_DIR = BDDL_DIR / "generated_data"
 
 logger = logging.getLogger(__name__)

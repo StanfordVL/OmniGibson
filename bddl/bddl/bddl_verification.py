@@ -18,7 +18,7 @@ from bddl.trivial_backend import *
 
 # Files
 
-BDDL_DIR = pathlib.Path(bddl.__file__).parent
+BDDL_DIR = pathlib.Path(__file__).parent
 
 PROBLEM_FILE_DIR = BDDL_DIR / "activity_definitions"
 PROPS_TO_SYNS_JSON = BDDL_DIR / "generated_data/properties_to_synsets.json"
