@@ -20,6 +20,7 @@ import pymxs
 import tqdm
 
 import b1k_pipeline.utils
+import b1k_pipeline.max.apply_qa_fixes
 import b1k_pipeline.max.import_fillable_meshes
 import b1k_pipeline.max.extract_school_objects
 import b1k_pipeline.max.prebake_textures
@@ -31,7 +32,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-bakeryupdate.success"
+PASS_FILENAME = "done-bakeagain.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -543,6 +544,84 @@ def update_texture_paths():
                 # Then update the path in the bitmap texture
                 sub_texmap.filename = str(correct_path)
 
+def convert_baked_material_to_vray_and_add_ior():
+    MAP_TRANSLATION = {
+        "Diffuse map": "Base Color Map",
+        "Bump map": "Bump Map",
+        "Refl. gloss.": "Roughness Map",
+        "Reflect map": "Reflectivity Map",
+        "Refract map": "Transparency Map",
+        "Metalness": "Metalness Map",
+        "Fresnel IOR": "IOR Map",
+    }
+
+    for obj in rt.objects:
+        parsed_name = b1k_pipeline.utils.parse_name(obj.name)
+        if not parsed_name:
+            continue
+        if parsed_name.group("meta_type"):
+            continue
+        if parsed_name.group("instance_id") != "0":
+            continue
+        if parsed_name.group("bad"):
+            continue
+        if parsed_name.group("joint_side") == "upper":
+            continue
+
+        mtl = obj.material
+        if not mtl or rt.classOf(mtl) != rt.Shell_Material:
+            continue
+
+        baked_mtl = mtl.bakedMaterial
+        assert rt.classOf(baked_mtl) == rt.Physical_Material, \
+            f"Object {obj.name} baked material is not a Physical Material, but {rt.classOf(baked_mtl)}"
+
+        maps = {}
+        for map_idx in range(rt.getNumSubTexmaps(baked_mtl)):
+            channel_name = rt.getSubTexmapSlotName(baked_mtl, map_idx + 1)
+            sub_texmap = rt.getSubTexmap(baked_mtl, map_idx + 1)
+            if sub_texmap is not None:
+                if channel_name == "Transparency Color Map":
+                    channel_name = "Transparency Map"
+                maps[channel_name] = sub_texmap
+                
+        # If there is no IOR map, try to guess it from the name
+        if "IOR Map" not in maps:
+            ior_map_filename = pathlib.Path(rt.maxFilePath) / "bakery" / f"{obj.name}_VRayMtlReflectIORBake.exr"
+            assert ior_map_filename.exists(), f"IOR map {ior_map_filename} for object {obj.name} does not exist"
+
+            # Create a new bitmap and use it as the IOR map
+            ior_map = rt.Bitmaptexture()
+            ior_map.filename = str(ior_map_filename)
+            ior_map.coords.mapChannel = 99
+
+            maps["IOR Map"] = ior_map
+
+        # Check that we have ALL of the maps we need
+        missing_keys = set(MAP_TRANSLATION.values()) - set(maps.keys())
+        assert not missing_keys, f"Missing maps {missing_keys} for object {obj.name}. Found only {set(maps.keys())}"
+
+        # Start converting to the new material
+        new_mtl = rt.VRayMtl()
+        new_mtl.name = obj.name + "__baked"
+        new_mtl.reflection_lockIOR = False
+        converted_keys = set()
+        for map_idx in range(rt.getNumSubTexmaps(new_mtl)):
+            channel_name = rt.getSubTexmapSlotName(new_mtl, map_idx + 1)
+            if channel_name not in MAP_TRANSLATION:
+                continue
+            assert channel_name not in converted_keys, f"Duplicate channel name {channel_name} for object {obj.name}"
+
+            old_map = maps[MAP_TRANSLATION[channel_name]]
+            rt.setSubTexmap(new_mtl, map_idx + 1, old_map)
+            old_map.name = f"{obj.name}__baked__{channel_name}"
+            converted_keys.add(channel_name)
+        missing_converted_keys = set(MAP_TRANSLATION.keys()) - converted_keys
+        assert not missing_converted_keys, f"Not all maps converted for object {obj.name}: {missing_converted_keys}"
+
+        mtl.bakedMaterial = new_mtl
+        
+
 def processFile(filename: pathlib.Path):
     # Load file, fixing the units
     print(f"\n\nProcessing {filename}")
@@ -651,10 +730,13 @@ def processFile(filename: pathlib.Path):
     #     obj.material.bakedMaterial = old_baked_mtl
 
     # Update baked texture paths if the baked textures are not in the same folder as the max file
-    # update_texture_paths()
+    # convert_baked_material_to_vray_and_add_ior()
+
+    # Apply the orientation and scale changes
+    # b1k_pipeline.max.apply_qa_fixes.apply_qa_fixes_in_open_file()
 
     # Update visibility settings
-    # update_visibilities()
+    update_visibilities()
 
     # Save again.
     rt.saveMaxFile(str(filename))
@@ -663,8 +745,14 @@ def processFile(filename: pathlib.Path):
         pass
 
 def fix_common_issues_in_all_files():
+    TGTS = {
+        "house_single_floor",
+        "Beechwood_0_garden",
+        "Rs_garden",
+        "house_double_floor_lower"
+    }
     candidates = [
-        pathlib.Path(x) for x in glob.glob(r"D:\ig_pipeline\cad\*\*\processed.max")
+        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max") if x.parts[-2] in TGTS
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):

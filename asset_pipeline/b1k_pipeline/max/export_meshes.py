@@ -48,14 +48,18 @@ def save_meta_mesh(obj, output_fs):
     assert faces.shape[1] == 3, f"{obj.name} has non-triangular faces"
 
     # Split the faces into elements
-    elems = {
-        tuple(rt.polyop.GetElementsUsingFace(obj, i + 1))
-        for i in range(rt.polyop.GetNumFaces(obj))
-    }
+    faces_not_yet_found = np.zeros(faces.shape[0], dtype=bool)
+    elems = []
+    while not np.all(faces_not_yet_found):
+        next_not_found_face = int(np.where(~faces_not_yet_found)[0][0])
+        elem = np.array(rt.polyop.GetElementsUsingFace(obj, [next_not_found_face + 1]))
+        assert elem[next_not_found_face], "Searched face not found in element."
+        elems.append(elem)
+        faces_not_yet_found[elem] = True
     assert len(elems) <= 40, f"{obj.name} should not have more than 40 elements."
-    elems = np.array(list(elems))
+    elems = np.array(elems)
     assert not np.any(
-        np.sum(elems, axis=0) > 1
+        np.sum(elems.astype(int), axis=0) > 1
     ), f"{obj.name} has same face appear in multiple elements"
 
     # Iterate through the elements

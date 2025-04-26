@@ -45,13 +45,13 @@ NEW_UV_CHANNEL = 99
 
 # PhysicalMaterial
 CHANNEL_MAPPING = {
-    "VRayRawDiffuseFilterMap": "Base Color Map",  # or VRayDiffuseFilter
-    "VRayNormalsMap": "Bump Map",  # or VRayBumpNormals
-    "VRayMtlReflectGlossinessBake": "Roughness Map",  # iGibson/Omniverse renderer expects we flip the glossiness map
-    "VRayRawReflectionFilterMap": "Reflectivity Map",
-    "VRayRawRefractionFilterMap": "Transparency Map",
-    "VRayMetalnessMap": "Metalness Map",  # requires V-ray 5, update 2.3
-    "VRayMtlReflectIORBake": "IOR Map",
+    "VRayRawDiffuseFilterMap": "Diffuse map",  # or VRayDiffuseFilter
+    "VRayNormalsMap": "Bump map",  # or VRayBumpNormals
+    "VRayMtlReflectGlossinessBake": "Refl. gloss.",  # iGibson/Omniverse renderer expects we flip the glossiness map
+    "VRayRawReflectionFilterMap": "Reflect map",
+    "VRayRawRefractionFilterMap": "Refract map",
+    "VRayMetalnessMap": "Metalness",  # requires V-ray 5, update 2.3
+    "VRayMtlReflectIORBake": "Fresnel IOR",
 }
 
 CHANNEL_DATA_FORMAT_OVERRIDES = {
@@ -230,10 +230,16 @@ class TextureBaker:
 
         print("uv_unwrapping", obj.name)
 
+        rt.polyop.setMapSupport(obj, 99, False)
+        assert not rt.polyop.getMapSupport(obj, 99), f"Failed to clear UV channel 99 for {obj.name} prior to unwrapping"
         if USE_UNWRELLA:
             self.uv_unwrapping_unwrella(obj)
+            if not rt.polyop.getMapSupport(obj, 99):
+                print(f"Unwrella failed for {obj.name}, falling back to native unwrapping.")
+                self.uv_unwrapping_native(obj)
         else:
             self.uv_unwrapping_native(obj)
+        assert rt.polyop.getMapSupport(obj, 99), f"Could not unwrap UVs for object {obj.name}"
 
         # Flatten the modifier stack
         rt.maxOps.collapseNodeTo(obj, 1, True)
@@ -290,7 +296,7 @@ class TextureBaker:
             # Only the first channel requires creating the new PhysicalMaterial
             if i == 0:
                 btt.setOutputTo(
-                    obj, "CreateNewMaterial", material=rt.PhysicalMaterial()
+                    obj, "CreateNewMaterial", material=rt.VrayMtl()
                 )
                 # btt.setOutputTo(obj, "CreateNewMaterial", material=rt.PBRMetalRough())
 
@@ -319,6 +325,15 @@ class TextureBaker:
     def postprocess_texture_baking(self, obj, siblings):
         # Set the object to render the baked material
         obj.material.renderMtlIndex = 1
+
+        new_mtl = obj.material.bakedMaterial
+        new_mtl.name = obj.name + "__baked"
+        new_mtl.reflection_lockIOR = False
+        for map_idx in range(rt.getNumSubTexmaps(new_mtl)):
+            channel_name = rt.getSubTexmapSlotName(new_mtl, map_idx + 1)
+            texmap = rt.getSubTexmap(new_mtl, map_idx + 1)
+            if texmap:
+                texmap.name = f"{obj.name}__baked__{channel_name}"
 
         # Update everything that has the same baseobject to use the same material
         for sibling in siblings:

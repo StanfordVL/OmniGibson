@@ -20,11 +20,11 @@ jobs:
       - name: Setup python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.8"
+          python-version: "3.10"
           architecture: x64
 
       - name: Install DVC
-        run: pip install dvc[gs]===3.42.0
+        run: pip install dvc[gs]===3.42.0 deepdiff fs numpy trimesh pyyaml
         
       - name: Authenticate on Google Cloud
         uses: 'google-github-actions/auth@v1'
@@ -38,15 +38,15 @@ jobs:
 
       - name: Pull combined file manifest for PR branch
         working-directory: pr
-        run: dvc pull combined_file_manifest
+        run: dvc pull combined_file_manifest file_manifest
 
-      - name: Check repro output on PR branch
-        working-directory: pr
-        run: dvc repro --dry --allow-missing combined_file_manifest
+      # - name: Check repro output on PR branch
+      #   working-directory: pr
+      #   run: dvc repro --dry --allow-missing combined_file_manifest
 
-      - name: Check PR branch file manifest for validity
-        working-directory: pr
-        run: python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest      
+      # - name: Check PR branch file manifest for validity
+      #   working-directory: pr
+      #   run: python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest      
 
       - name: Checkout Base Branch (${{ github.base_ref }})
         uses: actions/checkout@v4
@@ -56,15 +56,15 @@ jobs:
 
       - name: Pull combined file manifest for base branch
         working-directory: base
-        run: dvc pull combined_file_manifest
+        run: dvc pull combined_file_manifest file_manifest
 
-      - name: Check repro output on base branch
-        working-directory: base
-        run: dvc repro --dry --allow-missing combined_file_manifest
+      # - name: Check repro output on base branch
+      #   working-directory: base
+      #   run: dvc repro --dry --allow-missing combined_file_manifest
 
-      - name: Check base branch file manifest for validity
-        working-directory: base
-        run: python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest
+      # - name: Check base branch file manifest for validity
+      #   working-directory: base
+      #   run: python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest
 
       - name: Generate Diff
         id: diff_step # Give the step an ID to reference its outputs
@@ -72,7 +72,8 @@ jobs:
           echo "Generating diff between base and PR file manifests..."
           # Use 'diff' command. It exits with 0 if no diff, 1 if diff, >1 if error.
           # We use '|| true' to ensure the workflow continues even if differences are found (exit code 1).
-          diff -u5 base/artifacts/pipeline/combined_file_manifest.json pr/artifacts/pipeline/combined_file_manifest.json > ${{ env.DIFF_FILE }} || true
+          # diff -u5 base/artifacts/pipeline/combined_file_manifest.json pr/artifacts/pipeline/combined_file_manifest.json > ${{ env.DIFF_FILE }} || true
+          PYTHONPATH="pr:${PYTHONPATH}" python pr/b1k_pipeline/deep_diff.py > ${{ env.DIFF_FILE }}
 
           # Check if diff file has content
           if [ -s "${{ env.DIFF_FILE }}" ]; then

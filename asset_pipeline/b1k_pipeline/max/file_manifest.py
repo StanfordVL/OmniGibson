@@ -71,7 +71,7 @@ def hash_attrs(obj):
     # it makes the files grow to tens of megabytes and makes them really hard to diff so we don't do that.
     # But if you want to, just return hash_dict instead of the hash to get the full information for
     # debugging.
-    return {"unified_hash": hash_single_thing(hash_dict)}
+    return hash_dict  # {"unified_hash": hash_single_thing(hash_dict)}
 
 def hash_material(root_mat):
     """
