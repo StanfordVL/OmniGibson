@@ -916,7 +916,6 @@ class Task(Model):
             "preserving_meat-0",
             "bringing_glass_to_recycling-0",
             "watering_outdoor_flowers-0",
-            "treating_spot-0",
             "fill_a_bucket_in_a_small_sink-0",
             "can_syrup-0",
             "can_beans-0",
