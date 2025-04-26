@@ -10,8 +10,8 @@
     
     (:init 
         (ontop picture_frame.n.01_1 floor.n.01_1)
-        (inroom floor.n.01_1 corridor) 
-        (inroom wall_nail.n.01_1 corridor)
+        (inroom floor.n.01_1 kitchen)
+        (inroom wall_nail.n.01_1 kitchen)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
