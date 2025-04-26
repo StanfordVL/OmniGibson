@@ -682,7 +682,7 @@ def processFile(filename: pathlib.Path):
     # b1k_pipeline.max.convex_decomposition.generate_all_missing_collision_meshes()
 
     # Reduce collision mesh vertex counts
-    b1k_pipeline.max.collision_vertex_reduction.process_all_convex_meshes()
+    # b1k_pipeline.max.collision_vertex_reduction.process_all_convex_meshes()
 
     # Match links
     # b1k_pipeline.max.match_links.process_all_objects()
@@ -714,7 +714,7 @@ def processFile(filename: pathlib.Path):
     #         # baked_mtls_by_object[obj] = obj.material.bakedMaterial
     #         obj.material = obj.material.originalMaterial
     #         assert rt.classOf(obj.material) != rt.Shell_Material, f"{obj} material should not be shell material before baking"
-    # b1k_pipeline.max.prebake_textures.process_open_file()
+    b1k_pipeline.max.prebake_textures.process_open_file()
     # for obj, old_baked_mtl in baked_mtls_by_object.items():
     #     # Make sure it got baked again
     #     if not rt.classOf(obj.material) == rt.Shell_Material:
@@ -749,6 +749,7 @@ def fix_common_issues_in_all_files():
         "house_single_floor",
         "Beechwood_0_garden",
         "Rs_garden",
+        "house_double_floor_lower"
     }
     candidates = [
         x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max") if x.parts[-2] in TGTS
