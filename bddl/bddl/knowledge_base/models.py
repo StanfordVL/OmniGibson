@@ -626,7 +626,7 @@ class TransitionRule(Model):
 @dataclass(eq=False, order=False)
 class Task(Model):
     name: str
-    definition: str
+    definition : str = field(default="", repr=False)
     synsets_fk: ManyToMany = ManyToManyField(
         Synset, "tasks"
     )  # the synsets required by this task
@@ -639,6 +639,9 @@ class Task(Model):
     class Meta:
         pk = "name"
         ordering = ["name"]
+
+    def __str__(self):
+        return self.name
 
     @cached_property
     def state(self):
@@ -694,6 +697,8 @@ class Task(Model):
         return any(
             pred.name in ["folded", "draped", "unfolded"]
             for pred in self.uses_predicates
+        ) or any(
+            "cloth" in synset.property_names for synset in self.synsets
         )
 
     @cached_property
@@ -896,9 +901,7 @@ class Task(Model):
             "collecting_aluminum_cans-0",
             "clearing_the_table_after_dinner-0",
             "loading_the_dishwasher-0",
-            "cleaning_out_drawers-0",
             "buying_fast_food-0",
-            "defrosting_freezer-0",
             "hiding_Easter_eggs-0",
             "sorting_mail-0",
             "make_dessert_watermelons-0",
@@ -912,9 +915,7 @@ class Task(Model):
             "clean_up_your_desk-0",
             "preserving_meat-0",
             "bringing_glass_to_recycling-0",
-            "treating_clothes-0",
             "watering_outdoor_flowers-0",
-            "clean_a_glass_windshield-0",
             "treating_spot-0",
             "fill_a_bucket_in_a_small_sink-0",
             "can_syrup-0",
@@ -931,14 +932,11 @@ class Task(Model):
             "adding_chemicals_to_lawn-0",
             "watering_indoor_flowers-0",
             "cleaning_bathtub-0",
-            "cleaning_barbecue_grill-0",
-            "clean_a_LED_screen-0",
-            "clean_a_glass_windshield-0",
             "putting_up_shelves-0",
             "putting_on_license_plates-0",
-            "hang_a_dartboard-0",
+            "installing_smoke_detectors-0",
             "hanging_pictures-0",
-            "putting_on_license_plates-0",
+            "attach_a_camera_to_a_tripod-0 ",
             "cook_hot_dogs-0",
             "make_a_steak-0",
             "toast_buns-0",
@@ -961,7 +959,6 @@ class Task(Model):
             "installing_alarms-0",
             "turning_out_all_lights_before_sleep-0",
             "turn_off_a_normal_school_calculator-0",
-            "clean_a_air_conditioner-0",
             "turning_off_the_hot_tub-0",
             "chop_an_onion-0",
             "slicing_vegetables-0",
@@ -990,20 +987,11 @@ class Task(Model):
             "make_chocolate_biscuits-0",
             "make_cookies-0",
             "make_dinner_rolls-0",
-            "clean_sheets-0",
             "clean_a_hamper-0",
             "clean_a_tie-0",
             "wash_a_baseball_cap-0",
             "wash_dog_toys-0",
             "wash_goalkeeper_gloves-0",
-            "hanging_up_bedsheets-0",
-            "making_the_bed-0",
-            "folding_piece_of_cloth-0",
-            "laying_clothes_out-0",
-            "putting_clean_laundry_away-0",
-            "putting_tablecloth_on_table-0",
-            "fold_towels-0",
-            "prepare_your_garden_for_a_cat-0",
         ]
         return [x for x in cls.all_objects() if x.name in CHALLENGE_TASKS]
 
