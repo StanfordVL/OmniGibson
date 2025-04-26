@@ -31,13 +31,13 @@ logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
 
 CHANNEL_MAPPING = {
-    "Base Color Map": ("diffuse", "map_Kd"),
-    "Bump Map": ("normal", "map_bump"),
-    "Roughness Map": ("roughness", "map_Pr"),
-    "Metalness Map": ("metalness", "map_Pm"),
-    "Transparency Map": ("refraction", "map_Tf"),
-    "Reflectivity Map": ("reflection", "map_Ks"),
-    "IOR Map": ("ior", "map_Ns"),
+    "Diffuse map": ("diffuse", "map_Kd"),
+    "Bump map": ("normal", "map_bump"),
+    "Refl. gloss.": ("roughness", "map_Pr"),
+    "Metalness": ("metalness", "map_Pm"),
+    "Refract map": ("refraction", "map_Tf"),
+    "Reflect map": ("reflection", "map_Ks"),
+    "Fresnel IOR": ("ior", "map_Ns"),
 }
 
 ALLOWED_PART_TAGS = {
