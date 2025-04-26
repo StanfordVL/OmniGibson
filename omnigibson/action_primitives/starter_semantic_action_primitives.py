@@ -61,6 +61,7 @@ from omnigibson.utils.motion_planning_utils import detect_robot_collision_in_sim
 from omnigibson.utils.object_state_utils import sample_cuboid_for_predicate
 from omnigibson.utils.python_utils import multi_dim_linspace
 from omnigibson.utils.ui_utils import create_module_logger
+from omnigibson.utils.sampling_utils import raytest
 
 m = create_module_macros(module_path=__file__)
 
@@ -958,12 +959,25 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         num_eyes_pos_samples = 5
         num_eyes_orn_samples = 5
+        eyes_obj_min_distance = 0.2
         for i in range(num_eyes_pos_samples):
             # World frame
             sampled_eyes_pos = self.sample_eyes_pos(
                 source_pose=eye_pose_for_sampled_base_pose, robot_pose=robot_pose_for_sampled_base
             )
             eye_to_obj_vec = obj_pos - sampled_eyes_pos
+            if eye_to_obj_vec.norm() < eyes_obj_min_distance:
+                print("sampled eyes pos too close to object, skipping sample")
+                continue
+            raytest_result = raytest(sampled_eyes_pos, obj_pos, only_closest=True)
+            if not raytest_result["hit"]:
+                print("raytest from eyes to object does not hit, skipping sample")
+                continue
+            elif raytest_result["hit"] and raytest_result["rigidBody"] != self._tracking_object.root_link.prim_path:
+                print(
+                    f"raytest from eyes to object hits something else, expect {self._tracking_object.root_link.prim_path}, got {raytest_result['rigidBody']}, skipping sample"
+                )
+                continue
             # print("dist: ", th.linalg.norm(eye_pos_for_sampled_base_pos - sampled_eyes_pos))
             # from omnigibson.utils.ui_utils import draw_line
             # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist())
