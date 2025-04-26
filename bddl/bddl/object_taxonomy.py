@@ -1,24 +1,19 @@
 import copy
 import json
-import pkgutil
+import pathlib
 
 import networkx as nx
 import bddl
 
-DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
-    bddl.__package__, "generated_data/output_hierarchy_properties.json"
-)
+DEFAULT_HIERARCHY_FILE = pathlib.Path(__file__).parent / "generated_data/output_hierarchy_properties.json"
 
 
 class ObjectTaxonomy(object):
     def __init__(self, hierarchy_type="default"):
-        self.taxonomy = self._parse_taxonomy(DEFAULT_HIERARCHY_FILE)
+        self.refresh_hierarchy_file()
 
     def refresh_hierarchy_file(self):
-        DEFAULT_HIERARCHY_FILE = pkgutil.get_data(
-            bddl.__package__, "generated_data/output_hierarchy_properties.json"
-        )
-        self.taxonomy = self._parse_taxonomy(DEFAULT_HIERARCHY_FILE)
+        self.taxonomy = self._parse_taxonomy(DEFAULT_HIERARCHY_FILE.read_text())
 
     @staticmethod
     def _parse_taxonomy(json_str):
