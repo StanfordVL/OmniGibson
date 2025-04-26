@@ -82,6 +82,7 @@ class CuRoboMotionGenerator:
         batch_size=2,
         use_cuda_graph=True,
         use_eyes_targets=True,
+        restrict_torso_joint_limits=False,
         debug=False,
         embodiment_types=None,
         collision_activation_distance=m.DEFAULT_COLLISION_ACTIVATION_DISTANCE,
@@ -168,8 +169,8 @@ class CuRoboMotionGenerator:
 
             if isinstance(robot, HolonomicBaseRobot):
                 self.update_joint_limits(robot_cfg_obj, emb_sel, scene_model=scene_model)
-                # if isinstance(robot, R1):
-                #     self.update_torso_joint_limits(robot_cfg_obj, emb_sel)
+                if restrict_torso_joint_limits and isinstance(robot, R1):
+                    self.update_torso_joint_limits(robot_cfg_obj, emb_sel)
 
             motion_kwargs = dict(
                 trajopt_tsteps=32,
@@ -1199,9 +1200,12 @@ class CuRoboMotionGenerator:
                 )
                 # cur_torso_pos = self.robot.get_joint_positions()[6:10]
 
-                nominal_pos = th.tensor([5.2360e-01, -1.0472e00, -5.2360e-01, 0.0])
+                nominal_pos = th.tensor([1.375, -2.195, -0.96, 0.0])
+                # nominal_pos = th.tensor([5.2360e-01, -1.0472e00, -5.2360e-01, 0.0])
                 # nominal_pos += th.tensor([0.2, -0.4, -0.2, 0.0])
-                joint_limit_offset = th.tensor([[-0.1, -1.0, -1.0, -0.84], [0.2, 0.1, 0.1, 0.84]])
+                # joint_limit_offset = th.tensor([[-0.1, -1.0, -1.0, -0.84], [0.2, 0.1, 0.1, 0.84]])
+                offset = 0.1
+                joint_limit_offset = th.tensor([[-offset, -offset, -0.3, -0.84], [offset, offset, 0.14, 0.84]])
                 min_torso_limit = nominal_pos + joint_limit_offset[0]
                 max_torso_limit = nominal_pos + joint_limit_offset[1]  # range 30 degrees, 0.27, range 15 degrees 0.135
 

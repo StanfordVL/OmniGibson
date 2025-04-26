@@ -169,6 +169,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         debug_visual_marker=None,
         skip_curobo_initilization=False,
         use_base_pose_hack=False,
+        real_robot_mode=False,
     ):
         """
         Initializes a StarterSemanticActionPrimitives generator.
@@ -218,6 +219,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 scene_model=scene_model,
                 embodiment_types=curobo_embodiment_types,
                 use_eyes_targets=enable_head_tracking,
+                restrict_torso_joint_limits=real_robot_mode,
             )
         )
 
@@ -255,6 +257,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self.target_eyes_pose_arr = []
         self.attached_obj_info = {"attached_obj": None, "attached_obj_scale": None}
         self.use_base_pose_hack = use_base_pose_hack
+        self.real_robot_mode = real_robot_mode
 
     @property
     def arm(self):
@@ -830,9 +833,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         # TODO (eric - datagen): specific to R1 only
         # Generate random samples within the cube range
-        x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.4)
-        y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.05, eye_pos_wrt_robot[1] + 0.05)
-        z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.4, eye_pos_wrt_robot[2])
+        if self.real_robot_mode:
+            x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.05)
+            y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.01, eye_pos_wrt_robot[1] + 0.01)
+            z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.025, eye_pos_wrt_robot[2])
+        else:
+            x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.4)
+            y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.05, eye_pos_wrt_robot[1] + 0.05)
+            z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.4, eye_pos_wrt_robot[2])
 
         sampled_eyes_pos_wrt_robot = np.array([x_sample, y_sample, z_sample])
         sampled_eyes_pos_wrt_world = T.pose2mat(robot_pose_wrt_world) @ np.hstack([sampled_eyes_pos_wrt_robot, 1])
