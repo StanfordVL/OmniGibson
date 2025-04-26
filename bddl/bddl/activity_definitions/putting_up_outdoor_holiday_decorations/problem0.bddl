@@ -20,9 +20,6 @@
         (inside wreath.n.01_1 carton.n.02_1)
         (inside icicle_lights.n.01_1 carton.n.02_1) 
         (inside rose.n.01_1 carton.n.02_1) 
-        (not 
-            (toggled_on icicle_lights.n.01_1)
-        ) 
         (inroom floor.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
         (inroom wall_nail.n.01_1 garden) 
@@ -35,7 +32,6 @@
         (and 
             (attached ?wreath.n.01_1 ?wall_nail.n.01_1)
             (ontop ?icicle_lights.n.01_1 ?pot_plant.n.01_1)
-            (toggled_on ?icicle_lights.n.01_1) 
             (ontop ?rose.n.01_1 ?lawn.n.01_1)
             (ontop ?pot_plant.n.01_1 ?lawn.n.01_1)
         )
