@@ -87,6 +87,7 @@ class OGRobotServer:
         self._resume_cooldown_time = None
         self._in_cooldown = False
         self._current_trunk_translate = DEFAULT_TRUNK_TRANSLATE
+        self._current_trunk_tilt_offset = 0.0
         self._current_trunk_tilt = 0.0
         self._joint_state = None
         self._joint_cmd = None
@@ -122,8 +123,11 @@ class OGRobotServer:
         self.active_arm = "right"
         self._arm_shoulder_directions = {"left": -1.0, "right": 1.0}
         self.obs = {}
+        
+        # Cache values
+        self._trunk_tilt_limits = {"lower": self.robot.joint_lower_limits[self.robot.trunk_control_idx][2],
+                                   "upper": self.robot.joint_upper_limits[self.robot.trunk_control_idx][2]}
 
-        # Experimental optimizations
         with og.sim.stopped():
             # # Set lower position iteration count for faster sim speed
             # og.sim._physics_context._physx_scene_api.GetMaxPositionIterationCountAttr().Set(8)
@@ -584,14 +588,25 @@ class OGRobotServer:
 
             # Apply trunk action
             if SIMPLIFIED_TRUNK_CONTROL:
+                # Update trunk translation (height)
                 self._current_trunk_translate = float(th.clamp(
-                    th.tensor(self._current_trunk_translate, dtype=th.float) - th.tensor(self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), dtype=th.float),
+                    th.tensor(self._current_trunk_translate, dtype=th.float) - 
+                    th.tensor(self._joint_cmd["trunk"][0].item() * og.sim.get_sim_step_dt(), dtype=th.float),
                     0.0,
                     2.0
                 ))
-                action[self.robot.trunk_action_idx] = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
-            else:
-                raise NotImplementedError("Non-simplified trunk control is no longer supported!")
+                trunk_action = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
+                
+                # Update trunk tilt offset
+                self._current_trunk_tilt_offset = float(th.clamp(
+                    th.tensor(self._current_trunk_tilt_offset, dtype=th.float) + 
+                    th.tensor(self._joint_cmd["trunk"][1].item() * og.sim.get_sim_step_dt(), dtype=th.float),
+                    self._trunk_tilt_limits["lower"] - trunk_action[2],
+                    self._trunk_tilt_limits["upper"] - trunk_action[2]
+                ))
+                trunk_action[2] = trunk_action[2] + self._current_trunk_tilt_offset
+                
+                action[self.robot.trunk_action_idx] = trunk_action
 
             # Update vertical visualizers
             if USE_VERTICAL_VISUALIZERS:
@@ -624,6 +639,7 @@ class OGRobotServer:
         self._resume_cooldown_time = time.time() + N_COOLDOWN_SECS
         self._in_cooldown = True
         self._current_trunk_translate = DEFAULT_TRUNK_TRANSLATE
+        self._current_trunk_tilt_offset = 0.0
         self._current_trunk_tilt = 0.0
         self._waiting_to_resume = True
         self._joint_state = self.robot.reset_joint_pos

@@ -190,8 +190,10 @@ class JoyconAgent(Agent):
         base_speed = self.max_translation if not self.jc_left.get_button_l_stick() else self.max_translation * 2.0
         base_trunk_vals[:2] = joystick_values["left"] * base_speed * np.array([1.0, -1.0])
 
-        # Right stick is (trunk_dry, base_drz)
-        base_trunk_vals[[4, 2]] = joystick_values["right"] * np.array([-self.max_trunk_tilt, -self.max_rotation])
+        # Right stick is (trunk_dry, base_drz); only apply trunk_dry if the right stick is pressed
+        trunk_tilt_value = -self.max_trunk_tilt if self.jc_right.get_button_r_stick() else 0
+        base_yaw_value = -self.max_rotation if not self.jc_right.get_button_r_stick() else 0
+        base_trunk_vals[[4, 2]] = joystick_values["right"] * np.array([trunk_tilt_value, base_yaw_value])
  
             
         # Left joycon up/down buttons control (trunk_dz or combined trunk dz and tilt)
