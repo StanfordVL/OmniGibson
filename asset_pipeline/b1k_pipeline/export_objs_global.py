@@ -27,6 +27,10 @@ from b1k_pipeline.utils import (
     save_mesh,
 )
 
+from bddl.object_taxonomy import ObjectTaxonomy
+
+OBJECT_TAXONOMY = ObjectTaxonomy()
+
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
 
@@ -46,10 +50,29 @@ ALLOWED_PART_TAGS = {
     "connectedpart",
 }
 
+# Objects that don't require these meta types should not have them
+REQUIRED_ONLY_META_TYPES = {
+    "fluidsource",
+    "togglebutton",
+    "heatsource",
+    "particleapplier",
+    "particleremover",
+    "fluidsink",
+    "slicer",
+    "fillable",
+}
+
 CLOTH_SUBDIVISION_THRESHOLD = 0.05
 
 LOG_SURFACE_AREA_RANGE = (-6, 4)
 LOG_TEXTURE_RANGE = (4, 11)
+
+
+def get_required_meta_links(category):
+    synset = OBJECT_TAXONOMY.get_synset_from_category(category)
+    if synset is None:
+        raise ValueError(f"Category {category} not found in taxonomy.")
+    return OBJECT_TAXONOMY.get_required_meta_links_for_synset(synset)
 
 
 def get_category_density(category):
@@ -281,6 +304,7 @@ def process_link(
 
             # Fix texture file paths if necessary.
             material_maps = G.nodes[link_node]["material_maps"]
+            moved_material_maps = {}
             for map_channel, map_path in material_maps.items():
                 assert os.path.exists(map_path), f"Texture file {map_path} does not exist!"
 
@@ -288,11 +312,12 @@ def process_link(
                 # to copy the file.
                 src_map_dir = os.path.dirname(map_path)
                 src_map_filename = os.path.basename(map_path)
+                src_map_ext = os.path.splitext(src_map_filename)[1]
                 src_map_fs = OSFS(src_map_dir)
 
                 assert map_channel in CHANNEL_MAPPING, f"Unknown channel {map_channel}"
                 dst_fname, _ = CHANNEL_MAPPING[map_channel]
-                dst_texture_filename = f"{model_id}__{link_name}__{dst_fname}.png"
+                dst_texture_filename = f"{model_id}__{link_name}__{dst_fname}{src_map_ext}"
 
                 # Load the image
                 # TODO: Re-enable this after tuning it.
@@ -308,6 +333,8 @@ def process_link(
                     obj_link_material_folder_fs,
                     dst_texture_filename,
                 )
+
+                moved_material_maps[map_channel] = dst_texture_filename
 
         # Copy the OBJ into the right spot
         fs.copy.copy_file(
@@ -368,8 +395,9 @@ def process_link(
                 for line in f.readlines():
                     if "map_Kd material_0.png" in line:
                         line = ""
-                        for file_suffix, mtl_key in CHANNEL_MAPPING.values():
-                            line += f"{mtl_key} ../../material/{model_id}__{link_name}__{file_suffix}.png\n"
+                        for channel_name, channel_filename in moved_material_maps.items():
+                            _, mtl_key = CHANNEL_MAPPING[channel_name]
+                            line += f"{mtl_key} ../../material/{channel_filename}\n"
                     new_lines.append(line)
 
             with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:
@@ -662,6 +690,18 @@ def process_link(
                 "scale": " ".join([str(item) for item in cm_scale]),
             }
             
+    # Filter non-required meta links
+    meta_links = copy.deepcopy(meta_links)
+    required_meta_types = get_required_meta_links(category_name)
+    found_nonoptional_meta_types = (
+        set(meta_links.keys()) & REQUIRED_ONLY_META_TYPES
+    )
+    found_extra_nonoptional_meta_types = (
+        found_nonoptional_meta_types - required_meta_types
+    )
+    if found_extra_nonoptional_meta_types:
+        for extra_meta_type in found_extra_nonoptional_meta_types:
+            del meta_links[extra_meta_type]
 
     out_metadata["meta_links"][link_name] = meta_links
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]

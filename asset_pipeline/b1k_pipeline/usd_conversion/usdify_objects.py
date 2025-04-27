@@ -16,7 +16,7 @@ import tqdm
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR
 
 WORKER_COUNT = 4
-BATCH_SIZE = 32
+BATCH_SIZE = 64
 MAX_TIME_PER_PROCESS = 5 * 60  # 5 minutes
 
 def run_on_batch(dataset_path, batch):
