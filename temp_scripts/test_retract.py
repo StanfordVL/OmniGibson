@@ -86,63 +86,101 @@ primitive = StarterSemanticActionPrimitives(env, env.robots[0], enable_head_trac
 
 for _ in range(100): og.sim.step()
 right_eef_pose = robot.links["right_eef_link"].get_position_orientation()
-# breakpoint()
+breakpoint()
 
 
 # set state
 import pickle
-state = pickle.load(open("/home/arpit/test_projects/mimicgen/random_files/start_of_last_nav.pickle", "rb"))
+state = pickle.load(open("/home/arpit/test_projects/mimicgen/random_files/second_retract.pickle", "rb"))
 og.sim.load_state(state)
 for _ in range(20): og.sim.step()
 current_right_eef_pose = robot.links["right_eef_link"].get_position_orientation()
+breakpoint()
+
+# Test Arm retract MP
+emb_sel = "arm_no_torso"
+target_pos = {"right_eef_link": right_eef_pose[0]}
+target_quat = {"right_eef_link": current_right_eef_pose[1]} # Retain current orientation
+plate_602 = env.scene.object_registry("name", "plate_602")
+attached_obj = {"right_eef_link": plate_602.root_link}
+attached_obj_scale = {"right_eef_link": 0.9}
+primitive.attached_obj_info = {"attached_obj": attached_obj, "attached_obj_scale": attached_obj_scale}
 # breakpoint()
 
-eef_pose = {'left': (th.tensor([[ 7.071, -1.833,  1.599],
-        [ 7.086, -1.879,  1.614],
-        [ 7.095, -1.917,  1.580],
-        [ 7.149, -1.971,  1.583],
-        [ 7.120, -1.991,  1.589],
-        [ 7.116, -1.992,  1.590],
-        [ 7.118, -1.981,  1.577],
-        [ 7.108, -1.845,  1.525]]), th.tensor([[ 0.769, -0.226,  0.069,  0.593],
-        [ 0.794, -0.165,  0.091,  0.579],
-        [ 0.825, -0.130,  0.091,  0.542],
-        [ 0.834, -0.102,  0.125,  0.528],
-        [ 0.824, -0.123,  0.116,  0.541],
-        [ 0.821, -0.128,  0.111,  0.546],
-        [ 0.846, -0.114,  0.106,  0.509],
-        [ 0.822, -0.244,  0.067,  0.510]])), 'right': (th.tensor([[ 6.529, -1.769,  1.300],
-        [ 6.529, -1.769,  1.300],
-        [ 6.529, -1.769,  1.300],
-        [ 6.529, -1.769,  1.300],
-        [ 6.529, -1.769,  1.300],
-        [ 6.529, -1.769,  1.300],
-        [ 6.529, -1.769,  1.300],
-        [ 6.529, -1.769,  1.300]]), th.tensor([[-0.194,  0.804, -0.551,  0.116],
-        [-0.194,  0.804, -0.551,  0.116],
-        [-0.194,  0.804, -0.551,  0.116],
-        [-0.194,  0.804, -0.551,  0.116],
-        [-0.194,  0.804, -0.551,  0.116],
-        [-0.194,  0.804, -0.551,  0.116],
-        [-0.194,  0.804, -0.551,  0.116],
-        [-0.194,  0.804, -0.551,  0.116]]))}
-plate_603 = env.scene.object_registry("name", "plate_603")
-ref_obj = plate_603
-primitive._tracking_object = ref_obj
-
+target_pos = {'left_eef_link': th.tensor([[ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194],
+        [ 4.531, -1.524,  1.194]])}
+target_quat = {'left_eef_link': th.tensor([[-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306],
+        [-0.389,  0.789,  0.363, -0.306]])}
 plate_601 = env.scene.object_registry("name", "plate_601")
-plate_602 = env.scene.object_registry("name", "plate_602")
 attached_obj = {"right_eef_link": plate_602.root_link, "left_eef_link": plate_601.root_link}
 attached_obj_scale = {"right_eef_link": 0.9, "left_eef_link": 0.9}
 primitive.attached_obj_info = {"attached_obj": attached_obj, "attached_obj_scale": attached_obj_scale}
 
-primitive._motion_generator.update_obstacles()
-# breakpoint()
-action_generator = primitive._navigate_to_obj(obj=ref_obj, eef_pose={"left": eef_pose["left"]}, visibility_constraint=True)
+# finger_links = {link for link in self.finger_links[arm]}
+# len(plate_601.states[ContactBodies].get_value().intersection(finger_links))
 
-# next(iter(action_generator))
+mp_results, traj_paths = primitive._motion_generator.compute_trajectories(
+    target_pos=target_pos,
+    target_quat=target_quat,
+    is_local=False,
+    max_attempts=50,
+    timeout=60.0,
+    ik_fail_return=50,
+    enable_finetune_trajopt=True,
+    finetune_attempts=1,
+    return_full_result=True,
+    success_ratio=1.0,
+    emb_sel=emb_sel,
+    attached_obj=attached_obj,
+    attached_obj_scale=attached_obj_scale,
+)
+successes = mp_results[0].success 
+print("successes: ", successes)
+success_status, traj_path = successes[0], traj_paths[0]
 breakpoint()
-    
+
+q_traj = primitive._motion_generator.path_to_joint_trajectory(traj_path, get_full_js=True, emb_sel=emb_sel)
+q_traj = q_traj.cpu()
+# print("q_traj shape ", q_traj.shape)
+q_traj = th.stack(primitive._add_linearly_interpolated_waypoints(plan=q_traj, max_inter_dist=0.01))
+# print("q_traj shape after interpolation ", q_traj.shape)
+
+init_left_arm_pos = robot.get_joint_positions()[robot.arm_control_idx["left"]]
+mp_actions = []
+for j_pos in q_traj:
+    action = robot.q_to_action(j_pos).cpu().numpy()
+    action[robot.gripper_action_idx["right"]] = -1.0
+    action[robot.arm_action_idx["left"]] = init_left_arm_pos
+    env.step(action)
+breakpoint()
+
+# Test base MP 
+for _ in range(3): 
+    plate_601 = env.scene.object_registry("name", "plate_601")
+    primitive._tracking_object = plate_601
+    action_generator = primitive._navigate_to_obj(obj=plate_601, visibility_constraint=True)
+    retval = next(iter(action_generator))
+    print("primitive.mp_err: ", primitive.mp_err)
+    if retval is not None:
+        break
+
+breakpoint()
 
 for mp_action in action_generator:
     if mp_action is None:
@@ -150,5 +188,8 @@ for mp_action in action_generator:
     
     mp_action = mp_action.cpu().numpy()
     obs, _, _, _, info = env.step(mp_action)
-    
+
 breakpoint()
+
+    
+

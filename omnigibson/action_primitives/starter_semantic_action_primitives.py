@@ -254,6 +254,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self.target_eyes_pose_arr = []
         self.attached_obj_info = {"attached_obj": None, "attached_obj_scale": None}
         self.use_base_pose_hack = use_base_pose_hack
+        self.base_sampling_time = 0.0
+        self.base_mp_planning_time = 0.0
 
     @property
     def arm(self):
@@ -831,7 +833,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # Generate random samples within the cube range
         x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.4)
         y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.05, eye_pos_wrt_robot[1] + 0.05)
-        z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.4, eye_pos_wrt_robot[2])
+        # TODO (arpit) Test the upper limit range (0.2) makes sense
+        z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.4, eye_pos_wrt_robot[2] + 0.2)
 
         sampled_eyes_pos_wrt_robot = np.array([x_sample, y_sample, z_sample])
         sampled_eyes_pos_wrt_world = T.pose2mat(robot_pose_wrt_world) @ np.hstack([sampled_eyes_pos_wrt_robot, 1])
@@ -967,7 +970,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # object is very close to robot body, the vector from the camera to the object is very "vertical" which leads to a lot of bending which could
             # lead to collision of arms of robot with table
             sampled_eyes_orn_wrt_robot_arr = self.sample_eyes_orn(
-                eye_to_obj_vec_wrt_robot, num_samples=num_eyes_orn_samples, max_angle=np.radians(45), anisotropy=(1, 2)
+                eye_to_obj_vec_wrt_robot, num_samples=num_eyes_orn_samples, max_angle=np.radians(30), anisotropy=(1, 1)
             )
             # breakpoint()
             for j in range(num_eyes_orn_samples):
@@ -1315,6 +1318,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             eyes_target_quat = obj_pose[1]
 
         # breakpoint()
+        start_time = time.time()
         results, traj_paths = self._motion_generator.compute_trajectories(
             target_pos=target_pos,
             target_quat=target_quat,
@@ -1337,6 +1341,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             eyes_target_pos=eyes_target_pos,
             eyes_target_quat=eyes_target_quat,
         )
+        self.base_mp_planning_time = round(time.time() - start_time, 2)
         # Grab the first successful trajectory if found
         successes = results[0].success
         print("Base motion planning successes: ", successes)
@@ -2119,12 +2124,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 cu_js_batch=cu_js_batch,
                 emb_sel=emb_sel,
             )
+        start_time = time.time()
         pose = self._sample_pose_near_object(
             obj,
             eef_pose=eef_pose,
             skip_obstacle_update=skip_obstacle_update,
             visibility_constraint=visibility_constraint,
         )
+        self.base_sampling_time = round(time.time() - start_time, 2)
 
         if self.attached_obj_info["attached_obj"] is not None:
             # Detach attached object if it was attached
@@ -2522,6 +2529,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # canonical_joint_pos = self.robot.reset_joint_pos.clone()
             # canonical_joint_pos[self.robot.base_control_idx] = pose
 
+            # NOTE: We check if the robot is in collision at the sampled base pose with sampled base pose + canonical torso + current arm joint positions
             canonical_joint_pos = joint_pos.clone()
             canonical_joint_pos[self.robot.trunk_control_idx] = self.robot.reset_joint_pos[
                 self.robot.trunk_control_idx
@@ -2557,6 +2565,17 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         for i in range(len(candidate_poses)):
             # print(f"candidate base pose {i}: ", candidate_poses[i])
 
+            # # ========= remove later =============
+            # temp_state = og.sim.dump_state()
+            # self.robot.set_joint_positions(canonical_joint_positions[i])
+
+            # for _ in range(50): og.sim.step()
+
+            # breakpoint()
+            # og.sim.load_state(temp_state)
+            # for _ in range(20): og.sim.step()
+            # # ======================================
+
             if invalid_results[i].item():
                 # print("collision? ", invalid_results[i].item())
                 self.target_eyes_pose_arr.append(None)
@@ -2587,6 +2606,21 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     break
 
         return ~invalid_results
+
+    def get_robot_2d_pose_from_3d_pose(self, pose):
+        """
+        Gets 2d pose from 3d pose
+
+        Args:
+            pose (Iterable): (position, quaternion)
+
+        Returns:
+            th.tensor: (x, y, yaw)
+        """
+        R.from_quat(pose[1]).as_euler("xyz")
+        yaw = R.from_quat(pose[1]).as_euler("xyz")[2]
+        pose2d = th.tensor([pose[0][0], pose[0][1], yaw])
+        return pose2d
 
     def _get_robot_pose_from_2d_pose(self, pose_2d):
         """

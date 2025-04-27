@@ -191,7 +191,7 @@ class CuRoboMotionGenerator:
                 finetune_trajopt_iters=100,
                 finetune_dt_scale=1.05,
                 position_threshold=0.01,  # originally 0.005
-                rotation_threshold=0.1,  # originally 0.05
+                rotation_threshold=0.12,  # originally 0.05
             )
             if motion_cfg_kwargs is not None:
                 motion_kwargs.update(motion_cfg_kwargs)
@@ -210,8 +210,10 @@ class CuRoboMotionGenerator:
             # DEFAULT mode will not be used at all
             if emb_sel == CuRoboEmbodimentSelection.DEFAULT:
                 continue
-            # ARM mode will only be used for IK, not motion planning
-            ik_only = emb_sel == CuRoboEmbodimentSelection.ARM
+            # If ARM mode is only be used for IK, not motion planning
+            # ik_only = emb_sel == CuRoboEmbodimentSelection.ARM
+            # Else
+            ik_only = False
 
             # mg.warmup(
             #     enable_graph=True,
