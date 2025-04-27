@@ -29,10 +29,9 @@ from b1k_pipeline.utils import (
 
 from bddl.object_taxonomy import ObjectTaxonomy
 
-OBJECT_TAXONOMY = ObjectTaxonomy()
-
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
+
 
 CHANNEL_MAPPING = {
     "Diffuse map": ("diffuse", "map_Kd"),
@@ -68,11 +67,11 @@ LOG_SURFACE_AREA_RANGE = (-6, 4)
 LOG_TEXTURE_RANGE = (4, 11)
 
 
-def get_required_meta_links(category):
-    synset = OBJECT_TAXONOMY.get_synset_from_category(category)
+def get_required_meta_links(object_taxonomy, category):
+    synset = object_taxonomy.get_synset_from_category(category)
     if synset is None:
         raise ValueError(f"Category {category} not found in taxonomy.")
-    return OBJECT_TAXONOMY.get_required_meta_links_for_synset(synset)
+    return object_taxonomy.get_required_meta_links_for_synset(synset)
 
 
 def get_category_density(category):
@@ -245,6 +244,7 @@ def process_link(
     link_node,
     base_link_center,
     canonical_orientation,
+    required_meta_types,
     output_fs,
     tree_root,
     out_metadata,
@@ -691,8 +691,6 @@ def process_link(
             }
             
     # Filter non-required meta links
-    meta_links = copy.deepcopy(meta_links)
-    required_meta_types = get_required_meta_links(category_name)
     found_nonoptional_meta_types = (
         set(meta_links.keys()) & REQUIRED_ONLY_META_TYPES
     )
@@ -707,7 +705,7 @@ def process_link(
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
 
 
-def process_object(root_node, target, relevant_nodes, output_dir):
+def process_object(root_node, target, relevant_nodes, requried_meta_types, output_dir):
     obj_cat, obj_model, obj_inst_id, _ = root_node
 
     G = mesh_tree.build_mesh_tree(
@@ -740,6 +738,7 @@ def process_object(root_node, target, relevant_nodes, output_dir):
                 link_node,
                 base_link_center,
                 canonical_orientation,
+                requried_meta_types,
                 output_fs,
                 tree_root,
                 out_metadata,
@@ -857,7 +856,7 @@ def process_object(root_node, target, relevant_nodes, output_dir):
             json.dump(out_metadata, f, cls=NumpyEncoder)
 
 
-def process_target(target, objects_path, dask_client):
+def process_target(target, objects_path, object_taxonomy, dask_client):
     object_futures = {}
 
     # Build the mesh tree using our mesh tree library. The scene code also uses this system.
@@ -894,6 +893,7 @@ def process_target(target, objects_path, dask_client):
                 root_node,
                 target,
                 relevant_nodes,
+                get_required_meta_links(object_taxonomy, obj_cat),
                 output_dirname_abs,
             )
         ] = str(root_node)
@@ -902,6 +902,7 @@ def process_target(target, objects_path, dask_client):
 
 
 def main():
+    object_taxonomy = ObjectTaxonomy()
     with b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True) as archive_fs:
         objects_dir = archive_fs.makedir("objects").getsyspath("/")
         # Load the mesh list from the object list json.
@@ -915,7 +916,7 @@ def main():
         obj_futures = {}
 
         for target in tqdm.tqdm(targets, desc="Processing targets to queue objects"):
-            obj_futures.update(process_target(target, objects_dir, dask_client))
+            obj_futures.update(process_target(target, objects_dir, object_taxonomy, dask_client))
 
         for future in tqdm.tqdm(as_completed(obj_futures.keys()), total=len(obj_futures), desc="Processing objects"):
             try:
