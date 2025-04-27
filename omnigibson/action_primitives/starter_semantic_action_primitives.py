@@ -8,6 +8,7 @@ runnable examples.
 
 import inspect
 import math
+
 import time
 import random
 
@@ -60,6 +61,7 @@ from omnigibson.utils.motion_planning_utils import detect_robot_collision_in_sim
 from omnigibson.utils.object_state_utils import sample_cuboid_for_predicate
 from omnigibson.utils.python_utils import multi_dim_linspace
 from omnigibson.utils.ui_utils import create_module_logger
+from omnigibson.utils.sampling_utils import raytest
 
 m = create_module_macros(module_path=__file__)
 
@@ -168,6 +170,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         debug_visual_marker=None,
         skip_curobo_initilization=False,
         use_base_pose_hack=False,
+        real_robot_mode=False,
     ):
         """
         Initializes a StarterSemanticActionPrimitives generator.
@@ -217,6 +220,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 scene_model=scene_model,
                 embodiment_types=curobo_embodiment_types,
                 use_eyes_targets=enable_head_tracking,
+                restrict_torso_joint_limits=real_robot_mode,
             )
         )
 
@@ -256,6 +260,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         self.use_base_pose_hack = use_base_pose_hack
         self.base_sampling_time = 0.0
         self.base_mp_planning_time = 0.0
+        self.real_robot_mode = real_robot_mode
 
     @property
     def arm(self):
@@ -831,10 +836,15 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         # TODO (eric - datagen): specific to R1 only
         # Generate random samples within the cube range
-        x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.4)
-        y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.05, eye_pos_wrt_robot[1] + 0.05)
-        # TODO (arpit) Test the upper limit range (0.2) makes sense
-        z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.4, eye_pos_wrt_robot[2] + 0.2)
+        if self.real_robot_mode:
+            x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.05)
+            y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.01, eye_pos_wrt_robot[1] + 0.01)
+            z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.025, eye_pos_wrt_robot[2])
+        else:
+            x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.4)
+            y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.05, eye_pos_wrt_robot[1] + 0.05)
+            # TODO (arpit) Test the upper limit range (0.2) makes sense
+            z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.4, eye_pos_wrt_robot[2] + 0.2)
 
         sampled_eyes_pos_wrt_robot = np.array([x_sample, y_sample, z_sample])
         sampled_eyes_pos_wrt_world = T.pose2mat(robot_pose_wrt_world) @ np.hstack([sampled_eyes_pos_wrt_robot, 1])
@@ -886,7 +896,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         x_scale, y_scale = anisotropy
 
         for _ in range(num_samples):
-            # To understand this: think of a plane perpendicular to the -z-axis of the eye frame. To obtain gaze that is close to the object, what we want is different vecotrs
+            # To understand this: think of a plane perpendicular to the -z-axis of the eye frame.
+            # To obtain gaze that is close to the object, what we want is different vectors
             # that intersect the plane at different points within a circle. This is what apha and beta ensures.
             # beta corresponds to which direction from the origin, along the radius to sample the point (hence it is between 0 and 2pi) and
             # alpha corresponds to how far from the origin, along the chosen direction, to sample the point (hence it is between 0 and max_angle)
@@ -951,12 +962,25 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
         num_eyes_pos_samples = 5
         num_eyes_orn_samples = 5
+        eyes_obj_min_distance = 0.2
         for i in range(num_eyes_pos_samples):
             # World frame
             sampled_eyes_pos = self.sample_eyes_pos(
                 source_pose=eye_pose_for_sampled_base_pose, robot_pose=robot_pose_for_sampled_base
             )
             eye_to_obj_vec = obj_pos - sampled_eyes_pos
+            if eye_to_obj_vec.norm() < eyes_obj_min_distance:
+                print("sampled eyes pos too close to object, skipping sample")
+                continue
+            raytest_result = raytest(sampled_eyes_pos, obj_pos, only_closest=True)
+            if not raytest_result["hit"]:
+                print("raytest from eyes to object does not hit, skipping sample")
+                continue
+            elif raytest_result["hit"] and raytest_result["rigidBody"] != self._tracking_object.root_link.prim_path:
+                print(
+                    f"raytest from eyes to object hits something else, expect {self._tracking_object.root_link.prim_path}, got {raytest_result['rigidBody']}, skipping sample"
+                )
+                continue
             # print("dist: ", th.linalg.norm(eye_pos_for_sampled_base_pos - sampled_eyes_pos))
             # from omnigibson.utils.ui_utils import draw_line
             # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist())
@@ -966,9 +990,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             ] @ eye_to_obj_vec.to(th.float32)
 
             # quat = eye_pose_wrt_world[1].numpy()
-            # Anisotropy of (1,2) means that there is more sampling in the up-down direction of the camera than sideways. This is helpful because if the
-            # object is very close to robot body, the vector from the camera to the object is very "vertical" which leads to a lot of bending which could
-            # lead to collision of arms of robot with table
             sampled_eyes_orn_wrt_robot_arr = self.sample_eyes_orn(
                 eye_to_obj_vec_wrt_robot, num_samples=num_eyes_orn_samples, max_angle=np.radians(30), anisotropy=(1, 1)
             )
@@ -1299,8 +1320,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         ignore_objects=None,
     ):
         # If an object is grasped, we need to pass it to the motion planner
-        obj_in_hand = self._get_obj_in_hand()
-        attached_obj = {self.robot.eef_link_names[self.arm]: obj_in_hand.root_link} if obj_in_hand is not None else None
+        # obj_in_hand = self._get_obj_in_hand()
+        # attached_obj = {self.robot.eef_link_names[self.arm]: obj_in_hand.root_link} if obj_in_hand is not None else None
 
         # Aggregate target_pos and target_quat to match batch_size
         target_pos = {k: th.stack([v for _ in range(self._motion_generator.batch_size)]) for k, v in target_pos.items()}
@@ -2137,8 +2158,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # Detach attached object if it was attached
             self._motion_generator._detach_objects_from_robot(attached_info, emb_sel)
 
-        print("pose: ", pose)
-
         # # remove later
         # state_dict = og.sim.dump_state()
         # pose3d = self._get_robot_pose_from_2d_pose(pose)
@@ -2152,6 +2171,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             print(f"Could not find a valid pose near the object {obj.name}")
             self.mp_err = "BaseSamplingFailed"
             yield None
+
+        print("base pose:", pose)
+        print("eyes pose", self.target_eyes_pose)
 
         # # remove later
         # yield None
@@ -2541,8 +2563,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         canonical_joint_positions = th.stack(canonical_joint_positions)
 
         # If an object is grasped, we need to pass it to the collision checker
-        obj_in_hand = self._get_obj_in_hand()
-        attached_obj = {self.robot.eef_link_names[self.arm]: obj_in_hand.root_link} if obj_in_hand is not None else None
+        # obj_in_hand = self._get_obj_in_hand()
+        # attached_obj = {self.robot.eef_link_names[self.arm]: obj_in_hand.root_link} if obj_in_hand is not None else None
 
         # Initial collision check of
         # - base joints: sampled base pose
