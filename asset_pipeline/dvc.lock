@@ -20229,17 +20229,17 @@ stages:
       size: 6639
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 3451e85cc3deb998188ef2bc49aeea1d
-      size: 261134218
+      md5: 7d8f14f8be3d39087a5448e03e0062c0
+      size: 261638980
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/file_manifest.json
       hash: md5
-      md5: 8fd8bcdbb31319d40c36d9be1f6696d0
-      size: 494065
+      md5: bdc1ba1998dbd79a9f3402d56e066067
+      size: 493839
     - path: cad/scenes/house_double_floor_lower/artifacts/file_manifest_deep.json
       hash: md5
-      md5: a5bd084d2b854f20c52d406e4d504f60
-      size: 121158505
+      md5: 3f9ffd4d7903288f278a5e8c0394df56
+      size: 120860482
   file_manifest@scenes/grocery_store_cafe:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_cafe/processed.max
       b1k_pipeline/max/file_manifest.py
@@ -20833,17 +20833,17 @@ stages:
       size: 6639
     - path: cad/scenes/house_single_floor/processed.max
       hash: md5
-      md5: 14a65908ce8caeccc998601870e1c734
-      size: 662685088
+      md5: 505c31e94e17447f4373301dc755ae46
+      size: 664389276
     outs:
     - path: cad/scenes/house_single_floor/artifacts/file_manifest.json
       hash: md5
-      md5: ef7c13fcb419ff3fbc5503edbade967d
-      size: 1475015
+      md5: 798708d7037242341b4d2e8339523667
+      size: 1474222
     - path: cad/scenes/house_single_floor/artifacts/file_manifest_deep.json
       hash: md5
-      md5: f06c11c367f6df8d355c6fcb43bbbe74
-      size: 307449412
+      md5: 28664d76db074b43f1dd1f97c28250be
+      size: 307314426
   file_manifest@objects/batch-04:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-04/processed.max b1k_pipeline/max/file_manifest.py
     deps:
@@ -21688,16 +21688,16 @@ stages:
       size: 73550
     - path: cad/scenes/house_double_floor_lower/artifacts/file_manifest.json
       hash: md5
-      md5: 8fd8bcdbb31319d40c36d9be1f6696d0
-      size: 494065
+      md5: bdc1ba1998dbd79a9f3402d56e066067
+      size: 493839
     - path: cad/scenes/house_double_floor_upper/artifacts/file_manifest.json
       hash: md5
       md5: b87838a443df21d105bd478e69d36656
       size: 470461
     - path: cad/scenes/house_single_floor/artifacts/file_manifest.json
       hash: md5
-      md5: ef7c13fcb419ff3fbc5503edbade967d
-      size: 1475015
+      md5: 798708d7037242341b4d2e8339523667
+      size: 1474222
     - path: cad/scenes/office_bike/artifacts/file_manifest.json
       hash: md5
       md5: 997f9fdf6a0d33d9fa5e8e26bf0813ea
