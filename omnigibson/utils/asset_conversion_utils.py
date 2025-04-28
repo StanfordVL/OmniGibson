@@ -432,6 +432,7 @@ def _import_rendering_channels(obj_prim, obj_category, obj_model, model_root_pat
     shaders = OrderedDict()  # maps mtl name to shader prim
     for mtl_name, mtl_info in mtl_infos.items():
         # Create the Vray material
+        vray_material_name = mtl_name + "_vray"
         mtl_created_list = []
         lazy.omni.kit.commands.execute(
             "CreateAndBindMdlMaterialFromLibrary",
@@ -440,6 +441,7 @@ def _import_rendering_channels(obj_prim, obj_category, obj_model, model_root_pat
             mtl_created_list=mtl_created_list,
         )
         vray_mat = lazy.omni.isaac.core.utils.prims.get_prim_at_path(mtl_created_list[0])
+        vray_mat = _rename_prim(prim=vray_mat, name=vray_material_name)
 
         # Create the OmniPBR material
         pbr_material_name = mtl_name + "_pbr"
