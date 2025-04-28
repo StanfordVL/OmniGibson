@@ -81,6 +81,10 @@ class OGRobotServer:
 
         # Set up cameras, visualizations, and UI
         self._setup_teleop_support()
+        
+        # Set up status display
+        self.status_window, self.status_labels = utils.setup_status_display_ui(og.sim.viewer_camera._viewport)
+        self.event_queue = []
 
         # Set variables that are set during reset call
         self._reset_max_arm_delta = DEFAULT_RESET_DELTA_SPEED * (np.pi / 180) * og.sim.get_sim_step_dt()
@@ -399,6 +403,7 @@ class OGRobotServer:
             self._waiting_to_resume = False
             self._resume_cooldown_time = time.time() + N_COOLDOWN_SECS
             self._in_cooldown = True
+            utils.add_status_event(self.event_queue, "waiting", "Control Resumed, cooling down...")
 
     def serve(self) -> None:
         """Main serving loop"""
@@ -410,6 +415,14 @@ class OGRobotServer:
 
             # Process button inputs
             self._process_button_inputs()
+            
+            # Update status display
+            self.event_queue = utils.update_status_display(
+                self.status_window,
+                self.status_labels,
+                self.event_queue,
+                time.time()
+            )
             
             # Only decrement cooldown if we're not waiting to resume
             if not self._waiting_to_resume:
@@ -423,6 +436,7 @@ class OGRobotServer:
             if self._waiting_to_resume:
                 og.sim.step()
                 utils.print_color(f"\rPress X (keyboard or JoyCon) to resume sim!{' ' * 30}", end="", flush=True)
+                utils.add_status_event(self.event_queue, "waiting", "Waiting to Resume... Press X to start", persistent=True)
             else:
                 # Generate action and deploy
                 action = self.get_action()
@@ -443,7 +457,8 @@ class OGRobotServer:
             else:
                 if self._recording_path is not None:
                     self.env.update_checkpoint()
-                    print("Manually recorded checkpoint!")
+                    print("Checkpoint Recorded manually")
+                    utils.add_status_event(self.event_queue, "checkpoint", "Checkpoint Recorded manually")
         self._button_toggled_state["x"] = button_x_state
 
         # If Y is toggled from OFF -> ON, rollback to checkpoint
@@ -451,6 +466,7 @@ class OGRobotServer:
         if button_y_state and not self._button_toggled_state["y"]:
             if self._recording_path is not None:
                 print("Rolling back to latest checkpoint...watch out, GELLO will move on its own!")
+                utils.add_status_event(self.event_queue, "rollback", "Rolling back to latest checkpoint...watch out, GELLO will move on its own!")
                 self.env.rollback_to_checkpoint()
                 utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
                 print("Finished rolling back!")
@@ -521,7 +537,8 @@ class OGRobotServer:
                 info['done']['goal_status'],
                 self._prev_goal_status,
                 self.env,
-                self._recording_path
+                self._recording_path,
+                self.event_queue
             )
         
         # Update other visualization elements
@@ -547,7 +564,8 @@ class OGRobotServer:
         self._frame_counter = utils.update_checkpoint(
             self.env,
             self._frame_counter,
-            self._recording_path
+            self._recording_path,
+            self.event_queue
         )
 
     def get_action(self):
@@ -634,6 +652,11 @@ class OGRobotServer:
 
     def reset(self):
         """Reset the environment and robot state"""
+        if self._recording_path is not None:
+            reset_text = "Resetting environment, episode recorded"
+        else:
+            reset_text = "Resetting environment"
+        utils.add_status_event(self.event_queue, "reset", reset_text)
         # Reset internal variables
         self._ghost_appear_counter = {arm: 0 for arm in self.robot.arm_names}
         self._resume_cooldown_time = time.time() + N_COOLDOWN_SECS

@@ -2,6 +2,7 @@ import os
 import yaml
 import torch as th
 import numpy as np
+import time
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -574,6 +575,90 @@ def setup_task_instruction_ui(task_name, env, robot):
     return overlay_window, text_labels, bddl_goal_conditions
 
 
+def setup_status_display_ui(main_viewport):
+    """Set up UI for displaying status messages in bottom right corner"""
+    # Create overlay window
+    overlay_window = lazy.omni.ui.Window(
+        main_viewport.name,
+        width=0,
+        height=0,
+        flags=lazy.omni.ui.WINDOW_FLAGS_NO_TITLE_BAR |
+              lazy.omni.ui.WINDOW_FLAGS_NO_SCROLLBAR |
+              lazy.omni.ui.WINDOW_FLAGS_NO_RESIZE
+    )
+    og.sim.render()
+    
+    # Create UI container structure
+    with overlay_window.frame:
+        with lazy.omni.ui.ZStack():
+            lazy.omni.ui.Spacer()
+            vstack = lazy.omni.ui.VStack(alignment=lazy.omni.ui.Alignment.RIGHT_BOTTOM, spacing=0)
+            with vstack:
+                lazy.omni.ui.Spacer()
+                hstack = lazy.omni.ui.HStack()
+                with hstack:
+                    lazy.omni.ui.Spacer()
+                    # Create a single placeholder label - we'll update its text later
+                    label = lazy.omni.ui.Label(
+                        "",  # Empty initially
+                        alignment=lazy.omni.ui.Alignment.RIGHT_CENTER,
+                        visible=False,
+                        style={
+                            "font_size": STATUS_DISPLAY_SETTINGS["font_size"],
+                            "margin": 0,
+                            "padding": 0
+                        }
+                    )
+                    lazy.omni.ui.Spacer(width=STATUS_DISPLAY_SETTINGS["right_margin"])
+                lazy.omni.ui.Spacer(height=STATUS_DISPLAY_SETTINGS["bottom_margin"])
+    
+    og.sim.render()
+    return overlay_window, label
+
+def update_status_display(status_window, label, event_queue, current_time):
+    """Update status display with the most recent active message"""
+    # Filter out expired events
+    filtered_queue = []
+    for event_type, message, timestamp in event_queue:
+        duration = STATUS_DISPLAY_SETTINGS.get("persistent_duration", 0.5) \
+                  if event_type in STATUS_DISPLAY_SETTINGS["persistent_states"] \
+                  else STATUS_DISPLAY_SETTINGS["event_duration"]
+                  
+        if current_time - timestamp < duration:
+            filtered_queue.append((event_type, message, timestamp))
+    
+    # Get the most recent message if available
+    if filtered_queue:
+        event_type, message, _ = filtered_queue[-1]
+        # Only update if text changed
+        if not label.visible or label.text != message:
+            label.text = message
+            label.visible = True
+            label.style = {
+                "color": STATUS_DISPLAY_SETTINGS["event_colors"].get(event_type, 0xFFFFFFFF),
+                "font_size": STATUS_DISPLAY_SETTINGS["font_size"],
+                "margin": 0,
+                "padding": 0
+            }
+    else:
+        # Hide label when no messages
+        label.visible = False
+    
+    return filtered_queue
+
+def add_status_event(event_queue, event_type, message, persistent=False):
+    """Add a status event to the display queue, avoiding duplicates for persistent events"""
+    # For persistent events, check if it's already in the queue
+    if persistent:
+        for i, (e_type, _, _) in enumerate(event_queue):
+            if e_type == event_type:
+                # Just update timestamp to keep it alive
+                event_queue[i] = (e_type, message, time.time())
+                return
+    
+    # Add new event if not found or not persistent
+    event_queue.append((event_type, message, time.time()))
+
 def setup_object_beacons(task_relevant_objects, scene):
     """
     Set up visual beacons for task-relevant objects
@@ -800,7 +885,7 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter, ghost_info):
     return ghost_appear_counter
 
 
-def update_goal_status(text_labels, goal_status, prev_goal_status, env, recording_path=None):
+def update_goal_status(text_labels, goal_status, prev_goal_status, env, recording_path=None, event_queue=None):
     """
     Update the UI based on goal status changes
     
@@ -841,6 +926,8 @@ def update_goal_status(text_labels, goal_status, prev_goal_status, env, recordin
             if recording_path is not None:
                 env.update_checkpoint()
                 print("Auto recorded checkpoint due to goal status change!")
+                if event_queue:
+                    add_status_event(event_queue, "checkpoint", "Checkpoint Recorded due to goal status change")
 
         # Return the updated status
         return goal_status.copy()
@@ -922,7 +1009,7 @@ def update_reachability_visualizers(reachability_visualizers, joint_cmd, prev_ba
     return has_base_motion
 
 
-def update_checkpoint(env, frame_counter, recording_path=None):
+def update_checkpoint(env, frame_counter, recording_path=None, event_queue=None):
     """
     Update checkpoint based on periodic timer
     
@@ -943,6 +1030,8 @@ def update_checkpoint(env, frame_counter, recording_path=None):
         if recording_path is not None:
             env.update_checkpoint()
             print("Auto recorded checkpoint due to periodic save!")
+            if event_queue:
+                add_status_event(event_queue, "checkpoint", "Checkpoint Recorded manually")
         updated_counter = 0
     
     return updated_counter

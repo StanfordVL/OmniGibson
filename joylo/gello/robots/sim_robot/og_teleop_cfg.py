@@ -250,6 +250,24 @@ UI_SETTINGS = {
     "left_margin": 50,
 }
 
+# Status display settings
+STATUS_DISPLAY_SETTINGS = {
+    "event_duration": 3.0,  # seconds
+    "persistent_duration": 0.1,  # For persistent events - very short
+    "persistent_states": ["in_cooldown", "waiting_to_resume"],
+    "event_colors": {
+        "checkpoint": 0xFF00FF00,  # Green
+        "rollback": 0xFFFF00FF,   # Magenta
+        "cooldown": 0xFF00FFFF,   # Yellow
+        "waiting": 0xFFFF0000,    # White
+        "reset": 0xFF00AAFF,      # Orange
+    },
+    "font_size": 20,
+    "bottom_margin": 50,
+    "right_margin": 50,
+    "line_spacing": 5,
+}
+
 # Visual sphere settings for object highlighting
 OBJECT_HIGHLIGHT_SPHERE = {
     "opacity": 0.5,
