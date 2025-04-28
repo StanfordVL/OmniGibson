@@ -887,7 +887,8 @@ class Task(Model):
         """Tasks that are candidates for the challenge"""
         CHALLENGE_TASKS = [
             "putting_away_toys-0",
-            "can_meat-0assembling_gift_baskets-0",
+            "can_meat-0",
+            "assembling_gift_baskets-0",
             "picking_up_trash-0",
             "putting_away_Halloween_decorations-0",
             "can_vegetables-0",
@@ -932,7 +933,7 @@ class Task(Model):
             "putting_on_license_plates-0",
             "installing_smoke_detectors-0",
             "hanging_pictures-0",
-            "attach_a_camera_to_a_tripod-0 ",
+            "attach_a_camera_to_a_tripod-0",
             "setup_a_trampoline-0",
             "cook_hot_dogs-0",
             "make_a_steak-0",
