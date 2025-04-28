@@ -1,6 +1,9 @@
 import json
 import os
+import pathlib
+import signal
 import subprocess
+import sys
 from dask.distributed import as_completed
 import fs.copy
 from fs.zipfs import ZipFS
@@ -11,12 +14,24 @@ import tqdm
 from b1k_pipeline.utils import PipelineFS, TMP_DIR, launch_cluster, get_targets
 
 WORKER_COUNT = 1
+MAX_TIME_PER_PROCESS = 20 * 60  # 20 minutes
 
 def run_on_scene(dataset_path, scene, output_dir):
     python_cmd = ["python", "-m", "b1k_pipeline.validate_scenes_process", dataset_path, scene, output_dir]
     cmd = ["micromamba", "run", "-n", "omnigibson", "/bin/bash", "-c", "source /isaac-sim/setup_conda_env.sh && rm -rf /root/.cache/ov/texturecache && " + " ".join(python_cmd)]
-    return subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.STDOUT, cwd="/scr/ig_pipeline")
+    with open(f"/scr/ig_pipeline/logs/{scene}.log", "w") as f, open(f"/scr/ig_pipeline/logs/{scene}.err", "w") as ferr:
+        try:
+            p = subprocess.Popen(cmd, stdout=f, stderr=ferr, cwd="/scr/ig_pipeline", start_new_session=True)
+            p.wait(timeout=MAX_TIME_PER_PROCESS)
+        except subprocess.TimeoutExpired:
+            print(f'Timeout for {scene} ({MAX_TIME_PER_PROCESS}s) expired. Killing', file=sys.stderr)
+            os.killpg(os.getpgid(p.pid), signal.SIGKILL)
+            p.wait()
 
+    return {
+        "stdout": pathlib.Path(f"/scr/ig_pipeline/logs/{scene}.log").read_text(),
+        "stderr": pathlib.Path(f"/scr/ig_pipeline/logs/{scene}.err").read_text(),
+    }
 
 def main():
     with PipelineFS() as pipeline_fs, \
@@ -56,13 +71,13 @@ def main():
             scene = futures[future]
             scene_results[scene] = {"success": False, "issues": [], "logs": ""}
             try:
-                out = future.result()
-                scene_results[scene]["logs"] = out.stdout.decode("utf-8")
+                logs = future.result()
+                scene_results[scene]["logs"] = logs
                 with out_temp_fs.open(f"{scene}.json", "r") as f:
                     scene_results[scene]["issues"] = json.load(f)
                 scene_results[scene]["success"] = not scene_results[scene]["issues"]
             except Exception as e:
-                scene_results[scene]["logs"] += "\n\n" + str(e)
+                scene_results[scene]["logs"] = str(e)
 
         # Save the logs
         results = {

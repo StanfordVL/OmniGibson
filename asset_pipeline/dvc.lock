@@ -12502,25 +12502,25 @@ stages:
     deps:
     - path: artifacts/og_dataset.zip
       hash: md5
-      md5: 39314dc79a7cc1e19dc9ebe1364637de
-      size: 27162928711
+      md5: 905523dd4aeddf1986702d65950be648
+      size: 31882642196
     - path: artifacts/pipeline/pack_dataset.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: b1k_pipeline/validate_scenes.py
       hash: md5
-      md5: a95ac393f963ea7cdb41c11b37ac2204
-      size: 3225
+      md5: 20c95f7ebb2fbb1467f613318e963fce
+      size: 3870
     - path: b1k_pipeline/validate_scenes_process.py
       hash: md5
-      md5: feb365a2846753d4177ea0f572ada834
-      size: 3113
+      md5: b296917a819f03b6952be067e779567b
+      size: 2551
     outs:
     - path: artifacts/pipeline/validate_scenes.json
       hash: md5
-      md5: c45893960820a82dcd3e7ef4d5e9eef4
-      size: 3077693
+      md5: c78cc4e740c2969f1db90d676edafb60
+      size: 6068221
   export_meshes@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/export_meshes.py

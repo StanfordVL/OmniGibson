@@ -4,6 +4,7 @@ Script to validate a scene for physics
 import json
 import sys
 import os
+import math
 
 import torch as th
 
@@ -18,9 +19,9 @@ import omnigibson as og
 import omnigibson.utils.transform_utils as T
 
 MAX_POS_DELTA = 0.05  # 5cm
-MAX_ORN_DELTA = th.deg2rad(5).item()  # 5 degrees
+MAX_ORN_DELTA = math.radians(5)  # 5 degrees
 MAX_LINEAR_VEL = 0.01  # 0.01 m/s
-MAX_ANGULAR_VEL = th.deg2rad(1).item()  # 1 degree/s
+MAX_ANGULAR_VEL = math.radians(1)  # 1 degree/s
 
 
 if __name__ == "__main__":
