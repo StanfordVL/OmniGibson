@@ -469,6 +469,13 @@ class OGRobotServer:
                 utils.add_status_event(self.event_queue, "rollback", "Rolling back to latest checkpoint...watch out, GELLO will move on its own!")
                 self.env.rollback_to_checkpoint()
                 utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
+                
+                # Extract trunk position values and calculate offsets
+                trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+                self._current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
+                base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
+                self._current_trunk_tilt_offset = trunk_qpos[2] - base_trunk_pos[2]
+                
                 print("Finished rolling back!")
                 self._waiting_to_resume = True
         self._button_toggled_state["y"] = button_y_state
