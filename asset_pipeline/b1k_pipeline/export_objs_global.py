@@ -27,17 +27,20 @@ from b1k_pipeline.utils import (
     save_mesh,
 )
 
+from bddl.object_taxonomy import ObjectTaxonomy
+
 logger = logging.getLogger("trimesh")
 logger.setLevel(logging.ERROR)
 
+
 CHANNEL_MAPPING = {
-    "Base Color Map": ("diffuse", "map_Kd"),
-    "Bump Map": ("normal", "map_bump"),
-    "Roughness Map": ("roughness", "map_Pr"),
-    "Metalness Map": ("metalness", "map_Pm"),
-    "Transparency Map": ("refraction", "map_Tf"),
-    "Reflectivity Map": ("reflection", "map_Ks"),
-    "IOR Map": ("ior", "map_Ns"),
+    "Diffuse map": ("diffuse", "map_Kd"),
+    "Bump map": ("normal", "map_bump"),
+    "Refl. gloss.": ("roughness", "map_Pr"),
+    "Metalness": ("metalness", "map_Pm"),
+    "Refract map": ("refraction", "map_Tf"),
+    "Reflect map": ("reflection", "map_Ks"),
+    "Fresnel IOR": ("ior", "map_Ns"),
 }
 
 ALLOWED_PART_TAGS = {
@@ -46,10 +49,29 @@ ALLOWED_PART_TAGS = {
     "connectedpart",
 }
 
+# Objects that don't require these meta types should not have them
+REQUIRED_ONLY_META_TYPES = {
+    "fluidsource",
+    "togglebutton",
+    "heatsource",
+    "particleapplier",
+    "particleremover",
+    "fluidsink",
+    "slicer",
+    "fillable",
+}
+
 CLOTH_SUBDIVISION_THRESHOLD = 0.05
 
 LOG_SURFACE_AREA_RANGE = (-6, 4)
 LOG_TEXTURE_RANGE = (4, 11)
+
+
+def get_required_meta_links(object_taxonomy, category):
+    synset = object_taxonomy.get_synset_from_category(category)
+    if synset is None:
+        raise ValueError(f"Category {category} not found in taxonomy.")
+    return object_taxonomy.get_required_meta_links_for_synset(synset)
 
 
 def get_category_density(category):
@@ -222,6 +244,7 @@ def process_link(
     link_node,
     base_link_center,
     canonical_orientation,
+    required_meta_types,
     output_fs,
     tree_root,
     out_metadata,
@@ -281,6 +304,7 @@ def process_link(
 
             # Fix texture file paths if necessary.
             material_maps = G.nodes[link_node]["material_maps"]
+            moved_material_maps = {}
             for map_channel, map_path in material_maps.items():
                 assert os.path.exists(map_path), f"Texture file {map_path} does not exist!"
 
@@ -288,11 +312,12 @@ def process_link(
                 # to copy the file.
                 src_map_dir = os.path.dirname(map_path)
                 src_map_filename = os.path.basename(map_path)
+                src_map_ext = os.path.splitext(src_map_filename)[1]
                 src_map_fs = OSFS(src_map_dir)
 
                 assert map_channel in CHANNEL_MAPPING, f"Unknown channel {map_channel}"
                 dst_fname, _ = CHANNEL_MAPPING[map_channel]
-                dst_texture_filename = f"{model_id}__{link_name}__{dst_fname}.png"
+                dst_texture_filename = f"{model_id}__{link_name}__{dst_fname}{src_map_ext}"
 
                 # Load the image
                 # TODO: Re-enable this after tuning it.
@@ -308,6 +333,8 @@ def process_link(
                     obj_link_material_folder_fs,
                     dst_texture_filename,
                 )
+
+                moved_material_maps[map_channel] = dst_texture_filename
 
         # Copy the OBJ into the right spot
         fs.copy.copy_file(
@@ -368,8 +395,9 @@ def process_link(
                 for line in f.readlines():
                     if "map_Kd material_0.png" in line:
                         line = ""
-                        for file_suffix, mtl_key in CHANNEL_MAPPING.values():
-                            line += f"{mtl_key} ../../material/{model_id}__{link_name}__{file_suffix}.png\n"
+                        for channel_name, channel_filename in moved_material_maps.items():
+                            _, mtl_key = CHANNEL_MAPPING[channel_name]
+                            line += f"{mtl_key} ../../material/{channel_filename}\n"
                     new_lines.append(line)
 
             with obj_link_visual_mesh_folder_fs.open(mtl_name, "w") as f:
@@ -662,180 +690,173 @@ def process_link(
                 "scale": " ".join([str(item) for item in cm_scale]),
             }
             
+    # Filter non-required meta links
+    found_nonoptional_meta_types = (
+        set(meta_links.keys()) & REQUIRED_ONLY_META_TYPES
+    )
+    found_extra_nonoptional_meta_types = (
+        found_nonoptional_meta_types - required_meta_types
+    )
+    if found_extra_nonoptional_meta_types:
+        for extra_meta_type in found_extra_nonoptional_meta_types:
+            del meta_links[extra_meta_type]
 
     out_metadata["meta_links"][link_name] = meta_links
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
 
 
-def process_object(root_node, target, relevant_nodes, output_dir):
-    try:
-        obj_cat, obj_model, obj_inst_id, _ = root_node
+def process_object(root_node, target, relevant_nodes, requried_meta_types, output_dir):
+    obj_cat, obj_model, obj_inst_id, _ = root_node
 
-        G = mesh_tree.build_mesh_tree(
-            target,
-            filter_nodes=relevant_nodes,
+    G = mesh_tree.build_mesh_tree(
+        target,
+        filter_nodes=relevant_nodes,
+    )
+    
+    with OSFS(output_dir) as output_fs:
+        # Prepare the URDF tree
+        tree_root = ET.Element("robot")
+        tree_root.attrib = {"name": obj_model}
+
+        # Extract base link orientation and position
+        canonical_orientation = np.array(
+            G.nodes[root_node]["canonical_orientation"]
         )
-        
-        with OSFS(output_dir) as output_fs:
-            # Prepare the URDF tree
-            tree_root = ET.Element("robot")
-            tree_root.attrib = {"name": obj_model}
+        base_link_mesh = G.nodes[root_node]["lower_mesh"]
+        base_link_center = get_mesh_center(base_link_mesh)
 
-            # Extract base link orientation and position
-            canonical_orientation = np.array(
-                G.nodes[root_node]["canonical_orientation"]
+        out_metadata = {
+            "meta_links": {},
+            "link_tags": {},
+            "object_parts": [],
+        }
+
+        # Iterate over each link.
+        for link_node in nx.dfs_preorder_nodes(G, root_node):
+            process_link(
+                G,
+                link_node,
+                base_link_center,
+                canonical_orientation,
+                requried_meta_types,
+                output_fs,
+                tree_root,
+                out_metadata,
             )
-            base_link_mesh = G.nodes[root_node]["lower_mesh"]
-            base_link_center = get_mesh_center(base_link_mesh)
 
-            out_metadata = {
-                "meta_links": {},
-                "link_tags": {},
-                "object_parts": [],
-            }
+        # Save the URDF file.
+        xmlstr = minidom.parseString(ET.tostring(tree_root)).toprettyxml(
+            indent="   "
+        )
+        xmlio = io.StringIO(xmlstr)
+        tree = ET.parse(xmlio)
 
-            # Iterate over each link.
-            for link_node in nx.dfs_preorder_nodes(G, root_node):
-                process_link(
-                    G,
-                    link_node,
-                    base_link_center,
-                    canonical_orientation,
-                    output_fs,
-                    tree_root,
-                    out_metadata,
-                )
+        urdf_fs = output_fs.makedir("urdf", recreate=True)
+        with urdf_fs.open(f"{obj_model}.urdf", "wb") as f:
+            tree.write(f, xml_declaration=True)
 
-            # Save the URDF file.
-            xmlstr = minidom.parseString(ET.tostring(tree_root)).toprettyxml(
-                indent="   "
+        bbox_size = np.array(G.nodes[root_node]["object_bounding_box"]["extent"])
+        bbox_world_pos = np.array(G.nodes[root_node]["object_bounding_box"]["position"])
+        base_link_offset_in_world = bbox_world_pos - base_link_center
+        base_link_offset = R.from_quat(canonical_orientation).inv().apply(base_link_offset_in_world)
+
+        # Compute part information
+        for part_node_key in get_part_nodes(G, root_node):
+            # Get the part node bounding box
+            part_bb_size = G.nodes[part_node_key]["object_bounding_box"]["extent"]
+            part_bb_in_world_pos = G.nodes[part_node_key]["object_bounding_box"]["position"]
+            part_bb_in_world_rot = R.from_quat(G.nodes[part_node_key]["object_bounding_box"]["rotation"])
+
+            # Convert into our base link frame
+            our_transform = np.eye(4)
+            our_transform[:3, 3] = base_link_center
+            our_transform[:3, :3] = R.from_quat(canonical_orientation).as_matrix()
+            bb_transform = np.eye(4)
+            bb_transform[:3, 3] = part_bb_in_world_pos
+            bb_transform[:3, :3] = part_bb_in_world_rot.as_matrix()
+            bb_transform_in_our = np.linalg.inv(our_transform) @ bb_transform
+            bb_pos_in_our = bb_transform_in_our[:3, 3]
+            bb_quat_in_our = R.from_matrix(bb_transform_in_our[:3, :3]).as_quat()
+
+            # Get the part type
+            part_tags = set(G.nodes[part_node_key]["tags"]) & ALLOWED_PART_TAGS
+            assert (
+                len(part_tags) == 1
+            ), f"Part node {part_node_key} has multiple part tags: {part_tags}"
+            (part_type,) = part_tags
+
+            # Add the metadata
+            out_metadata["object_parts"].append(
+                {
+                    "category": part_node_key[0],
+                    "model": part_node_key[1],
+                    "type": part_type,
+                    "bb_pos": bb_pos_in_our,
+                    "bb_orn": bb_quat_in_our,
+                    "bb_size": part_bb_size,
+                }
             )
-            xmlio = io.StringIO(xmlstr)
-            tree = ET.parse(xmlio)
 
-            urdf_fs = output_fs.makedir("urdf", recreate=True)
-            with urdf_fs.open(f"{obj_model}.urdf", "wb") as f:
-                tree.write(f, xml_declaration=True)
-
-            bbox_size = np.array(G.nodes[root_node]["object_bounding_box"]["extent"])
-            bbox_world_pos = np.array(G.nodes[root_node]["object_bounding_box"]["position"])
-            base_link_offset_in_world = bbox_world_pos - base_link_center
-            base_link_offset = R.from_quat(canonical_orientation).inv().apply(base_link_offset_in_world)
-
-            # Compute part information
-            for part_node_key in get_part_nodes(G, root_node):
-                # Get the part node bounding box
-                part_bb_size = G.nodes[part_node_key]["object_bounding_box"]["extent"]
-                part_bb_in_world_pos = G.nodes[part_node_key]["object_bounding_box"]["position"]
-                part_bb_in_world_rot = R.from_quat(G.nodes[part_node_key]["object_bounding_box"]["rotation"])
-
-                # Convert into our base link frame
-                our_transform = np.eye(4)
-                our_transform[:3, 3] = base_link_center
-                our_transform[:3, :3] = R.from_quat(canonical_orientation).as_matrix()
-                bb_transform = np.eye(4)
-                bb_transform[:3, 3] = part_bb_in_world_pos
-                bb_transform[:3, :3] = part_bb_in_world_rot.as_matrix()
-                bb_transform_in_our = np.linalg.inv(our_transform) @ bb_transform
-                bb_pos_in_our = bb_transform_in_our[:3, 3]
-                bb_quat_in_our = R.from_matrix(bb_transform_in_our[:3, :3]).as_quat()
-
-                # Get the part type
-                part_tags = set(G.nodes[part_node_key]["tags"]) & ALLOWED_PART_TAGS
-                assert (
-                    len(part_tags) == 1
-                ), f"Part node {part_node_key} has multiple part tags: {part_tags}"
-                (part_type,) = part_tags
-
-                # Add the metadata
-                out_metadata["object_parts"].append(
-                    {
-                        "category": part_node_key[0],
-                        "model": part_node_key[1],
-                        "type": part_type,
-                        "bb_pos": bb_pos_in_our,
-                        "bb_orn": bb_quat_in_our,
-                        "bb_size": part_bb_size,
-                    }
-                )
-
-                # If it's a connectedpart, we also need to generate the corresponding female attachment point.
-                if part_type == "connectedpart":
-                    base_link_meta_links = out_metadata["meta_links"]["base_link"]
-                    if "attachment" not in base_link_meta_links:
-                        base_link_meta_links["attachment"] = {}
-                    attachment_type = f"{part_node_key[1]}parent".lower() + "F"
-                    if attachment_type not in base_link_meta_links["attachment"]:
-                        base_link_meta_links["attachment"][attachment_type] = {}
-                    next_id = len(base_link_meta_links["attachment"][attachment_type])
-
-                    # pretend that the attachment point is at the center of the part with its transform
-                    part_orn = np.array(G.nodes[part_node_key]["canonical_orientation"])
-                    part_base_link_mesh = G.nodes[part_node_key]["lower_mesh"]
-                    part_pos = get_mesh_center(part_base_link_mesh)
-                    part_transform = np.eye(4)
-                    part_transform[:3, 3] = part_pos
-                    part_transform[:3, :3] = R.from_quat(part_orn).as_matrix()
-                    part_transform_in_our = (
-                        np.linalg.inv(our_transform) @ part_transform
-                    )
-                    part_pos_in_our = part_transform_in_our[:3, 3]
-                    part_quat_in_our = R.from_matrix(
-                        part_transform_in_our[:3, :3]
-                    ).as_quat()
-
-                    # actually add the point
-                    base_link_meta_links["attachment"][attachment_type][
-                        str(next_id)
-                    ] = {
-                        "position": part_pos_in_our,
-                        "orientation": part_quat_in_our,
-                    }
-
-            # Similarly, if we are a connectedpart, we need to generate the corresponding male attachment point.
-            if "connectedpart" in G.nodes[root_node]["tags"]:
+            # If it's a connectedpart, we also need to generate the corresponding female attachment point.
+            if part_type == "connectedpart":
                 base_link_meta_links = out_metadata["meta_links"]["base_link"]
                 if "attachment" not in base_link_meta_links:
                     base_link_meta_links["attachment"] = {}
-                attachment_type = f"{obj_model}parent".lower() + "M"
+                attachment_type = f"{part_node_key[1]}parent".lower() + "F"
                 if attachment_type not in base_link_meta_links["attachment"]:
                     base_link_meta_links["attachment"][attachment_type] = {}
                 next_id = len(base_link_meta_links["attachment"][attachment_type])
 
-                # Pretend that the attachment point is at the center of the part with its transform
-                next_id = len(base_link_meta_links["attachment"][attachment_type])
-                base_link_meta_links["attachment"][attachment_type][str(next_id)] = {
-                    "position": [0.0, 0.0, 0.0],
-                    "orientation": [0.0, 0.0, 0.0, 1.0],
+                # pretend that the attachment point is at the center of the part bbox with its transform
+                # actually add the point
+                base_link_meta_links["attachment"][attachment_type][
+                    str(next_id)
+                ] = {
+                    "position": bb_pos_in_our,
+                    "orientation": bb_quat_in_our,
                 }
 
-            openable_joint_ids = [
-                (i, joint.attrib["name"])
-                for i, joint in enumerate(tree.findall("joint"))
-                if "openable" in out_metadata["link_tags"].get(joint.find("child").attrib["link"], [])
-            ]
+        # Similarly, if we are a connectedpart, we need to generate the corresponding male attachment point.
+        if "connectedpart" in G.nodes[root_node]["tags"]:
+            base_link_meta_links = out_metadata["meta_links"]["base_link"]
+            if "attachment" not in base_link_meta_links:
+                base_link_meta_links["attachment"] = {}
+            attachment_type = f"{obj_model}parent".lower() + "M"
+            if attachment_type not in base_link_meta_links["attachment"]:
+                base_link_meta_links["attachment"][attachment_type] = {}
+            next_id = len(base_link_meta_links["attachment"][attachment_type])
 
-            # Save metadata json
-            out_metadata.update(
-                {
-                    "base_link_offset": base_link_offset.tolist(),
-                    "bbox_size": bbox_size.tolist(),
-                    "orientations": [],
-                    "link_bounding_boxes": compute_link_aligned_bounding_boxes(
-                        G, root_node
-                    ),
-                }
-            )
-            if openable_joint_ids:
-                out_metadata["openable_joint_ids"] = openable_joint_ids
-            with output_fs.makedir("misc").open("metadata.json", "w") as f:
-                json.dump(out_metadata, f, cls=NumpyEncoder)
-    except Exception as exc:
-        print(traceback.print_exc())
-        return exc
+            # Pretend that the attachment point is at the center of the part bbox with its transform
+            next_id = len(base_link_meta_links["attachment"][attachment_type])
+            base_link_meta_links["attachment"][attachment_type][str(next_id)] = {
+                "position": base_link_offset.tolist(),
+                "orientation": [0.0, 0.0, 0.0, 1.0],
+            }
+
+        openable_joint_ids = [
+            (i, joint.attrib["name"])
+            for i, joint in enumerate(tree.findall("joint"))
+            if "openable" in out_metadata["link_tags"].get(joint.find("child").attrib["link"], [])
+        ]
+
+        # Save metadata json
+        out_metadata.update(
+            {
+                "base_link_offset": base_link_offset.tolist(),
+                "bbox_size": bbox_size.tolist(),
+                "orientations": [],
+                "link_bounding_boxes": compute_link_aligned_bounding_boxes(
+                    G, root_node
+                ),
+            }
+        )
+        if openable_joint_ids:
+            out_metadata["openable_joint_ids"] = openable_joint_ids
+        with output_fs.makedir("misc").open("metadata.json", "w") as f:
+            json.dump(out_metadata, f, cls=NumpyEncoder)
 
 
-def process_target(target, objects_path, dask_client):
+def process_target(target, objects_path, object_taxonomy, dask_client):
     object_futures = {}
 
     # Build the mesh tree using our mesh tree library. The scene code also uses this system.
@@ -872,14 +893,16 @@ def process_target(target, objects_path, dask_client):
                 root_node,
                 target,
                 relevant_nodes,
+                get_required_meta_links(object_taxonomy, obj_cat),
                 output_dirname_abs,
             )
         ] = str(root_node)
 
-        return object_futures
+    return object_futures
 
 
 def main():
+    object_taxonomy = ObjectTaxonomy()
     with b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True) as archive_fs:
         objects_dir = archive_fs.makedir("objects").getsyspath("/")
         # Load the mesh list from the object list json.
@@ -888,12 +911,12 @@ def main():
         cluster = LocalCluster()
         dask_client = cluster.get_client()
 
-        targets = ["scenes/house_single_floor"]  # get_targets("combined")
+        targets = get_targets("combined")
 
         obj_futures = {}
 
         for target in tqdm.tqdm(targets, desc="Processing targets to queue objects"):
-            obj_futures.update(process_target(target, objects_dir, dask_client))
+            obj_futures.update(process_target(target, objects_dir, object_taxonomy, dask_client))
 
         for future in tqdm.tqdm(as_completed(obj_futures.keys()), total=len(obj_futures), desc="Processing objects"):
             try:
