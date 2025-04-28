@@ -5,25 +5,22 @@ import json
 import sys
 import os
 
-import numpy as np
-from scipy.spatial.transform import Rotation as R
+import torch as th
 
 from omnigibson.macros import gm
 
-# Set some macros. Is this kosher?
 gm.HEADLESS = True
-gm.ENABLE_FLATCACHE = False
+gm.ENABLE_FLATCACHE = True
 gm.USE_GPU_DYNAMICS = False
 gm.USE_ENCRYPTED_ASSETS = True
-gm.ENABLE_OBJECT_STATES = False
-gm.ENABLE_TRANSITION_RULES = False
 
 import omnigibson as og
-from omnigibson import app
-from omnigibson.systems import REGISTERED_SYSTEMS, FluidSystem
+import omnigibson.utils.transform_utils as T
 
-MAX_POS_DELTA = 0.1  # 10cm
-MAX_ORN_DELTA = np.deg2rad(10)  # 10 degrees
+MAX_POS_DELTA = 0.05  # 5cm
+MAX_ORN_DELTA = th.deg2rad(5).item()  # 5 degrees
+MAX_LINEAR_VEL = 0.01  # 0.01 m/s
+MAX_ANGULAR_VEL = th.deg2rad(1).item()  # 1 degree/s
 
 
 if __name__ == "__main__":
@@ -31,18 +28,6 @@ if __name__ == "__main__":
     scene = sys.argv[2]
     out_path = os.path.join(sys.argv[3], f"{scene}.json")
     gm.DATASET_PATH = str(dataset_root)
-
-    # Generate systems
-    # cats = ['water', 'dust', 'dirt', 'debris', 'bunchgrass', 'mud', 'mold', 'mildew', 'baby_oil', 'coconut_oil', 'cooking_oil', 'essential_oil', 'linseed_oil', 'olive_oil', 'sesame_oil', 'stain', 'ink', 'alga', 'spray_paint', 'house_paint', 'rust', 'patina', 'incision', 'tarnish', 'calcium_carbonate', 'wrinkle']
-    # for cat in cats:
-    #     if cat not in REGISTERED_SYSTEMS:
-    #         FluidSystem.create(
-    #             name=cat.replace("-", "_"),
-    #             particle_contact_offset=0.012,
-    #             particle_density=500.0,
-    #             is_viscous=False,
-    #             material_mtl_name="DeepWater",
-    #         )
 
     # Load the sim and do stuff
     # If the scene type is interactive, also check if we want to quick load or full load the scene
@@ -65,25 +50,28 @@ if __name__ == "__main__":
 
     # Run the simulation
     print("Stepping simulation.")
-    for _ in range(150):
+    for _ in range(300):
         env.step([])
     print("Done stepping simulation.")
 
-    # Get their new poses
-    final_poses = {link_name: link.get_position_orientation() for link_name, link in links.items()}
-
     # Compare the poses
     mismatches = []
-    for link_name in links:
+    for link_name, link in links.items():
         old_pos, old_orn = initial_poses[link_name]
-        new_pos, new_orn = final_poses[link_name]
+        new_pos, new_orn = link.get_position_orientation()
+        lin_vel = link.get_linear_velocity()
+        ang_vel = link.get_angular_velocity()
 
-        delta_pos = np.linalg.norm(np.array(new_pos) - np.array(old_pos))
+        delta_pos = th.linalg.norm(new_pos - old_pos).item()
         if delta_pos > MAX_POS_DELTA:
             mismatches.append(f"{link_name} position changed by {delta_pos} meters from {old_pos} to {new_pos}.")
-        delta_orn_mag = (R.from_quat(new_orn) * R.from_quat(old_orn).inv()).magnitude()
+        delta_orn_mag = T.get_orientation_diff_in_radian(old_orn, new_orn)
         if delta_orn_mag > MAX_ORN_DELTA:
             mismatches.append(f"{link_name} orientation changed by {delta_orn_mag} rads from {old_orn} to {new_orn}.")
+        if th.any(th.abs(lin_vel) > MAX_LINEAR_VEL):
+            mismatches.append(f"{link_name} linear velocity is {lin_vel}.")
+        if th.any(th.abs(ang_vel) > MAX_ANGULAR_VEL):
+            mismatches.append(f"{link_name} angular velocity is {ang_vel}.")
 
     # Save the results
     with open(out_path, "w") as f:

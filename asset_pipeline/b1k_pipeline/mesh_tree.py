@@ -66,11 +66,13 @@ def build_mesh_tree(
     mesh_list = object_list["meshes"]
     object_bounding_boxes = object_list["bounding_boxes"]
     
-    # Invert the bbox rotations. 
+    # Invert the bbox rotations and update their scales
     # TODO: Remove .inv() after fixing the object_list wrong rotation.
     for model_id, instances in object_bounding_boxes.items():
         for instance_id, bbox in instances.items():
             bbox["rotation"] = R.from_quat(bbox["rotation"]).inv().as_quat().tolist()
+            bbox["extent"] = (np.array(bbox["extent"]) * SCALE_FACTOR).tolist()
+            bbox["position"] = (np.array(bbox["position"]) * SCALE_FACTOR).tolist()
 
     pbar = tqdm.tqdm(mesh_list) if show_progress else mesh_list
     for mesh_name in pbar:
