@@ -46554,13 +46554,16 @@
     "gunnysack.n.01": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
         "flammable": {
             "ignition_temperature": 250.0,
             "fire_temperature": 1000.0,
             "heating_rate": 0.04,
             "distance_threshold": 0.2
         },
+        "freezable": {},
         "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
