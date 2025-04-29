@@ -307,7 +307,7 @@
     {
         "object": "swivel_chair-pkpcew",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 250
@@ -628,7 +628,7 @@
     },
     {
         "object": "bottle_of_cleaner-svzbeq",
-        "complaint": "particleApplier",
+        "complaint": "nth-particleApplier",
         "processed": false,
         "new": true,
         "type": "metalink",
@@ -647,7 +647,7 @@
     {
         "object": "bottle_of_cleaner-svzbeq",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -786,7 +786,7 @@
     {
         "object": "monitor-qvpbge",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 306
@@ -811,7 +811,7 @@
     {
         "object": "notebook-yibctu",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "",
@@ -827,7 +827,7 @@
     },
     {
         "object": "pencil_holder-eodvyo",
-        "complaint": "fillable",
+        "complaint": "nth-fillable",
         "processed": false,
         "new": true,
         "type": "metalink",
@@ -879,7 +879,7 @@
     {
         "object": "pruner-lucqrs",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "",
@@ -888,7 +888,7 @@
     {
         "object": "pruner-lucqrs",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -897,7 +897,7 @@
     {
         "object": "pruner-lucqrs",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 319
@@ -905,7 +905,7 @@
     {
         "object": "storage_box-izcglf",
         "complaint": "openable, fillable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -923,7 +923,7 @@
     {
         "object": "storage_box-izcglf",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -932,7 +932,7 @@
     {
         "object": "storage_box-izcglf",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "",
@@ -1161,7 +1161,7 @@
     {
         "object": "table_lamp-ajrzlq",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -1170,7 +1170,7 @@
     {
         "object": "table_lamp-ajrzlq",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 350
@@ -1232,7 +1232,7 @@
     {
         "object": "burlap_bag-hlqrxm",
         "complaint": "fillable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -1241,7 +1241,7 @@
     {
         "object": "burlap_bag-hlqrxm",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1292,7 +1292,7 @@
     {
         "object": "chainsaw-xfihoe",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 364
@@ -1300,7 +1300,7 @@
     {
         "object": "desk-iufjhy",
         "complaint": "drawers need to be articulated",
-        "processed": false,
+        "processed": true,
         "type": "joint",
         "additional_info": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "id": 365
@@ -1362,7 +1362,7 @@
     {
         "object": "mouse-wwyopp",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1371,7 +1371,7 @@
     {
         "object": "pot_plant-cqqyzp",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 373
@@ -1387,7 +1387,7 @@
     {
         "object": "pot_plant-jgkozi",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 375
@@ -1395,7 +1395,7 @@
     {
         "object": "power_washer-pkhrip",
         "complaint": "togglebutton;fluidsource",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "id": 376

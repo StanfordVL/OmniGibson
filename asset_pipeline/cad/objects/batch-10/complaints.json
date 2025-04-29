@@ -838,7 +838,7 @@
     {
         "object": "serving_cart-yaabya",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -847,7 +847,7 @@
     {
         "object": "suitcase-njalke",
         "complaint": "needs to be openable",
-        "processed": false,
+        "processed": true,
         "type": "joint",
         "additional_info": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "id": 1275
@@ -864,7 +864,7 @@
     {
         "object": "suitcase-oqiwhb",
         "complaint": "needs to be openable",
-        "processed": false,
+        "processed": true,
         "type": "joint",
         "additional_info": "Confirm articulation:\nThis object has the below movable links annotated:\n- N/A\n\nThey have now all been set to their upper (maximum) limits.\nVerify that these are all the moving parts you expect from this object\nand that the joint limits look reasonable.",
         "id": 1277
@@ -881,7 +881,7 @@
     {
         "object": "suitcase-qthouj",
         "complaint": "needs to be openable",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "Confirm object meta links listed below:\n- N/A\n\nMake sure these match mechanisms you expect from this object.",
         "id": 1279
@@ -922,7 +922,7 @@
     {
         "object": "violin_case-jlasop",
         "complaint": "openable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -931,7 +931,7 @@
     {
         "object": "violin_case-jlasop",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
