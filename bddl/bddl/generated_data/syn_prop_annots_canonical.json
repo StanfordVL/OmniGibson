@@ -19476,8 +19476,11 @@
         "disinfectable": {}
     },
     "mortar.n.03": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
+        "heatable": {},
+        "freezable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -22748,6 +22751,7 @@
     },
     "pot_plant.n.01": {
         "flammable": {},
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},

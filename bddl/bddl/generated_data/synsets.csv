@@ -1352,7 +1352,7 @@ mold.n.05,fungus.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,visualSubstanc
 money.n.01,medium_of_exchange.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 monitor.n.04,display.n.06,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 mop_bucket.n.01,vessel.n.03,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-mortar.n.03,vessel.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+mortar.n.03,vessel.n.03,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 moss.n.01,bryophyte.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,visualSubstance
 mothball.n.01,ball.n.03,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 motorcycle.n.01,motor_vehicle.n.01,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
@@ -1579,7 +1579,7 @@ post.n.09,visual_signal.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBo
 postage.n.02,token.n.01,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 postcard.n.01,card.n.03,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 poster.n.01,sign.n.02,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
-pot_plant.n.01,plant.n.02,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
+pot_plant.n.01,plant.n.02,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,rigidBody
 pot.n.04,container.n.01,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 potato_pancake.n.01,pancake.n.01,0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
 potato.n.01,"root_vegetable.n.01,solanaceous_vegetable.n.01,starches.n.01",0,0,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,rigidBody
