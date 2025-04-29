@@ -11,10 +11,10 @@
     )
     
     (:init 
-        (ontop recreational_vehicle.n.01_1 floor.n.01_1)
+        (inroom recreational_vehicle.n.01_1 garage)
         (attached bicycle.n.01_1 bicycle_rack.n.01_1) 
         (attached bicycle_rack.n.01_1 recreational_vehicle.n.01_1)
-        (inroom floor.n.01_1 garden)
+        (inroom floor.n.01_1 garage)
         (inroom bookcase.n.01_1 garage) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
