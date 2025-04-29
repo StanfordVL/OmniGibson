@@ -53,14 +53,14 @@ git lfs pull
 3. Update dataset to the most recent version:
 ```bash
 # Download the latest dataset
-wget https://storage.googleapis.com/gibson_scenes/og_dataset_1_2_0rc2.zip
+wget https://storage.googleapis.com/gibson_scenes/og_dataset_1_2_0rc4.zip
 
 # Extract and replace the existing dataset
 cd OmniGibson
 # Optionally backup the original dataset
 mv omnigibson/data/og_dataset omnigibson/data/og_dataset_backup
 # Extract the new dataset to the correct location
-unzip path/to/og_dataset_1_2_0rc2.zip -d omnigibson/data/og_dataset
+unzip path/to/og_dataset_1_2_0rc4.zip -d omnigibson/data/og_dataset
 ```
 
 ### Step 3: BDDL Repository Setup
@@ -172,7 +172,7 @@ python experiments/launch_nodes.py --recording_path /path/to/recording_file_name
 
 4. In another terminal, run the JoyLo node:
 ```bash
-python experiments/run_r1_gello.py --joint_config_file joint_config_{your specific gello set name}.yaml
+python experiments/run_joylo.py --gello_model r1pro --joint_config_file joint_config_{your specific gello set name}.yaml
 ```
 
 ### Usage Notes
