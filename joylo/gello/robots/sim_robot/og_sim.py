@@ -474,7 +474,7 @@ class OGRobotServer:
                 trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
                 self._current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
                 base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
-                self._current_trunk_tilt_offset = trunk_qpos[2] - base_trunk_pos[2]
+                self._current_trunk_tilt_offset = float(trunk_qpos[2] - base_trunk_pos[2])
                 
                 print("Finished rolling back!")
                 self._waiting_to_resume = True
