@@ -1019,9 +1019,6 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     target_pose["eyes"] = (sampled_eyes_pos.to(th.float32), sampled_eyes_orn_wrt_world.to(th.float32))
                     # print("angle: ", np.rad2deg(self.quaternion_angular_distance(eye_quat_for_sampled_base_pos, sampled_eyes_orn_wrt_world)))
 
-                    # make sure target_pose has eyes and right_eef_link in keys
-                    # breakpoint()
-
                     # TODO: Currently, the batch has same target pose. Each element in a batch does run independently, so it's still useful.
                     # But, check if it's better for speed to have different target poses for each element in a batch.
                     # start = time.time()
@@ -1041,6 +1038,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     # print("retval: ", retval)
                     # If reachibility satisfied (without collision check)
                     if retval is not None:
+                        
+                        # =============== CHECK 1 ================
                         # Set trunk positions obtainted from IK solving
                         query_joint_pos_after_nav = initial_joint_pos.clone()
                         query_joint_pos_after_nav[self.robot.trunk_control_idx] = retval[0][self.robot.trunk_control_idx]
@@ -1064,7 +1063,9 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                             # Collision detected, so skip this sample
                             print("after-nav collision check failed, skipping sample")
                             continue
+                        # =============== END OF CHECK 1 ================
 
+                        # =============== CHECK 2 (OPTION 1)================
                         query_joint_pos_pre_grasp = query_joint_pos_after_nav.clone()
                         # Set arm positions obtainted from IK solving
                         for arm in self.robot.arm_control_idx:
@@ -1072,33 +1073,14 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                                 self.robot.arm_control_idx[arm]
                             ]
 
-                        # NOTE: This might do unnecessary filtering. If the IK check w/o collision found a solution and we set the arms joint positions to that 
-                        # solution and then we check if the arm joint positions are in collision, it might be that those particular arm joint positions 
-                        # are in collision but there might exist some other joint positions that isn't. Talk to Eric about this
-
                         # Collision check for joint positions pre grasping
                         # - base joints: sampled base pose
                         # - torso joints: IK solution to reach sampled eyes pose
                         # - arm joints: IK solution to reach the *first* end-effector pose
-                        # if we pass an attaced object, leads to segmentation fault: https://github.com/mikedh/trimesh/issues/550
-                        # Instead, the object is already attached outside of this function
-                        # target_pose_first_eef = {
-                        #     key: val if key == "eyes" else (val[0][0], val[1][0])
-                        #     for key, val in target_pose.items()
-                        # }
-                        # start = time.time()
-                        # retval = self._ik_solver_cartesian_to_joint_space(
-                        #     target_pose_first_eef,
-                        #     initial_joint_pos=initial_joint_pos,
-                        #     skip_obstacle_update=skip_obstacle_update,
-                        #     ik_world_collision_check=True
-                        # )
-                        # print("ik solver pre-grasp", time.time() - start)
-                        # breakpoint()
-                        # if retval is None:
-                        #     print("pre-grasp IK w/ collision checking failed, skipping sample")
-                        #     continue
 
+                        # NOTE: This might do unnecessary filtering. If the IK check w/o collision found a solution and we set the arms joint positions to that 
+                        # solution and then we check if the arm joint positions are in collision, it might be that those particular arm joint positions 
+                        # are in collision but there might exist some other joint positions that isn't. Talk to Eric about this
                         # start = time.time()
                         invalid_results = self._motion_generator.check_collisions(
                             query_joint_pos_pre_grasp,
@@ -1111,7 +1093,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
                         if invalid_results[0].item():
                             # Collision detected, so skip this sample
-                            print("pre-grasp collision check failed, skipping sample")
+                            print("pre-replay collision check failed, skipping sample")
                             continue
 
                             # # ========= remove later =============
@@ -1131,8 +1113,37 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
 
                             # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
                             # # self.robot.set_joint_positions(temp_js)
-
                             # # ======================================
+                        
+                        # =============== END OF CHECK 2 (OPTION 1) ================
+
+                        # =============== CHECK 2 (OPTION 2) ================
+
+                        # IK check (with collision-check) for first eef_pose
+                        # - base joints: sampled base pose
+                        # - torso joints: IK solution to reach sampled eyes pose
+                        # - arm joints: current arm joint positions
+
+                        target_pose_first_eef = dict()
+                        for key, val in target_pose.items():
+                            if key != "eyes":
+                                target_pose_first_eef[key] = (val[0][0], val[1][0])
+                        
+                        # start = time.time()
+                        # Remember that query_joint_pos_after_nav is (sampled base pose + IK (w/o collision check) torso + current arm joint positions)
+                        retval = self._ik_solver_cartesian_to_joint_space(
+                            target_pose_first_eef,
+                            initial_joint_pos=query_joint_pos_after_nav,
+                            skip_obstacle_update=skip_obstacle_update,
+                            ik_world_collision_check=True,
+                            emb_sel=CuRoboEmbodimentSelection.ARM_NO_TORSO
+                        )
+                        # print("ik solver pre-grasp", time.time() - start)
+                        # breakpoint()
+                        if retval is None:
+                            print("pre-replay IK w/ collision checking failed, skipping sample")
+                            continue
+
 
                         # constraint_satisfied = True
                         self.target_eyes_pose_arr.append(target_pose["eyes"])
@@ -2610,21 +2621,23 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         for pose in candidate_poses:
             joint_pos = current_joint_pos.clone()
             joint_pos[self.robot.base_control_idx] = pose
+            
+            # candidate_joint_position: (sampled base pose + current torso + current arm joint positions)
             candidate_joint_positions.append(joint_pos)
 
             # Use the canonical torso joint positions for sampling eyes poses instead of the current torso joint positions.
             # Cause the eyes pose sampling is based on hardcoded thresholds so if the current position is such that
             # the robot is bent, the sampled eyes pose would be very wried and could lead to a lot of IK/MP failures
 
+            # Originally (sampled base pose + canonical torso + canonical arm joint positions)
             # canonical_joint_pos = self.robot.reset_joint_pos.clone()
             # canonical_joint_pos[self.robot.base_control_idx] = pose
 
-            # NOTE: We check if the robot is in collision at the sampled base pose with sampled base pose + canonical torso + current arm joint positions
+            # New version (sampled base pose + canonical torso + current arm joint positions)
             canonical_joint_pos = joint_pos.clone()
             canonical_joint_pos[self.robot.trunk_control_idx] = self.robot.reset_joint_pos[
                 self.robot.trunk_control_idx
             ].clone()
-
             canonical_joint_positions.append(canonical_joint_pos)
 
         candidate_joint_positions = th.stack(candidate_joint_positions)
