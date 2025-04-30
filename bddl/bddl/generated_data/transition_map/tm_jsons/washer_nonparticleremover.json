@@ -19162,6 +19162,19 @@
         }
     },
     {
+        "rule_name": "punching_bag.n.02-washer-cover",
+        "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
+        "washed_item": {
+            "punching_bag.n.02": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "putty_knife.n.01-washer-cover",
         "input_synsets": {},
         "machine": {
