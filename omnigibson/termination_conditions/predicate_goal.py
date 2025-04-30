@@ -29,7 +29,8 @@ class PredicateGoal(SuccessCondition):
         super().reset(task, env)
 
         # Reset status
-        self._goal_status = {"satisfied": [], "unsatisfied": []}
+        # self._goal_status = {"satisfied": [], "unsatisfied": []}
+        _, self._goal_status = evaluate_goal_conditions(self._goal_fcn())
 
     def _step(self, task, env, action):
         # Terminate if all goal conditions are met in the task

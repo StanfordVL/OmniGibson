@@ -62,6 +62,8 @@ from omnigibson.utils.object_state_utils import sample_cuboid_for_predicate
 from omnigibson.utils.python_utils import multi_dim_linspace
 from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.utils.sampling_utils import raytest
+from omnigibson.utils.ui_utils import draw_line
+
 
 m = create_module_macros(module_path=__file__)
 
@@ -128,6 +130,8 @@ m.LOW_PRECISION_JOINT_POS_DIFF_THRESHOLD = 0.05
 m.JOINT_CONTROL_MIN_ACTION = 0.0
 m.MAX_ALLOWED_JOINT_ERROR_FOR_LINEAR_MOTION = math.radians(45)
 m.TIME_BEFORE_JOINT_STUCK_CHECK = 1.0
+
+m.MAX_EYES_SAMPLING_ANGLE = math.radians(30)
 
 log = create_module_logger(module_name=__name__)
 
@@ -841,10 +845,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.01, eye_pos_wrt_robot[1] + 0.01)
             z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.025, eye_pos_wrt_robot[2])
         else:
-            x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.4)
+            x_sample = np.random.uniform(eye_pos_wrt_robot[0], eye_pos_wrt_robot[0] + 0.3)
             y_sample = np.random.uniform(eye_pos_wrt_robot[1] - 0.05, eye_pos_wrt_robot[1] + 0.05)
             # TODO (arpit) Test the upper limit range (0.2) makes sense
-            z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.4, eye_pos_wrt_robot[2] + 0.2)
+            z_sample = np.random.uniform(eye_pos_wrt_robot[2] - 0.2, eye_pos_wrt_robot[2] + 0.1) # originally eye_pos_wrt_robot[2] - 0.4 for lower limit
 
         sampled_eyes_pos_wrt_robot = np.array([x_sample, y_sample, z_sample])
         sampled_eyes_pos_wrt_world = T.pose2mat(robot_pose_wrt_world) @ np.hstack([sampled_eyes_pos_wrt_robot, 1])
@@ -930,7 +934,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         dot_product = np.clip(dot_product, -1.0, 1.0)  # Ensure numerical stability
         return 2 * np.arccos(abs(dot_product))
 
-    def _target_in_reach_of_robot_and_visible(self, target_pose, initial_joint_pos=None, skip_obstacle_update=False):
+    def _target_in_reach_of_robot_and_visible(self, target_pose, initial_joint_pos=None, skip_obstacle_update=False, ik_world_collision_check=False, emb_sel=CuRoboEmbodimentSelection.ARM, attach_obj=False, eyes_pose=None):
         """
         Determines whether the eef for the robot can reach the target pose in the world frame
 
@@ -941,184 +945,248 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             bool: Whether the default eef can reach the target pose
         """
-        # sample pos and orn for the eyes link and check if IK solution exists
-        robot_joint_names = list(self.robot.joints.keys())
-        cu_js = lazy.curobo.types.state.JointState(
-            position=self._motion_generator._tensor_args.to_device(initial_joint_pos), joint_names=robot_joint_names
-        ).get_ordered_joint_state(self._motion_generator.mg["default"].kinematics.joint_names)
-        retval = self._motion_generator.mg["default"].kinematics.compute_kinematics(cu_js, link_name="eyes")
-        # TODO: (eric - datagen): eye pose in robot initial pose frame
-        eye_pos_for_sampled_base_pos = retval.ee_position.cpu()[0]
-        eye_quat_for_sampled_base_pos = retval.ee_quaternion.cpu()[0]
-        # convert quat from wxyz (curobo) to xyzw (OG)
-        eye_quat_for_sampled_base_pos = th.roll(eye_quat_for_sampled_base_pos, -1)
-        eye_pose_for_sampled_base_pose = (eye_pos_for_sampled_base_pos, eye_quat_for_sampled_base_pos)
-        # TODO: (eric - datagen): obect pos is in world frame
-        obj_pos = self._tracking_object.get_position_orientation()[0]
+        ignore_bodies = []
+        for link in self.robot.links:
+            ignore_bodies.append(self.robot.links[link].prim_path)
 
-        robot_pose2d_for_sampled_base = th.tensor([initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]])
-        robot_pose_for_sampled_base = self._get_robot_pose_from_2d_pose(robot_pose2d_for_sampled_base)
-        # breakpoint()
+        if eyes_pose is None:
+            # sample pos and orn for the eyes link and check if IK solution exists
+            robot_joint_names = list(self.robot.joints.keys())
+            cu_js = lazy.curobo.types.state.JointState(
+                position=self._motion_generator._tensor_args.to_device(initial_joint_pos), joint_names=robot_joint_names
+            ).get_ordered_joint_state(self._motion_generator.mg["default"].kinematics.joint_names)
+            retval = self._motion_generator.mg["default"].kinematics.compute_kinematics(cu_js, link_name="eyes")
+            # TODO: (eric - datagen): eye pose in robot initial pose frame
+            eye_pos_for_sampled_base_pos = retval.ee_position.cpu()[0]
+            eye_quat_for_sampled_base_pos = retval.ee_quaternion.cpu()[0]
+            # convert quat from wxyz (curobo) to xyzw (OG)
+            eye_quat_for_sampled_base_pos = th.roll(eye_quat_for_sampled_base_pos, -1)
+            eye_pose_for_sampled_base_pose = (eye_pos_for_sampled_base_pos, eye_quat_for_sampled_base_pos)
+            # TODO: (eric - datagen): obect pos is in world frame
+            obj_pos = self._tracking_object.get_position_orientation()[0]
 
-        num_eyes_pos_samples = 5
-        num_eyes_orn_samples = 5
-        eyes_obj_min_distance = 0.2
-        for i in range(num_eyes_pos_samples):
-            # World frame
-            sampled_eyes_pos = self.sample_eyes_pos(
-                source_pose=eye_pose_for_sampled_base_pose, robot_pose=robot_pose_for_sampled_base
-            )
-            eye_to_obj_vec = obj_pos - sampled_eyes_pos
-            if eye_to_obj_vec.norm() < eyes_obj_min_distance:
-                print("sampled eyes pos too close to object, skipping sample")
-                continue
-            raytest_result = raytest(sampled_eyes_pos, obj_pos, only_closest=True)
-            if not raytest_result["hit"]:
-                print("raytest from eyes to object does not hit, skipping sample")
-                continue
-            elif raytest_result["hit"] and raytest_result["rigidBody"] != self._tracking_object.root_link.prim_path:
-                print(
-                    f"raytest from eyes to object hits something else, expect {self._tracking_object.root_link.prim_path}, got {raytest_result['rigidBody']}, skipping sample"
-                )
-                continue
-            # print("dist: ", th.linalg.norm(eye_pos_for_sampled_base_pos - sampled_eyes_pos))
-            # from omnigibson.utils.ui_utils import draw_line
-            # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist())
-            # for _ in range(20): og.sim.step()
-            eye_to_obj_vec_wrt_robot = th.linalg.inv(T.pose2mat(robot_pose_for_sampled_base))[
-                :3, :3
-            ] @ eye_to_obj_vec.to(th.float32)
-
-            # quat = eye_pose_wrt_world[1].numpy()
-            sampled_eyes_orn_wrt_robot_arr = self.sample_eyes_orn(
-                eye_to_obj_vec_wrt_robot, num_samples=num_eyes_orn_samples, max_angle=np.radians(30), anisotropy=(1, 1)
-            )
+            robot_pose2d_for_sampled_base = th.tensor([initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]])
+            robot_pose_for_sampled_base = self._get_robot_pose_from_2d_pose(robot_pose2d_for_sampled_base)
             # breakpoint()
-            for j in range(num_eyes_orn_samples):
-                sampled_eyes_orn_wrt_robot = sampled_eyes_orn_wrt_robot_arr[j]
-                sampled_eyes_orn_wrt_world = th.matmul(
-                    T.pose2mat(robot_pose_for_sampled_base)[:3, :3], T.quat2mat(sampled_eyes_orn_wrt_robot)
+
+            num_eyes_pos_samples = 5
+            num_eyes_orn_samples = 5
+            eyes_obj_min_distance = 0.2
+            for i in range(num_eyes_pos_samples):
+                # World frame
+                sampled_eyes_pos = self.sample_eyes_pos(
+                    source_pose=eye_pose_for_sampled_base_pose, robot_pose=robot_pose_for_sampled_base
                 )
-                sampled_eyes_orn_wrt_world = T.mat2quat(sampled_eyes_orn_wrt_world)
-                target_pose["eyes"] = (sampled_eyes_pos.to(th.float32), sampled_eyes_orn_wrt_world.to(th.float32))
-                # print("angle: ", np.rad2deg(self.quaternion_angular_distance(eye_quat_for_sampled_base_pos, sampled_eyes_orn_wrt_world)))
+                eye_to_obj_vec = obj_pos - sampled_eyes_pos
 
-                # make sure target_pose has eyes and right_eef_link in keys
-                # breakpoint()
+                if eye_to_obj_vec.norm() < eyes_obj_min_distance:
+                    print("sampled eyes pos too close to object, skipping sample")
+                    continue
+                
+                raytest_result = raytest(sampled_eyes_pos, obj_pos, only_closest=True, ignore_bodies=ignore_bodies)
+                # We don't need this!
+                # if not raytest_result["hit"]:
+                #     print("raytest from eyes to object does not hit, skipping sample")
+                #     continue
+                if raytest_result["hit"] and raytest_result["rigidBody"] != self._tracking_object.root_link.prim_path:
+                    print(
+                        f"raytest from eyes to object hits something else, expect {self._tracking_object.root_link.prim_path}, got {raytest_result['rigidBody']}, skipping sample"
+                    )
+                    # breakpoint()
+                    # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist(), color=(1.0, 0.0, 0.0, 1.0), size=2.0)
+                    # for _ in range(5): og.sim.step()
+                    
+                    continue
 
-                # TODO: Currently, the batch has same target pose. Each element in a batch does run independently, so it's still useful.
-                # But, check if it's better for speed to have different target poses for each element in a batch.
-                # start = time.time()
+                # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist(), color=(0.0, 1.0, 0.0, 1.0), size=2.0)
+                # for _ in range(5): og.sim.step()
+
+                eye_to_obj_vec_wrt_robot = th.linalg.inv(T.pose2mat(robot_pose_for_sampled_base))[
+                    :3, :3
+                ] @ eye_to_obj_vec.to(th.float32)
+
+                # quat = eye_pose_wrt_world[1].numpy()
+                sampled_eyes_orn_wrt_robot_arr = self.sample_eyes_orn(
+                    eye_to_obj_vec_wrt_robot, num_samples=num_eyes_orn_samples, max_angle=m.MAX_EYES_SAMPLING_ANGLE, anisotropy=(1, 1)
+                )
                 # breakpoint()
-                retval = self._ik_solver_cartesian_to_joint_space(
+                for j in range(num_eyes_orn_samples):
+                    sampled_eyes_orn_wrt_robot = sampled_eyes_orn_wrt_robot_arr[j]
+                    sampled_eyes_orn_wrt_world = th.matmul(
+                        T.pose2mat(robot_pose_for_sampled_base)[:3, :3], T.quat2mat(sampled_eyes_orn_wrt_robot)
+                    )
+                    sampled_eyes_orn_wrt_world = T.mat2quat(sampled_eyes_orn_wrt_world)
+                    target_pose["eyes"] = (sampled_eyes_pos.to(th.float32), sampled_eyes_orn_wrt_world.to(th.float32))
+                    # print("angle: ", np.rad2deg(self.quaternion_angular_distance(eye_quat_for_sampled_base_pos, sampled_eyes_orn_wrt_world)))
+
+                    # make sure target_pose has eyes and right_eef_link in keys
+                    # breakpoint()
+
+                    # TODO: Currently, the batch has same target pose. Each element in a batch does run independently, so it's still useful.
+                    # But, check if it's better for speed to have different target poses for each element in a batch.
+                    # start = time.time()
+                    # breakpoint()
+                    retval = self._ik_solver_cartesian_to_joint_space(
+                        target_pose,
+                        initial_joint_pos=initial_joint_pos,
+                        skip_obstacle_update=skip_obstacle_update,
+                        ik_world_collision_check=ik_world_collision_check,
+                        emb_sel=emb_sel,
+                        attach_obj=attach_obj,
+                    )
+                    # print("eye pos orn ij", i, j)
+                    # print("target pose", target_pose)
+                    # print("initial joint pos", initial_joint_pos)
+                    # print("ik solver", time.time() - start)
+                    # print("retval: ", retval)
+                    # If reachibility satisfied (without collision check)
+                    if retval is not None:
+                        # Set trunk positions obtainted from IK solving
+                        query_joint_pos_after_nav = initial_joint_pos.clone()
+                        query_joint_pos_after_nav[self.robot.trunk_control_idx] = retval[0][self.robot.trunk_control_idx]
+
+                        # Collision check for joint positions after navigation
+                        # - base joints: sampled base pose
+                        # - torso joints: IK solution to reach sampled eyes pose
+                        # - arm joints: current arm joint positions
+                        # if we pass an attaced object, leads to segmentation fault: https://github.com/mikedh/trimesh/issues/550
+                        # Instead, the object is already attached outside of this function
+                        # start = time.time()
+                        invalid_results = self._motion_generator.check_collisions(
+                            query_joint_pos_after_nav,
+                            self_collision_check=True,
+                            skip_obstacle_update=skip_obstacle_update,
+                            attached_obj=None,
+                            attached_obj_scale=None,
+                        ).cpu()
+                        # print("check collision after nav", time.time() - start)
+                        if invalid_results[0].item():
+                            # Collision detected, so skip this sample
+                            print("after-nav collision check failed, skipping sample")
+                            continue
+
+                        query_joint_pos_pre_grasp = query_joint_pos_after_nav.clone()
+                        # Set arm positions obtainted from IK solving
+                        for arm in self.robot.arm_control_idx:
+                            query_joint_pos_pre_grasp[self.robot.arm_control_idx[arm]] = retval[0][
+                                self.robot.arm_control_idx[arm]
+                            ]
+
+                        # NOTE: This might do unnecessary filtering. If the IK check w/o collision found a solution and we set the arms joint positions to that 
+                        # solution and then we check if the arm joint positions are in collision, it might be that those particular arm joint positions 
+                        # are in collision but there might exist some other joint positions that isn't. Talk to Eric about this
+
+                        # Collision check for joint positions pre grasping
+                        # - base joints: sampled base pose
+                        # - torso joints: IK solution to reach sampled eyes pose
+                        # - arm joints: IK solution to reach the *first* end-effector pose
+                        # if we pass an attaced object, leads to segmentation fault: https://github.com/mikedh/trimesh/issues/550
+                        # Instead, the object is already attached outside of this function
+                        # target_pose_first_eef = {
+                        #     key: val if key == "eyes" else (val[0][0], val[1][0])
+                        #     for key, val in target_pose.items()
+                        # }
+                        # start = time.time()
+                        # retval = self._ik_solver_cartesian_to_joint_space(
+                        #     target_pose_first_eef,
+                        #     initial_joint_pos=initial_joint_pos,
+                        #     skip_obstacle_update=skip_obstacle_update,
+                        #     ik_world_collision_check=True
+                        # )
+                        # print("ik solver pre-grasp", time.time() - start)
+                        # breakpoint()
+                        # if retval is None:
+                        #     print("pre-grasp IK w/ collision checking failed, skipping sample")
+                        #     continue
+
+                        # start = time.time()
+                        invalid_results = self._motion_generator.check_collisions(
+                            query_joint_pos_pre_grasp,
+                            self_collision_check=True,
+                            skip_obstacle_update=skip_obstacle_update,
+                            attached_obj=None,
+                            attached_obj_scale=None,
+                        ).cpu()
+                        # print("check collision pre-grasp", time.time() - start)
+
+                        if invalid_results[0].item():
+                            # Collision detected, so skip this sample
+                            print("pre-grasp collision check failed, skipping sample")
+                            continue
+
+                            # # ========= remove later =============
+                            # temp_state = og.sim.dump_state()
+                            # temp_base_joints = [initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]]
+                            # temp_base_joints = th.stack(temp_base_joints)
+                            # self.robot.set_joint_positions(temp_base_joints, indices=self.robot.base_control_idx)
+
+                            # temp_trunk_joints = retval[0][:4]
+                            # self.robot.set_joint_positions(temp_trunk_joints, indices=self.robot.trunk_control_idx)
+
+                            # for _ in range(50): og.sim.step()
+
+                            # breakpoint()
+                            # og.sim.load_state(temp_state)
+                            # for _ in range(20): og.sim.step()
+
+                            # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
+                            # # self.robot.set_joint_positions(temp_js)
+
+                            # # ======================================
+
+                        # constraint_satisfied = True
+                        self.target_eyes_pose_arr.append(target_pose["eyes"])
+
+                        return True
+
+            self.target_eyes_pose_arr.append(None)
+            # breakpoint()
+            return False
+
+        # If an eye pose is already given, we don't need to sample and we can directly compute visibility and reachability
+        else:
+            # 1. Visibility check
+            # Camera direction test
+            obj_pos = self._tracking_object.get_position_orientation()[0]
+            eyes_to_obj_vec = obj_pos - eyes_pose[0]
+            eyes_z_vec = -R.from_quat(eyes_pose[1]).as_matrix()[:3, 2]
+            dot_product = np.dot(eyes_to_obj_vec, eyes_z_vec)
+            norm_eyes_to_obj_vec = np.linalg.norm(eyes_to_obj_vec)
+            norm_eyes_z_vec = np.linalg.norm(eyes_z_vec)
+            # Ensure the value passed to arccos is within [-1, 1] to avoid NaNs due to floating point errors
+            cos_theta = np.clip(dot_product / (norm_eyes_to_obj_vec * norm_eyes_z_vec), -1.0, 1.0)
+            angle_rad = np.arccos(cos_theta)
+            print("angle_rad: ", angle_rad)
+            # Early return
+            if angle_rad > m.MAX_EYES_SAMPLING_ANGLE:
+                print("angle between eyes and object is too large, meaning that object is not in view of camera")
+                return False
+            
+            # Raycast test
+            # ignore_bodies=[self.robot.links["torso_link4"].prim_path]
+            raytest_result = raytest(eyes_pose[0], obj_pos, only_closest=True, ignore_bodies=ignore_bodies)
+            if raytest_result["hit"] and raytest_result["rigidBody"] != self._tracking_object.root_link.prim_path:
+                print(
+                    f"raytest from eyes to object hits something else, expect {self._tracking_object.root_link.prim_path}, got {raytest_result['rigidBody']}, meaning that another obect is probably blocking the camera from look at the object"
+                )
+                return False
+
+            # 2. Reachability check
+            retval = self._ik_solver_cartesian_to_joint_space(
                     target_pose,
                     initial_joint_pos=initial_joint_pos,
                     skip_obstacle_update=skip_obstacle_update,
-                    # visibility_constraint=True,
+                    ik_world_collision_check=ik_world_collision_check,
+                    emb_sel=emb_sel,
                 )
-                # print("eye pos orn ij", i, j)
-                # print("target pose", target_pose)
-                # print("initial joint pos", initial_joint_pos)
-                # print("ik solver", time.time() - start)
-                # print("retval: ", retval)
-                # If reachibility satisfied (without collision check)
-                if retval is not None:
-                    # Set trunk positions obtainted from IK solving
-                    query_joint_pos_after_nav = initial_joint_pos.clone()
-                    query_joint_pos_after_nav[self.robot.trunk_control_idx] = retval[0][self.robot.trunk_control_idx]
+            if retval is None:
+                print("IK solver failed, meaning that the object is not reachable")
+                return False
 
-                    # Collision check for joint positions after navigation
-                    # - base joints: sampled base pose
-                    # - torso joints: IK solution to reach sampled eyes pose
-                    # - arm joints: current arm joint positions
-                    # if we pass an attaced object, leads to segmentation fault: https://github.com/mikedh/trimesh/issues/550
-                    # Instead, the object is already attached outside of this function
-                    # start = time.time()
-                    invalid_results = self._motion_generator.check_collisions(
-                        query_joint_pos_after_nav,
-                        self_collision_check=True,
-                        skip_obstacle_update=skip_obstacle_update,
-                        attached_obj=None,
-                        attached_obj_scale=None,
-                    ).cpu()
-                    # print("check collision after nav", time.time() - start)
-                    if invalid_results[0].item():
-                        # Collision detected, so skip this sample
-                        print("after-nav collision check failed, skipping sample")
-                        continue
-
-                    query_joint_pos_pre_grasp = query_joint_pos_after_nav.clone()
-                    # Set arm positions obtainted from IK solving
-                    for arm in self.robot.arm_control_idx:
-                        query_joint_pos_pre_grasp[self.robot.arm_control_idx[arm]] = retval[0][
-                            self.robot.arm_control_idx[arm]
-                        ]
-
-                    # Collision check for joint positions pre grasping
-                    # - base joints: sampled base pose
-                    # - torso joints: IK solution to reach sampled eyes pose
-                    # - arm joints: IK solution to reach the *first* end-effector pose
-                    # if we pass an attaced object, leads to segmentation fault: https://github.com/mikedh/trimesh/issues/550
-                    # Instead, the object is already attached outside of this function
-                    # target_pose_first_eef = {
-                    #     key: val if key == "eyes" else (val[0][0], val[1][0])
-                    #     for key, val in target_pose.items()
-                    # }
-                    # start = time.time()
-                    # retval = self._ik_solver_cartesian_to_joint_space(
-                    #     target_pose_first_eef,
-                    #     initial_joint_pos=initial_joint_pos,
-                    #     skip_obstacle_update=skip_obstacle_update,
-                    #     ik_world_collision_check=True
-                    # )
-                    # print("ik solver pre-grasp", time.time() - start)
-                    # breakpoint()
-                    # if retval is None:
-                    #     print("pre-grasp IK w/ collision checking failed, skipping sample")
-                    #     continue
-
-                    # start = time.time()
-                    invalid_results = self._motion_generator.check_collisions(
-                        query_joint_pos_pre_grasp,
-                        self_collision_check=True,
-                        skip_obstacle_update=skip_obstacle_update,
-                        attached_obj=None,
-                        attached_obj_scale=None,
-                    ).cpu()
-                    # print("check collision pre-grasp", time.time() - start)
-
-                    if invalid_results[0].item():
-                        # Collision detected, so skip this sample
-                        print("pre-grasp collision check failed, skipping sample")
-                        continue
-
-                        # # ========= remove later =============
-                        # temp_state = og.sim.dump_state()
-                        # temp_base_joints = [initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]]
-                        # temp_base_joints = th.stack(temp_base_joints)
-                        # self.robot.set_joint_positions(temp_base_joints, indices=self.robot.base_control_idx)
-
-                        # temp_trunk_joints = retval[0][:4]
-                        # self.robot.set_joint_positions(temp_trunk_joints, indices=self.robot.trunk_control_idx)
-
-                        # for _ in range(50): og.sim.step()
-
-                        # breakpoint()
-                        # og.sim.load_state(temp_state)
-                        # for _ in range(20): og.sim.step()
-
-                        # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
-                        # # self.robot.set_joint_positions(temp_js)
-
-                        # # ======================================
-
-                    # constraint_satisfied = True
-                    self.target_eyes_pose_arr.append(target_pose["eyes"])
-
-                    return True
-
-        self.target_eyes_pose_arr.append(None)
-        return False
+            # If passed above checks, object is reachable and visible
+            print("All checks passed, meaning that the object is reachable and visible")
+            return True         
+            
 
     def _target_in_reach_of_robot(self, target_pose, initial_joint_pos=None, skip_obstacle_update=False):
         """
@@ -1145,7 +1213,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         return th.cat([self.robot.trunk_control_idx, self.robot.arm_control_idx[self.arm]])
 
     def _ik_solver_cartesian_to_joint_space(
-        self, target_pose, initial_joint_pos=None, skip_obstacle_update=False, ik_world_collision_check=False
+        self, target_pose, initial_joint_pos=None, skip_obstacle_update=False, ik_world_collision_check=False, emb_sel=CuRoboEmbodimentSelection.ARM, attach_obj=False,
     ):
         """
         Get joint positions for the arm so eef is at the target pose in the world frame
@@ -1211,13 +1279,13 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             finetune_attempts=0,
             return_full_result=False,
             success_ratio=success_ratio,
-            attached_obj=None,
-            attached_obj_scale=None,
+            attached_obj=None if not attach_obj else self.attached_obj_info["attached_obj"],
+            attached_obj_scale=None if not attach_obj else self.attached_obj_info["attached_obj_scale"],
             motion_constraint=None,
             skip_obstacle_update=skip_obstacle_update,
             ik_only=True,
             ik_world_collision_check=ik_world_collision_check,
-            emb_sel=CuRoboEmbodimentSelection.ARM,
+            emb_sel=emb_sel,
         )
         # print("IK solver successes: ", successes)
 
