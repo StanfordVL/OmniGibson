@@ -13515,9 +13515,12 @@
         "disinfectable": {}
     },
     "french_fry_holder.n.01": {
+        "fillable": {},
         "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
+        "heatable": {},
+        "freezable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -22369,7 +22372,6 @@
         "disinfectable": {}
     },
     "pole.n.01": {
-        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "attachable": {},
@@ -23173,7 +23175,6 @@
     },
     "punching_bag.n.02": {
         "fillable": {},
-        "particleRemover": {},
         "rigidBody": {},
         "nonSubstance": {},
         "heatable": {},
@@ -27255,8 +27256,11 @@
         "disinfectable": {}
     },
     "storage_organizer.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
+        "heatable": {},
+        "freezable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -29839,6 +29843,7 @@
         "physicalSubstance": {}
     },
     "violin_case.n.01": {
+        "openable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "wetable": {},
