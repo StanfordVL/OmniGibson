@@ -746,9 +746,7 @@ def processFile(filename: pathlib.Path):
 
 def fix_common_issues_in_all_files():
     TGTS = {
-        "house_single_floor",
-        "Beechwood_0_garden",
-        "Rs_garden",
+        "house_double_floor_upper",
         "house_double_floor_lower"
     }
     candidates = [
