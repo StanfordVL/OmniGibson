@@ -579,7 +579,7 @@
     {
         "object": "ceremonial_robe-stcrad",
         "complaint": "cloth",
-        "processed": false,
+        "processed": true,
         "type": "softbody",
         "additional_info": "Check if the object looks like it absolutely MUST be a soft body.\nRequirements:\n- type 'cloth' if you think the object can reasonably be simulated by 2D cloth.\n- type 'soft' if it needs to be soft but still needs to have a volume.\n- just hit enter without typing anything if the object does NOT have to be a soft body.",
         "id": 1430
@@ -887,7 +887,7 @@
     {
         "object": "tree-wtyipq",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
