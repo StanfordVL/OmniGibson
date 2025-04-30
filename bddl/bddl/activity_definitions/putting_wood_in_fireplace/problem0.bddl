@@ -11,7 +11,7 @@
     (:init 
         (ontop log.n.01_1 floor.n.01_1) 
         (ontop log.n.01_2 floor.n.01_1) 
-        (inroom floor.n.01_1 entryway) 
+        (inroom floor.n.01_1 garage) 
         (inroom wood_fireplace.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
