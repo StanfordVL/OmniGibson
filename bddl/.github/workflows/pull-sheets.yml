@@ -2,7 +2,7 @@ name: Sync Google Sheets data
 
 on:
   schedule:
-    - cron: "50 * * * *"  # 50 past every hour
+    - cron: "0 10 * * *"  # Every day at 10am
   workflow_dispatch:
   push:
     branches:
@@ -30,7 +30,7 @@ jobs:
     - name: Setup python
       uses: actions/setup-python@v2
       with:
-        python-version: "3.8"
+        python-version: "3.10"
         architecture: x64
 
     - name: Authenticate on Google Cloud
@@ -67,6 +67,20 @@ jobs:
     - name: Copy over ig_pipeline files
       run: cp ig_pipeline/artifacts/pipeline/{combined_room_object_list,combined_room_object_list_future,object_inventory,object_inventory_future}.json bddl/bddl/generated_data
 
+    - name: Combine complaint files from ig_pipeline
+      run: |
+        python3 -c "
+        import glob, json
+        files = glob.glob('ig_pipeline/cad/*/*/complaints.json')
+        combined = []
+        for file in files:
+            with open(file) as f:
+                combined.extend(json.load(f))
+        combined.sort(key=lambda x: (x['object'], x['type'], x['additional_info'], x['complaint'], x['processed']))
+        with open('bddl/bddl/generated_data/complaints.json', 'w') as f:
+            json.dump(combined, f, indent=2)
+        "
+
     - name: Install BDDL
       working-directory: bddl
       run: pip install -e .
@@ -82,6 +96,11 @@ jobs:
     - name: Refresh derivative data
       working-directory: bddl
       run: python -m bddl.data_generation.generate_datafiles
+
+    # We want to check if the knowledgebase imports correctly, and if not, we want to NOT do the pull
+    # because it will result in a permamently broken knowledgebase that blocks sampling and website.
+    - name: Test if knowledgebase loads OK
+      run: python -c "from bddl.knowledge_base import *"
 
     - uses: stefanzweifel/git-auto-commit-action@v4
       with:
