@@ -74,6 +74,8 @@ def generate_maps_for_current_scene(scene_id):
                         continue
                     door.states[object_states.Open].set_value(True, fully=True)
 
+            og.sim.step()
+
         # Compute the map dimensions by finding the AABB of all objects and calculating max distance from origin.
         floor_objs = {
             floor

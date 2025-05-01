@@ -53,40 +53,52 @@ ENTRYPOINTS = {
     "resolve_complaints.py": "Resolve QA complaints for this file.",
     "wensi_view_complaints.py": "View Wensi's TODO complaints for this file.",
     "wensi_resolve_complaints.py": "Resolve Wensi's TODO complaints for this file.",
+    "require_rebake.py": "Mark the object for rebaking of its texture.",
 }
 
 
 def main():
-    # Create the menu
+    # Get the main menu bar
+    mainMenuBar = rt.menuMan.getMainMenuBar()
+
+    # Create the menu if it doesnt exist
     if rt.menuMan.registerMenuContext(0x5f77dd6d):
-        this_dir = pathlib.Path(__file__).parent
-
-        # Get the main menu bar
-        mainMenuBar = rt.menuMan.getMainMenuBar()
-
         # Create a new menu
         subMenu = rt.menuMan.createMenu("SVL")
-
-        for entrypoint, tooltip in ENTRYPOINTS.items():
-            # Create the script
-            script_name = entrypoint.replace(".py", "")
-            script_human_readable_name = script_name.replace("_", " ").title()
-            entrypoint_fullname = str((this_dir / entrypoint).absolute())
-            script = f'Python.ExecuteFile @"{entrypoint_fullname}"'
-            rt.macros.new("SVL_Tools", script_name, tooltip, script_human_readable_name, script)
-
-            # Create a menu item that calls the sample macroScript
-            testItem = rt.menuMan.createActionItem(script_name, "SVL_Tools")
-            assert testItem, "Failed to create action item " + script_human_readable_name
-            # Add the item to the menu
-            subMenu.addItem(testItem, -1)
-
         # Create a new menu item with the menu as its sub-menu
         subMenuItem = rt.menuMan.createSubMenuItem("SVL", subMenu)
         # Compute the index of the next-to-last menu item in the main menu bar
         subMenuIndex = mainMenuBar.numItems() - 1
         # Add the sub-menu just at the second to last slot
         mainMenuBar.addItem(subMenuItem, subMenuIndex)
+    else:
+        # Get the existing menu
+        subMenuItem, = [mainMenuBar.getItem(x + 1) for x in range(mainMenuBar.numItems()) if mainMenuBar.getItem(x + 1).getTitle() == "SVL"]
+        subMenu = subMenuItem.getSubMenu()
+
+        this_dir = pathlib.Path(__file__).parent
+
+        for entrypoint, tooltip in ENTRYPOINTS.items():
+            script_name = entrypoint.replace(".py", "")
+            script_human_readable_name = script_name.replace("_", " ").title()
+
+            # Check if it already exists
+            existing_menu_items_with_name = [x for x in range(subMenu.numItems()) if subMenu.getItem(x + 1).getTitle() == script_human_readable_name]
+            if existing_menu_items_with_name:
+                continue
+
+            # Create the script
+            entrypoint_fullname = str((this_dir / entrypoint).absolute())
+            script = f'Python.ExecuteFile @"{entrypoint_fullname}"'
+            rt.macros.new("SVL_Tools", script_name, tooltip, script_human_readable_name, script)
+
+            # Create a menu item that calls the sample macroScript
+            actionItem = rt.menuMan.createActionItem(script_name, "SVL_Tools")
+            assert actionItem, "Failed to create action item " + script_human_readable_name
+            # Add the item to the menu
+            subMenu.addItem(actionItem, -1)
+
+
         # Redraw the menu bar with the new item
         rt.menuMan.updateMenuBar()
 
