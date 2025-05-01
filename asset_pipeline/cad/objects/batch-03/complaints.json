@@ -352,7 +352,7 @@
     {
         "object": "parer-lwpdhi",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 427
@@ -368,7 +368,7 @@
     {
         "object": "putty_knife-qmdkub",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 429
@@ -402,7 +402,7 @@
     {
         "object": "air_freshener_atomizer-vxtgpy",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -584,7 +584,7 @@
     {
         "object": "toolbox-redmtl",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "",
@@ -609,7 +609,7 @@
     {
         "object": "bag_of_starch-npegpl",
         "complaint": "softBody",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "substanceness",
         "additional_info": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: rigidBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",
@@ -686,7 +686,7 @@
     {
         "object": "teddy_bear-faxvha",
         "complaint": "3",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "substanceness",
         "additional_info": "SUBSTANCE: Confirm if object should be a rigid body, cloth, or substance.\nIf it's marked softBody or rope, that means it will be a rigid body for now, which is OK.\n\nCurrently, it is annotated as: softBody.\n\nEnter one of \"rigidBody\", \"liquid\", \"macroPhysicalSubstance\", \"microPhysicalSubstance\", \"visualSubstance\", \"cloth\", \"softBody\", \"rope\" to change.",

@@ -412,7 +412,7 @@
     {
         "object": "carving_knife-alekva",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 3020
@@ -420,7 +420,7 @@
     {
         "object": "carving_knife-awvoox",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 3021
@@ -463,7 +463,7 @@
     {
         "object": "carving_knife-mzhpkm",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 3026
@@ -593,7 +593,7 @@
     {
         "object": "folding_chair-dqhazh",
         "complaint": "two joints are annotated but only one moves in the category qa scripts",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_leg, RevoluteJoint\n- j_seat, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -602,7 +602,7 @@
     {
         "object": "folding_chair-dxergu",
         "complaint": "two joints are annotated but only one moves in the category qa script",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_leg, RevoluteJoint\n- j_seat, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -955,7 +955,7 @@
     {
         "object": "burner-pmntxh",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah_6",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
