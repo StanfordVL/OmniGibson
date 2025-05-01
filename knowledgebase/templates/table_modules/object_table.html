@@ -8,7 +8,7 @@
       {% endif %}
       <th>Category</th>
       <th>Synset</th>
-      <th>Task Relevant</th>
+      <th>Bounding Box Size</th>
       <th>Meta Links</th>
       <th>Used Rooms</th>
       <th>Ready?</th>
@@ -23,7 +23,7 @@
       {% endif %}
       <td>{{ object.category.name }}</td>
       <td>{{ object.category.synset.name }}</td>
-      <td>{{ object.category.synset.task_relevant }}</td>
+      <td>{{ "%.2f"|format(object.bounding_box_size.0) }}, {{ "%.2f"|format(object.bounding_box_size.1) }}, {{ "%.2f"|format(object.bounding_box_size.2) }}</td>
       <td>{% for ml in object.meta_links %} {{ ml.name }}, {% endfor %}</td>
       <td>{{ object.roomobjects|length }}</td>
       <td class="{% if object.ready %}bg-success{% else %}bg-warning|tocolor{% endif %}">{{ object.ready }}</td>
