@@ -298,21 +298,21 @@ class CuRoboMotionGenerator:
                     joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_REVOLUTE_JOINT_LIMIT
                     joint_limits.position[1][joint_idx] = -joint_limits.position[0][joint_idx]
 
-        # Make arm joint limits a bit more conservative
-        for arm in ["left", "right"]:
-            for joint_name in self.robot.arm_joint_names[arm]:
-                if joint_name in joint_limits.joint_names:
-                    joint_idx = joint_limits.joint_names.index(joint_name)
-                    lower = joint_limits.position[0][joint_idx]
-                    upper = joint_limits.position[1][joint_idx]
-                    mid = (upper + lower) / 2
-                    range = upper - lower
-                    # Make the joint limits range 95% of the original range
-                    new_range = 0.95 * range
-                    new_lower = mid - new_range / 2
-                    new_upper = mid + new_range / 2
-                    joint_limits.position[0][joint_idx] = new_lower
-                    joint_limits.position[1][joint_idx] = new_upper
+        # # Make arm joint limits a bit more conservative
+        # for arm in ["left", "right"]:
+        #     for joint_name in self.robot.arm_joint_names[arm]:
+        #         if joint_name in joint_limits.joint_names:
+        #             joint_idx = joint_limits.joint_names.index(joint_name)
+        #             lower = joint_limits.position[0][joint_idx]
+        #             upper = joint_limits.position[1][joint_idx]
+        #             mid = (upper + lower) / 2
+        #             range = upper - lower
+        #             # Make the joint limits range 95% of the original range
+        #             new_range = 0.95 * range
+        #             new_lower = mid - new_range / 2
+        #             new_upper = mid + new_range / 2
+        #             joint_limits.position[0][joint_idx] = new_lower
+        #             joint_limits.position[1][joint_idx] = new_upper
 
 
     def save_visualization(self, q, file_path, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
