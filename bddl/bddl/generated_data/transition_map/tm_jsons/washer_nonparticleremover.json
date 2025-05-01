@@ -6734,6 +6734,19 @@
         }
     },
     {
+        "rule_name": "clothesline_pole.n.01-washer-cover",
+        "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
+        "washed_item": {
+            "clothesline_pole.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "clothesline_rope.n.01-washer-cover",
         "input_synsets": {},
         "machine": {
