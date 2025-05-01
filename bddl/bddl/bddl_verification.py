@@ -43,7 +43,7 @@ VALID_ATTACHMENTS = set([
     ("bow.n.08", "wall_nail.n.01"),
     ("broken__light_bulb.n.01", "table_lamp.n.01"),
     ("cabinet_door.n.01", "cabinet_base.n.01"),
-    ("clothesline_rope.n.01", "pole.n.01"),
+    ("clothesline_rope.n.01", "clothesline_pole.n.01"),
     ("cork.n.04", "wine_bottle.n.01"),
     ("curtain_rod.n.01", "wall_nail.n.01"),
     ("dartboard.n.01", "wall_nail.n.01"),
