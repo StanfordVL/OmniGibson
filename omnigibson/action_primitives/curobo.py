@@ -305,14 +305,12 @@ class CuRoboMotionGenerator:
         #             joint_idx = joint_limits.joint_names.index(joint_name)
         #             lower = joint_limits.position[0][joint_idx]
         #             upper = joint_limits.position[1][joint_idx]
-        #             mid = (upper + lower) / 2
-        #             range = upper - lower
-        #             # Make the joint limits range 95% of the original range
-        #             new_range = 0.95 * range
-        #             new_lower = mid - new_range / 2
-        #             new_upper = mid + new_range / 2
-        #             joint_limits.position[0][joint_idx] = new_lower
-        #             joint_limits.position[1][joint_idx] = new_upper
+        #             percentile = 0.95
+        #             q_range = upper - lower
+        #             lower = lower + (1 - percentile) / 2 * q_range
+        #             upper = upper - (1 - percentile) / 2 * q_range
+        #             joint_limits.position[0][joint_idx] = lower
+        #             joint_limits.position[1][joint_idx] = upper
 
 
     def save_visualization(self, q, file_path, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
