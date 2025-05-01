@@ -156,6 +156,8 @@ class KnowledgeBaseProcessor():
                 # Original category
                 orig_category_name = orig_name.split("-")[0]
                 obj = Object.create(name=orig_id, original_category_name=orig_category_name, provider=provider, category=category)
+                if orig_id in inventory["bounding_box_sizes"]:
+                    obj.bounding_box_size = tuple(inventory["bounding_box_sizes"][orig_id])
                 if orig_name in inventory["meta_links"]:
                     existing_meta_types = set(inventory["meta_links"][orig_name])
                     if "openfillable" in existing_meta_types:
