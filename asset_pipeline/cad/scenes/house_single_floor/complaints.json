@@ -2042,7 +2042,7 @@
     {
         "object": "carving_knife-usqmjc",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -2051,7 +2051,7 @@
     {
         "object": "carving_knife-usqmjc",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 5607
@@ -2585,7 +2585,7 @@
     {
         "object": "laptop-izydvb",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "",
@@ -2863,7 +2863,7 @@
     {
         "object": "salt_shaker-fztfsi",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -2890,7 +2890,7 @@
     {
         "object": "shelf-amyper",
         "complaint": "multiple pieces",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "connectedness",
         "additional_info": "",
@@ -2908,7 +2908,7 @@
     {
         "object": "shelf-fjozhc",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -2926,7 +2926,7 @@
     {
         "object": "shelf-pfusrd",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -2944,7 +2944,7 @@
     {
         "object": "shelf-zlaser",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -2953,7 +2953,7 @@
     {
         "object": "shelf-zlaser",
         "complaint": "multiple shelves, looks quite like amyper",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "connectedness",
         "additional_info": "",
@@ -3124,7 +3124,7 @@
     {
         "object": "storage_box-igzoex",
         "complaint": "openable, fillable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -3133,7 +3133,7 @@
     {
         "object": "storage_box-igzoex",
         "complaint": "joint for openning lid?",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -3142,7 +3142,7 @@
     {
         "object": "storage_box-kjidns",
         "complaint": "fillable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -3151,7 +3151,7 @@
     {
         "object": "storage_box-kjidns",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -3178,7 +3178,7 @@
     {
         "object": "storage_box-rvhrtr",
         "complaint": "joint for opening lid?",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -3187,7 +3187,7 @@
     {
         "object": "storage_box-rvhrtr",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -3205,7 +3205,7 @@
     {
         "object": "storage_box-wovzuq",
         "complaint": "joint for opening lid?",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -3223,7 +3223,7 @@
     {
         "object": "storage_box-wovzuq",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -3241,7 +3241,7 @@
     {
         "object": "storage_box-wtvcvz",
         "complaint": "joint for opening lid?",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -3259,7 +3259,7 @@
     {
         "object": "storage_box-wtvcvz",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -3650,7 +3650,7 @@
     {
         "object": "briefcase-wymodw",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -3703,7 +3703,7 @@
     {
         "object": "desk-xhjsub",
         "complaint": "drawers could be openable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -4053,7 +4053,7 @@
     {
         "object": "shears-glbxff",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -4062,7 +4062,7 @@
     {
         "object": "shears-glbxff",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 5840
@@ -4070,7 +4070,7 @@
     {
         "object": "shower-qkgvsz",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -4151,7 +4151,7 @@
     {
         "object": "wall_mounted_light-cstgzt",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -4177,7 +4177,7 @@
     {
         "object": "sink-qnequy",
         "complaint": "pipes below sink are not attached to sink",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "connectedness",
         "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -4186,7 +4186,7 @@
     {
         "object": "sink-qnequy",
         "complaint": "pipes below sink are not attached to sink",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "appearance",
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
@@ -5668,7 +5668,7 @@
         "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
         "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
         "new": true,
-        "processed": false
+        "processed": true
     },
     {
         "id": 8083,
