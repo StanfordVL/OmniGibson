@@ -2,6 +2,7 @@
 {% block title %}Synset {{ synset.name }} Details{% endblock %}
 {% block content %}
   <h1 class="text-center">{{ synset.name }}</h1>
+  <h4 class="text-center">Parents: {% for parent in synset.parents %}<a href="{{ url_for('synset_detail', name=parent.name) }}">{{ parent.name }}</a>, {% endfor %}</h4>
   <p class="text-center">{{ synset.definition }}</p>
   <hr/>
   {% if synset.legal %} 
