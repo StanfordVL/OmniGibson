@@ -22768,30 +22768,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cocoa__box.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "fillable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "cocoa_powder.n.01": {
         "cookable": {
             "cook_temperature": 50.0,
@@ -22801,16 +22777,11 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cocoa_powder__box.n.01": {
+    "cocoa_powder__jar.n.01": {
+        "breakable": {},
         "disinfectable": {},
         "dustyable": {},
         "fillable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
         "freezable": {},
         "grassyable": {},
         "heatable": {},

@@ -8561,8 +8561,6 @@
         "stove-urgtyy": "scenes/restaurant_cafeteria",
         "straight_chair-dzrlfn": "scenes/restaurant_cafeteria",
         "straight_chair-qkyfxr": "scenes/restaurant_cafeteria",
-        "straight_pin-orntct": "scenes/restaurant_cafeteria",
-        "straight_pin-udyhsc": "scenes/restaurant_cafeteria",
         "taboret-ehaclu": "scenes/restaurant_cafeteria",
         "toasting_fork-aytnwm": "scenes/restaurant_cafeteria",
         "wall_mounted_tv-eqnopt": "scenes/restaurant_cafeteria",
@@ -36202,12 +36200,6 @@
         "straight_chair-qkyfxr": [
             "scenes/restaurant_cafeteria"
         ],
-        "straight_pin-orntct": [
-            "scenes/restaurant_cafeteria"
-        ],
-        "straight_pin-udyhsc": [
-            "scenes/restaurant_cafeteria"
-        ],
         "taboret-ehaclu": [
             "scenes/restaurant_cafeteria"
         ],
@@ -41925,6 +41917,11 @@
             "collision",
             "joint"
         ],
+        "mop_bucket-xjzyfc": [
+            "collision",
+            "fillable",
+            "joint"
+        ],
         "oyster-enzocs": [
             "collision",
             "subpart"
@@ -45019,6 +45016,7 @@
             "togglebutton"
         ],
         "table_lamp-tggobp": [
+            "collision",
             "com",
             "joint",
             "togglebutton"
@@ -51832,13 +51830,16 @@
             "collision"
         ],
         "pot_plant-ibvdwh": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-liqyem": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-mkhbtk": [
-            "collision"
+            "collision",
+            "com"
         ],
         "rail_fence-akeroe": [
             "collision"
@@ -53007,7 +53008,8 @@
             "fillable"
         ],
         "pot_plant-irdjit": [
-            "collision"
+            "collision",
+            "com"
         ],
         "rail_fence-friakc": [
             "collision"
@@ -54606,13 +54608,16 @@
             "collision"
         ],
         "pot_plant-dxypbs": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-eixiaq": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-koloae": [
-            "collision"
+            "collision",
+            "com"
         ],
         "rail_fence-cfcgtl": [
             "collision",
@@ -55322,6 +55327,7 @@
         ],
         "food_slicer-uanenn": [
             "collision",
+            "com",
             "joint"
         ],
         "fridge-vwylob": [
@@ -55828,10 +55834,12 @@
         ],
         "floor_lamp-cosjfl": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "floor_lamp-ozknkr": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "floors-lwmjzl": [
@@ -55851,10 +55859,12 @@
             "collision"
         ],
         "swivel_chair-fieiyo": [
-            "collision"
+            "collision",
+            "com"
         ],
         "table_lamp-bbentu": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "trash_can-jlawet": [
@@ -56196,10 +56206,12 @@
             "collision"
         ],
         "frail-qdienb": [
-            "collision"
+            "collision",
+            "fillable"
         ],
         "frail-zmjovr": [
-            "collision"
+            "collision",
+            "fillable"
         ],
         "freezer-gyupcj": [
             "collision"
@@ -56234,10 +56246,6 @@
         "grocery_shelf-dhattl": [
             "collision",
             "openfillable"
-        ],
-        "grocery_shelf-dtaove": [
-            "collision",
-            "fillable"
         ],
         "grocery_shelf-fgfrwb": [
             "collision",
@@ -56797,6 +56805,7 @@
         ],
         "monitor-okfatx": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "mouse-chqwqp": [
@@ -56833,7 +56842,8 @@
             "fillable"
         ],
         "pot_plant-mypsrd": [
-            "collision"
+            "collision",
+            "com"
         ],
         "reception_desk-vxombm": [
             "collision"
@@ -58220,7 +58230,6 @@
         ],
         "hot_tub-wbnkfk": [
             "collision",
-            "fillable",
             "fluidsource",
             "togglebutton"
         ],
@@ -58967,16 +58976,20 @@
             "fillable"
         ],
         "pot_plant-asnsgf": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-opykqm": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-stawgx": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-xzoovy": [
-            "collision"
+            "collision",
+            "com"
         ],
         "reed_diffuser-kfdaui": [
             "collision"
@@ -59244,6 +59257,7 @@
         ],
         "standing_tv-jszpwr": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "toilet_paper-qibjff": [
@@ -63425,6 +63439,7 @@
         ],
         "monitor-acltvl": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "mouse-ihpnjx": [
@@ -63516,10 +63531,12 @@
             "fillable"
         ],
         "pot_plant-jaofyw": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-ztnfnw": [
-            "collision"
+            "collision",
+            "com"
         ],
         "rocking_chair-zgmspi": [
             "collision"
@@ -63528,7 +63545,8 @@
             "collision"
         ],
         "swivel_chair-zvwpfc": [
-            "collision"
+            "collision",
+            "com"
         ],
         "table_lamp-qsajsm": [
             "collision",
@@ -63729,7 +63747,8 @@
             "collision"
         ],
         "mouse-pljjtu": [
-            "collision"
+            "collision",
+            "togglebutton"
         ],
         "notebook-ylrwil": [
             "collision"
@@ -63753,10 +63772,12 @@
             "collision"
         ],
         "pot_plant-dbjcic": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-iblutb": [
-            "collision"
+            "collision",
+            "com"
         ],
         "printer-icxhbx": [
             "collision",
@@ -63792,16 +63813,20 @@
             "togglebutton"
         ],
         "swivel_chair-gfixyb": [
-            "collision"
+            "collision",
+            "com"
         ],
         "swivel_chair-ryznxk": [
-            "collision"
+            "collision",
+            "com"
         ],
         "swivel_chair-uauzsu": [
-            "collision"
+            "collision",
+            "com"
         ],
         "swivel_chair-ucawqa": [
-            "collision"
+            "collision",
+            "com"
         ],
         "table_lamp-gycqmt": [
             "collision",
@@ -64122,6 +64147,7 @@
         ],
         "monitor-kmltvq": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "printer-kqzshp": [
@@ -64136,7 +64162,8 @@
             "collision"
         ],
         "swivel_chair-lhkkri": [
-            "collision"
+            "collision",
+            "com"
         ],
         "table_lamp-ehjsdz": [
             "attachment",
@@ -64648,14 +64675,17 @@
         ],
         "monitor-nghyiv": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "monitor-wxhvqc": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "monitor-xhxcyg": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "mouse-ofdmmj": [
@@ -64739,13 +64769,16 @@
             "collision"
         ],
         "swivel_chair-jhipgz": [
-            "collision"
+            "collision",
+            "com"
         ],
         "swivel_chair-srucpc": [
-            "collision"
+            "collision",
+            "com"
         ],
         "swivel_chair-wksozf": [
-            "collision"
+            "collision",
+            "com"
         ],
         "taboret-stnoqf": [
             "collision"
@@ -65209,6 +65242,7 @@
         ],
         "monitor-fpkdou": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "motorcycle-aocuum": [
@@ -65296,7 +65330,8 @@
             "collision"
         ],
         "swivel_chair-xvpywp": [
-            "collision"
+            "collision",
+            "com"
         ],
         "trash_can-gilsji": [
             "collision",
@@ -65456,7 +65491,8 @@
             "collision"
         ],
         "pot_plant-ttijye": [
-            "collision"
+            "collision",
+            "com"
         ],
         "room_divider-lgrcuq": [
             "collision"
@@ -65983,7 +66019,8 @@
             "collision"
         ],
         "pot_plant-aantth": [
-            "collision"
+            "collision",
+            "com"
         ],
         "room_divider-doxkzb": [
             "collision"
@@ -66383,22 +66420,28 @@
             "fillable"
         ],
         "pot_plant-kndwfb": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-niavbx": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-peypuq": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-qlyaks": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-spmhnj": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-xyczqb": [
-            "collision"
+            "collision",
+            "com"
         ],
         "room_divider-vwnumt": [
             "collision"
@@ -66780,12 +66823,6 @@
         "straight_chair-qkyfxr": [
             "collision"
         ],
-        "straight_pin-orntct": [
-            "collision"
-        ],
-        "straight_pin-udyhsc": [
-            "collision"
-        ],
         "taboret-ehaclu": [
             "collision"
         ],
@@ -67140,6 +67177,7 @@
         ],
         "monitor-xffisd": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "painting-cjrilr": [
@@ -67549,10 +67587,12 @@
             "collision"
         ],
         "pot_plant-jtkcip": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-tbsjnw": [
-            "collision"
+            "collision",
+            "com"
         ],
         "room_divider-ifajxj": [
             "collision"
@@ -67754,31 +67794,39 @@
             "collision"
         ],
         "pot_plant-arwvvc": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-cvthyv": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-qftnsu": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-qyarus": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-vycujf": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-yrakhf": [
-            "collision"
+            "collision",
+            "com"
         ],
         "pot_plant-zkbbdm": [
-            "collision"
+            "collision",
+            "com"
         ],
         "straight_chair-kusubw": [
             "collision"
         ],
         "swivel_chair-iyruig": [
-            "collision"
+            "collision",
+            "com"
         ],
         "taboret-wjrpwg": [
             "collision"
@@ -68084,7 +68132,8 @@
             "collision"
         ],
         "swivel_chair-wcitvd": [
-            "collision"
+            "collision",
+            "com"
         ],
         "taboret-hugvml": [
             "collision"
@@ -68341,6 +68390,7 @@
         ],
         "monitor-mlyppp": [
             "collision",
+            "com",
             "togglebutton"
         ],
         "mouse-eosngb": [
@@ -68354,7 +68404,8 @@
             "collision"
         ],
         "pot_plant-jrvtso": [
-            "collision"
+            "collision",
+            "com"
         ],
         "printer-tiioui": [
             "collision",
@@ -68581,7 +68632,8 @@
             "collision"
         ],
         "pot_plant-irtlsj": [
-            "collision"
+            "collision",
+            "com"
         ],
         "radiator-xnoiwp": [
             "collision",
@@ -76229,7 +76281,7 @@
         ],
         "xjzyfc": [
             0.35084817504882815,
-            0.5900731201171875,
+            0.5926145935058593,
             0.43153024291992187
         ],
         "enzocs": [
@@ -113172,16 +113224,6 @@
             0.51608203125,
             0.7758484802246094
         ],
-        "orntct": [
-            0.012595558643341064,
-            0.012499720096588134,
-            0.012496726512908935
-        ],
-        "udyhsc": [
-            0.012696769714355469,
-            0.012696769714355469,
-            0.012696769714355469
-        ],
         "ehaclu": [
             0.5410065612792969,
             0.5054886169433593,
@@ -114548,7 +114590,7 @@
             1.965211669921875
         ],
         "qbdweu": [
-            0.8241481323242188,
+            0.8241482849121093,
             1.374130615234375,
             0.8999951782226563
         ],
