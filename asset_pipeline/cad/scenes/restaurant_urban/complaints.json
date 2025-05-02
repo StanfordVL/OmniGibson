@@ -65,7 +65,7 @@
     {
         "object": "floor_lamp-lcmuvd",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 6597
@@ -142,7 +142,7 @@
     {
         "object": "wine_fridge-tgcuwh",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "",
@@ -151,7 +151,7 @@
     {
         "object": "beer_tap-bebcmz",
         "complaint": "particleSource, toggleable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -178,7 +178,7 @@
     {
         "object": "beer_tap-zcrgvq",
         "complaint": "particleSource, toggleable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -671,7 +671,7 @@
     {
         "object": "table_knife-jxdfyy",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 6665
@@ -706,7 +706,7 @@
     {
         "object": "table_lamp-ykhxso",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -715,7 +715,7 @@
     {
         "object": "table_lamp-ykhxso",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 6670
@@ -741,7 +741,7 @@
     {
         "object": "pot_plant-jtkcip",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 6673
@@ -749,7 +749,7 @@
     {
         "object": "pot_plant-tbsjnw",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 6674
