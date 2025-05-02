@@ -16,9 +16,9 @@ import b1k_pipeline.utils
 
 rt = pymxs.runtime
 
-# file_name = "sanitycheck.json"
+file_name = "sanitycheck.json"
 # file_name = "object_list.json"
-file_name = "export_meshes.json"
+# file_name = "export_meshes.json"
 
 def file_eligible(objdir):
     sanitycheck = objdir / "artifacts" / file_name
