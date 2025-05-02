@@ -13,7 +13,7 @@
         carving_knife.n.01_1 - carving_knife.n.01
         lemonade__bottle.n.01_1 - lemonade__bottle.n.01
         lemon_juice__bottle.n.01_1 - lemon_juice__bottle.n.01
-        soda__can.n.01_1 - soda__can.n.01
+        soda_water__bottle.n.01_1 - soda_water__bottle.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         cabinet.n.01_1 - cabinet.n.01
         bowl.n.01_1 - bowl.n.01
@@ -31,8 +31,8 @@
         (inside lemonade__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (filled lemon_juice__bottle.n.01_1 lemon_juice.n.01_1) 
         (ontop lemon_juice__bottle.n.01_1 countertop.n.01_1) 
-        (filled soda__can.n.01_1 tonic.n.01_1) 
-        (inside soda__can.n.01_1 electric_refrigerator.n.01_1) 
+        (filled soda_water__bottle.n.01_1 tonic.n.01_1) 
+        (inside soda_water__bottle.n.01_1 electric_refrigerator.n.01_1) 
         (ontop blender.n.01_1 countertop.n.01_1) 
         (ontop pitcher.n.02_1 countertop.n.01_2) 
         (inside ice_cube.n.01_1 bowl.n.01_1) 
