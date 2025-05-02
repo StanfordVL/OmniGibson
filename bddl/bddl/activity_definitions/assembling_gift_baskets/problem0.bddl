@@ -8,7 +8,7 @@
     	butter_cookie.n.01_1 butter_cookie.n.01_2 butter_cookie.n.01_3 butter_cookie.n.01_4 - butter_cookie.n.01
     	swiss_cheese.n.01_1 swiss_cheese.n.01_2 swiss_cheese.n.01_3 swiss_cheese.n.01_4 - swiss_cheese.n.01
     	bow.n.08_1 bow.n.08_2 bow.n.08_3 bow.n.08_4 - bow.n.08
-        table.n.02_1 table.n.02_2 - table.n.02
+        table.n.02_1 - table.n.02
         agent.n.01_1 - agent.n.01
     )
     
@@ -25,17 +25,16 @@
         (ontop butter_cookie.n.01_2 table.n.02_1) 
         (ontop butter_cookie.n.01_3 table.n.02_1) 
         (ontop butter_cookie.n.01_4 table.n.02_1) 
-        (ontop swiss_cheese.n.01_1 table.n.02_2) 
-        (ontop swiss_cheese.n.01_2 table.n.02_2) 
-        (ontop swiss_cheese.n.01_3 table.n.02_2) 
-        (ontop swiss_cheese.n.01_4 table.n.02_2) 
-        (ontop bow.n.08_1 table.n.02_2) 
-        (ontop bow.n.08_2 table.n.02_2) 
-        (ontop bow.n.08_3 table.n.02_2) 
-        (ontop bow.n.08_4 table.n.02_2) 
+        (ontop swiss_cheese.n.01_1 table.n.02_1) 
+        (ontop swiss_cheese.n.01_2 table.n.02_1) 
+        (ontop swiss_cheese.n.01_3 table.n.02_1) 
+        (ontop swiss_cheese.n.01_4 table.n.02_1) 
+        (ontop bow.n.08_1 table.n.02_1) 
+        (ontop bow.n.08_2 table.n.02_1) 
+        (ontop bow.n.08_3 table.n.02_1) 
+        (ontop bow.n.08_4 table.n.02_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom table.n.02_1 living_room) 
-        (inroom table.n.02_2 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
