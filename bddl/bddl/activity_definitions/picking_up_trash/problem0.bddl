@@ -3,19 +3,16 @@
 
     (:objects
         ashcan.n.01_1 - ashcan.n.01
-        pad.n.01_1 pad.n.01_2 pad.n.01_3 - pad.n.01
-        can__of__soda.n.01_1 can__of__soda.n.01_2 - can__of__soda.n.01
+        can__of__soda.n.01_1 can__of__soda.n.01_2 can__of__soda.n.01_3 - can__of__soda.n.01
         floor.n.01_1 floor.n.01_2 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
         (ontop ashcan.n.01_1 floor.n.01_2) 
-        (ontop pad.n.01_1 floor.n.01_2) 
-        (ontop pad.n.01_2 floor.n.01_2) 
-        (ontop pad.n.01_3 floor.n.01_1) 
         (ontop can__of__soda.n.01_1 floor.n.01_1) 
         (ontop can__of__soda.n.01_2 floor.n.01_1) 
+        (ontop can__of__soda.n.01_3 floor.n.01_1) 
         (inroom floor.n.01_2 kitchen) 
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_2)
@@ -23,10 +20,6 @@
     
     (:goal 
         (and 
-            (forall 
-                (?pad.n.01 - pad.n.01) 
-                (inside ?pad.n.01 ?ashcan.n.01_1)
-            ) 
             (forall 
                 (?can__of__soda.n.01 - can__of__soda.n.01) 
                 (inside ?can__of__soda.n.01 ?ashcan.n.01_1)
