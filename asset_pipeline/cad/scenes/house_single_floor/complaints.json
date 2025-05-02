@@ -3792,7 +3792,7 @@
     {
         "object": "iron-vlvslm",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -3801,7 +3801,7 @@
     {
         "object": "oven-ffitak",
         "complaint": "needs glass window",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_door, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -3819,7 +3819,7 @@
     {
         "object": "oven-ffitak",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -3828,7 +3828,7 @@
     {
         "object": "oven-ffitak",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "appearance",
         "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes.",
         "id": 5809
