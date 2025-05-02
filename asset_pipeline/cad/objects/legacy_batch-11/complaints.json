@@ -382,7 +382,7 @@
     {
         "object": "bottle_of_powder-vfabau",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -391,7 +391,7 @@
     {
         "object": "half_spinach-jmfmwt",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -781,7 +781,7 @@
     {
         "object": "iron-fzbvce",
         "complaint": "wrong iron",
-        "processed": false,
+        "processed": true,
         "type": "category",
         "additional_info": "Confirm object synset assignment.\nObject assigned to synset: iron.n.01\nDefinition: a heavy ductile magnetic metallic element; is silver-white in pure form but readily rusts; used in construction and tools and armament; plays a role in the transport of oxygen by the blood\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "id": 3498
@@ -924,7 +924,7 @@
     {
         "object": "ladder-shfvtl",
         "complaint": "+",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: ladder.n.01\nDefinition: steps consisting of two parallel members connected by rungs; for climbing up or down\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",

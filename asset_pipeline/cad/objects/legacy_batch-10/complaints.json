@@ -368,7 +368,7 @@
     {
         "object": "baseboard-prytbo",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -531,7 +531,7 @@
     {
         "object": "bottle_of_conditioner-njqnuo",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -668,7 +668,7 @@
     {
         "object": "carton-causya",
         "complaint": "wrong synset",
-        "processed": false,
+        "processed": true,
         "type": "category",
         "additional_info": "Confirm object synset assignment.\nObject assigned to synset: orange_juice__carton.n.01 (custom synset)\nDefinition: bottle.n.01(hypernyms): a glass or plastic vessel used for storing drinks or other liquids; typically cylindrical without handles and with a narrow neck that can be plugged or capped\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "id": 3288
@@ -947,7 +947,7 @@
     {
         "object": "cream-ompiss",
         "complaint": "cream is the wrong one and it is a box of cream",
-        "processed": false,
+        "processed": true,
         "type": "category",
         "additional_info": "Confirm object synset assignment.\nObject assigned to synset: cream.n.01\nDefinition: the best people or things in a group\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "id": 3322
@@ -1070,7 +1070,7 @@
     {
         "object": "grill-ddlqye",
         "complaint": "it's grill.n.02",
-        "processed": false,
+        "processed": true,
         "type": "category",
         "additional_info": "Confirm object synset assignment.\nObject assigned to synset: grillroom.n.01\nDefinition: a restaurant where food is cooked on a grill\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "id": 3337

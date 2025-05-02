@@ -303,14 +303,14 @@
         "complaint": "bad object, containing 2 books",
         "processed": false,
         "new": true,
-        "type": "appearance",
+        "type": "connectedness",
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "id": 5205
     },
     {
         "object": "hardback-grxiqn",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -1613,7 +1613,7 @@
     {
         "object": "centerpiece-gakixx",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -1702,7 +1702,7 @@
     {
         "object": "pot_plant-mqhlkf",
         "complaint": "pot_tree ?",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pot_plant\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",

@@ -28,16 +28,16 @@
     {
         "object": "walls-galkwn",
         "complaint": "See message",
-        "processed": true,
+        "processed": false,
         "new": true,
-        "type": "category",
+        "type": "connectedness",
         "additional_info": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
         "id": 6688
     },
     {
         "object": "walls-galkwn",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -46,16 +46,16 @@
     {
         "object": "walls-gvpsby",
         "complaint": "See message",
-        "processed": true,
+        "processed": false,
         "new": true,
-        "type": "category",
+        "type": "connectedness",
         "additional_info": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
         "id": 6690
     },
     {
         "object": "walls-gvpsby",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -100,7 +100,7 @@
     {
         "object": "walls-zwkfzz",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -278,7 +278,7 @@
     {
         "object": "pot_plant-qftnsu",
         "complaint": "pot_plants  ? its a row of plants",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pot_plant\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
