@@ -93,6 +93,7 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     robot0_cfg["obs_modalities"] = ["rgb"]
     robot0_cfg["action_type"] = "continuous"
     robot0_cfg["action_normalize"] = True
+    robot0_cfg["default_reset_mode"] = "tuck"
 
     # Compile config
     cfg = dict(scene=scene_cfg, robots=[robot0_cfg])
@@ -160,9 +161,11 @@ def main(random_selection=False, headless=False, short_exec=False, quickstart=Fa
     step = 0
 
     while step != max_steps:
-        action = (
+        action, keypress_str = (
             action_generator.get_random_action() if control_mode == "random" else action_generator.get_teleop_action()
         )
+        if keypress_str == "TAB":
+            breakpoint()
         env.step(action=action)
         step += 1
 

@@ -218,7 +218,8 @@ controller_config = {
 env.robots[0].reload_controllers(controller_config=controller_config)
 # env.robots[0]._grasping_mode = "sticky"
 robot = env.robots[0]
-primitive = StarterSemanticActionPrimitives(env, env.robots[0], enable_head_tracking=False, curobo_batch_size=10)
+breakpoint()
+# primitive = StarterSemanticActionPrimitives(env, env.robots[0], enable_head_tracking=False, curobo_batch_size=10)
 
 # og.sim.viewer_camera.set_position_orientation(th.tensor([16.066,  3.745,  2.556]), th.tensor([0.256, 0.515, 0.732, 0.364]))
 
@@ -268,14 +269,14 @@ for _ in range(100): og.sim.step()
 # for _ in range(100): og.sim.step()
 
 # curr_pose = robot.get_position_orientation()
-action_generator = primitive._navigate_to_obj(obj=sink)
+# action_generator = primitive._navigate_to_obj(obj=sink)
 
-for mp_action in action_generator:
-    if mp_action is None:
-        break
+# for mp_action in action_generator:
+#     if mp_action is None:
+#         break
     
-    mp_action = mp_action.cpu().numpy()
-    obs, _, _, _, info = env.step(mp_action)
+#     mp_action = mp_action.cpu().numpy()
+#     obs, _, _, _, info = env.step(mp_action)
 
 breakpoint()
 

@@ -805,8 +805,8 @@ class DataPlaybackWrapper(DataWrapper):
             zip(action, state[1:], state_size[1:], reward, terminated, truncated)
         ):
             
-            # if i % 50 == 0:
-            #     breakpoint()
+            if i % 50 == 0:
+                breakpoint()
             
             if self.replay_state:
                 # Execute any transitions that should occur at this current step

@@ -918,7 +918,7 @@ class KeyboardRobotController:
         sys.stdout.write("\033[F")
 
         # Return action
-        return action
+        return action, keypress_str
 
     def print_keyboard_teleop_info(self):
         """

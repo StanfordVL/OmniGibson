@@ -1073,7 +1073,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                                 self.robot.arm_control_idx[arm]
                             ]
 
-                        # Collision check for joint positions pre grasping
+                        # Collision check for joint positions pre replay
                         # - base joints: sampled base pose
                         # - torso joints: IK solution to reach sampled eyes pose
                         # - arm joints: IK solution to reach the *first* end-effector pose
@@ -1138,6 +1138,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                             ik_world_collision_check=True,
                             emb_sel=CuRoboEmbodimentSelection.ARM_NO_TORSO
                         )
+                        # print("IK check retval: ", retval)
                         # print("ik solver pre-grasp", time.time() - start)
                         # breakpoint()
                         if retval is None:
@@ -1210,14 +1211,26 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         Returns:
             bool: Whether the default eef can reach the target pose
         """
-        return (
-            self._ik_solver_cartesian_to_joint_space(
-                target_pose,
-                initial_joint_pos=initial_joint_pos,
-                skip_obstacle_update=skip_obstacle_update,
-            )
-            is not None
+        retval = self._ik_solver_cartesian_to_joint_space(
+            target_pose,
+            initial_joint_pos=initial_joint_pos,
+            skip_obstacle_update=skip_obstacle_update,
         )
+        if retval is None: 
+            self.target_eyes_pose_arr.append(None)
+            return False
+        else: 
+            robot_joint_names = list(self.robot.joints.keys())
+            returned_joint_pos = retval[0]
+            cu_js = lazy.curobo.types.state.JointState(position=self._motion_generator._tensor_args.to_device(returned_joint_pos), joint_names=robot_joint_names).get_ordered_joint_state(self._motion_generator.mg["default"].kinematics.joint_names)
+            retval_eye_pose = self._motion_generator.mg["default"].kinematics.compute_kinematics(cu_js, link_name="eyes")
+            retval_eye_pos = retval_eye_pose.ee_position.cpu()[0]
+            retval_eye_quat = retval_eye_pose.ee_quaternion.cpu()[0]
+            retval_eye_quat = th.roll(retval_eye_quat, -1)
+            self.target_eyes_pose_arr.append((retval_eye_pos, retval_eye_quat))
+            # breakpoint()
+            return True
+
 
     def _manipulation_control_idx(self):
         """The appropriate manipulation control idx for the current settings."""
@@ -2121,10 +2134,10 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         target_pos = {self.robot.base_footprint_link_name: pose_3d[0]}
         target_quat = {self.robot.base_footprint_link_name: pose_3d[1]}
 
-        if visibility_constraint:
-            assert self.target_eyes_pose is not None, "target_eyes_pose is None"
-            target_pos["eyes"] = self.target_eyes_pose[0]
-            target_quat["eyes"] = self.target_eyes_pose[1]
+        # if visibility_constraint:
+        assert self.target_eyes_pose is not None, "target_eyes_pose is None"
+        target_pos["eyes"] = self.target_eyes_pose[0]
+        target_quat["eyes"] = self.target_eyes_pose[1]
 
         print("Base motion planning")
         q_traj = self._plan_joint_motion(
@@ -2465,8 +2478,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                 for i, res in enumerate(result):
                     if res:
                         indented_print("Found valid position near object.")
-                        if visibility_constraint:
-                            self.target_eyes_pose = self.target_eyes_pose_arr[i]
+                        # if visibility_constraint:
+                        self.target_eyes_pose = self.target_eyes_pose_arr[i]
                         return candidate_poses[i]
 
             attempt += self._curobo_batch_size
