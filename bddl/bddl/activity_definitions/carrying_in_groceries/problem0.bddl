@@ -4,37 +4,44 @@
     (:objects
         car.n.01_1 - car.n.01
         driveway.n.01_1 - driveway.n.01
-        carton.n.02_1 - carton.n.02
-        bacon.n.01_1 - bacon.n.01
+        sack.n.01_1 - sack.n.01
         beefsteak_tomato.n.01_1 - beefsteak_tomato.n.01
         pack__of__bread.n.01_1 - pack__of__bread.n.01
         carton__of__milk.n.01_1 - carton__of__milk.n.01
-        countertop.n.01_1 - countertop.n.01
-        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        countertop.n.01_1 countertop.n.01_* - countertop.n.01
+        electric_refrigerator.n.01_1 electric_refrigerator.n.01_* - electric_refrigerator.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
         (inroom car.n.01_1 garden) 
-        (inside carton.n.02_1 car.n.01_1)
-        (inside bacon.n.01_1 carton.n.02_1)
-        (inside beefsteak_tomato.n.01_1 carton.n.02_1)
-        (inside pack__of__bread.n.01_1 carton.n.02_1)
-        (inside carton__of__milk.n.01_1 carton.n.02_1)
+        (inside sack.n.01_1 car.n.01_1)
+        (inside beefsteak_tomato.n.01_1 sack.n.01_1)
+        (inside pack__of__bread.n.01_1 sack.n.01_1)
+        (inside carton__of__milk.n.01_1 sack.n.01_1)
         (inroom driveway.n.01_1 garden) 
-        (inroom countertop.n.01_1 kitchen) 
-        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_* kitchen)
+        (inroom electric_refrigerator.n.01_1 kitchen)
+        (inroom electric_refrigerator.n.01_* kitchen)
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (inside ?bacon.n.01_1 ?electric_refrigerator.n.01_1) 
-            (inside ?beefsteak_tomato.n.01_1 ?electric_refrigerator.n.01_1) 
-            (ontop ?pack__of__bread.n.01_1 ?countertop.n.01_1) 
-            (inside ?carton__of__milk.n.01_1 ?electric_refrigerator.n.01_1) 
+            (exists
+                (?electric_refrigerator.n.01 - electric_refrigerator.n.01)
+                (and
+                    (inside ?beefsteak_tomato.n.01_1 ?electric_refrigerator.n.01)
+                    (inside ?carton__of__milk.n.01_1 ?electric_refrigerator.n.01) 
+                )
+            )
+            (exists
+                (?countertop.n.01 - countertop.n.01)
+                (ontop ?pack__of__bread.n.01_1 ?countertop.n.01)
+            )
         )
     )
 )

@@ -23,6 +23,8 @@
         (inroom floor.n.01_1 childs_room)
         (inroom bookcase.n.01_1 childs_room)
         (inroom bookcase.n.01_* childs_room)
+        (inroom bed.n.01_1 childs_room)
+        (inroom table.n.02_1 childs_room)
         (ontop toy_box.n.01_1 bed.n.01_1) 
         (ontop toy_box.n.01_2 table.n.02_1) 
         (ontop agent.n.01_1 floor.n.01_1)
