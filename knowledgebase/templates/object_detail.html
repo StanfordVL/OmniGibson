@@ -5,7 +5,7 @@
   <hr>
   <h4 class="text-center">
     {% if object.ready %}<span class="text-success">Ready</span>{% else %}<div class="text-warning">Has Unresolved Complaints</div>{% endif %} 
-    Category: <a href="{{ url_for('category_detail', name=object.category.name) }}">{{ object.category }}</a> | Original category: {{ object.original_category }} | Provider: {{ object.provider }}
+    Category: <a href="{{ url_for('category_detail', name=object.category.name) }}">{{ object.category }}</a> | Original category: {{ object.original_category_name }} | Provider: {{ object.provider }}
   </h4>
   <div class="text-center">
     <b>Bounding Box Size:</b> {{ "%.2f"|format(object.bounding_box_size.0) }}, {{ "%.2f"|format(object.bounding_box_size.1) }}, {{ "%.2f"|format(object.bounding_box_size.2) }}
