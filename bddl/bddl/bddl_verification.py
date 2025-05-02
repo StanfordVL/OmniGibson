@@ -60,6 +60,7 @@ VALID_ATTACHMENTS = set([
     ("kayak.n.01", "kayak_rack.n.01"),
     ("kayak_rack.n.01", "wall_nail.n.01"),
     ("lens.n.01", "digital_camera.n.01"),
+    ("lid.n.02", "hingeless_jar.n.01"),
     ("license_plate.n.01", "car.n.01"),
     ("light_bulb.n.01", "table_lamp.n.01"),
     ("mirror.n.01", "wall_nail.n.01"),
