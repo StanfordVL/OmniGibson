@@ -5,9 +5,9 @@
         tupperware.n.01_1 tupperware.n.01_2 - tupperware.n.01
         countertop.n.01_1 - countertop.n.01
         cabinet.n.01_1 - cabinet.n.01
-        steak.n.01_1 steak.n.01_2 - steak.n.01
+        steak.n.01_1 - steak.n.01
         plate.n.04_1 plate.n.04_2 - plate.n.04
-        chicken.n.01_1 chicken.n.01_2 - chicken.n.01
+        chicken.n.01_1 - chicken.n.01
         wax_paper.n.01_1 wax_paper.n.01_2 - wax_paper.n.01
         floor.n.01_1 - floor.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -17,14 +17,10 @@
     (:init 
         (inside tupperware.n.01_1 cabinet.n.01_1) 
         (inside tupperware.n.01_2 cabinet.n.01_1) 
-        (ontop steak.n.01_1 plate.n.04_1) 
-        (ontop steak.n.01_2 plate.n.04_1) 
-        (ontop chicken.n.01_1 plate.n.04_2) 
-        (ontop chicken.n.01_2 plate.n.04_2) 
+        (ontop steak.n.01_1 plate.n.04_1)
+        (ontop chicken.n.01_1 plate.n.04_2)
         (cooked steak.n.01_1)
-        (cooked steak.n.01_2)
         (cooked chicken.n.01_1)
-        (cooked chicken.n.01_2)
         (ontop plate.n.04_1 countertop.n.01_1) 
         (ontop plate.n.04_2 countertop.n.01_1) 
         (ontop wax_paper.n.01_1 countertop.n.01_1) 
