@@ -475,7 +475,7 @@
     {
         "object": "dishwasher-xlmier",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -610,7 +610,7 @@
     {
         "object": "bed-sunfhf",
         "complaint": "too small",
-        "processed": false,
+        "processed": true,
         "type": "scale",
         "additional_info": "Confirm reasonable bounding box size:\n49.21cm, 66.74cm, 55.89cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
         "id": 2201

@@ -920,7 +920,7 @@
     {
         "object": "pizza_sauce-clttao",
         "complaint": "x40",
-        "processed": false,
+        "processed": true,
         "type": "scale",
         "additional_info": "Confirm reasonable bounding box size:\n3.87m, 3.87m, 2.84m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "id": 1469
@@ -1000,7 +1000,7 @@
     {
         "object": "toast-ygginu",
         "complaint": "what is this object?",
-        "processed": false,
+        "processed": true,
         "type": "scale",
         "additional_info": "Confirm reasonable bounding box size:\n3.90m, 3.39m, 20.03cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
         "id": 1478
