@@ -3,7 +3,7 @@ from functools import cached_property, cache
 import itertools
 import json
 import networkx as nx
-from typing import Dict, Set, List, Tuple
+from typing import Dict, Optional, Set, List, Tuple
 from bddl.object_taxonomy import ObjectTaxonomy
 from bddl.knowledge_base.orm import (
     Model,
@@ -206,6 +206,8 @@ class Object(Model):
     name: str
     # providing target
     provider: str = ""
+    # bounding box size of the object in meters
+    bounding_box_size: Optional[Tuple[float, float, float]] = None
     # the category that the object belongs to
     category_fk: ManyToOne = ManyToOneField(Category, "objects")
     # the category of the object prior to getting renamed

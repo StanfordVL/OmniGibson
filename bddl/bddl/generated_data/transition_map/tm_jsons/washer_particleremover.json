@@ -936,6 +936,19 @@
         }
     },
     {
+        "rule_name": "pot_plant.n.01-washer-saturate-cover",
+        "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
+        "washed_item": {
+            "pot_plant.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "quilt.n.01-washer-saturate-cover",
         "input_synsets": {},
         "machine": {
