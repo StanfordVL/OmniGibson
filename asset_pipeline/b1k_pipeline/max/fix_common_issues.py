@@ -633,16 +633,16 @@ def processFile(filename: pathlib.Path):
     # load_vray_renderer()
 
     # Remove shell materials that might show up under multi materials
-    # remove_nested_shell_materials(filename)
+    remove_nested_shell_materials(filename)
 
     # Fix any bad materials
     # convert_materials_to_vray(filename)
 
     # Remove root_level meta links
-    # remove_root_level_meta_links(filename)
+    remove_root_level_meta_links(filename)
 
     # Apply renames
-    # apply_renames(filename)
+    apply_renames(filename)
 
     # Fix layering (room assignments and object files)
     # fix_layers(filename)
