@@ -6,7 +6,6 @@
     	electric_refrigerator.n.01_1 - electric_refrigerator.n.01
     	olive.n.04_1 - olive.n.04
     	lobster.n.01_1 lobster.n.01_2 lobster.n.01_3 lobster.n.01_4 - lobster.n.01
-    	sink.n.01_1 - sink.n.01
     	floor.n.01_1 - floor.n.01
     	agent.n.01_1 - agent.n.01
     )
@@ -23,8 +22,7 @@
         (frozen lobster.n.01_3) 
         (frozen lobster.n.01_4) 
         (frozen date.n.08_1) 
-        (frozen olive.n.04_1) 
-        (inroom sink.n.01_1 kitchen) 
+        (frozen olive.n.04_1)
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
