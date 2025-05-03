@@ -14,7 +14,7 @@ def should_get_complaint(complaint):
     if complaint["processed"]:
         return False
 
-    if complaint["type"] not in ("collision", "handle"):
+    if complaint["type"] in ("material", "clothappearance"):
         return False
 
     return True

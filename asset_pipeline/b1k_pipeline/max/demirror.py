@@ -13,7 +13,7 @@ X_MIRROR_MATRIX = rt.Matrix3(
 
 
 def demirror():
-    objects = rt.objects
+    objects = rt.selection
 
     # First, find all the qualifying objects.
     assert all(
