@@ -32,7 +32,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-bakeagain.success"
+PASS_FILENAME = "done-assetfreeze.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -75,6 +75,22 @@ def get_renames():
 
 
 RENAMES = get_renames()
+
+
+def get_deletions():
+    with open(
+        b1k_pipeline.utils.PIPELINE_ROOT / "metadata/deletion_queue.csv", "r"
+    ) as f:
+        reader = csv.DictReader(f)
+        deletions = {}
+        for row in reader:
+            obj_id = row["ID (auto)"]
+            deletions.add(obj_id)
+
+        return deletions
+
+
+DELETIONS = get_deletions()
 
 
 def fix_layers(filename) -> bool:
@@ -179,6 +195,25 @@ def remove_root_level_meta_links(filename) -> bool:
     for obj in to_delete:
         rt.delete(obj)
     
+    return True
+
+def apply_deletions(filename):
+    to_delete = []
+    for obj in rt.objects:
+        match = b1k_pipeline.utils.parse_name(obj.name)
+        if not match:
+            continue
+
+        model_id = match.group("model_id")
+        if model_id in DELETIONS:
+            to_delete.append(obj)
+
+    if not to_delete:
+        return False
+    
+    for obj in to_delete:
+        rt.delete(obj)
+
     return True
 
 def apply_renames(filename):
@@ -632,17 +667,20 @@ def processFile(filename: pathlib.Path):
     # Switch to Vray
     # load_vray_renderer()
 
+    # Apply deletions
+    apply_deletions(filename)
+
     # Remove shell materials that might show up under multi materials
-    # remove_nested_shell_materials(filename)
+    remove_nested_shell_materials(filename)
 
     # Fix any bad materials
     # convert_materials_to_vray(filename)
 
     # Remove root_level meta links
-    # remove_root_level_meta_links(filename)
+    remove_root_level_meta_links(filename)
 
     # Apply renames
-    # apply_renames(filename)
+    apply_renames(filename)
 
     # Fix layering (room assignments and object files)
     # fix_layers(filename)
@@ -750,7 +788,7 @@ def fix_common_issues_in_all_files():
         "house_double_floor_lower"
     }
     candidates = [
-        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max") if x.parts[-2] in TGTS
+        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max") if x.parts[-2] not in TGTS
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):
