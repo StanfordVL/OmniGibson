@@ -6279,7 +6279,10 @@
     "basket.n.01": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
+        "freezable": {},
         "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -22476,6 +22479,23 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "clothesline_pole.n.01": {
+        "attachable": {},
+        "disinfectable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "moldyable": {},
+        "nonSubstance": {},
+        "rigidBody": {},
+        "rustable": {},
+        "sceneObject": {},
+        "scratchable": {},
+        "stainable": {},
+        "stickyable": {},
+        "tarnishable": {},
+        "wetable": {},
+        "wrinkleable": {}
+    },
     "clothesline_rope.n.01": {
         "attachable": {},
         "disinfectable": {},
@@ -22748,30 +22768,6 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cocoa__box.n.01": {
-        "disinfectable": {},
-        "dustyable": {},
-        "fillable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
-        "freezable": {},
-        "grassyable": {},
-        "heatable": {},
-        "moldyable": {},
-        "nonSubstance": {},
-        "rigidBody": {},
-        "rustable": {},
-        "scratchable": {},
-        "stainable": {},
-        "stickyable": {},
-        "tarnishable": {},
-        "wetable": {},
-        "wrinkleable": {}
-    },
     "cocoa_powder.n.01": {
         "cookable": {
             "cook_temperature": 50.0,
@@ -22781,16 +22777,11 @@
         "physicalSubstance": {},
         "substance": {}
     },
-    "cocoa_powder__box.n.01": {
+    "cocoa_powder__jar.n.01": {
+        "breakable": {},
         "disinfectable": {},
         "dustyable": {},
         "fillable": {},
-        "flammable": {
-            "ignition_temperature": 250.0,
-            "fire_temperature": 1000.0,
-            "heating_rate": 0.04,
-            "distance_threshold": 0.2
-        },
         "freezable": {},
         "grassyable": {},
         "heatable": {},
@@ -42745,7 +42736,10 @@
     "frail.n.02": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
+        "freezable": {},
         "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -54655,6 +54649,7 @@
         "wrinkleable": {}
     },
     "hingeless_jar.n.01": {
+        "attachable": {},
         "breakable": {},
         "disinfectable": {},
         "dustyable": {},
@@ -62454,6 +62449,7 @@
         "wrinkleable": {}
     },
     "lid.n.02": {
+        "attachable": {},
         "disinfectable": {},
         "dustyable": {},
         "grassyable": {},
@@ -78633,7 +78629,10 @@
     "pewter_teapot.n.01": {
         "disinfectable": {},
         "dustyable": {},
+        "fillable": {},
+        "freezable": {},
         "grassyable": {},
+        "heatable": {},
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
@@ -82589,6 +82588,40 @@
         "grassyable": {},
         "moldyable": {},
         "nonSubstance": {},
+        "particleRemover": {
+            "conditions": {
+                "water.n.06": [],
+                "dust.n.01": null,
+                "dirt.n.02": null,
+                "debris.n.01": null,
+                "bunchgrass.n.01": null,
+                "mud.n.03": null,
+                "mold.n.05": null,
+                "mildew.n.02": null,
+                "baby_oil.n.01": null,
+                "coconut_oil.n.01": null,
+                "cooking_oil.n.01": null,
+                "essential_oil.n.01": null,
+                "linseed_oil.n.01": null,
+                "olive_oil.n.01": null,
+                "sesame_oil.n.01": null,
+                "stain.n.01": null,
+                "ink.n.01": null,
+                "alga.n.01": null,
+                "spray_paint.n.01": null,
+                "house_paint.n.01": null,
+                "rust.n.01": null,
+                "patina.n.01": null,
+                "incision.n.01": null,
+                "tarnish.n.02": null,
+                "calcium_carbonate.n.01": null,
+                "wrinkle.n.01": null
+            },
+            "default_visual_conditions": null,
+            "default_non_fluid_conditions": null,
+            "default_fluid_conditions": null,
+            "method": "adjacency"
+        },
         "rigidBody": {},
         "rustable": {},
         "sceneObject": {},

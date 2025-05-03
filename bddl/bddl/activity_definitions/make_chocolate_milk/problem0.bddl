@@ -9,7 +9,7 @@
         blender.n.01_1 - blender.n.01
         water_glass.n.02_1 - water_glass.n.02
         sugar__sack.n.01_1 - sugar__sack.n.01
-        cocoa__box.n.01_1 - cocoa__box.n.01
+        cocoa_powder__jar.n.01_1 - cocoa_powder__jar.n.01
         countertop.n.01_1 - countertop.n.01
         milk__carton.n.01_1 - milk__carton.n.01
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
@@ -21,8 +21,8 @@
     (:init 
         (filled sugar__sack.n.01_1 granulated_sugar.n.01_1) 
         (ontop sugar__sack.n.01_1 countertop.n.01_1) 
-        (filled cocoa__box.n.01_1 cocoa_powder.n.01_1) 
-        (ontop cocoa__box.n.01_1 countertop.n.01_1) 
+        (filled cocoa_powder__jar.n.01_1 cocoa_powder.n.01_1) 
+        (ontop cocoa_powder__jar.n.01_1 countertop.n.01_1) 
         (ontop tablespoon.n.02_1 countertop.n.01_1) 
         (filled milk__carton.n.01_1 low-fat_milk.n.01_1) 
         (ontop blender.n.01_1 countertop.n.01_1) 

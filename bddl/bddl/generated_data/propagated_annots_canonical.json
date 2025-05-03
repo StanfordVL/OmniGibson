@@ -2643,7 +2643,10 @@
   "basket.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
+    "freezable": {},
     "grassyable": {},
+    "heatable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -11290,6 +11293,23 @@
     "wetable": {},
     "wrinkleable": {}
   },
+  "clothesline_pole.n.01": {
+    "attachable": {},
+    "disinfectable": {},
+    "dustyable": {},
+    "grassyable": {},
+    "moldyable": {},
+    "nonSubstance": {},
+    "rigidBody": {},
+    "rustable": {},
+    "sceneObject": {},
+    "scratchable": {},
+    "stainable": {},
+    "stickyable": {},
+    "tarnishable": {},
+    "wetable": {},
+    "wrinkleable": {}
+  },
   "clothesline_rope.n.01": {
     "attachable": {},
     "disinfectable": {},
@@ -11530,36 +11550,17 @@
     "physicalSubstance": {},
     "substance": {}
   },
-  "cocoa__box.n.01": {
-    "disinfectable": {},
-    "dustyable": {},
-    "fillable": {},
-    "flammable": {},
-    "freezable": {},
-    "grassyable": {},
-    "heatable": {},
-    "moldyable": {},
-    "nonSubstance": {},
-    "rigidBody": {},
-    "rustable": {},
-    "scratchable": {},
-    "stainable": {},
-    "stickyable": {},
-    "tarnishable": {},
-    "wetable": {},
-    "wrinkleable": {}
-  },
   "cocoa_powder.n.01": {
     "cookable": {},
     "microPhysicalSubstance": {},
     "physicalSubstance": {},
     "substance": {}
   },
-  "cocoa_powder__box.n.01": {
+  "cocoa_powder__jar.n.01": {
+    "breakable": {},
     "disinfectable": {},
     "dustyable": {},
     "fillable": {},
-    "flammable": {},
     "freezable": {},
     "grassyable": {},
     "heatable": {},
@@ -21273,7 +21274,10 @@
   "frail.n.02": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
+    "freezable": {},
     "grassyable": {},
+    "heatable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -28805,6 +28809,7 @@
     "wrinkleable": {}
   },
   "hingeless_jar.n.01": {
+    "attachable": {},
     "breakable": {},
     "disinfectable": {},
     "dustyable": {},
@@ -31869,6 +31874,7 @@
     "wrinkleable": {}
   },
   "lid.n.02": {
+    "attachable": {},
     "disinfectable": {},
     "dustyable": {},
     "grassyable": {},
@@ -37435,7 +37441,10 @@
   "pewter_teapot.n.01": {
     "disinfectable": {},
     "dustyable": {},
+    "fillable": {},
+    "freezable": {},
     "grassyable": {},
+    "heatable": {},
     "moldyable": {},
     "nonSubstance": {},
     "rigidBody": {},
@@ -39056,6 +39065,7 @@
     "grassyable": {},
     "moldyable": {},
     "nonSubstance": {},
+    "particleRemover": {},
     "rigidBody": {},
     "rustable": {},
     "sceneObject": {},

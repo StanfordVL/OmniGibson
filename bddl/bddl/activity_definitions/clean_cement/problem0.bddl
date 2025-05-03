@@ -2,10 +2,9 @@
     (:domain omnigibson)
 
     (:objects
-        cement.n.01_1 - cement.n.01
+        driveway.n.01_1 - driveway.n.01
         floor.n.01_1 - floor.n.01
         dirt.n.02_1 - dirt.n.02
-        rail_fence.n.01_1 - rail_fence.n.01
         watering_can.n.01_1 - watering_can.n.01
         scrub_brush.n.01_1 - scrub_brush.n.01
         water.n.06_1 - water.n.06
@@ -15,22 +14,21 @@
     )
     
     (:init 
-        (ontop cement.n.01_1 floor.n.01_1)
-        (covered cement.n.01_1 dirt.n.02_1)
+        (inroom driveway.n.01_1 garden) 
+        (covered driveway.n.01_1 dirt.n.02_1)
         (ontop watering_can.n.01_1 floor.n.01_1)
         (ontop scrub_brush.n.01_1 floor.n.01_1) 
         (insource watering_can.n.01_1 water.n.06_1) 
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop detergent__bottle.n.01_1 floor.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1) 
-        (inroom floor.n.01_1 garden) 
-        (inroom rail_fence.n.01_1 garden)
+        (inroom floor.n.01_1 garage) 
     )
     
     (:goal 
         (and 
             (not 
-                (covered ?cement.n.01_1 ?dirt.n.02_1)
+                (covered ?driveway.n.01_1 ?dirt.n.02_1)
             )
         )
     )

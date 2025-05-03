@@ -9200,28 +9200,9 @@
         "substance": {},
         "physicalSubstance": {}
     },
-    "cocoa__box.n.01": {
+    "cocoa_powder__jar.n.01": {
+        "breakable": {},
         "fillable": {},
-        "flammable": {},
-        "rigidBody": {},
-        "nonSubstance": {},
-        "heatable": {},
-        "freezable": {},
-        "wetable": {},
-        "stickyable": {},
-        "dustyable": {},
-        "grassyable": {},
-        "scratchable": {},
-        "stainable": {},
-        "tarnishable": {},
-        "moldyable": {},
-        "rustable": {},
-        "wrinkleable": {},
-        "disinfectable": {}
-    },
-    "cocoa_powder__box.n.01": {
-        "fillable": {},
-        "flammable": {},
         "rigidBody": {},
         "nonSubstance": {},
         "heatable": {},
@@ -17914,6 +17895,7 @@
     "lid.n.02": {
         "rigidBody": {},
         "nonSubstance": {},
+        "attachable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -18936,6 +18918,7 @@
         "nonSubstance": {},
         "heatable": {},
         "freezable": {},
+        "attachable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -21623,8 +21606,11 @@
         "disinfectable": {}
     },
     "pewter_teapot.n.01": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
+        "heatable": {},
+        "freezable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -22753,6 +22739,7 @@
     },
     "pot_plant.n.01": {
         "flammable": {},
+        "particleRemover": {},
         "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
@@ -31700,8 +31687,11 @@
         "disinfectable": {}
     },
     "frail.n.02": {
+        "fillable": {},
         "rigidBody": {},
         "nonSubstance": {},
+        "heatable": {},
+        "freezable": {},
         "wetable": {},
         "stickyable": {},
         "dustyable": {},
@@ -39539,6 +39529,23 @@
         "disinfectable": {}
     },
     "clothesline_rope.n.01": {
+        "rigidBody": {},
+        "nonSubstance": {},
+        "attachable": {},
+        "wetable": {},
+        "stickyable": {},
+        "dustyable": {},
+        "grassyable": {},
+        "scratchable": {},
+        "stainable": {},
+        "tarnishable": {},
+        "moldyable": {},
+        "rustable": {},
+        "wrinkleable": {},
+        "disinfectable": {}
+    },
+    "clothesline_pole.n.01": {
+        "sceneObject": {},
         "rigidBody": {},
         "nonSubstance": {},
         "attachable": {},
