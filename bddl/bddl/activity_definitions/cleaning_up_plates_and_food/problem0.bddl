@@ -2,7 +2,8 @@
     (:domain omnigibson)
 
     (:objects
-        plate.n.04_1 plate.n.04_2 plate.n.04_3 - plate.n.04
+        plate.n.04_1 plate.n.04_2 - plate.n.04
+        bowl.n.01_1 bowl.n.01_2 - bowl.n.01
         floor.n.01_1 - floor.n.01
         pizza.n.01_1 pizza.n.01_2 - pizza.n.01
         breakfast_table.n.01_1 - breakfast_table.n.01
@@ -14,7 +15,8 @@
     (:init 
         (ontop plate.n.04_1 breakfast_table.n.01_1) 
         (ontop plate.n.04_2 breakfast_table.n.01_1) 
-        (ontop plate.n.04_3 breakfast_table.n.01_1) 
+        (ontop bowl.n.01_1 breakfast_table.n.01_1)
+        (ontop bowl.n.01_2 breakfast_table.n.01_1)
         (ontop pizza.n.01_1 plate.n.04_1) 
         (ontop pizza.n.01_2 plate.n.04_2) 
         (ontop agent.n.01_1 floor.n.01_1) 
@@ -28,6 +30,11 @@
     
     (:goal 
         (and 
+            (forpairs 
+                (?pizza.n.01 - pizza.n.01) 
+                (?plate.n.04 - plate.n.04)
+                (ontop ?pizza.n.01 ?plate.n.04)
+            ) 
             (exists
                 (?electric_refrigerator.n.01 - electric_refrigerator.n.01)
                 (forall
@@ -38,11 +45,8 @@
             (exists
                 (?sink.n.01 - sink.n.01)
                 (forall 
-                    (?plate.n.04 - plate.n.04)
-                    (or 
-                        (inside ?plate.n.04 ?sink.n.01)
-                        (nextto ?plate.n.04 ?sink.n.01)
-                    )
+                    (?bowl.n.01 - bowl.n.01)
+                    (inside ?bowl.n.01 ?sink.n.01)
                 )
             )
         )
