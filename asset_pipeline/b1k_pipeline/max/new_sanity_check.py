@@ -382,6 +382,7 @@ class SanityCheck:
                 self.expect(
                     len(multimaterials) <= 1,
                     f"{row.object_name} has more than one MultiMaterial in its material hierarchy. This is a bad attachment and has resulted in face material assignment loss.",
+                    level="WARNING",
                 )
 
                 # Check the found materials for any materials that are not VrayMtl or MultiMaterial
