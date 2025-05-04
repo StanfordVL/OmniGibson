@@ -12,15 +12,8 @@ def main():
     # Get all JSON files in the script's directory
     json_files = [f for f in os.listdir(script_dir) if f.endswith('.json')]
     
-    # Load the existing YAML file from the script's directory
-    yaml_file = os.path.join(script_dir, 'available_tasks.yaml')
-    try:
-        with open(yaml_file, 'r') as f:
-            tasks_data = yaml.safe_load(f)
-            if tasks_data is None:
-                tasks_data = {}
-    except FileNotFoundError:
-        tasks_data = {}
+    # Create a new empty dictionary to store tasks
+    tasks_data = {}
     
     # Process each JSON file
     for json_file in json_files:
@@ -60,7 +53,7 @@ def main():
         robot_joint_orientation = json_content['state']['registry']['object_registry'][robot_name]['joint_pos'][3:6]
         robot_start_orientation = T.euler2quat(th.tensor(robot_joint_orientation)).tolist()
         
-        # Add or update task in tasks_data
+        # Add task to tasks_data
         tasks_data[task_name] = {
             'scene_model': scene_model,
             'robot_start_position': robot_start_position,
@@ -74,11 +67,12 @@ def main():
         print(f"  Robot start orientation: {robot_start_orientation}")
         print("-" * 50)
     
-    # Write the updated data back to the YAML file
+    # Write the data to the YAML file (completely overwriting it)
+    yaml_file = os.path.join(script_dir, 'available_tasks.yaml')
     with open(yaml_file, 'w') as f:
         yaml.dump(tasks_data, f, default_flow_style=False)
     
-    print(f"Updated {yaml_file} with information from {len(json_files)} JSON files")
+    print(f"Created new {yaml_file} with information from {len(json_files)} JSON files")
 
 if __name__ == "__main__":
     main()
