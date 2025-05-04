@@ -64,7 +64,7 @@
     {
         "object": "floor_lamp-uivlzf",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 4988
@@ -1511,7 +1511,7 @@
     {
         "object": "pot_plant-mfnact",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5150
@@ -1519,7 +1519,7 @@
     {
         "object": "pot_plant-nwuuca",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5151
@@ -2156,7 +2156,7 @@
         "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
         "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
         "new": true,
-        "processed": false
+        "processed": true
     },
     {
         "id": 7569,
