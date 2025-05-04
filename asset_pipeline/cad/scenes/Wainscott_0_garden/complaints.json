@@ -238,7 +238,7 @@
         "complaint": "should be segmented",
         "processed": false,
         "new": true,
-        "type": "connectedness",
+        "type": "structureconnectedness",
         "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
         "id": 4133
     },
@@ -256,7 +256,7 @@
         "complaint": "it does have disconnected parts. we should put the individual wood areas into an object each, the stone into an object, then the left set of pavers into one object, and the right set of pavers into another. we should NOT make every paver a separate object.",
         "processed": false,
         "new": true,
-        "type": "connectedness",
+        "type": "structureconnectedness",
         "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
         "id": 4135
     },
