@@ -474,7 +474,7 @@ class OGRobotServer:
                 trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
                 self._current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
                 base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
-                self._current_trunk_tilt_offset = trunk_qpos[2] - base_trunk_pos[2]
+                self._current_trunk_tilt_offset = float(trunk_qpos[2] - base_trunk_pos[2])
                 
                 print("Finished rolling back!")
                 self._waiting_to_resume = True
@@ -505,6 +505,10 @@ class OGRobotServer:
                     frame="world"
                 )
                 beacon.visible = not beacon.visible
+                if obj.fixed_base and obj.articulated:
+                    for name, link in obj.links.items():
+                        if not 'meta' in name and link != obj.root_link:
+                            link.visible = not obj.highlighted
         self._button_toggled_state["a"] = button_a_state
 
         # If capture is toggled from OFF -> ON, breakpoint
