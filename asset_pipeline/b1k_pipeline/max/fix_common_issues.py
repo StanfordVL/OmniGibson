@@ -82,7 +82,7 @@ def get_deletions():
         b1k_pipeline.utils.PIPELINE_ROOT / "metadata/deletion_queue.csv", "r"
     ) as f:
         reader = csv.DictReader(f)
-        deletions = {}
+        deletions = set()
         for row in reader:
             obj_id = row["ID (auto)"]
             deletions.add(obj_id)
@@ -198,6 +198,10 @@ def remove_root_level_meta_links(filename) -> bool:
     return True
 
 def apply_deletions(filename):
+    # No deletions on scenes.
+    if "scenes" in str(filename):
+        return False
+
     to_delete = []
     for obj in rt.objects:
         match = b1k_pipeline.utils.parse_name(obj.name)
