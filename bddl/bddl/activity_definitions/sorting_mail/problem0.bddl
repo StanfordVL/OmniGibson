@@ -4,21 +4,21 @@
     (:objects
         envelope.n.01_1 envelope.n.01_2 envelope.n.01_3 envelope.n.01_4 - envelope.n.01
         floor.n.01_1 - floor.n.01
-        sofa.n.01_1 - sofa.n.01
+        table.n.02_1 - table.n.02
         newspaper.n.03_1 newspaper.n.03_2 newspaper.n.03_3 newspaper.n.03_4 - newspaper.n.03
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop envelope.n.01_1 floor.n.01_1) 
-        (ontop envelope.n.01_2 floor.n.01_1) 
-        (ontop envelope.n.01_3 floor.n.01_1) 
-        (ontop envelope.n.01_4 floor.n.01_1) 
-        (ontop newspaper.n.03_1 floor.n.01_1) 
-        (ontop newspaper.n.03_2 floor.n.01_1) 
-        (ontop newspaper.n.03_3 floor.n.01_1) 
-        (ontop newspaper.n.03_4 floor.n.01_1) 
-        (inroom sofa.n.01_1 living_room) 
+        (ontop envelope.n.01_1 table.n.02_1)
+        (ontop envelope.n.01_2 table.n.02_1)
+        (ontop envelope.n.01_3 table.n.02_1)
+        (ontop envelope.n.01_4 table.n.02_1)
+        (ontop newspaper.n.03_1 table.n.02_1)
+        (ontop newspaper.n.03_2 table.n.02_1)
+        (ontop newspaper.n.03_3 table.n.02_1)
+        (ontop newspaper.n.03_4 table.n.02_1)
+        (inroom table.n.02_1 living_room)
         (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
