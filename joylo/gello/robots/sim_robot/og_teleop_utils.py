@@ -1269,7 +1269,7 @@ def generate_robot_config(task_name=None, task_cfg=None):
         "name": ROBOT_NAME,
         "action_normalize": False,
         "controller_config": controller_config,
-        "self_collisions": False,
+        "self_collisions": True,
         "obs_modalities": [],
         "position": [0.0, 0.0, 0.0],
         "orientation": [0.0, 0.0, 0.0, 1.0],
