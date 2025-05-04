@@ -52,6 +52,10 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         return super().__init__(*args, **kwargs)
 
     def _pick_place(self, obj_name, dest_obj_name):
+        num_steps_dict = {}
+        num_steps_dict['teleport_aerial_dist'] = 0  # add to this everytime we teleport
+        num_steps_dict['teleport_speed'] = 0.01
+
         pick_obj = self.env.get_obj_by_name(obj_name)
         if dest_obj_name == "coffee_table":
             # convert destination from coffee_table --> "pad" on the
@@ -60,24 +64,66 @@ class LangSemanticActionPrimitivesV2(StarterSemanticActionPrimitives):
         dest_obj = self.env.get_obj_by_name(dest_obj_name)
         print("Start executing grasp")
         st = time.time()
-        grasp_num_env_steps, _ = self.execute_controller(
-            self.apply_ref(StarterSemanticActionPrimitiveSet.GRASP, pick_obj))
+        reset_after_grasp = True
+        num_steps_dict['grasp_steps'], _ = self.execute_controller(
+            self.apply_ref(
+                StarterSemanticActionPrimitiveSet.GRASP,
+                pick_obj,
+                attempts=5,
+                ignore_primitive_errors=True,
+                do_robot_reset=reset_after_grasp))
         print(f"Finish executing grasp. time: {time.time() - st}")
+
+        # store grasp pose so we can return to it
+        # post_grasp_pose_action = self._empty_action(follow_arm_targets=False)
+
+        # move base toward coffee table
+        if obj_name == "ribbons":
+            print("Start moving base toward place location")
+            st = time.time()
+            print("\tteleporting...")
+            R_pos_pre, _ = self.robot.get_position_orientation()
+            R_pos_post, _ = self.env.set_rand_R_pose(furn_name="coffee_table", step_env=True)
+            nav_to_place_teleport_dist = th.norm(R_pos_post - R_pos_pre).item()
+            num_steps_dict['teleport_aerial_dist'] += (
+                nav_to_place_teleport_dist)
+            num_steps_dict['nav_to_place_teleport_inferred_steps'] = int(
+                nav_to_place_teleport_dist
+                / num_steps_dict['teleport_speed'])
+            print(f"Done navigating to place. time: {time.time() - st}")
 
         # Place on coffee table
         print("Start executing place")
         st = time.time()
-        place_num_env_steps, r = self.execute_controller(
-            self.apply_ref(StarterSemanticActionPrimitiveSet.PLACE_ON_TOP, dest_obj))
+        num_steps_dict['place_steps'], r = self.execute_controller(
+            self.apply_ref(
+                StarterSemanticActionPrimitiveSet.PLACE_ON_TOP,
+                dest_obj,
+                attempts=5,
+                ignore_primitive_errors=True))
         print(f"Finish executing place. time: {time.time() - st}")
 
-        total_num_env_steps = grasp_num_env_steps + place_num_env_steps
+        total_num_env_steps = num_steps_dict['grasp_steps'] + num_steps_dict['place_steps']
 
-        print("grasp_num_env_steps", grasp_num_env_steps)
-        print("place_num_env_steps", place_num_env_steps)
+        print("grasp_num_env_steps", num_steps_dict['grasp_steps'])
+        print("place_num_env_steps", num_steps_dict['place_steps'])
         print("total_num_env_steps", total_num_env_steps)
 
-        return total_num_env_steps
+        # calculate totals
+        total_env_steps = 0
+        total_env_steps_wo_teleport = 0
+        for k, v in num_steps_dict.items():
+            if "_steps" in k:
+                total_env_steps += v
+                if "teleport" not in k:
+                    total_env_steps_wo_teleport += v
+
+        num_steps_dict['total_env_steps'] = total_env_steps
+        num_steps_dict['total_env_steps_wo_teleport'] = total_env_steps_wo_teleport
+
+        print("num_steps_dict", num_steps_dict)
+
+        return num_steps_dict
 
     def _pick_place_forward(self, obj_name, dest_obj_name):
         """Used for pick and place from a shelf, where only forward grasp works"""

@@ -124,6 +124,11 @@ class TaskEnv(Environment):
         if dest_obj_name in ["shelf", "sink"]:
             placed_on = bool(th.all(
                 (obj_place_min <= obj_pos) & (obj_pos <= obj_place_max)))
+        if dest_obj_name in ["box"]:
+            placed_on = bool(
+                th.all(obj_place_min <= obj_pos)
+                and th.all(obj_pos[:2] <= obj_place_max[:2]))
+            # ignore being under the box's max z, since box lid won't satisfy this.
 
         # if obj_name in ["package_contents", "package"]:
         #     # if obj_name in ["package_contents", "package"] and len(self.grasped_obj_names) > 0:

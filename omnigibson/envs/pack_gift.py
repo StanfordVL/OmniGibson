@@ -37,7 +37,7 @@ class PackGiftEnv(TaskEnv):
         # self.get_obj_by_name("bowl").links['base_link'].mass = 0.1
         self.get_obj_by_name("shelf").links['base_link'].mass = 100.0
         self.get_obj_by_name("sink").links['base_link'].mass = 100.0
-        self.get_obj_by_name("ribbons").links['base_link'].mass = 1.0
+        self.get_obj_by_name("ribbons").links['base_link'].mass = 0.1
 
     def set_R_plan_order(self):
         # used for calculating rewards
@@ -135,8 +135,8 @@ class PackGiftEnv(TaskEnv):
             init_obj_to_parent_map['tissue_paper'] = 'box'
         if R_step_idx >= 3:
             init_obj_to_parent_map['car'] = 'box'
-        if R_step_idx >= 4:
             init_obj_to_parent_map['lid'] = 'box'
+        if R_step_idx >= 4:
             init_obj_to_parent_map['ribbons'] = 'lid'
         if R_step_idx >= 5:
             init_obj_to_parent_map['gift_bow'] = 'lid'
@@ -169,7 +169,7 @@ class PackGiftEnv(TaskEnv):
         )
         coffee_table_xyz = coffee_table_xyz_map[config_name]
         coffee_table_surface_xyz = coffee_table_xyz + np.array([-0.1, 0.0, 0.2])
-        console_table_xyz = np.array([6.04, 4.63, 0.4])
+        console_table_xyz = np.array([6.04, 4.63, 0.52])
         console_table_surface_xyz = console_table_xyz + np.array([0.0, 0.0, 0.2])
         console_table_ori = np.array([0, 0, 0, 1])
 
@@ -181,7 +181,7 @@ class PackGiftEnv(TaskEnv):
         if lid_parent == "coffee_table":
             lid_xyz = coffee_table_surface_xyz + np.array([0.0, -0.1, 0.0])
         elif lid_parent == "box":
-            lid_xyz = box_xyz + np.array([0.0, 0.0, 0.2])
+            lid_xyz = box_xyz + np.array([0.0, 0.0, 0.3])
         else:
             raise NotImplementedError
         lid_ori = np.array([0, 0, 0, 1])
@@ -201,7 +201,7 @@ class PackGiftEnv(TaskEnv):
         if car_parent == "coffee_table":
             car_xyz = coffee_table_surface_xyz + np.array([0.0, 0.2, 0.0])
         elif car_parent == "box":
-            car_xyz = box_xyz + np.array([0.0, 0.0, 0.15])
+            car_xyz = box_xyz + np.array([-.05, 0.0, 0.15])
         else:
             raise NotImplementedError
         car_ori = np.array([0, 0, 0, 1])
@@ -211,10 +211,10 @@ class PackGiftEnv(TaskEnv):
         if ribbons_parent == "console_table":
             ribbons_xyz = console_table_surface_xyz + np.array([0, 0, 0.1])
         elif ribbons_parent == "lid":
-            ribbons_xyz = lid_xyz + np.array([0, 0, 0.05])
+            ribbons_xyz = lid_xyz + np.array([0, -0.05, 0.15])
         else:
             raise NotImplementedError
-        ribbons_ori = np.array([0, 0, 0, 1])
+        ribbons_ori = np.array([0.707, 0, 0, 0.707])
         
         # gift bow
         gift_bow_parent = init_obj_to_parent_map["gift_bow"]
@@ -287,8 +287,6 @@ class PackGiftEnv(TaskEnv):
                 "type": "PrimitiveObject",
                 "name": "lid",
                 "primitive_type": "Cube",
-                "category": "toy_box",
-                "model": "kvithq",
                 "manipulable": True,
                 "position": lid_xyz,
                 "orientation": lid_ori,
@@ -298,12 +296,12 @@ class PackGiftEnv(TaskEnv):
             {
                 "type": "DatasetObject",
                 "name": "tissue_paper",
-                "category": "wrapping_paper",  # "paper_liners",
-                "model": "hjbesb",  # "yvuilk",
+                "category": "paper_coffee_filter",  # "wrapping_paper",  # "paper_liners",
+                "model": "kizndy",  # "hjbesb",  # "yvuilk",
                 "manipulable": True,
                 "position": tissue_paper_xyz,
                 "orientation": tissue_paper_ori,
-                "scale": [0.3, 0.3, 0.5],
+                "scale": [1.0, 1.0, 1.0],  #  [0.4, 0.4, 0.2],  # [1.0, 1.0, 1.0]
             },
             {
                 "type": "DatasetObject",
@@ -316,24 +314,40 @@ class PackGiftEnv(TaskEnv):
                 "scale": [0.2, 0.2, 0.2],
             },
             {
-                "type": "DatasetObject",
+                # "type": "DatasetObject",
+                # "name": "ribbons",
+                # "category": "bow",  # "ribbon",
+                # "model": "puwdwq",  # "apyxhw",
+                # "manipulable": True,
+                # "position": ribbons_xyz,
+                # "orientation": ribbons_ori,
+                # "scale": [1.0, 1.0, 3.0],
+                "type": "PrimitiveObject",
                 "name": "ribbons",
-                "category": "ribbon",
-                "model": "apyxhw",
+                "primitive_type": "Cube",
                 "manipulable": True,
                 "position": ribbons_xyz,
-                "orientation": ribbons_ori,
-                "scale": [0.5, 0.5, 0.5],
+                "orientation": np.array([0, 0, 0, 1]),
+                "rgba": [0.0, 0.0, 1.0, 1.0],
+                "scale": [0.1, 0.1, 0.05],
             },
             {
-                "type": "DatasetObject",
+                # "type": "DatasetObject",
+                # "name": "gift_bow",
+                # "category": "bow",
+                # "model": "fhchql",
+                # "manipulable": True,
+                # "position": gift_bow_xyz,
+                # "orientation": gift_bow_ori,
+                # "scale": [3.0, 3.0, 3.0],
+                "type": "PrimitiveObject",
                 "name": "gift_bow",
-                "category": "bow",
-                "model": "fhchql",
+                "primitive_type": "Cube",
                 "manipulable": True,
                 "position": gift_bow_xyz,
                 "orientation": gift_bow_ori,
-                "scale": [3.0, 3.0, 3.0],
+                "rgba": [1.0, 0.0, 0.0, 1.0],
+                "scale": [0.1, 0.1, 0.05],
             },
             {
                 "type": "DatasetObject",
@@ -342,7 +356,7 @@ class PackGiftEnv(TaskEnv):
                 "model": "zisekv",
                 "position": coffee_table_xyz,
                 "orientation": coffee_table_ori,
-                "scale": [1.0, 1.5, 1.0],
+                "scale": [1.0, 1.5, 0.9],
             },
             {
                 "type": "DatasetObject",
@@ -351,7 +365,7 @@ class PackGiftEnv(TaskEnv):
                 "model": "zisekv",
                 "position": console_table_xyz,
                 "orientation": console_table_ori,
-                "scale": [1.0, 1.0, 1.0],
+                "scale": [1.0, 1.0, 1.3],
             },
             {
                 "type": "DatasetObject",
