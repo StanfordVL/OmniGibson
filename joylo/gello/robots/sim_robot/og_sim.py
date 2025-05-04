@@ -505,6 +505,10 @@ class OGRobotServer:
                     frame="world"
                 )
                 beacon.visible = not beacon.visible
+                if obj.fixed_base and obj.articulated:
+                    for name, link in obj.links.items():
+                        if not 'meta' in name and link != obj.root_link:
+                            link.visible = not obj.highlighted
         self._button_toggled_state["a"] = button_a_state
 
         # If capture is toggled from OFF -> ON, breakpoint
