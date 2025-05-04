@@ -1031,7 +1031,7 @@ def update_checkpoint(env, frame_counter, recording_path=None, event_queue=None)
             env.update_checkpoint()
             print("Auto recorded checkpoint due to periodic save!")
             if event_queue:
-                add_status_event(event_queue, "checkpoint", "Checkpoint Recorded manually")
+                add_status_event(event_queue, "checkpoint", "Checkpoint Recorded due to periodic save")
         updated_counter = 0
     
     return updated_counter
