@@ -535,12 +535,27 @@ class Synset(Model):
     @classmethod
     def view_object_unsupported_properties(cls):
         """Leaf synsets that do not have at least one object that supports all of annotated properties."""
-        # TODO: joint count
+        transition_relevant_synsets = {
+            anc
+            for t in Task.all_objects()
+            for transition in t.relevant_transitions
+            for s in list(transition.output_synsets) + list(transition.input_synsets)
+            for anc in s.ancestors
+        }
+        task_relevant_synsets = {
+            s for s in cls.all_objects()
+            if s.task_relevant
+        }
+        fluid_synsets = {
+            s for s in cls.all_objects()
+            if "fluid" not in s.property_names
+        }
+        relevant_synsets = (transition_relevant_synsets | task_relevant_synsets) - fluid_synsets
+
         return [
             s
-            for s in cls.all_objects()
-            if len(s.matching_objects) > 0
-            and len(s.children) == 0
+            for s in relevant_synsets
+            if len(s.children) == 0
             and not s.has_fully_supporting_object
         ]
 
