@@ -95,7 +95,7 @@ def validate_collision_mesh(obj, max_elements=40, max_vertices_per_element=60):
             raise ValueError(f"{obj.name} element {i} is not a volume. It's now selected for your viewing.")
         elems_by_volume.append((elem, m.volume))
         if not m.is_convex:
-            pass # print(f"WARNING: {obj.name} element {i} may be non-convex. The checker says so, but it's not 100% accurate, so please verify that all elements are indeed convex.")
+            print(f"WARNING: {obj.name} element {i} may be non-convex. The checker says so, but it's not 100% accurate, so please verify that all elements are indeed convex.")
         assert (
             len(m.split()) == 1
         ), f"{obj.name} element {i} has elements trimesh still finds splittable e.g. are not watertight / connected"
