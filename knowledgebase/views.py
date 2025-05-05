@@ -260,7 +260,6 @@ class IndexView(TemplateView):
         context["synset_metadata"] = {
             "valid": sum(1 for x in Synset.all_objects() if x.state == SynsetState.MATCHED),
             "planned": sum(1 for x in Synset.all_objects() if x.state == SynsetState.PLANNED),
-            "substance": sum(1 for x in Synset.all_objects() if x.state == SynsetState.SUBSTANCE),
             "unmatched": sum(1 for x in Synset.all_objects() if x.state == SynsetState.UNMATCHED),
             "illegal": sum(1 for x in Synset.all_objects() if x.state == SynsetState.ILLEGAL),
             "total": sum(1 for x in Synset.all_objects()),

@@ -10,7 +10,6 @@ def tocolor_filter(state):
         SynsetState.MATCHED: "success",
         SynsetState.PLANNED: "warning", 
         SynsetState.UNMATCHED: "danger",
-        SynsetState.SUBSTANCE: "info",
         SynsetState.ILLEGAL: "secondary",
         SynsetState.NONE: "light"
     }

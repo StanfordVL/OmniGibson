@@ -51,24 +51,20 @@
             <strong>{{ synset_metadata.valid }}</strong>
           </div>
           <div class="col-sm-4 border-right border-bottom py-4">
-            <h6 class="text-warning">Planned:</h6>
+            <h6 class="text-warning">In Progress:</h6>
             <strong>{{ synset_metadata.planned }}</strong>
           </div>
           <div class="col-sm-4 border-bottom py-4">
-            <h6 class="text-info">Substances:</h6>
-            <strong>{{ synset_metadata.substance }}</strong>
+            <h6 class="text-primary">Total:</h6>
+            <strong>{{ synset_metadata.total }}</strong>
           </div>
-          <div class="col-sm-4 border-right py-4">
+          <div class="col-sm-6 border-right py-4">
             <h6 class="text-danger">Missing Objects:</h6>
             <strong>{{ synset_metadata.unmatched }}</strong>
           </div>
-          <div class="col-sm-4 border-right py-4">
+          <div class="col-sm-6 py-4">
             <h6 class="text-danger">Missing Definition:</h6>
             <strong>{{ synset_metadata.illegal }}</strong>
-          </div>
-          <div class="col-sm-4 py-4">
-            <h6 class="text-primary">Total:</h6>
-            <strong>{{ synset_metadata.total }}</strong>
           </div>
         </div>
         <a href="{{ url_for('synset_list') }}" class="stretched-link"></a>
