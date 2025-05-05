@@ -12,7 +12,6 @@ class SynsetState(Enum):
     MATCHED = "Matched"
     PLANNED = "Planned"
     UNMATCHED = "Unmatched"
-    SUBSTANCE = "Substance"
     ILLEGAL = "Illegal"
     NONE = "No State Info"
 
