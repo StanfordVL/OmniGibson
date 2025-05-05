@@ -787,11 +787,8 @@ def processFile(filename: pathlib.Path):
         pass
 
 def fix_common_issues_in_all_files():
-    TGTS = {
-        "house_double_floor_upper",
-    }
     candidates = [
-        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max") if x.parts[-2] not in TGTS
+        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max") # if x.parts[-2] not in TGTS
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):
