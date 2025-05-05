@@ -53,73 +53,132 @@
     }
     </style>
     <script>
-    // First, load Fuse.js for fuzzy search
-    const fusejsScript = document.createElement('script');
-    fusejsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js';
-    document.head.appendChild(fusejsScript);
-    
-    fusejsScript.onload = () => {
-      let searchData = [];
-      let fuse;
-    
-      // Load the search data
-      $.getJSON("{{ url_for('searchable_items_list') }}", function(data) {
-        searchData = data;
-        // Initialize Fuse.js
-        fuse = new Fuse(searchData, {
-          keys: ['title'],
-        });
-      });
-    
-      const searchInput = $('#search-input');
-      const searchResults = $('#search-results');
-    
-      // Handle input changes
-      searchInput.on('input', function() {
-        const query = $(this).val().trim();
-        
-        if (query.length < 2) {
-          searchResults.addClass('d-none');
-          return;
-        }
-    
-        const results = fuse.search(query).slice(0, 20); // Limit to 20 results
-    
-        if (results.length > 0) {
-          searchResults.html(results.map(result => `
-            <div class="search-result-item" data-url="${result.item.url}">
-              <div style="font-weight: bold; font-size: small; color: darkgray;">${result.item.type}</div>
-              <div style="font-size: small;">${highlightText(result.item.title, query)}</div>
-            </div>
-          `).join('')).removeClass('d-none');
-        } else {
-          searchResults.html('<div class="search-result-item">No results found</div>').removeClass('d-none');
-        }
-      });
-    
-      // Handle click on search result
-      searchResults.on('click', '.search-result-item', function() {
-        const url = $(this).data('url');
-        if (url) {
-          window.location.href = url;
-        }
-      });
-    
-      // Close results when clicking outside
-      $(document).on('click', function(e) {
-        if (!$(e.target).closest('.form-inline').length) {
-          searchResults.addClass('d-none');
-        }
-      });
-    
-      // Highlight matching text
-      function highlightText(text, query) {
-        if (!query) return text;
-        const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
-        const regex = new RegExp(`(${escapedQuery})`, 'gi');
-        return text.replace(regex, '<span class="highlight">$1</span>');
-      }
-    };
+      // Wait for the DOM to be ready
+      $(document).ready(function() {
+        // First, load Fuse.js for fuzzy search
+        const fusejsScript = document.createElement('script');
+        fusejsScript.src = 'https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.6.2/fuse.min.js';
+        document.head.appendChild(fusejsScript);
+      
+        fusejsScript.onload = () => {
+          let searchData = [];
+          let fuse; // Declare fuse here
+      
+          const searchInput = $('#search-input');
+          const searchResults = $('#search-results');
+      
+          // Load the search data
+          $.getJSON("{{ url_for('searchable_items_list') }}", function(data) {
+            console.log("Search data loaded."); // Good for debugging
+            searchData = data;
+            // Initialize Fuse.js *after* data is loaded
+            fuse = new Fuse(searchData, {
+              keys: ['title'],
+              // includeScore: true, // Optional: useful for debugging relevance
+              // threshold: 0.4,   // Optional: adjust sensitivity
+            });
+            console.log("Fuse.js initialized."); // Good for debugging
+      
+            // --- Attach listeners ONLY after fuse is ready ---
+      
+            // Handle input changes to show results
+            searchInput.on('input', function() {
+              const query = $(this).val().trim();
+      
+              if (query.length < 2) {
+                searchResults.addClass('d-none');
+                return;
+              }
+      
+              // Ensure fuse is actually initialized
+              if (!fuse) {
+                  console.warn("Fuse not ready yet during input.");
+                  searchResults.addClass('d-none');
+                  return;
+              }
+      
+              const results = fuse.search(query).slice(0, 20); // Limit to 20 results
+              // console.log("Search results:", results); // Uncomment for debugging
+      
+              if (results.length > 0) {
+                searchResults.html(results.map(result => `
+                  <div class="search-result-item" data-url="${result.item.url}">
+                    <div style="font-weight: bold; font-size: small; color: darkgray;">${result.item.type}</div>
+                    <div style="font-size: small;">${highlightText(result.item.title, query)}</div>
+                  </div>
+                `).join('')).removeClass('d-none');
+              } else {
+                searchResults.html('<div class="search-result-item">No results found</div>').removeClass('d-none');
+              }
+            });
+      
+            // **** NEW: Handle 'Enter' key press in search input ****
+            searchInput.on('keydown', function(event) {
+                // Check if the pressed key is Enter (key code 13 or key 'Enter')
+                if (event.key === 'Enter' || event.keyCode === 13) {
+                    event.preventDefault(); // Prevent default form submission or other Enter behavior
+      
+                    // Check if results are visible and there's at least one actual result item
+                    if (!searchResults.hasClass('d-none') && searchResults.find('.search-result-item[data-url]').length > 0) {
+                        // Find the very first result item that has a data-url attribute
+                        const firstResult = searchResults.find('.search-result-item[data-url]:first');
+                        const url = firstResult.data('url');
+      
+                        if (url) {
+                            console.log("Enter pressed, navigating to first result:", url);
+                            window.location.href = url; // Navigate to the URL
+                        }
+                    } else {
+                        console.log("Enter pressed, but no results visible or available to navigate to.");
+                    }
+                }
+            });
+            // **** END NEW SECTION ****
+      
+      
+            // Handle click on search result item
+            searchResults.on('click', '.search-result-item', function() {
+              // Only navigate if the item has a URL (ignores "No results found")
+              const url = $(this).data('url');
+              if (url) {
+                window.location.href = url;
+              }
+            });
+      
+            // --- End of listeners attached after fuse is ready ---
+      
+          }).fail(function(jqXHR, textStatus, errorThrown) {
+              // Handle potential errors loading the search data
+              console.error("Failed to load search data:", textStatus, errorThrown);
+              searchInput.prop('placeholder', 'Search unavailable');
+              searchInput.prop('disabled', true);
+          });
+      
+          // Close results when clicking outside
+          $(document).on('click', function(e) {
+            // Check if the click is outside the search input AND outside the search results
+            if (!$(e.target).closest('#search-input').length && !$(e.target).closest('#search-results').length) {
+              searchResults.addClass('d-none');
+            }
+          });
+      
+          // Highlight matching text
+          function highlightText(text, query) {
+            if (!query) return text;
+            // Escape special characters in the query for regex
+            const escapedQuery = query.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&');
+            const regex = new RegExp(`(${escapedQuery})`, 'gi');
+            return text.replace(regex, '<span class="highlight">$1</span>');
+          }
+        };
+      
+        fusejsScript.onerror = () => {
+            // Handle potential errors loading Fuse.js
+            console.error("Failed to load Fuse.js script.");
+            $('#search-input').prop('placeholder', 'Search unavailable');
+            $('#search-input').prop('disabled', true);
+        };
+      }); // End of $(document).ready
     </script>
 
     <!-- Stuff that powers the mermaid diagrams -->
