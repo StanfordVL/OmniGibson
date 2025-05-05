@@ -375,6 +375,16 @@ class SanityCheck:
                             _recursively_get_materials(sub_mtl)
                 _recursively_get_materials(obj.material)
 
+                # We should NOT find more than 1 multimaterial in the entire hierarchy. If we do,
+                # it means that a bad merge was done and thus the face material IDs overwritten.
+                # Sadly this means data loss and I'm not sure how we're going to get back from it.
+                multimaterials = [mat for mat in recursive_materials if rt.classOf(mat) == rt.MultiMaterial]
+                self.expect(
+                    len(multimaterials) <= 1,
+                    f"{row.object_name} has more than one MultiMaterial in its material hierarchy. This is a bad attachment and has resulted in face material assignment loss.",
+                    level="WARNING",
+                )
+
                 # Check the found materials for any materials that are not VrayMtl or MultiMaterial
                 for mat in recursive_materials:
                     mat_type = rt.classOf(mat)
@@ -382,12 +392,11 @@ class SanityCheck:
                         # The top level material can be vray, shell, or multi
                         self.expect(mat_type in (rt.MultiMaterial, rt.Shell_Material) or "vray" in str(mat).lower(), f"Top level material {mat} of {row.object_name} is not a MultiMaterial, Shell_Material, or VrayMtl.")
                     elif rt.classOf(obj.material) == rt.Shell_Material and mat == obj.material.bakedMaterial:
-                        # If the top level material is a Shell_Material, then the baked material should be physical
+                        # If the top level material is a Shell_Material, then the baked material should be VrayMtl
                         self.expect(mat_type == rt.VrayMtl, f"Baked material {mat} of {row.object_name} is not a VrayMtl.")
                     else:
                         # Everything that's not the top level material nor the baked material should be a vraymtl or multimaterial
-                        # self.expect(mat_type == rt.MultiMaterial or "vray" in str(mat).lower(), f"Non-top level material {mat} of {row.object_name} is not a MultiMaterial or VrayMtl.")
-                        pass
+                        self.expect(mat_type == rt.MultiMaterial or "vray" in str(mat).lower(), f"Non-top level material {mat} of {row.object_name} is not a MultiMaterial or some kind of VRay material: {rt.classOf(mat)}", level="WARNING")
 
         else:
             # Bad object tasks
@@ -817,6 +826,49 @@ class SanityCheck:
                 found_convex_mesh_metas[meta_link_type].append(child)
                 self.validate_convex_mesh(child)
 
+            if meta_link_type == "collision" and row.name_category not in ("floors", "driveway", "lawn", "ceilings", "rail_fence", "roof", "walls"):
+                # For collision meshes, get the AABB of the mesh and its collision mesh and check that
+                # their bounds are not more than 5cm different in any direction.
+                child_bbox_min, child_bbox_max = rt.NodeGetBoundingBox(child._obj, rt.Matrix3(1))
+                child_bbox_min = np.array(child_bbox_min)
+                child_bbox_max = np.array(child_bbox_max)
+                child_bbox_volume = np.prod(child_bbox_max - child_bbox_min)
+
+                parent_bbox_min, parent_bbox_max = rt.NodeGetBoundingBox(row.object._obj, rt.Matrix3(1))
+                parent_bbox_min = np.array(parent_bbox_min)
+                parent_bbox_max = np.array(parent_bbox_max)
+                parent_bbox_volume = np.prod(parent_bbox_max - parent_bbox_min)
+
+                # Check that the bounding boxes are not more than 5cm different in any direction
+                self.expect(
+                    np.all(np.abs(child_bbox_min - parent_bbox_min) < 50),
+                    f"Collision mesh {child.name} has bounding box min {child_bbox_min} that is more than 5cm different from parent {row.object_name} min {parent_bbox_min}.",
+                    level="WARNING",
+                )
+                self.expect(
+                    np.all(np.abs(child_bbox_max - parent_bbox_max) < 50),
+                    f"Collision mesh {child.name} has bounding box max {child_bbox_max} that is more than 5cm different from parent {row.object_name} max {parent_bbox_max}.",
+                    level="WARNING",
+                )
+                
+                # TODO: Reconsider this IOU logic. The problem with this is that it is really sensitive
+                # to the size of the bounding box. If the bounding box is very small along any dimension,
+                # just a few cm's difference in the bounding box will cause the IOU to be very small.
+                # This is true for a lot of glass/window meshes.
+                # inter_min = np.maximum(child_bbox_min, parent_bbox_min)
+                # inter_max = np.minimum(child_bbox_max, parent_bbox_max)
+                # # Clamp negative/zero dimensions to zero before multiplying
+                # clamped_side_lengths = np.maximum(0.0, inter_max - inter_min)
+                # intersection_volume = np.prod(clamped_side_lengths)
+                # union_volume = child_bbox_volume + parent_bbox_volume - intersection_volume
+                # iou = intersection_volume / union_volume
+                # self.expect(
+                #     iou > 0.9,
+                #     f"Collision mesh {child.name} has low IOU with parent {row.object_name}: {iou:.2f}.",
+                #     level="WARNING",
+                # )
+
+
             if meta_link_type == "attachment":
                 attachment_type = match.group("meta_id")
                 self.expect(
@@ -1026,6 +1078,9 @@ class SanityCheck:
 
         def record_links(group):
             instance_id = group["name_instance_id"].iloc[0]
+            # Check that there is a base link row
+            assert "base_link" in group["name_link_name"].unique(), \
+                f"Model ID {model_id} instance {instance_id} is missing base link."
             base_link_row = group[group["name_link_name"] == "base_link"].iloc[0]
             base_link_transform = base_link_row.object.objecttransform
             inverse_base_link_transform = rt.inverse(base_link_transform)

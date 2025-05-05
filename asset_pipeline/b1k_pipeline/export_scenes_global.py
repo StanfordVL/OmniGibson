@@ -127,31 +127,6 @@ def process_target(target, scenes_dir):
         partial_scene_target_name = "scenes/" + partial_scene_name
         partial_scene_output_fs = pipeline_fs.target_output(partial_scene_target_name)
 
-        # Load the object layer assignments from the file manifest. This is a temporary fix until we can make
-        # object list include this properly.
-        with partial_scene_output_fs.open("file_manifest.json", "r") as f:
-            partial_scene_object_layers = {}
-            for manifest_entry in json.load(f):
-                if manifest_entry["class"] != "Editable_Poly":
-                    continue
-                manifest_name = manifest_entry["name"]
-                manifest_layer = manifest_entry["layer"]
-                manifest_parsed_name = b1k_pipeline.utils.parse_name(manifest_name)
-                if not manifest_parsed_name:
-                    continue
-                link_name = manifest_parsed_name.group("link_name")
-                if link_name not in (None, "base_link"):
-                    continue
-                if manifest_parsed_name.group("meta_type") or manifest_parsed_name.group("light_id"):
-                    continue
-                model_id = manifest_parsed_name.group("model_id")
-                instance_id = manifest_parsed_name.group("instance_id")
-                key = (model_id, instance_id)
-                assert key not in partial_scene_object_layers, (
-                    "Duplicate object in room mapping", key, partial_scene_object_layers[key]
-                )
-                partial_scene_object_layers[key] = manifest_layer
-
         # Compute the incoming transform
         rel_transform = np.eye(4)
         if portal_pose_in_parent is not None:
@@ -195,7 +170,7 @@ def process_target(target, scenes_dir):
                 continue
 
             obj_name_in_scene = "-".join([obj_cat, obj_model, obj_inst_id])
-            obj_rooms = partial_scene_object_layers[(obj_model, obj_inst_id)]
+            obj_rooms = G.nodes[root_node]["object_bounding_box"]["layer"]
             # TODO: Verify rooms.
             if obj_rooms == "0":
                 obj_rooms = ""

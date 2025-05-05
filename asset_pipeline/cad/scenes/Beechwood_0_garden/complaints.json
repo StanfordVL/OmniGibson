@@ -11,7 +11,7 @@
     {
         "object": "fairy_light-waitum",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -153,7 +153,7 @@
     {
         "object": "glass_lantern-engbrg",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -162,7 +162,7 @@
     {
         "object": "glass_lantern-onfjnh",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -216,7 +216,7 @@
     {
         "object": "gate-izmteu",
         "complaint": "two parts",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "connectedness",
         "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -225,7 +225,7 @@
     {
         "object": "gate-izmteu",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "appearance",
         "additional_info": "",
@@ -234,7 +234,7 @@
     {
         "object": "gate-vqjuvg",
         "complaint": "two parts",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "connectedness",
         "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -243,7 +243,7 @@
     {
         "object": "gate-vqjuvg",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "appearance",
         "additional_info": "",
@@ -252,7 +252,7 @@
     {
         "object": "pot_plant-ibvdwh",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 4007
@@ -269,7 +269,7 @@
     {
         "object": "pot_plant-liqyem",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 4009
@@ -277,7 +277,7 @@
     {
         "object": "pot_plant-mkhbtk",
         "complaint": "not really a potted plant.",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: pot_plant.n.01\nDefinition: a plant suitable for growing in a flowerpot (especially indoors)\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
@@ -286,7 +286,7 @@
     {
         "object": "pot_plant-mkhbtk",
         "complaint": "pot_plant_fixture r something",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pot_plant\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
@@ -304,7 +304,7 @@
     {
         "object": "pot_plant-mkhbtk",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 4013

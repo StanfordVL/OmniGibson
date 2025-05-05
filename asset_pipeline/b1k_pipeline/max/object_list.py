@@ -231,6 +231,7 @@ def main():
         bbox_rotation_in_world = quat2arr(pivot.rotation)
 
         bounding_boxes[model_id][instance_id] = {
+            "layer": obj.layer.name,
             "position": bbox_position_in_world.tolist(),
             "rotation": bbox_rotation_in_world.tolist(),
             "extent": bbox_extent.tolist(),
@@ -404,7 +405,7 @@ def main():
     # For scenes, do this stuff that used to be in room_object_list only
     is_scene = pathlib.Path(rt.maxFilePath).parts[-2] == "scenes"
     if is_scene:
-        objects_by_room = defaultdict(Counter)
+        object_instances_by_room = defaultdict(lambda: defaultdict(set))
         missing_room_assignment = set()
 
         for obj in rt.objects:
@@ -424,9 +425,12 @@ def main():
                     if match.group("category") in MUST_HAVE_ROOM_ASSIGNMENT_CATEGORIES:
                         missing_room_assignment.add(obj.name)
                     continue
-                link_name = match.group("link_name")
-                if link_name == "base_link" or not link_name:
-                    objects_by_room[room_str][model] += 1
+                object_instances_by_room[room_str][model].add(int(match.group("instance_id")))
+
+        objects_by_room = {
+            room: {mid: len(instances) for mid, instances in models.items()}
+            for room, models in object_instances_by_room.items()
+        }
 
         # Separately process portals
         portals = [x for x in rt.objects if rt.classOf(x) == rt.Plane]

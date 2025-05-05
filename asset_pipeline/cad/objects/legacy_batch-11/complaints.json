@@ -237,7 +237,7 @@
     {
         "object": "ripsaw-laysom",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 3432
@@ -382,7 +382,7 @@
     {
         "object": "bottle_of_powder-vfabau",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -391,7 +391,7 @@
     {
         "object": "half_spinach-jmfmwt",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -409,7 +409,7 @@
     {
         "object": "hinge-qroify",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "",
@@ -508,7 +508,7 @@
     {
         "object": "lawn_mower-bterwo",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -566,7 +566,7 @@
     {
         "object": "modem-axqxsv",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -625,7 +625,7 @@
     {
         "object": "pocketknife-ngtgdn",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -634,7 +634,7 @@
     {
         "object": "pocketknife-ngtgdn",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 3480
@@ -781,7 +781,7 @@
     {
         "object": "iron-fzbvce",
         "complaint": "wrong iron",
-        "processed": false,
+        "processed": true,
         "type": "category",
         "additional_info": "Confirm object synset assignment.\nObject assigned to synset: iron.n.01\nDefinition: a heavy ductile magnetic metallic element; is silver-white in pure form but readily rusts; used in construction and tools and armament; plays a role in the transport of oxygen by the blood\nReminder: synset should match the object and not its contents.\n(e.g. orange juice bottle needs to match orange_juice__bottle.n.01\nand not orange_juice.n.01)",
         "id": 3498
@@ -823,7 +823,7 @@
     {
         "object": "mouse-oydobn",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -924,7 +924,7 @@
     {
         "object": "ladder-shfvtl",
         "complaint": "+",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: ladder.n.01\nDefinition: steps consisting of two parallel members connected by rungs; for climbing up or down\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
@@ -965,7 +965,7 @@
     {
         "object": "shoulder_bag-mcualj",
         "complaint": "fillable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",

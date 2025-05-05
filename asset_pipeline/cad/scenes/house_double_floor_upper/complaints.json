@@ -143,7 +143,7 @@
     {
         "object": "floor_lamp-drpann",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5187
@@ -187,7 +187,7 @@
     {
         "object": "floor_lamp-mqfdjk",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5192
@@ -213,7 +213,7 @@
     {
         "object": "floor_lamp-ogolip",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5195
@@ -301,16 +301,16 @@
     {
         "object": "hardback-grxiqn",
         "complaint": "bad object, containing 2 books",
-        "processed": false,
+        "processed": true,
         "new": true,
-        "type": "appearance",
+        "type": "connectedness",
         "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
         "id": 5205
     },
     {
         "object": "hardback-grxiqn",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -594,7 +594,7 @@
     {
         "object": "swivel_chair-iiihwn",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5238
@@ -1174,7 +1174,7 @@
     {
         "object": "furniture_sink-ojjqku",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1252,7 +1252,7 @@
     {
         "object": "monitor-qaacxt",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5312
@@ -1278,7 +1278,7 @@
     {
         "object": "pencil_holder-jkuiqg",
         "complaint": "fillable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -1295,7 +1295,7 @@
     {
         "object": "serving_cart-vvtcby",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1313,7 +1313,7 @@
     {
         "object": "shelf-sapyzl",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1322,7 +1322,7 @@
     {
         "object": "shelf-sapyzl",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1420,7 +1420,7 @@
     {
         "object": "table_lamp-erfbgw",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5331
@@ -1446,7 +1446,7 @@
     {
         "object": "table_lamp-htmtsr",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1454,17 +1454,17 @@
     },
     {
         "object": "table_lamp-htmtsr",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "complaint": "maybe make this movable",
         "processed": false,
         "new": true,
-        "type": "unknown",
+        "type": "nth-metalink",
         "additional_info": "",
         "id": 5335
     },
     {
         "object": "table_lamp-htmtsr",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5336
@@ -1489,17 +1489,17 @@
     },
     {
         "object": "table_lamp-lshxmu",
-        "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+        "complaint": "maybe add joint",
         "processed": false,
         "new": true,
-        "type": "unknown",
+        "type": "nth-metalink",
         "additional_info": "",
         "id": 5339
     },
     {
         "object": "table_lamp-lshxmu",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5340
@@ -1525,7 +1525,7 @@
     {
         "object": "table_lamp-vbjpad",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1534,7 +1534,7 @@
     {
         "object": "table_lamp-vbjpad",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -1543,7 +1543,7 @@
     {
         "object": "table_lamp-vbjpad",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5345
@@ -1578,7 +1578,7 @@
     {
         "object": "table_lamp-wbcgev",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1587,7 +1587,7 @@
     {
         "object": "table_lamp-wbcgev",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",
@@ -1596,7 +1596,7 @@
     {
         "object": "table_lamp-wbcgev",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5351
@@ -1613,7 +1613,7 @@
     {
         "object": "centerpiece-gakixx",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "",
@@ -1622,7 +1622,7 @@
     {
         "object": "desk-aduafr",
         "complaint": "looks like drawer could be openable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "joint",
         "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -1694,7 +1694,7 @@
     {
         "object": "pot_plant-kyrcpw",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5362
@@ -1702,7 +1702,7 @@
     {
         "object": "pot_plant-mqhlkf",
         "complaint": "pot_tree ?",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pot_plant\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
@@ -1720,7 +1720,7 @@
     {
         "object": "pot_plant-mqhlkf",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "centerofmass",
         "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
         "id": 5365
@@ -1736,7 +1736,7 @@
     {
         "object": "shower-giialz",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1771,7 +1771,7 @@
     {
         "object": "wall_socket-zyzufw",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",

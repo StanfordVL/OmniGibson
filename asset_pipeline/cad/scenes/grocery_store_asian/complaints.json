@@ -244,7 +244,7 @@
     {
         "object": "box_of_chocolates-dlhqft",
         "complaint": "maybe box of biscuits?",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: box__of__chocolates.n.01 (custom synset)\nDefinition: (hypernyms: grocery.n.02): (usually plural) consumer goods sold by a grocer\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
@@ -323,7 +323,7 @@
     {
         "object": "display_case-eyegld",
         "complaint": "openable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: True\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -366,7 +366,7 @@
     {
         "object": "frail-qdienb",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -384,7 +384,7 @@
     {
         "object": "frail-zmjovr",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -393,7 +393,7 @@
     {
         "object": "freezer-gyupcj",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -419,7 +419,7 @@
     {
         "object": "furniture_sink-jqvfyl",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -436,7 +436,7 @@
     {
         "object": "grocery_shelf-dtaove",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "unknown",
         "additional_info": "",

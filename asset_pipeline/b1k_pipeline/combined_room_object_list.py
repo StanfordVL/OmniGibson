@@ -107,17 +107,20 @@ def main(use_future=False):
         # Check that the IDs of all the rooms are contiguous
         non_contiguous_rooms = defaultdict(dict)
         for scene_name, scene_info in scenes.items():
-            room_type_keys = defaultdict(set)
-            for rm_name in scene_info.keys():
-                if "_" not in rm_name:
-                    print("Found invalid room name", rm_name, "in scene", scene_name)
-                    continue
-                room_type, room_id = rm_name.rsplit("_", 1)
-                room_type_keys[room_type].add(int(room_id))
+            try:
+                room_type_keys = defaultdict(set)
+                for rm_name in scene_info.keys():
+                    if "_" not in rm_name:
+                        print("Found invalid room name", rm_name, "in scene", scene_name)
+                        continue
+                    room_type, room_id = rm_name.rsplit("_", 1)
+                    room_type_keys[room_type].add(int(room_id))
 
-            for room_type, room_ids in room_type_keys.items():
-                if room_ids != set(range(len(room_ids))):
-                    non_contiguous_rooms[scene_name][room_type] = sorted(room_ids)
+                for room_type, room_ids in room_type_keys.items():
+                    if room_ids != set(range(len(room_ids))):
+                        non_contiguous_rooms[scene_name][room_type] = sorted(room_ids)
+            except:
+                raise ValueError("Error parsing room name", rm_name, "in scene", scene_name)
 
         success = (
             len(skipped_files) == 0

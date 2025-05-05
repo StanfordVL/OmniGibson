@@ -405,7 +405,7 @@
     {
         "object": "parer-zpkhwi",
         "complaint": "Auto-generated 2025",
-        "processed": false,
+        "processed": true,
         "type": "metalink",
         "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
         "id": 736
@@ -873,7 +873,7 @@
     {
         "object": "lighter-zsxfjz",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -917,7 +917,7 @@
     {
         "object": "portafilter-obdthu",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1003,7 +1003,7 @@
     {
         "object": "watering_can-pewtns",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1148,7 +1148,7 @@
     {
         "object": "plastic_bag-fwxfpe",
         "complaint": "fillable",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: True\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -1157,7 +1157,7 @@
     {
         "object": "plastic_bag-fwxfpe",
         "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "metalink",
         "additional_info": "",
@@ -1227,7 +1227,7 @@
     {
         "object": "bottle_of_coke-uqusgj",
         "complaint": "0",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: bottle__of__coke.n.01 (custom synset)\nDefinition: (hypernyms: grocery.n.02): (usually plural) consumer goods sold by a grocer\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",
@@ -1262,7 +1262,7 @@
     {
         "object": "watermelon-diflgd",
         "complaint": "6",
-        "processed": false,
+        "processed": true,
         "new": true,
         "type": "category",
         "additional_info": "SYNSET: Confirm object synset assignment.\n\nObject assigned to synset: watermelon.n.02\nDefinition: large oblong or roundish melon with a hard green rind and sweet watery red or occasionally yellowish pulp\n\nReminder: synset should match the object and not its contents.\n(e.g., orange_juice.n.01 is the fluid orange juice and not a bottle).\nFor containers, note that usable containers (e.g. ones that have an open cap and\ncan be filled should be assigned to x__bottle.n.01 etc. synsets/categories while\nnon-usable containers should be assigned to bottle__of__x.n.01 etc. synsets/categories).\n\nIf the synset is wrong, please type in the name of the correct synset the object\nshould be assigned to. In the next question also type in the correct category.",

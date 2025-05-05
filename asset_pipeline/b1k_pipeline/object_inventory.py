@@ -17,6 +17,7 @@ ALLOWED_PART_TAGS = {
 def main(use_future=False):
     needed = set()
     providers = defaultdict(list)
+    bounding_box_sizes = {}
     meta_links = defaultdict(set)
     attachment_pairs = defaultdict(
         lambda: defaultdict(set)
@@ -48,6 +49,10 @@ def main(use_future=False):
                     needed_by[obj].append(target)
                 for provided in object_list["provided_objects"]:
                     providers[provided].append(target)
+
+                    model_id = provided.split("-")[1]
+                    bounding_box_size = object_list["bounding_boxes"][model_id]["0"]["extent"]
+                    bounding_box_sizes[model_id] = [x / 1000. for x in bounding_box_size]
                 for obj, links in object_list["meta_links"].items():
                     meta_links[obj].update(links)
                 for obj, attachment_dict in object_list["attachment_pairs"].items():
@@ -144,6 +149,7 @@ def main(use_future=False):
                 k: {kk: sorted(vv) for kk, vv in sorted(v.items())}
                 for k, v in sorted(attachment_pairs.items())
             },
+            "bounding_box_sizes": bounding_box_sizes,
             "error_skipped_files": sorted(skipped_files),
             "error_multiple_provided": multiple_provided,
             "error_missing_objects": sorted(missing_objects),
