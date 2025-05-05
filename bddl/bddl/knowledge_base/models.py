@@ -313,8 +313,8 @@ class Synset(Model):
     def state(self) -> SynsetState:
         if self.name == "entity.n.01":
             return SynsetState.MATCHED   # root synset is always legal
-        elif self.is_fluid:
-            # Fluids are always matched
+        elif self.is_liquid:
+            # liquids are always matched
             return SynsetState.MATCHED
         elif self.parents:
             if len(self.matching_ready_objects) > 0:
@@ -335,8 +335,8 @@ class Synset(Model):
         return "substance" in self.property_names
 
     @cached_property
-    def is_fluid(self):
-        return "fluid" in self.property_names
+    def is_liquid(self):
+        return "liquid" in self.property_names
 
     @cached_property
     def direct_matching_objects(self) -> Set[Object]:
@@ -375,7 +375,7 @@ class Synset(Model):
 
     @cached_property
     def has_fully_supporting_object(self) -> bool:
-        if self.is_fluid:
+        if self.is_liquid:
             return True
 
         for obj in self.matching_objects:
@@ -542,11 +542,11 @@ class Synset(Model):
             for t in Task.all_objects()
             for transition in t.relevant_transitions
             for s in list(transition.output_synsets) + list(transition.input_synsets)
-            for anc in s.ancestors
+            for anc in set(s.ancestors) | {s}
         }
         task_relevant_synsets = {
             s for s in cls.all_objects()
-            if s.task_relevant
+            if s.tasks   # TODO: Is it important to check if ancestors are also task relevant?
         }
         relevant_synsets = (transition_relevant_synsets | task_relevant_synsets)
 
@@ -565,7 +565,7 @@ class Synset(Model):
             for t in Task.all_objects()
             for transition in t.relevant_transitions
             for s in list(transition.output_synsets) + list(transition.input_synsets)
-            for anc in s.ancestors
+            for anc in set(s.ancestors) | {s}
         }
         return [
             s
