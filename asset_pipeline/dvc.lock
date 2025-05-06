@@ -10,13 +10,13 @@ stages:
       size: 17928
     - path: cad/scenes/Beechwood_0_garden/processed.max
       hash: md5
-      md5: d5a31821a8fc15bc7ca3611a80c5cb78
-      size: 254640164
+      md5: a1ee00d623686999bf314b239b83897b
+      size: 254733436
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       hash: md5
-      md5: 15f719da428aa9234ff2fee9dde7cc03
-      size: 376709
+      md5: b57915b06345d0e219ed67d1c391177e
+      size: 376893
   object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -27,13 +27,13 @@ stages:
       size: 17928
     - path: cad/scenes/Beechwood_0_int/processed.max
       hash: md5
-      md5: 45405fabe4adafb75188735091337043
-      size: 103528334
+      md5: 381fb671e20491d2bde8cb39dd6f0cce
+      size: 103658652
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       hash: md5
-      md5: 39d4a5696ac731f8d5452f607ce35e7d
-      size: 213370
+      md5: 81dee4aae4f1cdef35b7971a374cb146
+      size: 213554
   object_list@scenes/Beechwood_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_1_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -78,13 +78,13 @@ stages:
       size: 17928
     - path: cad/scenes/Benevolence_1_int/processed.max
       hash: md5
-      md5: 72c26c9e7bbf5a74744263ea4d41c6a5
-      size: 31326284
+      md5: 5f77ba4b79b63d53c491f16f7e1e63a4
+      size: 31460564
     outs:
     - path: cad/scenes/Benevolence_1_int/artifacts/object_list.json
       hash: md5
-      md5: 72e925723406443149af0487ea5ce805
-      size: 99713
+      md5: 2661d4f1b7faf9c8b241fe1968d48314
+      size: 99896
   object_list@scenes/Benevolence_2_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_2_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -231,13 +231,13 @@ stages:
       size: 17928
     - path: cad/scenes/Pomaria_1_int/processed.max
       hash: md5
-      md5: 5b45e141cd297bc74aa21db40547d90d
-      size: 54840188
+      md5: 71fab42356020fae1ebd5e851e093ed3
+      size: 54962180
     outs:
     - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
       hash: md5
-      md5: 4d0e33092982d2a914dac137e158e027
-      size: 138361
+      md5: 2e712b350dbabb5922289da5fd969176
+      size: 138544
   object_list@scenes/Pomaria_2_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_2_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -297,13 +297,13 @@ stages:
       size: 17928
     - path: cad/scenes/Wainscott_0_garden/processed.max
       hash: md5
-      md5: 7a1451ad5ecd3f6492964e67c22c7f35
-      size: 259053164
+      md5: b100e55622521b41617c26ce07885bdb
+      size: 258998996
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       hash: md5
-      md5: db7731423f7fa1418d6a2679a1965989
-      size: 535045
+      md5: 0fdd9770621dd94a56e972ec18536065
+      size: 535229
   object_list@scenes/Wainscott_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -314,13 +314,13 @@ stages:
       size: 17928
     - path: cad/scenes/Wainscott_0_int/processed.max
       hash: md5
-      md5: 6d72afa65be04b984cb149ff402bcd77
-      size: 85605622
+      md5: 99a7a99b1eada24f409a93e1d1fc93a6
+      size: 85698894
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       hash: md5
-      md5: f23c9f63a9bb29f55c115d57edd0bafd
-      size: 228133
+      md5: aa87b2e0d5b5a313aaa408e70ff5b6a7
+      size: 228315
   object_list@scenes/Wainscott_1_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_1_int/processed.max
       b1k_pipeline/max/object_list.py
@@ -433,13 +433,13 @@ stages:
       size: 17928
     - path: cad/scenes/grocery_store_convenience/processed.max
       hash: md5
-      md5: 182f754c81d86d155e7f2ee91cf21535
-      size: 29205358
+      md5: 2c662d002813d46e5a857711e88ab363
+      size: 29315950
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
       hash: md5
-      md5: 8585f4b630513913bfb830a053259047
-      size: 1350037
+      md5: b35df245a1bc9da92371a24d0747ddd6
+      size: 1350301
   object_list@scenes/grocery_store_half_stocked:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_half_stocked/processed.max
       b1k_pipeline/max/object_list.py
@@ -586,13 +586,13 @@ stages:
       size: 17928
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 86f771b545f190c04ec7d4a17f582762
-      size: 265021456
+      md5: 4d9720ab8d2e62d3a45ac68128547552
+      size: 267494892
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: bdb9ae88c1965a97f6aafaef772daab4
-      size: 443677
+      md5: d3487293bd56898b2baa0f35b3c66e11
+      size: 443874
   object_list@scenes/house_double_floor_upper:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_double_floor_upper/processed.max
       b1k_pipeline/max/object_list.py
@@ -603,13 +603,13 @@ stages:
       size: 17928
     - path: cad/scenes/house_double_floor_upper/processed.max
       hash: md5
-      md5: b0d87b9e0dc98e2dbcb12597234c716a
-      size: 190656492
+      md5: 4bf1850573258295ebc70064db873952
+      size: 190361608
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
-      md5: d50d72c031a27f1a0b769674e1db5c41
-      size: 361660
+      md5: 1eb671ecc1b7d80d0f8f4065af5c8b0d
+      size: 361649
   object_list@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/object_list.py
@@ -620,13 +620,13 @@ stages:
       size: 17928
     - path: cad/scenes/house_single_floor/processed.max
       hash: md5
-      md5: 50d31e8c5e39f8b818b0d16346adb8bb
-      size: 620478588
+      md5: a4b5cbcc7ecc782e901cd923cc98bfff
+      size: 614140926
     outs:
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
       hash: md5
-      md5: fbaf1ff82c0670c2b22b762966b8c037
-      size: 1217922
+      md5: bb86abd52cbba104df0895e035749fa2
+      size: 1197675
   object_list@scenes/office_bike:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_bike/processed.max
       b1k_pipeline/max/object_list.py
@@ -1077,8 +1077,8 @@ stages:
       size: 214180
     - path: cad/objects/legacy_batch-06/artifacts/object_list.json
       hash: md5
-      md5: 2fd2d49e42d6623855fadfec480f775b
-      size: 183699
+      md5: eaf0539d2e7221af3dede156f4af9e11
+      size: 182968
     - path: cad/objects/legacy_batch-07/artifacts/object_list.json
       hash: md5
       md5: d8fc2865d91868fbbc5ac85ee6526717
@@ -1129,12 +1129,12 @@ stages:
       size: 236151
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       hash: md5
-      md5: 15f719da428aa9234ff2fee9dde7cc03
-      size: 376709
+      md5: b57915b06345d0e219ed67d1c391177e
+      size: 376893
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       hash: md5
-      md5: 39d4a5696ac731f8d5452f607ce35e7d
-      size: 213370
+      md5: 81dee4aae4f1cdef35b7971a374cb146
+      size: 213554
     - path: cad/scenes/Beechwood_1_int/artifacts/object_list.json
       hash: md5
       md5: 134c25c1b4c96a4fdb5c40ff208ac383
@@ -1145,8 +1145,8 @@ stages:
       size: 38491
     - path: cad/scenes/Benevolence_1_int/artifacts/object_list.json
       hash: md5
-      md5: 72e925723406443149af0487ea5ce805
-      size: 99713
+      md5: 2661d4f1b7faf9c8b241fe1968d48314
+      size: 99896
     - path: cad/scenes/Benevolence_2_int/artifacts/object_list.json
       hash: md5
       md5: 2d050977bf982b50c40d1048750feae4
@@ -1181,8 +1181,8 @@ stages:
       size: 116262
     - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
       hash: md5
-      md5: 4d0e33092982d2a914dac137e158e027
-      size: 138361
+      md5: 2e712b350dbabb5922289da5fd969176
+      size: 138544
     - path: cad/scenes/Pomaria_2_int/artifacts/object_list.json
       hash: md5
       md5: 34684e8e865581dde4406cef98a90a5e
@@ -1197,12 +1197,12 @@ stages:
       size: 95447
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       hash: md5
-      md5: db7731423f7fa1418d6a2679a1965989
-      size: 535045
+      md5: 0fdd9770621dd94a56e972ec18536065
+      size: 535229
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       hash: md5
-      md5: f23c9f63a9bb29f55c115d57edd0bafd
-      size: 228133
+      md5: aa87b2e0d5b5a313aaa408e70ff5b6a7
+      size: 228315
     - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
       hash: md5
       md5: 5fa487f76d2271a74eba6f8096701d20
@@ -1229,8 +1229,8 @@ stages:
       size: 5715386
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
       hash: md5
-      md5: 8585f4b630513913bfb830a053259047
-      size: 1350037
+      md5: b35df245a1bc9da92371a24d0747ddd6
+      size: 1350301
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
       hash: md5
       md5: 297a3068d28bc2dfa74d15487ca97f9d
@@ -1265,16 +1265,16 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: bdb9ae88c1965a97f6aafaef772daab4
-      size: 443677
+      md5: d3487293bd56898b2baa0f35b3c66e11
+      size: 443874
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
-      md5: d50d72c031a27f1a0b769674e1db5c41
-      size: 361660
+      md5: 1eb671ecc1b7d80d0f8f4065af5c8b0d
+      size: 361649
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
       hash: md5
-      md5: fbaf1ff82c0670c2b22b762966b8c037
-      size: 1217922
+      md5: bb86abd52cbba104df0895e035749fa2
+      size: 1197675
     - path: cad/scenes/office_bike/artifacts/object_list.json
       hash: md5
       md5: 35e0495f1c0a10f9d55f4f74c3e91ad9
@@ -1465,8 +1465,8 @@ stages:
       size: 214180
     - path: cad/objects/legacy_batch-06/artifacts/object_list.json
       hash: md5
-      md5: 2fd2d49e42d6623855fadfec480f775b
-      size: 183699
+      md5: eaf0539d2e7221af3dede156f4af9e11
+      size: 182968
     - path: cad/objects/legacy_batch-07/artifacts/object_list.json
       hash: md5
       md5: d8fc2865d91868fbbc5ac85ee6526717
@@ -1517,12 +1517,12 @@ stages:
       size: 236151
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       hash: md5
-      md5: 15f719da428aa9234ff2fee9dde7cc03
-      size: 376709
+      md5: b57915b06345d0e219ed67d1c391177e
+      size: 376893
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       hash: md5
-      md5: 39d4a5696ac731f8d5452f607ce35e7d
-      size: 213370
+      md5: 81dee4aae4f1cdef35b7971a374cb146
+      size: 213554
     - path: cad/scenes/Beechwood_1_int/artifacts/object_list.json
       hash: md5
       md5: 134c25c1b4c96a4fdb5c40ff208ac383
@@ -1533,8 +1533,8 @@ stages:
       size: 38491
     - path: cad/scenes/Benevolence_1_int/artifacts/object_list.json
       hash: md5
-      md5: 72e925723406443149af0487ea5ce805
-      size: 99713
+      md5: 2661d4f1b7faf9c8b241fe1968d48314
+      size: 99896
     - path: cad/scenes/Benevolence_2_int/artifacts/object_list.json
       hash: md5
       md5: 2d050977bf982b50c40d1048750feae4
@@ -1569,8 +1569,8 @@ stages:
       size: 116262
     - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
       hash: md5
-      md5: 4d0e33092982d2a914dac137e158e027
-      size: 138361
+      md5: 2e712b350dbabb5922289da5fd969176
+      size: 138544
     - path: cad/scenes/Pomaria_2_int/artifacts/object_list.json
       hash: md5
       md5: 34684e8e865581dde4406cef98a90a5e
@@ -1585,12 +1585,12 @@ stages:
       size: 95447
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       hash: md5
-      md5: db7731423f7fa1418d6a2679a1965989
-      size: 535045
+      md5: 0fdd9770621dd94a56e972ec18536065
+      size: 535229
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       hash: md5
-      md5: f23c9f63a9bb29f55c115d57edd0bafd
-      size: 228133
+      md5: aa87b2e0d5b5a313aaa408e70ff5b6a7
+      size: 228315
     - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
       hash: md5
       md5: 5fa487f76d2271a74eba6f8096701d20
@@ -1617,8 +1617,8 @@ stages:
       size: 5715386
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
       hash: md5
-      md5: 8585f4b630513913bfb830a053259047
-      size: 1350037
+      md5: b35df245a1bc9da92371a24d0747ddd6
+      size: 1350301
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
       hash: md5
       md5: 297a3068d28bc2dfa74d15487ca97f9d
@@ -1653,16 +1653,16 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: bdb9ae88c1965a97f6aafaef772daab4
-      size: 443677
+      md5: d3487293bd56898b2baa0f35b3c66e11
+      size: 443874
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
-      md5: d50d72c031a27f1a0b769674e1db5c41
-      size: 361660
+      md5: 1eb671ecc1b7d80d0f8f4065af5c8b0d
+      size: 361649
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
       hash: md5
-      md5: fbaf1ff82c0670c2b22b762966b8c037
-      size: 1217922
+      md5: bb86abd52cbba104df0895e035749fa2
+      size: 1197675
     - path: cad/scenes/office_bike/artifacts/object_list.json
       hash: md5
       md5: 35e0495f1c0a10f9d55f4f74c3e91ad9
@@ -1754,8 +1754,8 @@ stages:
     outs:
     - path: artifacts/pipeline/object_inventory.json
       hash: md5
-      md5: cf87965de11862484b0c43ff1bb7cd9f
-      size: 3080334
+      md5: 2d59a317fd6795b213aa93cbc40ad6d1
+      size: 3075673
   object_inventory_future:
     cmd: python -m b1k_pipeline.object_inventory --future
     deps:
@@ -1853,8 +1853,8 @@ stages:
       size: 214180
     - path: cad/objects/legacy_batch-06/artifacts/object_list.json
       hash: md5
-      md5: 2fd2d49e42d6623855fadfec480f775b
-      size: 183699
+      md5: eaf0539d2e7221af3dede156f4af9e11
+      size: 182968
     - path: cad/objects/legacy_batch-07/artifacts/object_list.json
       hash: md5
       md5: d8fc2865d91868fbbc5ac85ee6526717
@@ -1905,12 +1905,12 @@ stages:
       size: 236151
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       hash: md5
-      md5: 15f719da428aa9234ff2fee9dde7cc03
-      size: 376709
+      md5: b57915b06345d0e219ed67d1c391177e
+      size: 376893
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       hash: md5
-      md5: 39d4a5696ac731f8d5452f607ce35e7d
-      size: 213370
+      md5: 81dee4aae4f1cdef35b7971a374cb146
+      size: 213554
     - path: cad/scenes/Beechwood_1_int/artifacts/object_list.json
       hash: md5
       md5: 134c25c1b4c96a4fdb5c40ff208ac383
@@ -1921,8 +1921,8 @@ stages:
       size: 38491
     - path: cad/scenes/Benevolence_1_int/artifacts/object_list.json
       hash: md5
-      md5: 72e925723406443149af0487ea5ce805
-      size: 99713
+      md5: 2661d4f1b7faf9c8b241fe1968d48314
+      size: 99896
     - path: cad/scenes/Benevolence_2_int/artifacts/object_list.json
       hash: md5
       md5: 2d050977bf982b50c40d1048750feae4
@@ -1957,8 +1957,8 @@ stages:
       size: 116262
     - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
       hash: md5
-      md5: 4d0e33092982d2a914dac137e158e027
-      size: 138361
+      md5: 2e712b350dbabb5922289da5fd969176
+      size: 138544
     - path: cad/scenes/Pomaria_2_int/artifacts/object_list.json
       hash: md5
       md5: 34684e8e865581dde4406cef98a90a5e
@@ -1973,12 +1973,12 @@ stages:
       size: 95447
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       hash: md5
-      md5: db7731423f7fa1418d6a2679a1965989
-      size: 535045
+      md5: 0fdd9770621dd94a56e972ec18536065
+      size: 535229
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       hash: md5
-      md5: f23c9f63a9bb29f55c115d57edd0bafd
-      size: 228133
+      md5: aa87b2e0d5b5a313aaa408e70ff5b6a7
+      size: 228315
     - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
       hash: md5
       md5: 5fa487f76d2271a74eba6f8096701d20
@@ -2005,8 +2005,8 @@ stages:
       size: 5715386
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
       hash: md5
-      md5: 8585f4b630513913bfb830a053259047
-      size: 1350037
+      md5: b35df245a1bc9da92371a24d0747ddd6
+      size: 1350301
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
       hash: md5
       md5: 297a3068d28bc2dfa74d15487ca97f9d
@@ -2041,16 +2041,16 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: bdb9ae88c1965a97f6aafaef772daab4
-      size: 443677
+      md5: d3487293bd56898b2baa0f35b3c66e11
+      size: 443874
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
-      md5: d50d72c031a27f1a0b769674e1db5c41
-      size: 361660
+      md5: 1eb671ecc1b7d80d0f8f4065af5c8b0d
+      size: 361649
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
       hash: md5
-      md5: fbaf1ff82c0670c2b22b762966b8c037
-      size: 1217922
+      md5: bb86abd52cbba104df0895e035749fa2
+      size: 1197675
     - path: cad/scenes/office_bike/artifacts/object_list.json
       hash: md5
       md5: 35e0495f1c0a10f9d55f4f74c3e91ad9
@@ -2142,8 +2142,8 @@ stages:
     outs:
     - path: artifacts/pipeline/object_inventory_future.json
       hash: md5
-      md5: cf87965de11862484b0c43ff1bb7cd9f
-      size: 3080334
+      md5: 2d59a317fd6795b213aa93cbc40ad6d1
+      size: 3075673
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -2813,12 +2813,12 @@ stages:
       size: 6074
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       hash: md5
-      md5: 15f719da428aa9234ff2fee9dde7cc03
-      size: 376709
+      md5: b57915b06345d0e219ed67d1c391177e
+      size: 376893
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       hash: md5
-      md5: 39d4a5696ac731f8d5452f607ce35e7d
-      size: 213370
+      md5: 81dee4aae4f1cdef35b7971a374cb146
+      size: 213554
     - path: cad/scenes/Beechwood_1_int/artifacts/object_list.json
       hash: md5
       md5: 134c25c1b4c96a4fdb5c40ff208ac383
@@ -2829,8 +2829,8 @@ stages:
       size: 38491
     - path: cad/scenes/Benevolence_1_int/artifacts/object_list.json
       hash: md5
-      md5: 72e925723406443149af0487ea5ce805
-      size: 99713
+      md5: 2661d4f1b7faf9c8b241fe1968d48314
+      size: 99896
     - path: cad/scenes/Benevolence_2_int/artifacts/object_list.json
       hash: md5
       md5: 2d050977bf982b50c40d1048750feae4
@@ -2865,8 +2865,8 @@ stages:
       size: 116262
     - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
       hash: md5
-      md5: 4d0e33092982d2a914dac137e158e027
-      size: 138361
+      md5: 2e712b350dbabb5922289da5fd969176
+      size: 138544
     - path: cad/scenes/Pomaria_2_int/artifacts/object_list.json
       hash: md5
       md5: 34684e8e865581dde4406cef98a90a5e
@@ -2881,12 +2881,12 @@ stages:
       size: 95447
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       hash: md5
-      md5: db7731423f7fa1418d6a2679a1965989
-      size: 535045
+      md5: 0fdd9770621dd94a56e972ec18536065
+      size: 535229
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       hash: md5
-      md5: f23c9f63a9bb29f55c115d57edd0bafd
-      size: 228133
+      md5: aa87b2e0d5b5a313aaa408e70ff5b6a7
+      size: 228315
     - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
       hash: md5
       md5: 5fa487f76d2271a74eba6f8096701d20
@@ -2913,8 +2913,8 @@ stages:
       size: 5715386
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
       hash: md5
-      md5: 8585f4b630513913bfb830a053259047
-      size: 1350037
+      md5: b35df245a1bc9da92371a24d0747ddd6
+      size: 1350301
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
       hash: md5
       md5: 297a3068d28bc2dfa74d15487ca97f9d
@@ -2949,16 +2949,16 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: bdb9ae88c1965a97f6aafaef772daab4
-      size: 443677
+      md5: d3487293bd56898b2baa0f35b3c66e11
+      size: 443874
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
-      md5: d50d72c031a27f1a0b769674e1db5c41
-      size: 361660
+      md5: 1eb671ecc1b7d80d0f8f4065af5c8b0d
+      size: 361649
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
       hash: md5
-      md5: fbaf1ff82c0670c2b22b762966b8c037
-      size: 1217922
+      md5: bb86abd52cbba104df0895e035749fa2
+      size: 1197675
     - path: cad/scenes/office_bike/artifacts/object_list.json
       hash: md5
       md5: 35e0495f1c0a10f9d55f4f74c3e91ad9
@@ -3054,8 +3054,8 @@ stages:
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
       hash: md5
-      md5: e7b4b1b335a32e52aaeec00f0ee2411b
-      size: 293412
+      md5: 723eb00cd3a65e0e181a9ea6e204779a
+      size: 293047
   room_object_list@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -3222,12 +3222,12 @@ stages:
       size: 6074
     - path: cad/scenes/Beechwood_0_garden/artifacts/object_list.json
       hash: md5
-      md5: 15f719da428aa9234ff2fee9dde7cc03
-      size: 376709
+      md5: b57915b06345d0e219ed67d1c391177e
+      size: 376893
     - path: cad/scenes/Beechwood_0_int/artifacts/object_list.json
       hash: md5
-      md5: 39d4a5696ac731f8d5452f607ce35e7d
-      size: 213370
+      md5: 81dee4aae4f1cdef35b7971a374cb146
+      size: 213554
     - path: cad/scenes/Beechwood_1_int/artifacts/object_list.json
       hash: md5
       md5: 134c25c1b4c96a4fdb5c40ff208ac383
@@ -3238,8 +3238,8 @@ stages:
       size: 38491
     - path: cad/scenes/Benevolence_1_int/artifacts/object_list.json
       hash: md5
-      md5: 72e925723406443149af0487ea5ce805
-      size: 99713
+      md5: 2661d4f1b7faf9c8b241fe1968d48314
+      size: 99896
     - path: cad/scenes/Benevolence_2_int/artifacts/object_list.json
       hash: md5
       md5: 2d050977bf982b50c40d1048750feae4
@@ -3274,8 +3274,8 @@ stages:
       size: 116262
     - path: cad/scenes/Pomaria_1_int/artifacts/object_list.json
       hash: md5
-      md5: 4d0e33092982d2a914dac137e158e027
-      size: 138361
+      md5: 2e712b350dbabb5922289da5fd969176
+      size: 138544
     - path: cad/scenes/Pomaria_2_int/artifacts/object_list.json
       hash: md5
       md5: 34684e8e865581dde4406cef98a90a5e
@@ -3290,12 +3290,12 @@ stages:
       size: 95447
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       hash: md5
-      md5: db7731423f7fa1418d6a2679a1965989
-      size: 535045
+      md5: 0fdd9770621dd94a56e972ec18536065
+      size: 535229
     - path: cad/scenes/Wainscott_0_int/artifacts/object_list.json
       hash: md5
-      md5: f23c9f63a9bb29f55c115d57edd0bafd
-      size: 228133
+      md5: aa87b2e0d5b5a313aaa408e70ff5b6a7
+      size: 228315
     - path: cad/scenes/Wainscott_1_int/artifacts/object_list.json
       hash: md5
       md5: 5fa487f76d2271a74eba6f8096701d20
@@ -3322,8 +3322,8 @@ stages:
       size: 5715386
     - path: cad/scenes/grocery_store_convenience/artifacts/object_list.json
       hash: md5
-      md5: 8585f4b630513913bfb830a053259047
-      size: 1350037
+      md5: b35df245a1bc9da92371a24d0747ddd6
+      size: 1350301
     - path: cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
       hash: md5
       md5: 297a3068d28bc2dfa74d15487ca97f9d
@@ -3358,16 +3358,16 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: bdb9ae88c1965a97f6aafaef772daab4
-      size: 443677
+      md5: d3487293bd56898b2baa0f35b3c66e11
+      size: 443874
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
-      md5: d50d72c031a27f1a0b769674e1db5c41
-      size: 361660
+      md5: 1eb671ecc1b7d80d0f8f4065af5c8b0d
+      size: 361649
     - path: cad/scenes/house_single_floor/artifacts/object_list.json
       hash: md5
-      md5: fbaf1ff82c0670c2b22b762966b8c037
-      size: 1217922
+      md5: bb86abd52cbba104df0895e035749fa2
+      size: 1197675
     - path: cad/scenes/office_bike/artifacts/object_list.json
       hash: md5
       md5: 35e0495f1c0a10f9d55f4f74c3e91ad9
@@ -3463,8 +3463,8 @@ stages:
     outs:
     - path: artifacts/pipeline/combined_room_object_list_future.json
       hash: md5
-      md5: e7b4b1b335a32e52aaeec00f0ee2411b
-      size: 293412
+      md5: 723eb00cd3a65e0e181a9ea6e204779a
+      size: 293047
   sanitycheck@scenes/public_restroom_blue:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/public_restroom_blue/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -3563,12 +3563,12 @@ stages:
       size: 57242
     - path: cad/scenes/house_double_floor_upper/processed.max
       hash: md5
-      md5: b0d87b9e0dc98e2dbcb12597234c716a
-      size: 190656492
+      md5: 4bf1850573258295ebc70064db873952
+      size: 190361608
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
       hash: md5
-      md5: c31783178f504bbc1e3c4a72dea11e20
+      md5: f8ad5f341baf17b7b1895d23bd50320c
       size: 1481
   sanitycheck@scenes/office_vendor_machine:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_vendor_machine/processed.max
@@ -3689,12 +3689,12 @@ stages:
       size: 57242
     - path: cad/scenes/Beechwood_0_int/processed.max
       hash: md5
-      md5: 45405fabe4adafb75188735091337043
-      size: 103528334
+      md5: 381fb671e20491d2bde8cb39dd6f0cce
+      size: 103658652
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
       hash: md5
-      md5: 5ea7c3bc3e24115447c77649bb952044
+      md5: 913cdb9601643f7c6c52c4c86c75bdb4
       size: 1124
   sanitycheck@scenes/office_cubicles_left:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_cubicles_left/processed.max
@@ -3815,13 +3815,13 @@ stages:
       size: 57242
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 86f771b545f190c04ec7d4a17f582762
-      size: 265021456
+      md5: 4d9720ab8d2e62d3a45ac68128547552
+      size: 267494892
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
       hash: md5
-      md5: 7a69b5b97f0e0d1ef9d5d05310d26d54
-      size: 20248
+      md5: 792fdf7d0d8cd7de6ed863d2a008c3e2
+      size: 20206
   sanitycheck@scenes/restaurant_hotel:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_hotel/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -4004,13 +4004,13 @@ stages:
       size: 57242
     - path: cad/scenes/house_single_floor/processed.max
       hash: md5
-      md5: 50d31e8c5e39f8b818b0d16346adb8bb
-      size: 620478588
+      md5: a4b5cbcc7ecc782e901cd923cc98bfff
+      size: 614140926
     outs:
     - path: cad/scenes/house_single_floor/artifacts/sanitycheck.json
       hash: md5
-      md5: 3e7fae7cf809ee9361e2eb2b9163fde6
-      size: 4497
+      md5: 5e0b8b93f41fc732fb165d9e346e37f1
+      size: 3793
   sanitycheck@scenes/hall_arch_wood:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/hall_arch_wood/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -4067,12 +4067,12 @@ stages:
       size: 57242
     - path: cad/scenes/Benevolence_1_int/processed.max
       hash: md5
-      md5: 72c26c9e7bbf5a74744263ea4d41c6a5
-      size: 31326284
+      md5: 5f77ba4b79b63d53c491f16f7e1e63a4
+      size: 31460564
     outs:
     - path: cad/scenes/Benevolence_1_int/artifacts/sanitycheck.json
       hash: md5
-      md5: 68386345df33ff00714083bf801abc6a
+      md5: 3ade481d4741e2cacec6f929806ca221
       size: 978
   sanitycheck@scenes/Benevolence_2_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_2_int/processed.max
@@ -4172,12 +4172,12 @@ stages:
       size: 57242
     - path: cad/scenes/grocery_store_convenience/processed.max
       hash: md5
-      md5: 182f754c81d86d155e7f2ee91cf21535
-      size: 29205358
+      md5: 2c662d002813d46e5a857711e88ab363
+      size: 29315950
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/sanitycheck.json
       hash: md5
-      md5: e40f636b37fd1a3bbfefdaf1f9d800a1
+      md5: 20de60b4da55d94f9ea725c08be6f92f
       size: 325
   sanitycheck@scenes/Benevolence_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Benevolence_0_int/processed.max
@@ -4298,12 +4298,12 @@ stages:
       size: 57242
     - path: cad/scenes/Wainscott_0_garden/processed.max
       hash: md5
-      md5: 7a1451ad5ecd3f6492964e67c22c7f35
-      size: 259053164
+      md5: b100e55622521b41617c26ce07885bdb
+      size: 258998996
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
       hash: md5
-      md5: df0cb2c62a7866558b6595de68440bbf
+      md5: bef4255b5c47cbd8ce013d6fd5e74908
       size: 3310
   sanitycheck@scenes/school_gym:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/school_gym/processed.max b1k_pipeline/max/new_sanity_check.py
@@ -4445,12 +4445,12 @@ stages:
       size: 57242
     - path: cad/scenes/Wainscott_0_int/processed.max
       hash: md5
-      md5: 6d72afa65be04b984cb149ff402bcd77
-      size: 85605622
+      md5: 99a7a99b1eada24f409a93e1d1fc93a6
+      size: 85698894
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/sanitycheck.json
       hash: md5
-      md5: 66fa2e98d4a1a31704877b01c2452f4a
+      md5: e769964f6895b26aefaa06c464d0b330
       size: 2139
   sanitycheck@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
@@ -4466,13 +4466,13 @@ stages:
       size: 57242
     - path: cad/scenes/Beechwood_0_garden/processed.max
       hash: md5
-      md5: d5a31821a8fc15bc7ca3611a80c5cb78
-      size: 254640164
+      md5: a1ee00d623686999bf314b239b83897b
+      size: 254733436
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/sanitycheck.json
       hash: md5
-      md5: 3823e14f27d17136c12b73ca1c9145a9
-      size: 3085
+      md5: 93db1f1bb450df25dd89dd826af037bf
+      size: 3086
   sanitycheck@scenes/restaurant_urban:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_urban/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -4676,12 +4676,12 @@ stages:
       size: 57242
     - path: cad/scenes/Pomaria_1_int/processed.max
       hash: md5
-      md5: 5b45e141cd297bc74aa21db40547d90d
-      size: 54840188
+      md5: 71fab42356020fae1ebd5e851e093ed3
+      size: 54962180
     outs:
     - path: cad/scenes/Pomaria_1_int/artifacts/sanitycheck.json
       hash: md5
-      md5: b3204165a37186bd024ca41b7e5a729d
+      md5: 21d67ee95c2fa9e444697395f5cddd74
       size: 1703
   sanitycheck_success:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/sanitycheck.json
@@ -4777,8 +4777,8 @@ stages:
       size: 5802
     - path: cad/objects/legacy_batch-06/artifacts/sanitycheck.json
       hash: md5
-      md5: 58dbfc16625c34f5568dfd58434898d7
-      size: 805
+      md5: 88f2b6e61d273eb707f37a49b61268a2
+      size: 999
     - path: cad/objects/legacy_batch-07/artifacts/sanitycheck.json
       hash: md5
       md5: da5e4a0afb626abe17afbae339e70620
@@ -4829,11 +4829,11 @@ stages:
       size: 819
     - path: cad/scenes/Beechwood_0_garden/artifacts/sanitycheck.json
       hash: md5
-      md5: 3823e14f27d17136c12b73ca1c9145a9
-      size: 3085
+      md5: 93db1f1bb450df25dd89dd826af037bf
+      size: 3086
     - path: cad/scenes/Beechwood_0_int/artifacts/sanitycheck.json
       hash: md5
-      md5: 5ea7c3bc3e24115447c77649bb952044
+      md5: 913cdb9601643f7c6c52c4c86c75bdb4
       size: 1124
     - path: cad/scenes/Beechwood_1_int/artifacts/sanitycheck.json
       hash: md5
@@ -4845,7 +4845,7 @@ stages:
       size: 253
     - path: cad/scenes/Benevolence_1_int/artifacts/sanitycheck.json
       hash: md5
-      md5: 68386345df33ff00714083bf801abc6a
+      md5: 3ade481d4741e2cacec6f929806ca221
       size: 978
     - path: cad/scenes/Benevolence_2_int/artifacts/sanitycheck.json
       hash: md5
@@ -4881,7 +4881,7 @@ stages:
       size: 688
     - path: cad/scenes/Pomaria_1_int/artifacts/sanitycheck.json
       hash: md5
-      md5: b3204165a37186bd024ca41b7e5a729d
+      md5: 21d67ee95c2fa9e444697395f5cddd74
       size: 1703
     - path: cad/scenes/Pomaria_2_int/artifacts/sanitycheck.json
       hash: md5
@@ -4897,11 +4897,11 @@ stages:
       size: 688
     - path: cad/scenes/Wainscott_0_garden/artifacts/sanitycheck.json
       hash: md5
-      md5: df0cb2c62a7866558b6595de68440bbf
+      md5: bef4255b5c47cbd8ce013d6fd5e74908
       size: 3310
     - path: cad/scenes/Wainscott_0_int/artifacts/sanitycheck.json
       hash: md5
-      md5: 66fa2e98d4a1a31704877b01c2452f4a
+      md5: e769964f6895b26aefaa06c464d0b330
       size: 2139
     - path: cad/scenes/Wainscott_1_int/artifacts/sanitycheck.json
       hash: md5
@@ -4929,7 +4929,7 @@ stages:
       size: 328789
     - path: cad/scenes/grocery_store_convenience/artifacts/sanitycheck.json
       hash: md5
-      md5: e40f636b37fd1a3bbfefdaf1f9d800a1
+      md5: 20de60b4da55d94f9ea725c08be6f92f
       size: 325
     - path: cad/scenes/grocery_store_half_stocked/artifacts/sanitycheck.json
       hash: md5
@@ -4965,16 +4965,16 @@ stages:
       size: 1736
     - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
       hash: md5
-      md5: 7a69b5b97f0e0d1ef9d5d05310d26d54
-      size: 20248
+      md5: 792fdf7d0d8cd7de6ed863d2a008c3e2
+      size: 20206
     - path: cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
       hash: md5
-      md5: c31783178f504bbc1e3c4a72dea11e20
+      md5: f8ad5f341baf17b7b1895d23bd50320c
       size: 1481
     - path: cad/scenes/house_single_floor/artifacts/sanitycheck.json
       hash: md5
-      md5: 3e7fae7cf809ee9361e2eb2b9163fde6
-      size: 4497
+      md5: 5e0b8b93f41fc732fb165d9e346e37f1
+      size: 3793
     - path: cad/scenes/office_bike/artifacts/sanitycheck.json
       hash: md5
       md5: 82eaab2396e66303f67ab8506a13729f
@@ -5107,8 +5107,8 @@ stages:
       size: 17211
     - path: cad/scenes/grocery_store_convenience/processed.max
       hash: md5
-      md5: 182f754c81d86d155e7f2ee91cf21535
-      size: 29205358
+      md5: 2c662d002813d46e5a857711e88ab363
+      size: 29315950
     outs:
     - path: cad/scenes/grocery_store_convenience/artifacts/export_meshes.json
       hash: md5
@@ -5116,8 +5116,8 @@ stages:
       size: 34
     - path: cad/scenes/grocery_store_convenience/artifacts/meshes.zip
       hash: md5
-      md5: 3056c0893ae9b5e78088b99a2f4207dd
-      size: 3834245
+      md5: 9487a74fded51c7383921a89b74913e6
+      size: 3835426
   export_meshes@scenes/Ihlen_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Ihlen_0_int/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -5981,13 +5981,13 @@ stages:
       size: 57242
     - path: cad/objects/legacy_batch-06/processed.max
       hash: md5
-      md5: d76b66ca43f1e96abcd6551a7d90c31c
-      size: 248932224
+      md5: 7dc2f4d14e059748b11dfdb8694865e6
+      size: 248551632
     outs:
     - path: cad/objects/legacy_batch-06/artifacts/sanitycheck.json
       hash: md5
-      md5: 58dbfc16625c34f5568dfd58434898d7
-      size: 805
+      md5: 88f2b6e61d273eb707f37a49b61268a2
+      size: 999
   sanitycheck@objects/legacy_batch-07:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-07/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -6220,8 +6220,8 @@ stages:
       size: 17211
     - path: cad/scenes/house_double_floor_upper/processed.max
       hash: md5
-      md5: b0d87b9e0dc98e2dbcb12597234c716a
-      size: 190656492
+      md5: 4bf1850573258295ebc70064db873952
+      size: 190361608
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/export_meshes.json
       hash: md5
@@ -6229,8 +6229,8 @@ stages:
       size: 34
     - path: cad/scenes/house_double_floor_upper/artifacts/meshes.zip
       hash: md5
-      md5: d829e1a2b190c8c85a0bf6a8d83358c9
-      size: 32357581
+      md5: ec60b58822e06143c98687f856ec090a
+      size: 32360694
   export_meshes@scenes/restaurant_diner:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_diner/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -6333,13 +6333,13 @@ stages:
       size: 17928
     - path: cad/objects/legacy_batch-06/processed.max
       hash: md5
-      md5: d76b66ca43f1e96abcd6551a7d90c31c
-      size: 248932224
+      md5: 7dc2f4d14e059748b11dfdb8694865e6
+      size: 248551632
     outs:
     - path: cad/objects/legacy_batch-06/artifacts/object_list.json
       hash: md5
-      md5: 2fd2d49e42d6623855fadfec480f775b
-      size: 183699
+      md5: eaf0539d2e7221af3dede156f4af9e11
+      size: 182968
   export_meshes@objects/legacy_batch-06:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-06/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -6354,8 +6354,8 @@ stages:
       size: 17211
     - path: cad/objects/legacy_batch-06/processed.max
       hash: md5
-      md5: d76b66ca43f1e96abcd6551a7d90c31c
-      size: 248932224
+      md5: 7dc2f4d14e059748b11dfdb8694865e6
+      size: 248551632
     outs:
     - path: cad/objects/legacy_batch-06/artifacts/export_meshes.json
       hash: md5
@@ -6363,8 +6363,8 @@ stages:
       size: 34
     - path: cad/objects/legacy_batch-06/artifacts/meshes.zip
       hash: md5
-      md5: f71bdcb697227256b73766f0e10085af
-      size: 32803013
+      md5: ff38f48b356ae854531e76088095158c
+      size: 32442495
   object_list@objects/legacy_batch-11:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-11/processed.max
       b1k_pipeline/max/object_list.py
@@ -7342,8 +7342,8 @@ stages:
       size: 17211
     - path: cad/scenes/Beechwood_0_int/processed.max
       hash: md5
-      md5: 45405fabe4adafb75188735091337043
-      size: 103528334
+      md5: 381fb671e20491d2bde8cb39dd6f0cce
+      size: 103658652
     outs:
     - path: cad/scenes/Beechwood_0_int/artifacts/export_meshes.json
       hash: md5
@@ -7351,8 +7351,8 @@ stages:
       size: 34
     - path: cad/scenes/Beechwood_0_int/artifacts/meshes.zip
       hash: md5
-      md5: a2fed28957bc5a3428159ffa14aea181
-      size: 473402
+      md5: cb609bfed802909ff3282d2707d47856
+      size: 473400
   export_meshes@objects/batch-06:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-06/processed.max b1k_pipeline/max/export_meshes.py
     deps:
@@ -7439,8 +7439,8 @@ stages:
       size: 17211
     - path: cad/scenes/Benevolence_1_int/processed.max
       hash: md5
-      md5: 72c26c9e7bbf5a74744263ea4d41c6a5
-      size: 31326284
+      md5: 5f77ba4b79b63d53c491f16f7e1e63a4
+      size: 31460564
     outs:
     - path: cad/scenes/Benevolence_1_int/artifacts/export_meshes.json
       hash: md5
@@ -7448,8 +7448,8 @@ stages:
       size: 34
     - path: cad/scenes/Benevolence_1_int/artifacts/meshes.zip
       hash: md5
-      md5: 4d2e0ced40b4e0a95b008d70e0eb9fcd
-      size: 146965
+      md5: f4120a9817bb83f0128fa3f53959c91e
+      size: 146964
   export_meshes@scenes/restaurant_cafeteria:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_cafeteria/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -7767,8 +7767,8 @@ stages:
       size: 17211
     - path: cad/scenes/Pomaria_1_int/processed.max
       hash: md5
-      md5: 5b45e141cd297bc74aa21db40547d90d
-      size: 54840188
+      md5: 71fab42356020fae1ebd5e851e093ed3
+      size: 54962180
     outs:
     - path: cad/scenes/Pomaria_1_int/artifacts/export_meshes.json
       hash: md5
@@ -7776,8 +7776,8 @@ stages:
       size: 34
     - path: cad/scenes/Pomaria_1_int/artifacts/meshes.zip
       hash: md5
-      md5: 88ccb6808302217306d31cd6420fdfef
-      size: 244746
+      md5: dd181cce1d0fde60882f7b63221e5625
+      size: 244744
   export_meshes@scenes/Wainscott_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Wainscott_0_int/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -7792,8 +7792,8 @@ stages:
       size: 17211
     - path: cad/scenes/Wainscott_0_int/processed.max
       hash: md5
-      md5: 6d72afa65be04b984cb149ff402bcd77
-      size: 85605622
+      md5: 99a7a99b1eada24f409a93e1d1fc93a6
+      size: 85698894
     outs:
     - path: cad/scenes/Wainscott_0_int/artifacts/export_meshes.json
       hash: md5
@@ -7801,8 +7801,8 @@ stages:
       size: 34
     - path: cad/scenes/Wainscott_0_int/artifacts/meshes.zip
       hash: md5
-      md5: 5ecaebec4a7fbbc429f913c18ddfbc8a
-      size: 364401
+      md5: 8f79ea8ee78eb35c79c8aa2eda50a763
+      size: 364404
   export_meshes@scenes/grocery_store_asian:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/grocery_store_asian/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -8448,8 +8448,8 @@ stages:
       size: 17211
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 86f771b545f190c04ec7d4a17f582762
-      size: 265021456
+      md5: 4d9720ab8d2e62d3a45ac68128547552
+      size: 267494892
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/export_meshes.json
       hash: md5
@@ -8457,8 +8457,8 @@ stages:
       size: 34
     - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
       hash: md5
-      md5: 809ce3e91e9bc4bfef322f37e25c2a85
-      size: 37879886
+      md5: 7cd5372b96fafc5648cd3b9dabed3581
+      size: 37838335
   export_meshes@scenes/office_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_large/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -12534,8 +12534,8 @@ stages:
       size: 17211
     - path: cad/scenes/house_single_floor/processed.max
       hash: md5
-      md5: 50d31e8c5e39f8b818b0d16346adb8bb
-      size: 620478588
+      md5: a4b5cbcc7ecc782e901cd923cc98bfff
+      size: 614140926
     outs:
     - path: cad/scenes/house_single_floor/artifacts/export_meshes.json
       hash: md5
@@ -12543,8 +12543,8 @@ stages:
       size: 34
     - path: cad/scenes/house_single_floor/artifacts/meshes.zip
       hash: md5
-      md5: 133d5783674b117377186bba8e7d3107
-      size: 91581866
+      md5: ce2250008832d0ed1d5b5d4e6f69abcb
+      size: 90524695
   export_scene@scenes/house_single_floor:
     cmd: python -m b1k_pipeline.export_scene scenes/house_single_floor
     deps:
@@ -14009,8 +14009,8 @@ stages:
       size: 17211
     - path: cad/scenes/Beechwood_0_garden/processed.max
       hash: md5
-      md5: d5a31821a8fc15bc7ca3611a80c5cb78
-      size: 254640164
+      md5: a1ee00d623686999bf314b239b83897b
+      size: 254733436
     outs:
     - path: cad/scenes/Beechwood_0_garden/artifacts/export_meshes.json
       hash: md5
@@ -14018,8 +14018,8 @@ stages:
       size: 34
     - path: cad/scenes/Beechwood_0_garden/artifacts/meshes.zip
       hash: md5
-      md5: 96da3236072bf3552a40a348ce3a3a63
-      size: 32487281
+      md5: 16ea02f27168a4bd7f6862dfec81cea4
+      size: 32487251
   export_meshes@scenes/Rs_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Rs_garden/processed.max b1k_pipeline/max/export_meshes.py
     deps:
@@ -14058,8 +14058,8 @@ stages:
       size: 17211
     - path: cad/scenes/Wainscott_0_garden/processed.max
       hash: md5
-      md5: 7a1451ad5ecd3f6492964e67c22c7f35
-      size: 259053164
+      md5: b100e55622521b41617c26ce07885bdb
+      size: 258998996
     outs:
     - path: cad/scenes/Wainscott_0_garden/artifacts/export_meshes.json
       hash: md5
@@ -14067,8 +14067,8 @@ stages:
       size: 34
     - path: cad/scenes/Wainscott_0_garden/artifacts/meshes.zip
       hash: md5
-      md5: 97b07eafa995c489e2a1e8f3c79f7b6d
-      size: 30357673
+      md5: 34dc25287b677f4dab71e852fd2c49e2
+      size: 30357674
   export_meshes@scenes/Merom_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Merom_0_garden/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -17941,34 +17941,34 @@ stages:
     deps:
     - path: b1k_pipeline/max/check_collisions.py
       hash: md5
-      md5: 72694447d9799e1a550df8676be35ad0
-      size: 12964
+      md5: 5958f4583d8f844bf57b0acbf8aed12d
+      size: 14444
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 86f771b545f190c04ec7d4a17f582762
-      size: 265021456
+      md5: 4d9720ab8d2e62d3a45ac68128547552
+      size: 267494892
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/check_collisions.json
       hash: md5
-      md5: 59faf63f0e14f19bbe8596ea8fbd19a1
-      size: 713
+      md5: d030202926f79b4f9235fec0cf55725a
+      size: 880
   check_collisions@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/check_collisions.py
     deps:
     - path: b1k_pipeline/max/check_collisions.py
       hash: md5
-      md5: 72694447d9799e1a550df8676be35ad0
-      size: 12964
+      md5: 5958f4583d8f844bf57b0acbf8aed12d
+      size: 14444
     - path: cad/scenes/house_single_floor/processed.max
       hash: md5
-      md5: 50d31e8c5e39f8b818b0d16346adb8bb
-      size: 620478588
+      md5: a4b5cbcc7ecc782e901cd923cc98bfff
+      size: 614140926
     outs:
     - path: cad/scenes/house_single_floor/artifacts/check_collisions.json
       hash: md5
-      md5: c48e6221fc868fec347759512cd9da7c
-      size: 1350
+      md5: 6257c22dd967f2b89d73f3df89279ec4
+      size: 599
   check_collisions@scenes/restaurant_brunch:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_brunch/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -18263,17 +18263,17 @@ stages:
     deps:
     - path: b1k_pipeline/max/check_collisions.py
       hash: md5
-      md5: 72694447d9799e1a550df8676be35ad0
-      size: 12964
+      md5: 5958f4583d8f844bf57b0acbf8aed12d
+      size: 14444
     - path: cad/scenes/house_double_floor_upper/processed.max
       hash: md5
-      md5: b0d87b9e0dc98e2dbcb12597234c716a
-      size: 190656492
+      md5: 4bf1850573258295ebc70064db873952
+      size: 190361608
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/check_collisions.json
       hash: md5
-      md5: cc2e1ca668edcba34eb220df389a34cc
-      size: 2623
+      md5: a698048a7b91cde34e901392fa268783
+      size: 354
   check_collisions@scenes/Pomaria_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
