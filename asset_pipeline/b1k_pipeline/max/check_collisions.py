@@ -18,7 +18,7 @@ import tqdm
 import trimesh
 
 MINIMUM_COLLISION_DEPTH_METERS = 0.01  # 1cm of collision
-
+MINIMUM_COLLISION_DEPTH_METERS_SENSITIVE = 0  # any collision
 
 inventory_path = PIPELINE_ROOT / "artifacts" / "pipeline" / "object_inventory.json"
 with open(inventory_path, "r") as f:
@@ -167,10 +167,19 @@ def prepare_scene(use_clutter=False):
 
     # Get the base link frame for each model
     base_link_frames = {}
+    categories_by_model_id = {}
     for obj in tqdm.tqdm(all_objects, desc="Getting base link frames"):
         parsed_name = parse_name(obj.name)
         if not parsed_name:
             continue
+
+        if parsed_name.group("model_id") not in categories_by_model_id:
+            categories_by_model_id[parsed_name.group("model_id")] = parsed_name.group(
+                "category"
+            )
+        assert parsed_name.group("category") == categories_by_model_id[
+            parsed_name.group("model_id")
+        ], f"{parsed_name.group('model_id')} has different categories: {parsed_name.group('category')} vs {categories_by_model_id[parsed_name.group('model_id')]}."
 
         if int(parsed_name.group("instance_id")) != 0:
             continue
@@ -257,13 +266,14 @@ def prepare_scene(use_clutter=False):
 
         is_loose = "true" if loose_key else "false"
         model_id = parsed_name.group("model_id")
+        category = categories_by_model_id[model_id]
         instance_id = parsed_name.group("instance_id")
         obj_transform = np.hstack([mat2arr(obj.transform), [[0], [0], [0], [1]]]).T
 
         # Actually add the meshes
         for link_name, link_meshes in meshes[model_id].items():
             for mesh_idx, link_mesh in enumerate(link_meshes):
-                node_key = f"{is_loose}-{model_id}-{instance_id}-{link_name}-{mesh_idx}"
+                node_key = f"{category}-{model_id}-{instance_id}-{link_name}-{mesh_idx}-{is_loose}"
                 scene.add_geometry(
                     link_mesh, node_name=node_key, transform=obj_transform
                 )
@@ -306,10 +316,10 @@ def check_collisions(scene):
 
     pairs_collision = {}
     for collision in tqdm.tqdm(collision_data, desc="Filtering collisions"):
-        left, right = tuple(collision.names)
-        left_loose, left_model, left_instance, left_link, left_body = left.split("-")
+        left, right = sorted(tuple(collision.names))  # Sorting here gives deterministic category ordering
+        left_category, left_model, left_instance, left_link, left_body, left_loose = left.split("-")
         left_loose = left_loose == "true"
-        right_loose, right_model, right_instance, right_link, right_body = right.split(
+        right_category, right_model, right_instance, right_link, right_body, right_loose = right.split(
             "-"
         )
         right_loose = right_loose == "true"
@@ -319,19 +329,31 @@ def check_collisions(scene):
             continue
 
         # Exclude collisions between fixed links of two fixed objects
+        left_fixed_link = left_link in links_fixed_to_base[left_model]
+        right_fixed_link = right_link in links_fixed_to_base[right_model]
         if not left_loose and not right_loose:
-            left_fixed_link = left_link in links_fixed_to_base[left_model]
-            right_fixed_link = right_link in links_fixed_to_base[right_model]
             if left_fixed_link and right_fixed_link:
                 continue
 
+        # Exclude collisions between walls and sliding doors
+        if left_category == "sliding_door" and right_category == "walls":
+            continue
+
+        # Decide what the depth limit is. We are especially sensitive to collisions between moving
+        # links of fixed objects and other fixed objects, so we set a lower threshold for those.
+        depth_threshold = MINIMUM_COLLISION_DEPTH_METERS
+        is_left_moving_part_of_fixed_obj = not left_loose and not left_fixed_link
+        is_right_moving_part_of_fixed_obj = not right_loose and not right_fixed_link
+        if is_left_moving_part_of_fixed_obj or is_right_moving_part_of_fixed_obj:
+            depth_threshold = MINIMUM_COLLISION_DEPTH_METERS_SENSITIVE
+
         # Print the collision
         depth = float(collision.depth)
-        if depth < MINIMUM_COLLISION_DEPTH_METERS * 1000:
+        if depth < depth_threshold * 1000:
             continue
 
         pair = tuple(
-            sorted([(left_model, left_instance), (right_model, right_instance)])
+            sorted([(left_category, left_model, left_instance), (right_category, right_model, right_instance)])
         )
         if pair not in pairs_collision:
             pairs_collision[pair] = depth
@@ -354,9 +376,10 @@ def main():
         collisions = check_collisions(scene)
         for left, right, depth in collisions:
             print(f"Collision between {left} and {right}: {depth} mm")
-    except Exception as e:
-        error = traceback.format_exc()
-        traceback.print_exc()
+    except Exception:
+        raise
+    #     error = traceback.format_exc()
+    #     traceback.print_exc()
 
     output_dir = pathlib.Path(rt.maxFilePath) / "artifacts"
     output_dir.mkdir(parents=True, exist_ok=True)
