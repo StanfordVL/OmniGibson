@@ -171,6 +171,26 @@ class OGRobotServer:
                 else:
                     if isinstance(obj, (R1, R1Pro)):
                         obj.base_footprint_link.mass = 250.0
+            
+            # TODO: remove this once we have RC6
+            if self.task_name == "carrying_in_groceries":
+                for car in self.env.scene.object_registry("category", "car"):
+                    for link in car.links.values():
+                        if "trunk" in link.name:
+                            link.mass = link.mass * 0.5
+
+        # Make sure robot fingers are extra grippy
+        gripper_mat = lazy.isaacsim.core.api.materials.PhysicsMaterial(
+            prim_path=f"{self.robot.prim_path}/Looks/gripper_mat",
+            name="gripper_material",
+            static_friction=2.0,
+            dynamic_friction=1.0,
+            restitution=None,
+        )
+        for _, links in self.robot.finger_links.items():
+            for link in links:
+                for msh in link.collision_meshes.values():
+                    msh.apply_physics_material(gripper_mat)
 
         # Set optimized settings
         utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
