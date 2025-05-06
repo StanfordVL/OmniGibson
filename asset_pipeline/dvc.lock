@@ -17945,13 +17945,13 @@ stages:
       size: 12964
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 551a5580e7667b2525512adfa6f14aeb
-      size: 264387176
+      md5: 86f771b545f190c04ec7d4a17f582762
+      size: 265021456
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/check_collisions.json
       hash: md5
-      md5: 2e740620f2af60cd3032f7f1c3e6e564
-      size: 3469
+      md5: 59faf63f0e14f19bbe8596ea8fbd19a1
+      size: 713
   check_collisions@scenes/house_single_floor:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_single_floor/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -17962,13 +17962,13 @@ stages:
       size: 12964
     - path: cad/scenes/house_single_floor/processed.max
       hash: md5
-      md5: d35dad85f4c3a2cb4a350a3c196a01d8
-      size: 662529440
+      md5: 50d31e8c5e39f8b818b0d16346adb8bb
+      size: 620478588
     outs:
     - path: cad/scenes/house_single_floor/artifacts/check_collisions.json
       hash: md5
-      md5: 56e50abee34ef61288f9b96d6fea2597
-      size: 3473
+      md5: c48e6221fc868fec347759512cd9da7c
+      size: 1350
   check_collisions@scenes/restaurant_brunch:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_brunch/processed.max
       b1k_pipeline/max/check_collisions.py
@@ -18267,13 +18267,13 @@ stages:
       size: 12964
     - path: cad/scenes/house_double_floor_upper/processed.max
       hash: md5
-      md5: 8bf9ce6b33dc70bf93521aefd00049f2
-      size: 214720534
+      md5: b0d87b9e0dc98e2dbcb12597234c716a
+      size: 190656492
     outs:
     - path: cad/scenes/house_double_floor_upper/artifacts/check_collisions.json
       hash: md5
-      md5: 8fb97171835610603bf2bce1115de2c9
-      size: 8995
+      md5: cc2e1ca668edcba34eb220df389a34cc
+      size: 2623
   check_collisions@scenes/Pomaria_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Pomaria_0_garden/processed.max
       b1k_pipeline/max/check_collisions.py
