@@ -81,8 +81,8 @@ OMNIGIBSON_MACROS = {
     "USE_GPU_DYNAMICS": (USE_FLUID or USE_CLOTH),
     "ENABLE_FLATCACHE": True,
     "ENABLE_OBJECT_STATES": True,  # True (FOR TASKS!)
-    "ENABLE_TRANSITION_RULES": False,
-    "ENABLE_CCD": False,
+    "ENABLE_TRANSITION_RULES": True,
+    "ENABLE_CCD": True,
     "ENABLE_HQ_RENDERING": USE_FLUID,
     "GUI_VIEWPORT_ONLY": True,
 }
@@ -203,18 +203,6 @@ VIS_CYLINDER_CONFIG = {
         T.euler2quat(th.tensor([-th.pi / 2, 0.0, 0.0])),
         T.euler2quat(th.tensor([0.0, 0.0, 0.0])),
     ]
-}
-
-# Environmental settings for simulator performance
-SIM_OPTIMIZATION_SETTINGS = {
-    "/app/asyncRendering": True,
-    "/app/asyncRenderingLowLatency": True,
-    "/app/runLoops/main/rateLimitEnabled": False,
-    "/app/runLoops/main/rateLimitUseBusyLoop": False,
-    "/rtx-transient/dlssg/enabled": True,
-    "/app/player/useFastMode": True,
-    "/app/show_developer_preference_section": True,
-    "/app/player/useFixedTimeStepping": True,
 }
 
 # Camera and viewport configuration
