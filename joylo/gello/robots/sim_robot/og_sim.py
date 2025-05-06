@@ -13,6 +13,7 @@ from omnigibson.robots.manipulation_robot import ManipulationRobot
 from omnigibson.tasks import BehaviorTask
 from omnigibson.systems.system_base import BaseSystem
 from omnigibson.utils.teleop_utils import OVXRSystem
+from omnigibson.utils.ui_utils import choose_from_options
 from omnigibson.object_states import Filled
 from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.utils.usd_utils import GripperRigidContactAPI, ControllableObjectViewAPI
@@ -34,9 +35,24 @@ class OGRobotServer:
         port: int = 5556,
         recording_path: Optional[str] = None,
         task_name: Optional[str] = None,
+        batch_id: Optional[int] = None, # 0 or 1
         ghosting: bool = True,
     ):
-        self.task_name = task_name
+        # Case 1: Direct task name provided
+        if task_name is not None:
+            assert batch_id is None, "Cannot specify both task name and batch id"
+            self.task_name = task_name
+        # Case 2: Batch ID provided
+        elif batch_id is not None:
+            assert batch_id in [0, 1], f"Got invalid batch id: {batch_id}. Must be 0 or 1"
+            self.task_name = choose_from_options(options=VALIDATED_TASKS[batch_id], 
+                                                name="task options", 
+                                                random_selection=False)
+        # Case 3: No task specified
+        else:
+            self.task_name = None
+        
+        # Configure task if one was set
         if self.task_name is not None:
             available_tasks = utils.load_available_tasks()
             assert self.task_name in available_tasks, f"Task {self.task_name} not found in available tasks"

@@ -2,6 +2,20 @@ import torch as th
 from enum import Enum
 from omnigibson.utils import transform_utils as T
 
+VALIDATED_TASKS = {
+    0: ["picking_up_trash", # difficulty: 1 (pick&place)
+        "putting_away_Halloween_decorations", # difficulty: 2 (articulated+pick&place)
+        "installing_alarms", # difficulty: 2 (toggleOn)
+        "slicing_vegetables", # difficulty: 4 (slicing)
+        "cleaning_up_plates_and_food", # difficulty: 5 (advanced pick&place+articulated)
+    ],
+    1: ["turning_on_radio", # difficulty: 1 (toggleOn)
+        "chopping_wood", # difficulty: 2 (slicing)
+        "carrying_in_groceries", # difficulty: 3 (articulated+navigation)
+        "picking_up_toys", # difficulty: 4 (advanced pick&place)
+        "assembling_gift_baskets", # difficulty: 4 (small object pick&place)
+    ]}
+
 # Viewing mode configuration
 class ViewingMode(str, Enum):
     SINGLE_VIEW = "single_view"
