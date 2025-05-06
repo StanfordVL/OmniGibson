@@ -470,7 +470,7 @@ class OGRobotServer:
 
             # If waiting to resume, simply step sim without updating action
             if self._waiting_to_resume:
-                og.sim.step()
+                og.sim.render()
                 utils.print_color(f"\rPress X (keyboard or JoyCon) to resume sim!{' ' * 30}", end="", flush=True)
                 utils.add_status_event(self.event_queue, "waiting", "Waiting to Resume... Press X to start", persistent=True)
             else:
