@@ -259,6 +259,10 @@ def process_target(target, scenes_dir):
 
 
 def main():
+    # If this variable is set, we will only export the scenes in this list. This is useful for quickly
+    # iterating on scenes (usdify otherwise takes 8+ hours) to resolve stability etc. issues.
+    SCENES_TO_INCLUDE = []  # ["house_single_floor", "house_double_floor_lower", "house_double_floor_upper"]
+
     with b1k_pipeline.utils.ParallelZipFS("scenes.zip", write=True) as archive_fs:
         scenes_dir = archive_fs.makedir("scenes").getsyspath("/")
         errors = {}
@@ -266,6 +270,12 @@ def main():
 
         with futures.ProcessPoolExecutor(max_workers=16) as target_executor:
             targets = b1k_pipeline.utils.get_targets("final_scenes")
+            if SCENES_TO_INCLUDE:
+                targets = [
+                    target
+                    for target in targets
+                    if target.replace("scenes/", "") in SCENES_TO_INCLUDE
+                ]
             for target in tqdm.tqdm(targets):
                 target_futures[
                     target_executor.submit(process_target, target, scenes_dir)
