@@ -821,14 +821,25 @@ def setup_ghost_robot_info(ghost, robot):
     joint_keys_list = list(ghost.joints.keys())
     arm_action_idxs = []
     arm_joint_idxs = []
+    finger_joint_idxs = []
     for arm in robot.arm_names:
         for i in range(robot_arm_dof):
             arm_joint_idxs.append(joint_keys_list.index(f"{arm}_arm_joint{i+1}"))
             arm_action_idxs.append(robot.arm_action_idx[arm][i])
+        for i in range(2):
+            finger_name = f"{arm}_gripper_finger_joint{i+1}"
+            if not ghost.joints[finger_name].is_mimic_joint:
+                finger_joint_idxs.append(joint_keys_list.index(finger_name))
+    
+    torso_joint_idxs = []
+    for i in range(4):
+        torso_joint_idxs.append(joint_keys_list.index(f"torso_joint{i+1}"))
                     
     ghost_info = {
         "arm_action_idxs": th.tensor(arm_action_idxs, dtype=th.int),
         "arm_joint_idxs": th.tensor(arm_joint_idxs, dtype=th.int),
+        "finger_joint_idxs": th.tensor(finger_joint_idxs, dtype=th.int),
+        "torso_joint_idxs": th.tensor(torso_joint_idxs, dtype=th.int),
         "lower_limit": ghost.joint_lower_limits,
         "upper_limit": ghost.joint_upper_limits,
         "left_links": [link for link_name, link in ghost.links.items() if link_name.startswith("left")],
@@ -857,9 +868,8 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter, ghost_info):
         orientation=robot.get_position_orientation(frame="world")[1],
     )
     
-    robot_qpos = robot.get_joint_positions()
+    robot_qpos = robot.get_joint_positions(normalized=False)
     ghost_qpos = robot_qpos.clone()
-    ghost_qpos[robot.base_idx] = 0.0
     ghost_qpos[ghost_info["arm_joint_idxs"]] = action[ghost_info["arm_action_idxs"]]
     ghost_qpos = ghost_qpos.clip(ghost_info["lower_limit"], ghost_info["upper_limit"])
     
@@ -880,7 +890,9 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter, ghost_info):
                 link.visible = False
     
     if update:
-        ghost.set_joint_positions(ghost_qpos, normalized=False, drive=False)
+        # Concatenate arm and torso indices and set joint positions
+        update_indices = th.cat([ghost_info["torso_joint_idxs"], ghost_info["arm_joint_idxs"]])
+        ghost.set_joint_positions(ghost_qpos[update_indices], indices=update_indices, normalized=False, drive=False)
     
     return ghost_appear_counter
 
