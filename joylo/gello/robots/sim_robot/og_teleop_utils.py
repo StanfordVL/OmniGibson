@@ -2,6 +2,7 @@ import os
 import yaml
 import torch as th
 import numpy as np
+import time
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -13,6 +14,8 @@ from omnigibson.utils.ui_utils import dock_window
 from omnigibson.utils import transform_utils as T
 from omnigibson.sensors import VisionSensor
 from omnigibson.objects.usd_object import USDObject
+from omnigibson.robots.r1 import R1
+from omnigibson.robots.r1pro import R1Pro
 
 from gello.robots.sim_robot.og_teleop_cfg import *
 
@@ -168,7 +171,7 @@ def setup_cameras(robot, external_sensors, resolution):
             viewport_left_shoulder.name,
             lazy.omni.ui.DockPosition.BOTTOM,
             0.5,
-            f"{robot.links['left_eef_link'].prim_path}/Camera"
+            f"{robot.links[WRIST_CAMERA_LINK_NAME[robot.__class__.__name__]['left']].prim_path}/Camera"
         )
         viewport_right_shoulder = create_and_dock_viewport(
             "DockSpace",
@@ -180,7 +183,7 @@ def setup_cameras(robot, external_sensors, resolution):
             viewport_right_shoulder.name,
             lazy.omni.ui.DockPosition.BOTTOM,
             0.5,
-            f"{robot.links['right_eef_link'].prim_path}/Camera"
+            f"{robot.links[WRIST_CAMERA_LINK_NAME[robot.__class__.__name__]['right']].prim_path}/Camera"
         )
         # Set resolution for all viewports
         for viewport in [viewport_left_shoulder, viewport_left_wrist, 
@@ -199,32 +202,43 @@ def setup_cameras(robot, external_sensors, resolution):
             og.sim.render()
 
     # Setup main camera view
-    eyes_cam_prim_path = f"{robot.links['eyes'].prim_path}/Camera"
+    eyes_cam_prim_path = f"{robot.links[HEAD_CAMERA_LINK_NAME[robot.__class__.__name__]].prim_path}/Camera"
     og.sim.viewer_camera.active_camera_path = eyes_cam_prim_path
     og.sim.viewer_camera.image_height = resolution[0]
     og.sim.viewer_camera.image_width = resolution[1]
 
-    # Adjust wrist cameras
-    left_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
-        prim_path=f"{robot.links['left_eef_link'].prim_path}/Camera"
-    )
-    right_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
-        prim_path=f"{robot.links['right_eef_link'].prim_path}/Camera"
-    )
+    # Adjust wrist cameras for R1
+    if isinstance(robot, R1) and not isinstance(robot, R1Pro):
+        left_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
+            prim_path=f"{robot.links[WRIST_CAMERA_LINK_NAME[robot.__class__.__name__]['left']].prim_path}/Camera"
+        )
+        right_wrist_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(
+            prim_path=f"{robot.links[WRIST_CAMERA_LINK_NAME[robot.__class__.__name__]['right']].prim_path}/Camera"
+        )
+        
+        left_wrist_camera_prim.GetAttribute("xformOp:translate").Set(
+            lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist())
+        )
+        right_wrist_camera_prim.GetAttribute("xformOp:translate").Set(
+            lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist())
+        )
+        
+        left_wrist_camera_prim.GetAttribute("xformOp:orient").Set(
+            lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
+        ) # expects (w, x, y, z)
+        right_wrist_camera_prim.GetAttribute("xformOp:orient").Set(
+            lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
+        ) # expects (w, x, y, z)
     
-    left_wrist_camera_prim.GetAttribute("xformOp:translate").Set(
-        lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist())
-    )
-    right_wrist_camera_prim.GetAttribute("xformOp:translate").Set(
-        lazy.pxr.Gf.Vec3d(*R1_WRIST_CAMERA_LOCAL_POS.tolist())
-    )
-    
-    left_wrist_camera_prim.GetAttribute("xformOp:orient").Set(
-        lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
-    ) # expects (w, x, y, z)
-    right_wrist_camera_prim.GetAttribute("xformOp:orient").Set(
-        lazy.pxr.Gf.Quatd(*R1_WRIST_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
-    ) # expects (w, x, y, z)
+    # Adjust head camera for R1Pro (TODO: fix this in assets)
+    if isinstance(robot, R1Pro):
+        head_camera_prim = lazy.isaacsim.core.utils.prims.get_prim_at_path(prim_path=f"{robot.links[HEAD_CAMERA_LINK_NAME[robot.__class__.__name__]].prim_path}/Camera")
+        head_camera_prim.GetAttribute("xformOp:translate").Set(
+            lazy.pxr.Gf.Vec3d(*R1PRO_HEAD_CAMERA_LOCAL_POS.tolist())
+        )
+        head_camera_prim.GetAttribute("xformOp:orient").Set(
+            lazy.pxr.Gf.Quatd(*R1PRO_HEAD_CAMERA_LOCAL_ORI[[3, 0, 1, 2]].tolist())
+        )
 
     camera_paths = [
         eyes_cam_prim_path,
@@ -561,6 +575,90 @@ def setup_task_instruction_ui(task_name, env, robot):
     return overlay_window, text_labels, bddl_goal_conditions
 
 
+def setup_status_display_ui(main_viewport):
+    """Set up UI for displaying status messages in bottom right corner"""
+    # Create overlay window
+    overlay_window = lazy.omni.ui.Window(
+        main_viewport.name,
+        width=0,
+        height=0,
+        flags=lazy.omni.ui.WINDOW_FLAGS_NO_TITLE_BAR |
+              lazy.omni.ui.WINDOW_FLAGS_NO_SCROLLBAR |
+              lazy.omni.ui.WINDOW_FLAGS_NO_RESIZE
+    )
+    og.sim.render()
+    
+    # Create UI container structure
+    with overlay_window.frame:
+        with lazy.omni.ui.ZStack():
+            lazy.omni.ui.Spacer()
+            vstack = lazy.omni.ui.VStack(alignment=lazy.omni.ui.Alignment.RIGHT_BOTTOM, spacing=0)
+            with vstack:
+                lazy.omni.ui.Spacer()
+                hstack = lazy.omni.ui.HStack()
+                with hstack:
+                    lazy.omni.ui.Spacer()
+                    # Create a single placeholder label - we'll update its text later
+                    label = lazy.omni.ui.Label(
+                        "",  # Empty initially
+                        alignment=lazy.omni.ui.Alignment.RIGHT_CENTER,
+                        visible=False,
+                        style={
+                            "font_size": STATUS_DISPLAY_SETTINGS["font_size"],
+                            "margin": 0,
+                            "padding": 0
+                        }
+                    )
+                    lazy.omni.ui.Spacer(width=STATUS_DISPLAY_SETTINGS["right_margin"])
+                lazy.omni.ui.Spacer(height=STATUS_DISPLAY_SETTINGS["bottom_margin"])
+    
+    og.sim.render()
+    return overlay_window, label
+
+def update_status_display(status_window, label, event_queue, current_time):
+    """Update status display with the most recent active message"""
+    # Filter out expired events
+    filtered_queue = []
+    for event_type, message, timestamp in event_queue:
+        duration = STATUS_DISPLAY_SETTINGS.get("persistent_duration", 0.5) \
+                  if event_type in STATUS_DISPLAY_SETTINGS["persistent_states"] \
+                  else STATUS_DISPLAY_SETTINGS["event_duration"]
+                  
+        if current_time - timestamp < duration:
+            filtered_queue.append((event_type, message, timestamp))
+    
+    # Get the most recent message if available
+    if filtered_queue:
+        event_type, message, _ = filtered_queue[-1]
+        # Only update if text changed
+        if not label.visible or label.text != message:
+            label.text = message
+            label.visible = True
+            label.style = {
+                "color": STATUS_DISPLAY_SETTINGS["event_colors"].get(event_type, 0xFFFFFFFF),
+                "font_size": STATUS_DISPLAY_SETTINGS["font_size"],
+                "margin": 0,
+                "padding": 0
+            }
+    else:
+        # Hide label when no messages
+        label.visible = False
+    
+    return filtered_queue
+
+def add_status_event(event_queue, event_type, message, persistent=False):
+    """Add a status event to the display queue, avoiding duplicates for persistent events"""
+    # For persistent events, check if it's already in the queue
+    if persistent:
+        for i, (e_type, _, _) in enumerate(event_queue):
+            if e_type == event_type:
+                # Just update timestamp to keep it alive
+                event_queue[i] = (e_type, message, time.time())
+                return
+    
+    # Add new event if not found or not persistent
+    event_queue.append((event_type, message, time.time()))
+
 def setup_object_beacons(task_relevant_objects, scene):
     """
     Set up visual beacons for task-relevant objects
@@ -640,7 +738,8 @@ def setup_ghost_robot(scene, task_cfg=None):
         name="ghost", 
         usd_path=os.path.join(gm.ASSET_PATH, f"models/{ROBOT_TYPE.lower()}/usd/{ROBOT_TYPE.lower()}.usda"), 
         visual_only=True, 
-        position=(task_cfg is not None and task_cfg["robot_start_position"]) or [0.0, 0.0, 0.0]
+        position=(task_cfg is not None and task_cfg["robot_start_position"]) or [0.0, 0.0, 0.0],
+        orientation=(task_cfg is not None and task_cfg["robot_start_orientation"]) or [0.0, 0.0, 0.0, 1.0],
     )
     scene.add_object(ghost, register=False)
     
@@ -655,41 +754,102 @@ def setup_ghost_robot(scene, task_cfg=None):
     return ghost
 
 
-def optimize_sim_settings():
+def optimize_sim_settings(vr_mode=False):
     """Apply optimized simulation settings for better performance"""
     settings = lazy.carb.settings.get_settings()
 
-    # Use asynchronous rendering for faster performance
-    # NOTE: This gets reset EVERY TIME the sim stops / plays!!
-    # For some reason, need to turn on, then take one render step, then turn off, and then back on in order to
-    # avoid viewport freezing...not sure why
-    settings.set_bool("/app/asyncRendering", True)
-    og.sim.render()
-    settings.set_bool("/app/asyncRendering", False)
-    settings.set_bool("/app/asyncRendering", True)
-    settings.set_bool("/app/asyncRenderingLowLatency", True)
+    if not vr_mode:
+        # Use asynchronous rendering for faster performance
+        # NOTE: This gets reset EVERY TIME the sim stops / plays!!
+        # For some reason, need to turn on, then take one render step, then turn off, and then back on in order to
+        # avoid viewport freezing...not sure why
+        settings.set_bool("/app/asyncRendering", True)
+        og.sim.render()
+        settings.set_bool("/app/asyncRendering", False)
+        settings.set_bool("/app/asyncRendering", True)
+        settings.set_bool("/app/asyncRenderingLowLatency", True)
 
-    # Must ALWAYS be set after sim plays because omni overrides these values
-    settings.set("/app/runLoops/main/rateLimitEnabled", False)
-    settings.set("/app/runLoops/main/rateLimitUseBusyLoop", False)
+        # Must ALWAYS be set after sim plays because omni overrides these values
+        settings.set("/app/runLoops/main/rateLimitEnabled", False)
+        settings.set("/app/runLoops/main/rateLimitUseBusyLoop", False)
 
-    # Use asynchronous rendering for faster performance (repeat to ensure it takes effect)
-    settings.set_bool("/app/asyncRendering", True)
-    settings.set_bool("/app/asyncRenderingLowLatency", True)
-    settings.set_bool("/app/asyncRendering", False)
-    settings.set_bool("/app/asyncRenderingLowLatency", False)
-    settings.set_bool("/app/asyncRendering", True)
-    settings.set_bool("/app/asyncRenderingLowLatency", True)
+        # Use asynchronous rendering for faster performance (repeat to ensure it takes effect)
+        settings.set_bool("/app/asyncRendering", True)
+        settings.set_bool("/app/asyncRenderingLowLatency", True)
+        settings.set_bool("/app/asyncRendering", False)
+        settings.set_bool("/app/asyncRenderingLowLatency", False)
+        settings.set_bool("/app/asyncRendering", True)
+        settings.set_bool("/app/asyncRenderingLowLatency", True)
 
-    # Additional RTX settings
-    settings.set_bool("/rtx-transient/dlssg/enabled", True)
+        # Additional RTX settings
+        settings.set_bool("/rtx-transient/dlssg/enabled", True)
+
+        # Disable fractional cutout opacity for speed
+        # Alternatively, turn this on so that we can use semi-translucent visualizers
+        lazy.carb.settings.get_settings().set_bool("/rtx/raytracing/fractionalCutoutOpacity", False)
+
+    # Does this improve things?
+    # See https://docs.omniverse.nvidia.com/kit/docs/omni.timeline/latest/TIME_STEPPING.html#synchronizing-wall-clock-time-and-simulation-time
+    # Obtain the main timeline object
+    timeline = lazy.omni.timeline.get_timeline_interface()
+
+    # Configure Kit to not wait for wall clock time to catch up between updates
+    # This setting is effective only with Fixed time stepping
+    timeline.set_play_every_frame(True)
+
+    # The following setting has the exact same effect as set_play_every_frame
+    settings.set("/app/player/useFastMode", True)
+    settings.set("/app/show_developer_preference_section", True)
+    settings.set("/app/player/useFixedTimeStepping", True)
+
+    for run_loop in ["present", "main", "rendering_0"]:
+        settings.set(f"/app/runLoops/{run_loop}/rateLimitEnabled", False)
+        settings.set(f"/app/runLoops/{run_loop}/rateLimitFrequency", 120)
+        settings.set(f"/app/runLoops/{run_loop}/rateLimitUseBusyLoop", False)
+    settings.set("/exts/omni.kit.renderer.core/present/enabled", True)
+    settings.set("/app/vsync", True)
+
+def setup_ghost_robot_info(ghost, robot):
+    if isinstance(robot, R1Pro):
+        robot_arm_dof = 7
+    elif isinstance(robot, R1):
+        robot_arm_dof = 6
+    else:
+        raise ValueError(f"Unknown robot type: {type(robot)}")
     
-    # Disable fractional cutout opacity for speed
-    # Alternatively, turn this on so that we can use semi-translucent visualizers
-    lazy.carb.settings.get_settings().set_bool("/rtx/raytracing/fractionalCutoutOpacity", False)
+    # Aggregate joint indices for the ghost robot
+    joint_keys_list = list(ghost.joints.keys())
+    arm_action_idxs = []
+    arm_joint_idxs = []
+    finger_joint_idxs = []
+    for arm in robot.arm_names:
+        for i in range(robot_arm_dof):
+            arm_joint_idxs.append(joint_keys_list.index(f"{arm}_arm_joint{i+1}"))
+            arm_action_idxs.append(robot.arm_action_idx[arm][i])
+        for i in range(2):
+            finger_name = f"{arm}_gripper_finger_joint{i+1}"
+            if not ghost.joints[finger_name].is_mimic_joint:
+                finger_joint_idxs.append(joint_keys_list.index(finger_name))
+    
+    torso_joint_idxs = []
+    for i in range(4):
+        torso_joint_idxs.append(joint_keys_list.index(f"torso_joint{i+1}"))
+                    
+    ghost_info = {
+        "arm_action_idxs": th.tensor(arm_action_idxs, dtype=th.int),
+        "arm_joint_idxs": th.tensor(arm_joint_idxs, dtype=th.int),
+        "finger_joint_idxs": th.tensor(finger_joint_idxs, dtype=th.int),
+        "torso_joint_idxs": th.tensor(torso_joint_idxs, dtype=th.int),
+        "lower_limit": ghost.joint_lower_limits,
+        "upper_limit": ghost.joint_upper_limits,
+        "left_links": [link for link_name, link in ghost.links.items() if link_name.startswith("left")],
+        "right_links": [link for link_name, link in ghost.links.items() if link_name.startswith("right")],
+    }
+    
+    return ghost_info
 
 
-def update_ghost_robot(ghost, robot, action, ghost_appear_counter):
+def update_ghost_robot(ghost, robot, action, ghost_appear_counter, ghost_info):
     """
     Update the ghost robot visualization based on current robot state and action
     
@@ -698,6 +858,7 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter):
         robot: Robot object
         action: Current action being applied
         ghost_appear_counter: Counter for ghost appearance timing
+        ghost_info: Dictionary of cached ghost information
         
     Returns:
         dict: Updated ghost_appear_counter
@@ -706,39 +867,37 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter):
         position=robot.get_position_orientation(frame="world")[0],
         orientation=robot.get_position_orientation(frame="world")[1],
     )
-    for i in range(4):
-        ghost.joints[f"torso_joint{i+1}"].set_pos(robot.joints[f"torso_joint{i+1}"].get_state()[0])
+    
+    robot_qpos = robot.get_joint_positions(normalized=False)
+    ghost_qpos = robot_qpos.clone()
+    ghost_qpos[ghost_info["arm_joint_idxs"]] = action[ghost_info["arm_action_idxs"]]
+    ghost_qpos = ghost_qpos.clip(ghost_info["lower_limit"], ghost_info["upper_limit"])
+    
+    update = False
     for arm in robot.arm_names:
-        for i in range(6):
-            ghost.joints[f"{arm}_arm_joint{i+1}"].set_pos(th.clamp(
-                action[robot.arm_action_idx[arm]][i],
-                min=ghost.joints[f"{arm}_arm_joint{i+1}"].lower_limit,
-                max=ghost.joints[f"{arm}_arm_joint{i+1}"].upper_limit
-            ))
-        for i in range(2):
-            ghost.joints[f"{arm}_gripper_axis{i+1}"].set_pos(
-                action[robot.gripper_action_idx[arm]][0],
-                normalized=True
-            )
         # make arm visible if some joint difference is larger than the threshold
         if th.max(th.abs(
-            robot.get_joint_positions()[robot.arm_control_idx[arm]] - action[robot.arm_action_idx[arm]]
+            robot_qpos[robot.arm_control_idx[arm]] - action[robot.arm_action_idx[arm]]
         )) > GHOST_APPEAR_THRESHOLD:
             ghost_appear_counter[arm] += 1
+            update = True
             if ghost_appear_counter[arm] >= GHOST_APPEAR_TIME:
-                for link_name, link in ghost.links.items():
-                    if link_name.startswith(arm):
-                        link.visible = True
+                for link in ghost_info[f"{arm}_links"]:
+                    link.visible = True
         else:
             ghost_appear_counter[arm] = 0
-            for link_name, link in ghost.links.items():
-                if link_name.startswith(arm):
-                    link.visible = False
+            for link in ghost_info[f"{arm}_links"]:
+                link.visible = False
+    
+    if update:
+        # Concatenate arm and torso indices and set joint positions
+        update_indices = th.cat([ghost_info["torso_joint_idxs"], ghost_info["arm_joint_idxs"]])
+        ghost.set_joint_positions(ghost_qpos[update_indices], indices=update_indices, normalized=False, drive=False)
     
     return ghost_appear_counter
 
 
-def update_goal_status(text_labels, goal_status, prev_goal_status, env, recording_path=None):
+def update_goal_status(text_labels, goal_status, prev_goal_status, env, recording_path=None, event_queue=None):
     """
     Update the UI based on goal status changes
     
@@ -779,6 +938,8 @@ def update_goal_status(text_labels, goal_status, prev_goal_status, env, recordin
             if recording_path is not None:
                 env.update_checkpoint()
                 print("Auto recorded checkpoint due to goal status change!")
+                if event_queue:
+                    add_status_event(event_queue, "checkpoint", "Checkpoint Recorded due to goal status change")
 
         # Return the updated status
         return goal_status.copy()
@@ -860,7 +1021,7 @@ def update_reachability_visualizers(reachability_visualizers, joint_cmd, prev_ba
     return has_base_motion
 
 
-def update_checkpoint(env, frame_counter, recording_path=None):
+def update_checkpoint(env, frame_counter, recording_path=None, event_queue=None):
     """
     Update checkpoint based on periodic timer
     
@@ -877,10 +1038,12 @@ def update_checkpoint(env, frame_counter, recording_path=None):
     
     updated_counter = frame_counter + 1
     
-    if frame_counter % STEPS_TO_AUTO_CHECKPOINT == 0:
+    if updated_counter % STEPS_TO_AUTO_CHECKPOINT == 0:
         if recording_path is not None:
             env.update_checkpoint()
             print("Auto recorded checkpoint due to periodic save!")
+            if event_queue:
+                add_status_event(event_queue, "checkpoint", "Checkpoint Recorded due to periodic save")
         updated_counter = 0
     
     return updated_counter
@@ -960,7 +1123,7 @@ def generate_basic_environment_config(task_name=None, task_cfg=None):
             "type": "InteractiveTraversableScene",
             "scene_model": task_cfg["scene_model"],
             "load_room_types": None,
-            "load_room_instances": None,
+            "load_room_instances": task_cfg.get("load_room_instances", None),
             "include_robots": False,
         }
 
@@ -979,6 +1142,7 @@ def generate_basic_environment_config(task_name=None, task_cfg=None):
             "reward_config": {
                 "r_potential": 1.0,
             },
+            "include_obs": False,
         }
     elif FULL_SCENE:
         cfg["scene"] = {
@@ -1117,7 +1281,7 @@ def generate_robot_config(task_name=None, task_cfg=None):
         "name": ROBOT_NAME,
         "action_normalize": False,
         "controller_config": controller_config,
-        "self_collisions": False,
+        "self_collisions": True,
         "obs_modalities": [],
         "position": [0.0, 0.0, 0.0],
         "orientation": [0.0, 0.0, 0.0, 1.0],
@@ -1138,7 +1302,7 @@ def generate_robot_config(task_name=None, task_cfg=None):
         robot_config["orientation"] = task_cfg["robot_start_orientation"]
     
     # Add reset joint positions
-    joint_pos = R1_RESET_JOINT_POS.clone()
+    joint_pos = ROBOT_RESET_JOINT_POS[ROBOT_TYPE].clone()
     
     # NOTE: Fingers MUST start open, or else generated AG spheres will be spawned incorrectly
     joint_pos[-4:] = 0.05

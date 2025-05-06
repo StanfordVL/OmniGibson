@@ -17,6 +17,7 @@ class Args:
     robot_ip: str = "192.168.1.10"
     recording_path: Optional[str] = None
     task_name: Optional[str] = None
+    batch_id: Optional[int] = None # 0 or 1
 
 
 def launch_robot_server(args: Args):
@@ -29,7 +30,7 @@ def launch_robot_server(args: Args):
         # Make sure sim is selected
         assert args.domain == "sim"
         from gello.robots.sim_robot.og_sim import OGRobotServer
-        server = OGRobotServer(robot=args.robot, port=port, host=args.hostname, recording_path=args.recording_path, task_name=args.task_name)
+        server = OGRobotServer(robot=args.robot, port=port, host=args.hostname, recording_path=args.recording_path, task_name=args.task_name, batch_id=args.batch_id)
         server.serve()
 
 

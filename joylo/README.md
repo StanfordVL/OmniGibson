@@ -2,7 +2,11 @@
 
 ## Hardware Setup
 
-For hardware setup, please reference this [guide](https://behavior-robot-suite.github.io/docs/sections/joylo/overview.html) from the [BEHAVIOR Robot Suite](https://behavior-robot-suite.github.io/).
+### 6 DoF R1
+For the 6dof version, please reference this [guide](https://behavior-robot-suite.github.io/docs/sections/joylo/overview.html) from the [BEHAVIOR Robot Suite](https://behavior-robot-suite.github.io/).
+
+### 7 DoF R1-Pro
+https://github.com/user-attachments/assets/d6d3ee59-dfac-4ece-92f4-ea44619a2d05
 
 ## Software Setup
 
@@ -49,14 +53,14 @@ git lfs pull
 3. Update dataset to the most recent version:
 ```bash
 # Download the latest dataset
-wget https://storage.googleapis.com/gibson_scenes/og_dataset_1_2_0rc2.zip
+wget https://storage.googleapis.com/gibson_scenes/og_dataset_1_2_0rc4.zip
 
 # Extract and replace the existing dataset
 cd OmniGibson
 # Optionally backup the original dataset
 mv omnigibson/data/og_dataset omnigibson/data/og_dataset_backup
 # Extract the new dataset to the correct location
-unzip path/to/og_dataset_1_2_0rc2.zip -d omnigibson/data/og_dataset
+unzip path/to/og_dataset_1_2_0rc4.zip -d omnigibson/data/og_dataset
 ```
 
 ### Step 3: BDDL Repository Setup
@@ -168,7 +172,7 @@ python experiments/launch_nodes.py --recording_path /path/to/recording_file_name
 
 4. In another terminal, run the JoyLo node:
 ```bash
-python experiments/run_r1_gello.py --joint_config_file joint_config_{your specific gello set name}.yaml
+python experiments/run_joylo.py --gello_model r1pro --joint_config_file joint_config_{your specific gello set name}.yaml
 ```
 
 ### Usage Notes
@@ -197,7 +201,8 @@ python experiments/run_r1_gello.py --joint_config_file joint_config_{your specif
 - If the JoyCons are connected to Ubuntu in bluetooth but are still unable to be detected from Python, try `pip uninstall hidapi`, and then `pip install hid pyglm`, and then try again
 
 ## Joycon Button Mapping
-![Screenshot 2025-03-28 at 11 04 39 PM](https://github.com/user-attachments/assets/29d33994-ea8f-4302-b37c-ebfe30fa8901)
+![image](https://github.com/user-attachments/assets/39d20d02-36ff-4ed9-aa34-bcd63ded1294)
+
 
 ## JoyLo Joint Calibration
 - JoyLo sets can be assembled in slightly different ways, resulting in different orientations of the motors and offsets between the physical motor positions and the joint positions in simulation. 
@@ -216,3 +221,4 @@ The calibration script requires each arm to be placed in two fixed reference pos
 |----------------------|----------- |----------------| 
 | Zero Position        | ![](imgs/R1_zero_L.jpg)![](imgs/R1_zero_R.jpg)  | ![](imgs/R1pro_zero_L.jpg)![](imgs/R1pro_zero_R.jpg)                |
 | Calibration Position | ![](imgs/R1_calibration_L.jpg)![](imgs/R1_calibration_R.jpg)  **NOTE: Take from the front - note the forwards orientation of the notch on the wrist joint**| ![](imgs/R1pro_calibration_L.jpg)![](imgs/R1pro_calibration_R.jpg) |
+

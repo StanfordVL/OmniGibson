@@ -2,6 +2,20 @@ import torch as th
 from enum import Enum
 from omnigibson.utils import transform_utils as T
 
+VALIDATED_TASKS = {
+    0: ["picking_up_trash", # difficulty: 1 (pick&place)
+        "putting_away_Halloween_decorations", # difficulty: 2 (articulated+pick&place)
+        "installing_alarms", # difficulty: 2 (toggleOn)
+        "slicing_vegetables", # difficulty: 4 (slicing)
+        "cleaning_up_plates_and_food", # difficulty: 5 (advanced pick&place+articulated)
+    ],
+    1: ["turning_on_radio", # difficulty: 1 (toggleOn)
+        "chopping_wood", # difficulty: 2 (slicing)
+        "carrying_in_groceries", # difficulty: 3 (articulated+navigation)
+        "picking_up_toys", # difficulty: 4 (advanced pick&place)
+        "assembling_gift_baskets", # difficulty: 4 (small object pick&place)
+    ]}
+
 # Viewing mode configuration
 class ViewingMode(str, Enum):
     SINGLE_VIEW = "single_view"
@@ -18,7 +32,7 @@ SIMPLIFIED_TRUNK_CONTROL = True
 
 # Robot parameters
 SUPPORTED_ROBOTS = ["R1", "R1Pro"]
-ROBOT_TYPE = "R1"  # This should always be our robot generally since GELLO is designed for this specific robot
+ROBOT_TYPE = "R1Pro"  # This should always be our robot generally since GELLO is designed for this specific robot
 ROBOT_NAME = "robot_r1"
 
 # R1 robot-specific configurations
@@ -27,6 +41,10 @@ R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.94, 0.0], dtype=th.float3
 R1_GROUND_TORSO_JOINT_POS = th.tensor([1.735, -2.57, -2.1, 0.0], dtype=th.float32)  # For ground object pick up
 R1_WRIST_CAMERA_LOCAL_POS = th.tensor([0.1, 0.0, -0.1], dtype=th.float32)  # Local position of the wrist camera relative to eef
 R1_WRIST_CAMERA_LOCAL_ORI = th.tensor([0.6830127018922194, 0.6830127018922193, 0.18301270189221927, 0.18301270189221946], dtype=th.float32)  # Local orientation of the wrist camera relative to eef
+
+# R1 Pro robot-specific configurations
+R1PRO_HEAD_CAMERA_LOCAL_POS = th.tensor([0.06, 0.0, 0.01], dtype=th.float32)  # Local position of the head camera relative to head link
+R1PRO_HEAD_CAMERA_LOCAL_ORI = th.tensor([-1.0, 0.0, 0.0, 0.0], dtype=th.float32)  # Local orientation of the head camera relative to head link
 
 # Default parameters
 DEFAULT_TRUNK_TRANSLATE = 0.5
@@ -77,8 +95,8 @@ OMNIGIBSON_MACROS = {
     "USE_GPU_DYNAMICS": (USE_FLUID or USE_CLOTH),
     "ENABLE_FLATCACHE": True,
     "ENABLE_OBJECT_STATES": True,  # True (FOR TASKS!)
-    "ENABLE_TRANSITION_RULES": False,
-    "ENABLE_CCD": False,
+    "ENABLE_TRANSITION_RULES": True,
+    "ENABLE_CCD": True,
     "ENABLE_HQ_RENDERING": USE_FLUID,
     "GUI_VIEWPORT_ONLY": True,
 }
@@ -137,19 +155,48 @@ R1_CONTROLLER_CONFIG = {
     }
 }
 
-# R1 robot reset joint positions
-R1_RESET_JOINT_POS = th.tensor([
-    0, 0, 0, 0, 0, 0,    # 6 virtual base joints
-    0, 0, 0, 0,          # 4 trunk joints -- these will be programmatically added
-    33, -33,             # L, R arm joints
-    162, 162,
-    -108, -108,
-    34, -34,
-    73, -73,
-    -65, 65,
-    0, 0,                # 2 L gripper
-    0, 0,                # 2 R gripper
-]) * th.pi / 180
+ROBOT_RESET_JOINT_POS = {
+    "R1": th.tensor([
+        0, 0, 0, 0, 0, 0,    # 6 virtual base joints
+        0, 0, 0, 0,          # 4 trunk joints -- these will be programmatically added
+        33, -33,             # L, R arm joints
+        162, 162,
+        -108, -108,
+        34, -34,
+        73, -73,
+        -65, 65,
+        0, 0,                # 2 L gripper
+        0, 0,                # 2 R gripper
+    ]) * th.pi / 180,
+    "R1Pro": th.zeros(28) * th.pi / 180,
+}
+
+WRIST_CAMERA_LINK_NAME = {
+    "R1": {
+        "left": "left_eef_link",
+        "right": "right_eef_link",
+    },
+    "R1Pro": {
+        "left": "left_realsense_link",
+        "right": "right_realsense_link",
+    },
+}
+
+HEAD_CAMERA_LINK_NAME = {
+    "R1": "eyes",
+    "R1Pro": "zed_link",
+}
+
+FINGER_LINK_NAME = {
+    "R1": {
+        "left": "left_gripper_axis",
+        "right": "right_gripper_axis",
+    },
+    "R1Pro": {
+        "left": "left_gripper_finger_joint",
+        "right": "right_gripper_finger_joint",
+    },
+}
 
 # Reachability visualizer settings
 REACHABILITY_VISUALIZER_CONFIG = {
@@ -170,18 +217,6 @@ VIS_CYLINDER_CONFIG = {
         T.euler2quat(th.tensor([-th.pi / 2, 0.0, 0.0])),
         T.euler2quat(th.tensor([0.0, 0.0, 0.0])),
     ]
-}
-
-# Environmental settings for simulator performance
-SIM_OPTIMIZATION_SETTINGS = {
-    "/app/asyncRendering": True,
-    "/app/asyncRenderingLowLatency": True,
-    "/app/runLoops/main/rateLimitEnabled": False,
-    "/app/runLoops/main/rateLimitUseBusyLoop": False,
-    "/rtx-transient/dlssg/enabled": True,
-    "/app/player/useFastMode": True,
-    "/app/show_developer_preference_section": True,
-    "/app/player/useFixedTimeStepping": True,
 }
 
 # Camera and viewport configuration
@@ -217,8 +252,30 @@ UI_SETTINGS = {
     "left_margin": 50,
 }
 
+# Status display settings
+STATUS_DISPLAY_SETTINGS = {
+    "event_duration": 3.0,  # seconds
+    "persistent_duration": 0.1,  # For persistent events - very short
+    "persistent_states": ["in_cooldown", "waiting_to_resume"],
+    "event_colors": {
+        "checkpoint": 0xFF00FF00,  # Green
+        "rollback": 0xFFFF00FF,   # Magenta
+        "cooldown": 0xFF00FFFF,   # Yellow
+        "waiting": 0xFFFF0000,    # White
+        "reset": 0xFF00AAFF,      # Orange
+    },
+    "font_size": 20,
+    "bottom_margin": 50,
+    "right_margin": 50,
+    "line_spacing": 5,
+}
+
 # Visual sphere settings for object highlighting
 OBJECT_HIGHLIGHT_SPHERE = {
     "opacity": 0.5,
     "emissive_intensity": 10000.0,
 }
+
+INCLUDE_CONTACT_OBS = False
+INCLUDE_JACOBIAN_OBS = False
+GHOST_UPDATE_FREQ = 3
