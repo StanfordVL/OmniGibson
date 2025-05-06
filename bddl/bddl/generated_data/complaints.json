@@ -1687,7 +1687,7 @@
   {
     "object": "barbecue_sauce_bottle-gfxrnj",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -1696,7 +1696,7 @@
   {
     "object": "barbecue_sauce_bottle-gfxrnj",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -1962,7 +1962,7 @@
   {
     "object": "bathtub-jfhrwj",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -2296,7 +2296,7 @@
   {
     "object": "bed-sunfhf",
     "complaint": "too small",
-    "processed": false,
+    "processed": true,
     "type": "scale",
     "additional_info": "Confirm reasonable bounding box size:\n49.21cm, 66.74cm, 55.89cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.",
     "id": 2201
@@ -3107,7 +3107,7 @@
   {
     "object": "bidet-lcyvov",
     "complaint": "particleSink, particleSource",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -9758,7 +9758,7 @@
   {
     "object": "briefcase-wymodw",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -11672,7 +11672,7 @@
   {
     "object": "cap-vnpjfn",
     "complaint": "wrong part on wrong side of obj",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "",
@@ -12355,7 +12355,7 @@
   {
     "object": "carving_knife-icxnkd",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -12364,7 +12364,7 @@
   {
     "object": "carving_knife-icxnkd",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "metalink",
     "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
     "id": 5099
@@ -12424,7 +12424,7 @@
   {
     "object": "carving_knife-oxvnsa",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -12433,7 +12433,7 @@
   {
     "object": "carving_knife-oxvnsa",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "metalink",
     "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
     "id": 5101
@@ -12450,7 +12450,7 @@
   {
     "object": "carving_knife-usqmjc",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -12459,7 +12459,7 @@
   {
     "object": "carving_knife-usqmjc",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "metalink",
     "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
     "id": 5607
@@ -12476,7 +12476,7 @@
   {
     "object": "carving_knife-xsjhji",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -12485,7 +12485,7 @@
   {
     "object": "carving_knife-xsjhji",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "metalink",
     "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
     "id": 5103
@@ -12636,7 +12636,7 @@
   {
     "object": "catsup_bottle-qfvqfm",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -12830,7 +12830,7 @@
   {
     "object": "ceilings-awbqsa",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -13028,7 +13028,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "ceilings-gexutv",
@@ -13147,7 +13147,7 @@
   {
     "object": "ceilings-ibxzsn",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -13200,7 +13200,7 @@
   {
     "object": "ceilings-jjyrdh",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -13244,7 +13244,7 @@
   {
     "object": "ceilings-khkogf",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -13269,7 +13269,7 @@
   {
     "object": "ceilings-kxjvpr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -13579,7 +13579,7 @@
   {
     "object": "ceilings-tcwyvb",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -14817,7 +14817,7 @@
   {
     "object": "chicken_broth_carton-ztripg",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -14860,7 +14860,7 @@
   {
     "object": "chicken_soup_carton-ooyqcr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -15341,7 +15341,7 @@
   {
     "object": "chocolate_sauce_bottle-yegrkf",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -18408,7 +18408,7 @@
   {
     "object": "desk-aduafr",
     "complaint": "looks like drawer could be openable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -18619,7 +18619,7 @@
   {
     "object": "desk-nbpuns",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
     "additional_info": "",
@@ -18628,7 +18628,7 @@
   {
     "object": "desk-nbpuns",
     "complaint": "not connected",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -18829,7 +18829,7 @@
   {
     "object": "desk-xhjsub",
     "complaint": "drawers could be openable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -19229,7 +19229,7 @@
   {
     "object": "dishwasher-xlmier",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -21320,7 +21320,7 @@
   {
     "object": "driveway-qbxmgb",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -21341,7 +21341,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "driveway-ywqsrg",
@@ -21364,7 +21364,7 @@
   {
     "object": "drop_in_sink-hecjnt",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -22070,7 +22070,7 @@
   {
     "object": "fabric_softener_bottle-uyixwc",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -22230,7 +22230,7 @@
   {
     "object": "fire_sprinkler-skcdiz",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -22707,7 +22707,7 @@
   {
     "object": "floor_lamp-disyzd",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5396
@@ -22742,7 +22742,7 @@
   {
     "object": "floor_lamp-drpann",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5187
@@ -22991,7 +22991,7 @@
   {
     "object": "floor_lamp-mqfdjk",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5192
@@ -23035,7 +23035,7 @@
   {
     "object": "floor_lamp-ogolip",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5195
@@ -23121,7 +23121,7 @@
   {
     "object": "floor_lamp-uivlzf",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 4988
@@ -23177,12 +23177,12 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "floors-adimyi",
     "complaint": "See message",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "structurethickness",
     "additional_info": "STRUCTURE-THICKNESS: This object is a paper-thin floor or wall that should have some thickness.",
@@ -23339,7 +23339,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "floors-csxnnw",
@@ -23411,7 +23411,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "floors-ewbqsp",
@@ -23544,7 +23544,7 @@
     "complaint": "it does have disconnected parts. we should put the individual wood areas into an object each, the stone into an object, then the left set of pavers into one object, and the right set of pavers into another. we should NOT make every paver a separate object.",
     "processed": false,
     "new": true,
-    "type": "connectedness",
+    "type": "structureconnectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
     "id": 4135
   },
@@ -23722,7 +23722,7 @@
   {
     "object": "floors-khjmrr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -23977,7 +23977,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "floors-nmnycd",
@@ -24061,15 +24061,6 @@
     "processed": false
   },
   {
-    "object": "floors-oxhkpu",
-    "complaint": "we should separate the actual floor and the elevated wood platform. does that have to be called floor, or do we have a better category & synset for it?",
-    "processed": false,
-    "new": true,
-    "type": "connectedness",
-    "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
-    "id": 4841
-  },
-  {
     "id": 7299,
     "object": "floors-oxhkpu",
     "type": "material",
@@ -24077,6 +24068,15 @@
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
     "processed": false
+  },
+  {
+    "object": "floors-oxhkpu",
+    "complaint": "we should separate the actual floor and the elevated wood platform. does that have to be called floor, or do we have a better category & synset for it?",
+    "processed": false,
+    "new": true,
+    "type": "structureconnectedness",
+    "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
+    "id": 4841
   },
   {
     "id": 7488,
@@ -24126,7 +24126,7 @@
   {
     "object": "floors-pyoemr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -24229,7 +24229,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "floors-qwzkxn",
@@ -24265,7 +24265,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "floors-rhwsaa",
@@ -24391,7 +24391,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "floors-ueqcjl",
@@ -24598,7 +24598,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "floors-xqgwla",
@@ -25438,7 +25438,7 @@
   {
     "object": "furniture_sink-egwapq",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -25456,7 +25456,7 @@
   {
     "object": "furniture_sink-ojjqku",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -25624,7 +25624,7 @@
   {
     "object": "gate-flveay",
     "complaint": "two parts",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -25633,7 +25633,7 @@
   {
     "object": "gate-izmteu",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
     "additional_info": "",
@@ -25642,7 +25642,7 @@
   {
     "object": "gate-izmteu",
     "complaint": "two parts",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -25669,7 +25669,7 @@
   {
     "object": "gate-vqjuvg",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
     "additional_info": "",
@@ -25678,7 +25678,7 @@
   {
     "object": "gate-vqjuvg",
     "complaint": "two parts",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -25687,7 +25687,7 @@
   {
     "object": "gate-wvbxij",
     "complaint": "two parts",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -30214,7 +30214,7 @@
   {
     "object": "hardback-grxiqn",
     "complaint": "bad object, containing 2 books",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
@@ -30745,7 +30745,7 @@
   {
     "object": "hot_sauce_bottle-qvpthd",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -30869,7 +30869,7 @@
   {
     "object": "hydrogen_peroxide_bottle-luhnej",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -31174,7 +31174,7 @@
   {
     "object": "iron-vlvslm",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -33011,7 +33011,7 @@
   {
     "object": "laptop-izydvb",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "",
@@ -33141,12 +33141,12 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "lawn-qaedpx",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -33163,7 +33163,7 @@
   {
     "object": "lawn-wwoqjw",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -36550,7 +36550,7 @@
   {
     "object": "milk_carton-icvmix",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -37200,7 +37200,7 @@
   {
     "object": "monitor-qaacxt",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5312
@@ -39074,7 +39074,7 @@
   {
     "object": "oven-ffitak",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "appearance",
     "additional_info": "GLASS: This window object does not have a glass-tagged mesh associated with it. Please check the object's meshes.",
     "id": 5809
@@ -39091,7 +39091,7 @@
   {
     "object": "oven-ffitak",
     "complaint": "needs glass window",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- j_door, RevoluteJoint\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -39100,7 +39100,7 @@
   {
     "object": "oven-ffitak",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -41860,7 +41860,7 @@
   {
     "object": "pencil_holder-jkuiqg",
     "complaint": "fillable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -41869,7 +41869,7 @@
   {
     "object": "pencil_holder-jyetcl",
     "complaint": "fillable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -41896,7 +41896,7 @@
   {
     "object": "pencil_holder-qwqsgi",
     "complaint": "fillable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -44095,7 +44095,7 @@
   {
     "object": "pizza_sauce-clttao",
     "complaint": "x40",
-    "processed": false,
+    "processed": true,
     "type": "scale",
     "additional_info": "Confirm reasonable bounding box size:\n3.87m, 3.87m, 2.84m\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
     "id": 1469
@@ -45544,7 +45544,7 @@
   {
     "object": "pot_plant-bcirge",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5816
@@ -45561,7 +45561,7 @@
   {
     "object": "pot_plant-bjwskl",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5817
@@ -45569,7 +45569,7 @@
   {
     "object": "pot_plant-cecdwu",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 4100
@@ -45774,7 +45774,7 @@
   {
     "object": "pot_plant-irffta",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 4103
@@ -45968,7 +45968,7 @@
   {
     "object": "pot_plant-kyrcpw",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5362
@@ -46029,7 +46029,7 @@
   {
     "object": "pot_plant-lligdl",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5820
@@ -46064,7 +46064,7 @@
   {
     "object": "pot_plant-mfnact",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5150
@@ -46134,7 +46134,7 @@
   {
     "object": "pot_plant-mqhlkf",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5365
@@ -46175,7 +46175,7 @@
   {
     "object": "pot_plant-nwfojy",
     "complaint": "convert to separate glass vase and flower",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CATEGORY: Confirm object category assignment.\n\nObject assigned to category: pot_plant\n\nIf the object is not compatible with the rest of the objects in this category,\n(e.g. tabletop sink vs regular sink), change the category here.\nConfirm that the object is the same kind of object as the rest of the objects\nin this category.\n\nIf the category is wrong, please type in the correct category.",
@@ -46188,12 +46188,12 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "pot_plant-nwuuca",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5151
@@ -46205,7 +46205,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "pot_plant-opykqm",
@@ -46391,7 +46391,7 @@
   {
     "object": "pot_plant-qwtwrx",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 4106
@@ -46434,7 +46434,7 @@
   {
     "object": "pot_plant-rkqvba",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5826
@@ -46446,7 +46446,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "pot_plant-spmhnj",
@@ -46571,7 +46571,7 @@
   {
     "object": "pot_plant-usrbxb",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5154
@@ -46674,7 +46674,7 @@
   {
     "object": "pot_plant-xcybvc",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5833
@@ -46715,7 +46715,7 @@
   {
     "object": "pot_plant-yfqgfd",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5835
@@ -47655,7 +47655,7 @@
     "complaint": "should be segmented",
     "processed": false,
     "new": true,
-    "type": "connectedness",
+    "type": "structureconnectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
     "id": 4133
   },
@@ -47680,7 +47680,7 @@
   {
     "object": "rail_fence-ewgkos",
     "complaint": "should be segmented?",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -48511,7 +48511,7 @@
   {
     "object": "roofs-jqqtaq",
     "complaint": "roof too big, needs segmentation",
-    "processed": false,
+    "processed": true,
     "type": "collision",
     "additional_info": "Was at least one of the collision mesh candidates acceptable?",
     "id": 5700
@@ -49008,7 +49008,7 @@
   {
     "object": "rubbing_alcohol_atomizer-kbnobp",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -49155,7 +49155,7 @@
   {
     "object": "salsa_bottle-kydilb",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -49173,7 +49173,7 @@
   {
     "object": "salt_shaker-fztfsi",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -49777,7 +49777,7 @@
   {
     "object": "serving_cart-vvtcby",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50041,7 +50041,7 @@
   {
     "object": "shears-glbxff",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50050,7 +50050,7 @@
   {
     "object": "shears-glbxff",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "metalink",
     "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
     "id": 5840
@@ -50083,7 +50083,7 @@
   {
     "object": "shelf-amyper",
     "complaint": "multiple pieces",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "",
@@ -50172,7 +50172,7 @@
   {
     "object": "shelf-fjozhc",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50270,7 +50270,7 @@
   {
     "object": "shelf-pfusrd",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50323,7 +50323,7 @@
   {
     "object": "shelf-sapyzl",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50332,7 +50332,7 @@
   {
     "object": "shelf-sapyzl",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50376,7 +50376,7 @@
   {
     "object": "shelf-vanltx",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50437,7 +50437,7 @@
   {
     "object": "shelf-zlaser",
     "complaint": "multiple shelves, looks quite like amyper",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "",
@@ -50450,12 +50450,12 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "shelf-zlaser",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50617,7 +50617,7 @@
     "complaint": "fillable",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5898
   },
@@ -50626,7 +50626,7 @@
     "complaint": "fillable",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5899
   },
@@ -50644,7 +50644,7 @@
     "complaint": "fillable",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5901
   },
@@ -50662,7 +50662,7 @@
     "complaint": "fillable",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5903
   },
@@ -50689,7 +50689,7 @@
     "complaint": "fillable",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5905
   },
@@ -50724,7 +50724,7 @@
     "complaint": "fillable",
     "processed": true,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5780
   },
@@ -50769,7 +50769,7 @@
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah_6",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "",
     "id": 5906
   },
@@ -50778,7 +50778,7 @@
     "complaint": "fillable",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5908
   },
@@ -50796,7 +50796,7 @@
     "complaint": "fillable",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5910
   },
@@ -50823,7 +50823,7 @@
     "complaint": "fillable",
     "processed": true,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5783
   },
@@ -50841,7 +50841,7 @@
     "complaint": "fillable",
     "processed": false,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5912
   },
@@ -50868,7 +50868,7 @@
     "complaint": "fillable",
     "processed": true,
     "new": true,
-    "type": "metalink",
+    "type": "nth-metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: True\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
     "id": 5787
   },
@@ -50933,7 +50933,7 @@
   {
     "object": "shower-giialz",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -50958,7 +50958,7 @@
   {
     "object": "shower-qkgvsz",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -51515,7 +51515,7 @@
   {
     "object": "sink-buifoi",
     "complaint": "faucet is apart from the sink.",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -51690,7 +51690,7 @@
   {
     "object": "sink-qnequy",
     "complaint": "pipes below sink are not attached to sink",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
     "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
@@ -51716,7 +51716,7 @@
   {
     "object": "sink-qnequy",
     "complaint": "pipes below sink are not attached to sink",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -52287,7 +52287,7 @@
   {
     "object": "slotted_spoon-ucrzlb",
     "complaint": "no texture",
-    "processed": false,
+    "processed": true,
     "type": "scale",
     "additional_info": "Confirm reasonable bounding box size:\n16.99cm, 13.17cm, 64.38cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
     "id": 1001
@@ -52544,7 +52544,7 @@
   {
     "object": "sodium_carbonate_jar-vxtjjn",
     "complaint": "openable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -52919,7 +52919,7 @@
   {
     "object": "soy_sauce_bottle-saujjl",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -53242,7 +53242,7 @@
   {
     "object": "spotlight-odrdjb",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -53475,7 +53475,7 @@
   {
     "object": "square_light-qebtel",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -53626,7 +53626,7 @@
   {
     "object": "squeeze_bottle-uzmhdn",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -54437,7 +54437,7 @@
   {
     "object": "storage_box-igzoex",
     "complaint": "joint for openning lid?",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -54446,7 +54446,7 @@
   {
     "object": "storage_box-igzoex",
     "complaint": "openable, fillable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -54509,7 +54509,7 @@
   {
     "object": "storage_box-kjidns",
     "complaint": "fillable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: False\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -54518,7 +54518,7 @@
   {
     "object": "storage_box-kjidns",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -54563,7 +54563,7 @@
   {
     "object": "storage_box-rvhrtr",
     "complaint": "joint for opening lid?",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -54581,7 +54581,7 @@
   {
     "object": "storage_box-rvhrtr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -54626,7 +54626,7 @@
   {
     "object": "storage_box-wovzuq",
     "complaint": "joint for opening lid?",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -54644,7 +54644,7 @@
   {
     "object": "storage_box-wovzuq",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -54662,7 +54662,7 @@
   {
     "object": "storage_box-wtvcvz",
     "complaint": "joint for opening lid?",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "joint",
     "additional_info": "ARTICULATION: Confirm articulation:\nThis object has the below movable links annotated:\n- None\n\nVerify that the joint limits look reasonable and that the object is not\nmissing articulations that would make it useless. Do NOT be overly ambitious - we\nonly care about MUST-HAVE articulations here.",
@@ -54680,7 +54680,7 @@
   {
     "object": "storage_box-wtvcvz",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -55226,7 +55226,7 @@
   {
     "object": "sugar_syrup_bottle-kdlbbq",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -55244,7 +55244,7 @@
   {
     "object": "suitcase-fqsjey",
     "complaint": "openable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -55467,7 +55467,7 @@
   {
     "object": "swimming_pool-vnvmkx",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -55476,7 +55476,7 @@
   {
     "object": "swimming_pool-vnvmkx",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -55715,7 +55715,7 @@
   {
     "object": "swivel_chair-iiihwn",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5238
@@ -55880,7 +55880,7 @@
   {
     "object": "swivel_chair-mqxrim",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 1926
@@ -55984,7 +55984,7 @@
   {
     "object": "swivel_chair-tbzfgf",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5570
@@ -56215,7 +56215,7 @@
   {
     "object": "table_knife-nvwmkx",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -56224,7 +56224,7 @@
   {
     "object": "table_knife-nvwmkx",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "metalink",
     "additional_info": "SLICER: This object has a slicer meta link. Many objects of this type have issues with their positioning. Check it.",
     "id": 5135
@@ -56451,7 +56451,7 @@
   {
     "object": "table_lamp-btdcou",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5755
@@ -56472,12 +56472,12 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "table_lamp-btdcou",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -56600,7 +56600,7 @@
   {
     "object": "table_lamp-erfbgw",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5331
@@ -56810,7 +56810,7 @@
   {
     "object": "table_lamp-htmtsr",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5336
@@ -56836,7 +56836,7 @@
   {
     "object": "table_lamp-htmtsr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -56844,10 +56844,10 @@
   },
   {
     "object": "table_lamp-htmtsr",
-    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "complaint": "maybe make this movable",
     "processed": false,
     "new": true,
-    "type": "unknown",
+    "type": "nth-metalink",
     "additional_info": "",
     "id": 5335
   },
@@ -56863,7 +56863,7 @@
   {
     "object": "table_lamp-jbjckk",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5760
@@ -56880,7 +56880,7 @@
   {
     "object": "table_lamp-jbjckk",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -56889,7 +56889,7 @@
   {
     "object": "table_lamp-jbjckk",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -57022,7 +57022,7 @@
   {
     "object": "table_lamp-lshxmu",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5340
@@ -57047,10 +57047,10 @@
   },
   {
     "object": "table_lamp-lshxmu",
-    "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
+    "complaint": "maybe add joint",
     "processed": false,
     "new": true,
-    "type": "unknown",
+    "type": "nth-metalink",
     "additional_info": "",
     "id": 5339
   },
@@ -57304,7 +57304,7 @@
   {
     "object": "table_lamp-qgdwbh",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5763
@@ -57321,7 +57321,7 @@
   {
     "object": "table_lamp-qgdwbh",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -57559,7 +57559,7 @@
   {
     "object": "table_lamp-uupwiq",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5766
@@ -57646,7 +57646,7 @@
   {
     "object": "table_lamp-vbjpad",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5345
@@ -57672,7 +57672,7 @@
   {
     "object": "table_lamp-vbjpad",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -57681,7 +57681,7 @@
   {
     "object": "table_lamp-vbjpad",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -57699,7 +57699,7 @@
   {
     "object": "table_lamp-wbcgev",
     "complaint": "Auto-generated 2025",
-    "processed": false,
+    "processed": true,
     "type": "centerofmass",
     "additional_info": "CENTEROFMASS: This object belongs to a category that frequently has stability issues. Please check the object's center of mass.",
     "id": 5351
@@ -57734,7 +57734,7 @@
   {
     "object": "table_lamp-wbcgev",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -57743,7 +57743,7 @@
   {
     "object": "table_lamp-wbcgev",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -59017,7 +59017,7 @@
   {
     "object": "toast-ygginu",
     "complaint": "what is this object?",
-    "processed": false,
+    "processed": true,
     "type": "scale",
     "additional_info": "Confirm reasonable bounding box size:\n3.90m, 3.39m, 20.03cm\nMake sure these sizes are within the same order of magnitude you expect from this object IRL.\nIf the scale is off, please let us know by a factor of how much (for example, 1000 if something\nthat's supposed to be 1mm is 1m instead) in your complaint note.",
     "id": 1478
@@ -60956,7 +60956,7 @@
   {
     "object": "vanilla_bottle-drevku",
     "complaint": "bad center of mass, object will tip over",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
     "additional_info": "APPEARANCE: Confirm object visual appearance.\nRequirements:\n- make sure the object has a valid texture or appearance (e.g., texture not black,\n       transparency rendered correctly, etc).\n- make sure any glass parts are transparent (would this object contain glass? e.g.\n       wall pictures, clocks, etc. - anything wrong)\n- compare the object against the 3ds Max image that should open up now.",
@@ -60965,7 +60965,7 @@
   {
     "object": "vanilla_bottle-drevku",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -61782,7 +61782,7 @@
   {
     "object": "wall_mounted_light-cstgzt",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -62269,7 +62269,7 @@
   {
     "object": "wall_socket-zyzufw",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-josiah",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "unknown",
     "additional_info": "",
@@ -62406,7 +62406,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 7442,
@@ -62496,7 +62496,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-apakqv",
@@ -62860,7 +62860,7 @@
   {
     "object": "walls-btxexl",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -62873,7 +62873,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-btxexl",
@@ -63116,7 +63116,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-crydgh",
@@ -63134,7 +63134,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-cvtrhg",
@@ -63336,7 +63336,7 @@
   {
     "object": "walls-dqarfl",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -63349,7 +63349,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 8231,
@@ -63457,7 +63457,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-eculrb",
@@ -63606,7 +63606,7 @@
   {
     "object": "walls-eooxoa",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -63619,7 +63619,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 7543,
@@ -63655,7 +63655,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-fapfsm",
@@ -63844,7 +63844,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-fpfyos",
@@ -63862,7 +63862,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 7787,
@@ -63937,15 +63937,6 @@
     "id": 6689
   },
   {
-    "object": "walls-galkwn",
-    "complaint": "See message",
-    "processed": false,
-    "new": true,
-    "type": "connectedness",
-    "additional_info": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
-    "id": 6688
-  },
-  {
     "id": 7557,
     "object": "walls-galkwn",
     "type": "material",
@@ -63955,13 +63946,22 @@
     "processed": false
   },
   {
+    "object": "walls-galkwn",
+    "complaint": "See message",
+    "processed": false,
+    "new": true,
+    "type": "structureconnectedness",
+    "additional_info": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
+    "id": 6688
+  },
+  {
     "id": 8100,
     "object": "walls-gatabi",
     "type": "material",
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 7738,
@@ -64015,7 +64015,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-gfyaka",
@@ -64029,7 +64029,7 @@
   {
     "object": "walls-gholmm",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -64042,7 +64042,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-gholmm",
@@ -64069,7 +64069,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-gkezra",
@@ -64141,7 +64141,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-gqwker",
@@ -64171,15 +64171,6 @@
     "id": 6691
   },
   {
-    "object": "walls-gvpsby",
-    "complaint": "See message",
-    "processed": false,
-    "new": true,
-    "type": "connectedness",
-    "additional_info": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
-    "id": 6690
-  },
-  {
     "id": 7274,
     "object": "walls-gvpsby",
     "type": "material",
@@ -64187,6 +64178,15 @@
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
     "processed": false
+  },
+  {
+    "object": "walls-gvpsby",
+    "complaint": "See message",
+    "processed": false,
+    "new": true,
+    "type": "structureconnectedness",
+    "additional_info": "STRUCTURE-SYNSET: This object is assigned to a wall/floor category but it may need to either be attached to a structure object or moved into another category.",
+    "id": 6690
   },
   {
     "object": "walls-gxpqau",
@@ -64425,7 +64425,7 @@
   {
     "object": "walls-hnxiju",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -64438,7 +64438,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-hpsypc",
@@ -64591,7 +64591,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 8169,
@@ -64839,7 +64839,7 @@
   {
     "object": "walls-iuzbqu",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -64852,12 +64852,12 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-ivezzr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -64911,7 +64911,7 @@
   {
     "object": "walls-ixwdkv",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -64924,7 +64924,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-ixwdkv",
@@ -64978,7 +64978,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 8276,
@@ -65023,7 +65023,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-jhyczx",
@@ -65145,7 +65145,7 @@
   {
     "object": "walls-judhst",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -65158,7 +65158,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-judhst",
@@ -65320,7 +65320,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-kczhvj",
@@ -65365,7 +65365,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-kfadgw",
@@ -65527,7 +65527,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 7653,
@@ -65563,7 +65563,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-kstqar",
@@ -65608,7 +65608,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-kxxjkr",
@@ -65626,7 +65626,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-lagpjt",
@@ -65895,7 +65895,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-mazmaa",
@@ -66071,7 +66071,7 @@
   {
     "object": "walls-mojnsh",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -66084,7 +66084,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-mojnsh",
@@ -66489,7 +66489,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-nobmrq",
@@ -66543,7 +66543,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-ntatzo",
@@ -66561,7 +66561,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-ntwvgk",
@@ -66858,7 +66858,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-ouhzch",
@@ -66975,7 +66975,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-pckpam",
@@ -67047,7 +67047,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-pghswh",
@@ -67074,7 +67074,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 8082,
@@ -67245,7 +67245,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-pqzkrj",
@@ -67335,7 +67335,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-qeczib",
@@ -67677,7 +67677,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-sdxjmq",
@@ -67695,7 +67695,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-sfobco",
@@ -67745,7 +67745,7 @@
   {
     "object": "walls-somuet",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "appearance",
     "additional_info": "",
@@ -67754,7 +67754,7 @@
   {
     "object": "walls-somuet",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -67839,7 +67839,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "id": 7288,
@@ -67929,7 +67929,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-tsohkj",
@@ -67970,7 +67970,7 @@
   {
     "object": "walls-tyjlww",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -68069,7 +68069,7 @@
   {
     "object": "walls-ueqyqb",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -68082,7 +68082,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-ueqyqb",
@@ -68168,7 +68168,7 @@
   {
     "object": "walls-uplnmr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -68208,7 +68208,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-uqliim",
@@ -68568,7 +68568,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-vupsfl",
@@ -68780,7 +68780,7 @@
   {
     "object": "walls-wnhkmr",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -68793,7 +68793,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-wnhkmr",
@@ -69225,7 +69225,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-yaieuq",
@@ -69311,7 +69311,7 @@
   {
     "object": "walls-yhvncx",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "collision",
     "additional_info": "",
@@ -69324,7 +69324,7 @@
     "complaint": "Automatic complaint: object has bad material (non-VRay) in 3ds Max, which causes baking to fail. Investigate & replace the material.",
     "additional_info": "Our current baking stack only permits the baking of VRay materials. This object has another kind of material, likely scanline. Follow information on the materials.md guide to fix it.",
     "new": true,
-    "processed": false
+    "processed": true
   },
   {
     "object": "walls-yhvncx",
@@ -70288,7 +70288,7 @@
   {
     "object": "water_atomizer-lfarai",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -70621,7 +70621,7 @@
   {
     "object": "white_sauce_bottle-gtwngf",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-eric",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -71355,7 +71355,7 @@
   {
     "object": "window-vsifsu",
     "complaint": "window panes floating midair",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "connectedness",
     "additional_info": "CONNECTED: Confirm object is a single body. An object cannot contain disconnected parts.",
@@ -71811,7 +71811,7 @@
   {
     "object": "wine_sauce_bottle-vqtevv",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
@@ -72036,7 +72036,7 @@
   {
     "object": "yeast_jar-vmajcm",
     "complaint": "openable",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "ABILITIES: Confirm that this object can support all of the abilities seen below.\n\nAbilities to evaluate (subset of all abilities): \n    cloth: False\n    coldSource: False\n    fillable: True\n    heatSource: False\n    openable: False\n    particleApplier: False\n    particleRemover: False\n    particleSink: False\n    particleSource: False\n    toggleable: False\n\nIf this object looks like it should have some of these abilities flipped, please\nlist the abilities that we should flip for this object as a comma separated list.\nFor example, for an unopenable window you would put in 'openable'.",
@@ -72124,7 +72124,7 @@
   {
     "object": "yogurt_carton-ahbhsd",
     "complaint": "quick complaint added during qa-2025 batch qa-2025-hang",
-    "processed": false,
+    "processed": true,
     "new": true,
     "type": "metalink",
     "additional_info": "",
