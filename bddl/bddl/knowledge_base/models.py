@@ -189,13 +189,6 @@ class Category(Model):
         return {anc.name for anc in self.synset.ancestors} | {self.synset.name}
 
     @classmethod
-    def view_mapped_to_substance_synset(cls):
-        """Categories Incorrectly Mapped to Substance Synsets"""
-        return [
-            x for x in cls.all_objects() if x.synset.state == SynsetState.SUBSTANCE
-        ]
-
-    @classmethod
     def view_mapped_to_non_leaf_synsets(cls):
         """Categories Mapped to Non-Leaf Synsets"""
         return [x for x in cls.all_objects() if len(x.synset.children) > 0]
@@ -320,8 +313,9 @@ class Synset(Model):
     def state(self) -> SynsetState:
         if self.name == "entity.n.01":
             return SynsetState.MATCHED   # root synset is always legal
-        elif "substance" in self.property_names:
-            return SynsetState.SUBSTANCE
+        elif self.is_liquid:
+            # liquids are always matched
+            return SynsetState.MATCHED
         elif self.parents:
             if len(self.matching_ready_objects) > 0:
                 return SynsetState.MATCHED
@@ -335,6 +329,14 @@ class Synset(Model):
     @cached_property
     def property_names(self):
         return {prop.name for prop in self.properties}
+
+    @cached_property
+    def is_substance(self):
+        return "substance" in self.property_names
+
+    @cached_property
+    def is_liquid(self):
+        return "liquid" in self.property_names
 
     @cached_property
     def direct_matching_objects(self) -> Set[Object]:
@@ -373,7 +375,7 @@ class Synset(Model):
 
     @cached_property
     def has_fully_supporting_object(self) -> bool:
-        if self.state == SynsetState.SUBSTANCE:
+        if self.is_liquid:
             return True
 
         for obj in self.matching_objects:
@@ -491,7 +493,7 @@ class Synset(Model):
                     diceable_children.append(json.loads(p.parameters)["uncooked_diceable_derivative_synset"])
                 except KeyError:
                     raise ValueError(f"'uncooked_diceable_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
-            elif p.name == "cookable" and self.state == SynsetState.SUBSTANCE:
+            elif p.name == "cookable" and self.is_substance:
                 try:
                     cookable_children.append(json.loads(p.parameters)["substance_cooking_derivative_synset"])
                 except KeyError:
@@ -526,8 +528,8 @@ class Synset(Model):
             s
             for s in cls.all_objects()
             if (
-                (s.state == SynsetState.SUBSTANCE and s.is_used_as_non_substance)
-                or (not s.state == SynsetState.SUBSTANCE and s.is_used_as_substance)
+                (s.is_substance and s.is_used_as_non_substance)
+                or (not s.is_substance and s.is_used_as_substance)
                 or (s.is_used_as_substance and s.is_used_as_non_substance)
             )
         ]
@@ -535,12 +537,23 @@ class Synset(Model):
     @classmethod
     def view_object_unsupported_properties(cls):
         """Leaf synsets that do not have at least one object that supports all of annotated properties."""
-        # TODO: joint count
+        transition_relevant_synsets = {
+            anc
+            for t in Task.all_objects()
+            for transition in t.relevant_transitions
+            for s in list(transition.output_synsets) + list(transition.input_synsets)
+            for anc in set(s.ancestors) | {s}
+        }
+        task_relevant_synsets = {
+            s for s in cls.all_objects()
+            if s.tasks   # TODO: Is it important to check if ancestors are also task relevant?
+        }
+        relevant_synsets = (transition_relevant_synsets | task_relevant_synsets)
+
         return [
             s
-            for s in cls.all_objects()
-            if len(s.matching_objects) > 0
-            and len(s.children) == 0
+            for s in relevant_synsets
+            if len(s.children) == 0
             and not s.has_fully_supporting_object
         ]
 
@@ -552,7 +565,7 @@ class Synset(Model):
             for t in Task.all_objects()
             for transition in t.relevant_transitions
             for s in list(transition.output_synsets) + list(transition.input_synsets)
-            for anc in s.ancestors
+            for anc in set(s.ancestors) | {s}
         }
         return [
             s
@@ -706,7 +719,7 @@ class Task(Model):
     @cached_property
     def substance_synsets(self):
         """synsets that represent a substance"""
-        return [x for x in self.synsets if x.state == SynsetState.SUBSTANCE]
+        return [x for x in self.synsets if x.is_substance]
 
     @cached_property
     def synset_state(self) -> str:
@@ -762,13 +775,6 @@ class Task(Model):
             return SynsetState.PLANNED
         else:
             return SynsetState.UNMATCHED
-
-    @cached_property
-    def substance_required(self) -> str:
-        if self.substance_synsets:
-            return SynsetState.SUBSTANCE
-        else:
-            return SynsetState.NONE
 
     @cached_property
     def producability_data(self) -> Dict[Synset, Tuple[bool, Set[TransitionRule]]]:
