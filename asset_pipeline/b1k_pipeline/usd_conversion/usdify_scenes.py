@@ -69,12 +69,12 @@ def main():
 
             # Wait for all the workers to finish
             print("Queued all scenes. Waiting for them to finish...")
-            logs = {}
+            errors = {}
             for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
                 try:
                     future.result()
                 except Exception as e:
-                    print("Error in worker")
+                    errors[futures[future]] = str(e)
 
             # Move the USDs to the output FS
             print("Copying scene JSONs to output FS...")
@@ -87,11 +87,13 @@ def main():
             print("Done processing. Archiving things now.")
 
         # Save the logs
+        success = len(errors) == 0
         with pipeline_fs.pipeline_output().open("usdify_scenes.json", "w") as f:
-            json.dump(logs, f)
+            json.dump({"success": success, "errors": errors}, f)
 
         # At this point, out_temp_fs's contents will be zipped. Save the success file.
-        pipeline_fs.pipeline_output().touch("usdify_scenes.success")
+        if success:
+            pipeline_fs.pipeline_output().touch("usdify_scenes.success")
 
 if __name__ == "__main__":
     main()

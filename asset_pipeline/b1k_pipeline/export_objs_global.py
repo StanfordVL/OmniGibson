@@ -931,7 +931,7 @@ def main():
             is_clutter = pn.group("loose") == "C-"
             if not is_clutter:
                 found_as_non_clutter.add(model_id)
-        needed_objects = needed_objects - found_as_non_clutter
+        needed_objects = needed_objects & found_as_non_clutter
 
         # Add the needed models to the whitelist
         model_whitelist.update(needed_objects)
