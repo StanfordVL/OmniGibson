@@ -13,7 +13,7 @@ import tqdm
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR, launch_cluster
 
 WORKER_COUNT = 2
-MAX_TIME_PER_PROCESS = 20 * 60  # 20 minutes
+MAX_TIME_PER_PROCESS = 30 * 60  # 20 minutes
 
 def run_on_scene(dataset_path, scene):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_scenes_process", dataset_path, scene]
@@ -23,7 +23,7 @@ def run_on_scene(dataset_path, scene):
             p = subprocess.Popen(cmd, stdout=f, stderr=ferr, cwd="/scr/ig_pipeline", start_new_session=True)
             p.wait(timeout=MAX_TIME_PER_PROCESS)
         except subprocess.TimeoutExpired:
-            print(f'Timeout for {scene} ({MAX_TIME_PER_PROCESS}s) expired. Killing', file=sys.stderr)
+            ferr.write(f'\nTimeout for {scene} ({MAX_TIME_PER_PROCESS}s) expired. Killing\n')
             os.killpg(os.getpgid(p.pid), signal.SIGKILL)
             p.wait()
 
@@ -63,7 +63,7 @@ def main():
                     run_on_scene,
                     dataset_fs.getsyspath("/"),
                     scene,
-                    retries=2,
+                    # retries=2,
                     pure=False)
                 futures[worker_future] = scene
 
