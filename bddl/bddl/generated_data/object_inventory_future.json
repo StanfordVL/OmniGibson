@@ -1625,8 +1625,6 @@
         "half_hotdog_bun-znjcve": "objects/batch-12",
         "half_hotdog_frank-jvnabz": "objects/batch-12",
         "half_hotdog_frank-stklgn": "objects/batch-12",
-        "half_log-ccnvxc": "objects/batch-12",
-        "half_log-uuuien": "objects/batch-12",
         "half_marshmallow-pdyexe": "objects/batch-12",
         "half_marshmallow-tcsuum": "objects/batch-12",
         "half_taco-jbawkm": "objects/batch-12",
@@ -5584,7 +5582,6 @@
         "crock_pot-xdahvv": "scenes/grocery_store_convenience",
         "display_fridge-oddyhd": "scenes/grocery_store_convenience",
         "display_fridge-wlxyjn": "scenes/grocery_store_convenience",
-        "door-hgcxno": "scenes/grocery_store_convenience",
         "drink_dispenser-midfat": "scenes/grocery_store_convenience",
         "drink_dispenser-zgvhru": "scenes/grocery_store_convenience",
         "espresso_machine-xybbzt": "scenes/grocery_store_convenience",
@@ -5630,6 +5627,7 @@
         "security_camera-bhsikv": "scenes/grocery_store_convenience",
         "shopping_basket-vsxhsv": "scenes/grocery_store_convenience",
         "shopping_cart-kmgltg": "scenes/grocery_store_convenience",
+        "sliding_door-hgcxno": "scenes/grocery_store_convenience",
         "snack_rack-ytrmpz": "scenes/grocery_store_convenience",
         "soft_roll-jelruc": "scenes/grocery_store_convenience",
         "soft_roll-ogaivq": "scenes/grocery_store_convenience",
@@ -6395,7 +6393,6 @@
         "table_knife-nvwmkx": "scenes/house_double_floor_lower",
         "tablefork-osfjvs": "scenes/house_double_floor_lower",
         "teaspoon-wzsvzv": "scenes/house_double_floor_lower",
-        "toilet-essgie": "scenes/house_double_floor_lower",
         "top_cabinet-tynnnw": "scenes/house_double_floor_lower",
         "track_light-ltnnrc": "scenes/house_double_floor_lower",
         "tray-mkdcha": "scenes/house_double_floor_lower",
@@ -6475,7 +6472,7 @@
         "bookcase-opryhp": "scenes/house_double_floor_upper",
         "bookcase-otwukr": "scenes/house_double_floor_upper",
         "bottle_of_water-qaceen": "scenes/house_double_floor_upper",
-        "bottom_cabinet-ncgmqr": "scenes/house_double_floor_upper",
+        "bottom_cabinet_no_top-ncgmqr": "scenes/house_double_floor_upper",
         "cap-amryfj": "scenes/house_double_floor_upper",
         "carpet-vlccww": "scenes/house_double_floor_upper",
         "ceilings-gznlyj": "scenes/house_double_floor_upper",
@@ -6771,27 +6768,13 @@
         "desk-nbpuns": "scenes/house_single_floor",
         "desk-xhjsub": "scenes/house_single_floor",
         "digital_camera-yptdmt": "scenes/house_single_floor",
-        "door-agrzdb": "scenes/house_single_floor",
-        "door-arkmpj": "scenes/house_single_floor",
         "door-crtrpa": "scenes/house_single_floor",
         "door-eduavq": "scenes/house_single_floor",
-        "door-egqeue": "scenes/house_single_floor",
         "door-fnvpyu": "scenes/house_single_floor",
-        "door-hkxqfh": "scenes/house_single_floor",
         "door-iuuykr": "scenes/house_single_floor",
         "door-kwbnhy": "scenes/house_single_floor",
-        "door-lrvyvc": "scenes/house_single_floor",
-        "door-mqlbnj": "scenes/house_single_floor",
-        "door-mtufto": "scenes/house_single_floor",
-        "door-nhcpvf": "scenes/house_single_floor",
-        "door-ryflkw": "scenes/house_single_floor",
         "door-tfdrhh": "scenes/house_single_floor",
         "door-tonlzz": "scenes/house_single_floor",
-        "door-tprpvb": "scenes/house_single_floor",
-        "door-vgjnsq": "scenes/house_single_floor",
-        "door-whqaxp": "scenes/house_single_floor",
-        "door-xqdonc": "scenes/house_single_floor",
-        "door-zlxolj": "scenes/house_single_floor",
         "downlight-fisfbn": "scenes/house_single_floor",
         "downlight-nlhffs": "scenes/house_single_floor",
         "downlight-zojpvs": "scenes/house_single_floor",
@@ -7160,6 +7143,8 @@
         "showerhead-lrfpvk": "scenes/house_single_floor",
         "showerhead-vbijwn": "scenes/house_single_floor",
         "showerhead-vuswbv": "scenes/house_single_floor",
+        "sliding_door-lrvyvc": "scenes/house_single_floor",
+        "sliding_door-tprpvb": "scenes/house_single_floor",
         "soap_dish-ownvqj": "scenes/house_single_floor",
         "soap_dispenser-jmulpc": "scenes/house_single_floor",
         "sofa-bskyog": "scenes/house_single_floor",
@@ -7172,7 +7157,6 @@
         "spatula-kqpoxk": "scenes/house_single_floor",
         "spatula-vnymjm": "scenes/house_single_floor",
         "spatula-yppdij": "scenes/house_single_floor",
-        "spotlight-qhvhzq": "scenes/house_single_floor",
         "statue-hlkcni": "scenes/house_single_floor",
         "statue-krsfzi": "scenes/house_single_floor",
         "statue-lcgvzq": "scenes/house_single_floor",
@@ -7184,7 +7168,6 @@
         "straight_chair-gktknj": "scenes/house_single_floor",
         "straight_chair-jgoolz": "scenes/house_single_floor",
         "straight_chair-rljebp": "scenes/house_single_floor",
-        "structural_element-bmcetq": "scenes/house_single_floor",
         "sunglasses-qiwncl": "scenes/house_single_floor",
         "swimming_pool-vnvmkx": "scenes/house_single_floor",
         "swivel_chair-tbzfgf": "scenes/house_single_floor",
@@ -14051,12 +14034,6 @@
         "half_hotdog_frank-stklgn": [
             "objects/batch-12"
         ],
-        "half_log-ccnvxc": [
-            "objects/batch-12"
-        ],
-        "half_log-uuuien": [
-            "objects/batch-12"
-        ],
         "half_marshmallow-pdyexe": [
             "objects/batch-12"
         ],
@@ -16508,8 +16485,7 @@
             "scenes/Pomaria_1_int",
             "scenes/Wainscott_0_garden",
             "scenes/Wainscott_0_int",
-            "scenes/Wainscott_1_int",
-            "scenes/house_single_floor"
+            "scenes/Wainscott_1_int"
         ],
         "toilet-mzocsn": [
             "objects/legacy_batch-04"
@@ -17321,7 +17297,6 @@
             "objects/legacy_batch-06",
             "scenes/Rs_garden",
             "scenes/Rs_int",
-            "scenes/house_double_floor_lower",
             "scenes/house_single_floor"
         ],
         "microwave-bfbeeb": [
@@ -17334,7 +17309,8 @@
             "scenes/Wainscott_0_int"
         ],
         "microwave-hjjxmi": [
-            "objects/legacy_batch-06"
+            "objects/legacy_batch-06",
+            "scenes/house_double_floor_lower"
         ],
         "microwave-rtfebu": [
             "objects/legacy_batch-06"
@@ -27137,9 +27113,6 @@
         "display_fridge-wlxyjn": [
             "scenes/grocery_store_convenience"
         ],
-        "door-hgcxno": [
-            "scenes/grocery_store_convenience"
-        ],
         "drink_dispenser-midfat": [
             "scenes/grocery_store_convenience"
         ],
@@ -27270,6 +27243,9 @@
             "scenes/grocery_store_convenience"
         ],
         "shopping_basket-vsxhsv": [
+            "scenes/grocery_store_convenience"
+        ],
+        "sliding_door-hgcxno": [
             "scenes/grocery_store_convenience"
         ],
         "snack_rack-ytrmpz": [
@@ -29578,8 +29554,11 @@
         "teaspoon-wzsvzv": [
             "scenes/house_double_floor_lower"
         ],
-        "toilet-essgie": [
-            "scenes/house_double_floor_lower"
+        "toilet-udiezm": [
+            "scenes/house_double_floor_lower",
+            "scenes/house_double_floor_upper",
+            "scenes/house_single_floor",
+            "scenes/public_restroom_brown"
         ],
         "top_cabinet-tynnnw": [
             "scenes/house_double_floor_lower"
@@ -29818,7 +29797,7 @@
         "bottle_of_water-qaceen": [
             "scenes/house_double_floor_upper"
         ],
-        "bottom_cabinet-ncgmqr": [
+        "bottom_cabinet_no_top-ncgmqr": [
             "scenes/house_double_floor_upper"
         ],
         "cap-amryfj": [
@@ -30392,10 +30371,6 @@
         "teacup-kccqwj": [
             "scenes/house_double_floor_upper"
         ],
-        "toilet-udiezm": [
-            "scenes/house_double_floor_upper",
-            "scenes/public_restroom_brown"
-        ],
         "towel_rack-qedffr": [
             "scenes/house_double_floor_upper"
         ],
@@ -30551,10 +30526,6 @@
         ],
         "bottom_cabinet-fancyy": [
             "scenes/house_single_floor"
-        ],
-        "bottom_cabinet-qbdweu": [
-            "scenes/house_single_floor",
-            "scenes/school_biology"
         ],
         "bottom_cabinet_no_top-gjeoer": [
             "scenes/house_single_floor"
@@ -30715,25 +30686,13 @@
         "digital_camera-yptdmt": [
             "scenes/house_single_floor"
         ],
-        "door-agrzdb": [
-            "scenes/house_single_floor"
-        ],
-        "door-arkmpj": [
-            "scenes/house_single_floor"
-        ],
         "door-crtrpa": [
             "scenes/house_single_floor"
         ],
         "door-eduavq": [
             "scenes/house_single_floor"
         ],
-        "door-egqeue": [
-            "scenes/house_single_floor"
-        ],
         "door-fnvpyu": [
-            "scenes/house_single_floor"
-        ],
-        "door-hkxqfh": [
             "scenes/house_single_floor"
         ],
         "door-iuuykr": [
@@ -30742,40 +30701,10 @@
         "door-kwbnhy": [
             "scenes/house_single_floor"
         ],
-        "door-lrvyvc": [
-            "scenes/house_single_floor"
-        ],
-        "door-mqlbnj": [
-            "scenes/house_single_floor"
-        ],
-        "door-mtufto": [
-            "scenes/house_single_floor"
-        ],
-        "door-nhcpvf": [
-            "scenes/house_single_floor"
-        ],
-        "door-ryflkw": [
-            "scenes/house_single_floor"
-        ],
         "door-tfdrhh": [
             "scenes/house_single_floor"
         ],
         "door-tonlzz": [
-            "scenes/house_single_floor"
-        ],
-        "door-tprpvb": [
-            "scenes/house_single_floor"
-        ],
-        "door-vgjnsq": [
-            "scenes/house_single_floor"
-        ],
-        "door-whqaxp": [
-            "scenes/house_single_floor"
-        ],
-        "door-xqdonc": [
-            "scenes/house_single_floor"
-        ],
-        "door-zlxolj": [
             "scenes/house_single_floor"
         ],
         "downlight-nlhffs": [
@@ -31876,6 +31805,12 @@
         "showerhead-vuswbv": [
             "scenes/house_single_floor"
         ],
+        "sliding_door-lrvyvc": [
+            "scenes/house_single_floor"
+        ],
+        "sliding_door-tprpvb": [
+            "scenes/house_single_floor"
+        ],
         "soap_dish-ownvqj": [
             "scenes/house_single_floor"
         ],
@@ -31912,9 +31847,6 @@
         "spatula-yppdij": [
             "scenes/house_single_floor"
         ],
-        "spotlight-qhvhzq": [
-            "scenes/house_single_floor"
-        ],
         "statue-hlkcni": [
             "scenes/house_single_floor"
         ],
@@ -31946,9 +31878,6 @@
             "scenes/house_single_floor"
         ],
         "straight_chair-rljebp": [
-            "scenes/house_single_floor"
-        ],
-        "structural_element-bmcetq": [
             "scenes/house_single_floor"
         ],
         "sunglasses-qiwncl": [
@@ -36630,6 +36559,9 @@
             "scenes/school_biology"
         ],
         "bottom_cabinet-kctcuj": [
+            "scenes/school_biology"
+        ],
+        "bottom_cabinet-qbdweu": [
             "scenes/school_biology"
         ],
         "carton-hhlmbi": [
@@ -43038,12 +42970,6 @@
         "half_hotdog_frank-stklgn": [
             "collision"
         ],
-        "half_log-ccnvxc": [
-            "collision"
-        ],
-        "half_log-uuuien": [
-            "collision"
-        ],
         "half_marshmallow-pdyexe": [
             "collision"
         ],
@@ -43115,8 +43041,7 @@
             "collision"
         ],
         "log-tujlga": [
-            "collision",
-            "subpart"
+            "collision"
         ],
         "log-ubcyhk": [
             "collision"
@@ -56686,10 +56611,6 @@
             "fillable",
             "joint"
         ],
-        "door-hgcxno": [
-            "collision",
-            "joint"
-        ],
         "drink_dispenser-midfat": [
             "collision",
             "particleapplier",
@@ -56859,6 +56780,10 @@
         "shopping_cart-kmgltg": [
             "collision",
             "fillable"
+        ],
+        "sliding_door-hgcxno": [
+            "collision",
+            "joint"
         ],
         "snack_rack-ytrmpz": [
             "collision"
@@ -59394,7 +59319,7 @@
         "teaspoon-wzsvzv": [
             "collision"
         ],
-        "toilet-essgie": [
+        "toilet-udiezm": [
             "collision",
             "fluidsink",
             "joint"
@@ -59673,7 +59598,7 @@
             "collision",
             "connectedpart"
         ],
-        "bottom_cabinet-ncgmqr": [
+        "bottom_cabinet_no_top-ncgmqr": [
             "collision",
             "fillable",
             "joint"
@@ -60293,11 +60218,6 @@
             "collision",
             "fillable"
         ],
-        "toilet-udiezm": [
-            "collision",
-            "fluidsink",
-            "joint"
-        ],
         "towel_rack-qedffr": [
             "collision"
         ],
@@ -60468,11 +60388,6 @@
             "connectedpart"
         ],
         "bottom_cabinet-fancyy": [
-            "collision",
-            "fillable",
-            "joint"
-        ],
-        "bottom_cabinet-qbdweu": [
             "collision",
             "fillable",
             "joint"
@@ -60651,14 +60566,6 @@
             "collision",
             "togglebutton"
         ],
-        "door-agrzdb": [
-            "collision",
-            "joint"
-        ],
-        "door-arkmpj": [
-            "collision",
-            "joint"
-        ],
         "door-crtrpa": [
             "collision",
             "joint"
@@ -60667,15 +60574,7 @@
             "collision",
             "joint"
         ],
-        "door-egqeue": [
-            "collision",
-            "joint"
-        ],
         "door-fnvpyu": [
-            "collision",
-            "joint"
-        ],
-        "door-hkxqfh": [
             "collision",
             "joint"
         ],
@@ -60687,51 +60586,11 @@
             "collision",
             "joint"
         ],
-        "door-lrvyvc": [
-            "collision",
-            "joint"
-        ],
-        "door-mqlbnj": [
-            "collision",
-            "joint"
-        ],
-        "door-mtufto": [
-            "collision",
-            "joint"
-        ],
-        "door-nhcpvf": [
-            "collision",
-            "joint"
-        ],
-        "door-ryflkw": [
-            "collision",
-            "joint"
-        ],
         "door-tfdrhh": [
             "collision",
             "joint"
         ],
         "door-tonlzz": [
-            "collision",
-            "joint"
-        ],
-        "door-tprpvb": [
-            "collision",
-            "joint"
-        ],
-        "door-vgjnsq": [
-            "collision",
-            "joint"
-        ],
-        "door-whqaxp": [
-            "collision",
-            "joint"
-        ],
-        "door-xqdonc": [
-            "collision",
-            "joint"
-        ],
-        "door-zlxolj": [
             "collision",
             "joint"
         ],
@@ -61911,6 +61770,14 @@
             "fluidsource",
             "togglebutton"
         ],
+        "sliding_door-lrvyvc": [
+            "collision",
+            "joint"
+        ],
+        "sliding_door-tprpvb": [
+            "collision",
+            "joint"
+        ],
         "soap_dish-ownvqj": [
             "collision"
         ],
@@ -61949,10 +61816,6 @@
         "spatula-yppdij": [
             "collision"
         ],
-        "spotlight-qhvhzq": [
-            "collision",
-            "togglebutton"
-        ],
         "statue-hlkcni": [
             "collision"
         ],
@@ -61984,9 +61847,6 @@
             "collision"
         ],
         "straight_chair-rljebp": [
-            "collision"
-        ],
-        "structural_element-bmcetq": [
             "collision"
         ],
         "sunglasses-qiwncl": [
@@ -67043,6 +66903,11 @@
             "openfillable"
         ],
         "bottom_cabinet-kctcuj": [
+            "collision",
+            "fillable",
+            "joint"
+        ],
+        "bottom_cabinet-qbdweu": [
             "collision",
             "fillable",
             "joint"
@@ -77843,16 +77708,6 @@
             0.07948628234863281,
             0.029031296730041505
         ],
-        "ccnvxc": [
-            0.09888607788085937,
-            0.09551643753051758,
-            0.2789290008544922
-        ],
-        "uuuien": [
-            0.09261732482910157,
-            0.09778701019287109,
-            0.22439901733398437
-        ],
         "pdyexe": [
             0.0613474006652832,
             0.062439895629882815,
@@ -78299,14 +78154,14 @@
             0.004422291994094849
         ],
         "bbieuz": [
-            0.1494784698486328,
-            0.14861366271972656,
-            0.22603218078613282
+            0.445804931640625,
+            0.1504190139770508,
+            0.07622528839111328
         ],
         "rvtvqc": [
-            0.14968885803222656,
-            0.1485303192138672,
-            0.22394955444335937
+            0.44283111572265627,
+            0.14970323181152342,
+            0.0761513786315918
         ],
         "gbrakc": [
             0.15984500885009767,
@@ -82069,7 +81924,7 @@
             1.0297031555175782
         ],
         "abzvij": [
-            0.41354653930664065,
+            0.4223656311035156,
             0.4975291290283203,
             0.3037397918701172
         ],
@@ -82079,7 +81934,7 @@
             0.2961483612060547
         ],
         "hjjxmi": [
-            0.33322926330566405,
+            0.3434343566894531,
             0.5168904113769531,
             0.26394378662109375
         ],
@@ -97638,11 +97493,6 @@
             0.35560064697265625,
             0.9903825073242187
         ],
-        "hgcxno": [
-            0.3551938934326172,
-            4.474398193359375,
-            2.596258544921875
-        ],
         "midfat": [
             0.40814656066894534,
             0.25375382232666016,
@@ -97867,6 +97717,11 @@
             0.7750234069824219,
             0.5573154907226563,
             0.8356847534179688
+        ],
+        "hgcxno": [
+            0.3551938934326172,
+            4.474398193359375,
+            2.596258544921875
         ],
         "ytrmpz": [
             0.2302075424194336,
@@ -101206,7 +101061,7 @@
         "prdjyt": [
             2.906970458984375,
             5.666039306640625,
-            2.6394461669921876
+            2.6295255126953125
         ],
         "cottya": [
             0.7350795593261719,
@@ -101234,7 +101089,7 @@
             0.06327257537841798
         ],
         "daxzaw": [
-            0.5885345458984375,
+            0.575989990234375,
             1.705444580078125,
             2.37288037109375
         ],
@@ -101693,14 +101548,9 @@
             0.022183684349060057,
             0.007798393249511718
         ],
-        "essgie": [
-            0.5399806518554687,
-            0.36888670349121094,
-            0.3791549377441406
-        ],
         "tynnnw": [
-            0.38731338500976564,
-            2.4093201904296877,
+            0.38731370544433597,
+            2.409320068359375,
             0.88348681640625
         ],
         "ltnnrc": [
@@ -101816,7 +101666,7 @@
         "chmqjn": [
             0.887958984375,
             0.194107421875,
-            0.36673388671875
+            0.646241455078125
         ],
         "cvdpaq": [
             4.990809814453125,
@@ -101841,7 +101691,7 @@
         "epketb": [
             0.89800634765625,
             0.18571484375,
-            0.36673388671875
+            0.646241455078125
         ],
         "fwsbwf": [
             0.2765634765625,
@@ -101909,7 +101759,7 @@
             0.36673388671875
         ],
         "mwlvfb": [
-            1.5402900390625,
+            1.5667520141601563,
             0.23486181640625,
             0.36673388671875
         ],
@@ -101934,7 +101784,7 @@
             0.36673388671875
         ],
         "pmygxs": [
-            1.0210625,
+            0.9946005249023437,
             0.2348447265625,
             2.69688623046875
         ],
@@ -101954,7 +101804,7 @@
             0.36673388671875
         ],
         "umqqmh": [
-            0.4252109375,
+            0.3941630859375,
             0.221023681640625,
             2.69688623046875
         ],
@@ -101974,7 +101824,7 @@
             2.69688623046875
         ],
         "xsubff": [
-            1.5716337890625,
+            1.602681640625,
             0.2040927734375,
             0.36673388671875
         ],
@@ -101995,7 +101845,7 @@
         ],
         "ziomqg": [
             0.6792963256835938,
-            0.620516845703125,
+            0.6205168762207032,
             0.9426333618164062
         ],
         "trwyaq": [
@@ -102034,9 +101884,9 @@
             0.8579322509765624
         ],
         "tjfzsb": [
-            2.1420736083984373,
-            3.01519091796875,
-            0.8005407409667968
+            2.1420740966796874,
+            1.6349036865234374,
+            0.8005404968261719
         ],
         "nigfha": [
             0.07544153594970703,
@@ -102049,7 +101899,7 @@
             0.10896342468261719
         ],
         "uwbyty": [
-            1.5490098876953124,
+            1.549009765625,
             0.8821611633300781,
             0.29505157470703125
         ],
@@ -102095,8 +101945,8 @@
         ],
         "ncgmqr": [
             0.6237394104003906,
-            0.799904296875,
-            0.7151506652832031
+            0.41669439697265626,
+            0.6957286682128906
         ],
         "amryfj": [
             0.028498236656188964,
@@ -102149,8 +101999,8 @@
             0.7282194519042968
         ],
         "uqcmzf": [
-            0.8001467590332031,
-            1.6000186767578124,
+            1.6046596069335937,
+            1.60005615234375,
             0.7151491394042969
         ],
         "yidrel": [
@@ -102845,7 +102695,7 @@
         ],
         "ilcleb": [
             0.33902490234375,
-            0.4813909912109375,
+            0.4813909301757813,
             0.16416015625
         ],
         "kqjtnx": [
@@ -102856,7 +102706,7 @@
         "odbass": [
             0.6276156921386719,
             0.8770078125,
-            0.18663169860839843
+            0.18663177490234376
         ],
         "poyzyt": [
             0.4317982177734375,
@@ -103044,9 +102894,9 @@
             0.04744175338745117
         ],
         "udiezm": [
-            0.5611656799316406,
+            0.5399797668457031,
             0.3688867645263672,
-            0.816969482421875
+            0.8177396240234375
         ],
         "qedffr": [
             0.13997866821289062,
@@ -103304,8 +103154,8 @@
             0.18467591857910157
         ],
         "fancyy": [
-            0.6126045227050781,
-            1.2317955322265626,
+            0.6504591979980469,
+            1.2317945556640626,
             1.9723458862304688
         ],
         "gjeoer": [
@@ -103573,16 +103423,6 @@
             0.13711186599731445,
             0.09417926025390624
         ],
-        "agrzdb": [
-            0.03190838623046875,
-            1.864010009765625,
-            2.3435977783203126
-        ],
-        "arkmpj": [
-            0.039309764862060545,
-            1.9126534423828125,
-            2.3444097900390624
-        ],
         "crtrpa": [
             0.1459912109375,
             0.9289619140625,
@@ -103593,20 +103433,10 @@
             1.053978515625,
             2.329566650390625
         ],
-        "egqeue": [
-            0.033089054107666015,
-            1.380110107421875,
-            2.3437059326171874
-        ],
         "fnvpyu": [
             0.145357421875,
             1.1625185546875,
             2.719161865234375
-        ],
-        "hkxqfh": [
-            0.04059465599060059,
-            1.3300088500976563,
-            2.3435946044921874
         ],
         "iuuykr": [
             0.10465980911254882,
@@ -103618,65 +103448,15 @@
             0.694943603515625,
             2.6547362060546873
         ],
-        "lrvyvc": [
-            0.25662261962890626,
-            4.17799560546875,
-            2.722150634765625
-        ],
-        "mqlbnj": [
-            0.03271174621582031,
-            1.269650177001953,
-            2.3457955322265627
-        ],
-        "mtufto": [
-            0.03190738868713379,
-            1.0792673950195313,
-            2.3430498046875
-        ],
-        "nhcpvf": [
-            0.03279396629333496,
-            1.9336214599609376,
-            2.3464482421875
-        ],
-        "ryflkw": [
-            0.031908461570739746,
-            1.11148681640625,
-            2.3435615234375
-        ],
         "tfdrhh": [
             0.22697467041015626,
             1.100284912109375,
-            2.4231494140625
+            2.39361279296875
         ],
         "tonlzz": [
             0.14568212890625,
             1.01675341796875,
             2.738624267578125
-        ],
-        "tprpvb": [
-            0.1966491470336914,
-            1.7616463623046874,
-            2.3437587890625
-        ],
-        "vgjnsq": [
-            0.03190931701660156,
-            1.1443091430664063,
-            2.3435831298828127
-        ],
-        "whqaxp": [
-            0.04387602615356445,
-            1.2694713134765625,
-            2.34366064453125
-        ],
-        "xqdonc": [
-            0.031907386779785156,
-            1.2704983520507813,
-            2.35751171875
-        ],
-        "zlxolj": [
-            0.032486230850219726,
-            1.1030025024414063,
-            2.3436109619140626
         ],
         "fisfbn": [
             0.25469198608398436,
@@ -105375,7 +105155,7 @@
         ],
         "amxayl": [
             17.392138671875,
-            19.4755322265625,
+            19.475533203125,
             0.386233154296875
         ],
         "jqqtaq": [
@@ -105518,6 +105298,16 @@
             0.25325331115722655,
             1.9572066040039062
         ],
+        "lrvyvc": [
+            0.2566225128173828,
+            4.177995727539063,
+            2.722150634765625
+        ],
+        "tprpvb": [
+            0.04686530113220215,
+            1.679872314453125,
+            2.3442738037109376
+        ],
         "ownvqj": [
             0.18060867309570314,
             0.13431663513183595,
@@ -105578,11 +105368,6 @@
             0.08304475784301758,
             0.0116033296585083
         ],
-        "qhvhzq": [
-            0.1218691864013672,
-            0.28611256408691405,
-            0.10060916900634766
-        ],
         "hlkcni": [
             0.11772439193725585,
             0.2306609649658203,
@@ -105637,11 +105422,6 @@
             0.29248007202148435,
             0.3556640014648437,
             0.3733093872070313
-        ],
-        "bmcetq": [
-            0.218568603515625,
-            2.7350384521484377,
-            0.05248301696777344
         ],
         "qiwncl": [
             0.12297414016723633,
@@ -105704,7 +105484,7 @@
             0.006875753879547119
         ],
         "lkxmne": [
-            0.361840576171875,
+            0.3532421875,
             1.1319547119140625,
             0.6003809814453125
         ],
@@ -106099,7 +105879,7 @@
             0.75422412109375
         ],
         "gupuvk": [
-            1.48417578125,
+            1.069744140625,
             0.135458984375,
             0.754052734375
         ],
@@ -106364,7 +106144,7 @@
             0.45522216796875
         ],
         "qsvtbs": [
-            1.866623046875,
+            2.2810546875,
             0.2893671875,
             3.05406640625
         ],
