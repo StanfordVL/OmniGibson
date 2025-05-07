@@ -112,6 +112,7 @@ class OGRobotServer:
         self._joint_state = None
         self._joint_cmd = None
         self._waiting_to_resume = True
+        self._should_update_checkpoint = False
 
         # Recording configuration
         self._recording_path = recording_path
@@ -477,6 +478,14 @@ class OGRobotServer:
                 # Generate action and deploy
                 action = self.get_action()
                 _, _, _, _, info = self.env.step(action)
+                
+                # Update checkpoint if queued
+                if self._should_update_checkpoint:
+                    self.env.update_checkpoint()
+                    print("Auto recorded checkpoint due to goal status change!")
+                    if self.event_queue:
+                        utils.add_status_event(self.event_queue, "checkpoint", "Checkpoint Recorded due to goal status change")
+                    self._should_update_checkpoint = False
 
                 # Update visualizations and status
                 self._update_visualization_and_status(info)
@@ -579,7 +588,7 @@ class OGRobotServer:
         """Update visualization and status based on new information"""
         # Update task goal status if task is active
         if self.task_name is not None and 'done' in info:
-            self._prev_goal_status = utils.update_goal_status(
+            current_goal_status = utils.update_goal_status(
                 self.text_labels,
                 info['done']['goal_status'],
                 self._prev_goal_status,
@@ -587,6 +596,13 @@ class OGRobotServer:
                 self._recording_path,
                 self.event_queue
             )
+            
+            # Update checkpoint if new goals are satisfied
+            if AUTO_CHECKPOINTING and len(current_goal_status['satisfied']) > len(self._prev_goal_status['satisfied']):
+                if self._recording_path is not None:
+                    self._should_update_checkpoint = True
+            
+            self._prev_goal_status = current_goal_status
         
         # Update other visualization elements
         self._prev_in_hand_status = utils.update_in_hand_status(
@@ -716,6 +732,7 @@ class OGRobotServer:
         self._joint_cmd = {
             f"{arm}_arm": self._joint_state[self.robot.arm_control_idx[arm]] for arm in self.robot.arm_names
         }
+        self._should_update_checkpoint = False
         if isinstance(self.robot, (R1, R1Pro)):
             for arm in self.robot.arm_names:
                 self._joint_cmd[f"{arm}_gripper"] = th.ones(len(self.robot.gripper_action_idx[arm]))
@@ -739,6 +756,9 @@ class OGRobotServer:
         self._zmq_server_thread.join()
         
         if self._recording_path is not None:
+            # Sanity check if we are in the middle of an episode; always flush the current trajectory
+            if len(self.env.current_traj_history) > 0:
+                self.env.flush_current_traj()
             self.env.save_data()
         
         if VIEWING_MODE == ViewingMode.VR:

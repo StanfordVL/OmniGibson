@@ -932,14 +932,6 @@ def update_goal_status(text_labels, goal_status, prev_goal_status, env, recordin
                 current_style = text_labels[idx].style
                 current_style.update({"color": UI_SETTINGS["goal_unsatisfied_color"]})  # Red (ABGR)
                 text_labels[idx].set_style(current_style)
-        
-        # Update checkpoint if new goals are satisfied
-        if AUTO_CHECKPOINTING and len(goal_status['satisfied']) > len(prev_goal_status['satisfied']):
-            if recording_path is not None:
-                env.update_checkpoint()
-                print("Auto recorded checkpoint due to goal status change!")
-                if event_queue:
-                    add_status_event(event_queue, "checkpoint", "Checkpoint Recorded due to goal status change")
 
         # Return the updated status
         return goal_status.copy()
