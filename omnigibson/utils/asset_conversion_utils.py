@@ -61,6 +61,7 @@ _SPLIT_COLLISION_MESHES = False
 
 _META_LINK_RENAME_MAPPING = {
     "fillable": "container",
+    "openfillable": "container",
     "fluidsink": "particlesink",
     "fluidsource": "particlesource",
 }
