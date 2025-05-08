@@ -44,6 +44,15 @@ def main():
                     assert mass is not None and mass > 0, f"Invalid mass for category {category}"
                     density = mass / volume if mass and volume else None
 
+                    # The density needs to be temporarily capped at 10000 kg/m^3 - values above that
+                    # are likely due to errors in the mass annotation (LLM based) or in the volume
+                    # obtained from the collision mesh (infinitesimal dimension).
+                    if density and density > 10000:
+                        print(
+                            f"Warning: Density for category {category} is {density} kg/m^3, capping to 10000 kg/m^3"
+                        )
+                        density = 10000
+
                     avg_category_specs[category] = {
                         "mass": mass,
                         "volume": volume,

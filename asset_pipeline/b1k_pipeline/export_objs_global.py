@@ -856,7 +856,7 @@ def process_object(root_node, target, relevant_nodes, requried_meta_types, outpu
             json.dump(out_metadata, f, cls=NumpyEncoder)
 
 
-def process_target(target, objects_path, object_taxonomy, dask_client):
+def process_target(target, objects_path, object_taxonomy, model_whitelist, dask_client):
     object_futures = {}
 
     # Build the mesh tree using our mesh tree library. The scene code also uses this system.
@@ -869,7 +869,7 @@ def process_target(target, objects_path, object_taxonomy, dask_client):
     saveable_roots = [
         root_node
         for root_node in roots
-        if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"]
+        if int(root_node[2]) == 0 and not G.nodes[root_node]["is_broken"] and (not model_whitelist or root_node[1] in model_whitelist)
     ]
     for root_node in saveable_roots:
         # Start processing the object. We start by creating an object-specific
@@ -903,6 +903,39 @@ def process_target(target, objects_path, object_taxonomy, dask_client):
 
 def main():
     object_taxonomy = ObjectTaxonomy()
+
+    # If this variable is set, we will only export the models in this list. This is useful for quickly
+    # iterating on scenes (usdify otherwise takes 8+ hours). If this list is empty, we will export all models.
+    SCENES_TO_INCLUDE_MODELS_FOR = ["house_single_floor", "house_double_floor_lower", "house_double_floor_upper"]
+
+    # Start with a whitelist of some hardcoded objects
+    model_whitelist = {"tujlga", "pepele", "rvtvqc", "bbieuz", "hjjxmi"}
+    pipeline_fs = b1k_pipeline.utils.PipelineFS()
+    for scene in SCENES_TO_INCLUDE_MODELS_FOR:
+        target_output_fs = pipeline_fs.target_output(f"scenes/{scene}")
+
+        # Load the object list for the file
+        with target_output_fs.open("object_list.json", "r") as f:
+            object_list = json.load(f)
+
+        # Get the needed object models
+        needed_objects = {x.split("-")[-1] for x in object_list["needed_objects"]}
+
+        # Remove the ones that only show up as clutter
+        found_as_non_clutter = set()
+        for name in object_list["meshes"]:
+            pn = b1k_pipeline.utils.parse_name(name)
+            if not pn:
+                continue
+            model_id = pn.group("model_id")
+            is_clutter = pn.group("loose") == "C-"
+            if not is_clutter:
+                found_as_non_clutter.add(model_id)
+        needed_objects = needed_objects & found_as_non_clutter
+
+        # Add the needed models to the whitelist
+        model_whitelist.update(needed_objects)
+
     with b1k_pipeline.utils.ParallelZipFS("objects.zip", write=True) as archive_fs:
         objects_dir = archive_fs.makedir("objects").getsyspath("/")
         # Load the mesh list from the object list json.
@@ -916,7 +949,7 @@ def main():
         obj_futures = {}
 
         for target in tqdm.tqdm(targets, desc="Processing targets to queue objects"):
-            obj_futures.update(process_target(target, objects_dir, object_taxonomy, dask_client))
+            obj_futures.update(process_target(target, objects_dir, object_taxonomy, model_whitelist, dask_client))
 
         for future in tqdm.tqdm(as_completed(obj_futures.keys()), total=len(obj_futures), desc="Processing objects"):
             try:
@@ -927,7 +960,6 @@ def main():
 
         print("Finished processing")
 
-    pipeline_fs = b1k_pipeline.utils.PipelineFS()
     with pipeline_fs.pipeline_output().open("export_objs.json", "w") as f:
         json.dump({"success": not errors, "errors": errors}, f)
 

@@ -23,6 +23,7 @@ IN_FILENAME_AGGREGATE = os.path.join(os.path.dirname(os.path.dirname(__file__)),
 PARALLELS_DIR = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "parallels")
 OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset.zip")
 DEMO_OUT_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "artifacts", "og_dataset_demo.zip")
+VERSION_FILENAME = os.path.join(os.path.dirname(os.path.dirname(__file__)), "VERSION")
 PARALLELS = [
     "objects.zip",
     "objects_usd.zip",
@@ -46,7 +47,7 @@ def main():
         # Copy all the files to the output zip filesystem.
         print("Copying files")
         total_files = sum(1 for f in multi_fs.walk.files())
-        with fs.zipfs.ZipFS(OUT_FILENAME, write=True) as out_fs:
+        with b1k_pipeline.utils.WriteOnly7ZipFS(OUT_FILENAME) as out_fs:
             with tqdm.tqdm(total=total_files) as pbar:
                 fs.copy.copy_fs(multi_fs, out_fs, on_copy=lambda *args: pbar.update(1))
 
@@ -82,28 +83,31 @@ def main():
             for urdf_dir in urdf_dirs:
                 out_fs.removetree(urdf_dir)
 
+            # Add the VERSION file
+            out_fs.writetext("VERSION", pathlib.Path(VERSION_FILENAME).read_text())
+
             # Now create the demo zip
-            with fs.zipfs.ZipFS(DEMO_OUT_FILENAME, write=True) as demo_out_fs:
-                # Copy over the metadata directory
-                fs.copy.copy_fs(out_fs.opendir("metadata"), demo_out_fs.makedirs("metadata"))
+            # with fs.zipfs.ZipFS(DEMO_OUT_FILENAME, write=True) as demo_out_fs:
+            #     # Copy over the metadata directory
+            #     fs.copy.copy_fs(out_fs.opendir("metadata"), demo_out_fs.makedirs("metadata"))
 
-                # Copy over the Rs_int scene directory
-                fs.copy.copy_fs(out_fs.opendir("scenes/Rs_int"), demo_out_fs.makedirs("scenes/Rs_int"))
+            #     # Copy over the Rs_int scene directory
+            #     fs.copy.copy_fs(out_fs.opendir("scenes/Rs_int"), demo_out_fs.makedirs("scenes/Rs_int"))
 
-                # Copy over the water system directory
-                fs.copy.copy_fs(out_fs.opendir("systems/water"), demo_out_fs.makedirs("systems/water"))
+            #     # Copy over the water system directory
+            #     fs.copy.copy_fs(out_fs.opendir("systems/water"), demo_out_fs.makedirs("systems/water"))
 
-                # Copy over the object directories of ALL objects that are needed for Rs_int
-                rs_int_object_list = json.loads(b1k_pipeline.utils.PipelineFS().target_output("scenes/Rs_int").readtext("object_list.json"))
-                rs_int_needed_objects = {obj.split("-")[1] for obj in rs_int_object_list["needed_objects"]}
-                objects_dir = out_fs.opendir("objects")
-                for cat in objects_dir.listdir("/"):
-                    cat_dir = objects_dir.opendir(cat)
-                    for mdl in cat_dir.listdir("/"):
-                        mdl_dir = cat_dir.opendir(mdl)
+            #     # Copy over the object directories of ALL objects that are needed for Rs_int
+            #     rs_int_object_list = json.loads(b1k_pipeline.utils.PipelineFS().target_output("scenes/Rs_int").readtext("object_list.json"))
+            #     rs_int_needed_objects = {obj.split("-")[1] for obj in rs_int_object_list["needed_objects"]}
+            #     objects_dir = out_fs.opendir("objects")
+            #     for cat in objects_dir.listdir("/"):
+            #         cat_dir = objects_dir.opendir(cat)
+            #         for mdl in cat_dir.listdir("/"):
+            #             mdl_dir = cat_dir.opendir(mdl)
 
-                        if mdl in rs_int_needed_objects:
-                            fs.copy.copy_fs(mdl_dir, demo_out_fs.makedirs(f"objects/{cat}/{mdl}", recreate=True))
+            #             if mdl in rs_int_needed_objects:
+            #                 fs.copy.copy_fs(mdl_dir, demo_out_fs.makedirs(f"objects/{cat}/{mdl}", recreate=True))
 
     except Exception as e:
         success = False

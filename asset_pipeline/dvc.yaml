@@ -1289,10 +1289,10 @@ stages:
     - artifacts/parallels/objects_usd.zip
     - artifacts/parallels/scenes_json.zip
     - artifacts/parallels/systems.zip
+    - VERSION
     - b1k_pipeline/pack_dataset.py
     outs:
     - artifacts/og_dataset.zip
-    - artifacts/og_dataset_demo.zip
     - artifacts/pipeline/pack_dataset.json
     - artifacts/pipeline/pack_dataset.success
   patch_sampled:

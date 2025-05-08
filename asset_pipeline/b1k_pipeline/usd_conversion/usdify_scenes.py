@@ -13,7 +13,7 @@ import tqdm
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR, launch_cluster
 
 WORKER_COUNT = 2
-MAX_TIME_PER_PROCESS = 20 * 60  # 20 minutes
+MAX_TIME_PER_PROCESS = 30 * 60  # 20 minutes
 
 def run_on_scene(dataset_path, scene):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_scenes_process", dataset_path, scene]
@@ -23,7 +23,7 @@ def run_on_scene(dataset_path, scene):
             p = subprocess.Popen(cmd, stdout=f, stderr=ferr, cwd="/scr/ig_pipeline", start_new_session=True)
             p.wait(timeout=MAX_TIME_PER_PROCESS)
         except subprocess.TimeoutExpired:
-            print(f'Timeout for {scene} ({MAX_TIME_PER_PROCESS}s) expired. Killing', file=sys.stderr)
+            ferr.write(f'\nTimeout for {scene} ({MAX_TIME_PER_PROCESS}s) expired. Killing\n')
             os.killpg(os.getpgid(p.pid), signal.SIGKILL)
             p.wait()
 
@@ -63,18 +63,18 @@ def main():
                     run_on_scene,
                     dataset_fs.getsyspath("/"),
                     scene,
-                    retries=2,
+                    # retries=2,
                     pure=False)
                 futures[worker_future] = scene
 
             # Wait for all the workers to finish
             print("Queued all scenes. Waiting for them to finish...")
-            logs = {}
+            errors = {}
             for future in tqdm.tqdm(as_completed(futures.keys()), total=len(futures)):
                 try:
                     future.result()
                 except Exception as e:
-                    print("Error in worker")
+                    errors[futures[future]] = str(e)
 
             # Move the USDs to the output FS
             print("Copying scene JSONs to output FS...")
@@ -87,11 +87,13 @@ def main():
             print("Done processing. Archiving things now.")
 
         # Save the logs
+        success = len(errors) == 0
         with pipeline_fs.pipeline_output().open("usdify_scenes.json", "w") as f:
-            json.dump(logs, f)
+            json.dump({"success": success, "errors": errors}, f)
 
         # At this point, out_temp_fs's contents will be zipped. Save the success file.
-        pipeline_fs.pipeline_output().touch("usdify_scenes.success")
+        if success:
+            pipeline_fs.pipeline_output().touch("usdify_scenes.success")
 
 if __name__ == "__main__":
     main()
