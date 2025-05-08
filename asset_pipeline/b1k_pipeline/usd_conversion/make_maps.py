@@ -37,16 +37,6 @@ MAP_GENERATION_PASSES = [
 ]
 
 
-def world_to_map(xy, trav_map_resolution, trav_map_size):
-    """
-    Transforms a 2D point in world (simulator) reference frame into map reference frame
-
-    :param xy: 2D location in world reference frame (metric)
-    :return: 2D location in map reference frame (image)
-    """
-    return np.flip((np.array(xy) / trav_map_resolution + trav_map_size / 2.0)).round().astype(int)
-
-
 def map_to_world(xy, trav_map_resolution, trav_map_size):
     """
     Transforms a 2D point in map reference frame into world (simulator) reference frame
@@ -90,15 +80,24 @@ def generate_maps_for_current_scene(scene_id):
     dist_from_center = np.max(aabb_dist_from_zero)
     map_size_in_meters = dist_from_center * 2
     map_size_in_pixels = map_size_in_meters / RESOLUTION
-    map_size_in_pixels = int(np.ceil(map_size_in_pixels / 2) * 2)  # Round to nearest multiple of 2
+    map_size_in_pixels = int(np.ceil(map_size_in_pixels / 2) * 2) + 2  # Round to nearest multiple of 2
 
     # Get the bounds of the part of the map that we will actually cast rays for (e.g. the occupied section)
-    x_min, y_min = world_to_map(combined_aabb[0][:2], RESOLUTION, map_size_in_pixels)
-    x_max, y_max = world_to_map(combined_aabb[1][:2], RESOLUTION, map_size_in_pixels)
+    world_to_map_float = lambda xy: np.flip((np.array(xy) / RESOLUTION + map_size_in_pixels / 2.0))
+
+    xy_min = world_to_map_float(combined_aabb[0][:2])
+    xy_max = world_to_map_float(combined_aabb[1][:2])
+
+    x_min, y_min = np.floor(xy_min).astype(int)
+    x_max, y_max = np.ceil(xy_max).astype(int)
+
+    # Assert that all the dimensions are within the map
+    assert x_min >= 0 and x_max < map_size_in_pixels, f"Map x bounds: {x_min}, {x_max} vs {map_size_in_pixels}"
+    assert y_min >= 0 and y_max < map_size_in_pixels, f"Map y bounds: {y_min}, {y_max} vs {map_size_in_pixels}"
 
     # Calculate the dimensions explicitly
-    width = x_max - x_min + 1
-    height = y_max - y_min + 1
+    x_extent = x_max - x_min + 1
+    y_extent = y_max - y_min + 1
     
     # Create grid of x, y coordinates using meshgrid
     x_coords = np.arange(x_min, x_max + 1)
@@ -172,9 +171,8 @@ def generate_maps_for_current_scene(scene_id):
             # Check which rays hit *only* floors
             hit_floor = np.array([hit_objects.issubset(floor_objs) for hit_objects in hit_object_sets]).astype(np.uint8)
             
-            # Reshape the hit_floor array to match the scannable map's dimensions (height, width)
-            # Since we're using meshgrid, the natural reshape is (height, width)
-            hit_floor_reshaped = np.reshape(hit_floor * 255, (height, width))
+            # Reshape the hit_floor array to match the scannable map's dimensions
+            hit_floor_reshaped = np.reshape(hit_floor * 255, (x_extent, y_extent))
             
             # Assign the reshaped array to the scannable map
             scannable_map[:, :] = hit_floor_reshaped
@@ -205,8 +203,8 @@ def generate_maps_for_current_scene(scene_id):
                 ]
                 insseg_val = np.array([inst_to_id[inst] if inst else 0 for inst in hit_room_inst_name], dtype=np.uint8)
                 
-                # Reshape the insseg_val array to match the scannable map's dimensions (height, width)
-                insseg_val_reshaped = np.reshape(insseg_val, (height, width))
+                # Reshape the insseg_val array to match the scannable map's dimensions
+                insseg_val_reshaped = np.reshape(insseg_val, (x_extent, y_extent))
                 
                 # Assign the reshaped array to the scannable insseg map
                 scannable_insseg_map[:, :] = insseg_val_reshaped
@@ -220,8 +218,8 @@ def generate_maps_for_current_scene(scene_id):
                 hit_room_type = [x.rsplit("_", 1)[0] if x else None for x in hit_room_inst_name]
                 semseg_val = np.array([sem_to_id[rm_type] if rm_type else 0 for rm_type in hit_room_type], dtype=np.uint8)
                 
-                # Reshape the semseg_val array to match the scannable map's dimensions (height, width)
-                semseg_val_reshaped = np.reshape(semseg_val, (height, width))
+                # Reshape the semseg_val array to match the scannable map's dimensions
+                semseg_val_reshaped = np.reshape(semseg_val, (x_extent, y_extent))
                 
                 # Assign the reshaped array to the scannable semseg map
                 scannable_semseg_map[:, :] = semseg_val_reshaped
