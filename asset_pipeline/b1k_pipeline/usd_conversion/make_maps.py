@@ -96,9 +96,21 @@ def generate_maps_for_current_scene(scene_id):
     x_min, y_min = world_to_map(combined_aabb[0][:2], RESOLUTION, map_size_in_pixels)
     x_max, y_max = world_to_map(combined_aabb[1][:2], RESOLUTION, map_size_in_pixels)
 
-    # Get the points to cast rays from
-    pixel_indices = np.array(list(np.ndindex((x_max - x_min + 1, y_max - y_min + 1))), dtype=int)
-    corresponding_world_centers = map_to_world(pixel_indices + np.array([[x_min, y_min]]), RESOLUTION, map_size_in_pixels)
+    # Calculate the dimensions explicitly
+    width = x_max - x_min + 1
+    height = y_max - y_min + 1
+    
+    # Create grid of x, y coordinates using meshgrid
+    x_coords = np.arange(x_min, x_max + 1)
+    y_coords = np.arange(y_min, y_max + 1)
+    xv, yv = np.meshgrid(x_coords, y_coords)
+    
+    # Stack the coordinates to create an array of (x, y) pairs
+    # Reshape to a list of coordinates: (N, 2) array where N = width * height
+    world_indices = np.stack((xv.flatten(), yv.flatten()), axis=1)
+    
+    # Convert to world coordinates
+    corresponding_world_centers = map_to_world(world_indices, RESOLUTION, map_size_in_pixels)
 
     for pass_idx, map_pass in enumerate(MAP_GENERATION_PASSES):
         # Move the doors to the open position if necessary
@@ -159,7 +171,14 @@ def generate_maps_for_current_scene(scene_id):
 
             # Check which rays hit *only* floors
             hit_floor = np.array([hit_objects.issubset(floor_objs) for hit_objects in hit_object_sets]).astype(np.uint8)
-            scannable_map[:, :] = np.reshape(hit_floor * 255, scannable_map.shape)
+            
+            # Reshape the hit_floor array to match the scannable map's dimensions (height, width)
+            # Since we're using meshgrid, the natural reshape is (height, width)
+            hit_floor_reshaped = np.reshape(hit_floor * 255, (height, width))
+            
+            # Assign the reshaped array to the scannable map
+            scannable_map[:, :] = hit_floor_reshaped
+            
             Image.fromarray(new_trav_map).save(os.path.join(save_path, fname))
 
             # At the same time as the no-obj trav map, we generate the segmentation maps.
@@ -175,7 +194,7 @@ def generate_maps_for_current_scene(scene_id):
                 # Map those rooms into a contiguous range of integers starting from 1
                 inst_to_id = {inst: i + 1 for i, inst in enumerate(sorted_all_insts)}
 
-                # Color the instance segmentation map using the hit objects' 
+                # Color the instance segmentation map using the hit objects'
                 insseg_map_fname = "floor_insseg_0.png"
                 insseg_map = np.zeros_like(new_trav_map, dtype=np.uint8)
                 scannable_insseg_map = insseg_map[x_min:x_max+1, y_min:y_max+1]
@@ -185,7 +204,13 @@ def generate_maps_for_current_scene(scene_id):
                     for hit_obj in first_hit_floors
                 ]
                 insseg_val = np.array([inst_to_id[inst] if inst else 0 for inst in hit_room_inst_name], dtype=np.uint8)
-                scannable_insseg_map[:, :] = np.reshape(insseg_val, scannable_insseg_map.shape)
+                
+                # Reshape the insseg_val array to match the scannable map's dimensions (height, width)
+                insseg_val_reshaped = np.reshape(insseg_val, (height, width))
+                
+                # Assign the reshaped array to the scannable insseg map
+                scannable_insseg_map[:, :] = insseg_val_reshaped
+                
                 Image.fromarray(insseg_map).save(os.path.join(save_path, insseg_map_fname))
 
                 # Now the same for the semseg map
@@ -194,5 +219,11 @@ def generate_maps_for_current_scene(scene_id):
                 scannable_semseg_map = semseg_map[x_min:x_max+1, y_min:y_max+1]
                 hit_room_type = [x.rsplit("_", 1)[0] if x else None for x in hit_room_inst_name]
                 semseg_val = np.array([sem_to_id[rm_type] if rm_type else 0 for rm_type in hit_room_type], dtype=np.uint8)
-                scannable_semseg_map[:, :] = np.reshape(semseg_val, scannable_semseg_map.shape)
+                
+                # Reshape the semseg_val array to match the scannable map's dimensions (height, width)
+                semseg_val_reshaped = np.reshape(semseg_val, (height, width))
+                
+                # Assign the reshaped array to the scannable semseg map
+                scannable_semseg_map[:, :] = semseg_val_reshaped
+                
                 Image.fromarray(semseg_map).save(os.path.join(save_path, semseg_map_fname))
