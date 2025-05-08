@@ -14,9 +14,9 @@ Z_END = -0.1  # Just below the floor
 HALF_Z = (Z_START + Z_END) / 2.
 HALF_HEIGHT = (Z_START - Z_END) / 2.
 
-WALL_CATEGORIES = ["walls", "fence"]
+WALL_CATEGORIES = ["walls", "rail_fence"]
 FLOOR_CATEGORIES = ["floors", "driveway", "lawn"]
-DOOR_CATEGORIES = ["door", "garage_door", "gate"]
+DOOR_CATEGORIES = ["door", "sliding_door", "garage_door", "gate"]
 IGNORE_CATEGORIES = ["carpet"]
 NEEDED_STRUCTURE_CATEGORIES = FLOOR_CATEGORIES + WALL_CATEGORIES
 

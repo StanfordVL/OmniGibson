@@ -909,7 +909,7 @@ def main():
     SCENES_TO_INCLUDE_MODELS_FOR = ["house_single_floor", "house_double_floor_lower", "house_double_floor_upper"]
 
     # Start with a whitelist of some hardcoded objects
-    model_whitelist = {"tujlga", "pepele", "rvtvqc", "bbieuz"}
+    model_whitelist = {"tujlga", "pepele", "rvtvqc", "bbieuz", "hjjxmi"}
     pipeline_fs = b1k_pipeline.utils.PipelineFS()
     for scene in SCENES_TO_INCLUDE_MODELS_FOR:
         target_output_fs = pipeline_fs.target_output(f"scenes/{scene}")
