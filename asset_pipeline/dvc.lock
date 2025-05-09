@@ -586,8 +586,8 @@ stages:
       size: 17928
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 807b8a39c597e169c2ee8366f82c51bb
-      size: 265351574
+      md5: dbfc2cf17fdbb69954942e1abba83050
+      size: 265355670
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
@@ -3815,12 +3815,12 @@ stages:
       size: 57242
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 807b8a39c597e169c2ee8366f82c51bb
-      size: 265351574
+      md5: dbfc2cf17fdbb69954942e1abba83050
+      size: 265355670
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
       hash: md5
-      md5: 18c0579f137bebb7bb9f96ca70f14f8c
+      md5: 83ac7a0afd6cb071c3d9ddf592bbf014
       size: 20135
   sanitycheck@scenes/restaurant_hotel:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_hotel/processed.max
@@ -4965,7 +4965,7 @@ stages:
       size: 1736
     - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
       hash: md5
-      md5: 18c0579f137bebb7bb9f96ca70f14f8c
+      md5: 83ac7a0afd6cb071c3d9ddf592bbf014
       size: 20135
     - path: cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
       hash: md5
@@ -8448,8 +8448,8 @@ stages:
       size: 17211
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: 807b8a39c597e169c2ee8366f82c51bb
-      size: 265351574
+      md5: dbfc2cf17fdbb69954942e1abba83050
+      size: 265355670
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/export_meshes.json
       hash: md5
@@ -8457,8 +8457,8 @@ stages:
       size: 34
     - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
       hash: md5
-      md5: ec40ccbadbf0c1299a12806dd97398e7
-      size: 37327524
+      md5: 222aa7cca2365130458bfb8ea60dbe78
+      size: 37327453
   export_meshes@scenes/office_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_large/processed.max
       b1k_pipeline/max/export_meshes.py
