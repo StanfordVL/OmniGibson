@@ -94,8 +94,8 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self._pose_info = None
         self._updated_state_objects = None
         self._altered_objects_and_systems = {
-            "objects": dict(),      # Maps object name to "state" (whether added or removed), "info" keys
-            "systems": dict(),      # Maps system name to "state" (whether added or removed), "info" keys
+            "objects": dict(),  # Maps object name to "state" (whether added or removed), "info" keys
+            "systems": dict(),  # Maps system name to "state" (whether added or removed), "info" keys
         }
 
         # Call super init
@@ -673,8 +673,9 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 obj_name = obj.name
                 if obj_name in altered_objs:
                     # We should never have an object that's doubly added
-                    assert altered_objs[obj_name]["state"] == "removed", \
-                        f"Expected found altered state to be 'removed', but got: {altered_objs[obj_name]['state']}"
+                    assert (
+                        altered_objs[obj_name]["state"] == "removed"
+                    ), f"Expected found altered state to be 'removed', but got: {altered_objs[obj_name]['state']}"
                     # Pop this value -- this remove / addition cancels out
                     altered_objs.pop(obj_name)
                 else:
@@ -702,8 +703,9 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             obj_name = obj.name
             if obj_name in altered_objs:
                 # We should never have an object that's doubly removed
-                assert altered_objs[obj_name]["state"] == "added", \
-                    f"Expected found altered state to be 'added', but got: {altered_objs[obj_name]['state']}"
+                assert (
+                    altered_objs[obj_name]["state"] == "added"
+                ), f"Expected found altered state to be 'added', but got: {altered_objs[obj_name]['state']}"
                 # Pop this value -- this remove / addition cancels out
                 altered_objs.pop(obj_name)
             else:
@@ -920,8 +922,9 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             altered_systems = self._altered_objects_and_systems["systems"]
             if system_name in altered_systems:
                 # We should never have a system that's doubly added
-                assert altered_systems[system_name]["state"] == "removed", \
-                    f"Expected found altered state to be 'removed', but got: {altered_systems[system_name]['state']}"
+                assert (
+                    altered_systems[system_name]["state"] == "removed"
+                ), f"Expected found altered state to be 'removed', but got: {altered_systems[system_name]['state']}"
                 # Pop this value -- this remove / addition cancels out
                 altered_systems.pop(system_name)
             else:
@@ -946,8 +949,9 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             altered_systems = self._altered_objects_and_systems["systems"]
             if system_name in altered_systems:
                 # We should never have a system that's doubly removed
-                assert altered_systems[system_name]["state"] == "added", \
-                    f"Expected found altered state to be 'added', but got: {altered_systems[system_name]['state']}"
+                assert (
+                    altered_systems[system_name]["state"] == "added"
+                ), f"Expected found altered state to be 'added', but got: {altered_systems[system_name]['state']}"
                 # Pop this value -- this remove / addition cancels out
                 altered_systems.pop(system_name)
             else:
