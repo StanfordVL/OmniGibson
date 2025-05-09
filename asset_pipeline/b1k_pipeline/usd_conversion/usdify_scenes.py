@@ -74,6 +74,7 @@ def main():
                 try:
                     future.result()
                 except Exception as e:
+                    raise
                     errors[futures[future]] = str(e)
 
             # Move the USDs to the output FS
