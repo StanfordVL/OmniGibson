@@ -53,20 +53,21 @@ def main():
 
             # Rename any WIP scenes
             print("Renaming WIP scenes")
-            scenes_dir = out_fs.opendir("scenes")
-            for scene_dir in list(scenes_dir.listdir("/")):
-                if "scenes/" + scene_dir in b1k_pipeline.utils.get_targets("verified_scenes"):
-                    continue
+            if out_fs.exists("scenes"):
+                scenes_dir = out_fs.opendir("scenes")
+                for scene_dir in list(scenes_dir.listdir("/")):
+                    if "scenes/" + scene_dir in b1k_pipeline.utils.get_targets("verified_scenes"):
+                        continue
 
-                # First rename the main dir
-                renamed_dir = "WIP_" + scene_dir
-                print("Renaming", scene_dir, "to", renamed_dir)
-                scenes_dir.movedir(scene_dir, renamed_dir, create=True)
+                    # First rename the main dir
+                    renamed_dir = "WIP_" + scene_dir
+                    print("Renaming", scene_dir, "to", renamed_dir)
+                    scenes_dir.movedir(scene_dir, renamed_dir, create=True)
 
-                # Then rename the JSONs
-                json_dir = scenes_dir.opendir(renamed_dir).opendir("json")
-                for json_file in list(json_dir.listdir("/")):
-                    json_dir.move(json_file, "WIP_" + json_file)
+                    # Then rename the JSONs
+                    json_dir = scenes_dir.opendir(renamed_dir).opendir("json")
+                    for json_file in list(json_dir.listdir("/")):
+                        json_dir.move(json_file, "WIP_" + json_file)
 
             # Nuke any systems' directories in the objects directory
             print("Removing object dirs of systems")
