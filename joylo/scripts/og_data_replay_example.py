@@ -6,11 +6,17 @@ import torch as th
 from omnigibson.macros import gm
 import os
 import omnigibson as og
+from omnigibson.macros import gm
 import argparse
 import sys
 import json
+from gello.robots.sim_robot.og_teleop_utils import optimize_sim_settings
 
 RUN_QA = True
+
+gm.RENDER_VIEWER_CAMERA = False
+gm.DEFAULT_VIEWER_WIDTH = 128
+gm.DEFAULT_VIEWER_HEIGHT = 128
 
 
 class MotionMetric(EnvMetric):
@@ -114,9 +120,6 @@ def check_robot_base_nonarm_nonfloor_collision(env):
     return th.any(robot_contacts).item()
 
 
-
-
-
 def replay_hdf5_file(hdf_input_path):
     """
     Replays a single HDF5 file and saves videos to a new folder
@@ -138,7 +141,7 @@ def replay_hdf5_file(hdf_input_path):
 
     # Metrics path
     metrics_output_path = os.path.join(folder_path, f"qa_metrics.json")
-    
+
     # Move original HDF5 file to the new folder
     new_hdf_input_path = os.path.join(folder_path, base_name)
     if hdf_input_path != new_hdf_input_path:  # Avoid copying if already in target folder
@@ -146,7 +149,8 @@ def replay_hdf5_file(hdf_input_path):
         hdf_input_path = new_hdf_input_path
     
     # Define resolution for consistency
-    RESOLUTION = 1088
+    RESOLUTION_DEFAULT = 560
+    RESOLUTION_WRIST = 240
     
     # This flag is needed to run data playback wrapper
     gm.ENABLE_TRANSITION_RULES = False
@@ -155,10 +159,10 @@ def replay_hdf5_file(hdf_input_path):
     external_camera_poses = [
         # Camera 1
         [[-0.4, 0, 2.0], [0.369, -0.369, -0.603, 0.603]],
-        # Camera 2
-        [[-0.2, 0.6, 2.0], [-0.1930, 0.4163, 0.8062, -0.3734]],
-        # Camera 3
-        [[-0.2, -0.6, 2.0], [0.4164, -0.1929, -0.3737, 0.8060]]
+        # # Camera 2
+        # [[-0.2, 0.6, 2.0], [-0.1930, 0.4163, 0.8062, -0.3734]],
+        # # Camera 3
+        # [[-0.2, -0.6, 2.0], [0.4164, -0.1929, -0.3737, 0.8060]]
     ]
     
     # Robot sensor configuration
@@ -166,8 +170,8 @@ def replay_hdf5_file(hdf_input_path):
         "VisionSensor": {
             "modalities": ["rgb"],
             "sensor_kwargs": {
-                "image_height": RESOLUTION,
-                "image_width": RESOLUTION,
+                "image_height": RESOLUTION_WRIST,
+                "image_width": RESOLUTION_WRIST,
             },
         },
     }
@@ -181,14 +185,30 @@ def replay_hdf5_file(hdf_input_path):
             "relative_prim_path": f"/controllable__r1pro__robot_r1/base_link/external_sensor{i}",
             "modalities": ["rgb"],
             "sensor_kwargs": {
-                "image_height": RESOLUTION,
-                "image_width": RESOLUTION,
+                "image_height": RESOLUTION_DEFAULT,
+                "image_width": RESOLUTION_DEFAULT,
             },
             "position": th.tensor(position, dtype=th.float32),
             "orientation": th.tensor(orientation, dtype=th.float32),
             "pose_frame": "parent",
         })
-    
+
+    # Replace normal head camera with custom config
+    idx = len(external_sensors_config)
+    external_sensors_config.append({
+        "sensor_type": "VisionSensor",
+        "name": f"external_sensor{idx}",
+        "relative_prim_path": f"/controllable__r1pro__robot_r1/zed_link/external_sensor{idx}",
+        "modalities": ["rgb"],
+        "sensor_kwargs": {
+            "image_height": RESOLUTION_DEFAULT,
+            "image_width": RESOLUTION_DEFAULT,
+            "horizontal_aperture": 40.0,
+        },
+        "position": th.tensor([0.06, 0, 0.4525], dtype=th.float32),
+        "orientation": th.tensor([-0.98481, 0, 0, 0.17365], dtype=th.float32),
+        "pose_frame": "parent",
+    })
 
     # Create the environment
     additional_wrapper_configs = []
@@ -202,10 +222,18 @@ def replay_hdf5_file(hdf_input_path):
         robot_obs_modalities=["rgb"],
         robot_sensor_config=robot_sensor_config,
         external_sensors_config=external_sensors_config,
+        exclude_sensor_names=["zed"],
         n_render_iterations=1,
         only_successes=False,
         additional_wrapper_configs=additional_wrapper_configs,
+        include_task=False,
+        include_task_obs=False,
+        include_robot_control=False,
+        include_contacts=True,
     )
+
+    # Optimize rendering for faster speeds
+    og.sim.add_callback_on_play("optimize_rendering", optimize_sim_settings)
 
     if RUN_QA:
         # Add QA metrics
@@ -223,14 +251,13 @@ def replay_hdf5_file(hdf_input_path):
     
     # Create video writer for robot cameras
     robot_camera_names = ['robot_r1::robot_r1:left_realsense_link:Camera:0::rgb', 
-                        'robot_r1::robot_r1:right_realsense_link:Camera:0::rgb', 
-                        'robot_r1::robot_r1:zed_link:Camera:0::rgb']
+                        'robot_r1::robot_r1:right_realsense_link:Camera:0::rgb']
     for robot_camera_name in robot_camera_names:
         video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{robot_camera_name}.mp4"))
         video_rgb_keys.append(robot_camera_name)
     
     # Create video writers for external cameras
-    for i in range(len(external_camera_poses)):
+    for i in range(len(external_sensors_config)):
         camera_name = f"external_sensor{i}"
         video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{camera_name}.mp4"))
         video_rgb_keys.append(f"external::{camera_name}::rgb")
@@ -298,6 +325,8 @@ def main():
             continue
             
         replay_hdf5_file(hdf_file)
+
+    og.shutdown()
 
 
 if __name__ == "__main__":

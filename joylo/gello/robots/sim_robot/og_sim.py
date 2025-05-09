@@ -125,7 +125,8 @@ class OGRobotServer:
                 env=self.env, 
                 output_path=self._recording_path, 
                 viewport_camera_path=og.sim.viewer_camera.active_camera_path,
-                only_successes=False, 
+                only_successes=False,
+                flush_every_n_traj=1,
                 use_vr=VIEWING_MODE == ViewingMode.VR
             )
 
@@ -763,6 +764,7 @@ class OGRobotServer:
             # Sanity check if we are in the middle of an episode; always flush the current trajectory
             if len(self.env.current_traj_history) > 0:
                 self.env.flush_current_traj()
+
             self.env.save_data()
         
         if VIEWING_MODE == ViewingMode.VR:
