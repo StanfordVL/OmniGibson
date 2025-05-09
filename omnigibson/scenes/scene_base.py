@@ -4,6 +4,7 @@ import os
 import shutil
 import tempfile
 from abc import ABC
+from copy import deepcopy
 
 import torch as th
 
@@ -92,6 +93,10 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         self._available_systems = None
         self._pose_info = None
         self._updated_state_objects = None
+        self._altered_objects_and_systems = {
+            "objects": dict(),      # Maps object name to "state" (whether added or removed), "info" keys
+            "systems": dict(),      # Maps system name to "state" (whether added or removed), "info" keys
+        }
 
         # Call super init
         super().__init__()
@@ -663,6 +668,19 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 # Run any additional scene-specific logic with the created object
                 self._add_object(obj)
 
+                # Add to added objects
+                altered_objs = self._altered_objects_and_systems["objects"]
+                obj_name = obj.name
+                if obj_name in altered_objs:
+                    # We should never have an object that's doubly added
+                    assert altered_objs[obj_name]["state"] == "removed", \
+                        f"Expected found altered state to be 'removed', but got: {altered_objs[obj_name]['state']}"
+                    # Pop this value -- this remove / addition cancels out
+                    altered_objs.pop(obj_name)
+                else:
+                    # Add info to tracked altered objects
+                    altered_objs[obj_name] = {"state": "added", "info": obj.get_init_info()}
+
     def remove_object(self, obj, _batched_call=False):
         """
         Method to remove an object from the simulator
@@ -679,20 +697,77 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             if self.object_registry.object_is_registered(obj):
                 self.object_registry.remove(obj)
 
+            # Add to removed objects
+            altered_objs = self._altered_objects_and_systems["objects"]
+            obj_name = obj.name
+            if obj_name in altered_objs:
+                # We should never have an object that's doubly removed
+                assert altered_objs[obj_name]["state"] == "added", \
+                    f"Expected found altered state to be 'added', but got: {altered_objs[obj_name]['state']}"
+                # Pop this value -- this remove / addition cancels out
+                altered_objs.pop(obj_name)
+            else:
+                # Add info to tracked altered objects
+                altered_objs[obj_name] = {"state": "removed", "info": obj.get_init_info()}
+
             # Remove from omni stage
             obj.remove()
 
-    def reset(self):
+    def reset(self, hard=False):
         """
         Resets this scene
+
+        Args:
+            hard (bool): If set, will forcibly synchronize the simulator to match the scene's state. That is, any
+                additional objects / systems will be removed and any missing objects / systems will be re-added
         """
         # Make sure the simulator is playing
         assert og.sim.is_playing(), "Simulator must be playing in order to reset the scene!"
+
+        if hard:
+            # We iterate through all of our altered objects / systems, and add / remove them as needed
+            # copy here because the dictionary gets mutated in-place during addition / removal
+            # We handle objects (specifically, adding objects) last because after they're added we cannot dump_state
+            # until a sim step occurs to initialize them, which many of these other systems adds and system / object
+            # removes require
+            for system_name, system_info in deepcopy(self._altered_objects_and_systems["systems"]).items():
+                state = system_info["state"]
+                if state == "added":
+                    # We need to remove this system
+                    self.clear_system(system_name=system_name)
+                else:
+                    # We need to add this system
+                    self.get_system(system_name=system_name, force_init=True)
+
+            objects_to_add, objects_to_remove = [], []
+            for obj_name, obj_info in deepcopy(self._altered_objects_and_systems["objects"]).items():
+                state, info = obj_info["state"], obj_info["info"]
+                if state == "added":
+                    # We need to remove this object
+                    objects_to_remove.append(self.object_registry("name", obj_name))
+                else:
+                    # We need to add this object
+                    obj = create_object_from_init_info(info)
+                    objects_to_add.append(obj)
+            # Add / remove objects -- this is done intentionally outside of the above loop so we can:
+            # (a) batch all the calls
+            # (b) avoid errors due to adding objects that aren't initialized before removing other objects (which would
+            #     require dumping state, including the just-added objects which aren't initialized yet!)
+            if len(objects_to_remove) > 0:
+                og.sim.batch_remove_objects(objects_to_remove)
+            if len(objects_to_add) > 0:
+                og.sim.batch_add_objects(objects_to_add, [self] * len(objects_to_add))
 
         # Reset the states of all objects (including robots), including (non-)kinematic states and internal variables.
         assert self._initial_state is not None
         self.load_state(self._initial_state)
         og.sim.step_physics()
+
+        # Clear tracked altered systems / objects
+        self._altered_objects_and_systems = {
+            "objects": dict(),  # Maps object name to "state" (whether added or removed), "info" keys
+            "systems": dict(),  # Maps system name to "state" (whether added or removed), "info" keys
+        }
 
     def get_position_orientation(self):
         """
@@ -841,6 +916,17 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
         if not system.initialized and force_init:
             system.initialize(scene=self)
             self.system_registry.add(system)
+            # Add to added systems
+            altered_systems = self._altered_objects_and_systems["systems"]
+            if system_name in altered_systems:
+                # We should never have a system that's doubly added
+                assert altered_systems[system_name]["state"] == "removed", \
+                    f"Expected found altered state to be 'removed', but got: {altered_systems[system_name]['state']}"
+                # Pop this value -- this remove / addition cancels out
+                altered_systems.pop(system_name)
+            else:
+                # Add info to tracked altered systems
+                altered_systems[system_name] = {"state": "added"}
         return system
 
     def clear_system(self, system_name):
@@ -855,6 +941,18 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
             # Remove from system registry and clear
             self.system_registry.remove(system)
             system.clear()
+
+            # Removed from altered systems
+            altered_systems = self._altered_objects_and_systems["systems"]
+            if system_name in altered_systems:
+                # We should never have a system that's doubly removed
+                assert altered_systems[system_name]["state"] == "added", \
+                    f"Expected found altered state to be 'added', but got: {altered_systems[system_name]['state']}"
+                # Pop this value -- this remove / addition cancels out
+                altered_systems.pop(system_name)
+            else:
+                # Add info to tracked altered systems
+                altered_systems[system_name] = {"state": "removed"}
 
     @property
     def active_systems(self):
@@ -927,6 +1025,12 @@ class Scene(Serializable, Registerable, Recreatable, ABC):
                 be the current state
         """
         self._initial_state = self.dump_state(serialized=False) if state is None else state
+        # clear the tracked objects
+        # TODO: How to handle if @state refers to some arbitrary previous state? Not sure if we can do anything about it
+        self._altered_objects_and_systems = {
+            "objects": dict(),  # Maps object name to "state" (whether added or removed), "info" keys
+            "systems": dict(),  # Maps system name to "state" (whether added or removed), "info" keys
+        }
 
     def update_objects_info(self):
         """

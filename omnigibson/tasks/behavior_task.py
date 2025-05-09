@@ -413,6 +413,10 @@ class BehaviorTask(BaseTask):
                 entity=entity,
             )
 
+    def _reset_scene(self, env):
+        # Hard reset scene in case any transitions occurred
+        env.scene.reset(hard=True)
+
     def _get_obs(self, env):
         low_dim_obs = dict()
 
