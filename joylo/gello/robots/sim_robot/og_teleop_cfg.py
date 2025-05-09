@@ -1,6 +1,13 @@
 import torch as th
 from enum import Enum
 from omnigibson.utils import transform_utils as T
+from omnigibson.transition_rules import (
+    ToggleableMachineRule,
+    MixingToolRule,
+    CookingObjectRule,
+    CookingPhysicalParticleRule,
+    CookingSystemRule,
+)
 
 VALIDATED_TASKS = {
     0: ["picking_up_trash", # difficulty: 1 (pick&place)
@@ -279,3 +286,9 @@ OBJECT_HIGHLIGHT_SPHERE = {
 INCLUDE_CONTACT_OBS = False
 INCLUDE_JACOBIAN_OBS = False
 GHOST_UPDATE_FREQ = 3
+
+DISABLED_TRANSITION_RULES = [ToggleableMachineRule, 
+                             MixingToolRule, 
+                             CookingObjectRule,
+                             CookingPhysicalParticleRule, 
+                             CookingSystemRule]

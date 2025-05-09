@@ -61,6 +61,10 @@ class OGRobotServer:
             self.task_cfg = None
 
         utils.apply_omnigibson_macros()
+        
+        # Disable a subset of transition rules for data collection
+        for rule in DISABLED_TRANSITION_RULES:
+            rule.ENABLED = False
 
         robot_cls = REGISTERED_ROBOTS.get(robot, None)
         assert robot_cls is not None, f"Got invalid OmniGibson robot class: {robot}"
