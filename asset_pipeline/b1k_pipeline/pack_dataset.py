@@ -38,7 +38,7 @@ def main():
     try:
         # Get a multi-FS view over all of the parallel filesystems.
         multi_fs = fs.multifs.MultiFS()
-        multi_fs.add_fs('aggregate', fs.osfs.OSFS(IN_FILENAME_AGGREGATE), priority=0)
+        # multi_fs.add_fs('aggregate', fs.osfs.OSFS(IN_FILENAME_AGGREGATE), priority=0)
         for parallel_zip_name in PARALLELS:
             parallel_zip = os.path.join(PARALLELS_DIR, parallel_zip_name)
             print("Adding", parallel_zip)
