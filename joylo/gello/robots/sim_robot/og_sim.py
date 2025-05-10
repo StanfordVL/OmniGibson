@@ -237,7 +237,7 @@ class OGRobotServer:
         self.active_camera_id = 0
 
         # Setup visualizers
-        self.vis_elements = utils.setup_visualizers(self.robot, self.env.scene)
+        self.vis_elements = utils.setup_robot_visualizers(self.robot, self.env.scene)
         self.eef_cylinder_geoms = self.vis_elements["eef_cylinder_geoms"]
         self.vis_mats = self.vis_elements["vis_mats"]
         self.vertical_visualizers = self.vis_elements["vertical_visualizers"]
@@ -272,6 +272,9 @@ class OGRobotServer:
             
             # Setup object beacons
             self.object_beacons = utils.setup_object_beacons(self.task_relevant_objects, self.env.scene)
+            
+            # Setup task-specific visualizers
+            self.task_visualizers = utils.setup_task_visualizers(self.task_relevant_objects, self.env.scene)
             
             # Get task-irrelevant objects
             self.task_irrelevant_objects = [obj for obj in self.env.scene.objects
