@@ -18,6 +18,7 @@
         (inroom oven.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
+        (toggled_on oven.n.01_1)
     )
     
     (:goal 
