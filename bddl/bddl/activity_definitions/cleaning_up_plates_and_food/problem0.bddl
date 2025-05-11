@@ -49,6 +49,12 @@
                     (inside ?bowl.n.01 ?sink.n.01)
                 )
             )
+            (forall
+                (?electric_refrigerator.n.01 - electric_refrigerator.n.01)
+                (not
+                    (open ?electric_refrigerator.n.01)
+                )
+            )
         )
     )
 )

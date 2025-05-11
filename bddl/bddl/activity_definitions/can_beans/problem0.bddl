@@ -6,6 +6,7 @@
         stockpot.n.01_1 - stockpot.n.01
         countertop.n.01_1 - countertop.n.01
         black_bean.n.01_1 - black_bean.n.01
+        spatula.n.01_1 - spatula.n.01
         canister.n.02_1 canister.n.02_2 - canister.n.02
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
@@ -13,6 +14,7 @@
     
     (:init 
         (ontop stockpot.n.01_1 countertop.n.01_1) 
+        (ontop spatula.n.01_1 countertop.n.01_1)
         (filled stockpot.n.01_1 black_bean.n.01_1) 
         (inside canister.n.02_1 cabinet.n.01_1)
         (inside canister.n.02_2 cabinet.n.01_1)

@@ -38,6 +38,27 @@
             (real ?diced__zucchini.n.01_1)
             (real ?diced__bell_pepper.n.01_1)
             (real ?diced__beet.n.01_1)
+            (not
+                (open ?electric_refrigerator.n.01_1)
+            )
+            (forall
+                (?bell_pepper.n.02_1 - bell_pepper.n.02)
+                (not
+                    (real ?bell_pepper.n.02_1)
+                )
+            )
+            (forall
+                (?beet.n.02_1 - beet.n.02)
+                (not
+                    (real ?beet.n.02_1)
+                )
+            )
+            (forall
+                (?zucchini.n.02_1 - zucchini.n.02)
+                (not
+                    (real ?zucchini.n.02_1)
+                )
+            )
         )
     )
 )
