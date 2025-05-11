@@ -6,40 +6,60 @@ echo "Using dataset path: $DATASET_PATH"
 
 SRC_DIR="./sampled_task"
 
-FORCE=false
-while getopts "f" opt; do
+# Set FORCE to true by default
+FORCE=true
+
+# Allow disabling force with -n flag
+while getopts "n" opt; do
   case $opt in
-    f) FORCE=true ;;
-    *) echo "Usage: $0 [-f]" >&2
-       echo "  -f  Force overwrite of existing files" >&2
+    n) FORCE=false ;;
+    *) echo "Usage: $0 [-n]" >&2
+       echo "  -n  Do not overwrite existing files (by default, will overwrite)" >&2
        exit 1 ;;
   esac
 done
 
-for file in "$SRC_DIR"/*_template.json; do
-    filename=$(basename "$file")
+# Find all task directories within the source directory
+for task_dir in "$SRC_DIR"/*/; do
+    # Extract task name from directory path
+    task_name=$(basename "$task_dir")
     
-    # Extract everything before "_task" in the filename
-    task_name=$(echo "$filename" | sed -E 's/(.*)_task.*/\1/')
-    
-    dest_dir="${DATASET_PATH}/scenes/${task_name}/json"
-    if [ ! -d "$dest_dir" ]; then
-        echo "ERROR: Destination directory $dest_dir does not exist. Terminating."
-        exit 1
+    # Skip if not a directory
+    if [ ! -d "$task_dir" ]; then
+        continue
     fi
     
-    # Check if file already exists in destination
-    if [ -f "$dest_dir/$filename" ] && [ "$FORCE" = false ]; then
-        echo "WARNING: $filename already exists in $dest_dir/ - skipping"
-    else
-        # If force is true, we'll overwrite without a warning
-        if [ -f "$dest_dir/$filename" ] && [ "$FORCE" = true ]; then
-            echo "Overwriting $filename in $dest_dir/"
-        else
-            echo "Copying $filename to $dest_dir/"
+    echo "Processing task directory: $task_name"
+    
+    # Process each JSON template file in the task directory
+    for file in "$task_dir"/*_template.json; do
+        # Skip if no files match the pattern
+        [ -e "$file" ] || continue
+        
+        filename=$(basename "$file")
+        
+        # Extract scene model from filename (everything before "_task")
+        scene_model=$(echo "$filename" | sed -E 's/(.*)_task.*/\1/')
+        
+        dest_dir="${DATASET_PATH}/scenes/${scene_model}/json"
+        if [ ! -d "$dest_dir" ]; then
+            echo "ERROR: Destination directory $dest_dir does not exist for file $filename. Terminating."
+            exit 1
         fi
-        cp "$file" "$dest_dir/"
-    fi
+        
+        # Check if file already exists in destination
+        if [ -f "$dest_dir/$filename" ] && [ "$FORCE" = false ]; then
+            echo "INFO: $filename already exists in $dest_dir/ - skipping"
+        else
+            # Now the default is to overwrite
+            if [ -f "$dest_dir/$filename" ]; then
+                echo "Overwriting $filename in $dest_dir/"
+            else
+                echo "Copying $filename to $dest_dir/"
+            fi
+            cp "$file" "$dest_dir/"
+        fi
+    done
 done
 
 echo "All JSON files have been copied to their corresponding directories."

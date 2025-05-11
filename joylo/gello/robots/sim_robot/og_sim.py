@@ -56,7 +56,7 @@ class OGRobotServer:
         if self.task_name is not None:
             available_tasks = utils.load_available_tasks()
             assert self.task_name in available_tasks, f"Task {self.task_name} not found in available tasks"
-            self.task_cfg = available_tasks[self.task_name]
+            self.task_cfg = available_tasks[self.task_name][0] # TODO: once we have multiple instances, we need to specify this
         else:
             self.task_cfg = None
 
