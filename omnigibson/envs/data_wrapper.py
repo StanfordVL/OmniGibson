@@ -581,6 +581,7 @@ class DataPlaybackWrapper(DataWrapper):
         replay_state=True,
         include_env_wrapper=False,
         additional_wrapper_configs=None,
+        load_room_instances=None,
     ):
         """
         Create a DataPlaybackWrapper environment instance form the recorded demonstration info
@@ -641,6 +642,10 @@ class DataPlaybackWrapper(DataWrapper):
         config["scene"]["scene_file"] = json.loads(f["data"].attrs["scene_file"])
         if config["task"]["type"] == "BehaviorTask":
             config["task"]["online_object_sampling"] = False
+
+        # remove later
+        if load_room_instances is not None:
+            config["scene"]["load_room_instances"] = load_room_instances
 
         # Because we're loading directly from the cached scene file, we need to disable any additional objects that are being added since
         # they will already be cached in the original scene file
