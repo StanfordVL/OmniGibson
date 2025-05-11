@@ -46,6 +46,12 @@
                 (?table.n.02 - table.n.02)
                 (nextto ?caldron.n.01_1 ?table.n.02)
             )
+            (forall
+                (?cabinet.n.01 - cabinet.n.01)
+                (not
+                    (open ?cabinet.n.01)
+                )
+            )
         )
     )
 )

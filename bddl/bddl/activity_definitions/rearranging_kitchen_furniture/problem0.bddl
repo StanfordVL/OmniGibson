@@ -30,19 +30,10 @@
                     (inside toaster.n.02_1 ?cabinet.n.01)
                     (inside food_processor.n.01_1 ?cabinet.n.01)
                     (inside french_press.n.01_1 ?cabinet.n.01)
+                    (not
+                        (open ?cabinet.n.01)
+                    )
                 )
-            )
-            (or
-                (touching toaster.n.02_1 food_processor.n.01_1)
-                (touching toaster.n.02_1 french_press.n.01_1)
-            )
-            (or
-                (touching food_processor.n.01_1 french_press.n.01_1)
-                (touching food_processor.n.01_1 toaster.n.02_1)
-            )
-            (or
-                (touching french_press.n.01_1 toaster.n.02_1)
-                (touching french_press.n.01_1 food_processor.n.01_1)
             )
         )
     )

@@ -19,7 +19,6 @@
         (inroom electric_refrigerator.n.01_1 kitchen)
         (inroom electric_refrigerator.n.01_* kitchen)
         (inroom floor.n.01_1 garden) 
-        (open car.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -34,6 +33,9 @@
             )
             (not
                 (open car.n.01_1)
+            )
+            (not
+                (open electric_refrigerator.n.01_1)
             )
         )
     )
