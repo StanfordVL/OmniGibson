@@ -4,21 +4,21 @@
     (:objects
      	mousetrap.n.01_1 mousetrap.n.01_2 mousetrap.n.01_3 mousetrap.n.01_4 - mousetrap.n.01
         floor.n.01_1 floor.n.01_* - floor.n.01
-        toilet.n.02_1 toilet.n.02_* - toilet.n.02
-        shelf.n.01_1 - shelf.n.01
+        sink.n.01_1 sink.n.01_* - sink.n.01
+        cabinet.n.01_1 - cabinet.n.01
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop mousetrap.n.01_1 shelf.n.01_1)
-        (ontop mousetrap.n.01_2 shelf.n.01_1)
-        (ontop mousetrap.n.01_3 shelf.n.01_1)
-        (ontop mousetrap.n.01_4 shelf.n.01_1)
-        (inroom toilet.n.02_1 bathroom)
-        (inroom toilet.n.02_* bathroom)
+        (ontop mousetrap.n.01_1 cabinet.n.01_1)
+        (ontop mousetrap.n.01_2 cabinet.n.01_1)
+        (ontop mousetrap.n.01_3 cabinet.n.01_1)
+        (ontop mousetrap.n.01_4 cabinet.n.01_1)
+        (inroom sink.n.01_1 bathroom)
+        (inroom sink.n.01_* bathroom)
         (inroom floor.n.01_1 bathroom)
         (inroom floor.n.01_* bathroom)
-        (inroom shelf.n.01_1 bathroom)
+        (inroom cabinet.n.01_1 bathroom)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -32,11 +32,14 @@
                 )
             )
             (exists
-                (?toilet.n.02 - toilet.n.02)
+                (?sink.n.01 - sink.n.01)
                 (forn
                     (2)
                     (?mousetrap.n.01 - mousetrap.n.01)
-                    (under ?mousetrap.n.01 ?toilet.n.02)
+                    (or
+                        (under ?mousetrap.n.01 ?sink.n.01)
+                        (nextto ?mousetrap.n.01 ?sink.n.01)
+                    )
                 )
             )
         )
