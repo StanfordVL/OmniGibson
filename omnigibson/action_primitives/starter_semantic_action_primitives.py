@@ -62,7 +62,7 @@ from omnigibson.utils.object_state_utils import sample_cuboid_for_predicate
 from omnigibson.utils.python_utils import multi_dim_linspace
 from omnigibson.utils.ui_utils import create_module_logger
 from omnigibson.utils.sampling_utils import raytest
-from omnigibson.utils.ui_utils import draw_line
+from omnigibson.utils.ui_utils import draw_line, clear_debug_drawing
 
 
 m = create_module_macros(module_path=__file__)
@@ -994,8 +994,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     )
                     # breakpoint()
                     # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist(), color=(1.0, 0.0, 0.0, 1.0), size=2.0)
-                    # for _ in range(5): og.sim.step()
-                    
+                    # for _ in range(5): og.sim.step()                    
                     continue
 
                 # draw_line(sampled_eyes_pos.tolist(), obj_pos.tolist(), color=(0.0, 1.0, 0.0, 1.0), size=2.0)
@@ -1036,101 +1035,39 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                     # print("initial joint pos", initial_joint_pos)
                     # print("ik solver", time.time() - start)
                     # print("retval: ", retval)
-                    # If reachibility satisfied (without collision check)
+                    
+                    # If reachibility and visibility satisfied (without collision check)
                     if retval is not None:
                         
-                        # =============== CHECK 1 ================
-                        # Set trunk positions obtainted from IK solving
-                        query_joint_pos_after_nav = initial_joint_pos.clone()
-                        query_joint_pos_after_nav[self.robot.trunk_control_idx] = retval[0][self.robot.trunk_control_idx]
-
-                        # Collision check for joint positions after navigation
-                        # - base joints: sampled base pose
-                        # - torso joints: IK solution to reach sampled eyes pose
-                        # - arm joints: current arm joint positions
-                        # if we pass an attaced object, leads to segmentation fault: https://github.com/mikedh/trimesh/issues/550
-                        # Instead, the object is already attached outside of this function
-                        # start = time.time()
-                        invalid_results = self._motion_generator.check_collisions(
-                            query_joint_pos_after_nav,
-                            self_collision_check=True,
+                        # This ensures given the current joint configuration, I can find a collision-aware
+                        # IK solution, using my base virtual joints and torso joints, to reach base target pose
+                        # and eye target pose, while keeping my arm joints frozen (this is guaranteed because it's emb_sel=BASE)
+                        # ============= Check 1 ================
+                        base_target_pose = {
+                            "base_link": robot_pose_for_sampled_base,
+                            "eyes": target_pose["eyes"],
+                        }
+                        retval_post_nav = self._ik_solver_cartesian_to_joint_space(
+                            base_target_pose,
+                            initial_joint_pos=None,
                             skip_obstacle_update=skip_obstacle_update,
-                            attached_obj=None,
-                            attached_obj_scale=None,
-                        ).cpu()
-                        # print("check collision after nav", time.time() - start)
-                        if invalid_results[0].item():
-                            # Collision detected, so skip this sample
-                            print("after-nav collision check failed, skipping sample")
-                            continue
-                        # =============== END OF CHECK 1 ================
-
-                        # =============== CHECK 2 (OPTION 1)================
-                        query_joint_pos_pre_grasp = query_joint_pos_after_nav.clone()
-                        # Set arm positions obtainted from IK solving
-                        for arm in self.robot.arm_control_idx:
-                            query_joint_pos_pre_grasp[self.robot.arm_control_idx[arm]] = retval[0][
-                                self.robot.arm_control_idx[arm]
-                            ]
-
-                        # Collision check for joint positions pre replay
-                        # - base joints: sampled base pose
-                        # - torso joints: IK solution to reach sampled eyes pose
-                        # - arm joints: IK solution to reach the *first* end-effector pose
-
-                        # NOTE: This might do unnecessary filtering. If the IK check w/o collision found a solution and we set the arms joint positions to that 
-                        # solution and then we check if the arm joint positions are in collision, it might be that those particular arm joint positions 
-                        # are in collision but there might exist some other joint positions that isn't. Talk to Eric about this
-                        # start = time.time()
-                        invalid_results = self._motion_generator.check_collisions(
-                            query_joint_pos_pre_grasp,
-                            self_collision_check=True,
-                            skip_obstacle_update=skip_obstacle_update,
-                            attached_obj=None,
-                            attached_obj_scale=None,
-                        ).cpu()
-                        # print("check collision pre-grasp", time.time() - start)
-
-                        if invalid_results[0].item():
-                            # Collision detected, so skip this sample
-                            print("pre-replay collision check failed, skipping sample")
+                            ik_world_collision_check=True,
+                            emb_sel=CuRoboEmbodimentSelection.BASE
+                        )
+                        if retval_post_nav is None:
+                            print("Base IK solution for next navigation phase not found, skipping sample")
                             continue
 
-                            # # ========= remove later =============
-                            # temp_state = og.sim.dump_state()
-                            # temp_base_joints = [initial_joint_pos[0], initial_joint_pos[1], initial_joint_pos[5]]
-                            # temp_base_joints = th.stack(temp_base_joints)
-                            # self.robot.set_joint_positions(temp_base_joints, indices=self.robot.base_control_idx)
-
-                            # temp_trunk_joints = retval[0][:4]
-                            # self.robot.set_joint_positions(temp_trunk_joints, indices=self.robot.trunk_control_idx)
-
-                            # for _ in range(50): og.sim.step()
-
-                            # breakpoint()
-                            # og.sim.load_state(temp_state)
-                            # for _ in range(20): og.sim.step()
-
-                            # # temp_js = self._motion_generator.path_to_joint_trajectory(self.temp_js[0], get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM)
-                            # # self.robot.set_joint_positions(temp_js)
-                            # # ======================================
-                        
-                        # =============== END OF CHECK 2 (OPTION 1) ================
-
-                        # =============== CHECK 2 (OPTION 2) ================
-
-                        # IK check (with collision-check) for first eef_pose
-                        # - base joints: sampled base pose
-                        # - torso joints: IK solution to reach sampled eyes pose
-                        # - arm joints: current arm joint positions
-
+                        # ============= Check 2 ================
+                        query_joint_pos_after_nav = retval_post_nav
+                        # Target pose for two (first pose from replay) eefs only
                         target_pose_first_eef = dict()
                         for key, val in target_pose.items():
                             if key != "eyes":
                                 target_pose_first_eef[key] = (val[0][0], val[1][0])
                         
                         # start = time.time()
-                        # Remember that query_joint_pos_after_nav is (sampled base pose + IK (w/o collision check) torso + current arm joint positions)
+                        # Remember that query_joint_pos_after_nav is (sampled base pose + BASE IK (with collision check) torso + current arm joint positions/BASE IK (with collision check) arm)
                         retval = self._ik_solver_cartesian_to_joint_space(
                             target_pose_first_eef,
                             initial_joint_pos=query_joint_pos_after_nav,
@@ -1138,20 +1075,19 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
                             ik_world_collision_check=True,
                             emb_sel=CuRoboEmbodimentSelection.ARM_NO_TORSO
                         )
-                        # print("IK check retval: ", retval)
-                        # print("ik solver pre-grasp", time.time() - start)
-                        # breakpoint()
-                        if retval is None:
-                            print("pre-replay IK w/ collision checking failed, skipping sample")
+                        if retval_post_nav is None:
+                            print("Arm-no-torso IK solution for next manipulation phase not found, skipping sample")
                             continue
 
-
+                        # print("------- target_pose_first_eef: ", target_pose_first_eef)
+                        # print("------- query_joint_pos_after_nav: ", query_joint_pos_after_nav)
                         # constraint_satisfied = True
                         self.target_eyes_pose_arr.append(target_pose["eyes"])
-
+                        # clear_debug_drawing()
                         return True
 
             self.target_eyes_pose_arr.append(None)
+            # clear_debug_drawing()
             # breakpoint()
             return False
 
@@ -1326,7 +1262,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         if not batched:
             joint_state = joint_states[success_idx[0]]
             joint_pos = self._motion_generator.path_to_joint_trajectory(
-                joint_state, get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM
+                joint_state, get_full_js=False, emb_sel=emb_sel
             )
             return joint_pos.cpu()
         else:
@@ -1334,7 +1270,7 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
             # self.temp_js = joint_states
             return [
                 self._motion_generator.path_to_joint_trajectory(
-                    joint_state, get_full_js=False, emb_sel=CuRoboEmbodimentSelection.ARM
+                    joint_state, get_full_js=False, emb_sel=emb_sel
                 ).cpu()
                 for joint_state in joint_states
             ]
@@ -2154,7 +2090,8 @@ class StarterSemanticActionPrimitives(BaseActionPrimitiveSet):
         # # remove later
         # yield None
 
-        yield from self._execute_motion_plan(q_traj)
+        # low precision is mainly added for clean pan task
+        yield from self._execute_motion_plan(q_traj, low_precision=True)
 
     # (TODO) add a function to draw curobo-generated plans.
     def _draw_plan(self, plan):
