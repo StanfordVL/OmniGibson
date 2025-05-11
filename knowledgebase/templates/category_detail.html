@@ -13,7 +13,8 @@
           <div class="card-header">
             <a href="{{ url_for('object_detail', name=object.name) }}">{{ object }}</a>
           </div>
-          <img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object }} photo">
+          <video autoplay muted loop playsinline src="{{ object.image_url }}" class="card-img-bottom" alt="{{ object }} photo"></video>
+          <!--<img class="card-img-bottom" src="{{ object.image_url }}" alt="{{ object }} photo">-->
         </div>
       </div>
       {% else %}
