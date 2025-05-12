@@ -8,7 +8,7 @@
         tennis_ball.n.01_1 - tennis_ball.n.01
         bed.n.01_1 - bed.n.01
         table.n.02_1 - table.n.02
-        toy_box.n.01_1 toy_box.n.01_2 - toy_box.n.01
+        toy_box.n.01_1 - toy_box.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -22,8 +22,7 @@
         (inroom floor.n.01_1 childs_room)
         (inroom bed.n.01_1 childs_room)
         (inroom table.n.02_1 childs_room)
-        (ontop toy_box.n.01_1 bed.n.01_1) 
-        (ontop toy_box.n.01_2 table.n.02_1) 
+        (ontop toy_box.n.01_1 table.n.02_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
