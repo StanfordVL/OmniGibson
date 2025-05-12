@@ -32,7 +32,7 @@ for task_dir in "$SRC_DIR"/*/; do
     echo "Processing task directory: $task_name"
     
     # Process each JSON template file in the task directory
-    for file in "$task_dir"/*_template.json; do
+    for file in "$task_dir"/*_template*.json; do
         # Skip if no files match the pattern
         [ -e "$file" ] || continue
         
