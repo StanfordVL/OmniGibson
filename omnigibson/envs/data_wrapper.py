@@ -7,6 +7,7 @@ from pathlib import Path
 import h5py
 import imageio
 import torch as th
+import numpy as np
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -581,7 +582,7 @@ class DataPlaybackWrapper(DataWrapper):
         replay_state=True,
         include_env_wrapper=False,
         additional_wrapper_configs=None,
-        load_room_instances=None,
+        append_to_input_path=False,
     ):
         """
         Create a DataPlaybackWrapper environment instance form the recorded demonstration info
@@ -624,7 +625,7 @@ class DataPlaybackWrapper(DataWrapper):
             DataPlaybackWrapper: Generated playback environment
         """
         # Read from the HDF5 file
-        f = h5py.File(input_path, "r")
+        f = h5py.File(input_path, "a" if append_to_input_path else "r")
         config = json.loads(f["data"].attrs["config"])
 
         # Hot swap in additional info for playing back data
@@ -642,10 +643,6 @@ class DataPlaybackWrapper(DataWrapper):
         config["scene"]["scene_file"] = json.loads(f["data"].attrs["scene_file"])
         if config["task"]["type"] == "BehaviorTask":
             config["task"]["online_object_sampling"] = False
-
-        # remove later
-        if load_room_instances is not None:
-            config["scene"]["load_room_instances"] = load_room_instances
 
         # Because we're loading directly from the cached scene file, we need to disable any additional objects that are being added since
         # they will already be cached in the original scene file
@@ -809,10 +806,9 @@ class DataPlaybackWrapper(DataWrapper):
         for i, (a, s, ss, r, te, tr) in enumerate(
             zip(action, state[1:], state_size[1:], reward, terminated, truncated)
         ):
-            
             if i % 50 == 0:
                 breakpoint()
-            
+
             if self.replay_state:
                 # Execute any transitions that should occur at this current step
                 if str(i) in transitions:
@@ -865,7 +861,61 @@ class DataPlaybackWrapper(DataWrapper):
 
         return result
 
-    def playback_dataset(self, record_data=False, video_writers=None, video_rgb_keys=None, callback=None, demo_ids=None):
+    def playback_episode_datagen(self, episode_id):
+        """
+        Playback episode @episode_id, and optionally record observation data if @record is True
+
+        Args:
+            episode_id (int): Episode to playback. This should be a valid demo ID number from the inputted collected
+                data hdf5 file
+        """
+        print(f"================= playback episode {episode_id} =================")
+        data_grp = self.input_hdf5["data"]
+        assert f"demo_{episode_id}" in data_grp, f"No valid episode with ID {episode_id} found!"
+        traj_grp = data_grp[f"demo_{episode_id}"]
+
+        # Grab episode data
+        traj_grp = h5py_group_to_torch(traj_grp)
+        action = traj_grp["actions"]
+        state = traj_grp["states"]
+        seg_obs_dict = {
+            "robot_r1::robot_r1:left_eef_link:Camera:0::seg_instance": [],
+            "robot_r1::robot_r1:right_eef_link:Camera:0::seg_instance": [],
+            "robot_r1::robot_r1:eyes:Camera:0::seg_instance": [],
+        }
+        obs_infos = []
+
+        # Reset environment
+        og.sim.restore(scene_files=[self.scene_file])
+
+        # Restore to initial state
+        og.sim.load_state(state[0], serialized=True)
+
+        seg_obs, _, _, _, info = self.env.step(action=action[0], n_render_iterations=self.n_render_iterations)
+        for key in seg_obs_dict:
+            seg_obs_dict[key].append(seg_obs[key])
+        obs_infos.append(json.dumps(info["obs_info"]))
+
+        for i, (a, s) in enumerate(zip(action, state[1:])):
+            og.sim.load_state(s, serialized=True)
+            seg_obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
+            for key in seg_obs_dict:
+                seg_obs_dict[key].append(seg_obs[key])
+            obs_infos.append(json.dumps(info["obs_info"]))
+
+        for key in seg_obs_dict:
+            seg_obs_dict[key] = th.stack(seg_obs_dict[key], dim=0)
+
+        traj_grp = data_grp[f"demo_{episode_id}"]
+        for k, v in seg_obs_dict.items():
+            traj_grp.create_dataset(f"obs/{k}".format(k), data=v.cpu().numpy(), compression="gzip")
+
+        dt = h5py.string_dtype(encoding="utf-8")
+        traj_grp["obs_info"][...] = np.array(obs_infos, dtype=dt)
+
+    def playback_dataset(
+        self, record_data=False, video_writers=None, video_rgb_keys=None, callback=None, demo_ids=None
+    ):
         """
         Playback all episodes from the input HDF5 file, and optionally record observation data if @record is True
 
@@ -891,15 +941,22 @@ class DataPlaybackWrapper(DataWrapper):
         else:
             for episode_id in demo_ids:
                 results.append(
-                        self.playback_episode(
-                            episode_id=episode_id,
-                            record_data=record_data,
-                            video_writers=video_writers,
-                            video_rgb_keys=video_rgb_keys,
-                            callback=callback,
-                        )
+                    self.playback_episode(
+                        episode_id=episode_id,
+                        record_data=record_data,
+                        video_writers=video_writers,
+                        video_rgb_keys=video_rgb_keys,
+                        callback=callback,
                     )
+                )
         return results
+
+    def playback_dataset_datagen(self):
+        """
+        Playback all episodes from the input HDF5 file, and optionally record observation data if @record is True
+        """
+        for episode_id in range(self.input_hdf5["data"].attrs["n_episodes"]):
+            self.playback_episode_datagen(episode_id=episode_id)
 
     def create_video_writer(self, fpath, fps=30):
         """
