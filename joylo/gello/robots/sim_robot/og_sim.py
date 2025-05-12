@@ -188,13 +188,6 @@ class OGRobotServer:
                 else:
                     if isinstance(obj, (R1, R1Pro)):
                         obj.base_footprint_link.mass = 250.0
-            
-            # TODO: remove this once we have RC6
-            if self.task_name == "carrying_in_groceries":
-                for car in self.env.scene.object_registry("category", "car"):
-                    for link in car.links.values():
-                        if "trunk" in link.name:
-                            link.mass = link.mass * 0.5
 
         # Make sure robot fingers are extra grippy
         gripper_mat = lazy.isaacsim.core.api.materials.PhysicsMaterial(
