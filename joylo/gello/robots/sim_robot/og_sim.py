@@ -92,7 +92,7 @@ class OGRobotServer:
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
-        self.instance_id = instance_id
+        self.instance_id = instance_id - 1      # This will be immediately incremented during our first reset() during initialization
 
         self.ghosting = ghosting
         if self.ghosting:
@@ -206,7 +206,7 @@ class OGRobotServer:
         utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
 
         # Reset environment to initialize
-        self.reset(increment_instance=False)
+        self.reset()
 
         # Take a single step
         action = self.get_action()
