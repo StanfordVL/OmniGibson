@@ -770,25 +770,25 @@ def setup_task_visualizers(task_relevant_objects, scene):
     #             )
     #             visualizer.load(scene)
                 
-                # Set the position and scale of the visualizer
-                visualizer.scale = th.tensor([0.05, 0.05, 0.05]) / link.scale
-                visualizer.set_position_orientation(
-                    position=link.get_position_orientation()[0], 
-                    orientation=link.get_position_orientation()[1]
-                )
+    #             # Set the position and scale of the visualizer
+    #             visualizer.scale = th.tensor([0.05, 0.05, 0.05]) / link.scale
+    #             visualizer.set_position_orientation(
+    #                 position=link.get_position_orientation()[0], 
+    #                 orientation=link.get_position_orientation()[1]
+    #             )
                 
-                mat = MaterialPrim(
-                    relative_prim_path=absolute_prim_path_to_scene_relative(scene, f"{link.prim_path}/attachment_visualizer_mat"),
-                    name=f"{obj.name}:attachment_visualizer_mat",
-                )
-                mat.load(scene)
-                mat.diffuse_color_constant = th.tensor([0.0, 0.0, 1.0]) if link.meta_link_id.endswith("M") else th.tensor([1.0, 0.4, 0.75])
-                mat.enable_emission = True
-                mat.emissive_color = th.tensor([0.0, 0.0, 1.0]) if link.meta_link_id.endswith("M") else th.tensor([1.0, 0.4, 0.75])
-                mat.emissive_intensity = 10000.0
-                visualizer.material = mat
+    #             mat = MaterialPrim(
+    #                 relative_prim_path=absolute_prim_path_to_scene_relative(scene, f"{link.prim_path}/attachment_visualizer_mat"),
+    #                 name=f"{obj.name}:attachment_visualizer_mat",
+    #             )
+    #             mat.load(scene)
+    #             mat.diffuse_color_constant = th.tensor([0.0, 0.0, 1.0]) if link.meta_link_id.endswith("M") else th.tensor([1.0, 0.4, 0.75])
+    #             mat.enable_emission = True
+    #             mat.emissive_color = th.tensor([0.0, 0.0, 1.0]) if link.meta_link_id.endswith("M") else th.tensor([1.0, 0.4, 0.75])
+    #             mat.emissive_intensity = 10000.0
+    #             visualizer.material = mat
                 
-                task_visualizers[obj] = visualizer
+    #             task_visualizers[obj] = visualizer
     return task_visualizers
 
 def setup_ghost_robot(scene, task_cfg=None):
