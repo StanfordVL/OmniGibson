@@ -753,21 +753,22 @@ def setup_object_beacons(task_relevant_objects, scene):
 
 def setup_task_visualizers(task_relevant_objects, scene):
     task_visualizers = {}
-    for obj in task_relevant_objects:
-        for link in obj.links.values():
-            if link.is_meta_link and link.meta_link_type == "attachment":
-                # Create a visualizer for the attachment link
-                vis_prim_path = f"{link.prim_path}/attachment_visualizer"
-                vis_prim = create_primitive_mesh(
-                    vis_prim_path,
-                    "Sphere",
-                    extents=1.0
-                )
-                visualizer = VisualGeomPrim(
-                    relative_prim_path=absolute_prim_path_to_scene_relative(scene, vis_prim_path),
-                    name=f"{obj.name}:attachment_visualizer"
-                )
-                visualizer.load(scene)
+    # TODO: add these back in a mode for attachment tasks
+    # for obj in task_relevant_objects:
+    #     for link in obj.links.values():
+    #         if link.is_meta_link and link.meta_link_type == "attachment":
+    #             # Create a visualizer for the attachment link
+    #             vis_prim_path = f"{link.prim_path}/attachment_visualizer"
+    #             vis_prim = create_primitive_mesh(
+    #                 vis_prim_path,
+    #                 "Sphere",
+    #                 extents=1.0
+    #             )
+    #             visualizer = VisualGeomPrim(
+    #                 relative_prim_path=absolute_prim_path_to_scene_relative(scene, vis_prim_path),
+    #                 name=f"{obj.name}:attachment_visualizer"
+    #             )
+    #             visualizer.load(scene)
                 
                 # Set the position and scale of the visualizer
                 visualizer.scale = th.tensor([0.05, 0.05, 0.05]) / link.scale
