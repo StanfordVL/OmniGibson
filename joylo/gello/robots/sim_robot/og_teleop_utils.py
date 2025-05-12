@@ -16,8 +16,38 @@ from omnigibson.sensors import VisionSensor
 from omnigibson.objects.usd_object import USDObject
 from omnigibson.robots.r1 import R1
 from omnigibson.robots.r1pro import R1Pro
+from bddl.activity import Conditions
 
 from gello.robots.sim_robot.og_teleop_cfg import *
+
+
+from bddl.activity import Conditions
+from bddl.object_taxonomy import ObjectTaxonomy
+import json
+import argparse
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--activity", type=str, required=True)
+
+ot = ObjectTaxonomy()
+
+
+def get_task_relevant_room_types(activity_name):
+    activity_conditions = Conditions(
+        activity_name,
+        0,
+        simulator_name="omnigibson",
+        predefined_problem=None,
+    )
+    init_conds = activity_conditions.parsed_initial_conditions
+    room_types = set()
+    for init_cond in init_conds:
+        if len(init_cond) == 3:
+            if "inroom" == init_cond[0]:
+                room_types.add(init_cond[2])
+
+    return list(room_types)
+
 
 def infer_trunk_translate_from_torso_qpos(qpos):
     """

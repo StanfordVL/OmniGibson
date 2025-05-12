@@ -2,8 +2,10 @@ import time
 import torch as th
 import numpy as np
 from typing import Dict, Optional
+import json
 
 import omnigibson as og
+from omnigibson.macros import gm
 import omnigibson.lazy as lazy
 from omnigibson.envs import DataCollectionWrapper
 from omnigibson.robots import REGISTERED_ROBOTS
@@ -19,11 +21,14 @@ from omnigibson.prims.xform_prim import XFormPrim
 from omnigibson.utils.usd_utils import GripperRigidContactAPI, ControllableObjectViewAPI
 import omnigibson.utils.transform_utils as T
 from omnigibson.utils.config_utils import parse_config
+from omnigibson.utils.python_utils import recursively_convert_to_torch
 
 from gello.robots.sim_robot.zmq_server import ZMQRobotServer, ZMQServerThread
 
 from gello.robots.sim_robot.og_teleop_cfg import *
 import gello.robots.sim_robot.og_teleop_utils as utils
+
+from bddl.activity import Conditions
 
 
 class OGRobotServer:
@@ -35,7 +40,9 @@ class OGRobotServer:
         port: int = 5556,
         recording_path: Optional[str] = None,
         task_name: Optional[str] = None,
+        partial_load: bool = True,
         batch_id: Optional[int] = None, # 0 or 1
+        instance_id: Optional[int] = None,
         ghosting: bool = True,
     ):
         # Case 1: Direct task name provided
@@ -80,8 +87,12 @@ class OGRobotServer:
         robot_config = utils.generate_robot_config(self.task_name, self.task_cfg)
         cfg["robots"] = [robot_config]
 
+        if partial_load:
+            cfg["scene"]["load_room_types"] = utils.get_task_relevant_room_types(activity_name=self.task_name)
+
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
+        self.instance_id = instance_id
 
         self.ghosting = ghosting
         if self.ghosting:
@@ -202,7 +213,7 @@ class OGRobotServer:
         utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
 
         # Reset environment to initialize
-        self.reset()
+        self.reset(increment_instance=False)
 
         # Take a single step
         action = self.get_action()
@@ -721,8 +732,14 @@ class OGRobotServer:
 
         return action
 
-    def reset(self):
-        """Reset the environment and robot state"""
+    def reset(self, increment_instance=True):
+        """
+        Reset the environment and robot state
+
+        Args:
+            increment_instance (bool): If True and self.instance_id is not None, will increment the instance to reset to
+                and reset to the updated instance id's initial state
+        """
         if self._recording_path is not None:
             reset_text = "Resetting environment, episode recorded"
         else:
@@ -754,6 +771,31 @@ class OGRobotServer:
                 self._joint_cmd["button_home"] = th.zeros(1)
                 self._joint_cmd["button_left"] = th.zeros(1)
                 self._joint_cmd["button_right"] = th.zeros(1)
+
+        # Update the instance id / initial state if the instance ID is specified
+        # We will manually update the task relevant objects (TRO) state
+        if self.instance_id is not None and increment_instance:
+            self.instance_id += 1
+            scene_model = self.env.task.scene_name
+            tro_filename = self.env.task.get_cached_activity_scene_filename(
+                scene_model=scene_model,
+                activity_name=self.env.task.activity_name,
+                activity_definition_id=self.env.task.activity_definition_id,
+                activity_instance_id=self.instance_id,
+            )
+            with open(f"{gm.DATASET_PATH}/scenes/{scene_model}/json/{tro_filename}-tro_state.json", "r") as f:
+                tro_state = recursively_convert_to_torch(json.load(f))
+            self.env.scene.reset()
+            for bddl_name, obj_state in tro_state.items():
+                if "agent" in bddl_name:
+                    # Only set pose (we assume this is a holonomic robot, so ignore Rx / Ry and only take Rz component
+                    # for orientation
+                    robot_pos = obj_state["joint_pos"][:3] + obj_state["root_link"]["pos"]
+                    robot_quat = T.euler2quat(th.tensor([0, 0, obj_state["joint_pos"][5]]))
+                    self.env.task.object_scope[bddl_name].set_position_orientation(robot_pos, robot_quat)
+                else:
+                    self.env.task.object_scope[bddl_name].load_state(obj_state, serialized=False)
+            self.env.scene.update_initial_file()
 
         # Reset env
         self.env.reset()
