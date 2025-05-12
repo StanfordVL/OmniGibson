@@ -59,16 +59,18 @@ def main():
             print("Queueing batches.")
             print("Total count: ", len(object_glob))
             futures = {}
-            for start in range(0, len(object_glob), BATCH_SIZE):
-                end = start + BATCH_SIZE
+            batch_size = min(BATCH_SIZE, len(object_glob) // WORKER_COUNT)
+            for start in range(0, len(object_glob), batch_size):
+                end = start + batch_size
                 batch = object_glob[start:end]
-                worker_future = dask_client.submit(
-                    run_on_batch,
-                    dataset_fs.getsyspath("/"),
-                    out_temp_fs.getsyspath("/"),
-                    batch,
-                    pure=False)
-                futures[worker_future] = batch
+                if batch:
+                    worker_future = dask_client.submit(
+                        run_on_batch,
+                        dataset_fs.getsyspath("/"),
+                        out_temp_fs.getsyspath("/"),
+                        batch,
+                        pure=False)
+                    futures[worker_future] = batch
 
             # Wait for all the workers to finish
             print("Queued all batches. Waiting for them to finish...")
