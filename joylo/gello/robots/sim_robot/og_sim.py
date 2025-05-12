@@ -189,6 +189,11 @@ class OGRobotServer:
                     if isinstance(obj, (R1, R1Pro)):
                         obj.base_footprint_link.mass = 250.0
 
+            # Update ghost robot's masses to be uniform to avoid orthonormal errors
+            if self.ghosting:
+                for link in self.ghost.links.values():
+                    link.mass = 0.1
+
         # Make sure robot fingers are extra grippy
         gripper_mat = lazy.isaacsim.core.api.materials.PhysicsMaterial(
             prim_path=f"{self.robot.prim_path}/Looks/gripper_mat",
