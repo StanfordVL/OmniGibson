@@ -789,6 +789,7 @@ class OGRobotServer:
                 else:
                     self.env.task.object_scope[bddl_name].load_state(obj_state, serialized=False)
             self.env.scene.update_initial_file()
+            print(f"\nLoading task {self.env.task.activity_name} instance id: {self.instance_id}\n")
 
         # Reset env
         self.env.reset()
