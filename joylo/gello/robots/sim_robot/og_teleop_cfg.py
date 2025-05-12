@@ -10,17 +10,17 @@ from omnigibson.transition_rules import (
 )
 
 VALIDATED_TASKS = {
-    0: ["picking_up_trash", # difficulty: 1 (pick&place)
-        "putting_away_Halloween_decorations", # difficulty: 2 (articulated+pick&place)
-        "installing_alarms", # difficulty: 2 (toggleOn)
-        "slicing_vegetables", # difficulty: 4 (slicing)
-        "cleaning_up_plates_and_food", # difficulty: 5 (advanced pick&place+articulated)
+    0: ["picking_up_trash", # difficulty: 2
+        "putting_away_Halloween_decorations", # difficulty: 3
+        "cleaning_up_plates_and_food", # difficulty: 3.5
+        "setting_mousetraps", # difficulty: 2
+        "hiding_Easter_eggs", # difficulty: 2
     ],
-    1: ["turning_on_radio", # difficulty: 1 (toggleOn)
-        "chopping_wood", # difficulty: 2 (slicing)
-        "carrying_in_groceries", # difficulty: 3 (articulated+navigation)
-        "picking_up_toys", # difficulty: 4 (advanced pick&place)
-        "assembling_gift_baskets", # difficulty: 4 (small object pick&place)
+    1: ["turning_on_radio", # difficulty: 1
+        "picking_up_toys", # difficulty: 3.5
+        "can_meat", # difficulty: 3.5
+        "rearranging_kitchen_furniture", # difficulty: 3
+        "putting_up_Christmas_decorations_inside", # difficulty: 2
     ]}
 
 # Viewing mode configuration
