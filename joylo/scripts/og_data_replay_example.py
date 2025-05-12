@@ -87,6 +87,20 @@ class CollisionMetric(EnvMetric):
         return episode_metrics
 
 
+
+class TaskSuccessMetric(EnvMetric):
+    def __init__(self):
+        super().__init__()
+
+    def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
+        # Record whether task is done (terminated is true but not truncated)
+        return {"done": terminated and not truncated}
+
+    def _compute_episode_metrics(self, env, episode_info):
+        # Derive acceleration -> jerk based on the recorded velocities
+        return {"success": th.any(th.tensor(episode_info["done"])).item()}
+
+
 def check_robot_self_collision(env):
     # TODO: What about gripper finger self collision?
     for robot in env.robots:
@@ -237,6 +251,7 @@ def replay_hdf5_file(hdf_input_path):
 
     if RUN_QA:
         # Add QA metrics
+        env.add_metric(name="success", metric=TaskSuccessMetric())
         env.add_metric(name="jerk", metric=MotionMetric())
 
         col_metric = CollisionMetric()
