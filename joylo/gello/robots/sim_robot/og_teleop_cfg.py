@@ -66,7 +66,7 @@ USE_VERTICAL_VISUALIZERS = False
 GHOST_APPEAR_THRESHOLD = 0.1  # Threshold for showing ghost
 GHOST_APPEAR_TIME = 10  # Number of frames to wait before showing ghost
 USE_REACHABILITY_VISUALIZERS = True
-AUTO_CHECKPOINTING = True  # checkpoint when 1) a new termination condition is met 2) some fixed amount of time has passed
+AUTO_CHECKPOINTING = False  # checkpoint when 1) a new termination condition is met 2) some fixed amount of time has passed
 STEPS_TO_AUTO_CHECKPOINT = 6000  # Assuming 20 fps, this is about 5 minutes
 
 # Visualization cylinder configs
@@ -84,9 +84,9 @@ BEACON_LENGTH = 5.0
 
 # Global whitelist of visual-only objects
 VISUAL_ONLY_CATEGORIES = {
-    "bush",
-    "tree",
-    "pot_plant",
+    # "bush",
+    # "tree",
+    # "pot_plant",
 }
 
 # Global whitelist of task-relevant objects
