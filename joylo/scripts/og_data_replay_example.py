@@ -2,6 +2,7 @@ from omnigibson.envs import DataPlaybackWrapper
 from omnigibson.envs import EnvMetric
 from omnigibson.utils.usd_utils import RigidContactAPI
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
+from omnigibson.utils.config_utils import TorchEncoder
 import torch as th
 from omnigibson.macros import gm
 import os
@@ -36,6 +37,9 @@ class MotionMetric(EnvMetric):
             vels = (positions[1:] - positions[:-1]) / og.sim.get_sim_step_dt()
             accs = (vels[1:] - vels[:-1]) / og.sim.get_sim_step_dt()
             jerks = (accs[1:] - accs[:-1]) / og.sim.get_sim_step_dt()
+            episode_metrics[f"{pos_key}::avg_vel"] = vels.mean(dim=0)
+            episode_metrics[f"{pos_key}::avg_acc"] = accs.mean(dim=0)
+            episode_metrics[f"{pos_key}::avg_jerk"] = jerks.mean(dim=0)
             episode_metrics[f"{pos_key}::max_vel"] = vels.max().item()
             episode_metrics[f"{pos_key}::max_acc"] = accs.max().item()
             episode_metrics[f"{pos_key}::max_jerk"] = jerks.max().item()
@@ -78,7 +82,7 @@ class CollisionMetric(EnvMetric):
         return step_metrics
 
     def _compute_episode_metrics(self, env, episode_info):
-        # Derive acceleration -> jerk based on the recorded velocities
+        # Compute any collisions from this step
         episode_metrics = dict()
         for name, collisions in episode_info.items():
             collisions = th.tensor(collisions)
@@ -89,8 +93,6 @@ class CollisionMetric(EnvMetric):
 
 
 class TaskSuccessMetric(EnvMetric):
-    def __init__(self):
-        super().__init__()
 
     def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
         # Record whether task is done (terminated is true but not truncated)
@@ -122,14 +124,11 @@ def check_robot_base_nonarm_nonfloor_collision(env):
     for robot in env.robots:
         robot_link_paths = set(robot.link_prim_paths)
         for arm in robot.arm_names:
-            robot_link_paths -= set(robot.arm_link_names[arm])
-            robot_link_paths -= set(robot.gripper_link_names[arm])
-            robot_link_paths -= set(robot.finger_link_names[arm])
-    robot_link_idxs = [RigidContactAPI.get_body_col_idx(link_path) for link_path in robot_link_paths]
+            robot_link_paths -= set(link.prim_path for link in robot.arm_links[arm])
+            robot_link_paths -= set(link.prim_path for link in robot.gripper_links[arm])
+            robot_link_paths -= set(link.prim_path for link in robot.finger_links[arm])
+    robot_link_idxs = [RigidContactAPI.get_body_col_idx(link_path)[1] for link_path in robot_link_paths]
     robot_contacts = RigidContactAPI.get_all_impulses(env.scene.idx)[robot_link_idxs]
-
-    # col_idxs = th.tensor(tuple(set(len(RigidContactAPI._COL_IDX_TO_PATH)) - floor_link_col_idxs))
-    # robot_contacts = robot_contacts[:, col_idxs]
 
     return th.any(robot_contacts).item()
 
@@ -240,7 +239,7 @@ def replay_hdf5_file(hdf_input_path):
         n_render_iterations=1,
         only_successes=False,
         additional_wrapper_configs=additional_wrapper_configs,
-        include_task=False,
+        include_task=True,
         include_task_obs=False,
         include_robot_control=False,
         include_contacts=True,
@@ -301,7 +300,7 @@ def replay_hdf5_file(hdf_input_path):
 
     # Save metrics
     with open(metrics_output_path, "w+") as f:
-        json.dump(metrics, f, indent=4)
+        json.dump(metrics, f, cls=TorchEncoder, indent=4)
 
     # Always clear the environment to free resources
     og.clear()
