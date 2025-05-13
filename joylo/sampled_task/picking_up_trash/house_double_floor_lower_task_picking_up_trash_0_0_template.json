@@ -32,26 +32,6 @@
     },
     "objects_info": {
         "init_info": {
-            "blender_dhfqid_0": {
-                "class_module": "omnigibson.objects.dataset_object",
-                "class_name": "DatasetObject",
-                "args": {
-                    "name": "blender_dhfqid_0",
-                    "category": "blender",
-                    "model": "dhfqid",
-                    "scale": [
-                        0.9999678134918213,
-                        1.0002723932266235,
-                        1.000071406364441
-                    ],
-                    "fixed_base": true,
-                    "visual_only": false,
-                    "in_rooms": [
-                        "kitchen_0"
-                    ],
-                    "bddl_object_scope": null
-                }
-            },
             "bottom_cabinet_qacthv_0": {
                 "class_module": "omnigibson.objects.dataset_object",
                 "class_name": "DatasetObject",
@@ -5283,47 +5263,6 @@
         "registry": {
             "system_registry": {},
             "object_registry": {
-                "blender_dhfqid_0": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            8.240078926086426,
-                            -0.8539604544639587,
-                            0.9985507726669312
-                        ],
-                        "ori": [
-                            5.0445087254047394e-05,
-                            8.293766586575657e-05,
-                            0.9999512434005737,
-                            -0.009885820560157299
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "joint_pos": [
-                        -2.1557134549654577e-11
-                    ],
-                    "joint_vel": [
-                        7.386292471482214e-16
-                    ],
-                    "non_kin": {
-                        "Temperature": {
-                            "temperature": 23.0
-                        },
-                        "ToggledOn": {
-                            "value": false,
-                            "hand_in_marker_steps": 0
-                        }
-                    }
-                },
                 "bottom_cabinet_qacthv_0": {
                     "is_asleep": false,
                     "root_link": {
