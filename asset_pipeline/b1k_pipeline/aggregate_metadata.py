@@ -22,7 +22,7 @@ def main():
                 object_inventory = json.load(f)
 
             with pipeline_output_dir.open("collision_average_volumes.json", "r") as f:
-                collision_average_volumes = json.load(f)["volumes"]
+                collision_average_volumes = json.load(f)["average_volumes"]
 
             # For now, get categories from CSV file
             categories_by_id = {}
@@ -51,11 +51,11 @@ def main():
                     # The density needs to be temporarily capped at 10000 kg/m^3 - values above that
                     # are likely due to errors in the mass annotation (LLM based) or in the volume
                     # obtained from the collision mesh (infinitesimal dimension).
-                    if density and density > 10000:
-                        print(
-                            f"Warning: Density for category {category} is {density} kg/m^3, capping to 10000 kg/m^3"
-                        )
-                        density = 10000
+                    # if density and density > 10000:
+                    #     print(
+                    #         f"Warning: Density for category {category} is {density} kg/m^3, capping to 10000 kg/m^3"
+                    #     )
+                    #     density = 10000
 
                     avg_category_specs[category] = {
                         "mass": mass,

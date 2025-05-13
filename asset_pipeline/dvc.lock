@@ -9282,8 +9282,8 @@ stages:
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 12882d6c86a729c61984061fdbe9ebaf
-      size: 91054
+      md5: 189db49bb43956aac68646fce5636270
+      size: 558703
     - path: artifacts/pipeline/collision_average_volumes.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -9298,16 +9298,16 @@ stages:
       size: 0
     - path: b1k_pipeline/aggregate_metadata.py
       hash: md5
-      md5: 03226f9679b85d2725b7cefbdfede3f6
-      size: 6235
+      md5: f0eba335ce7c3228a6800985d888418e
+      size: 6253
     - path: metadata/allowed_room_types.csv
       hash: md5
       md5: a2cc4b8459c061f843bf130a5c267346
       size: 454
     - path: metadata/category_mapping.csv
       hash: md5
-      md5: ce6966b6e6c260ca12548fd736030f6f
-      size: 179841
+      md5: c2d77a7aaffa8beb47271df8ef8966b7
+      size: 191710
     - path: metadata/non_sampleable_categories.csv
       hash: md5
       md5: 58187b59a613fbb183d0f6b63b42a32b
@@ -9315,8 +9315,8 @@ stages:
     outs:
     - path: artifacts/parallels/metadata.zip
       hash: md5
-      md5: b9a588f5d570dbd7dbb3cc6758cfc436
-      size: 66978
+      md5: 9635a77ca0c2879ad2fd50c200c86ebe
+      size: 67221
     - path: artifacts/pipeline/aggregate_metadata.json
       hash: md5
       md5: 3f6059a52842bd4b8d8ea19a40456a8e
@@ -11729,8 +11729,8 @@ stages:
     deps:
     - path: b1k_pipeline/collision_average_volumes.py
       hash: md5
-      md5: 1086011974867fa240099a18a827a979
-      size: 2445
+      md5: a59b9dcf9385a4803e033d193a5549c8
+      size: 2493
     - path: cad/objects/batch-00/artifacts/meshes.zip
       hash: md5
       md5: 87adf16cd2f5691d27ee5192a947fa02
@@ -12470,16 +12470,16 @@ stages:
     outs:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 12882d6c86a729c61984061fdbe9ebaf
-      size: 91054
+      md5: 189db49bb43956aac68646fce5636270
+      size: 558703
   collision_average_volumes_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_average_volumes.json
       artifacts/pipeline/collision_average_volumes.success
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 12882d6c86a729c61984061fdbe9ebaf
-      size: 91054
+      md5: 189db49bb43956aac68646fce5636270
+      size: 558703
     - path: b1k_pipeline/check_success.py
       hash: md5
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
