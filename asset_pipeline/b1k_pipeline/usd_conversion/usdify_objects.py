@@ -41,7 +41,7 @@ def main():
         with ParallelZipFS("objects_usd.zip", write=True) as out_fs:
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
-            objdir_glob = list(objects_fs.glob("objects/*/*/"))[:10]
+            objdir_glob = list(objects_fs.glob("objects/*/*/"))
             for item in tqdm.tqdm(objdir_glob):
                 if objects_fs.opendir(item.path).opendir("urdf").glob("*.urdf").count().files == 0:
                     continue
