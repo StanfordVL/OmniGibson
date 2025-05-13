@@ -11,7 +11,7 @@ from omnigibson.macros import gm
 import argparse
 import sys
 import json
-from gello.robots.sim_robot.og_teleop_utils import optimize_sim_settings
+from gello.robots.sim_robot.og_teleop_utils import optimize_sim_settings, GHOST_APPEAR_THRESHOLD
 
 RUN_QA = True
 
@@ -91,7 +91,6 @@ class CollisionMetric(EnvMetric):
         return episode_metrics
 
 
-
 class TaskSuccessMetric(EnvMetric):
 
     def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
@@ -101,6 +100,28 @@ class TaskSuccessMetric(EnvMetric):
     def _compute_episode_metrics(self, env, episode_info):
         # Derive acceleration -> jerk based on the recorded velocities
         return {"success": th.any(th.tensor(episode_info["done"])).item()}
+
+
+class GhostHandAppearanceMetric(EnvMetric):
+
+    def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
+        # Record whether task is done (terminated is true but not truncated)
+        active = False
+        for robot in env.robots:
+            robot_qpos = robot.get_joint_positions(normalized=False)
+            for arm in robot.arm_names:
+                if th.max(th.abs(
+                        robot_qpos[robot.arm_control_idx[arm]] - action[robot.arm_action_idx[arm]]
+                )).item() > GHOST_APPEAR_THRESHOLD:
+                    active = True
+                    break
+            if active:
+                break
+        return {"active": active}
+
+    def _compute_episode_metrics(self, env, episode_info):
+        # Derive acceleration -> jerk based on the recorded velocities
+        return {"n_steps_active": th.tensor(episode_info["active"]).sum().item()}
 
 
 def check_robot_self_collision(env):
@@ -252,6 +273,7 @@ def replay_hdf5_file(hdf_input_path):
         # Add QA metrics
         env.add_metric(name="success", metric=TaskSuccessMetric())
         env.add_metric(name="jerk", metric=MotionMetric())
+        env.add_metric(name="ghost_hand", metric=GhostHandAppearanceMetric())
 
         col_metric = CollisionMetric()
         col_metric.add_check(name="robot_self", check=check_robot_self_collision)
