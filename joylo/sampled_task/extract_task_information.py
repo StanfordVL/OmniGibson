@@ -20,8 +20,8 @@ def main():
         task_name = task_dir  # The directory name is the task name
         task_path = os.path.join(script_dir, task_dir)
         
-        # Get all JSON files in the task directory
-        json_files = [f for f in os.listdir(task_path) if f.endswith('.json')]
+        # Get all JSON files in the task directory, excluding those with a dash '-' in their name (partial/aggregate)
+        json_files = [f for f in os.listdir(task_path) if f.endswith('.json') and '-' not in f]
         
         if not json_files:
             print(f"No JSON files found in task directory: {task_dir}")

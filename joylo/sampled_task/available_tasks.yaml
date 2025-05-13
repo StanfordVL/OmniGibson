@@ -10,6 +10,54 @@ assembling_gift_baskets:
     - 4.3265380859375
     - 0.003753662109375
     scene_model: house_double_floor_lower
+bringing_in_kindling:
+  0:
+    robot_start_orientation:
+    - 0.0009201883804053068
+    - -1.5625875676050782e-05
+    - -0.7516356706619263
+    - 0.6595779061317444
+    robot_start_position:
+    - -7.711273193359375
+    - -2.353759765625
+    - 0.0050048828125
+    scene_model: house_double_floor_lower
+bringing_in_wood:
+  0:
+    robot_start_orientation:
+    - 0.000644969055429101
+    - 0.0006564260693266988
+    - -0.5481373071670532
+    - 0.8363878726959229
+    robot_start_position:
+    - -10.47418212890625
+    - 1.28668212890625
+    - 0.0050048828125
+    scene_model: house_double_floor_lower
+bringing_newspaper_in:
+  0:
+    robot_start_orientation:
+    - -0.0006256562774069607
+    - 0.0006749705644324422
+    - -0.0720907673239708
+    - 0.9973976612091064
+    robot_start_position:
+    - 5.05450439453125
+    - 5.048004150390625
+    - 0.0050048828125
+    scene_model: house_double_floor_lower
+bringing_water:
+  0:
+    robot_start_orientation:
+    - 0.0008991969516500831
+    - -0.00019634084310382605
+    - -0.793474018573761
+    - 0.6086034774780273
+    robot_start_position:
+    - 6.06195068359375
+    - -0.887542724609375
+    - 0.0050048828125
+    scene_model: house_single_floor
 can_beans:
   0:
     robot_start_orientation:
@@ -94,6 +142,18 @@ clean_up_broken_glass:
     - 3.120452880859375
     - 0.003753662109375
     scene_model: house_double_floor_lower
+clean_up_your_desk:
+  0:
+    robot_start_orientation:
+    - 0.0003504300257191062
+    - -0.0008522080606780946
+    - -0.945310115814209
+    - 0.3261714577674866
+    robot_start_position:
+    - 22.890777587890625
+    - 14.367156982421875
+    - 0.004974365234375
+    scene_model: house_single_floor
 cleaning_up_plates_and_food:
   0:
     robot_start_orientation:

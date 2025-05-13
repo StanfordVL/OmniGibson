@@ -27,10 +27,10 @@ class JoyconAgent(Agent):
             self,
             calibration_dir: str,
             deadzone_threshold: float = 0.1,
-            max_translation: float = 0.1,
-            max_rotation: float = 0.3,
-            max_trunk_translate: float = 0.1,
-            max_trunk_tilt: float = 0.1,
+            max_translation: float = 0.05,
+            max_rotation: float = 0.1,
+            max_trunk_translate: float = 0.05,
+            max_trunk_tilt: float = 0.001,
             enable_rumble: bool = True,
             # default_trunk_translate: float = 0.0,
             # default_trunk_tilt: float = 0.0,
@@ -63,6 +63,11 @@ class JoyconAgent(Agent):
             "right": None,
         }
         # self.current_tilt = default_tilt
+        
+        self.velocity_filters = {
+            "left": SecondOrderFilter(dim=2, damping_ratio=1.0, natural_frequency=15.0),
+            "right": SecondOrderFilter(dim=2, damping_ratio=1.0, natural_frequency=15.0),
+        }
 
         # Connect the joycons
         jc_id_left = get_L_id()
@@ -185,15 +190,18 @@ class JoyconAgent(Agent):
         # Use joysticks to genreate array of motions for the base
         # Values are:  (base_dx, base_dy, base_drz, trunk_dz, trunk_dry)
         base_trunk_vals = np.zeros(5)
+        base_speed = self.max_translation if not self.jc_left.get_button_l_stick() else self.max_translation * 2.0
+        
+        # Get filtered joystick values with smooth acceleration
+        left_filtered = self.velocity_filters["left"].update(joystick_values["left"])
+        right_filtered = self.velocity_filters["right"].update(joystick_values["right"])
 
         # Left stick is (base_dx, base_dy)
-        base_speed = self.max_translation if not self.jc_left.get_button_l_stick() else self.max_translation * 2.0
-        base_trunk_vals[:2] = joystick_values["left"] * base_speed * np.array([1.0, -1.0])
-
+        base_trunk_vals[:2] = left_filtered * base_speed * np.array([1.0, -1.0])
         # Right stick is (trunk_dry, base_drz); only apply trunk_dry if the right stick is pressed
-        trunk_tilt_value = -self.max_trunk_tilt if self.jc_right.get_button_r_stick() else 0
+        trunk_tilt_value = -self.max_trunk_tilt if not self.jc_right.get_button_r_stick() else 0
         base_yaw_value = -self.max_rotation if not self.jc_right.get_button_r_stick() else 0
-        base_trunk_vals[[4, 2]] = joystick_values["right"] * np.array([trunk_tilt_value, base_yaw_value])
+        base_trunk_vals[[4, 2]] = right_filtered * np.array([trunk_tilt_value, base_yaw_value])
  
             
         # Left joycon up/down buttons control (trunk_dz or combined trunk dz and tilt)
@@ -232,3 +240,46 @@ class JoyconAgent(Agent):
         # Compose values and return
         # [base_x, base_y, base_r, trunk_translate, trunk_tilt, gripper_l, gripper_r, X, Y, B, A, capture, home, left arrow, right arrow buttons]
         return th.Tensor(vals)
+    
+    
+class SecondOrderFilter:
+    """A second-order filter that produces smooth velocity profiles."""
+    
+    def __init__(self, dim=1, damping_ratio=1.0, natural_frequency=5.0):
+        """
+        Args:
+            dim: Dimension of the data
+            damping_ratio: Damping ratio (1.0 for critical damping)
+            natural_frequency: Natural frequency of the system
+        """
+        self.dim = dim
+        self.damping_ratio = damping_ratio
+        self.natural_frequency = natural_frequency
+        
+        # State variables
+        self.position = np.zeros(dim)
+        self.velocity = np.zeros(dim)
+        
+    def update(self, target, dt=1/60.0):
+        """
+        Update the filter state.
+        
+        Args:
+            target: Target position
+            dt: Time step
+            
+        Returns:
+            Current filtered position
+        """
+        # Calculate acceleration
+        omega_n_squared = self.natural_frequency ** 2
+        damping_term = 2 * self.damping_ratio * self.natural_frequency
+        
+        error = target - self.position
+        acceleration = omega_n_squared * error - damping_term * self.velocity
+        
+        # Update velocity and position
+        self.velocity += acceleration * dt
+        self.position += self.velocity * dt
+        
+        return self.position

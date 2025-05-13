@@ -192,7 +192,7 @@ def replay_hdf5_file(hdf_input_path):
     # Define external camera positions and orientations
     external_camera_poses = [
         # Camera 1
-        [[-0.4, 0, 2.0], [0.369, -0.369, -0.603, 0.603]],
+        [[-0.4, 0, 2.0], [0.2706, -0.2706, -0.6533,  0.6533]],
         # # Camera 2
         # [[-0.2, 0.6, 2.0], [-0.1930, 0.4163, 0.8062, -0.3734]],
         # # Camera 3
@@ -239,8 +239,8 @@ def replay_hdf5_file(hdf_input_path):
             "image_width": RESOLUTION_DEFAULT,
             "horizontal_aperture": 40.0,
         },
-        "position": th.tensor([0.06, 0, 0.4525], dtype=th.float32),
-        "orientation": th.tensor([-0.98481, 0, 0, 0.17365], dtype=th.float32),
+        "position": th.tensor([0.06, 0.0, 0.01], dtype=th.float32),
+        "orientation": th.tensor([-1.0, 0.0, 0.0, 0.0], dtype=th.float32),
         "pose_frame": "parent",
     })
 
