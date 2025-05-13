@@ -960,7 +960,7 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter, ghost_info):
     
     if update:
         # Concatenate arm and torso indices and set joint positions
-        update_indices = th.cat([ghost_info["torso_joint_idxs"], ghost_info["arm_joint_idxs"]])
+        update_indices = th.cat([ghost_info["torso_joint_idxs"], ghost_info["arm_joint_idxs"], ghost_info["finger_joint_idxs"]])
         ghost.set_joint_positions(ghost_qpos[update_indices], indices=update_indices, normalized=False, drive=False)
     
     return ghost_appear_counter

@@ -9,6 +9,8 @@ from omnigibson.transition_rules import (
     CookingSystemRule,
 )
 
+TOTAL_TASK_INSTANCES = 150
+
 VALIDATED_TASKS = {
     0: ["picking_up_trash", # difficulty: 2
         "putting_away_Halloween_decorations", # difficulty: 3
