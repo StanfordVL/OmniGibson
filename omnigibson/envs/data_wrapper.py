@@ -8,6 +8,7 @@ import h5py
 import imageio
 import torch as th
 import numpy as np
+import time
 
 import omnigibson as og
 import omnigibson.lazy as lazy
@@ -583,6 +584,7 @@ class DataPlaybackWrapper(DataWrapper):
         include_env_wrapper=False,
         additional_wrapper_configs=None,
         append_to_input_path=False,
+        load_room_instances=None,
     ):
         """
         Create a DataPlaybackWrapper environment instance form the recorded demonstration info
@@ -643,6 +645,9 @@ class DataPlaybackWrapper(DataWrapper):
         config["scene"]["scene_file"] = json.loads(f["data"].attrs["scene_file"])
         if config["task"]["type"] == "BehaviorTask":
             config["task"]["online_object_sampling"] = False
+
+        if load_room_instances is not None:
+            config["scene"]["load_room_instances"] = load_room_instances
 
         # Because we're loading directly from the cached scene file, we need to disable any additional objects that are being added since
         # they will already be cached in the original scene file
@@ -870,6 +875,8 @@ class DataPlaybackWrapper(DataWrapper):
                 data hdf5 file
         """
         print(f"================= playback episode {episode_id} =================")
+        eps_start = time.time()
+
         data_grp = self.input_hdf5["data"]
         assert f"demo_{episode_id}" in data_grp, f"No valid episode with ID {episode_id} found!"
         traj_grp = data_grp[f"demo_{episode_id}"]
@@ -886,22 +893,34 @@ class DataPlaybackWrapper(DataWrapper):
         obs_infos = []
 
         # Reset environment
-        og.sim.restore(scene_files=[self.scene_file])
+        # og.sim.restore(scene_files=[self.scene_file])
 
         # Restore to initial state
-        og.sim.load_state(state[0], serialized=True)
-
+        # og.sim.load_state(state[0], serialized=True)
+        s = state[0]
+        dicts, _ = og.sim.deserialize(s)
+        for obj_name in list(dicts[0]["object_registry"].keys()):
+            if self.env.scene.object_registry("name", obj_name).kinematic_only:
+                del dicts[0]["object_registry"][obj_name]
+        og.sim.load_state(dicts, serialized=False)
         seg_obs, _, _, _, info = self.env.step(action=action[0], n_render_iterations=self.n_render_iterations)
         for key in seg_obs_dict:
             seg_obs_dict[key].append(seg_obs[key])
         obs_infos.append(json.dumps(info["obs_info"]))
 
         for i, (a, s) in enumerate(zip(action, state[1:])):
-            og.sim.load_state(s, serialized=True)
+            print(f"================= playback step {i} =================")
+            start = time.time()
+            dicts, _ = og.sim.deserialize(s)
+            for obj_name in list(dicts[0]["object_registry"].keys()):
+                if self.env.scene.object_registry("name", obj_name).kinematic_only:
+                    del dicts[0]["object_registry"][obj_name]
+            og.sim.load_state(dicts, serialized=False)
             seg_obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
             for key in seg_obs_dict:
                 seg_obs_dict[key].append(seg_obs[key])
             obs_infos.append(json.dumps(info["obs_info"]))
+            print(f"================= playback step {i} done, time: {time.time() - start} =================")
 
         for key in seg_obs_dict:
             seg_obs_dict[key] = th.stack(seg_obs_dict[key], dim=0)
@@ -912,6 +931,11 @@ class DataPlaybackWrapper(DataWrapper):
 
         dt = h5py.string_dtype(encoding="utf-8")
         traj_grp["obs_info"][...] = np.array(obs_infos, dtype=dt)
+
+        self.input_hdf5.flush()
+        print(
+            f"================= playback episode {episode_id} done, time: {time.time() - eps_start} ================="
+        )
 
     def playback_dataset(
         self, record_data=False, video_writers=None, video_rgb_keys=None, callback=None, demo_ids=None
