@@ -207,6 +207,7 @@ stages:
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
     - artifacts/pipeline/export_meshes.success
+    - metadata/object_renames.csv
     # These were necessary when we were adding the mass in the URDF file which is no longer the case.
     # - artifacts/parallels/metadata.zip
     # - artifacts/pipeline/aggregate_metadata.success

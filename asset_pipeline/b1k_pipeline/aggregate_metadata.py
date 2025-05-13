@@ -30,14 +30,18 @@ def main():
             with metadata_in_dir.open("category_mapping.csv", newline="") as csvfile:
                 reader = csv.DictReader(csvfile)
                 for i, row in enumerate(reader):
+                    # TODO: Use something more authoritative than this entry
+                    # Get the has_system entry to check if the category is a particle system,
+                    # and if so, skip it entirely.
+                    has_system = row["has_system"].strip().lower()
+                    if has_system == "true":
+                        continue
+
                     cat_id = i  # Temporarily just use row idx. TODO: Cover everything
                     category = row["category"].strip()
                     categories_by_id[cat_id] = category
 
-                    if category not in collision_average_volumes:
-                        # If a category is not in the average volumes, it means it doesn't have
-                        # any objects. So we can skip it in the metadata.
-                        continue
+                    assert category in collision_average_volumes, f"Category {category} not in collision_average_volumes"
 
                     volume = collision_average_volumes[category]
                     mass = float(row["mass (auto)"]) if row["mass (auto)"] and row["mass (auto)"] != "#DIV/0!" else None

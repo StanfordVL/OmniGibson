@@ -9294,16 +9294,16 @@ stages:
       size: 0
     - path: b1k_pipeline/aggregate_metadata.py
       hash: md5
-      md5: c233c2cc073b43a5f0340e0235c6cde5
-      size: 6014
+      md5: f9a650e1845a23b16750b8e27d95e57d
+      size: 6334
     - path: metadata/allowed_room_types.csv
       hash: md5
       md5: a2cc4b8459c061f843bf130a5c267346
       size: 454
     - path: metadata/category_mapping.csv
       hash: md5
-      md5: 56ca15ec6db083e7f7f7a81b54c54824
-      size: 184348
+      md5: ce6966b6e6c260ca12548fd736030f6f
+      size: 179841
     - path: metadata/non_sampleable_categories.csv
       hash: md5
       md5: 58187b59a613fbb183d0f6b63b42a32b
@@ -9311,12 +9311,12 @@ stages:
     outs:
     - path: artifacts/parallels/metadata.zip
       hash: md5
-      md5: ca75159c76957613ef85df29c623f193
-      size: 152
+      md5: 4308ff5fe487d83a7d05c38fc00413bd
+      size: 66978
     - path: artifacts/pipeline/aggregate_metadata.json
       hash: md5
-      md5: fd712d66128202aad4b7b7d1a07cd889
-      size: 336
+      md5: 3f6059a52842bd4b8d8ea19a40456a8e
+      size: 69
   aggregate_metadata_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/aggregate_metadata.json
       artifacts/pipeline/aggregate_metadata.success
