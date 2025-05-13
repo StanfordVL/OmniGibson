@@ -53,13 +53,10 @@ class OGRobotServer:
         # Case 2: Batch ID provided
         elif batch_id is not None:
             assert batch_id in [0, 1], f"Got invalid batch id: {batch_id}. Must be 0 or 1"
-            assert instance_id is None, "Cannot specify both batch id and instance id"
+            assert instance_id is not None, "Have to specify both batch id and instance id"
             self.task_name = choose_from_options(options=VALIDATED_TASKS[batch_id],
                                                 name="task options", 
                                                 random_selection=False)
-            instance_id = choose_from_options(options=list(range(0, TOTAL_TASK_INSTANCES+1)),
-                                            name="instance id to start from",
-                                            random_selection=False)
         # Case 3: No task specified
         else:
             self.task_name = None
@@ -272,10 +269,10 @@ class OGRobotServer:
         # Setup task-related elements if task is specified
         if self.task_name is not None:
             # Setup task instruction UI
-            self.overlay_window, self.text_labels, self.bddl_goal_conditions = utils.setup_task_instruction_ui(
+            self.overlay_window, self.text_labels, self.instance_id_label, self.bddl_goal_conditions = utils.setup_task_instruction_ui(
                 self.task_name, 
-                self.env, 
-                self.robot
+                self.env,
+                self.instance_id
             )
             
             # Initialize goal status tracking
@@ -796,7 +793,7 @@ class OGRobotServer:
                 activity_definition_id=self.env.task.activity_definition_id,
                 activity_instance_id=self.instance_id,
             )
-            tro_file_path = f"{gm.DATASET_PATH}/scenes/{scene_model}/json/{self.env.task.activity_name}_instances/{tro_filename}-tro_state.json"
+            tro_file_path = f"{gm.DATASET_PATH}/scenes/{scene_model}/json/{scene_model}_task_{self.env.task.activity_name}_instances/{tro_filename}-tro_state.json"
             # check if tro_file_path exists, if not, then presumbaly we are done
             if not os.path.exists(tro_file_path):
                 print(f"Task {self.env.task.activity_name} instance id: {self.instance_id} does not exist")
@@ -816,6 +813,7 @@ class OGRobotServer:
                     self.env.task.object_scope[bddl_name].load_state(obj_state, serialized=False)
             self.env.scene.update_initial_file()
             print(f"\nLoading task {self.env.task.activity_name} instance id: {self.instance_id}\n")
+            utils.update_instance_id_label(self.instance_id_label, self.instance_id)
 
         # Reset env
         self.env.reset()

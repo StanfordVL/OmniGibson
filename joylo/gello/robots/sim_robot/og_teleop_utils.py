@@ -542,20 +542,20 @@ def setup_flashlights(robot):
     return flashlights
 
 
-def setup_task_instruction_ui(task_name, env, robot):
+def setup_task_instruction_ui(task_name, env, instance_id=None):
     """
     Set up UI for displaying task instructions and goal status
     
     Args:
         task_name (str): Name of the task
         env: Environment object
-        robot: Robot object
+        instance_id (int, optional): Instance ID to display in the top right corner
         
     Returns:
-        tuple: (overlay_window, text_labels, bddl_goal_conditions)
+        tuple: (overlay_window, text_labels, instance_id_label, bddl_goal_conditions)
     """
     if task_name is None:
-        return None, None, None
+        return None, None, None, None
     
     bddl_goal_conditions = env.task.activity_natural_language_goal_conditions
 
@@ -575,10 +575,30 @@ def setup_task_instruction_ui(task_name, env, robot):
     og.sim.render()
 
     text_labels = []
+    instance_id_label = None
+
     with overlay_window.frame:
         with lazy.omni.ui.ZStack():
             # Bottom layer - transparent spacer
             lazy.omni.ui.Spacer()
+            
+            # Create a container for the instance ID in the top right corner
+            if instance_id is not None:
+                with lazy.omni.ui.VStack(alignment=lazy.omni.ui.Alignment.RIGHT_TOP, spacing=0):
+                    lazy.omni.ui.Spacer(height=UI_SETTINGS["top_margin"])  # Top margin
+                    with lazy.omni.ui.HStack(height=20):
+                        instance_id_label = lazy.omni.ui.Label(
+                            f"Instance ID: {instance_id}",
+                            alignment=lazy.omni.ui.Alignment.RIGHT_CENTER,
+                            style={
+                                "color": 0xFFFFFFFF,  # White color (ABGR)
+                                "font_size": UI_SETTINGS["font_size"],
+                                "margin": 0,
+                                "padding": 0
+                            }
+                        )
+                        lazy.omni.ui.Spacer(width=UI_SETTINGS["left_margin"])  # Right margin
+            
             # Text container at top left
             with lazy.omni.ui.VStack(alignment=lazy.omni.ui.Alignment.LEFT_TOP, spacing=0):
                 lazy.omni.ui.Spacer(height=UI_SETTINGS["top_margin"])  # Top margin
@@ -602,7 +622,7 @@ def setup_task_instruction_ui(task_name, env, robot):
     # Force render to update the overlay
     og.sim.render()
     
-    return overlay_window, text_labels, bddl_goal_conditions
+    return overlay_window, text_labels, instance_id_label, bddl_goal_conditions
 
 
 def setup_status_display_ui(main_viewport):
@@ -965,6 +985,20 @@ def update_ghost_robot(ghost, robot, action, ghost_appear_counter, ghost_info):
     
     return ghost_appear_counter
 
+def update_instance_id_label(instance_id_label, instance_id):
+    """
+    Update the instance ID label in the UI
+    
+    Args:
+        instance_id_label: Label object for displaying instance ID
+        instance_id: New instance ID to display
+        
+    Returns:
+        None
+    """
+    if instance_id_label is not None and instance_id is not None:
+        instance_id_label.text = f"Instance ID: {instance_id}"
+
 
 def update_goal_status(text_labels, goal_status, prev_goal_status, env, recording_path=None, event_queue=None):
     """
@@ -1073,7 +1107,7 @@ def update_reachability_visualizers(reachability_visualizers, joint_cmd, prev_ba
         return prev_base_motion
 
     # Show visualizers only when there's nonzero base motion
-    has_base_motion = th.any(th.abs(joint_cmd["base"]) > 0.0)
+    has_base_motion = th.any(th.abs(joint_cmd["base"]) > 1e-3)
     
     if has_base_motion != prev_base_motion:
         for edge in reachability_visualizers.values():

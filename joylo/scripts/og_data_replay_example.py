@@ -221,6 +221,7 @@ def replay_hdf5_file(hdf_input_path):
             "sensor_kwargs": {
                 "image_height": RESOLUTION_DEFAULT,
                 "image_width": RESOLUTION_DEFAULT,
+                "horizontal_aperture": 40.0,
             },
             "position": th.tensor(position, dtype=th.float32),
             "orientation": th.tensor(orientation, dtype=th.float32),
