@@ -871,6 +871,9 @@ def import_obj_metadata(usd_path, obj_category, obj_model, dataset_root, import_
     # Pop bb and base link offset and meta links info
     base_link_offset = data["metadata"].pop("base_link_offset")
     default_bb = data["metadata"].pop("bbox_size")
+    center_of_mass = None
+    if "center_of_mass" in data["metadata"]:
+        center_of_mass = data["metadata"].pop("center_of_mass")
 
     # Manually modify material groups info
     if "material_groups" in data:
@@ -947,6 +950,9 @@ def import_obj_metadata(usd_path, obj_category, obj_model, dataset_root, import_
     prim.GetAttribute("ig:offsetBaseLink").Set(lazy.pxr.Gf.Vec3f(*base_link_offset))
     prim.GetAttribute("ig:category").Set(obj_category)
     prim.GetAttribute("ig:model").Set(obj_model)
+    if center_of_mass is not None:
+        prim.CreateAttribute("ig:centerOfMass", lazy.pxr.Sdf.ValueTypeNames.Vector3f)
+        prim.GetAttribute("ig:centerOfMass").Set(lazy.pxr.Gf.Vec3f(*center_of_mass))
 
     log.debug(f"data: {data}")
 
@@ -1096,7 +1102,7 @@ def _create_urdf_import_config(
     import_config.set_merge_fixed_joints(merge_fixed_joints)
     import_config.set_convex_decomp(use_convex_decomposition)
     import_config.set_fix_base(False)
-    import_config.set_import_inertia_tensor(True)
+    import_config.set_import_inertia_tensor(False)
     import_config.set_distance_scale(1.0)
     import_config.set_density(0.0)
     import_config.set_default_drive_type(drive_mode.JOINT_DRIVE_NONE)
