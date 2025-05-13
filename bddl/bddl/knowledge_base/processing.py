@@ -39,6 +39,7 @@ class KnowledgeBaseProcessor():
         self.preparation()
         self.create_synsets()
         self.create_objects()
+        self.create_particle_systems()
         self.create_scenes()
         self.create_tasks()
         self.create_transitions()
@@ -200,6 +201,17 @@ class KnowledgeBaseProcessor():
         # missing_renames = {final_name for _, final_name in self.object_rename_mapping.values() if not Object.exists(name=final_name.split("-")[1])}
         # assert len(missing_renames) == 0, f"{missing_renames} do not exist in the database. Did you rename a nonexistent object (or one in the deletion queue)?"
 
+    def create_particle_systems(self):
+        with open(GENERATED_DATA_DIR / "substance_hyperparams.csv") as csvfile:
+            reader = csv.DictReader(csvfile, delimiter=",", quotechar='"')
+            for row in reader:
+                name = row["substance"]
+                assert ParticleSystem.get(name) is None, f"Duplicate particle system {name}"
+                params = json.loads(row["hyperparams"])
+                synset_name = row["synset"]
+                synset = Synset.get(name=synset_name)
+                assert synset is not None, f"Synset {synset_name} does not exist in the database."
+                ParticleSystem.create(name=name, parameters=json.dumps(params), synset=synset)
 
     def create_scenes(self):
         """

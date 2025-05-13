@@ -4,6 +4,7 @@ from bddl.knowledge_base.models import Property, \
   Scene, \
   Category, \
   Object, \
+  ParticleSystem, \
   Synset, \
   TransitionRule, \
   Task, \
@@ -29,6 +30,7 @@ __all__ = [
   'Scene',
   'Category',
   'Object',
+  'ParticleSystem',
   'Synset',
   'TransitionRule',
   'Task',

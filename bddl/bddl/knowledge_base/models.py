@@ -162,6 +162,42 @@ class Scene(Model):
 
 
 @dataclass(eq=False, order=False)
+class ParticleSystem(Model):
+    name: str
+    parameters: str
+
+    # the synset that the category belongs to
+    synset_fk: ManyToOne = ManyToOneField("Synset", "particle_systems")
+
+    def __str__(self):
+        return self.name
+
+    class Meta:
+        pk = "name"
+        ordering = ["name"]
+
+    @cache
+    def matching_synset(self, synset) -> bool:
+        return synset.name in self.matching_synsets
+
+    @cached_property
+    def matching_synsets(self) -> Set["Synset"]:
+        if not self.synset:
+            return set()
+        return {anc.name for anc in self.synset.ancestors} | {self.synset.name}
+
+    @classmethod
+    def view_mapped_to_non_leaf_synsets(cls):
+        """Particle systems mapped to Non-Leaf Synsets"""
+        return [x for x in cls.all_objects() if len(x.synset.children) > 0]
+    
+    @classmethod
+    def view_mapped_to_non_substance_synsets(cls):
+        """Particle systems mapped to Non-Substance Synsets"""
+        return [x for x in cls.all_objects() if not x.synset.is_substance]
+
+
+@dataclass(eq=False, order=False)
 class Category(Model):
     name: str
 
@@ -289,6 +325,7 @@ class Synset(Model):
     descendants_fk: ManyToMany = ManyToManyField("Synset", "ancestors")
 
     categories_fk: OneToMany = OneToManyField(Category, "synset")
+    particle_systems_fk: OneToMany = OneToManyField(ParticleSystem, "synset")
     properties_fk: OneToMany = OneToManyField(Property, "synset")
     tasks_fk: ManyToMany = ManyToManyField("Task", "synsets")
     tasks_using_as_future_fk: ManyToMany = ManyToManyField("Task", "future_synsets")
@@ -365,6 +402,13 @@ class Synset(Model):
         for synset in self.descendants:
             matched_objs.update(synset.direct_matching_ready_objects)
         return matched_objs
+    
+    @cached_property
+    def matching_particle_systems(self) -> Set[ParticleSystem]:
+        matched_particle_systems = set(self.particle_systems)
+        for synset in self.descendants:
+            matched_particle_systems.update(synset.particle_systems)
+        return matched_particle_systems
 
     @cached_property
     def required_meta_links(self) -> Set[str]:
@@ -531,6 +575,30 @@ class Synset(Model):
                 (s.is_substance and s.is_used_as_non_substance)
                 or (not s.is_substance and s.is_used_as_substance)
                 or (s.is_used_as_substance and s.is_used_as_non_substance)
+            )
+        ]
+    
+    @classmethod
+    def view_substance_missing_particle_system(cls):
+        """Synsets that are marked as a substance but do not have a particle system"""
+        return [
+            s
+            for s in cls.all_objects()
+            if s.is_substance and len(s.matching_particle_systems) == 0
+        ]
+    
+    @classmethod
+    def view_substance_assigned_unrelated_category(cls):
+        """Substance synsets that have assigned categories whose names do not match an assigned ParticleSystem name."""
+        return [
+            s
+            for s in cls.all_objects()
+            if s.is_substance and any(
+                all(
+                    category.name != ps.name
+                    for ps in s.matching_particle_systems
+                )
+                for category in s.categories
             )
         ]
 
