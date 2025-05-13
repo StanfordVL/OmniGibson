@@ -1,3 +1,4 @@
+from collections import defaultdict
 import csv
 import os
 import pathlib
@@ -19,6 +20,15 @@ FLOOR_CATEGORIES = ["floors", "driveway", "lawn"]
 DOOR_CATEGORIES = ["door", "sliding_door", "garage_door", "gate"]
 IGNORE_CATEGORIES = ["carpet"]
 NEEDED_STRUCTURE_CATEGORIES = FLOOR_CATEGORIES + WALL_CATEGORIES
+
+# Segmentation maps will be generated with the data from the below map's overlap query
+GENERATE_SEG_MAPS_DURING_FNAME = "floor_trav_no_obj_0.png"
+
+# Segmentation maps will be saved with the below filenames even though they don't have their
+# own passes.
+SEMSEG_MAP_FNAME = "floor_semseg_0.png"
+INSSEG_MAP_FNAME = "floor_insseg_0.png"
+
 
 MAP_GENERATION_PASSES = [
     # Each outer level list is a single pass of the overlap query. Multiple maps can be generated
@@ -85,33 +95,29 @@ def generate_maps_for_current_scene(scene_id):
     # Get the bounds of the part of the map that we will actually cast rays for (e.g. the occupied section)
     world_to_map_float = lambda xy: np.flip((np.array(xy) / RESOLUTION + map_size_in_pixels / 2.0))
 
-    xy_min = world_to_map_float(combined_aabb[0][:2])
-    xy_max = world_to_map_float(combined_aabb[1][:2])
-
-    x_min, y_min = np.floor(xy_min).astype(int)
-    x_max, y_max = np.ceil(xy_max).astype(int)
+    row_min, col_min = np.floor(world_to_map_float(combined_aabb[0][:2])).astype(int)
+    row_max, col_max = np.ceil(world_to_map_float(combined_aabb[1][:2])).astype(int)
 
     # Assert that all the dimensions are within the map
-    assert x_min >= 0 and x_max < map_size_in_pixels, f"Map x bounds: {x_min}, {x_max} vs {map_size_in_pixels}"
-    assert y_min >= 0 and y_max < map_size_in_pixels, f"Map y bounds: {y_min}, {y_max} vs {map_size_in_pixels}"
+    assert row_min >= 0 and row_max < map_size_in_pixels, f"Map row bounds: {row_min}, {row_max} vs {map_size_in_pixels}"
+    assert col_min >= 0 and col_max < map_size_in_pixels, f"Map column bounds: {col_min}, {col_max} vs {map_size_in_pixels}"
 
-    # Calculate the dimensions explicitly
-    x_extent = x_max - x_min + 1
-    y_extent = y_max - y_min + 1
-    
-    # Create grid of x, y coordinates using meshgrid
-    x_coords = np.arange(x_min, x_max + 1)
-    y_coords = np.arange(y_min, y_max + 1)
-    xv, yv = np.meshgrid(x_coords, y_coords)
-    
-    # Stack the coordinates to create an array of (x, y) pairs
-    # Reshape to a list of coordinates: (N, 2) array where N = width * height
-    world_indices = np.stack((xv.flatten(), yv.flatten()), axis=1)
-    
-    # Convert to world coordinates
-    corresponding_world_centers = map_to_world(world_indices, RESOLUTION, map_size_in_pixels)
+    row_extent = row_max - row_min + 1
+    col_extent = col_max - col_min + 1
+    total_cells = row_extent * col_extent
 
     for pass_idx, map_pass in enumerate(MAP_GENERATION_PASSES):
+        # Get a list of all of the room instances in the scene
+        all_insts = {
+            room
+            for floor in og.sim.scenes[0].objects
+            for room in (floor.in_rooms if floor.in_rooms else [])
+        }
+        sorted_all_insts = sorted(all_insts)
+
+        # Map those rooms into a contiguous range of integers starting from 1
+        inst_to_id = {inst: i + 1 for i, inst in enumerate(sorted_all_insts)}
+
         # Move the doors to the open position if necessary
         if map_pass[0][0] == "floor_trav_open_door_0.png":
             for door_cat in DOOR_CATEGORIES:
@@ -140,88 +146,65 @@ def generate_maps_for_current_scene(scene_id):
             # Add the allowed hit paths to the dictionary
             allowed_hit_paths_by_fname[fname] = allowed_hit_paths_for_fname
 
+        # Prepare the arrays for the maps
+        map_fnames = {fname for fname, _, _ in map_pass}
+        if GENERATE_SEG_MAPS_DURING_FNAME in map_fnames:
+            map_fnames.add(SEMSEG_MAP_FNAME)
+            map_fnames.add(INSSEG_MAP_FNAME)
+        map_arrays = {fname: np.zeros((map_size_in_pixels, map_size_in_pixels), dtype=np.uint8) for fname in map_fnames}
+
         # Do the actual ray casting (actually an overlap query). We make a single pass for each
         # map pass, relying on the callback to filter out the hits we don't want for each map file.
-        hit_object_sets_by_fname = {fname: [set() for _ in corresponding_world_centers] for fname, _, _ in map_pass}
-        for i, cwc in enumerate(tqdm.tqdm(corresponding_world_centers, desc=f"Overlap grid for pass {pass_idx}")):
-            def _check_hit(hit):
-                for fname, allowed_hit_paths_for_fname in allowed_hit_paths_by_fname.items():
-                    if hit.rigid_body in allowed_hit_paths_for_fname:
-                        hit_object_sets_by_fname[fname][i].add(allowed_hit_paths_for_fname[hit.rigid_body])
-                    
-                return True
-                
-            og.sim.psqi.overlap_box(
-                halfExtent=np.array([RESOLUTION / 2, RESOLUTION / 2, HALF_HEIGHT]),
-                pos=np.array([cwc[0], cwc[1], HALF_Z]),
-                rot=np.array([0, 0, 0, 1.0]),
-                reportFn=_check_hit,
-            )
+        with tqdm.tqdm(total=total_cells, desc=f"Overlap grid for pass {pass_idx}") as pbar:
+            for row in range(row_min, row_max + 1):
+                for col in range(col_min, col_max + 1):
+                    world_pos = map_to_world(np.array([row, col]), RESOLUTION, map_size_in_pixels)
 
-        for fname, load_categories, not_load_categories in map_pass:
-            # Get the hit object sets for this map
-            hit_object_sets = hit_object_sets_by_fname[fname]
+                    hit_objs_by_fname = {fname: set() for fname in map_fnames}
+                    def _check_hit(hit):
+                        for fname, allowed_hit_paths_for_fname in allowed_hit_paths_by_fname.items():
+                            if hit.rigid_body in allowed_hit_paths_for_fname:
+                                hit_objs_by_fname[fname].add(allowed_hit_paths_for_fname[hit.rigid_body])
+                            
+                        return True
+                        
+                    # Run the actual overlap query
+                    og.sim.psqi.overlap_box(
+                        halfExtent=np.array([RESOLUTION / 2, RESOLUTION / 2, HALF_HEIGHT]),
+                        pos=np.array([world_pos[0], world_pos[1], HALF_Z]),
+                        rot=np.array([0, 0, 0, 1.0]),
+                        reportFn=_check_hit,
+                    )
 
-            # Initialize the map array
-            new_trav_map = np.zeros((map_size_in_pixels, map_size_in_pixels), dtype=np.uint8)
-            assert new_trav_map.shape[0] == new_trav_map.shape[1]
-            # Get a view to the part of the map that we will actually cast rays for (e.g. the occupied section)
-            scannable_map = new_trav_map[x_min:x_max+1, y_min:y_max+1]
+                    # Use the results from the hit_objs_by_fname to fill in the map arrays
+                    for fname, load_categories, not_load_categories in map_pass:
+                        # Get the hit object set for this map
+                        hit_objs = hit_objs_by_fname[fname]
 
-            # Check which rays hit *only* floors
-            hit_floor = np.array([hit_objects.issubset(floor_objs) for hit_objects in hit_object_sets]).astype(np.uint8)
-            
-            # Reshape the hit_floor array to match the scannable map's dimensions
-            hit_floor_reshaped = np.reshape(hit_floor * 255, (x_extent, y_extent))
-            
-            # Assign the reshaped array to the scannable map
-            scannable_map[:, :] = hit_floor_reshaped
-            
-            Image.fromarray(new_trav_map).save(os.path.join(save_path, fname))
+                        # Check whether or not we only hit a floor
+                        only_hit_floor = int(hit_objs.issubset(floor_objs))
+                        
+                        # Assign the reshaped array to the scannable map
+                        map_arrays[fname][row, col] = only_hit_floor * 255
+                        
+                        # At the same time as the no-obj trav map, we generate the segmentation maps.
+                        if fname == GENERATE_SEG_MAPS_DURING_FNAME:
+                            # Color the instance segmentation map using the hit object's color
+                            first_hit_floor = next(iter(sorted(hit_objs & floor_objs, key=lambda x: x.name)), None) if hit_objs else None
+                            hit_room_inst_name = first_hit_floor.in_rooms[0] if first_hit_floor and first_hit_floor.in_rooms else None
+                            insseg_val = inst_to_id[hit_room_inst_name] if hit_room_inst_name else 0
+                            map_arrays[INSSEG_MAP_FNAME][row, col] = insseg_val
 
-            # At the same time as the no-obj trav map, we generate the segmentation maps.
-            if fname == "floor_trav_no_obj_0.png":
-                # Get a list of all of the room instances in the scene
-                all_insts = {
-                    room
-                    for floor in og.sim.scenes[0].objects
-                    for room in (floor.in_rooms if floor.in_rooms else [])
-                }
-                sorted_all_insts = sorted(all_insts)
+                            # Now the same for the semseg map
+                            hit_room_type = hit_room_inst_name.rsplit("_", 1)[0] if hit_room_inst_name else None
+                            semseg_val = sem_to_id[hit_room_type] if hit_room_type else 0
+                            map_arrays[SEMSEG_MAP_FNAME][row, col] = semseg_val
 
-                # Map those rooms into a contiguous range of integers starting from 1
-                inst_to_id = {inst: i + 1 for i, inst in enumerate(sorted_all_insts)}
+                    # Update the progress bar
+                    pbar.update(1)
 
-                # Color the instance segmentation map using the hit objects'
-                insseg_map_fname = "floor_insseg_0.png"
-                insseg_map = np.zeros_like(new_trav_map, dtype=np.uint8)
-                scannable_insseg_map = insseg_map[x_min:x_max+1, y_min:y_max+1]
-                first_hit_floors = [next(iter(sorted(hit_objects & floor_objs, key=lambda x: x.name)), None) if hit_objects else None for hit_objects in hit_object_sets]
-                hit_room_inst_name = [
-                    hit_obj.in_rooms[0] if hit_obj and hit_obj.in_rooms else None
-                    for hit_obj in first_hit_floors
-                ]
-                insseg_val = np.array([inst_to_id[inst] if inst else 0 for inst in hit_room_inst_name], dtype=np.uint8)
-                
-                # Reshape the insseg_val array to match the scannable map's dimensions
-                insseg_val_reshaped = np.reshape(insseg_val, (x_extent, y_extent))
-                
-                # Assign the reshaped array to the scannable insseg map
-                scannable_insseg_map[:, :] = insseg_val_reshaped
-                
-                Image.fromarray(insseg_map).save(os.path.join(save_path, insseg_map_fname))
-
-                # Now the same for the semseg map
-                semseg_map_fname = "floor_semseg_0.png"
-                semseg_map = np.zeros_like(new_trav_map, dtype=np.uint8)
-                scannable_semseg_map = semseg_map[x_min:x_max+1, y_min:y_max+1]
-                hit_room_type = [x.rsplit("_", 1)[0] if x else None for x in hit_room_inst_name]
-                semseg_val = np.array([sem_to_id[rm_type] if rm_type else 0 for rm_type in hit_room_type], dtype=np.uint8)
-                
-                # Reshape the semseg_val array to match the scannable map's dimensions
-                semseg_val_reshaped = np.reshape(semseg_val, (x_extent, y_extent))
-                
-                # Assign the reshaped array to the scannable semseg map
-                scannable_semseg_map[:, :] = semseg_val_reshaped
-                
-                Image.fromarray(semseg_map).save(os.path.join(save_path, semseg_map_fname))
+        # Save the maps
+        for fname, map_array in map_arrays.items():
+            # Save the map as a PNG
+            full_fname = os.path.join(save_path, fname)
+            Image.fromarray(map_array).save(full_fname)
