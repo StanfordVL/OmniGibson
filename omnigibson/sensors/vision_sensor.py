@@ -175,10 +175,10 @@ class VisionSensor(BaseSensor):
 
         # 1) seg_instance and seg_instance_id require seg_semantic to be enabled (for rendering particle systems)
         # 2) bounding box observations require seg_semantic to be enabled (for remapping bounding box semantic IDs)
-        semantic_dependent_modalities = {"seg_instance", "seg_instance_id", "bbox_2d_loose", "bbox_2d_tight", "bbox_3d"}
-        # if any of the semantic dependent modalities are enabled, then seg_semantic must be enabled
-        if semantic_dependent_modalities.intersection(modalities) and "seg_semantic" not in modalities:
-            modalities.add("seg_semantic")
+        # semantic_dependent_modalities = {"seg_instance", "seg_instance_id", "bbox_2d_loose", "bbox_2d_tight", "bbox_3d"}
+        # # if any of the semantic dependent modalities are enabled, then seg_semantic must be enabled
+        # if semantic_dependent_modalities.intersection(modalities) and "seg_semantic" not in modalities:
+        #     modalities.add("seg_semantic")
 
         # Run super method
         super().__init__(
