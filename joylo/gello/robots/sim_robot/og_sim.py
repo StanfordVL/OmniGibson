@@ -163,8 +163,15 @@ class OGRobotServer:
         self.obs = {}
         
         # Cache values
-        self._trunk_tilt_limits = {"lower": self.robot.joint_lower_limits[self.robot.trunk_control_idx][2],
-                                   "upper": self.robot.joint_upper_limits[self.robot.trunk_control_idx][2]}
+        qpos_min, qpos_max = self.robot.joint_lower_limits, self.robot.joint_upper_limits
+        self._trunk_tilt_limits = {"lower": qpos_min[self.robot.trunk_control_idx][2],
+                                   "upper": qpos_max[self.robot.trunk_control_idx][2]}
+        self._arm_joint_limits = dict()
+        for arm in self.robot.arm_names:
+            self._arm_joint_limits[arm] = {
+                "lower": qpos_min[self.robot.arm_control_idx[arm]],
+                "upper": qpos_max[self.robot.arm_control_idx[arm]],
+            }
 
         with og.sim.stopped():
             # # Set lower position iteration count for faster sim speed
@@ -662,7 +669,8 @@ class OGRobotServer:
         # Apply arm action + extra dimension from base
         if isinstance(self.robot, R1):
             # Apply arm action
-            left_act, right_act = self._joint_cmd["left_arm"].clone(), self._joint_cmd["right_arm"].clone()
+            left_act = self._joint_cmd["left_arm"].clone().clip(self._arm_joint_limits["left"]["lower"], self._arm_joint_limits["left"]["upper"])
+            right_act = self._joint_cmd["right_arm"].clone().clip(self._arm_joint_limits["right"]["lower"], self._arm_joint_limits["right"]["upper"])
 
             # If we're in cooldown, clip values based on max delta value
             if self._in_cooldown:
