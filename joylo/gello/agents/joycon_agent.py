@@ -13,7 +13,7 @@ _backend_utils._compute_backend.set_methods_from_backend(
     _backend_utils._ComputeNumpyBackend if gm.USE_NUMPY_CONTROLLER_BACKEND else _backend_utils._ComputeTorchBackend
 )
 
-from omnigibson.utils.processing_utils import MovingAverageFilter
+from omnigibson.utils.processing_utils import MovingAverageFilter, ExponentialAverageFilter
 
 
 
@@ -65,8 +65,8 @@ class JoyconAgent(Agent):
         # self.current_tilt = default_tilt
         
         self.velocity_filters = {
-            "left": SecondOrderFilter(dim=2, damping_ratio=1.0, natural_frequency=15.0),
-            "right": SecondOrderFilter(dim=2, damping_ratio=1.0, natural_frequency=15.0),
+            "left": ExponentialAverageFilter(obs_dim=2, alpha=0.2),
+            "right": ExponentialAverageFilter(obs_dim=2, alpha=0.2),
         }
 
         # Connect the joycons
@@ -193,8 +193,8 @@ class JoyconAgent(Agent):
         base_speed = self.max_translation if not self.jc_left.get_button_l_stick() else self.max_translation * 2.0
         
         # Get filtered joystick values with smooth acceleration
-        left_filtered = self.velocity_filters["left"].update(joystick_values["left"])
-        right_filtered = self.velocity_filters["right"].update(joystick_values["right"])
+        left_filtered = self.velocity_filters["left"].estimate(joystick_values["left"])
+        right_filtered = self.velocity_filters["right"].estimate(joystick_values["right"])
 
         # Left stick is (base_dx, base_dy)
         base_trunk_vals[:2] = left_filtered * base_speed * np.array([1.0, -1.0])
@@ -240,46 +240,3 @@ class JoyconAgent(Agent):
         # Compose values and return
         # [base_x, base_y, base_r, trunk_translate, trunk_tilt, gripper_l, gripper_r, X, Y, B, A, capture, home, left arrow, right arrow buttons]
         return th.Tensor(vals)
-    
-    
-class SecondOrderFilter:
-    """A second-order filter that produces smooth velocity profiles."""
-    
-    def __init__(self, dim=1, damping_ratio=1.0, natural_frequency=5.0):
-        """
-        Args:
-            dim: Dimension of the data
-            damping_ratio: Damping ratio (1.0 for critical damping)
-            natural_frequency: Natural frequency of the system
-        """
-        self.dim = dim
-        self.damping_ratio = damping_ratio
-        self.natural_frequency = natural_frequency
-        
-        # State variables
-        self.position = np.zeros(dim)
-        self.velocity = np.zeros(dim)
-        
-    def update(self, target, dt=1/60.0):
-        """
-        Update the filter state.
-        
-        Args:
-            target: Target position
-            dt: Time step
-            
-        Returns:
-            Current filtered position
-        """
-        # Calculate acceleration
-        omega_n_squared = self.natural_frequency ** 2
-        damping_term = 2 * self.damping_ratio * self.natural_frequency
-        
-        error = target - self.position
-        acceleration = omega_n_squared * error - damping_term * self.velocity
-        
-        # Update velocity and position
-        self.velocity += acceleration * dt
-        self.position += self.velocity * dt
-        
-        return self.position

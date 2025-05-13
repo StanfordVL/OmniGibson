@@ -11,6 +11,8 @@ from gello.agents.agent import Agent
 from gello.robots.dynamixel import DynamixelRobot
 from gello.dynamixel.driver import OperatingMode, GainType
 
+from omnigibson.utils.processing_utils import ExponentialAverageFilter
+
 class MotorFeedbackConfig(Enum):
     """
     Enum specifying different types of force feedback, which are used in
@@ -113,6 +115,12 @@ class GelloAgent(Agent):
         self._robot._driver.set_gain(GainType.P, 500)
         self._robot._driver.set_gain(GainType.I, 0)
         self._robot._driver.set_gain(GainType.D, 200)
+        
+        # Initialize exponential average filter for smoothing
+        self._smoothing_filter = ExponentialAverageFilter(
+            obs_dim=self._robot.num_dofs(),
+            alpha=0.2
+        )
 
         # Call super method
         super().__init__()
@@ -179,7 +187,6 @@ class GelloAgent(Agent):
     def act(self, obs: Dict[str, np.ndarray]) -> th.tensor:
         # Resist if specified
         jnts = self._robot.get_joint_state()
-        jnts_vel = self._robot.get_joint_velocities() # Values from the dynamixels
         if self._current_enabled:
             # Disable controller if we're in cooldown
             current_idxs = np.where(self._robot.operating_mode == OperatingMode.CURRENT)[0]
@@ -196,9 +203,13 @@ class GelloAgent(Agent):
             # Compute joint errors and delegate to control function implemented by subclass
             joint_error = np.rad2deg(joint_setpoint - jnts)
 
+            jnts_vel = self._robot.get_joint_velocities() # Values from the dynamixels
             current = self.compute_feedback_currents(joint_error, jnts_vel, obs)
             self._robot.command_current(current[current_idxs], idxs=current_idxs)
 
+        # Apply smoothing to the joint states
+        jnts = self._smoothing_filter.estimate(jnts)
+        
         # Return GELLO joints in environment-compatible form (for the sim)
         return th.from_numpy(self._gello_joints_to_obs_joints(joints=jnts).astype(np.float32))
 
