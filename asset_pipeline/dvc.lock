@@ -586,13 +586,13 @@ stages:
       size: 17928
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: a1b9535e38be56f57631bc6b624fe58e
-      size: 265403708
+      md5: 3024064a45c4304ad847718f4985f334
+      size: 266534204
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: b50cbc502b39e23acc8c2bcb71080928
-      size: 444294
+      md5: 1cddebf34afefb9ed63694ae6f4ef345
+      size: 444306
   object_list@scenes/house_double_floor_upper:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/house_double_floor_upper/processed.max
       b1k_pipeline/max/object_list.py
@@ -1265,8 +1265,8 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: b50cbc502b39e23acc8c2bcb71080928
-      size: 444294
+      md5: 1cddebf34afefb9ed63694ae6f4ef345
+      size: 444306
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
       md5: 449111c06cd298f93adbea4bdd79625e
@@ -1653,8 +1653,8 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: b50cbc502b39e23acc8c2bcb71080928
-      size: 444294
+      md5: 1cddebf34afefb9ed63694ae6f4ef345
+      size: 444306
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
       md5: 449111c06cd298f93adbea4bdd79625e
@@ -2041,8 +2041,8 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: b50cbc502b39e23acc8c2bcb71080928
-      size: 444294
+      md5: 1cddebf34afefb9ed63694ae6f4ef345
+      size: 444306
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
       md5: 449111c06cd298f93adbea4bdd79625e
@@ -2949,8 +2949,8 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: b50cbc502b39e23acc8c2bcb71080928
-      size: 444294
+      md5: 1cddebf34afefb9ed63694ae6f4ef345
+      size: 444306
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
       md5: 449111c06cd298f93adbea4bdd79625e
@@ -3358,8 +3358,8 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: b50cbc502b39e23acc8c2bcb71080928
-      size: 444294
+      md5: 1cddebf34afefb9ed63694ae6f4ef345
+      size: 444306
     - path: cad/scenes/house_double_floor_upper/artifacts/object_list.json
       hash: md5
       md5: 449111c06cd298f93adbea4bdd79625e
@@ -3815,12 +3815,12 @@ stages:
       size: 57242
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: a1b9535e38be56f57631bc6b624fe58e
-      size: 265403708
+      md5: 3024064a45c4304ad847718f4985f334
+      size: 266534204
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
       hash: md5
-      md5: c499952e591fb801bd4ddd48033b793d
+      md5: 8404c0dc750bec4cc2fccb0ccab8cba0
       size: 20135
   sanitycheck@scenes/restaurant_hotel:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/restaurant_hotel/processed.max
@@ -4965,7 +4965,7 @@ stages:
       size: 1736
     - path: cad/scenes/house_double_floor_lower/artifacts/sanitycheck.json
       hash: md5
-      md5: c499952e591fb801bd4ddd48033b793d
+      md5: 8404c0dc750bec4cc2fccb0ccab8cba0
       size: 20135
     - path: cad/scenes/house_double_floor_upper/artifacts/sanitycheck.json
       hash: md5
@@ -8448,8 +8448,8 @@ stages:
       size: 17211
     - path: cad/scenes/house_double_floor_lower/processed.max
       hash: md5
-      md5: a1b9535e38be56f57631bc6b624fe58e
-      size: 265403708
+      md5: 3024064a45c4304ad847718f4985f334
+      size: 266534204
     outs:
     - path: cad/scenes/house_double_floor_lower/artifacts/export_meshes.json
       hash: md5
@@ -8457,8 +8457,8 @@ stages:
       size: 34
     - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
       hash: md5
-      md5: 9906da798c5375a27bd355a429e0af0d
-      size: 37334972
+      md5: 94547376152eaf0fbccd4cb72cf54558
+      size: 37334984
   export_meshes@scenes/office_large:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/office_large/processed.max
       b1k_pipeline/max/export_meshes.py
