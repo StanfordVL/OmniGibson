@@ -13,7 +13,7 @@ import tqdm
 from b1k_pipeline.utils import ParallelZipFS, PipelineFS, TMP_DIR, launch_cluster
 
 WORKER_COUNT = 2
-MAX_TIME_PER_PROCESS = 30 * 60  # 20 minutes
+MAX_TIME_PER_PROCESS = 60 * 60  # 1 hour
 
 def run_on_scene(dataset_path, scene):
     python_cmd = ["python", "-m", "b1k_pipeline.usd_conversion.usdify_scenes_process", dataset_path, scene]

@@ -14,7 +14,7 @@ def process_target(target):
     roots = [node for node, in_degree in G.in_degree() if in_degree == 0]
 
     # Compute volumes from this target
-    volumes = defaultdict(list)
+    volumes = defaultdict(dict)
     errors = {}
     for node in roots:
         try:
@@ -22,7 +22,7 @@ def process_target(target):
 
             obj_volume = G.nodes[node]["combined_collision_mesh"].volume
             assert obj_volume > 0, f"Node {node} has a non-positive volume: {obj_volume}"
-            volumes[node[0]].append(obj_volume)
+            volumes[node[0]][node[1]] = obj_volume
         except Exception as e:
             errors[str(node)] = str(e)
 
@@ -33,7 +33,7 @@ def main():
     targets = get_targets("combined")
 
     # Collect the volumes from each target
-    volumes = defaultdict(list)
+    volumes = defaultdict(dict)
     errors = {}
     with futures.ProcessPoolExecutor(max_workers=16) as executor:
         # Submit all targets for execution
@@ -50,20 +50,20 @@ def main():
                     errors[target] = target_errors
                 
                 for category, category_volumes in target_volumes.items():
-                    volumes[category].extend(category_volumes)
+                    volumes[category].update(category_volumes)
 
                 pbar.update(1)
 
     # Convert the volumes to average volumes
     average_volumes = {
-        category: np.mean(category_volumes)
+        category: np.median(list(category_volumes.values()))
         for category, category_volumes in volumes.items()
     }
 
     with PipelineFS() as pipeline_fs:
-        with pipeline_fs.pipeline_output().open("collision_average_volumes.json", "w") as f:
+        with pipeline_fs.pipeline_output().open("collision_average_volumes_2.json", "w") as f:
             # TODO: set success
-            json.dump({"success": True, "volumes": average_volumes, "errors": errors}, f, indent=4)
+            json.dump({"success": True, "average_volumes": average_volumes, "volumes": volumes, "errors": errors}, f, indent=4)
 
 
 if __name__ == "__main__":
