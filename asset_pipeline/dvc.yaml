@@ -1421,7 +1421,6 @@ stages:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
     - artifacts/parallels/objects.zip
-    - artifacts/parallels/metadata.zip
     - artifacts/pipeline/export_objs.success
     - b1k_pipeline/usd_conversion/usdify_objects.py
     - b1k_pipeline/usd_conversion/usdify_objects_process.py
