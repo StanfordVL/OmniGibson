@@ -8504,14 +8504,6 @@ stages:
   export_objs_global:
     cmd: python -m b1k_pipeline.export_objs_global
     deps:
-    - path: artifacts/parallels/metadata.zip
-      hash: md5
-      md5: ff4ef95671824c12d640c31e002a3015
-      size: 69742
-    - path: artifacts/pipeline/aggregate_metadata.success
-      hash: md5
-      md5: d41d8cd98f00b204e9800998ecf8427e
-      size: 0
     - path: artifacts/pipeline/export_meshes.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8530,8 +8522,8 @@ stages:
       size: 0
     - path: b1k_pipeline/export_objs_global.py
       hash: md5
-      md5: f9802f86151678dcb845ae1bbcdbf91d
-      size: 39409
+      md5: a967cbf5e9bd3689383dfe719e378196
+      size: 39122
     - path: b1k_pipeline/mesh_tree.py
       hash: md5
       md5: c01a25201232fad5307f53d73a0fbee7
@@ -9082,12 +9074,12 @@ stages:
       size: 61462
     - path: cad/scenes/house_double_floor_lower/artifacts/meshes.zip
       hash: md5
-      md5: 9906da798c5375a27bd355a429e0af0d
-      size: 37334972
+      md5: 94547376152eaf0fbccd4cb72cf54558
+      size: 37334984
     - path: cad/scenes/house_double_floor_lower/artifacts/object_list.json
       hash: md5
-      md5: b50cbc502b39e23acc8c2bcb71080928
-      size: 444294
+      md5: 1cddebf34afefb9ed63694ae6f4ef345
+      size: 444306
     - path: cad/scenes/house_double_floor_upper/artifacts/meshes.zip
       hash: md5
       md5: 4ba9ea83646f921ed985aeb3f3dad942
@@ -9275,8 +9267,8 @@ stages:
     outs:
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: 8447eba0625abcec44ffcbb1de316b73
-      size: 2628737744
+      md5: a0f9a205cd1803c8bc52115fb4abca1d
+      size: 26746282618
     - path: artifacts/pipeline/export_objs.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a

@@ -298,7 +298,7 @@ stages:
     - artifacts/parallels/metadata.zip
     # - artifacts/parallels/fillable_volumes.zip
     - artifacts/pipeline/export_objs.success
-    - artifacts/pipeline/aggregate_metadata.success
+    # - artifacts/pipeline/aggregate_metadata.success
     - b1k_pipeline/usd_conversion/usdify_objects.py
     - b1k_pipeline/usd_conversion/usdify_objects_process.py
     outs:

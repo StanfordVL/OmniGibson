@@ -37,13 +37,11 @@ def main():
     failed_objects = set()
     with PipelineFS() as pipeline_fs, \
          ParallelZipFS("objects.zip") as objects_fs, \
-         ParallelZipFS("metadata.zip") as metadata_fs, \
          TempFS(temp_dir=str(TMP_DIR)) as dataset_fs:
         with ParallelZipFS("objects_usd.zip", write=True) as out_fs:
             # Copy everything over to the dataset FS
             print("Copying input to dataset fs...")
-            fs.copy.copy_fs(metadata_fs, dataset_fs)
-            objdir_glob = list(objects_fs.glob("objects/*/*/"))
+            objdir_glob = list(objects_fs.glob("objects/*/*/"))[:10]
             for item in tqdm.tqdm(objdir_glob):
                 if objects_fs.opendir(item.path).opendir("urdf").glob("*.urdf").count().files == 0:
                     continue
