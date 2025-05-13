@@ -61,7 +61,7 @@ def main():
     }
 
     with PipelineFS() as pipeline_fs:
-        with pipeline_fs.pipeline_output().open("collision_average_volumes_2.json", "w") as f:
+        with pipeline_fs.pipeline_output().open("collision_average_volumes.json", "w") as f:
             # TODO: set success
             json.dump({"success": True, "average_volumes": average_volumes, "volumes": volumes, "errors": errors}, f, indent=4)
 
