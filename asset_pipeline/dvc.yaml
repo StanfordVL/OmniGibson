@@ -782,8 +782,6 @@ stages:
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
     - artifacts/pipeline/export_meshes.success
-    - artifacts/parallels/metadata.zip
-    - artifacts/pipeline/aggregate_metadata.success
     - b1k_pipeline/export_objs_global.py
     - b1k_pipeline/mesh_tree.py
     outs:

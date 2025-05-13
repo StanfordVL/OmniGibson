@@ -74,19 +74,6 @@ def get_required_meta_links(object_taxonomy, category):
     return object_taxonomy.get_required_meta_links_for_synset(synset)
 
 
-def get_category_density(category):
-    with b1k_pipeline.utils.ParallelZipFS("metadata.zip") as archive_fs:
-        metadata_out_dir = archive_fs.opendir("metadata")
-        with metadata_out_dir.open("avg_category_specs.json") as f:
-            avg_category_specs = json.load(f)
-
-    return (
-        avg_category_specs[category]["density"]
-        if category in avg_category_specs and avg_category_specs[category]["density"]
-        else None
-    )
-
-
 class NumpyEncoder(json.JSONEncoder):
     def default(self, obj):
         if isinstance(obj, np.ndarray):
@@ -587,48 +574,29 @@ def process_link(
         G.nodes[link_node]["link_frame_in_base"] = parent_frame + joint_origin
         G.nodes[link_node]["mesh_in_link_frame"] = mesh_offset
 
-    # Find the density and update it on the canonical collision mesh
-    density = get_category_density(category_name)
-    G.nodes[link_node]["canonical_collision_mesh"].density = density
-    mass = G.nodes[link_node]["canonical_collision_mesh"].mass
-
-    # Compute the center of mass, or read it from metadata if it's available
-    if "com" in meta_links:
-        assert (
-            len(meta_links["com"]) == 1
-        ), f"Something's wrong: there's more than 1 CoM in {link_node}"
-        com_links = list(meta_links["com"].values())[0]
-        assert (
-            len(com_links) == 1
-        ), f"Something's wrong: there's more than 1 CoM in {link_node}"
-        com = np.array(com_links[0]["position"])
-        del meta_links["com"]
-    else:
-        com = np.array(G.nodes[link_node]["canonical_collision_mesh"].center_mass)
-
-    # Compute the moment of inertia
-    moment_of_inertia = G.nodes[link_node][
-        "canonical_collision_mesh"
-    ].moment_inertia_frame(trimesh.transformations.translation_matrix(com))
+    # # Compute the moment of inertia
+    # moment_of_inertia = G.nodes[link_node][
+    #     "canonical_collision_mesh"
+    # ].moment_inertia_frame(trimesh.transformations.translation_matrix(com))
 
     # Annotate mass, center of mass and moment of inertia directly on the URDF
     inertial_xml = ET.SubElement(link_xml, "inertial")
     inertial_origin_xml = ET.SubElement(inertial_xml, "origin")
     inertial_origin_xml.attrib = {
-        "xyz": " ".join([str(item) for item in com]),
+        "xyz": "0 0 0",
         "rpy": "0 0 0",
     }
     inertial_mass_xml = ET.SubElement(inertial_xml, "mass")
-    inertial_mass_xml.attrib = {"value": str(mass)}
-    inertial_inertia_xml = ET.SubElement(inertial_xml, "inertia")
-    inertial_inertia_xml.attrib = {
-        "ixx": str(moment_of_inertia[0, 0]),
-        "ixy": str(moment_of_inertia[0, 1]),
-        "ixz": str(moment_of_inertia[0, 2]),
-        "iyy": str(moment_of_inertia[1, 1]),
-        "iyz": str(moment_of_inertia[1, 2]),
-        "izz": str(moment_of_inertia[2, 2]),
-    }
+    inertial_mass_xml.attrib = {"value": "1.0"}
+    # inertial_inertia_xml = ET.SubElement(inertial_xml, "inertia")
+    # inertial_inertia_xml.attrib = {
+    #     "ixx": str(moment_of_inertia[0, 0]),
+    #     "ixy": str(moment_of_inertia[0, 1]),
+    #     "ixz": str(moment_of_inertia[0, 2]),
+    #     "iyy": str(moment_of_inertia[1, 1]),
+    #     "iyz": str(moment_of_inertia[1, 2]),
+    #     "izz": str(moment_of_inertia[2, 2]),
+    # }
 
     # Walk over the meta links to add visual meshes for non-collision convex meshes, since this
     # is the only way to get them into the URDF.
@@ -651,17 +619,17 @@ def process_link(
             "rpy": "0 0 0",
         }
         cm_inertial_mass_xml = ET.SubElement(cm_inertial_xml, "mass")
-        cm_inertial_mass_xml.attrib = {"value": str(0.001)}
-        cm_inertial_inertia_xml = ET.SubElement(cm_inertial_xml, "inertia")
-        cm_moment_of_inertia = np.eye(3) * 1e-7
-        cm_inertial_inertia_xml.attrib = {
-            "ixx": str(cm_moment_of_inertia[0, 0]),
-            "ixy": str(cm_moment_of_inertia[0, 1]),
-            "ixz": str(cm_moment_of_inertia[0, 2]),
-            "iyy": str(cm_moment_of_inertia[1, 1]),
-            "iyz": str(cm_moment_of_inertia[1, 2]),
-            "izz": str(cm_moment_of_inertia[2, 2]),
-        }
+        cm_inertial_mass_xml.attrib = {"value": "0.001"}
+        # cm_inertial_inertia_xml = ET.SubElement(cm_inertial_xml, "inertia")
+        # cm_moment_of_inertia = np.eye(3) * 1e-7
+        # cm_inertial_inertia_xml.attrib = {
+        #     "ixx": str(cm_moment_of_inertia[0, 0]),
+        #     "ixy": str(cm_moment_of_inertia[0, 1]),
+        #     "ixz": str(cm_moment_of_inertia[0, 2]),
+        #     "iyy": str(cm_moment_of_inertia[1, 1]),
+        #     "iyz": str(cm_moment_of_inertia[1, 2]),
+        #     "izz": str(cm_moment_of_inertia[2, 2]),
+        # }
 
         # Create the joint in URDF
         cm_joint_xml = ET.SubElement(tree_root, "joint")
@@ -700,6 +668,10 @@ def process_link(
     if found_extra_nonoptional_meta_types:
         for extra_meta_type in found_extra_nonoptional_meta_types:
             del meta_links[extra_meta_type]
+
+    # Assert no CoM meta link anywhere except the base link
+    assert not ("com" in meta_links and link_name != "base_link"), \
+        f"CoM meta link found in {link_name} of {link_node}. Only base link should have CoM."
 
     out_metadata["meta_links"][link_name] = meta_links
     out_metadata["link_tags"][link_name] = G.nodes[link_node]["tags"]
@@ -838,6 +810,20 @@ def process_object(root_node, target, relevant_nodes, requried_meta_types, outpu
             for i, joint in enumerate(tree.findall("joint"))
             if "openable" in out_metadata["link_tags"].get(joint.find("child").attrib["link"], [])
         ]
+
+        # If there is a center of mass annotation for the base link, we need to pop it to store it
+        # separately in the metadata.
+        if "com" in out_metadata["meta_links"]["base_link"]:
+            assert (
+                len(out_metadata["meta_links"]["base_link"]["com"]) == 1
+            ), f"Something's wrong: there's more than 1 CoM in {link_node}"
+            com_links = list(out_metadata["meta_links"]["base_link"]["com"].values())[0]
+            assert (
+                len(com_links) == 1
+            ), f"Something's wrong: there's more than 1 CoM in {link_node}"
+            com = np.array(com_links[0]["position"])
+            del out_metadata["meta_links"]["base_link"]["com"]
+            out_metadata["center_of_mass"] = com.tolist()
 
         # Save metadata json
         out_metadata.update(

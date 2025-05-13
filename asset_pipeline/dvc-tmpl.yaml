@@ -207,8 +207,9 @@ stages:
     - artifacts/pipeline/object_inventory.success
     - artifacts/pipeline/sanitycheck.success
     - artifacts/pipeline/export_meshes.success
-    - artifacts/parallels/metadata.zip
-    - artifacts/pipeline/aggregate_metadata.success
+    # These were necessary when we were adding the mass in the URDF file which is no longer the case.
+    # - artifacts/parallels/metadata.zip
+    # - artifacts/pipeline/aggregate_metadata.success
     - b1k_pipeline/export_objs_global.py
     - b1k_pipeline/mesh_tree.py
     outs:
