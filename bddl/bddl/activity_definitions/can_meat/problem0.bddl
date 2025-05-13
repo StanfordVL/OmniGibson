@@ -48,7 +48,10 @@
                     (?bratwurst.n.01 - bratwurst.n.01)
                     (inside ?bratwurst.n.01 ?hinged_jar.n.01)
                 )
-            ) 
+            )
+            (not
+                (open ?cabinet.n.01_1)
+            )
         )
     )
 )

@@ -41,6 +41,7 @@
                 (or 
                     (nextto ?gift_box.n.01 ?christmas_tree.n.05_1)
                     (under ?gift_box.n.01 ?christmas_tree.n.05_1)
+                    (touching ?gift_box.n.01 ?christmas_tree.n.05_1)
                 )
             )
             (exists
