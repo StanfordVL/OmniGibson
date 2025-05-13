@@ -138,7 +138,8 @@ class OGRobotServer:
                 viewport_camera_path=og.sim.viewer_camera.active_camera_path,
                 only_successes=False,
                 flush_every_n_traj=1,
-                use_vr=VIEWING_MODE == ViewingMode.VR
+                use_vr=VIEWING_MODE == ViewingMode.VR,
+                keep_checkpoint_rollback_data=True,
             )
 
         # Status tracking
