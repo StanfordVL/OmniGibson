@@ -790,7 +790,7 @@ class OGRobotServer:
                 activity_definition_id=self.env.task.activity_definition_id,
                 activity_instance_id=self.instance_id,
             )
-            with open(f"{gm.DATASET_PATH}/scenes/{scene_model}/json/{tro_filename}-tro_state.json", "r") as f:
+            with open(f"{gm.DATASET_PATH}/scenes/{scene_model}/json/{self.env.task.activity_name}_instances/{tro_filename}-tro_state.json", "r") as f:
                 tro_state = recursively_convert_to_torch(json.load(f))
             self.env.scene.reset()
             for bddl_name, obj_state in tro_state.items():

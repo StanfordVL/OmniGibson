@@ -32,14 +32,24 @@ for task_dir in "$SRC_DIR"/*/; do
     echo "Processing task directory: $task_name"
     
     # Process each JSON template file in the task directory
-    for file in "$task_dir"/*_template*.json; do
+    for file in "$task_dir"/*; do
         # Skip if no files match the pattern
         [ -e "$file" ] || continue
-        
+
         filename=$(basename "$file")
-        
+
         # Extract scene model from filename (everything before "_task")
         scene_model=$(echo "$filename" | sed -E 's/(.*)_task.*/\1/')
+        echo "scene model: ${scene_model}"
+
+        if [ -d "$file" ]; then
+            flag="-d"
+        elif [ -f "$file" ]; then
+            flag="-f"
+        else
+            echo "$file is a special file, skipping"
+            continue
+        fi
         
         dest_dir="${DATASET_PATH}/scenes/${scene_model}/json"
         if [ ! -d "$dest_dir" ]; then
@@ -48,16 +58,16 @@ for task_dir in "$SRC_DIR"/*/; do
         fi
         
         # Check if file already exists in destination
-        if [ -f "$dest_dir/$filename" ] && [ "$FORCE" = false ]; then
+        if [ "$flag" "$dest_dir/$filename" ] && [ "$FORCE" = false ]; then
             echo "INFO: $filename already exists in $dest_dir/ - skipping"
         else
             # Now the default is to overwrite
-            if [ -f "$dest_dir/$filename" ]; then
+            if [ "$flag" "$dest_dir/$filename" ]; then
                 echo "Overwriting $filename in $dest_dir/"
             else
                 echo "Copying $filename to $dest_dir/"
             fi
-            cp "$file" "$dest_dir/"
+            cp -r "$file" "$dest_dir/"
         fi
     done
 done
