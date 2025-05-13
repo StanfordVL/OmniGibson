@@ -2,8 +2,10 @@ import omnigibson as og
 from omnigibson.envs import EnvMetric
 from omnigibson.utils.usd_utils import RigidContactAPI
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
+from omnigibson.utils.backend_utils import _compute_backend as cb
 from gello.robots.sim_robot.og_teleop_utils import GHOST_APPEAR_THRESHOLD
 import torch as th
+import operator
 
 
 class MotionMetric(EnvMetric):
@@ -31,12 +33,15 @@ class MotionMetric(EnvMetric):
             vels = (positions[1:] - positions[:-1]) / self.step_dt
             accs = (vels[1:] - vels[:-1]) / self.step_dt
             jerks = (accs[1:] - accs[:-1]) / self.step_dt
-            episode_metrics[f"{pos_key}::avg_vel"] = vels.mean(dim=0)
-            episode_metrics[f"{pos_key}::avg_acc"] = accs.mean(dim=0)
-            episode_metrics[f"{pos_key}::avg_jerk"] = jerks.mean(dim=0)
-            episode_metrics[f"{pos_key}::max_vel"] = vels.max().item()
-            episode_metrics[f"{pos_key}::max_acc"] = accs.max().item()
-            episode_metrics[f"{pos_key}::max_jerk"] = jerks.max().item()
+            episode_metrics[f"{pos_key}::vel_avg"] = vels.mean(dim=0)
+            episode_metrics[f"{pos_key}::acc_avg"] = accs.mean(dim=0)
+            episode_metrics[f"{pos_key}::jerk_avg"] = jerks.mean(dim=0)
+            episode_metrics[f"{pos_key}::vel_std"] = vels.std(dim=0)
+            episode_metrics[f"{pos_key}::acc_std"] = accs.std(dim=0)
+            episode_metrics[f"{pos_key}::jerk_std"] = jerks.std(dim=0)
+            episode_metrics[f"{pos_key}::vel_max"] = vels.max().item()
+            episode_metrics[f"{pos_key}::acc_max"] = accs.max().item()
+            episode_metrics[f"{pos_key}::jerk_max"] = jerks.max().item()
 
         return episode_metrics
 
@@ -98,55 +103,118 @@ class TaskSuccessMetric(EnvMetric):
 
 class GhostHandAppearanceMetric(EnvMetric):
 
+    @classmethod
+    def is_compatible(cls, env):
+        valid = super().is_compatible(env=env)
+        if valid:
+            # We must be using a binary / smooth gripper controller for each robot to ensure that we can
+            # infer un/grasping intent
+            for robot in env.robots:
+                for arm in robot.arm_names:
+                    gripper_controller = robot.controllers[f"gripper_{arm}"]
+                    is_1d = gripper_controller.command_dim == 1
+                    is_normalized = (th.all(cb.to_torch(gripper_controller.command_input_limits[0]) == -1.0).item() and
+                                     th.all(cb.to_torch(gripper_controller.command_input_limits[1]) == 1.0).item())
+                    valid = is_1d and is_normalized
+                    if not valid:
+                        break
+                if not valid:
+                    break
+        return valid
+
     def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
         # Record whether task is done (terminated is true but not truncated)
-        active = False
-        for robot in env.robots:
+        step_metrics = dict()
+        for i, robot in enumerate(env.robots):
             robot_qpos = robot.get_joint_positions(normalized=False)
+            gripper_action_idxs = robot.gripper_action_idx
             for arm in robot.arm_names:
-                if th.max(th.abs(
+                active = th.max(th.abs(
                         robot_qpos[robot.arm_control_idx[arm]] - action[robot.arm_action_idx[arm]]
-                )).item() > GHOST_APPEAR_THRESHOLD:
-                    active = True
-                    break
-            if active:
-                break
-        return {"active": active}
+                )).item() > GHOST_APPEAR_THRESHOLD
+                gripper_controller = robot.controllers[f"gripper_{arm}"]
+                step_metrics[f"robot{i}::arm_{arm}::active"] = active
+                op = operator.lt if gripper_controller._inverted else operator.ge
+                step_metrics[f"robot{i}::arm_{arm}::open_cmd"] = th.all(op(gripper_action_idxs[arm], 0.0)).item()
+        return step_metrics
 
     def _compute_episode_metrics(self, env, episode_info):
-        # Derive acceleration -> jerk based on the recorded velocities
-        return {"n_steps_active": th.tensor(episode_info["active"]).sum().item()}
+        # Aggregate number of steps the ghost hands have appeared per-arm, and whether the robot was releasing a grasp
+        # during that time
+        episode_metrics = dict()
+        for i, robot in enumerate(env.robots):
+            for arm in robot.arm_names:
+                pf = f"robot{i}::arm_{arm}"
+                active = th.tensor(episode_info[f"{pf}::active"])
+                open_cmd = th.tensor(episode_info[f"{pf}::open_cmd"])
+                ungrasping = open_cmd[1:] & ~open_cmd[:-1]
+                episode_metrics[f"{pf}::n_steps"] = active.sum().item()
+                episode_metrics[f"{pf}::n_steps_while_ungrasping"] = (active[1:] & ungrasping).sum().item()
+        return episode_metrics
 
 
-class ProlongedPauseMetric(EnvMetric):
+class ProlongedPauseMetric(MotionMetric):
 
-    def __init__(self, motion_threshold=0.01):
+    def __init__(self, step_dt, vel_threshold=0.001):
         """
         Args:
-            motion_threshold (float): Amount of time between steps, used to differentiate from pos -> vel -> acc -> jerk
+            step_dt (float): Amount of time between steps, used to differentiate from pos -> vel -> acc -> jerk
+            vel_threshold (float): Per-joint vel threshold for determining whether there's any motion occurring
+                at a given step
         """
-        self.motion_threshold = motion_threshold
+        self.vel_threshold = vel_threshold
+        super().__init__(step_dt=step_dt)
 
-        super().__init__()
+    def _compute_episode_metrics(self, env, episode_info):
+        # Derive velocities, then count consecutive steps that contain values greater than our threshold
+        episode_metrics = dict()
+        for pos_key, positions in episode_info.items():
+            positions = th.stack(positions, dim=0)
+            vels = (positions[1:] - positions[:-1]) / self.step_dt
+            in_motions = th.any(th.abs(vels) > self.vel_threshold, dim=-1)
+            max_pause_length = 0
+            current_pause_length = 0
+            for in_motion in in_motions:
+                if not in_motion.item():
+                    current_pause_length += 1
+                    if current_pause_length > max_pause_length:
+                        max_pause_length = current_pause_length
+                else:
+                    current_pause_length = 0
+            episode_metrics[f"{pos_key}::max_pause_length"] = max_pause_length
+
+        return episode_metrics
+
+
+class FailedGraspMetric(EnvMetric):
 
     def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
-        # Record whether task is done (terminated is true but not truncated)
-        active = False
-        for robot in env.robots:
-            robot_qpos = robot.get_joint_positions(normalized=False)
+        step_metrics = dict()
+        for i, robot in enumerate(env.robots):
+            # Record whether fingers are closed (values ~ 0) -- this implies a failed grasp
             for arm in robot.arm_names:
-                if th.max(th.abs(
-                        robot_qpos[robot.arm_control_idx[arm]] - action[robot.arm_action_idx[arm]]
-                )).item() > GHOST_APPEAR_THRESHOLD:
-                    active = True
-                    break
-            if active:
-                break
-        return {"active": active}
+                step_metrics[f"robot{i}::arm_{arm}::fingers_closed"] = robot.get_joint_positions()[]
+        return step_metrics
 
     def _compute_episode_metrics(self, env, episode_info):
         # Derive acceleration -> jerk based on the recorded velocities
-        return {"n_steps_active": th.tensor(episode_info["active"]).sum().item()}
+        episode_metrics = dict()
+        for pos_key, positions in episode_info.items():
+            positions = th.stack(positions, dim=0)
+            vels = (positions[1:] - positions[:-1]) / self.step_dt
+            accs = (vels[1:] - vels[:-1]) / self.step_dt
+            jerks = (accs[1:] - accs[:-1]) / self.step_dt
+            episode_metrics[f"{pos_key}::vel_avg"] = vels.mean(dim=0)
+            episode_metrics[f"{pos_key}::acc_avg"] = accs.mean(dim=0)
+            episode_metrics[f"{pos_key}::jerk_avg"] = jerks.mean(dim=0)
+            episode_metrics[f"{pos_key}::vel_std"] = vels.std(dim=0)
+            episode_metrics[f"{pos_key}::acc_std"] = accs.std(dim=0)
+            episode_metrics[f"{pos_key}::jerk_std"] = jerks.std(dim=0)
+            episode_metrics[f"{pos_key}::vel_max"] = vels.max().item()
+            episode_metrics[f"{pos_key}::acc_max"] = accs.max().item()
+            episode_metrics[f"{pos_key}::jerk_max"] = jerks.max().item()
+
+        return episode_metrics
 
 
 
