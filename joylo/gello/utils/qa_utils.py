@@ -193,29 +193,20 @@ class FailedGraspMetric(EnvMetric):
         for i, robot in enumerate(env.robots):
             # Record whether fingers are closed (values ~ 0) -- this implies a failed grasp
             for arm in robot.arm_names:
-                step_metrics[f"robot{i}::arm_{arm}::fingers_closed"] = robot.get_joint_positions()[]
+                step_metrics[f"robot{i}::arm_{arm}::fingers_closed"] = th.allclose(robot.get_joint_positions()[robot.gripper_control_idx[arm]], th.zeros(2), atol=1e-4).item()
         return step_metrics
 
     def _compute_episode_metrics(self, env, episode_info):
-        # Derive acceleration -> jerk based on the recorded velocities
+        # Compute all fingers_closed upticks to get total failed grasp count
         episode_metrics = dict()
-        for pos_key, positions in episode_info.items():
-            positions = th.stack(positions, dim=0)
-            vels = (positions[1:] - positions[:-1]) / self.step_dt
-            accs = (vels[1:] - vels[:-1]) / self.step_dt
-            jerks = (accs[1:] - accs[:-1]) / self.step_dt
-            episode_metrics[f"{pos_key}::vel_avg"] = vels.mean(dim=0)
-            episode_metrics[f"{pos_key}::acc_avg"] = accs.mean(dim=0)
-            episode_metrics[f"{pos_key}::jerk_avg"] = jerks.mean(dim=0)
-            episode_metrics[f"{pos_key}::vel_std"] = vels.std(dim=0)
-            episode_metrics[f"{pos_key}::acc_std"] = accs.std(dim=0)
-            episode_metrics[f"{pos_key}::jerk_std"] = jerks.std(dim=0)
-            episode_metrics[f"{pos_key}::vel_max"] = vels.max().item()
-            episode_metrics[f"{pos_key}::acc_max"] = accs.max().item()
-            episode_metrics[f"{pos_key}::jerk_max"] = jerks.max().item()
+        for i, robot in enumerate(env.robots):
+            for arm in robot.arm_names:
+                pf = f"robot{i}::arm_{arm}"
+                fingers_closed = th.tensor(episode_info[f"{pf}::fingers_closed"])
+                fingers_closed_transition = fingers_closed[1:] & ~fingers_closed[:-1]
+                episode_metrics[f"{pf}::failed_grasp_count"] = fingers_closed_transition.sum().item()
 
         return episode_metrics
-
 
 
 def check_robot_self_collision(env):
