@@ -9,12 +9,18 @@ import sys
 import json
 from gello.robots.sim_robot.og_teleop_utils import optimize_sim_settings
 from gello.utils.qa_utils import *
+from gello.utils.b1k_utils import ALL_QA_METRICS, COMMON_QA_METRICS, TASK_QA_METRICS
+import inspect
 
 RUN_QA = True
 
 gm.RENDER_VIEWER_CAMERA = False
 gm.DEFAULT_VIEWER_WIDTH = 128
 gm.DEFAULT_VIEWER_HEIGHT = 128
+
+
+def extract_arg_names(func):
+    return list(inspect.signature(func).parameters.keys())
 
 
 def replay_hdf5_file(hdf_input_path):
@@ -135,36 +141,33 @@ def replay_hdf5_file(hdf_input_path):
 
     if RUN_QA:
         # Add QA metrics
-        step_dt = 1/30
-        env.add_metric(name="success", metric=TaskSuccessMetric())
-        col_metric = CollisionMetric()
-        col_metric.add_check(name="robot_self", check=check_robot_self_collision)
-        col_metric.add_check(name="robot_nonarm_nonstructure", check=check_robot_base_nonarm_nonfloor_collision)
-        env.add_metric(name="collision", metric=col_metric)
-        env.add_metric(name="jerk", metric=MotionMetric(step_dt=step_dt))
-        env.add_metric(name="prolonged_pause", metric=ProlongedPauseMetric(step_dt=step_dt, vel_threshold=0.001))
-        env.add_metric(name="ghost_hand", metric=GhostHandAppearanceMetric())
-        env.add_metric(name="failed_grasp", metric=FailedGraspMetric())
-        env.add_metric(name="tro_vel", metric=TaskRelevantObjectVelocityMetric(step_dt=step_dt))
-
-        head_camera = env.external_sensors[f"external_sensor{len(env.external_sensors)-1}"]
-        gripper_link_paths = {
-            "left":
-                set([
-                    '/World/scene_0/controllable__r1pro__robot_r1/left_realsense_link/visuals',
-                    '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_link/visuals',
-                    '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_finger_link1/visuals',
-                    '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_finger_link2/visuals'
-                ]),
-            "right":
-                set([
-                    '/World/scene_0/controllable__r1pro__robot_r1/right_realsense_link/visuals',
-                    '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_link/visuals',
-                    '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_finger_link1/visuals',
-                    '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_finger_link2/visuals'
-                ])
-        }
-        env.add_metric(name="fov", metric=FieldOfViewMetric(head_camera=head_camera, gripper_link_paths=gripper_link_paths))
+        metric_kwargs = dict(
+            step_dt=1/30,
+            vel_threshold=0.001,
+            head_camera=env.external_sensors[f"external_sensor{len(env.external_sensors) - 1}"],
+            gripper_link_paths={
+                "left":
+                    set([
+                        '/World/scene_0/controllable__r1pro__robot_r1/left_realsense_link/visuals',
+                        '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_link/visuals',
+                        '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_finger_link1/visuals',
+                        '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_finger_link2/visuals'
+                    ]),
+                "right":
+                    set([
+                        '/World/scene_0/controllable__r1pro__robot_r1/right_realsense_link/visuals',
+                        '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_link/visuals',
+                        '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_finger_link1/visuals',
+                        '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_finger_link2/visuals'
+                    ])
+            },
+        )
+        active_metrics_info = {metric_name: ALL_QA_METRICS[metric_name] for metric_name in COMMON_QA_METRICS}
+        for metric_name, metric_info in active_metrics_info.items():
+            create_fcn = metric_info["cls"] if metric_info["init"] is None else metric_info["init"]
+            init_kwargs = {arg: metric_kwargs[arg] for arg in extract_arg_names(create_fcn)}
+            metric = create_fcn(**init_kwargs)
+            env.add_metric(name=metric_name, metric=metric)
         env.reset()
 
     # Create a list to store video writers and RGB keys
