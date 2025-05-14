@@ -33,7 +33,7 @@ ALL_QA_METRICS = {
         "init": None,
         "validate_kwargs": dict(
             gh_appearance_limit=50,
-            gh_appearance_limit_while_ungrasping=10,
+            gh_appearance_limit_while_ungrasping=0,
         ),
     },
     "prolonged_pause": {
@@ -106,11 +106,11 @@ def aggregate_episode_validation(all_episode_metrics):
         sorted_metrics[metric_name][metric_val_name] = val
     for metric_name, episode_metrics in sorted_metrics.items():
         metric_info = ALL_QA_METRICS[metric_name]
-        results.update(metric_info["cls"].validate_episode(
+        results[metric_name] = metric_info["cls"].validate_episode(
             episode_metrics=episode_metrics,
             **metric_info["validate_kwargs"],
-        ))
+        )
 
     # Passes if all metric validations pass
-    success = all(v["success"] for v in results.values())
+    success = all(v["success"] for res in results.values() for v in res.values())
     return success, results
