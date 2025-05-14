@@ -212,7 +212,7 @@ class GhostHandAppearanceMetric(EnvMetric):
                 gripper_controller = robot.controllers[f"gripper_{arm}"]
                 step_metrics[f"robot{i}::arm_{arm}::active"] = active
                 op = operator.lt if gripper_controller._inverted else operator.ge
-                step_metrics[f"robot{i}::arm_{arm}::open_cmd"] = th.all(op(gripper_action_idxs[arm], 0.0)).item()
+                step_metrics[f"robot{i}::arm_{arm}::open_cmd"] = th.all(op(action[gripper_action_idxs[arm]], 0.0)).item()
         return step_metrics
 
     def _compute_episode_metrics(self, env, episode_info):
