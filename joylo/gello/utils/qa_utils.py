@@ -209,6 +209,65 @@ class FailedGraspMetric(EnvMetric):
         return episode_metrics
 
 
+class FieldOfViewMetric(EnvMetric):
+    """
+    When teleoperator grasp/release, the gripper needs to be in field of view
+    """
+    def __init__(self, head_camera, gripper_link_paths):
+        """
+        Args:
+            head_camera (VisionSensor): The head camera of the robot
+            gripper_link_paths (dict): The paths of the gripper links
+        """
+        self.head_camera = head_camera
+        self.gripper_link_paths = gripper_link_paths
+        
+        assert "seg_instance_id" in self.head_camera.modalities, "FieldOfViewMetric requires instance_id_segmentation modality"
+
+        super().__init__()
+            
+    def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
+        step_metrics = dict()
+        for i, robot in enumerate(env.robots):
+            _, info = self.head_camera.get_obs()
+            links_in_fov = set(info["seg_instance_id"].values())
+            
+            for arm in robot.arm_names:
+                is_grasping = bool(robot.is_grasping(arm))
+                # check if any of the gripper link for this arm is in the field of view
+                gripper_in_fov = len(links_in_fov.intersection(self.gripper_link_paths[arm])) > 0
+            
+                step_metrics[f"robot{i}::arm{arm}::is_grasping"] = is_grasping
+                step_metrics[f"robot{i}::arm{arm}::gripper_in_fov"] = gripper_in_fov
+        return step_metrics
+    
+    def _compute_episode_metrics(self, env, episode_info):
+        episode_metrics = dict()
+
+        for i, robot in enumerate(env.robots):
+            for arm in robot.arm_names:
+                is_grasping_key = f"robot{i}::arm{arm}::is_grasping"
+                gripper_in_fov_key = f"robot{i}::arm{arm}::gripper_in_fov"
+                    
+                is_grasping = th.tensor(episode_info[is_grasping_key])
+                gripper_in_fov = th.tensor(episode_info[gripper_in_fov_key])
+                
+                # Detect grasping state changes (comparing current with previous)
+                # For index 0, we assume no change (start of episode)
+                grasping_changes = th.zeros_like(is_grasping, dtype=th.bool)
+                # From index 1 onwards, compare with previous state
+                if len(is_grasping) > 1:
+                    grasping_changes[1:] = is_grasping[1:] != is_grasping[:-1]
+                
+                # Count steps when gripper is not in field of view
+                episode_metrics[f"robot{i}::arm_{arm}::gripper_outside_fov"] = (gripper_in_fov == 0).sum().item()
+                
+                # Count changes when gripper was NOT in field of view (undesired behavior)
+                episode_metrics[f"robot{i}::arm_{arm}::grasp_changes_outside_fov"] = (grasping_changes & ~gripper_in_fov).sum().item()
+        return episode_metrics
+
+
+
 def check_robot_self_collision(env):
     # TODO: What about gripper finger self collision?
     for robot in env.robots:

@@ -97,7 +97,7 @@ def replay_hdf5_file(hdf_input_path):
         "sensor_type": "VisionSensor",
         "name": f"external_sensor{idx}",
         "relative_prim_path": f"/controllable__r1pro__robot_r1/zed_link/external_sensor{idx}",
-        "modalities": ["rgb"],
+        "modalities": ["rgb", "seg_instance_id"],
         "sensor_kwargs": {
             "image_height": RESOLUTION_DEFAULT,
             "image_width": RESOLUTION_DEFAULT,
@@ -144,6 +144,25 @@ def replay_hdf5_file(hdf_input_path):
         env.add_metric(name="jerk", metric=ProlongedPauseMetric(step_dt=1/30, vel_threshold=0.001))
         env.add_metric(name="ghost_hand", metric=GhostHandAppearanceMetric())
         env.add_metric(name="failed_grasp", metric=FailedGraspMetric())
+        
+        head_camera = env.external_sensors[f"external_sensor{len(env.external_sensors)-1}"]
+        gripper_link_paths = {
+            "left":
+                set([
+                    '/World/scene_0/controllable__r1pro__robot_r1/left_realsense_link/visuals',
+                    '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_link/visuals',
+                    '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_finger_link1/visuals',
+                    '/World/scene_0/controllable__r1pro__robot_r1/left_gripper_finger_link2/visuals'
+                ]),
+            "right":
+                set([
+                    '/World/scene_0/controllable__r1pro__robot_r1/right_realsense_link/visuals',
+                    '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_link/visuals',
+                    '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_finger_link1/visuals',
+                    '/World/scene_0/controllable__r1pro__robot_r1/right_gripper_finger_link2/visuals'
+                ])
+        }
+        env.add_metric(name="fov", metric=FieldOfViewMetric(head_camera=head_camera, gripper_link_paths=gripper_link_paths))
         env.reset()
 
     # Create a list to store video writers and RGB keys
