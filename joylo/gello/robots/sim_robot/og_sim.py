@@ -819,6 +819,15 @@ class OGRobotServer:
                     self.env.task.object_scope[bddl_name].set_position_orientation(robot_pos, robot_quat)
                 else:
                     self.env.task.object_scope[bddl_name].load_state(obj_state, serialized=False)
+                    
+            # Try to ensure that all task-relevant objects are stable
+            # They should already be stable from the sampled instance, but there is some issue where loading the state
+            # causes some jitter (maybe for small mass / thin objects?)
+            for _ in range(25):
+                og.sim.step_physics()
+                for entity in self.env.task.object_scope.values():
+                    if not entity.is_system and entity.exists:
+                        entity.keep_still()
             self.env.scene.update_initial_file()
             print(f"\nLoading task {self.env.task.activity_name} instance id: {self.instance_id}\n")
             utils.update_instance_id_label(self.instance_id_label, self.instance_id)
