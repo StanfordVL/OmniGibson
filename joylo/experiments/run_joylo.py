@@ -145,10 +145,10 @@ def main(args):
         base_trunk_gripper_agent = JoyconAgent(
             calibration_dir=f"{REPO_DIR}/configs",
             deadzone_threshold=0.2,
-            max_translation=0.5,
-            max_rotation=0.8,
-            max_trunk_translate=0.2,
-            max_trunk_tilt=0.4,
+            max_translation=0.35,
+            max_rotation=0.3,
+            max_trunk_translate=0.1,
+            max_trunk_tilt=0.05,
             enable_rumble=True,
         )
 
