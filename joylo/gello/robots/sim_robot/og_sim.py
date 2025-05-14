@@ -99,6 +99,11 @@ class OGRobotServer:
         self.robot = self.env.robots[0]
         # Initialize instance ID, decrementing by 1 to ensure proper increment during the first reset
         self.instance_id = (instance_id - 1) if instance_id is not None else None
+        
+        # Disable opacity to guarantee all objects are visible
+        for obj in self.env.scene.objects:
+            for material in obj.materials:
+                material.enable_opacity = False
 
         self.ghosting = ghosting
         if self.ghosting:
