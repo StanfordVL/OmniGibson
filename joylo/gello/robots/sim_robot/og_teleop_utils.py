@@ -48,6 +48,35 @@ def get_task_relevant_room_types(activity_name):
 
     return list(room_types)
 
+def augment_rooms(relevant_rooms, scene_model):
+    """
+    Augment the list of relevant rooms by adding dependent rooms that need to be loaded together.
+    
+    Args:
+        relevant_rooms: List of room types that are initially relevant
+        scene_model: The scene model being used
+        
+    Returns:
+        Augmented list of room types including all dependencies
+    """
+
+    
+    # Get dependencies for current scene
+    scene_dependencies = ROOM_DEPENDENCIES[scene_model]
+    
+    # Create a copy of the original list to avoid modifying it during iteration
+    augmented_rooms = relevant_rooms.copy()
+    
+    # Check each relevant room for dependencies
+    for room in relevant_rooms:
+        if room in scene_dependencies:
+            # Add dependent rooms if they're not already in the list
+            for dependent_room in scene_dependencies[room]:
+                if dependent_room not in augmented_rooms:
+                    augmented_rooms.append(dependent_room)
+    
+    return augmented_rooms
+
 
 def infer_trunk_translate_from_torso_qpos(qpos):
     """
