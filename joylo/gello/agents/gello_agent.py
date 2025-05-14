@@ -187,6 +187,7 @@ class GelloAgent(Agent):
     def act(self, obs: Dict[str, np.ndarray]) -> th.tensor:
         # Resist if specified
         jnts = self._robot.get_joint_state()
+        jnts_vel = self._robot.get_joint_velocities() # Values from the dynamixels
         if self._current_enabled:
             # Disable controller if we're in cooldown
             current_idxs = np.where(self._robot.operating_mode == OperatingMode.CURRENT)[0]
@@ -203,7 +204,6 @@ class GelloAgent(Agent):
             # Compute joint errors and delegate to control function implemented by subclass
             joint_error = np.rad2deg(joint_setpoint - jnts)
 
-            jnts_vel = self._robot.get_joint_velocities() # Values from the dynamixels
             current = self.compute_feedback_currents(joint_error, jnts_vel, obs)
             self._robot.command_current(current[current_idxs], idxs=current_idxs)
 
