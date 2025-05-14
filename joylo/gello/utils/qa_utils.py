@@ -1,5 +1,6 @@
 import omnigibson as og
 from omnigibson.envs import EnvMetric
+from omnigibson.tasks import BehaviorTask
 from omnigibson.utils.usd_utils import RigidContactAPI
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.backend_utils import _compute_backend as cb
@@ -205,6 +206,41 @@ class FailedGraspMetric(EnvMetric):
                 fingers_closed = th.tensor(episode_info[f"{pf}::fingers_closed"])
                 fingers_closed_transition = fingers_closed[1:] & ~fingers_closed[:-1]
                 episode_metrics[f"{pf}::failed_grasp_count"] = fingers_closed_transition.sum().item()
+
+        return episode_metrics
+
+
+class TaskRelevantObjectVelocityMetric(EnvMetric):
+    def __init__(self, step_dt):
+        """
+        Args:
+            step_dt (float): Amount of time between steps, used to differentiate from pos -> vel
+        """
+        self.step_dt = step_dt
+
+        super().__init__()
+
+    @classmethod
+    def is_compatible(cls, env):
+        return isinstance(env.task, BehaviorTask)
+
+    def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
+        step_metrics = dict()
+        for name, bddl_inst in env.task.object_scope.items():
+            if bddl_inst.is_system or not bddl_inst.exists:
+                continue
+            step_metrics[f"{name}::pos"] = bddl_inst.get_position_orientation()[0]
+        return step_metrics
+
+    def _compute_episode_metrics(self, env, episode_info):
+        # Derive acceleration -> jerk based on the recorded velocities
+        episode_metrics = dict()
+        for pos_key, positions in episode_info.items():
+            positions = th.stack(positions, dim=0)
+            vels = (positions[1:] - positions[:-1]) / self.step_dt
+            episode_metrics[f"{pos_key}::vel_avg"] = vels.mean(dim=0)
+            episode_metrics[f"{pos_key}::vel_std"] = vels.std(dim=0)
+            episode_metrics[f"{pos_key}::vel_max"] = vels.max().item()
 
         return episode_metrics
 

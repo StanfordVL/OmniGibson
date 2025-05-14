@@ -135,15 +135,17 @@ def replay_hdf5_file(hdf_input_path):
 
     if RUN_QA:
         # Add QA metrics
+        step_dt = 1/30
         env.add_metric(name="success", metric=TaskSuccessMetric())
         col_metric = CollisionMetric()
         col_metric.add_check(name="robot_self", check=check_robot_self_collision)
         col_metric.add_check(name="robot_nonarm_nonstructure", check=check_robot_base_nonarm_nonfloor_collision)
         env.add_metric(name="collision", metric=col_metric)
-        env.add_metric(name="jerk", metric=MotionMetric(step_dt=1/30))
-        env.add_metric(name="jerk", metric=ProlongedPauseMetric(step_dt=1/30, vel_threshold=0.001))
+        env.add_metric(name="jerk", metric=MotionMetric(step_dt=step_dt))
+        env.add_metric(name="prolonged_pause", metric=ProlongedPauseMetric(step_dt=step_dt, vel_threshold=0.001))
         env.add_metric(name="ghost_hand", metric=GhostHandAppearanceMetric())
         env.add_metric(name="failed_grasp", metric=FailedGraspMetric())
+        env.add_metric(name="tro_vel", metric=TaskRelevantObjectVelocityMetric(step_dt=step_dt))
         env.reset()
 
     # Create a list to store video writers and RGB keys
