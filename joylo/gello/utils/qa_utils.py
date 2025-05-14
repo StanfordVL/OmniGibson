@@ -34,6 +34,8 @@ class MotionMetric(EnvMetric):
             vels = (positions[1:] - positions[:-1]) / self.step_dt
             accs = (vels[1:] - vels[:-1]) / self.step_dt
             jerks = (accs[1:] - accs[:-1]) / self.step_dt
+            # Only keep absolute values
+            vels, accs, jerks = th.abs(vels), th.abs(accs), th.abs(jerks)
             episode_metrics[f"{pos_key}::vel_avg"] = vels.mean(dim=0)
             episode_metrics[f"{pos_key}::acc_avg"] = accs.mean(dim=0)
             episode_metrics[f"{pos_key}::jerk_avg"] = jerks.mean(dim=0)
@@ -45,6 +47,43 @@ class MotionMetric(EnvMetric):
             episode_metrics[f"{pos_key}::jerk_max"] = jerks.max().item()
 
         return episode_metrics
+
+    @classmethod
+    def validate_episode(
+            cls,
+            episode_metrics,
+            vel_max_limit=None,
+            acc_max_limit=None,
+            jerk_max_limit=None,
+    ):
+        """
+        Validates the given @episode_metrics from self.aggregate_results using any specific @kwargs
+
+        Args:
+            episode_metrics (dict): Metrics aggregated using self.aggregate_results
+            vel_max_limit (None or float): If specified, maximum velocity that is acceptable for the episode to
+                be validated
+            acc_max_limit (None or float): If specified, maximum acceleration that is acceptable for the episode to
+                be validated
+            jerk_max_limit (None or float): If specified, maximum jerk that is acceptable for the episode to
+                be validated
+
+        Returns:
+            dict: Keyword-mapped dictionary mapping each validation test name to {"success": bool, "feedback": str} dict
+                where "success" is True if the given @episode_metrics pass that specific test; if False, "feedback"
+                provides information as to why the test failed
+        """
+        results = dict()
+        for val_max_limit, val_name in zip((vel_max_limit, acc_max_limit, jerk_max_limit), ("vel_max", "acc_max", "jerk_max")):
+            if val_max_limit is not None:
+                for name, metric in episode_metrics.items():
+                    if f"::{val_name}" in name:
+                        test_name = name
+                        success = metric <= val_max_limit
+                        feedback = None if success else f"Robot's {val_name} is too high ({metric}), must be <= {val_max_limit}"
+                        results[test_name] = {"success": success, "feedback": feedback}
+
+        return results
 
 
 class CollisionMetric(EnvMetric):
@@ -90,6 +129,37 @@ class CollisionMetric(EnvMetric):
 
         return episode_metrics
 
+    @classmethod
+    def validate_episode(
+            cls,
+            episode_metrics,
+            collision_limits=None,
+    ):
+        """
+        Validates the given @episode_metrics from self.aggregate_results using any specific @kwargs
+
+        Args:
+            episode_metrics (dict): Metrics aggregated using self.aggregate_results
+            collision_limits (None or dict): If specified, should map collision check name (i.e.: the name
+                passed in during self.add_check() to corresponding maximum acceptable collision count)
+
+        Returns:
+            dict: Keyword-mapped dictionary mapping each validation test name to {"success": bool, "feedback": str} dict
+                where "success" is True if the given @episode_metrics pass that specific test; if False, "feedback"
+                provides information as to why the test failed
+        """
+        results = dict()
+        if collision_limits is not None:
+            for name, collision_limit in collision_limits.items():
+                test_name = name
+                if collision_limit is not None:
+                    n_collisions = episode_metrics[f"{name}::n_collision"]
+                    success = n_collisions <= collision_limit
+                    feedback = None if success else f"Too many collisions ({n_collisions}) when checking {name}, must be <= {collision_limit}"
+                    results[test_name] = {"success": success, "feedback": feedback}
+
+        return results
+
 
 class TaskSuccessMetric(EnvMetric):
 
@@ -100,6 +170,12 @@ class TaskSuccessMetric(EnvMetric):
     def _compute_episode_metrics(self, env, episode_info):
         # Derive acceleration -> jerk based on the recorded velocities
         return {"success": th.any(th.tensor(episode_info["done"])).item()}
+
+    @classmethod
+    def validate_episode(cls, episode_metrics):
+        success = episode_metrics["success"]
+        feedback = None if success else "Task was a not a success!"
+        return {"task_success": {"success": success, "feedback": feedback}}
 
 
 class GhostHandAppearanceMetric(EnvMetric):
@@ -149,9 +225,48 @@ class GhostHandAppearanceMetric(EnvMetric):
                 active = th.tensor(episode_info[f"{pf}::active"])
                 open_cmd = th.tensor(episode_info[f"{pf}::open_cmd"])
                 ungrasping = open_cmd[1:] & ~open_cmd[:-1]
-                episode_metrics[f"{pf}::n_steps"] = active.sum().item()
+                episode_metrics[f"{pf}::n_steps_total"] = active.sum().item()
                 episode_metrics[f"{pf}::n_steps_while_ungrasping"] = (active[1:] & ungrasping).sum().item()
         return episode_metrics
+
+    @classmethod
+    def validate_episode(
+            cls,
+            episode_metrics,
+            gh_appearance_limit=None,
+            gh_appearance_limit_while_ungrasping=None,
+    ):
+        """
+        Validates the given @episode_metrics from self.aggregate_results using any specific @kwargs
+
+        Args:
+            episode_metrics (dict): Metrics aggregated using self.aggregate_results
+            gh_appearance_limit (None or int): If specified, maximum acceptable number of steps where the ghost hand
+                was triggered in the episode
+            gh_appearance_limit_while_ungrasping (None or int): If specified, maximum number of steps where the
+                ghost hand was triggered during an ungrasp
+
+        Returns:
+            dict: Keyword-mapped dictionary mapping each validation test name to {"success": bool, "feedback": str} dict
+                where "success" is True if the given @episode_metrics pass that specific test; if False, "feedback"
+                provides information as to why the test failed
+        """
+        results = dict()
+        if gh_appearance_limit is not None or gh_appearance_limit_while_ungrasping is not None:
+            for name, metric in episode_metrics.items():
+                test_name = name
+                if gh_appearance_limit is not None and "::n_steps_total" in name:
+                    success = episode_metrics[name] <= gh_appearance_limit
+                    limit = gh_appearance_limit
+                elif gh_appearance_limit_while_ungrasping is not None and "::n_steps_while_ungrasping" in name:
+                    success = episode_metrics[name] <= gh_appearance_limit_while_ungrasping
+                    limit = gh_appearance_limit_while_ungrasping
+                else:
+                    raise ValueError(f"Got invalid metric name: {name}")
+                feedback = None if success else f"Too many ghost hand appearances ({episode_metrics[name]}) when checking {name}, must be <= {limit}"
+                results[test_name] = {"success": success, "feedback": feedback}
+
+        return results
 
 
 class ProlongedPauseMetric(MotionMetric):
@@ -186,6 +301,35 @@ class ProlongedPauseMetric(MotionMetric):
 
         return episode_metrics
 
+    @classmethod
+    def validate_episode(
+            cls,
+            episode_metrics,
+            pause_steps_limit=None,
+    ):
+        """
+        Validates the given @episode_metrics from self.aggregate_results using any specific @kwargs
+
+        Args:
+            episode_metrics (dict): Metrics aggregated using self.aggregate_results
+            pause_steps_limit (None or int): If specified, maximum acceptable number of consecutive steps without
+                robot motion
+
+        Returns:
+            dict: Keyword-mapped dictionary mapping each validation test name to {"success": bool, "feedback": str} dict
+                where "success" is True if the given @episode_metrics pass that specific test; if False, "feedback"
+                provides information as to why the test failed
+        """
+        results = dict()
+        if pause_steps_limit is not None:
+            for name, metric in episode_metrics.items():
+                test_name = name
+                success = episode_metrics[name] <= pause_steps_limit
+                feedback = None if success else f"Too many consecutive steps ({episode_metrics[name]}) without robot motion, must be <= {pause_steps_limit}"
+                results[test_name] = {"success": success, "feedback": feedback}
+
+        return results
+
 
 class FailedGraspMetric(EnvMetric):
 
@@ -194,7 +338,7 @@ class FailedGraspMetric(EnvMetric):
         for i, robot in enumerate(env.robots):
             # Record whether fingers are closed (values ~ 0) -- this implies a failed grasp
             for arm in robot.arm_names:
-                step_metrics[f"robot{i}::arm_{arm}::fingers_closed"] = th.allclose(robot.get_joint_positions()[robot.gripper_control_idx[arm]], th.zeros(2), atol=1e-4).item()
+                step_metrics[f"robot{i}::arm_{arm}::fingers_closed"] = th.allclose(robot.get_joint_positions()[robot.gripper_control_idx[arm]], th.zeros(2), atol=1e-4)
         return step_metrics
 
     def _compute_episode_metrics(self, env, episode_info):
@@ -208,6 +352,34 @@ class FailedGraspMetric(EnvMetric):
                 episode_metrics[f"{pf}::failed_grasp_count"] = fingers_closed_transition.sum().item()
 
         return episode_metrics
+
+    @classmethod
+    def validate_episode(
+            cls,
+            episode_metrics,
+            failed_grasp_limit=None,
+    ):
+        """
+        Validates the given @episode_metrics from self.aggregate_results using any specific @kwargs
+
+        Args:
+            episode_metrics (dict): Metrics aggregated using self.aggregate_results
+            failed_grasp_limit (None or int): If specified, maximum acceptable number of failed (empty) grasps
+
+        Returns:
+            dict: Keyword-mapped dictionary mapping each validation test name to {"success": bool, "feedback": str} dict
+                where "success" is True if the given @episode_metrics pass that specific test; if False, "feedback"
+                provides information as to why the test failed
+        """
+        results = dict()
+        if failed_grasp_limit is not None:
+            for name, metric in episode_metrics.items():
+                test_name = name
+                success = episode_metrics[name] <= failed_grasp_limit
+                feedback = None if success else f"Too many ({episode_metrics[name]}) failed grasps, must be <= {failed_grasp_limit}"
+                results[test_name] = {"success": success, "feedback": feedback}
+
+        return results
 
 
 class TaskRelevantObjectVelocityMetric(EnvMetric):
@@ -243,6 +415,36 @@ class TaskRelevantObjectVelocityMetric(EnvMetric):
             episode_metrics[f"{pos_key}::vel_max"] = vels.max().item()
 
         return episode_metrics
+
+    @classmethod
+    def validate_episode(
+            cls,
+            episode_metrics,
+            vel_max_limit=None,
+    ):
+        """
+        Validates the given @episode_metrics from self.aggregate_results using any specific @kwargs
+
+        Args:
+            episode_metrics (dict): Metrics aggregated using self.aggregate_results
+            vel_max_limit (None or float): If specified, maximum velocity that is acceptable for the episode to
+                be validated
+
+        Returns:
+            dict: Keyword-mapped dictionary mapping each validation test name to {"success": bool, "feedback": str} dict
+                where "success" is True if the given @episode_metrics pass that specific test; if False, "feedback"
+                provides information as to why the test failed
+        """
+        results = dict()
+        if vel_max_limit is not None:
+            for name, metric in episode_metrics.items():
+                if f"::vel_max" in name:
+                    test_name = name
+                    success = metric <= vel_max_limit
+                    feedback = None if success else f"{name} is too high({metric}), must be <= {vel_max_limit}"
+                    results[test_name] = {"success": success, "feedback": feedback}
+
+        return results
 
 
 class FieldOfViewMetric(EnvMetric):
@@ -302,6 +504,35 @@ class FieldOfViewMetric(EnvMetric):
                 episode_metrics[f"robot{i}::arm_{arm}::grasp_changes_outside_fov"] = (grasping_changes & ~gripper_in_fov).sum().item()
         return episode_metrics
 
+    @classmethod
+    def validate_episode(
+            cls,
+            episode_metrics,
+            gripper_changes_outside_fov_limit=None,
+    ):
+        """
+        Validates the given @episode_metrics from self.aggregate_results using any specific @kwargs
+
+        Args:
+            episode_metrics (dict): Metrics aggregated using self.aggregate_results
+            gripper_changes_outside_fov_limit (None or float): If specified, maximum acceptable number of instances
+                where the gripper was outside the fov during an un/grasp change
+
+        Returns:
+            dict: Keyword-mapped dictionary mapping each validation test name to {"success": bool, "feedback": str} dict
+                where "success" is True if the given @episode_metrics pass that specific test; if False, "feedback"
+                provides information as to why the test failed
+        """
+        results = dict()
+        if gripper_changes_outside_fov_limit is not None:
+            for name, metric in episode_metrics.items():
+                if f"::grasp_changes_outside_fov" in name:
+                    test_name = name
+                    success = metric <= gripper_changes_outside_fov_limit
+                    feedback = None if success else f"{name} is too high ({metric}) (too many times the gripper was toggled outside of the robot's main FOV), must be <= {gripper_changes_outside_fov_limit}"
+                    results[test_name] = {"success": success, "feedback": feedback}
+
+        return results
 
 
 def check_robot_self_collision(env):
@@ -313,7 +544,7 @@ def check_robot_self_collision(env):
     return False
 
 
-def check_robot_base_nonarm_nonfloor_collision(env):
+def check_robot_base_nonarm_nonkinematic_collision(env):
     # TODO: How to check for wall collisions? They're kinematic only
     # # One solution: Make them non-kinematic only during QA checking
     # floor_link_paths = []
@@ -332,4 +563,13 @@ def check_robot_base_nonarm_nonfloor_collision(env):
     robot_contacts = RigidContactAPI.get_all_impulses(env.scene.idx)[robot_link_idxs]
 
     return th.any(robot_contacts).item()
+
+
+def create_collision_metric(include_robot_self_collision=True, include_robot_nonarm_nonkinematic_collision=True):
+    col_metric = CollisionMetric()
+    if include_robot_self_collision:
+        col_metric.add_check(name="robot_self", check=check_robot_self_collision)
+    if include_robot_nonarm_nonkinematic_collision:
+        col_metric.add_check(name="robot_nonarm_nonstructure", check=check_robot_base_nonarm_nonkinematic_collision)
+    return col_metric
 
