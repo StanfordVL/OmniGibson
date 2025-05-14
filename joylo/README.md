@@ -201,7 +201,8 @@ python experiments/run_joylo.py --gello_model r1pro --joint_config_file joint_co
 - If the JoyCons are connected to Ubuntu in bluetooth but are still unable to be detected from Python, try `pip uninstall hidapi`, and then `pip install hid pyglm`, and then try again
 
 ## Joycon Button Mapping
-![image](https://github.com/user-attachments/assets/39d20d02-36ff-4ed9-aa34-bcd63ded1294)
+![Joycon instruction](https://github.com/user-attachments/assets/2e7d57d7-66be-490b-aa76-4d6f9b2ede52)
+
 
 
 ## JoyLo Joint Calibration
