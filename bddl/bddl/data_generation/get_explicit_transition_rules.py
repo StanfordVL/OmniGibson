@@ -26,7 +26,7 @@ def parse_conditions_entry(unparsed_conditions):
 
 def sheet_to_json(submap):
     params = TM_SUBMAPS_TO_PARAMS[submap]
-    raw_data = pd.read_csv(os.path.join(SHEETS_DIR, submap + ".csv"))[params].to_json(orient="records")
+    raw_data = pd.read_csv(os.path.join(SHEETS_DIR, submap + ".csv"))[list(params.keys())].to_json(orient="records")
     data = json.loads(raw_data)
     reformatted_data = []
     for rule in data:
