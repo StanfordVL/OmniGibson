@@ -38,8 +38,8 @@ class KnowledgeBaseProcessor():
         logger.warning("Loading BDDL knowledge base... This may take a few seconds.")
         self.preparation()
         self.create_synsets()
+        self.add_particle_system_parameters()
         self.create_objects()
-        self.create_particle_systems()
         self.create_scenes()
         self.create_tasks()
         self.create_transitions()
@@ -120,6 +120,11 @@ class KnowledgeBaseProcessor():
                 assert not any(c.name == category for c in Category.all_objects()), f"Category {category} of {synset_name} already exists!"
                 Category.get_or_create(name=category, synset=synset)
 
+            # Add any particle systems
+            for particle_system in self.object_taxonomy.get_substances(synset_name):
+                assert not any(ps.name == particle_system for ps in ParticleSystem.all_objects()), f"Particle system {particle_system} of {synset_name} already exists!"
+                ParticleSystem.get_or_create(name=particle_system, synset=synset)
+
             # Add any properties
             if created:
                 for property_name, params in self.object_taxonomy.get_abilities(synset_name).items():
@@ -138,7 +143,7 @@ class KnowledgeBaseProcessor():
             for row in reader:
                 self.deletion_queue.add(row["Object"].strip().split("-")[1])
         # then create objects
-        with open(GENERATED_DATA_DIR / "object_inventory_future.json", "r") as f:
+        with open(GENERATED_DATA_DIR / "object_inventory.json", "r") as f:
             inventory = json.load(f)
             for orig_name, provider in self.tqdm(inventory["providers"].items()):
                 object_name = orig_name
@@ -151,14 +156,14 @@ class KnowledgeBaseProcessor():
                     continue
 
                 # Create the object
-                category_name = object_name.split("-")[0]
-                category, _ = Category.get_or_create(name=category_name)
-
-                # Original category
                 orig_category_name = orig_name.split("-")[0]
-                obj = Object.create(name=orig_id, original_category_name=orig_category_name, provider=provider, category=category)
+                obj = Object.create(name=orig_id, original_category_name=orig_category_name, provider=provider)
+
+                # Add bounding box info
                 if orig_id in inventory["bounding_box_sizes"]:
                     obj.bounding_box_size = tuple(inventory["bounding_box_sizes"][orig_id])
+
+                # Add meta link info
                 if orig_name in inventory["meta_links"]:
                     existing_meta_types = set(inventory["meta_links"][orig_name])
                     if "openfillable" in existing_meta_types:
@@ -178,40 +183,40 @@ class KnowledgeBaseProcessor():
                                     obj.male_attachment_pairs.add(pair_obj)
                                 else:
                                     raise Exception(f"Invalid gender {gender} for attachment pair {pair}")
-
-        with open(GENERATED_DATA_DIR / "object_inventory.json", "r") as f:
-            objs = []
-            for orig_name in self.tqdm(json.load(f)["providers"].keys()):
-                orig_id = orig_name.split("-")[1]
-                object_name = orig_name
-                if orig_id in self.object_rename_mapping:
-                    from_name, to_name = self.object_rename_mapping[orig_id]
-                    assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
-                    object_name = to_name
-                if orig_id not in self.deletion_queue:
-                    category_name = object_name.split("-")[0]
-                    category, _ = Category.get_or_create(name=category_name)
-                    # safeguard to ensure currently available objects are also in future planned dataset
-                    assert Object.exists(name=orig_id), f"{orig_id} in category {category}, which exists in object_inventory.json, is not in object_inventory_future.json!"
-                    obj = Object.get(name=orig_id)
-                    objs.append(obj)
+                                
+                # Add the category and/or particle system
+                category_name = object_name.split("-")[0]
+                particle_system = ParticleSystem.get(name=category_name)
+                category = Category.get(name=category_name)
+                assert (category is None) != (particle_system is None), f"{category_name} should be exactly one of category or particle system"
+                if particle_system is not None:
+                    # If it's a particle system, add it to the object
+                    obj.particle_system = particle_system
+                else:
+                    obj.category = category
 
         # Check that all of the renames have happened
         # TODO: Is this really useful? Doubt it.
         # missing_renames = {final_name for _, final_name in self.object_rename_mapping.values() if not Object.exists(name=final_name.split("-")[1])}
         # assert len(missing_renames) == 0, f"{missing_renames} do not exist in the database. Did you rename a nonexistent object (or one in the deletion queue)?"
 
-    def create_particle_systems(self):
+    def add_particle_system_parameters(self):
         with open(GENERATED_DATA_DIR / "substance_hyperparams.csv") as csvfile:
             reader = csv.DictReader(csvfile, delimiter=",", quotechar='"')
             for row in reader:
+                # Get the particle system. It should already exist from the synset stage.
                 name = row["substance"]
-                assert ParticleSystem.get(name) is None, f"Duplicate particle system {name}"
-                params = json.loads(row["hyperparams"])
+                particle_system = ParticleSystem.get(name)
+                assert particle_system is not None, f"Duplicate particle system {name}"
+
+                # Confirm the synset assignment
                 synset_name = row["synset"]
                 synset = Synset.get(name=synset_name)
-                assert synset is not None, f"Synset {synset_name} does not exist in the database."
-                ParticleSystem.create(name=name, parameters=json.dumps(params), synset=synset)
+                assert particle_system.synset == synset, f"Particle system {name} is not in the correct synset {synset_name}"
+
+                # Load, and re-dump, the parameters
+                params = json.loads(row["hyperparams"])
+                particle_system.parameters = json.dumps(params)
 
     def create_scenes(self):
         """
@@ -219,48 +224,20 @@ class KnowledgeBaseProcessor():
         scene matching to tasks will be generated later when creating task objects
         """
         self.debug_print("Creating scenes...")
-        with open(GENERATED_DATA_DIR / "combined_room_object_list_future.json", "r") as f:
+        with open(GENERATED_DATA_DIR / "combined_room_object_list.json", "r") as f:
             planned_scene_dict = json.load(f)["scenes"]
             for scene_name in self.tqdm(planned_scene_dict):
                 scene, _ = Scene.get_or_create(name=scene_name)
                 for room_name in planned_scene_dict[scene_name]:
-                    # TODO: Implement unique_together constraints
                     try:
                         room = Room.create(
                             name=room_name, 
                             type=room_name.rsplit('_', 1)[0], 
-                            ready=False, 
                             scene=scene
                         )
                     except IntegrityError:
                         raise Exception(f"room {room_name} in {scene.name} (not ready) already exists!")
                     for orig_name, count in planned_scene_dict[scene_name][room_name].items():
-                        if orig_name.split("-")[1] not in self.deletion_queue:
-                            object_name = orig_name
-                            orig_id = orig_name.split("-")[1]
-                            if orig_id in self.object_rename_mapping:
-                                from_name, to_name = self.object_rename_mapping[orig_id]
-                                assert orig_name == from_name or orig_name == to_name, f"Object {orig_name} is in the rename mapping with the wrong categories {from_name} -> {to_name}."
-                                object_name = to_name
-                            obj = Object.get(name=orig_id)
-                            assert obj is not None, f"Scene {scene_name} object {orig_id} does not exist in the database."
-                            RoomObject.create(room=room, object=obj, count=count)
-
-        with open(GENERATED_DATA_DIR / "combined_room_object_list.json", "r") as f:
-            current_scene_dict = json.load(f)["scenes"]
-            for scene_name in self.tqdm(current_scene_dict):
-                scene, _ = Scene.get_or_create(name=scene_name)
-                for room_name in current_scene_dict[scene_name]:
-                    try:
-                        room = Room.create(
-                            name=room_name, 
-                            type=room_name.rsplit('_', 1)[0], 
-                            ready=True, 
-                            scene=scene
-                        )
-                    except IntegrityError:
-                        raise Exception(f"room {room_name} in {scene.name} (ready) already exists!")
-                    for orig_name, count in current_scene_dict[scene_name][room_name].items():
                         if orig_name.split("-")[1] not in self.deletion_queue:
                             object_name = orig_name
                             orig_id = orig_name.split("-")[1]

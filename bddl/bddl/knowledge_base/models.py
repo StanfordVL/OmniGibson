@@ -122,15 +122,7 @@ class Scene(Model):
 
     @cached_property
     def room_count(self):
-        return len(self.future_rooms)
-    
-    @cached_property
-    def ready_rooms(self):
-        return [room for room in self.rooms if room.ready]
-    
-    @cached_property
-    def future_rooms(self):
-        return [room for room in self.rooms if not room.ready]
+        return len(self.rooms)
 
     @cached_property
     def object_count(self):
@@ -138,23 +130,7 @@ class Scene(Model):
             roomobject.count
             for room in self.rooms
             for roomobject in room.non_clutter_roomobjects  # TODO: Should we include clutter objects?
-            if not room.ready
         )
-
-    @cached_property
-    def any_ready(self):
-        return any(room.ready for room in self.rooms)
-
-    @cached_property
-    def fully_ready(self):
-        ready_count = sum(
-            roomobject.count
-            for room in self.rooms
-            for roomobject in room.roomobjects
-            if room.ready
-        )
-        unready_count = self.object_count
-        return ready_count == unready_count
 
     class Meta:
         pk = "name"
@@ -164,10 +140,13 @@ class Scene(Model):
 @dataclass(eq=False, order=False)
 class ParticleSystem(Model):
     name: str
-    parameters: str
+    parameters: Optional[str] = None
 
     # the synset that the category belongs to
     synset_fk: ManyToOne = ManyToOneField("Synset", "particle_systems")
+
+    # the objects that belong to this particle system as particles
+    particles_fk: OneToMany = OneToManyField("Object", "particle_system")
 
     def __str__(self):
         return self.name
@@ -186,6 +165,15 @@ class ParticleSystem(Model):
             return set()
         return {anc.name for anc in self.synset.ancestors} | {self.synset.name}
 
+    def state(self) -> SynsetState:
+        # A particle system is ready if it doesn't need particles or if it has any ready particles.
+        if self.synset.is_liquid:
+            return SynsetState.MATCHED
+        elif len(self.particles) == 0 or not any(particle.ready for particle in self.particles):
+            return SynsetState.UNMATCHED
+        else:
+            return SynsetState.PLANNED
+
     @classmethod
     def view_mapped_to_non_leaf_synsets(cls):
         """Particle systems mapped to Non-Leaf Synsets"""
@@ -195,6 +183,20 @@ class ParticleSystem(Model):
     def view_mapped_to_non_substance_synsets(cls):
         """Particle systems mapped to Non-Substance Synsets"""
         return [x for x in cls.all_objects() if not x.synset.is_substance]
+    
+    @classmethod
+    def view_missing_particle(cls):
+        """Particle systems that are missing particles"""
+        return [
+            x for x in cls.all_objects() if not x.synset.is_liquid and len(x.particles) == 0
+        ]
+    
+    @classmethod
+    def view_missing_params(cls):
+        """Particle systems that are missing parameters"""
+        return [
+            x for x in cls.all_objects() if not x.parameters
+        ]
 
 
 @dataclass(eq=False, order=False)
@@ -239,6 +241,8 @@ class Object(Model):
     bounding_box_size: Optional[Tuple[float, float, float]] = None
     # the category that the object belongs to
     category_fk: ManyToOne = ManyToOneField(Category, "objects")
+    # the particle system that the object belongs to
+    particle_system_fk: ManyToOne = ManyToOneField(ParticleSystem, "particles")
     # the category of the object prior to getting renamed
     original_category_name: str = ""
     # meta links owned by the object
@@ -253,7 +257,14 @@ class Object(Model):
     male_attachment_pairs_fk: ManyToMany = ManyToManyField(AttachmentPair, "male_objects")
 
     def __str__(self):
-        return self.category.name + "-" + self.name
+        if self.category is not None:
+            return self.category.name + "-" + self.name
+        elif self.particle_system is not None:
+            return self.particle_system.name + "-" + self.name
+        
+        raise ValueError(
+            f"Object {self.name} does not belong to a category or particle system"
+        )
 
     class Meta:
         pk = "name"
@@ -261,7 +272,14 @@ class Object(Model):
 
     @cache
     def matching_synset(self, synset) -> bool:
-        return self.category.matching_synset(synset)
+        if self.category is not None:
+            return self.category.matching_synset(synset)
+        elif self.particle_system is not None:
+            return self.particle_system.matching_synset(synset)
+        
+        raise ValueError(
+            f"Object {self.name} does not belong to a category or particle system to match against synset {synset.name}"
+        )
 
     @cached_property
     def ready(self) -> bool:
@@ -288,8 +306,15 @@ class Object(Model):
 
     @cached_property
     def missing_meta_links(self) -> List[str]:
-        return sorted(
-            self.category.synset.required_meta_links - {x.name for x in self.meta_links}
+        if self.category is not None:
+            return sorted(
+                self.category.synset.required_meta_links - {x.name for x in self.meta_links}
+            )
+        elif self.particle_system is not None:
+            return []
+        
+        raise ValueError(
+            f"Object {self.name} does not belong to a category or particle system to check for missing meta links"
         )
 
     @classmethod
@@ -298,7 +323,7 @@ class Object(Model):
         return [
             o
             for o in cls.all_objects()
-            if not o.fully_supports_synset(o.category.synset, ignore={"subpart"})
+            if o.category is not None and not o.fully_supports_synset(o.category.synset, ignore={"subpart"})
         ]
 
 
@@ -350,9 +375,13 @@ class Synset(Model):
     def state(self) -> SynsetState:
         if self.name == "entity.n.01":
             return SynsetState.MATCHED   # root synset is always legal
-        elif self.is_liquid:
-            # liquids are always matched
-            return SynsetState.MATCHED
+        elif self.is_substance:
+            if any(ps.state == SynsetState.MATCHED for ps in self.matching_particle_systems):
+                return SynsetState.MATCHED
+            elif any(ps.state == SynsetState.PLANNED for ps in self.matching_particle_systems):
+                return SynsetState.PLANNED
+            else:
+                return SynsetState.UNMATCHED
         elif self.parents:
             if len(self.matching_ready_objects) > 0:
                 return SynsetState.MATCHED
@@ -589,17 +618,11 @@ class Synset(Model):
     
     @classmethod
     def view_substance_assigned_unrelated_category(cls):
-        """Substance synsets that have assigned categories whose names do not match an assigned ParticleSystem name."""
+        """Substance synsets that have assigned categories."""
         return [
             s
             for s in cls.all_objects()
-            if s.is_substance and any(
-                all(
-                    category.name != ps.name
-                    for ps in s.matching_particle_systems
-                )
-                for category in s.categories
-            )
+            if s.is_substance and len(s.categories) > 0
         ]
 
     @classmethod
@@ -621,8 +644,10 @@ class Synset(Model):
         return [
             s
             for s in relevant_synsets
-            if len(s.children) == 0
-            and not s.has_fully_supporting_object
+            if len(s.children) == 0 and (
+                (s.is_substance and len(s.matching_particle_systems) == 0) or
+                (not s.is_substance and not s.has_fully_supporting_object)
+            )
         ]
 
     @classmethod
@@ -737,13 +762,13 @@ class Task(Model):
         else:
             return SynsetState.PLANNED
 
-    def matching_scene(self, scene: Scene, ready: bool = True) -> str:
+    def matching_scene(self, scene: Scene) -> str:
         """checks whether a scene satisfies task requirements"""
         ret = ""
         for room_requirement in self.room_requirements:
             scene_ret = f"Cannot find suitable {room_requirement.type}: "
             for room in scene.rooms:
-                if room.type != room_requirement.type or room.ready != ready:
+                if room.type != room_requirement.type:
                     continue
                 room_ret = room.matching_room_requirement(room_requirement)
                 if len(room_ret) == 0:
@@ -812,16 +837,10 @@ class Task(Model):
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
         ret = {}
         for scene in Scene.all_objects():
-            if not any(room.ready for room in scene.rooms):
-                result_ready = "Scene does not have a ready version currently."
-            else:
-                result_ready = self.matching_scene(scene=scene, ready=True)
-            result_partial = self.matching_scene(scene=scene, ready=False)
+            matching_result = self.matching_scene(scene=scene)
             ret[scene] = {
-                "matched_ready": len(result_ready) == 0,
-                "reason_ready": result_ready,
-                "matched_planned": len(result_partial) == 0,
-                "reason_planned": result_partial,
+                "matched": len(matching_result) == 0,
+                "reason": matching_result,
             }
         return ret
     
@@ -831,16 +850,14 @@ class Task(Model):
         return [
             scene
             for scene, result in self.scene_matching_dict.items()
-            if result["matched_ready"]
+            if result["matched"]
         ]
 
     @cached_property
     def scene_state(self) -> str:
         scene_matching_dict = self.scene_matching_dict
-        if any(x["matched_ready"] for x in scene_matching_dict.values()):
+        if any(x["matched"] for x in scene_matching_dict.values()):
             return SynsetState.MATCHED
-        elif any(x["matched_planned"] for x in scene_matching_dict.values()):
-            return SynsetState.PLANNED
         else:
             return SynsetState.UNMATCHED
 
@@ -1103,8 +1120,6 @@ class Room(Model):
     # type of the room
     # TODO: make this one of the room types
     type: str
-    # whether the scene is ready in the current dataset
-    ready: bool = False
     id: str = UUIDField()
     # the scene the room belongs to
     scene_fk: ManyToOne = ManyToOneField(Scene, "rooms")
@@ -1113,11 +1128,11 @@ class Room(Model):
 
     class Meta:
         pk = "id"
-        unique_together = ("name", "ready", "scene")
+        unique_together = ("name", "scene")
         ordering = ["name"]
 
     def __str__(self):
-        return f'{self.scene.name}_{self.type}_{"ready" if self.ready else "planned"}'
+        return f'{self.scene.name}_{self.name}'
     
     @cached_property
     def non_clutter_roomobjects(self):

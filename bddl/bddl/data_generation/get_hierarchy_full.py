@@ -126,6 +126,11 @@ def get_hierarchy(syn_prop_dict):
     for rec in synset_to_substance_raw:
         synset_to_substance[rec["synset"]].append(rec["substance"])
 
+        # If the synset also has a category with the same name, remove it from the category list.
+        # It's just a placeholder category for particles of the substance.
+        if rec["synset"] in synset_to_cat and rec["substance"] in synset_to_cat[rec["synset"]]:
+            synset_to_cat[rec["synset"]].remove(rec["substance"])
+
     add_igibson_objects(hierarchy, synset_to_cat, synset_to_substance)
 
     with open(HIERARCHY_OUTPUT_FN, "w") as f:
