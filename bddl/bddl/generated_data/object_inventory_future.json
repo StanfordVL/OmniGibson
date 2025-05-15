@@ -6235,6 +6235,7 @@
         "walls-nfqxva": "scenes/hotel_suite_small",
         "walls-ovzcgo": "scenes/hotel_suite_small",
         "bar-byvbuc": "scenes/house_double_floor_lower",
+        "bar-egwapq": "scenes/house_double_floor_lower",
         "bar_soap-ofargb": "scenes/house_double_floor_lower",
         "bottom_cabinet-rhdbzv": "scenes/house_double_floor_lower",
         "bowl-xplzbo": "scenes/house_double_floor_lower",
@@ -6275,6 +6276,7 @@
         "downlight-pxrmnt": "scenes/house_double_floor_lower",
         "driveway-umalys": "scenes/house_double_floor_lower",
         "drop_in_sink-hecjnt": "scenes/house_double_floor_lower",
+        "drop_in_sink-lkklqs": "scenes/house_double_floor_lower",
         "electric_switch-strbnw": "scenes/house_double_floor_lower",
         "fixed_window-kvdqep": "scenes/house_double_floor_lower",
         "fixed_window-lhzwtz": "scenes/house_double_floor_lower",
@@ -6294,7 +6296,6 @@
         "flower-ldkhmx": "scenes/house_double_floor_lower",
         "flower-qokboq": "scenes/house_double_floor_lower",
         "flower-tfvsai": "scenes/house_double_floor_lower",
-        "furniture_sink-egwapq": "scenes/house_double_floor_lower",
         "garage_door-prdjyt": "scenes/house_double_floor_lower",
         "garden_chair-cottya": "scenes/house_double_floor_lower",
         "garden_chair-lraplz": "scenes/house_double_floor_lower",
@@ -29069,6 +29070,9 @@
         "bar-byvbuc": [
             "scenes/house_double_floor_lower"
         ],
+        "bar-egwapq": [
+            "scenes/house_double_floor_lower"
+        ],
         "bar_soap-ofargb": [
             "scenes/house_double_floor_lower"
         ],
@@ -29191,6 +29195,9 @@
         "drop_in_sink-hecjnt": [
             "scenes/house_double_floor_lower"
         ],
+        "drop_in_sink-lkklqs": [
+            "scenes/house_double_floor_lower"
+        ],
         "electric_switch-strbnw": [
             "scenes/house_double_floor_lower",
             "scenes/house_double_floor_upper"
@@ -29248,9 +29255,6 @@
             "scenes/house_double_floor_lower"
         ],
         "flower-tfvsai": [
-            "scenes/house_double_floor_lower"
-        ],
-        "furniture_sink-egwapq": [
             "scenes/house_double_floor_lower"
         ],
         "garage_door-prdjyt": [
@@ -58774,6 +58778,9 @@
         "bar-byvbuc": [
             "collision"
         ],
+        "bar-egwapq": [
+            "collision"
+        ],
         "bar_soap-ofargb": [
             "collision"
         ],
@@ -58918,6 +58925,13 @@
             "fluidsource",
             "togglebutton"
         ],
+        "drop_in_sink-lkklqs": [
+            "collision",
+            "fillable",
+            "fluidsink",
+            "fluidsource",
+            "togglebutton"
+        ],
         "electric_switch-strbnw": [
             "collision",
             "togglebutton"
@@ -58977,13 +58991,6 @@
         ],
         "flower-tfvsai": [
             "collision"
-        ],
-        "furniture_sink-egwapq": [
-            "collision",
-            "fillable",
-            "fluidsink",
-            "fluidsource",
-            "togglebutton"
         ],
         "garage_door-prdjyt": [
             "collision",
@@ -100750,6 +100757,11 @@
             2.1545859375,
             0.8953730773925781
         ],
+        "egwapq": [
+            0.6252081604003906,
+            2.427306640625,
+            0.89566357421875
+        ],
         "ofargb": [
             0.10868589401245117,
             0.08596190643310547,
@@ -100950,6 +100962,11 @@
             0.6815599365234375,
             0.3874165344238281
         ],
+        "lkklqs": [
+            0.5167975769042968,
+            0.8579257507324218,
+            0.42649981689453126
+        ],
         "strbnw": [
             0.01407900333404541,
             0.08032913589477539,
@@ -101044,11 +101061,6 @@
             0.22824877166748048,
             0.17006884002685546,
             0.1617411575317383
-        ],
-        "egwapq": [
-            0.6252081604003906,
-            2.427306640625,
-            1.2002647705078124
         ],
         "prdjyt": [
             2.906970458984375,
