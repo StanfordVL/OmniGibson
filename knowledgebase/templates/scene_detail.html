@@ -3,14 +3,7 @@
 {% block content %}
   <h1 class="text-center">{{ scene.name }}</h1>
   <hr>
-  {% if scene.fully_ready %}
-  <h4 class="text-center text-success">Fully Ready</h4>
-  {% elif scene.any_ready %}
-  <h4 class="text-center text-warning">Partially Ready</h4>
-  {% else %}
-  <h4 class="text-center text-danger">Not Ready</h4>
-  {% endif %}
   <h2>Rooms</h2>
   {% from "table_modules/room_table.html" import render_room_table %}
-  {{ render_room_table(scene.ready_rooms, enable_search=False, enable_csv=False) }}
+  {{ render_room_table(scene.rooms, enable_search=False, enable_csv=False) }}
 {% endblock %}

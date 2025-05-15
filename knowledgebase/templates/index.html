@@ -96,12 +96,8 @@
         <div class="card-header h5">Scenes</div>
         <div class="row no-gutters">
           <div class="col-sm-6 border-right py-4">
-            <h6 class="text-success">Sampleable:</h6>
-            <strong>{{ scene_metadata.0 }}</strong>
-          </div>
-          <div class="col-sm-6 py-4">
-            <h6 class="text-warning">In Progress:</h6>
-            <strong>{{ scene_metadata.1 }}</strong>
+            <h6 class="text-success">Total Count:</h6>
+            <strong>{{ scene_metadata.count }}</strong>
           </div>
         </div>
         <a href="{{ url_for('scene_list') }}" class="stretched-link"></a>

@@ -4,7 +4,6 @@
     <tr>
       <th>Scene</th>
       <th>Room</th>
-      <th>Status</th>
       <th>Count</th>
     </tr>
   </thead>
@@ -13,7 +12,6 @@
     <tr>
       <td><a href="{{ url_for('scene_detail', name=roomobject.room.scene.name) }}">{{ roomobject.room.scene.name }}</a></td>
       <td>{{ roomobject.room.name }}</td>
-      <td>{% if roomobject.room.ready %}Ready{% else %}Future{% endif %}</td>
       <td>{{ roomobject.count }}</td>
     </tr>
     {% else %}

@@ -11,7 +11,7 @@
   <tbody>
     {% for transition in transitions|sort %}
     <tr>
-      <td><a href="{{ url_for('transition_detail', name=transition.name) }}">{{ transition.name }}</a></td>
+      <td><a href="{{ url_for('transition_rule_detail', name=transition.name) }}">{{ transition.name }}</a></td>
       <td>
         {% for synset in transition.input_synsets %}
           {{ synset.name }}, 

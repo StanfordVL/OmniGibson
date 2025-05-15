@@ -1,41 +1,33 @@
+import inspect
 import unicodedata, re
 from flask import redirect
 from . import create_app
-from knowledgebase.views import *
+from bddl.knowledge_base import Task, Scene, Synset, Category, Object, TransitionRule, AttachmentPair, ComplaintType, ParticleSystem
+from knowledgebase.views import ListView, DetailView, IndexView, profile_badge_view, profile_plot_view, searchable_items_list
 
-error_url_patterns = [
-  ("transitionfailuretasks/", TransitionFailureTaskListView, "transition_failure_task_list"),
-  ("nonscenematchedtasks/", NonSceneMatchedTaskListView, "non_scene_matched_task_list"),
-  ("missingmetalinkobjects/", MissingMetaLinkObjectListView, "missing_meta_link_object_list"),
-  ("substancemismatchsynsets/", SubstanceMismatchSynsetListView, "substance_mismatch_synset_list"),
-  ("unsupportedpropertysynsets/", UnsupportedPropertySynsetListView, "unsupported_property_synset_list"),
-  ("unnecessarysynsets/", UnnecessarySynsetListView, "unnecessary_synset_list"),
-  ("badderivativesynsets/", BadDerivativeSynsetView, "bad_derivative_synset_list"),
-  ("missingderivativesynsets/", MissingDerivativeSynsetView, "missing_derivative_synset_list"),
-  ("nonleafcategories/", NonLeafCategoryListView, "non_leaf_category_list"),
-  ("missingobjectattachmentpairs/", MissingObjectAttachmentPairListView, "missing_object_attachment_pair_list"),
-  ("complainttypes/", ComplaintTypeListView, "complaint_type_list"),
+MODELS = [
+  AttachmentPair,
+  Category,
+  ComplaintType,
+  Object,
+  ParticleSystem,
+  Scene,
+  Synset,
+  Task,
+  TransitionRule,
 ]
 
-urlpatterns = [
-  ("", IndexView, "index", dict(error_url_patterns=error_url_patterns)),
-  ("tasks/", TaskListView, "task_list"),
-  ("objects/", ObjectListView, "object_list"),
-  ("scenes/", SceneListView, "scene_list"),
-  ("synsets/", SynsetListView, "synset_list"),
-  ("categories/", CategoryListView, "category_list"),
-  ("transitions/", TransitionListView, "transition_list"),
-  ("attachments/", AttachmentPairListView, "attachment_pair_list"),
-  ("tasks/<name>/", TaskDetailView, "task_detail"),
-  ("synsets/<name>/", SynsetDetailView, "synset_detail"),
-  ("categories/<name>/", CategoryDetailView, "category_detail"),
-  ("scenes/<name>/", SceneDetailView, "scene_detail"),
-  ("objects/<name>/", ObjectDetailView, "object_detail"),
-  ("transitions/<name>/", TransitionDetailView, "transition_detail"),
-  ("attachments/<name>/", AttachmentPairDetailView, "attachment_pair_detail"),
-  ("complainttypes/<name>/", ComplaintTypeDetailView, "complaint_type_detail"),
-  ("challengetasks/", ChallengeTaskListView, "challenge_task_list"),
-]
+def pluralize(name):
+  return name + "s" if not name == "category" else "categories"
+
+
+def snake_case(camel_case):
+  return re.sub("(?<!^)(?=[A-Z])", "_", camel_case).lower()
+
+
+def camel_case(snake_case):
+  return "".join(word.title() for word in snake_case.split("_"))
+
 
 app = create_app()
 app.config["TEMPLATES_AUTO_RELOAD"] = True
@@ -57,13 +49,93 @@ def slugify_filter(value):
 def redirect_index():
   return redirect("/knowledgebase", code=302)
 
-for view_info in urlpatterns + error_url_patterns:
-  urlpattern, view_class, view_arg = view_info[:3]
-  view_kwargs = view_info[3] if len(view_info) > 3 else {}
-  view = view_class.as_view(view_arg, **view_kwargs)
-  app.add_url_rule("/knowledgebase/" + urlpattern, view_func=view)
+def add_url_rule(rule, view_func):
+  print(f"Adding URL rule: {rule} -> {view_func.__name__}")
+  app.add_url_rule(rule, view_func=view_func)
+
+# Create the list, detail, error, and custom views for each model.
+error_views = []  # (name, class)
+for model in MODELS:
+  # First, get relevant metadata from the model
+  pk = model.Meta.pk
+  model_snake_case = snake_case(model.__name__)
+  detail_name = model_snake_case + "_detail"
+  list_name = model_snake_case + "_list"
+  plural_for_url = pluralize(model_snake_case)
+
+  # Create the list view
+  class_list_view = type(
+    f"{model}ListView",
+    (ListView,),
+    {
+      "model": model,
+      "context_object_name": list_name,
+    }
+  )
+  add_url_rule(f"/knowledgebase/{plural_for_url}/", view_func=class_list_view.as_view(list_name))
+
+  # Create the detail view
+  class_detail_view = type(
+    f"{model}DetailView",
+    (DetailView,),
+    {
+      "model": model,
+      "context_object_name": model_snake_case,
+      "slug_field": model.Meta.pk,
+      "slug_url_kwarg": model.Meta.pk,
+    }
+  )
+  add_url_rule(
+    f"/knowledgebase/{plural_for_url}/<{pk}>/",
+    view_func=class_detail_view.as_view(detail_name)
+  )
+
+  # Now walk through the view functions that the model provides, and add them
+  # to the app. These are custom views - the error views are shown on the index, other
+  # custom views need to be added to the navbar manually.
+  # inspect the class to find all static methods that start with "view_"
+  for func_name, func in inspect.getmembers(model):
+    # Check if it's a view, if it's an error view, and get the view name
+    if not func_name.startswith("view_"):
+      continue
+    custom_view_name = func_name[5:]  # Remove the "view_" prefix
+    is_error = custom_view_name.startswith("error_")
+    if is_error:
+      custom_view_name = custom_view_name[6:]  # Remove the "error_" prefix
+
+    # Suffix the view name with the pluralized model name
+    custom_view_name = f"{custom_view_name}_{plural_for_url}"
+
+    # Get a camel case view name
+    view_class_name = camel_case(custom_view_name) + "View"
+
+    # Create the queryset getter using the return value of the view function
+    get_queryset = lambda self, func_name=func_name: getattr(self.model, func_name)()
+
+    # Use inspect to get the docstring of the function
+    page_title = inspect.getdoc(func)
+
+    # Create a new view class
+    custom_class_view = type(
+      view_class_name,
+      (class_list_view,),
+      {
+        "page_title": page_title,
+        "get_queryset": get_queryset,
+      }
+    )
+    # Add the view to the app
+    add_url_rule(
+      f"/knowledgebase/{custom_view_name}/",
+      view_func=custom_class_view.as_view(custom_view_name)
+    )
+    if is_error:
+      # If the view is an error view, add it to the error_url_patterns
+      error_views.append((custom_view_name, custom_class_view))
+
+add_url_rule("/knowledgebase/", view_func=IndexView.as_view("index", error_views=error_views))
 
 # Add the profile views
-app.add_url_rule("/knowledgebase/profile/badge.svg", view_func=profile_badge_view)
-app.add_url_rule("/knowledgebase/profile/plot.png", view_func=profile_plot_view)
-app.add_url_rule("/knowledgebase/searchable_items.json", view_func=searchable_items_list)
+add_url_rule("/knowledgebase/profile/badge.svg", view_func=profile_badge_view)
+add_url_rule("/knowledgebase/profile/plot.png", view_func=profile_plot_view)
+add_url_rule("/knowledgebase/searchable_items.json", view_func=searchable_items_list)

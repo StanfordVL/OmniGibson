@@ -11,16 +11,13 @@
     {% for scene, info in scene_matching_dict|dictsort %}
     <tr>
       <td><a href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene.name }}</a></td>
-      <td class="{% if info.matched_ready %}bg-success{% elif info.matched_planned %}bg-warning{% else %}bg-danger{% endif %}">
-        {% if info.matched_ready %}Ready
-        {% elif info.matched_planned %}Planned
+      <td class="{% if info.matched %}bg-success{% else %}bg-danger{% endif %}">
+        {% if info.matched %}Matched
         {% else %}Unmatched{% endif %}
       </td>
       <td>
-        {% if not info.matched_ready and info.matched_planned %}
-          {{ info.reason_ready }}
-        {% elif not info.matched_ready and not info.matched_planned %}
-          {{ info.reason_planned }}
+        {% if not info.matched %}
+          {{ info.reason }}
         {% endif %}
       </td>
     </tr>

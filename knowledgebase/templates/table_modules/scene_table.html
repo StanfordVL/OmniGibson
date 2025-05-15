@@ -5,7 +5,6 @@
       <th>Scene</th>
       <th>Rooms</th>
       <th>Objects</th>
-      <th>Ready?</th>
     </tr>
   </thead>
   <tbody>
@@ -14,9 +13,6 @@
       <td><a href="{{ url_for('scene_detail', name=scene.name) }}">{{ scene.name }}</a></td>
       <td>{{ scene.room_count }}</td>
       <td>{{ scene.object_count }}</td>
-      <td class="{% if scene.fully_ready %}bg-success{% elif scene.any_ready %}bg-warning{% else %}bg-danger{% endif %}">
-        {% if scene.fully_ready %}Fully Ready{% elif scene.any_ready %}Partially Ready{% else %}Not Ready{% endif %}
-      </td>
     </tr>
     {% endfor %}
   </tbody>

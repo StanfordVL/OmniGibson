@@ -6,7 +6,7 @@
       {% if enable_images %}
       <th>Image</th>
       {% endif %}
-      <th>Category</th>
+      <th>Category or Particle System</th>
       <th>Synset</th>
       <th>Bounding Box Size</th>
       <th>Meta Links</th>
@@ -24,8 +24,8 @@
         <!--<img src="{{ object.image_url }}" alt="{{ object }} photo" style="max-width: 480px; height: auto;"/>-->
       </td>
       {% endif %}
-      <td>{{ object.category.name }}</td>
-      <td>{{ object.category.synset.name }}</td>
+      <td>{{ object.owner.name }}</td>
+      <td>{{ object.owner.synset.name }}</td>
       <td>{{ "%.2f"|format(object.bounding_box_size.0) }}, {{ "%.2f"|format(object.bounding_box_size.1) }}, {{ "%.2f"|format(object.bounding_box_size.2) }}</td>
       <td>{% for ml in object.meta_links %} {{ ml.name }}, {% endfor %}</td>
       <td>{{ object.roomobjects|length }}</td>

@@ -20,10 +20,8 @@
       </td>
       <td>
         {% for scene, state in task.scene_matching_dict.items() %}
-          {% if state.matched_ready %}
+          {% if state.matched %}
             <span class="text-success">{{ scene.name }},</span>
-          {% elif state.matched_planned %}
-            <span class="text-warning">{{ scene.name }},</span>
           {% endif %}
         {% endfor %}
       </td>

@@ -21,9 +21,9 @@
 {% endblock %}
 {% block content %}
   <h1 class="text-center">{% if view.page_title %}{{ view.page_title }}{% else %}BEHAVIOR-1K Transitions{% endif %}</h1>
-  <h3 class="text-center">Total count: {{ transition_list | length }}</h3>
+  <h3 class="text-center">Total count: {{ transition_rule_list | length }}</h3>
   <br>
   {% from "table_modules/transition_table.html" import render_transition_table %}
-  {{ render_transition_table(transition_list) }}
+  {{ render_transition_table(transition_rule_list) }}
 {% endblock %}
 
