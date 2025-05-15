@@ -1,4 +1,4 @@
-{% macro render_transition_table(transitions, enable_search=True, enable_csv=True) %}
+{% macro render_transition_rule_table(transition_rules, enable_search=True, enable_csv=True) %}
 <table class="table table-striped" id="datatable">
   <thead>
     <tr>
@@ -9,21 +9,21 @@
     </tr>
   </thead>
   <tbody>
-    {% for transition in transitions|sort %}
+    {% for transition_rule in transition_rules|sort %}
     <tr>
-      <td><a href="{{ url_for('transition_rule_detail', name=transition.name) }}">{{ transition.name }}</a></td>
+      <td><a href="{{ url_for('transition_rule_detail', name=transition_rule.name) }}">{{ transition_rule.name }}</a></td>
       <td>
-        {% for synset in transition.input_synsets %}
+        {% for synset in transition_rule.input_synsets %}
           {{ synset.name }}, 
         {% endfor %}
       </td>
       <td>
-        {% for synset in transition.machine_synsets %}
+        {% for synset in transition_rule.machine_synsets %}
           {{ synset.name }}, 
         {% endfor %}
       </td>
       <td>
-        {% for synset in transition.output_synsets %}
+        {% for synset in transition_rule.output_synsets %}
           {{ synset.name }}, 
         {% endfor %}
       </td>

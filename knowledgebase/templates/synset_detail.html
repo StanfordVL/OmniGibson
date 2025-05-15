@@ -39,8 +39,8 @@
   <br>
 
   <h2>Transitions</h2>
-  {% from "table_modules/transition_table.html" import render_transition_table %}
-  {{ render_transition_table(synset.relevant_transitions, enable_search=False, enable_csv=False) }}
+  {% from "table_modules/transition_table.html" import render_transition_rule_table %}
+  {{ render_transition_rule_table(synset.relevant_transitions, enable_search=False, enable_csv=False) }}
   <br>
 
   <h2>Transition Graph</h2>
