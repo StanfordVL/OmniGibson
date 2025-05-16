@@ -478,7 +478,35 @@ class Synset(Model):
 
     @cached_property
     def task_relevant(self):
-        return bool(self.tasks or any(ancestor.tasks for ancestor in self.ancestors))
+        # Is it directly used in a task?
+        if self.tasks:
+            return True
+        
+        # Is it used in a transition that's used in a task?
+        transition_relevant_synsets = {
+            anc
+            for t in Task.all_objects()
+            for transition in t.relevant_transitions
+            for s in list(transition.output_synsets) + list(transition.input_synsets)
+            for anc in set(s.ancestors) | {s}
+        }
+        if self in transition_relevant_synsets:
+            return True
+        
+        return False
+        
+    @cached_property
+    def generates_synsets(self):
+        # Look for particleApplier and particleSource annotations.
+        generated_synsets = set()
+        for prop in self.properties:
+            if prop.name not in ["particleApplier", "particleSource"]:
+                continue
+            prop_params = json.loads(prop.parameters)
+            conditions = prop_params.get("conditions", {})
+            generated_synsets.update([Synset.get(name) for name in conditions.keys()])
+
+        return generated_synsets
 
     @cached_property
     def relevant_transitions(self):
@@ -535,7 +563,7 @@ class Synset(Model):
 
     @cached_property
     def is_derivative(self):
-        derivative_words = ["cooked__", "half__", "diced__"]
+        derivative_words = ["cooked__", "half__", "diced__", "melted__"]
         return any(self.name.startswith(dw) for dw in derivative_words)
 
     @cached_property
@@ -552,6 +580,7 @@ class Synset(Model):
         sliceable_children = []
         diceable_children = []
         cookable_children = []
+        meltable_children = []
 
         for p in self.properties:
             if p.name == "sliceable":
@@ -569,7 +598,12 @@ class Synset(Model):
                     cookable_children.append(json.loads(p.parameters)["substance_cooking_derivative_synset"])
                 except KeyError:
                     raise ValueError(f"'substance_cooking_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
-        return set(sliceable_children + diceable_children + cookable_children)
+            elif p.name == "meltable":
+                try:
+                    meltable_children.append(json.loads(p.parameters)["meltable_derivative_synset"])
+                except KeyError:
+                    raise ValueError(f"'meltable_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
+        return set(sliceable_children + diceable_children + cookable_children + meltable_children)
 
     @cached_property
     def derivative_children(self):
@@ -587,7 +621,8 @@ class Synset(Model):
 
     @cached_property
     def derivative_descendants(self):
-        descendants = {self}.update(self.derivative_children)
+        descendants = {self}
+        descendants.update(self.derivative_children)
         for child in self.derivative_children:
             descendants.update(child.derivative_descendants)
         return descendants
@@ -625,24 +660,11 @@ class Synset(Model):
 
     @classmethod
     def view_error_object_unsupported_properties(cls):
-        """Leaf synsets that do not have at least one object that supports all of annotated properties."""
-        transition_relevant_synsets = {
-            anc
-            for t in Task.all_objects()
-            for transition in t.relevant_transitions
-            for s in list(transition.output_synsets) + list(transition.input_synsets)
-            for anc in set(s.ancestors) | {s}
-        }
-        task_relevant_synsets = {
-            s for s in cls.all_objects()
-            if s.tasks   # TODO: Is it important to check if ancestors are also task relevant?
-        }
-        relevant_synsets = (transition_relevant_synsets | task_relevant_synsets)
-
+        """Synsets that do not have at least one object that supports all of annotated properties."""
         return [
             s
-            for s in relevant_synsets
-            if len(s.children) == 0 and (
+            for s in Synset.all_objects()
+            if s.task_relevant and (
                 (s.is_substance and len(s.matching_particle_systems) == 0) or
                 (not s.is_substance and not s.has_fully_supporting_object)
             )
@@ -651,24 +673,36 @@ class Synset(Model):
     @classmethod
     def view_error_unnecessary(cls):
         """Objectless synsets that are not used in any task or required by any property"""
-        transition_relevant_synsets = {
-            anc
-            for t in Task.all_objects()
-            for transition in t.relevant_transitions
-            for s in list(transition.output_synsets) + list(transition.input_synsets)
-            for anc in set(s.ancestors) | {s}
-        }
-        return [
-            s
-            for s in cls.all_objects()
-            if all(
-                not sp.task_relevant
-                and sp not in transition_relevant_synsets
-                and len(sp.matching_objects) == 0
-                and len(sp.children) == 0
-                for sp in s.derivative_ancestors
+        useful_synsets = set()
+
+        # Iteratively search for useful synsets
+        while True:
+            task_relevant = {s for s in cls.all_objects() if s.task_relevant}
+            has_objects = {s for s in cls.all_objects() if len(s.matching_objects) > 0}
+            has_particle_system_with_particles = {
+                s
+                for s in cls.all_objects()
+                if len([particle for ps in s.matching_particle_systems for particle in ps.particles]) > 0
+            }
+            generated_by_useful = {
+                generatee for s in useful_synsets for generatee in s.generates_synsets
+            }
+            ancestor_of_useful = {
+                ancestor for s in useful_synsets for ancestor in s.ancestors
+            }
+            derivative_of_useful = {
+                derivative for s in useful_synsets for derivative in s.derivative_ancestors | s.derivative_descendants
+            }
+            new_useful = (
+                task_relevant | has_objects | has_particle_system_with_particles | generated_by_useful | ancestor_of_useful | derivative_of_useful
             )
-        ]
+            delta_useful = new_useful - useful_synsets
+            if not delta_useful:
+                break
+            useful_synsets.update(delta_useful)
+
+
+        return set(cls.all_objects()) - useful_synsets
 
     @classmethod
     def view_error_bad_derivative(cls):

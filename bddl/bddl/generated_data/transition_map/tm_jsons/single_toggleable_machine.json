@@ -204,26 +204,6 @@
         "output_states": null
     },
     {
-        "rule_name": "gazpacho",
-        "input_synsets": {
-            "basil.n.03": 1,
-            "salt.n.02": 1,
-            "black_pepper.n.02": 1,
-            "tomato_juice.n.01": 1,
-            "cucumber.n.02": 1,
-            "water.n.06": 1,
-            "lemon_juice.n.01": 1
-        },
-        "input_states": null,
-        "machine": {
-            "blender.n.01": 1
-        },
-        "output_synsets": {
-            "gazpacho.n.01": 1
-        },
-        "output_states": null
-    },
-    {
         "rule_name": "iced_chocolate",
         "input_synsets": {
             "ice_cube.n.01": 2,

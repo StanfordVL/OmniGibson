@@ -1,15 +1,5 @@
 [
     {
-        "rule_name": "arborio_rice.n.01-cooking",
-        "input_synsets": {
-            "arborio_rice.n.01": 1,
-            "cooked__water.n.01": 1
-        },
-        "output_synsets": {
-            "cooked__arborio_rice.n.01": 1
-        }
-    },
-    {
         "rule_name": "black_bean.n.01-cooking",
         "input_synsets": {
             "black_bean.n.01": 1,
@@ -47,16 +37,6 @@
         },
         "output_synsets": {
             "cooked__kidney_bean.n.01": 1
-        }
-    },
-    {
-        "rule_name": "lentil.n.01-cooking",
-        "input_synsets": {
-            "lentil.n.01": 1,
-            "cooked__water.n.01": 1
-        },
-        "output_synsets": {
-            "cooked__lentil.n.01": 1
         }
     },
     {
