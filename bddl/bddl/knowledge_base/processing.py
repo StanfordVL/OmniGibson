@@ -284,7 +284,8 @@ class KnowledgeBaseProcessor():
                 is_used_as_non_substance, is_used_as_substance = object_substance_match(combined_conds, synset_name)
                 is_used_as_fillable = object_used_as_fillable(combined_conds, synset_name)
                 # all annotated synsets have been created before, so any newly created synset is illegal
-                synset, _ = Synset.get_or_create(name=synset_name)
+                synset = Synset.get(synset_name)
+                assert synset is not None, f"Synset {synset_name} used by task {task_name} does not exist in the database."
                 synset.is_used_as_substance = synset.is_used_as_substance or is_used_as_substance
                 synset.is_used_as_non_substance = synset.is_used_as_non_substance or is_used_as_non_substance
                 synset.is_used_as_fillable = synset.is_used_as_fillable or is_used_as_fillable
