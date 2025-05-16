@@ -211,7 +211,7 @@ class KnowledgeBaseProcessor():
                 # Get the particle system. It should already exist from the synset stage.
                 name = row["substance"]
                 particle_system = ParticleSystem.get(name)
-                assert particle_system is not None, f"Particle system {name} does not exist in hierarchy.")
+                assert particle_system is not None, f"Particle system {name} does not exist in hierarchy."
 
                 # Confirm the synset assignment
                 synset_name = row["synset"]
