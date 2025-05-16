@@ -270,6 +270,15 @@
         }
     },
     {
+        "rule_name": "coca_cola.n.01-cooking",
+        "input_synsets": {
+            "coca_cola.n.01": 1
+        },
+        "output_synsets": {
+            "cooked__coca_cola.n.01": 1
+        }
+    },
+    {
         "rule_name": "cocoa.n.01-cooking",
         "input_synsets": {
             "cocoa.n.01": 1

@@ -17744,6 +17744,16 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "coca_cola.n.01": {
+        "boilable": {},
+        "cookable": {
+            "cook_temperature": 100.0,
+            "substance_cooking_derivative_synset": "cooked__coca_cola.n.01"
+        },
+        "liquid": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "cocktail.n.01": {
         "boilable": {},
         "flammable": {},
@@ -18059,6 +18069,12 @@
         "tarnishable": {},
         "wetable": {},
         "wrinkleable": {}
+    },
+    "cola.n.02": {
+        "boilable": {},
+        "liquid": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "cola__bottle.n.01": {
         "breakable": {},
@@ -18893,6 +18909,12 @@
     },
     "cooked__clove.n.01": {
         "microPhysicalSubstance": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
+    "cooked__coca_cola.n.01": {
+        "boilable": {},
+        "liquid": {},
         "physicalSubstance": {},
         "substance": {}
     },
@@ -67247,6 +67269,12 @@
         "wetable": {},
         "wrinkleable": {}
     },
+    "scotch.n.02": {
+        "boilable": {},
+        "liquid": {},
+        "physicalSubstance": {},
+        "substance": {}
+    },
     "scrambled_eggs.n.01": {
         "cookable": {
             "cook_temperature": 74.0,
@@ -82975,6 +83003,12 @@
         "tarnishable": {},
         "wetable": {},
         "wrinkleable": {}
+    },
+    "whiskey.n.01": {
+        "boilable": {},
+        "liquid": {},
+        "physicalSubstance": {},
+        "substance": {}
     },
     "whiskey__bottle.n.01": {
         "breakable": {},

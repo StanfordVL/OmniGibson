@@ -1442,6 +1442,19 @@
                                           "substances": [
                                             "vodka"
                                           ]
+                                        },
+                                        {
+                                          "name": "whiskey.n.01",
+                                          "hasModel": true,
+                                          "children": [
+                                            {
+                                              "name": "scotch.n.02",
+                                              "hasModel": true,
+                                              "substances": [
+                                                "scotch"
+                                              ]
+                                            }
+                                          ]
                                         }
                                       ]
                                     },
@@ -1794,6 +1807,26 @@
                                   "name": "soft_drink.n.01",
                                   "hasModel": true,
                                   "children": [
+                                    {
+                                      "name": "cola.n.02",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "coca_cola.n.01",
+                                          "hasModel": true,
+                                          "substances": [
+                                            "coca_cola"
+                                          ]
+                                        },
+                                        {
+                                          "name": "cooked__coca_cola.n.01",
+                                          "hasModel": true,
+                                          "substances": [
+                                            "cooked__coca_cola"
+                                          ]
+                                        }
+                                      ]
+                                    },
                                     {
                                       "name": "cream_soda.n.01",
                                       "hasModel": true,
@@ -3097,6 +3130,19 @@
                                   "hasModel": true,
                                   "substances": [
                                     "vodka"
+                                  ]
+                                },
+                                {
+                                  "name": "whiskey.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "scotch.n.02",
+                                      "hasModel": true,
+                                      "substances": [
+                                        "scotch"
+                                      ]
+                                    }
                                   ]
                                 }
                               ]
@@ -8748,6 +8794,19 @@
                                       "substances": [
                                         "vodka"
                                       ]
+                                    },
+                                    {
+                                      "name": "whiskey.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "scotch.n.02",
+                                          "hasModel": true,
+                                          "substances": [
+                                            "scotch"
+                                          ]
+                                        }
+                                      ]
                                     }
                                   ]
                                 },
@@ -9100,6 +9159,26 @@
                               "name": "soft_drink.n.01",
                               "hasModel": true,
                               "children": [
+                                {
+                                  "name": "cola.n.02",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "coca_cola.n.01",
+                                      "hasModel": true,
+                                      "substances": [
+                                        "coca_cola"
+                                      ]
+                                    },
+                                    {
+                                      "name": "cooked__coca_cola.n.01",
+                                      "hasModel": true,
+                                      "substances": [
+                                        "cooked__coca_cola"
+                                      ]
+                                    }
+                                  ]
+                                },
                                 {
                                   "name": "cream_soda.n.01",
                                   "hasModel": true,
@@ -10276,6 +10355,19 @@
                                       "substances": [
                                         "vodka"
                                       ]
+                                    },
+                                    {
+                                      "name": "whiskey.n.01",
+                                      "hasModel": true,
+                                      "children": [
+                                        {
+                                          "name": "scotch.n.02",
+                                          "hasModel": true,
+                                          "substances": [
+                                            "scotch"
+                                          ]
+                                        }
+                                      ]
                                     }
                                   ]
                                 },
@@ -10520,6 +10612,19 @@
                                   "hasModel": true,
                                   "substances": [
                                     "vodka"
+                                  ]
+                                },
+                                {
+                                  "name": "whiskey.n.01",
+                                  "hasModel": true,
+                                  "children": [
+                                    {
+                                      "name": "scotch.n.02",
+                                      "hasModel": true,
+                                      "substances": [
+                                        "scotch"
+                                      ]
+                                    }
                                   ]
                                 }
                               ]
@@ -10873,6 +10978,26 @@
                           "name": "soft_drink.n.01",
                           "hasModel": true,
                           "children": [
+                            {
+                              "name": "cola.n.02",
+                              "hasModel": true,
+                              "children": [
+                                {
+                                  "name": "coca_cola.n.01",
+                                  "hasModel": true,
+                                  "substances": [
+                                    "coca_cola"
+                                  ]
+                                },
+                                {
+                                  "name": "cooked__coca_cola.n.01",
+                                  "hasModel": true,
+                                  "substances": [
+                                    "cooked__coca_cola"
+                                  ]
+                                }
+                              ]
+                            },
                             {
                               "name": "cream_soda.n.01",
                               "hasModel": true,
