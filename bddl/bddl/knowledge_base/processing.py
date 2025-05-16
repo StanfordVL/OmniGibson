@@ -204,10 +204,14 @@ class KnowledgeBaseProcessor():
         with open(GENERATED_DATA_DIR / "substance_hyperparams.csv") as csvfile:
             reader = csv.DictReader(csvfile, delimiter=",", quotechar='"')
             for row in reader:
+                # Skip the row if it is marked for pruning
+                if int(row["prune"]) == 1:
+                    continue
+
                 # Get the particle system. It should already exist from the synset stage.
                 name = row["substance"]
                 particle_system = ParticleSystem.get(name)
-                assert particle_system is not None, f"Duplicate particle system {name}"
+                assert particle_system is not None, f"Particle system {name} does not exist in hierarchy.")
 
                 # Confirm the synset assignment
                 synset_name = row["synset"]

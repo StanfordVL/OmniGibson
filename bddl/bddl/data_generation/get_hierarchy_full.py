@@ -124,6 +124,8 @@ def get_hierarchy(syn_prop_dict):
     ].to_dict(orient="records")
     synset_to_substance = collections.defaultdict(list)
     for rec in synset_to_substance_raw:
+        if int(rec["prune"]) == 1:
+            continue
         synset_to_substance[rec["synset"]].append(rec["substance"])
 
         # If the synset also has a category with the same name, remove it from the category list.
