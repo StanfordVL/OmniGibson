@@ -3,7 +3,7 @@ import io
 import re
 from flask.views import View
 from flask import render_template, send_file, url_for, jsonify
-from bddl.knowledge_base import Task, Scene, Synset, Category, Object, TransitionRule, AttachmentPair, SynsetState
+from bddl.knowledge_base import Task, Scene, Synset, Category, Object, TransitionRule, AttachmentPair, SynsetState, ParticleSystem
 
 from . import profile_utils
 
@@ -71,27 +71,29 @@ class IndexView(TemplateView):
         context = super().get_context_data(**kwargs)
         # task metadata
         context["task_metadata"] = {
-            "ready": sum([1 for task in Task.all_objects() if task.synset_state == SynsetState.MATCHED and task.scene_state == SynsetState.MATCHED]),
-            "missing_object": sum([1 for task in Task.all_objects() if task.synset_state == SynsetState.UNMATCHED]),
-            "missing_scene": sum([1 for task in Task.all_objects() if task.scene_state == SynsetState.UNMATCHED]),
+            "challenge_ready": sum([1 for task in Task.view_challenge() if task.synset_state == SynsetState.MATCHED and task.scene_state == SynsetState.MATCHED]),
+            "total_ready": sum([1 for task in Task.all_objects() if task.synset_state == SynsetState.MATCHED and task.scene_state == SynsetState.MATCHED]),
+            "challenge": len(list(Task.view_challenge())),
             "total": len(list(Task.all_objects())),
         }
         # synset metadata
         context["synset_metadata"] = {
-            "valid": sum(1 for x in Synset.all_objects() if x.state == SynsetState.MATCHED),
-            "planned": sum(1 for x in Synset.all_objects() if x.state == SynsetState.PLANNED),
-            "unmatched": sum(1 for x in Synset.all_objects() if x.state == SynsetState.UNMATCHED),
-            "illegal": sum(1 for x in Synset.all_objects() if x.state == SynsetState.ILLEGAL),
+            "leaf": sum(1 for x in Synset.all_objects() if len(x.children) == 0),
             "total": sum(1 for x in Synset.all_objects()),
         }
         # object metadata
         context["object_metadata"] = {
             "ready": sum(1 for x in Object.all_objects() if x.state == SynsetState.MATCHED),
             "planned": sum(1 for x in Object.all_objects() if x.state == SynsetState.PLANNED),
-            "error": sum(1 for x in Object.all_objects() if x.state == SynsetState.UNMATCHED),
+            "total": sum(1 for x in Object.all_objects()),
+            "categories": sum(1 for x in Category.all_objects()),
+            "particle_systems": sum(1 for x in ParticleSystem.all_objects()),
         }
         # scene metadata
-        context["scene_metadata"] = {"count": len(list(Scene.all_objects()))}
+        context["scene_metadata"] = {
+            "challenge": len(list(Scene.view_challenge())),
+            "total": len(list(Scene.all_objects()))
+        }
         context["error_views"] = [
             (view_name, view_class.page_title, len(view_class().get_queryset()))
             for view_name, view_class in self.error_views
@@ -103,6 +105,7 @@ def searchable_items_list():
     SEARCHABLE_ITEM_TYPES = [
         (Object, "Object", "object_detail"),
         (Category, "Category", "category_detail"), 
+        (ParticleSystem, "Particle System", "particle_system_detail"), 
         (Synset, "Synset", "synset_detail"),
         (Task, "Task", "task_detail"),
         (Scene, "Scene", "scene_detail"),
