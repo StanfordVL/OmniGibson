@@ -1045,7 +1045,6 @@ class Task(Model):
     @classmethod
     def view_challenge(cls):
         """Tasks that are candidates for the challenge"""
-        return []
         CHALLENGE_TASKS = [
             "putting_away_toys-0",
             "can_meat-0",
