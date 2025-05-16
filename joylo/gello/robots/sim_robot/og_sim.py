@@ -328,6 +328,8 @@ class OGRobotServer:
             ):
                 if event.input == lazy.carb.input.KeyboardInput.R:
                     self.reset()
+                elif event.input == lazy.carb.input.KeyboardInput.P:
+                    self.pause()
                 elif event.input == lazy.carb.input.KeyboardInput.X:
                     self.resume_control()
                 elif event.input == lazy.carb.input.KeyboardInput.ESCAPE:
@@ -750,6 +752,9 @@ class OGRobotServer:
             )
 
         return action
+
+    def pause(self):
+        self._waiting_to_resume = True
 
     def reset(self, increment_instance=True):
         """
