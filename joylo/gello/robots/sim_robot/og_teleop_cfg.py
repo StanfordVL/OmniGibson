@@ -18,8 +18,9 @@ ROOM_DEPENDENCIES = {
         "living_room": ["kitchen", "dining_room"],
     },
     "house_double_floor_lower": {
-        "kitchen": ["living_room"],
-        "living_room": ["kitchen"],
+        "kitchen": ["living_room", "corridor"],
+        "living_room": ["kitchen", "corridor"],
+        "garage": ["corridor"],
     },
     "house_double_floor_upper": {
     }

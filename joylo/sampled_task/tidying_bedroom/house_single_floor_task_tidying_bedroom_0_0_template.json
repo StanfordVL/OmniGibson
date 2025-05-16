@@ -2,22 +2,14 @@
     "metadata": {
         "task": {
             "inst_to_name": {
-                "agent.n.01_1": "robot_vsxjco",
-                "bed.n.01_1": "bed_rrcvaq_1",
-                "bookcase.n.01_1": "bookcase_jaysra_0",
-                "chair.n.01_1": "eames_chair_hndxiw_0",
-                "desk.n.01_1": "desk_bhkhxo_0",
-                "floor.n.01_1": "floors_qnvzkr_0",
-                "folder.n.02_1": "folder_232",
-                "folder.n.02_2": "folder_231",
-                "laptop.n.01_1": "laptop_233",
-                "paperback_book.n.01_1": "paperback_book_226",
-                "paperback_book.n.01_2": "paperback_book_225",
-                "pen.n.01_1": "pen_229",
-                "pen.n.01_2": "pen_228",
-                "pencil.n.01_1": "pencil_230",
-                "pencil_box.n.01_1": "pencil_case_224",
-                "stapler.n.01_1": "stapler_227"
+                "agent.n.01_1": "robot_bmqgab",
+                "bed.n.01_1": "bed_gxfipj_0",
+                "book.n.02_1": "hardback_188",
+                "floor.n.01_1": "floors_htolat_0",
+                "sandal.n.01_1": "sandal_190",
+                "sandal.n.01_2": "sandal_189",
+                "table.n.02_1": "nightstand_wbxekb_1",
+                "table.n.02_2": "nightstand_wbxekb_0"
             }
         }
     },
@@ -1759,8 +1751,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "712b619346b7f90bddf0a6bf13b41d52",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "712b619346b7f90bddf0a6bf13b41d52"
                 }
             },
             "bookcase_zfpyqe_0": {
@@ -1780,8 +1772,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "ee2b86f9cb17d41571a98e03ad0dc2df",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ee2b86f9cb17d41571a98e03ad0dc2df"
                 }
             },
             "bookcase_zfpyqe_1": {
@@ -1801,8 +1793,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "ee2b86f9cb17d41571a98e03ad0dc2df",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ee2b86f9cb17d41571a98e03ad0dc2df"
                 }
             },
             "desk_bhkhxo_0": {
@@ -1822,8 +1814,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "1ba458382f053292b37874055e5edf03",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "1ba458382f053292b37874055e5edf03"
                 }
             },
             "desk_nbpuns_0": {
@@ -1843,8 +1835,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "ffa8e5bffd84b031b4d0aa195fae1b59",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ffa8e5bffd84b031b4d0aa195fae1b59"
                 }
             },
             "desk_xhjsub_0": {
@@ -1864,8 +1856,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "3588d596f3147c27277fbc0c4523678a",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "3588d596f3147c27277fbc0c4523678a"
                 }
             },
             "hall_tree_gypwkr_0": {
@@ -2515,8 +2507,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "f2890a64443b0c42c87f0e67de288811",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "f2890a64443b0c42c87f0e67de288811"
                 }
             },
             "eames_chair_ubmrms_0": {
@@ -2620,8 +2612,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "48a4d598c3376f5bcb731e59d3863c27",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "48a4d598c3376f5bcb731e59d3863c27"
                 }
             },
             "floor_lamp_jbjckk_0": {
@@ -2998,8 +2990,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "a054213daf6908530759f88aa649d02e",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a054213daf6908530759f88aa649d02e"
                 }
             },
             "straight_chair_jgoolz_0": {
@@ -3145,8 +3137,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "b9e81235f1ffbbd0fc62010c797ac7da",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b9e81235f1ffbbd0fc62010c797ac7da"
                 }
             },
             "straight_chair_rljebp_1": {
@@ -3166,8 +3158,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "b9e81235f1ffbbd0fc62010c797ac7da",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b9e81235f1ffbbd0fc62010c797ac7da"
                 }
             },
             "swivel_chair_tbzfgf_0": {
@@ -3187,8 +3179,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "4657e608d7309fea3f1c01e788316ee5",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "4657e608d7309fea3f1c01e788316ee5"
                 }
             },
             "table_lamp_qgdwbh_0": {
@@ -3208,8 +3200,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "f295e43bdde826b4ad3c9178f43479d6"
+                    "expected_file_hash": "f295e43bdde826b4ad3c9178f43479d6",
+                    "bddl_object_scope": null
                 }
             },
             "table_lamp_qgdwbh_1": {
@@ -3229,8 +3221,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "f295e43bdde826b4ad3c9178f43479d6"
+                    "expected_file_hash": "f295e43bdde826b4ad3c9178f43479d6",
+                    "bddl_object_scope": null
                 }
             },
             "table_lamp_uupwiq_0": {
@@ -3250,8 +3242,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "dcc009f3843c2e9795283a6588078d6f",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "dcc009f3843c2e9795283a6588078d6f"
                 }
             },
             "taboret_ivtoxu_0": {
@@ -3523,8 +3515,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "75c42cf18ee9172284693b6ec0f4bea8"
+                    "expected_file_hash": "75c42cf18ee9172284693b6ec0f4bea8",
+                    "bddl_object_scope": null
                 }
             },
             "bed_ivdnny_0": {
@@ -3544,8 +3536,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "38984cdeb52e395f1b6f1d18728db863",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "38984cdeb52e395f1b6f1d18728db863"
                 }
             },
             "bed_rrcvaq_0": {
@@ -3565,8 +3557,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "658b683cfbdd1ed29176c259ac15124e",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "658b683cfbdd1ed29176c259ac15124e"
                 }
             },
             "bed_rrcvaq_1": {
@@ -3586,8 +3578,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "658b683cfbdd1ed29176c259ac15124e",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "658b683cfbdd1ed29176c259ac15124e"
                 }
             },
             "bench_pfjnnj_0": {
@@ -3607,8 +3599,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "abafe52e7595f32d7996d72aa6d8db8b"
+                    "expected_file_hash": "abafe52e7595f32d7996d72aa6d8db8b",
+                    "bddl_object_scope": null
                 }
             },
             "bottom_cabinet_fancyy_0": {
@@ -4284,8 +4276,8 @@
                         "childs_room_0",
                         "garden_0"
                     ],
-                    "expected_file_hash": "e7c26151a20f3756ebfc0e76365e8cdb",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "e7c26151a20f3756ebfc0e76365e8cdb"
                 }
             },
             "door_kwbnhy_1": {
@@ -4328,8 +4320,8 @@
                         "childs_room_2",
                         "garden_0"
                     ],
-                    "expected_file_hash": "e7c26151a20f3756ebfc0e76365e8cdb",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "e7c26151a20f3756ebfc0e76365e8cdb"
                 }
             },
             "door_kwbnhy_3": {
@@ -4350,8 +4342,8 @@
                         "childs_room_1",
                         "garden_0"
                     ],
-                    "expected_file_hash": "e7c26151a20f3756ebfc0e76365e8cdb",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "e7c26151a20f3756ebfc0e76365e8cdb"
                 }
             },
             "door_tfdrhh_0": {
@@ -4919,8 +4911,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086"
                 }
             },
             "downlight_fisfbn_31": {
@@ -4940,8 +4932,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086"
                 }
             },
             "downlight_fisfbn_32": {
@@ -4961,8 +4953,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086"
                 }
             },
             "downlight_fisfbn_33": {
@@ -4982,8 +4974,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086"
                 }
             },
             "downlight_fisfbn_34": {
@@ -5024,8 +5016,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086"
+                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086",
+                    "bddl_object_scope": null
                 }
             },
             "downlight_fisfbn_36": {
@@ -5045,8 +5037,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086"
+                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086",
+                    "bddl_object_scope": null
                 }
             },
             "downlight_fisfbn_37": {
@@ -5066,8 +5058,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086"
                 }
             },
             "downlight_fisfbn_38": {
@@ -5087,8 +5079,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b27b81835bd1bcc3a92976511bb16086"
                 }
             },
             "downlight_fisfbn_4": {
@@ -5633,8 +5625,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
                 }
             },
             "electric_switch_gashan_1": {
@@ -5654,8 +5646,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
                 }
             },
             "electric_switch_gashan_10": {
@@ -5759,8 +5751,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
+                    "bddl_object_scope": null
                 }
             },
             "electric_switch_gashan_15": {
@@ -5780,8 +5772,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
+                    "bddl_object_scope": null
                 }
             },
             "electric_switch_gashan_16": {
@@ -5801,8 +5793,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
+                    "bddl_object_scope": null
                 }
             },
             "electric_switch_gashan_17": {
@@ -5822,8 +5814,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
+                    "bddl_object_scope": null
                 }
             },
             "electric_switch_gashan_18": {
@@ -5843,8 +5835,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
                 }
             },
             "electric_switch_gashan_19": {
@@ -5864,8 +5856,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
                 }
             },
             "electric_switch_gashan_2": {
@@ -5969,8 +5961,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
                 }
             },
             "electric_switch_gashan_4": {
@@ -5990,8 +5982,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8d08f91d2693c7c134ad02d14bd899c3"
                 }
             },
             "electric_switch_gashan_5": {
@@ -6532,8 +6524,8 @@
                         "childs_room_0",
                         "garden_0"
                     ],
-                    "expected_file_hash": "a0cc9f2046c3ab2409a5a2652f507f14",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a0cc9f2046c3ab2409a5a2652f507f14"
                 }
             },
             "fixed_window_tspbac_1": {
@@ -6554,8 +6546,8 @@
                         "childs_room_1",
                         "garden_0"
                     ],
-                    "expected_file_hash": "a0cc9f2046c3ab2409a5a2652f507f14",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a0cc9f2046c3ab2409a5a2652f507f14"
                 }
             },
             "fixed_window_tspbac_2": {
@@ -6576,8 +6568,8 @@
                         "childs_room_2",
                         "garden_0"
                     ],
-                    "expected_file_hash": "a0cc9f2046c3ab2409a5a2652f507f14",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a0cc9f2046c3ab2409a5a2652f507f14"
                 }
             },
             "fixed_window_usynui_0": {
@@ -6598,8 +6590,8 @@
                         "bedroom_0",
                         "garden_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "9724005ec16122f722f14b77b84fdc30"
+                    "expected_file_hash": "9724005ec16122f722f14b77b84fdc30",
+                    "bddl_object_scope": null
                 }
             },
             "fixed_window_usynui_1": {
@@ -6642,8 +6634,8 @@
                         "bedroom_0",
                         "garden_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "9724005ec16122f722f14b77b84fdc30"
+                    "expected_file_hash": "9724005ec16122f722f14b77b84fdc30",
+                    "bddl_object_scope": null
                 }
             },
             "fixed_window_wogynv_0": {
@@ -6835,8 +6827,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "3697fc1addfd00e556a38cfccb757e22"
+                    "expected_file_hash": "3697fc1addfd00e556a38cfccb757e22",
+                    "bddl_object_scope": null
                 }
             },
             "floors_khjmrr_0": {
@@ -7003,8 +6995,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "1b83a057dfb020cb97d87d4dc8daf51d",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "1b83a057dfb020cb97d87d4dc8daf51d"
                 }
             },
             "floors_shuuqu_0": {
@@ -7108,8 +7100,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "70c0007261d4b8bfee86dd0c6d617792",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "70c0007261d4b8bfee86dd0c6d617792"
                 }
             },
             "floors_vmamhf_0": {
@@ -7129,8 +7121,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "489028e664d381656f3fd50e9f1fdebc",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "489028e664d381656f3fd50e9f1fdebc"
                 }
             },
             "floors_wkdxrr_0": {
@@ -7339,8 +7331,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "ef96026ff7f066e8a0b906c7549920f3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ef96026ff7f066e8a0b906c7549920f3"
                 }
             },
             "mirror_kglofh_1": {
@@ -7360,8 +7352,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "ef96026ff7f066e8a0b906c7549920f3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ef96026ff7f066e8a0b906c7549920f3"
                 }
             },
             "mirror_kglofh_2": {
@@ -7381,8 +7373,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "ef96026ff7f066e8a0b906c7549920f3",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ef96026ff7f066e8a0b906c7549920f3"
                 }
             },
             "mirror_lobucc_0": {
@@ -7486,8 +7478,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "3b503c4c61c37fc3850ad53c64038c0a"
+                    "expected_file_hash": "3b503c4c61c37fc3850ad53c64038c0a",
+                    "bddl_object_scope": null
                 }
             },
             "nightstand_wbxekb_1": {
@@ -7507,8 +7499,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "3b503c4c61c37fc3850ad53c64038c0a"
+                    "expected_file_hash": "3b503c4c61c37fc3850ad53c64038c0a",
+                    "bddl_object_scope": null
                 }
             },
             "nightstand_wbxekb_2": {
@@ -7528,8 +7520,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "3b503c4c61c37fc3850ad53c64038c0a",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "3b503c4c61c37fc3850ad53c64038c0a"
                 }
             },
             "openable_window_eyvzfu_0": {
@@ -7592,8 +7584,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "18c01c829a9938e7b32d5e672579d134",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "18c01c829a9938e7b32d5e672579d134"
                 }
             },
             "painting_fqlxxd_0": {
@@ -7634,8 +7626,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "d4ddf6588a91f758469d81ae82b0200a"
+                    "expected_file_hash": "d4ddf6588a91f758469d81ae82b0200a",
+                    "bddl_object_scope": null
                 }
             },
             "painting_gardkz_0": {
@@ -7655,8 +7647,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "7e2c99559be6184df637290b41799c77",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7e2c99559be6184df637290b41799c77"
                 }
             },
             "painting_ifdzgs_0": {
@@ -7676,8 +7668,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "8821bdcbaa841388909a54490635ad87",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8821bdcbaa841388909a54490635ad87"
                 }
             },
             "painting_jreujf_0": {
@@ -7718,8 +7710,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "55ed16e549820c10552c4c60cedb369d",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "55ed16e549820c10552c4c60cedb369d"
                 }
             },
             "painting_msquxr_0": {
@@ -7739,8 +7731,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "5c94ec577732c0783fe2d361cb1dab05",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5c94ec577732c0783fe2d361cb1dab05"
                 }
             },
             "painting_tkcdhf_0": {
@@ -7760,8 +7752,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "515e632b2faeaf25d09ff3c3dd9d0c0a",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "515e632b2faeaf25d09ff3c3dd9d0c0a"
                 }
             },
             "painting_wduwwo_0": {
@@ -7781,8 +7773,8 @@
                     "in_rooms": [
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "6969552748bedabc9d9be92995cf4596",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "6969552748bedabc9d9be92995cf4596"
                 }
             },
             "painting_wwnloz_0": {
@@ -7802,8 +7794,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "391a3ff28bc83978a533078c656e9804",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "391a3ff28bc83978a533078c656e9804"
                 }
             },
             "painting_xpxncg_0": {
@@ -7823,8 +7815,8 @@
                     "in_rooms": [
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "8ab5b790e507c6217d07c039c251834a",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8ab5b790e507c6217d07c039c251834a"
                 }
             },
             "pot_plant_xcybvc_0": {
@@ -8683,8 +8675,8 @@
                         "corridor_0",
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
+                    "bddl_object_scope": null
                 }
             },
             "sliding_door_tprpvb_1": {
@@ -8705,8 +8697,8 @@
                         "corridor_0",
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
                 }
             },
             "sliding_door_tprpvb_10": {
@@ -8727,8 +8719,8 @@
                         "bedroom_0",
                         "bathroom_1"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
+                    "bddl_object_scope": null
                 }
             },
             "sliding_door_tprpvb_11": {
@@ -8749,8 +8741,8 @@
                         "corridor_0",
                         "childs_room_0"
                     ],
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
                 }
             },
             "sliding_door_tprpvb_12": {
@@ -8792,8 +8784,8 @@
                         "childs_room_2",
                         "closet_3"
                     ],
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
                 }
             },
             "sliding_door_tprpvb_3": {
@@ -8814,8 +8806,8 @@
                         "childs_room_0",
                         "closet_2"
                     ],
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
                 }
             },
             "sliding_door_tprpvb_4": {
@@ -8836,8 +8828,8 @@
                         "bedroom_0",
                         "closet_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
+                    "bddl_object_scope": null
                 }
             },
             "sliding_door_tprpvb_5": {
@@ -8880,8 +8872,8 @@
                         "corridor_0",
                         "childs_room_2"
                     ],
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
                 }
             },
             "sliding_door_tprpvb_7": {
@@ -8924,8 +8916,8 @@
                         "childs_room_1",
                         "closet_4"
                     ],
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
                 }
             },
             "sliding_door_tprpvb_9": {
@@ -8946,8 +8938,8 @@
                         "bedroom_0",
                         "closet_1"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156"
+                    "expected_file_hash": "56a072c7ea48f492a544508ad943c156",
+                    "bddl_object_scope": null
                 }
             },
             "sofa_hiphpn_0": {
@@ -9198,8 +9190,8 @@
                     "in_rooms": [
                         "childs_room_1"
                     ],
-                    "expected_file_hash": "d60ae31dfcab0beb701c1263c7646ff8",
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d60ae31dfcab0beb701c1263c7646ff8"
                 }
             },
             "wall_mounted_light_bkaivt_0": {
@@ -9387,8 +9379,8 @@
                     "in_rooms": [
                         "bedroom_0"
                     ],
-                    "bddl_object_scope": null,
-                    "expected_file_hash": "e70eaf770a4567ca7f443691c0fd24c5"
+                    "expected_file_hash": "e70eaf770a4567ca7f443691c0fd24c5",
+                    "bddl_object_scope": null
                 }
             },
             "wall_mounted_tv_ovzajm_0": {
@@ -12287,231 +12279,68 @@
                     "expected_file_hash": "506bf58be3399f40ee913a2856598d27"
                 }
             },
-            "pencil_case_224": {
+            "hardback_188": {
                 "class_module": "omnigibson.objects.dataset_object",
                 "class_name": "DatasetObject",
                 "args": {
-                    "name": "pencil_case_224",
-                    "category": "pencil_case",
-                    "model": "otcmih",
+                    "name": "hardback_188",
+                    "category": "hardback",
+                    "model": "dmqfqx",
                     "prim_type": 0,
-                    "expected_file_hash": "42b2851c39f2fba9ba92eed45ded3458",
-                    "scale": [
-                        1.6131101846694946,
-                        1.5242146253585815,
-                        1.5
-                    ],
-                    "in_rooms": [
-                        "childs_room_1"
-                    ]
-                }
-            },
-            "paperback_book_225": {
-                "class_module": "omnigibson.objects.dataset_object",
-                "class_name": "DatasetObject",
-                "args": {
-                    "name": "paperback_book_225",
-                    "category": "paperback_book",
-                    "model": "yxujzs",
-                    "prim_type": 0,
-                    "expected_file_hash": "f55d90f311c0903c6d5ef19eb0ebd221",
-                    "scale": [
-                        0.9908587336540222,
-                        1.0256308317184448,
-                        8.798772811889648
-                    ],
-                    "in_rooms": [
-                        "childs_room_1"
-                    ]
-                }
-            },
-            "paperback_book_226": {
-                "class_module": "omnigibson.objects.dataset_object",
-                "class_name": "DatasetObject",
-                "args": {
-                    "name": "paperback_book_226",
-                    "category": "paperback_book",
-                    "model": "yxujzs",
-                    "prim_type": 0,
-                    "expected_file_hash": "f55d90f311c0903c6d5ef19eb0ebd221",
-                    "scale": [
-                        0.9908587336540222,
-                        1.0256308317184448,
-                        8.798772811889648
-                    ],
-                    "in_rooms": [
-                        "childs_room_1"
-                    ]
-                }
-            },
-            "stapler_227": {
-                "class_module": "omnigibson.objects.dataset_object",
-                "class_name": "DatasetObject",
-                "args": {
-                    "name": "stapler_227",
-                    "category": "stapler",
-                    "model": "kgnsas",
-                    "prim_type": 0,
-                    "expected_file_hash": "7366465bfddba0f3690d42949adef458",
-                    "scale": [
-                        2.0587918758392334,
-                        2.194150924682617,
-                        2.221076011657715
-                    ],
-                    "in_rooms": [
-                        "childs_room_1"
-                    ]
-                }
-            },
-            "pen_228": {
-                "class_module": "omnigibson.objects.dataset_object",
-                "class_name": "DatasetObject",
-                "args": {
-                    "name": "pen_228",
-                    "category": "pen",
-                    "model": "gqwdor",
-                    "prim_type": 0,
-                    "expected_file_hash": "e4dacf8d659b7b2cb42d757c9de80e15",
-                    "scale": [
-                        0.8044772148132324,
-                        1.4594866037368774,
-                        1.648958444595337
-                    ],
-                    "in_rooms": [
-                        "childs_room_1"
-                    ]
-                }
-            },
-            "pen_229": {
-                "class_module": "omnigibson.objects.dataset_object",
-                "class_name": "DatasetObject",
-                "args": {
-                    "name": "pen_229",
-                    "category": "pen",
-                    "model": "gqwdor",
-                    "prim_type": 0,
-                    "expected_file_hash": "e4dacf8d659b7b2cb42d757c9de80e15",
-                    "scale": [
-                        0.8044772148132324,
-                        1.4594866037368774,
-                        1.648958444595337
-                    ],
-                    "in_rooms": [
-                        "childs_room_1"
-                    ]
-                }
-            },
-            "pencil_230": {
-                "class_module": "omnigibson.objects.dataset_object",
-                "class_name": "DatasetObject",
-                "args": {
-                    "name": "pencil_230",
-                    "category": "pencil",
-                    "model": "lamaxq",
-                    "prim_type": 0,
-                    "expected_file_hash": "99c83f23bb4501455d2dfce5db5903d8",
-                    "scale": [
-                        1.0077543258666992,
-                        2.016660690307617,
-                        2.6576876640319824
-                    ],
-                    "in_rooms": [
-                        "childs_room_1"
-                    ]
-                }
-            },
-            "folder_231": {
-                "class_module": "omnigibson.objects.dataset_object",
-                "class_name": "DatasetObject",
-                "args": {
-                    "name": "folder_231",
-                    "category": "folder",
-                    "model": "lktggf",
-                    "prim_type": 0,
-                    "expected_file_hash": "e88da610ccc31d03a0599d139a4a44e4",
+                    "expected_file_hash": "3469ac891e45c7c5fa3ef1e52641925c",
                     "scale": [
                         1.0,
                         1.0,
                         1.0
                     ],
                     "in_rooms": [
-                        "childs_room_1"
+                        "bedroom_0"
                     ]
                 }
             },
-            "folder_232": {
+            "sandal_189": {
                 "class_module": "omnigibson.objects.dataset_object",
                 "class_name": "DatasetObject",
                 "args": {
-                    "name": "folder_232",
-                    "category": "folder",
-                    "model": "lktggf",
+                    "name": "sandal_189",
+                    "category": "sandal",
+                    "model": "txkidl",
                     "prim_type": 0,
-                    "expected_file_hash": "e88da610ccc31d03a0599d139a4a44e4",
+                    "expected_file_hash": "b0765ccf7f8384b59e74db1e6d83f5b8",
                     "scale": [
                         1.0,
                         1.0,
                         1.0
                     ],
                     "in_rooms": [
-                        "childs_room_1"
+                        "bedroom_0"
                     ]
                 }
             },
-            "laptop_233": {
+            "sandal_190": {
                 "class_module": "omnigibson.objects.dataset_object",
                 "class_name": "DatasetObject",
                 "args": {
-                    "name": "laptop_233",
-                    "category": "laptop",
-                    "model": "izydvb",
+                    "name": "sandal_190",
+                    "category": "sandal",
+                    "model": "tkfdsk",
                     "prim_type": 0,
-                    "expected_file_hash": "a864782d6e1f9384edb210c33d87f611",
+                    "expected_file_hash": "96c2a8a274422a70aea2c85bd15dc67a",
                     "scale": [
                         1.0,
                         1.0,
                         1.0
                     ],
                     "in_rooms": [
-                        "childs_room_1"
+                        "bedroom_0"
                     ]
                 }
             },
-            "robot_vsxjco": {
+            "robot_bmqgab": {
                 "class_module": "omnigibson.robots.r1pro",
                 "class_name": "R1Pro",
                 "args": {
-                    "name": "robot_vsxjco",
-                    "reset_joint_pos": [
-                        0.0001,
-                        0.0,
-                        0.0,
-                        -0.0025,
-                        -0.0005,
-                        -0.0003,
-                        1.025,
-                        -1.45,
-                        -0.47,
-                        0.0,
-                        0.0038,
-                        0.0307,
-                        -0.0924,
-                        0.0631,
-                        0.2441,
-                        -0.0,
-                        -0.1772,
-                        -0.0261,
-                        0.5193,
-                        0.0135,
-                        -0.2793,
-                        -0.0992,
-                        0.185,
-                        0.0045,
-                        0.05,
-                        0.05,
-                        0.05,
-                        0.05
-                    ],
+                    "name": "robot_bmqgab",
                     "obs_modalities": [],
                     "default_reset_mode": "untuck",
                     "expected_file_hash": "fb7a5df9e48a57ad673b0486a08a6b3f"
@@ -14939,7 +14768,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            23.909406661987305,
+                            23.909448623657227,
                             13.200728416442871,
                             0.4939129650592804
                         ],
@@ -14956,32 +14785,32 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            23.955385208129883,
-                            7.669084548950195,
+                            23.95534324645996,
+                            7.669092178344727,
                             0.4257984161376953
                         ],
                         "ori": [
                             0.0,
                             0.0,
                             0.9999991655349731,
-                            0.0012718007201328874
+                            0.0012718004873022437
                         ]
                     },
                     "non_kin": {}
                 },
                 "desk_xhjsub_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             20.747095108032227,
                             18.638792037963867,
-                            0.4296231269836426
+                            0.4296233057975769
                         ],
                         "ori": [
-                            -1.1175870895385742e-08,
-                            3.259629011154175e-08,
-                            3.725290298461914e-09,
-                            1.000000238418579
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0000001192092896
                         ],
                         "lin_vel": [
                             0.0,
@@ -14995,14 +14824,14 @@
                         ]
                     },
                     "joint_pos": [
-                        1.9559868048163453e-12,
-                        3.045490021193892e-14,
-                        4.133128843515632e-13
+                        4.396586913979483e-11,
+                        0.0,
+                        8.180001814794835e-12
                     ],
                     "joint_vel": [
-                        2.82030273874609e-17,
-                        1.1903639782019972e-30,
-                        1.5242991656999771e-30
+                        0.0,
+                        0.0,
+                        0.0
                     ],
                     "non_kin": {}
                 },
@@ -15785,18 +15614,18 @@
                     "non_kin": {}
                 },
                 "eames_chair_hndxiw_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            23.086750030517578,
-                            13.290356636047363,
-                            0.5246184468269348
+                            23.086761474609375,
+                            13.290338516235352,
+                            0.5246189832687378
                         ],
                         "ori": [
-                            0.0031835734844207764,
-                            0.0006255002226680517,
-                            0.38442957401275635,
-                            0.9231487512588501
+                            0.0031842663884162903,
+                            0.0006251153536140919,
+                            0.3843998908996582,
+                            0.9231610894203186
                         ],
                         "lin_vel": [
                             0.0,
@@ -15920,18 +15749,18 @@
                     "non_kin": {}
                 },
                 "floor_lamp_disyzd_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             22.73666763305664,
-                            5.584035873413086,
-                            0.22897058725357056
+                            5.584033966064453,
+                            0.22897350788116455
                         ],
                         "ori": [
-                            0.0003346875309944153,
-                            6.0388119891285896e-05,
-                            0.9236709475517273,
-                            -0.3831866681575775
+                            0.00033431872725486755,
+                            6.0424674302339554e-05,
+                            0.9236710667610168,
+                            -0.38318634033203125
                         ],
                         "lin_vel": [
                             0.0,
@@ -16546,18 +16375,18 @@
                     }
                 },
                 "straight_chair_gktknj_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            23.624650955200195,
-                            7.468307018280029,
-                            0.3230947256088257
+                            23.624670028686523,
+                            7.468319416046143,
+                            0.32309454679489136
                         ],
                         "ori": [
-                            1.7703860066831112e-06,
-                            -0.0006617357139475644,
-                            -0.0010919347405433655,
-                            0.9999993443489075
+                            1.82047369889915e-06,
+                            -0.0006620020722039044,
+                            -0.0012159827165305614,
+                            0.9999990463256836
                         ],
                         "lin_vel": [
                             0.0,
@@ -16735,17 +16564,17 @@
                     "non_kin": {}
                 },
                 "straight_chair_rljebp_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            22.379995346069336,
-                            5.6198225021362305,
-                            0.19902624189853668
+                            22.3799991607666,
+                            5.619822025299072,
+                            0.1990261822938919
                         ],
                         "ori": [
-                            -3.102421760559082e-05,
-                            2.9789749532938004e-05,
-                            0.6823962330818176,
+                            -3.109872341156006e-05,
+                            2.990756183862686e-05,
+                            0.6823961138725281,
                             0.7309826016426086
                         ],
                         "lin_vel": [
@@ -16762,18 +16591,18 @@
                     "non_kin": {}
                 },
                 "straight_chair_rljebp_1": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            23.101539611816406,
-                            5.553992748260498,
-                            0.20245638489723206
+                            23.101577758789062,
+                            5.553976535797119,
+                            0.20247039198875427
                         ],
                         "ori": [
-                            -0.008593812584877014,
-                            0.008153475821018219,
-                            0.6824033856391907,
-                            0.7308798432350159
+                            -0.008628994226455688,
+                            0.008187048137187958,
+                            0.6823963522911072,
+                            0.7308856248855591
                         ],
                         "lin_vel": [
                             0.0,
@@ -16789,18 +16618,18 @@
                     "non_kin": {}
                 },
                 "swivel_chair_tbzfgf_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.798137664794922,
-                            18.55534553527832,
-                            0.4240536093711853
+                            20.79814338684082,
+                            18.55535125732422,
+                            0.42405733466148376
                         ],
                         "ori": [
-                            0.0002195984125137329,
-                            0.00045147351920604706,
-                            0.9899078011512756,
-                            -0.14171192049980164
+                            0.00022496283054351807,
+                            0.00045637600123882294,
+                            0.989906370639801,
+                            -0.14172202348709106
                         ],
                         "lin_vel": [
                             0.0,
@@ -16816,18 +16645,18 @@
                     "non_kin": {}
                 },
                 "table_lamp_qgdwbh_0": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             24.76480484008789,
-                            22.259647369384766,
-                            0.6288507580757141
+                            22.2596492767334,
+                            0.6288511753082275
                         ],
                         "ori": [
-                            1.7393322195857763e-06,
-                            4.0885061025619507e-07,
-                            -0.13052400946617126,
-                            0.9914452433586121
+                            7.047201506793499e-07,
+                            -1.2181117199361324e-06,
+                            -0.1305258721113205,
+                            0.9914449453353882
                         ],
                         "lin_vel": [
                             0.0,
@@ -16848,18 +16677,18 @@
                     }
                 },
                 "table_lamp_qgdwbh_1": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            24.707101821899414,
+                            24.70709991455078,
                             25.621984481811523,
-                            0.628851592540741
+                            0.6288511753082275
                         ],
                         "ori": [
-                            2.0847946871072054e-06,
-                            -2.64530535787344e-06,
-                            -0.13052740693092346,
-                            0.9914447069168091
+                            5.88421244174242e-07,
+                            -2.4476321414113045e-07,
+                            -0.1305265575647354,
+                            0.9914448857307434
                         ],
                         "lin_vel": [
                             0.0,
@@ -16880,18 +16709,18 @@
                     }
                 },
                 "table_lamp_uupwiq_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.483827590942383,
-                            13.814239501953125,
-                            0.6136512160301208
+                            20.48381805419922,
+                            13.81424331665039,
+                            0.6136524677276611
                         ],
                         "ori": [
-                            -4.362745676189661e-05,
-                            -5.4694071877747774e-05,
-                            0.70733243227005,
-                            0.7068812847137451
+                            -6.150442641228437e-05,
+                            -6.0396851040422916e-05,
+                            0.7073327302932739,
+                            0.7068808078765869
                         ],
                         "lin_vel": [
                             0.0,
@@ -17224,14 +17053,14 @@
                     "root_link": {
                         "pos": [
                             23.886598587036133,
-                            23.958683013916016,
+                            23.95870590209961,
                             0.2662099301815033
                         ],
                         "ori": [
                             0.0,
                             0.0,
                             0.9999991655349731,
-                            0.0012722773244604468
+                            0.0012722775572910905
                         ]
                     },
                     "non_kin": {}
@@ -17265,7 +17094,7 @@
                             0.0,
                             0.0,
                             0.9999991655349731,
-                            0.0012722775572910905
+                            0.0012722773244604468
                         ]
                     },
                     "non_kin": {}
@@ -17484,9 +17313,9 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            19.655349731445312,
-                            8.170421600341797,
-                            2.716301441192627
+                            19.65536880493164,
+                            8.170412063598633,
+                            2.7163028717041016
                         ],
                         "ori": [
                             -0.0031692711636424065,
@@ -17536,7 +17365,7 @@
                     "root_link": {
                         "pos": [
                             21.243879318237305,
-                            15.9108304977417,
+                            15.910840034484863,
                             2.7620418071746826
                         ],
                         "ori": [
@@ -17603,7 +17432,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            22.2261905670166,
+                            22.22620964050293,
                             11.028487205505371,
                             2.715930461883545
                         ],
@@ -17621,7 +17450,7 @@
                     "root_link": {
                         "pos": [
                             6.614812850952148,
-                            -0.3610565960407257,
+                            -0.3610568940639496,
                             2.7164530754089355
                         ],
                         "ori": [
@@ -17637,7 +17466,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.102426528930664,
+                            20.102445602416992,
                             24.773836135864258,
                             2.862042188644409
                         ],
@@ -17654,7 +17483,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.698959350585938,
+                            20.698978424072266,
                             20.609506607055664,
                             2.7620418071746826
                         ],
@@ -17671,7 +17500,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            22.263917922973633,
+                            22.26393699645996,
                             17.982383728027344,
                             2.756324052810669
                         ],
@@ -17723,7 +17552,7 @@
                     "root_link": {
                         "pos": [
                             1.3020293712615967,
-                            -0.0882028341293335,
+                            -0.08820290863513947,
                             2.7156898975372314
                         ],
                         "ori": [
@@ -17740,7 +17569,7 @@
                     "root_link": {
                         "pos": [
                             7.001570701599121,
-                            3.3189001083374023,
+                            3.3189024925231934,
                             2.712042808532715
                         ],
                         "ori": [
@@ -17757,7 +17586,7 @@
                     "root_link": {
                         "pos": [
                             22.248825073242188,
-                            6.918673515319824,
+                            6.918678283691406,
                             2.76203989982605
                         ],
                         "ori": [
@@ -17989,7 +17818,7 @@
                     "non_kin": {}
                 },
                 "door_kwbnhy_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             24.388137817382812,
@@ -17997,10 +17826,10 @@
                             1.326021671295166
                         ],
                         "ori": [
-                            -2.3283419636754843e-10,
-                            -7.958078640513122e-13,
-                            6.984939293630532e-10,
-                            1.000000238418579
+                            0.0,
+                            0.0,
+                            0.0,
+                            1.0000001192092896
                         ],
                         "lin_vel": [
                             0.0,
@@ -18014,10 +17843,10 @@
                         ]
                     },
                     "joint_pos": [
-                        6.777719661552051e-13
+                        1.5143390014182856e-11
                     ],
                     "joint_vel": [
-                        -1.1234572283577134e-29
+                        0.0
                     ],
                     "non_kin": {}
                 },
@@ -18055,7 +17884,7 @@
                     "non_kin": {}
                 },
                 "door_kwbnhy_2": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             24.36335563659668,
@@ -18063,10 +17892,10 @@
                             1.3245834112167358
                         ],
                         "ori": [
-                            1.8201656075689243e-06,
-                            1.4815213944530115e-08,
-                            0.008148507215082645,
-                            0.9999670386314392
+                            1.8195835309597896e-06,
+                            1.482476363889873e-08,
+                            0.008148524910211563,
+                            0.9999669194221497
                         ],
                         "lin_vel": [
                             0.0,
@@ -18080,15 +17909,15 @@
                         ]
                     },
                     "joint_pos": [
-                        4.185543838602923e-12
+                        9.360626163079644e-11
                     ],
                     "joint_vel": [
-                        -2.7809891603371596e-17
+                        0.0
                     ],
                     "non_kin": {}
                 },
                 "door_kwbnhy_3": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             24.38517951965332,
@@ -18096,10 +17925,10 @@
                             1.3247464895248413
                         ],
                         "ori": [
-                            1.8181907535108621e-06,
-                            3.399236447876319e-11,
-                            0.011554639786481857,
-                            0.9999334812164307
+                            1.8192384914073045e-06,
+                            1.7848833522293717e-11,
+                            0.011554650962352753,
+                            0.9999333620071411
                         ],
                         "lin_vel": [
                             0.0,
@@ -18113,10 +17942,10 @@
                         ]
                     },
                     "joint_pos": [
-                        4.354122097594004e-12
+                        9.737353978689356e-11
                     ],
                     "joint_vel": [
-                        1.4322093858099016e-14
+                        0.0
                     ],
                     "non_kin": {}
                 },
@@ -19321,7 +19150,7 @@
                     }
                 },
                 "electric_switch_gashan_0": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             23.446962356567383,
@@ -19329,8 +19158,8 @@
                             1.4417192935943604
                         ],
                         "ori": [
-                            -0.012339215725660324,
-                            -0.012335633859038353,
+                            -0.012339342385530472,
+                            -0.01233544759452343,
                             -0.7069767713546753,
                             0.7070215344429016
                         ],
@@ -19353,7 +19182,7 @@
                     }
                 },
                 "electric_switch_gashan_1": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             20.286672592163086,
@@ -19513,7 +19342,7 @@
                     }
                 },
                 "electric_switch_gashan_14": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             20.790578842163086,
@@ -19545,7 +19374,7 @@
                     }
                 },
                 "electric_switch_gashan_15": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             19.800701141357422,
@@ -19577,7 +19406,7 @@
                     }
                 },
                 "electric_switch_gashan_16": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             19.800703048706055,
@@ -19609,11 +19438,43 @@
                     }
                 },
                 "electric_switch_gashan_17": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             22.94794273376465,
                             21.874603271484375,
+                            1.44171941280365
+                        ],
+                        "ori": [
+                            0.012335587292909622,
+                            -0.012339338660240173,
+                            0.7070208191871643,
+                            0.7069774866104126
+                        ],
+                        "lin_vel": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ],
+                        "ang_vel": [
+                            0.0,
+                            0.0,
+                            0.0
+                        ]
+                    },
+                    "non_kin": {
+                        "ToggledOn": {
+                            "value": false,
+                            "hand_in_marker_steps": 0
+                        }
+                    }
+                },
+                "electric_switch_gashan_18": {
+                    "is_asleep": false,
+                    "root_link": {
+                        "pos": [
+                            21.2015323638916,
+                            16.540071487426758,
                             1.44171941280365
                         ],
                         "ori": [
@@ -19640,40 +19501,8 @@
                         }
                     }
                 },
-                "electric_switch_gashan_18": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            21.2015323638916,
-                            16.540071487426758,
-                            1.44171941280365
-                        ],
-                        "ori": [
-                            0.012335609644651413,
-                            -0.012339338660240173,
-                            0.7070208191871643,
-                            0.7069774866104126
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "non_kin": {
-                        "ToggledOn": {
-                            "value": false,
-                            "hand_in_marker_steps": 0
-                        }
-                    }
-                },
                 "electric_switch_gashan_19": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             20.29729652404785,
@@ -19833,7 +19662,7 @@
                     }
                 },
                 "electric_switch_gashan_3": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             20.267234802246094,
@@ -19865,7 +19694,7 @@
                     }
                 },
                 "electric_switch_gashan_4": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             23.4011287689209,
@@ -19873,10 +19702,10 @@
                             1.4417271614074707
                         ],
                         "ori": [
-                            0.012335614301264286,
-                            -0.01233924925327301,
-                            0.7070207595825195,
-                            0.7069775462150574
+                            0.012335425242781639,
+                            -0.012339361943304539,
+                            0.7070205211639404,
+                            0.706977903842926
                         ],
                         "lin_vel": [
                             0.0,
@@ -20388,7 +20217,7 @@
                             1.5710136890411377
                         ],
                         "ori": [
-                            -1.233134184985829e-06,
+                            -1.2331340712989913e-06,
                             -0.0005373567109927535,
                             -0.001405781484209001,
                             0.9999988675117493
@@ -20401,11 +20230,11 @@
                     "root_link": {
                         "pos": [
                             24.376859664916992,
-                            12.78878116607666,
+                            12.788802146911621,
                             1.5577272176742554
                         ],
                         "ori": [
-                            -1.233134184985829e-06,
+                            -1.2331340712989913e-06,
                             -0.0005373567109927535,
                             -0.001405781484209001,
                             0.9999988675117493
@@ -20417,12 +20246,12 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            24.363861083984375,
-                            7.702073574066162,
-                            1.5713220834732056
+                            24.363903045654297,
+                            7.702084064483643,
+                            1.5713194608688354
                         ],
                         "ori": [
-                            -1.233134184985829e-06,
+                            -1.2331340712989913e-06,
                             -0.0005373567109927535,
                             -0.001405781484209001,
                             0.9999988675117493
@@ -21031,11 +20860,11 @@
                         "pos": [
                             21.271665573120117,
                             12.29036808013916,
-                            1.197868824005127
+                            1.197871446609497
                         ],
                         "ori": [
                             -0.0006550721009261906,
-                            -0.000653164810501039,
+                            -0.0006531647522933781,
                             0.7061806917190552,
                             0.7080310583114624
                         ]
@@ -21048,11 +20877,11 @@
                         "pos": [
                             20.561664581298828,
                             12.29216480255127,
-                            1.197872519493103
+                            1.1978751420974731
                         ],
                         "ori": [
                             -0.0006550721009261906,
-                            -0.000653164810501039,
+                            -0.0006531647522933781,
                             0.7061806917190552,
                             0.7080310583114624
                         ]
@@ -21063,13 +20892,13 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            21.98055648803711,
+                            21.980514526367188,
                             12.288555145263672,
-                            1.1978694200515747
+                            1.1978713274002075
                         ],
                         "ori": [
                             -0.0006550721009261906,
-                            -0.000653164810501039,
+                            -0.0006531647522933781,
                             0.7061806917190552,
                             0.7080310583114624
                         ]
@@ -21285,13 +21114,13 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.299579620361328,
+                            20.29962158203125,
                             18.342422485351562,
-                            1.4625874757766724
+                            1.4625896215438843
                         ],
                         "ori": [
                             4.0757299757387955e-06,
-                            -9.548877278575674e-05,
+                            -9.548878006171435e-05,
                             -0.0004788359219674021,
                             0.9999998807907104
                         ]
@@ -21324,7 +21153,7 @@
                             1.5914191007614136
                         ],
                         "ori": [
-                            -0.0005896190414205194,
+                            -0.0005896189832128584,
                             -0.0006817947723902762,
                             0.7051113247871399,
                             0.7090960741043091
@@ -21337,12 +21166,12 @@
                     "root_link": {
                         "pos": [
                             21.83816909790039,
-                            8.215245246887207,
-                            1.1013023853302002
+                            8.215266227722168,
+                            1.1013027429580688
                         ],
                         "ori": [
-                            0.0003347951569594443,
-                            -0.0008794598979875445,
+                            0.00033479512785561383,
+                            -0.0008794598397798836,
                             0.709183394908905,
                             -0.7050234079360962
                         ]
@@ -21353,13 +21182,13 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            22.543424606323242,
+                            22.543466567993164,
                             8.214720726013184,
-                            1.1846740245819092
+                            1.184675931930542
                         ],
                         "ori": [
-                            0.0016013331478461623,
-                            0.0009808293543756008,
+                            0.0016013332642614841,
+                            0.0009808294707909226,
                             0.7052294611930847,
                             0.7089766263961792
                         ]
@@ -21387,9 +21216,9 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.30018424987793,
-                            18.414033889770508,
-                            1.100412368774414
+                            20.300220489501953,
+                            18.413991928100586,
+                            1.1004101037979126
                         ],
                         "ori": [
                             -0.0013808469520881772,
@@ -21404,7 +21233,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.29854393005371,
+                            20.298585891723633,
                             18.40552520751953,
                             1.287843108177185
                         ],
@@ -21421,9 +21250,9 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.3031005859375,
-                            18.849740982055664,
-                            1.4363861083984375
+                            20.303058624267578,
+                            18.849699020385742,
+                            1.4363821744918823
                         ],
                         "ori": [
                             0.0018190614646300673,
@@ -21440,11 +21269,11 @@
                         "pos": [
                             22.280960083007812,
                             8.214296340942383,
-                            1.5043586492538452
+                            1.5043612718582153
                         ],
                         "ori": [
-                            -0.0011653451947495341,
-                            0.0005090967752039433,
+                            -0.0011653450783342123,
+                            0.0005090968334116042,
                             0.7089493870735168,
                             -0.7052581906318665
                         ]
@@ -21455,7 +21284,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            20.29932403564453,
+                            20.299365997314453,
                             18.5460147857666,
                             1.287843108177185
                         ],
@@ -21867,7 +21696,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            -12.121430397033691,
+                            -12.121420860290527,
                             6.898795127868652,
                             2.6166608333587646
                         ],
@@ -22342,7 +22171,7 @@
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_0": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             19.7230224609375,
@@ -22370,12 +22199,12 @@
                         1.2767097129057359e-36
                     ],
                     "joint_vel": [
-                        0.0
+                        2.237128528031753e-34
                     ],
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_1": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             20.203441619873047,
@@ -22403,12 +22232,12 @@
                         0.0
                     ],
                     "joint_vel": [
-                        -2.5607022317694853e-35
+                        0.0
                     ],
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_10": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             23.93096351623535,
@@ -22417,7 +22246,7 @@
                         ],
                         "ori": [
                             -1.8189894035458565e-12,
-                            3.419034153018252e-12,
+                            1.2513981170747535e-11,
                             0.70710688829422,
                             0.7071066498756409
                         ],
@@ -22433,15 +22262,15 @@
                         ]
                     },
                     "joint_pos": [
-                        1.1655584165198591e-15
+                        1.636541637129295e-16
                     ],
                     "joint_vel": [
-                        0.0
+                        -1.7486864721248097e-21
                     ],
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_11": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             20.209266662597656,
@@ -22449,8 +22278,8 @@
                             2.310049057006836
                         ],
                         "ori": [
-                            2.2737367544323206e-11,
-                            5.491787580247376e-14,
+                            3.637978807091713e-12,
+                            5.49595091658972e-14,
                             1.0,
                             -7.54978373151971e-08
                         ],
@@ -22466,10 +22295,10 @@
                         ]
                     },
                     "joint_pos": [
-                        6.526271068075157e-17
+                        1.4587559065966198e-15
                     ],
                     "joint_vel": [
-                        3.2026965773639694e-34
+                        0.0
                     ],
                     "non_kin": {}
                 },
@@ -22507,7 +22336,7 @@
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_2": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             23.53179168701172,
@@ -22515,8 +22344,8 @@
                             2.310049057006836
                         ],
                         "ori": [
-                            -2.2737367544323206e-11,
-                            -3.091741272720494e-13,
+                            -3.637978807091713e-12,
+                            -3.0923007210414966e-13,
                             0.7071068286895752,
                             -0.7071067094802856
                         ],
@@ -22532,15 +22361,15 @@
                         ]
                     },
                     "joint_pos": [
-                        2.23565346702708e-16
+                        2.332529048721028e-15
                     ],
                     "joint_vel": [
-                        6.991435550461893e-21
+                        0.0
                     ],
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_3": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             21.096506118774414,
@@ -22568,12 +22397,12 @@
                         0.0
                     ],
                     "joint_vel": [
-                        -1.324784131919036e-23
+                        0.0
                     ],
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_4": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             20.72974967956543,
@@ -22601,7 +22430,7 @@
                         5.33908436422318e-37
                     ],
                     "joint_vel": [
-                        0.0
+                        9.406030288791471e-35
                     ],
                     "non_kin": {}
                 },
@@ -22639,7 +22468,7 @@
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_6": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             20.194963455200195,
@@ -22664,10 +22493,10 @@
                         ]
                     },
                     "joint_pos": [
-                        3.9157721037913015e-17
+                        8.752615378314116e-16
                     ],
                     "joint_vel": [
-                        5.670949335286462e-34
+                        0.0
                     ],
                     "non_kin": {}
                 },
@@ -22705,7 +22534,7 @@
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_8": {
-                    "is_asleep": true,
+                    "is_asleep": false,
                     "root_link": {
                         "pos": [
                             23.602252960205078,
@@ -22713,8 +22542,8 @@
                             2.310049057006836
                         ],
                         "ori": [
-                            -2.091837814077735e-11,
-                            2.9189185790645666e-12,
+                            -1.8189894035458565e-12,
+                            2.9188595984663834e-12,
                             0.70710688829422,
                             -0.7071066498756409
                         ],
@@ -22730,15 +22559,15 @@
                         ]
                     },
                     "joint_pos": [
-                        3.2147986724602256e-16
+                        4.5205220893884766e-15
                     ],
                     "joint_vel": [
-                        -6.885556432055105e-21
+                        0.0
                     ],
                     "non_kin": {}
                 },
                 "sliding_door_tprpvb_9": {
-                    "is_asleep": false,
+                    "is_asleep": true,
                     "root_link": {
                         "pos": [
                             20.620098114013672,
@@ -22747,7 +22576,7 @@
                         ],
                         "ori": [
                             0.0,
-                            1.3957134059605636e-12,
+                            1.0490660423689846e-11,
                             0.70710688829422,
                             0.7071066498756409
                         ],
@@ -22763,10 +22592,10 @@
                         ]
                     },
                     "joint_pos": [
-                        0.0
+                        9.837768874678505e-17
                     ],
                     "joint_vel": [
-                        0.0
+                        -5.595796064564538e-20
                     ],
                     "non_kin": {}
                 },
@@ -25459,7 +25288,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            15.979924201965332,
+                            15.979914665222168,
                             19.321510314941406,
                             1.5721783638000488
                         ],
@@ -25494,7 +25323,7 @@
                     "root_link": {
                         "pos": [
                             10.882919311523438,
-                            6.198075771331787,
+                            6.198080539703369,
                             1.5721783638000488
                         ],
                         "ori": [
@@ -25511,7 +25340,7 @@
                     "root_link": {
                         "pos": [
                             13.544175148010254,
-                            6.191306114196777,
+                            6.191310882568359,
                             1.5721783638000488
                         ],
                         "ori": [
@@ -25527,7 +25356,7 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            15.960148811340332,
+                            15.960139274597168,
                             11.544008255004883,
                             1.5721783638000488
                         ],
@@ -25904,19 +25733,19 @@
                         }
                     }
                 },
-                "pencil_case_224": {
+                "hardback_188": {
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            23.84032440185547,
-                            12.58386516571045,
-                            0.8165009021759033
+                            23.841144561767578,
+                            23.960256576538086,
+                            0.5003737211227417
                         ],
                         "ori": [
-                            -1.8093734979629517e-05,
-                            -0.00023017398780211806,
-                            0.9869163036346436,
-                            0.16123437881469727
+                            0.0039102318696677685,
+                            -0.002804189221933484,
+                            -0.807144284248352,
+                            0.5903345346450806
                         ],
                         "lin_vel": [
                             0.0,
@@ -25935,81 +25764,19 @@
                         }
                     }
                 },
-                "paperback_book_225": {
+                "sandal_189": {
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            23.75396728515625,
-                            12.895184516906738,
-                            0.7771163582801819
+                            21.585124969482422,
+                            22.78311538696289,
+                            0.007701329421252012
                         ],
                         "ori": [
-                            -1.1002612154698e-08,
-                            3.6458735053201963e-07,
-                            0.9989964962005615,
-                            -0.04478878900408745
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "non_kin": {
-                        "Temperature": {
-                            "temperature": 23.0
-                        }
-                    }
-                },
-                "paperback_book_226": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            23.723421096801758,
-                            13.649759292602539,
-                            0.7771165370941162
-                        ],
-                        "ori": [
-                            1.5529451502516167e-08,
-                            3.7380488038252224e-07,
-                            0.9879177808761597,
-                            0.15497931838035583
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "non_kin": {
-                        "Temperature": {
-                            "temperature": 23.0
-                        }
-                    }
-                },
-                "stapler_227": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            22.572219848632812,
-                            12.531218528747559,
-                            1.3852587938308716
-                        ],
-                        "ori": [
-                            -0.003833182156085968,
-                            -0.003800370031967759,
-                            0.777428150177002,
-                            0.6289488673210144
+                            0.0010370167437940836,
+                            -0.0007980573573149741,
+                            0.8268848061561584,
+                            0.5623700618743896
                         ],
                         "lin_vel": [
                             0.0,
@@ -26024,19 +25791,19 @@
                     },
                     "non_kin": {}
                 },
-                "pen_228": {
+                "sandal_190": {
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            23.807754516601562,
-                            13.282960891723633,
-                            0.7739093899726868
+                            22.081680297851562,
+                            22.449819564819336,
+                            0.007096865214407444
                         ],
                         "ori": [
-                            0.00011299853213131428,
-                            4.3990963604301214e-05,
-                            0.30424878001213074,
-                            0.9525927305221558
+                            0.0006931754760444164,
+                            -0.0007348892977461219,
+                            -0.5329521894454956,
+                            0.8461447954177856
                         ],
                         "lin_vel": [
                             0.0,
@@ -26051,153 +25818,7 @@
                     },
                     "non_kin": {}
                 },
-                "pen_229": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            23.926740646362305,
-                            14.080534934997559,
-                            0.7739092707633972
-                        ],
-                        "ori": [
-                            0.0001376100699417293,
-                            -1.5978090232238173e-05,
-                            -0.1739567220211029,
-                            0.984753429889679
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "non_kin": {}
-                },
-                "pencil_230": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            23.701921463012695,
-                            13.120808601379395,
-                            0.7745987772941589
-                        ],
-                        "ori": [
-                            0.00017999894043896347,
-                            -0.00011869229638250545,
-                            -0.6284257769584656,
-                            0.7778698205947876
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "non_kin": {}
-                },
-                "folder_231": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            23.14426040649414,
-                            13.347464561462402,
-                            0.5515816807746887
-                        ],
-                        "ori": [
-                            0.015026605688035488,
-                            0.08297266066074371,
-                            0.8293341994285583,
-                            0.5523539781570435
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "non_kin": {}
-                },
-                "folder_232": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            24.10976791381836,
-                            13.813966751098633,
-                            0.7876507043838501
-                        ],
-                        "ori": [
-                            -1.40536212711595e-06,
-                            1.8816917872754857e-06,
-                            0.7126427292823792,
-                            0.7015273571014404
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "non_kin": {}
-                },
-                "laptop_233": {
-                    "is_asleep": true,
-                    "root_link": {
-                        "pos": [
-                            21.27920150756836,
-                            12.963788986206055,
-                            0.5092077255249023
-                        ],
-                        "ori": [
-                            0.0050363242626190186,
-                            -0.007818322628736496,
-                            0.9485083818435669,
-                            0.3166155219078064
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ]
-                    },
-                    "joint_pos": [
-                        2.399827718734741
-                    ],
-                    "joint_vel": [
-                        -0.00044854296720586717
-                    ],
-                    "non_kin": {
-                        "ToggledOn": {
-                            "value": false,
-                            "hand_in_marker_steps": 0
-                        }
-                    }
-                },
-                "robot_vsxjco": {
+                "robot_bmqgab": {
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
@@ -26223,64 +25844,64 @@
                         ]
                     },
                     "joint_pos": [
-                        -278.478271484375,
-                        -285.4093322753906,
+                        -277.7673034667969,
+                        -276.6153869628906,
                         -299.9950256347656,
-                        0.000263566238572821,
-                        0.0018207624088972807,
-                        -1.1073938608169556,
-                        1.0250070095062256,
-                        -1.4499682188034058,
-                        -0.4699844717979431,
-                        -2.3021132165013114e-06,
-                        0.003735635196790099,
-                        0.006923804059624672,
-                        -0.09248458594083786,
-                        0.06310655921697617,
-                        0.24517475068569183,
-                        -0.00010381512402091175,
-                        -0.1772356778383255,
-                        0.026082994416356087,
-                        0.5180657505989075,
-                        0.012190757319331169,
-                        -0.2792339622974396,
-                        -0.1276797503232956,
-                        0.1848996877670288,
-                        0.004126098472625017,
-                        0.04999947547912598,
-                        0.04999934509396553,
-                        0.049999624490737915,
-                        0.04999928921461105
+                        -0.0014036587672308087,
+                        0.001192297786474228,
+                        -0.09732858836650848,
+                        -2.7864087314810604e-05,
+                        -6.771685730200261e-05,
+                        1.4148752597975545e-05,
+                        2.9720294492108223e-07,
+                        0.009412259794771671,
+                        0.034833453595638275,
+                        1.5900294780731201,
+                        -1.5707297325134277,
+                        -0.01161322370171547,
+                        -0.036786340177059174,
+                        -1.57000732421875,
+                        -1.570011019706726,
+                        1.5900264978408813,
+                        -1.5707026720046997,
+                        -0.024027153849601746,
+                        -0.0008464998682029545,
+                        -0.00021182485215831548,
+                        -5.754978246841347e-06,
+                        0.049999650567770004,
+                        0.04999959096312523,
+                        0.049998946487903595,
+                        0.049999576061964035
                     ],
                     "joint_vel": [
-                        0.0009325493592768908,
-                        -0.0023831194266676903,
-                        0.0029977522790431976,
-                        -0.0053245797753334045,
-                        -0.0006017963751219213,
-                        0.0008423122344538569,
-                        -0.024833472445607185,
-                        0.04955191910266876,
-                        0.01971467025578022,
-                        -0.0012660800712183118,
-                        0.000824699061922729,
-                        0.0011380319483578205,
-                        -0.0065243919380009174,
-                        -0.004680197685956955,
-                        0.03643826022744179,
-                        -0.019633391872048378,
-                        -0.004021785221993923,
-                        -0.0028572259470820427,
-                        -0.03374224156141281,
-                        0.01944699138402939,
-                        -0.0019779964350163937,
-                        0.0030026258900761604,
-                        0.005646394100040197,
-                        0.013853901997208595,
-                        -3.201093932148069e-06,
-                        0.0001828479435062036,
-                        -7.598613592563197e-06,
-                        0.0004820349859073758
+                        0.002817501313984394,
+                        -0.0008942016866058111,
+                        0.0051801567897200584,
+                        -0.002138424664735794,
+                        -0.010871724225580692,
+                        0.0012443647719919682,
+                        0.012695680372416973,
+                        -0.002329209353774786,
+                        0.000525053939782083,
+                        -0.0010932873701676726,
+                        0.003373313695192337,
+                        0.018440771847963333,
+                        0.046865761280059814,
+                        -0.03245679289102554,
+                        -0.01682288758456707,
+                        -0.01623675972223282,
+                        -0.01309089083224535,
+                        0.013829924166202545,
+                        0.045713141560554504,
+                        -0.03339730203151703,
+                        -0.019710598513484,
+                        -0.010966547764837742,
+                        0.019875405356287956,
+                        0.019707193598151207,
+                        -8.072305718087591e-06,
+                        0.00037816137773916125,
+                        -6.7629098339239135e-06,
+                        0.00029439557692967355
                     ],
                     "controllers": {
                         "base": {
@@ -26297,10 +25918,10 @@
                             "goal_is_valid": true,
                             "goal": {
                                 "target": [
-                                    1.025007724761963,
-                                    -1.4499671459197998,
-                                    -0.4699839651584625,
-                                    -2.4361318082810612e-06
+                                    -2.6904277547146194e-05,
+                                    -6.763857527403161e-05,
+                                    1.4306177945400123e-05,
+                                    -3.3562290724376e-08
                                 ]
                             }
                         },
@@ -26308,47 +25929,47 @@
                             "goal_is_valid": true,
                             "goal": {
                                 "target_pos": [
-                                    0.21369409561157227,
-                                    0.2715721130371094,
-                                    0.45345908403396606
+                                    0.3990955352783203,
+                                    0.5623798370361328,
+                                    1.4465491771697998
                                 ],
                                 "target_ori_mat": [
                                     [
-                                        -0.6514192819595337,
-                                        -0.7364902496337891,
-                                        0.18230471014976501
+                                        0.0031260251998901367,
+                                        -0.00079678266774863,
+                                        0.9999948143959045
                                     ],
                                     [
-                                        -0.6853938102722168,
-                                        0.6742779016494751,
-                                        0.2749265134334564
+                                        2.8853362891823053e-05,
+                                        0.9999997019767761,
+                                        0.0007966963457874954
                                     ],
                                     [
-                                        -0.32540473341941833,
-                                        0.05414193868637085,
-                                        -0.944023609161377
+                                        -0.9999951720237732,
+                                        2.6362657081335783e-05,
+                                        0.003126084804534912
                                     ]
                                 ]
                             },
                             "control_filter": {
                                 "past_samples": [
                                     [
-                                        0.0037324968725442886,
-                                        -0.09248586744070053,
-                                        0.24517039954662323,
-                                        -0.17723383009433746,
-                                        0.5180633664131165,
-                                        -0.27923351526260376,
-                                        0.18489959836006165
+                                        0.00897571723908186,
+                                        1.5900280475616455,
+                                        -0.012052284553647041,
+                                        -1.5700204372406006,
+                                        1.5900216102600098,
+                                        -0.024025416001677513,
+                                        -0.00021077370911370963
                                     ],
                                     [
-                                        0.003734252881258726,
-                                        -0.09248589724302292,
-                                        0.24516913294792175,
-                                        -0.17723645269870758,
-                                        0.5180644392967224,
-                                        -0.2792325019836426,
-                                        0.18490003049373627
+                                        0.00955466739833355,
+                                        1.5900301933288574,
+                                        -0.011477162130177021,
+                                        -1.5700037479400635,
+                                        1.5900241136550903,
+                                        -0.02402801625430584,
+                                        -0.00021635516895912588
                                     ]
                                 ],
                                 "current_idx": 1,
@@ -26365,24 +25986,24 @@
                             "vel_filter": {
                                 "past_samples": [
                                     [
-                                        0.0,
-                                        -7.063149678288028e-05
+                                        -1.4752148672414478e-05,
+                                        -1.117586998589104e-05
                                     ],
                                     [
-                                        -2.235173951703473e-06,
-                                        6.839632987976074e-05
+                                        7.599591754114954e-06,
+                                        3.1292436233343324e-06
                                     ],
                                     [
-                                        5.364417575037805e-06,
-                                        -6.392598152160645e-05
+                                        -8.493661880493164e-06,
+                                        6.7055220824840944e-06
                                     ],
                                     [
-                                        -6.258487246668665e-06,
-                                        6.61611557006836e-05
+                                        8.940696147874405e-07,
+                                        -5.364417575037805e-06
                                     ],
                                     [
-                                        -1.072883515007561e-05,
-                                        7.152556645451114e-05
+                                        2.235173997178208e-05,
+                                        1.117586998589104e-05
                                     ]
                                 ],
                                 "current_idx": 4,
@@ -26393,47 +26014,47 @@
                             "goal_is_valid": true,
                             "goal": {
                                 "target_pos": [
-                                    0.13161730766296387,
-                                    -0.20108985900878906,
-                                    0.44028007984161377
+                                    0.3990917205810547,
+                                    -0.5623798370361328,
+                                    1.4464800357818604
                                 ],
                                 "target_ori_mat": [
                                     [
-                                        -0.9987243413925171,
-                                        -0.008970355615019798,
-                                        0.04969225078821182
+                                        0.0029833316802978516,
+                                        0.0007968898862600327,
+                                        0.9999952912330627
                                     ],
                                     [
-                                        -0.00555769307538867,
-                                        0.997642993927002,
-                                        0.06839314848184586
+                                        -2.8196576749905944e-05,
+                                        0.9999997019767761,
+                                        -0.0007968093268573284
                                     ],
                                     [
-                                        -0.050188638269901276,
-                                        0.0680297240614891,
-                                        -0.99642014503479
+                                        -0.9999956488609314,
+                                        -2.5819259462878108e-05,
+                                        0.002983391284942627
                                     ]
                                 ]
                             },
                             "control_filter": {
                                 "past_samples": [
                                     [
-                                        0.006956218276172876,
-                                        0.06310989707708359,
-                                        -0.00010685715096769854,
-                                        0.026012476533651352,
-                                        0.012188405729830265,
-                                        -0.1276429146528244,
-                                        0.004122748970985413
+                                        0.034733548760414124,
+                                        -1.5706346035003662,
+                                        -0.03687392175197601,
+                                        -1.570014476776123,
+                                        -1.570607304573059,
+                                        -0.0007309786742553115,
+                                        -8.83673692442244e-06
                                     ],
                                     [
-                                        0.006913992576301098,
-                                        0.06310368329286575,
-                                        -0.00010889769328059629,
-                                        0.026102371513843536,
-                                        0.01218736544251442,
-                                        -0.12769046425819397,
-                                        0.004128340166062117
+                                        0.034774526953697205,
+                                        -1.5707298517227173,
+                                        -0.036797717213630676,
+                                        -1.5700106620788574,
+                                        -1.5707026720046997,
+                                        -0.0008468424784950912,
+                                        -8.555205567972735e-06
                                     ]
                                 ],
                                 "current_idx": 1,
@@ -26450,24 +26071,24 @@
                             "vel_filter": {
                                 "past_samples": [
                                     [
-                                        8.940695806813892e-06,
-                                        1.6987323760986328e-05
+                                        -9.834765660343692e-05,
+                                        -3.9786096749594435e-05
                                     ],
                                     [
-                                        2.235173951703473e-06,
-                                        -1.4305113836599048e-05
+                                        8.583068120060489e-05,
+                                        4.246830576448701e-05
                                     ],
                                     [
-                                        -3.8444992242148146e-05,
-                                        8.940695806813892e-06
+                                        -7.599591754114954e-06,
+                                        -5.2750106988241896e-05
                                     ],
                                     [
-                                        4.0680166421225294e-05,
-                                        -1.788139229574881e-06
+                                        2.8163192837382667e-05,
+                                        5.2750106988241896e-05
                                     ],
                                     [
-                                        -1.6987323760986328e-05,
-                                        -1.8328426449443214e-05
+                                        8.314847218571231e-05,
+                                        2.592801865830552e-05
                                     ]
                                 ],
                                 "current_idx": 4,
