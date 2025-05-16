@@ -35,10 +35,11 @@
                     (inside ?plate.n.04 ?cabinet.n.01)
                 )
             )
-        (forall
-            (?cabinet.n.01 - cabinet.n.01)
-            (not
-                (open ?cabinet.n.01)
+            (forall
+                (?cabinet.n.01 - cabinet.n.01)
+                (not
+                    (open ?cabinet.n.01)
+                )
             )
         )
     )
