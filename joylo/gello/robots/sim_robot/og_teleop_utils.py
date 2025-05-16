@@ -48,13 +48,15 @@ def get_task_relevant_room_types(activity_name):
 
     return list(room_types)
 
-def augment_rooms(relevant_rooms, scene_model):
+
+def augment_rooms(relevant_rooms, scene_model, task_name):
     """
     Augment the list of relevant rooms by adding dependent rooms that need to be loaded together.
     
     Args:
         relevant_rooms: List of room types that are initially relevant
         scene_model: The scene model being used
+        task_name: Name of the task being used
         
     Returns:
         Augmented list of room types including all dependencies
@@ -74,6 +76,11 @@ def augment_rooms(relevant_rooms, scene_model):
             for dependent_room in scene_dependencies[room]:
                 if dependent_room not in augmented_rooms:
                     augmented_rooms.append(dependent_room)
+
+    # Additionally add any task-specific rooms
+    augmented_rooms += TASK_SPECIFIC_EXTRA_ROOMS.get(task_name, dict()).get(scene_model, [])
+    # Remove redundancies
+    augmented_rooms = list(set(augmented_rooms))
     
     return augmented_rooms
 

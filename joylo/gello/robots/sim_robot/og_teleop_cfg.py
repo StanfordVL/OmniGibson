@@ -21,7 +21,16 @@ ROOM_DEPENDENCIES = {
         "kitchen": ["living_room"],
         "living_room": ["kitchen"],
     },
-    "house_double_floor_upper":{
+    "house_double_floor_upper": {
+    }
+}
+
+TASK_SPECIFIC_EXTRA_ROOMS = {
+    "bringing_in_kindling": {
+        "house_double_floor_lower": ["corridor"],
+    },
+    "bringing_newspaper_in": {
+        "house_double_floor_lower": ["corridor"],
     }
 }
 

@@ -313,14 +313,14 @@ loading_the_dishwasher:
 picking_up_toys:
   0:
     robot_start_orientation:
-    - -0.003785175271332264
-    - -0.0033482732251286507
-    - 0.9034662246704102
-    - 0.42862942814826965
+    - 0.0007278993725776672
+    - 0.0005626706988550723
+    - 0.9948073625564575
+    - 0.10177161544561386
     robot_start_position:
-    - 21.39404296875
-    - 17.4315185546875
-    - 0.003753662109375
+    - 21.585540771484375
+    - 17.41180419921875
+    - 0.004974365234375
     scene_model: house_single_floor
 picking_up_trash:
   0:
@@ -334,6 +334,18 @@ picking_up_trash:
     - 1.5191650390625
     - 0.003753662109375
     scene_model: house_double_floor_lower
+put_togethera_basic_pruning_kit:
+  0:
+    robot_start_orientation:
+    - -0.0008984971209429204
+    - 0.00019658342353068292
+    - 0.12990111112594604
+    - 0.9915264844894409
+    robot_start_position:
+    - -12.474456787109375
+    - 10.972503662109375
+    - 0.004974365234375
+    scene_model: house_single_floor
 putting_away_Halloween_decorations:
   0:
     robot_start_orientation:
