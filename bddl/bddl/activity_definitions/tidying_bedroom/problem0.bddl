@@ -3,7 +3,7 @@
 
     (:objects
         sandal.n.01_1 sandal.n.01_2 - sandal.n.01
-        desk.n.01_1 - desk.n.01
+        table.n.02_1 table.n.02_* - table.n.02
         book.n.02_1 - book.n.02
         floor.n.01_1 - floor.n.01
         bed.n.01_1 - bed.n.01
@@ -11,10 +11,11 @@
     )
 
     (:init 
-        (ontop sandal.n.01_1 desk.n.01_1) 
-        (ontop sandal.n.01_2 desk.n.01_1) 
-        (ontop book.n.02_1 floor.n.01_1) 
-        (inroom desk.n.01_1 bedroom) 
+        (ontop sandal.n.01_1 floor.n.01_1) 
+        (ontop sandal.n.01_2 floor.n.01_1) 
+        (ontop book.n.02_1 bed.n.01_1) 
+        (inroom table.n.02_1 bedroom) 
+        (inroom table.n.02_* bedroom)
         (inroom bed.n.01_1 bedroom) 
         (inroom floor.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -24,7 +25,10 @@
         (and 
             (nextto ?sandal.n.01_1 ?bed.n.01_1) 
             (nextto ?sandal.n.01_2 ?sandal.n.01_1) 
-            (ontop ?book.n.02_1 ?desk.n.01_1) 
+            (exists 
+                (?table.n.02 - table.n.02) 
+                (ontop ?book.n.02_1 ?table.n.02)
+            )
         )
     )
 )

@@ -12,13 +12,13 @@
     )
     
     (:init 
-        (inroom car.n.01_1 garden) 
+        (inroom car.n.01_1 garage) 
         (inside sack.n.01_1 car.n.01_1)
         (inside beefsteak_tomato.n.01_1 sack.n.01_1)
         (inside carton__of__milk.n.01_1 sack.n.01_1)
         (inroom electric_refrigerator.n.01_1 kitchen)
         (inroom electric_refrigerator.n.01_* kitchen)
-        (inroom floor.n.01_1 garden) 
+        (inroom floor.n.01_1 garage) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

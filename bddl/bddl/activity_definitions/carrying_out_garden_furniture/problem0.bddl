@@ -6,7 +6,6 @@
         floor.n.01_1 - floor.n.01
         barrow.n.03_1 - barrow.n.03
         lawn.n.01_1 - lawn.n.01
-        driveway.n.01_1 - driveway.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -15,8 +14,7 @@
         (ontop lawn_chair.n.01_2 floor.n.01_1)
         (ontop barrow.n.03_1 floor.n.01_1) 
         (inroom lawn.n.01_1 garden) 
-        (inroom driveway.n.01_1 garden) 
-        (inroom floor.n.01_1 bedroom) 
+        (inroom floor.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
