@@ -120,7 +120,7 @@ def get_hierarchy(syn_prop_dict):
         synset_to_cat[rec["synset"]].append(rec["category"])
 
     synset_to_substance_raw = pd.read_csv(SUBSTANCE_MAPPING_FN)[
-        ["substance", "synset"]
+        ["substance", "synset", "prune"]
     ].to_dict(orient="records")
     synset_to_substance = collections.defaultdict(list)
     for rec in synset_to_substance_raw:
