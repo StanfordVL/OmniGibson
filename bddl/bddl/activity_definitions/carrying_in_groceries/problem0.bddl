@@ -13,6 +13,7 @@
     
     (:init 
         (inroom car.n.01_1 garage) 
+        (open car.n.01_1)
         (inside sack.n.01_1 car.n.01_1)
         (inside beefsteak_tomato.n.01_1 sack.n.01_1)
         (inside carton__of__milk.n.01_1 sack.n.01_1)
