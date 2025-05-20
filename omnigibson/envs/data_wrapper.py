@@ -964,7 +964,7 @@ class DataPlaybackWrapper(DataWrapper):
         traj_grp = data_grp[f"demo_{episode_id}"]
 
         video_paths = {
-            key: f"{video_folder_path}/task_{str(episode_id).zfill(4)}_{key}.mp4"
+            key: f"{video_folder_path}/{task}_{str(episode_id).zfill(4)}_{key}.mp4"
             for key in ["left_eef_link", "right_eef_link", "eyes", "external_camera"]
         }
         video_writers = {
