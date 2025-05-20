@@ -841,6 +841,12 @@ class OGRobotServer:
         # Reset env
         self.env.reset()
 
+        # If we're recording, record the retroactively record the instance ID from the previous episode
+        if self._recording_path is not None and self.instance_id is not None:
+            instance_id = self.instance_id - 1 if increment_instance else self.instance_id
+            group = self.env.hdf5_file[f"data/demo_{self.env.traj_count - 1}"]
+            self.env.add_metadata(group=group, instance_id=instance_id, data=instance_id)
+
     def stop(self) -> None:
         """Stop the server and clean up resources"""
         self._zmq_server_thread.terminate()
