@@ -585,6 +585,8 @@ class DataPlaybackWrapper(DataWrapper):
         additional_wrapper_configs=None,
         append_to_input_path=False,
         load_room_instances=None,
+        overwrite_config=None,
+        overwrite_scene_file=None,
     ):
         """
         Create a DataPlaybackWrapper environment instance form the recorded demonstration info
@@ -628,7 +630,7 @@ class DataPlaybackWrapper(DataWrapper):
         """
         # Read from the HDF5 file
         f = h5py.File(input_path, "a" if append_to_input_path else "r")
-        config = json.loads(f["data"].attrs["config"])
+        config = json.loads(f["data"].attrs["config"]) if overwrite_config is None else json.loads(overwrite_config)
 
         # Hot swap in additional info for playing back data
 
@@ -642,7 +644,11 @@ class DataPlaybackWrapper(DataWrapper):
         config["env"]["flatten_obs_space"] = True
 
         # Set scene file and disable online object sampling if BehaviorTask is being used
-        config["scene"]["scene_file"] = json.loads(f["data"].attrs["scene_file"])
+        config["scene"]["scene_file"] = (
+            json.loads(f["data"].attrs["scene_file"])
+            if overwrite_scene_file is None
+            else json.loads(overwrite_scene_file)
+        )
         if config["task"]["type"] == "BehaviorTask":
             config["task"]["online_object_sampling"] = False
 
@@ -683,6 +689,8 @@ class DataPlaybackWrapper(DataWrapper):
             n_render_iterations=n_render_iterations,
             overwrite=overwrite,
             only_successes=only_successes,
+            replay_state=replay_state,
+            overwrite_scene_file=overwrite_scene_file,
         )
 
     def __init__(
@@ -694,6 +702,7 @@ class DataPlaybackWrapper(DataWrapper):
         overwrite=True,
         only_successes=False,
         replay_state=True,
+        overwrite_scene_file=None,
     ):
         """
         Args:
@@ -713,7 +722,11 @@ class DataPlaybackWrapper(DataWrapper):
 
         # Store scene file so we can restore the data upon each episode reset
         self.input_hdf5 = h5py.File(input_path, "r")
-        self.scene_file = json.loads(self.input_hdf5["data"].attrs["scene_file"])
+        self.scene_file = (
+            json.loads(self.input_hdf5["data"].attrs["scene_file"])
+            if overwrite_scene_file is None
+            else json.loads(overwrite_scene_file)
+        )
 
         # Store additional variables
         self.n_render_iterations = n_render_iterations
@@ -937,6 +950,68 @@ class DataPlaybackWrapper(DataWrapper):
             f"================= playback episode {episode_id} done, time: {time.time() - eps_start} ================="
         )
 
+    def playback_episode_videogen(self, task, episode_id, video_folder_path):
+        """
+        Playback episode @episode_id, and optionally record observation data if @record is True
+
+        Args:
+            episode_id (int): Episode to playback. This should be a valid demo ID number from the inputted collected
+                data hdf5 file
+        """
+        # breakpoint()
+        data_grp = self.input_hdf5["data"]
+        assert f"demo_{episode_id}" in data_grp, f"No valid episode with ID {episode_id} found!"
+        traj_grp = data_grp[f"demo_{episode_id}"]
+
+        video_paths = {
+            key: f"{video_folder_path}/task_{str(episode_id).zfill(4)}_{key}.mp4"
+            for key in ["left_eef_link", "right_eef_link", "eyes", "external_camera"]
+        }
+        video_writers = {
+            key: self.create_video_writer(fpath=video_path, fps=120) for key, video_path in video_paths.items()
+        }
+
+        # Grab episode data
+        traj_grp = h5py_group_to_torch(traj_grp)
+        action = traj_grp["actions"]
+        state = traj_grp["states"]
+
+        s = state[0]
+        dicts, _ = og.sim.deserialize(s)
+        for obj_name in list(dicts[0]["object_registry"].keys()):
+            if self.env.scene.object_registry("name", obj_name).kinematic_only:
+                del dicts[0]["object_registry"][obj_name]
+        og.sim.load_state(dicts, serialized=False)
+        obs, _, _, _, info = self.env.step(action=action[0], n_render_iterations=self.n_render_iterations)
+        for key, writer in video_writers.items():
+            # if key == "viewer_camera":
+            #     writer.append_data(og.sim.viewer_camera.get_obs()[0]["rgb"][:, :, :3].numpy())
+            if key == "external_camera":
+                writer.append_data(self.env.external_sensors["external_sensor2"].get_obs()[0]["rgb"][:, :, :3].numpy())
+            else:
+                writer.append_data(obs[f"robot_r1::robot_r1:{key}:Camera:0::rgb"][:, :, :3].numpy())
+
+        for i, (a, s) in enumerate(zip(action, state[1:])):
+            print(f"================= playback step {i} =================")
+            dicts, _ = og.sim.deserialize(s)
+            for obj_name in list(dicts[0]["object_registry"].keys()):
+                if self.env.scene.object_registry("name", obj_name).kinematic_only:
+                    del dicts[0]["object_registry"][obj_name]
+            og.sim.load_state(dicts, serialized=False)
+            obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
+            for key, writer in video_writers.items():
+                # if key == "viewer_camera":
+                #     writer.append_data(og.sim.viewer_camera.get_obs()[0]["rgb"][:, :, :3].numpy())
+                if key == "external_camera":
+                    writer.append_data(
+                        self.env.external_sensors["external_sensor2"].get_obs()[0]["rgb"][:, :, :3].numpy()
+                    )
+                else:
+                    writer.append_data(obs[f"robot_r1::robot_r1:{key}:Camera:0::rgb"][:, :, :3].numpy())
+
+        for writer in video_writers.values():
+            writer.close()
+
     def playback_dataset(
         self, record_data=False, video_writers=None, video_rgb_keys=None, callback=None, demo_ids=None
     ):
@@ -981,6 +1056,14 @@ class DataPlaybackWrapper(DataWrapper):
         """
         for episode_id in range(self.input_hdf5["data"].attrs["n_episodes"]):
             self.playback_episode_datagen(episode_id=episode_id)
+
+    def playback_dataset_videogen(self, task, video_folder_path):
+        """
+        Playback all episodes from the input HDF5 file, and optionally record observation data if @record is True
+        """
+        for episode_id in range(len(self.input_hdf5["data"])):
+            self.playback_episode_videogen(task=task, episode_id=episode_id, video_folder_path=video_folder_path)
+            break
 
     def create_video_writer(self, fpath, fps=30):
         """
