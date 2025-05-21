@@ -139,6 +139,7 @@ class OGRobotServer:
         self._joint_cmd = None
         self._waiting_to_resume = True
         self._should_update_checkpoint = False
+        self._rollback_checkpoint_idx = None
 
         # Recording configuration
         self._recording_path = recording_path
@@ -479,6 +480,7 @@ class OGRobotServer:
             self._waiting_to_resume = False
             self._resume_cooldown_time = time.time() + N_COOLDOWN_SECS
             self._in_cooldown = True
+            self._rollback_checkpoint_idx = None
             utils.add_status_event(self.event_queue, "waiting", "Control Resumed, cooling down...")
 
     def serve(self) -> None:
@@ -533,35 +535,45 @@ class OGRobotServer:
         """Process button inputs from controller"""
         # If X is toggled from OFF -> ON, either:
         # (a) begin receiving commands, if currently paused, or
-        # (b) record checkpoint, if actively running
+        # (b) record checkpoint, if actively running, or
+        # (c) rollback to checkpoint, if at least a single "Y" was pressed beforehand
         button_x_state = self._joint_cmd["button_x"].item() != 0.0
         if button_x_state and not self._button_toggled_state["x"]:
             if self._waiting_to_resume:
                 self.resume_control()
             else:
                 if self._recording_path is not None:
-                    self.env.update_checkpoint()
-                    print("Checkpoint Recorded manually")
-                    utils.add_status_event(self.event_queue, "checkpoint", "Checkpoint Recorded manually")
+                    if self._rollback_checkpoint_idx is not None:
+                        print("Rolling back to checkpoint...watch out, GELLO will move on its own!")
+                        utils.add_status_event(self.event_queue, "rollback",
+                                               "Rolling back to checkpoint...watch out, GELLO will move on its own!")
+                        self.env.rollback_to_checkpoint(index=-self._rollback_checkpoint_idx)
+                        utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
+
+                        # Extract trunk position values and calculate offsets
+                        trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
+                        self._current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
+                        base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
+                        self._current_trunk_tilt_offset = float(trunk_qpos[2] - base_trunk_pos[2])
+
+                        print("Finished rolling back!")
+                        self._waiting_to_resume = True
+                    else:
+                        self.env.update_checkpoint()
+                        print("Checkpoint Recorded manually")
+                        utils.add_status_event(self.event_queue, "checkpoint", "Checkpoint Recorded manually")
         self._button_toggled_state["x"] = button_x_state
 
         # If Y is toggled from OFF -> ON, rollback to checkpoint
         button_y_state = self._joint_cmd["button_y"].item() != 0.0
         if button_y_state and not self._button_toggled_state["y"]:
             if self._recording_path is not None:
-                print("Rolling back to latest checkpoint...watch out, GELLO will move on its own!")
-                utils.add_status_event(self.event_queue, "rollback", "Rolling back to latest checkpoint...watch out, GELLO will move on its own!")
-                self.env.rollback_to_checkpoint()
-                utils.optimize_sim_settings(vr_mode=(VIEWING_MODE == ViewingMode.VR))
-                
-                # Extract trunk position values and calculate offsets
-                trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
-                self._current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
-                base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
-                self._current_trunk_tilt_offset = float(trunk_qpos[2] - base_trunk_pos[2])
-                
-                print("Finished rolling back!")
-                self._waiting_to_resume = True
+                # Increment rollback counter -- this means that we will rollback next time "X" is pressed
+                if self._rollback_checkpoint_idx is None:
+                    self._rollback_checkpoint_idx = 0
+                self._rollback_checkpoint_idx = (self._rollback_checkpoint_idx % len(self.env.checkpoint_states)) + 1
+                print(f"Preparing to rollback to checkpoint idx -{self._rollback_checkpoint_idx}")
+                utils.add_status_event(self.event_queue, "rollback", f"Preparing to rollback to checkpoint idx -{self._rollback_checkpoint_idx}")
         self._button_toggled_state["y"] = button_y_state
 
         # If B is toggled from OFF -> ON, toggle camera
@@ -842,10 +854,10 @@ class OGRobotServer:
         self.env.reset()
 
         # If we're recording, record the retroactively record the instance ID from the previous episode
-        if self._recording_path is not None and self.instance_id is not None:
+        if self._recording_path is not None and self.instance_id is not None and self.env.traj_count > 0:
             instance_id = self.instance_id - 1 if increment_instance else self.instance_id
             group = self.env.hdf5_file[f"data/demo_{self.env.traj_count - 1}"]
-            self.env.add_metadata(group=group, instance_id=instance_id, data=instance_id)
+            self.env.add_metadata(group=group, name="instance_id", data=instance_id)
 
     def stop(self) -> None:
         """Stop the server and clean up resources"""
