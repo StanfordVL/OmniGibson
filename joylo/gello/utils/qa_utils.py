@@ -4,6 +4,8 @@ from omnigibson.tasks import BehaviorTask
 from omnigibson.utils.usd_utils import RigidContactAPI
 from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.backend_utils import _compute_backend as cb
+import omnigibson.utils.transform_utils as T
+from omnigibson.robots import LocomotionRobot
 from gello.robots.sim_robot.og_teleop_utils import GHOST_APPEAR_THRESHOLD
 import torch as th
 import operator
@@ -545,6 +547,118 @@ class FieldOfViewMetric(EnvMetric):
                     test_name = name
                     success = metric <= gripper_changes_outside_fov_limit
                     feedback = None if success else f"{name} is too high ({metric}) (too many times the gripper was toggled outside of the robot's main FOV), must be <= {gripper_changes_outside_fov_limit}"
+                    results[test_name] = {"success": success, "feedback": feedback}
+
+        return results
+
+class HeadCameraUprightMetric(EnvMetric):
+    """
+    When robot navigate for prolonged periods, head camera link should not be tilted up or down too much
+    """
+    @classmethod
+    def is_compatible(cls, env):
+        return super().is_compatible(env) and all(isinstance(robot, LocomotionRobot) for robot in env.robots)
+    
+    def __init__(self, head_camera_link_name, step_dt, navigation_window=3.0, translation_threshold=0.1, rotation_threshold=0.05, camera_tilt_threshold=0.4):
+        """
+        Args:
+            head_camera_link_name (str): head camera link name
+            step_dt (float): Amount of time between steps
+            navigation_window (float): window size for detecting navigation in seconds
+            translation_threshold (float): threshold for translation velocity
+            rotation_threshold (float): threshold for rotation velocity
+            camera_tilt_threshold (float): threshold for camera tilt
+        """
+        self.head_camera_link_name = head_camera_link_name
+        self.translation_threshold = translation_threshold
+        self.rotation_threshold = rotation_threshold
+        self.camera_tilt_threshold = camera_tilt_threshold
+        
+        self.navigation_window_in_steps = int(navigation_window / step_dt)
+        self.step_dt = step_dt
+
+        super().__init__()
+
+    def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
+        step_metrics = dict()
+        for i, robot in enumerate(env.robots):
+            _, ori = robot.links[self.head_camera_link_name].get_position_orientation()
+            step_metrics[f"robot{i}::head_link_y_ori"] = T.quat2euler(ori)[1]
+            base_pos, base_ori = robot.get_position_orientation()
+            step_metrics[f"robot{i}::base_pos_x"] = base_pos[0]
+            step_metrics[f"robot{i}::base_pos_y"] = base_ori[1]
+            step_metrics[f"robot{i}::base_ori_yaw"] = T.quat2euler(base_ori)[2]
+            
+        return step_metrics
+
+    def _compute_episode_metrics(self, env, episode_info):
+        episode_metrics = dict()
+
+        for i, robot in enumerate(env.robots):
+            # Get the stored data from step metrics
+            head_y_ori = th.tensor(episode_info[f"robot{i}::head_link_y_ori"])
+            base_pos_x = th.tensor(episode_info[f"robot{i}::base_pos_x"])
+            base_pos_y = th.tensor(episode_info[f"robot{i}::base_pos_y"])
+            base_ori_yaw = th.tensor(episode_info[f"robot{i}::base_ori_yaw"])
+            
+            # Calculate base position and orientation changes to detect navigation
+            base_pos_diff_x = base_pos_x[1:] - base_pos_x[:-1]
+            base_pos_diff_y = base_pos_y[1:] - base_pos_y[:-1]
+            # TODO: handle angle wrapping here
+            base_ori_diff_yaw = base_ori_yaw[1:] - base_ori_yaw[:-1]
+            
+            # Detect when robot is navigating (has significant position or orientation change)
+            translation_velocity = th.sqrt(base_pos_diff_x**2 + base_pos_diff_y**2) / self.step_dt
+            is_translating = translation_velocity > self.translation_threshold
+            is_rotating = th.abs(base_ori_diff_yaw / self.step_dt) > self.rotation_threshold
+            is_navigating = is_translating | is_rotating
+            
+            # Add a placeholder for the first timestep (assume not navigating)
+            is_navigating = th.cat([th.tensor([False]), is_navigating])
+            is_tilted = th.abs(head_y_ori) > self.camera_tilt_threshold
+            prolonged_navigation_mask = th.zeros_like(is_navigating, dtype=th.bool)
+
+            consecutive_count = 0
+            for j in range(len(is_navigating)):
+                if is_navigating[j]:
+                    consecutive_count += 1
+                else:
+                    consecutive_count = 0
+                    
+                # Consider navigation "prolonged" after several consecutive frames
+                if consecutive_count >= self.navigation_window_in_steps:
+                    prolonged_navigation_mask[j] = True
+
+            episode_metrics[f"robot{i}::head_camera_tilted_during_navigation"] = (is_tilted & prolonged_navigation_mask).sum().item()
+
+        return episode_metrics
+
+    @classmethod
+    def validate_episode(
+            cls,
+            episode_metrics,
+            head_camera_tilt_during_navigation_limit=None,
+    ):
+        """
+        Validates the given @episode_metrics from self.aggregate_results using any specific @kwargs
+
+        Args:
+            episode_metrics (dict): Metrics aggregated using self.aggregate_results
+            head_camera_tilt_during_navigation_limit (None or float): If specified, maximum acceptable number of instances
+                where the head camera was tilted during navigation
+
+        Returns:
+            dict: Keyword-mapped dictionary mapping each validation test name to {"success": bool, "feedback": str} dict
+                where "success" is True if the given @episode_metrics pass that specific test; if False, "feedback"
+                provides information as to why the test failed
+        """
+        results = dict()
+        if head_camera_tilt_during_navigation_limit is not None:
+            for name, metric in episode_metrics.items():
+                if f"::head_camera_tilted_during_navigation" in name:
+                    test_name = name
+                    success = metric <= head_camera_tilt_during_navigation_limit
+                    feedback = None if success else f"{name} is too high ({metric}) (too many steps where the robot head is tilted during navigation), must be <= {head_camera_tilt_during_navigation_limit}"
                     results[test_name] = {"success": success, "feedback": feedback}
 
         return results

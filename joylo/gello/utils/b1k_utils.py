@@ -64,6 +64,13 @@ ALL_QA_METRICS = {
             gripper_changes_outside_fov_limit=0,
         ),
     },
+    "head_camera_upright_during_navigation": {
+        "cls": HeadCameraUprightMetric,
+        "init": None,
+        "validate_kwargs": dict(
+            head_camera_tilt_during_navigation_limit=0,
+        ),
+    },
 }
 
 # Set of common metric names to use
@@ -76,6 +83,7 @@ COMMON_QA_METRICS = {
     "failed_grasp",
     "task_relevant_obj_vel",
     "gripper_in_fov",
+    "head_camera_upright_during_navigation",
 }
 
 # Task specific qa metrics

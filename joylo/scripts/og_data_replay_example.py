@@ -145,6 +145,11 @@ def replay_hdf5_file(hdf_input_path):
             step_dt=1/30,
             vel_threshold=0.001,
             head_camera=env.external_sensors[f"external_sensor{len(env.external_sensors) - 1}"],
+            head_camera_link_name="torso_link4",
+            navigation_window=3.0,
+            translation_threshold=0.1,
+            rotation_threshold=0.05,
+            camera_tilt_threshold=0.4,
             gripper_link_paths={
                 "left":
                     set([
