@@ -49,12 +49,10 @@ class JoyconAgent(Agent):
             "left": {
                 "cooldown": 0,
                 "pressed": False,
-                "status": 1,                # -1 corresponds to closed, 1 to open
             },
             "right": {
                 "cooldown": 0,
                 "pressed": False,
-                "status": 1,                # -1 corresponds to closed, 1 to open
             },
         }
         self.enable_rumble = enable_rumble
@@ -218,14 +216,16 @@ class JoyconAgent(Agent):
         # Get L / R gripper action
         for arm, button_pressed in zip(("left", "right"), (self.jc_left.get_button_zl(), self.jc_right.get_button_zr())):
             gripper_info = self.gripper_info[arm]
+            gripper_status_change = 0
             # Toggle grasping state if cooldown is 0 and transition from F -> T
             if gripper_info["cooldown"] == 0 and not gripper_info["pressed"] and button_pressed:
-                gripper_info["status"] = -gripper_info["status"]
+                print(f"Gripper {arm} pressed")
+                gripper_status_change = 1
                 gripper_info["cooldown"] = self.max_gripper_cooldown
             # Update internal gripper info
             gripper_info["cooldown"] = max(gripper_info["cooldown"] - 1, 0)
             gripper_info["pressed"] = button_pressed
-            vals.append(gripper_info["status"])
+            vals.append(gripper_status_change)
 
         # Get X, Y, B, A, capture, home, left arrow, right arrow buttons
         vals.append(self.jc_right.get_button_x())
