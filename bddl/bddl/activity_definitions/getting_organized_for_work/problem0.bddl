@@ -11,27 +11,30 @@
         desk.n.01_1 - desk.n.01
         floor.n.01_1 - floor.n.01
         computer.n.01_1 - computer.n.01
+        monitor.n.04_1 - monitor.n.04
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop mouse.n.04_1 swivel_chair.n.01_1)
+        (ontop mouse.n.04_1 desk.n.01_1)
         (ontop keyboard.n.01_1 notebook.n.01_1) 
         (ontop pen.n.01_1 folder.n.02_1) 
         (ontop notebook.n.01_1 desk.n.01_1) 
         (ontop folder.n.02_1 swivel_chair.n.01_1)
-        (ontop computer.n.01_1 desk.n.01_1) 
-        (inroom desk.n.01_1 shared_office) 
-        (inroom floor.n.01_1 shared_office) 
-        (inroom swivel_chair.n.01_1 shared_office)
+        (under computer.n.01_1 desk.n.01_1) 
+        (ontop monitor.n.04_1 desk.n.01_1)
+        (inroom desk.n.01_1 bedroom) 
+        (inroom floor.n.01_1 bedroom) 
+        (inroom swivel_chair.n.01_1 bedroom)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (nextto ?keyboard.n.01_1 ?computer.n.01_1) 
+            (nextto ?keyboard.n.01_1 ?monitor.n.04_1) 
             (ontop ?keyboard.n.01_1 ?desk.n.01_1)
-            (ontop ?computer.n.01_1 ?desk.n.01_1)
+            (under ?computer.n.01_1 ?desk.n.01_1)
+            (ontop ?monitor.n.04_1 ?desk.n.01_1)
             (nextto ?mouse.n.04_1 ?keyboard.n.01_1) 
             (ontop ?mouse.n.04_1 ?desk.n.01_1)
             (nextto ?folder.n.02_1 ?mouse.n.04_1) 
