@@ -65,6 +65,19 @@
         }
     },
     {
+        "rule_name": "agent.n.01-washer-cover",
+        "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
+        "washed_item": {
+            "agent.n.01": 1
+        },
+        "output_synsets": {
+            "water.n.06": 1
+        }
+    },
+    {
         "rule_name": "air_conditioner.n.01-washer-cover",
         "input_synsets": {},
         "machine": {
