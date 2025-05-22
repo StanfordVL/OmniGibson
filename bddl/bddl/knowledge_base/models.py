@@ -99,7 +99,7 @@ class AttachmentPair(Model):
         pk = "name"
 
     @classmethod
-    def view_attachment_pairs_with_missing_objects(cls):
+    def view_error_missing_objects(cls):
         """Attachment pairs that only have objects on one side"""
         return [x for x in cls.all_objects() if len(x.female_objects) == 0 or len(x.male_objects) == 0]
 
@@ -122,15 +122,7 @@ class Scene(Model):
 
     @cached_property
     def room_count(self):
-        return len(self.future_rooms)
-    
-    @cached_property
-    def ready_rooms(self):
-        return [room for room in self.rooms if room.ready]
-    
-    @cached_property
-    def future_rooms(self):
-        return [room for room in self.rooms if not room.ready]
+        return len(self.rooms)
 
     @cached_property
     def object_count(self):
@@ -138,36 +130,32 @@ class Scene(Model):
             roomobject.count
             for room in self.rooms
             for roomobject in room.non_clutter_roomobjects  # TODO: Should we include clutter objects?
-            if not room.ready
         )
-
-    @cached_property
-    def any_ready(self):
-        return any(room.ready for room in self.rooms)
-
-    @cached_property
-    def fully_ready(self):
-        ready_count = sum(
-            roomobject.count
-            for room in self.rooms
-            for roomobject in room.roomobjects
-            if room.ready
-        )
-        unready_count = self.object_count
-        return ready_count == unready_count
 
     class Meta:
         pk = "name"
         ordering = ["name"]
 
+    @classmethod
+    def view_challenge(cls):
+        """Scenes that are included in the NeurIPS 2025 BEHAVIOR Challenge"""
+        return [
+            x
+            for x in cls.all_objects()
+            if x.name in ["house_single_floor", "house_double_floor_lower", "house_double_floor_upper"]
+        ]
+
 
 @dataclass(eq=False, order=False)
 class ParticleSystem(Model):
     name: str
-    parameters: str
+    parameters: Optional[str] = None
 
     # the synset that the category belongs to
     synset_fk: ManyToOne = ManyToOneField("Synset", "particle_systems")
+
+    # the objects that belong to this particle system as particles
+    particles_fk: OneToMany = OneToManyField("Object", "particle_system")
 
     def __str__(self):
         return self.name
@@ -186,15 +174,39 @@ class ParticleSystem(Model):
             return set()
         return {anc.name for anc in self.synset.ancestors} | {self.synset.name}
 
+    @cached_property
+    def state(self) -> SynsetState:
+        # A particle system is ready if it doesn't need particles or if it has any ready particles.
+        if self.synset.is_liquid:
+            return SynsetState.MATCHED
+        elif len(self.particles) == 0 or not any(particle.ready for particle in self.particles):
+            return SynsetState.UNMATCHED
+        else:
+            return SynsetState.PLANNED
+
     @classmethod
-    def view_mapped_to_non_leaf_synsets(cls):
-        """Particle systems mapped to Non-Leaf Synsets"""
+    def view_error_mapped_to_non_leaf_synsets(cls):
+        """Particle systems mapped to non-leaf synsets"""
         return [x for x in cls.all_objects() if len(x.synset.children) > 0]
     
     @classmethod
-    def view_mapped_to_non_substance_synsets(cls):
-        """Particle systems mapped to Non-Substance Synsets"""
+    def view_error_mapped_to_non_substance_synsets(cls):
+        """Particle systems mapped to non-substance synsets"""
         return [x for x in cls.all_objects() if not x.synset.is_substance]
+    
+    @classmethod
+    def view_error_missing_particle(cls):
+        """Particle systems that are missing particles"""
+        return [
+            x for x in cls.all_objects() if not x.synset.is_liquid and len(x.particles) == 0
+        ]
+    
+    @classmethod
+    def view_error_missing_params(cls):
+        """Particle systems that are missing parameters"""
+        return [
+            x for x in cls.all_objects() if not x.parameters
+        ]
 
 
 @dataclass(eq=False, order=False)
@@ -225,9 +237,14 @@ class Category(Model):
         return {anc.name for anc in self.synset.ancestors} | {self.synset.name}
 
     @classmethod
-    def view_mapped_to_non_leaf_synsets(cls):
-        """Categories Mapped to Non-Leaf Synsets"""
+    def view_error_mapped_to_non_leaf_synsets(cls):
+        """Categories mapped to non-leaf synsets"""
         return [x for x in cls.all_objects() if len(x.synset.children) > 0]
+    
+    @classmethod
+    def view_objectless(cls):
+        """Categories that have no objects"""
+        return [x for x in cls.all_objects() if len(x.objects) == 0]
 
 
 @dataclass(eq=False, order=False)
@@ -239,6 +256,8 @@ class Object(Model):
     bounding_box_size: Optional[Tuple[float, float, float]] = None
     # the category that the object belongs to
     category_fk: ManyToOne = ManyToOneField(Category, "objects")
+    # the particle system that the object belongs to
+    particle_system_fk: ManyToOne = ManyToOneField(ParticleSystem, "particles")
     # the category of the object prior to getting renamed
     original_category_name: str = ""
     # meta links owned by the object
@@ -252,8 +271,20 @@ class Object(Model):
     female_attachment_pairs_fk: ManyToMany = ManyToManyField(AttachmentPair, "female_objects")
     male_attachment_pairs_fk: ManyToMany = ManyToManyField(AttachmentPair, "male_objects")
 
+    @property
+    def owner(self):
+        assert (self.category is None) != (self.particle_system is None), f"{self.name} should either belong to a category or a particle system"
+        if self.category is not None:
+            return self.category
+        elif self.particle_system is not None:
+            return self.particle_system
+        else:
+            raise ValueError(
+                f"Object {self.name} does not belong to a category or particle system"
+            )
+
     def __str__(self):
-        return self.category.name + "-" + self.name
+        return self.owner.name + "-" + self.name
 
     class Meta:
         pk = "name"
@@ -261,7 +292,7 @@ class Object(Model):
 
     @cache
     def matching_synset(self, synset) -> bool:
-        return self.category.matching_synset(synset)
+        return self.owner.matching_synset(synset)
 
     @cached_property
     def ready(self) -> bool:
@@ -288,17 +319,24 @@ class Object(Model):
 
     @cached_property
     def missing_meta_links(self) -> List[str]:
-        return sorted(
-            self.category.synset.required_meta_links - {x.name for x in self.meta_links}
+        if self.category is not None:
+            return sorted(
+                self.category.synset.required_meta_links - {x.name for x in self.meta_links}
+            )
+        elif self.particle_system is not None:
+            return []
+        
+        raise ValueError(
+            f"Object {self.name} does not belong to a category or particle system to check for missing meta links"
         )
 
     @classmethod
-    def view_objects_with_missing_meta_links(cls):
-        """Objects with Missing Meta Links (Not Including Subpart)"""
+    def view_error_missing_meta_links(cls):
+        """Objects with missing meta links (not including subpart)"""
         return [
             o
             for o in cls.all_objects()
-            if not o.fully_supports_synset(o.category.synset, ignore={"subpart"})
+            if o.category is not None and not o.fully_supports_synset(o.category.synset, ignore={"subpart"})
         ]
 
 
@@ -350,9 +388,13 @@ class Synset(Model):
     def state(self) -> SynsetState:
         if self.name == "entity.n.01":
             return SynsetState.MATCHED   # root synset is always legal
-        elif self.is_liquid:
-            # liquids are always matched
-            return SynsetState.MATCHED
+        elif self.is_substance:
+            if any(ps.state == SynsetState.MATCHED for ps in self.matching_particle_systems):
+                return SynsetState.MATCHED
+            elif any(ps.state == SynsetState.PLANNED for ps in self.matching_particle_systems):
+                return SynsetState.PLANNED
+            else:
+                return SynsetState.UNMATCHED
         elif self.parents:
             if len(self.matching_ready_objects) > 0:
                 return SynsetState.MATCHED
@@ -451,7 +493,35 @@ class Synset(Model):
 
     @cached_property
     def task_relevant(self):
-        return bool(self.tasks or any(ancestor.tasks for ancestor in self.ancestors))
+        # Is it directly used in a task?
+        if self.tasks:
+            return True
+        
+        # Is it used in a transition that's used in a task?
+        transition_relevant_synsets = {
+            anc
+            for t in Task.all_objects()
+            for transition in t.relevant_transitions
+            for s in list(transition.output_synsets) + list(transition.input_synsets)
+            for anc in set(s.ancestors) | {s}
+        }
+        if self in transition_relevant_synsets:
+            return True
+        
+        return False
+        
+    @cached_property
+    def generates_synsets(self):
+        # Look for particleApplier and particleSource annotations.
+        generated_synsets = set()
+        for prop in self.properties:
+            if prop.name not in ["particleApplier", "particleSource"]:
+                continue
+            prop_params = json.loads(prop.parameters)
+            conditions = prop_params.get("conditions", {})
+            generated_synsets.update([Synset.get(name) for name in conditions.keys()])
+
+        return generated_synsets
 
     @cached_property
     def relevant_transitions(self):
@@ -508,7 +578,7 @@ class Synset(Model):
 
     @cached_property
     def is_derivative(self):
-        derivative_words = ["cooked__", "half__", "diced__"]
+        derivative_words = ["cooked__", "half__", "diced__", "melted__"]
         return any(self.name.startswith(dw) for dw in derivative_words)
 
     @cached_property
@@ -525,6 +595,7 @@ class Synset(Model):
         sliceable_children = []
         diceable_children = []
         cookable_children = []
+        meltable_children = []
 
         for p in self.properties:
             if p.name == "sliceable":
@@ -542,7 +613,12 @@ class Synset(Model):
                     cookable_children.append(json.loads(p.parameters)["substance_cooking_derivative_synset"])
                 except KeyError:
                     raise ValueError(f"'substance_cooking_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
-        return set(sliceable_children + diceable_children + cookable_children)
+            elif p.name == "meltable":
+                try:
+                    meltable_children.append(json.loads(p.parameters)["meltable_derivative_synset"])
+                except KeyError:
+                    raise ValueError(f"'meltable_derivative_synset' key not found in property parameters for {p.name} in {self.name}")
+        return set(sliceable_children + diceable_children + cookable_children + meltable_children)
 
     @cached_property
     def derivative_children(self):
@@ -560,13 +636,14 @@ class Synset(Model):
 
     @cached_property
     def derivative_descendants(self):
-        descendants = {self}.update(self.derivative_children)
+        descendants = {self}
+        descendants.update(self.derivative_children)
         for child in self.derivative_children:
             descendants.update(child.derivative_descendants)
         return descendants
 
     @classmethod
-    def view_substance_mismatch(cls):
+    def view_error_substance_mismatch(cls):
         """Synsets that are used in predicates that don't match their substance state"""
         return [
             s
@@ -579,7 +656,7 @@ class Synset(Model):
         ]
     
     @classmethod
-    def view_substance_missing_particle_system(cls):
+    def view_error_substance_missing_particle_system(cls):
         """Synsets that are marked as a substance but do not have a particle system"""
         return [
             s
@@ -588,79 +665,85 @@ class Synset(Model):
         ]
     
     @classmethod
-    def view_substance_assigned_unrelated_category(cls):
-        """Substance synsets that have assigned categories whose names do not match an assigned ParticleSystem name."""
+    def view_error_substance_assigned_unrelated_category(cls):
+        """Substance synsets that have assigned categories"""
         return [
             s
             for s in cls.all_objects()
-            if s.is_substance and any(
-                all(
-                    category.name != ps.name
-                    for ps in s.matching_particle_systems
-                )
-                for category in s.categories
-            )
+            if s.is_substance and len(s.categories) > 0
         ]
 
     @classmethod
-    def view_object_unsupported_properties(cls):
-        """Leaf synsets that do not have at least one object that supports all of annotated properties."""
-        transition_relevant_synsets = {
-            anc
-            for t in Task.all_objects()
-            for transition in t.relevant_transitions
-            for s in list(transition.output_synsets) + list(transition.input_synsets)
-            for anc in set(s.ancestors) | {s}
-        }
-        task_relevant_synsets = {
-            s for s in cls.all_objects()
-            if s.tasks   # TODO: Is it important to check if ancestors are also task relevant?
-        }
-        relevant_synsets = (transition_relevant_synsets | task_relevant_synsets)
-
+    def view_error_object_unsupported_properties(cls):
+        """Synsets that do not have at least one object that supports all of annotated properties"""
         return [
             s
-            for s in relevant_synsets
-            if len(s.children) == 0
-            and not s.has_fully_supporting_object
+            for s in Synset.all_objects()
+            if not s.is_substance and not s.has_fully_supporting_object
         ]
 
     @classmethod
-    def view_unnecessary(cls):
+    def view_error_unnecessary(cls):
         """Objectless synsets that are not used in any task or required by any property"""
-        transition_relevant_synsets = {
-            anc
-            for t in Task.all_objects()
-            for transition in t.relevant_transitions
-            for s in list(transition.output_synsets) + list(transition.input_synsets)
-            for anc in set(s.ancestors) | {s}
-        }
-        return [
-            s
-            for s in cls.all_objects()
-            if all(
-                not sp.task_relevant
-                and sp not in transition_relevant_synsets
-                and len(sp.matching_objects) == 0
-                and len(sp.children) == 0
-                for sp in s.derivative_ancestors
+        useful_synsets = set()
+
+        # Iteratively search for useful synsets
+        while True:
+            task_relevant = {s for s in cls.all_objects() if s.task_relevant}
+            has_objects = {s for s in cls.all_objects() if len(s.matching_objects) > 0}
+            has_particle_system_with_particles = {
+                s
+                for s in cls.all_objects()
+                if len([particle for ps in s.matching_particle_systems for particle in ps.particles]) > 0
+            }
+            generated_by_useful = {
+                generatee for s in useful_synsets for generatee in s.generates_synsets
+            }
+            ancestor_of_useful = {
+                ancestor for s in useful_synsets for ancestor in s.ancestors
+            }
+            derivative_of_useful = {
+                derivative for s in useful_synsets for derivative in s.derivative_ancestors | s.derivative_descendants
+            }
+            new_useful = (
+                task_relevant | has_objects | has_particle_system_with_particles | generated_by_useful | ancestor_of_useful | derivative_of_useful
             )
-        ]
+            delta_useful = new_useful - useful_synsets
+            if not delta_useful:
+                break
+            useful_synsets.update(delta_useful)
+
+
+        return set(cls.all_objects()) - useful_synsets
 
     @classmethod
-    def view_bad_derivative(cls):
+    def view_error_bad_derivative(cls):
         """Derivative synsets that exist even though the original synset is missing the expected property"""
         return [
             s for s in cls.all_objects() if s.is_derivative and not s.derivative_parents
         ]
 
     @classmethod
-    def view_missing_derivative(cls):
+    def view_error_missing_derivative(cls):
         """Synsets that are missing a derivative synset that is expected to exist from property annotations"""
         return sorted([
             s for s in cls.all_objects()
             if len(s.derivative_children_names) != len(s.derivative_children)
         ])
+    
+    @classmethod
+    def view_error_missing_definition(cls):
+        """Synsets that are missing a definition"""
+        return [
+            s for s in cls.all_objects() if not s.definition
+        ]
+    
+    @classmethod
+    def view_unmatched(self):
+        """Synsets that are unmatched to either an object or a particle system"""
+        return [
+            s for s in self.all_objects() if s.state == SynsetState.UNMATCHED
+        ]
 
 
 @dataclass(eq=False, order=False)
@@ -737,13 +820,13 @@ class Task(Model):
         else:
             return SynsetState.PLANNED
 
-    def matching_scene(self, scene: Scene, ready: bool = True) -> str:
+    def matching_scene(self, scene: Scene) -> str:
         """checks whether a scene satisfies task requirements"""
         ret = ""
         for room_requirement in self.room_requirements:
             scene_ret = f"Cannot find suitable {room_requirement.type}: "
             for room in scene.rooms:
-                if room.type != room_requirement.type or room.ready != ready:
+                if room.type != room_requirement.type:
                     continue
                 room_ret = room.matching_room_requirement(room_requirement)
                 if len(room_ret) == 0:
@@ -812,16 +895,10 @@ class Task(Model):
     def scene_matching_dict(self) -> Dict[str, Dict[str, str]]:
         ret = {}
         for scene in Scene.all_objects():
-            if not any(room.ready for room in scene.rooms):
-                result_ready = "Scene does not have a ready version currently."
-            else:
-                result_ready = self.matching_scene(scene=scene, ready=True)
-            result_partial = self.matching_scene(scene=scene, ready=False)
+            matching_result = self.matching_scene(scene=scene)
             ret[scene] = {
-                "matched_ready": len(result_ready) == 0,
-                "reason_ready": result_ready,
-                "matched_planned": len(result_partial) == 0,
-                "reason_planned": result_partial,
+                "matched": len(matching_result) == 0,
+                "reason": matching_result,
             }
         return ret
     
@@ -831,16 +908,14 @@ class Task(Model):
         return [
             scene
             for scene, result in self.scene_matching_dict.items()
-            if result["matched_ready"]
+            if result["matched"]
         ]
 
     @cached_property
     def scene_state(self) -> str:
         scene_matching_dict = self.scene_matching_dict
-        if any(x["matched_ready"] for x in scene_matching_dict.values()):
+        if any(x["matched"] for x in scene_matching_dict.values()):
             return SynsetState.MATCHED
-        elif any(x["matched_planned"] for x in scene_matching_dict.values()):
-            return SynsetState.PLANNED
         else:
             return SynsetState.UNMATCHED
 
@@ -949,14 +1024,23 @@ class Task(Model):
         return len(self.unreachable_goal_synsets) == 0
 
     @classmethod
-    def view_transition_failure(cls):
-        """Transition Failure Tasks"""
+    def view_error_transition_failure(cls):
+        """Tasks that do not have a valid transition path from the initial to the goal"""
         return [x for x in cls.all_objects() if not x.goal_is_reachable]
 
     @classmethod
-    def view_non_scene_matched(cls):
-        """Non-Scene-Matched Tasks"""
+    def view_error_missing_scene(cls):
+        """Tasks that are not matched to any scene"""
         return [x for x in cls.all_objects() if x.scene_state == SynsetState.UNMATCHED]
+    
+    @classmethod
+    def view_error_missing_object(cls):
+        """Tasks that are missing some objects or particle systems"""
+        return [
+            x
+            for x in cls.all_objects()
+            if x.synset_state == SynsetState.UNMATCHED
+        ]
     
     @classmethod
     def view_challenge(cls):
@@ -1103,8 +1187,6 @@ class Room(Model):
     # type of the room
     # TODO: make this one of the room types
     type: str
-    # whether the scene is ready in the current dataset
-    ready: bool = False
     id: str = UUIDField()
     # the scene the room belongs to
     scene_fk: ManyToOne = ManyToOneField(Scene, "rooms")
@@ -1113,11 +1195,11 @@ class Room(Model):
 
     class Meta:
         pk = "id"
-        unique_together = ("name", "ready", "scene")
+        unique_together = ("name", "scene")
         ordering = ["name"]
 
     def __str__(self):
-        return f'{self.scene.name}_{self.type}_{"ready" if self.ready else "planned"}'
+        return f'{self.scene.name}_{self.name}'
     
     @cached_property
     def non_clutter_roomobjects(self):
