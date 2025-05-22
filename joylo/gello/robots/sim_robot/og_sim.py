@@ -140,6 +140,7 @@ class OGRobotServer:
         self._waiting_to_resume = True
         self._should_update_checkpoint = False
         self._rollback_checkpoint_idx = None
+        self._grasp_action = {arm: 1 for arm in self.robot.arm_names}
 
         # Recording configuration
         self._recording_path = recording_path
@@ -168,6 +169,7 @@ class OGRobotServer:
             "left": False,
             "right": False,
         }
+        self._gripper_action_signal_detectors = {arm: utils.SignalChangeDetector(debounce_time=0.5) for arm in self.robot.arm_names}
 
         # Set default active arm
         self.active_arm = "right"
@@ -555,6 +557,12 @@ class OGRobotServer:
                         self._current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
                         base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
                         self._current_trunk_tilt_offset = float(trunk_qpos[2] - base_trunk_pos[2])
+                        
+                        # Handle gripper actions
+                        for arm in self.robot.arm_names:
+                            gripper_goal = float(self.robot.controllers[f"gripper_{arm}"].goal["target"])
+                            checkpoint_gripper_action = 1 if gripper_goal > 0 else -1
+                            self._grasp_action[arm] = checkpoint_gripper_action
 
                         print("Finished rolling back!")
                         self._waiting_to_resume = True
@@ -716,8 +724,12 @@ class OGRobotServer:
             action[self.robot.base_action_idx] = self._joint_cmd["base"].clone()
 
             # Apply gripper action
-            action[self.robot.gripper_action_idx["left"]] = self._joint_cmd["left_gripper"].clone()
-            action[self.robot.gripper_action_idx["right"]] = self._joint_cmd["right_gripper"].clone()
+            for arm in self.robot.arm_names:
+                gripper_signal = self._joint_cmd[f"{arm}_gripper"].item()
+                gripper_changed = self._gripper_action_signal_detectors[arm].process_sample(gripper_signal)
+                if gripper_changed:
+                    self._grasp_action[arm] = -self._grasp_action[arm]
+                action[self.robot.gripper_action_idx[arm]] = self._grasp_action[arm]
 
             # Apply trunk action
             if SIMPLIFIED_TRUNK_CONTROL:
@@ -767,6 +779,8 @@ class OGRobotServer:
 
     def pause(self):
         self._waiting_to_resume = True
+        for detector in self._gripper_action_signal_detectors.values():
+            detector.reset()
 
     def reset(self, increment_instance=True):
         """
@@ -794,6 +808,9 @@ class OGRobotServer:
             f"{arm}_arm": self._joint_state[self.robot.arm_control_idx[arm]] for arm in self.robot.arm_names
         }
         self._should_update_checkpoint = False
+        self._grasp_action = {arm: 1 for arm in self.robot.arm_names}
+        for detector in self._gripper_action_signal_detectors.values():
+            detector.reset()
         if isinstance(self.robot, (R1, R1Pro)):
             for arm in self.robot.arm_names:
                 self._joint_cmd[f"{arm}_gripper"] = th.ones(len(self.robot.gripper_action_idx[arm]))

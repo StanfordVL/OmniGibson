@@ -1450,3 +1450,48 @@ def apply_omnigibson_macros():
     """Apply global OmniGibson settings"""
     for key, value in OMNIGIBSON_MACROS.items():
         setattr(gm, key, value)
+
+class SignalChangeDetector:
+    def __init__(self, debounce_time=0.5):
+        """
+        A very simple signal change detector for stable signals that only change infrequently.
+        
+        Args:
+            debounce_time: Minimum time (seconds) between detected changes
+        """
+        self.current_state = None
+        self.last_change_time = 0
+        self.debounce_time = debounce_time
+    
+    def reset(self):
+        """Reset the detector to initial state"""
+        self.current_state = None
+        self.last_change_time = 0
+        
+    def process_sample(self, sample):
+        """
+        Process a new sample and detect if a change occurred.
+        
+        Args:
+            sample: The signal value (1 or -1)
+            
+        Returns:
+            bool: True if a change was detected, False otherwise
+        """
+        # Catch first valid sample
+        if self.current_state is None:
+            self.current_state = sample
+            return False
+        
+        # Check if enough time has passed since last change
+        current_time = time.time()
+        if current_time - self.last_change_time < self.debounce_time:
+            return False
+        
+        # Check for state change
+        if sample != self.current_state:
+            self.current_state = sample
+            self.last_change_time = current_time
+            return True
+            
+        return False

@@ -49,12 +49,12 @@ class JoyconAgent(Agent):
             "left": {
                 "cooldown": 0,
                 "pressed": False,
-                "status": 1,                # -1 corresponds to closed, 1 to open
+                "status": 1,                # 'status' can be either 1 or -1, working as a toggle rather than directly mapping to gripper actions
             },
             "right": {
                 "cooldown": 0,
                 "pressed": False,
-                "status": 1,                # -1 corresponds to closed, 1 to open
+                "status": 1,                # 'status' can be either 1 or -1, working as a toggle rather than directly mapping to gripper actions
             },
         }
         self.enable_rumble = enable_rumble
