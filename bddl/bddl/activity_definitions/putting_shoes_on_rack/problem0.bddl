@@ -23,12 +23,24 @@
         (and 
             (forall 
                 (?sandal.n.01 - sandal.n.01)
-                (inside ?sandal.n.01 ?hallstand.n.01_1)
+                (and
+                    (touching ?sandal.n.01 ?hallstand.n.01_1)
+                    (not
+                        (touching ?sandal.n.01 floor.n.01_1)    
+                    )
+                )
             )
             (forall 
                 (?gym_shoe.n.01 - gym_shoe.n.01)
-                (inside ?gym_shoe.n.01 ?hallstand.n.01_1)
+                (and
+                    (touching ?gym_shoe.n.01 ?hallstand.n.01_1)
+                    (not
+                        (touching ?gym_shoe.n.01 floor.n.01_1)    
+                    )
+                )
             )
+            (nextto gym_shoe.n.01_1 gym_shoe.n.01_2)
+            (nextto sandal.n.01_1 sandal.n.01_2)
         )
     )
 )

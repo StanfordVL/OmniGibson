@@ -41,6 +41,9 @@
                 (?tupperware.n.01 - tupperware.n.01) 
                 (inside ?tupperware.n.01 ?electric_refrigerator.n.01_1)
             ) 
+            (not
+                (open ?electric_refrigerator.n.01_1)
+            )
         )
     )
 )
