@@ -16,9 +16,6 @@ _backend_utils._compute_backend.set_methods_from_backend(
 from omnigibson.utils.processing_utils import MovingAverageFilter, ExponentialAverageFilter
 
 
-
-
-
 class JoyconAgent(Agent):
     """
     Agent for controlling base + additional joints
@@ -55,6 +52,16 @@ class JoyconAgent(Agent):
                 "cooldown": 0,
                 "pressed": False,
                 "status": 1,                # 'status' can be either 1 or -1, working as a toggle rather than directly mapping to gripper actions
+            },
+            "-": {
+                "cooldown": 0,
+                "pressed": False,
+                "status": 1,                # 'status' can be either 1 or -1, working as a toggle rather than directly mapping to external actions
+            },
+            "+": {
+                "cooldown": 0,
+                "pressed": False,
+                "status": 1,                # 'status' can be either 1 or -1, working as a toggle rather than directly mapping to external actions
             },
         }
         self.enable_rumble = enable_rumble
@@ -216,7 +223,7 @@ class JoyconAgent(Agent):
         vals += base_trunk_vals.tolist()
 
         # Get L / R gripper action
-        for arm, button_pressed in zip(("left", "right"), (self.jc_left.get_button_zl(), self.jc_right.get_button_zr())):
+        for arm, button_pressed in zip(("left", "right", "-", "+"), (self.jc_left.get_button_zl(), self.jc_right.get_button_zr(), self.jc_left.get_button_minus(), self.jc_right.get_button_plus())):
             gripper_info = self.gripper_info[arm]
             # Toggle grasping state if cooldown is 0 and transition from F -> T
             if gripper_info["cooldown"] == 0 and not gripper_info["pressed"] and button_pressed:
@@ -238,5 +245,5 @@ class JoyconAgent(Agent):
         vals.append(self.jc_left.get_button_right())
 
         # Compose values and return
-        # [base_x, base_y, base_r, trunk_translate, trunk_tilt, gripper_l, gripper_r, X, Y, B, A, capture, home, left arrow, right arrow buttons]
+        # [base_x, base_y, base_r, trunk_translate, trunk_tilt, gripper_l, gripper_r, -, +, X, Y, B, A, capture, home, left arrow, right arrow buttons]
         return th.Tensor(vals)

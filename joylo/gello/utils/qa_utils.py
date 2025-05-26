@@ -182,6 +182,12 @@ class TaskSuccessMetric(EnvMetric):
 
 class GhostHandAppearanceMetric(EnvMetric):
 
+    def __init__(self, color_arms=True):
+        self.color_arms = color_arms
+        self.robot_arm_colors = dict()
+
+        super().__init__()
+
     @classmethod
     def is_compatible(cls, env):
         valid = super().is_compatible(env=env)
@@ -213,6 +219,18 @@ class GhostHandAppearanceMetric(EnvMetric):
                 )).item() > GHOST_APPEAR_THRESHOLD
                 gripper_controller = robot.controllers[f"gripper_{arm}"]
                 step_metrics[f"robot{i}::arm_{arm}::active"] = active
+                if self.color_arms:
+                    if robot.name not in self.robot_arm_colors:
+                        self.robot_arm_colors[robot.name] = {a: False for a in robot.arm_names}
+                    robot_arm_color_is_active = self.robot_arm_colors[robot.name][arm]
+                    if active != robot_arm_color_is_active:
+                        # Update the coloring
+                        # TODO: Overfit to R1Pro at the moment
+                        color = th.tensor([1.0, 0, 0]) if active else th.tensor([0.8235, 0.8235, 1.0000])
+                        for link in robot.arm_links[arm]:
+                            for vm in link.visual_meshes.values():
+                                vm.material.diffuse_color_constant = color
+                        self.robot_arm_colors[robot.name][arm] = active
                 op = operator.lt if gripper_controller._inverted else operator.ge
                 step_metrics[f"robot{i}::arm_{arm}::open_cmd"] = th.all(op(action[gripper_action_idxs[arm]], 0.0)).item()
         return step_metrics
@@ -230,6 +248,29 @@ class GhostHandAppearanceMetric(EnvMetric):
                 episode_metrics[f"{pf}::n_steps_total"] = active.sum().item()
                 episode_metrics[f"{pf}::n_steps_while_ungrasping"] = (active[1:] & ungrasping).sum().item()
         return episode_metrics
+
+    def reset(self, env):
+        """
+        Resets this metric with respect to @env
+
+        Args:
+            env (EnvironmentWrapper): Environment being tracked
+        """
+        super().reset(env=env)
+
+        # Reset all robot colors
+        for i, robot in enumerate(env.robots):
+            if self.color_arms and robot.name in self.robot_arm_colors:
+                for arm in robot.arm_names:
+                    if self.robot_arm_colors[robot.name][arm]:
+                        # TODO: Overfit to R1Pro at the moment
+                        # Reset to original color
+                        color = th.tensor([0.8235, 0.8235, 1.0000])
+                        for link in robot.arm_links[arm]:
+                            for vm in link.visual_meshes.values():
+                                vm.material.diffuse_color_constant = color
+
+        self.robot_arm_colors = dict()
 
     @classmethod
     def validate_episode(
