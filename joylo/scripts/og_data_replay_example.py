@@ -144,7 +144,8 @@ def replay_hdf5_file(hdf_input_path):
         metric_kwargs = dict(
             step_dt=1/30,
             vel_threshold=0.001,
-            color_arms=True,
+            color_arms=False,           # For ghost hand
+            default_color=(0.8235, 0.8235, 1.0000),
             head_camera=env.external_sensors[f"external_sensor{len(env.external_sensors) - 1}"],
             head_camera_link_name="torso_link4",
             navigation_window=3.0,
