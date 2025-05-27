@@ -29,6 +29,7 @@ class BaseR1GelloAgent(GelloAgent):
                 "locked": {
                     "upper": False,
                     "lower": False,
+                    "all": False,
                 },
                 "gello_ids": np.arange(motors_per_arm),
                 "locked_wrist_angle": None,
@@ -38,6 +39,7 @@ class BaseR1GelloAgent(GelloAgent):
                 "locked": {
                     "upper": False,
                     "lower": False,
+                    "all": False,
                 },
                 "gello_ids": np.arange(motors_per_arm) + motors_per_arm,
                 "locked_wrist_angle": None,
@@ -216,11 +218,11 @@ class BaseR1GelloAgent(GelloAgent):
         # all other joints' positions to allow for positional offsetting in the final joint (NOTE: this only applies to R1)
         # Feedback case 2: L / R is pressed -- this will lock the final two/three wrist joints of the given arm
         # while freeing all the other joints to allow for easy elbow maneuvering
-        for arm, (lock_upper, lock_lower) in zip(
+        for arm, (lock_all, lock_lower) in zip(
                 ("left", "right"),
                 (
-                    (self.joycon_agent.jc_left.get_button_minus(), self.joycon_agent.jc_left.get_button_l()),
-                    (self.joycon_agent.jc_right.get_button_plus(), self.joycon_agent.jc_right.get_button_r()),
+                    (self.joycon_agent.gripper_info["-"]["status"], self.joycon_agent.jc_left.get_button_l()),
+                    (self.joycon_agent.gripper_info["+"]["status"], self.joycon_agent.jc_right.get_button_r()),
                 ),
         ):
             arm_info = self.arm_info[arm]
@@ -240,16 +242,27 @@ class BaseR1GelloAgent(GelloAgent):
                         operating_modes[arm_info["gello_ids"]] = self.default_operation_modes[arm_info["gello_ids"]]
                         active_operating_mode_idxs = np.concatenate([active_operating_mode_idxs, arm_info["gello_ids"]])
 
-            # Handle upper arm locking
-            operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs = self._handle_upper_arm_locking(
-                arm_info, 
-                lock_upper,
-                wrist_id, 
-                gello_jnts, 
-                operating_modes, 
-                active_operating_mode_idxs, 
+            # Handle entire arm locking
+            operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs = self._handle_all_arm_locking(
+                arm_info,
+                lock_all == -1,
+                wrist_id,
+                gello_jnts,
+                operating_modes,
+                active_operating_mode_idxs,
                 active_commanded_jnt_idxs
             )
+
+            # # Handle upper arm locking
+            # operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs = self._handle_upper_arm_locking(
+            #     arm_info,
+            #     lock_upper,
+            #     wrist_id,
+            #     gello_jnts,
+            #     operating_modes,
+            #     active_operating_mode_idxs,
+            #     active_commanded_jnt_idxs
+            # )
 
             # Handle lower arm locking
             operating_modes, active_operating_mode_idxs, active_commanded_jnt_idxs = self._handle_lower_arm_locking(
@@ -267,7 +280,22 @@ class BaseR1GelloAgent(GelloAgent):
         # Command joints if requested
         if len(active_commanded_jnt_idxs) > 0:
             self._robot.command_joint_state(commanded_jnts[active_commanded_jnt_idxs], idxs=active_commanded_jnt_idxs)
-    
+
+    def _handle_all_arm_locking(
+        self,
+        arm_info,
+        lock_all,
+        wrist_id,
+        gello_jnts,
+        operating_modes,
+        active_operating_mode_idxs,
+        active_commanded_jnt_idxs
+    ):
+        """
+        Handle all arm locking. This is specific to each model and should be implemented by subclasses.
+        """
+        raise NotImplementedError("Subclasses must implement this method")
+
     def _handle_upper_arm_locking(
         self, 
         arm_info, 

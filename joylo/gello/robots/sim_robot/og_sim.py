@@ -390,22 +390,22 @@ class OGRobotServer:
         # If R1, process manually
         state = joint_state.clone()
         if isinstance(self.robot, R1) and not isinstance(self.robot, R1Pro):
-            # [ 6DOF left arm, 6DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home, left arrow, right arrow buttons]
+            # [ 6DOF left arm, 6DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, -, +, X, Y, B, A, home, left arrow, right arrow buttons]
             start_idx = 0
             for component, dim in zip(
-                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_capture", "button_home", "button_left", "button_right"),
-                    (6, 6, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_-", "button_+", "button_x", "button_y", "button_b", "button_a", "button_capture", "button_home", "button_left", "button_right"),
+                    (6, 6, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
             ):
                 if start_idx >= len(state):
                     break
                 self._joint_cmd[component] = state[start_idx: start_idx + dim]
                 start_idx += dim
         elif isinstance(self.robot, R1Pro):
-            # [ 7DOF left arm, 7DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, X, Y, B, A, home, left arrow, right arrow buttons]
+            # [ 7DOF left arm, 7DOF right arm, 3DOF base, 2DOF trunk (z, ry), 2DOF gripper, -, +, X, Y, B, A, home, left arrow, right arrow buttons]
             start_idx = 0
             for component, dim in zip(
-                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_x", "button_y", "button_b", "button_a", "button_capture", "button_home", "button_left", "button_right"),
-                    (7, 7, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
+                    ("left_arm", "right_arm", "base", "trunk", "left_gripper", "right_gripper", "button_-", "button_+", "button_x", "button_y", "button_b", "button_a", "button_capture", "button_home", "button_left", "button_right"),
+                    (7, 7, 3, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1),
             ):
                 if start_idx >= len(state):
                     break
@@ -575,7 +575,7 @@ class OGRobotServer:
         # If Y is toggled from OFF -> ON, rollback to checkpoint
         button_y_state = self._joint_cmd["button_y"].item() != 0.0
         if button_y_state and not self._button_toggled_state["y"]:
-            if self._recording_path is not None:
+            if self._recording_path is not None and len(self.env.checkpoint_states) > 0:
                 # Increment rollback counter -- this means that we will rollback next time "X" is pressed
                 if self._rollback_checkpoint_idx is None:
                     self._rollback_checkpoint_idx = 0
@@ -816,6 +816,8 @@ class OGRobotServer:
                 self._joint_cmd[f"{arm}_gripper"] = th.ones(len(self.robot.gripper_action_idx[arm]))
                 self._joint_cmd["base"] = self._joint_state[self.robot.base_control_idx]
                 self._joint_cmd["trunk"] = th.zeros(2)
+                self._joint_cmd["button_-"] = th.zeros(1)
+                self._joint_cmd["button_+"] = th.zeros(1)
                 self._joint_cmd["button_x"] = th.zeros(1)
                 self._joint_cmd["button_y"] = th.zeros(1)
                 self._joint_cmd["button_b"] = th.zeros(1)

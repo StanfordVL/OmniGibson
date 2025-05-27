@@ -89,11 +89,21 @@ class MotionMetric(EnvMetric):
 
 
 class CollisionMetric(EnvMetric):
-    def __init__(self):
+    def __init__(self, default_color=(0.8235, 0.8235, 1.0000)):
+        """
+        Args:
+            default_color (3-tuple): Default color to assign to the robot's geoms when there's no colored collision
+                active
+        """
         self.checks = dict()
+        self.check_colors = dict()
+        self.color_is_active = dict()
+        self.default_color = th.tensor(default_color)
+        self.active_color = self.default_color
+
         super().__init__()
 
-    def add_check(self, name, check):
+    def add_check(self, name, check, color_robots=None):
         """
         Adds a collision check to this metric, which can be queried by @name
 
@@ -104,8 +114,13 @@ class CollisionMetric(EnvMetric):
                 def check(env: Environment) -> bool
 
                 which should return True if there is collision, else False
+
+            color_robots (None or 3-element tuple): If set, should be the (R,G,B) color to visualize for the entire
+                robots' set of visual geoms when this check is active. Else, will not do any coloring. Note that
+                downstream checks added are prioritized in terms of coloring
         """
         self.checks[name] = check
+        self.check_colors[name] = color_robots
 
     def remove_check(self, name):
         """
@@ -115,11 +130,27 @@ class CollisionMetric(EnvMetric):
             name (str): name of the check to remove
         """
         self.checks.pop(name)
+        self.check_colors.pop(name)
 
     def _compute_step_metrics(self, env, action, obs, reward, terminated, truncated, info):
         step_metrics = dict()
+        active_color = self.default_color
         for name, check in self.checks.items():
-            step_metrics[f"{name}"] = check(env)
+            active = check(env)
+            step_metrics[f"{name}"] = active
+            if active:
+                color = self.check_colors[name]
+                if color is not None:
+                    active_color = color
+        if th.any(active_color != self.active_color).item():
+            # Our color has changed, update accordingly
+            for robot in env.robots:
+                for link in robot.links.values():
+                    for vm in link.visual_meshes.values():
+                        if vm.material is not None:
+                            vm.material.diffuse_color_constant = active_color
+            self.active_color = active_color
+
         return step_metrics
 
     def _compute_episode_metrics(self, env, episode_info):
@@ -130,6 +161,18 @@ class CollisionMetric(EnvMetric):
             episode_metrics[f"{name}::n_collision"] = collisions.sum().item()
 
         return episode_metrics
+
+    def reset(self, env):
+        super().reset(env=env)
+
+        # Reset all robot colors
+        if th.any(self.active_color != self.default_color).item():
+            # Our color has changed, reset to default color
+            for robot in env.robots:
+                for link in robot.links.values():
+                    for vm in link.visual_meshes.values():
+                        vm.material.diffuse_color_constant = self.default_color
+            self.active_color = self.default_color
 
     @classmethod
     def validate_episode(
@@ -182,6 +225,12 @@ class TaskSuccessMetric(EnvMetric):
 
 class GhostHandAppearanceMetric(EnvMetric):
 
+    def __init__(self, color_arms=True):
+        self.color_arms = color_arms
+        self.robot_arm_colors = dict()
+
+        super().__init__()
+
     @classmethod
     def is_compatible(cls, env):
         valid = super().is_compatible(env=env)
@@ -213,6 +262,18 @@ class GhostHandAppearanceMetric(EnvMetric):
                 )).item() > GHOST_APPEAR_THRESHOLD
                 gripper_controller = robot.controllers[f"gripper_{arm}"]
                 step_metrics[f"robot{i}::arm_{arm}::active"] = active
+                if self.color_arms:
+                    if robot.name not in self.robot_arm_colors:
+                        self.robot_arm_colors[robot.name] = {a: False for a in robot.arm_names}
+                    robot_arm_color_is_active = self.robot_arm_colors[robot.name][arm]
+                    if active != robot_arm_color_is_active:
+                        # Update the coloring
+                        # TODO: Overfit to R1Pro at the moment
+                        color = th.tensor([1.0, 0, 0]) if active else th.tensor([0.8235, 0.8235, 1.0000])
+                        for link in robot.arm_links[arm]:
+                            for vm in link.visual_meshes.values():
+                                vm.material.diffuse_color_constant = color
+                        self.robot_arm_colors[robot.name][arm] = active
                 op = operator.lt if gripper_controller._inverted else operator.ge
                 step_metrics[f"robot{i}::arm_{arm}::open_cmd"] = th.all(op(action[gripper_action_idxs[arm]], 0.0)).item()
         return step_metrics
@@ -230,6 +291,29 @@ class GhostHandAppearanceMetric(EnvMetric):
                 episode_metrics[f"{pf}::n_steps_total"] = active.sum().item()
                 episode_metrics[f"{pf}::n_steps_while_ungrasping"] = (active[1:] & ungrasping).sum().item()
         return episode_metrics
+
+    def reset(self, env):
+        """
+        Resets this metric with respect to @env
+
+        Args:
+            env (EnvironmentWrapper): Environment being tracked
+        """
+        super().reset(env=env)
+
+        # Reset all robot colors
+        for i, robot in enumerate(env.robots):
+            if self.color_arms and robot.name in self.robot_arm_colors:
+                for arm in robot.arm_names:
+                    if self.robot_arm_colors[robot.name][arm]:
+                        # TODO: Overfit to R1Pro at the moment
+                        # Reset to original color
+                        color = th.tensor([0.8235, 0.8235, 1.0000])
+                        for link in robot.arm_links[arm]:
+                            for vm in link.visual_meshes.values():
+                                vm.material.diffuse_color_constant = color
+
+        self.robot_arm_colors = dict()
 
     @classmethod
     def validate_episode(
@@ -697,7 +781,7 @@ def check_robot_base_nonarm_nonkinematic_collision(env):
 def create_collision_metric(include_robot_self_collision=True, include_robot_nonarm_nonkinematic_collision=True):
     col_metric = CollisionMetric()
     if include_robot_self_collision:
-        col_metric.add_check(name="robot_self", check=check_robot_self_collision)
+        col_metric.add_check(name="robot_self", check=check_robot_self_collision, color_robots=th.tensor([1.0, 0, 0]))
     if include_robot_nonarm_nonkinematic_collision:
         col_metric.add_check(name="robot_nonarm_nonstructure", check=check_robot_base_nonarm_nonkinematic_collision)
     return col_metric
