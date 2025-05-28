@@ -2,7 +2,6 @@
     (:domain omnigibson)
 
     (:objects
-        rug.n.01_1 - rug.n.01
         floor.n.01_1 - floor.n.01
         scrub_brush.n.01_1 - scrub_brush.n.01
         pool_table.n.01_1 - pool_table.n.01
@@ -11,11 +10,10 @@
     )
     
     (:init 
-        (ontop rug.n.01_1 floor.n.01_1) 
         (ontop scrub_brush.n.01_1 pool_table.n.01_1) 
         (covered pool_table.n.01_1 dust.n.01_1) 
-        (inroom floor.n.01_1 playroom) 
-        (inroom pool_table.n.01_1 playroom) 
+        (inroom floor.n.01_1 living_room) 
+        (ontop pool_table.n.01_1 floor.n.01_1) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        car.n.01_1 - car.n.01
+        car.n.01_1 car.n.01_* - car.n.01
         driveway.n.01_1 - driveway.n.01
         license_plate.n.01_1 - license_plate.n.01
         floor.n.01_1 - floor.n.01
@@ -11,6 +11,7 @@
     
     (:init 
         (inroom car.n.01_1 garden) 
+        (inroom car.n.01_* garden)
         (ontop license_plate.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 garden) 
         (inroom driveway.n.01_1 garden) 
@@ -19,7 +20,10 @@
     
     (:goal 
         (and 
-            (attached ?license_plate.n.01_1 ?car.n.01_1) 
+            (exists
+                (?car.n.01 - car.n.01)
+                (attached ?license_plate.n.01_1 ?car.n.01)
+            )
         )
     )
 )
