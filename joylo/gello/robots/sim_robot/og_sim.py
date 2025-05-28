@@ -44,27 +44,25 @@ class OGRobotServer:
         partial_load: bool = True,
         instance_id: Optional[int] = None,
         ghosting: bool = True,
-    ):
-        # Case 1: Only task name is provided, this is for testing and validation
+    ):      
         if task_name is not None:
-            assert instance_id is None, "Cannot specify both task name and instance id"
-            self.task_name = task_name
-        # Case 2: Only instance id is provided, this is for formal data collection with domain randomization
-        elif instance_id is not None:
-            self.task_name = choose_from_options(options=VALIDATED_TASKS,
-                                                name="task options", 
-                                                random_selection=False)
-        # Case 3: No task or instance specified
-        else:
-            self.task_name = None
-        
-        # Configure task if one was set
-        if self.task_name is not None:
             available_tasks = utils.load_available_tasks()
-            assert self.task_name in available_tasks, f"Task {self.task_name} not found in available tasks"
-            self.task_cfg = available_tasks[self.task_name][0] # TODO: once we have multiple instances, we need to specify this
+            assert task_name in available_tasks, f"Task {task_name} not found in available tasks"
+            self.task_name = task_name
+            self.task_cfg = available_tasks[self.task_name][0] # Regardless of whether we have multiple instances, we always load the seed instance by default; we will handle randomization for different instances during reset
+            # Case 1: Both task name and instance id are provided; this is for formal data collection with domain randomization
+            if instance_id is not None:
+                assert task_name in VALIDATED_TASKS, f"Task {task_name} is not in the list of validated tasks: {VALIDATED_TASKS}"
+                # Initialize instance ID, decrementing by 1 to ensure proper increment during the first reset
+                self.instance_id = (instance_id - 1)
+            # Case 2: Only task name is provided; this is for task validation and testing with the seed instance
+            else:
+                self.instance_id = None
         else:
+            # Case 3: No task or instance specified; this is for testing in an empty environment
+            self.task_name = None
             self.task_cfg = None
+            self.instance_id = None
 
         utils.apply_omnigibson_macros()
         
@@ -94,8 +92,6 @@ class OGRobotServer:
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
-        # Initialize instance ID, decrementing by 1 to ensure proper increment during the first reset
-        self.instance_id = (instance_id - 1) if instance_id is not None else None
         
         # Disable opacity to guarantee all objects are visible
         for obj in self.env.scene.objects:
