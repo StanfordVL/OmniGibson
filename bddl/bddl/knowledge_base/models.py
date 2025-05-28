@@ -177,9 +177,9 @@ class ParticleSystem(Model):
     @cached_property
     def state(self) -> SynsetState:
         # A particle system is ready if it doesn't need particles or if it has any ready particles.
-        if self.synset.is_liquid:
+        if self.synset.is_liquid or (len(self.particles) > 0 and any(particle.ready for particle in self.particles)):
             return SynsetState.MATCHED
-        elif len(self.particles) == 0 or not any(particle.ready for particle in self.particles):
+        elif len(self.particles) == 0:
             return SynsetState.UNMATCHED
         else:
             return SynsetState.PLANNED
