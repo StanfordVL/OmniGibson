@@ -149,7 +149,7 @@ def main(args):
             max_rotation=0.3,
             max_trunk_translate=0.1,
             max_trunk_tilt=0.05,
-            enable_rumble=True,
+            enable_rumble=False,
         )
 
     # Create the appropriate agent based on the robot model

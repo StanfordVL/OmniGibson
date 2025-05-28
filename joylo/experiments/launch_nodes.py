@@ -18,7 +18,6 @@ class Args:
     recording_path: Optional[str] = None
     task_name: Optional[str] = None
     partial_load: Optional[bool] = True
-    batch_id: Optional[int] = None # 0 or 1
     instance_id: Optional[int] = None
 
 
@@ -39,7 +38,6 @@ def launch_robot_server(args: Args):
             recording_path=args.recording_path,
             task_name=args.task_name,
             partial_load=args.partial_load,
-            batch_id=args.batch_id,
             instance_id=args.instance_id,
         )
         server.serve()

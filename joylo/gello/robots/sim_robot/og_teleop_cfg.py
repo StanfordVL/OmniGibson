@@ -35,31 +35,38 @@ TASK_SPECIFIC_EXTRA_ROOMS = {
     }
 }
 
-TOTAL_TASK_INSTANCES = 150
-
-VALIDATED_TASKS = {
-    0: ["picking_up_trash", # difficulty: 2
-        "putting_away_Halloween_decorations", # difficulty: 3
-        "cleaning_up_plates_and_food", # difficulty: 3.5
-        "setting_mousetraps", # difficulty: 2
-        "hiding_Easter_eggs", # difficulty: 2
-        "set_up_a_coffee_station_in_your_kitchen", # difficulty: 3
-        "putting_dishes_away_after_cleaning", # difficulty: 3
-        "preparing_lunch_box", # difficulty: 3
-        "loading_the_car", # difficulty: 3.5
-        "carrying_in_groceries", # difficulty: 3.5
-    ],
-    1: ["turning_on_radio", # difficulty: 1
-        "picking_up_toys", # difficulty: 3.5
-        "can_meat", # difficulty: 3.5
-        "rearranging_kitchen_furniture", # difficulty: 3
-        "putting_up_Christmas_decorations_inside", # difficulty: 2
-        "bringing_in_wood", # difficulty: 1.5
-        "moving_boxes_to_storage", # difficulty: 1.5
-        "bringing_water", # difficulty: 1.5
-        "tidying_bedroom", # difficulty: 2
-        "outfit_a_basic_toolbox", # difficulty: 2
-    ]}
+VALIDATED_TASKS = [
+    "picking_up_trash", # difficulty: 2
+    "putting_away_Halloween_decorations", # difficulty: 3
+    "cleaning_up_plates_and_food", # difficulty: 3.5
+    "setting_mousetraps", # difficulty: 2
+    "hiding_Easter_eggs", # difficulty: 2
+    "set_up_a_coffee_station_in_your_kitchen", # difficulty: 3
+    "putting_dishes_away_after_cleaning", # difficulty: 3
+    "preparing_lunch_box", # difficulty: 3
+    "loading_the_car", # difficulty: 3.5
+    "carrying_in_groceries", # difficulty: 3.5
+    "turning_on_radio", # difficulty: 1
+    "picking_up_toys", # difficulty: 3.5
+    "can_meat", # difficulty: 3.5
+    "rearranging_kitchen_furniture", # difficulty: 3
+    "putting_up_Christmas_decorations_inside", # difficulty: 2
+    "bringing_in_wood", # difficulty: 1.5
+    "moving_boxes_to_storage", # difficulty: 1.5
+    "bringing_water", # difficulty: 1.5
+    "tidying_bedroom", # difficulty: 2
+    "outfit_a_basic_toolbox", # difficulty: 2,
+    "sorting_vegetables",
+    "collecting_childrens_toys",
+    "putting_shoes_on_rack",
+    "boxing_books_up_for_storage",
+    "storing_food",
+    "clearing_food_from_table_into_fridge",
+    "assembling_gift_baskets",
+    "setting_the_table",
+    "getting_organized_for_work",
+    "clean_up_your_desk",
+]
 
 # Viewing mode configuration
 class ViewingMode(str, Enum):
@@ -322,9 +329,15 @@ OBJECT_HIGHLIGHT_SPHERE = {
     "emissive_intensity": 10000.0,
 }
 
-INCLUDE_CONTACT_OBS = False
+INCLUDE_TRUNK_CONTACT_OBS = True
+INCLUDE_BASE_CONTACT_OBS = True
+INCLUDE_ARM_CONTACT_OBS = False
+INCLUDE_FINGER_CONTACT_OBS = False
+
 INCLUDE_JACOBIAN_OBS = False
 GHOST_UPDATE_FREQ = 3
+
+BLINK_WHEN_IN_CONTACT = True 
 
 DISABLED_TRANSITION_RULES = [ToggleableMachineRule, 
                              MixingToolRule, 
