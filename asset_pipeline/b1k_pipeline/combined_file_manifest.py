@@ -3,7 +3,7 @@ import json
 import b1k_pipeline.utils
 
 def main():
-    targets = b1k_pipeline.utils.get_targets("combined_unfiltered")
+    targets = b1k_pipeline.utils.get_targets("combined")
     with b1k_pipeline.utils.PipelineFS() as pipeline_fs:
         combined_file_manifest = {}
 

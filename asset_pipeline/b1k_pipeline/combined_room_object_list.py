@@ -22,7 +22,7 @@ def get_approved_room_types(pipeline_fs):
     return approved
 
 
-def main(use_future=False):
+def main():
     scenes = {}
     skipped_files = []
 
@@ -34,7 +34,7 @@ def main(use_future=False):
         # Get the list of targets
         with pipeline_fs.open("params.yaml", "r") as f:
             params = yaml.load(f, Loader=yaml.SafeLoader)
-            targets = params["scenes_unfiltered"] if use_future else params["scenes"]
+            targets = params["scenes"]
             final_scenes = [x.replace("scenes/", "") for x in params["final_scenes"]]
 
         outgoing_portals = {}
@@ -128,12 +128,7 @@ def main(use_future=False):
             and len(non_contiguous_rooms) == 0
         )
         with pipeline_fs.pipeline_output() as pipeline_output_fs:
-            json_path = (
-                "combined_room_object_list_future.json"
-                if use_future
-                else "combined_room_object_list.json"
-            )
-            with pipeline_output_fs.open(json_path, "w") as f:
+            with pipeline_output_fs.open("combined_room_object_list.json", "w") as f:
                 json.dump(
                     {
                         "success": success,
@@ -151,10 +146,4 @@ def main(use_future=False):
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Produce a list of rooms and objects included in the scenes of the pipeline."
-    )
-    parser.add_argument("--future", action="store_true")
-    args = parser.parse_args()
-
-    main(args.future)
+    main()

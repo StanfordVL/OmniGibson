@@ -159,13 +159,13 @@ def main():
     out_path = os.path.join(os.path.dirname(__file__), OUT_PATH)
     params = {
         "objects": objects,
-        "objects_unfiltered": objects_unfiltered,
+        # "objects_unfiltered": objects_unfiltered,
         "scenes": scenes,
-        "scenes_unfiltered": scenes_unfiltered,
+        # "scenes_unfiltered": scenes_unfiltered,
         "final_scenes": final_scenes,
         "verified_scenes": verified_scenes,
         "combined": combined,
-        "combined_unfiltered": combined_unfiltered,
+        # "combined_unfiltered": combined_unfiltered,
     }
     with open(out_path, "w") as f:
         yaml.dump(params, f)

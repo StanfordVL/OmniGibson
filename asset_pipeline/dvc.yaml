@@ -39,7 +39,7 @@ stages:
       - cad/${item}/processed.max
       outs:
       - cad/${item}/artifacts/check_collisions.json
-    foreach: ${scenes_unfiltered}
+    foreach: ${scenes}
   check_collisions_with_clutter:
     do:
       cmd: python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/check_collisions.py
@@ -49,7 +49,7 @@ stages:
       - cad/${item}/processed.max
       outs:
       - cad/${item}/artifacts/check_collisions_with_clutter.json
-    foreach: ${scenes_unfiltered}
+    foreach: ${scenes}
   collision_average_volumes:
     cmd: python -m b1k_pipeline.collision_average_volumes
     deps:
@@ -414,73 +414,6 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/combined_room_object_list.json
-  combined_room_object_list_future:
-    cmd: python -m b1k_pipeline.combined_room_object_list --future
-    deps:
-    - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-    - cad/scenes/Beechwood_0_int/artifacts/object_list.json
-    - cad/scenes/Beechwood_1_int/artifacts/object_list.json
-    - cad/scenes/Benevolence_0_int/artifacts/object_list.json
-    - cad/scenes/Benevolence_1_int/artifacts/object_list.json
-    - cad/scenes/Benevolence_2_int/artifacts/object_list.json
-    - cad/scenes/Ihlen_0_int/artifacts/object_list.json
-    - cad/scenes/Ihlen_1_int/artifacts/object_list.json
-    - cad/scenes/Merom_0_garden/artifacts/object_list.json
-    - cad/scenes/Merom_0_int/artifacts/object_list.json
-    - cad/scenes/Merom_1_int/artifacts/object_list.json
-    - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
-    - cad/scenes/Pomaria_0_int/artifacts/object_list.json
-    - cad/scenes/Pomaria_1_int/artifacts/object_list.json
-    - cad/scenes/Pomaria_2_int/artifacts/object_list.json
-    - cad/scenes/Rs_garden/artifacts/object_list.json
-    - cad/scenes/Rs_int/artifacts/object_list.json
-    - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-    - cad/scenes/Wainscott_0_int/artifacts/object_list.json
-    - cad/scenes/Wainscott_1_int/artifacts/object_list.json
-    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
-    - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-    - cad/scenes/gates_bedroom/artifacts/object_list.json
-    - cad/scenes/grocery_store_asian/artifacts/object_list.json
-    - cad/scenes/grocery_store_cafe/artifacts/object_list.json
-    - cad/scenes/grocery_store_convenience/artifacts/object_list.json
-    - cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
-    - cad/scenes/hall_arch_wood/artifacts/object_list.json
-    - cad/scenes/hall_conference_large/artifacts/object_list.json
-    - cad/scenes/hall_glass_ceiling/artifacts/object_list.json
-    - cad/scenes/hall_train_station/artifacts/object_list.json
-    - cad/scenes/hotel_gym_spa/artifacts/object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/object_list.json
-    - cad/scenes/hotel_suite_small/artifacts/object_list.json
-    - cad/scenes/house_double_floor_lower/artifacts/object_list.json
-    - cad/scenes/house_double_floor_upper/artifacts/object_list.json
-    - cad/scenes/house_single_floor/artifacts/object_list.json
-    - cad/scenes/office_bike/artifacts/object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/object_list.json
-    - cad/scenes/office_cubicles_right/artifacts/object_list.json
-    - cad/scenes/office_large/artifacts/object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/object_list.json
-    - cad/scenes/public_restroom_blue/artifacts/object_list.json
-    - cad/scenes/public_restroom_brown/artifacts/object_list.json
-    - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
-    - cad/scenes/public_restroom_marble/artifacts/object_list.json
-    - cad/scenes/public_restroom_white/artifacts/object_list.json
-    - cad/scenes/restaurant_asian/artifacts/object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/object_list.json
-    - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
-    - cad/scenes/restaurant_diner/artifacts/object_list.json
-    - cad/scenes/restaurant_hotel/artifacts/object_list.json
-    - cad/scenes/restaurant_urban/artifacts/object_list.json
-    - cad/scenes/school_biology/artifacts/object_list.json
-    - cad/scenes/school_chemistry/artifacts/object_list.json
-    - cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
-    - cad/scenes/school_geography/artifacts/object_list.json
-    - cad/scenes/school_gym/artifacts/object_list.json
-    - artifacts/pipeline/object_list.success
-    - b1k_pipeline/combined_room_object_list.py
-    - metadata/allowed_room_types.csv
-    - params.yaml
-    outs:
-    - artifacts/pipeline/combined_room_object_list_future.json
   export_meshes:
     do:
       cmd: python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/export_meshes.py
@@ -941,7 +874,7 @@ stages:
       outs:
       - cad/${item}/artifacts/file_manifest.json
       - cad/${item}/artifacts/file_manifest_deep.json
-    foreach: ${combined_unfiltered}
+    foreach: ${combined}
   generate_systems:
     cmd: python -m b1k_pipeline.generate_systems
     deps:
@@ -1059,106 +992,6 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/object_inventory.json
-  object_inventory_future:
-    cmd: python -m b1k_pipeline.object_inventory --future
-    deps:
-    - cad/objects/batch-00/artifacts/object_list.json
-    - cad/objects/batch-01/artifacts/object_list.json
-    - cad/objects/batch-02/artifacts/object_list.json
-    - cad/objects/batch-03/artifacts/object_list.json
-    - cad/objects/batch-04/artifacts/object_list.json
-    - cad/objects/batch-05/artifacts/object_list.json
-    - cad/objects/batch-06/artifacts/object_list.json
-    - cad/objects/batch-07/artifacts/object_list.json
-    - cad/objects/batch-08/artifacts/object_list.json
-    - cad/objects/batch-09/artifacts/object_list.json
-    - cad/objects/batch-10/artifacts/object_list.json
-    - cad/objects/batch-11/artifacts/object_list.json
-    - cad/objects/batch-12/artifacts/object_list.json
-    - cad/objects/batch-13/artifacts/object_list.json
-    - cad/objects/custom-aa/artifacts/object_list.json
-    - cad/objects/legacy_batch-00/artifacts/object_list.json
-    - cad/objects/legacy_batch-01/artifacts/object_list.json
-    - cad/objects/legacy_batch-02/artifacts/object_list.json
-    - cad/objects/legacy_batch-03/artifacts/object_list.json
-    - cad/objects/legacy_batch-04/artifacts/object_list.json
-    - cad/objects/legacy_batch-05/artifacts/object_list.json
-    - cad/objects/legacy_batch-06/artifacts/object_list.json
-    - cad/objects/legacy_batch-07/artifacts/object_list.json
-    - cad/objects/legacy_batch-08/artifacts/object_list.json
-    - cad/objects/legacy_batch-09/artifacts/object_list.json
-    - cad/objects/legacy_batch-10/artifacts/object_list.json
-    - cad/objects/legacy_batch-11/artifacts/object_list.json
-    - cad/objects/legacy_batch-12/artifacts/object_list.json
-    - cad/objects/procedural-aa/artifacts/object_list.json
-    - cad/objects/school_objects-aa/artifacts/object_list.json
-    - cad/objects/substances-01/artifacts/object_list.json
-    - cad/objects/substances-02/artifacts/object_list.json
-    - cad/objects/task_relavant-ab/artifacts/object_list.json
-    - cad/objects/task_relevant-xy/artifacts/object_list.json
-    - cad/scenes/Beechwood_0_garden/artifacts/object_list.json
-    - cad/scenes/Beechwood_0_int/artifacts/object_list.json
-    - cad/scenes/Beechwood_1_int/artifacts/object_list.json
-    - cad/scenes/Benevolence_0_int/artifacts/object_list.json
-    - cad/scenes/Benevolence_1_int/artifacts/object_list.json
-    - cad/scenes/Benevolence_2_int/artifacts/object_list.json
-    - cad/scenes/Ihlen_0_int/artifacts/object_list.json
-    - cad/scenes/Ihlen_1_int/artifacts/object_list.json
-    - cad/scenes/Merom_0_garden/artifacts/object_list.json
-    - cad/scenes/Merom_0_int/artifacts/object_list.json
-    - cad/scenes/Merom_1_int/artifacts/object_list.json
-    - cad/scenes/Pomaria_0_garden/artifacts/object_list.json
-    - cad/scenes/Pomaria_0_int/artifacts/object_list.json
-    - cad/scenes/Pomaria_1_int/artifacts/object_list.json
-    - cad/scenes/Pomaria_2_int/artifacts/object_list.json
-    - cad/scenes/Rs_garden/artifacts/object_list.json
-    - cad/scenes/Rs_int/artifacts/object_list.json
-    - cad/scenes/Wainscott_0_garden/artifacts/object_list.json
-    - cad/scenes/Wainscott_0_int/artifacts/object_list.json
-    - cad/scenes/Wainscott_1_int/artifacts/object_list.json
-    - cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/object_list.json
-    - cad/scenes/commercial_kitchen_pans/artifacts/object_list.json
-    - cad/scenes/gates_bedroom/artifacts/object_list.json
-    - cad/scenes/grocery_store_asian/artifacts/object_list.json
-    - cad/scenes/grocery_store_cafe/artifacts/object_list.json
-    - cad/scenes/grocery_store_convenience/artifacts/object_list.json
-    - cad/scenes/grocery_store_half_stocked/artifacts/object_list.json
-    - cad/scenes/hall_arch_wood/artifacts/object_list.json
-    - cad/scenes/hall_conference_large/artifacts/object_list.json
-    - cad/scenes/hall_glass_ceiling/artifacts/object_list.json
-    - cad/scenes/hall_train_station/artifacts/object_list.json
-    - cad/scenes/hotel_gym_spa/artifacts/object_list.json
-    - cad/scenes/hotel_suite_large/artifacts/object_list.json
-    - cad/scenes/hotel_suite_small/artifacts/object_list.json
-    - cad/scenes/house_double_floor_lower/artifacts/object_list.json
-    - cad/scenes/house_double_floor_upper/artifacts/object_list.json
-    - cad/scenes/house_single_floor/artifacts/object_list.json
-    - cad/scenes/office_bike/artifacts/object_list.json
-    - cad/scenes/office_cubicles_left/artifacts/object_list.json
-    - cad/scenes/office_cubicles_right/artifacts/object_list.json
-    - cad/scenes/office_large/artifacts/object_list.json
-    - cad/scenes/office_vendor_machine/artifacts/object_list.json
-    - cad/scenes/public_restroom_blue/artifacts/object_list.json
-    - cad/scenes/public_restroom_brown/artifacts/object_list.json
-    - cad/scenes/public_restroom_futuristic/artifacts/object_list.json
-    - cad/scenes/public_restroom_marble/artifacts/object_list.json
-    - cad/scenes/public_restroom_white/artifacts/object_list.json
-    - cad/scenes/restaurant_asian/artifacts/object_list.json
-    - cad/scenes/restaurant_brunch/artifacts/object_list.json
-    - cad/scenes/restaurant_cafeteria/artifacts/object_list.json
-    - cad/scenes/restaurant_diner/artifacts/object_list.json
-    - cad/scenes/restaurant_hotel/artifacts/object_list.json
-    - cad/scenes/restaurant_urban/artifacts/object_list.json
-    - cad/scenes/school_biology/artifacts/object_list.json
-    - cad/scenes/school_chemistry/artifacts/object_list.json
-    - cad/scenes/school_computer_lab_and_infirmary/artifacts/object_list.json
-    - cad/scenes/school_geography/artifacts/object_list.json
-    - cad/scenes/school_gym/artifacts/object_list.json
-    - artifacts/pipeline/object_list.success
-    - b1k_pipeline/object_inventory.py
-    - params.yaml
-    outs:
-    - artifacts/pipeline/object_inventory_future.json
   object_inventory_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/object_inventory.json
       artifacts/pipeline/object_inventory.success
@@ -1175,7 +1008,7 @@ stages:
       - cad/${item}/processed.max
       outs:
       - cad/${item}/artifacts/object_list.json
-    foreach: ${combined_unfiltered}
+    foreach: ${combined}
   object_list_success:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/object_list.json
       artifacts/pipeline/object_list.success
@@ -1316,7 +1149,7 @@ stages:
       - artifacts/pipeline/object_list.success
       outs:
       - cad/${item}/artifacts/sanitycheck.json
-    foreach: ${combined_unfiltered}
+    foreach: ${combined}
   sanitycheck_success:
     cmd: python -m b1k_pipeline.check_success_aggregate artifacts/sanitycheck.json
       artifacts/pipeline/sanitycheck.success

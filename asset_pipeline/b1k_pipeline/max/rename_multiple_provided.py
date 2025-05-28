@@ -11,7 +11,7 @@ import string
 import pymxs
 rt = pymxs.runtime
 
-objs_inv_path = PIPELINE_ROOT / "artifacts/pipeline/object_inventory_future.json"
+objs_inv_path = PIPELINE_ROOT / "artifacts/pipeline/object_inventoty.json"
 current_file = rt.maxFilePath.split("cad", 1)[1][1:-1]
 current_file = current_file.replace('\\', '/')
 
