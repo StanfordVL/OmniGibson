@@ -17138,6 +17138,13 @@
         "disinfectable": {},
         "dustyable": {},
         "grassyable": {},
+        "heatSource": {
+            "requires_toggled_on": 1.0,
+            "requires_closed": 0.0,
+            "requires_inside": 0.0,
+            "temperature": 1000.0,
+            "heating_rate": 0.1
+        },
         "moldyable": {},
         "nonSubstance": {},
         "rigidBody": {},
