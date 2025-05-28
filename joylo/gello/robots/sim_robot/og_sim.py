@@ -42,22 +42,19 @@ class OGRobotServer:
         recording_path: Optional[str] = None,
         task_name: Optional[str] = None,
         partial_load: bool = True,
-        batch_id: Optional[int] = None, # 0 or 1
         instance_id: Optional[int] = None,
         ghosting: bool = True,
     ):
-        # Case 1: Direct task name provided
+        # Case 1: Only task name is provided, this is for testing and validation
         if task_name is not None:
-            assert batch_id is None, "Cannot specify both task name and batch id"
+            assert instance_id is None, "Cannot specify both task name and instance id"
             self.task_name = task_name
-        # Case 2: Batch ID provided
-        elif batch_id is not None:
-            assert batch_id in [0, 1], f"Got invalid batch id: {batch_id}. Must be 0 or 1"
-            assert instance_id is not None, "Have to specify both batch id and instance id"
-            self.task_name = choose_from_options(options=VALIDATED_TASKS[batch_id],
+        # Case 2: Only instance id is provided, this is for formal data collection with domain randomization
+        elif instance_id is not None:
+            self.task_name = choose_from_options(options=VALIDATED_TASKS,
                                                 name="task options", 
                                                 random_selection=False)
-        # Case 3: No task specified
+        # Case 3: No task or instance specified
         else:
             self.task_name = None
         
