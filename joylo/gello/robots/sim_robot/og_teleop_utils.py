@@ -330,6 +330,90 @@ def setup_cameras(robot, external_sensors, resolution):
         
     return camera_paths, viewports
 
+def setup_camera_blinking_visualizers(camera_paths, scene):
+    """
+    Set up blinking visualizers for cameras
+    
+    Args:
+        camera_paths (list): List of camera paths
+        scene: Scene object
+        
+    Returns:
+        dict: Dictionary of camera blinking visualizers
+    """
+    vis_elements = {}
+    
+    if BLINK_WHEN_IN_CONTACT:
+        for cam_path in camera_paths:
+            # Create material for blinking visualizer
+            mat_prim_path = f"{cam_path}/Looks/blink_vis_mat"
+            mat = MaterialPrim(
+                relative_prim_path=absolute_prim_path_to_scene_relative(scene, mat_prim_path),
+                name=f"{cam_path}:blink_vis_mat",
+            )
+            mat.load(scene)
+            mat.diffuse_color_constant = th.tensor([1.0, 0.0, 0.0])  # Red color
+            
+            # Create visual sphere for blinking effect
+            vis_prim_path = f"{cam_path}/blink_vis_sphere"
+            vis_prim = create_primitive_mesh(
+                vis_prim_path,
+                "Cube",
+                extents=[2.0, 1.0, 0.01]
+            )
+            vis_geom = VisualGeomPrim(
+                relative_prim_path=absolute_prim_path_to_scene_relative(scene, vis_prim_path),
+                name=f"{cam_path}:blink_vis_sphere"
+            )
+            vis_geom.load(scene)
+            
+            # Attach the material to this prim
+            vis_geom.material = mat
+            vis_geom.set_position_orientation(
+                position=th.tensor([0, 0.65, -0.2]), 
+                orientation=th.tensor([0, 0, 0, 1.0]), 
+                frame="parent"
+            )
+            
+            vis_elements[cam_path] = vis_geom
+            vis_geom.visible = False  # Initially hidden
+    
+    return vis_elements
+
+def update_camera_blinking_visualizers(visualizers, active_camera_path, obs, blink_frequency):
+    """
+    Update camera blinking visualizers based on contact status
+    
+    Args:
+        active_visualizer: The visual geometry primitive for the active camera
+        obs: Observation dictionary containing contact information
+        blink_frequency (float): Frequency of blinking in Hz
+    """
+    if not BLINK_WHEN_IN_CONTACT:
+        return
+    
+    # Check if robot is in contact
+    in_contact = obs.get("trunk_contact", False) or obs.get("base_contact", False)
+    
+    if in_contact:
+        # Calculate blinking based on time
+        current_time = time.time()
+        blink_period = 1.0 / blink_frequency  # Time for one complete blink cycle
+        
+        # Use sine wave for smooth blinking
+        blink_phase = (current_time % blink_period) / blink_period * 2 * np.pi
+        visibility = (np.sin(blink_phase) + 1) / 2  # Normalize to 0-1
+        for path, vis in visualizers.items():
+            if path == active_camera_path:
+                # Only update the active camera's visualizer
+                vis.visible = visibility > 0.5
+            else:
+                vis.visible = False  # Hide other visualizers
+    else:
+        # Not in contact - hide the visualizer
+        for vis in visualizers.values():
+            vis.visible = False
+
 
 def setup_robot_visualizers(robot, scene):
     """

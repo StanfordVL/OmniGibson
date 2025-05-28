@@ -44,27 +44,25 @@ class OGRobotServer:
         partial_load: bool = True,
         instance_id: Optional[int] = None,
         ghosting: bool = True,
-    ):
-        # Case 1: Only task name is provided, this is for testing and validation
+    ):      
         if task_name is not None:
-            assert instance_id is None, "Cannot specify both task name and instance id"
-            self.task_name = task_name
-        # Case 2: Only instance id is provided, this is for formal data collection with domain randomization
-        elif instance_id is not None:
-            self.task_name = choose_from_options(options=VALIDATED_TASKS,
-                                                name="task options", 
-                                                random_selection=False)
-        # Case 3: No task or instance specified
-        else:
-            self.task_name = None
-        
-        # Configure task if one was set
-        if self.task_name is not None:
             available_tasks = utils.load_available_tasks()
-            assert self.task_name in available_tasks, f"Task {self.task_name} not found in available tasks"
-            self.task_cfg = available_tasks[self.task_name][0] # TODO: once we have multiple instances, we need to specify this
+            assert task_name in available_tasks, f"Task {task_name} not found in available tasks"
+            self.task_name = task_name
+            self.task_cfg = available_tasks[self.task_name][0] # Regardless of whether we have multiple instances, we always load the seed instance by default; we will handle randomization for different instances during reset
+            # Case 1: Both task name and instance id are provided; this is for formal data collection with domain randomization
+            if instance_id is not None:
+                assert task_name in VALIDATED_TASKS, f"Task {task_name} is not in the list of validated tasks: {VALIDATED_TASKS}"
+                # Initialize instance ID, decrementing by 1 to ensure proper increment during the first reset
+                self.instance_id = (instance_id - 1)
+            # Case 2: Only task name is provided; this is for task validation and testing with the seed instance
+            else:
+                self.instance_id = None
         else:
+            # Case 3: No task or instance specified; this is for testing in an empty environment
+            self.task_name = None
             self.task_cfg = None
+            self.instance_id = None
 
         utils.apply_omnigibson_macros()
         
@@ -94,8 +92,6 @@ class OGRobotServer:
 
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
-        # Initialize instance ID, decrementing by 1 to ensure proper increment during the first reset
-        self.instance_id = (instance_id - 1) if instance_id is not None else None
         
         # Disable opacity to guarantee all objects are visible
         for obj in self.env.scene.objects:
@@ -138,6 +134,7 @@ class OGRobotServer:
         self._should_update_checkpoint = False
         self._rollback_checkpoint_idx = None
         self._grasp_action = {arm: 1 for arm in self.robot.arm_names}
+        self._blink_frequency = 1.0 # Hz
 
         # Recording configuration
         self._recording_path = recording_path
@@ -264,6 +261,12 @@ class OGRobotServer:
             RESOLUTION
         )
         self.active_camera_id = 0
+        
+        # Setup camera blinking visualizers
+        self.camera_blinking_visualizers = utils.setup_camera_blinking_visualizers(
+            self.camera_paths, 
+            self.env.scene
+        )
 
         # Setup visualizers
         self.vis_elements = utils.setup_robot_visualizers(self.robot, self.env.scene)
@@ -433,13 +436,13 @@ class OGRobotServer:
         # Loop over all arms and grab relevant joint info
         joint_pos = self.robot.get_joint_positions()
         joint_vel = self.robot.get_joint_velocities()
-        finger_impulses = GripperRigidContactAPI.get_all_impulses(self.env.scene.idx) if INCLUDE_CONTACT_OBS else None
+        finger_impulses = GripperRigidContactAPI.get_all_impulses(self.env.scene.idx) if INCLUDE_FINGER_CONTACT_OBS else None
 
         obs = dict()
         obs["active_arm"] = self.active_arm
         obs["in_cooldown"] = self._in_cooldown
-        obs["base_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.non_floor_touching_base_links) if INCLUDE_CONTACT_OBS else False
-        obs["trunk_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.trunk_links) if INCLUDE_CONTACT_OBS else False
+        obs["base_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.non_floor_touching_base_links) if INCLUDE_BASE_CONTACT_OBS else False
+        obs["trunk_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.trunk_links) if INCLUDE_TRUNK_CONTACT_OBS else False
         obs["reset_joints"] = bool(self._joint_cmd["button_y"][0].item())
         obs["waiting_to_resume"] = self._waiting_to_resume
 
@@ -453,8 +456,8 @@ class OGRobotServer:
             obs[f"arm_{arm}_gripper_positions"] = joint_pos[self.robot.gripper_control_idx[arm]]
             obs[f"arm_{arm}_ee_pos_quat"] = th.concatenate(self.robot.eef_links[arm].get_position_orientation())
             # When using VR, this expansive check makes the view glitch
-            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if VIEWING_MODE != ViewingMode.VR and INCLUDE_CONTACT_OBS else False
-            obs[f"arm_{arm}_finger_max_contact"] = th.max(th.sum(th.square(finger_impulses[:, 2*i:2*(i+1), :]), dim=-1)).item() if INCLUDE_CONTACT_OBS else 0.0
+            obs[f"arm_{arm}_contact"] = any(len(link.contact_list()) > 0 for link in self.robot.arm_links[arm]) if VIEWING_MODE != ViewingMode.VR and INCLUDE_ARM_CONTACT_OBS else False
+            obs[f"arm_{arm}_finger_max_contact"] = th.max(th.sum(th.square(finger_impulses[:, 2*i:2*(i+1), :]), dim=-1)).item() if INCLUDE_FINGER_CONTACT_OBS else 0.0
 
             obs[f"{arm}_gripper"] = self._joint_cmd[f"{arm}_gripper"].item()
 
@@ -677,6 +680,13 @@ class OGRobotServer:
             self.reachability_visualizers,
             self._joint_cmd,
             self._prev_base_motion
+        )
+        
+        utils.update_camera_blinking_visualizers(
+            self.camera_blinking_visualizers,
+            self.camera_paths[self.active_camera_id],
+            self.obs,
+            self._blink_frequency,
         )
         
         # Update checkpoint if needed
