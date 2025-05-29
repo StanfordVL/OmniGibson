@@ -29,6 +29,7 @@ ALL_SHEETS = [
   (SYNSET_PARAMS_SHEET_KEY, "diceable", "prop_param_annots/diceable.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "sliceable", "prop_param_annots/sliceable.csv"),
   (SYNSET_PARAMS_SHEET_KEY, "meltable", "prop_param_annots/meltable.csv"),
+  (SYNSET_PARAMS_SHEET_KEY, "toggleable", "prop_param_annots/toggleable.csv"),
   (EXPLICIT_TRANSITION_RULES_SHEET_KEY, "heat_cook", "transition_map/tm_raw_data/heat_cook.csv"),
   (EXPLICIT_TRANSITION_RULES_SHEET_KEY, "mixing_stick", "transition_map/tm_raw_data/mixing_stick.csv"),
   (EXPLICIT_TRANSITION_RULES_SHEET_KEY, "single_toggleable_machine", "transition_map/tm_raw_data/single_toggleable_machine.csv"),
