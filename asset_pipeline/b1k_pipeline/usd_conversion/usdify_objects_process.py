@@ -63,7 +63,7 @@ if __name__ == "__main__":
         )
         print("Done importing metadata")
 
-        obj_synset = ot.get_synset_from_category(obj_category)
+        obj_synset = ot.get_synset_from_category_or_substance(obj_category)
         assert obj_synset is not None, f"Could not find synset for category {obj_category}"
         if "cloth" in ot.get_abilities(obj_synset):
             og.clear(**clear_kwargs)

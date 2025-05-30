@@ -68,7 +68,7 @@ LOG_TEXTURE_RANGE = (4, 11)
 
 
 def get_required_meta_links(object_taxonomy, category):
-    synset = object_taxonomy.get_synset_from_category(category)
+    synset = object_taxonomy.get_synset_from_category_or_substance(category)
     if synset is None:
         raise ValueError(f"Category {category} not found in taxonomy.")
     return object_taxonomy.get_required_meta_links_for_synset(synset)
