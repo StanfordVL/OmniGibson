@@ -37,7 +37,7 @@ def main():
                     if has_system == "true":
                         continue
 
-                    cat_id = i  # Temporarily just use row idx. TODO: Cover everything
+                    cat_id = int(row["ID"].strip())
                     category = row["category"].strip()
                     categories_by_id[cat_id] = category
 
