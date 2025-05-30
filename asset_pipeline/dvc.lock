@@ -8522,8 +8522,8 @@ stages:
       size: 0
     - path: b1k_pipeline/export_objs_global.py
       hash: md5
-      md5: a967cbf5e9bd3689383dfe719e378196
-      size: 39122
+      md5: 1c71aca0a78b9d71a367abb0b0a6f928
+      size: 39140
     - path: b1k_pipeline/mesh_tree.py
       hash: md5
       md5: c01a25201232fad5307f53d73a0fbee7
@@ -9266,13 +9266,13 @@ stages:
       size: 456741
     - path: metadata/object_renames.csv
       hash: md5
-      md5: 3b8b55ae80612a5032ad7bd6471d985b
-      size: 142755
+      md5: 90539cd46df64bda97c6de7834176bde
+      size: 142813
     outs:
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: 99cd52eeabae618fd7f0ef30766458a9
-      size: 26746281441
+      md5: 1bddef858c6a71bcaf86a63be3ea13cd
+      size: 2144337
     - path: artifacts/pipeline/export_objs.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
@@ -9282,8 +9282,8 @@ stages:
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 189db49bb43956aac68646fce5636270
-      size: 558703
+      md5: f773084b0ce9e433ffce98552209f1d1
+      size: 558715
     - path: artifacts/pipeline/collision_average_volumes.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -9298,16 +9298,16 @@ stages:
       size: 0
     - path: b1k_pipeline/aggregate_metadata.py
       hash: md5
-      md5: f0eba335ce7c3228a6800985d888418e
-      size: 6253
+      md5: 77613e8a3ac659abcb2aabe8dc21f600
+      size: 6218
     - path: metadata/allowed_room_types.csv
       hash: md5
       md5: a2cc4b8459c061f843bf130a5c267346
       size: 454
     - path: metadata/category_mapping.csv
       hash: md5
-      md5: c2d77a7aaffa8beb47271df8ef8966b7
-      size: 191710
+      md5: cc8ec2a4bffdb02552523c4b07742760
+      size: 191750
     - path: metadata/non_sampleable_categories.csv
       hash: md5
       md5: 58187b59a613fbb183d0f6b63b42a32b
@@ -9315,8 +9315,8 @@ stages:
     outs:
     - path: artifacts/parallels/metadata.zip
       hash: md5
-      md5: 9635a77ca0c2879ad2fd50c200c86ebe
-      size: 67221
+      md5: 3876973fe8665b0c59f9a99a8f38eedc
+      size: 67303
     - path: artifacts/pipeline/aggregate_metadata.json
       hash: md5
       md5: 3f6059a52842bd4b8d8ea19a40456a8e
@@ -9341,14 +9341,10 @@ stages:
   usdify_objects:
     cmd: python -m b1k_pipeline.usd_conversion.usdify_objects
     deps:
-    - path: artifacts/parallels/metadata.zip
-      hash: md5
-      md5: b9a588f5d570dbd7dbb3cc6758cfc436
-      size: 66978
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: 99cd52eeabae618fd7f0ef30766458a9
-      size: 26746281441
+      md5: 1bddef858c6a71bcaf86a63be3ea13cd
+      size: 2144337
     - path: artifacts/pipeline/export_objs.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -9359,13 +9355,13 @@ stages:
       size: 6587
     - path: b1k_pipeline/usd_conversion/usdify_objects_process.py
       hash: md5
-      md5: 34854cadc7be0b3310856fd832a75e6f
-      size: 4949
+      md5: 52a36426801a521b00848f8d9dfa95f2
+      size: 4962
     outs:
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: 7b8359af61675cb1c9c68338e870a36a
-      size: 4805817911
+      md5: 47ca468d1304b3a0b91e2d6555cb37ff
+      size: 799794
     - path: artifacts/pipeline/usdify_objects.json
       hash: md5
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
@@ -10532,16 +10528,16 @@ stages:
     deps:
     - path: artifacts/parallels/metadata.zip
       hash: md5
-      md5: 9635a77ca0c2879ad2fd50c200c86ebe
-      size: 67221
+      md5: 3876973fe8665b0c59f9a99a8f38eedc
+      size: 67303
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: 7b8359af61675cb1c9c68338e870a36a
-      size: 4805817911
+      md5: 47ca468d1304b3a0b91e2d6555cb37ff
+      size: 799794
     - path: artifacts/parallels/scenes.zip
       hash: md5
-      md5: 9e55587c96ef60ea13150d06900785ac
-      size: 774932
+      md5: 80f800b1a9f464e274e94b0bc122ade4
+      size: 148
     - path: artifacts/pipeline/aggregate_metadata.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -10569,8 +10565,8 @@ stages:
     outs:
     - path: artifacts/parallels/scenes_json.zip
       hash: md5
-      md5: db9993212155bd70f503e56922ac465f
-      size: 4947846
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
     - path: artifacts/pipeline/usdify_scenes.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
@@ -12470,16 +12466,16 @@ stages:
     outs:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 189db49bb43956aac68646fce5636270
-      size: 558703
+      md5: f773084b0ce9e433ffce98552209f1d1
+      size: 558715
   collision_average_volumes_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_average_volumes.json
       artifacts/pipeline/collision_average_volumes.success
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 189db49bb43956aac68646fce5636270
-      size: 558703
+      md5: f773084b0ce9e433ffce98552209f1d1
+      size: 558715
     - path: b1k_pipeline/check_success.py
       hash: md5
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
@@ -14222,21 +14218,21 @@ stages:
     deps:
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: 7b8359af61675cb1c9c68338e870a36a
-      size: 4805817911
+      md5: 47ca468d1304b3a0b91e2d6555cb37ff
+      size: 799794
     - path: artifacts/pipeline/usdify_objects.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: metadata/substance_hyperparams.csv
       hash: md5
-      md5: bc23551870652ffe1e6badf50739c04b
-      size: 187585
+      md5: 06372e1e41620e2b20e2b34212b87341
+      size: 189583
     outs:
     - path: artifacts/parallels/systems.zip
       hash: md5
-      md5: fbb7f057f8d0378e07c910c591502cee
-      size: 102089394
+      md5: 7cba1a6996f495c31a22c4ab48b47a87
+      size: 440349
     - path: artifacts/pipeline/generate_systems.json
       hash: md5
       md5: 5b64e8b89092b2e3dfd448b10700627f
@@ -14513,12 +14509,12 @@ stages:
       size: 0
     - path: b1k_pipeline/export_objs_global.py
       hash: md5
-      md5: a967cbf5e9bd3689383dfe719e378196
-      size: 39122
+      md5: 1c71aca0a78b9d71a367abb0b0a6f928
+      size: 39140
     - path: b1k_pipeline/export_scenes_global.py
       hash: md5
-      md5: 794c4f362bad29f8ee25f549aa0dc29f
-      size: 15391
+      md5: ce84adf50f6d478b7eb3348a73500694
+      size: 15398
     - path: b1k_pipeline/mesh_tree.py
       hash: md5
       md5: c01a25201232fad5307f53d73a0fbee7
@@ -14994,8 +14990,8 @@ stages:
     outs:
     - path: artifacts/parallels/scenes.zip
       hash: md5
-      md5: 9e55587c96ef60ea13150d06900785ac
-      size: 774932
+      md5: 80f800b1a9f464e274e94b0bc122ade4
+      size: 148
     - path: artifacts/pipeline/export_scenes.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
