@@ -54,7 +54,7 @@ def main():
     # Assign a new ID to the complaint
     this_id = next_id
     next_id += 1
-    complaints_by_file[c.file].append({
+    complaints_by_file[c["file"]].append({
       "id": this_id,
       "object": c["object"],
       "type": c["type"],
