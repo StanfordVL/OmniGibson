@@ -357,8 +357,8 @@ class SanityCheck:
             if substance_synset is not None:
                 # Check that this file is one of the substances files
                 self.expect(
-                    pathlib.Path(rt.maxFilePath).resolve().parts[-1] == "substances-00",
-                    f"{row.object_name} is a substance particle but not in the substances-00 file.",
+                    pathlib.Path(rt.maxFilePath).resolve().parts[-1] == "substances-01",
+                    f"{row.object_name} is a substance particle but not in the substances-01 file.",
                 )
 
             # Check that each object zeroth instance object actually has a collision mesh
