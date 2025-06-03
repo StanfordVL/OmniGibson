@@ -50,7 +50,7 @@ def main():
   # If there are any new complaints (these would have no ID), assign them IDs, add them to the complaint dicts, and update the sheet
   new_complaints = df[df["id"].isna()]
   indices_to_ids = {}
-  for _, c in new_complaints.iterrows():
+  for index, c in new_complaints.iterrows():
     # Assign a new ID to the complaint
     this_id = next_id
     next_id += 1
@@ -62,7 +62,7 @@ def main():
       "complaint": c["complaint"],
       "additional_info": c["additional_info"],
     })
-    indices_to_ids[c.index] = this_id
+    indices_to_ids[index] = this_id
 
   # Update the complaints sheet with the new IDs
   for i, this_id in indices_to_ids.items():
