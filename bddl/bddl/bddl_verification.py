@@ -49,6 +49,7 @@ VALID_ATTACHMENTS = set([
     ("dartboard.n.01", "wall_nail.n.01"),
     ("desk_bracket.n.01", "desk_top.n.01"),
     ("desk_leg.n.01", "desk_bracket.n.01"),
+    ("digital_camera.n.01", "camera_tripod.n.01"),
     ("dip.n.07", "candlestick.n.01"),
     ("fire_alarm.n.02", "wall_nail.n.01"),
     ("gummed_label.n.01", "license_plate.n.01"),
