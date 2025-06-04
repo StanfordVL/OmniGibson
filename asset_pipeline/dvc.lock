@@ -5849,13 +5849,13 @@ stages:
       size: 17928
     - path: cad/objects/legacy_batch-04/processed.max
       hash: md5
-      md5: 820d02f582317a53a2a9f0c46e3ba2cd
-      size: 164861098
+      md5: 68e94dbb962bb61a3b2a560bedc0ace2
+      size: 164791216
     outs:
     - path: cad/objects/legacy_batch-04/artifacts/object_list.json
       hash: md5
-      md5: e413577512d8bd402dd825f455329e3b
-      size: 210298
+      md5: a26ec30bf63094be2a7cded4ed22beb6
+      size: 209163
   export_meshes@objects/legacy_batch-04:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/legacy_batch-04/processed.max
       b1k_pipeline/max/export_meshes.py
@@ -6580,13 +6580,13 @@ stages:
       size: 17928
     - path: cad/objects/batch-09/processed.max
       hash: md5
-      md5: 62485222dd43160c9b57a5097268f833
-      size: 141738024
+      md5: 046a9bdab3585c5d550b38fa3216e7a3
+      size: 140764006
     outs:
     - path: cad/objects/batch-09/artifacts/object_list.json
       hash: md5
-      md5: 783859c46aa3f42125a7caeca397f276
-      size: 169928
+      md5: d8c4f044707086e7e4c0b8120d84eb28
+      size: 168837
   object_list@objects/batch-10:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-10/processed.max b1k_pipeline/max/object_list.py
     deps:
@@ -6612,13 +6612,13 @@ stages:
       size: 17928
     - path: cad/objects/batch-11/processed.max
       hash: md5
-      md5: 9797c74c3ba135048d9a24a544c3be61
-      size: 178001564
+      md5: 053edd4ed90b8ae6a8440aa028c2f0cb
+      size: 177874816
     outs:
     - path: cad/objects/batch-11/artifacts/object_list.json
       hash: md5
-      md5: 5da23bba69246423b61a6420746ed61b
-      size: 149021
+      md5: 362e7b8091c92420a5ff50bc625ef441
+      size: 147803
   object_list@objects/batch-12:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-12/processed.max b1k_pipeline/max/object_list.py
     deps:
@@ -6628,13 +6628,13 @@ stages:
       size: 17928
     - path: cad/objects/batch-12/processed.max
       hash: md5
-      md5: 9e251084363e210b5b7eea7b704dbb56
-      size: 147232698
+      md5: 0fa0bac161c9aa87b4ea9431d7b10eb9
+      size: 146709720
     outs:
     - path: cad/objects/batch-12/artifacts/object_list.json
       hash: md5
-      md5: 37f6a2b7eb18a8ef3c1ae614d86c1332
-      size: 187921
+      md5: 8ebd034deaf842016a8003a7bbad93b4
+      size: 186741
   object_list@objects/batch-13:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/batch-13/processed.max b1k_pipeline/max/object_list.py
     deps:
