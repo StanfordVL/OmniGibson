@@ -2,12 +2,14 @@ import omnigibson as og
 from omnigibson.envs import EnvMetric
 from omnigibson.tasks import BehaviorTask
 from omnigibson.utils.usd_utils import RigidContactAPI
-from omnigibson.utils.constants import STRUCTURE_CATEGORIES
+from omnigibson.utils.constants import STRUCTURE_CATEGORIES, GROUND_CATEGORIES
 from omnigibson.utils.backend_utils import _compute_backend as cb
 import omnigibson.utils.transform_utils as T
+from omnigibson.utils.sim_utils import prim_paths_to_rigid_prims
 from omnigibson.robots import LocomotionRobot
 from gello.robots.sim_robot.og_teleop_utils import GHOST_APPEAR_THRESHOLD
 import torch as th
+import numpy as np
 import operator
 
 
@@ -31,22 +33,31 @@ class MotionMetric(EnvMetric):
     def _compute_episode_metrics(self, env, episode_info):
         # Derive acceleration -> jerk based on the recorded velocities
         episode_metrics = dict()
-        for pos_key, positions in episode_info.items():
-            positions = th.stack(positions, dim=0)
+        for robot, (pos_key, positions) in zip(env.robots, episode_info.items()):
+            arm_idxs = th.cat([arm_control_idx for arm_control_idx in robot.arm_control_idx.values()])
+            arm_vel_limits = th.tensor([jnt.max_velocity for jnt in robot.joints.values()])[arm_idxs]
+            positions = th.stack(positions, dim=0)[:, arm_idxs]
             vels = (positions[1:] - positions[:-1]) / self.step_dt
+            n_vels = len(vels)
             accs = (vels[1:] - vels[:-1]) / self.step_dt
             jerks = (accs[1:] - accs[:-1]) / self.step_dt
             # Only keep absolute values
             vels, accs, jerks = th.abs(vels), th.abs(accs), th.abs(jerks)
             episode_metrics[f"{pos_key}::vel_avg"] = vels.mean(dim=0)
+            episode_metrics[f"{pos_key}::vel_prop_over_05max"] = th.any(vels > arm_vel_limits.unsqueeze(0) * 0.5, dim=-1).sum() / n_vels
+            episode_metrics[f"{pos_key}::vel_prop_over_06max"] = th.any(vels > arm_vel_limits.unsqueeze(0) * 0.6, dim=-1).sum() / n_vels
+            episode_metrics[f"{pos_key}::vel_prop_over_07max"] = th.any(vels > arm_vel_limits.unsqueeze(0) * 0.7, dim=-1).sum() / n_vels
+            episode_metrics[f"{pos_key}::vel_prop_over_08max"] = th.any(vels > arm_vel_limits.unsqueeze(0) * 0.8, dim=-1).sum() / n_vels
+            episode_metrics[f"{pos_key}::vel_prop_over_09max"] = th.any(vels > arm_vel_limits.unsqueeze(0) * 0.9, dim=-1).sum() / n_vels
+            episode_metrics[f"{pos_key}::vel_prop_over_10max"] = th.any(vels > arm_vel_limits.unsqueeze(0) * 1.0, dim=-1).sum() / n_vels
             episode_metrics[f"{pos_key}::acc_avg"] = accs.mean(dim=0)
             episode_metrics[f"{pos_key}::jerk_avg"] = jerks.mean(dim=0)
             episode_metrics[f"{pos_key}::vel_std"] = vels.std(dim=0)
             episode_metrics[f"{pos_key}::acc_std"] = accs.std(dim=0)
             episode_metrics[f"{pos_key}::jerk_std"] = jerks.std(dim=0)
-            episode_metrics[f"{pos_key}::vel_max"] = vels.max(dim=0)
-            episode_metrics[f"{pos_key}::acc_max"] = accs.max(dim=0)
-            episode_metrics[f"{pos_key}::jerk_max"] = jerks.max(dim=0)
+            episode_metrics[f"{pos_key}::vel_max"] = vels.max(dim=0).values
+            episode_metrics[f"{pos_key}::acc_max"] = accs.max(dim=0).values
+            episode_metrics[f"{pos_key}::jerk_max"] = jerks.max(dim=0).values
 
         return episode_metrics
 
@@ -54,8 +65,17 @@ class MotionMetric(EnvMetric):
     def validate_episode(
             cls,
             episode_metrics,
+            vel_avg_limit=None,
             vel_max_limit=None,
+            vel_prop_over_05max=None,
+            vel_prop_over_06max=None,
+            vel_prop_over_07max=None,
+            vel_prop_over_08max=None,
+            vel_prop_over_09max=None,
+            vel_prop_over_10max=None,
+            acc_avg_limit=None,
             acc_max_limit=None,
+            jerk_avg_limit=None,
             jerk_max_limit=None,
     ):
         """
@@ -63,10 +83,28 @@ class MotionMetric(EnvMetric):
 
         Args:
             episode_metrics (dict): Metrics aggregated using self.aggregate_results
-            vel_max_limit (None or float): If specified, maximum velocity that is acceptable for the episode to
-                be validated
+            vel_avg_limit (None or float): If specified, maximum average velocity that is acceptable for the episode to
+                    be validated
+            vel_max_limit (None or float): If specified, maximum peak velocity that is acceptable for the episode to
+                    be validated
+            vel_prop_over_05max (None or float): If specified, maximum acceptable proportion of frames where any
+                joint's velocity is over 0.5 of its max joint velocity limit
+            vel_prop_over_06max (None or float): If specified, maximum acceptable proportion of frames where any
+                joint's velocity is over 0.6 of its max joint velocity limit
+            vel_prop_over_07max (None or float): If specified, maximum acceptable proportion of frames where any
+                joint's velocity is over 0.7 of its max joint velocity limit
+            vel_prop_over_08max (None or float): If specified, maximum acceptable proportion of frames where any
+                joint's velocity is over 0.8 of its max joint velocity limit
+            vel_prop_over_09max (None or float): If specified, maximum acceptable proportion of frames where any
+                joint's velocity is over 0.9 of its max joint velocity limit
+            vel_prop_over_10max (None or float): If specified, maximum acceptable proportion of frames where any
+                joint's velocity is over 1.0 of its max joint velocity limit
+            acc_avg_limit (None or float): If specified, maximum average acceleration that is acceptable for the
+                episode to be validated
             acc_max_limit (None or float): If specified, maximum acceleration that is acceptable for the episode to
                 be validated
+            jerk_avg_limit (None or float): If specified, maximum average jerk that is acceptable for the episode to
+                    be validated
             jerk_max_limit (None or float): If specified, maximum jerk that is acceptable for the episode to
                 be validated
 
@@ -76,12 +114,17 @@ class MotionMetric(EnvMetric):
                 provides information as to why the test failed
         """
         results = dict()
-        for val_max_limit, val_name in zip((vel_max_limit, acc_max_limit, jerk_max_limit), ("vel_max", "acc_max", "jerk_max")):
+        for val_max_limit, val_name in zip(
+                (vel_avg_limit, vel_max_limit, vel_prop_over_05max, vel_prop_over_06max, vel_prop_over_07max, vel_prop_over_08max, vel_prop_over_09max, vel_prop_over_10max, acc_avg_limit, acc_max_limit, jerk_avg_limit, jerk_max_limit),
+                ("vel_avg", "vel_max", "vel_prop_over_05max", "vel_prop_over_06max", "vel_prop_over_07max", "vel_prop_over_08max", "vel_prop_over_09max", "vel_prop_over_10max", "acc_avg", "acc_max", "jerk_avg", "jerk_max"),
+        ):
             if val_max_limit is not None:
                 for name, metric in episode_metrics.items():
                     if f"::{val_name}" in name:
                         test_name = name
-                        success = th.all(metric <= val_max_limit).item()
+                        success = metric <= val_max_limit
+                        if isinstance(success, th.Tensor):
+                            success = th.all(success).item()
                         feedback = None if success else f"Robot's {val_name} is too high ({metric}), must be <= {val_max_limit}"
                         results[test_name] = {"success": success, "feedback": feedback}
 
@@ -341,10 +384,14 @@ class GhostHandAppearanceMetric(EnvMetric):
         if gh_appearance_limit is not None or gh_appearance_limit_while_ungrasping is not None:
             for name, metric in episode_metrics.items():
                 test_name = name
-                if gh_appearance_limit is not None and "::n_steps_total" in name:
+                if "::n_steps_total" in name:
+                    if gh_appearance_limit is None:
+                        continue
                     success = episode_metrics[name] <= gh_appearance_limit
                     limit = gh_appearance_limit
-                elif gh_appearance_limit_while_ungrasping is not None and "::n_steps_while_ungrasping" in name:
+                elif "::n_steps_while_ungrasping" in name:
+                    if gh_appearance_limit_while_ungrasping is None:
+                        continue
                     success = episode_metrics[name] <= gh_appearance_limit_while_ungrasping
                     limit = gh_appearance_limit_while_ungrasping
                 else:
@@ -635,6 +682,7 @@ class FieldOfViewMetric(EnvMetric):
 
         return results
 
+
 class HeadCameraUprightMetric(EnvMetric):
     """
     When robot navigate for prolonged periods, head camera link should not be tilted up or down too much
@@ -748,12 +796,16 @@ class HeadCameraUprightMetric(EnvMetric):
         return results
 
 
-def check_robot_self_collision(env):
+def check_robot_self_collision(env, min_threshold=None):
     # TODO: What about gripper finger self collision?
     for robot in env.robots:
         link_paths = robot.link_prim_paths
-        if RigidContactAPI.in_contact(link_paths, link_paths):
-            return True
+        if min_threshold is None:
+            if RigidContactAPI.in_contact(link_paths, link_paths):
+                return True
+        else:
+            if th.any(th.norm(RigidContactAPI.get_impulses(link_paths, link_paths), dim=-1) > min_threshold).item():
+                return True
     return False
 
 
@@ -778,11 +830,54 @@ def check_robot_base_nonarm_nonkinematic_collision(env):
     return th.any(robot_contacts).item()
 
 
-def create_collision_metric(include_robot_self_collision=True, include_robot_nonarm_nonkinematic_collision=True):
+def check_robot_nonarm_nonground_collision(env):
+    for robot in env.robots:
+        robot_arm_paths = set()
+        robot_prim_path = robot.prim_path
+        for arm in robot.arm_names:
+            robot_arm_paths = robot_arm_paths.union(set(link.prim_path for link in robot.arm_links[arm]))
+            robot_arm_paths = robot_arm_paths.union(set(link.prim_path for link in robot.gripper_links[arm]))
+            robot_arm_paths = robot_arm_paths.union(set(link.prim_path for link in robot.finger_links[arm]))
+        for link in robot.links.values():
+            # Skip if link is an arm link
+            if link.prim_path in robot_arm_paths:
+                continue
+            for c in link.contact_list():
+                # Skip if it's a self-collision
+                if robot_prim_path in c.body0:
+                    if robot_prim_path in c.body1:
+                        continue
+                    else:
+                        c_prim_path = c.body1
+                else:
+                    c_prim_path = c.body0
+                # Ignore if zero-impulse
+                if np.linalg.norm(tuple(c.impulse)) == 0:
+                    continue
+                # Check which object this is
+                rigid_prims = prim_paths_to_rigid_prims([c_prim_path], robot.scene)
+                # Skip if obj is part of ground categories
+                assert len(rigid_prims) == 1
+                obj = next(iter(rigid_prims))[0]
+                if obj.category in GROUND_CATEGORIES:
+                    continue
+                # Otherwise this is a valid contact, so immediately return True
+                return True
+
+    return False
+
+
+def create_collision_metric(
+        include_robot_self_collision=True,
+        include_robot_nonarm_nonkinematic_collision=True,
+        include_robot_nonarm_nonground_collision=True,
+):
     col_metric = CollisionMetric()
     if include_robot_self_collision:
         col_metric.add_check(name="robot_self", check=check_robot_self_collision, color_robots=th.tensor([1.0, 0, 0]))
     if include_robot_nonarm_nonkinematic_collision:
         col_metric.add_check(name="robot_nonarm_nonstructure", check=check_robot_base_nonarm_nonkinematic_collision)
+    if include_robot_nonarm_nonground_collision:
+        col_metric.add_check(name="robot_nonarm_nonground", check=check_robot_nonarm_nonground_collision)
     return col_metric
 
