@@ -80,7 +80,7 @@ def main():
 
             # Delete the URDF and shape directories since they contain unencrypted objects
             print("Removing URDF directories")
-            urdf_dirs = {x.path for x in out_fs.glob("objects/*/*/urdf")} | {x.path for x in out_fs.glob("objects/*/*/shape")}
+            urdf_dirs = {x.path for x in out_fs.glob("*/*/*/urdf")} | {x.path for x in out_fs.glob("*/*/*/shape")}
             for urdf_dir in urdf_dirs:
                 out_fs.removetree(urdf_dir)
 
