@@ -7866,8 +7866,8 @@ stages:
       size: 0
     - path: b1k_pipeline/export_objs_global.py
       hash: md5
-      md5: 7dc72126e2289ed0d598ad3060894569
-      size: 39148
+      md5: 5afbf2980ce1d6a24d0c71f2488a690a
+      size: 39135
     - path: b1k_pipeline/mesh_tree.py
       hash: md5
       md5: c01a25201232fad5307f53d73a0fbee7
@@ -8607,8 +8607,8 @@ stages:
     outs:
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: b24abe5167bec50cfe4277718c203dd1
-      size: 671719161
+      md5: 91f1c21bbfe01ab76d51d7b843009614
+      size: 26936866702
     - path: artifacts/pipeline/export_objs.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
@@ -8679,8 +8679,8 @@ stages:
     deps:
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: b24abe5167bec50cfe4277718c203dd1
-      size: 671719161
+      md5: 91f1c21bbfe01ab76d51d7b843009614
+      size: 26936866702
     - path: artifacts/pipeline/export_objs.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8696,8 +8696,8 @@ stages:
     outs:
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: bb4d0a1e526802b1a7a1b5fa083105fd
-      size: 120630404
+      md5: 06432bdb734c99af073fe3ec9be14b03
+      size: 4825794852
     - path: artifacts/pipeline/usdify_objects.json
       hash: md5
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
@@ -13649,12 +13649,12 @@ stages:
       size: 0
     - path: b1k_pipeline/export_objs_global.py
       hash: md5
-      md5: 7dc72126e2289ed0d598ad3060894569
-      size: 39148
+      md5: 5afbf2980ce1d6a24d0c71f2488a690a
+      size: 39135
     - path: b1k_pipeline/export_scenes_global.py
       hash: md5
-      md5: caf71682269cb4ddf1ee5a360f634829
-      size: 15398
+      md5: 794c4f362bad29f8ee25f549aa0dc29f
+      size: 15391
     - path: b1k_pipeline/mesh_tree.py
       hash: md5
       md5: c01a25201232fad5307f53d73a0fbee7
@@ -14130,8 +14130,8 @@ stages:
     outs:
     - path: artifacts/parallels/scenes.zip
       hash: md5
-      md5: ac5040895246404868474aa761947be3
-      size: 148
+      md5: 27ba35c0e4f3fc56a9aa84e3d07c7bbb
+      size: 774935
     - path: artifacts/pipeline/export_scenes.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
