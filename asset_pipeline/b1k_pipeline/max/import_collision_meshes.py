@@ -161,7 +161,7 @@ def main():
         # assert target_type in ("scenes", "objects"), f"Current file is not in the scenes or objects directory: {current_target_rel}"
         # current_target = target_type + "/" + target_name
 
-        for target in get_targets("combined_unfiltered"):
+        for target in get_targets("combined"):
             process_target(pipeline_fs, target)
 
 if __name__ == "__main__":

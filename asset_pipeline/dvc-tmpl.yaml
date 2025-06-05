@@ -1,7 +1,7 @@
 stages:
   file_manifest:
     # Generate a file manifest that can be used to diff files for PRs
-    foreach: ${combined_unfiltered}
+    foreach: ${combined}
     do:
       cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/file_manifest.py'
       deps:
@@ -15,7 +15,7 @@ stages:
     # Combine the file manifest into a single file for diffing.
     cmd: 'python -m b1k_pipeline.combined_file_manifest'
     deps:
-    - cad/#{combined_unfiltered}/artifacts/file_manifest.json
+    - cad/#{combined}/artifacts/file_manifest.json
     - b1k_pipeline/combined_file_manifest.py
     - params.yaml
     outs:
@@ -23,7 +23,7 @@ stages:
 
   object_list:
     # List the objects found in the entry.
-    foreach: ${combined_unfiltered}
+    foreach: ${combined}
     do:
       cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/object_list.py'
       deps:
@@ -43,7 +43,7 @@ stages:
 
   sanitycheck:
     # Run a check to ensure .max files match expected format.
-    foreach: ${combined_unfiltered}
+    foreach: ${combined}
     do:
       cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/new_sanity_check.py batch=true'
       deps:
@@ -65,7 +65,7 @@ stages:
 
   check_collisions:
     # List the objects found in the entry.
-    foreach: ${scenes_unfiltered}
+    foreach: ${scenes}
     do:
       cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/check_collisions.py'
       deps:
@@ -86,7 +86,7 @@ stages:
 
   check_collisions_with_clutter:
     # List the objects found in the entry.
-    foreach: ${scenes_unfiltered}
+    foreach: ${scenes}
     do:
       cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/check_collisions.py clutter=true'
       deps:
@@ -134,17 +134,6 @@ stages:
     outs:
     - artifacts/pipeline/object_inventory.success
 
-  object_inventory_future:
-    # List all objects found in all entries, with their sources. Cross-reference bad objects w/ providers. Check provider uniqueness.
-    cmd: 'python -m b1k_pipeline.object_inventory --future'
-    deps:
-    - cad/#{combined_unfiltered}/artifacts/object_list.json
-    - artifacts/pipeline/object_list.success
-    - b1k_pipeline/object_inventory.py
-    - params.yaml
-    outs:
-    - artifacts/pipeline/object_inventory_future.json
-
   export_meshes:
     # Export meshes from 3dsmax as obj/mtl files with baked textures.
     foreach: ${combined}
@@ -168,7 +157,7 @@ stages:
 
   # generate_max_object_images:
   #   # List the objects found in the entry.
-  #   foreach: ${combined_unfiltered}
+  #   foreach: ${combined}
   #   do:
   #     cmd: 'python b1k_pipeline/batch_3dsmax.py cad/${item}/processed.max b1k_pipeline/max/generate_max_object_images.py'
   #     deps:
@@ -236,18 +225,6 @@ stages:
     - params.yaml
     outs:
     - artifacts/pipeline/combined_room_object_list.json
-
-  combined_room_object_list_future:
-    # Generate a combined list of all objects found in each room across all scenes, with synset mappings.
-    cmd: 'python -m b1k_pipeline.combined_room_object_list --future'
-    deps:
-    - cad/#{scenes_unfiltered}/artifacts/object_list.json
-    - artifacts/pipeline/object_list.success
-    - b1k_pipeline/combined_room_object_list.py
-    - metadata/allowed_room_types.csv
-    - params.yaml
-    outs:
-    - artifacts/pipeline/combined_room_object_list_future.json
 
   export_scenes_global:
     # Generate scene URDF file from meshes.

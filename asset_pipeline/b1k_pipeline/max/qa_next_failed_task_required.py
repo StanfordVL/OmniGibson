@@ -34,7 +34,7 @@ def next_failed():
         reader = csv.reader(f)
         task_required_objects = {row[0].split("-")[-1] for row in reader}
 
-    with open(b1k_pipeline.utils.PIPELINE_ROOT / "artifacts/pipeline/object_inventory_future.json", "r") as f:
+    with open(b1k_pipeline.utils.PIPELINE_ROOT / "artifacts/pipeline/object_inventory.json", "r") as f:
         providers = json.load(f)["providers"]
     provided = defaultdict(set)
     for object, provider in providers.items():

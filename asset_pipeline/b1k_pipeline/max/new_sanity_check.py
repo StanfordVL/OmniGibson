@@ -100,9 +100,14 @@ with open(b1k_pipeline.utils.PIPELINE_ROOT / "metadata/deletion_queue.csv", "r")
 
 def get_required_meta_links(category):
     synset = OBJECT_TAXONOMY.get_synset_from_category(category)
-    if synset is None:
-        raise ValueError(f"Category {category} not found in taxonomy.")
-    return OBJECT_TAXONOMY.get_required_meta_links_for_synset(synset)
+    if synset is not None:
+        return OBJECT_TAXONOMY.get_required_meta_links_for_synset(synset)
+    
+    substance_synset = OBJECT_TAXONOMY.get_synset_from_substance(category)
+    if substance_synset is not None:
+        return set()
+
+    raise ValueError(f"Category {category} not found in taxonomy.")
 
 
 def is_light_required(category):
@@ -343,14 +348,22 @@ class SanityCheck:
             # Run cloth object checks
             renamed_category = self.maybe_rename_category(row.name_category, row.name_model_id)
             synset = OBJECT_TAXONOMY.get_synset_from_category(renamed_category)
+            substance_synset = OBJECT_TAXONOMY.get_synset_from_substance(renamed_category)
+            self.expect(
+                synset is not None or substance_synset is not None,
+                f"Cannot perform cloth/particle checks: category {renamed_category} not found in taxonomy.",
+            )
+            
             if synset is not None:
                 obj_is_cloth = "cloth" in OBJECT_TAXONOMY.get_abilities(synset)
                 if obj_is_cloth:
                     self.validate_cloth(row)
-            else:
+            
+            if substance_synset is not None:
+                # Check that this file is one of the substances files
                 self.expect(
-                    False,
-                    f"Cannot validate clothness: category {renamed_category} not found in taxonomy.",
+                    pathlib.Path(rt.maxFilePath).resolve().parts[-1] == "substances-01",
+                    f"{row.object_name} is a substance particle but not in the substances-01 file.",
                 )
 
             # Check that each object zeroth instance object actually has a collision mesh

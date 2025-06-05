@@ -22,6 +22,7 @@ import tqdm
 import b1k_pipeline.utils
 import b1k_pipeline.max.apply_qa_fixes
 import b1k_pipeline.max.import_fillable_meshes
+import b1k_pipeline.max.extract_particle_objects
 import b1k_pipeline.max.extract_school_objects
 import b1k_pipeline.max.prebake_textures
 import b1k_pipeline.max.replace_bad_object
@@ -32,7 +33,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-assetfreeze.success"
+PASS_FILENAME = "done-particleremoval.success"
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -201,6 +202,9 @@ def apply_deletions(filename):
     # No deletions on scenes.
     if "scenes" in str(filename):
         return False
+    
+    # Get the particle deletions
+    particle_deletions = {mid for mids in b1k_pipeline.max.extract_particle_objects.MERGES_BY_TARGET.values() for mid in mids}
 
     to_delete = []
     for obj in rt.objects:
@@ -209,7 +213,7 @@ def apply_deletions(filename):
             continue
 
         model_id = match.group("model_id")
-        if model_id in DELETIONS:
+        if model_id in DELETIONS or ("substances-01" not in filename.parts and model_id in particle_deletions):
             to_delete.append(obj)
 
     if not to_delete:

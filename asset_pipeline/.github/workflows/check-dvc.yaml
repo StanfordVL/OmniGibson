@@ -28,13 +28,11 @@ jobs:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
         
       - name: Check that the important stages are pullable
-        run: dvc pull object_inventory object_inventory_future combined_room_object_list combined_room_object_list_future combined_file_manifest
+        run: dvc pull object_inventory combined_room_object_list combined_file_manifest
 
       # dvc status returns empty dict JSON if everything is up to date. check that using jq.
       - name: Check the status of the stages
         run: |
           python b1k_pipeline/check_dvc_stage_current.py object_inventory
-          python b1k_pipeline/check_dvc_stage_current.py object_inventory_future
           python b1k_pipeline/check_dvc_stage_current.py combined_room_object_list
-          python b1k_pipeline/check_dvc_stage_current.py combined_room_object_list_future
           python b1k_pipeline/check_dvc_stage_current.py combined_file_manifest

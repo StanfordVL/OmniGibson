@@ -14,7 +14,7 @@ ALLOWED_PART_TAGS = {
 }
 
 
-def main(use_future=False):
+def main():
     needed = set()
     providers = defaultdict(list)
     bounding_box_sizes = {}
@@ -30,9 +30,7 @@ def main(use_future=False):
         # Get the providers.
         with pipeline_fs.open("params.yaml", "r") as f:
             params = yaml.load(f, Loader=yaml.SafeLoader)
-            targets = (
-                params["combined_unfiltered"] if use_future else params["combined"]
-            )
+            targets = params["combined"]
 
         # Merge the object lists.
         for target in targets:
@@ -157,20 +155,9 @@ def main(use_future=False):
             "error_seen_as_multiple_categories": seen_as_multiple_categories,
         }
         with pipeline_fs.pipeline_output() as pipeline_output_fs:
-            json_path = (
-                "object_inventory_future.json"
-                if use_future
-                else "object_inventory.json"
-            )
-            with pipeline_output_fs.open(json_path, "w") as f:
+            with pipeline_output_fs.open("object_inventory.json", "w") as f:
                 json.dump(results, f, indent=4)
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(
-        description="Produce a list of objects included in the pipeline."
-    )
-    parser.add_argument("--future", action="store_true")
-    args = parser.parse_args()
-
-    main(args.future)
+    main()

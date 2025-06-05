@@ -31,7 +31,7 @@ from bddl.object_taxonomy import ObjectTaxonomy
 from b1k_pipeline.utils import PIPELINE_ROOT
 
 
-INVENTORY_PATH = r"D:\object_inventory_future.json"
+INVENTORY_PATH = r"D:\object_inventory.json"
 with open(INVENTORY_PATH, "r") as f:
     INVENTORY_DICT = json.load(f)["providers"]
 
