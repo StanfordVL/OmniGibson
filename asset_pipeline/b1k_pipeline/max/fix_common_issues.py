@@ -34,6 +34,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 rt = pymxs.runtime
 
 PASS_FILENAME = "done-particleremoval.success"
+VRAY_LOG_FILENAME = pathlib.Path(r"D:/ig_pipeline/mtlconvert.log")
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
 )
@@ -195,16 +196,21 @@ def remove_root_level_meta_links(filename) -> bool:
 
     for obj in to_delete:
         rt.delete(obj)
-    
+
     return True
+
 
 def apply_deletions(filename):
     # No deletions on scenes.
     if "scenes" in str(filename):
         return False
-    
+
     # Get the particle deletions
-    particle_deletions = {mid for mids in b1k_pipeline.max.extract_particle_objects.MERGES_BY_TARGET.values() for mid in mids}
+    particle_deletions = {
+        mid
+        for mids in b1k_pipeline.max.extract_particle_objects.MERGES_BY_TARGET.values()
+        for mid in mids
+    }
 
     to_delete = []
     for obj in rt.objects:
@@ -213,16 +219,19 @@ def apply_deletions(filename):
             continue
 
         model_id = match.group("model_id")
-        if model_id in DELETIONS or ("substances-01" not in filename.parts and model_id in particle_deletions):
+        if model_id in DELETIONS or (
+            "substances-01" not in filename.parts and model_id in particle_deletions
+        ):
             to_delete.append(obj)
 
     if not to_delete:
         return False
-    
+
     for obj in to_delete:
         rt.delete(obj)
 
     return True
+
 
 def apply_renames(filename):
     made_any_changes = False
@@ -242,6 +251,7 @@ def apply_renames(filename):
 
     return made_any_changes
 
+
 def update_visibilities():
     # Exit isolate mode
     rt.IsolateSelection.ExitIsolateSelectionMode()
@@ -259,6 +269,7 @@ def update_visibilities():
         ):
             obj.isHidden = True
 
+
 def match_instance_materials():
     objs_by_base = defaultdict(list)
     for obj in rt.objects:
@@ -268,7 +279,7 @@ def match_instance_materials():
         if not pn:
             continue
         objs_by_base[obj.baseObject].append(obj)
-        
+
     for base, objs in objs_by_base.items():
         if len(objs) < 2:
             continue
@@ -294,6 +305,7 @@ def match_instance_materials():
 
         print("Fixed material for instances of", good_instance.name)
 
+
 def remove_nested_shell_materials(filename, keep_top_level=True):
     def _replace_shell(mat):
         # If this is a multi material, recurse through its submaterials
@@ -315,12 +327,13 @@ def remove_nested_shell_materials(filename, keep_top_level=True):
     for obj in rt.objects:
         # Note that we don't assign the return value here, in effect keeping the top-level
         # material and only replacing the nested ones.
-        tmp_mtl =_replace_shell(obj.material)
+        tmp_mtl = _replace_shell(obj.material)
         if not keep_top_level:
             obj.material = tmp_mtl
 
     # Save here to clear material library
     rt.saveMaxFile(str(filename))
+
 
 def remove_unnecessary_lights():
     for light in list(rt.lights):
@@ -331,6 +344,7 @@ def remove_unnecessary_lights():
             rt.delete(light)
             made_any_changes = True
     return made_any_changes
+
 
 def merge_preexisting_fillable_meshes():
     processed_fillable = set()
@@ -369,6 +383,7 @@ def merge_preexisting_fillable_meshes():
             break
     return made_any_changes
 
+
 def run_bad_object_replacement_for_legacy_scenes(filename):
     target_name = filename.parts[-2]
     if target_name.endswith("_int") or target_name.endswith("_garden"):
@@ -380,6 +395,7 @@ def run_bad_object_replacement_for_legacy_scenes(filename):
             filename.parent / "artifacts" / "replaced_bad_objects.json", "w"
         ) as f:
             json.dump(comparison_data, f)
+
 
 def convert_legacy_uv_unwrap_attribute_to_new():
     for obj in rt.objects:
@@ -398,6 +414,7 @@ def convert_legacy_uv_unwrap_attribute_to_new():
             obj, hash_digest
         )
 
+
 def delete_parts_from_nonzero_instances():
     for obj in rt.objects:
         if not obj.parent:
@@ -412,6 +429,7 @@ def delete_parts_from_nonzero_instances():
             continue
         rt.delete(obj)
 
+
 def delete_upper_links_from_nonzero_instances():
     for obj in rt.objects:
         match = b1k_pipeline.utils.parse_name(obj.name)
@@ -422,6 +440,7 @@ def delete_upper_links_from_nonzero_instances():
         if match.group("joint_side") != "upper":
             continue
         rt.delete(obj)
+
 
 def delete_meta_links_from_unnecessary_instances():
     for obj in rt.objects:
@@ -434,6 +453,7 @@ def delete_meta_links_from_unnecessary_instances():
             continue
         rt.delete(obj)
 
+
 def fix_extracted_school_objects():
     ids_to_bad = b1k_pipeline.max.extract_school_objects.IDS_TO_MERGE
     for obj in rt.objects:
@@ -444,6 +464,7 @@ def fix_extracted_school_objects():
             obj.name = "B-" + obj.name
             made_any_changes = True
     return made_any_changes
+
 
 def fix_triangulation():
     for obj in tqdm.tqdm(list(rt.objects)):
@@ -471,6 +492,7 @@ def fix_triangulation():
             # print("Need to collapse", obj.name)
             rt.polyop.CollapseDeadStructs(obj)
 
+
 def convert_old_model_ids_to_new():
     objs_by_model = defaultdict(list)
     for obj in rt.objects:
@@ -480,7 +502,13 @@ def convert_old_model_ids_to_new():
             continue
 
         if re.fullmatch("[a-z]{6}", result.group("model_id")) is None:
-            objs_by_model[(result.group("category"), result.group("model_id"), result.group("bad"))].append(obj)
+            objs_by_model[
+                (
+                    result.group("category"),
+                    result.group("model_id"),
+                    result.group("bad"),
+                )
+            ].append(obj)
 
     for category, model_id, bad in objs_by_model:
         if bad:
@@ -494,31 +522,97 @@ def convert_old_model_ids_to_new():
             new_str = "-".join([category, random_str])
             obj.name = obj.name.replace(old_str, new_str)
 
+
 def rename_hallway_to_corridor():
-    existing_layer_names = {rt.LayerManager.getLayer(x).name for x in range(rt.LayerManager.count)}
+    existing_layer_names = {
+        rt.LayerManager.getLayer(x).name for x in range(rt.LayerManager.count)
+    }
     for layer_id in range(rt.LayerManager.count):
         layer = rt.LayerManager.getLayer(layer_id)
         if "hallway_" in layer.name:
             to_name = layer.name.replace("hallway_", "corridor_")
-            assert to_name not in existing_layer_names, f"Layer {to_name} already exists"
+            assert (
+                to_name not in existing_layer_names
+            ), f"Layer {to_name} already exists"
             layer.setName(to_name)
+
 
 def remove_soft_tags():
     for obj in rt.objects:
         if "-Tsoft" in obj.name:
             obj.name = obj.name.replace("-Tsoft", "")
 
+
 def load_vray_renderer():
     preset_categories = rt.renderpresets.LoadCategories(RENDER_PRESET_FILENAME)
     assert rt.renderpresets.Load(0, RENDER_PRESET_FILENAME, preset_categories)
 
+
 def convert_materials_to_vray(filename):
     # First, remove all baked materials and save
-    remove_nested_shell_materials(filename, keep_top_level=False)
+    # remove_nested_shell_materials(filename, keep_top_level=False)
 
-    # Then convert all materials to Vray
-    rt.select(rt.objects)
-    rt.convertToVRay(True)  # the selectedOnly parameter keeps it from having to convert the material editor
+    rt.orig_mtls = rt.Array()
+    rt.new_mtls = rt.Array()
+    rt.orig_texmaps = rt.Array()
+    rt.new_texmaps = rt.Array()
+
+    # Get the objects to process. This doesnt need to be in any particular order because we call
+    # a per-node processing function rather htan the recursive one.
+    objects = list(rt.objects)
+
+    # Get each object's prior materials first for tracking purposes
+    obj_materials_and_texmaps = {}
+    for obj in objects:
+        recursive_materials_and_texmaps = set()
+
+        def _recursively_get_materials(mtl_or_texmap):
+            if mtl_or_texmap is None:
+                return
+
+            recursive_materials_and_texmaps.add(mtl_or_texmap)
+
+            # We can check for submtls for material instances
+            if rt.superClassOf(mtl_or_texmap) == rt.Material:
+                for i in range(rt.getNumSubMtls(mtl_or_texmap)):
+                    sub_mtl = rt.getSubMtl(mtl_or_texmap, i + 1)
+                    if sub_mtl is not None:
+                        _recursively_get_materials(sub_mtl)
+
+            # We can check for subtexmaps for texture maps and materials
+            if (
+                rt.superClassOf(mtl_or_texmap) == rt.textureMap
+                or rt.superClassOf(mtl_or_texmap) == rt.Material
+            ):
+                for i in range(rt.getNumSubTexmaps(mtl_or_texmap)):
+                    sub_texmap = rt.getSubTexmap(mtl_or_texmap, i + 1)
+                    if sub_texmap is not None:
+                        _recursively_get_materials(sub_texmap)
+
+        _recursively_get_materials(obj.material)
+        obj_materials_and_texmaps[obj] = recursive_materials_and_texmaps
+
+    # Then do the actual conversion
+    for obj in objects:
+        converted_mtl = rt.createVRayMtl(obj.material)
+        obj.material = converted_mtl
+
+        # Check if any materials were converted, and if so, require rebake by removing the shell material
+        if (set(rt.orig_mtls) | set(rt.orig_texmaps)) & obj_materials_and_texmaps[obj]:
+            print(
+                "Object ", obj.name, "had materials converted, removing shell material"
+            )
+            VRAY_LOG_FILENAME.write_text(
+                VRAY_LOG_FILENAME.read_text() + f"{obj.name}\n"
+            )
+            if rt.classOf(obj.material) == rt.Shell_Material:
+                obj.material = obj.material.originalMaterial
+
+    # Clear these arrays the same way as in the original script
+    rt.orig_mtls = rt.Array()
+    rt.new_mtls = rt.Array()
+    rt.orig_texmaps = rt.Array()
+    rt.new_texmaps = rt.Array()
 
     # Save again to get rid of all the unused materials
     rt.saveMaxFile(str(filename))
@@ -540,8 +634,9 @@ def convert_materials_to_vray(filename):
     # for mat in rt.sceneMaterials:
     #     if rt.classOf(mat) != rt.MultiMaterial and "vray" not in str(rt.classOf(mat)).lower():
     #         print("Non-Vray material", mat.name)
-    #         found_bad = True       
+    #         found_bad = True
     # #assert not found_bad, "Non-Vray material found"
+
 
 def update_texture_paths():
     for obj in rt.objects:
@@ -553,13 +648,18 @@ def update_texture_paths():
             sub_texmap = rt.getSubTexmap(baked_mtl, map_idx + 1)
             if sub_texmap is not None:
                 sub_texmap_slot_name = rt.getSubTexmapSlotName(baked_mtl, map_idx + 1)
-                assert rt.classOf(sub_texmap) == rt.Bitmaptexture, \
-                    f"Object {obj.name} baked material map {sub_texmap_slot_name} has unexpected type {rt.classOf(sub_texmap)}"
-                
+                assert (
+                    rt.classOf(sub_texmap) == rt.Bitmaptexture
+                ), f"Object {obj.name} baked material map {sub_texmap_slot_name} has unexpected type {rt.classOf(sub_texmap)}"
+
                 # Use os.path.abspath which normalizes + absolutifies the paths but does not resolve symlinks unlike pathlib (problem with dvc)
                 map_path = pathlib.Path(os.path.abspath(sub_texmap.filename))
-                assert map_path.exists(), f"Object {obj.name} baked material map {sub_texmap_slot_name} does not exist at {map_path}"
-                bakery_path = pathlib.Path(os.path.abspath(os.path.join(rt.maxFilePath, "bakery")))
+                assert (
+                    map_path.exists()
+                ), f"Object {obj.name} baked material map {sub_texmap_slot_name} does not exist at {map_path}"
+                bakery_path = pathlib.Path(
+                    os.path.abspath(os.path.join(rt.maxFilePath, "bakery"))
+                )
 
                 if bakery_path in map_path.parents:
                     # This is the correct bakery path, so ignore this object
@@ -580,12 +680,13 @@ def update_texture_paths():
                         raise ValueError(
                             f"Hash mismatch for {map_path} and {correct_path}. Please check the files."
                         )
-                    
+
                 else:
                     shutil.copyfile(map_path, correct_path)
 
                 # Then update the path in the bitmap texture
                 sub_texmap.filename = str(correct_path)
+
 
 def convert_baked_material_to_vray_and_add_ior():
     MAP_TRANSLATION = {
@@ -616,8 +717,9 @@ def convert_baked_material_to_vray_and_add_ior():
             continue
 
         baked_mtl = mtl.bakedMaterial
-        assert rt.classOf(baked_mtl) == rt.Physical_Material, \
-            f"Object {obj.name} baked material is not a Physical Material, but {rt.classOf(baked_mtl)}"
+        assert (
+            rt.classOf(baked_mtl) == rt.Physical_Material
+        ), f"Object {obj.name} baked material is not a Physical Material, but {rt.classOf(baked_mtl)}"
 
         maps = {}
         for map_idx in range(rt.getNumSubTexmaps(baked_mtl)):
@@ -627,11 +729,17 @@ def convert_baked_material_to_vray_and_add_ior():
                 if channel_name == "Transparency Color Map":
                     channel_name = "Transparency Map"
                 maps[channel_name] = sub_texmap
-                
+
         # If there is no IOR map, try to guess it from the name
         if "IOR Map" not in maps:
-            ior_map_filename = pathlib.Path(rt.maxFilePath) / "bakery" / f"{obj.name}_VRayMtlReflectIORBake.exr"
-            assert ior_map_filename.exists(), f"IOR map {ior_map_filename} for object {obj.name} does not exist"
+            ior_map_filename = (
+                pathlib.Path(rt.maxFilePath)
+                / "bakery"
+                / f"{obj.name}_VRayMtlReflectIORBake.exr"
+            )
+            assert (
+                ior_map_filename.exists()
+            ), f"IOR map {ior_map_filename} for object {obj.name} does not exist"
 
             # Create a new bitmap and use it as the IOR map
             ior_map = rt.Bitmaptexture()
@@ -642,7 +750,9 @@ def convert_baked_material_to_vray_and_add_ior():
 
         # Check that we have ALL of the maps we need
         missing_keys = set(MAP_TRANSLATION.values()) - set(maps.keys())
-        assert not missing_keys, f"Missing maps {missing_keys} for object {obj.name}. Found only {set(maps.keys())}"
+        assert (
+            not missing_keys
+        ), f"Missing maps {missing_keys} for object {obj.name}. Found only {set(maps.keys())}"
 
         # Start converting to the new material
         new_mtl = rt.VRayMtl()
@@ -653,17 +763,21 @@ def convert_baked_material_to_vray_and_add_ior():
             channel_name = rt.getSubTexmapSlotName(new_mtl, map_idx + 1)
             if channel_name not in MAP_TRANSLATION:
                 continue
-            assert channel_name not in converted_keys, f"Duplicate channel name {channel_name} for object {obj.name}"
+            assert (
+                channel_name not in converted_keys
+            ), f"Duplicate channel name {channel_name} for object {obj.name}"
 
             old_map = maps[MAP_TRANSLATION[channel_name]]
             rt.setSubTexmap(new_mtl, map_idx + 1, old_map)
             old_map.name = f"{obj.name}__baked__{channel_name}"
             converted_keys.add(channel_name)
         missing_converted_keys = set(MAP_TRANSLATION.keys()) - converted_keys
-        assert not missing_converted_keys, f"Not all maps converted for object {obj.name}: {missing_converted_keys}"
+        assert (
+            not missing_converted_keys
+        ), f"Not all maps converted for object {obj.name}: {missing_converted_keys}"
 
         mtl.bakedMaterial = new_mtl
-        
+
 
 def processFile(filename: pathlib.Path):
     # Load file, fixing the units
@@ -682,7 +796,7 @@ def processFile(filename: pathlib.Path):
     remove_nested_shell_materials(filename)
 
     # Fix any bad materials
-    # convert_materials_to_vray(filename)
+    convert_materials_to_vray(filename)
 
     # Remove root_level meta links
     remove_root_level_meta_links(filename)
@@ -766,7 +880,7 @@ def processFile(filename: pathlib.Path):
     #     if not rt.classOf(obj.material) == rt.Shell_Material:
     #         print(f"{obj} material is not shell material after baking - meaning this object was not baked.")
     #         continue
-        
+
     #     new_baked_mtl = obj.material.bakedMaterial
 
     #     # Copy the new material's reflection channel to the old one's slot too
@@ -790,9 +904,12 @@ def processFile(filename: pathlib.Path):
     with open(filename.parent / PASS_FILENAME, "w") as f:
         pass
 
+
 def fix_common_issues_in_all_files():
     candidates = [
-        x for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max") # if x.parts[-2] not in TGTS
+        x
+        for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max")
+        if "substance" in x.parts[-2]
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):
