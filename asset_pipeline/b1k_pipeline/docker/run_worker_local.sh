@@ -72,7 +72,7 @@ do
     then
         GPU=0
     else
-        GPU=1
+        GPU=0
     fi
 
     echo "Launching job"

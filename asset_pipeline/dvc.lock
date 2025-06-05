@@ -10468,28 +10468,28 @@ stages:
     deps:
     - path: VERSION
       hash: md5
-      md5: 9182db37162729b0c602a6ad949aa71b
+      md5: 4f7b18fb71f5849cd0611eaa9146f7c1
       size: 9
     - path: artifacts/parallels/metadata.zip
       hash: md5
-      md5: 9635a77ca0c2879ad2fd50c200c86ebe
-      size: 67221
+      md5: 3876973fe8665b0c59f9a99a8f38eedc
+      size: 67303
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: 99cd52eeabae618fd7f0ef30766458a9
-      size: 26746281441
+      md5: 1bddef858c6a71bcaf86a63be3ea13cd
+      size: 2144337
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: 7b8359af61675cb1c9c68338e870a36a
-      size: 4805817911
+      md5: 47ca468d1304b3a0b91e2d6555cb37ff
+      size: 799794
     - path: artifacts/parallels/scenes_json.zip
       hash: md5
-      md5: db9993212155bd70f503e56922ac465f
-      size: 4947846
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
     - path: artifacts/parallels/systems.zip
       hash: md5
-      md5: fbb7f057f8d0378e07c910c591502cee
-      size: 102089394
+      md5: 7cba1a6996f495c31a22c4ab48b47a87
+      size: 440349
     - path: artifacts/pipeline/aggregate_metadata.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -10513,8 +10513,8 @@ stages:
     outs:
     - path: artifacts/og_dataset.zip
       hash: md5
-      md5: 2d4322567cd73584acaceb65f3929fe1
-      size: 31072875829
+      md5: b3b3931769f7793a8d0b4b3a3b6a5bec
+      size: 3451422
     - path: artifacts/pipeline/pack_dataset.json
       hash: md5
       md5: 2ad066aadc9c024dff5e8d3c6587590d
