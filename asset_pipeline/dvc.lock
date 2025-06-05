@@ -4161,8 +4161,8 @@ stages:
       size: 2658
     - path: cad/objects/substances-01/artifacts/sanitycheck.json
       hash: md5
-      md5: 8c83fa9429e29820f6c60c07a68758b6
-      size: 22223
+      md5: 12f907a23296340e4f6e40ba030860ed
+      size: 103
     - path: cad/objects/task_relavant-ab/artifacts/sanitycheck.json
       hash: md5
       md5: c2bb167d2e88c3e1405620eb5222d17e
@@ -7641,13 +7641,13 @@ stages:
       size: 57876
     - path: cad/objects/substances-01/processed.max
       hash: md5
-      md5: 1ca41d79bbb26d7a0829a1e2a4e8e8d0
-      size: 259294928
+      md5: 914310f86bf2eea347ee06cfd0c6b072
+      size: 259212336
     outs:
     - path: cad/objects/substances-01/artifacts/sanitycheck.json
       hash: md5
-      md5: 8c83fa9429e29820f6c60c07a68758b6
-      size: 22223
+      md5: 12f907a23296340e4f6e40ba030860ed
+      size: 103
   sanitycheck@objects/task_relavant-ab:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/task_relavant-ab/processed.max
       b1k_pipeline/max/new_sanity_check.py batch=true
@@ -7679,8 +7679,8 @@ stages:
       size: 17928
     - path: cad/objects/substances-01/processed.max
       hash: md5
-      md5: 1ca41d79bbb26d7a0829a1e2a4e8e8d0
-      size: 259294928
+      md5: 914310f86bf2eea347ee06cfd0c6b072
+      size: 259212336
     outs:
     - path: cad/objects/substances-01/artifacts/object_list.json
       hash: md5
@@ -7700,8 +7700,8 @@ stages:
       size: 17211
     - path: cad/objects/substances-01/processed.max
       hash: md5
-      md5: 1ca41d79bbb26d7a0829a1e2a4e8e8d0
-      size: 259294928
+      md5: 914310f86bf2eea347ee06cfd0c6b072
+      size: 259212336
     outs:
     - path: cad/objects/substances-01/artifacts/export_meshes.json
       hash: md5
@@ -7709,8 +7709,8 @@ stages:
       size: 34
     - path: cad/objects/substances-01/artifacts/meshes.zip
       hash: md5
-      md5: 172db833877dcbd29bb3250feace004f
-      size: 38877577
+      md5: bdaa2bcfd278f3a337e3d71a3150029f
+      size: 38877732
   object_list@objects/task_relavant-ab:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/objects/task_relavant-ab/processed.max
       b1k_pipeline/max/object_list.py

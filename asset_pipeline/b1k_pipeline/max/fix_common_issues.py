@@ -33,7 +33,7 @@ from b1k_pipeline.max.merge_collision import merge_collision
 
 rt = pymxs.runtime
 
-PASS_FILENAME = "done-particleremoval.success"
+PASS_FILENAME = "done-vrayconversionagain.success"
 VRAY_LOG_FILENAME = pathlib.Path(r"D:/ig_pipeline/mtlconvert.log")
 RENDER_PRESET_FILENAME = str(
     (b1k_pipeline.utils.PIPELINE_ROOT / "render_presets" / "objrender.rps").absolute()
@@ -598,12 +598,14 @@ def convert_materials_to_vray(filename):
         obj.material = converted_mtl
 
         # Check if any materials were converted, and if so, require rebake by removing the shell material
-        if (set(rt.orig_mtls) | set(rt.orig_texmaps)) & obj_materials_and_texmaps[obj]:
+        converted_so_far = set(rt.orig_mtls) | set(rt.orig_texmaps)
+        converted_this_object_uses = obj_materials_and_texmaps[obj] & converted_so_far
+        if len(converted_this_object_uses) > 0:
             print(
-                "Object ", obj.name, "had materials converted, removing shell material"
+                f"Object {obj.name} had materials converted, removing shell material"
             )
             VRAY_LOG_FILENAME.write_text(
-                VRAY_LOG_FILENAME.read_text() + f"{obj.name}\n"
+                VRAY_LOG_FILENAME.read_text() + f"{obj.name}: {','.join(x.name for x in converted_this_object_uses)}\n"
             )
             if rt.classOf(obj.material) == rt.Shell_Material:
                 obj.material = obj.material.originalMaterial
