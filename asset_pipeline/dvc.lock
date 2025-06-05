@@ -1413,20 +1413,20 @@ stages:
       size: 149921
     - path: cad/objects/batch-09/artifacts/object_list.json
       hash: md5
-      md5: 783859c46aa3f42125a7caeca397f276
-      size: 169928
+      md5: d8c4f044707086e7e4c0b8120d84eb28
+      size: 168837
     - path: cad/objects/batch-10/artifacts/object_list.json
       hash: md5
       md5: cbedffc384108a583479b4a1addc75cc
       size: 154011
     - path: cad/objects/batch-11/artifacts/object_list.json
       hash: md5
-      md5: 5da23bba69246423b61a6420746ed61b
-      size: 149021
+      md5: 362e7b8091c92420a5ff50bc625ef441
+      size: 147803
     - path: cad/objects/batch-12/artifacts/object_list.json
       hash: md5
-      md5: 37f6a2b7eb18a8ef3c1ae614d86c1332
-      size: 187921
+      md5: 8ebd034deaf842016a8003a7bbad93b4
+      size: 186741
     - path: cad/objects/batch-13/artifacts/object_list.json
       hash: md5
       md5: 69a77e080c7e70a8f1ff2c3b54fea8dc
@@ -1453,12 +1453,12 @@ stages:
       size: 199682
     - path: cad/objects/legacy_batch-04/artifacts/object_list.json
       hash: md5
-      md5: e413577512d8bd402dd825f455329e3b
-      size: 210298
+      md5: a26ec30bf63094be2a7cded4ed22beb6
+      size: 209163
     - path: cad/objects/legacy_batch-05/artifacts/object_list.json
       hash: md5
-      md5: 0dd0c8a0f9bde8f398ff8253f0262dff
-      size: 214180
+      md5: ce16426232b047f7eca43c4903709b16
+      size: 213040
     - path: cad/objects/legacy_batch-06/artifacts/object_list.json
       hash: md5
       md5: 0691de471da7069942b2283826db8aea
@@ -1481,8 +1481,8 @@ stages:
       size: 180317
     - path: cad/objects/legacy_batch-11/artifacts/object_list.json
       hash: md5
-      md5: 19f3bfab614b34b924fafd9eb7a64a5c
-      size: 163770
+      md5: 6d55f95e98efb1423396ac8e689bcb0b
+      size: 162603
     - path: cad/objects/legacy_batch-12/artifacts/object_list.json
       hash: md5
       md5: 8b605f1d0f4df092dc2cf61033e5c77f
@@ -1497,8 +1497,8 @@ stages:
       size: 131731
     - path: cad/objects/substances-01/artifacts/object_list.json
       hash: md5
-      md5: c241e9a76800db6760cf1d6f8a4c3f09
-      size: 1014369
+      md5: 52fa9d3a5673a666c4b122946f643eef
+      size: 1085472
     - path: cad/objects/task_relavant-ab/artifacts/object_list.json
       hash: md5
       md5: 899a8da79bda7d0aace7f14ecbf298bc
@@ -1569,12 +1569,12 @@ stages:
       size: 85837
     - path: cad/scenes/Rs_garden/artifacts/object_list.json
       hash: md5
-      md5: 0bc529c9b9bfb32de15066c2cef01403
-      size: 209026
+      md5: a3a5527556b71a814b7f36767afa55cf
+      size: 209209
     - path: cad/scenes/Rs_int/artifacts/object_list.json
       hash: md5
-      md5: 3f856ec6dd005926a0fccfb03db8eed2
-      size: 95447
+      md5: 7e2795e020c46810091ca8ec19e4ff53
+      size: 95629
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       hash: md5
       md5: 0fdd9770621dd94a56e972ec18536065
@@ -1746,8 +1746,8 @@ stages:
     outs:
     - path: artifacts/pipeline/object_inventory.json
       hash: md5
-      md5: 07a6d015f25479eaf79ea189a0f98bc9
-      size: 3228412
+      md5: 524c3de1f677efac659129477bf3e376
+      size: 3246641
   room_object_list@scenes/Beechwood_0_int:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_int/processed.max
       b1k_pipeline/max/room_object_list.py
@@ -2477,12 +2477,12 @@ stages:
       size: 85837
     - path: cad/scenes/Rs_garden/artifacts/object_list.json
       hash: md5
-      md5: 0bc529c9b9bfb32de15066c2cef01403
-      size: 209026
+      md5: a3a5527556b71a814b7f36767afa55cf
+      size: 209209
     - path: cad/scenes/Rs_int/artifacts/object_list.json
       hash: md5
-      md5: 3f856ec6dd005926a0fccfb03db8eed2
-      size: 95447
+      md5: 7e2795e020c46810091ca8ec19e4ff53
+      size: 95629
     - path: cad/scenes/Wainscott_0_garden/artifacts/object_list.json
       hash: md5
       md5: 0fdd9770621dd94a56e972ec18536065
@@ -2658,7 +2658,7 @@ stages:
     outs:
     - path: artifacts/pipeline/combined_room_object_list.json
       hash: md5
-      md5: 0b24d2d951c764263f036b0401175124
+      md5: 461703ae4db6eeaadc6411b39ee82da0
       size: 293030
   room_object_list@scenes/Beechwood_0_garden:
     cmd: python b1k_pipeline/batch_3dsmax.py cad/scenes/Beechwood_0_garden/processed.max
