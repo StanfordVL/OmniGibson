@@ -100,9 +100,14 @@ with open(b1k_pipeline.utils.PIPELINE_ROOT / "metadata/deletion_queue.csv", "r")
 
 def get_required_meta_links(category):
     synset = OBJECT_TAXONOMY.get_synset_from_category(category)
-    if synset is None:
-        raise ValueError(f"Category {category} not found in taxonomy.")
-    return OBJECT_TAXONOMY.get_required_meta_links_for_synset(synset)
+    if synset is not None:
+        return OBJECT_TAXONOMY.get_required_meta_links_for_synset(synset)
+    
+    substance_synset = OBJECT_TAXONOMY.get_synset_from_substance(category)
+    if substance_synset is not None:
+        return set()
+
+    raise ValueError(f"Category {category} not found in taxonomy.")
 
 
 def is_light_required(category):
