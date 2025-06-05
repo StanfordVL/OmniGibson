@@ -893,42 +893,68 @@ def setup_object_beacons(task_relevant_objects, scene):
 
 def setup_task_visualizers(task_relevant_objects, scene):
     task_visualizers = {}
-    # TODO: add these back in a mode for attachment tasks
-    # for obj in task_relevant_objects:
-    #     for link in obj.links.values():
-    #         if link.is_meta_link and link.meta_link_type == "attachment":
-    #             # Create a visualizer for the attachment link
-    #             vis_prim_path = f"{link.prim_path}/attachment_visualizer"
-    #             vis_prim = create_primitive_mesh(
-    #                 vis_prim_path,
-    #                 "Sphere",
-    #                 extents=1.0
-    #             )
-    #             visualizer = VisualGeomPrim(
-    #                 relative_prim_path=absolute_prim_path_to_scene_relative(scene, vis_prim_path),
-    #                 name=f"{obj.name}:attachment_visualizer"
-    #             )
-    #             visualizer.load(scene)
+    
+    # Extract frame visualization settings
+    vis_geom_width = ATTACHMENT_FRAME_CONFIG["width"]
+    vis_geom_lengths = ATTACHMENT_FRAME_CONFIG["lengths"]
+    vis_geom_quat_offsets = ATTACHMENT_FRAME_CONFIG["quat_offsets"]
+    vis_geom_colors = ATTACHMENT_FRAME_CONFIG["colors"]
+    
+    for obj in task_relevant_objects:
+        for link in obj.links.values():
+            if link.is_meta_link and link.meta_link_type == "attachment":
+                # Create frame visualizer for the attachment link
+                frame_visualizers = []
                 
-    #             # Set the position and scale of the visualizer
-    #             visualizer.scale = th.tensor([0.05, 0.05, 0.05]) / link.scale
-    #             visualizer.set_position_orientation(
-    #                 position=link.get_position_orientation()[0], 
-    #                 orientation=link.get_position_orientation()[1]
-    #             )
+                # Create materials for each axis
+                axis_materials = []
+                for axis, color in zip(("x", "y", "z"), vis_geom_colors):
+                    mat = MaterialPrim(
+                        relative_prim_path=absolute_prim_path_to_scene_relative(scene, f"{link.prim_path}/attachment_frame_mat_{axis}"),
+                        name=f"{obj.name}:attachment_frame_mat_{axis}",
+                    )
+                    mat.load(scene)
+                    mat.diffuse_color_constant = color
+                    axis_materials.append(mat)
                 
-    #             mat = MaterialPrim(
-    #                 relative_prim_path=absolute_prim_path_to_scene_relative(scene, f"{link.prim_path}/attachment_visualizer_mat"),
-    #                 name=f"{obj.name}:attachment_visualizer_mat",
-    #             )
-    #             mat.load(scene)
-    #             mat.diffuse_color_constant = th.tensor([0.0, 0.0, 1.0]) if link.meta_link_id.endswith("M") else th.tensor([1.0, 0.4, 0.75])
-    #             mat.enable_emission = True
-    #             mat.emissive_color = th.tensor([0.0, 0.0, 1.0]) if link.meta_link_id.endswith("M") else th.tensor([1.0, 0.4, 0.75])
-    #             mat.emissive_intensity = 10000.0
-    #             visualizer.material = mat
+                # Create cylinder for each axis (X, Y, Z)
+                for axis, length, mat, quat_offset in zip(
+                    ("x", "y", "z"),
+                    vis_geom_lengths,
+                    axis_materials,
+                    vis_geom_quat_offsets,
+                ):
+                    vis_prim_path = f"{link.prim_path}/attachment_frame_{axis}"
+                    vis_prim = create_primitive_mesh(
+                        vis_prim_path,
+                        "Cylinder",
+                        extents=1.0
+                    )
+                    visualizer = VisualGeomPrim(
+                        relative_prim_path=absolute_prim_path_to_scene_relative(scene, vis_prim_path),
+                        name=f"{obj.name}:attachment_frame_{axis}"
+                    )
+                    visualizer.load(scene)
+                    
+                    # Attach material
+                    visualizer.material = mat
+                    
+                    # Scale the cylinder and normalize with link scale
+                    visualizer.scale = th.tensor([vis_geom_width, vis_geom_width, length]) / link.scale
+                    
+                    # Set position and orientation relative to the attachment link
+                    visualizer.set_position_orientation(
+                        position=th.tensor([0, 0, 0]), 
+                        orientation=quat_offset, 
+                        frame="parent"
+                    )
+                    
+                    visualizer.visible = False  # Initially hidden
+                    frame_visualizers.append(visualizer)
                 
-    #             task_visualizers[obj] = visualizer
+                # Store all three axis visualizers for this attachment
+                task_visualizers[obj] = frame_visualizers
+    
     return task_visualizers
 
 def setup_ghost_robot(scene, task_cfg=None):
