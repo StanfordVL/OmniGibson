@@ -613,6 +613,9 @@ class OGRobotServer:
                     for name, link in obj.links.items():
                         if not 'meta' in name and link != obj.root_link:
                             link.visible = not obj.highlighted
+                for vis_list in self.task_visualizers.values():
+                    for vis in vis_list:
+                        vis.visible = obj.highlighted
         self._button_toggled_state["a"] = button_a_state
 
         # If capture is toggled from OFF -> ON, breakpoint
