@@ -911,7 +911,6 @@ def fix_common_issues_in_all_files():
     candidates = [
         x
         for x in pathlib.Path(r"D:\ig_pipeline").glob("cad/*/*/processed.max")
-        if "substance" in x.parts[-2]
     ]
 
     for i, f in enumerate(tqdm.tqdm(candidates)):
