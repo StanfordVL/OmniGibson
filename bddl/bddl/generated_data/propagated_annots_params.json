@@ -12294,12 +12294,7 @@
                 "dirt.n.02": [],
                 "debris.n.01": [],
                 "bunchgrass.n.01": null,
-                "mud.n.03": [
-                    [
-                        "saturated",
-                        "water.n.06"
-                    ]
-                ],
+                "mud.n.03": [],
                 "mold.n.05": [
                     [
                         "saturated",
@@ -58636,10 +58631,8 @@
         "wrinkleable": {}
     },
     "pesticide.n.01": {
-        "boilable": {},
-        "liquid": {},
-        "physicalSubstance": {},
-        "substance": {}
+        "substance": {},
+        "visualSubstance": {}
     },
     "pesticide__atomizer.n.01": {
         "disinfectable": {},
