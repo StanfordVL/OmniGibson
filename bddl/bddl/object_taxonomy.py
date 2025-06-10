@@ -95,6 +95,21 @@ class ObjectTaxonomy(object):
         return self._get_synset_by_filter(
             lambda synset: substance in self.get_substances(synset)
         )
+    
+    def get_synset_from_category_or_substance(self, category_or_substance):
+        """
+        Get synset name corresponding to object category or substance.
+
+        :param category_or_substance: object category or substance to search for.
+        :return: str containing matching synset.
+        :raises ValueError if multiple matching synsets are found.
+        """
+        return self._get_synset_by_filter(
+            lambda synset: (
+                category_or_substance in self.get_categories(synset)
+                or category_or_substance in self.get_substances(synset)
+            )
+        )
 
     def get_subtree_categories(self, synset):
         """
