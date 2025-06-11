@@ -406,6 +406,18 @@ freeze_vegetables:
     - -0.771820068359375
     - 0.0037841796875
     scene_model: house_single_floor
+gathering_nuts:
+  0:
+    robot_start_orientation:
+    - -0.00010575057240203023
+    - -0.0009146732045337558
+    - -0.9865900278091431
+    - 0.16321490705013275
+    robot_start_position:
+    - -22.0340576171875
+    - 3.820770263671875
+    - 0.0050048828125
+    scene_model: house_single_floor
 getting_organized_for_work:
   0:
     robot_start_orientation:
@@ -733,13 +745,13 @@ setting_the_table:
 slicing_vegetables:
   0:
     robot_start_orientation:
-    - -0.0009027041378431022
-    - -0.00017844283138401806
-    - 0.2640674114227295
-    - 0.9645037651062012
+    - 0.0003110530087724328
+    - -0.0008660361636430025
+    - 0.7452154755592346
+    - 0.666823148727417
     robot_start_position:
-    - 5.41961669921875
-    - -0.72479248046875
+    - 7.861236572265625
+    - -0.992340087890625
     - 0.0050048828125
     scene_model: house_single_floor
 sorting_mail:
