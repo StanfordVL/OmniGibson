@@ -206,7 +206,7 @@ class DynamixelDriver(DynamixelDriverProtocol):
         max_currents = np.zeros(self._n_joints, dtype=int)
         for i, dxl_id in enumerate(self._ids):
             # Read from packet handler and record max currents
-            max_curr, result, err = self._packetHandler.read4ByteTxRx(self._portHandler, dxl_id, ADDR_MAX_CURRENT)
+            max_curr, result, err = self._packetHandler.read2ByteTxRx(self._portHandler, dxl_id, ADDR_MAX_CURRENT)
             assert result == COMM_SUCCESS, f"comm failed: {result}"
             max_currents[i] = np.int32(np.uint32(max_curr))
         self._max_currents = max_currents

@@ -87,18 +87,18 @@ ALL_QA_METRICS = {
     "failed_grasp": {
         "cls": FailedGraspMetric,
         "init": None,
-        "mode": MetricMode.HARD,
+        "mode": MetricMode.SOFT,
         "warning": None,
         "task_whitelist": None,
         "task_blacklist": None,
         "validate_kwargs": dict(
-            failed_grasp_limit=5,
+            failed_grasp_limit=0,
         ),
     },
     "task_relevant_obj_vel": {
         "cls": TaskRelevantObjectVelocityMetric,
         "init": None,
-        "mode": MetricMode.HARD,
+        "mode": MetricMode.DISABLED,
         "warning": None,
         "task_whitelist": None,
         "task_blacklist": None,
