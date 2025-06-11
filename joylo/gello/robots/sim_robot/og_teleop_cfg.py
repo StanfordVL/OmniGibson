@@ -357,6 +357,4 @@ BLINK_WHEN_IN_CONTACT = True
 
 DISABLED_TRANSITION_RULES = [ToggleableMachineRule, 
                              MixingToolRule, 
-                             CookingObjectRule,
-                             CookingPhysicalParticleRule, 
                              CookingSystemRule]
