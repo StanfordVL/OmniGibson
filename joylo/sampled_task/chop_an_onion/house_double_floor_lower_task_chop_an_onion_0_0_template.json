@@ -2,14 +2,14 @@
     "metadata": {
         "task": {
             "inst_to_name": {
-                "agent.n.01_1": "robot_xgiqxf",
-                "chopping_board.n.01_1": "cutting_board_92",
-                "countertop.n.01_1": "bar_byvbuc_0",
+                "agent.n.01_1": "robot_qqfsim",
+                "bowl.n.01_1": "bowl_73",
+                "chopping_board.n.01_1": "cutting_board_76",
+                "countertop.n.01_1": "bar_egwapq_0",
                 "floor.n.01_1": "floors_zqjkvm_0",
-                "mixing_bowl.n.01_1": "mixing_bowl_89",
-                "parer.n.02_1": "parer_90",
+                "parer.n.02_1": "parer_74",
                 "sink.n.01_1": "drop_in_sink_lkklqs_0",
-                "vidalia_onion.n.01_1": "vidalia_onion_91"
+                "vidalia_onion.n.01_1": "vidalia_onion_75"
             }
         }
     },
@@ -19,7 +19,7 @@
         "args": {
             "scene_model": "house_double_floor_lower",
             "scene_instance": null,
-            "scene_file": "/scr/chengshu/iGibson3/omnigibson/data/og_dataset/scenes/house_double_floor_lower/json/house_double_floor_lower_stable.json",
+            "scene_file": "/home/yhang/OmniGibson/omnigibson/data/og_dataset/scenes/house_double_floor_lower/json/house_double_floor_lower_stable.json",
             "trav_map_resolution": 0.1,
             "default_erosion_radius": 0.0,
             "trav_map_with_objects": true,
@@ -50,7 +50,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a786b8fb65f91a047abc582495249a91"
                 }
             },
             "bush_cwsigt_0": {
@@ -70,7 +71,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_1": {
@@ -90,7 +92,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_10": {
@@ -110,7 +113,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_2": {
@@ -130,7 +134,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_3": {
@@ -150,7 +155,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_4": {
@@ -170,7 +176,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_5": {
@@ -190,7 +197,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_6": {
@@ -210,7 +218,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_7": {
@@ -230,7 +239,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_8": {
@@ -250,7 +260,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_cwsigt_9": {
@@ -270,7 +281,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c0add8dd9dccc3f4ccd9ea80bf2e59b3"
                 }
             },
             "bush_frqici_0": {
@@ -290,7 +302,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "0827d6854be7240a09c869caeddf5027"
                 }
             },
             "bush_frqici_1": {
@@ -310,7 +323,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "0827d6854be7240a09c869caeddf5027"
                 }
             },
             "bush_frqici_2": {
@@ -330,7 +344,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "0827d6854be7240a09c869caeddf5027"
                 }
             },
             "bush_frqici_3": {
@@ -350,7 +365,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "0827d6854be7240a09c869caeddf5027"
                 }
             },
             "bush_frqici_4": {
@@ -370,7 +386,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "0827d6854be7240a09c869caeddf5027"
                 }
             },
             "bush_kjakgd_0": {
@@ -390,7 +407,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ddfa92527f28ec6aadeaa23d663178aa"
                 }
             },
             "bush_kjakgd_1": {
@@ -410,7 +428,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ddfa92527f28ec6aadeaa23d663178aa"
                 }
             },
             "bush_knspbi_0": {
@@ -430,7 +449,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "bc0ed32a17da0958b11fe0f3c51b9f6d"
                 }
             },
             "bush_knspbi_1": {
@@ -450,7 +470,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "bc0ed32a17da0958b11fe0f3c51b9f6d"
                 }
             },
             "bush_knspbi_2": {
@@ -470,7 +491,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "bc0ed32a17da0958b11fe0f3c51b9f6d"
                 }
             },
             "bush_knspbi_3": {
@@ -490,7 +512,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "bc0ed32a17da0958b11fe0f3c51b9f6d"
                 }
             },
             "bush_knspbi_4": {
@@ -510,7 +533,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "bc0ed32a17da0958b11fe0f3c51b9f6d"
                 }
             },
             "bush_knspbi_5": {
@@ -530,7 +554,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "bc0ed32a17da0958b11fe0f3c51b9f6d"
                 }
             },
             "bush_kyghri_0": {
@@ -550,7 +575,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_kyghri_1": {
@@ -570,7 +596,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_kyghri_2": {
@@ -590,7 +617,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_kyghri_3": {
@@ -610,7 +638,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_kyghri_4": {
@@ -630,7 +659,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_kyghri_5": {
@@ -650,7 +680,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_kyghri_6": {
@@ -670,7 +701,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_kyghri_7": {
@@ -690,7 +722,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_kyghri_8": {
@@ -710,7 +743,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "11b517c3bfca9a656242c5a4639ef9b5"
                 }
             },
             "bush_lfyqkj_0": {
@@ -730,7 +764,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7b34166d6f969fb1895d1fe3a2c1d560"
                 }
             },
             "bush_lfyqkj_1": {
@@ -750,7 +785,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7b34166d6f969fb1895d1fe3a2c1d560"
                 }
             },
             "bush_lfyqkj_2": {
@@ -770,7 +806,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7b34166d6f969fb1895d1fe3a2c1d560"
                 }
             },
             "bush_lfyqkj_3": {
@@ -790,7 +827,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7b34166d6f969fb1895d1fe3a2c1d560"
                 }
             },
             "bush_lfyqkj_4": {
@@ -810,7 +848,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7b34166d6f969fb1895d1fe3a2c1d560"
                 }
             },
             "bush_lfyqkj_5": {
@@ -830,7 +869,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7b34166d6f969fb1895d1fe3a2c1d560"
                 }
             },
             "bush_lfyqkj_6": {
@@ -850,7 +890,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7b34166d6f969fb1895d1fe3a2c1d560"
                 }
             },
             "bush_oedeqi_0": {
@@ -870,7 +911,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a82a770d6190d760516639e5b0aece2f"
                 }
             },
             "bush_oedeqi_1": {
@@ -890,7 +932,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a82a770d6190d760516639e5b0aece2f"
                 }
             },
             "bush_oedeqi_2": {
@@ -910,7 +953,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a82a770d6190d760516639e5b0aece2f"
                 }
             },
             "bush_pjhpwk_0": {
@@ -930,7 +974,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5bd0269bbebe6f74f669cf89d2b24340"
                 }
             },
             "bush_pjhpwk_1": {
@@ -950,7 +995,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5bd0269bbebe6f74f669cf89d2b24340"
                 }
             },
             "bush_pjhpwk_2": {
@@ -970,7 +1016,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5bd0269bbebe6f74f669cf89d2b24340"
                 }
             },
             "bush_pjhpwk_3": {
@@ -990,7 +1037,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5bd0269bbebe6f74f669cf89d2b24340"
                 }
             },
             "bush_pjhpwk_4": {
@@ -1010,7 +1058,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5bd0269bbebe6f74f669cf89d2b24340"
                 }
             },
             "bush_yhjhta_0": {
@@ -1030,7 +1079,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "941005ad0c8f4c879e196420ba3000b0"
                 }
             },
             "bush_yhjhta_1": {
@@ -1050,7 +1100,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "941005ad0c8f4c879e196420ba3000b0"
                 }
             },
             "bush_yhjhta_2": {
@@ -1070,7 +1121,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "941005ad0c8f4c879e196420ba3000b0"
                 }
             },
             "bush_yhjhta_3": {
@@ -1090,7 +1142,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "941005ad0c8f4c879e196420ba3000b0"
                 }
             },
             "bush_yhjhta_4": {
@@ -1110,7 +1163,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "941005ad0c8f4c879e196420ba3000b0"
                 }
             },
             "bush_yhjhta_5": {
@@ -1130,7 +1184,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "941005ad0c8f4c879e196420ba3000b0"
                 }
             },
             "bush_yhjhta_6": {
@@ -1150,7 +1205,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "941005ad0c8f4c879e196420ba3000b0"
                 }
             },
             "car_xxsgpq_0": {
@@ -1170,7 +1226,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "0cd993eadd563bb4d7566d6aa2f67e05"
                 }
             },
             "charcoal_grill_crdaeu_0": {
@@ -1190,7 +1247,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "12597746435ceb178b5cc46ca59f16a3"
                 }
             },
             "countertop_tpuwys_0": {
@@ -1210,7 +1268,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "da4aba690baf7dfca8d81c1bc1b6de83"
                 }
             },
             "dishwasher_ynrhuk_0": {
@@ -1230,6 +1289,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "bf8ebfa4f2eddcbf9df621f5aa74f752",
                     "bddl_object_scope": null
                 }
             },
@@ -1250,6 +1310,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "d83d5bc62bc0e59923984dd17680385c",
                     "bddl_object_scope": null
                 }
             },
@@ -1270,6 +1331,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "d4f14541ccd2e3716e66022ef7a71ae6",
                     "bddl_object_scope": null
                 }
             },
@@ -1290,6 +1352,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "97058ea0b9027ae350a298f453ed87e8",
                     "bddl_object_scope": null
                 }
             },
@@ -1310,7 +1373,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "e23887408f7ae8386550346591a88a49"
                 }
             },
             "tree_dyymaq_0": {
@@ -1330,7 +1394,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c7cec21fbed88a8afd1e4e62bb7dc741"
                 }
             },
             "tree_dyymaq_1": {
@@ -1350,7 +1415,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c7cec21fbed88a8afd1e4e62bb7dc741"
                 }
             },
             "tree_dyymaq_2": {
@@ -1370,7 +1436,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c7cec21fbed88a8afd1e4e62bb7dc741"
                 }
             },
             "tree_flkzbo_0": {
@@ -1390,7 +1457,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "650416c499a34f8b011c305ddc24f886"
                 }
             },
             "tree_flkzbo_1": {
@@ -1410,7 +1478,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "650416c499a34f8b011c305ddc24f886"
                 }
             },
             "tree_flkzbo_2": {
@@ -1430,7 +1499,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "650416c499a34f8b011c305ddc24f886"
                 }
             },
             "tree_gmzozb_0": {
@@ -1450,7 +1520,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "749113048d1c2fd5b0a941d239ed92cf"
                 }
             },
             "tree_gmzozb_1": {
@@ -1470,7 +1541,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "749113048d1c2fd5b0a941d239ed92cf"
                 }
             },
             "tree_gmzozb_2": {
@@ -1490,7 +1562,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "749113048d1c2fd5b0a941d239ed92cf"
                 }
             },
             "tree_gmzozb_3": {
@@ -1510,7 +1583,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "749113048d1c2fd5b0a941d239ed92cf"
                 }
             },
             "tree_gmzozb_4": {
@@ -1530,7 +1604,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "749113048d1c2fd5b0a941d239ed92cf"
                 }
             },
             "tree_rrhqpw_0": {
@@ -1550,7 +1625,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "20bdea452dc69903e10b86b35e9acd82"
                 }
             },
             "tree_rrhqpw_1": {
@@ -1570,7 +1646,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "20bdea452dc69903e10b86b35e9acd82"
                 }
             },
             "tree_rrhqpw_2": {
@@ -1590,7 +1667,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "20bdea452dc69903e10b86b35e9acd82"
                 }
             },
             "tree_rrhqpw_3": {
@@ -1610,7 +1688,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "20bdea452dc69903e10b86b35e9acd82"
                 }
             },
             "tree_rrhqpw_4": {
@@ -1630,7 +1709,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "20bdea452dc69903e10b86b35e9acd82"
                 }
             },
             "tree_rrhqpw_5": {
@@ -1650,7 +1730,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "20bdea452dc69903e10b86b35e9acd82"
                 }
             },
             "tree_wtyipq_0": {
@@ -1670,7 +1751,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "tree_wtyipq_1": {
@@ -1690,7 +1772,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "tree_wtyipq_2": {
@@ -1710,7 +1793,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "tree_wtyipq_3": {
@@ -1730,7 +1814,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "tree_wtyipq_4": {
@@ -1750,7 +1835,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "tree_wtyipq_5": {
@@ -1770,7 +1856,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "tree_wtyipq_6": {
@@ -1790,7 +1877,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "tree_wtyipq_7": {
@@ -1810,7 +1898,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "tree_wtyipq_8": {
@@ -1830,7 +1919,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5868d78ff6cb31ec3d9e08f27765c95c"
                 }
             },
             "wall_nail_wlnail_0": {
@@ -1850,7 +1940,8 @@
                     "in_rooms": [
                         "garage_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b13640ddca0b3570656c5e120a6da059"
                 }
             },
             "wall_nail_wlnail_1": {
@@ -1870,6 +1961,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "b13640ddca0b3570656c5e120a6da059",
                     "bddl_object_scope": null
                 }
             },
@@ -1890,7 +1982,8 @@
                     "in_rooms": [
                         "garage_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b13640ddca0b3570656c5e120a6da059"
                 }
             },
             "wood_fireplace_gpnsij_0": {
@@ -1910,7 +2003,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d797382fdee0780cf9e7cf822d7bc824"
                 }
             },
             "bar_byvbuc_0": {
@@ -1930,6 +2024,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "095d92fea41b6b33cbb3070538a28b5a",
                     "bddl_object_scope": null
                 }
             },
@@ -1950,6 +2045,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "f85e9a7f5de5b91e25341137a775c302",
                     "bddl_object_scope": null
                 }
             },
@@ -1970,7 +2066,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "647e7dbd099d323784d0490abfae4eac"
                 }
             },
             "breakfast_table_xftrki_0": {
@@ -1990,6 +2087,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "3c6a214cdeb686e70120fa3115c65c97",
                     "bddl_object_scope": null
                 }
             },
@@ -2010,7 +2108,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "e461f59150bdc5b675a3b025c7b4e7ee"
                 }
             },
             "garden_chair_cottya_0": {
@@ -2030,7 +2129,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "361863b2b7c149379ec4d07cebc720b4"
                 }
             },
             "garden_chair_cottya_1": {
@@ -2050,7 +2150,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "361863b2b7c149379ec4d07cebc720b4"
                 }
             },
             "garden_chair_cottya_2": {
@@ -2070,7 +2171,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "361863b2b7c149379ec4d07cebc720b4"
                 }
             },
             "garden_chair_lraplz_0": {
@@ -2090,7 +2192,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ec121342bf420f1a13524bde771dda15"
                 }
             },
             "standing_mirror_wwkuuf_0": {
@@ -2110,7 +2213,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "f42a7d4cdb6c160f77faafaed7e6c12d"
                 }
             },
             "straight_chair_hgunnf_0": {
@@ -2130,6 +2234,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "7b7ec63d953cba350c0d1727bba2421e",
                     "bddl_object_scope": null
                 }
             },
@@ -2150,6 +2255,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "1142004608ed16c041c0c264e6eb74a5",
                     "bddl_object_scope": null
                 }
             },
@@ -2170,6 +2276,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "1142004608ed16c041c0c264e6eb74a5",
                     "bddl_object_scope": null
                 }
             },
@@ -2190,6 +2297,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "a1e17c47ea4dd146449fbe05d7bc095a",
                     "bddl_object_scope": null
                 }
             },
@@ -2210,6 +2318,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "fa31d04ec2beb2ccd5b8f4813360d422",
                     "bddl_object_scope": null
                 }
             },
@@ -2230,7 +2339,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "895d45486bbe4484676204b9e2da9f9b"
                 }
             },
             "car_ssxsje_0": {
@@ -2250,7 +2360,8 @@
                     "in_rooms": [
                         "garage_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "9ce18e38beba075d38367f101c1a6b82"
                 }
             },
             "ceilings_alydei_0": {
@@ -2270,6 +2381,7 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
+                    "expected_file_hash": "86e365b8fb102d702c6505cd28459c6b",
                     "bddl_object_scope": null
                 }
             },
@@ -2290,6 +2402,7 @@
                     "in_rooms": [
                         "garden_0"
                     ],
+                    "expected_file_hash": "fed445c055bd7da4df963a2455755786",
                     "bddl_object_scope": null
                 }
             },
@@ -2310,6 +2423,7 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
+                    "expected_file_hash": "0c8c59ac8c8af78b9d8eec93e762df12",
                     "bddl_object_scope": null
                 }
             },
@@ -2330,6 +2444,7 @@
                     "in_rooms": [
                         "garage_0"
                     ],
+                    "expected_file_hash": "d94c0f06b0244d1f69d59096d0a0ead6",
                     "bddl_object_scope": null
                 }
             },
@@ -2350,6 +2465,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "308be41b758fc0ca3f8ac8e31ce37d86",
                     "bddl_object_scope": null
                 }
             },
@@ -2370,6 +2486,7 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
+                    "expected_file_hash": "46c82d22b374f34f5b527f708c1c355b",
                     "bddl_object_scope": null
                 }
             },
@@ -2390,6 +2507,7 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
+                    "expected_file_hash": "9a9b27c732cc2d0cee5ece6550efee5b",
                     "bddl_object_scope": null
                 }
             },
@@ -2410,7 +2528,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "97e453ea122521909d3b30c306a76c63"
                 }
             },
             "decorative_sign_rypeha_0": {
@@ -2430,7 +2549,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "42d69583e4b4152650d990287368132f"
                 }
             },
             "decorative_sign_xzsmxq_0": {
@@ -2450,7 +2570,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "50b17dd7bf51dded04a7fef7a5383914"
                 }
             },
             "door_bexenl_0": {
@@ -2471,7 +2592,8 @@
                         "garage_0",
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7865c16b2356a17e2c56ddca2d9de7dc"
                 }
             },
             "door_bexenl_1": {
@@ -2492,7 +2614,8 @@
                         "corridor_0",
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7865c16b2356a17e2c56ddca2d9de7dc"
                 }
             },
             "door_vudhlc_0": {
@@ -2513,7 +2636,8 @@
                         "corridor_0",
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c7c5eb1d49930dbf60ae89ca35dd84b6"
                 }
             },
             "door_vudhlc_1": {
@@ -2534,7 +2658,8 @@
                         "corridor_0",
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c7c5eb1d49930dbf60ae89ca35dd84b6"
                 }
             },
             "door_vudhlc_2": {
@@ -2555,6 +2680,7 @@
                         "kitchen_0",
                         "garden_0"
                     ],
+                    "expected_file_hash": "c7c5eb1d49930dbf60ae89ca35dd84b6",
                     "bddl_object_scope": null
                 }
             },
@@ -2576,7 +2702,8 @@
                         "living_room_0",
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c7c5eb1d49930dbf60ae89ca35dd84b6"
                 }
             },
             "downlight_pawfmw_0": {
@@ -2596,7 +2723,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_1": {
@@ -2616,7 +2744,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_10": {
@@ -2636,7 +2765,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_11": {
@@ -2656,7 +2786,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_12": {
@@ -2676,7 +2807,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_13": {
@@ -2696,7 +2828,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_14": {
@@ -2716,7 +2849,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_15": {
@@ -2736,7 +2870,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_16": {
@@ -2756,7 +2891,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_17": {
@@ -2776,7 +2912,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_2": {
@@ -2796,7 +2933,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_3": {
@@ -2816,7 +2954,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_4": {
@@ -2836,7 +2975,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_5": {
@@ -2856,7 +2996,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_6": {
@@ -2876,7 +3017,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_7": {
@@ -2896,7 +3038,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_8": {
@@ -2916,7 +3059,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pawfmw_9": {
@@ -2936,7 +3080,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d0ce32190cf88078f7a14ffc1224ce50"
                 }
             },
             "downlight_pxrmnt_0": {
@@ -2956,7 +3101,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "93d84847ab01a9461440afd56a841139"
                 }
             },
             "downlight_pxrmnt_1": {
@@ -2976,7 +3122,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "93d84847ab01a9461440afd56a841139"
                 }
             },
             "downlight_pxrmnt_2": {
@@ -2996,7 +3143,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "93d84847ab01a9461440afd56a841139"
                 }
             },
             "driveway_umalys_0": {
@@ -3016,7 +3164,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "35a2db400ef08c7865f41f5854e7a73e"
                 }
             },
             "drop_in_sink_hecjnt_0": {
@@ -3036,7 +3185,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "e7fc89deecf1a1e3a2e9803531f2f7ec"
                 }
             },
             "drop_in_sink_lkklqs_0": {
@@ -3056,6 +3206,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "2425c55bea6d7dab1be772b6e9a57b7d",
                     "bddl_object_scope": null
                 }
             },
@@ -3076,7 +3227,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ba2d1bf51e06e657781716bd5c0cffe5"
                 }
             },
             "electric_switch_strbnw_1": {
@@ -3096,7 +3248,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ba2d1bf51e06e657781716bd5c0cffe5"
                 }
             },
             "electric_switch_strbnw_2": {
@@ -3116,7 +3269,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ba2d1bf51e06e657781716bd5c0cffe5"
                 }
             },
             "electric_switch_strbnw_3": {
@@ -3136,7 +3290,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ba2d1bf51e06e657781716bd5c0cffe5"
                 }
             },
             "fixed_window_kvdqep_0": {
@@ -3157,6 +3312,7 @@
                         "kitchen_0",
                         "garden_0"
                     ],
+                    "expected_file_hash": "61725e3a9b11c1062ad9959d78f32a2c",
                     "bddl_object_scope": null
                 }
             },
@@ -3178,6 +3334,7 @@
                         "kitchen_0",
                         "garden_0"
                     ],
+                    "expected_file_hash": "5f2a85d70c12c1d850ea555f4ae19873",
                     "bddl_object_scope": null
                 }
             },
@@ -3198,7 +3355,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b85488e0da56c02258613c20c2af8773"
                 }
             },
             "floors_irvmpb_0": {
@@ -3218,7 +3376,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "cb5f262190ac22e0711aa1864372f335"
                 }
             },
             "floors_iwsyoz_0": {
@@ -3238,7 +3397,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ddbf55a2d90dc4af5027f92c55b42f7d"
                 }
             },
             "floors_nbxnpk_0": {
@@ -3258,7 +3418,8 @@
                     "in_rooms": [
                         "garage_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "206e2a2ca68355137e10cbf2e2be59ce"
                 }
             },
             "floors_ogynye_0": {
@@ -3278,7 +3439,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "2df6fb7b9e79bcb077df5fcfd767c399"
                 }
             },
             "floors_qadhjb_0": {
@@ -3298,7 +3460,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "aabcb26a60eef7d3f76c54a75ee11d3b"
                 }
             },
             "floors_sdejoi_0": {
@@ -3318,7 +3481,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "e7b21ac38ea27b6d696c6c21d14aa7d8"
                 }
             },
             "floors_slmyas_0": {
@@ -3338,7 +3502,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "386b39948ef68b26229f17d0ec872556"
                 }
             },
             "floors_ulujpr_0": {
@@ -3358,7 +3523,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "da6d83b222d92083f433c257beb7824a"
                 }
             },
             "floors_xkkysf_0": {
@@ -3378,7 +3544,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8589d189d7be55d1cb950d968ca670c9"
                 }
             },
             "floors_xorxro_0": {
@@ -3398,7 +3565,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "59ccade0e971ccb4d674f4d3e4eef6f0"
                 }
             },
             "floors_zqjkvm_0": {
@@ -3418,6 +3586,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "5ef2eea344a85c5dbda9b196082a08b9",
                     "bddl_object_scope": null
                 }
             },
@@ -3438,7 +3607,8 @@
                     "in_rooms": [
                         "garage_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c16af5b05cd2f05a92fd4f503eebfc2e"
                 }
             },
             "garden_light_qyfrwj_0": {
@@ -3458,7 +3628,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "garden_light_qyfrwj_1": {
@@ -3478,7 +3649,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "garden_light_qyfrwj_2": {
@@ -3498,7 +3670,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "garden_light_qyfrwj_3": {
@@ -3518,7 +3691,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "garden_light_qyfrwj_4": {
@@ -3538,7 +3712,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "garden_light_qyfrwj_5": {
@@ -3558,7 +3733,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "garden_light_qyfrwj_6": {
@@ -3578,7 +3754,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "garden_light_qyfrwj_7": {
@@ -3598,7 +3775,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "garden_light_qyfrwj_8": {
@@ -3618,7 +3796,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "b4bd06ca5b7bdd7d9f9e1ef7df044cf3"
                 }
             },
             "hall_tree_daxzaw_0": {
@@ -3638,7 +3817,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "6064be1b8b994382d0eeb49ca9e72acb"
                 }
             },
             "hall_tree_upkvgr_0": {
@@ -3658,7 +3838,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "cfa4111f63bfadaf9af899c2134f5f0a"
                 }
             },
             "hook_akwlam_0": {
@@ -3678,7 +3859,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "97c95f19b6091cbc571ef52ee3fee49d"
                 }
             },
             "lawn_aztwla_0": {
@@ -3698,7 +3880,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "31bf51a93ae123f92b43269a0ab631a1"
                 }
             },
             "lawn_srfikq_0": {
@@ -3718,7 +3901,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "ef7d79805cc8810df19f294f7d722f98"
                 }
             },
             "lawn_tiqndr_0": {
@@ -3738,7 +3922,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "1fec0ea95f2fe7c925acbaf47f22fca1"
                 }
             },
             "lawn_zjtrpt_0": {
@@ -3758,7 +3943,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "92513f35773c03f56fd000ab6c55801b"
                 }
             },
             "mirror_edxfnt_0": {
@@ -3778,7 +3964,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "21de4e4e23fb0e7167a8708e388c2358"
                 }
             },
             "motion_sensor_aecflf_0": {
@@ -3798,7 +3985,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "701f8cbd21e9edde80f0feb3e7d17ce6"
                 }
             },
             "paver_eskaca_0": {
@@ -3818,7 +4006,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "6acdbe05fbc9d97ad1afadd58b7b8f7a"
                 }
             },
             "paver_lmdfdn_0": {
@@ -3838,7 +4027,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "f26fe536d4ef1fe7bec4a8681475b5b5"
                 }
             },
             "paver_sekqqq_0": {
@@ -3858,7 +4048,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "9daeb3c1e31780a1e563659a78ac8cb9"
                 }
             },
             "picture_ekagyj_0": {
@@ -3878,7 +4069,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "931f520415eaa97c3a351f55a9e3f1db"
                 }
             },
             "picture_ggajdz_0": {
@@ -3898,7 +4090,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "90222f7d3d6fd6d98a441a56b8e3da48"
                 }
             },
             "picture_hffaxw_0": {
@@ -3918,7 +4111,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "780b9cfc51e20366f6a3e8f7d8d0e450"
                 }
             },
             "picture_jnecmu_0": {
@@ -3938,7 +4132,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "c2e724ef7133aacd92beaf2d153e70ad"
                 }
             },
             "picture_qlkknu_0": {
@@ -3958,7 +4153,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "8943f9338563a7db28b46f04a61e4252"
                 }
             },
             "picture_qlsyco_0": {
@@ -3978,7 +4174,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7e7bd70f770fefe441fa4e7f17a72217"
                 }
             },
             "picture_tveyoh_0": {
@@ -3998,7 +4195,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "82d80e537605d3674f8978b2f64cd38c"
                 }
             },
             "picture_yzbpie_0": {
@@ -4018,7 +4216,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "94f5176b85ebea7cfba8bbe52a26e90d"
                 }
             },
             "playground_xdlcdi_0": {
@@ -4038,7 +4237,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "3d327526d99d098755db635ed6ea2dca"
                 }
             },
             "rail_fence_owbrvb_0": {
@@ -4058,7 +4258,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a7e2d4d5c8b270a694b7f5b54454787c"
                 }
             },
             "rail_fence_owbrvb_1": {
@@ -4078,7 +4279,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a7e2d4d5c8b270a694b7f5b54454787c"
                 }
             },
             "rail_fence_owbrvb_2": {
@@ -4098,7 +4300,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a7e2d4d5c8b270a694b7f5b54454787c"
                 }
             },
             "rail_fence_owbrvb_3": {
@@ -4118,7 +4321,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a7e2d4d5c8b270a694b7f5b54454787c"
                 }
             },
             "rail_fence_owbrvb_4": {
@@ -4138,7 +4342,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a7e2d4d5c8b270a694b7f5b54454787c"
                 }
             },
             "rail_fence_owbrvb_5": {
@@ -4158,7 +4363,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "a7e2d4d5c8b270a694b7f5b54454787c"
                 }
             },
             "range_hood_xvdfpp_0": {
@@ -4178,6 +4384,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "81bfc056084ea61abdd244371186d8c3",
                     "bddl_object_scope": null
                 }
             },
@@ -4196,6 +4403,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "16e85fae45365873f88aa2ba4e7e4acc",
                     "bddl_object_scope": null
                 }
             },
@@ -4216,7 +4424,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "41b6772d0ee658d7f567c3aaf18fe00e"
                 }
             },
             "room_light_kiuayi_0": {
@@ -4236,6 +4445,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "0a708f17db358d92424529282bde269d",
                     "bddl_object_scope": null
                 }
             },
@@ -4256,7 +4466,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "97f053b59fad5686fa81fb917c330d8c"
                 }
             },
             "stairs_tikozn_0": {
@@ -4276,6 +4487,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "3a312e0397d4aaf7758006345e2b4ac0",
                     "bddl_object_scope": null
                 }
             },
@@ -4296,7 +4508,8 @@
                     "in_rooms": [
                         "garden_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "7a40573dea95f12bc9ec1d298dbb3535"
                 }
             },
             "top_cabinet_tynnnw_0": {
@@ -4316,6 +4529,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "bb9e8ae548dea044f81606680c1ddd4a",
                     "bddl_object_scope": null
                 }
             },
@@ -4336,6 +4550,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "bb9e8ae548dea044f81606680c1ddd4a",
                     "bddl_object_scope": null
                 }
             },
@@ -4356,6 +4571,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "5f31529050ee2ff807107ab1848f8290",
                     "bddl_object_scope": null
                 }
             },
@@ -4376,6 +4592,7 @@
                     "in_rooms": [
                         "kitchen_0"
                     ],
+                    "expected_file_hash": "5f31529050ee2ff807107ab1848f8290",
                     "bddl_object_scope": null
                 }
             },
@@ -4396,7 +4613,8 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "d8ab9c3deac7af96a0d70ba688adacda"
                 }
             },
             "wall_mounted_tv_dxyfxf_0": {
@@ -4416,7 +4634,8 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "1990336656301cdc2627aae5f7318022"
                 }
             },
             "wall_socket_nujxel_0": {
@@ -4436,7 +4655,8 @@
                     "in_rooms": [
                         "corridor_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "4330b7cb7432ce234b36152b824a146f"
                 }
             },
             "walls_abtbfo_0": {
@@ -4454,6 +4674,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "5b4896a60c91fe6a70dfaf6d3dcdc497",
                     "bddl_object_scope": null
                 }
             },
@@ -4474,6 +4695,7 @@
                     "in_rooms": [
                         "living_room_0"
                     ],
+                    "expected_file_hash": "8cf95618eba09e45afe87c1d59d4a841",
                     "bddl_object_scope": null
                 }
             },
@@ -4492,6 +4714,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "6d240c22e5f36de3ad60ea086569d665",
                     "bddl_object_scope": null
                 }
             },
@@ -4510,6 +4733,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "332ac54222e17e0377a4004614cf7790",
                     "bddl_object_scope": null
                 }
             },
@@ -4528,6 +4752,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "61d61f77095a80ff9b5f03c2669df801",
                     "bddl_object_scope": null
                 }
             },
@@ -4546,6 +4771,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "1b5be077939eeb28fb416785efe26f03",
                     "bddl_object_scope": null
                 }
             },
@@ -4564,6 +4790,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "fcae1747905d4fed1bdf50e4e2bc6479",
                     "bddl_object_scope": null
                 }
             },
@@ -4582,6 +4809,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "1f18407b01312aa0fd583b93adf96e96",
                     "bddl_object_scope": null
                 }
             },
@@ -4600,6 +4828,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "d8e9b89b73cd854af80a55322a431a0d",
                     "bddl_object_scope": null
                 }
             },
@@ -4618,6 +4847,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "9f3aa2c8d583922ab877f18a3e5a8df9",
                     "bddl_object_scope": null
                 }
             },
@@ -4636,6 +4866,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "c972e073ef1ab690da74d37fd2dcb490",
                     "bddl_object_scope": null
                 }
             },
@@ -4654,6 +4885,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "4c223a0241e1c7e919f7514767a54b7a",
                     "bddl_object_scope": null
                 }
             },
@@ -4672,6 +4904,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "3122bb8332fa6ea366a14e86d3e219ce",
                     "bddl_object_scope": null
                 }
             },
@@ -4690,6 +4923,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "042e510fad798211dad67f4921944b91",
                     "bddl_object_scope": null
                 }
             },
@@ -4708,6 +4942,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "6cdd3a9f66cf52b3a80bf7f97e725e32",
                     "bddl_object_scope": null
                 }
             },
@@ -4726,6 +4961,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "261879bc3e684bf2dbd77d26f0c2b12e",
                     "bddl_object_scope": null
                 }
             },
@@ -4744,6 +4980,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "a95c81ecd20891f1bafe760b47c06420",
                     "bddl_object_scope": null
                 }
             },
@@ -4762,6 +4999,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "1ef27847777cc10a5634cdf9e031485d",
                     "bddl_object_scope": null
                 }
             },
@@ -4780,6 +5018,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "d64ca8201b1ab12b8d30cc5947ae45da",
                     "bddl_object_scope": null
                 }
             },
@@ -4798,6 +5037,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "dde5a8a24f95e81ea67759ba1da85bbe",
                     "bddl_object_scope": null
                 }
             },
@@ -4816,6 +5056,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "80acf118157114cffb17d2205bd44b6c",
                     "bddl_object_scope": null
                 }
             },
@@ -4834,6 +5075,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "e7d5eb091d9fb1d54402e23050fd5206",
                     "bddl_object_scope": null
                 }
             },
@@ -4852,6 +5094,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "77a32e0830f3660a5ed62483d5cac240",
                     "bddl_object_scope": null
                 }
             },
@@ -4870,6 +5113,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "657e0d27d79cc93ba85c415d2b42af1f",
                     "bddl_object_scope": null
                 }
             },
@@ -4888,6 +5132,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "fa379f9a9c9cd1da7ff648f499198f18",
                     "bddl_object_scope": null
                 }
             },
@@ -4906,6 +5151,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "34bef14a7ea780bf2cd93815746eb459",
                     "bddl_object_scope": null
                 }
             },
@@ -4924,6 +5170,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "e9e1b102347c179e7404ac8c63a057a1",
                     "bddl_object_scope": null
                 }
             },
@@ -4942,6 +5189,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "cfa38d73f5886197dba5e112adfcc07a",
                     "bddl_object_scope": null
                 }
             },
@@ -4960,6 +5208,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "de4be4ceec4d1ed48e605abe3782ada8",
                     "bddl_object_scope": null
                 }
             },
@@ -4978,6 +5227,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "ce0382609f884e45db5568d574f2e732",
                     "bddl_object_scope": null
                 }
             },
@@ -4996,6 +5246,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "0ed21a252059af2ca999e818dfd81cbb",
                     "bddl_object_scope": null
                 }
             },
@@ -5014,6 +5265,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "be4f1289ffe5930678abdd08063eb74a",
                     "bddl_object_scope": null
                 }
             },
@@ -5032,6 +5284,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "326697987c9faf715f6e6116bc9f3801",
                     "bddl_object_scope": null
                 }
             },
@@ -5050,6 +5303,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "db479ab9cc217e69d2cb0748a8fbe312",
                     "bddl_object_scope": null
                 }
             },
@@ -5068,6 +5322,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "8b98d47f8b384604d4211372b3575ebd",
                     "bddl_object_scope": null
                 }
             },
@@ -5086,6 +5341,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "2b2f42d7ef8fef68f4341a6059f45a0c",
                     "bddl_object_scope": null
                 }
             },
@@ -5104,6 +5360,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "948fd822034ea730f10f722b2bb1be1a",
                     "bddl_object_scope": null
                 }
             },
@@ -5122,6 +5379,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "d46233dedb1a367be1e2e28627c7b665",
                     "bddl_object_scope": null
                 }
             },
@@ -5140,6 +5398,7 @@
                     "fixed_base": true,
                     "visual_only": false,
                     "in_rooms": "",
+                    "expected_file_hash": "33d0d39b4bcb4f8eb883f96e2e614cba",
                     "bddl_object_scope": null
                 }
             },
@@ -5160,35 +5419,38 @@
                     "in_rooms": [
                         "bathroom_0"
                     ],
-                    "bddl_object_scope": null
+                    "bddl_object_scope": null,
+                    "expected_file_hash": "5104628d69c4e6da491d91832d049d58"
                 }
             },
-            "mixing_bowl_89": {
+            "bowl_73": {
                 "class_module": "omnigibson.objects.dataset_object",
                 "class_name": "DatasetObject",
                 "args": {
-                    "name": "mixing_bowl_89",
-                    "category": "mixing_bowl",
-                    "model": "bsgybx",
+                    "name": "bowl_73",
+                    "category": "bowl",
+                    "model": "aspeds",
                     "prim_type": 0,
+                    "expected_file_hash": "a6707a2b8242cd033ee80719f54423f2",
                     "scale": [
-                        0.8020207285881042,
-                        0.793493390083313,
-                        0.7731461524963379
+                        1.550701379776001,
+                        1.5507431030273438,
+                        1.3811830282211304
                     ],
                     "in_rooms": [
                         "kitchen_0"
                     ]
                 }
             },
-            "parer_90": {
+            "parer_74": {
                 "class_module": "omnigibson.objects.dataset_object",
                 "class_name": "DatasetObject",
                 "args": {
-                    "name": "parer_90",
+                    "name": "parer_74",
                     "category": "parer",
                     "model": "lwpdhi",
                     "prim_type": 0,
+                    "expected_file_hash": "8f672f6a39f02dd20449c2911a3216c7",
                     "scale": [
                         1.0,
                         1.0,
@@ -5199,14 +5461,15 @@
                     ]
                 }
             },
-            "vidalia_onion_91": {
+            "vidalia_onion_75": {
                 "class_module": "omnigibson.objects.dataset_object",
                 "class_name": "DatasetObject",
                 "args": {
-                    "name": "vidalia_onion_91",
+                    "name": "vidalia_onion_75",
                     "category": "vidalia_onion",
                     "model": "buyxll",
                     "prim_type": 0,
+                    "expected_file_hash": "5a84e8ed9bbdc743d767a568a7004a82",
                     "scale": [
                         1.0,
                         1.0,
@@ -5217,17 +5480,18 @@
                     ]
                 }
             },
-            "cutting_board_92": {
+            "cutting_board_76": {
                 "class_module": "omnigibson.objects.dataset_object",
                 "class_name": "DatasetObject",
                 "args": {
-                    "name": "cutting_board_92",
+                    "name": "cutting_board_76",
                     "category": "cutting_board",
                     "model": "aibvew",
                     "prim_type": 0,
+                    "expected_file_hash": "b5b7d42c459ed1c7bc91609a5fa58fa0",
                     "scale": [
-                        1.0,
-                        1.0,
+                        1.3023310899734497,
+                        1.2133365869522095,
                         1.0
                     ],
                     "in_rooms": [
@@ -5235,16 +5499,14 @@
                     ]
                 }
             },
-            "robot_xgiqxf": {
-                "class_module": "omnigibson.robots.r1",
-                "class_name": "R1",
+            "robot_qqfsim": {
+                "class_module": "omnigibson.robots.r1pro",
+                "class_name": "R1Pro",
                 "args": {
-                    "name": "robot_xgiqxf",
-                    "obs_modalities": [
-                        "rgb"
-                    ],
-                    "grasping_mode": "physical",
-                    "default_reset_mode": "untuck"
+                    "name": "robot_qqfsim",
+                    "obs_modalities": [],
+                    "default_reset_mode": "untuck",
+                    "expected_file_hash": "fb7a5df9e48a57ad673b0486a08a6b3f"
                 }
             }
         }
@@ -5270,12 +5532,12 @@
                         "pos": [
                             -2.485633134841919,
                             -0.7423186302185059,
-                            0.3915698528289795
+                            0.39156973361968994
                         ],
                         "ori": [
-                            0.000288940966129303,
-                            0.0003638051566667855,
-                            0.7071062326431274,
+                            0.0002889474853873253,
+                            0.0003637956397142261,
+                            0.7071061134338379,
                             0.7071073055267334
                         ],
                         "lin_vel": [
@@ -5290,9 +5552,9 @@
                         ]
                     },
                     "joint_pos": [
-                        6.792648576947613e-08,
-                        6.792078011130798e-08,
-                        6.792502915686782e-08
+                        6.790651951860127e-08,
+                        6.791844242570733e-08,
+                        6.791263729155617e-08
                     ],
                     "joint_vel": [
                         0.0,
@@ -6926,7 +7188,7 @@
                         ]
                     },
                     "joint_pos": [
-                        -1.6402458818259857e-12
+                        -3.5741602819744367e-12
                     ],
                     "joint_vel": [
                         0.0
@@ -6946,13 +7208,13 @@
                         "pos": [
                             15.853635787963867,
                             11.261885643005371,
-                            0.778302013874054
+                            0.7783020734786987
                         ],
                         "ori": [
                             9.313225746154785e-10,
-                            -1.686203177087009e-09,
+                            -6.833943189121783e-09,
                             0.9961946606636047,
-                            0.08715594559907913
+                            0.08715593069791794
                         ],
                         "lin_vel": [
                             0.0,
@@ -6966,7 +7228,7 @@
                         ]
                     },
                     "joint_pos": [
-                        -9.803002853914222e-11
+                        1.6196438287763293e-11
                     ],
                     "joint_vel": [
                         0.0
@@ -7007,8 +7269,8 @@
                             0.4197513163089752
                         ],
                         "ori": [
-                            -4.0745362639427185e-10,
-                            -5.6843418860808015e-12,
+                            4.0745362639427185e-10,
+                            3.115019353572279e-11,
                             1.0,
                             1.94646418094635e-07
                         ],
@@ -7024,22 +7286,22 @@
                         ]
                     },
                     "joint_pos": [
+                        1.9801159088181928e-15,
                         0.0,
-                        2.4553533576991693e-13,
-                        1.0166412778289668e-07
+                        1.4684491134175914e-07
                     ],
                     "joint_vel": [
+                        -2.8824456843745024e-30,
                         0.0,
-                        3.5796154154267955e-18,
-                        -2.332862791831758e-10
+                        4.565272313829249e-13
                     ],
                     "non_kin": {
-                        "Temperature": {
-                            "temperature": 23.0
-                        },
                         "ToggledOn": {
                             "value": false,
                             "hand_in_marker_steps": 0
+                        },
+                        "Temperature": {
+                            "temperature": 23.0
                         }
                     }
                 },
@@ -7048,14 +7310,14 @@
                     "root_link": {
                         "pos": [
                             5.201407432556152,
-                            -0.5687667727470398,
-                            0.9560027122497559
+                            -0.568766713142395,
+                            0.9560023546218872
                         ],
                         "ori": [
-                            -2.1967105567455292e-05,
-                            1.0629883036017418e-06,
-                            0.7071030735969543,
-                            0.7071107029914856
+                            -2.1981075406074524e-05,
+                            1.0683434084057808e-06,
+                            0.7071034908294678,
+                            0.7071104049682617
                         ],
                         "lin_vel": [
                             0.0,
@@ -7069,12 +7331,12 @@
                         ]
                     },
                     "joint_pos": [
-                        2.1653406845345557e-10,
-                        2.8507571303570955e-10
+                        3.447185314975343e-10,
+                        4.5566309059275056e-10
                     ],
                     "joint_vel": [
-                        1.7780936804585954e-15,
-                        1.7798336978904926e-15
+                        9.13940906462074e-13,
+                        3.5832533658582233e-22
                     ],
                     "non_kin": {
                         "Temperature": {
@@ -7087,14 +7349,14 @@
                     "root_link": {
                         "pos": [
                             6.116196632385254,
-                            -0.6967946887016296,
+                            -0.6967946290969849,
                             1.0086084604263306
                         ],
                         "ori": [
-                            -1.0710209608078003e-08,
-                            1.30385160446167e-07,
-                            0.7071057558059692,
-                            0.7071079015731812
+                            -2.2118911147117615e-08,
+                            1.2316741049289703e-07,
+                            0.7071062326431274,
+                            0.707107663154602
                         ],
                         "lin_vel": [
                             0.0,
@@ -7108,10 +7370,10 @@
                         ]
                     },
                     "joint_pos": [
-                        6.827414068127924e-13
+                        2.707402114253258e-16
                     ],
                     "joint_vel": [
-                        6.945676784930163e-18
+                        1.1123935465524957e-16
                     ],
                     "non_kin": {
                         "ToggledOn": {
@@ -7129,13 +7391,13 @@
                         "pos": [
                             6.911428928375244,
                             -0.6495887041091919,
-                            0.5409926772117615
+                            0.5409927368164062
                         ],
                         "ori": [
-                            -7.450580596923828e-09,
-                            -5.4016709327697754e-08,
-                            0.7071068286895752,
-                            0.7071070075035095
+                            2.9802322387695312e-08,
+                            -5.541369318962097e-08,
+                            0.7071066498756409,
+                            0.7071072459220886
                         ],
                         "lin_vel": [
                             0.0,
@@ -7149,14 +7411,14 @@
                         ]
                     },
                     "joint_pos": [
-                        -1.5650291826374563e-11,
-                        0.0,
-                        0.0
+                        -3.094039239225077e-13,
+                        6.927861796077609e-18,
+                        1.358975383251177e-30
                     ],
                     "joint_vel": [
-                        -1.8636332477228734e-09,
-                        -4.341047990581352e-19,
-                        -4.338924204358622e-19
+                        -4.35407222429407e-12,
+                        8.864428491912012e-16,
+                        2.286651085922375e-28
                     ],
                     "non_kin": {
                         "ToggledOn": {
@@ -7177,10 +7439,10 @@
                             0.33443355560302734
                         ],
                         "ori": [
-                            -7.275957614183426e-12,
                             0.0,
-                            -4.5838532969355583e-10,
-                            1.0
+                            0.0,
+                            0.0,
+                            1.0000001192092896
                         ],
                         "lin_vel": [
                             0.0,
@@ -7194,7 +7456,7 @@
                         ]
                     },
                     "joint_pos": [
-                        -3.603263791941008e-13
+                        1.5214525819762237e-11
                     ],
                     "joint_vel": [
                         0.0
@@ -7756,10 +8018,10 @@
                             1.027417540550232
                         ],
                         "ori": [
-                            -0.5329476594924927,
-                            -0.46316632628440857,
-                            -0.46000245213508606,
-                            0.5383691191673279
+                            -0.5329480171203613,
+                            -0.463166207075119,
+                            -0.4600023627281189,
+                            0.5383692383766174
                         ],
                         "lin_vel": [
                             0.0,
@@ -7787,10 +8049,10 @@
                             1.713331699371338
                         ],
                         "ori": [
-                            0.7043591737747192,
-                            -0.04934270679950714,
-                            0.7059550881385803,
-                            -0.05541405826807022
+                            0.7043589949607849,
+                            -0.04934267699718475,
+                            0.705955445766449,
+                            -0.05541404336690903
                         ],
                         "lin_vel": [
                             0.0,
@@ -7818,10 +8080,10 @@
                             1.027417540550232
                         ],
                         "ori": [
-                            0.4631660580635071,
-                            -0.5329477787017822,
+                            0.46316611766815186,
+                            -0.5329481363296509,
                             0.5383692979812622,
-                            0.46000242233276367
+                            0.4600023329257965
                         ],
                         "lin_vel": [
                             0.0,
@@ -7870,8 +8132,8 @@
                             0.4014427959918976
                         ],
                         "ori": [
-                            1.6717940525268205e-06,
-                            -6.88429793171963e-07,
+                            1.671794279900496e-06,
+                            -6.884298500153818e-07,
                             0.7071069478988647,
                             0.7071065902709961
                         ]
@@ -7883,14 +8145,14 @@
                     "root_link": {
                         "pos": [
                             6.905571937561035,
-                            -0.674903929233551,
+                            -0.6749039888381958,
                             0.8940384387969971
                         ],
                         "ori": [
-                            5.093170329928398e-11,
-                            1.1102230246251565e-14,
-                            0.7071068286895752,
-                            0.7071067094802856
+                            -3.637978807091713e-11,
+                            -1.8269830093231576e-12,
+                            0.707107424736023,
+                            0.7071062326431274
                         ],
                         "lin_vel": [
                             0.0,
@@ -7931,14 +8193,14 @@
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            4.291137218475342,
-                            1.4381622076034546,
-                            0.625613808631897
+                            4.291138172149658,
+                            1.438164234161377,
+                            0.6256135106086731
                         ],
                         "ori": [
-                            3.6506905871647177e-06,
-                            2.2110689315013587e-05,
-                            -1.8887430996983312e-07,
+                            3.5985056001663906e-06,
+                            2.191282510466408e-05,
+                            -1.851361020044351e-08,
                             1.0
                         ],
                         "lin_vel": [
@@ -7958,14 +8220,14 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            3.519810438156128,
-                            5.290379524230957,
+                            3.519810914993286,
+                            5.29038143157959,
                             0.3646339774131775
                         ],
                         "ori": [
-                            -1.0394654736956e-07,
-                            1.7707801816868596e-05,
-                            1.8930222722701728e-07,
+                            -4.3182978970435215e-08,
+                            1.7838901840150356e-05,
+                            4.010254315289785e-07,
                             1.0000001192092896
                         ],
                         "lin_vel": [
@@ -7985,15 +8247,15 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            17.188352584838867,
-                            9.653680801391602,
-                            0.4575159549713135
+                            17.18834114074707,
+                            9.653738021850586,
+                            0.45751622319221497
                         ],
                         "ori": [
-                            -0.0010528415441513062,
-                            -2.766028046607971e-07,
-                            0.9111853241920471,
-                            0.41199547052383423
+                            -0.0010530054569244385,
+                            -2.6245834305882454e-07,
+                            0.9112141728401184,
+                            0.4119317829608917
                         ],
                         "lin_vel": [
                             0.0,
@@ -8012,15 +8274,15 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            17.796110153198242,
-                            11.159156799316406,
-                            0.45754119753837585
+                            17.795991897583008,
+                            11.159252166748047,
+                            0.4575413465499878
                         ],
                         "ori": [
-                            -0.0008404850959777832,
-                            -0.00038315507117658854,
-                            0.999497652053833,
-                            0.03168351948261261
+                            -0.0008413493633270264,
+                            -0.0003828109474852681,
+                            0.9994930624961853,
+                            0.03182658553123474
                         ],
                         "lin_vel": [
                             0.0,
@@ -8039,15 +8301,15 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            17.39127540588379,
-                            12.77530574798584,
-                            0.4573386311531067
+                            17.39133071899414,
+                            12.775354385375977,
+                            0.4573381543159485
                         ],
                         "ori": [
-                            -0.000997588038444519,
-                            -0.00059695536037907,
-                            0.9486072063446045,
-                            -0.31645387411117554
+                            -0.000997290015220642,
+                            -0.0005967974429950118,
+                            0.9486130475997925,
+                            -0.3164364993572235
                         ],
                         "lin_vel": [
                             0.0,
@@ -8067,14 +8329,14 @@
                     "root_link": {
                         "pos": [
                             14.069025993347168,
-                            11.16181468963623,
-                            0.4360051453113556
+                            11.16177749633789,
+                            0.4360048174858093
                         ],
                         "ori": [
-                            0.0013555838959291577,
-                            -0.0005714431754313409,
-                            0.010651513934135437,
-                            0.9999423027038574
+                            0.0013556149788200855,
+                            -0.0005716405576094985,
+                            0.010666055604815483,
+                            0.9999421238899231
                         ],
                         "lin_vel": [
                             0.0,
@@ -8093,15 +8355,15 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            -0.9785433411598206,
-                            2.2687032222747803,
-                            0.7087390422821045
+                            -0.9783836603164673,
+                            2.268735647201538,
+                            0.7087318301200867
                         ],
                         "ori": [
-                            0.03872619569301605,
-                            -0.05869168043136597,
-                            0.12976275384426117,
-                            0.9890486598014832
+                            0.03865757957100868,
+                            -0.05872006714344025,
+                            0.12912040948867798,
+                            0.9891337156295776
                         ],
                         "lin_vel": [
                             0.0,
@@ -8120,15 +8382,15 @@
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            4.887537479400635,
-                            1.7928305864334106,
-                            0.47285696864128113
+                            4.887535572052002,
+                            1.7928298711776733,
+                            0.4728570282459259
                         ],
                         "ori": [
-                            0.002246558666229248,
-                            -0.00020680809393525124,
-                            0.9999974966049194,
-                            3.905966877937317e-06
+                            0.0022464096546173096,
+                            -0.0002068295143544674,
+                            0.9999975562095642,
+                            5.5711716413497925e-06
                         ],
                         "lin_vel": [
                             0.0,
@@ -8147,15 +8409,15 @@
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            3.4944543838500977,
-                            1.017116665840149,
-                            0.47334378957748413
+                            3.494453191757202,
+                            1.0171159505844116,
+                            0.4733436703681946
                         ],
                         "ori": [
-                            0.0,
-                            7.078051567077637e-08,
-                            0.25882014632225037,
-                            0.9659256339073181
+                            -2.9802322387695312e-08,
+                            3.4458935260772705e-08,
+                            0.2588210105895996,
+                            0.965925395488739
                         ],
                         "lin_vel": [
                             0.0,
@@ -8174,15 +8436,15 @@
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            3.685426712036133,
-                            1.7886838912963867,
-                            0.47334378957748413
+                            3.685426950454712,
+                            1.7886817455291748,
+                            0.4733439087867737
                         ],
                         "ori": [
-                            0.0,
-                            2.715096343308687e-07,
-                            -2.71480530500412e-07,
-                            1.0
+                            -1.862645149230957e-08,
+                            5.934271030128002e-08,
+                            -4.563480615615845e-08,
+                            1.0000001192092896
                         ],
                         "lin_vel": [
                             0.0,
@@ -8201,15 +8463,15 @@
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            4.889126777648926,
-                            1.107901930809021,
-                            0.4733007550239563
+                            4.889129161834717,
+                            1.1078979969024658,
+                            0.4733006954193115
                         ],
                         "ori": [
-                            0.0031212568283081055,
-                            -0.0037849461659789085,
-                            0.9999880790710449,
-                            2.50181183218956e-05
+                            0.0031211674213409424,
+                            -0.0037848688662052155,
+                            0.9999879598617554,
+                            2.3865140974521637e-05
                         ],
                         "lin_vel": [
                             0.0,
@@ -8237,16 +8499,6 @@
                             4.177641343972027e-09,
                             1.0,
                             3.1391647326017846e-07
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
                         ]
                     },
                     "non_kin": {}
@@ -8257,11 +8509,11 @@
                         "pos": [
                             6.260105133056641,
                             4.522088527679443,
-                            0.2144099771976471
+                            0.21441003680229187
                         ],
                         "ori": [
                             -9.960494935512543e-07,
-                            7.513392006330832e-07,
+                            7.511441708629718e-07,
                             1.0,
                             -1.9470462575554848e-07
                         ],
@@ -8277,8 +8529,8 @@
                         ]
                     },
                     "joint_pos": [
-                        1.2427999740438622e-09,
-                        1.2332401766457224e-09
+                        1.3001614229679603e-09,
+                        1.2810401628371437e-09
                     ],
                     "joint_vel": [
                         0.0,
@@ -8316,7 +8568,7 @@
                         ]
                     },
                     "joint_pos": [
-                        1.1961155677031599e-10
+                        -3.117962702262056e-12
                     ],
                     "joint_vel": [
                         0.0
@@ -8509,10 +8761,10 @@
                             1.1881227493286133
                         ],
                         "ori": [
-                            6.518278041767189e-07,
-                            3.084875788772479e-05,
-                            0.7104465961456299,
-                            -0.7037513256072998
+                            6.518206419059425e-07,
+                            3.084873969783075e-05,
+                            0.7104468941688538,
+                            -0.7037509083747864
                         ],
                         "lin_vel": [
                             0.0,
@@ -8526,7 +8778,7 @@
                         ]
                     },
                     "joint_pos": [
-                        -1.0186665137093063e-18
+                        -2.4554843558939555e-19
                     ],
                     "joint_vel": [
                         0.0
@@ -8543,9 +8795,9 @@
                         ],
                         "ori": [
                             3.0835813959129155e-05,
-                            -6.06063736086071e-07,
-                            0.7042463421821594,
-                            0.7099559307098389
+                            -6.060676014385535e-07,
+                            0.7042461633682251,
+                            0.7099558711051941
                         ],
                         "lin_vel": [
                             0.0,
@@ -8559,7 +8811,7 @@
                         ]
                     },
                     "joint_pos": [
-                        3.789185795916115e-15
+                        3.788730939223439e-15
                     ],
                     "joint_vel": [
                         0.0
@@ -8570,15 +8822,15 @@
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
-                            0.11536934971809387,
+                            0.11536933481693268,
                             7.761946678161621,
                             1.1729766130447388
                         ],
                         "ori": [
-                            -2.0066247088834643e-05,
-                            -0.0004578114894684404,
-                            -0.7034236788749695,
-                            0.7107706665992737
+                            -2.0096340449526906e-05,
+                            -0.0004578066000249237,
+                            -0.7034240961074829,
+                            0.7107702493667603
                         ],
                         "lin_vel": [
                             0.0,
@@ -8592,7 +8844,7 @@
                         ]
                     },
                     "joint_pos": [
-                        1.5931364316656982e-07
+                        1.6048457496253832e-07
                     ],
                     "joint_vel": [
                         0.0
@@ -8608,10 +8860,10 @@
                             1.1729762554168701
                         ],
                         "ori": [
-                            0.00045759600470773876,
-                            -1.9945029634982347e-05,
-                            0.7107514142990112,
-                            0.7034432291984558
+                            0.00045757470070384443,
+                            -1.9969622371718287e-05,
+                            0.7107513546943665,
+                            0.7034432888031006
                         ],
                         "lin_vel": [
                             0.0,
@@ -8625,7 +8877,7 @@
                         ]
                     },
                     "joint_pos": [
-                        1.5919859208679554e-07
+                        1.6037427030823892e-07
                     ],
                     "joint_vel": [
                         0.0
@@ -8637,14 +8889,14 @@
                     "root_link": {
                         "pos": [
                             7.709315776824951,
-                            3.4284281730651855,
-                            1.1734070777893066
+                            3.4284284114837646,
+                            1.1734071969985962
                         ],
                         "ori": [
-                            0.00045784874237142503,
-                            -2.0073697669431567e-05,
-                            0.7107710838317871,
-                            0.703423261642456
+                            0.0004577976942528039,
+                            -2.009398303925991e-05,
+                            0.7107700109481812,
+                            0.703424334526062
                         ],
                         "lin_vel": [
                             0.0,
@@ -8658,10 +8910,10 @@
                         ]
                     },
                     "joint_pos": [
-                        9.767153308359866e-09
+                        1.5558134336401963e-08
                     ],
                     "joint_vel": [
-                        -5.729227856021701e-14
+                        -1.145793529500061e-13
                     ],
                     "non_kin": {}
                 },
@@ -8674,10 +8926,10 @@
                             1.1734071969985962
                         ],
                         "ori": [
-                            0.000457792921224609,
-                            -2.00582726392895e-05,
-                            0.7107706665992737,
-                            0.703423798084259
+                            0.00045778282219544053,
+                            -2.00865906663239e-05,
+                            0.7107703685760498,
+                            0.7034239768981934
                         ],
                         "lin_vel": [
                             0.0,
@@ -8691,7 +8943,7 @@
                         ]
                     },
                     "joint_pos": [
-                        1.5930126551211288e-07
+                        1.6047424367116037e-07
                     ],
                     "joint_vel": [
                         0.0
@@ -9110,25 +9362,15 @@
                             4.177641343972027e-09,
                             1.0,
                             3.1391647326017846e-07
-                        ],
-                        "lin_vel": [
-                            0.0,
-                            0.0,
-                            0.0
-                        ],
-                        "ang_vel": [
-                            0.0,
-                            0.0,
-                            0.0
                         ]
                     },
                     "non_kin": {
-                        "Temperature": {
-                            "temperature": 23.0
-                        },
                         "ToggledOn": {
                             "value": false,
                             "hand_in_marker_steps": 0
+                        },
+                        "Temperature": {
+                            "temperature": 23.0
                         }
                     }
                 },
@@ -9141,9 +9383,9 @@
                             1.1495720148086548
                         ],
                         "ori": [
-                            0.0012304121628403664,
-                            -0.03238896653056145,
-                            -0.01089318934828043,
+                            0.0012304187985137105,
+                            -0.03238895907998085,
+                            -0.010893184691667557,
                             0.9994153380393982
                         ],
                         "lin_vel": [
@@ -9173,10 +9415,10 @@
                             1.1495720148086548
                         ],
                         "ori": [
-                            0.0220332033932209,
-                            0.023773150518536568,
-                            0.7143961787223816,
-                            -0.6989904642105103
+                            0.0220332108438015,
+                            0.023773111402988434,
+                            0.7143962383270264,
+                            -0.6989904046058655
                         ],
                         "lin_vel": [
                             0.0,
@@ -9205,10 +9447,10 @@
                             1.1495720148086548
                         ],
                         "ori": [
-                            0.0220332033932209,
-                            0.023773150518536568,
-                            0.7143961787223816,
-                            -0.6989904642105103
+                            0.0220332108438015,
+                            0.023773111402988434,
+                            0.7143962383270264,
+                            -0.6989904046058655
                         ],
                         "lin_vel": [
                             0.0,
@@ -9237,9 +9479,9 @@
                             1.1495718955993652
                         ],
                         "ori": [
-                            0.0012304121628403664,
-                            -0.03238896653056145,
-                            -0.01089318934828043,
+                            0.0012304187985137105,
+                            -0.03238895907998085,
+                            -0.010893184691667557,
                             0.9994153380393982
                         ],
                         "lin_vel": [
@@ -9269,8 +9511,8 @@
                             1.2367674112319946
                         ],
                         "ori": [
-                            -1.3410270582880912e-07,
-                            1.3410284793735627e-07,
+                            -1.3410272003966384e-07,
+                            1.34102862148211e-07,
                             0.7071072459220886,
                             -0.7071062922477722
                         ]
@@ -9289,7 +9531,7 @@
                             4.371139183945161e-08,
                             -4.371138473402425e-08,
                             1.0,
-                            -7.549790126404332e-08
+                            -7.549789415861596e-08
                         ]
                     },
                     "non_kin": {}
@@ -9507,7 +9749,7 @@
                             2.098114013671875
                         ],
                         "ori": [
-                            -2.9103830456733704e-11,
+                            0.0,
                             0.0,
                             0.0,
                             1.0000001192092896
@@ -9524,8 +9766,8 @@
                         ]
                     },
                     "joint_pos": [
-                        -1.644844959021452e-12,
-                        -1.7962357946529894e-12
+                        -1.8422084604313715e-12,
+                        -2.4282156146915312e-12
                     ],
                     "joint_vel": [
                         0.0,
@@ -10237,7 +10479,7 @@
                         ],
                         "ori": [
                             1.2178896779957427e-10,
-                            1.2178894004399865e-10,
+                            1.2178895392178646e-10,
                             0.7071068286895752,
                             0.7071067094802856
                         ]
@@ -10258,8 +10500,8 @@
                             5.219618320465088
                         ],
                         "ori": [
-                            -6.30734409146072e-10,
-                            6.307348532352819e-10,
+                            -6.307344646572233e-10,
+                            6.307349087464331e-10,
                             0.7071066498756409,
                             0.70710688829422
                         ]
@@ -10373,9 +10615,9 @@
                         ],
                         "ori": [
                             0.0,
-                            -1.4452883334570288e-12,
-                            1.0,
-                            1.1483816706459038e-06
+                            4.495737115917109e-12,
+                            1.000000238418579,
+                            1.1483916750876233e-06
                         ],
                         "lin_vel": [
                             0.0,
@@ -10389,11 +10631,11 @@
                         ]
                     },
                     "joint_pos": [
-                        -1.5428965171064216e-21,
-                        6.655793537840848e-13
+                        -5.585916345344001e-21,
+                        2.489278314726784e-12
                     ],
                     "joint_vel": [
-                        -1.867029037476012e-20,
+                        -3.653491006406786e-20,
                         6.952472900842899e-18
                     ],
                     "non_kin": {
@@ -10412,9 +10654,9 @@
                         ],
                         "ori": [
                             0.0,
-                            -1.4450662888521038e-12,
-                            1.0,
-                            1.3868002497474663e-06
+                            4.496181205126959e-12,
+                            1.000000238418579,
+                            1.3868102541891858e-06
                         ],
                         "lin_vel": [
                             0.0,
@@ -10428,11 +10670,11 @@
                         ]
                     },
                     "joint_pos": [
-                        -7.459726203969352e-22,
-                        6.655793537840848e-13
+                        -3.467680876109374e-21,
+                        2.492009853680144e-12
                     ],
                     "joint_vel": [
-                        -1.9390764688293807e-20,
+                        -4.1610490302693236e-20,
                         6.952472900842899e-18
                     ],
                     "non_kin": {
@@ -11200,12 +11442,12 @@
                         "pos": [
                             -3.9653077125549316,
                             0.3324632942676544,
-                            0.5006033778190613
+                            0.500603437423706
                         ],
                         "ori": [
-                            -0.0005396500346250832,
-                            -0.0008071316406130791,
-                            0.001729516196064651,
+                            -0.0005396555061452091,
+                            -0.0008071211632341146,
+                            0.0017295171273872256,
                             0.9999980330467224
                         ],
                         "lin_vel": [
@@ -11220,7 +11462,7 @@
                         ]
                     },
                     "joint_pos": [
-                        -4.858955284677847e-18
+                        4.553793053865703e-18
                     ],
                     "joint_vel": [
                         0.0
@@ -11235,19 +11477,19 @@
                         }
                     }
                 },
-                "mixing_bowl_89": {
+                "bowl_73": {
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            7.633085250854492,
-                            -0.6235456466674805,
-                            0.9238379597663879
+                            8.12746524810791,
+                            -0.6407567262649536,
+                            0.9255143404006958
                         ],
                         "ori": [
-                            1.601874828338623e-07,
-                            -6.397312972694635e-07,
-                            0.9986588358879089,
-                            0.051776569336652756
+                            0.0010145001579076052,
+                            -0.001031600870192051,
+                            -0.15454135835170746,
+                            0.9879852533340454
                         ],
                         "lin_vel": [
                             0.0,
@@ -11266,19 +11508,19 @@
                         }
                     }
                 },
-                "parer_90": {
+                "parer_74": {
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            6.464071273803711,
-                            -0.9473689794540405,
-                            0.8942086100578308
+                            8.100210189819336,
+                            -0.35536453127861023,
+                            0.8942152261734009
                         ],
                         "ori": [
-                            -3.519480742397718e-07,
-                            1.4511826975649456e-06,
-                            -0.08220711350440979,
-                            0.9966152906417847
+                            2.384622348472476e-07,
+                            8.161881623891531e-07,
+                            0.09867961704730988,
+                            0.9951193332672119
                         ],
                         "lin_vel": [
                             0.0,
@@ -11299,19 +11541,19 @@
                         }
                     }
                 },
-                "vidalia_onion_91": {
+                "vidalia_onion_75": {
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            8.108269691467285,
-                            0.3637202978134155,
-                            0.8077712655067444
+                            8.144020080566406,
+                            0.48106247186660767,
+                            0.8086832165718079
                         ],
                         "ori": [
-                            0.33146584033966064,
-                            -0.1881026029586792,
-                            0.34911519289016724,
-                            0.8560760617256165
+                            0.22726662456989288,
+                            0.025668010115623474,
+                            0.16569343209266663,
+                            0.9592897891998291
                         ],
                         "lin_vel": [
                             0.0,
@@ -11333,19 +11575,19 @@
                         }
                     }
                 },
-                "cutting_board_92": {
+                "cutting_board_76": {
                     "is_asleep": true,
                     "root_link": {
                         "pos": [
-                            6.778428077697754,
-                            -0.681513249874115,
-                            0.8975080847740173
+                            8.024589538574219,
+                            0.7844633460044861,
+                            0.8973477482795715
                         ],
                         "ori": [
-                            -0.0008162969606928527,
-                            -1.5608252397214528e-06,
-                            -0.1717938631772995,
-                            0.9851325750350952
+                            -5.6651355407666415e-05,
+                            0.00031313952058553696,
+                            0.9789218902587891,
+                            0.20423489809036255
                         ],
                         "lin_vel": [
                             0.0,
@@ -11360,7 +11602,7 @@
                     },
                     "non_kin": {}
                 },
-                "robot_xgiqxf": {
+                "robot_qqfsim": {
                     "is_asleep": false,
                     "root_link": {
                         "pos": [
@@ -11386,60 +11628,64 @@
                         ]
                     },
                     "joint_pos": [
-                        -293.06939697265625,
-                        -298.50250244140625,
-                        -299.9962463378906,
-                        0.009430622681975365,
-                        -0.0036373198963701725,
-                        -0.8503278493881226,
-                        -7.096835179254413e-05,
-                        -0.000260046508628875,
-                        0.00011032829206669703,
-                        6.0309102991595864e-06,
-                        -5.314738245942863e-06,
-                        3.4905820939457044e-05,
-                        1.905993938446045,
-                        1.9060072898864746,
-                        -0.9909920692443848,
-                        -0.9910039305686951,
-                        1.5710022449493408,
-                        1.5709991455078125,
-                        0.9150089621543884,
-                        0.9150000214576721,
-                        -1.5709995031356812,
-                        -1.5709999799728394,
-                        0.04999985545873642,
-                        0.04999975860118866,
-                        0.04999975860118866,
-                        0.04999995976686478
+                        -297.09613037109375,
+                        -297.4648742675781,
+                        -299.9949951171875,
+                        -0.000947637134231627,
+                        -0.0015781143447384238,
+                        1.6369295120239258,
+                        -2.7405645596445538e-05,
+                        -6.79890945320949e-05,
+                        1.426745620847214e-05,
+                        -1.183705364837806e-07,
+                        -0.015091560781002045,
+                        0.0267381202429533,
+                        1.549408197402954,
+                        -1.5709691047668457,
+                        0.012708593159914017,
+                        -0.028468238189816475,
+                        -1.5700013637542725,
+                        -1.5699950456619263,
+                        1.5493537187576294,
+                        -1.570942759513855,
+                        0.02477128803730011,
+                        -0.0011319085024297237,
+                        -0.0002711826818995178,
+                        -2.971022468045703e-07,
+                        0.0499999113380909,
+                        0.05000000074505806,
+                        0.049999941140413284,
+                        0.04999986290931702
                     ],
                     "joint_vel": [
-                        0.002413935726508498,
-                        -0.003896828042343259,
-                        0.006524004973471165,
-                        -0.012598072178661823,
-                        -0.009844006039202213,
-                        0.0002826224663294852,
-                        0.017151402309536934,
-                        8.813076419755816e-05,
-                        0.002811364596709609,
-                        -0.004740431904792786,
-                        -0.03367125615477562,
-                        0.02660270221531391,
-                        0.008844440802931786,
-                        -0.006106853950768709,
-                        0.0006999191828072071,
-                        -0.0035178493708372116,
-                        -0.07156898826360703,
-                        0.05394341051578522,
-                        0.010556329041719437,
-                        -0.010558665730059147,
-                        0.04616761580109596,
-                        -0.030541282147169113,
-                        -2.2790563889429905e-05,
-                        -9.024042810779065e-07,
-                        6.767723243683577e-05,
-                        3.104625648120418e-06
+                        -0.0003732376208063215,
+                        -0.0001239659613929689,
+                        -0.039009492844343185,
+                        0.00022351136431097984,
+                        0.00023482779215555638,
+                        0.0002777689369395375,
+                        0.0006082544568926096,
+                        -0.0007132925093173981,
+                        -8.817132038529962e-05,
+                        0.00016279343981295824,
+                        0.0036471267230808735,
+                        0.0023019686341285706,
+                        -5.486508962349035e-05,
+                        -0.0012918661814182997,
+                        0.0018314106855541468,
+                        0.000279900967143476,
+                        0.0014927563024684787,
+                        -0.0015501303132623434,
+                        0.0002213851548731327,
+                        -0.0010077592451125383,
+                        -9.105987555813044e-05,
+                        -0.0008929629111662507,
+                        -0.0012624651426449418,
+                        -0.0013590892776846886,
+                        2.8116557587054558e-05,
+                        -1.2452740520529915e-05,
+                        3.940765600418672e-05,
+                        -2.036540536209941e-07
                     ],
                     "controllers": {
                         "base": {
@@ -11456,10 +11702,10 @@
                             "goal_is_valid": true,
                             "goal": {
                                 "target": [
-                                    -7.04347257851623e-05,
-                                    -0.0002607421774882823,
-                                    0.00011166359763592482,
-                                    3.36231937581033e-06
+                                    -2.6904564947471954e-05,
+                                    -6.763950659660622e-05,
+                                    1.4306295270216651e-05,
+                                    -3.356400668508286e-08
                                 ]
                             }
                         },
@@ -11467,45 +11713,47 @@
                             "goal_is_valid": true,
                             "goal": {
                                 "target_pos": [
-                                    0.5446202754974365,
-                                    0.3968467712402344,
-                                    1.4467839002609253
+                                    0.3990974426269531,
+                                    0.5623793601989746,
+                                    1.4465491771697998
                                 ],
                                 "target_ori_mat": [
                                     [
-                                        -0.006777644157409668,
-                                        4.639883991330862e-05,
-                                        0.9999769330024719
+                                        0.003126204013824463,
+                                        -0.0007963546086102724,
+                                        0.9999948740005493
                                     ],
                                     [
-                                        0.003117512445896864,
-                                        -0.9999949932098389,
-                                        6.75299670547247e-05
+                                        2.9248854843899608e-05,
+                                        0.9999997019767761,
+                                        0.0007962670060805976
                                     ],
                                     [
-                                        0.9999720454216003,
-                                        0.0031178987119346857,
-                                        0.006777703762054443
+                                        -0.999995231628418,
+                                        2.675928408280015e-05,
+                                        0.0031262636184692383
                                     ]
                                 ]
                             },
                             "control_filter": {
                                 "past_samples": [
                                     [
-                                        -6.117189514043275e-06,
-                                        1.906000018119812,
-                                        -0.9909947514533997,
-                                        1.5710022449493408,
-                                        0.915008008480072,
-                                        -1.571000337600708
+                                        -0.01510088425129652,
+                                        1.5494085550308228,
+                                        0.0127071812748909,
+                                        -1.5700024366378784,
+                                        1.5493544340133667,
+                                        0.02477133274078369,
+                                        -0.0002700492041185498
                                     ],
                                     [
-                                        -5.9253138715575915e-06,
-                                        1.9059991836547852,
-                                        -0.9909934997558594,
-                                        1.5710021257400513,
-                                        0.9150086641311646,
-                                        -1.5710002183914185
+                                        -0.015099533833563328,
+                                        1.5494091510772705,
+                                        0.012708189897239208,
+                                        -1.5700005292892456,
+                                        1.5493547916412354,
+                                        0.024770651012659073,
+                                        -0.0002717837051022798
                                     ]
                                 ],
                                 "current_idx": 0,
@@ -11522,24 +11770,24 @@
                             "vel_filter": {
                                 "past_samples": [
                                     [
-                                        -4.4703480739372026e-07,
-                                        4.4703480739372026e-07
+                                        -1.609325408935547e-05,
+                                        -2.6822087875189027e-06
                                     ],
                                     [
-                                        -4.4703480739372026e-07,
+                                        1.251697449333733e-05,
+                                        1.788139229574881e-06
+                                    ],
+                                    [
+                                        -1.4305113836599048e-05,
                                         -1.788139229574881e-06
                                     ],
                                     [
-                                        4.4703480739372026e-07,
-                                        4.470347903406946e-06
+                                        1.609325408935547e-05,
+                                        4.023313522338867e-06
                                     ],
                                     [
-                                        0.0,
-                                        -3.1292436233343324e-06
-                                    ],
-                                    [
-                                        0.0,
-                                        2.235173951703473e-06
+                                        -1.3858079000783619e-05,
+                                        -8.046627044677734e-06
                                     ]
                                 ],
                                 "current_idx": 0,
@@ -11550,45 +11798,47 @@
                             "goal_is_valid": true,
                             "goal": {
                                 "target_pos": [
-                                    0.5446248054504395,
-                                    -0.3968377113342285,
-                                    1.4439862966537476
+                                    0.3990964889526367,
+                                    -0.5623824596405029,
+                                    1.4464802742004395
                                 ],
                                 "target_ori_mat": [
                                     [
-                                        0.0058498382568359375,
-                                        -3.995373845100403e-06,
-                                        0.9999827742576599
+                                        0.002984166145324707,
+                                        0.000797031563706696,
+                                        0.9999951124191284
                                     ],
                                     [
-                                        -0.004663331434130669,
-                                        -0.9999887943267822,
-                                        2.3284228518605232e-05
+                                        -2.809736179187894e-05,
+                                        0.9999997019767761,
+                                        -0.0007969512371346354
                                     ],
                                     [
-                                        0.9999719262123108,
-                                        -0.00466338824480772,
-                                        -0.005849480628967285
+                                        -0.9999954700469971,
+                                        -2.571908407844603e-05,
+                                        0.0029842257499694824
                                     ]
                                 ]
                             },
                             "control_filter": {
                                 "past_samples": [
                                     [
-                                        3.5204346204409376e-05,
-                                        1.9060051441192627,
-                                        -0.9910030961036682,
-                                        1.5709989070892334,
-                                        0.9150006771087646,
-                                        -1.5709991455078125
+                                        0.026721840724349022,
+                                        -1.5709617137908936,
+                                        -0.028472915291786194,
+                                        -1.5699961185455322,
+                                        -1.5709350109100342,
+                                        -0.0011231560492888093,
+                                        -6.564871455339016e-07
                                     ],
                                     [
-                                        3.496596764307469e-05,
-                                        1.9060053825378418,
-                                        -0.9910050630569458,
-                                        1.5709989070892334,
-                                        0.9149988293647766,
-                                        -1.570999026298523
+                                        0.02674110047519207,
+                                        -1.5709893703460693,
+                                        -0.0284590981900692,
+                                        -1.5699949264526367,
+                                        -1.5709624290466309,
+                                        -0.0011561231222003698,
+                                        -2.9434694681640394e-08
                                     ]
                                 ],
                                 "current_idx": 0,
@@ -11605,24 +11855,24 @@
                             "vel_filter": {
                                 "past_samples": [
                                     [
-                                        -5.811452410853235e-06,
-                                        -3.1292436233343324e-06
+                                        -4.4703480739372026e-07,
+                                        1.788139229574881e-06
                                     ],
                                     [
-                                        8.493661880493164e-06,
-                                        -2.6822087875189027e-06
+                                        4.4703480739372026e-07,
+                                        -8.940696147874405e-07
                                     ],
                                     [
-                                        -2.6822087875189027e-06,
-                                        2.235173951703473e-06
+                                        -4.4703480739372026e-07,
+                                        -2.235173951703473e-06
                                     ],
                                     [
-                                        -1.788139229574881e-06,
-                                        -1.3411043937594513e-06
+                                        0.0,
+                                        4.4703480739372026e-07
                                     ],
                                     [
-                                        1.3411043937594513e-06,
-                                        0.0
+                                        -8.940696147874405e-07,
+                                        1.788139229574881e-06
                                     ]
                                 ],
                                 "current_idx": 0,
