@@ -8,7 +8,7 @@ import omnigibson as og
 import omnigibson.lazy as lazy
 from omnigibson.macros import gm
 from omnigibson.prims import VisualGeomPrim
-from omnigibson.prims.material_prim import MaterialPrim
+from omnigibson.prims.material_prim import OmniPBRMaterialPrim
 from omnigibson.utils.usd_utils import create_primitive_mesh, absolute_prim_path_to_scene_relative
 from omnigibson.utils.ui_utils import dock_window
 from omnigibson.utils import transform_utils as T
@@ -347,7 +347,7 @@ def setup_camera_blinking_visualizers(camera_paths, scene):
         for cam_path in camera_paths:
             # Create material for blinking visualizer
             mat_prim_path = f"{cam_path}/Looks/blink_vis_mat"
-            mat = MaterialPrim(
+            mat = OmniPBRMaterialPrim(
                 relative_prim_path=absolute_prim_path_to_scene_relative(scene, mat_prim_path),
                 name=f"{cam_path}:blink_vis_mat",
             )
@@ -438,50 +438,35 @@ def setup_robot_visualizers(robot, scene):
         vis_elements["vis_mats"][arm] = []
         for axis, color in zip(("x", "y", "z"), VIS_GEOM_COLORS[False]):
             mat_prim_path = f"{robot.prim_path}/Looks/vis_cylinder_{arm}_{axis}_mat"
-            mat = MaterialPrim(
+            mat = OmniPBRMaterialPrim(
                 relative_prim_path=absolute_prim_path_to_scene_relative(scene, mat_prim_path),
                 name=f"{robot.name}:vis_cylinder_{arm}_{axis}_mat",
             )
             mat.load(scene)
             mat.diffuse_color_constant = color
-            mat.enable_opacity = False
-            mat.opacity_constant = 0.5
-            mat.enable_emission = True
-            mat.emissive_color = color.tolist()
-            mat.emissive_intensity = 10000.0
             vis_elements["vis_mats"][arm].append(mat)
 
     # Create material for visual sphere
     mat_prim_path = f"{robot.prim_path}/Looks/vis_sphere_mat"
-    sphere_mat = MaterialPrim(
+    sphere_mat = OmniPBRMaterialPrim(
         relative_prim_path=absolute_prim_path_to_scene_relative(scene, mat_prim_path),
         name=f"{robot.name}:vis_sphere_mat",
     )
     sphere_color = np.array([252, 173, 76]) / 255.0
     sphere_mat.load(scene)
     sphere_mat.diffuse_color_constant = th.as_tensor(sphere_color)
-    sphere_mat.enable_opacity = True
-    sphere_mat.opacity_constant = 0.1 if USE_VISUAL_SPHERES else 0.0
-    sphere_mat.enable_emission = True
-    sphere_mat.emissive_color = np.array(sphere_color)
-    sphere_mat.emissive_intensity = 1000.0
     vis_elements["sphere_mat"] = sphere_mat
 
     # Create material for vertical cylinder
     if USE_VERTICAL_VISUALIZERS:
         mat_prim_path = f"{robot.prim_path}/Looks/vis_vertical_mat"
-        vert_mat = MaterialPrim(
+        vert_mat = OmniPBRMaterialPrim(
             relative_prim_path=absolute_prim_path_to_scene_relative(scene, mat_prim_path),
             name=f"{robot.name}:vis_vertical_mat",
         )
         vert_color = np.array([252, 226, 76]) / 255.0
         vert_mat.load(scene)
         vert_mat.diffuse_color_constant = th.as_tensor(vert_color)
-        vert_mat.enable_opacity = True
-        vert_mat.opacity_constant = 0.3
-        vert_mat.enable_emission = True
-        vert_mat.emissive_color = np.array(vert_color)
-        vert_mat.emissive_intensity = 10000.0
         vis_elements["vert_mat"] = vert_mat
 
     # Extract visualization cylinder settings
@@ -586,17 +571,12 @@ def setup_robot_visualizers(robot, scene):
 
         # Create material for beams
         beam_mat_prim_path = f"{robot.prim_path}/Looks/square_beam_mat"
-        beam_mat = MaterialPrim(
+        beam_mat = OmniPBRMaterialPrim(
             relative_prim_path=absolute_prim_path_to_scene_relative(scene, beam_mat_prim_path),
             name=f"{robot.name}:square_beam_mat",
         )
         beam_mat.load(scene)
         beam_mat.diffuse_color_constant = th.as_tensor(beam_color)
-        beam_mat.enable_opacity = False
-        beam_mat.opacity_constant = 0.5
-        beam_mat.enable_emission = True
-        beam_mat.emissive_color = np.array(beam_color)
-        beam_mat.emissive_intensity = 10000.0
         vis_elements["beam_mat"] = beam_mat
 
         edges = [
@@ -854,17 +834,12 @@ def setup_object_beacons(task_relevant_objects, scene):
         
         # Create material for beacon
         mat_prim_path = f"{obj.prim_path}/Looks/beacon_cylinder_mat"
-        mat = MaterialPrim(
+        mat = OmniPBRMaterialPrim(
             relative_prim_path=absolute_prim_path_to_scene_relative(scene, mat_prim_path),
             name=f"{obj.name}:beacon_cylinder_mat",
         )
         mat.load(scene)
         mat.diffuse_color_constant = th.tensor(color)
-        mat.enable_opacity = False
-        mat.opacity_constant = OBJECT_HIGHLIGHT_SPHERE["opacity"]
-        mat.enable_emission = True
-        mat.emissive_color = color
-        mat.emissive_intensity = OBJECT_HIGHLIGHT_SPHERE["emissive_intensity"]
 
         # Create visual beacon
         vis_prim_path = f"{obj.prim_path}/beacon_cylinder"
@@ -909,7 +884,7 @@ def setup_task_visualizers(task_relevant_objects, scene):
                 # Create materials for each axis
                 axis_materials = []
                 for axis, color in zip(("x", "y", "z"), vis_geom_colors):
-                    mat = MaterialPrim(
+                    mat = OmniPBRMaterialPrim(
                         relative_prim_path=absolute_prim_path_to_scene_relative(scene, f"{link.prim_path}/attachment_frame_mat_{axis}"),
                         name=f"{obj.name}:attachment_frame_mat_{axis}",
                     )

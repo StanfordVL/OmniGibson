@@ -93,11 +93,6 @@ class OGRobotServer:
         self.env = og.Environment(configs=cfg)
         self.robot = self.env.robots[0]
         
-        # Disable opacity to guarantee all objects are visible
-        for obj in self.env.scene.objects:
-            for material in obj.materials:
-                material.enable_opacity = False
-
         self.ghosting = ghosting
         if self.ghosting:
             self.ghost = utils.setup_ghost_robot(self.env.scene, self.task_cfg)
