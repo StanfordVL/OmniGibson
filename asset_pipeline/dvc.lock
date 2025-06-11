@@ -7866,8 +7866,8 @@ stages:
       size: 0
     - path: b1k_pipeline/export_objs_global.py
       hash: md5
-      md5: 5afbf2980ce1d6a24d0c71f2488a690a
-      size: 39135
+      md5: 444fdb0cc7cecd7cc0b13ca691a455ee
+      size: 39210
     - path: b1k_pipeline/mesh_tree.py
       hash: md5
       md5: c01a25201232fad5307f53d73a0fbee7
@@ -7922,20 +7922,20 @@ stages:
       size: 153348
     - path: cad/objects/batch-06/artifacts/meshes.zip
       hash: md5
-      md5: 45f2c0b2ed2dc8ded3b39af56f3797d1
-      size: 29878027
+      md5: cf708f028861f183c1d2f63e35716d7b
+      size: 29804437
     - path: cad/objects/batch-06/artifacts/object_list.json
       hash: md5
-      md5: 3c84b6e84d61b93b3ee11cba4de3cf2c
-      size: 147120
+      md5: 86464822dc18d05406ba6f82431dc517
+      size: 147006
     - path: cad/objects/batch-07/artifacts/meshes.zip
       hash: md5
-      md5: 73f7b4cb7b2e823e80ce68b57e56f8f8
-      size: 28445447
+      md5: c38e2b4fc1cf87ef190fa7837499f533
+      size: 28441141
     - path: cad/objects/batch-07/artifacts/object_list.json
       hash: md5
-      md5: 5b617114abb8ca489610e372736e9f28
-      size: 137449
+      md5: 731df16199be4427fd7e4860ab8a6fe9
+      size: 137443
     - path: cad/objects/batch-08/artifacts/meshes.zip
       hash: md5
       md5: 831e9be08d36a4e831e4c71cef087b01
@@ -8114,8 +8114,8 @@ stages:
       size: 131731
     - path: cad/objects/substances-01/artifacts/meshes.zip
       hash: md5
-      md5: ceb890e9fa9f0b2124a0b1cd4bf4a27f
-      size: 38894105
+      md5: 6b03a67a0d2b79d982e157bcedba5200
+      size: 38894350
     - path: cad/objects/substances-01/artifacts/object_list.json
       hash: md5
       md5: 2d2bc1be52a29171104e9fa62de8431b
@@ -8607,8 +8607,8 @@ stages:
     outs:
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: 7bbb0f6da085b59c2162536b0a25e601
-      size: 28282447579
+      md5: a9a09c45ac3bf0e3cfcc7d742e7f4bd2
+      size: 13715949
     - path: artifacts/pipeline/export_objs.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
@@ -8618,16 +8618,16 @@ stages:
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 575e859e1fd6e66e518eddde085ab553
-      size: 627474
+      md5: f12fd59729fe6f8541575c1abdc5bfdf
+      size: 627473
     - path: artifacts/pipeline/collision_average_volumes.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     - path: artifacts/pipeline/object_inventory.json
       hash: md5
-      md5: 1a53eff8fee7d3055c8b52bbf822942b
-      size: 3247262
+      md5: 1d7248bcecc3b1936862d70031b3f68a
+      size: 3247267
     - path: artifacts/pipeline/object_inventory.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8651,8 +8651,8 @@ stages:
     outs:
     - path: artifacts/parallels/metadata.zip
       hash: md5
-      md5: e07f318b118f56d18851250eb357409b
-      size: 67301
+      md5: 50deb25eed1950725e29066b62564f46
+      size: 67303
     - path: artifacts/pipeline/aggregate_metadata.json
       hash: md5
       md5: 3f6059a52842bd4b8d8ea19a40456a8e
@@ -8679,8 +8679,8 @@ stages:
     deps:
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: 7bbb0f6da085b59c2162536b0a25e601
-      size: 28282447579
+      md5: a9a09c45ac3bf0e3cfcc7d742e7f4bd2
+      size: 13715949
     - path: artifacts/pipeline/export_objs.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -8696,8 +8696,8 @@ stages:
     outs:
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: 0ce55846aa6f14ae68c463df119b4f14
-      size: 4825858202
+      md5: 03c8fc901c237e26b8f9a5cc385255d1
+      size: 2551980
     - path: artifacts/pipeline/usdify_objects.json
       hash: md5
       md5: 4cb646f82a5c1d3d8db1d9c740a4b7e7
@@ -9804,28 +9804,28 @@ stages:
     deps:
     - path: VERSION
       hash: md5
-      md5: 21653fa454295ebcde98e8891f3ea248
+      md5: 2955c835525808626982819fe773d6b2
       size: 9
     - path: artifacts/parallels/metadata.zip
       hash: md5
-      md5: e07f318b118f56d18851250eb357409b
-      size: 67301
+      md5: 50deb25eed1950725e29066b62564f46
+      size: 67303
     - path: artifacts/parallels/objects.zip
       hash: md5
-      md5: 7bbb0f6da085b59c2162536b0a25e601
-      size: 28282447579
+      md5: a9a09c45ac3bf0e3cfcc7d742e7f4bd2
+      size: 13715949
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: 0ce55846aa6f14ae68c463df119b4f14
-      size: 4825858202
+      md5: 03c8fc901c237e26b8f9a5cc385255d1
+      size: 2551980
     - path: artifacts/parallels/scenes_json.zip
       hash: md5
-      md5: ab63cdb4744b117eb9618cb9f3a8e035
-      size: 4947800
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
     - path: artifacts/parallels/systems.zip
       hash: md5
-      md5: d6557d699f15faec9771b10f9950958f
-      size: 806196422
+      md5: 9c5e8de5754c166378be066c8b1e31b6
+      size: 875456
     - path: artifacts/pipeline/aggregate_metadata.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -9849,8 +9849,8 @@ stages:
     outs:
     - path: artifacts/og_dataset.zip
       hash: md5
-      md5: 6c584d40cf0d7d2aae9700b3d1625938
-      size: 31265079463
+      md5: 4290b95e03722581a9c3975f6bb3370c
+      size: 31267915803
     - path: artifacts/pipeline/pack_dataset.json
       hash: md5
       md5: 2ad066aadc9c024dff5e8d3c6587590d
@@ -9864,16 +9864,16 @@ stages:
     deps:
     - path: artifacts/parallels/metadata.zip
       hash: md5
-      md5: e07f318b118f56d18851250eb357409b
-      size: 67301
+      md5: 50deb25eed1950725e29066b62564f46
+      size: 67303
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: 0ce55846aa6f14ae68c463df119b4f14
-      size: 4825858202
+      md5: 03c8fc901c237e26b8f9a5cc385255d1
+      size: 2551980
     - path: artifacts/parallels/scenes.zip
       hash: md5
-      md5: 46d77b824e99598486534fafc8c23eac
-      size: 774935
+      md5: 5a36d13c9845438e895e9ba4c9c860a4
+      size: 148
     - path: artifacts/pipeline/aggregate_metadata.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -9901,8 +9901,8 @@ stages:
     outs:
     - path: artifacts/parallels/scenes_json.zip
       hash: md5
-      md5: ab63cdb4744b117eb9618cb9f3a8e035
-      size: 4947800
+      md5: 76cdb2bad9582d23c1f6f4d868218d6c
+      size: 22
     - path: artifacts/pipeline/usdify_scenes.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
@@ -10584,7 +10584,8 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_meshes.zip
       md5: bbd3682fa467a624f477a0cf73d7ddea
       size: 89307
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/collision_selection.json
       md5: 3b8a88205adfce34dbb53a846b73112c
       size: 10135
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/meshes.zip
@@ -11112,20 +11113,20 @@ stages:
       size: 153348
     - path: cad/objects/batch-06/artifacts/meshes.zip
       hash: md5
-      md5: 45f2c0b2ed2dc8ded3b39af56f3797d1
-      size: 29878027
+      md5: cf708f028861f183c1d2f63e35716d7b
+      size: 29804437
     - path: cad/objects/batch-06/artifacts/object_list.json
       hash: md5
-      md5: 3c84b6e84d61b93b3ee11cba4de3cf2c
-      size: 147120
+      md5: 86464822dc18d05406ba6f82431dc517
+      size: 147006
     - path: cad/objects/batch-07/artifacts/meshes.zip
       hash: md5
-      md5: 73f7b4cb7b2e823e80ce68b57e56f8f8
-      size: 28445447
+      md5: c38e2b4fc1cf87ef190fa7837499f533
+      size: 28441141
     - path: cad/objects/batch-07/artifacts/object_list.json
       hash: md5
-      md5: 5b617114abb8ca489610e372736e9f28
-      size: 137449
+      md5: 731df16199be4427fd7e4860ab8a6fe9
+      size: 137443
     - path: cad/objects/batch-08/artifacts/meshes.zip
       hash: md5
       md5: 831e9be08d36a4e831e4c71cef087b01
@@ -11304,8 +11305,8 @@ stages:
       size: 131731
     - path: cad/objects/substances-01/artifacts/meshes.zip
       hash: md5
-      md5: ceb890e9fa9f0b2124a0b1cd4bf4a27f
-      size: 38894105
+      md5: 6b03a67a0d2b79d982e157bcedba5200
+      size: 38894350
     - path: cad/objects/substances-01/artifacts/object_list.json
       hash: md5
       md5: 2d2bc1be52a29171104e9fa62de8431b
@@ -11793,16 +11794,16 @@ stages:
     outs:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 575e859e1fd6e66e518eddde085ab553
-      size: 627474
+      md5: f12fd59729fe6f8541575c1abdc5bfdf
+      size: 627473
   collision_average_volumes_success:
     cmd: python -m b1k_pipeline.check_success artifacts/pipeline/collision_average_volumes.json
       artifacts/pipeline/collision_average_volumes.success
     deps:
     - path: artifacts/pipeline/collision_average_volumes.json
       hash: md5
-      md5: 575e859e1fd6e66e518eddde085ab553
-      size: 627474
+      md5: f12fd59729fe6f8541575c1abdc5bfdf
+      size: 627473
     - path: b1k_pipeline/check_success.py
       hash: md5
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
@@ -12291,7 +12292,8 @@ stages:
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.json
       md5: 72c82c8e34bff048822fc06de024715a
       size: 4752
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/room_object_list.success
       md5: d41d8cd98f00b204e9800998ecf8427e
       size: 0
     outs:
@@ -13160,8 +13162,8 @@ stages:
     deps:
     - path: artifacts/pipeline/object_inventory.json
       hash: md5
-      md5: 1a53eff8fee7d3055c8b52bbf822942b
-      size: 3247262
+      md5: 1d7248bcecc3b1936862d70031b3f68a
+      size: 3247267
     - path: b1k_pipeline/check_success.py
       hash: md5
       md5: bc3fa689bd7cc8819016ea480a7d9ef3
@@ -13544,8 +13546,8 @@ stages:
     deps:
     - path: artifacts/parallels/objects_usd.zip
       hash: md5
-      md5: 0ce55846aa6f14ae68c463df119b4f14
-      size: 4825858202
+      md5: 03c8fc901c237e26b8f9a5cc385255d1
+      size: 2551980
     - path: artifacts/pipeline/usdify_objects.success
       hash: md5
       md5: d41d8cd98f00b204e9800998ecf8427e
@@ -13557,8 +13559,8 @@ stages:
     outs:
     - path: artifacts/parallels/systems.zip
       hash: md5
-      md5: d6557d699f15faec9771b10f9950958f
-      size: 806196422
+      md5: 9c5e8de5754c166378be066c8b1e31b6
+      size: 875456
     - path: artifacts/pipeline/generate_systems.json
       hash: md5
       md5: 5b64e8b89092b2e3dfd448b10700627f
@@ -13647,12 +13649,12 @@ stages:
       size: 0
     - path: b1k_pipeline/export_objs_global.py
       hash: md5
-      md5: 5afbf2980ce1d6a24d0c71f2488a690a
-      size: 39135
+      md5: 444fdb0cc7cecd7cc0b13ca691a455ee
+      size: 39210
     - path: b1k_pipeline/export_scenes_global.py
       hash: md5
-      md5: 794c4f362bad29f8ee25f549aa0dc29f
-      size: 15391
+      md5: caf71682269cb4ddf1ee5a360f634829
+      size: 15398
     - path: b1k_pipeline/mesh_tree.py
       hash: md5
       md5: c01a25201232fad5307f53d73a0fbee7
@@ -14128,8 +14130,8 @@ stages:
     outs:
     - path: artifacts/parallels/scenes.zip
       hash: md5
-      md5: 46d77b824e99598486534fafc8c23eac
-      size: 774935
+      md5: 5a36d13c9845438e895e9ba4c9c860a4
+      size: 148
     - path: artifacts/pipeline/export_scenes.json
       hash: md5
       md5: 664e2cb0fc4ca688ad97e1a8a3d8095a
@@ -15242,7 +15244,8 @@ stages:
       md5: d5666416e569dc6843a93ff1018b91e3
       size: 54362292
     outs:
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/generate_max_object_images.json
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
     - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/max_object_images.zip
@@ -15922,7 +15925,8 @@ stages:
       md5: de355bf4d13423d76861263de439bd82
       size: 93408350
     outs:
-    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/generate_max_object_images.json
+    - path: 
+        cad/scenes/school_computer_lab_and_infirmary/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
     - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/max_object_images.zip
@@ -16130,7 +16134,8 @@ stages:
     - path: cad/scenes/Wainscott_1_int/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/generate_max_object_images.json
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
     - path: cad/scenes/commercial_kitchen_pans/artifacts/generate_max_object_images.json
@@ -16232,7 +16237,8 @@ stages:
     - path: cad/scenes/school_chemistry/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
-    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/generate_max_object_images.json
+    - path: 
+        cad/scenes/school_computer_lab_and_infirmary/artifacts/generate_max_object_images.json
       md5: 8ed67ec9b425f120db963cd1baa003f6
       size: 36
     - path: cad/scenes/school_geography/artifacts/generate_max_object_images.json
@@ -17767,7 +17773,8 @@ stages:
       md5: 7322606246641d5fe92063dd3a8289c8
       size: 26693934
     outs:
-    - path: cad/scenes/grocery_store_half_stocked/artifacts/check_collisions_with_clutter.json
+    - path: 
+        cad/scenes/grocery_store_half_stocked/artifacts/check_collisions_with_clutter.json
       hash: md5
       md5: 0b4251d860c3779ce7c3cd8bf4a5b178
       size: 38671
@@ -17903,7 +17910,8 @@ stages:
       md5: b0702e3acd572d55080963558f9acf3c
       size: 12936700
     outs:
-    - path: cad/scenes/public_restroom_futuristic/artifacts/check_collisions_with_clutter.json
+    - path: 
+        cad/scenes/public_restroom_futuristic/artifacts/check_collisions_with_clutter.json
       hash: md5
       md5: dc1622d17d4f4bccda8990dfea955238
       size: 68
@@ -18260,7 +18268,8 @@ stages:
       md5: d14374915eb5b626e17476963408762b
       size: 30320958
     outs:
-    - path: cad/scenes/grocery_store_convenience/artifacts/check_collisions_with_clutter.json
+    - path: 
+        cad/scenes/grocery_store_convenience/artifacts/check_collisions_with_clutter.json
       hash: md5
       md5: 604c718bd9864390cc5ee54e29772d44
       size: 10488
@@ -18532,7 +18541,8 @@ stages:
       md5: 4753428cc6f6ecdba12ed8ba55c30509
       size: 103299684
     outs:
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/check_collisions_with_clutter.json
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/check_collisions_with_clutter.json
       hash: md5
       md5: 223590af3f9d226d80ac8d5892e69ab1
       size: 682
@@ -18617,7 +18627,8 @@ stages:
       md5: d12b5e94bc3ba4e0d159b75b6f709bcf
       size: 122218854
     outs:
-    - path: cad/scenes/school_computer_lab_and_infirmary/artifacts/check_collisions_with_clutter.json
+    - path: 
+        cad/scenes/school_computer_lab_and_infirmary/artifacts/check_collisions_with_clutter.json
       hash: md5
       md5: 957b16eaa44db8f3fec0368460776ad4
       size: 7748
@@ -18927,7 +18938,8 @@ stages:
       hash: md5
       md5: b4525151c76b07d708274dc826d1cc93
       size: 377575
-    - path: cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/file_manifest_deep.json
+    - path: 
+        cad/scenes/commercial_kitchen_fire_extinguisher/artifacts/file_manifest_deep.json
       hash: md5
       md5: 53b3c4876c58352c1692289ec4f3188f
       size: 64564359
