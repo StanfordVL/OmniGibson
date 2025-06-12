@@ -208,22 +208,10 @@ class CuRoboMotionGenerator:
             self.mg[emb_sel] = lazy.curobo.wrap.reacher.motion_gen.MotionGen(motion_gen_config)
 
         for emb_sel, mg in self.mg.items():
-            # DEFAULT mode will not be used at all
+            # DEFAULT mode will not be used at all, so no need to warm up
             if emb_sel == CuRoboEmbodimentSelection.DEFAULT:
                 continue
-            # If ARM mode is only be used for IK, not motion planning
-            # ik_only = emb_sel == CuRoboEmbodimentSelection.ARM
-            # Else
-            ik_only = False
 
-            # mg.warmup(
-            #     enable_graph=True,
-            #     warmup_js_trajopt=False,
-            #     batch=batch_size,
-            #     warmup_joint_delta=1e-6,
-            #     ik_only=ik_only,
-            #     use_eyes_targets=use_eyes_targets,
-            # )
             target_pos, target_quat = {}, {}
             for link_name in mg.kinematics.link_names:
                 target_pos[link_name], target_quat[link_name] = self.robot.links[link_name].get_position_orientation()
@@ -246,15 +234,15 @@ class CuRoboMotionGenerator:
                 max_attempts=10,
                 timeout=60.0,
                 ik_fail_return=10,
-                enable_finetune_trajopt=False if ik_only else True,
-                finetune_attempts=0 if ik_only else 1,
+                enable_finetune_trajopt=True,
+                finetune_attempts=1,
                 return_full_result=False,
                 success_ratio=1.0,
                 attached_obj=None,
                 attached_obj_scale=None,
                 motion_constraint=None,
                 skip_obstacle_update=True,
-                ik_only=ik_only,
+                ik_only=False,
                 ik_world_collision_check=False,
                 emb_sel=emb_sel,
                 eyes_target_pos=eyes_target_pos,
@@ -263,9 +251,6 @@ class CuRoboMotionGenerator:
 
             # Make sure all cuda graphs have been warmed up
             for solver in [mg.ik_solver, mg.trajopt_solver, mg.finetune_trajopt_solver]:
-                # ARM mode will only be used for IK, not motion planning
-                if ik_only and solver != mg.ik_solver:
-                    continue
                 if solver.solver.use_cuda_graph_metrics:
                     assert solver.solver.safety_rollout._metrics_cuda_graph_init
                     if isinstance(solver, lazy.curobo.wrap.reacher.trajopt.TrajOptSolver):
@@ -282,7 +267,6 @@ class CuRoboMotionGenerator:
                 # Manually specify joint limits for the base_footprint_x/y/rz
                 # TODO: Make this more general for all tasks (each task requires different joint limit based on the scene and where the robot is spawned)
                 if self.robot.joints[joint_name].joint_type == JointType.JOINT_PRISMATIC:
-                    # joint_limits.position[0][joint_idx] = -m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT
                     print(
                         " m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT[scene_model]: ",
                         m.HOLONOMIC_BASE_PRISMATIC_JOINT_LIMIT[scene_model],
@@ -311,7 +295,6 @@ class CuRoboMotionGenerator:
         #             upper = upper - (1 - percentile) / 2 * q_range
         #             joint_limits.position[0][joint_idx] = lower
         #             joint_limits.position[1][joint_idx] = upper
-
 
     def save_visualization(self, q, file_path, emb_sel=CuRoboEmbodimentSelection.DEFAULT):
         # Update obstacles
@@ -559,27 +542,6 @@ class CuRoboMotionGenerator:
         # Get the joint state with the minimum error
         joint_state = result.js_solution[range(result.js_solution.shape[0]), min_error_idx]
         joint_state = [joint_state[i] for i in range(joint_state.shape[0])]
-        return result, success, joint_state
-
-    # TODO: This is not tested yet. Test it!
-    def plan_js(
-        self,
-        start_state,
-        goal_pose,
-        plan_config,
-        link_poses=None,
-        eyes_targets=None,
-        emb_sel=CuRoboEmbodimentSelection.DEFAULT,
-    ):
-        result = self.mg[emb_sel].plan_single_js(
-            start_state, goal_pose, plan_config, link_poses=link_poses, eyes_targets=eyes_targets
-        )
-        success = result.success
-        if result.interpolated_plan is None:
-            joint_state = [None] * goal_pose.batch
-        else:
-            joint_state = result.get_paths()
-
         return result, success, joint_state
 
     def plan_batch(
@@ -878,9 +840,6 @@ class CuRoboMotionGenerator:
                     if additional_link in target_pos
                     else rollout_fn._link_pose_convergence[additional_link].disable_cost()
                 )
-                # if additional_link in target_pos and additional_link == "eyes":
-                #     rollout_fn._link_pose_costs[additional_link].weight *= 0.1
-                #     rollout_fn._link_pose_convergence[additional_link].weight *= 0.1
 
             if rollout_fn.eyes_target_cost is not None:
                 (
@@ -1194,9 +1153,6 @@ class CuRoboMotionGenerator:
     def update_torso_joint_limits(self, robot_cfg_obj, emb_sel):
         joint_limits = robot_cfg_obj.kinematics.kinematics_config.joint_limits  # [2, num_joints], related to emb_sel
 
-        # for ARM the joint limits
-        # ['torso_joint1', 'torso_joint2', 'torso_joint3', 'torso_joint4', 'left_arm_joint1', 'left_arm_joint2', 'left_arm_joint3', 'left_arm_joint4', 'left_arm_joint5', 'left_arm_joint6', 'right_arm_joint1', 'right_arm_joint2', 'right_arm_joint3', 'right_arm_joint4', 'right_arm_joint5', 'right_arm_joint6']
-
         # TODO: this torso limits can be very related to the task, so it should be set in the task level
         # clip torso joint limits
         for joint_name in self.robot.trunk_joint_names:
@@ -1212,12 +1168,8 @@ class CuRoboMotionGenerator:
                     joint_limits.position[0][joint_idx],
                     joint_limits.position[1][joint_idx],
                 )
-                # cur_torso_pos = self.robot.get_joint_positions()[6:10]
 
                 nominal_pos = th.tensor([1.375, -2.195, -0.96, 0.0])
-                # nominal_pos = th.tensor([5.2360e-01, -1.0472e00, -5.2360e-01, 0.0])
-                # nominal_pos += th.tensor([0.2, -0.4, -0.2, 0.0])
-                # joint_limit_offset = th.tensor([[-0.1, -1.0, -1.0, -0.84], [0.2, 0.1, 0.1, 0.84]])
                 offset = 0.1
                 joint_limit_offset = th.tensor([[-offset, -offset, -0.3, -0.84], [offset, offset, 0.14, 0.84]])
                 min_torso_limit = nominal_pos + joint_limit_offset[0]
@@ -1260,8 +1212,6 @@ class CuRoboMotionGenerator:
                     joint_limits.position[0][joint_idx],
                     joint_limits.position[1][joint_idx],
                 )
-                # cur_left_arm_pos = self.robot.get_joint_positions()[10:16]
-                # cur_right_arm_pos = self.robot.get_joint_positions()[16:22]
 
                 if joint_name == "right_arm_joint3":
                     joint_limits.position[1][joint_idx] -= 0.135
@@ -1291,8 +1241,6 @@ class CuRoboMotionGenerator:
                     joint_limits.position[0][joint_idx],
                     joint_limits.position[1][joint_idx],
                 )
-                # cur_left_arm_pos = self.robot.get_joint_positions()[10:16]
-                # cur_right_arm_pos = self.robot.get_joint_positions()[16:22]
 
                 if joint_name == "left_arm_joint3":
                     joint_limits.position[1][joint_idx] -= 0.135
