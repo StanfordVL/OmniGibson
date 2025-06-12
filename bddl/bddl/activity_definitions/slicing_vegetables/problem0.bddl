@@ -7,7 +7,7 @@
         electric_refrigerator.n.01_1 - electric_refrigerator.n.01
         beet.n.02_1 beet.n.02_2 - beet.n.02
         diced__beet.n.01_1 - diced__beet.n.01
-        chopping_board.n.01_1 - chopping_board.n.01
+        chopping_board.n.01_1 chopping_board.n.01_2 - chopping_board.n.01
         zucchini.n.02_1 - zucchini.n.02
         diced__zucchini.n.01_1 - diced__zucchini.n.01
         parer.n.02_1 - parer.n.02
@@ -23,7 +23,8 @@
         (inside beet.n.02_2 electric_refrigerator.n.01_1)
         (inside zucchini.n.02_1 electric_refrigerator.n.01_1) 
         (ontop parer.n.02_1 countertop.n.01_1)
-        (ontop chopping_board.n.01_1 countertop.n.01_1) 
+        (ontop chopping_board.n.01_1 countertop.n.01_1)
+        (ontop chopping_board.n.01_2 countertop.n.01_1) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom floor.n.01_1 kitchen) 
