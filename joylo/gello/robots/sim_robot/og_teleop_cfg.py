@@ -4,6 +4,8 @@ from omnigibson.utils import transform_utils as T
 from omnigibson.transition_rules import (
     ToggleableMachineRule,
     MixingToolRule,
+    CookingObjectRule,
+    CookingPhysicalParticleRule,
     CookingSystemRule,
 )
 
@@ -20,7 +22,8 @@ ROOM_DEPENDENCIES = {
         "living_room": ["kitchen", "corridor"],
         "garage": ["corridor"],
     },
-    "house_double_floor_upper": {},
+    "house_double_floor_upper": {
+    }
 }
 
 TASK_SPECIFIC_EXTRA_ROOMS = {
@@ -29,30 +32,30 @@ TASK_SPECIFIC_EXTRA_ROOMS = {
     },
     "bringing_newspaper_in": {
         "house_double_floor_lower": ["corridor"],
-    },
+    }
 }
 
 VALIDATED_TASKS = [
-    "picking_up_trash",  # difficulty: 2
-    "putting_away_Halloween_decorations",  # difficulty: 3
-    "cleaning_up_plates_and_food",  # difficulty: 3.5
-    "setting_mousetraps",  # difficulty: 2
-    "hiding_Easter_eggs",  # difficulty: 2
-    "set_up_a_coffee_station_in_your_kitchen",  # difficulty: 3
-    "putting_dishes_away_after_cleaning",  # difficulty: 3
-    "preparing_lunch_box",  # difficulty: 3
-    "loading_the_car",  # difficulty: 3.5
-    "carrying_in_groceries",  # difficulty: 3.5
-    "turning_on_radio",  # difficulty: 1
-    "picking_up_toys",  # difficulty: 3.5
-    "can_meat",  # difficulty: 3.5
-    "rearranging_kitchen_furniture",  # difficulty: 3
-    "putting_up_Christmas_decorations_inside",  # difficulty: 2
-    "bringing_in_wood",  # difficulty: 1.5
-    "moving_boxes_to_storage",  # difficulty: 1.5
-    "bringing_water",  # difficulty: 1.5
-    "tidying_bedroom",  # difficulty: 2
-    "outfit_a_basic_toolbox",  # difficulty: 2,
+    "picking_up_trash", # difficulty: 2
+    "putting_away_Halloween_decorations", # difficulty: 3
+    "cleaning_up_plates_and_food", # difficulty: 3.5
+    "setting_mousetraps", # difficulty: 2
+    "hiding_Easter_eggs", # difficulty: 2
+    "set_up_a_coffee_station_in_your_kitchen", # difficulty: 3
+    "putting_dishes_away_after_cleaning", # difficulty: 3
+    "preparing_lunch_box", # difficulty: 3
+    "loading_the_car", # difficulty: 3.5
+    "carrying_in_groceries", # difficulty: 3.5
+    "turning_on_radio", # difficulty: 1
+    "picking_up_toys", # difficulty: 3.5
+    "can_meat", # difficulty: 3.5
+    "rearranging_kitchen_furniture", # difficulty: 3
+    "putting_up_Christmas_decorations_inside", # difficulty: 2
+    "bringing_in_wood", # difficulty: 1.5
+    "moving_boxes_to_storage", # difficulty: 1.5
+    "bringing_water", # difficulty: 1.5
+    "tidying_bedroom", # difficulty: 2
+    "outfit_a_basic_toolbox", # difficulty: 2,
     "sorting_vegetables",
     "collecting_childrens_toys",
     "putting_shoes_on_rack",
@@ -65,13 +68,11 @@ VALIDATED_TASKS = [
     "clean_up_your_desk",
 ]
 
-
 # Viewing mode configuration
 class ViewingMode(str, Enum):
     SINGLE_VIEW = "single_view"
     VR = "vr"
     MULTI_VIEW_1 = "multi_view_1"
-
 
 # Feature flags
 USE_FLUID = False
@@ -88,30 +89,15 @@ ROBOT_TYPE = "R1Pro"  # This should always be our robot generally since GELLO is
 ROBOT_NAME = "robot_r1"
 
 # R1 robot-specific configurations
-R1_UPRIGHT_TORSO_JOINT_POS = th.tensor(
-    [0.45, -0.4, 0.0, 0.0], dtype=th.float32
-)  # For upper cabinets, shelves, etc.
-R1_DOWNWARD_TORSO_JOINT_POS = th.tensor(
-    [1.6, -2.5, -0.94, 0.0], dtype=th.float32
-)  # For bottom cabinets, dishwashers, etc.
-R1_GROUND_TORSO_JOINT_POS = th.tensor(
-    [1.735, -2.57, -2.1, 0.0], dtype=th.float32
-)  # For ground object pick up
-R1_WRIST_CAMERA_LOCAL_POS = th.tensor(
-    [0.1, 0.0, -0.1], dtype=th.float32
-)  # Local position of the wrist camera relative to eef
-R1_WRIST_CAMERA_LOCAL_ORI = th.tensor(
-    [0.6830127018922194, 0.6830127018922193, 0.18301270189221927, 0.18301270189221946],
-    dtype=th.float32,
-)  # Local orientation of the wrist camera relative to eef
+R1_UPRIGHT_TORSO_JOINT_POS = th.tensor([0.45, -0.4, 0.0, 0.0], dtype=th.float32)  # For upper cabinets, shelves, etc.
+R1_DOWNWARD_TORSO_JOINT_POS = th.tensor([1.6, -2.5, -0.94, 0.0], dtype=th.float32)  # For bottom cabinets, dishwashers, etc.
+R1_GROUND_TORSO_JOINT_POS = th.tensor([1.735, -2.57, -2.1, 0.0], dtype=th.float32)  # For ground object pick up
+R1_WRIST_CAMERA_LOCAL_POS = th.tensor([0.1, 0.0, -0.1], dtype=th.float32)  # Local position of the wrist camera relative to eef
+R1_WRIST_CAMERA_LOCAL_ORI = th.tensor([0.6830127018922194, 0.6830127018922193, 0.18301270189221927, 0.18301270189221946], dtype=th.float32)  # Local orientation of the wrist camera relative to eef
 
 # R1 Pro robot-specific configurations
-R1PRO_HEAD_CAMERA_LOCAL_POS = th.tensor(
-    [0.06, 0.0, 0.01], dtype=th.float32
-)  # Local position of the head camera relative to head link
-R1PRO_HEAD_CAMERA_LOCAL_ORI = th.tensor(
-    [-1.0, 0.0, 0.0, 0.0], dtype=th.float32
-)  # Local orientation of the head camera relative to head link
+R1PRO_HEAD_CAMERA_LOCAL_POS = th.tensor([0.06, 0.0, 0.01], dtype=th.float32)  # Local position of the head camera relative to head link
+R1PRO_HEAD_CAMERA_LOCAL_ORI = th.tensor([-1.0, 0.0, 0.0, 0.0], dtype=th.float32)  # Local orientation of the head camera relative to head link
 
 # Default parameters
 DEFAULT_TRUNK_TRANSLATE = 0.5
@@ -131,16 +117,14 @@ STEPS_TO_AUTO_CHECKPOINT = 6000  # Assuming 20 fps, this is about 5 minutes
 
 # Visualization cylinder configs
 VIS_GEOM_COLORS = {
-    False: [
-        th.tensor([1.0, 0, 0]),  # Red
-        th.tensor([0, 1.0, 0]),  # Green
-        th.tensor([0, 0, 1.0]),  # Blue
+    False: [th.tensor([1.0, 0, 0]),  # Red
+            th.tensor([0, 1.0, 0]),  # Green
+            th.tensor([0, 0, 1.0]),  # Blue
     ],
-    True: [
-        th.tensor([1.0, 0.5, 0.5]),  # Light Red
-        th.tensor([0.5, 1.0, 0.5]),  # Light Green
-        th.tensor([0.5, 0.5, 1.0]),  # Light Blue
-    ],
+    True: [th.tensor([1.0, 0.5, 0.5]),  # Light Red 
+           th.tensor([0.5, 1.0, 0.5]),  # Light Green
+           th.tensor([0.5, 0.5, 1.0]),  # Light Blue
+    ]
 }
 BEACON_LENGTH = 5.0
 
@@ -207,10 +191,7 @@ R1_CONTROLLER_CONFIG = {
         "motor_type": "velocity",
         "vel_kp": 150,
         "command_input_limits": [-th.ones(3), th.ones(3)],
-        "command_output_limits": [
-            -th.tensor([0.75, 0.75, 1.0]),
-            th.tensor([0.75, 0.75, 1.0]),
-        ],
+        "command_output_limits": [-th.tensor([0.75, 0.75, 1.0]), th.tensor([0.75, 0.75, 1.0])],
         "use_impedances": False,
     },
     "trunk": {
@@ -224,42 +205,22 @@ R1_CONTROLLER_CONFIG = {
     },
     "camera": {
         "name": "NullJointController",
-    },
+    }
 }
 
 ROBOT_RESET_JOINT_POS = {
-    "R1": th.tensor(
-        [
-            0,
-            0,
-            0,
-            0,
-            0,
-            0,  # 6 virtual base joints
-            0,
-            0,
-            0,
-            0,  # 4 trunk joints -- these will be programmatically added
-            33,
-            -33,  # L, R arm joints
-            162,
-            162,
-            -108,
-            -108,
-            34,
-            -34,
-            73,
-            -73,
-            -65,
-            65,
-            0,
-            0,  # 2 L gripper
-            0,
-            0,  # 2 R gripper
-        ]
-    )
-    * th.pi
-    / 180,
+    "R1": th.tensor([
+        0, 0, 0, 0, 0, 0,    # 6 virtual base joints
+        0, 0, 0, 0,          # 4 trunk joints -- these will be programmatically added
+        33, -33,             # L, R arm joints
+        162, 162,
+        -108, -108,
+        34, -34,
+        73, -73,
+        -65, 65,
+        0, 0,                # 2 L gripper
+        0, 0,                # 2 R gripper
+    ]) * th.pi / 180,
     "R1Pro": th.zeros(28) * th.pi / 180,
 }
 
@@ -302,13 +263,13 @@ REACHABILITY_VISUALIZER_CONFIG = {
 # Visualization cylinder configurations
 VIS_CYLINDER_CONFIG = {
     "width": 0.01,
-    "lengths": [0.25, 0.25, 0.5],  # x,y,z
-    "proportion_offsets": [0.0, 0.0, 0.5],  # x,y,z
+    "lengths": [0.25, 0.25, 0.5],            # x,y,z
+    "proportion_offsets": [0.0, 0.0, 0.5],   # x,y,z
     "quat_offsets": [
         T.euler2quat(th.tensor([0.0, th.pi / 2, 0.0])),
         T.euler2quat(th.tensor([-th.pi / 2, 0.0, 0.0])),
         T.euler2quat(th.tensor([0.0, 0.0, 0.0])),
-    ],
+    ]
 }
 
 # Frame visualizer cylinder configurations
@@ -317,37 +278,29 @@ ATTACHMENT_FRAME_CONFIG = {
     "lengths": [0.15, 0.15, 0.15],
     "quat_offsets": [
         T.euler2quat(th.tensor([0.0, th.pi / 2, 0.0])),  # X-axis (red)
-        T.euler2quat(th.tensor([-th.pi / 2, 0.0, 0.0])),  # Y-axis (green)
-        T.euler2quat(th.tensor([0.0, 0.0, 0.0])),  # Z-axis (blue)
+        T.euler2quat(th.tensor([-th.pi / 2, 0.0, 0.0])), # Y-axis (green)
+        T.euler2quat(th.tensor([0.0, 0.0, 0.0])),        # Z-axis (blue)
     ],
     "colors": [
         th.tensor([1.0, 0.0, 0.0]),  # Red for X-axis
         th.tensor([0.0, 1.0, 0.0]),  # Green for Y-axis
         th.tensor([0.0, 0.0, 1.0]),  # Blue for Z-axis
-    ],
+    ]
 }
 
 # Camera and viewport configuration
 CAMERA_VIEWPORT_POSITIONS = {
     "left_shoulder": {"parent": "DockSpace", "position": "LEFT", "ratio": 0.25},
-    "left_wrist": {
-        "parent": "viewport_left_shoulder",
-        "position": "BOTTOM",
-        "ratio": 0.5,
-    },
+    "left_wrist": {"parent": "viewport_left_shoulder", "position": "BOTTOM", "ratio": 0.5},
     "right_shoulder": {"parent": "DockSpace", "position": "RIGHT", "ratio": 0.2},
-    "right_wrist": {
-        "parent": "viewport_right_shoulder",
-        "position": "BOTTOM",
-        "ratio": 0.5,
-    },
+    "right_wrist": {"parent": "viewport_right_shoulder", "position": "BOTTOM", "ratio": 0.5},
 }
 
 # External camera parameters
 EXTERNAL_CAMERA_CONFIGS = {
     "external_sensor0": {
         "position": [-0.4, 0, 2.0],
-        "orientation": [0.2706, -0.2706, -0.6533, 0.6533],
+        "orientation": [ 0.2706, -0.2706, -0.6533,  0.6533],
     },
     "external_sensor1": {
         "position": [-0.2, 0.6, 2.0],
@@ -356,7 +309,7 @@ EXTERNAL_CAMERA_CONFIGS = {
     "external_sensor2": {
         "position": [-0.2, -0.6, 2.0],
         "orientation": [0.4164, -0.1929, -0.3737, 0.8060],
-    },
+    }
 }
 
 # UI visual settings
@@ -375,10 +328,10 @@ STATUS_DISPLAY_SETTINGS = {
     "persistent_states": ["in_cooldown", "waiting_to_resume"],
     "event_colors": {
         "checkpoint": 0xFF00FF00,  # Green
-        "rollback": 0xFFFF00FF,  # Magenta
-        "cooldown": 0xFF00FFFF,  # Yellow
-        "waiting": 0xFFFF0000,  # White
-        "reset": 0xFF00AAFF,  # Orange
+        "rollback": 0xFFFF00FF,   # Magenta
+        "cooldown": 0xFF00FFFF,   # Yellow
+        "waiting": 0xFFFF0000,    # White
+        "reset": 0xFF00AAFF,      # Orange
     },
     "font_size": 20,
     "bottom_margin": 50,
@@ -400,6 +353,8 @@ INCLUDE_FINGER_CONTACT_OBS = False
 INCLUDE_JACOBIAN_OBS = False
 GHOST_UPDATE_FREQ = 3
 
-BLINK_WHEN_IN_CONTACT = True
+BLINK_WHEN_IN_CONTACT = True 
 
-DISABLED_TRANSITION_RULES = [ToggleableMachineRule, MixingToolRule, CookingSystemRule]
+DISABLED_TRANSITION_RULES = [ToggleableMachineRule, 
+                             MixingToolRule, 
+                             CookingSystemRule]
