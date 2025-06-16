@@ -47,6 +47,9 @@
                 (?apple_pie.n.01 - apple_pie.n.01) 
                 (frozen ?apple_pie.n.01)
             )
+            (not
+                (open ?electric_refrigerator.n.01_1)
+            )
         )
     )
 )

@@ -50,6 +50,9 @@
                 (?bacon.n.01 - bacon.n.01)
                 (cooked ?bacon.n.01)
             )
+            (not
+                (open ?electric_refrigerator.n.01_1)
+            )
         )
     )
 )
