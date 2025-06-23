@@ -6,7 +6,7 @@
         checkout.n.03_1 - checkout.n.03
         sack.n.01_1 - sack.n.01
         bottle__of__antihistamines.n.01_1 - bottle__of__antihistamines.n.01
-        shelf.n.01_1 shelf.n.01_2 shelf.n.01_3 - shelf.n.01
+        grocery_shelf.n.01_1 grocery_shelf.n.01_2 grocery_shelf.n.01_3 - grocery_shelf.n.01
         first-aid_kit.n.01_1 - first-aid_kit.n.01
         shopping_cart.n.01_1 - shopping_cart.n.01
         bottle__of__aspirin.n.01_1 - bottle__of__aspirin.n.01
@@ -17,18 +17,18 @@
     )
     
     (:init 
-        (ontop cash_register.n.01_1 checkout.n.03_1)
+        (inroom cash_register.n.01_1 grocery_store)
         (ontop sack.n.01_1 checkout.n.03_1)
-        (inside bottle__of__antihistamines.n.01_1 shelf.n.01_2)
-        (inside first-aid_kit.n.01_1 shelf.n.01_1) 
-        (inside bottle__of__aspirin.n.01_1 shelf.n.01_1) 
-        (inside bandage.n.01_1 shelf.n.01_3) 
+        (inside bottle__of__antihistamines.n.01_1 grocery_shelf.n.01_2)
+        (inside first-aid_kit.n.01_1 grocery_shelf.n.01_1) 
+        (inside bottle__of__aspirin.n.01_1 grocery_shelf.n.01_1) 
+        (inside bandage.n.01_1 grocery_shelf.n.01_3) 
         (inside credit_card.n.01_1 shopping_cart.n.01_1) 
         (inroom floor.n.01_1 grocery_store) 
         (inroom checkout.n.03_1 grocery_store) 
-        (inroom shelf.n.01_1 grocery_store) 
-        (inroom shelf.n.01_2 grocery_store) 
-        (inroom shelf.n.01_3 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_2 grocery_store) 
+        (inroom grocery_shelf.n.01_3 grocery_store) 
         (inroom shopping_cart.n.01_1 grocery_store) 
         (ontop agent.n.01_1 floor.n.01_1)
     

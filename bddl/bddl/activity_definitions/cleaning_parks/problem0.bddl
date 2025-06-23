@@ -25,7 +25,7 @@
                 (?water_bottle.n.01 - water_bottle.n.01) 
                 (inside ?water_bottle.n.01 ?recycling_bin.n.01_1)
             ) 
-            (inside ?recycling_bin.n.01_1 ?lawn.n.01_1)
+            (ontop ?recycling_bin.n.01_1 ?lawn.n.01_1)
         )
     )
 )

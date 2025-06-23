@@ -5,7 +5,7 @@
         floor.n.01_1 - floor.n.01
         jersey.n.03_1 - jersey.n.03
         dress.n.01_1 - dress.n.01
-        jacket.n.01_1 - jacket.n.01
+        vest.n.01_1 - vest.n.01
         hanger.n.02_1 hanger.n.02_2 hanger.n.02_3 hanger.n.02_4 - hanger.n.02
         wardrobe.n.01_1 - wardrobe.n.01
         agent.n.01_1 - agent.n.01
@@ -14,7 +14,7 @@
     (:init
         (ontop jersey.n.03_1 floor.n.01_1)
         (ontop dress.n.01_1 floor.n.01_1)
-        (ontop jacket.n.01_1 floor.n.01_1)
+        (ontop vest.n.01_1 floor.n.01_1)
         (attached hanger.n.02_1 wardrobe.n.01_1)
         (attached hanger.n.02_2 wardrobe.n.01_1)
         (attached hanger.n.02_3 wardrobe.n.01_1)
@@ -26,7 +26,7 @@
     
     (:goal 
         (and 
-            (draped ?jacket.n.01_1 ?hanger.n.02_1)
+            (draped ?vest.n.01_1 ?hanger.n.02_1)
             (draped ?dress.n.01_1 ?hanger.n.02_1)
             (draped ?jersey.n.03_1 ?hanger.n.02_1) 
         )

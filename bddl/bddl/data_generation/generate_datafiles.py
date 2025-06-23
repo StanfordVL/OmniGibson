@@ -26,6 +26,8 @@ def main():
     with open(SYN_PROP_DATA_FN, "r") as f:
         syn_prop_dict = {}
         for row in csv.DictReader(f):
+            if int(row["prune"]) == 1:
+                continue
             syn_prop_dict[row.pop("synset")] = row
     hierarchy = get_hierarchy(syn_prop_dict)
     syn_prop_df = pd.read_csv(SYN_PROP_DATA_FN)
@@ -51,7 +53,7 @@ def main():
     create_get_save_implicit_transition_rules(syns_to_param_props, props_to_syns)
 
     # Create and save explicit transition jsons
-    create_save_explicit_transition_rules()
+    create_save_explicit_transition_rules(syns_to_param_props)
 
     # Sanity check object taxonomy and transition rules
     sanity_check()

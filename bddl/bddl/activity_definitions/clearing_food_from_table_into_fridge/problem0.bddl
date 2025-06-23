@@ -2,7 +2,7 @@
     (:domain omnigibson)
 
     (:objects
-        chicken_wing.n.01_1 - chicken_wing.n.01 
+        half__chicken.n.01_1 - half__chicken.n.01 
         half__apple_pie.n.01_1 - half__apple_pie.n.01
         plate.n.04_1 plate.n.04_2 - plate.n.04
         breakfast_table.n.01_1 - breakfast_table.n.01
@@ -14,17 +14,16 @@
     )
     
     (:init 
-        (ontop chicken_wing.n.01_1 plate.n.04_1) 
-        (cooked chicken_wing.n.01_1)
+        (ontop half__chicken.n.01_1 plate.n.04_1) 
         (ontop half__apple_pie.n.01_1 plate.n.04_2) 
         (ontop plate.n.04_1 breakfast_table.n.01_1) 
         (ontop plate.n.04_2 breakfast_table.n.01_1) 
         (ontop tupperware.n.01_1 countertop.n.01_1)
         (ontop tupperware.n.01_2 countertop.n.01_1)
-        (inroom breakfast_table.n.01_1 dining_room) 
+        (inroom breakfast_table.n.01_1 kitchen) 
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen)
-        (inroom floor.n.01_1 dining_room) 
+        (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -36,12 +35,15 @@
             )
             (exists 
                 (?tupperware.n.01 - tupperware.n.01)
-                (inside ?chicken_wing.n.01_1 ?tupperware.n.01)
+                (inside ?half__chicken.n.01_1 ?tupperware.n.01)
             )
             (forall 
                 (?tupperware.n.01 - tupperware.n.01) 
                 (inside ?tupperware.n.01 ?electric_refrigerator.n.01_1)
             ) 
+            (not
+                (open ?electric_refrigerator.n.01_1)
+            )
         )
     )
 )

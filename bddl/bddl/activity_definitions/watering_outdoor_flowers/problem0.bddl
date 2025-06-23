@@ -5,8 +5,7 @@
         watering_can.n.01_1 - watering_can.n.01
         water.n.06_1 - water.n.06
         floor.n.01_1 - floor.n.01
-        flower.n.02_1 - flower.n.02
-        scrub.n.01_1 scrub.n.01_2 - scrub.n.01
+        pot_plant.n.01_1 pot_plant.n.01_2 - pot_plant.n.01
         agent.n.01_1 - agent.n.01
     )
     
@@ -14,19 +13,17 @@
         (insource watering_can.n.01_1 water.n.06_1) 
         (ontop watering_can.n.01_1 floor.n.01_1)
         (inroom floor.n.01_1 garden) 
-        (inroom flower.n.02_1 garden) 
-        (inroom scrub.n.01_1 garden)
-        (inroom scrub.n.01_2 garden)
+        (inroom pot_plant.n.01_1 garden)
+        (inroom pot_plant.n.01_2 garden)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
             (forall 
-                (?scrub.n.01 - scrub.n.01)
-                (saturated ?scrub.n.01 ?water.n.06_1)
+                (?pot_plant.n.01 - pot_plant.n.01)
+                (saturated ?pot_plant.n.01 ?water.n.06_1)
             )
-            (covered ?flower.n.02_1 ?water.n.06_1)
         )
     )
 )

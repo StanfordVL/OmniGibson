@@ -12,7 +12,7 @@
     )
     
     (:init 
-        (ontop car.n.01_1 floor.n.01_1) 
+        (inroom car.n.01_1 garden)
         (ontop backpack.n.01_1 table.n.02_1) 
         (inside book.n.02_1 backpack.n.01_1) 
         (inside pencil_box.n.01_1 backpack.n.01_1) 

@@ -16,18 +16,6 @@
         (ontop icicle_lights.n.01_2 floor.n.01_1)
         (ontop icicle_lights.n.01_3 floor.n.01_1)
         (ontop icicle_lights.n.01_4 floor.n.01_1)
-        (not 
-            (toggled_on icicle_lights.n.01_1)
-        )
-        (not 
-            (toggled_on icicle_lights.n.01_2)
-        )
-        (not 
-            (toggled_on icicle_lights.n.01_3)
-        )
-        (not 
-            (toggled_on icicle_lights.n.01_4)
-        )
         (inroom floor.n.01_1 garden) 
         (inroom scrub.n.01_1 garden)
         (inroom scrub.n.01_2 garden)
@@ -47,10 +35,6 @@
             (exists 
                 (?icicle_lights.n.01 - icicle_lights.n.01)
                 (attached ?icicle_lights.n.01 ?wall_nail.n.01_1)
-            )
-            (forall 
-                (?icicle_lights.n.01 - icicle_lights.n.01) 
-                (toggled_on ?icicle_lights.n.01)
             )
         )
     )

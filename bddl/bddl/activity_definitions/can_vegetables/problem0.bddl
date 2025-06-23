@@ -4,7 +4,7 @@
     (:objects
         asparagus.n.02_1 asparagus.n.02_2 asparagus.n.02_3 - asparagus.n.02
         chopping_board.n.01_1 - chopping_board.n.01
-        mason_jar.n.01_1 mason_jar.n.01_2 mason_jar.n.01_3 - mason_jar.n.01
+        hingeless_jar.n.01_1 hingeless_jar.n.01_2 hingeless_jar.n.01_3 - hingeless_jar.n.01
         cabinet.n.01_1 - cabinet.n.01
         lid.n.02_1 lid.n.02_2 lid.n.02_3 - lid.n.02
         countertop.n.01_1 - countertop.n.01
@@ -17,9 +17,9 @@
         (ontop asparagus.n.02_1 chopping_board.n.01_1) 
         (ontop asparagus.n.02_2 chopping_board.n.01_1) 
         (ontop asparagus.n.02_3 chopping_board.n.01_1) 
-        (inside mason_jar.n.01_1 cabinet.n.01_1) 
-        (inside mason_jar.n.01_2 cabinet.n.01_1) 
-        (inside mason_jar.n.01_3 cabinet.n.01_1) 
+        (inside hingeless_jar.n.01_1 cabinet.n.01_1) 
+        (inside hingeless_jar.n.01_2 cabinet.n.01_1) 
+        (inside hingeless_jar.n.01_3 cabinet.n.01_1) 
         (inside lid.n.02_1 cabinet.n.01_1) 
         (inside lid.n.02_2 cabinet.n.01_1) 
         (inside lid.n.02_3 cabinet.n.01_1) 
@@ -35,17 +35,17 @@
         (and 
             (forpairs 
                 (?asparagus.n.02 - asparagus.n.02)
-                (?mason_jar.n.01 - mason_jar.n.01)
-                (inside ?asparagus.n.02 ?mason_jar.n.01)
+                (?hingeless_jar.n.01 - hingeless_jar.n.01)
+                (inside ?asparagus.n.02 ?hingeless_jar.n.01)
             )
             (forpairs 
                 (?lid.n.02 - lid.n.02)
-                (?mason_jar.n.01 - mason_jar.n.01)
-                (ontop ?lid.n.02 ?mason_jar.n.01)
+                (?hingeless_jar.n.01 - hingeless_jar.n.01)
+                (attached ?lid.n.02 ?hingeless_jar.n.01)
             )
             (forall 
-                (?mason_jar.n.01 - mason_jar.n.01) 
-                (inside ?mason_jar.n.01 ?cabinet.n.01_1)
+                (?hingeless_jar.n.01 - hingeless_jar.n.01) 
+                (inside ?hingeless_jar.n.01 ?cabinet.n.01_1)
             ) 
         )
     )

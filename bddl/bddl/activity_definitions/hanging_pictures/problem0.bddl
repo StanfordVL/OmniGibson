@@ -2,22 +2,28 @@
     (:domain omnigibson)
 
     (:objects
-        picture_frame.n.01_1 - picture_frame.n.01
+        poster.n.01_1 - poster.n.01
         floor.n.01_1 - floor.n.01
-        wall_nail.n.01_1 - wall_nail.n.01
+        countertop.n.01_1 - countertop.n.01
+        wall_nail.n.01_1 wall_nail.n.01_* - wall_nail.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop picture_frame.n.01_1 floor.n.01_1)
-        (inroom floor.n.01_1 corridor) 
-        (inroom wall_nail.n.01_1 corridor)
+        (ontop poster.n.01_1 countertop.n.01_1)
+        (inroom floor.n.01_1 kitchen)
+        (inroom countertop.n.01_1 kitchen)
+        (inroom wall_nail.n.01_1 kitchen)
+        (inroom wall_nail.n.01_* kitchen)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (attached ?picture_frame.n.01_1 ?wall_nail.n.01_1)
+            (exists
+                (?wall_nail.n.01 - wall_nail.n.01)
+                (attached ?poster.n.01_1 ?wall_nail.n.01)
+            )
         )
     )
 )

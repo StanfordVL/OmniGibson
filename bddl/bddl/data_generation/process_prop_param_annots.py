@@ -33,11 +33,14 @@ PREDICATE_MAPPING = {
     "function": ParticleModifyCondition.FUNCTION,
 }
 
-def parse_predicate(condition):
+def parse_predicate(condition, syns_to_props):
     predicate = condition.split(" ")[0]
     pred_type = PREDICATE_MAPPING[predicate]
     if pred_type == ParticleModifyCondition.SATURATED:
-        cond = (predicate, condition.split(" ")[1])
+        saturated_synset = condition.split(" ")[1]
+        if saturated_synset not in syns_to_props:
+            return None
+        cond = (predicate, saturated_synset)
     elif pred_type == ParticleModifyCondition.TOGGLEDON:
         cond = (predicate, True)
     elif pred_type == ParticleModifyCondition.FUNCTION:
@@ -47,20 +50,21 @@ def parse_predicate(condition):
     return cond
 
 
-def parse_conditions_entry(unparsed_conditions):
+def parse_conditions_entry(unparsed_conditions, syns_to_props):
     # print(f"Parsing: {unparsed_conditions}")
     if unparsed_conditions.isnumeric():
         always_true = bool(int(unparsed_conditions))
         conditions = [] if always_true else None
     else:
-        conditions = [parse_predicate(condition=cond) for cond in unparsed_conditions.lower().split(" or ")]
+        conditions = [parse_predicate(cond, syns_to_props) for cond in unparsed_conditions.lower().split(" or ")]
+        conditions = [cond for cond in conditions if cond is not None]
     return conditions
 
 
 
 # particleRemovers
 
-def get_synsets_to_particle_remover_params():
+def get_synsets_to_particle_remover_params(syns_to_props):
     synset_cleaning_mapping = {}
     records = []
     with open(os.path.join(PROP_PARAM_ANNOTS_DIR, "particleRemover.csv"), "r") as f:
@@ -76,9 +80,9 @@ def get_synsets_to_particle_remover_params():
         # Skip washer and dryer
         if "not particleremover" in record["synset"].lower(): continue
 
-        default_fluid_conditions = parse_conditions_entry(record["other liquids"])
-        default_visual_conditions = parse_conditions_entry(record["other visualSubstances"])
-        default_non_fluid_conditions = parse_conditions_entry(record["other physicalSubstances"])
+        default_fluid_conditions = parse_conditions_entry(record["other liquids"], syns_to_props)
+        default_visual_conditions = parse_conditions_entry(record["other visualSubstances"], syns_to_props)
+        default_non_fluid_conditions = parse_conditions_entry(record["other physicalSubstances"], syns_to_props)
         if record["method"] not in {"projection", "adjacency"}:
             raise ValueError(f"Synset {record['synset']} prop particleRemover has invalid method {record['method']}")
         
@@ -92,7 +96,9 @@ def get_synsets_to_particle_remover_params():
 
         # Iterate through all the columns headed by a substance, in no particular order since their ultimate location is a dict
         for dirtiness_substance_synset in [key for key in record if re.match(OBJECT_CAT_AND_INST_RE, key) is not None]:
-            conditions = parse_conditions_entry(record[dirtiness_substance_synset])
+            if dirtiness_substance_synset not in syns_to_props:
+                continue
+            conditions = parse_conditions_entry(record[dirtiness_substance_synset], syns_to_props)
             remover_kwargs["conditions"][dirtiness_substance_synset] = conditions
 
         synset_cleaning_mapping[synset] = remover_kwargs
@@ -104,8 +110,10 @@ def get_synsets_to_particle_remover_params():
 
 def create_get_save_propagated_annots_params(syns_to_props):
     print("Processing param annots...")
-    synsets_to_particleremover_params = get_synsets_to_particle_remover_params()
+    synsets_to_particleremover_params = get_synsets_to_particle_remover_params(syns_to_props)
     for particleremover_syn, particleremover_params in synsets_to_particleremover_params.items():
+        if particleremover_syn not in syns_to_props:
+            continue
         assert "particleRemover" in syns_to_props[particleremover_syn], f"Synset {particleremover_syn} has particleRemover params but is not annotated as a particleRemover"
         syns_to_props[particleremover_syn]["particleRemover"] = particleremover_params
 
@@ -115,9 +123,11 @@ def create_get_save_propagated_annots_params(syns_to_props):
         if prop == "particleRemover": continue
         else:
             param_annots = pd.read_csv(os.path.join(PROP_PARAM_ANNOTS_DIR, prop_fn)).to_dict(orient="records")
-            for param_record in param_annots: 
+            for param_record in param_annots:
+                if param_record["synset"] not in syns_to_props:
+                    continue
+                
                 for param_name, param_value in param_record.items():
-
                     if param_name == "synset": continue
 
                     if param_name == "requires_toggled_on" and param_value == 1:
@@ -210,6 +220,7 @@ def create_get_save_propagated_annots_params(syns_to_props):
                         except ValueError:
                             raise ValueError(f"Synset {param_record['synset']} property {prop} has param {param_name} that is not named `method`, `conditions`, or `system` and is not a NaN or a float. This is unhandled - please check.")
 
+                    assert prop in syns_to_props[param_record["synset"]], f"Synset {param_record['synset']} has prop param {prop} but is not annotated as {prop}"
                     syns_to_props[param_record["synset"]][prop][param_name] = formatted_param_value
     
 

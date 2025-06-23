@@ -3,32 +3,45 @@
 
     (:objects
      	mousetrap.n.01_1 mousetrap.n.01_2 mousetrap.n.01_3 mousetrap.n.01_4 - mousetrap.n.01
-    	sink.n.01_1 - sink.n.01
-    	floor.n.01_1 floor.n.01_2 - floor.n.01
-    	toilet.n.02_1 - toilet.n.02
-        bed.n.01_1 - bed.n.01
+        floor.n.01_1 floor.n.01_* - floor.n.01
+        sink.n.01_1 sink.n.01_* - sink.n.01
+        cabinet.n.01_1 - cabinet.n.01
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop mousetrap.n.01_1 bed.n.01_1) 
-        (ontop mousetrap.n.01_2 bed.n.01_1) 
-        (ontop mousetrap.n.01_3 bed.n.01_1) 
-        (ontop mousetrap.n.01_4 bed.n.01_1) 
-        (inroom floor.n.01_1 corridor) 
-        (inroom toilet.n.02_1 bathroom) 
-        (inroom sink.n.01_1 bathroom) 
-        (inroom floor.n.01_2 bathroom) 
-        (inroom bed.n.01_1 bedroom) 
-        (ontop agent.n.01_1 floor.n.01_2)
+        (ontop mousetrap.n.01_1 cabinet.n.01_1)
+        (ontop mousetrap.n.01_2 cabinet.n.01_1)
+        (ontop mousetrap.n.01_3 cabinet.n.01_1)
+        (ontop mousetrap.n.01_4 cabinet.n.01_1)
+        (inroom sink.n.01_1 bathroom)
+        (inroom sink.n.01_* bathroom)
+        (inroom floor.n.01_1 bathroom)
+        (inroom floor.n.01_* bathroom)
+        (inroom cabinet.n.01_1 bathroom)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (ontop ?mousetrap.n.01_1 ?floor.n.01_1) 
-            (ontop ?mousetrap.n.01_2 ?floor.n.01_1) 
-            (nextto ?mousetrap.n.01_3 ?toilet.n.02_1) 
-            (nextto ?mousetrap.n.01_4 ?toilet.n.02_1)
+            (exists
+                (?floor.n.01 - floor.n.01)
+                (forall
+                    (?mousetrap.n.01 - mousetrap.n.01)
+                    (ontop ?mousetrap.n.01 ?floor.n.01)
+                )
+            )
+            (exists
+                (?sink.n.01 - sink.n.01)
+                (forn
+                    (2)
+                    (?mousetrap.n.01 - mousetrap.n.01)
+                    (or
+                        (under ?mousetrap.n.01 ?sink.n.01)
+                        (nextto ?mousetrap.n.01 ?sink.n.01)
+                    )
+                )
+            )
         )
     )
 )

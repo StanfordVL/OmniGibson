@@ -46,9 +46,7 @@ jobs:
         key: ig_pipeline-${{ hashFiles('ig_pipeline/dvc.lock') }}
         path: |
           ig_pipeline/artifacts/pipeline/combined_room_object_list.json
-          ig_pipeline/artifacts/pipeline/combined_room_object_list_future.json
           ig_pipeline/artifacts/pipeline/object_inventory.json
-          ig_pipeline/artifacts/pipeline/object_inventory_future.json
 
     - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
       name: Install dvc
@@ -57,15 +55,29 @@ jobs:
     - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
       name: Pull dvc data
       working-directory: ig_pipeline
-      run: dvc pull combined_room_object_list combined_room_object_list_future object_inventory object_inventory_future
+      run: dvc pull combined_room_object_list object_inventory
 
     - if: ${{ steps.cache-pipeline.outputs.cache-hit != 'true' }}
       name: Unprotect data
       working-directory: ig_pipeline
-      run: dvc unprotect artifacts/pipeline/combined_room_object_list.json artifacts/pipeline/combined_room_object_list_future.json artifacts/pipeline/object_inventory.json artifacts/pipeline/object_inventory_future.json
+      run: dvc unprotect artifacts/pipeline/combined_room_object_list.json artifacts/pipeline/object_inventory.json
 
     - name: Copy over ig_pipeline files
-      run: cp ig_pipeline/artifacts/pipeline/{combined_room_object_list,combined_room_object_list_future,object_inventory,object_inventory_future}.json bddl/bddl/generated_data
+      run: cp ig_pipeline/artifacts/pipeline/{combined_room_object_list,object_inventory}.json bddl/bddl/generated_data
+
+    - name: Combine complaint files from ig_pipeline
+      run: |
+        python3 -c "
+        import glob, json
+        files = glob.glob('ig_pipeline/cad/*/*/complaints.json')
+        combined = []
+        for file in files:
+            with open(file) as f:
+                combined.extend(json.load(f))
+        combined.sort(key=lambda x: (x['object'], x['type'], x['additional_info'], x['complaint'], x['processed']))
+        with open('bddl/bddl/generated_data/complaints.json', 'w') as f:
+            json.dump(combined, f, indent=2)
+        "
 
     - name: Combine complaint files from ig_pipeline
       run: |

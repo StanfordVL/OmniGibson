@@ -6,24 +6,26 @@
         floor.n.01_1 - floor.n.01
         bicycle.n.01_1 - bicycle.n.01
         bicycle_rack.n.01_1 - bicycle_rack.n.01
-        shelf.n.01_1 - shelf.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop recreational_vehicle.n.01_1 floor.n.01_1)
+        (inroom recreational_vehicle.n.01_1 garden)
         (attached bicycle.n.01_1 bicycle_rack.n.01_1) 
         (attached bicycle_rack.n.01_1 recreational_vehicle.n.01_1)
-        (inroom floor.n.01_1 living_room)
-        (inroom shelf.n.01_1 living_room) 
+        (inroom floor.n.01_1 garage)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
-            (forall 
-                (?bicycle.n.01 - bicycle.n.01) 
-                (nextto ?bicycle.n.01 ?shelf.n.01_1)
+            (ontop bicycle.n.01_1 floor.n.01_1)
+            (ontop bicycle_rack.n.01_1 floor.n.01_1)
+            (not
+                (attached bicycle.n.01_1 bicycle_rack.n.01_1) 
+            )
+            (not
+                (attached bicycle_rack.n.01_1 recreational_vehicle.n.01_1)
             )
         )
     )

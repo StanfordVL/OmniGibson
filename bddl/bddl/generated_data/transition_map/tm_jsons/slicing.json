@@ -9,15 +9,6 @@
         }
     },
     {
-        "rule_name": "antipasto.n.01-slicing",
-        "input_synsets": {
-            "antipasto.n.01": 1
-        },
-        "output_synsets": {
-            "half__antipasto.n.01": 2
-        }
-    },
-    {
         "rule_name": "apple.n.01-slicing",
         "input_synsets": {
             "apple.n.01": 1
@@ -132,15 +123,6 @@
         },
         "output_synsets": {
             "half__baguet.n.01": 2
-        }
-    },
-    {
-        "rule_name": "bamboo.n.01-slicing",
-        "input_synsets": {
-            "bamboo.n.01": 1
-        },
-        "output_synsets": {
-            "half__bamboo.n.01": 2
         }
     },
     {
@@ -351,9 +333,9 @@
         }
     },
     {
-        "rule_name": "butternut_squash.n.01-slicing",
+        "rule_name": "butternut_squash.n.02-slicing",
         "input_synsets": {
-            "butternut_squash.n.01": 1
+            "butternut_squash.n.02": 1
         },
         "output_synsets": {
             "half__butternut_squash.n.01": 2
@@ -621,15 +603,6 @@
         }
     },
     {
-        "rule_name": "cod.n.02-slicing",
-        "input_synsets": {
-            "cod.n.02": 1
-        },
-        "output_synsets": {
-            "half__cod.n.01": 2
-        }
-    },
-    {
         "rule_name": "cold_cuts.n.01-slicing",
         "input_synsets": {
             "cold_cuts.n.01": 1
@@ -726,15 +699,6 @@
         },
         "output_synsets": {
             "half__duck.n.01": 2
-        }
-    },
-    {
-        "rule_name": "dumpling.n.02-slicing",
-        "input_synsets": {
-            "dumpling.n.02": 1
-        },
-        "output_synsets": {
-            "half__dumpling.n.01": 2
         }
     },
     {
@@ -846,6 +810,15 @@
         }
     },
     {
+        "rule_name": "fried_chicken.n.01-slicing",
+        "input_synsets": {
+            "fried_chicken.n.01": 1
+        },
+        "output_synsets": {
+            "half__fried_chicken.n.01": 2
+        }
+    },
+    {
         "rule_name": "fruitcake.n.02-slicing",
         "input_synsets": {
             "fruitcake.n.02": 1
@@ -945,24 +918,6 @@
         }
     },
     {
-        "rule_name": "grouper.n.01-slicing",
-        "input_synsets": {
-            "grouper.n.01": 1
-        },
-        "output_synsets": {
-            "half__grouper.n.01": 2
-        }
-    },
-    {
-        "rule_name": "halibut.n.01-slicing",
-        "input_synsets": {
-            "halibut.n.01": 1
-        },
-        "output_synsets": {
-            "half__halibut.n.01": 2
-        }
-    },
-    {
         "rule_name": "ham_hock.n.01-slicing",
         "input_synsets": {
             "ham_hock.n.01": 1
@@ -1017,15 +972,6 @@
         }
     },
     {
-        "rule_name": "hemp.n.01-slicing",
-        "input_synsets": {
-            "hemp.n.01": 1
-        },
-        "output_synsets": {
-            "half__hemp.n.01": 2
-        }
-    },
-    {
         "rule_name": "hip.n.05-slicing",
         "input_synsets": {
             "hip.n.05": 1
@@ -1050,15 +996,6 @@
         },
         "output_synsets": {
             "half__huitre.n.01": 2
-        }
-    },
-    {
-        "rule_name": "ivy.n.01-slicing",
-        "input_synsets": {
-            "ivy.n.01": 1
-        },
-        "output_synsets": {
-            "half__ivy.n.01": 2
         }
     },
     {
@@ -1287,15 +1224,6 @@
         }
     },
     {
-        "rule_name": "oxtail.n.01-slicing",
-        "input_synsets": {
-            "oxtail.n.01": 1
-        },
-        "output_synsets": {
-            "half__oxtail.n.01": 2
-        }
-    },
-    {
         "rule_name": "papaya.n.02-slicing",
         "input_synsets": {
             "papaya.n.02": 1
@@ -1377,15 +1305,6 @@
         }
     },
     {
-        "rule_name": "pie_crust.n.01-slicing",
-        "input_synsets": {
-            "pie_crust.n.01": 1
-        },
-        "output_synsets": {
-            "half__pie_crust.n.01": 2
-        }
-    },
-    {
         "rule_name": "pieplant.n.01-slicing",
         "input_synsets": {
             "pieplant.n.01": 1
@@ -1464,15 +1383,6 @@
         },
         "output_synsets": {
             "half__potato.n.01": 2
-        }
-    },
-    {
-        "rule_name": "potato_pancake.n.01-slicing",
-        "input_synsets": {
-            "potato_pancake.n.01": 1
-        },
-        "output_synsets": {
-            "half__potato_pancake.n.01": 2
         }
     },
     {
@@ -1602,15 +1512,6 @@
         }
     },
     {
-        "rule_name": "sirloin.n.01-slicing",
-        "input_synsets": {
-            "sirloin.n.01": 1
-        },
-        "output_synsets": {
-            "half__sirloin.n.01": 2
-        }
-    },
-    {
         "rule_name": "snapper.n.02-slicing",
         "input_synsets": {
             "snapper.n.02": 1
@@ -1653,15 +1554,6 @@
         },
         "output_synsets": {
             "half__spinach.n.01": 2
-        }
-    },
-    {
-        "rule_name": "sprout.n.01-slicing",
-        "input_synsets": {
-            "sprout.n.01": 1
-        },
-        "output_synsets": {
-            "half__sprout.n.01": 2
         }
     },
     {
@@ -1815,15 +1707,6 @@
         },
         "output_synsets": {
             "half__trout.n.01": 2
-        }
-    },
-    {
-        "rule_name": "trunk.n.01-slicing",
-        "input_synsets": {
-            "trunk.n.01": 1
-        },
-        "output_synsets": {
-            "half__trunk.n.01": 2
         }
     },
     {

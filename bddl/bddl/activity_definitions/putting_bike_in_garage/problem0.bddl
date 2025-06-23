@@ -4,16 +4,12 @@
     (:objects
         bicycle.n.01_1 - bicycle.n.01
         floor.n.01_1 floor.n.01_2 - floor.n.01
-        car.n.01_1 - car.n.01
-        helmet.n.01_1 - helmet.n.01
         door.n.01_1 - door.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
         (ontop bicycle.n.01_1 floor.n.01_2) 
-        (ontop car.n.01_1 floor.n.01_1) 
-        (ontop helmet.n.01_1 floor.n.01_2) 
         (inroom floor.n.01_1 garage) 
         (inroom door.n.01_1 garage) 
         (inroom floor.n.01_2 garden)
@@ -23,8 +19,6 @@
     (:goal 
         (and 
             (ontop ?bicycle.n.01_1 ?floor.n.01_1) 
-            (nextto ?helmet.n.01_1 ?bicycle.n.01_1) 
-            (nextto ?car.n.01_1 ?bicycle.n.01_1) 
         )
     )
 )

@@ -18,7 +18,7 @@ from bddl.trivial_backend import *
 
 # Files
 
-BDDL_DIR = pathlib.Path(bddl.__file__).parent
+BDDL_DIR = pathlib.Path(__file__).parent
 
 PROBLEM_FILE_DIR = BDDL_DIR / "activity_definitions"
 PROPS_TO_SYNS_JSON = BDDL_DIR / "generated_data/properties_to_synsets.json"
@@ -43,12 +43,13 @@ VALID_ATTACHMENTS = set([
     ("bow.n.08", "wall_nail.n.01"),
     ("broken__light_bulb.n.01", "table_lamp.n.01"),
     ("cabinet_door.n.01", "cabinet_base.n.01"),
-    ("clothesline_rope.n.01", "pole.n.01"),
+    ("clothesline_rope.n.01", "clothesline_pole.n.01"),
     ("cork.n.04", "wine_bottle.n.01"),
     ("curtain_rod.n.01", "wall_nail.n.01"),
     ("dartboard.n.01", "wall_nail.n.01"),
     ("desk_bracket.n.01", "desk_top.n.01"),
     ("desk_leg.n.01", "desk_bracket.n.01"),
+    ("digital_camera.n.01", "camera_tripod.n.01"),
     ("dip.n.07", "candlestick.n.01"),
     ("fire_alarm.n.02", "wall_nail.n.01"),
     ("gummed_label.n.01", "license_plate.n.01"),
@@ -60,6 +61,7 @@ VALID_ATTACHMENTS = set([
     ("kayak.n.01", "kayak_rack.n.01"),
     ("kayak_rack.n.01", "wall_nail.n.01"),
     ("lens.n.01", "digital_camera.n.01"),
+    ("lid.n.02", "hingeless_jar.n.01"),
     ("license_plate.n.01", "car.n.01"),
     ("light_bulb.n.01", "table_lamp.n.01"),
     ("mirror.n.01", "wall_nail.n.01"),
@@ -68,10 +70,10 @@ VALID_ATTACHMENTS = set([
     ("pole.n.01", "wall_nail.n.01"),
     ("poster.n.01", "wall_nail.n.01"),
     ("raspberry.n.02", "scrub.n.01"),
-    ("shelf_baseboard.n.01", "shelf_side.n.01"),
-    ("shelf_shelf.n.01", "shelf_back.n.01"),
-    ("shelf_side.n.01", "shelf_back.n.01"),
-    ("shelf_top.n.01", "shelf_back.n.01"),
+    ("bookcase_baseboard.n.01", "bookcase_side.n.01"),
+    ("bookcase_shelf.n.01", "bookcase_back.n.01"),
+    ("bookcase_side.n.01", "bookcase_back.n.01"),
+    ("bookcase_top.n.01", "bookcase_back.n.01"),
     ("skateboard_wheel.n.01", "skateboard_deck.n.01"),
     ("trampoline_leg.n.01", "trampoline_top.n.01"),
     ("trout.n.01", "fishing_rod.n.01"),
@@ -314,6 +316,7 @@ def check_synset_predicate_alignment(atom, syns_to_props):
         assert ("rigidBody" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable touching: {atom}"
     if pred == "inside": 
         assert ("nonSubstance" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]] or "softBody" in syns_to_props[objects[1]]), f"Inapplicable inside: {atom}"
+        assert "fillable" in syns_to_props[objects[1]], f"Inapplicable inside: {atom}"
     if pred == "overlaid": 
         assert ("drapeable" in syns_to_props[objects[0]]) and ("rigidBody" in syns_to_props[objects[1]]), f"Inapplicable overlaid: {atom}"
     if pred == "attached":

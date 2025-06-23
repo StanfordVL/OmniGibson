@@ -3,7 +3,7 @@
 
     (:objects
      	salmon.n.03_1 - salmon.n.03
-    	shelf.n.01_1 - shelf.n.01
+    	grocery_shelf.n.01_1 - grocery_shelf.n.01
     	money.n.01_1 - money.n.01
     	disinfectant.n.01_1 - disinfectant.n.01
     	checkout.n.03_1 - checkout.n.03
@@ -12,11 +12,11 @@
     )
     
     (:init 
-        (ontop salmon.n.03_1 shelf.n.01_1) 
+        (ontop salmon.n.03_1 grocery_shelf.n.01_1) 
         (ontop money.n.01_1 salmon.n.03_1) 
         (covered money.n.01_1 disinfectant.n.01_1) 
         (inroom checkout.n.03_1 grocery_store) 
-        (inroom shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
         (ontop agent.n.01_1 floor.n.01_1)
     )

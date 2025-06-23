@@ -10,10 +10,10 @@
     )
     
     (:init 
-        (ontop car.n.01_1 floor.n.01_1) 
+        (inroom car.n.01_1 garden)
         (ontop vacuum.n.04_1 floor.n.01_1) 
         (covered car.n.01_1 dust.n.01_1) 
-        (inroom floor.n.01_1 living_room) 
+        (inroom floor.n.01_1 garage) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

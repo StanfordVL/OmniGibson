@@ -6,13 +6,17 @@ from bddl.logic_base import UnaryAtomicFormula, BinaryAtomicFormula, Expression
 from bddl.backend_abc import BDDLBackend
 from bddl.parsing import parse_domain
 
-# STATE METADATA
-STATE_MATCHED = "success"
-STATE_PLANNED = "warning"
-STATE_UNMATCHED = "danger"
-STATE_SUBSTANCE = "info"
-STATE_ILLEGAL = "secondary"
-STATE_NONE = "light"
+from enum import Enum, auto
+
+class SynsetState(Enum):
+    MATCHED = "Matched"
+    PLANNED = "Planned"
+    UNMATCHED = "Unmatched"
+    ILLEGAL = "Illegal"
+    NONE = "No State Info"
+
+    def __str__(self):
+        return str(self.value)
 
 
 # predicates that can only be used for substances
@@ -20,18 +24,6 @@ SUBSTANCE_PREDICATES = {"filled", "insource", "empty", "saturated", "contains", 
 
 # predicates that indicate the need for a fillable volume
 FILLABLE_PREDICATES = {"filled", "contains", "empty"}
-
-ANNOTATION_REQUIRED_PROPERTIES = {
-    "fillable",
-    "toggleable",
-    "fireSource",
-    # "sliceable",
-    "slicer",
-    "particleRemover",
-    "particleApplier",
-    "particleSource",
-    "particleSink",
-}
 
 
 def canonicalize(s):

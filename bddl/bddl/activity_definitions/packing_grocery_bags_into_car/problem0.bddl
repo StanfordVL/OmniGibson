@@ -10,13 +10,11 @@
         bottle__of__shampoo.n.01_1 - bottle__of__shampoo.n.01
     	toilet_tissue.n.01_1 toilet_tissue.n.01_2 - toilet_tissue.n.01
         salt__shaker.n.01_1 salt__shaker.n.01_2 - salt__shaker.n.01
-    	lawn.n.01_1 - lawn.n.01
-    	driveway.n.01_1 - driveway.n.01
     	agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop car.n.01_1 floor.n.01_1) 
+        (inroom car.n.01_1 garden) 
         (ontop sack.n.01_1 floor.n.01_1)
         (ontop sack.n.01_2 floor.n.01_1)
         (ontop sack.n.01_3 floor.n.01_1)
@@ -30,8 +28,6 @@
         (inside salt__shaker.n.01_1 sack.n.01_4)
         (inside salt__shaker.n.01_2 sack.n.01_4)
         (inroom floor.n.01_1 garden) 
-        (inroom lawn.n.01_1 garden) 
-        (inroom driveway.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

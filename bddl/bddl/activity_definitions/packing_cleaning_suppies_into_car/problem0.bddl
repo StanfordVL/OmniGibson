@@ -4,7 +4,6 @@
     (:objects
         car.n.01_1 - car.n.01
         driveway.n.01_1 - driveway.n.01
-        face_mask.n.01_1 - face_mask.n.01
         backpack.n.01_1 - backpack.n.01
         rag.n.01_1 - rag.n.01
         scrub_brush.n.01_1 - scrub_brush.n.01
@@ -13,8 +12,7 @@
     )
     
     (:init 
-        (ontop car.n.01_1 driveway.n.01_1) 
-        (ontop face_mask.n.01_1 backpack.n.01_1)
+        (inroom car.n.01_1 garden) 
         (ontop rag.n.01_1 floor.n.01_1) 
         (ontop backpack.n.01_1 driveway.n.01_1) 
         (ontop scrub_brush.n.01_1 driveway.n.01_1)
@@ -26,7 +24,6 @@
     (:goal 
         (and 
             (ontop ?car.n.01_1 ?driveway.n.01_1)
-            (inside ?face_mask.n.01_1 ?backpack.n.01_1)
             (inside ?rag.n.01_1 ?backpack.n.01_1)
             (inside ?backpack.n.01_1 ?car.n.01_1)
             (inside ?scrub_brush.n.01_1 ?car.n.01_1)

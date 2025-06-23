@@ -9,7 +9,7 @@
     )
     
     (:init 
-        (ontop car.n.01_1 floor.n.01_1) 
+        (inroom car.n.01_1 garage)
         (inside bag.n.06_2 car.n.01_1) 
         (inside bag.n.06_1 car.n.01_1) 
         (inroom floor.n.01_1 garage) 

@@ -3,7 +3,6 @@
 
     (:objects
         recreational_vehicle.n.01_1 - recreational_vehicle.n.01
-        driveway.n.01_1 - driveway.n.01
         wicker_basket.n.01_1 wicker_basket.n.01_2 - wicker_basket.n.01
         lawn.n.01_1 - lawn.n.01
         pocketknife.n.01_1 - pocketknife.n.01
@@ -15,7 +14,7 @@
     )
     
     (:init 
-        (ontop recreational_vehicle.n.01_1 driveway.n.01_1) 
+        (inroom recreational_vehicle.n.01_1 garden) 
         (ontop wicker_basket.n.01_1 lawn.n.01_1) 
         (ontop wicker_basket.n.01_2 lawn.n.01_1) 
         (inside pocketknife.n.01_1 wicker_basket.n.01_1) 
@@ -24,7 +23,6 @@
         (inside bagel.n.01_3 wicker_basket.n.01_2) 
         (inside wire.n.02_1 wicker_basket.n.01_1) 
         (inside charger.n.02_1 wicker_basket.n.01_1) 
-        (inroom driveway.n.01_1 garden) 
         (inroom lawn.n.01_1 garden) 
         (inroom floor.n.01_1 garden) 
         (ontop agent.n.01_1 floor.n.01_1)

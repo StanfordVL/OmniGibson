@@ -2,24 +2,24 @@
     (:domain omnigibson)
 
     (:objects
-        plaything.n.01_1 plaything.n.01_2 plaything.n.01_3 plaything.n.01_4 plaything.n.01_5 plaything.n.01_6 plaything.n.01_7 plaything.n.01_8 - plaything.n.01
+        toy_figure.n.01_1 toy_figure.n.01_2 toy_figure.n.01_3 toy_figure.n.01_4 toy_figure.n.01_5 toy_figure.n.01_6 toy_figure.n.01_7 toy_figure.n.01_8 - toy_figure.n.01
         floor.n.01_1 floor.n.01_2 - floor.n.01
-        carton.n.02_1 carton.n.02_2 - carton.n.02
+        toy_box.n.01_1 toy_box.n.01_2 - toy_box.n.01
         agent.n.01_1 - agent.n.01
         table.n.02_1 - table.n.02
     )
     
     (:init 
-        (ontop plaything.n.01_1 floor.n.01_1) 
-        (ontop plaything.n.01_2 floor.n.01_1) 
-        (ontop plaything.n.01_3 floor.n.01_1) 
-        (ontop plaything.n.01_4 floor.n.01_1) 
-        (ontop plaything.n.01_5 floor.n.01_2) 
-        (ontop plaything.n.01_6 floor.n.01_2) 
-        (ontop plaything.n.01_7 floor.n.01_2) 
-        (ontop plaything.n.01_8 floor.n.01_2) 
-        (ontop carton.n.02_1 floor.n.01_1) 
-        (ontop carton.n.02_2 table.n.02_1) 
+        (ontop toy_figure.n.01_1 floor.n.01_1) 
+        (ontop toy_figure.n.01_2 floor.n.01_1) 
+        (ontop toy_figure.n.01_3 floor.n.01_1) 
+        (ontop toy_figure.n.01_4 floor.n.01_1) 
+        (ontop toy_figure.n.01_5 floor.n.01_2) 
+        (ontop toy_figure.n.01_6 floor.n.01_2) 
+        (ontop toy_figure.n.01_7 floor.n.01_2) 
+        (ontop toy_figure.n.01_8 floor.n.01_2) 
+        (ontop toy_box.n.01_1 floor.n.01_1) 
+        (ontop toy_box.n.01_2 table.n.02_1) 
         (inroom floor.n.01_1 living_room) 
         (inroom floor.n.01_2 dining_room) 
         (inroom table.n.02_1 dining_room) 
@@ -29,10 +29,10 @@
     (:goal 
         (and 
             (forall 
-                (?plaything.n.01 - plaything.n.01) 
+                (?toy_figure.n.01 - toy_figure.n.01) 
                 (exists 
-                    (?carton.n.02 - carton.n.02) 
-                    (inside ?plaything.n.01 ?carton.n.02)
+                    (?toy_box.n.01 - toy_box.n.01) 
+                    (inside ?toy_figure.n.01 ?toy_box.n.01)
                 )
             )
         )

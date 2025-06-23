@@ -5,7 +5,7 @@
      	muffin.n.01_1 - muffin.n.01
     	coffee_table.n.01_1 - coffee_table.n.01
     	tank_top.n.01_1 - tank_top.n.01
-    	duffel_bag.n.01_1 - duffel_bag.n.01
+    	carryall.n.01_1 - carryall.n.01
     	floor.n.01_1 - floor.n.01
     	gym_shoe.n.01_1 gym_shoe.n.01_2 - gym_shoe.n.01
     	sock.n.01_1 sock.n.01_2 - sock.n.01
@@ -15,7 +15,7 @@
     (:init 
         (ontop muffin.n.01_1 coffee_table.n.01_1) 
         (ontop tank_top.n.01_1 coffee_table.n.01_1) 
-        (ontop duffel_bag.n.01_1 floor.n.01_1) 
+        (ontop carryall.n.01_1 floor.n.01_1) 
         (ontop gym_shoe.n.01_2 floor.n.01_1) 
         (ontop gym_shoe.n.01_1 floor.n.01_1) 
         (ontop sock.n.01_2 floor.n.01_1) 
@@ -27,15 +27,15 @@
     
     (:goal 
         (and 
-            (inside ?muffin.n.01_1 ?duffel_bag.n.01_1)
-            (inside ?tank_top.n.01_1 ?duffel_bag.n.01_1)
+            (inside ?muffin.n.01_1 ?carryall.n.01_1)
+            (inside ?tank_top.n.01_1 ?carryall.n.01_1)
             (forall
                 (?gym_shoe.n.01 - gym_shoe.n.01)
-                (inside ?gym_shoe.n.01 ?duffel_bag.n.01_1)
+                (inside ?gym_shoe.n.01 ?carryall.n.01_1)
             )
             (forall
                 (?sock.n.01 - sock.n.01)
-                (inside ?sock.n.01 ?duffel_bag.n.01_1)
+                (inside ?sock.n.01 ?carryall.n.01_1)
             )
         )
     )

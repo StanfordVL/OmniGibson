@@ -149,7 +149,7 @@ class Model:
         try:
             fk = self.__getattribute__(key + "_fk")
             if hasattr(fk, "set"):  # ManyToOne
-                return fk.set(self, value)
+                return fk.set(value)
             else:
                 raise ValueError(f"Cannot set {key} because it is a OneToMany or ManyToMany field.")
         except AttributeError:

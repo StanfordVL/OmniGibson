@@ -2,6 +2,9 @@
     {
         "rule_name": "apron.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "apron.n.01": 1
         },
@@ -12,6 +15,9 @@
     {
         "rule_name": "backpack.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "backpack.n.01": 1
         },
@@ -22,6 +28,9 @@
     {
         "rule_name": "bandage.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "bandage.n.01": 1
         },
@@ -32,6 +41,9 @@
     {
         "rule_name": "bandanna.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "bandanna.n.01": 1
         },
@@ -42,6 +54,9 @@
     {
         "rule_name": "baseball_cap.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "baseball_cap.n.01": 1
         },
@@ -52,6 +67,9 @@
     {
         "rule_name": "baseball_glove.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "baseball_glove.n.01": 1
         },
@@ -60,18 +78,11 @@
         }
     },
     {
-        "rule_name": "bath_mat.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "bath_mat.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "bath_towel.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "bath_towel.n.01": 1
         },
@@ -82,6 +93,9 @@
     {
         "rule_name": "batting_glove.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "batting_glove.n.01": 1
         },
@@ -92,6 +106,9 @@
     {
         "rule_name": "blanket.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "blanket.n.01": 1
         },
@@ -102,6 +119,9 @@
     {
         "rule_name": "blouse.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "blouse.n.01": 1
         },
@@ -112,6 +132,9 @@
     {
         "rule_name": "boxing_glove.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "boxing_glove.n.01": 1
         },
@@ -122,6 +145,9 @@
     {
         "rule_name": "brassiere.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "brassiere.n.01": 1
         },
@@ -132,6 +158,9 @@
     {
         "rule_name": "broom.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "broom.n.01": 1
         },
@@ -142,6 +171,9 @@
     {
         "rule_name": "cardigan.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "cardigan.n.01": 1
         },
@@ -152,6 +184,9 @@
     {
         "rule_name": "carpet_sweeper.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "carpet_sweeper.n.01": 1
         },
@@ -162,6 +197,9 @@
     {
         "rule_name": "case.n.19-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "case.n.19": 1
         },
@@ -170,30 +208,13 @@
         }
     },
     {
-        "rule_name": "cheesecloth.n.01-washer-saturate-cover",
+        "rule_name": "christmas_stocking.n.01-washer-saturate-cover",
         "input_synsets": {},
-        "washed_item": {
-            "cheesecloth.n.01": 1
+        "machine": {
+            "washer.n.03": 1
         },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "collar.n.01-washer-saturate-cover",
-        "input_synsets": {},
         "washed_item": {
-            "collar.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "costume.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "costume.n.01": 1
+            "christmas_stocking.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -202,6 +223,9 @@
     {
         "rule_name": "cotton.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "cotton.n.01": 1
         },
@@ -212,6 +236,9 @@
     {
         "rule_name": "cotton.n.04-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "cotton.n.04": 1
         },
@@ -220,18 +247,11 @@
         }
     },
     {
-        "rule_name": "crewneck_sweater.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "crewneck_sweater.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "curtain.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "curtain.n.01": 1
         },
@@ -242,6 +262,9 @@
     {
         "rule_name": "diaper.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "diaper.n.01": 1
         },
@@ -252,6 +275,9 @@
     {
         "rule_name": "dinner_napkin.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "dinner_napkin.n.01": 1
         },
@@ -262,6 +288,9 @@
     {
         "rule_name": "dishtowel.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "dishtowel.n.01": 1
         },
@@ -272,6 +301,9 @@
     {
         "rule_name": "doily.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "doily.n.01": 1
         },
@@ -282,6 +314,9 @@
     {
         "rule_name": "drawers.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "drawers.n.01": 1
         },
@@ -292,6 +327,9 @@
     {
         "rule_name": "dress.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "dress.n.01": 1
         },
@@ -302,6 +340,9 @@
     {
         "rule_name": "dress_shirt.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "dress_shirt.n.01": 1
         },
@@ -310,18 +351,11 @@
         }
     },
     {
-        "rule_name": "duffel_bag.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "duffel_bag.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "emery_paper.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "emery_paper.n.01": 1
         },
@@ -330,18 +364,11 @@
         }
     },
     {
-        "rule_name": "felt.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "felt.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "fur_coat.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "fur_coat.n.01": 1
         },
@@ -352,6 +379,9 @@
     {
         "rule_name": "goalkeeper_gloves.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "goalkeeper_gloves.n.01": 1
         },
@@ -362,6 +392,9 @@
     {
         "rule_name": "gown.n.05-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "gown.n.05": 1
         },
@@ -372,6 +405,9 @@
     {
         "rule_name": "hand_towel.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "hand_towel.n.01": 1
         },
@@ -382,6 +418,9 @@
     {
         "rule_name": "hat.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "hat.n.01": 1
         },
@@ -392,6 +431,9 @@
     {
         "rule_name": "iron.n.04-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "iron.n.04": 1
         },
@@ -400,18 +442,11 @@
         }
     },
     {
-        "rule_name": "jacket.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "jacket.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "jean.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "jean.n.01": 1
         },
@@ -422,6 +457,9 @@
     {
         "rule_name": "jersey.n.03-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "jersey.n.03": 1
         },
@@ -432,6 +470,9 @@
     {
         "rule_name": "kid_glove.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "kid_glove.n.01": 1
         },
@@ -440,18 +481,11 @@
         }
     },
     {
-        "rule_name": "knit.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "knit.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "lace.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "lace.n.01": 1
         },
@@ -462,6 +496,9 @@
     {
         "rule_name": "legging.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "legging.n.01": 1
         },
@@ -472,6 +509,9 @@
     {
         "rule_name": "leotard.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "leotard.n.01": 1
         },
@@ -482,6 +522,9 @@
     {
         "rule_name": "liner.n.03-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "liner.n.03": 1
         },
@@ -490,18 +533,11 @@
         }
     },
     {
-        "rule_name": "lingerie.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "lingerie.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "lining.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "lining.n.01": 1
         },
@@ -512,6 +548,9 @@
     {
         "rule_name": "lint_roller.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "lint_roller.n.01": 1
         },
@@ -522,6 +561,9 @@
     {
         "rule_name": "long_trousers.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "long_trousers.n.01": 1
         },
@@ -532,6 +574,9 @@
     {
         "rule_name": "loofa.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "loofa.n.01": 1
         },
@@ -542,6 +587,9 @@
     {
         "rule_name": "maillot.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "maillot.n.01": 1
         },
@@ -552,6 +600,9 @@
     {
         "rule_name": "mat.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "mat.n.01": 1
         },
@@ -562,6 +613,9 @@
     {
         "rule_name": "mattress.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "mattress.n.01": 1
         },
@@ -570,28 +624,11 @@
         }
     },
     {
-        "rule_name": "mattress_cover.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "mattress_cover.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "mattress_pad.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "mattress_pad.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "national_flag.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "national_flag.n.01": 1
         },
@@ -602,6 +639,9 @@
     {
         "rule_name": "necktie.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "necktie.n.01": 1
         },
@@ -610,18 +650,11 @@
         }
     },
     {
-        "rule_name": "overall.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "overall.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "pajama.n.02-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "pajama.n.02": 1
         },
@@ -632,6 +665,9 @@
     {
         "rule_name": "paper_coffee_filter.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "paper_coffee_filter.n.01": 1
         },
@@ -642,6 +678,9 @@
     {
         "rule_name": "paper_towel.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "paper_towel.n.01": 1
         },
@@ -652,6 +691,9 @@
     {
         "rule_name": "pennant.n.02-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "pennant.n.02": 1
         },
@@ -662,6 +704,9 @@
     {
         "rule_name": "pet_bed.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "pet_bed.n.01": 1
         },
@@ -672,6 +717,9 @@
     {
         "rule_name": "pillow.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "pillow.n.01": 1
         },
@@ -682,6 +730,9 @@
     {
         "rule_name": "pipe_cleaner.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "pipe_cleaner.n.01": 1
         },
@@ -692,6 +743,9 @@
     {
         "rule_name": "place_mat.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "place_mat.n.01": 1
         },
@@ -700,20 +754,13 @@
         }
     },
     {
-        "rule_name": "polo_shirt.n.01-washer-saturate-cover",
+        "rule_name": "pot_plant.n.01-washer-saturate-cover",
         "input_synsets": {},
-        "washed_item": {
-            "polo_shirt.n.01": 1
+        "machine": {
+            "washer.n.03": 1
         },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "punching_bag.n.02-washer-saturate-cover",
-        "input_synsets": {},
         "washed_item": {
-            "punching_bag.n.02": 1
+            "pot_plant.n.01": 1
         },
         "output_synsets": {
             "water.n.06": 1
@@ -722,6 +769,9 @@
     {
         "rule_name": "quilt.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "quilt.n.01": 1
         },
@@ -732,6 +782,9 @@
     {
         "rule_name": "rag.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "rag.n.01": 1
         },
@@ -742,6 +795,9 @@
     {
         "rule_name": "ribbon.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "ribbon.n.01": 1
         },
@@ -752,6 +808,9 @@
     {
         "rule_name": "rug.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "rug.n.01": 1
         },
@@ -762,6 +821,9 @@
     {
         "rule_name": "sanitary_napkin.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "sanitary_napkin.n.01": 1
         },
@@ -772,6 +834,9 @@
     {
         "rule_name": "scarf.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "scarf.n.01": 1
         },
@@ -782,6 +847,9 @@
     {
         "rule_name": "scrub.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "scrub.n.01": 1
         },
@@ -792,6 +860,9 @@
     {
         "rule_name": "scrub_brush.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "scrub_brush.n.01": 1
         },
@@ -800,18 +871,11 @@
         }
     },
     {
-        "rule_name": "shawl.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "shawl.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "sheet.n.02-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "sheet.n.02": 1
         },
@@ -822,6 +886,9 @@
     {
         "rule_name": "sheet.n.03-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "sheet.n.03": 1
         },
@@ -832,6 +899,9 @@
     {
         "rule_name": "shoulder_bag.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "shoulder_bag.n.01": 1
         },
@@ -842,6 +912,9 @@
     {
         "rule_name": "skirt.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "skirt.n.01": 1
         },
@@ -850,18 +923,11 @@
         }
     },
     {
-        "rule_name": "slacks.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "slacks.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "sock.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "sock.n.01": 1
         },
@@ -872,6 +938,9 @@
     {
         "rule_name": "sofa.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "sofa.n.01": 1
         },
@@ -882,6 +951,9 @@
     {
         "rule_name": "sponge.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "sponge.n.01": 1
         },
@@ -892,6 +964,9 @@
     {
         "rule_name": "steel_wool.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "steel_wool.n.01": 1
         },
@@ -900,28 +975,11 @@
         }
     },
     {
-        "rule_name": "stocking.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "stocking.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
-        "rule_name": "suit.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "suit.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "swab.n.02-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "swab.n.02": 1
         },
@@ -932,6 +990,9 @@
     {
         "rule_name": "sweat_suit.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "sweat_suit.n.01": 1
         },
@@ -942,6 +1003,9 @@
     {
         "rule_name": "sweatshirt.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "sweatshirt.n.01": 1
         },
@@ -952,6 +1016,9 @@
     {
         "rule_name": "tablecloth.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "tablecloth.n.01": 1
         },
@@ -962,6 +1029,9 @@
     {
         "rule_name": "tank_top.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "tank_top.n.01": 1
         },
@@ -972,6 +1042,9 @@
     {
         "rule_name": "tea_bag.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "tea_bag.n.01": 1
         },
@@ -982,6 +1055,9 @@
     {
         "rule_name": "teddy.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "teddy.n.01": 1
         },
@@ -990,18 +1066,11 @@
         }
     },
     {
-        "rule_name": "tie.n.09-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "tie.n.09": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "tights.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "tights.n.01": 1
         },
@@ -1012,6 +1081,9 @@
     {
         "rule_name": "toilet_tissue.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "toilet_tissue.n.01": 1
         },
@@ -1022,6 +1094,9 @@
     {
         "rule_name": "toothbrush.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "toothbrush.n.01": 1
         },
@@ -1032,6 +1107,9 @@
     {
         "rule_name": "vacuum.n.04-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "vacuum.n.04": 1
         },
@@ -1040,18 +1118,11 @@
         }
     },
     {
-        "rule_name": "velvet.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "velvet.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "vest.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "vest.n.01": 1
         },
@@ -1062,6 +1133,9 @@
     {
         "rule_name": "window_blind.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "window_blind.n.01": 1
         },
@@ -1070,18 +1144,11 @@
         }
     },
     {
-        "rule_name": "wool.n.01-washer-saturate-cover",
-        "input_synsets": {},
-        "washed_item": {
-            "wool.n.01": 1
-        },
-        "output_synsets": {
-            "water.n.06": 1
-        }
-    },
-    {
         "rule_name": "wool_coat.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "wool_coat.n.01": 1
         },
@@ -1092,6 +1159,9 @@
     {
         "rule_name": "yoga_mat.n.01-washer-saturate-cover",
         "input_synsets": {},
+        "machine": {
+            "washer.n.03": 1
+        },
         "washed_item": {
             "yoga_mat.n.01": 1
         },

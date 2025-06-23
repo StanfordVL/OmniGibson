@@ -19,7 +19,7 @@
     )
     
     (:init 
-        (ontop recreational_vehicle.n.01_1 floor.n.01_1) 
+        (inroom recreational_vehicle.n.01_1 garden) 
         (covered recreational_vehicle.n.01_1 dust.n.01_1) 
         (covered recreational_vehicle.n.01_1 mud.n.03_1)
         (ontop bucket.n.01_1 floor.n.01_1) 
@@ -31,7 +31,7 @@
         (ontop sponge.n.01_1 floor.n.01_1) 
         (insource sink.n.01_1 water.n.06_1)
         (inroom sink.n.01_1 bathroom) 
-        (inroom floor.n.01_1 garden) 
+        (inroom floor.n.01_1 garage) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     

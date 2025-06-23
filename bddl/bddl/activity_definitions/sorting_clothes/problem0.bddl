@@ -5,7 +5,7 @@
         trouser.n.01_1 trouser.n.01_2 - trouser.n.01
         bed.n.01_1 - bed.n.01
         blouse.n.01_1 blouse.n.01_2 - blouse.n.01
-        shelf.n.01_1 shelf.n.01_2 - shelf.n.01
+        wardrobe.n.01_1 wardrobe.n.01_2 - wardrobe.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -16,8 +16,8 @@
         (ontop blouse.n.01_1 bed.n.01_1) 
         (ontop blouse.n.01_2 bed.n.01_1) 
         (inroom bed.n.01_1 bedroom) 
-        (inroom shelf.n.01_1 bedroom) 
-        (inroom shelf.n.01_2 bedroom) 
+        (inroom wardrobe.n.01_1 closet) 
+        (inroom wardrobe.n.01_2 closet) 
         (inroom floor.n.01_1 bedroom) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
@@ -27,7 +27,7 @@
             (exists 
                 (?trouser.n.01 - trouser.n.01)
                 (and
-                    (inside ?trouser.n.01 ?shelf.n.01_2)
+                    (inside ?trouser.n.01 ?wardrobe.n.01_2)
                     (folded ?trouser.n.01)
                 )
             ) 
@@ -42,7 +42,7 @@
             (exists 
                 (?blouse.n.01 - blouse.n.01) 
                 (and
-                    (inside ?blouse.n.01 ?shelf.n.01_2)
+                    (inside ?blouse.n.01 ?wardrobe.n.01_2)
                     (folded ?blouse.n.01)
                 )
             ) 
@@ -54,20 +54,20 @@
                 )
             )
             (exists 
-                (?shelf.n.01 - shelf.n.01)
+                (?wardrobe.n.01 - wardrobe.n.01)
                 (and 
-                    (inside ?trouser.n.01_1 ?shelf.n.01)
+                    (inside ?trouser.n.01_1 ?wardrobe.n.01)
                     (not 
-                        (inside ?blouse.n.01_1 ?shelf.n.01)
+                        (inside ?blouse.n.01_1 ?wardrobe.n.01)
                     )
                 )
             )
             (exists 
-                (?shelf.n.01 - shelf.n.01)
+                (?wardrobe.n.01 - wardrobe.n.01)
                 (and
-                    (inside ?blouse.n.01_1 ?shelf.n.01)
+                    (inside ?blouse.n.01_1 ?wardrobe.n.01)
                     (not 
-                        (inside ?trouser.n.01_1 ?shelf.n.01)
+                        (inside ?trouser.n.01_1 ?wardrobe.n.01)
                     )
                 )
             )

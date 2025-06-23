@@ -9,7 +9,7 @@
     	baseball.n.02_1 - baseball.n.02
     	soccer_ball.n.01_1 - soccer_ball.n.01
     	window.n.01_1 - window.n.01
-    	shelf.n.01_1 - shelf.n.01
+    	bookcase.n.01_1 - bookcase.n.01
     	agent.n.01_1 - agent.n.01
     )
     
@@ -22,7 +22,7 @@
         (inroom floor.n.01_1 living_room) 
         (inroom window.n.01_1 living_room) 
         (inroom sofa.n.01_1 living_room) 
-        (inroom shelf.n.01_1 living_room) 
+        (inroom bookcase.n.01_1 living_room) 
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -32,7 +32,7 @@
             (inside ?soccer_ball.n.01_1 ?carton.n.02_1)  
             (forall 
                 (?jigsaw_puzzle.n.01 - jigsaw_puzzle.n.01) 
-                (inside ?jigsaw_puzzle.n.01 ?shelf.n.01_1)
+                (inside ?jigsaw_puzzle.n.01 ?bookcase.n.01_1)
             )
         )
     )

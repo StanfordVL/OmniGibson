@@ -6,7 +6,6 @@
         white_wine.n.01_1 - white_wine.n.01
         flour.n.01_1 - flour.n.01
         parsley.n.02_1 - parsley.n.02
-        wine_sauce.n.01_1 - wine_sauce.n.01
         cooked__wine_sauce.n.01_1 - cooked__wine_sauce.n.01
         stove.n.01_1 - stove.n.01
         saucepan.n.01_1 - saucepan.n.01
@@ -35,7 +34,6 @@
         (inroom electric_refrigerator.n.01_1 kitchen) 
         (inroom countertop.n.01_1 kitchen) 
         (inroom cabinet.n.01_1 kitchen) 
-        (future wine_sauce.n.01_1) 
         (future cooked__wine_sauce.n.01_1) 
         (inroom floor.n.01_1 kitchen) 
         (ontop agent.n.01_1 floor.n.01_1)
@@ -43,14 +41,8 @@
     
     (:goal 
         (and 
-            (or 
-                (real ?wine_sauce.n.01_1) 
-                (real ?cooked__wine_sauce.n.01_1)
-            ) 
-            (or 
-                (contains ?saucepan.n.01_1 ?wine_sauce.n.01_1) 
-                (contains ?saucepan.n.01_1 ?cooked__wine_sauce.n.01_1)
-            )
+            (real ?cooked__wine_sauce.n.01_1)
+            (contains ?saucepan.n.01_1 ?cooked__wine_sauce.n.01_1)
         )
     )
 )

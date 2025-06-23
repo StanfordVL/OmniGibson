@@ -27,13 +27,13 @@
         (and 
             (forall 
                 (?bottle__of__vodka.n.01 - bottle__of__vodka.n.01)
-                (inside ?bottle__of__vodka.n.01 ?shelf.n.01_1)
+                (ontop ?bottle__of__vodka.n.01 ?shelf.n.01_1)
             )
             (forall 
                 (?bottle__of__rum.n.01 - bottle__of__rum.n.01)
-                (inside ?bottle__of__rum.n.01 ?shelf.n.01_1)
+                (ontop ?bottle__of__rum.n.01 ?shelf.n.01_1)
             )
-            (inside ?bottle__of__gin.n.01_1 ?shelf.n.01_1)
+            (ontop ?bottle__of__gin.n.01_1 ?shelf.n.01_1)
         )
     )
 )

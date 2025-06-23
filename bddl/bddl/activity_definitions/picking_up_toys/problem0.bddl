@@ -2,30 +2,27 @@
     (:domain omnigibson)
 
     (:objects
-        wicker_basket.n.01_1 - wicker_basket.n.01
         floor.n.01_1 - floor.n.01
         board_game.n.01_1 board_game.n.01_2 board_game.n.01_3 - board_game.n.01
         jigsaw_puzzle.n.01_1 jigsaw_puzzle.n.01_2 - jigsaw_puzzle.n.01
         tennis_ball.n.01_1 - tennis_ball.n.01
-        shelf.n.01_1 - shelf.n.01
-        window.n.01_1 - window.n.01
-        toy_box.n.01_1 toy_box.n.01_2 - toy_box.n.01
+        bed.n.01_1 - bed.n.01
+        table.n.02_1 - table.n.02
+        toy_box.n.01_1 - toy_box.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop wicker_basket.n.01_1 floor.n.01_1) 
-        (ontop board_game.n.01_1 floor.n.01_1) 
-        (ontop board_game.n.01_2 floor.n.01_1) 
-        (ontop board_game.n.01_3 floor.n.01_1) 
-        (ontop jigsaw_puzzle.n.01_1 floor.n.01_1) 
-        (ontop jigsaw_puzzle.n.01_2 floor.n.01_1) 
-        (ontop tennis_ball.n.01_1 shelf.n.01_1) 
-        (inroom floor.n.01_1 childs_room) 
-        (inroom window.n.01_1 childs_room) 
-        (inroom shelf.n.01_1 childs_room)
-        (ontop toy_box.n.01_1 floor.n.01_1) 
-        (ontop toy_box.n.01_2 floor.n.01_1) 
+        (ontop board_game.n.01_1 bed.n.01_1)
+        (ontop board_game.n.01_2 bed.n.01_1)
+        (ontop board_game.n.01_3 table.n.02_1)
+        (ontop jigsaw_puzzle.n.01_1 table.n.02_1) 
+        (ontop jigsaw_puzzle.n.01_2 table.n.02_1) 
+        (ontop tennis_ball.n.01_1 table.n.02_1)
+        (inroom floor.n.01_1 childs_room)
+        (inroom bed.n.01_1 childs_room)
+        (inroom table.n.02_1 childs_room)
+        (ontop toy_box.n.01_1 table.n.02_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -45,8 +42,13 @@
                     (inside ?board_game.n.01 ?toy_box.n.01)
                 ) 
             )
-            (inside ?wicker_basket.n.01_1 ?shelf.n.01_1) 
-            (inside ?tennis_ball.n.01_1 ?wicker_basket.n.01_1)
+            (exists
+                (?toy_box.n.01 - toy_box.n.01)
+                (forall
+                    (?tennis_ball.n.01 - tennis_ball.n.01)
+                    (inside ?tennis_ball.n.01 ?toy_box.n.01)
+                )
+            )
         )
     )
 )

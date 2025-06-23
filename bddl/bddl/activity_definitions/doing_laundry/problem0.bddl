@@ -6,7 +6,7 @@
         floor.n.01_1 - floor.n.01
         detergent.n.02_1 - detergent.n.02
         hamper.n.02_1 - hamper.n.02
-        lingerie.n.01_1 - lingerie.n.01
+        undergarment.n.01_1 - undergarment.n.01
         stain.n.01_1 - stain.n.01
         blouse.n.01_1 - blouse.n.01
         washer.n.03_1 - washer.n.03
@@ -20,8 +20,8 @@
         (ontop detergent__bottle.n.01_1 floor.n.01_1)
         (filled detergent__bottle.n.01_1 detergent.n.02_1) 
         (ontop hamper.n.02_1 floor.n.01_1) 
-        (inside lingerie.n.01_1 hamper.n.02_1) 
-        (covered lingerie.n.01_1 stain.n.01_1)
+        (inside undergarment.n.01_1 hamper.n.02_1) 
+        (covered undergarment.n.01_1 stain.n.01_1)
         (ontop blouse.n.01_1 floor.n.01_1)
         (covered blouse.n.01_1 stain.n.01_1)
         (ontop hanger.n.02_1 floor.n.01_1)
@@ -36,15 +36,15 @@
     (:goal 
         (and 
             (forall
-                (?lingerie.n.01 - lingerie.n.01)
+                (?undergarment.n.01 - undergarment.n.01)
                 (and
                     (not
-                        (covered ?lingerie.n.01 ?stain.n.01_1)
+                        (covered ?undergarment.n.01 ?stain.n.01_1)
                     )
                     (not
-                        (saturated ?lingerie.n.01 ?water.n.06_1)
+                        (saturated ?undergarment.n.01 ?water.n.06_1)
                     )
-                    (folded ?lingerie.n.01)
+                    (folded ?undergarment.n.01)
                 )
             )
             (forpairs

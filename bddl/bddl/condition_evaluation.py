@@ -42,7 +42,7 @@ class Conjunction(Expression):
         return all(self.child_values)
 
     def get_ground_options(self):
-        options = list(itertools.product(*[child.flattened_condition_options for child in self.children]))
+        options = list(truncated_product(*[child.flattened_condition_options for child in self.children]))
         self.flattened_condition_options = []
         for option in options:
             self.flattened_condition_options.append(list(itertools.chain(*option)))
@@ -353,7 +353,7 @@ class Negation(Expression):
                 negated_conds.append(["not", cond])
             negated_options.append(negated_conds)
         # only picking one condition from each set of disjuncts
-        for negated_option_selections in itertools.product(*negated_options):
+        for negated_option_selections in truncated_product(*negated_options):
             self.flattened_condition_options.append(list(itertools.chain(negated_option_selections)))
 
 
@@ -402,7 +402,7 @@ class Implication(Expression):
             for cond in option:
                 negated_conds.append(["not", cond])
             negated_options.append(negated_conds)
-        for negated_option_selections in itertools.product(*negated_options):
+        for negated_option_selections in truncated_product(*negated_options):
             flattened_neg_antecedent_options.append(list(itertools.chain(negated_option_selections)))
 
         flattened_consequent_options = self.children[1].flattened_condition_options
@@ -497,7 +497,7 @@ def evaluate_state(compiled_state):
 
 def get_ground_state_options(compiled_state, backend, scope=None, object_map=None):
     all_options = list(
-        itertools.product(*[compiled_condition.flattened_condition_options for compiled_condition in compiled_state])
+        truncated_product(*[compiled_condition.flattened_condition_options for compiled_condition in compiled_state])
     )
     all_unpacked_options = [list(itertools.chain(*option)) for option in all_options]
 

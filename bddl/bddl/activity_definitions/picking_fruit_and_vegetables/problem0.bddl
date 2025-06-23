@@ -10,7 +10,7 @@
         eggplant.n.01_1 eggplant.n.01_2 - eggplant.n.01
         zucchini.n.02_1 zucchini.n.02_2 zucchini.n.02_3 - zucchini.n.02
         stain.n.01_1 - stain.n.01
-        shelf.n.01_1 - shelf.n.01
+        grocery_shelf.n.01_1 - grocery_shelf.n.01
         floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
@@ -20,17 +20,17 @@
         (covered zucchini.n.02_3 stain.n.01_1)
         (covered eggplant.n.01_2 stain.n.01_1)
         (ontop shopping_basket.n.01_1 floor.n.01_1) 
-        (inroom shelf.n.01_1 grocery_store) 
+        (inroom grocery_shelf.n.01_1 grocery_store) 
         (inroom floor.n.01_1 grocery_store) 
-        (ontop pineapple.n.02_1 shelf.n.01_1)
-        (ontop mango.n.02_1 shelf.n.01_1)
-        (ontop mango.n.02_2 shelf.n.01_1)
-        (ontop cantaloup.n.02_1 shelf.n.01_1)
-        (ontop zucchini.n.02_1 shelf.n.01_1)
-        (ontop zucchini.n.02_2 shelf.n.01_1)
-        (ontop zucchini.n.02_3 shelf.n.01_1)
-        (ontop eggplant.n.01_1 shelf.n.01_1)
-        (ontop eggplant.n.01_2 shelf.n.01_1)
+        (ontop pineapple.n.02_1 grocery_shelf.n.01_1)
+        (ontop mango.n.02_1 grocery_shelf.n.01_1)
+        (ontop mango.n.02_2 grocery_shelf.n.01_1)
+        (ontop cantaloup.n.02_1 grocery_shelf.n.01_1)
+        (ontop zucchini.n.02_1 grocery_shelf.n.01_1)
+        (ontop zucchini.n.02_2 grocery_shelf.n.01_1)
+        (ontop zucchini.n.02_3 grocery_shelf.n.01_1)
+        (ontop eggplant.n.01_1 grocery_shelf.n.01_1)
+        (ontop eggplant.n.01_2 grocery_shelf.n.01_1)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
