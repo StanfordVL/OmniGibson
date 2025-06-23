@@ -4,6 +4,7 @@
     (:objects
         drill.n.01_1 - drill.n.01
         floor.n.01_1 - floor.n.01
+        tabletop.n.01_1 - tabletop.n.01
         pliers.n.01_1 - pliers.n.01
         toolbox.n.01_1 - toolbox.n.01
         flashlight.n.01_1 - flashlight.n.01
@@ -13,13 +14,14 @@
     )
     
     (:init 
-        (ontop drill.n.01_1 floor.n.01_1) 
-        (ontop pliers.n.01_1 floor.n.01_1) 
-        (ontop toolbox.n.01_1 floor.n.01_1) 
-        (ontop flashlight.n.01_1 floor.n.01_1) 
-        (ontop allen_wrench.n.01_1 floor.n.01_1) 
-        (ontop screwdriver.n.01_1 floor.n.01_1) 
-        (inroom floor.n.01_1 empty_room)
+        (ontop drill.n.01_1 tabletop.n.01_1) 
+        (ontop pliers.n.01_1 tabletop.n.01_1) 
+        (ontop toolbox.n.01_1 tabletop.n.01_1) 
+        (ontop flashlight.n.01_1 tabletop.n.01_1) 
+        (ontop allen_wrench.n.01_1 tabletop.n.01_1) 
+        (ontop screwdriver.n.01_1 tabletop.n.01_1) 
+        (inroom tabletop.n.01_1 utility_room)
+        (inroom floor.n.01_1 utility_room)
         (ontop agent.n.01_1 floor.n.01_1)
     )
     
@@ -30,7 +32,10 @@
             (inside ?flashlight.n.01_1 ?toolbox.n.01_1)
             (inside ?allen_wrench.n.01_1 ?toolbox.n.01_1)
             (inside ?screwdriver.n.01_1 ?toolbox.n.01_1)
-            (ontop ?toolbox.n.01_1 ?floor.n.01_1)
+            (ontop ?toolbox.n.01_1 ?tabletop.n.01_1)
+            (not
+                (open ?toolbox.n.01_1)
+            )
         )
     )
 )

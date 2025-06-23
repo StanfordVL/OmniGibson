@@ -2,28 +2,30 @@
     (:domain omnigibson)
 
     (:objects
-        water_bottle.n.01_1 water_bottle.n.01_2 - water_bottle.n.01
-        lawn.n.01_1 - lawn.n.01
-        cabinet.n.01_1 - cabinet.n.01
-        floor.n.01_1 floor.n.01_2 - floor.n.01
+        bottle.n.01_1 bottle.n.01_2 - bottle.n.01
+        coffee_table.n.01_1 - coffee_table.n.01
+        electric_refrigerator.n.01_1 - electric_refrigerator.n.01
+        floor.n.01_1 - floor.n.01
         agent.n.01_1 - agent.n.01
     )
     
     (:init 
-        (ontop water_bottle.n.01_1 floor.n.01_2) 
-        (ontop water_bottle.n.01_2 floor.n.01_2)
-        (inroom floor.n.01_2 garden) 
-        (inroom cabinet.n.01_1 kitchen) 
+        (inside bottle.n.01_1 electric_refrigerator.n.01_1) 
+        (inside bottle.n.01_2 electric_refrigerator.n.01_1)
+        (inroom electric_refrigerator.n.01_1 kitchen) 
+        (inroom coffee_table.n.01_1 living_room)
         (inroom floor.n.01_1 kitchen)
-        (inroom lawn.n.01_1 garden)
-        (ontop agent.n.01_1 floor.n.01_2)
+        (ontop agent.n.01_1 floor.n.01_1)
     )
     
     (:goal 
         (and 
             (forall
-                (?water_bottle.n.01 - water_bottle.n.01)
-                (inside ?water_bottle.n.01 ?cabinet.n.01_1)
+                (?bottle.n.01 - bottle.n.01)
+                (ontop ?bottle.n.01 ?coffee_table.n.01_1)
+            )
+            (not
+                (open ?electric_refrigerator.n.01_1)
             )
         )
     )
