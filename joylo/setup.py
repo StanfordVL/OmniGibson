@@ -37,7 +37,7 @@ setuptools.setup(
         "termcolor",
         "tyro",
         "zmq",
-        "telemoma"
+        "telemoma~=0.2.0",
     ],
     extras_require={
         "dev": [
