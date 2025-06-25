@@ -422,7 +422,7 @@ class OGRobotServer:
                         # Extract trunk position values and calculate offsets
                         trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
                         self.teleop_controller.current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
-                        base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self._current_trunk_translate)
+                        base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self.teleop_controller.current_trunk_translate)
                         self.teleop_controller.current_trunk_tilt_offset = float(trunk_qpos[2] - base_trunk_pos[2])
                         
                         # Handle gripper actions
@@ -555,7 +555,7 @@ class OGRobotServer:
         utils.update_camera_blinking_visualizers(
             self.camera_blinking_visualizers,
             self.camera_paths[self.active_camera_id],
-            self.obs,
+            self.teleop_controller.obs,
             self._blink_frequency,
         )
         

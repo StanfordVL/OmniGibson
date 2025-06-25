@@ -25,6 +25,7 @@ class JoyLoController(BaseController):
         # Set default active arm
         self._active_arm = "right"
         self._arm_shoulder_directions = {"left": -1.0, "right": 1.0}
+        self.obs = {"in_cooldown": False, "waiting_to_resume": True}
 
         # Cache values
         self._reset_max_arm_delta = DEFAULT_RESET_DELTA_SPEED * (np.pi / 180) * og.sim.get_sim_step_dt()
@@ -94,7 +95,7 @@ class JoyLoController(BaseController):
                 
                 jacobian = jacobian[:, self.robot.arm_control_idx[arm]]
                 obs[f"arm_{arm}_jacobian"] = jacobian
-        self.obs = obs
+        self.obs.update(obs)
 
     def get_action(self, in_cooldown: bool) -> th.Tensor:
         # Start an empty action
