@@ -685,7 +685,6 @@ class OGRobotServer:
 
     def stop(self) -> None:
         """Stop the controller and clean up resources"""
-        self.teleop_controller.stop()
         
         if self._recording_path is not None:
             # Sanity check if we are in the middle of an episode; always flush the current trajectory
@@ -696,6 +695,8 @@ class OGRobotServer:
         
         if VIEWING_MODE == ViewingMode.VR:
             self.vr_system.stop()
+        
+        self.teleop_controller.stop()
         
         og.shutdown()
 
