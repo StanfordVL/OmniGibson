@@ -1,9 +1,9 @@
 from gello.controllers.joylo_controller import JoyLoController
-# from gello.controllers.r1prot_controller import R1ProTController
+from gello.controllers.r1prot_controller import R1ProTController
 
 CONTROLLER_LIB = {
     "JoyLo": JoyLoController,
-    # "R1ProT": R1ProTController,
+    "R1ProT": R1ProTController,
 }
 
 
