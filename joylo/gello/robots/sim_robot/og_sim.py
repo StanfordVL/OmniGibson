@@ -22,7 +22,7 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.config_utils import parse_config
 from omnigibson.utils.python_utils import recursively_convert_to_torch
 
-from gello.controllers import CONTROLLER_LIB
+from gello.devices import CONTROLLER_LIB
 
 from gello.robots.sim_robot.og_teleop_cfg import *
 import gello.robots.sim_robot.og_teleop_utils as utils

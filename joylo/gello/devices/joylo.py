@@ -2,7 +2,7 @@ import torch as th
 import numpy as np
 import gello.robots.sim_robot.og_teleop_utils as utils
 import omnigibson as og
-from gello.controllers.controller_base import BaseController
+from gello.devices.device_base import BaseDevice
 from gello.robots.sim_robot.og_teleop_cfg import *
 from gello.robots.sim_robot.zmq_server import ZMQRobotServer, ZMQServerThread
 from omnigibson.robots import R1, R1Pro
@@ -10,7 +10,7 @@ from omnigibson.utils.usd_utils import GripperRigidContactAPI, ControllableObjec
 from typing import Dict
 
 
-class JoyLoController(BaseController):
+class JoyLo(BaseDevice):
     """
     A class to control the JoyLo robot using ROS2.
     """

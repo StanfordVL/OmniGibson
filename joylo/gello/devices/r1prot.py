@@ -3,14 +3,15 @@ import numpy as np
 import threading
 import torch
 import importlib
-from gello.controllers.controller_base import BaseController
+from gello.devices.device_base import BaseDevice
 from gello.robots.sim_robot.og_teleop_cfg import *
 from omnigibson.robots import R1
 from time import time
+
 logger = logging.getLogger("R1ProT Controller")
 
 
-class R1ProTController(BaseController):
+class R1ProT(BaseDevice):
     """
     A class to control the R1ProT robot using ROS2.
     """
@@ -43,6 +44,10 @@ class R1ProTController(BaseController):
         self.right_gripper_cmd = None
         self.base_cmd = None
         self.torso_cmd = None
+
+        # initialize current positions
+        self.current_left_arm_pos = None
+        self.current_right_arm_pos = None
 
         self.rclpy.init()
         self.node = self.rclpy.create_node('r1prot_controller')
@@ -80,13 +85,13 @@ class R1ProTController(BaseController):
     @property
     def JointState(self):
         if self._JointState is None:
-            self._JointState = self.rclpy.import_module('sensor_msgs.msg').JointState
+            self._JointState = importlib.import_module('sensor_msgs.msg').JointState
         return self._JointState
     
     @property
     def TwistStamped(self):
         if self._TwistStamped is None:
-            self._TwistStamped = self.rclpy.import_module('geometry_msgs.msg').TwistStamped
+            self._TwistStamped = importlib.import_module('geometry_msgs.msg').TwistStamped
         return self._TwistStamped
 
     def start(self):
@@ -99,7 +104,8 @@ class R1ProTController(BaseController):
         self.ros_spin_thread.start()
         logger.info("[START] R1ProT controller started.")
 
-    def update_observations(self, joint_pos: torch.Tensor):
+    def update_observations(self):
+        joint_pos = self.robot.get_joint_positions()
         self.current_left_arm_pos = joint_pos[self.robot.arm_control_idx["left"]]
         self.current_right_arm_pos = joint_pos[self.robot.arm_control_idx["right"]]
         trunk_joint_pos = joint_pos[self.robot.trunk_control_idx]
@@ -114,7 +120,7 @@ class R1ProTController(BaseController):
         """
         return not self._stopped and self.rclpy.ok()
 
-    def get_action(self):
+    def get_action(self, in_cooldown: bool = False) -> torch.Tensor:
         # Start an empty action
         action = torch.zeros(self.robot.action_dim)
 
@@ -229,12 +235,19 @@ class R1ProTController(BaseController):
                 action[self.robot.trunk_action_idx] = interpolated_trunk_pos
 
     def get_base_cmd(self):
-        # TODO
-        pass
-
+        return self.base_cmd[:3]
+    
     def get_button_input_cmd(self):
-        # TODO
-        pass
+        return {
+            "button_x": 0.0,
+            "button_y": 0.0,
+            "button_b": 0.0,
+            "button_a": 0.0,
+            "button_capture": 0.0,
+            "button_home": 0.0,
+            "button_left": 0.0,
+            "button_right": 0.0
+        }
 
     def _pub_robot_joint_states(self, trunk_joint_pos, left_arm_pos, right_arm_pos):
         now = self.node.get_clock().now().to_msg()

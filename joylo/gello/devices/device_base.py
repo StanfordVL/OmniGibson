@@ -1,8 +1,8 @@
 from gello.robots.sim_robot.og_teleop_cfg import *
 
-class BaseController:
+class BaseDevice:
     """
-    Base controller class that provides common functionality for all teleop controllers.
+    Base device class that provides common functionality for all teleop devices.
     """
 
     def __init__(self, robot):
