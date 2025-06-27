@@ -23,7 +23,7 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.utils.config_utils import parse_config
 from omnigibson.utils.python_utils import recursively_convert_to_torch
 
-from gello.devices import CONTROLLER_LIB
+from gello.devices import DEVICE_LIB
 
 from gello.robots.sim_robot.og_teleop_cfg import *
 import gello.robots.sim_robot.og_teleop_utils as utils
@@ -151,7 +151,7 @@ class OGRobotServer:
         }
 
         # Setup teleop controller
-        self.teleop_controller = CONTROLLER_LIB[teleop](robot=self.robot, host=host, port=port)
+        self.teleop_device = DEVICE_LIB[teleop](robot=self.robot, host=host, port=port)
 
         with og.sim.stopped():
             # # Set lower position iteration count for faster sim speed
@@ -220,7 +220,7 @@ class OGRobotServer:
                 scale = obj.states[ToggledOn].visual_marker.scale
                 obj.states[ToggledOn].visual_marker.scale = scale
 
-        assert teleop in CONTROLLER_LIB, f"Got invalid teleop type: {teleop}. Supported types: {list(CONTROLLER_LIB.keys())}"
+        assert teleop in DEVICE_LIB, f"Got invalid teleop type: {teleop}. Supported types: {list(DEVICE_LIB.keys())}"
 
     def _setup_teleop_support(self):
         """Set up cameras, visualizations, UI elements"""
@@ -353,9 +353,9 @@ class OGRobotServer:
     def serve(self) -> None:
         """Main serving loop"""
         # start the teleop controller
-        self.teleop_controller.start()
+        self.teleop_device.start()
 
-        while self.teleop_controller.is_running():
+        while self.teleop_device.is_running():
             self._update_observations()
 
             # Process button inputs
@@ -405,7 +405,7 @@ class OGRobotServer:
         # (b) record checkpoint, if actively running, or
         # (c) rollback to checkpoint, if at least a single "Y" was pressed beforehand
 
-        button_cmd = self.teleop_controller.get_button_input_cmd()
+        button_cmd = self.teleop_device.get_button_input_cmd()
 
         button_x_state = button_cmd["button_x"] != 0.0
         if button_x_state and not self._button_toggled_state["x"]:
@@ -422,15 +422,15 @@ class OGRobotServer:
 
                         # Extract trunk position values and calculate offsets
                         trunk_qpos = self.robot.get_joint_positions()[self.robot.trunk_control_idx]
-                        self.teleop_controller.current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
-                        base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self.teleop_controller.current_trunk_translate)
-                        self.teleop_controller.current_trunk_tilt_offset = float(trunk_qpos[2] - base_trunk_pos[2])
+                        self.teleop_device.current_trunk_translate = utils.infer_trunk_translate_from_torso_qpos(trunk_qpos)
+                        base_trunk_pos = utils.infer_torso_qpos_from_trunk_translate(self.teleop_device.current_trunk_translate)
+                        self.teleop_device.current_trunk_tilt_offset = float(trunk_qpos[2] - base_trunk_pos[2])
                         
                         # Handle gripper actions
                         for arm in self.robot.arm_names:
                             gripper_goal = float(self.robot.controllers[f"gripper_{arm}"].goal["target"])
                             checkpoint_gripper_action = 1 if gripper_goal > 0 else -1
-                            self.teleop_controller.grasp_action[arm] = checkpoint_gripper_action
+                            self.teleop_device.grasp_action[arm] = checkpoint_gripper_action
 
                         print("Finished rolling back!")
                         self._waiting_to_resume = True
@@ -570,14 +570,14 @@ class OGRobotServer:
         
         self._prev_base_motion = utils.update_reachability_visualizers(
             self.reachability_visualizers,
-            self.teleop_controller.get_base_cmd(),
+            self.teleop_device.get_base_cmd(),
             self._prev_base_motion
         )
         
         utils.update_camera_blinking_visualizers(
             self.camera_blinking_visualizers,
             self.camera_paths[self.active_camera_id],
-            self.teleop_controller.obs,
+            self.teleop_device.obs,
             self._blink_frequency,
         )
         
@@ -596,7 +596,7 @@ class OGRobotServer:
         Returns:
             torch.Tensor: Action for the robot
         """
-        action = self.teleop_controller.get_action(in_cooldown=self._in_cooldown)
+        action = self.teleop_device.get_action(in_cooldown=self._in_cooldown)
 
         # Update vertical visualizers
         if isinstance(self.robot, R1) and USE_VERTICAL_VISUALIZERS:
@@ -621,14 +621,14 @@ class OGRobotServer:
         return action
 
     def _update_observations(self) -> None:
-        self.teleop_controller.update_observations()
+        self.teleop_device.update_observations()
         # update cooldown and wait info
-        self.teleop_controller.obs["in_cooldown"] = self._in_cooldown
-        self.teleop_controller.obs["waiting_to_resume"] = self._waiting_to_resume
+        self.teleop_device.obs["in_cooldown"] = self._in_cooldown
+        self.teleop_device.obs["waiting_to_resume"] = self._waiting_to_resume
 
     def pause(self):
         self._waiting_to_resume = True
-        self.teleop_controller.pause()
+        self.teleop_device.pause()
 
 
     def reset(self, increment_instance=True):
@@ -652,7 +652,7 @@ class OGRobotServer:
 
         self._should_update_checkpoint = False
         
-        self.teleop_controller.reset()
+        self.teleop_device.reset()
 
         # Update the instance id / initial state if the instance ID is specified
         # We will manually update the task relevant objects (TRO) state
@@ -718,7 +718,7 @@ class OGRobotServer:
         if VIEWING_MODE == ViewingMode.VR:
             self.vr_system.stop()
         
-        self.teleop_controller.stop()
+        self.teleop_device.stop()
         
         og.shutdown()
 
