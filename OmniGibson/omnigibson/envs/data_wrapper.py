@@ -1014,3 +1014,309 @@ class DataPlaybackWrapper(DataWrapper):
         """
         assert fpath.endswith(".mp4"), f"Video writer fpath must end with .mp4! Got: {fpath}"
         return imageio.get_writer(fpath, fps=fps)
+
+
+class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
+    """
+    A wrapper that supports the scene graph recording.
+    It inherits from the original DataPlaybackWrapper and overrides the `create_from_hdf5` and `playback_episode` method.
+    """
+    @classmethod
+    def create_from_hdf5(
+        cls,
+        input_path,
+        output_path,
+        robot_obs_modalities=tuple(),
+        robot_sensor_config=None,
+        external_sensors_config=None,
+        include_sensor_names=None,
+        exclude_sensor_names=None,
+        n_render_iterations=5,
+        overwrite=True,
+        only_successes=False,
+        flush_every_n_traj=10,
+        include_env_wrapper=False,
+        additional_wrapper_configs=None,
+        full_scene_file=None,
+        include_task=True,
+        include_task_obs=True,
+        include_robot_control=True,
+        include_contacts=True,
+        scene_graph_config=None,
+    ):
+        """
+        Create a DataPlaybackWrapper environment instance form the recorded demonstration info
+        from @hdf5_path, and aggregate observation_modalities @obs during playback
+
+        Args:
+            input_path (str): Absolute path to the input hdf5 file containing the relevant collected data to playback
+            output_path (str): Absolute path to the output hdf5 file that will contain the recorded observations from
+                the replayed data
+            robot_obs_modalities (list): Robot observation modalities to use. This list is directly passed into
+                the robot_cfg (`obs_modalities` kwarg) when spawning the robot
+            robot_sensor_config (None or dict): If specified, the sensor configuration to use for the robot. See the
+                example sensor_config in fetch_behavior.yaml env config. This can be used to specify relevant sensor
+                params, such as image_height and image_width
+            external_sensors_config (None or list): If specified, external sensor(s) to use. This will override the
+                external_sensors kwarg in the env config when the environment is loaded. Each entry should be a
+                dictionary specifying an individual external sensor's relevant parameters. See the example
+                external_sensors key in fetch_behavior.yaml env config. This can be used to specify additional sensors
+                to collect observations during playback.
+            include_sensor_names (None or list of str): If specified, substring(s) to check for in all raw sensor prim
+                paths found on the robot. A sensor must include one of the specified substrings in order to be included
+                in this robot's set of sensors during playback
+            exclude_sensor_names (None or list of str): If specified, substring(s) to check against in all raw sensor
+                prim paths found on the robot. A sensor must not include any of the specified substrings in order to
+                be included in this robot's set of sensors during playback
+            n_render_iterations (int): Number of rendering iterations to use when loading each stored frame from the
+                recorded data. This is needed because the omniverse real-time raytracing always lags behind the
+                underlying physical state by a few frames, and additionally produces transient visual artifacts when
+                the physical state changes. Increasing this number will improve the rendered quality at the expense of
+                speed.
+            overwrite (bool): If set, will overwrite any pre-existing data found at @output_path.
+                Otherwise, will load the data and append to it
+            only_successes (bool): Whether to only save successful episodes
+            flush_every_n_traj (int): How often to flush (write) current data to file
+            include_env_wrapper (bool): Whether to include environment wrapper stored in the underlying env config
+            additional_wrapper_configs (None or list of dict): If specified, list of wrapper config(s) specifying
+                environment wrappers to wrap the internal environment class in
+            full_scene_file (None or str): If specified, the full scene file to use for playback. During data collection
+                the scene file stored may be partial, and will be used to fill in the missing scene objects from the
+                full scene file.
+            include_task (bool): Whether to include the original task or not. If False, will use a DummyTask instead
+            include_task_obs (bool): Whether to include task observations or not. If False, will not include task obs
+            include_robot_control (bool): Whether or not to include robot control. If False, will set all
+                robot.control_enabled=False
+            include_contacts (bool): Whether or not to include (enable) contacts in the sim. If False, will set all
+                objects to be visual_only
+            scene_graph_config (None or dict): If specified, the scene graph configuration to use for the replay.
+                This can be used to specify relevant scene graph parameters, such as the scene file to use.
+
+        Returns:
+            DataPlaybackWrapper: Generated playback environment
+        """
+        # Read from the HDF5 file
+        f = h5py.File(input_path, "r")
+        config = json.loads(f["data"].attrs["config"])
+
+        # Hot swap in additional info for playing back data
+
+        # Minimize physics leakage during playback (we need to take an env step when loading state)
+        config["env"]["action_frequency"] = 1000.0
+        config["env"]["rendering_frequency"] = 1000.0
+        config["env"]["physics_frequency"] = 1000.0
+
+        # Make sure obs space is flattened for recording
+        config["env"]["flatten_obs_space"] = True
+
+        # Set the scene file either to the one stored in the hdf5 or the hot swap scene file
+        config["scene"]["scene_file"] = json.loads(f["data"].attrs["scene_file"])
+        if full_scene_file:
+            with open(full_scene_file, "r") as json_file:
+                full_scene_json = json.load(json_file)
+            config["scene"]["scene_file"] = merge_scene_files(
+                scene_a=full_scene_json, scene_b=config["scene"]["scene_file"], keep_robot_from="b"
+            )
+
+        # Use dummy task if not loading task
+        if not include_task:
+            config["task"] = {"type": "DummyTask"}
+
+        # Maybe include task observations
+        config["task"]["include_obs"] = include_task_obs
+
+        # Set scene file and disable online object sampling if BehaviorTask is being used
+        if config["task"]["type"] == "BehaviorTask":
+            config["task"]["online_object_sampling"] = False
+
+        # Because we're loading directly from the cached scene file, we need to disable any additional objects that are being added since
+        # they will already be cached in the original scene file
+        config["objects"] = []
+
+        # Set observation modalities and update sensor config
+        for robot_cfg in config["robots"]:
+            robot_cfg["obs_modalities"] = list(robot_obs_modalities)
+            robot_cfg["include_sensor_names"] = include_sensor_names
+            robot_cfg["exclude_sensor_names"] = exclude_sensor_names
+
+            if robot_sensor_config is not None:
+                robot_cfg["sensor_config"] = robot_sensor_config
+        if external_sensors_config is not None:
+            config["env"]["external_sensors"] = external_sensors_config
+
+
+        # Add scene graph config
+        if scene_graph_config is not None:
+            config["scene_graph"] = scene_graph_config
+        else:
+            # load default scene graph config here
+            print("No scene graph config provided, using default config")
+            print("We set to None for now")
+            scene_graph_config = {
+                "robot_names": [robot_cfg["name"] for robot_cfg in config["robots"]],
+                "egocentric": False,           # Use world coordinate system for analysis
+                "full_obs": True,              # Record all objects, not just in view
+                "only_true": True,            # Include all relationship states, including False
+                "merge_parallel_edges": False, # Preserve all edges
+            }
+            config["scene_graph"] = scene_graph_config
+
+        # Load env
+        env = og.Environment(configs=config)
+
+        if not include_contacts:
+            with og.sim.stopped():
+                for obj in env.scene.objects:
+                    obj.visual_only = True
+
+        # If not controlling robots, disable for all robots
+        for robot in env.robots:
+            robot.control_enabled = include_robot_control
+
+        # Optionally include the desired environment wrapper specified in the config
+        if include_env_wrapper:
+            env = create_wrapper(env=env)
+
+        if additional_wrapper_configs is not None:
+            for wrapper_cfg in additional_wrapper_configs:
+                env = create_wrapper(env=env, wrapper_cfg=wrapper_cfg)
+
+        # Wrap and return env
+        return cls(
+            env=env,
+            input_path=input_path,
+            output_path=output_path,
+            n_render_iterations=n_render_iterations,
+            overwrite=overwrite,
+            only_successes=only_successes,
+            flush_every_n_traj=flush_every_n_traj,
+            full_scene_file=full_scene_file,
+        )
+    
+    def playback_episode(self, episode_id, record_data=True, video_writers=None, video_rgb_keys=None, start_frame=None, end_frame=None):
+        """
+        Playback episode @episode_id, and optionally record observation data if @record is True
+
+        Args:
+            episode_id (int): Episode to playback. This should be a valid demo ID number from the inputted collected
+                data hdf5 file
+            record_data (bool): Whether to record data during playback or not
+            video_writers (None or list of imageio.Writer): If specified, writer objects that RGB frames will be written to
+            video_rgb_keys (None or list of str): If specified, observation keys representing the RGB frames to write to video.
+                If @video_writers is specified, this must also be specified!
+            start_frame (None or int): If specified, the frame to start playback from. If not specified, will start from the first frame
+            end_frame (None or int): If specified, the frame to end playback at. If not specified, will end at the last frame
+        """
+        # Validate video_writers and video_rgb_keys
+        if video_writers is not None:
+            assert video_rgb_keys is not None, "If video_writers is specified, video_rgb_keys must also be specified!"
+            assert len(video_writers) == len(
+                video_rgb_keys
+            ), "video_writers and video_rgb_keys must have the same length!"
+
+        data_grp = self.input_hdf5["data"]
+        assert f"demo_{episode_id}" in data_grp, f"No valid episode with ID {episode_id} found!"
+        traj_grp = data_grp[f"demo_{episode_id}"]
+
+        # Get start and end frame
+        start_frame = start_frame if start_frame is not None else 0
+        end_frame = end_frame if end_frame is not None else len(traj_grp["state"])
+
+        assert start_frame >= 0 and start_frame < end_frame, "start_frame must be less than end_frame and greater than 0!"
+        assert end_frame <= len(traj_grp["state"]), "end_frame must be less than the total number of frames!"
+
+        log.info(f"Playing back episode {episode_id} from frame {start_frame} to frame {end_frame}")
+
+        # Grab episode data
+        # Skip early if found malformed data
+        try:
+            transitions = json.loads(traj_grp.attrs["transitions"])
+            traj_grp = h5py_group_to_torch(traj_grp)
+            init_metadata = traj_grp["init_metadata"]
+            action = traj_grp["action"]
+            state = traj_grp["state"]
+            state_size = traj_grp["state_size"]
+            reward = traj_grp["reward"]
+            terminated = traj_grp["terminated"]
+            truncated = traj_grp["truncated"]
+        except KeyError as e:
+            print(f"Got error when trying to load episode {episode_id}:")
+            print(f"Error: {str(e)}")
+            return
+
+        # Reset environment and update this to be the new initial state
+        self.scene.restore(self.scene_file, update_initial_file=True)
+
+        # Reset object attributes from the stored metadata
+        with og.sim.stopped():
+            for attr, vals in init_metadata.items():
+                assert len(vals) == self.scene.n_objects
+            for i, obj in enumerate(self.scene.objects):
+                for attr, vals in init_metadata.items():
+                    val = vals[i]
+                    setattr(obj, attr, val.item() if val.ndim == 0 else val)
+        self.reset()
+
+        # Restore to initial state
+        og.sim.load_state(state[0, : int(state_size[0])], serialized=True)
+
+        # If record, record initial observations
+        if record_data:
+            init_obs, _, _, _, init_info = self.env.step(action=action[0], n_render_iterations=self.n_render_iterations)
+            step_data = {"obs": self._process_obs(obs=init_obs, info=init_info)}
+            self.current_traj_history.append(step_data)
+
+        for i, (a, s, ss, r, te, tr) in enumerate(
+            zip(action, state[1:], state_size[1:], reward, terminated, truncated)
+        ):
+            # Execute any transitions that should occur at this current step
+            if str(i) in transitions:
+                cur_transitions = transitions[str(i)]
+                scene = og.sim.scenes[0]
+                for add_sys_name in cur_transitions["systems"]["add"]:
+                    scene.get_system(add_sys_name, force_init=True)
+                for remove_sys_name in cur_transitions["systems"]["remove"]:
+                    scene.clear_system(remove_sys_name)
+                for remove_obj_name in cur_transitions["objects"]["remove"]:
+                    obj = scene.object_registry("name", remove_obj_name)
+                    scene.remove_object(obj)
+                for j, add_obj_info in enumerate(cur_transitions["objects"]["add"]):
+                    obj = create_object_from_init_info(add_obj_info)
+                    scene.add_object(obj)
+                    obj.set_position(th.ones(3) * 100.0 + th.ones(3) * 5 * j)
+                # Step physics to initialize any new objects
+                og.sim.step()
+
+            self.step_count += 1
+
+            if i < start_frame:
+                continue
+            if i > end_frame:
+                break
+
+            # Restore the sim state, and take a very small step with the action to make sure physics are
+            # properly propagated after the sim state update
+            og.sim.load_state(s[: int(ss)], serialized=True)
+            self.current_obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
+
+            # If recording, record data
+            if record_data:
+                step_data = self._parse_step_data(
+                    action=a,
+                    obs=self.current_obs,
+                    reward=r,
+                    terminated=te,
+                    truncated=tr,
+                    info=info,
+                )
+                self.current_traj_history.append(step_data)
+
+            # If writing to video, write desired frame
+            if video_writers is not None:
+                for writer, rgb_key in zip(video_writers, video_rgb_keys):
+                    assert_valid_key(rgb_key, self.current_obs.keys(), "video_rgb_key")
+                    writer.append_data(self.current_obs[rgb_key][:, :, :3].numpy())
+
+
+        if record_data:
+            self.flush_current_traj()

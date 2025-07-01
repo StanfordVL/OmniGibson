@@ -1,4 +1,4 @@
-from omnigibson.envs.data_wrapper import DataCollectionWrapper, DataPlaybackWrapper
+from omnigibson.envs.data_wrapper import DataCollectionWrapper, DataPlaybackWrapper, SceneGraphDataPlaybackWrapper
 from omnigibson.envs.metrics_wrapper import MetricsWrapper, EnvMetric
 from omnigibson.envs.env_base import Environment
 from omnigibson.envs.env_wrapper import REGISTERED_ENV_WRAPPERS, EnvironmentWrapper, create_wrapper
@@ -8,6 +8,7 @@ __all__ = [
     "create_wrapper",
     "DataCollectionWrapper",
     "DataPlaybackWrapper",
+    "SceneGraphDataPlaybackWrapper",
     "MetricsWrapper",
     "EnvMetric",
     "Environment",
