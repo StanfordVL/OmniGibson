@@ -1,5 +1,6 @@
 from omnigibson.envs import SceneGraphDataPlaybackWrapper
 from omnigibson.utils.config_utils import TorchEncoder
+from omnigibson.utils.scene_graph_utils import SceneGraphWriter
 import torch as th
 import os
 import omnigibson as og
@@ -33,10 +34,11 @@ def replay_hdf5_file(hdf_input_path):
     # Create folder with same name as HDF5 file (without extension)
     base_name = os.path.basename(hdf_input_path)
     folder_name = os.path.splitext(base_name)[0]
-    folder_path = os.path.join(os.path.dirname(hdf_input_path), folder_name)
+    # folder_path = os.path.join(os.path.dirname(hdf_input_path), folder_name)
+    folder_path = os.path.dirname(hdf_input_path)
     
-    # Create the folder if it doesn't exist
-    os.makedirs(folder_path, exist_ok=True)
+    # # Create the folder if it doesn't exist
+    # os.makedirs(folder_path, exist_ok=True)
     
     # Define output paths
     hdf_output_path = os.path.join(folder_path, f"{folder_name}_replay.hdf5")
@@ -44,12 +46,6 @@ def replay_hdf5_file(hdf_input_path):
 
     # Metrics path
     metrics_output_path = os.path.join(folder_path, f"qa_metrics.json")
-
-    # Move original HDF5 file to the new folder
-    new_hdf_input_path = os.path.join(folder_path, base_name)
-    if hdf_input_path != new_hdf_input_path:  # Avoid copying if already in target folder
-        os.rename(hdf_input_path, new_hdf_input_path)
-        hdf_input_path = new_hdf_input_path
     
     # Define resolution for consistency
     RESOLUTION_DEFAULT = 560
@@ -199,12 +195,15 @@ def replay_hdf5_file(hdf_input_path):
     # aggregate per-episode metrics
     metrics = dict()
     for episode_id in range(env.input_hdf5["data"].attrs["n_episodes"]):
+        scene_graph_writer = SceneGraphWriter(output_path=os.path.join(folder_path, f"scene_graph_{episode_id}.json"), interval=100, buffer_size=100)
         env.playback_episode(
             episode_id=episode_id,
             record_data=False,
             video_writers=video_writers,
             video_rgb_keys=video_rgb_keys,
-            start_frame=5000,
+            start_frame=4000,
+            end_frame=5000,
+            scene_graph_writer=scene_graph_writer,
         )
         episode_metrics = env.aggregate_metrics(flatten=True)
         for k, v in episode_metrics.items():

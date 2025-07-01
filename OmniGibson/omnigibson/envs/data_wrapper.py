@@ -1157,7 +1157,7 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
                 "egocentric": False,           # Use world coordinate system for analysis
                 "full_obs": True,              # Record all objects, not just in view
                 "only_true": True,            # Include all relationship states, including False
-                "merge_parallel_edges": False, # Preserve all edges
+                "merge_parallel_edges": True, # Merge parallel edges
             }
             config["scene_graph"] = scene_graph_config
 
@@ -1193,7 +1193,16 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
             full_scene_file=full_scene_file,
         )
     
-    def playback_episode(self, episode_id, record_data=True, video_writers=None, video_rgb_keys=None, start_frame=None, end_frame=None):
+    def playback_episode(
+        self, 
+        episode_id, 
+        record_data=True, 
+        video_writers=None, 
+        video_rgb_keys=None, 
+        start_frame=None, 
+        end_frame=None,
+        scene_graph_writer=None
+    ):
         """
         Playback episode @episode_id, and optionally record observation data if @record is True
 
@@ -1206,6 +1215,7 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
                 If @video_writers is specified, this must also be specified!
             start_frame (None or int): If specified, the frame to start playback from. If not specified, will start from the first frame
             end_frame (None or int): If specified, the frame to end playback at. If not specified, will end at the last frame
+            scene_graph_writer (None or SceneGraphWriter): If specified, a SceneGraphWriter object that will be used to record the scene graph
         """
         # Validate video_writers and video_rgb_keys
         if video_writers is not None:
@@ -1259,6 +1269,8 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
 
         # Restore to initial state
         og.sim.load_state(state[0, : int(state_size[0])], serialized=True)
+        if scene_graph_writer is not None:
+            scene_graph_writer.step(self.env.get_scene_graph(), 0)
 
         # If record, record initial observations
         if record_data:
@@ -1317,6 +1329,12 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
                     assert_valid_key(rgb_key, self.current_obs.keys(), "video_rgb_key")
                     writer.append_data(self.current_obs[rgb_key][:, :, :3].numpy())
 
+            if scene_graph_writer is not None:
+                scene_graph_writer.step(self.env.get_scene_graph(), i+1)
+
 
         if record_data:
             self.flush_current_traj()
+
+        if scene_graph_writer is not None:
+            scene_graph_writer.close()
