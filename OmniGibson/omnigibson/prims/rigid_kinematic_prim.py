@@ -32,6 +32,7 @@ class RigidKinematicPrim(RigidPrim):
         # This exists because RigidPrimView uses USD pose read, which is very slow
         # For scene-relative poses, we also manually compute pose transforms, which can be slow if repeatedly queried
         self._kinematic_pose_cache = dict()  # "scene", "world" keys
+        self._kinematic_aabb_cache = None  # Cached AABB for this kinematic-only object
 
         # Run super init
         super().__init__(
@@ -65,7 +66,7 @@ class RigidKinematicPrim(RigidPrim):
         # Use the XFormPrim implementation directly
         XFormPrim.set_position_orientation(self, position=position, orientation=orientation, frame=frame)
 
-        # Invalidate kinematic-only object pose cache when new pose is set
+        # Invalidate kinematic-only object pose and aabb cache when new pose is set
         self.clear_kinematic_only_cache()
 
         # Invalidate pose API
@@ -118,6 +119,15 @@ class RigidKinematicPrim(RigidPrim):
         changes without explicitly calling this prim's pose setter
         """
         self._kinematic_pose_cache = dict()
+        self._kinematic_aabb_cache = None
+
+    @property
+    def aabb(self):
+        if self._kinematic_aabb_cache is not None:
+            # If we have a cached AABB, return it
+            return self._kinematic_aabb_cache
+
+        return super().aabb
 
     # The following methods implement the same interface as RigidDynamicPrim, but as no-op
     # versions for kinematic-only prims. This allows code to call these methods on any RigidPrim
