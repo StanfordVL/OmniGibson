@@ -1,4 +1,4 @@
-from omnigibson.envs import DataPlaybackWrapper
+from omnigibson.envs import SceneGraphDataPlaybackWrapper
 from omnigibson.utils.config_utils import TorchEncoder
 import torch as th
 import os
@@ -120,7 +120,7 @@ def replay_hdf5_file(hdf_input_path):
         additional_wrapper_configs.append({
             "type": "MetricsWrapper",
         })
-    env = DataPlaybackWrapper.create_from_hdf5(
+    env = SceneGraphDataPlaybackWrapper.create_from_hdf5(
         input_path=hdf_input_path,
         output_path=hdf_output_path,
         robot_obs_modalities=["rgb"],
@@ -204,6 +204,7 @@ def replay_hdf5_file(hdf_input_path):
             record_data=False,
             video_writers=video_writers,
             video_rgb_keys=video_rgb_keys,
+            start_frame=5000,
         )
         episode_metrics = env.aggregate_metrics(flatten=True)
         for k, v in episode_metrics.items():
@@ -227,11 +228,16 @@ def replay_hdf5_file(hdf_input_path):
 
 
 def main():
+
     parser = argparse.ArgumentParser(description="Replay HDF5 files and save videos")
     parser.add_argument("--dir", help="Directory containing HDF5 files to process")
     parser.add_argument("--files", nargs="*", help="Individual HDF5 file(s) to process")
+
+    default_files = ["/home/mll-laptop-1/01_projects/03_behavior_challenge/raw_demos/test_set/cleaning_up_plates_and_food_1747365183765658_cleaning_up_plates_and_food.hdf5"]
     
     args = parser.parse_args()
+
+    args.files = default_files
     
     if args.dir and os.path.isdir(args.dir):
         # Process all HDF5 files in the directory (non-recursively)
