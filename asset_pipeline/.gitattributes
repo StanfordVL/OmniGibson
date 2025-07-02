@@ -1,0 +1,6 @@
+*.dvc merge=dvc
+*.json eol=lf
+*.py eol=lf
+*.yaml eol=lf
+*.yml eol=lf
+dvc.lock eol=lf

@@ -1,0 +1,94 @@
+*.pyc
+*.pyd
+*.pkl
+*.so
+*.egg-info/
+.DS_Store
+*.pth
+src/
+pw
+*.o
+*.ipynb
+*.ipynb_checkpoints/
+*.out
+npz/
+*.npy
+dev/transfer.c
+*.jpg
+*.png
+*.bmp
+*.bak
+*.zip
+.*.swp
+
+docs/apidoc
+
+# vscode
+.vscode/
+
+# Physics
+physics/*.txt
+physics/*.json
+# Physics assets
+physics/models
+
+*/events*
+0_VRDemoSettings.txt
+
+# VR
+# This is the folder where the pyd files get put after setup.py builds gibson
+Release
+
+cnn_policy*
+*ppo_policy*
+checkpoint
+*.log
+*.log.*
+*.model.*
+examples/train/models/
+
+log_*/
+baselines/
+aws/
+monitor_*
+comparison/
+0.monitor.csvpaper/
+0.monitor.csv
+
+cvpr/
+gibson/cpp-household
+
+*.idea*
+
+# Plotting
+examples/scripts/plot*
+
+# Models
+nav_models
+
+gibson/assets
+*.pdf
+.cache
+notebook
+build
+dist
+omnigibson.egg-info
+
+# Directories used for QC pipeline
+omnigibson/utils/data_utils/mesh_decimation/collision
+omnigibson/utils/data_utils/mesh_decimation/visual
+omnigibson/utils/data_utils/mesh_decimation/final_videos
+
+# libcryptopp
+omnigibson/render/mesh_renderer/libcryptopp.so.8.6
+
+# Coverage
+.coverage
+coverage.xml
+
+# Doc
+docs/reference
+site/
+
+# Tests of examples
+tests/tests_of_examples

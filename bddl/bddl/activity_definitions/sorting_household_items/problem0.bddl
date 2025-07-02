@@ -1,0 +1,48 @@
+(define (problem sorting_household_items-0)
+    (:domain omnigibson)
+
+    (:objects
+        bottle__of__detergent.n.01_1 bottle__of__detergent.n.01_2 - bottle__of__detergent.n.01
+        basket.n.01_1 basket.n.01_2 - basket.n.01
+        floor.n.01_1 - floor.n.01
+        box__of__sanitary_napkin.n.01_1 - box__of__sanitary_napkin.n.01
+        soap_dispenser.n.01_1 - soap_dispenser.n.01
+        tube__of__toothpaste.n.01_1 - tube__of__toothpaste.n.01
+        toothbrush.n.01_1 - toothbrush.n.01
+        cup.n.01_1 - cup.n.01
+        shelf.n.01_1 - shelf.n.01
+        sink.n.01_1 - sink.n.01
+        agent.n.01_1 - agent.n.01
+    )
+    
+    (:init 
+        (inside bottle__of__detergent.n.01_1 basket.n.01_1) 
+        (inside bottle__of__detergent.n.01_2 basket.n.01_1) 
+        (ontop basket.n.01_1 floor.n.01_1) 
+        (ontop basket.n.01_2 floor.n.01_1) 
+        (inside box__of__sanitary_napkin.n.01_1 basket.n.01_1) 
+        (inside soap_dispenser.n.01_1 basket.n.01_2) 
+        (inside tube__of__toothpaste.n.01_1 basket.n.01_2) 
+        (inside toothbrush.n.01_1 basket.n.01_2) 
+        (ontop cup.n.01_1 sink.n.01_1)
+        (inroom floor.n.01_1 bedroom) 
+        (inroom shelf.n.01_1 bathroom) 
+        (inroom sink.n.01_1 bathroom)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (forall 
+                (?bottle__of__detergent.n.01 - bottle__of__detergent.n.01)
+                (under ?bottle__of__detergent.n.01 ?sink.n.01_1)
+            )
+            (nextto ?bottle__of__detergent.n.01_1 ?bottle__of__detergent.n.01_2)
+            (ontop ?box__of__sanitary_napkin.n.01_1 ?shelf.n.01_1)
+            (ontop ?soap_dispenser.n.01_1 ?sink.n.01_1)
+            (ontop cup.n.01_1 sink.n.01_1)
+            (nextto ?tube__of__toothpaste.n.01_1 cup.n.01_1)
+            (inside ?toothbrush.n.01_1 cup.n.01_1)
+        )
+    )
+)

@@ -1,0 +1,8 @@
+[core]
+    remote = google
+    autostage = true
+    hardlink_lock = false
+[cache]
+    type = symlink
+['remote "google"']
+    url = gs://ig-pipeline-cache
