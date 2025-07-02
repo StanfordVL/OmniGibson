@@ -1,10 +1,6 @@
-html{
-    line-height:1.15;
-    -ms-text-size-adjust:100%;
-    -webkit-text-size-adjust:100%
-}
-body{
-    margin:0
+.md-sidebar,
+.md-sidebar__scrollwrap {
+    display: none !important;
 }
 article,aside,footer,header,nav,section{
     display:block
@@ -31,12 +27,6 @@ pre{
 a{
     background-color:transparent;
     -webkit-text-decoration-skip:objects
-}
-abbr[title]{
-    border-bottom:none;
-    text-decoration:underline;
-    -webkit-text-decoration:underline dotted;
-    text-decoration:underline dotted
 }
 b,strong{
     font-weight:inherit
@@ -156,16 +146,8 @@ template{
 [hidden]{
     display:none
 }
-html{
-    box-sizing:border-box
-}
 *,*:before,*:after{
     box-sizing:inherit
-}
-body{
-    /*background:#1D2026;*/
-    /*-moz-osx-font-smoothing:grayscale;*/
-    /*-webkit-font-smoothing:antialiased*/
 }
 hr{
     border:0;
@@ -236,20 +218,12 @@ th:first-child,td:first-child{
 th:last-child,td:last-child{
     padding-right:0
 }
-html{
-    font-size:20px;
-    line-height:30px
-}
 body{
     color:#8A94A7;
     font-size:1rem
 }
 body,button,input,select,textarea{
     font-family:"IBM Plex Sans", sans-serif
-}
-a{
-    color:#8A94A7;
-    text-decoration:underline
 }
 a:hover,a:active{
     outline:0;
@@ -941,8 +915,27 @@ button,input,select,textarea,label{
     }
 }
 .site-header{
-    padding:24px 0
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
 }
+
+.hero {
+    position: absolute;
+    top: 0; left: 0; width: 100%; height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    /* Optional: add a little background for readability */
+    /* background: rgba(0,0,0,0.3); */
+}
+
+.hero-inner, .hero-copy {
+    position: relative;
+    z-index: 2;
+}
+
 .site-header-inner{
     position:relative;
     display:flex;
@@ -978,7 +971,7 @@ button,input,select,textarea,label{
         left: 0;
         width: 100%;
         height: 100vh;
-        background-image: url("../../assets/behavior_cover.png"), linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1));
+        background-image: url("../../assets/splash_no_logo.png"), linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1));
         background-size: 100%;
         background-repeat: no-repeat;
     }
