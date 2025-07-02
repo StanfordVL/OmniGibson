@@ -1,0 +1,32 @@
+(define (problem datagen_wash_dishes-0)
+    (:domain omnigibson)
+
+    (:objects
+        frying_pan.n.01_1 - frying_pan.n.01
+        scrub_brush.n.01_1 - scrub_brush.n.01
+        dust.n.01_1 - dust.n.01
+        sink.n.01_1 - sink.n.01
+        floor.n.01_1 - floor.n.01
+        agent.n.01_1 - agent.n.01
+        countertop.n.01_1 countertop.n.01_2 - countertop.n.01
+    )
+    
+    (:init 
+        (ontop frying_pan.n.01_1 countertop.n.01_1)
+        (ontop scrub_brush.n.01_1 countertop.n.01_2)
+        (covered frying_pan.n.01_1 dust.n.01_1)
+        (inroom countertop.n.01_1 kitchen)
+        (inroom countertop.n.01_2 kitchen)
+        (inroom sink.n.01_1 kitchen) 
+        (inroom floor.n.01_1 kitchen)
+        (ontop agent.n.01_1 floor.n.01_1)
+    )
+    
+    (:goal 
+        (and 
+            (not
+                (covered ?frying_pan.n.01_1 ?dust.n.01_1)
+            )
+        )
+    )
+)
