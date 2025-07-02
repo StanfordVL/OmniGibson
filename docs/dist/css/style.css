@@ -1023,3 +1023,97 @@ button,input,select,textarea,label{
         }
     }
 }
+
+/* Background image classes for BEHAVIOR-1K features */
+.bg-compare {
+    background-image: url("../../assets/b1k_features/compare.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 400px;
+  }
+  
+  .bg-survey {
+    background-image: url("../../assets/b1k_features/survey.png");
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    min-height: 350px;
+  }
+  
+  .bg-scenes {
+    background-image: url("../../assets/b1k_features/scenes.png");
+    background-size: cover;
+    background-position: center;
+    height: 280px;
+  }
+  
+  .bg-objects {
+    background-image: url("../../assets/b1k_features/objects.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 280px;
+  }
+  
+  .bg-water {
+    background-image: url("../../assets/b1k_features/water.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
+  
+  .bg-deformable {
+    background-image: url("../../assets/b1k_features/deformable.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
+  
+  .bg-fire {
+    background-image: url("../../assets/b1k_features/fire.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
+  
+  .bg-transition {
+    background-image: url("../../assets/b1k_features/transition.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
+  
+  .bg-glass {
+    background-image: url("../../assets/b1k_features/glass.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
+  
+  .bg-light {
+    background-image: url("../../assets/b1k_features/light.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
+  
+  .bg-rigid-grasp {
+    background-image: url("../../assets/b1k_features/rigid-grasp.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
+  
+  .bg-cloth-grasp {
+    background-image: url("../../assets/b1k_features/cloth-grasp.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
+  
+  .bg-fluid-scoop {
+    background-image: url("../../assets/b1k_features/fluid-scoop.mp4");
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+  }
