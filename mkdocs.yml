@@ -2,23 +2,24 @@
 # The above line is included to enable intellisense for mkdocs.yml file in VSCode. It is not a valid
 # part of the mkdocs.yml file and should remain commented out.
 
-site_name: BEHAVIOR-1K Documentation
+site_name: BEHAVIOR Documentation
 repo_name: StanfordVL/BEHAVIOR-1K
 site_url: https://behavior.stanford.edu/omnigibson # TODO: move this to root
 repo_url: https://github.com/StanfordVL/BEHAVIOR-1K
 theme: 
   name: material
-  logo: assets/OmniGibson_logo.png
-  favicon: assets/OmniGibson_logo.png
+  logo: assets/behavior_logo3.png
+  favicon: assets/behavior_logo3.png
   icon:
     repo: fontawesome/brands/git-alt
 
   features:
-    - navigation.tracking
-    - navigation.instant
-    - navigation.expand
-    - toc.integrate
-    - content.code.copy
+    - navigation.tabs
+    # - navigation.tracking
+    # - navigation.instant
+    # - navigation.expand
+    # - toc.integrate
+    # - content.code.copy
 
   extra:
     homepage: https://behavior.stanford.edu
@@ -92,32 +93,34 @@ plugins:
   - offline
 
 nav:
-  - Home: index.md
+  - Home:
+      - Home: index.md
   - Getting Started:
+    - Overview: getting_started/overview.md
     - Installation: getting_started/installation.md
     - Quickstart: getting_started/quickstart.md
     - Important Concepts: getting_started/important_concepts.md
     - Examples: getting_started/examples.md
-  - OmniGibson Modules:
-    - Overview: modules/overview.md
-    - Prims: modules/prims.md
-    - Objects: modules/objects.md
-    - Object States: modules/object_states.md
-    - Robots: modules/robots.md
-    - Controllers: modules/controllers.md
-    - Sensors: modules/sensors.md
-    - Systems: modules/systems.md
-    - Scenes: modules/scenes.md
-    - Transition Rules: modules/transition_rules.md
-    - Simulator: modules/simulator.md
-    - Tasks: modules/tasks.md
-    - Environments: modules/environments.md
-    - Vector Environments: modules/vector_environments.md
-    - Setting Macros: modules/setting_macros.md
-    - Under the Hood - Isaac Sim: modules/under_the_hood.md
-  - BEHAVIOR Components:
-    - BEHAVIOR Tasks: behavior_components/behavior_tasks.md
-    - BEHAVIOR Knowledgebase: behavior_components/behavior_knowledgebase.md
+  - OmniGibson:
+    - Overview: omnigibson/overview.md
+    - Prims: omnigibson/prims.md
+    - Objects: omnigibson/objects.md
+    - Object States: omnigibson/object_states.md
+    - Robots: omnigibson/robots.md
+    - Controllers: omnigibson/controllers.md
+    - Sensors: omnigibson/sensors.md
+    - Systems: omnigibson/systems.md
+    - Scenes: omnigibson/scenes.md
+    - Transition Rules: omnigibson/transition_rules.md
+    - Simulator: omnigibson/simulator.md
+    - Tasks: omnigibson/tasks.md
+    - Environments: omnigibson/environments.md
+    - Vector Environments: omnigibson/vector_environments.md
+    - Setting Macros: omnigibson/setting_macros.md
+    - Under the Hood - Isaac Sim: omnigibson/under_the_hood.md
+  - Tasks:
+    - BDDL Tasks: behavior_components/behavior_tasks.md
+    - Knowledgebase: behavior_components/behavior_knowledgebase.md
   - Tutorials:
     - Demo Collection: tutorials/demo_collection.md
     - Running on a Compute Cluster: tutorials/running_on_a_compute_cluster.md
@@ -125,6 +128,9 @@ nav:
     - Saving and Loading Simulation State: tutorials/save_load.md
     - Customizing Robots: tutorials/customizing_robots.md
     - Custom Robot Import: tutorials/custom_robot_import.md
+  - Community:
+    - Related Research: community/related_research.md
+    - Discord: community/discord.md
   - Miscellaneous:
     - Roadmap: miscellaneous/roadmap.md
     - Speed Optimization: miscellaneous/speed_optimization.md

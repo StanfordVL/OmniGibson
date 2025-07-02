@@ -920,12 +920,12 @@ button,input,select,textarea,label{
     height:32px
 }
 .button-primary{
-    background:#8c1515;
-    background:linear-gradient(65deg, #8a0f0f 0, #8a2727 100%)
+    background:#1577d8;
+    background:linear-gradient(65deg, #0f6fd8 0, #2793ea 100%)
 }
 .button-primary:hover{
-    background:#b32727;
-    background:linear-gradient(65deg, #b51d1d 0, #b83b3b 100%)
+    background:#1d8cfb;
+    background:linear-gradient(65deg, #1d8cfb 0, #3bb8ff 100%)
 }
 .button-block{
     display:flex
@@ -978,7 +978,7 @@ button,input,select,textarea,label{
         left: 0;
         width: 100%;
         height: 100vh;
-        background-image: url("../../assets/splash_no_logo.png"), linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1));
+        background-image: url("../../assets/behavior_cover.png"), linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 1));
         background-size: 100%;
         background-repeat: no-repeat;
     }

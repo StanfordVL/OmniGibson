@@ -1,6 +1,4 @@
 ---
-
-title: Title
+title: BEHAVIOR
 template: index.html
-
 ---
