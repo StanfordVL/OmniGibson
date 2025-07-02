@@ -5,14 +5,22 @@ import numpy as np
 import torch as th
 from PIL import Image
 
+import omnigibson as og
 from omnigibson import object_states
 from omnigibson.object_states.factory import get_state_name
 from omnigibson.object_states.object_state_base import AbsoluteObjectState, BooleanStateMixin, RelativeObjectState
 from omnigibson.robots import BaseRobot
 from omnigibson.sensors import VisionSensor
+from omnigibson.systems.system_base import BaseSystem
 from omnigibson.utils import transform_utils as T
 from omnigibson.utils.numpy_utils import pil_to_tensor
 
+
+EXTRA_TASK_RELEVANT_CATEGORIES = {
+    "floors",
+    "driveway",
+    "lawn",
+}
 
 def _formatted_aabb(obj):
     return T.pose2mat((obj.aabb_center, th.tensor([0, 0, 0, 1], dtype=th.float32))), obj.aabb_extent
@@ -30,6 +38,8 @@ class SceneGraphBuilder(object):
             object_states.Touching,
             object_states.NextTo,
         ),
+        only_task_relevant_objects=False,
+        semantic_only=True
     ):
         """
         A utility that builds a scene graph with objects as nodes and relative states as edges,
@@ -45,6 +55,8 @@ class SceneGraphBuilder(object):
             merge_parallel_edges (bool): Whether parallel edges (e.g. different states of the same pair of objects) should
                 exist (making the graph a MultiDiGraph) or should be merged into a single edge instead.
             exclude_states (Iterable): Object state classes that should be ignored when building the graph.
+            only_task_relevant_objects (bool): Whether to only consider task-relevant objects.
+            semantic_only (bool): Whether to only include semantic states in the graph.
         """
         self._G = None
         self._robots = None
@@ -57,6 +69,30 @@ class SceneGraphBuilder(object):
         self._merge_parallel_edges = merge_parallel_edges
         self._last_desired_frame_to_world = None
         self._exclude_states = set(exclude_states)
+
+        # Heuristics fields for efficient scenegraph states updating
+        self._task_relevant_objects = None
+        self._only_task_relevant_objects = only_task_relevant_objects
+        self._contact_objects = set()
+        self._contact_callback = og.sim._physics_context._physx_sim_interface.subscribe_contact_report_events(
+            self._on_contact_handler
+        )
+
+        # Whether to only include semantic states in the graph
+        self._semantic_only = semantic_only
+
+    def _on_contact_handler(self, contact_headers, contact_data):
+        '''
+        This callback will be invoked after every PHYSICS step if there is any contact. Will record the contact objects in the current step.
+        '''
+        for contact_header in contact_headers:
+            actor0_obj = og.sim._link_id_to_objects.get(contact_header.actor0, None)
+            actor1_obj = og.sim._link_id_to_objects.get(contact_header.actor1, None)
+
+            if actor0_obj is not None:
+                self._contact_objects.add(actor0_obj)
+            if actor1_obj is not None:
+                self._contact_objects.add(actor1_obj)
 
     def get_scene_graph(self):
         return self._G.copy()
@@ -120,10 +156,43 @@ class SceneGraphBuilder(object):
                         pass
 
         return states
+    
+    def _get_object_candidates_via_heuristics(
+            self,
+            scene,
+        ):
+        '''
+        Before checking, we use some heuristics to filter out some impossible objects.
+        '''
 
-    def start(self, scene):
+        objects_to_add = set()
+        # 0. if we only want task-relevant objects, filter them out first and directly return
+        if self._task_relevant_objects is not None:
+            objects_to_add = set(self._task_relevant_objects)
+        # 1. first get all objects with contact changes
+        objects_to_add.update(self._contact_objects)
+
+        # 2. then get all objects with acceleration changes
+        # TODO: implement this
+
+        # 3. after that, we get all objects with special properties. particles, temperature, fluid, etc
+        # TODO: implement this
+
+        # add a fallback here for now
+        if len(objects_to_add) == 0:
+            objects_to_add = set(scene.objects)
+        return objects_to_add
+
+    def start(self, scene, task=None):
         assert self._G is None, "Cannot start graph builder multiple times."
 
+        if task is not None and self._only_task_relevant_objects:
+            task_objects = [bddl_obj.wrapped_obj for bddl_obj in task.object_scope.values() 
+                            if bddl_obj.wrapped_obj is not None and bddl_obj.exists]
+            self._task_relevant_objects = [obj for obj in task_objects 
+                                          if not isinstance(obj, BaseSystem)
+                                          and obj.category != "agent" 
+                                          and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
         if self._robot_names is None:
             assert (
                 len(scene.robots) == 1
@@ -158,24 +227,26 @@ class SceneGraphBuilder(object):
         # Update the position of everything that's already in the scene by using our relative position to last frame.
         old_desired_to_new_desired = world_to_desired_frame @ self._last_desired_frame_to_world
         nodes = list(self._G.nodes)
-        poses = th.stack([self._G.nodes[obj]["pose"] for obj in nodes])
-        bbox_poses = th.stack([self._G.nodes[obj]["bbox_pose"] for obj in nodes])
-        updated_poses = old_desired_to_new_desired @ poses
-        updated_bbox_poses = old_desired_to_new_desired @ bbox_poses
-        for i, obj in enumerate(nodes):
-            self._G.nodes[obj]["pose"] = updated_poses[i]
-            self._G.nodes[obj]["bbox_pose"] = updated_bbox_poses[i]
 
-        # Update the robots' poses. We don't want to accumulate errors because of the repeated transforms.
-        for robot in self._robots:
-            self._G.nodes[robot]["pose"] = world_to_desired_frame @ self._get_robot_to_world_transform(robot)
-            robot_bbox_pose, robot_bbox_extent = _formatted_aabb(robot)
-            robot_bbox_pose = world_to_desired_frame @ robot_bbox_pose
-            self._G.nodes[robot]["bbox_pose"] = robot_bbox_pose
-            self._G.nodes[robot]["bbox_extent"] = robot_bbox_extent
+        if not self._semantic_only:
+            poses = th.stack([self._G.nodes[obj]["pose"] for obj in nodes])
+            bbox_poses = th.stack([self._G.nodes[obj]["bbox_pose"] for obj in nodes])
+            updated_poses = old_desired_to_new_desired @ poses
+            updated_bbox_poses = old_desired_to_new_desired @ bbox_poses
+            for i, obj in enumerate(nodes):
+                self._G.nodes[obj]["pose"] = updated_poses[i]
+                self._G.nodes[obj]["bbox_pose"] = updated_bbox_poses[i]
+
+            # Update the robots' poses. We don't want to accumulate errors because of the repeated transforms.
+            for robot in self._robots:
+                self._G.nodes[robot]["pose"] = world_to_desired_frame @ self._get_robot_to_world_transform(robot)
+                robot_bbox_pose, robot_bbox_extent = _formatted_aabb(robot)
+                robot_bbox_pose = world_to_desired_frame @ robot_bbox_pose
+                self._G.nodes[robot]["bbox_pose"] = robot_bbox_pose
+                self._G.nodes[robot]["bbox_extent"] = robot_bbox_extent
 
         # Go through the objects in FOV of the robot.
-        objs_to_add = set(scene.objects)
+        objs_to_add = self._get_object_candidates_via_heuristics(scene)
         if not self._full_obs:
             # If we're not in full observability mode, only pick the objects in FOV of robots.
             for robot in self._robots:
@@ -191,17 +262,18 @@ class SceneGraphBuilder(object):
             if obj not in self._G.nodes:
                 self._G.add_node(obj)
 
-            # Get the relative position of the object & update it (reducing accumulated errors)
-            self._G.nodes[obj]["pose"] = world_to_desired_frame @ T.pose2mat(obj.get_position_orientation())
+            if not self._semantic_only:
+                # Get the relative position of the object & update it (reducing accumulated errors)
+                self._G.nodes[obj]["pose"] = world_to_desired_frame @ T.pose2mat(obj.get_position_orientation())
 
-            # Get the bounding box.
-            if hasattr(obj, "get_base_aligned_bbox"):
-                bbox_center, bbox_orn, bbox_extent, _ = obj.get_base_aligned_bbox(visual=True)
-                bbox_pose = T.pose2mat((bbox_center, bbox_orn))
-            else:
-                bbox_pose, bbox_extent = _formatted_aabb(obj)
-            self._G.nodes[obj]["bbox_pose"] = world_to_desired_frame @ bbox_pose
-            self._G.nodes[obj]["bbox_extent"] = bbox_extent
+                # Get the bounding box.
+                if hasattr(obj, "get_base_aligned_bbox"):
+                    bbox_center, bbox_orn, bbox_extent, _ = obj.get_base_aligned_bbox(visual=True)
+                    bbox_pose = T.pose2mat((bbox_center, bbox_orn))
+                else:
+                    bbox_pose, bbox_extent = _formatted_aabb(obj)
+                self._G.nodes[obj]["bbox_pose"] = world_to_desired_frame @ bbox_pose
+                self._G.nodes[obj]["bbox_extent"] = bbox_extent
 
             # Update the states of the object
             self._G.nodes[obj]["states"] = self._get_boolean_unary_states(obj)

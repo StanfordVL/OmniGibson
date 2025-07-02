@@ -450,7 +450,7 @@ class Environment(gym.Env, GymObservable, Recreatable):
 
         # Start the scene graph builder
         if self._scene_graph_builder:
-            self._scene_graph_builder.start(self.scene)
+            self._scene_graph_builder.start(self.scene, self.task)
 
         # Denote that the scene is loaded
         self._loaded = True

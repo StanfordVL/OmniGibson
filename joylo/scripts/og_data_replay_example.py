@@ -176,31 +176,40 @@ def replay_hdf5_file(hdf_input_path):
     # Create a list to store video writers and RGB keys
     video_writers = []
     video_rgb_keys = []
+
+    frame_writers = []
+    frame_rgb_keys = []
     
     # Create video writer for robot cameras
     robot_camera_names = ['robot_r1::robot_r1:left_realsense_link:Camera:0::rgb', 
                         'robot_r1::robot_r1:right_realsense_link:Camera:0::rgb']
     for robot_camera_name in robot_camera_names:
-        video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{robot_camera_name}.mp4"))
-        video_rgb_keys.append(robot_camera_name)
-    
+        # video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{robot_camera_name}.mp4"))
+        # video_rgb_keys.append(robot_camera_name)
+        frame_writers.append(env.create_frame_writer(output_dir=f"{video_dir}/{robot_camera_name}/"))
+        frame_rgb_keys.append(robot_camera_name)
+
     # Create video writers for external cameras
     for i in range(len(external_sensors_config)):
         camera_name = f"external_sensor{i}"
-        video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{camera_name}.mp4"))
-        video_rgb_keys.append(f"external::{camera_name}::rgb")
+        # video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{camera_name}.mp4"))
+        # video_rgb_keys.append(f"external::{camera_name}::rgb")
+        frame_writers.append(env.create_frame_writer(output_dir=f"{video_dir}/{camera_name}/"))
+        frame_rgb_keys.append(f"external::{camera_name}::rgb")
     
     # Playback the dataset with all video writers
     # We avoid calling playback_dataset and call playback_episode individually in order to manually
     # aggregate per-episode metrics
     metrics = dict()
     for episode_id in range(env.input_hdf5["data"].attrs["n_episodes"]):
-        scene_graph_writer = SceneGraphWriter(output_path=os.path.join(folder_path, f"scene_graph_{episode_id}.json"), interval=100, buffer_size=100)
+        scene_graph_writer = SceneGraphWriter(output_path=os.path.join(folder_path, f"scene_graph_{episode_id}.json"), interval=200, buffer_size=200)
         env.playback_episode(
             episode_id=episode_id,
             record_data=False,
             video_writers=video_writers,
             video_rgb_keys=video_rgb_keys,
+            frame_writers=frame_writers,
+            frame_rgb_keys=frame_rgb_keys,
             start_frame=4000,
             end_frame=5000,
             scene_graph_writer=scene_graph_writer,

@@ -18,7 +18,7 @@ from omnigibson.utils.config_utils import TorchEncoder
 from omnigibson.utils.data_utils import merge_scene_files
 from omnigibson.utils.python_utils import create_object_from_init_info, h5py_group_to_torch, assert_valid_key
 from omnigibson.utils.ui_utils import create_module_logger
-
+from omnigibson.utils.scene_graph_utils import FrameWriter
 # Create module logger
 log = create_module_logger(module_name=__name__)
 
@@ -1012,8 +1012,20 @@ class DataPlaybackWrapper(DataWrapper):
         Returns:
             imageio.Writer: Generated video writer
         """
-        assert fpath.endswith(".mp4"), f"Video writer fpath must end with .mp4! Got: {fpath}"
         return imageio.get_writer(fpath, fps=fps)
+
+    def create_frame_writer(self, output_dir, filename_prefix=""):
+        """
+        Creates a FrameWriter object for saving RGB frames as PNG files.
+
+        Args:
+            output_dir (str): Directory where PNG frames will be saved
+            filename_prefix (str): Optional prefix for filenames (default: "")
+
+        Returns:
+            FrameWriter: Writer object for saving frames
+        """
+        return FrameWriter(output_dir=output_dir, filename_prefix=filename_prefix)
 
 
 class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
@@ -1158,8 +1170,10 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
                 "full_obs": True,              # Record all objects, not just in view
                 "only_true": True,            # Include all relationship states, including False
                 "merge_parallel_edges": True, # Merge parallel edges
+                "only_task_relevant_objects": True # Only consider task relevant objects
             }
             config["scene_graph"] = scene_graph_config
+
 
         # Load env
         env = og.Environment(configs=config)
@@ -1199,9 +1213,11 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
         record_data=True, 
         video_writers=None, 
         video_rgb_keys=None, 
+        frame_writers=None,
+        frame_rgb_keys=None,
         start_frame=None, 
         end_frame=None,
-        scene_graph_writer=None
+        scene_graph_writer=None,
     ):
         """
         Playback episode @episode_id, and optionally record observation data if @record is True
@@ -1216,6 +1232,8 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
             start_frame (None or int): If specified, the frame to start playback from. If not specified, will start from the first frame
             end_frame (None or int): If specified, the frame to end playback at. If not specified, will end at the last frame
             scene_graph_writer (None or SceneGraphWriter): If specified, a SceneGraphWriter object that will be used to record the scene graph
+            frame_writers (None or list of FrameWriter): If specified, FrameWriter objects to save RGB frames to
+            frame_rgb_keys (None or list of str): If specified, observation keys representing the RGB frames to save as PNG files.
         """
         # Validate video_writers and video_rgb_keys
         if video_writers is not None:
@@ -1301,14 +1319,15 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
 
             self.step_count += 1
 
-            if i < start_frame:
-                continue
-            if i > end_frame:
-                break
-
             # Restore the sim state, and take a very small step with the action to make sure physics are
             # properly propagated after the sim state update
             og.sim.load_state(s[: int(ss)], serialized=True)
+            
+            if i+1 < start_frame:
+                continue
+            if i+1 > end_frame:
+                break
+            
             self.current_obs, _, _, _, info = self.env.step(action=a, n_render_iterations=self.n_render_iterations)
 
             # If recording, record data
@@ -1328,6 +1347,13 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
                 for writer, rgb_key in zip(video_writers, video_rgb_keys):
                     assert_valid_key(rgb_key, self.current_obs.keys(), "video_rgb_key")
                     writer.append_data(self.current_obs[rgb_key][:, :, :3].numpy())
+                    
+            # If saving frames as PNG, save desired frame
+            if frame_writers is not None:
+                for frame_writer, frame_rgb_key in zip(frame_writers, frame_rgb_keys):
+                    assert_valid_key(frame_rgb_key, self.current_obs.keys(), "frame_rgb_key")
+                    frame_data = self.current_obs[frame_rgb_key][:, :, :3].numpy()
+                    frame_writer.append_data(frame_data, i+1)
 
             if scene_graph_writer is not None:
                 scene_graph_writer.step(self.env.get_scene_graph(), i+1)
@@ -1338,3 +1364,7 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
 
         if scene_graph_writer is not None:
             scene_graph_writer.close()
+        
+        if frame_writers is not None:
+            for frame_writer in frame_writers:
+                frame_writer.close()
