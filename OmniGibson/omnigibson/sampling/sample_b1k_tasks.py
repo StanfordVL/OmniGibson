@@ -27,97 +27,97 @@ import random
 import logging
 
 
-# TASK_CUSTOM_LISTS = {
-#     ("picking_up_trash", "Rs_int"): {
-#         "whitelist": {
-#             "pad.n.01": {
-#                 "sticky_note": ["tghqep"],
-#             },
-#         },
-#         "blacklist": None,
-#     },
-#     ("packing_recreational_vehicle_for_trip", "Merom_0_garden"): {
-#         "whitelist": {
-#             "wicker_basket.n.01": {
-#                 "wicker_basket": ["tsjvyu"],
-#             },
-#         },
-#         "blacklist": None,
-#     },
-#     ("datagen_tidy_table", "house_single_floor"): {
-#         "whitelist": {
-#             "countertop.n.01": {
-#                 "bar": ["udatjt"],
-#             },
-#             "teacup.n.02": {
-#                 "teacup": ["kccqwj"],
-#             },
-#         },
-#         "blacklist": None,
-#     },
-#     ("datagen_cook_brussels_sprouts", "house_single_floor"): {
-#         "whitelist": {
-#             "countertop.n.01": {
-#                 "bar": ["udatjt"],
-#             },
-#             "burner.n.02": {
-#                 "burner": ["mjvqii"],
-#             },
-#             "brussels_sprouts.n.01": {
-#                 "brussels_sprouts": ["hkwyzk"],
-#             },
-#             "stockpot.n.01": {
-#                 "stockpot": ["grrcna"],
-#             },
-#             "tupperware.n.01": {
-#                 "tupperware": ["mkstwr"],
-#             },
-#         },
-#         "blacklist": None,
-#     },
-#     ("datagen_wash_dishes", "house_single_floor"): {
-#         "whitelist": {
-#             "countertop.n.01": {
-#                 "bar": ["gjeoer"],
-#             },
-#             "frying_pan.n.01": {
-#                 "frying_pan": ["jpzusm"],
-#             },
-#             "scrub_brush.n.01": {
-#                 "scrub_brush": ["hsejyi"],
-#             },
-#         },
-#         "blacklist": None,
-#     },
-#     ("datagen_dishes_away", "house_single_floor"): {
-#         "whitelist": {
-#             "countertop.n.01": {
-#                 "bar": ["gjeoer"],
-#             },
-#             "plate.n.04": {
-#                 "plate": ["akfjxx"],
-#             },
-#             "shelf.n.01": {
-#                 "shelf": ["pfusrd"],
-#             },
-#         },
-#         "blacklist": None,
-#     },
-#     ("datagen_pick", "Rs_int"): {
-#         "whitelist": {
-#             "breakfast_table.n.01": {
-#                 "breakfast_table": ["bhszwe"],
-#             },
-#             "coffee_cup.n.01": {
-#                 "coffee_cup": ["dkxddg"],
-#             },
-#         },
-#         "blacklist": None,
-#     },
-# }
+TASK_CUSTOM_LISTS = {
+    ("picking_up_trash", "Rs_int"): {
+        "whitelist": {
+            "pad.n.01": {
+                "sticky_note": ["tghqep"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("packing_recreational_vehicle_for_trip", "Merom_0_garden"): {
+        "whitelist": {
+            "wicker_basket.n.01": {
+                "wicker_basket": ["tsjvyu"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_tidy_table", "house_single_floor"): {
+        "whitelist": {
+            "countertop.n.01": {
+                "bar": ["udatjt"],
+            },
+            "teacup.n.02": {
+                "teacup": ["kccqwj"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_cook_brussels_sprouts", "house_single_floor"): {
+        "whitelist": {
+            "countertop.n.01": {
+                "bar": ["udatjt"],
+            },
+            "burner.n.02": {
+                "burner": ["mjvqii"],
+            },
+            "brussels_sprouts.n.01": {
+                "brussels_sprouts": ["hkwyzk"],
+            },
+            "stockpot.n.01": {
+                "stockpot": ["grrcna"],
+            },
+            "tupperware.n.01": {
+                "tupperware": ["mkstwr"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_wash_dishes", "house_single_floor"): {
+        "whitelist": {
+            "countertop.n.01": {
+                "bar": ["gjeoer"],
+            },
+            "frying_pan.n.01": {
+                "frying_pan": ["jpzusm"],
+            },
+            "scrub_brush.n.01": {
+                "scrub_brush": ["hsejyi"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_dishes_away", "house_single_floor"): {
+        "whitelist": {
+            "countertop.n.01": {
+                "bar": ["gjeoer"],
+            },
+            "plate.n.04": {
+                "plate": ["akfjxx"],
+            },
+            "shelf.n.01": {
+                "shelf": ["pfusrd"],
+            },
+        },
+        "blacklist": None,
+    },
+    ("datagen_pick", "Rs_int"): {
+        "whitelist": {
+            "breakfast_table.n.01": {
+                "breakfast_table": ["bhszwe"],
+            },
+            "coffee_cup.n.01": {
+                "coffee_cup": ["dkxddg"],
+            },
+        },
+        "blacklist": None,
+    },
+}
 
-with open("task_custom_lists.json", "r") as f:
-    TASK_CUSTOM_LISTS = json.load(f)
+# with open("task_custom_lists.json", "r") as f:
+#     TASK_CUSTOM_LISTS = json.load(f)
 
 # TODO:
 # 1. Set boundingCube approximation earlier (maybe right after importing the scene objects). Otherwise after loading the robot, we will elapse one physics step
