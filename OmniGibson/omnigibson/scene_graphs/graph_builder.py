@@ -14,7 +14,9 @@ from omnigibson.sensors import VisionSensor
 from omnigibson.systems.system_base import BaseSystem
 from omnigibson.utils import transform_utils as T
 from omnigibson.utils.numpy_utils import pil_to_tensor
+from omnigibson.utils.scene_graph_utils import CustomizedBinaryStates, CustomizedUnaryStates
 
+from dataclasses import fields
 
 EXTRA_TASK_RELEVANT_CATEGORIES = {
     "floors",
@@ -117,6 +119,21 @@ class SceneGraphBuilder(object):
 
     def _get_boolean_unary_states(self, obj):
         states = {}
+
+        # Add customized unary states
+        customized_unary_states = CustomizedUnaryStates()
+        for field in fields(customized_unary_states):
+            state_name = field.name
+            state_func = getattr(customized_unary_states, state_name)
+            if not callable(state_func):
+                continue
+
+            value = state_func(obj)
+            if self._only_true and not value:
+                continue
+
+            states[state_name] = value
+
         for state_type, state_inst in obj.states.items():
             if not issubclass(state_type, BooleanStateMixin) or not issubclass(state_type, AbsoluteObjectState):
                 continue
@@ -134,10 +151,26 @@ class SceneGraphBuilder(object):
 
     def _get_boolean_binary_states(self, objs):
         states = []
+
+        # Add customized binary states
+        customized_binary_states = CustomizedBinaryStates()
         for obj1 in objs:
             for obj2 in objs:
                 if obj1 == obj2:
                     continue
+                
+                for field in fields(customized_binary_states):
+                    state_name = field.name
+                    state_func = getattr(customized_binary_states, state_name)
+                    if not callable(state_func):
+                        continue
+                    
+                    value = state_func(obj1, obj2)
+                    if self._only_true and not value:
+                        continue
+
+                    states.append((obj1, obj2, state_name, {"value": value}))
+                    print(f"Added ({obj1.name}, {state_name}, {obj2.name}) = {value}")
 
                 for state_type, state_inst in obj1.states.items():
                     if not issubclass(state_type, BooleanStateMixin) or not issubclass(state_type, RelativeObjectState):
@@ -193,6 +226,7 @@ class SceneGraphBuilder(object):
                                           if not isinstance(obj, BaseSystem)
                                           and obj.category != "agent" 
                                           and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
+            print(f"Loaded {len(self._task_relevant_objects)} task relevant objects")
         if self._robot_names is None:
             assert (
                 len(scene.robots) == 1
@@ -253,9 +287,10 @@ class SceneGraphBuilder(object):
                 objs_in_fov = robot.states[object_states.ObjectsInFOVOfRobot].get_value()
                 objs_to_add &= objs_in_fov
 
-        # Remove all BaseRobot objects from the set of objects to add.
-        base_robots = [obj for obj in objs_to_add if isinstance(obj, BaseRobot)]
-        objs_to_add -= set(base_robots)
+        # # Remove all BaseRobot objects from the set of objects to add.
+        # base_robots = [obj for obj in objs_to_add if isinstance(obj, BaseRobot)]
+        # objs_to_add -= set(base_robots)
+        
 
         for obj in objs_to_add:
             # Add the object if not already in the graph

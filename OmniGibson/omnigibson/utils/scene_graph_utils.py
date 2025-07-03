@@ -8,8 +8,8 @@ from PIL import Image
 import networkx as nx
 
 from copy import deepcopy
-from typing import Dict, List, Tuple
-
+from typing import Dict, List, Tuple, Callable, Any
+from dataclasses import field, dataclass
 
 def convert_to_serializable(obj):
     '''
@@ -549,3 +549,24 @@ class FrameWriter:
         Flush any remaining buffered frames and close the frame writer.
         """
         self.flush()
+
+@dataclass
+class CustomizedUnaryStates:
+    ...
+
+@dataclass
+class CustomizedBinaryStates:
+    LeftGrasping: Callable[[Any, Any], bool] = field(init=False, repr=False)
+    RightGrasping: Callable[[Any, Any], bool] = field(init=False, repr=False)
+
+    def __post_init__(self):
+        self.LeftGrasping = lambda obj, candidate_obj=None: (
+            obj.is_grasping(arm="left", candidate_obj=candidate_obj).value == 1
+            if hasattr(obj, "is_grasping") and "left" in getattr(obj, "arm_names", ())
+            else False
+        )
+        self.RightGrasping = lambda obj, candidate_obj=None: (
+            obj.is_grasping(arm="right", candidate_obj=candidate_obj).value == 1
+            if hasattr(obj, "is_grasping") and "right" in getattr(obj, "arm_names", ())
+            else False
+        )

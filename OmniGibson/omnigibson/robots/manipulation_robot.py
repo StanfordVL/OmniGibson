@@ -465,7 +465,7 @@ class ManipulationRobot(BaseRobot):
                 and IsGraspingState.UNKNOWN if unknown.
         """
         arm = self.default_arm if arm == "default" else arm
-        if self.grasping_mode != "physical":
+        if self.grasping_mode != "physical" and False: # since serializing is not implemented, we bypass this
             is_grasping_obj = (
                 self._ag_obj_in_hand[arm] is not None
                 if candidate_obj is None
@@ -478,12 +478,34 @@ class ManipulationRobot(BaseRobot):
             )
         else:
             # Infer from the gripper controller the state
-            is_grasping = self._controllers["gripper_{}".format(arm)].is_grasping()
+            # is_grasping = self._controllers["gripper_{}".format(arm)].is_grasping()
+            controller_lower_limit = self._controllers["gripper_{}".format(arm)]._command_output_limits[0]
+            is_grasping = self._controllers["gripper_{}".format(arm)].goal["target"] == controller_lower_limit
+            if is_grasping:
+                is_grasping = IsGraspingState.TRUE
+            else:
+                is_grasping = IsGraspingState.FALSE
             # If candidate obj is not None, we also check to see if our fingers are in contact with the object
             if is_grasping == IsGraspingState.TRUE and candidate_obj is not None:
                 finger_links = {link for link in self.finger_links[arm]}
-                if len(candidate_obj.states[ContactBodies].get_value().intersection(finger_links)) == 0:
+                # Check contact first
+                has_contact = len(candidate_obj.states[ContactBodies].get_value().intersection(finger_links)) > 0
+                
+                if not has_contact:
                     is_grasping = IsGraspingState.FALSE
+                else:
+                    # Additional raycast check to ensure object is actually in grasp area
+                    # Check if candidate object is detected by raycast (similar to _calculate_in_hand_object_rigid)
+                    raycast_candidates = self._find_gripper_raycast_collisions(arm=arm)
+                    # Check if any link of the candidate object appears in raycast results
+                    obj_links_in_raycast = False
+                    for link in candidate_obj.links.values():
+                        if link.prim_path in raycast_candidates:
+                            obj_links_in_raycast = True
+                            break
+                    # If object is not detected by raycast, it's likely an accidental contact
+                    if not obj_links_in_raycast:
+                        is_grasping = IsGraspingState.FALSE
         return is_grasping
 
     def _find_gripper_contacts(self, arm="default", return_contact_positions=False):
