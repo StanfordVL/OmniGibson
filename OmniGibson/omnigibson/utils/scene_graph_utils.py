@@ -10,7 +10,8 @@ import networkx as nx
 from copy import deepcopy
 from typing import Dict, List, Tuple, Callable, Any
 from dataclasses import field, dataclass
-
+from omnigibson.robots.manipulation_robot import ManipulationRobot
+from omnigibson.object_states import ContactBodies
 def convert_to_serializable(obj):
     '''
     Recursively convert tensors and numpy arrays to lists
@@ -558,6 +559,9 @@ class CustomizedUnaryStates:
 class CustomizedBinaryStates:
     LeftGrasping: Callable[[Any, Any], bool] = field(init=False, repr=False)
     RightGrasping: Callable[[Any, Any], bool] = field(init=False, repr=False)
+    LeftContact: Callable[[Any, Any], bool] = field(init=False, repr=False)
+    RightContact: Callable[[Any, Any], bool] = field(init=False, repr=False)
+
 
     def __post_init__(self):
         self.LeftGrasping = lambda obj, candidate_obj=None: (
@@ -568,5 +572,15 @@ class CustomizedBinaryStates:
         self.RightGrasping = lambda obj, candidate_obj=None: (
             obj.is_grasping(arm="right", candidate_obj=candidate_obj).value == 1
             if hasattr(obj, "is_grasping") and "right" in getattr(obj, "arm_names", ())
+            else False
+        )
+        self.LeftContact = lambda obj, candidate_obj=None: (
+            len(candidate_obj.states[ContactBodies].get_value().intersection(obj.finger_links["left"])) > 0
+            if isinstance(obj, ManipulationRobot) and "left" in getattr(obj, "arm_names", ())
+            else False
+        )
+        self.RightContact = lambda obj, candidate_obj=None: (
+            len(candidate_obj.states[ContactBodies].get_value().intersection(obj.finger_links["right"])) > 0
+            if isinstance(obj, ManipulationRobot) and "right" in getattr(obj, "arm_names", ())
             else False
         )
