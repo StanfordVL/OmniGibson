@@ -17,7 +17,7 @@ from omnigibson.utils.numpy_utils import pil_to_tensor
 from omnigibson.utils.scene_graph_utils import CustomizedBinaryStates, CustomizedUnaryStates
 
 from dataclasses import fields
-
+from copy import deepcopy
 EXTRA_TASK_RELEVANT_CATEGORIES = {
     "floors",
     "driveway",
@@ -116,6 +116,55 @@ class SceneGraphBuilder(object):
         robot_to_world = T.pose2mat((robot_to_world[0], T.euler2quat(th.tensor([0, 0, z_angle], dtype=th.float32))))
 
         return robot_to_world
+    
+    def _get_binary_filtered_edge(self, edge):
+        '''
+        Rules to filter out edges that are not what we want.
+        '''
+
+        obj_1, obj_2, state_dict = edge
+        states = [s[0] for s in state_dict["states"]]
+        filtered_edge = (obj_1, obj_2, deepcopy(state_dict))
+
+        # 1. if obj_1 is not a robot, obj_2 is a robot, and the state is 'Under', filtered
+        if not isinstance(obj_1, BaseRobot) and isinstance(obj_2, BaseRobot) and "Under" in states:
+            # remove the 'Under' state
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
+        
+        # 2. if obj_1 and obj_2 have the relations 'Inside' and 'Ontop' and their values are both True, filtered 'Ontop'
+        if "Inside" in states and "Ontop" in states:
+            both_true = True
+            for state_name, state_value in state_dict["states"]:
+                if state_name == "Inside":
+                    both_true = both_true and state_value
+                elif state_name == "Ontop":
+                    both_true = both_true and state_value
+            if both_true:
+                filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Ontop"]
+        
+        # 3. if obj_1 is a robot and is grasping obj_2, filtered 'Contact'
+        if isinstance(obj_1, BaseRobot) and ("LeftContact" in states and "LeftGrasping" in states):
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "LeftContact"]
+        if isinstance(obj_1, BaseRobot) and ("RightContact" in states and "RightGrasping" in states):
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "RightContact"]
+        
+        # 4. filter robot is under ceiling
+        if isinstance(obj_1, BaseRobot) and "Under" in states and "ceiling" in obj_2.category:
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
+
+        return filtered_edge
+
+
+    def _get_binary_filtered_edges(self, edges):
+        '''
+        Filter out edges that are not what we want, according to the binary rules.
+        '''
+        filtered_edges = []
+        for edge in edges:
+            filtered_edge = self._get_binary_filtered_edge(edge)
+            if len(filtered_edge[2]["states"]) > 0:
+                filtered_edges.append(filtered_edge)
+        return filtered_edges
 
     def _get_boolean_unary_states(self, obj):
         states = {}
@@ -326,7 +375,7 @@ class SceneGraphBuilder(object):
                 new_edges[edge_pair].append((edge[2], edge[3]["value"]))
 
             edges = [(k[0], k[1], {"states": v}) for k, v in new_edges.items()]
-
+            edges = self._get_binary_filtered_edges(edges)
         self._G.add_edges_from(edges)
 
         # Save the robot's transform in this frame.
