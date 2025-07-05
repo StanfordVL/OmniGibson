@@ -1327,6 +1327,32 @@ class ManipulationRobot(BaseRobot):
                 "workspace_pose_limiter": None,
             }
         return dic
+    
+    @property
+    def _default_arm_hybrid_controller_configs(self):
+        """
+        Returns:
+            dict: Dictionary mapping arm appendage name to default controller config for an
+                Hybrid Arm controller to control this robot's arm
+        """
+        dic = {}
+        for arm in self.arm_names:
+            dic[arm] = {
+                "name": "HybridArmController",
+                "task_name": f"eef_{arm}",
+                "control_freq": self._control_freq,
+                "reset_joint_pos": self.reset_joint_pos,
+                "control_limits": self.control_limits,
+                "dof_idx": self.arm_control_idx[arm],
+                "command_output_limits": (
+                    th.tensor([-0.2, -0.2, -0.2, -0.5, -0.5, -0.5]),
+                    th.tensor([0.2, 0.2, 0.2, 0.5, 0.5, 0.5]),
+                ),
+                "mode": "pose_delta_ori",
+                "smoothing_filter_size": 2,
+                "workspace_pose_limiter": None,
+            }
+        return dic
 
     @property
     def _default_arm_osc_controller_configs(self):
@@ -1445,6 +1471,7 @@ class ManipulationRobot(BaseRobot):
         arm_osc_configs = self._default_arm_osc_controller_configs
         arm_joint_configs = self._default_arm_joint_controller_configs
         arm_null_joint_configs = self._default_arm_null_joint_controller_configs
+        arm_hybrid_configs = self._default_arm_hybrid_controller_configs
         gripper_pj_configs = self._default_gripper_multi_finger_controller_configs
         gripper_joint_configs = self._default_gripper_joint_controller_configs
         gripper_null_configs = self._default_gripper_null_controller_configs
@@ -1456,6 +1483,7 @@ class ManipulationRobot(BaseRobot):
                 arm_osc_configs[arm]["name"]: arm_osc_configs[arm],
                 arm_joint_configs[arm]["name"]: arm_joint_configs[arm],
                 arm_null_joint_configs[arm]["name"]: arm_null_joint_configs[arm],
+                arm_hybrid_configs[arm]["name"]: arm_hybrid_configs[arm]
             }
             cfg["gripper_{}".format(arm)] = {
                 gripper_pj_configs[arm]["name"]: gripper_pj_configs[arm],

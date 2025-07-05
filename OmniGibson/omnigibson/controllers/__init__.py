@@ -15,6 +15,7 @@ from omnigibson.controllers.joint_controller import JointController
 from omnigibson.controllers.multi_finger_gripper_controller import MultiFingerGripperController
 from omnigibson.controllers.null_joint_controller import NullJointController
 from omnigibson.controllers.osc_controller import OperationalSpaceController
+from omnigibson.controllers.hybrid_arm_controller import HybridArmController
 from omnigibson.utils.python_utils import assert_valid_key
 
 
@@ -41,6 +42,7 @@ __all__ = [
     "DifferentialDriveController",
     "GripperController",
     "HolonomicBaseJointController",
+    "HybridArmController"
     "InverseKinematicsController",
     "IsGraspingState",
     "JointController",
