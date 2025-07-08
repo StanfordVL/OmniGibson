@@ -117,7 +117,7 @@ class SceneGraphBuilder(object):
 
         return robot_to_world
     
-    def _get_binary_filtered_edge(self, edge):
+    def _get_binary_filtered_edge(self, edge, all_edges):
         '''
         Rules to filter out edges that are not what we want.
         '''
@@ -132,6 +132,7 @@ class SceneGraphBuilder(object):
             filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
         
         # 2. if obj_1 and obj_2 have the relations 'Inside' and 'Ontop' and their values are both True, filtered 'Ontop'
+        ## 2.1 remove 'Ontop' for (obj_1, obj_2)
         if "Inside" in states and "Ontop" in states:
             both_true = True
             for state_name, state_value in state_dict["states"]:
@@ -141,6 +142,15 @@ class SceneGraphBuilder(object):
                     both_true = both_true and state_value
             if both_true:
                 filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Ontop"]
+        ## 2.2 if obj_1 is 'Under' obj_2 and obj_2 is 'Inside' obj_1, remove 'Under'
+        if 'Under' in states:
+            # first find the (obj_2, obj_1) edge
+            for candidate_edge in all_edges:
+                if candidate_edge[0] == obj_2 \
+                and candidate_edge[1] == obj_1 \
+                and 'Inside' in candidate_edge[2]["states"]:
+                    filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != 'Under']
+                    break
         
         # 3. if obj_1 is a robot and is grasping obj_2, filtered 'Contact'
         if isinstance(obj_1, BaseRobot) and ("LeftContact" in states and "LeftGrasping" in states):
@@ -162,7 +172,7 @@ class SceneGraphBuilder(object):
         '''
         filtered_edges = []
         for edge in edges:
-            filtered_edge = self._get_binary_filtered_edge(edge)
+            filtered_edge = self._get_binary_filtered_edge(edge, edges)
             if len(filtered_edge[2]["states"]) > 0:
                 filtered_edges.append(filtered_edge)
         return filtered_edges
