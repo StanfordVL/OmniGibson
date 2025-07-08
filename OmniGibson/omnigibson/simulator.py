@@ -438,7 +438,7 @@ def _launch_simulator(*args, **kwargs):
             self._viewer_camera = VisionSensor(
                 relative_prim_path=relative_prim_path,
                 name=relative_prim_path.split("/")[-1],  # Assume name is the lowest-level name in the prim_path
-                modalities="rgb",
+                modalities=["rgb", "depth", "seg_instance"],
                 image_height=self.viewer_height,
                 image_width=self.viewer_width,
                 viewport_name=viewport_name,

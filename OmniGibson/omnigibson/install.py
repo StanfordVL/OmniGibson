@@ -97,10 +97,8 @@ def _is_glibc_older():
         dist_info = subprocess.check_output(["ldd", "--version"]).decode("utf-8")
         if any(version in dist_info for version in ["2.31", "2.32", "2.33"]):
             return True
-        elif any(version in dist_info for version in ["2.34", "2.35", "2.36", "2.37", "2.38", "2.39"]):
-            return False
         else:
-            raise ValueError("Incompatible GLIBC version")
+            return False
     except subprocess.CalledProcessError:
         raise ValueError("Failed to check GLIBC version. `ldd` was not accessible. Try running it yourself to see why.")
 
