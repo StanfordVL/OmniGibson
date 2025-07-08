@@ -8,6 +8,8 @@ from PIL import Image
 import networkx as nx
 
 from copy import deepcopy
+from math import ceil
+from tqdm import tqdm
 from typing import Dict, List, Tuple, Callable, Any
 from dataclasses import field, dataclass
 from omnigibson.robots.manipulation_robot import ManipulationRobot
@@ -243,7 +245,7 @@ class SceneGraphWriter:
         self._flush()
 
 class SceneGraphReader:
-    def __init__(self, file_path: str):
+    def __init__(self, file_path: str, filter_transients: bool=False):
         """
         Initialize the scene graph reader.
         
@@ -253,6 +255,8 @@ class SceneGraphReader:
         self.file_path = file_path
         self.data = {}
         self._load_data()
+        if filter_transients:
+            self._filter_transient_states()
     
     def _load_data(self):
         """
@@ -479,7 +483,220 @@ class SceneGraphReader:
             List[str]: Sorted list of frame IDs
         """
         return sorted(self.data.keys(), key=int)
+    
+    
+    def _filter_transient_states(self):
+        """
+        Filter out transient frames from the scene graph data.
+        This method identifies and removes transient state changes (glitches/pulses)
+        while preserving real state changes that occur in the same frames.
+        """
+        TRANSIENT_FRAME_THRESHOLD = 10
+        STRIDE = TRANSIENT_FRAME_THRESHOLD // 2
+        print(f"Filtering transient states with threshold {TRANSIENT_FRAME_THRESHOLD}")
 
+        # Step 1: Reconstruct all scene graphs first (avoid dependency on self.data)
+        frame_ids = self.get_available_frame_ids()
+        graphs = {frame_id: self.get_scene_graph(frame_id) for frame_id in frame_ids}
+
+        # Step 2: Fix transient states
+        fixed_count = 0
+        num_iters = ceil(len(frame_ids) / STRIDE)
+        print(f"Processing {len(frame_ids)} frames with stride {STRIDE}")
+
+        for i in tqdm(range(0, len(frame_ids), STRIDE), desc="Processing frames", total=num_iters):
+            for window in range(2, min(TRANSIENT_FRAME_THRESHOLD, len(frame_ids) - i)):
+                if i + window >= len(frame_ids):
+                    break
+
+                base_idx = i
+                end_idx = i + window
+
+                # Check and fix transients in this window
+                fixed = self._fix_window_transients(
+                    graphs,
+                    frame_ids[base_idx], # current frame
+                    frame_ids[base_idx +1: end_idx], # intermediate frames
+                    frame_ids[end_idx], # future frame
+                )
+                fixed_count += fixed
+
+        # Step 3: Rebuild data from fixed graphs
+        self._rebuild_data_from_graphs(graphs, frame_ids)
+
+        print(f"Fixed {fixed_count} transient states")
+    
+    def _fix_window_transients(
+        self,
+        graphs,
+        base_frame,
+        middle_frames,
+        end_frame
+    ):
+        """
+        Fix transients in a window. If a state exists in base and end but not middle, add it back.
+        """
+        fixed = 0
+        base_graph = graphs[base_frame]
+        end_graph = graphs[end_frame]
+
+        # Fix node states, convert [{"name": "node_name", "states": ["state1", "state2"]}] to {node_name: set(state1, state2)}
+        base_nodes = {n['name']: set(n.get('states', [])) for n in base_graph['nodes']}
+        end_nodes = {n['name']: set(n.get('states', [])) for n in end_graph['nodes']}
+
+        all_node_names = set(base_nodes.keys()) | set(end_nodes.keys())
+        for mid_frame in middle_frames:
+            mid_graph = graphs[mid_frame]
+            all_node_names |= {n['name'] for n in mid_graph['nodes']}
+        
+        for node_name in all_node_names:
+            base_states = base_nodes.get(node_name, set())
+            end_states = end_nodes.get(node_name, set())
+
+            # If node does not exist in both base and end, it is a transient node
+            if node_name not in base_nodes and node_name not in end_nodes:
+                # Remove this node from all middle frames
+                for mid_frame in middle_frames:
+                    mid_graph = graphs[mid_frame]
+                    mid_graph['nodes'] = [n for n in mid_graph['nodes'] if n['name'] != node_name]
+                    fixed += 1
+                continue
+
+            # States that should be stable (exist in both base and end)
+            stable_states = base_states & end_states
+
+            for mid_frame in middle_frames:
+                mid_graph = graphs[mid_frame]
+                node_found = False
+
+                for node in mid_graph['nodes']:
+                    if node['name'] == node_name:
+                        node_found = True
+                        current = set(node.get('states', []))
+
+                        # Fix transient removals (add back missing stable states)
+                        missing = stable_states -current
+                        if missing:
+                            current |= missing
+                            fixed += len(missing)
+
+                        # Fix transient additions (remove states that should not exist)
+                        # States that are not in base AND not in end should be removed
+                        unwanted = current - (base_states | end_states)
+                        if unwanted:
+                            current -= unwanted
+                            fixed += len(unwanted)
+                        
+                        node['states'] = list(current)
+                        break
+                
+                # Handle nodes that exist in base and end but not in middle
+                if not node_found and stable_states:
+                    # Add missing node to all middle frames
+                    for mid_frame in middle_frames:
+                        mid_graph = graphs[mid_frame]
+                        mid_graph['nodes'].append({
+                            'name': node_name,
+                            'states': list(stable_states)
+                        })
+                    fixed += 1
+
+        # Finished fixing nodes, now fix edges
+        def get_edge_map(edges):
+            # Convert edges to a dictionary of (from, to) -> edge
+            return {(e['from'], e['to']): e for e in edges}
+        
+        base_edges = get_edge_map(base_graph['edges'])
+        end_edges = get_edge_map(end_graph['edges'])
+
+        # Get all edges from all frames
+        all_edge_keys = set(base_edges.keys()) | set(end_edges.keys())
+        for mid_frame in middle_frames:
+            mid_graph = graphs[mid_frame]
+            all_edge_keys |= {(e['from'], e['to']) for e in mid_graph['edges']}
+
+        for edge_key in all_edge_keys:
+            base_edge = base_edges.get(edge_key)
+            end_edge = end_edges.get(edge_key)
+
+            base_states = set(base_edge.get('states', [])) if base_edge else set()
+            end_states = set(end_edge.get('states', [])) if end_edge else set()
+
+            # If edge does not exist in both base and end, it is a transient edge
+            if edge_key not in base_edges and edge_key not in end_edges:
+                # Remove this edge from all middle frames
+                for mid_frame in middle_frames:
+                    mid_graph = graphs[mid_frame]
+                    mid_graph['edges'] = [e for e in mid_graph['edges'] if (e['from'], e['to']) != edge_key]
+                    fixed += 1
+                continue
+
+            # States that should be stable (exist in both base and end)
+            stable_states = base_states & end_states
+
+            for mid_frame in middle_frames:
+                mid_graph = graphs[mid_frame]
+                mid_edges = get_edge_map(mid_graph['edges'])
+
+                if edge_key in mid_edges:
+                    current = set(mid_edges[edge_key].get('states', []))
+
+                    # Fix transient removals
+                    missing = stable_states - current
+                    if missing:
+                        current |= missing
+                        fixed += len(missing)
+                    
+                    # Fix transient additions
+                    unwanted = current - (base_states | end_states)
+                    if unwanted:
+                        current -= unwanted
+                        fixed += len(unwanted)
+                    
+                    mid_edges[edge_key]['states'] = list(current)
+                else:
+                    # Edge missing entirely, add it back with stable states
+                    if stable_states:
+                        mid_graph['edges'].append({
+                            'from': edge_key[0],
+                            'to': edge_key[1],
+                            'states': list(stable_states)
+                        })
+                        fixed += len(stable_states)
+            
+        # Finished fixing edges
+        return fixed
+    
+    def _rebuild_data_from_graphs(self, graphs, frame_ids):
+        """
+        Rebuild self.data from the fixed graphs
+        """
+        new_data = {}
+        FULL_GRAPH_INTERVAL = 1000  
+
+        # First frame is always full
+        first_frame = frame_ids[0]
+        new_data[first_frame] = {
+            'type': 'full',
+            'nodes': graphs[first_frame]['nodes'],
+            'edges': graphs[first_frame]['edges']
+        }
+
+        # Process intermediate frames
+        for i in range(1, len(frame_ids)):
+            prev = frame_ids[i-1]
+            curr = frame_ids[i]
+
+            if (i % FULL_GRAPH_INTERVAL == 0):
+                new_data[curr] = {
+                    'type': 'full',
+                    'nodes': graphs[curr]['nodes'],
+                    'edges': graphs[curr]['edges']
+                }
+            diff = generate_scene_graph_diff(graphs[prev], graphs[curr])
+            new_data[curr] = diff
+
+        self.data = new_data
 
 class FrameWriter:
     """
@@ -559,8 +776,8 @@ class CustomizedUnaryStates:
 class CustomizedBinaryStates:
     LeftGrasping: Callable[[Any, Any], bool] = field(init=False, repr=False)
     RightGrasping: Callable[[Any, Any], bool] = field(init=False, repr=False)
-    LeftContact: Callable[[Any, Any], bool] = field(init=False, repr=False)
-    RightContact: Callable[[Any, Any], bool] = field(init=False, repr=False)
+    # LeftContact: Callable[[Any, Any], bool] = field(init=False, repr=False)
+    # RightContact: Callable[[Any, Any], bool] = field(init=False, repr=False)
 
 
     def __post_init__(self):
@@ -574,13 +791,13 @@ class CustomizedBinaryStates:
             if hasattr(obj, "is_grasping") and "right" in getattr(obj, "arm_names", ())
             else False
         )
-        self.LeftContact = lambda obj, candidate_obj=None: (
-            len(candidate_obj.states[ContactBodies].get_value().intersection(obj.finger_links["left"])) > 0
-            if isinstance(obj, ManipulationRobot) and "left" in getattr(obj, "arm_names", ())
-            else False
-        )
-        self.RightContact = lambda obj, candidate_obj=None: (
-            len(candidate_obj.states[ContactBodies].get_value().intersection(obj.finger_links["right"])) > 0
-            if isinstance(obj, ManipulationRobot) and "right" in getattr(obj, "arm_names", ())
-            else False
-        )
+        # self.LeftContact = lambda obj, candidate_obj=None: (
+        #     len(candidate_obj.states[ContactBodies].get_value().intersection(obj.finger_links["left"])) > 0
+        #     if isinstance(obj, ManipulationRobot) and "left" in getattr(obj, "arm_names", ())
+        #     else False
+        # )
+        # self.RightContact = lambda obj, candidate_obj=None: (
+        #     len(candidate_obj.states[ContactBodies].get_value().intersection(obj.finger_links["right"])) > 0
+        #     if isinstance(obj, ManipulationRobot) and "right" in getattr(obj, "arm_names", ())
+        #     else False
+        # )
