@@ -148,9 +148,10 @@ class SceneGraphBuilder(object):
         if isinstance(obj_1, BaseRobot) and ("RightContact" in states and "RightGrasping" in states):
             filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "RightContact"]
         
-        # 4. filter robot is under ceiling
-        if isinstance(obj_1, BaseRobot) and "Under" in states and "ceiling" in obj_2.category:
+        # 4. filter robot or objectis under ceiling, directly remove the edge
+        if "Under" in states and "ceiling" in obj_2.category:
             filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
+
 
         return filtered_edge
 
@@ -219,7 +220,7 @@ class SceneGraphBuilder(object):
                         continue
 
                     states.append((obj1, obj2, state_name, {"value": value}))
-                    print(f"Added ({obj1.name}, {state_name}, {obj2.name}) = {value}")
+                    # print(f"Added ({obj1.name}, {state_name}, {obj2.name}) = {value}")
 
                 for state_type, state_inst in obj1.states.items():
                     if not issubclass(state_type, BooleanStateMixin) or not issubclass(state_type, RelativeObjectState):
@@ -275,7 +276,7 @@ class SceneGraphBuilder(object):
                                           if not isinstance(obj, BaseSystem)
                                           and obj.category != "agent" 
                                           and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
-            print(f"Loaded {len(self._task_relevant_objects)} task relevant objects")
+            # print(f"Loaded {len(self._task_relevant_objects)} task relevant objects")
         if self._robot_names is None:
             assert (
                 len(scene.robots) == 1
