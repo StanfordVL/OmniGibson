@@ -17,8 +17,8 @@ m = create_module_macros(module_path=__file__)
 # Should be a number in the range [0, 1] which will be transformed
 # to a position in the joint's min-max range.
 m.JOINT_THRESHOLD_BY_TYPE = {
-    JointType.JOINT_REVOLUTE: 0.05,
-    JointType.JOINT_PRISMATIC: 0.05,
+    JointType.JOINT_REVOLUTE: 0.25, # set to 0.25 for meaningful open/close state
+    JointType.JOINT_PRISMATIC: 0.40, # set to 0.40 for meaningful open/close state
 }
 m.OPEN_SAMPLING_ATTEMPTS = 5
 
