@@ -37,8 +37,8 @@ def main():
 
     cfg = {
         "render": {
-            "viewer_width": 224,
-            "viewer_height": 224,
+            "viewer_width": 1024,
+            "viewer_height": 1024,
         },
         "scene": {
             "type": "InteractiveTraversableScene",
@@ -87,82 +87,80 @@ def main():
         f.create_dataset('camera_pose', shape=(TOTAL_IMAGES, 4, 4), dtype='float32')
         f.create_dataset('camera_intrinsics', shape=(TOTAL_IMAGES, 3, 3), dtype='float32')
 
-        with tqdm.tqdm(total=TOTAL_IMAGES, desc="Collecting images") as pbar:
-            while index < TOTAL_IMAGES:
-                # Pick a room from the scene, uniformly
-                room_name = random.choice(rooms)
-                _, camera_point = env.scene.seg_map.get_random_point_by_room_instance(room_name)
-                if camera_point is None:
-                    continue
+        # with tqdm.tqdm(total=TOTAL_IMAGES, desc="Collecting images") as pbar:
+        while index < TOTAL_IMAGES:
+            # Pick a room from the scene, uniformly
+            room_name = random.choice(rooms)
+            _, camera_point = env.scene.seg_map.get_random_point_by_room_instance(room_name)
+            if camera_point is None:
+                continue
 
-                # Check if the camera point is valid (e.g. not within 10cm of a wall)
-                map_coords = env.scene.trav_map.world_to_map(camera_point[:2])
-                if trav_map[map_coords[0], map_coords[1]] == 0:
-                    continue
+            # Check if the camera point is valid (e.g. not within 10cm of a wall)
+            map_coords = env.scene.trav_map.world_to_map(camera_point[:2])
+            if trav_map[map_coords[0], map_coords[1]] == 0:
+                continue
 
-                # Pick a random height
-                camera_point[2] = random.uniform(1.5, 2.0)  # Height in meters
+            # Pick a random height
+            camera_point[2] = random.uniform(1.5, 2.0)  # Height in meters
 
-                # Now iterate through the camera orientations.
-                for yaw in range(0, 360, 45):
-                    # Randomly pick a pitch angle between -45 and 0 degrees
-                    pitch = random.uniform(45, 0)
+            # Now iterate through the camera orientations.
+            # for yaw in range(0, 360, 45):
+            yaw = random.uniform(0, 360)  # Randomly pick a yaw angle between 0 and 360 degrees
 
-                    # Get the rotation as a quaternion
-                    rotation = T.euler2quat(th.tensor([0, pitch * DEG2RAD, yaw * DEG2RAD], dtype=th.float32))
-                    rotation = convert_camera_frame_orientation_convention(rotation, "world", "opengl")
+            # Randomly pick a pitch angle between -45 and 0 degrees
+            pitch = random.uniform(45, 0)
 
-                    # Set the camera pose
-                    og.sim.viewer_camera.set_position_orientation(position=camera_point, orientation=rotation)
+            # Get the rotation as a quaternion
+            rotation = T.euler2quat(th.tensor([0, pitch * DEG2RAD, yaw * DEG2RAD], dtype=th.float32))
+            rotation = convert_camera_frame_orientation_convention(rotation, "world", "opengl")
 
-                    # Render 100 times to ensure the camera is stable
-                    for _ in range(100):
-                        og.sim.render()
+            # Set the camera pose
+            og.sim.viewer_camera.set_position_orientation(position=camera_point, orientation=rotation)
 
-                    # Get the observation from the viewer camera sensor
-                    rgb = og.sim.viewer_camera.get_obs()[0]["rgb"].detach().clone().cpu().numpy()
-                    depth = og.sim.viewer_camera.get_obs()[0]["depth"].detach().clone().cpu().numpy()
-                    seg = og.sim.viewer_camera.get_obs()[0]["seg_instance"].detach().clone().cpu().numpy()
+            # Render 100 times to ensure the camera is stable
+            for _ in range(100):
+                og.sim.render()
 
-                    # Check that in any given image at least 3 different objects are visible by at least 1% of the total area
-                    unique_objects, counts = np.unique(seg.flatten(), return_counts=True)
-                    if len(unique_objects) < 3:
-                        continue
-                    counts = counts[unique_objects > 0]  # Ignore background
-                    object_areas = counts / (rgb.shape[0] * rgb.shape[1])
-                    if np.sum(object_areas > 0.01) < 3:
-                        continue
+            # Get the observation from the viewer camera sensor
+            rgb = og.sim.viewer_camera.get_obs()[0]["rgb"].detach().clone().cpu().numpy()
+            depth = og.sim.viewer_camera.get_obs()[0]["depth_linear"].detach().clone().cpu().numpy()
+            seg = og.sim.viewer_camera.get_obs()[0]["seg_instance"].detach().clone().cpu().numpy()
 
-                    # Check that no object takes up more than 90% of the image area
-                    # if np.any(object_areas > 0.9):
-                    #     continue
+            # Check that in any given image at least 3 different objects are visible by at least 1% of the total area
+            unique_objects, counts = np.unique(seg.flatten(), return_counts=True)
+            if len(unique_objects) < 3:
+                continue
+            counts = counts[unique_objects > 0]  # Ignore background
+            object_areas = counts / (rgb.shape[0] * rgb.shape[1])
+            # if np.sum(object_areas > 0.01) < 3:
+            #     continue
 
-                    # Check that the average depth is not less than a constant.
-                    if np.mean(depth) < 1.5:
-                        continue
+            # Check that no object takes up more than 90% of the image area
+            if np.any(object_areas > 0.9):
+                continue
 
-                    # Save the image to a file
-                    image_file = f"camera_{index:04d}_room_{room_name}_yaw_{yaw}_pitch_{int(pitch)}.png"
-                    Image.fromarray(rgb).save(os.path.join(images_dir, image_file))
+            # Check that the average depth is not less than a constant.
+            if np.mean(depth) < 1:
+                continue
 
-                    # Save the data into hdf5
-                    f['rgb'][index] = rgb
-                    f['depth'][index] = depth
-                    f['segmentation'][index] = seg
+            # Save the image to a file
+            image_file = f"camera_{index:04d}_room_{room_name}_yaw_{yaw}_pitch_{int(pitch)}.png"
+            Image.fromarray(rgb).save(os.path.join(images_dir, image_file))
 
-                    f['camera_pose'][index] = T.pose2mat(og.sim.viewer_camera.get_position_orientation()).cpu().numpy()
-                    f['camera_intrinsics'][index] = og.sim.viewer_camera.intrinsic_matrix.cpu().numpy()
+            # Save the data into hdf5
+            f['rgb'][index] = rgb
+            f['depth'][index] = depth
+            f['segmentation'][index] = seg
 
-                    # Flush every N entries
-                    if index % FLUSH_EVERY == 0:
-                        f.flush()
+            f['camera_pose'][index] = T.pose2mat(og.sim.viewer_camera.get_position_orientation()).cpu().numpy()
+            f['camera_intrinsics'][index] = og.sim.viewer_camera.intrinsic_matrix.cpu().numpy()
 
-                    index += 1
-                    pbar.update(1)
-                    print(index)
+            # Flush every N entries
+            if index % FLUSH_EVERY == 0:
+                f.flush()
 
-                    if index >= TOTAL_IMAGES:
-                        break
+            index += 1
+            print(index)
 
         # Record the segmentation keys
         f.attrs['segmentation_labels'] = json.dumps(og.sim.viewer_camera.get_obs()[1]['seg_instance'])

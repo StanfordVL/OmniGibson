@@ -23,222 +23,9 @@ TensorData = Union[np.ndarray, torch.Tensor]  # , wp.array]
 Math utils
 """
 
-
-def convert_to_torch(
-    array: TensorData,
-    dtype: torch.dtype = None,
-    device: torch.device | str | None = None,
-) -> torch.Tensor:
-    """Converts a given array into a torch tensor.
-
-    The function tries to convert the array to a torch tensor. If the array is a numpy/warp arrays, or python
-    list/tuples, it is converted to a torch tensor. If the array is already a torch tensor, it is returned
-    directly.
-
-    If ``device`` is None, then the function deduces the current device of the data. For numpy arrays,
-    this defaults to "cpu", for torch tensors it is "cpu" or "cuda", and for warp arrays it is "cuda".
-
-    Note:
-        Since PyTorch does not support unsigned integer types, unsigned integer arrays are converted to
-        signed integer arrays. This is done by casting the array to the corresponding signed integer type.
-
-    Args:
-        array: The input array. It can be a numpy array, warp array, python list/tuple, or torch tensor.
-        dtype: Target data-type for the tensor.
-        device: The target device for the tensor. Defaults to None.
-
-    Returns:
-        The converted array as torch tensor.
-    """
-    # Convert array to tensor
-    # if the datatype is not currently supported by torch we need to improvise
-    # supported types are: https://pytorch.org/docs/stable/tensors.html
-    if isinstance(array, torch.Tensor):
-        tensor = array
-    elif isinstance(array, np.ndarray):
-        if array.dtype == np.uint32:
-            array = array.astype(np.int32)
-        # need to deal with object arrays (np.void) separately
-        tensor = torch.from_numpy(array)
-    # elif isinstance(array, wp.array):
-    #     if array.dtype == wp.uint32:
-    #         array = array.view(wp.int32)
-    #     tensor = wp.to_torch(array)
-    else:
-        tensor = torch.Tensor(array)
-    # Convert tensor to the right device
-    if device is not None and str(tensor.device) != str(device):
-        tensor = tensor.to(device)
-    # Convert dtype of tensor if requested
-    if dtype is not None and tensor.dtype != dtype:
-        tensor = tensor.type(dtype)
-
-    return tensor
-
-
-@torch.jit.script
-def matrix_from_quat(quaternions: torch.Tensor) -> torch.Tensor:
-    """Convert rotations given as quaternions to rotation matrices.
-
-    Args:
-        quaternions: The quaternion orientation in (w, x, y, z). Shape is (..., 4).
-
-    Returns:
-        Rotation matrices. The shape is (..., 3, 3).
-
-    Reference:
-        https://github.com/facebookresearch/pytorch3d/blob/main/pytorch3d/transforms/rotation_conversions.py#L41-L70
-    """
-    r, i, j, k = torch.unbind(quaternions, -1)
-    # pyre-fixme[58]: `/` is not supported for operand types `float` and `Tensor`.
-    two_s = 2.0 / (quaternions * quaternions).sum(-1)
-
-    o = torch.stack(
-        (
-            1 - two_s * (j * j + k * k),
-            two_s * (i * j - k * r),
-            two_s * (i * k + j * r),
-            two_s * (i * j + k * r),
-            1 - two_s * (i * i + k * k),
-            two_s * (j * k - i * r),
-            two_s * (i * k - j * r),
-            two_s * (j * k + i * r),
-            1 - two_s * (i * i + j * j),
-        ),
-        -1,
-    )
-    return o.reshape(quaternions.shape[:-1] + (3, 3))
-
-
-# @torch.jit.script
-def math_utils_transform_points(
-    points: torch.Tensor, pos: torch.Tensor | None = None, quat: torch.Tensor | None = None
-) -> torch.Tensor:
-    r"""Transform input points in a given frame to a target frame.
-
-    This function transform points from a source frame to a target frame. The transformation is defined by the
-    position :math:`t` and orientation :math:`R` of the target frame in the source frame.
-
-    .. math::
-        p_{target} = R_{target} \times p_{source} + t_{target}
-
-    If the input `points` is a batch of points, the inputs `pos` and `quat` must be either a batch of
-    positions and quaternions or a single position and quaternion. If the inputs `pos` and `quat` are
-    a single position and quaternion, the same transformation is applied to all points in the batch.
-
-    If either the inputs :attr:`pos` and :attr:`quat` are None, the corresponding transformation is not applied.
-
-    Args:
-        points: Points to transform. Shape is (N, P, 3) or (P, 3).
-        pos: Position of the target frame. Shape is (N, 3) or (3,).
-            Defaults to None, in which case the position is assumed to be zero.
-        quat: Quaternion orientation of the target frame in (w, x, y, z). Shape is (N, 4) or (4,).
-            Defaults to None, in which case the orientation is assumed to be identity.
-
-    Returns:
-        Transformed points in the target frame. Shape is (N, P, 3) or (P, 3).
-
-    Raises:
-        ValueError: If the inputs `points` is not of shape (N, P, 3) or (P, 3).
-        ValueError: If the inputs `pos` is not of shape (N, 3) or (3,).
-        ValueError: If the inputs `quat` is not of shape (N, 4) or (4,).
-    """
-    points_batch = points.clone()
-    # check if inputs are batched
-    is_batched = points_batch.dim() == 3
-    # -- check inputs
-    if points_batch.dim() == 2:
-        points_batch = points_batch[None]  # (P, 3) -> (1, P, 3)
-    if points_batch.dim() != 3:
-        raise ValueError(f"Expected points to have dim = 2 or dim = 3: got shape {points.shape}")
-    if not (pos is None or pos.dim() == 1 or pos.dim() == 2):
-        raise ValueError(f"Expected pos to have dim = 1 or dim = 2: got shape {pos.shape}")
-    if not (quat is None or quat.dim() == 1 or quat.dim() == 2):
-        raise ValueError(f"Expected quat to have dim = 1 or dim = 2: got shape {quat.shape}")
-    # -- rotation
-    if quat is not None:
-        # convert to batched rotation matrix
-        rot_mat = matrix_from_quat(quat)
-        if rot_mat.dim() == 2:
-            rot_mat = rot_mat[None]  # (3, 3) -> (1, 3, 3)
-        # convert points to matching batch size (N, P, 3) -> (N, 3, P)
-        # and apply rotation
-        points_batch = torch.matmul(rot_mat, points_batch.transpose_(1, 2))
-        # (N, 3, P) -> (N, P, 3)
-        points_batch = points_batch.transpose_(1, 2)
-    # -- translation
-    if pos is not None:
-        # convert to batched translation vector
-        if pos.dim() == 1:
-            pos = pos[None, None, :]  # (3,) -> (1, 1, 3)
-        else:
-            pos = pos[:, None, :]  # (N, 3) -> (N, 1, 3)
-        # apply translation
-        points_batch += pos
-    # -- return points in same shape as input
-    if not is_batched:
-        points_batch = points_batch.squeeze(0)  # (1, P, 3) -> (P, 3)
-
-    return points_batch
-
-
 """
 Depth <-> Pointcloud conversions.
 """
-
-
-def transform_points(
-    points: TensorData,
-    position: Sequence[float] | None = None,
-    orientation: Sequence[float] | None = None,
-    device: torch.device | str | None = None,
-) -> np.ndarray | torch.Tensor:
-    r"""Transform input points in a given frame to a target frame.
-
-    This function transform points from a source frame to a target frame. The transformation is defined by the
-    position ``t`` and orientation ``R`` of the target frame in the source frame.
-
-    .. math::
-        p_{target} = R_{target} \times p_{source} + t_{target}
-
-    If either the inputs `position` and `orientation` are None, the corresponding transformation is not applied.
-
-    Args:
-        points: a tensor of shape (p, 3) or (n, p, 3) comprising of 3d points in source frame.
-        position: The position of source frame in target frame. Defaults to None.
-        orientation: The orientation (w, x, y, z) of source frame in target frame.
-            Defaults to None.
-        device: The device for torch where the computation
-            should be executed. Defaults to None, i.e. takes the device that matches the depth image.
-
-    Returns:
-        A tensor of shape (N, 3) comprising of 3D points in target frame.
-        If the input is a numpy array, the output is a numpy array. Otherwise, it is a torch tensor.
-    """
-    # check if numpy
-    is_numpy = isinstance(points, np.ndarray)
-    # decide device
-    if device is None and is_numpy:
-        device = torch.device("cpu")
-    # convert to torch
-    points = convert_to_torch(points, dtype=torch.float32, device=device)
-    # update the device with the device of the depth image
-    # note: this is needed since warp does not provide the device directly
-    device = points.device
-    # apply rotation
-    if orientation is not None:
-        orientation = convert_to_torch(orientation, dtype=torch.float32, device=device)
-    # apply translation
-    if position is not None:
-        position = convert_to_torch(position, dtype=torch.float32, device=device)
-    # apply transformation
-    points = math_utils_transform_points(points, position, orientation)
-
-    # return everything according to input type
-    if is_numpy:
-        return points.detach().cpu().numpy()
-    else:
-        return points
 
 
 def create_pointcloud_from_depth(
@@ -247,7 +34,7 @@ def create_pointcloud_from_depth(
     keep_invalid: bool = False,
     position: Sequence[float] | None = None,
     orientation: Sequence[float] | None = None,
-    device: torch.device | str | None = None,
+    device: torch.device | str = "cpu",
 ) -> np.ndarray | torch.Tensor:
     r"""Creates pointcloud from input depth image and camera intrinsic matrix.
 
@@ -272,9 +59,9 @@ def create_pointcloud_from_depth(
         keep_invalid: Whether to keep invalid points in the cloud or not. Invalid points
             correspond to pixels with depth values 0.0 or NaN. Defaults to False.
         position: The position of the camera in a target frame. Defaults to None.
-        orientation: The orientation (w, x, y, z) of the camera in a target frame. Defaults to None.
+        orientation: The orientation (x, y, z, w) of the camera in a target frame. Defaults to None.
         device: The device for torch where the computation should be executed.
-            Defaults to None, i.e. takes the device that matches the depth image.
+            Defaults to "cpu".
 
     Returns:
         An array/tensor of shape (N, 3) comprising of 3D coordinates of points.
@@ -285,26 +72,24 @@ def create_pointcloud_from_depth(
     # by default uses OpenBLAS. With PyTorch (CPU), we could process a depth image of size (480, 640)
     # in 0.0051 secs, while with numpy it took 0.0292 secs.
 
-    # convert to numpy matrix
-    is_numpy = isinstance(depth, np.ndarray)
-    # decide device
-    if device is None and is_numpy:
-        device = torch.device("cpu")
     # convert depth to torch tensor
-    depth = convert_to_torch(depth, dtype=torch.float32, device=device)
+    depth = torch.tensor(depth, dtype=torch.float32, device=device)
     # update the device with the device of the depth image
     # note: this is needed since warp does not provide the device directly
     device = depth.device
     # convert inputs to torch tensors
-    intrinsic_matrix = convert_to_torch(intrinsic_matrix, dtype=torch.float32, device=device)
-    if position is not None:
-        position = convert_to_torch(position, dtype=torch.float32, device=device)
-    if orientation is not None:
-        orientation = convert_to_torch(orientation, dtype=torch.float32, device=device)
+    intrinsic_matrix = torch.tensor(intrinsic_matrix, dtype=torch.float32, device=device)
+    position = torch.tensor(position, dtype=torch.float32, device=device)
+    orientation = torch.tensor(orientation, dtype=torch.float32, device=device)
     # compute pointcloud
     depth_cloud = unproject_depth(depth, intrinsic_matrix)
+
     # convert 3D points to world frame
-    depth_cloud = transform_points(depth_cloud, position, orientation)
+    rot_mat = T.quat2mat(orientation)
+    # and apply rotation
+    depth_cloud = torch.matmul(depth_cloud, rot_mat)
+    # apply translation
+    depth_cloud += position[None, :]
 
     # keep only valid entries if flag is set
     if not keep_invalid:
@@ -315,10 +100,7 @@ def create_pointcloud_from_depth(
         depth_cloud = depth_cloud[pts_idx_to_keep, ...]
 
     # return everything according to input type
-    if is_numpy:
-        return depth_cloud.detach().cpu().numpy()
-    else:
-        return depth_cloud
+    return depth_cloud
 
 
 def create_pointcloud_from_rgbd(
@@ -328,7 +110,7 @@ def create_pointcloud_from_rgbd(
     normalize_rgb: bool = False,
     position: Sequence[float] | None = None,
     orientation: Sequence[float] | None = None,
-    device: torch.device | str | None = None,
+    device: torch.device | str = "cpu",
     num_channels: int = 3,
 ) -> tuple[torch.Tensor, torch.Tensor] | tuple[np.ndarray, np.ndarray]:
     """Creates pointcloud from input depth image and camera transformation matrix.
@@ -350,10 +132,8 @@ def create_pointcloud_from_rgbd(
         rgb: Color for generated point cloud. Defaults to None.
         normalize_rgb: Whether to normalize input rgb. Defaults to False.
         position: The position of the camera in a target frame. Defaults to None.
-        orientation: The orientation `(w, x, y, z)` of the camera in a target frame. Defaults to None.
-        device: The device for torch where the computation should be executed. Defaults to None, in which case
-            it takes the device that matches the depth image.
-        num_channels: Number of channels in RGB pointcloud. Defaults to 3.
+        orientation: The orientation `(x, y, z, w)` of the camera in a target frame. Defaults to None.
+        device: The device for torch where the computation should be executed. Defaults to "cpu".
 
     Returns:
         A tuple of (N, 3) arrays or tensors containing the 3D coordinates of points and their RGB color respectively.
@@ -363,176 +143,12 @@ def create_pointcloud_from_rgbd(
     Raises:
         ValueError:  When rgb image is a numpy array but not of shape (H, W, 3) or (H, W, 4).
     """
-    # check valid inputs
-    if rgb is not None and not isinstance(rgb, tuple):
-        if len(rgb.shape) == 3:
-            if rgb.shape[2] not in [3, 4]:
-                raise ValueError(f"Input rgb image of invalid shape: {rgb.shape} != (H, W, 3) or (H, W, 4).")
-        else:
-            raise ValueError(f"Input rgb image not three-dimensional. Received shape: {rgb.shape}.")
-    if num_channels not in [3, 4]:
-        raise ValueError(f"Invalid number of channels: {num_channels} != 3 or 4.")
-
-    # check if input depth is numpy array
-    is_numpy = isinstance(depth, np.ndarray)
-    # decide device
-    if device is None and is_numpy:
-        device = torch.device("cpu")
-    # convert depth to torch tensor
-    if is_numpy:
-        depth = torch.from_numpy(depth).to(device=device)
-    # retrieve XYZ pointcloud
     points_xyz = create_pointcloud_from_depth(intrinsic_matrix, depth, True, position, orientation, device=device)
 
-    # get image height and width
-    im_height, im_width = depth.shape[:2]
-    # total number of points
-    num_points = im_height * im_width
-    # extract color value
-    if rgb is not None:
-        if isinstance(rgb, (np.ndarray, torch.Tensor)):  # , wp.array)):
-            # copy numpy array to preserve
-            rgb = convert_to_torch(rgb, device=device, dtype=torch.float32)
-            rgb = rgb[:, :, :3]
-            # convert the matrix to (W, H, 3) from (H, W, 3) since depth processing
-            # is done in the order (u, v) where u: (0, W-1) and v: (0 - H-1)
-            points_rgb = rgb.permute(1, 0, 2).reshape(-1, 3)
-        elif isinstance(rgb, (tuple, list)):
-            # same color for all points
-            points_rgb = torch.Tensor((rgb,) * num_points, device=device, dtype=torch.uint8)
-        else:
-            # default color is white
-            points_rgb = torch.Tensor(((0, 0, 0),) * num_points, device=device, dtype=torch.uint8)
-    else:
-        points_rgb = torch.Tensor(((0, 0, 0),) * num_points, device=device, dtype=torch.uint8)
-    # normalize color values
-    if normalize_rgb:
-        points_rgb = points_rgb.float() / 255
-
-    # remove invalid points
-    # pts_idx_to_keep = torch.all(torch.logical_and(~torch.isnan(points_xyz), ~torch.isinf(points_xyz)), dim=1)
-    # points_rgb = points_rgb[pts_idx_to_keep, ...]
-    # points_xyz = points_xyz[pts_idx_to_keep, ...]
-
-    # add additional channels if required
-    if num_channels == 4:
-        points_rgb = torch.nn.functional.pad(points_rgb, (0, 1), mode="constant", value=1.0)
-
-    # return everything according to input type
-    if is_numpy:
-        return points_xyz.cpu().numpy(), points_rgb.cpu().numpy()
-    else:
-        return points_xyz, points_rgb
-
-
-def save_images_to_file(images: torch.Tensor, file_path: str):
-    """Save images to file.
-
-    Args:
-        images: A tensor of shape (N, H, W, C) containing the images.
-        file_path: The path to save the images to.
-    """
-    from torchvision.utils import make_grid, save_image
-
-    save_image(
-        make_grid(
-            torch.swapaxes(images.unsqueeze(1), 1, -1).squeeze(-1),
-            nrow=round(images.shape[0] ** 0.5),
-        ),
-        file_path,
-    )
-
-
-@torch.jit.script
-def orthogonalize_perspective_depth(depth: torch.Tensor, intrinsics: torch.Tensor) -> torch.Tensor:
-    """Converts perspective depth image to orthogonal depth image.
-
-    Perspective depth images contain distances measured from the camera's optical center.
-    Meanwhile, orthogonal depth images provide the distance from the camera's image plane.
-    This method uses the camera geometry to convert perspective depth to orthogonal depth image.
-
-    The function assumes that the width and height are both greater than 1.
-
-    Args:
-        depth: The perspective depth images. Shape is (H, W) or or (H, W, 1) or (N, H, W) or (N, H, W, 1).
-        intrinsics: The camera's calibration matrix. If a single matrix is provided, the same
-            calibration matrix is used across all the depth images in the batch.
-            Shape is (3, 3) or (N, 3, 3).
-
-    Returns:
-        The orthogonal depth images. Shape matches the input shape of depth images.
-
-    Raises:
-        ValueError: When depth is not of shape (H, W) or (H, W, 1) or (N, H, W) or (N, H, W, 1).
-        ValueError: When intrinsics is not of shape (3, 3) or (N, 3, 3).
-    """
-    # Clone inputs to avoid in-place modifications
-    perspective_depth_batch = depth.clone()
-    intrinsics_batch = intrinsics.clone()
-
-    # Check if inputs are batched
-    is_batched = perspective_depth_batch.dim() == 4 or (
-        perspective_depth_batch.dim() == 3 and perspective_depth_batch.shape[-1] != 1
-    )
-
-    # Track whether the last dimension was singleton
-    add_last_dim = False
-    if perspective_depth_batch.dim() == 4 and perspective_depth_batch.shape[-1] == 1:
-        add_last_dim = True
-        perspective_depth_batch = perspective_depth_batch.squeeze(dim=3)  # (N, H, W, 1) -> (N, H, W)
-    if perspective_depth_batch.dim() == 3 and perspective_depth_batch.shape[-1] == 1:
-        add_last_dim = True
-        perspective_depth_batch = perspective_depth_batch.squeeze(dim=2)  # (H, W, 1) -> (H, W)
-
-    if perspective_depth_batch.dim() == 2:
-        perspective_depth_batch = perspective_depth_batch[None]  # (H, W) -> (1, H, W)
-
-    if intrinsics_batch.dim() == 2:
-        intrinsics_batch = intrinsics_batch[None]  # (3, 3) -> (1, 3, 3)
-
-    if is_batched and intrinsics_batch.shape[0] == 1:
-        intrinsics_batch = intrinsics_batch.expand(perspective_depth_batch.shape[0], -1, -1)  # (1, 3, 3) -> (N, 3, 3)
-
-    # Validate input shapes
-    if perspective_depth_batch.dim() != 3:
-        raise ValueError(f"Expected depth images to have 2, 3, or 4 dimensions; got {depth.shape}.")
-    if intrinsics_batch.dim() != 3:
-        raise ValueError(f"Expected intrinsics to have shape (3, 3) or (N, 3, 3); got {intrinsics.shape}.")
-
-    # Image dimensions
-    im_height, im_width = perspective_depth_batch.shape[1:]
-
-    # Get the intrinsics parameters
-    fx = intrinsics_batch[:, 0, 0].view(-1, 1, 1)
-    fy = intrinsics_batch[:, 1, 1].view(-1, 1, 1)
-    cx = intrinsics_batch[:, 0, 2].view(-1, 1, 1)
-    cy = intrinsics_batch[:, 1, 2].view(-1, 1, 1)
-
-    # Create meshgrid of pixel coordinates
-    u_grid = torch.arange(im_width, device=depth.device, dtype=depth.dtype)
-    v_grid = torch.arange(im_height, device=depth.device, dtype=depth.dtype)
-    u_grid, v_grid = torch.meshgrid(u_grid, v_grid, indexing="xy")
-
-    # Expand the grids for batch processing
-    u_grid = u_grid.unsqueeze(0).expand(perspective_depth_batch.shape[0], -1, -1)
-    v_grid = v_grid.unsqueeze(0).expand(perspective_depth_batch.shape[0], -1, -1)
-
-    # Compute the squared terms for efficiency
-    x_term = ((u_grid - cx) / fx) ** 2
-    y_term = ((v_grid - cy) / fy) ** 2
-
-    # Calculate the orthogonal (normal) depth
-    orthogonal_depth = perspective_depth_batch / torch.sqrt(1 + x_term + y_term)
-
-    # Restore the last dimension if it was present in the input
-    if add_last_dim:
-        orthogonal_depth = orthogonal_depth.unsqueeze(-1)
-
-    # Return to original shape if input was not batched
-    if not is_batched:
-        orthogonal_depth = orthogonal_depth.squeeze(0)
-
-    return orthogonal_depth
+    # convert the matrix to (W, H, 3) from (H, W, 3) since depth processing
+    # is done in the order (u, v) where u: (0, W-1) and v: (0 - H-1)
+    points_rgb = rgb[:, :, :3].permute(1, 0, 2).reshape(-1, 3)
+    return points_xyz, points_rgb
 
 
 @torch.jit.script
@@ -572,33 +188,33 @@ def unproject_depth(depth: torch.Tensor, intrinsics: torch.Tensor, is_ortho: boo
         ValueError: When depth is not of shape (H, W) or (H, W, 1) or (N, H, W) or (N, H, W, 1).
         ValueError: When intrinsics is not of shape (3, 3) or (N, 3, 3).
     """
-    # clone inputs to avoid in-place modifications
-    intrinsics_batch = intrinsics.clone()
-    # convert depth image to orthogonal if needed
-    if not is_ortho:
-        depth_batch = orthogonalize_perspective_depth(depth, intrinsics)
-    else:
-        depth_batch = depth.clone()
-
-    # check if inputs are batched
-    is_batched = depth_batch.dim() == 4 or (depth_batch.dim() == 3 and depth_batch.shape[-1] != 1)
-    # make sure inputs are batched
-    if depth_batch.dim() == 3 and depth_batch.shape[-1] == 1:
-        depth_batch = depth_batch.squeeze(dim=2)  # (H, W, 1) -> (H, W)
-    if depth_batch.dim() == 2:
-        depth_batch = depth_batch[None]  # (H, W) -> (1, H, W)
-    if depth_batch.dim() == 4 and depth_batch.shape[-1] == 1:
-        depth_batch = depth_batch.squeeze(dim=3)  # (N, H, W, 1) -> (N, H, W)
-    if intrinsics_batch.dim() == 2:
-        intrinsics_batch = intrinsics_batch[None]  # (3, 3) -> (1, 3, 3)
-    # check shape of inputs
-    if depth_batch.dim() != 3:
-        raise ValueError(f"Expected depth images to have dim = 2 or 3 or 4: got shape {depth.shape}")
-    if intrinsics_batch.dim() != 3:
-        raise ValueError(f"Expected intrinsics to have shape (3, 3) or (N, 3, 3): got shape {intrinsics.shape}")
-
     # get image height and width
     im_height, im_width = depth_batch.shape[1:]
+
+    # convert depth image to orthogonal if needed
+    if not is_ortho:
+        # Get the intrinsics parameters
+        fx = intrinsics_batch[:, 0, 0].view(-1, 1, 1)
+        fy = intrinsics_batch[:, 1, 1].view(-1, 1, 1)
+        cx = intrinsics_batch[:, 0, 2].view(-1, 1, 1)
+        cy = intrinsics_batch[:, 1, 2].view(-1, 1, 1)
+
+        # Create meshgrid of pixel coordinates
+        u_grid = torch.arange(im_width, device=depth.device, dtype=depth.dtype)
+        v_grid = torch.arange(im_height, device=depth.device, dtype=depth.dtype)
+        u_grid, v_grid = torch.meshgrid(u_grid, v_grid, indexing="xy")
+
+        # Expand the grids for batch processing
+        u_grid = u_grid.unsqueeze(0).expand(depth.shape[0], -1, -1)
+        v_grid = v_grid.unsqueeze(0).expand(depth.shape[0], -1, -1)
+
+        # Compute the squared terms for efficiency
+        x_term = ((u_grid - cx) / fx) ** 2
+        y_term = ((v_grid - cy) / fy) ** 2
+
+        # Calculate the orthogonal (normal) depth
+        depth = depth / torch.sqrt(1 + x_term + y_term)
+
     # create image points in homogeneous coordinates (3, H x W)
     indices_u = torch.arange(im_width, device=depth.device, dtype=depth.dtype)
     indices_v = torch.arange(im_height, device=depth.device, dtype=depth.dtype)
@@ -614,10 +230,6 @@ def unproject_depth(depth: torch.Tensor, intrinsics: torch.Tensor, is_ortho: boo
     depth_batch = depth_batch.expand(-1, -1, 3)
     # scale points by depth
     points_xyz = points.transpose_(1, 2) * depth_batch  # (N, H x W, 3)
-
-    # return points in same shape as input
-    if not is_batched:
-        points_xyz = points_xyz.squeeze(0)
 
     return points_xyz
 
