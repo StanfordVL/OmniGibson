@@ -1,3 +1,6 @@
+import shutil
+
+import cv2
 from omnigibson.utils.mvs_utils import batch_np_matrix_to_pycolmap_wo_track, create_pixel_coordinate_grid, build_pycolmap_intri
 import omnigibson.utils.camera_utils as ilutils
 import omnigibson.utils.transform_utils as T
@@ -14,7 +17,7 @@ def hdf5_to_colmap(scene_dir):
   if not os.path.exists(images_dir):
       raise FileNotFoundError(f"Images directory {images_dir} does not exist. Please run the data collection script first.")
 
-  MAX_IMAGES = 10000
+  MAX_IMAGES = 100000
 
   # Open the HDF5 file in read mode
   print("Loading HDF5 file...")
@@ -36,6 +39,11 @@ def hdf5_to_colmap(scene_dir):
   # Find the image files in the images directory
   image_files = os.listdir(images_dir)
   image_files_by_idx = {int(f.split("_")[1]): f for f in image_files}
+
+  # Create a directory for storing the depth images
+  depth_dir = os.path.join(scene_dir, "depth")
+  shutil.rmtree(depth_dir, ignore_errors=True)
+  os.makedirs(depth_dir, exist_ok=True)
 
   # Convert the data to a point cloud format
   points_3d = []
@@ -59,13 +67,24 @@ def hdf5_to_colmap(scene_dir):
     points = points.reshape((rgb.shape[1], rgb.shape[0], 3)).permute(
         1, 0, 2
     )
+
+    # Move everything to the OpenCV-based frame
     flip_yz = np.diag([1, -1, -1, 1])  # 4x4 matrix
     cam_extrinsic_opencv = flip_yz @ cam_pose
-    extrinsics.append(cam_extrinsic_opencv)
+    extrinsics.append(np.linalg.inv(cam_extrinsic_opencv))
+
+    # Convert points from ROS frame to OpenCV frame. This means flipping the Y and Z axes
+    points = points @ flip_yz[:3, :3].T
+
     colors = rgb[:, :, :3]
     points_rgb.append(colors)
     points_3d.append(points.numpy())
     image_paths.append(image_files_by_idx[i])
+
+    # Save the depth image also.
+    depth_path = os.path.join(depth_dir, os.path.basename(image_files_by_idx[i]))
+    depth_zero_to_one = (depth - np.min(depth)) / (np.max(depth) - np.min(depth))
+    cv2.imwrite(depth_path, (depth_zero_to_one * 255).astype(np.uint8))
 
   print("Stacking points and colors...")
   points_3d = np.stack(points_3d, axis=0)
@@ -104,7 +123,8 @@ def hdf5_to_colmap(scene_dir):
   )
 
   print(f"Saving reconstruction to {scene_dir}/sparse")
-  sparse_reconstruction_dir = os.path.join(scene_dir, "sparse")
+  sparse_reconstruction_dir = os.path.join(scene_dir, "sparse", "0")
+  shutil.rmtree(sparse_reconstruction_dir, ignore_errors=True)
   os.makedirs(sparse_reconstruction_dir, exist_ok=True)
   reconstruction.write(sparse_reconstruction_dir)
 
