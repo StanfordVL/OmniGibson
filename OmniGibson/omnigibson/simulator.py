@@ -29,11 +29,11 @@ from omnigibson.scenes import Scene
 from omnigibson.sensors.vision_sensor import VisionSensor
 from omnigibson.systems.macro_particle_system import MacroPhysicalParticleSystem
 from omnigibson.utils.constants import LightingMode
+from omnigibson.utils.camera_utils import CameraMover
 from omnigibson.utils.python_utils import Serializable
 from omnigibson.utils.python_utils import clear as clear_python_utils
 from omnigibson.utils.python_utils import create_object_from_init_info, recursively_convert_to_torch
 from omnigibson.utils.ui_utils import (
-    CameraMover,
     create_module_logger,
     disclaimer,
     logo_small,
