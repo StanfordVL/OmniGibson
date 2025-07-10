@@ -487,14 +487,18 @@ def _launch_simulator(*args, **kwargs):
 
         def _set_renderer_settings(self):
             lazy.carb.settings.get_settings().set_bool("/rtx/reflections/enabled", False)
-            lazy.carb.settings.get_settings().set_bool("/rtx/indirectDiffuse/enabled", True)
+            lazy.carb.settings.get_settings().set_bool("/rtx/indirectDiffuse/enabled", False)
+            lazy.carb.settings.get_settings().set_bool("/rtx/directLighting/enabled", False)
             lazy.carb.settings.get_settings().set_int("/rtx/post/dlss/execMode", 1)  # "Performance"
             lazy.carb.settings.get_settings().set_bool("/rtx/ambientOcclusion/enabled", True)
             lazy.carb.settings.get_settings().set_bool("/rtx/directLighting/sampledLighting/enabled", True)
             lazy.carb.settings.get_settings().set_int("/rtx/raytracing/showLights", 1)
-            lazy.carb.settings.get_settings().set_float("/rtx/sceneDb/ambientLightIntensity", 0.1)
+            lazy.carb.settings.get_settings().set_float("/rtx/sceneDb/ambientLightIntensity", 3)
             lazy.carb.settings.get_settings().set_bool("/app/renderer/skipMaterialLoading", False)
             lazy.carb.settings.get_settings().set_bool("/rtx/flow/enabled", True)
+
+            # disable texture streaming
+            # lazy.carb.settings.get_settings().set_bool("/rtx-transient/resourcemanager/enableTextureStreaming", False)
 
             # Below settings are for improving performance: we use the USD / Fabric only for poses.
             lazy.carb.settings.get_settings().set_bool("/physics/updateToUsd", not gm.ENABLE_FLATCACHE)
