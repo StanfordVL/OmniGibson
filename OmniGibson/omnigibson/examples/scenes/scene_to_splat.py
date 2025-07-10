@@ -23,6 +23,7 @@ gm.USE_GPU_DYNAMICS = True
 gm.ENABLE_FLATCACHE = True
 gm.ENABLE_OBJECT_STATES = False
 gm.ENABLE_TRANSITION_RULES = False
+gm.HEADLESS = True
 
 DEG2RAD = math.pi / 180.0
 
@@ -38,11 +39,11 @@ def main():
     cfg = {
         "render": {
             "viewer_width": 1600,
-            "viewer_height": 900,
+            "viewer_height": 1600,
         },
         "scene": {
             "type": "InteractiveTraversableScene",
-            "scene_model": "house_double_floor_upper",
+            "scene_model": "house_single_floor",
             # "load_object_categories": [
             #     "floors",
             #     "walls",
@@ -71,7 +72,7 @@ def main():
 
     index = 0
     
-    TOTAL_IMAGES = 200
+    TOTAL_IMAGES = 5000
     FLUSH_EVERY = 10
     HEIGHT = og.sim.viewer_height
     WIDTH = og.sim.viewer_width
@@ -92,6 +93,9 @@ def main():
         while index < TOTAL_IMAGES:
             # Pick a room from the scene, uniformly
             room_name = random.choice(rooms)
+            if room_name in ("garden_0", "sauna_0", "garage_0"):
+                continue
+
             _, camera_point = env.scene.seg_map.get_random_point_by_room_instance(room_name)
             if camera_point is None:
                 continue
@@ -111,57 +115,74 @@ def main():
             # Randomly pick a pitch angle between -45 and 0 degrees
             pitch = random.uniform(45, 0)
 
-            # Get the rotation as a quaternion
+            # Compute the camera rotation
             rotation = T.euler2quat(th.tensor([0, pitch * DEG2RAD, yaw * DEG2RAD], dtype=th.float32))
             rotation = convert_camera_frame_orientation_convention(rotation, "world", "opengl")
 
-            # Set the camera pose
-            og.sim.viewer_camera.set_position_orientation(position=camera_point, orientation=rotation)
+            # Get the rotation as a quaternion
+            for jitter_idx in range(10):
+                jittered_position = camera_point.clone()
+                jittered_rotation = rotation.clone()
 
-            # Render 100 times to ensure the camera is stable
-            for _ in range(5):
-                og.sim.render()
+                if jitter_idx > 0:
+                    # Jitter the camera position slightly by up to 10cm in any direction
+                    position_jitter = th.rand(3) * 0.2 - 0.1  # Random jitter in [-0.1, 0.1] meters
+                    jittered_position += position_jitter
 
-            # Get the observation from the viewer camera sensor
-            rgb = og.sim.viewer_camera.get_obs()[0]["rgb"].detach().clone().cpu().numpy()
-            depth = og.sim.viewer_camera.get_obs()[0]["depth_linear"].detach().clone().cpu().numpy()
-            seg = og.sim.viewer_camera.get_obs()[0]["seg_instance"].detach().clone().cpu().numpy()
+                    # Jitter the orientation too. Randomly sample an axis and a small angle.
+                    axis = th.rand(3)
+                    axis /= th.norm(axis)
+                    angle = th.deg2rad(th.rand(1) * 20 - 10)  # Random angle of up to 10 degrees
+                    rotation_jitter = T.axisangle2quat(axis * angle)
+                    jittered_rotation = T.quat_multiply(jittered_rotation, rotation_jitter)
 
-            # Check that in any given image at least 3 different objects are visible by at least 1% of the total area
-            unique_objects, counts = np.unique(seg.flatten(), return_counts=True)
-            if len(unique_objects) < 3:
-                continue
-            counts = counts[unique_objects > 0]  # Ignore background
-            object_areas = counts / (rgb.shape[0] * rgb.shape[1])
-            # if np.sum(object_areas > 0.01) < 3:
-            #     continue
+                # Set the camera pose
+                og.sim.viewer_camera.set_position_orientation(position=jittered_position, orientation=jittered_rotation)
 
-            # Check that no object takes up more than 90% of the image area
-            if np.any(object_areas > 0.9):
-                continue
+                # Render 30 times to ensure the camera is stable
+                for _ in range(30):
+                    og.sim.render()
 
-            # Check that the average depth is not less than a constant.
-            if np.mean(depth) < 2:
-                continue
+                # Get the observation from the viewer camera sensor
+                rgb = og.sim.viewer_camera.get_obs()[0]["rgb"].detach().clone().cpu().numpy()
+                depth = og.sim.viewer_camera.get_obs()[0]["depth_linear"].detach().clone().cpu().numpy()
+                seg = og.sim.viewer_camera.get_obs()[0]["seg_instance"].detach().clone().cpu().numpy()
 
-            # Save the image to a file
-            image_file = f"camera_{index:04d}_room_{room_name}_yaw_{yaw}_pitch_{int(pitch)}.png"
-            Image.fromarray(rgb).save(os.path.join(images_dir, image_file))
+                # Check that in any given image at least 3 different objects are visible by at least 1% of the total area
+                unique_objects, counts = np.unique(seg.flatten(), return_counts=True)
+                if len(unique_objects) < 3:
+                    continue
+                counts = counts[unique_objects > 0]  # Ignore background
+                object_areas = counts / (rgb.shape[0] * rgb.shape[1])
+                # if np.sum(object_areas > 0.01) < 3:
+                #     continue
 
-            # Save the data into hdf5
-            f['rgb'][index] = rgb
-            f['depth'][index] = depth
-            f['segmentation'][index] = seg
+                # Check that no object takes up more than 90% of the image area
+                if np.any(object_areas > 0.9):
+                    continue
 
-            f['camera_pose'][index] = T.pose2mat(og.sim.viewer_camera.get_position_orientation()).cpu().numpy()
-            f['camera_intrinsics'][index] = og.sim.viewer_camera.intrinsic_matrix.cpu().numpy()
+                # Check that the average depth is not less than a constant.
+                if np.mean(depth) < 2:
+                    continue
 
-            # Flush every N entries
-            if index % FLUSH_EVERY == 0:
-                f.flush()
+                # Save the image to a file
+                image_file = f"camera_{index:04d}_room_{room_name}_yaw_{yaw}_pitch_{int(pitch)}.png"
+                Image.fromarray(rgb).save(os.path.join(images_dir, image_file))
 
-            index += 1
-            print(index)
+                # Save the data into hdf5
+                f['rgb'][index] = rgb
+                f['depth'][index] = depth
+                f['segmentation'][index] = seg
+
+                f['camera_pose'][index] = T.pose2mat(og.sim.viewer_camera.get_position_orientation()).cpu().numpy()
+                f['camera_intrinsics'][index] = og.sim.viewer_camera.intrinsic_matrix.cpu().numpy()
+
+                # Flush every N entries
+                if index % FLUSH_EVERY == 0:
+                    f.flush()
+
+                index += 1
+                print(index)
 
         # Record the segmentation keys
         f.attrs['segmentation_labels'] = json.dumps(og.sim.viewer_camera.get_obs()[1]['seg_instance'])
