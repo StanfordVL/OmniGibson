@@ -649,7 +649,8 @@ def _launch_simulator(*args, **kwargs):
             )
             self._skybox.load(None)
             self._skybox.color = (1.07, 0.85, 0.61)
-            self._skybox.texture_file_path = f"{gm.ASSET_PATH}/models/background/sky.jpg"
+            # self._skybox.texture_file_path = f"{gm.ASSET_PATH}/models/background/sky.jpg"
+            self._skybox.set_attribute("visibleInPrimaryRay", False)
 
         def get_sim_step_dt(self):
             """
