@@ -11,13 +11,14 @@ import numpy as np
 import torch
 import json
 import tqdm
+import fpsample
 
 def hdf5_to_colmap(scene_dir):
   images_dir = os.path.join(scene_dir, "images")
   if not os.path.exists(images_dir):
       raise FileNotFoundError(f"Images directory {images_dir} does not exist. Please run the data collection script first.")
 
-  MAX_IMAGES = 100000
+  MAX_IMAGES = 10
 
   # Open the HDF5 file in read mode
   print("Loading HDF5 file...")
@@ -34,11 +35,11 @@ def hdf5_to_colmap(scene_dir):
       camera_intrinsics_data = f['camera_intrinsics'][:MAX_IMAGES]  # shape: (TOTAL_IMAGES, 3, 3), dtype: float32
 
       # Load the segmentation labels (stored as a JSON string in the file attributes)
-      segmentation_labels = json.loads(f.attrs['segmentation_labels'])
+      # segmentation_labels = json.loads(f.attrs['segmentation_labels'])
 
   # Find the image files in the images directory
   image_files = os.listdir(images_dir)
-  image_files_by_idx = {int(f.split("_")[1]): f for f in image_files}
+  image_files_by_idx = {int(os.path.splitext(os.path.basename(f))[0].split("_")[1]): f for f in image_files}
 
   # Create a directory for storing the depth images
   depth_dir = os.path.join(scene_dir, "depth")
@@ -56,25 +57,26 @@ def hdf5_to_colmap(scene_dir):
     cam_pos, cam_orn = T.mat2pose(torch.as_tensor(cam_pose))
     quat_for_conversion = ilutils.convert_camera_frame_orientation_convention(
         cam_orn, "opengl", "ros"
-    )[[3, 0, 1, 2]].reshape(4)
+    ).reshape(4)
     points = ilutils.create_pointcloud_from_depth(
-        torch.as_tensor(cam_intrinsics),
-        torch.as_tensor(depth),
+        torch.as_tensor(cam_intrinsics)[None],
+        torch.as_tensor(depth)[None],
         True,
-        position=cam_pos,
-        orientation=quat_for_conversion,
+        position=cam_pos[None],
+        orientation=quat_for_conversion[None],
     )
     points = points.reshape((rgb.shape[1], rgb.shape[0], 3)).permute(
         1, 0, 2
     )
 
     # Move everything to the OpenCV-based frame
-    flip_yz = np.diag([1, -1, -1, 1])  # 4x4 matrix
-    cam_extrinsic_opencv = flip_yz @ cam_pose
+    flip_yz = np.diag([1, -1, -1])  # 4x4 matrix
+    cam_rotation = cam_pose[:3, :3]
+    cam_rotation_opencv = cam_rotation @ flip_yz
+    cam_extrinsic_opencv = np.eye(4)
+    cam_extrinsic_opencv[:3, :3] = cam_rotation_opencv
+    cam_extrinsic_opencv[:3, 3] = cam_pose[:3, 3]  # Translation part
     extrinsics.append(np.linalg.inv(cam_extrinsic_opencv))
-
-    # Convert points from ROS frame to OpenCV frame. This means flipping the Y and Z axes
-    points = points @ flip_yz[:3, :3].T
 
     colors = rgb[:, :, :3]
     points_rgb.append(colors)
@@ -99,13 +101,16 @@ def hdf5_to_colmap(scene_dir):
   points_rgb = points_rgb[finite_mask]
   points_xyf = points_xyf[finite_mask]
 
-  # Limit the number of points to 1,000,000
-  indices = np.random.choice(points_3d.shape[0], 1000000, replace=False)
-  points_3d = points_3d[indices]
-  points_rgb = points_rgb[indices]
-  points_xyf = points_xyf[indices]
+  # Limit the number of points
+  max_points = min(1000000, points_3d.shape[0])
+  if len(points_3d) > max_points:
+    indices = np.random.choice(points_3d.shape[0], max_points, replace=False)
+    # indices = fpsample.bucket_fps_kdline_sampling(points_3d.reshape(-1, 3), max_points, h=5)    
+    points_3d = points_3d[indices]
+    points_rgb = points_rgb[indices]
+    points_xyf = points_xyf[indices]
 
-  assert points_3d.shape == points_rgb.shape == points_xyf.shape == (1000000, 3), \
+  assert points_3d.shape == points_rgb.shape == points_xyf.shape == (max_points, 3), \
       "Mismatch in number of points, colors, and pixel coordinates."
 
   print("Creating COLMAP reconstruction...")
@@ -118,7 +123,7 @@ def hdf5_to_colmap(scene_dir):
       image_paths,
       rgb_data.shape[1],
       rgb_data.shape[2],
-      shared_camera=False,
+      shared_camera=True,
       camera_type="PINHOLE",
   )
 

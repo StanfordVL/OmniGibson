@@ -37,12 +37,12 @@ def main():
 
     cfg = {
         "render": {
-            "viewer_width": 1024,
-            "viewer_height": 1024,
+            "viewer_width": 1600,
+            "viewer_height": 900,
         },
         "scene": {
             "type": "InteractiveTraversableScene",
-            "scene_model": "house_single_floor",
+            "scene_model": "house_double_floor_upper",
             # "load_object_categories": [
             #     "floors",
             #     "walls",
@@ -53,6 +53,7 @@ def main():
             #     "rail_fence",
             # ],
             "default_erosion_radius": 0.5,  # Erosion radius for the traversable map
+            "use_skybox": False,
         },
     }
 
@@ -70,7 +71,7 @@ def main():
 
     index = 0
     
-    TOTAL_IMAGES = 1000
+    TOTAL_IMAGES = 200
     FLUSH_EVERY = 10
     HEIGHT = og.sim.viewer_height
     WIDTH = og.sim.viewer_width
@@ -118,7 +119,7 @@ def main():
             og.sim.viewer_camera.set_position_orientation(position=camera_point, orientation=rotation)
 
             # Render 100 times to ensure the camera is stable
-            for _ in range(100):
+            for _ in range(5):
                 og.sim.render()
 
             # Get the observation from the viewer camera sensor
@@ -140,7 +141,7 @@ def main():
                 continue
 
             # Check that the average depth is not less than a constant.
-            if np.mean(depth) < 1:
+            if np.mean(depth) < 2:
                 continue
 
             # Save the image to a file

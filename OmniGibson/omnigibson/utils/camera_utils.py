@@ -87,7 +87,7 @@ def create_pointcloud_from_depth(
     # convert 3D points to world frame
     rot_mat = T.quat2mat(orientation)
     # and apply rotation
-    depth_cloud = torch.matmul(depth_cloud, rot_mat)
+    depth_cloud = torch.matmul(depth_cloud, rot_mat.mT)
     # apply translation
     depth_cloud += position[None, :]
 
@@ -151,7 +151,7 @@ def create_pointcloud_from_rgbd(
     return points_xyz, points_rgb
 
 
-@torch.jit.script
+# @torch.jit.script
 def unproject_depth(depth: torch.Tensor, intrinsics: torch.Tensor, is_ortho: bool = True) -> torch.Tensor:
     r"""Un-project depth image into a pointcloud.
 
@@ -172,32 +172,28 @@ def unproject_depth(depth: torch.Tensor, intrinsics: torch.Tensor, is_ortho: boo
         by using the :meth:`orthogonalize_perspective_depth` method.
 
     Args:
-        depth: The depth measurement. Shape is (H, W) or or (H, W, 1) or (N, H, W) or (N, H, W, 1).
+        depth: The depth measurement. Shape is (N, H, W)
         intrinsics: The camera's calibration matrix. If a single matrix is provided, the same
             calibration matrix is used across all the depth images in the batch.
-            Shape is (3, 3) or (N, 3, 3).
+            Shape is (N, 3, 3).
         is_ortho: Whether the input depth image is orthogonal or perspective depth image. If True, the input
             depth image is considered as the *orthogonal* type, where the measurements are from the camera's
             image plane. If False, the depth image is considered as the *perspective* type, where the
             measurements are from the camera's optical center. Defaults to True.
 
     Returns:
-        The 3D coordinates of points. Shape is (P, 3) or (N, P, 3).
-
-    Raises:
-        ValueError: When depth is not of shape (H, W) or (H, W, 1) or (N, H, W) or (N, H, W, 1).
-        ValueError: When intrinsics is not of shape (3, 3) or (N, 3, 3).
+        The 3D coordinates of points. Shape is (N, P, 3).
     """
     # get image height and width
-    im_height, im_width = depth_batch.shape[1:]
+    im_height, im_width = depth.shape[1:]
 
     # convert depth image to orthogonal if needed
     if not is_ortho:
         # Get the intrinsics parameters
-        fx = intrinsics_batch[:, 0, 0].view(-1, 1, 1)
-        fy = intrinsics_batch[:, 1, 1].view(-1, 1, 1)
-        cx = intrinsics_batch[:, 0, 2].view(-1, 1, 1)
-        cy = intrinsics_batch[:, 1, 2].view(-1, 1, 1)
+        fx = intrinsics[:, 0, 0].view(-1, 1, 1)
+        fy = intrinsics[:, 1, 1].view(-1, 1, 1)
+        cx = intrinsics[:, 0, 2].view(-1, 1, 1)
+        cy = intrinsics[:, 1, 2].view(-1, 1, 1)
 
         # Create meshgrid of pixel coordinates
         u_grid = torch.arange(im_width, device=depth.device, dtype=depth.dtype)
@@ -223,13 +219,13 @@ def unproject_depth(depth: torch.Tensor, intrinsics: torch.Tensor, is_ortho: boo
     pixels = pixels.unsqueeze(0)  # (3, H x W) -> (1, 3, H x W)
 
     # unproject points into 3D space
-    points = torch.matmul(torch.inverse(intrinsics_batch), pixels)  # (N, 3, H x W)
+    points = torch.matmul(torch.inverse(intrinsics), pixels)  # (N, 3, H x W)
     points = points / points[:, -1, :].unsqueeze(1)  # normalize by last coordinate
     # flatten depth image (N, H, W) -> (N, H x W)
-    depth_batch = depth_batch.transpose_(1, 2).reshape(depth_batch.shape[0], -1).unsqueeze(2)
-    depth_batch = depth_batch.expand(-1, -1, 3)
+    depth = depth.transpose_(1, 2).reshape(depth.shape[0], -1).unsqueeze(2)
+    depth = depth.expand(-1, -1, 3)
     # scale points by depth
-    points_xyz = points.transpose_(1, 2) * depth_batch  # (N, H x W, 3)
+    points_xyz = points.transpose_(1, 2) * depth  # (N, H x W, 3)
 
     return points_xyz
 
