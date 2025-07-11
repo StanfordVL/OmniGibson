@@ -68,7 +68,7 @@ class FrameSegmentManager:
         """Extract changes by comparing consecutive frames, saving last frame of each stable segment."""
         TEMPORAL_THRESHOLD = 40
         MAX_SEGMENT_RATIO = 0.25
-        MAX_BRUTE_FORCE_SEGMENT_LENGTH = 400
+        MAX_BRUTE_FORCE_SEGMENT_LENGTH = 200
         print(f"Extracting changes with temporal threshold {TEMPORAL_THRESHOLD}")
         changes = {}
         segments = []
@@ -195,8 +195,8 @@ class FrameSegmentManager:
 
     def _extract_cosine_similarity_changes(self) -> dict:
         """Extract changes by comparing cosine similarity of scene graphs."""
-        STATE_THRESHOLD = 0.95
-        TEMPORAL_THRESHOLD = 3
+        STATE_THRESHOLD = 0.98
+        TEMPORAL_THRESHOLD = 200
 
         def cosine_similarity(scene_graph1, scene_graph2):
             """
@@ -280,19 +280,19 @@ class FrameSegmentManager:
                     }
                     first_change_saved = True
                     prev_frame = current_frame
+                    prev_frame_number = current_frame_number
                     prev_scene_graph = current_scene_graph
                 elif current_frame_number - prev_frame_number > TEMPORAL_THRESHOLD:
                     diff = self.reader.get_diff(prev_frame, current_frame)
                     changes[current_frame] = diff
                     changes[current_frame]['type'] = 'diff'
                     prev_frame = current_frame
+                    prev_frame_number = current_frame_number
                     prev_scene_graph = current_scene_graph
 
         self.extracted_frames = list(changes.keys())
         return changes
 
-            
-    ...
 
     def save_changes(self, changes: dict, output_path: str):
         """Save changes to JSON file."""
