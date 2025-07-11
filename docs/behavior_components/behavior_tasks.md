@@ -3,46 +3,99 @@ icon: material/silverware-fork-knife
 ---
 
 # 🍴 **BEHAVIOR Tasks**
+ 
+[`BehaviorTask`](../reference/tasks/behavior_task.md) represents a family of **1000 long-horizon household activities** that humans benefit the most from robots' help based on our survey results.
 
-## Overview
+---
 
-BEHAVIOR is short for Benchmark for Everyday Household Activities in Virtual, Interactive, and ecOlogical enviRonments.
+## :octicons-goal-16: **Getting Started**
 
-[**`BehaviorTask`**](../reference/tasks/behavior_task.md) represents a family of 1000 long-horizon household activities that humans benefit the most from robots' help based on our survey results.
+Before working with BEHAVIOR tasks, you'll need to set up the BDDL (BEHAVIOR Domain Definition Language) repository for task definition editing and browsing.
 
-To browse and modify the definition of BEHAVIOR tasks, you might find it helpful to download a local editable copy of our `bddl` repo.
-```{.python .annotate}
-git clone https://github.com/StanfordVL/bddl.git
-```
+### Installation Steps
 
-Then you can install it in the same conda environment as OmniGibson.
-```{.python .annotate}
-conda activate omnigibson
-cd bddl
-pip install -e .
-```
+=== ":material-download: Clone Repository"
 
-You can verify the installation by running the following command. This should now point to the local `bddl` repo, instead of the PyPI one.
-```{.python .annotate}
->>> import bddl; print(bddl)
-<module 'bddl' from '/path/to/BDDL/bddl/__init__.py'>
-```
+    ```bash
+    git clone https://github.com/StanfordVL/bddl.git
+    ```
 
-## Browse 1000 BEHAVIOR Tasks
-All 1000 activities are defined in BDDL, a domain-specific language designed for BEHAVIOR.
+=== ":material-package: Install Package"
 
-You can find them in [`bddl/activity_definitions`](https://github.com/StanfordVL/bddl/tree/master/bddl/activity_definitions) folder.
+    ```bash
+    conda activate omnigibson
+    cd bddl
+    pip install -e .
+    ```
 
-Alternatively, you can browse them on the [BEHAVIOR Knowledgebase](https://behavior.stanford.edu/knowledgebase/tasks).
+=== ":material-check-circle: Verify Installation"
 
-Here is an example of a BEHAVIOR task definition, which consists of several components:
+    ```python
+    >>> import bddl; print(bddl)
+    <module 'bddl' from '/path/to/BDDL/bddl/__init__.py'>
+    ```
 
-- **:objects**: task-relevant objects, where each line represents a [**WordNet**](https://wordnet.princeton.edu/) synset of the object. For example, `candle.n.01_1 candle.n.01_2 candle.n.01_3 candle.n.01_4 - candle.n.01` indicates that four objects that belong to the `candoe.n.01` synset are needed for this task.
-- **:init**: initial conditions of the task, where each line represents a ground predicate that holds at the beginning of the task. For example, `(ontop candle.n.01_1 table.n.02_1)` indicates that the first candle is on top of the first table when the task begins.
-- **:goal**: goal conditions of the task, where each line represents a ground predicate and each block represents a non-ground predicate (e.g. `forall`, `forpairs`, `and`, `or`, etc) that should hold for the task to be considered solved. For example, `(inside ?candle.n.01 ?wicker_basket.n.01)` indicates that the candle should be inside the wicker basket at the end of the task.
+!!! success "Installation Complete"
+    This should now point to your local `bddl` repo, instead of the PyPI version, giving you full editing capabilities.
 
-??? code "assembling_gift_baskets.bddl"
-    ``` yaml linenums="1"
+---
+
+## :material-library: **Exploring the Task Library**
+
+### 📂 Task Locations
+
+All 1000 activities are defined using **BDDL** (BEHAVIOR Domain Definition Language), specifically designed for household robotics tasks.
+
+!!! info "Where to Find Tasks"
+    - **📁 Local Files:** [`bddl/activity_definitions`](https://github.com/StanfordVL/bddl/tree/master/bddl/activity_definitions) folder
+    - **🌐 Online Browser:** [BEHAVIOR Knowledgebase](https://behavior.stanford.edu/knowledgebase/tasks) - Interactive exploration
+
+### 🏗️ Task Structure
+
+Every BEHAVIOR task consists of three main components that define the complete activity specification:
+
+=== ":material-cube-outline: Objects"
+
+    !!! info "Task-Relevant Objects"
+        Each line represents a [**WordNet**](https://wordnet.princeton.edu/) synset of required objects.
+
+    **Example:**
+    ```yaml
+    candle.n.01_1 candle.n.01_2 candle.n.01_3 candle.n.01_4 - candle.n.01
+    ```
+    
+    ↳ *Four objects belonging to the `candle.n.01` synset are needed*
+
+=== ":material-play-circle: Initial Conditions"
+
+    !!! info "Starting State"
+        Ground predicates that define the world state when the task begins.
+
+    **Example:**
+    ```yaml
+    (ontop candle.n.01_1 table.n.02_1)
+    ```
+    
+    ↳ *The first candle starts on top of the first table*
+
+=== ":material-flag-checkered: Goal Conditions"
+
+    !!! info "Success Criteria"
+        Predicates and logical blocks that must be satisfied for task completion.
+
+    **Example:**
+    ```yaml
+    (inside ?candle.n.01 ?wicker_basket.n.01)
+    ```
+    
+    ↳ *All candles must end up inside wicker baskets*
+
+### 📖 Complete Task Example
+
+Here's a full task definition showing all components working together:
+
+??? example "assembling_gift_baskets.bddl - Complete Task Definition"
+    ```yaml linenums="1"
     (define (problem assembling_gift_baskets-0)
         (:domain omnigibson)
     
@@ -111,13 +164,22 @@ Here is an example of a BEHAVIOR task definition, which consists of several comp
     )
     ```
 
-## Sample BEHAVIOR Tasks
+---
 
-Given a BEHAVIOR task definition, you can sample an instance of the task in OmniGibson by specifying the `activity_name` and `activity_definition_id` in the task configuration, which correspounds to `bddl/activity_definitions/<activity_name>/problem<activity_definition_id>.bddl`.
+## :material-cogs: **Working with Tasks**
 
-Here is an example of sample a BEHAVIOR task in OmniGibson for [laying_wood_floors](https://github.com/StanfordVL/bddl/blob/master/bddl/activity_definitions/laying_wood_floors/problem0.bddl).
-```{.python .annotate}
+### 🎲 Sampling New Task Instances
+
+Generate fresh instances of existing tasks with randomized elements for variety and robustness testing.
+
+!!! tip "Dynamic Sampling Benefits"
+    Each sample creates unique variations in object types, models, poses, and configurations while maintaining task semantics.
+
+**Example: Sampling a Wood Floor Laying Task**
+
+```python
 import omnigibson as og
+
 cfg = {
     "scene": {
         "type": "InteractiveTraversableScene",
@@ -133,43 +195,83 @@ cfg = {
     ],
     "task": {
         "type": "BehaviorTask",
-        "activity_name": "laying_wood_floors",
-        "activity_definition_id": 0,
-        "activity_instance_id": 0,
-        "online_object_sampling": True,
+        "activity_name": "laying_wood_floors",  # Task name
+        "activity_definition_id": 0,           # Problem variant
+        "activity_instance_id": 0,             # Instance number
+        "online_object_sampling": True,        # Enable sampling
     },
 }
+
 env = og.Environment(configs=cfg)
 ```
 
-Each time you run the code above, a different instance of the task will be generated:
+### 🎯 Sampling Variations
 
-- A different object category might be sampled. For example, for a high-level synset like `fruit.n.01`, different types of fruits like apple, banana, and orange might be sampled.
-- A different object model might be sampled. For example, different models of the same category (e.g. apple) might be sampled
-- A different object pose might be sampled. For example, the apple might be placed at a different location in the scene.
+Each sampling run produces different variations:
 
-Sampling can also fail for a wide variety of reasons:
+=== ":material-apple: Object Categories"
 
-- Missing room types: a required room type doesn't exist in the current scene
-- No valid scene objects: cannot find appropriate scene objects (objects with the `inroom` predicate in the task definition), e.g. category mismatch.
-- Cannot sample initial conditions: cannot find an appropraite physical configuration that satisfies all the initial conditions in the task definition, e.g. size mismatch.
-- Many more...
+    **High-level synsets** sample different specific types:
+    
+    - `fruit.n.01` → apple, banana, orange, etc.
+    - `chair.n.01` → office chair, dining chair, recliner, etc.
 
-Once a task is successfully sampled, you can save it to disk.
-```{.python .annotate}
+=== ":material-shape: Object Models"
+
+    **Same categories** use different 3D models:
+    
+    - Apple category → different apple models with varying shapes, colors
+    - Table category → various table designs and sizes
+
+=== ":material-map-marker: Object Poses"
+
+    **Spatial arrangements** vary while satisfying constraints:
+    
+    - Objects placed at different valid locations
+    - Orientations adjusted within acceptable ranges
+
+### ⚠️ Sampling Challenges
+
+!!! warning "Common Sampling Failures"
+    Sampling can fail for various reasons - this is normal behavior:
+
+| Failure Type | Description | Example |
+|--------------|-------------|---------|
+| 🏠 **Missing Rooms** | Required room type doesn't exist | Task needs kitchen, scene has none |
+| 🎯 **No Valid Objects** | Cannot find appropriate scene objects | Category mismatch with scene contents |
+| 📐 **Physical Constraints** | Cannot satisfy initial conditions | Objects too large for designated spaces |
+| 🔗 **Dependency Issues** | Complex constraint satisfaction fails | Multiple interconnected placement rules |
+
+### 💾 Saving Task Instances
+
+Once successfully sampled, preserve the configuration for reuse:
+
+```python
+# Save the current task instance
 env.task.save_task()
 ```
-The default path for saving the task is:
-```
-<gm.DATASET_PATH>/scenes/<SCENE_MODEL>/json/<scene_model>_task_{activity_name}_{activity_definition_id}_{activity_instance_id}_template.json
-```
 
-## Load Pre-sampled BEHAVIOR Tasks
+!!! info "Default Save Location"
+    ```
+    <gm.DATASET_PATH>/scenes/<SCENE_MODEL>/json/<scene_model>_task_{activity_name}_{activity_definition_id}_{activity_instance_id}_template.json
+    ```
 
-Here is an example of loading a pre-sampled BEHAVIOR task instance in OmniGibson that you just saved.
+---
 
-```{.python .annotate}
+## :material-folder-open: **Loading Pre-sampled Tasks**
+
+### 📦 Using Existing Instances
+
+For consistent, reproducible experiments, load pre-sampled task instances from the dataset.
+
+!!! success "Dataset Availability"
+    Our publicly available dataset includes **exactly 1 pre-sampled instance** of all 1000 BEHAVIOR tasks.
+
+**Example: Loading a Pre-sampled Task**
+
+```python
 import omnigibson as og
+
 cfg = {
     "scene": {
         "type": "InteractiveTraversableScene",
@@ -188,30 +290,121 @@ cfg = {
         "activity_name": "laying_wood_floors",
         "activity_definition_id": 0,
         "activity_instance_id": 0,
-        "online_object_sampling": False,
+        "online_object_sampling": False,  # Load pre-sampled
     },
 }
+
 env = og.Environment(configs=cfg)
 ```
 
-Curently, in our publicly available dataset, we have pre-sampled exactly **1** instance of all 1000 BEHAVIOR tasks.
-We recommend you to set `online_object_sampling` to `False` to load the pre-sampled task instances in the dataset.
-You can run the following command to find out the path to the pre-sampled task instances.
+### 🔍 Finding Pre-sampled Tasks
+
+Discover available pre-sampled task instances in your dataset:
+
 ```bash
 ls -l <gm.DATASET_PATH>/scenes/*/json/*task*
 ```
 
-## (Advanced) Customize BEHAVIOR Tasks
+!!! tip "Recommended Usage"
+    Set `online_object_sampling=False` to load the stable, pre-sampled task instances for consistent evaluation and comparison.
 
-The easiest way to create custom BEHAVIOR tasks is to add new task definitions to the `bddl` repo.
+---
 
-For instance, you can emulate the existing task definitions and create a new task definition at `bddl/activity_definitions/<my_new_task>/problem0.bddl`.
+## :material-wrench: **Advanced Customization**
 
-Then you can run the following tests to ensure that your new task is compatible with the rest of BEHAVIOR knowledgebase (e.g. you are using valid synsets with valid states).
-```bash
-cd bddl
-python tests/bddl_tests.py batch_verify
-python tests/tm_tests.py
-```
+### 🎨 Creating Custom Tasks
 
-Finally, you can sample and load your custom BEHAVIOR tasks in OmniGibson as shown above.
+The most straightforward approach to creating custom BEHAVIOR tasks is extending the existing BDDL repository structure.
+
+#### Step-by-Step Process
+
+=== ":material-file-plus: Create Task Definition"
+
+    **1. Add New Task Directory**
+    ```bash
+    mkdir bddl/activity_definitions/my_new_task
+    ```
+
+    **2. Create Task Definition File**
+    ```bash
+    touch bddl/activity_definitions/my_new_task/problem0.bddl
+    ```
+
+    **3. Define Task Components**
+    - Specify required objects (`:objects`)
+    - Set initial conditions (`:init`) 
+    - Define goal conditions (`:goal`)
+
+=== ":material-test-tube: Validate Compatibility"
+
+    **Run Compatibility Tests**
+    ```bash
+    cd bddl
+    python tests/bddl_tests.py batch_verify
+    python tests/tm_tests.py
+    ```
+
+    !!! warning "Validation Importance"
+        These tests ensure your task uses:
+        
+        - ✅ Valid synsets from the knowledgebase
+        - ✅ Compatible object states and properties
+        - ✅ Proper BDDL syntax and semantics
+
+=== ":material-rocket-launch: Deploy & Test"
+
+    **Sample Your Custom Task**
+    ```python
+    cfg = {
+        # ... standard configuration ...
+        "task": {
+            "type": "BehaviorTask",
+            "activity_name": "my_new_task",  # Your custom task
+            "activity_definition_id": 0,
+            "activity_instance_id": 0,
+            "online_object_sampling": True,
+        },
+    }
+    
+    env = og.Environment(configs=cfg)
+    ```
+
+### 🧩 Task Design Guidelines
+
+!!! tip "Best Practices for Custom Tasks"
+    
+    **Synset Selection:**
+    - Use existing synsets from the [BEHAVIOR Knowledgebase](behavior_knowledgebase.md)
+    - Ensure objects have required abilities for your task goals
+    
+    **Spatial Constraints:**
+    - Consider object sizes and room layouts
+    - Design achievable initial and goal configurations
+    
+    **Logical Structure:**
+    - Use clear, unambiguous goal conditions
+    - Test with multiple object instances when applicable
+
+---
+
+## :material-lightbulb: **Key Concepts**
+
+### Task Sampling vs. Loading
+
+| Aspect | **Sampling** (`online_object_sampling=True`) | **Loading** (`online_object_sampling=False`) |
+|--------|---------------------------------------------|---------------------------------------------|
+| 🎲 **Variability** | High - new instance each time | Low - same instance always |
+| 🔧 **Use Case** | Research, robustness testing | Evaluation, comparison |
+
+### Activity Identification
+
+Tasks are uniquely identified by three parameters:
+
+- **`activity_name`** - The task type (e.g., "laying_wood_floors")
+- **`activity_definition_id`** - Problem variant within the task (usually 0)
+- **`activity_instance_id`** - Specific instance number for the sampled configuration
+
+---
+
+!!! success "Ready to Explore?"
+    You now have the complete toolkit for working with BEHAVIOR tasks! Start by exploring the 1000 pre-defined activities, then create your own custom household robotics challenges. 🚀

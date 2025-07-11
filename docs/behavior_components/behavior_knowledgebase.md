@@ -2,282 +2,423 @@
 icon: material/bookshelf
 ---
 
-# 🍴 **BEHAVIOR Knowledgebase**
-
-## Overview
-
-BEHAVIOR is short for Benchmark for Everyday Household Activities in Virtual, Interactive, and ecOlogical enviRonments.
-
-[**BEHAVIOR Knowledgebase**](https://behavior.stanford.edu/knowledgebase/) contains information about what synsets are valid, their relationship between each other, their abilities (or properties), the hyperparameters of the abilities, and the hand-specified [transition rules](../modules/transition_rules.md).
-
-Here are the important conceptual components of the BEHAVIOR Knowledgebase:
-
-
-### [**Tasks**](https://behavior.stanford.edu/knowledgebase/tasks)
-A family of 1000 long-horizon household activities.
-
-- As illustrated in the [**BEHAVIOR Tasks tutorial**](behavior_tasks.md), each task definition contains a list of task-relevant objects, and their initial and goal conditions.
-- The knowledgebase page also shows
-    - Which scenes this task is compatible with.
-    - (Experimental) The transition paths that help achieve the goal conditions.
-
-### [**Synsets**](https://behavior.stanford.edu/knowledgebase/synsets)
-The basic building block of the knowledgebase.
-
-- We follow the [**WordNet**](https://wordnet.princeton.edu/) hierarchy while expanding it with additional ("custom") synsets to suit the need of BEHAVIOR.
-- Each synset has at least one parent synset, and can have many children synsets (no children means it's a leaf synset).
-- Each synset can have many abilities (or properties).
-    - Some properties define the physical attributes of the object and how OmniGibson simulates them, e.g. `liquid`, `cloth`, `visualSubstance`, etc.
-    - Some properties define the semantic attributes (or affordances) of the object, e.g. `fillable`, `openable`, `cookable`, etc.
-    - Each property might contain additional hyperparameters that define the exact behavior of the property, e.g. `heatSource` has hyperparameters `requires_toggled_on` (bool), `requires_closed` (bool), `requires_inside` (bool), `temperature` (float), and `heating_rate` (float).
-- The knowledgebase page also shows
-    - The predicates that are used for the synset in the task definitions.
-    - The tasks that involve the synset.
-    - The object categories and models that belong to the synset.
-    - The transition rules that involve the synset.
-    - The synset's position in the WordNet hierarchy (e.g. ancestors, descendants, etc).
-
-### [**Categories**](https://behavior.stanford.edu/knowledgebase/categories)
-The bridge between the WordNet(-like) synsets and OmniGibson's object and substance categories.
-
-- Each category is mapped to **exactly one leaf synset**, e.g. `apple` is mapped to `apple.n.01`.
-- Multiple categories can be mapped to the same synset, e.g. `drop_in_sink` and `pedestal_sink` both map to `sink.n.01`, and share the exact same properties (because properties are annotated at the synset level, not the category level).
-- All objects belonging to the same category should share similar mass and size, i.e. should be interchangeable if object randomization is performed.
-- The knowledgebase page also shows
-    - The objects that belong to the category, as well as their images.
-    - The corresponding synset's position in the WordNet hierarchy (e.g. ancestors, descendants, etc).
+# 📚 **BEHAVIOR Knowledgebase**
+
+The [**BEHAVIOR Knowledgebase**](https://behavior.stanford.edu/knowledgebase/) is a comprehensive resource containing information about valid synsets, their relationships, abilities, hyperparameters, and hand-specified [transition rules](../modules/transition_rules.md).
+
+---
+
+## :material-puzzle-outline: **Core Components**
+
+The BEHAVIOR Knowledgebase provides an interactive web interface to visualize and look up the following components, making them easily accessible for both users developing robot behaviors and developers extending the system.
+
+=== ":material-format-list-checks: Tasks"
+
+    !!! info "1000 Household Activities"
+        A comprehensive family of [**1000 long-horizon household activities**](https://behavior.stanford.edu/knowledgebase/tasks) that cover the full spectrum of everyday tasks.
+
+    **What's Included:**
+    
+    - 📋 **Task-relevant objects** and their specifications
+    - 🎯 **Initial conditions** - setup requirements
+    - ✅ **Goal conditions** - completion criteria
+    - 🏠 **Scene compatibility** information
+    - 🔄 **(Experimental)** Transition paths for goal achievement
+
+    !!! example "Task Structure"
+        Each task definition contains a structured representation of objects needed and conditions that must be satisfied for successful completion.
+
+=== ":material-graph: Synsets"
+
+    !!! info "The Foundation"
+        [**Synsets**](https://behavior.stanford.edu/knowledgebase/synsets) are the basic building blocks of the knowledgebase.
+
+    **Structure & Organization:**
+    
+    - 🌳 **WordNet Hierarchy** - follows established semantic relationships
+    - ➕ **Custom Extensions** - additional synsets for robotics needs
+    - 👨‍👩‍👧‍👦 **Parent-Child Relationships** - hierarchical organization
+    - 🍃 **Leaf Synsets** - terminal nodes without children
+
+    **Synset Abilities:**
+    
+    | Type | Examples | Purpose |
+    |------|----------|---------|
+    | 🔬 **Physical** | `liquid`, `cloth`, `visualSubstance` | OmniGibson simulation behavior |
+    | 🤏 **Semantic** | `fillable`, `openable`, `cookable` | Object affordances |
+    | ⚙️ **Parameterized** | `heatSource` with temperature settings | Detailed behavior control |
+
+    !!! tip "Rich Metadata"
+        The knowledgebase provides extensive cross-references:
+        
+        - Predicates used in task definitions
+        - Tasks involving each synset
+        - Associated object categories and models
+        - Relevant transition rules
+        - WordNet hierarchy position
+
+=== ":material-tag: Categories"
+
+    !!! info "Bridging Concepts and Reality"
+        [**Categories**](https://behavior.stanford.edu/knowledgebase/categories) connect abstract synsets to concrete OmniGibson objects and substances.
+
+    **Key Principles:**
+    
+    - 🎯 **One-to-One Mapping** - each category maps to exactly one leaf synset
+    - 🔄 **Many-to-One Allowed** - multiple categories can share the same synset
+    - ⚖️ **Mass & Size Consistency** - objects in same category are interchangeable
+    - 🎲 **Randomization Ready** - supports object randomization
+
+    !!! example "Category Mapping"
+        ```
+        Synset: sink.n.01
+        ├── drop_in_sink (category)
+        └── pedestal_sink (category)
+        
+        Both share identical properties but differ physically
+        ```
+
+    **What You'll Find:**
+    
+    - 🖼️ **Object Images** - visual representation of category members
+    - 📊 **Object Collections** - all objects belonging to the category
+    - 🌳 **Hierarchy Navigation** - synset relationships and position
+
+=== ":material-cube: Objects"
+
+    !!! info "3D Model Integration"
+        [**Objects**](https://behavior.stanford.edu/knowledgebase/objects) represent specific 3D models in the dataset with one-to-one mapping.
+
+    **Object Properties:**
+    
+    - 🏷️ **Unique Identity** - belongs to exactly one category
+    - 📁 **File System** - corresponds to `<gm.DATASET_PATH>/objects/category/id`
+    - 🔗 **Meta Links** - annotations for object states in OmniGibson
+
+    !!! example "Meta Link System"
+        For `coffee_maker-fwlabx`:
+        
+        - `connectedpart` → `AttachedTo` state
+        - `heatsource` → `HeatSourceOrSink` state  
+        - `toggleButton` → `ToggledOn` state
+
+    **Additional Information:**
+    
+    - 📸 **Object imagery** and visual representation
+    - 🏠 **Scene/room appearances** - where objects are found
+    - 🌳 **Synset hierarchy** - semantic relationships
+
+=== ":material-home: Scenes"
+
+    !!! info "3D Environment Definitions"
+        [**Scenes**](https://behavior.stanford.edu/knowledgebase/scenes) define specific 3D environment configurations in the dataset.
+
+    **Scene Structure:**
+    
+    - 🏠 **Room Organization** - multiple rooms per scene
+    - 🏷️ **Naming Convention** - `<room_type>_<room_id>` (e.g., `living_room_0`, `kitchen_1`)
+    - 📦 **Object Inventory** - detailed object counts per room
+
+    !!! example "Scene Composition"
+        In [`Beechwood_0_int`](https://behavior.stanford.edu/knowledgebase/scenes/Beechwood_0_int/index.html):
+        
+        `countertop-tpuwys: 6` means the `kitchen_0` room contains 6 instances of the `countertop-tpuwys` object.
+
+=== ":material-swap-horizontal: Transition Rules"
+
+    !!! info "Complex Interactions"
+        [**Transition Rules**](https://behavior.stanford.edu/knowledgebase/transitions/index.html) define physical and chemical interactions not natively supported by Omniverse.
+
+    **Rule Components:**
+    
+    - 📥 **Input Synsets** - required starting materials
+    - 📤 **Output Synsets** - resulting products
+    - ✅ **Conditions** - requirements for transition to occur
 
-### [**Objects**](https://behavior.stanford.edu/knowledgebase/objects)
-One-to-one mapping to a specific 3D object model in our dataset.
+    !!! example "Recipe Example"
+        [`beef_stew`](https://behavior.stanford.edu/knowledgebase/transitions/beef_stew) rule:
+        
+        **Inputs:** `ground_beef.n.01` + `beef_broth.n.01` + `pea.n.01` + `diced__carrot.n.01` + `diced__vidalia_onion.n.01`
+        
+        **Output:** `beef_stew.n.01`
+        
+        **Conditions:** heated in `stove.n.01` or `stockpot.n.01`
 
-- Each object belongs to **exactly one category**, e.g. `coffee_maker-fwlabx` belongs to `coffee_maker`, correspounding to the object model residing at `<gm.DATASET_PATH>/objects/coffee_maker/fwlabx`.
-- Each object can have multiple meta links that serve the relevant object states in OmniGibson. For example, for the [`coffee_maker-fwlabx`](https://behavior.stanford.edu/knowledgebase/objects/coffee_maker-fwlabx/index.html) object, it is annotated with `connectedpart` for the `AttachedTo` state, `heatsource` for the `HeatSourceOrSink` state, and `toggleButton` for the `ToggledOn` state.
-- The knowledgebase page also shows
-    - The object's image.
-    - The scenes / rooms the object appears in.
-    - The corresponding synset's position in the WordNet hierarchy (e.g. ancestors, descendants, etc).
+---
 
-### [**Scenes**](https://behavior.stanford.edu/knowledgebase/scenes)
-One-to-one mapping to a specific 3D scene model in our dataset.
+## :material-code-tags: **Usage & Integration**
 
-- Each scene consists of multiple rooms with the following naming convention: `<room_type>_<room_id>`, e.g. `living_room_0`, `kitchen_1`, etc.
-- Each room contains a list of objects, e.g. in the [`Beechwood_0_int`](https://behavior.stanford.edu/knowledgebase/scenes/Beechwood_0_int/index.html) scene, `countertop-tpuwys: 6` means the `kitchen_0` room has 6 copies of the `countertop-tpuwys` object.
+### Python API Access
 
-### [**Transition Rules**](https://behavior.stanford.edu/knowledgebase/transitions/index.html)
-Hand-specified rules that define complex physical or chemical interactions between objects and substances that are not natively supported by Omniverse.
+OmniGibson interfaces with the BEHAVIOR Knowledgebase through the [`ObjectTaxonomy`](https://github.com/StanfordVL/bddl/blob/master/bddl/object_taxonomy.py) class.
 
-- Each transition rule specifies a list of input synsets and a list of output synsets, as well as the conditions that need to be satisfied for the transition to occur.
-- For instance, in the [`beef_stew`](https://behavior.stanford.edu/knowledgebase/transitions/beef_stew) rule, the input synsets are `ground_beef.n.01`, `beef_broth.n.01`, `pea.n.01`, `diced__carrot.n.01` and `diced__vidalia_onion.n.01` and the output synset is `beef_stew.n.01`.
-- The conditions are not yet visualized on the website, but you can manually inspect them in the [JSON files](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_jsons).
+!!! tip "Getting Started"
+    ```python
+    from omnigibson.utils.bddl_utils import OBJECT_TAXONOMY
+    ```
 
-We have 6 different types of transition rules:
+### Common Operations
 
-- `WasherRule`: remove "dirty" substance from the washer if the necessary solvent is present, and wet the objects inside by making them either `Saturated` with or `Covered` by `water`.
-- `DryerRule`: dry the objects inside by making them not `Saturated` with `water`, and remove all `water` from the dryer.
-- `SlicingRule`: when an object with the `slicer` ability exerts a sufficient force on another object with the `sliceable` ability, it slices the latter object into two halves.
-- `DicingRule`: when an object with the `slicer` ability exerts a sufficient force on another object with the `diceable` ability, it dices the latter object into the corresounding diced substance.
-- `MeltingRule`: when an object with the `meltable` ability reaches a certain temperature, it melts into the corresounding melted substance.
-- `RecipeRule`: a general framework of recipe-based transitions that involve multiple objects and substances, and custom defined conditions.
-    - `input_objects`: input objects and their counts that are required
-    - `input_systems`: input systems that are required
-    - `output_objects`: output objects and their counts that are produced
-    - `output_systems`: output systems that are produced (the quantity depends on the collective volume of the input objects and systems)
-    - `input_states`: the states that the input objects and systems should satisfy, e.g. an ingredient should not be `cooked` already.
-    - `output_states`: the states that the output objects and systems should satisfy, e.g. the dish should be `cooked` after the recipe is done.
-    - `fillable_categories`: `fillable` object categories needed for the recipe, e.g. pots and pans for cooking, and coffee makers for brewing coffee.
+=== ":material-family-tree: Hierarchy Navigation"
 
-We have 5 different types of `RecipeRule`s:
+    ```python
+    # Get family relationships
+    parents = OBJECT_TAXONOMY.get_parents("fruit.n.01")
+    children = OBJECT_TAXONOMY.get_children("fruit.n.01")
+    ancestors = OBJECT_TAXONOMY.get_ancestors("fruit.n.01")
+    descendants = OBJECT_TAXONOMY.get_descendants("fruit.n.01")
+    leaf_descendants = OBJECT_TAXONOMY.get_leaf_descendants("fruit.n.01")
+    ```
 
-- `CookingPhysicalParticleRule`: "cook" physical particles. It might or might not require water, depending on the synset's property `waterCook`.
-    - Requires water: `rice` + `cooked__water` -> `cooked__rice`.
-    - Doesn't require water: `diced__chicken` -> `cooked__diced__chicken`.
-- `ToggleableMachineRule`: leverages a `toggleable` ability machine (e.g. electric mixer, coffee machine, blender) that needs to be `ToggledOn`.
-    - Output is a single object: `flour` + `butter` + `sugar` -> `dough`; the machine is `electric_mixer`.
-    - Output is a single system: `strawberry` + `milk` -> `strawberry_smoothie`; the machine is `blender`.
-- `MixingToolRule`: leverages a `mixingTool` ability object that gets into contact with a `fillable` ability object.
-    - Output is a single system: `water` + `lemon_juice` + `sugar` -> `lemonade`; the mixing tool is `spoon`.
-- `CookingRule`: leverages a `heatsource` ability object and a `fillable` ability object for general cooking.
-    - `CookingObjectRule`: Output is one or more objects: `bagel_dough` + `egg` + `sesame_seed` -> `bagel`; the heat source is `oven`; the container is `baking_sheet`.
-    - `CookingSystemRule`: Output is a single system: `beef` + `tomato` + `chicken_stock` -> `stew`; the heat source is `stove`; the container is `stockpot`.
+=== ":material-check-circle: Validation & Queries"
 
+    ```python
+    # Checker functions for synsets
+    is_leaf = OBJECT_TAXONOMY.is_leaf("fruit.n.01")
+    is_ancestor = OBJECT_TAXONOMY.is_ancestor("fruit.n.01", "apple.n.01")
+    is_descendant = OBJECT_TAXONOMY.is_descendant("apple.n.01", "fruit.n.01")
+    is_valid = OBJECT_TAXONOMY.is_valid_synset("fruit.n.01")
+    ```
 
-## Usage
+=== ":material-cog: Abilities & Properties"
 
-OmniGibson interfaces with the BEHAVIOR Knowledgebase via a single interface: the [`ObjectTaxonomy`](https://github.com/StanfordVL/bddl/blob/master/bddl/object_taxonomy.py) class.
+    ```python
+    # Get synset abilities
+    # Returns: {'rigidBody': {...}, 'heatSource': {...}, 'toggleable': {...}, ...}
+    abilities = OBJECT_TAXONOMY.get_abilities("coffee_maker.n.01")
+    
+    # Check specific ability
+    has_ability = OBJECT_TAXONOMY.has_ability("coffee_maker.n.01", "heatSource")
+    ```
 
-Here is an example of how to use the `ObjectTaxonomy` class to query the BEHAVIOR Knowledgebase.
+=== ":material-link: Category Mappings"
 
-```{.python .annotate}
-from omnigibson.utils.bddl_utils import OBJECT_TAXONOMY
+    ```python
+    # Synset ↔ Category conversion
+    object_synset = OBJECT_TAXONOMY.get_synset_from_category("apple")  # → "apple.n.01"
+    object_categories = OBJECT_TAXONOMY.get_categories("apple.n.01")   # → ["apple"]
+    
+    # Get all categories in subtree
+    leaf_descendant_categories = OBJECT_TAXONOMY.get_subtree_categories("fruit.n.01")
+    # → ["apple", "banana", "orange", ...]
+    ```
 
-# Get parents / children / ancestors / descendants / leaf descendants of a synset
-parents = OBJECT_TAXONOMY.get_parents("fruit.n.01")
-children = OBJECT_TAXONOMY.get_children("fruit.n.01")
-ancestors = OBJECT_TAXONOMY.get_ancestors("fruit.n.01")
-descendants = OBJECT_TAXONOMY.get_descendants("fruit.n.01")
-leaf_descendants = OBJECT_TAXONOMY.get_leaf_descendants("fruit.n.01")
+=== ":material-water: Substance Handling"
 
-# Checker functions for synsets
-is_leaf = OBJECT_TAXONOMY.is_leaf("fruit.n.01")
-is_ancestor = OBJECT_TAXONOMY.is_ancestor("fruit.n.01", "apple.n.01")
-is_descendant = OBJECT_TAXONOMY.is_descendant("apple.n.01", "fruit.n.01")
-is_valid = OBJECT_TAXONOMY.is_valid_synset("fruit.n.01")
+    ```python
+    # Substance synset mappings
+    substance_synset = OBJECT_TAXONOMY.get_synset_from_substance("water")  # → "water.n.06"
+    substance_categories = OBJECT_TAXONOMY.get_substances("water.n.06")    # → ["water"]
+    
+    # Substance subtrees
+    leaf_descendant_substances = OBJECT_TAXONOMY.get_subtree_substances("liquid.n.01")
+    # → ["water", "milk", "juice", ...]
+    ```
 
-# Get the abilities of a synset, e.g. "coffee_maker.n.01" -> {'rigidBody': {...}, 'heatSource': {...}, 'toggleable': {...}, ...}
-abilities = OBJECT_TAXONOMY.get_abilities("coffee_maker.n.01")
+---
 
-# Check if a synset has a specific ability, e.g. "coffee_maker.n.01" has "heatSource"
-has_ability = OBJECT_TAXONOMY.has_ability("coffee_maker.n.01", "heatSource")
+## :material-transition-masked: **Transition Rule Types**
 
-# Get the synset of a object category, e.g. "apple" -> "apple.n.01"
-object_synset = OBJECT_TAXONOMY.get_synset_from_category("apple")
+The BEHAVIOR system supports six distinct types of transition rules, each handling different aspects of object and substance interactions.
 
-# Get the object categories of a synset, e.g. "apple.n.01" -> ["apple"]
-object_categories = OBJECT_TAXONOMY.get_categories("apple.n.01")
+### Core Transition Rules
 
-# Get the object categories of all the leaf descendants of a synset, e.g. "fruit.n.01" -> ["apple", "banana", "orange", ...]
-leaf_descendant_categories = OBJECT_TAXONOMY.get_subtree_categories("fruit.n.01")
+=== ":material-washing-machine: Washer Rule"
 
-# Get the synset of a substance category , e.g. "water" -> "water.n.06"
-substance_synset = OBJECT_TAXONOMY.get_synset_from_substance("water")
+    !!! abstract "Cleaning Operations"
+        Removes "dirty" substances when proper solvent is present and applies water effects.
 
-# Get the substance categories of a synset, e.g. "water.n.06" -> ["water"]
-substance_categories = OBJECT_TAXONOMY.get_substances("water.n.06")
+    **Process:**
 
-# Get the substance categories of all the leaf descendants of a synset, e.g. "liquid.n.01" -> ["water", "milk", "juice", ...]
-leaf_descendant_substances = OBJECT_TAXONOMY.get_subtree_substances("liquid.n.01")
-```
+    - ❌ Remove dirty substances from washer
+    - 💧 Apply water saturation or coverage
+    - ✅ Clean objects inside washer
 
-## (Advanced) Customize BEHAVIOR Knowledgebase
+=== ":material-tumble-dryer: Dryer Rule"
 
-To customize BEHAVIOR Knowedgebase, you can modify the source CSV files in the [bddl](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data) repository, and then rebuild the knowledgebase.
+    !!! abstract "Drying Operations"
+        Removes water saturation and moisture from objects.
 
-### Modify Source CSV Files
+    **Process:**
 
-You can use Excel, Google Sheets or any other spreadsheet software to modify the source CSV files below.
+    - 🌬️ Remove water saturation from objects
+    - 💨 Clear all water from dryer
+    - ✅ Dry objects completely
 
-[category_mapping.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/category_mapping.csv)
+=== ":material-knife: Slicing Rule"
 
-- **Information**: map an object category to a synset.
-- **When modify**: add a new object category.
-- **Caveat**: you also need to add the canonical density of the object category to `<gm.DATASET_PATH>/metadata/avg_category_specs.json`.
+    !!! abstract "Cutting Operations"
+        Cutting objects into halves based on contact with a `slicer` object.
 
-[substance_hyperparams.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/substance_hyperparams.csv)
+    **Requirements:**
 
-- **Information**: map a substance category to a synset, and also specify the substance's type (e.g. `fluid`, `macro_physical_particle`), physical attributes (e.g. `is_viscous`, `particle_density`) and visual appearance (e.g. `material_mtl_name`, `diffuse_reflection_color`).
-- **When modify**: add a new substance category.
-- **Caveat**: you also need to add the metadata (in a JSON file) and (optionally) particle prototypes to the `<gm.DATASET_PATH>/systems/<substance_category>`.
-    - `fluid`: only metadata is needed, e.g. `<gm.DATASET_PATH>/systems/water/metadata.json`.
-    - `granular`: both metadata and particle prototypes are needed, e.g. `<gm.DATASET_PATH>/systems/salt/metadata.json` and `<gm.DATASET_PATH>/systems/sugar/iheusv`.
-    - `macro_physical_particle`: both hyperparams and particle prototypes are needed, e.g. `<gm.DATASET_PATH>/systems/cashew/metadata.json` and `<gm.DATASET_PATH>/systems/cashew/qyglnm`.
-    - `macro_visual_particle`: both hyperparams and particle prototypes are needed, e.g. `<gm.DATASET_PATH>/systems/stain/metadata.json` and `<gm.DATASET_PATH>/systems/stain/ahkjul`.
+    - 🔪 Object with `slicer` ability
+    - 🎯 Target with `sliceable` ability
+    - ➡️ **Result:** Two object halves
 
-[synsets.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/synsets.csv)
+=== ":material-cube-outline: Dicing Rule"
 
-- **Information**: specify the parent and abilities of a synset.
-- **When modify**: add a new synset.
-- **Caveat**: feel free to create custom synsets if you can't find existing ones from WordNet; you also need to update the property parameter annotations in the `prop_param_annots` folder accordingly (see below).
+    !!! abstract "Chopping Operations"
+        Transformation into diced substances.
 
-[prop_param_annots/*](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots)
+    **Requirements:**
 
-- **Information**: specify the hyperparameters of the abilities (or properties) of a synset.
-- **When modify**: add a new synset that has the ability, or modify the hyperparameters of the ability.
-- **Caveat**: if a new object or substance synset is involved, you also need to modify `synsets.csv`, `category_mapping` and `substance_hyperparams.csv` accordingly (see above).
+    - 🔪 Object with `slicer` ability 
+    - 🎯 Target with `diceable` ability
+    - ➡️ **Result:** Diced substance
 
-[prop_param_annots/heatSource.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/heatSource.csv)
+=== ":material-fire: Melting Rule"
 
-- **Information**: specify the hyperparameters of the `heatSource` ability, e.g. whether the object needs to be toggled on or have its doors closed, whether it requires other objects to be inside it, and the heating temperature and rate.
-- **When modify**: add a new synset that has the `heatSource` ability.
+    !!! abstract "Temperature-Based Transformation"
+        Heat-induced state changes to melted substances.
 
-[prop_param_annots/coldSource.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/coldSource.csv)
+    **Requirements:**
 
-- **Information**: specify the hyperparameters of the `coldSource` ability, e.g. whether the object needs to be toggled on or have its doors closed, whether it requires other objects to be inside it, and the heating temperature and rate.
-- **When modify**: add a new synset that has the `coldSource` ability.
+    - 🌡️ Object with `meltable` ability
+    - 🔥 Reaching critical temperature
+    - ➡️ **Result:** Melted substance
 
-[prop_param_annots/cookable.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/cookable.csv)
+=== ":material-chef-hat: Recipe Rule"
 
-- **Information**: specify the hyperparameters of the `cookable` ability, e.g. the temperature threshold, and the cooked version of the substance synset (if applicable).
-- **When modify**: add a new synset that has the `cookable` ability.
+    !!! abstract "Complex Multi-Component Transformations"
+        General framework for recipe-based transitions with multiple inputs and custom conditions.
 
-[prop_param_annots/flammable.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/flammable.csv)
+    **Components:**
+    
+    | Element | Description |
+    |---------|-------------|
+    | 📥 **input_objects** | Required objects and counts |
+    | 🌊 **input_systems** | Required particle systems |
+    | 📤 **output_objects** | Produced objects and counts |
+    | 💫 **output_systems** | Produced systems (volume-based) |
+    | 🎯 **input_states** | Required input conditions |
+    | ✅ **output_states** | Resulting output conditions |
+    | 🍳 **fillable_categories** | Required containers (pots, pans, etc.) |
 
-- **Information**: specify the hyperparameters of the `flammable` ability, e.g. the ignition and fire temperature, the heating rate and distance threshold.
-- **When modify**: add a new synset that has the `flammable` ability.
+### Recipe Rule Subtypes
 
-[prop_param_annots/particleApplier.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/particleApplier.csv)
+=== ":material-pot-steam: Cooking Rules"
 
-- **Information**: specify the hyperparameters of the `particleApplier` ability, e.g. modification method, conditions, and substance synset to be applied.
-- **When modify**: add a new synset that has the `particleApplier` ability.
+    **🔥 CookingPhysicalParticleRule**
+    
+    Transforms physical particles through cooking, with optional water requirements.
+    
+    !!! example "Examples"
+        - **With water:** `rice` + `cooked__water` → `cooked__rice`
+        - **Without water:** `diced__chicken` → `cooked__diced__chicken`
 
-[prop_param_annots/particleSource.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/particleSource.csv)
+=== ":material-blender: ToggleableMachine Rules"
 
-- **Information**: specify the hyperparameters of the `particleSource` ability, e.g. conditions, and substance synset to be applied.
-- **When modify**: add a new synset that has the `particleSource` ability.
+    **⚡ ToggleableMachineRule**
+    
+    Uses toggleable appliances that must be in `ToggledOn` state.
+    
+    !!! example "Examples"
+        - **Object output:** `flour` + `butter` + `sugar` → `dough` (electric_mixer)
+        - **System output:** `strawberry` + `milk` → `strawberry_smoothie` (blender)
 
-[prop_param_annots/particleRemover.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/particleRemover.csv)
+=== ":material-silverware-spoon: Mixing Rules"
 
-- **Information**: specify the hyperparameters of the `particleRemover` ability, e.g. conditions to remove white-listed substance synsets, and conditions to remove everything else.
-- **When modify**: add a new synset that has the `particleRemover` ability.
+    **🥄 MixingToolRule**
+    
+    Leverages mixing tools in contact with fillable containers.
+    
+    !!! example "Example"
+        `water` + `lemon_juice` + `sugar` → `lemonade` (spoon + container)
 
-[prop_param_annots/particleSink.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/particleSink.csv)
+=== ":material-stove: Advanced Cooking"
 
-- **Information**: specify the hyperparameters of the `particleSink` ability (deprecated).
-- **When modify**: add a new synset that has the `particleSink` ability.
+    **👨‍🍳 CookingRule Variants**
+    
+    | Type | Input | Output | Heat Source | Container |
+    |------|-------|---------|-------------|-----------|
+    | **CookingObjectRule** | `bagel_dough` + `egg` + `sesame_seed` | `bagel` | `oven` | `baking_sheet` |
+    | **CookingSystemRule** | `beef` + `tomato` + `chicken_stock` | `stew` | `stove` | `stockpot` |
 
-[prop_param_annots/diceable.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/diceable.csv)
+---
 
-- **Information**: specify the hyperparameters of the `diceable` ability, e.g. the uncooked and cooked diced substance synsets.
-- **When modify**: add a new synset that has the `diceable` ability.
+## :material-wrench: **Advanced Customization**
 
-[prop_param_annots/sliceable.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/sliceable.csv)
+For advanced users who need to modify or extend the BEHAVIOR Knowledgebase, you can customize the source data and rebuild the system.
 
-- **Information**: specify the hyperparameters of the `sliceable` ability, e.g. the sliced halves' synset.
-- **When modify**: add a new synset that has the `sliceable` ability.
+!!! warning "Advanced Feature"
+    Knowledgebase customization requires understanding of the BEHAVIOR ecosystem and careful attention to data consistency.
 
-[prop_param_annots/meltable.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/meltable.csv)
+### Modification Workflow
 
-- **Information**: specify the hyperparameters of the `meltable` ability, e.g. the melted substance synset.
-- **When modify**: add a new synset that has the `meltable` ability.
+1. **📝 Edit Source CSV Files** - Modify the underlying data definitions
+2. **🔧 Rebuild Knowledgebase** - Generate updated system files  
+3. **✅ Validate Consistency** - Ensure task compatibility
 
-[transition_map/tm_raw_data/*](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data)
+### Key Source Files
 
-- **Information**: specify the transition rules for different types of transitions.
-- **Caveat**: if a new object or substance synset is involved, you also need to modify `synsets.csv`, `category_mapping` and `substance_hyperparams.csv` accordingly (see above).
+=== ":material-file-table: Core Mappings"
 
-[transition_map/tm_raw_data/heat_cook.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/heat_cook.csv)
+    **📋 [category_mapping.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/category_mapping.csv)**
+    
+    - **Purpose:** Map object categories to synsets
+    - **When to modify:** Adding new object categories
+    - **Dependency:** Requires updating `avg_category_specs.json` for canonical density
 
-- **Information**: specify the transition rules for `CookingObjectRule` and `CookingSystemRule`, i.e. the input synsets / states, the output synsets / states, the heat source, the container, and the timesteps to cook.
-- **When modify**: add a new transition rule for cooking objects or systems.
+    **🧪 [substance_hyperparams.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/substance_hyperparams.csv)**
+    
+    - **Purpose:** Map substance categories to synsets with physical/visual properties
+    - **When to modify:** Adding new substance categories
+    - **Dependencies:** Requires metadata and particle prototypes in dataset
 
-[transition_map/tm_raw_data/mixing_stick.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/mixing_stick.csv)
+    **🌳 [synsets.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/synsets.csv)**
+    
+    - **Purpose:** Define synset hierarchy and abilities
+    - **When to modify:** Adding new synsets
+    - **Dependencies:** Update corresponding property parameter annotations
 
-- **Information**: specify the transition rules for `MixingToolRule`, i.e. the input synsets, and the output synsets.
-- **When modify**: add a new transition rule for mixing systems.
+=== ":fontawesome-solid-gear: Property Parameters"
 
-[transition_map/tm_raw_data/single_toggleable_machine.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/single_toggleable_machine.csv)
+    **🔥 Heat & Temperature**
 
-- **Information**: specify the transition rules for `ToggleableMachineRule`, i.e. the input synsets / states, the output synsets / states, and the machine.
-- **When modify**: add a new transition rule for toggleable machines.
+    - [`heatSource.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/heatSource.csv) - heating behavior parameters
+    - [`coldSource.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/coldSource.csv) - cooling behavior parameters
+    - [`cookable.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/cookable.csv) - cooking thresholds
+    - [`flammable.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/flammable.csv) - ignition properties
 
-[transition_map/tm_raw_data/washer.csv](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/washer.csv)
+    **🧪 Particle Interactions**
 
-- **Information**: specify the transition rules for `WasherRule`, similar to `prop_param_annots/particleRemover.csv` , i.e. solvents required to remove white-listed substance synsets, and conditions to remove everything else.
-- **When modify**: add a new transition rule for washing machines.
+    - [`particleApplier.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/particleApplier.csv) - substance application
+    - [`particleSource.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/particleSource.csv) - substance generation
+    - [`particleRemover.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/particleRemover.csv) - substance removal
 
-### Rebuild Knowledgebase
+    **🔪 Physical Transformations**
 
-To rebuild the knowledgebase, you need to run the following command:
+    - [`diceable.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/diceable.csv) - dicing parameters
+    - [`sliceable.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/sliceable.csv) - slicing parameters  
+    - [`meltable.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/prop_param_annots/meltable.csv) - melting parameters
 
-```bash
-cd bddl
-python data_generation/generate_datafiles.py
-```
+=== ":material-transition: Transition Rules"
 
-To make sure the new knowledgebase is consistent with the task definitions, you should also run the following command:
+    **🍳 Recipe Definitions**
+    
+    - [`heat_cook.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/heat_cook.csv) - cooking transformations
+    - [`mixing_stick.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/mixing_stick.csv) - mixing operations
+    - [`single_toggleable_machine.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/single_toggleable_machine.csv) - appliance usage
+    - [`washer.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/washer.csv) - cleaning rules
 
-```bash
-python tests/bddl_tests.py batch_verify
-python tests/tm_tests.py
-```
+### Rebuild Process
 
-If you encounter any errors during the rebuilding process, please read the error messages carefully and try to fix the issues accordingly.
+!!! info "Rebuild Commands"
+    ```bash
+    # Rebuild the knowledgebase
+    cd bddl
+    python data_generation/generate_datafiles.py
+    
+    # Validate consistency
+    python tests/bddl_tests.py batch_verify
+    python tests/tm_tests.py
+    ```
+
+!!! tip "Error Handling"
+    If errors occur during rebuilding, carefully read error messages and address issues systematically. Common problems include missing dependencies, inconsistent mappings, or malformed CSV entries.
+
+---
+
+!!! success "Ready to Explore?"
+    Visit the [**BEHAVIOR Knowledgebase Website**](https://behavior.stanford.edu/knowledgebase) to explore the full dataset interactively! 🚀

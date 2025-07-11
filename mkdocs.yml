@@ -24,7 +24,7 @@ theme:
   extra:
     homepage: https://behavior.stanford.edu
 
-  custom_dir: .overrides
+  custom_dir: docs/overrides
 
   # color info
   palette:
@@ -40,7 +40,7 @@ theme:
 
     # Palette toggle for dark mode
     - media: "(prefers-color-scheme: dark)"
-      primary: blue grey
+      primary: black
       accent: indigo
       scheme: slate
       toggle:
@@ -95,13 +95,20 @@ plugins:
 nav:
   - Home:
       - Home: index.md
+  - Challenge:
+    - Overview: challenge/overview.md
+    - Dataset: challenge/dataset.md
+    - Demo Gallery: challenge/demo_gallery.md
+    - Baselines: challenge/baselines.md
+    - Submission: challenge/submission.md
+    - Hosting: challenge/hosting.md
   - Getting Started:
     - Installation: getting_started/installation.md
-    - Quickstart: getting_started/quickstart.md
     - Important Concepts: getting_started/important_concepts.md
-    - Examples: getting_started/examples.md
   - OmniGibson:
     - Overview: omnigibson/overview.md
+    - Quickstart: getting_started/quickstart.md
+    - Examples: getting_started/examples.md
     - Prims: omnigibson/prims.md
     - Objects: omnigibson/objects.md
     - Object States: omnigibson/object_states.md
@@ -117,9 +124,11 @@ nav:
     - Vector Environments: omnigibson/vector_environments.md
     - Setting Macros: omnigibson/setting_macros.md
     - Under the Hood - Isaac Sim: omnigibson/under_the_hood.md
-  - Tasks:
+  - Components:
     - BDDL Tasks: behavior_components/behavior_tasks.md
     - Knowledgebase: behavior_components/behavior_knowledgebase.md
+    - 3D Assets: behavior_components/3d_assets.md
+    - JoyLo: behavior_components/joylo.md
   - Tutorials:
     - Demo Collection: tutorials/demo_collection.md
     - Running on a Compute Cluster: tutorials/running_on_a_compute_cluster.md
@@ -128,15 +137,17 @@ nav:
     - Customizing Robots: tutorials/customizing_robots.md
     - Custom Robot Import: tutorials/custom_robot_import.md
   - Community:
+    - Contact: community/contact.md
     - Related Research: community/related_research.md
-    - Discord: community/discord.md
-  - Miscellaneous:
-    - Roadmap: miscellaneous/roadmap.md
-    - Speed Optimization: miscellaneous/speed_optimization.md
-    - FAQ: miscellaneous/faq.md
-    - Known Issues & Troubleshooting: miscellaneous/known_issues.md
-    - Contributing: miscellaneous/contributing.md
-    - Contact Us: miscellaneous/contact.md
+    - Roadmap: community/roadmap.md
+    - Speed Optimization: community/speed_optimization.md
+    - FAQ: community/faq.md
+    - Known Issues & Troubleshooting: community/known_issues.md
+    - Contributing: community/contributing.md
+  - BEHAVIOR-100:
+    - Overview: behavior_100/overview.md
+    - VR Dataset: behavior_100/dataset.md
+    - Demo Gallery: behavior_100/demo_gallery.md
   - API Reference: reference/*
   - Changelog: https://github.com/StanfordVL/OmniGibson/releases
 
@@ -144,3 +155,10 @@ extra:
   analytics:
     provider: google
     property: G-6L1G6GMR63
+  generator: false
+  social:
+    - icon: material/web
+      link: https://svl.stanford.edu/
+      name: SVL
+
+copyright: © 2025 Stanford Vision and Learning Lab
