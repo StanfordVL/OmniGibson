@@ -109,12 +109,6 @@ class SceneGraphBuilder(object):
             actor0_obj = og.sim._link_id_to_objects.get(contact_header.actor0, None)
             actor1_obj = og.sim._link_id_to_objects.get(contact_header.actor1, None)
 
-            for contact_point in current_contact_points:
-                impulse = contact_point.impulse
-                impulse_magnitude = self._get_impulse_magnitude(impulse)
-                if impulse_magnitude >= 0.1:
-                    print(f"Contact with {actor0_obj.name} and {actor1_obj.name} with impulse magnitude {impulse_magnitude}")
-
             if actor0_obj is not None:
                 self._contact_objects.add(actor0_obj)
             if actor1_obj is not None:
