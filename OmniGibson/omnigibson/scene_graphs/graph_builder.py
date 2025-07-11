@@ -1,4 +1,5 @@
 import itertools
+import math
 
 import networkx as nx
 import numpy as np
@@ -23,6 +24,8 @@ EXTRA_TASK_RELEVANT_CATEGORIES = {
     "driveway",
     "lawn",
 }
+
+MAGNITUDE_TOLERANCE = 1e-1
 
 def _formatted_aabb(obj):
     return T.pose2mat((obj.aabb_center, th.tensor([0, 0, 0, 1], dtype=th.float32))), obj.aabb_extent
@@ -82,14 +85,35 @@ class SceneGraphBuilder(object):
 
         # Whether to only include semantic states in the graph
         self._semantic_only = semantic_only
+    
+    @staticmethod
+    def _get_impulse_magnitude(impulse):
+        return math.sqrt(sum(x**2 for x in impulse))
 
     def _on_contact_handler(self, contact_headers, contact_data):
         '''
         This callback will be invoked after every PHYSICS step if there is any contact. Will record the contact objects in the current step.
         '''
+        current_contact_points_num = 0
         for contact_header in contact_headers:
+            # TODO: Not all contact headers have valid impulse contact points
+            # We need to skip those contact headers
+            current_contact_points = contact_data[current_contact_points_num:current_contact_points_num + contact_header.num_contact_data]
+            current_contact_points_num += contact_header.num_contact_data # always update this
+
+            has_evident_contact = any(self._get_impulse_magnitude(cp.impulse) >= MAGNITUDE_TOLERANCE 
+                                    for cp in current_contact_points)
+            if not has_evident_contact:
+                continue
+
             actor0_obj = og.sim._link_id_to_objects.get(contact_header.actor0, None)
             actor1_obj = og.sim._link_id_to_objects.get(contact_header.actor1, None)
+
+            for contact_point in current_contact_points:
+                impulse = contact_point.impulse
+                impulse_magnitude = self._get_impulse_magnitude(impulse)
+                if impulse_magnitude >= 0.1:
+                    print(f"Contact with {actor0_obj.name} and {actor1_obj.name} with impulse magnitude {impulse_magnitude}")
 
             if actor0_obj is not None:
                 self._contact_objects.add(actor0_obj)
@@ -145,10 +169,10 @@ class SceneGraphBuilder(object):
         ## 2.2 if obj_1 is 'Under' obj_2 and obj_2 is 'Inside' obj_1, remove 'Under'
         if 'Under' in states:
             # first find the (obj_2, obj_1) edge
-            for candidate_edge in all_edges:
-                if candidate_edge[0] == obj_2 \
-                and candidate_edge[1] == obj_1 \
-                and 'Inside' in candidate_edge[2]["states"]:
+            for find_obj1, find_obj2, find_states in all_edges:
+                if find_obj1.name == obj_2.name \
+                and find_obj2.name == obj_1.name \
+                and 'Inside' in [s[0] for s in find_states["states"]]:
                     filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != 'Under']
                     break
         
