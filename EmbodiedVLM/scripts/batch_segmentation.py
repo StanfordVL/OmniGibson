@@ -143,8 +143,8 @@ class BatchSegmentationProcessor:
             # Initialize FrameSegmentManager
             manager = FrameSegmentManager(str(scene_graph_path))
             
-            # Extract changes using consecutive frame comparison
-            changes = manager.extract_changes(method="temporal_threshold")
+            # Extract changes
+            changes = manager.extract_changes(method="cosine_similarity")
             
             # Save segmented scene graph
             output_scene_graph = output_task_dir / "segmented_scene_graph_0.json"
