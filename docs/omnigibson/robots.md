@@ -172,7 +172,7 @@ These are manipulation-only robots (an instance of [`ManipulationRobot`](../refe
     </tr>
     <tr>
         <td valign="top" width="60%">
-            [**`A1`**](../reference/robots/A1.md)<br><br>  
+            [**`A1`**](../reference/robots/a1.md)<br><br>  
             The 6-DOF A1 model equipped with a Inspire-Robots Dexterous Hand.<br><br> 
             <ul>
                 <li>_Controllers_: Arm, Gripper</li>
@@ -231,7 +231,7 @@ These are robots that can both navigate and manipulate (and inherit from both [`
     </tr>
     <tr>
         <td valign="top" width="60%">
-            [**`R1`**](../reference/robots/R1.md)<br><br>  
+            [**`R1`**](../reference/robots/r1.md)<br><br>  
             The bimanual R1 model, composed of a holonomic base (which we model as a 3-DOF (x,y,rz) set of joints), 4-DOF torso, x2 6-DOF arm, and x2 2-DOF parallel jaw grippers.<br><br> 
             <ul>
                 <li>_Controllers_: Base, Left Arm, Right Arm, Left Gripper, Right Gripper</li>

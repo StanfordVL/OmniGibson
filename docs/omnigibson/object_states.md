@@ -222,7 +222,7 @@ These are object states that are agnostic to other objects in a given scene.
     </tr>
     <tr>
         <td valign="top" width="60%">
-            [**`Open`**](../reference/object_states/open.md)<br><br>  
+            [**`Open`**](../reference/object_states/open_state.md)<br><br>  
             Whether the object's joint is considered open or not. This corresponds to at least one joint being above some threshold from its pre-defined annotated closed state.<br><br>
             <ul>
                 <li>`get_value()`: returns `True / False`</li>

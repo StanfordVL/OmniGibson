@@ -4,7 +4,7 @@ icon: material/bookshelf
 
 # 📚 **BEHAVIOR Knowledgebase**
 
-The [**BEHAVIOR Knowledgebase**](https://behavior.stanford.edu/knowledgebase/) is a comprehensive resource containing information about valid synsets, their relationships, abilities, hyperparameters, and hand-specified [transition rules](../modules/transition_rules.md).
+The [**BEHAVIOR Knowledgebase**](https://behavior.stanford.edu/knowledgebase/) is a comprehensive resource containing information about valid synsets, their relationships, abilities, hyperparameters, and hand-specified [transition rules](../omnigibson/transition_rules.md).
 
 ---
 
@@ -396,7 +396,7 @@ For advanced users who need to modify or extend the BEHAVIOR Knowledgebase, you 
 === ":material-transition: Transition Rules"
 
     **🍳 Recipe Definitions**
-    
+
     - [`heat_cook.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/heat_cook.csv) - cooking transformations
     - [`mixing_stick.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/mixing_stick.csv) - mixing operations
     - [`single_toggleable_machine.csv`](https://github.com/StanfordVL/bddl/tree/master/bddl/generated_data/transition_map/tm_raw_data/single_toggleable_machine.csv) - appliance usage

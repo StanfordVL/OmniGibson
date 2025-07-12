@@ -66,7 +66,7 @@ markdown_extensions:
       anchor_linenums: true
   - pymdownx.inlinehilite
   - pymdownx.snippets:
-      base_path: omnigibson
+      base_path: OmniGibson/omnigibson
   - pymdownx.tasklist:
       custom_checkbox: true
   - attr_list
@@ -79,7 +79,7 @@ plugins:
   - mkdocstrings:
       handlers:
         python:
-          paths: [omnigibson]
+          paths: [OmniGibson/omnigibson]
           options:
             docstring_options:
               returns_named_value: false

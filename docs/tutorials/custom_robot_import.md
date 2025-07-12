@@ -411,7 +411,7 @@ Now that we have the USD model, let's open it up in Isaac Sim and inspect it.
 6. Finally, save your USD (as a USDA file)! Note that you need to remove the fixed link created at step 4 before saving. Please save the file to `<gm.ASSET_PATH>/models/<name>/usd/<name>.usda`.
 
 ## Create the Robot Class
-Now that we have the USD file for the robot, let's write our own robot class. For more information please refer to the [Robot module](../modules/robots.md).
+Now that we have the USD file for the robot, let's write our own robot class. For more information please refer to the [Robot module](../omnigibson/robots.md).
 
 1. Create a new python file named after your robot. In our case, our file exists under `omnigibson/robots` and is named `stretch.py`.
 
