@@ -39,11 +39,11 @@ def main():
     cfg = {
         "render": {
             "viewer_width": 1600,
-            "viewer_height": 1600,
+            "viewer_height": 1200,
         },
         "scene": {
             "type": "InteractiveTraversableScene",
-            "scene_model": "house_single_floor",
+            "scene_model": "Rs_int",
             # "load_object_categories": [
             #     "floors",
             #     "walls",
@@ -72,7 +72,7 @@ def main():
 
     index = 0
     
-    TOTAL_IMAGES = 5000
+    TOTAL_IMAGES = 1000
     FLUSH_EVERY = 10
     HEIGHT = og.sim.viewer_height
     WIDTH = og.sim.viewer_width
@@ -183,6 +183,9 @@ def main():
 
                 index += 1
                 print(index)
+
+                if index >= TOTAL_IMAGES:
+                    break
 
         # Record the segmentation keys
         f.attrs['segmentation_labels'] = json.dumps(og.sim.viewer_camera.get_obs()[1]['seg_instance'])
