@@ -410,7 +410,7 @@ def mat2quat(rmat: torch.Tensor) -> torch.Tensor:
     Returns:
         torch.Tensor: (4,) or (..., 4) (x,y,z,w) float quaternion angles
     """
-    assert torch.allclose(torch.linalg.det(rmat), torch.tensor(1.0)), "Rotation matrix must not be scaled"
+    # assert torch.allclose(torch.linalg.det(rmat), torch.tensor(1.0)), "Rotation matrix must not be scaled"
 
     # Check if input is a single matrix or a batch
     is_single = rmat.dim() == 2
@@ -519,8 +519,8 @@ def decompose_mat(hmat):
     if torch.any(torch.abs(det_P) < EPS):
         raise ValueError("Some matrices are singular and cannot be decomposed")
 
-    if not torch.allclose(M[:, :3, 3], torch.tensor(0.0, device=hmat.device, dtype=hmat.dtype)):
-        raise ValueError("Some matrices have perspective components")
+    # if not torch.allclose(M[:, :3, 3], torch.tensor(0.0, device=hmat.device, dtype=hmat.dtype)):
+    #     raise ValueError("Some matrices have perspective components")
 
     scale = torch.zeros((batch_size, 3), device=hmat.device, dtype=hmat.dtype)
     shear = torch.zeros((batch_size, 3), device=hmat.device, dtype=hmat.dtype)

@@ -310,7 +310,7 @@ def parse_task_mapping_new():
         task_name = task.name[:-2]
         scenes = []
         for scene, status in task.scene_matching_dict.items():
-            if status["matched_ready"]:
+            if status["matched"]:
                 scenes.append(scene.name)
         mapping[task_name] = scenes
     with open("task_mapping.json", "w") as f:

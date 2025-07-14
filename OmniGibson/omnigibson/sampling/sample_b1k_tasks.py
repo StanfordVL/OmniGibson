@@ -31,7 +31,9 @@ TASK_CUSTOM_LISTS = {
     ("picking_up_trash", "Rs_int"): {
         "whitelist": {
             "pad.n.01": {
-                "sticky_note": ["tghqep"],
+                "sticky_note": {
+                    "tghqep": None,
+                },
             },
         },
         "blacklist": None,
@@ -39,7 +41,9 @@ TASK_CUSTOM_LISTS = {
     ("packing_recreational_vehicle_for_trip", "Merom_0_garden"): {
         "whitelist": {
             "wicker_basket.n.01": {
-                "wicker_basket": ["tsjvyu"],
+                "wicker_basket": {
+                    "tsjvyu": None,
+                },
             },
         },
         "blacklist": None,
@@ -47,10 +51,14 @@ TASK_CUSTOM_LISTS = {
     ("datagen_tidy_table", "house_single_floor"): {
         "whitelist": {
             "countertop.n.01": {
-                "bar": ["udatjt"],
+                "bar": {
+                    "udatjt": None,
+                },
             },
             "teacup.n.02": {
-                "teacup": ["kccqwj"],
+                "teacup": {
+                    "kccqwj": None,
+                },
             },
         },
         "blacklist": None,
@@ -58,33 +66,50 @@ TASK_CUSTOM_LISTS = {
     ("datagen_cook_brussels_sprouts", "house_single_floor"): {
         "whitelist": {
             "countertop.n.01": {
-                "bar": ["udatjt"],
+                "bar": {
+                    "udatjt": None,
+                },
             },
-            "burner.n.02": {
-                "burner": ["mjvqii"],
+            "stove.n.01": {
+                "stove": {
+                    "mjvqii": None,
+                },
             },
             "brussels_sprouts.n.01": {
-                "brussels_sprouts": ["hkwyzk"],
+                "brussels_sprouts": {
+                    "hkwyzk": None,
+                },
             },
             "stockpot.n.01": {
-                "stockpot": ["grrcna"],
+                "stockpot": {
+                    "grrcna": None,
+                },
             },
             "tupperware.n.01": {
-                "tupperware": ["mkstwr"],
+                "tupperware": {
+                    "mkstwr": None,
+                },
             },
         },
         "blacklist": None,
     },
-    ("datagen_wash_dishes", "house_single_floor"): {
+    ("datagen_clean_pan", "house_single_floor"): {
         "whitelist": {
             "countertop.n.01": {
-                "bar": ["gjeoer"],
+                "countertop": {
+                    "kelker": None,
+                    "kelzer": None,
+                },
             },
             "frying_pan.n.01": {
-                "frying_pan": ["jpzusm"],
+                "frying_pan": {
+                    "jpzusm": None,
+                },
             },
             "scrub_brush.n.01": {
-                "scrub_brush": ["hsejyi"],
+                "scrub_brush": {
+                    "hsejyi": None,
+                },
             },
         },
         "blacklist": None,
@@ -92,13 +117,19 @@ TASK_CUSTOM_LISTS = {
     ("datagen_dishes_away", "house_single_floor"): {
         "whitelist": {
             "countertop.n.01": {
-                "bar": ["gjeoer"],
+                "countertop": {
+                    "kelker": None,
+                },
             },
             "plate.n.04": {
-                "plate": ["akfjxx"],
+                "plate": {
+                    "akfjxx": None,
+                },
             },
             "shelf.n.01": {
-                "shelf": ["pfusrd"],
+                "shelf": {
+                    "pfusrd": None,
+                },
             },
         },
         "blacklist": None,
@@ -106,10 +137,14 @@ TASK_CUSTOM_LISTS = {
     ("datagen_pick", "Rs_int"): {
         "whitelist": {
             "breakfast_table.n.01": {
-                "breakfast_table": ["bhszwe"],
+                "breakfast_table": {
+                    "bhszwe": None,
+                },
             },
             "coffee_cup.n.01": {
-                "coffee_cup": ["dkxddg"],
+                "coffee_cup": {
+                    "dkxddg": None,
+                },
             },
         },
         "blacklist": None,
@@ -245,7 +280,7 @@ def main(random_selection=False, headless=False, short_exec=False):
         },
         "robots": [
             {
-                "type": "R1Pro",
+                "type": "R1",
                 "obs_modalities": [],
                 "default_reset_mode": "untuck",
                 "position": np.ones(3) * -50.0,
@@ -261,7 +296,7 @@ def main(random_selection=False, headless=False, short_exec=False):
     else:
         activities = args.activities.split(",")
         assert len(activities) == 1
-        cfg["scene"]["load_room_types"] = TASK_CUSTOM_LISTS[activities[0]]["room_types"]
+        # cfg["scene"]["load_room_types"] = [] # TASK_CUSTOM_LISTS[activities[0]]["room_types"]
 
     valid_tasks = get_valid_tasks()
     # mapping = parse_task_mapping(fpath=TASK_INFO_FPATH)
@@ -366,13 +401,13 @@ def main(random_selection=False, headless=False, short_exec=False):
             reason = f"Unsupported predicate(s): {unsupported_predicates}"
 
         env.task_config["activity_name"] = activity
-        # activity_scene_combo = (activity, args.scene_model)
-        # if activity_scene_combo in TASK_CUSTOM_LISTS:
-        #     whitelist = TASK_CUSTOM_LISTS[activity_scene_combo]["whitelist"]
-        #     blacklist = TASK_CUSTOM_LISTS[activity_scene_combo]["blacklist"]
-        if activity in TASK_CUSTOM_LISTS and args.scene_model in TASK_CUSTOM_LISTS[activity]:
-            whitelist = TASK_CUSTOM_LISTS[activity][args.scene_model]["whitelist"]
-            blacklist = TASK_CUSTOM_LISTS[activity][args.scene_model]["blacklist"]
+        activity_scene_combo = (activity, args.scene_model)
+        if activity_scene_combo in TASK_CUSTOM_LISTS:
+            whitelist = TASK_CUSTOM_LISTS[activity_scene_combo]["whitelist"]
+            blacklist = TASK_CUSTOM_LISTS[activity_scene_combo]["blacklist"]
+        # if activity in TASK_CUSTOM_LISTS and args.scene_model in TASK_CUSTOM_LISTS[activity]:
+        #     whitelist = TASK_CUSTOM_LISTS[activity][args.scene_model]["whitelist"]
+        #     blacklist = TASK_CUSTOM_LISTS[activity][args.scene_model]["blacklist"]
         else:
             whitelist, blacklist = None, None
         env.task_config["sampling_whitelist"] = whitelist
