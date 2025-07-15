@@ -87,7 +87,14 @@ def main():
         f.create_dataset('segmentation', shape=(TOTAL_IMAGES, HEIGHT, WIDTH), dtype='int32')
 
         f.create_dataset('camera_pose', shape=(TOTAL_IMAGES, 4, 4), dtype='float32')
-        f.create_dataset('camera_intrinsics', shape=(TOTAL_IMAGES, 3, 3), dtype='float32')
+
+        # Warm up.
+        for _ in range(100):
+            og.sim.render()
+
+        # Record the camera intrinsics
+        K = og.sim.viewer_camera.intrinsic_matrix.cpu().numpy()
+        f.attrs["camera_intrinsics"] = json.dumps(K.tolist())
 
         # with tqdm.tqdm(total=TOTAL_IMAGES, desc="Collecting images") as pbar:
         while index < TOTAL_IMAGES:
@@ -175,7 +182,6 @@ def main():
                 f['segmentation'][index] = seg
 
                 f['camera_pose'][index] = T.pose2mat(og.sim.viewer_camera.get_position_orientation()).cpu().numpy()
-                f['camera_intrinsics'][index] = og.sim.viewer_camera.intrinsic_matrix.cpu().numpy()
 
                 # Flush every N entries
                 if index % FLUSH_EVERY == 0:
