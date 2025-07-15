@@ -98,13 +98,14 @@ class SceneGraphBuilder(object):
         for contact_header in contact_headers:
             # TODO: Not all contact headers have valid impulse contact points
             # We need to skip those contact headers
-            current_contact_points = contact_data[current_contact_points_num:current_contact_points_num + contact_header.num_contact_data]
-            current_contact_points_num += contact_header.num_contact_data # always update this
+            # This implementation has some issues
+            # current_contact_points = contact_data[current_contact_points_num:current_contact_points_num + contact_header.num_contact_data]
+            # current_contact_points_num += contact_header.num_contact_data # always update this
 
-            has_evident_contact = any(self._get_impulse_magnitude(cp.impulse) >= MAGNITUDE_TOLERANCE 
-                                    for cp in current_contact_points)
-            if not has_evident_contact:
-                continue
+            # has_evident_contact = any(self._get_impulse_magnitude(cp.impulse) >= MAGNITUDE_TOLERANCE 
+            #                         for cp in current_contact_points)
+            # if not has_evident_contact:
+            #     continue
 
             actor0_obj = og.sim._link_id_to_objects.get(contact_header.actor0, None)
             actor1_obj = og.sim._link_id_to_objects.get(contact_header.actor1, None)
@@ -145,21 +146,24 @@ class SceneGraphBuilder(object):
         filtered_edge = (obj_1, obj_2, deepcopy(state_dict))
 
         # 1. if obj_1 is not a robot, obj_2 is a robot, and the state is 'Under', filtered
-        if not isinstance(obj_1, BaseRobot) and isinstance(obj_2, BaseRobot) and "Under" in states:
+        if not isinstance(obj_1, BaseRobot) and isinstance(obj_2, BaseRobot) and ("Under" in states or "OnTop" in states or "Inside" in states):
             # remove the 'Under' state
-            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under" and s[0] != "OnTop" and s[0] != "Inside"]
         
-        # 2. if obj_1 and obj_2 have the relations 'Inside' and 'Ontop' and their values are both True, filtered 'Ontop'
-        ## 2.1 remove 'Ontop' for (obj_1, obj_2)
-        if "Inside" in states and "Ontop" in states:
+        if isinstance(obj_2, BaseRobot) and ("OnTop" in states or "Inside" in states or 'Under' in states):
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "OnTop" and s[0] != "Inside" and s[0] != 'Under']
+        
+        # 2. if obj_1 and obj_2 have the relations 'Inside' and 'OnTop' and their values are both True, filtered 'OnTop'
+        ## 2.1 remove 'OnTop' for (obj_1, obj_2)
+        if "Inside" in states and "OnTop" in states:
             both_true = True
             for state_name, state_value in state_dict["states"]:
                 if state_name == "Inside":
                     both_true = both_true and state_value
-                elif state_name == "Ontop":
+                elif state_name == "OnTop":
                     both_true = both_true and state_value
             if both_true:
-                filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Ontop"]
+                filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "OnTop"]
         ## 2.2 if obj_1 is 'Under' obj_2 and obj_2 is 'Inside' obj_1, remove 'Under'
         if 'Under' in states:
             # first find the (obj_2, obj_1) edge
@@ -179,6 +183,9 @@ class SceneGraphBuilder(object):
         # 4. filter robot or objectis under ceiling, directly remove the edge
         if "Under" in states and "ceiling" in obj_2.category:
             filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
+        
+        if obj_1.category == obj_2.category:
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "OnTop" and s[0] != "Under" and s[0] != "Touching"]
 
 
         return filtered_edge
