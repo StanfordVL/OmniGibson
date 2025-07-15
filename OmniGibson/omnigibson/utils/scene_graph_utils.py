@@ -171,6 +171,100 @@ def generate_scene_graph_diff(
     
     return diff_graph
 
+
+def generate_state_centric_diff(
+    prev_graph: Dict[str, List[Dict]],
+    new_graph: Dict[str, List[Dict]]
+) -> Dict[str, Dict]:
+    '''
+    Generate a state-centric diff between two scene graphs.
+    
+    This function implements the new state-centric diff format that tracks
+    individual state additions and removals rather than node/edge updates.
+    
+    Args:
+        prev_graph: The previous scene graph with 'nodes' and 'edges' keys
+        new_graph: The new scene graph with 'nodes' and 'edges' keys
+    
+    Returns:
+        Dict with 'add' and 'remove' keys containing state-level changes
+    '''
+    diff = {
+        "add": {'nodes': [], 'edges': []},
+        "remove": {'nodes': [], 'edges': []}
+    }
+    
+    # Convert node lists to dictionaries for efficient lookup
+    prev_nodes = {node['name']: set(node.get('states', [])) for node in prev_graph['nodes']}
+    new_nodes = {node['name']: set(node.get('states', [])) for node in new_graph['nodes']}
+    
+    # Process node state changes
+    all_node_names = set(prev_nodes.keys()) | set(new_nodes.keys())
+    
+    for node_name in all_node_names:
+        prev_states = prev_nodes.get(node_name, set())
+        new_states = new_nodes.get(node_name, set())
+        
+        # States that were added (present in new but not in prev)
+        added_states = new_states - prev_states
+        if added_states:
+            diff['add']['nodes'].append({
+                'name': node_name,
+                'states': list(added_states)
+            })
+        
+        # States that were removed (present in prev but not in new)
+        removed_states = prev_states - new_states
+        if removed_states:
+            diff['remove']['nodes'].append({
+                'name': node_name,
+                'states': list(removed_states)
+            })
+    
+    # Convert edge lists to dictionaries for efficient lookup
+    prev_edges = {}
+    new_edges = {}
+    
+    for edge in prev_graph['edges']:
+        key = (edge['from'], edge['to'])
+        prev_edges[key] = set(edge.get('states', []))
+    
+    for edge in new_graph['edges']:
+        key = (edge['from'], edge['to'])
+        new_edges[key] = set(edge.get('states', []))
+    
+    # Process edge state changes
+    all_edge_keys = set(prev_edges.keys()) | set(new_edges.keys())
+    
+    for edge_key in all_edge_keys:
+        prev_states = prev_edges.get(edge_key, set())
+        new_states = new_edges.get(edge_key, set())
+        
+        # States that were added
+        added_states = new_states - prev_states
+        if added_states:
+            diff['add']['edges'].append({
+                'from': edge_key[0],
+                'to': edge_key[1],
+                'states': list(added_states)
+            })
+        
+        # States that were removed
+        removed_states = prev_states - new_states
+        if removed_states:
+            diff['remove']['edges'].append({
+                'from': edge_key[0],
+                'to': edge_key[1],
+                'states': list(removed_states)
+            })
+    
+    # Check if the diff is empty (no state changes)
+    if (not diff['add']['nodes'] and not diff['add']['edges'] and
+        not diff['remove']['nodes'] and not diff['remove']['edges']):
+        return {"type": "empty"}
+    
+    return diff
+
 class SceneGraphWriter:
     output_path: str
     interval: int
@@ -359,6 +453,98 @@ class SceneGraphReader:
         
         return generate_scene_graph_diff(from_graph, to_graph)
     
+    def get_unchanged_states(self, from_id, to_id) -> Dict[str, Dict]:
+        """
+        Get the unchanged states between two frames.
+        Args:
+            from_id: The starting frame ID (int or str)
+            to_id: The ending frame ID (int or str)
+            
+        Returns:
+            Dict: The unchanged states with 'nodes' and 'edges' keys
+            {
+                "nodes": [...],
+                "edges": [...]
+            }
+        """
+        from_id_str = str(from_id)
+        to_id_str = str(to_id)
+        
+        from_graph = self.get_scene_graph(from_id_str)
+        to_graph = self.get_scene_graph(to_id_str)
+        
+        from_nodes = {n['name']: set(n.get('states', [])) for n in from_graph['nodes']}
+        to_nodes = {n['name']: set(n.get('states', [])) for n in to_graph['nodes']}
+        
+        shared_node_names = set(from_nodes.keys()) & set(to_nodes.keys())
+        
+        unchanged_nodes = []
+        
+        for node_name in shared_node_names:
+            from_states = from_nodes.get(node_name, set())
+            to_states = to_nodes.get(node_name, set())
+
+            unchanged_states = from_states & to_states
+            
+            if unchanged_states:
+                unchanged_nodes.append({
+                    'name': node_name,
+                    'states': list(unchanged_states)
+                })
+        
+        from_edges = {(e['from'], e['to']): set(e.get('states', [])) for e in from_graph['edges']}
+        to_edges = {(e['from'], e['to']): set(e.get('states', [])) for e in to_graph['edges']}
+
+        shared_edge_keys = set(from_edges.keys()) & set(to_edges.keys())
+
+        unchanged_edges = []
+
+        for edge_key in shared_edge_keys:
+            from_states = from_edges.get(edge_key, set())
+            to_states = to_edges.get(edge_key, set())
+            
+            unchanged_states = from_states & to_states
+
+            if unchanged_states:
+                unchanged_edges.append({
+                    'from': edge_key[0],
+                    'to': edge_key[1],
+                    'states': list(unchanged_states)
+                })
+        
+        return {
+            'nodes': unchanged_nodes,
+            'edges': unchanged_edges
+        }
+        
+        
+        
+        
+    
+    def get_state_full_diff(self, from_id, to_id) -> Dict[str, Dict]:
+        """
+        Get the state-centric difference between two scene graphs.
+        
+        This method implements the new state-centric diff format that tracks
+        individual state additions and removals rather than node/edge updates.
+        
+        Args:
+            from_id: The starting frame ID (int or str)
+            to_id: The ending frame ID (int or str)
+            
+        Returns:
+            Dict: State-centric difference with only 'add' and 'remove' keys
+        """
+        from_id_str = str(from_id)
+        to_id_str = str(to_id)
+        
+        # Reconstruct both scene graphs
+        from_graph = self.get_scene_graph(from_id_str)
+        to_graph = self.get_scene_graph(to_id_str)
+        
+        # Generate state-centric diff
+        return generate_state_centric_diff(from_graph, to_graph)
+
     def _find_nearest_full_graph(self, target_frame_id: str) -> Tuple[str, Dict]:
         """
         Find the nearest previous full graph for a given frame ID.
