@@ -2,10 +2,10 @@
 icon: material/graph-outline
 ---
 
-<video width="640" height="480" controls autoplay loop muted>
-  <source src="../assets/b100/hundred-tile-recording.m4v" type="video/mp4">
-  Your browser does not support the video tag.
-</video>
+<iframe width="640" height="360" 
+        src="https://www.youtube-nocookie.com/embed/vvSS3zCWtHI?autoplay=1&loop=1&mute=1&controls=1&playlist=vvSS3zCWtHI&modestbranding=1&rel=0"
+        frameborder="0" allowfullscreen>
+</iframe>
 
 
 ### What is BEHAVIOR-100?
@@ -34,10 +34,10 @@ Do you want to benchmark your solution? Follow the instructions [here](https://s
     
     Activities include cleaning, preparing food, tidying, polishing, installing elements, etc. The activities are obtained from the American Time Use Survey and approximate the real distribution of tasks performed by humans in their everyday lives.
     
-    <video autoplay loop muted width="100%" style="max-width: 500px; border-radius: 8px; margin: 1rem 0;">
-        <source src="../assets/b100/behav_web1.mp4" type="video/mp4">
-        Sorry, your browser doesn't support embedded videos.
-    </video>
+    <iframe width="100%" height="281" style="max-width: 500px; border-radius: 8px; margin: 1rem 0;"
+            src="https://www.youtube-nocookie.com/embed/c3dJrIg-aL8?autoplay=1&loop=1&mute=1&controls=0&playlist=c3dJrIg-aL8&modestbranding=1&rel=0"
+            frameborder="0" allowfullscreen>
+    </iframe>
     
     **Resources:** [Activity list](https://behavior.stanford.edu/activity_list.html) | [Activity images and videos](https://behavior.stanford.edu/behavior-gallery/activity.html)
 
@@ -45,10 +45,10 @@ Do you want to benchmark your solution? Follow the instructions [here](https://s
     
     These long-horizon activities require that the robot understand the scene, plan a strategy, and execute it by controlling the motion of the embodied agent based on observations. We provide [three embodiments](https://stanfordvl.github.io/behavior/agents.html), both [a rich actuation space and a set of action primitives](https://stanfordvl.github.io/behavior/agents.html#embodiments-actuation-sensing-grasping), and [realistic RGB-D and proprioceptive signals](https://stanfordvl.github.io/behavior/agents.html#observations): as close as it gets to the challenges of real-world.
     
-    <video autoplay loop muted width="100%" style="max-width: 500px; border-radius: 8px; margin: 1rem 0;">
-        <source src="../assets/b100/behav_web2.mp4" type="video/mp4">
-        Sorry, your browser doesn't support embedded videos.
-    </video>
+    <iframe width="100%" height="281" style="max-width: 500px; border-radius: 8px; margin: 1rem 0;"
+            src="https://www.youtube-nocookie.com/embed/8N2nffFzGdA?autoplay=1&loop=1&mute=1&controls=0&playlist=8N2nffFzGdA&modestbranding=1&rel=0"
+            frameborder="0" allowfullscreen>
+    </iframe>
     
     **Resources:** [Benchmark documentation](https://stanfordvl.github.io/behavior/intro.html)
 
@@ -56,10 +56,10 @@ Do you want to benchmark your solution? Follow the instructions [here](https://s
     
     Accomplishing the BEHAVIOR activities requires changing more than the position of the objects in the environment: they need to be cooked, frozen, soaked, cleaned, and more. All these new types of state changes are supported by the provided simulator, iGibson 2.0, and enable new and unique types of activities.
     
-    <video autoplay loop muted width="100%" style="max-width: 500px; border-radius: 8px; margin: 1rem 0;">
-        <source src="../assets/b100/state_changes.mp4" type="video/mp4">
-        Sorry, your browser doesn't support embedded videos.
-    </video>
+    <iframe width="100%" height="281" style="max-width: 500px; border-radius: 8px; margin: 1rem 0;"
+            src="https://www.youtube-nocookie.com/embed/f6VSPkxolqs?autoplay=1&loop=1&mute=1&controls=0&playlist=f6VSPkxolqs&modestbranding=1&rel=0"
+            frameborder="0" allowfullscreen>
+    </iframe>
     
     **Resources:** [More about the simulator iGibson 2.0](http://svl.stanford.edu/igibson/)
 
