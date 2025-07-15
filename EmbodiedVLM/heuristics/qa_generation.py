@@ -21,6 +21,8 @@ sys.path.insert(0, os.path.join(project_root, 'OmniGibson'))
 
 try:
     from EmbodiedVLM.utils.qa_gen_utils import TaskData, QAPair, AbstractQAGenerator
+    from EmbodiedVLM.heuristics.forward_dynamics_generator import ForwardDynamicsGenerator
+    from EmbodiedVLM.heuristics.inverse_dynamics_generator import InverseDynamicsGenerator
     from omnigibson.utils.scene_graph_utils import SceneGraphReader
 except ImportError as e:
     print(f"Import error: {e}")
@@ -128,6 +130,7 @@ class QAGenerationManager:
         
         Args:
             qa_type (str): Type of Q&A to generate (e.g., "forward_dynamics", "inverse_dynamics")
+            qa_gen_logic (str): Optional logic specification for generation
             
         Returns:
             List[QAPair]: All generated Q&A pairs
@@ -165,12 +168,10 @@ class QAGenerationManager:
         
         This method can be extended to support dynamic registration of generators.
         """
-        # For now, we'll return mock generators for testing
-        # In the future, this can be extended with a registry pattern
         if qa_type == "forward_dynamics":
-            return MockForwardDynamicsGenerator
+            return ForwardDynamicsGenerator
         elif qa_type == "inverse_dynamics":
-            return MockInverseDynamicsGenerator
+            return InverseDynamicsGenerator
         else:
             return None
 
@@ -206,7 +207,7 @@ class QAGenerationManager:
         return len(self.qa_pairs)
 
 
-# Mock implementations for testing
+# Keep mock implementations for backward compatibility and testing
 
 class MockForwardDynamicsGenerator(AbstractQAGenerator):
     """

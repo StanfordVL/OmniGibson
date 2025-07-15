@@ -1,0 +1,474 @@
+"""
+State Change Translator for Scene Graph Diffs.
+
+This module provides functionality to translate symbolic scene graph differences 
+into natural language descriptions for Q&A generation.
+"""
+
+from typing import Dict, List, Any, Set
+import random
+
+
+class StateChangeTranslator:
+    """
+    Translates symbolic scene graph differences into natural language descriptions.
+    
+    Uses a template-based approach with change type templates and state type templates
+    to generate readable descriptions of scene graph modifications.
+    
+    Updated to support the new state-centric diff format that only contains 'add'
+    and 'remove' operations (no 'update' operations).
+    """
+    
+    def __init__(self):
+        """Initialize the translator with predefined templates."""
+        self._change_type_templates = {
+            'add': {
+                'nodes': [
+                    "{object} is now {state}",
+                    "{object} became {state}",
+                    "{object} is {state}"
+                ],
+                'edges': [
+                    "{object} is now {relation} {target}",
+                    "{object} was {relation} {target}",
+                    "{object} is {relation} {target}"
+                ]
+            },
+            'remove': {
+                'nodes': [
+                    "{object} is no longer {state}",
+                    "{object} stopped being {state}",
+                    "{object} is not {state}"
+                ],
+                'edges': [
+                    "{object} is no longer {relation} {target}",
+                    "{object} is not {relation} {target}"
+                ]
+            }
+        }
+        
+        # State type templates for natural language mapping
+        self._state_templates = {
+            # Unary states (nodes)
+            'Burnt': 'burnt',
+            'Cooked': 'cooked',
+            'Folded': 'folded',
+            'Unfolded': 'unfolded',
+            'Frozen': 'frozen',
+            'HeatSourceOrSink': 'heat source or sink',
+            'Heated': 'heated',
+            'OnFire': 'on fire',
+            'InFOVofRobot': 'in field of view of robot',
+            'Open': 'open',
+            'ToggledOn': 'turned on',
+            
+            
+            # Binary relations (edges)
+            'AttachedTo': 'attached to',
+            'Contains': 'containing',
+            'Covered': 'covered by',
+            'Draped': 'draped over',
+            'Filled': 'filled with',
+            'Inside': 'inside',
+            'NextTo': 'next to',
+            'OnTop': 'on top of',
+            'Overlaid': 'overlaid on',
+            'Saturated': 'saturated with',
+            'Touching': 'touching',
+            'Under': 'under',
+            'Grasping': 'grasping',
+            'LeftGrasping': 'grasping with left hand',
+            'RightGrasping': 'grasping with right hand'
+        }
+    
+    def translate_diff(self, diff: Dict[str, Any]) -> str:
+        """
+        Translate a scene graph diff into natural language description.
+        
+        Updated to work with the new state-centric diff format that only contains
+        'add' and 'remove' operations.
+        
+        Args:
+            diff: State-centric scene graph difference with 'add' and 'remove' operations
+            
+        Returns:
+            str: Natural language description of the changes
+        """
+        if diff.get('type') == 'empty':
+            return "No significant changes occurred."
+        
+        descriptions = []
+        
+        # Process only add and remove operations (no update in new format)
+        for operation in ['add', 'remove']:
+            if operation in diff:
+                # Process node changes
+                for node in diff[operation].get('nodes', []):
+                    desc = self._translate_node_change(operation, node)
+                    if desc:
+                        descriptions.append(desc)
+                
+                # Process edge changes
+                for edge in diff[operation].get('edges', []):
+                    desc = self._translate_edge_change(operation, edge)
+                    if desc:
+                        descriptions.append(desc)
+        
+        if not descriptions:
+            print(f"No descriptions found for diff: {diff}")
+            exit()
+        
+        # Combine descriptions naturally
+        if len(descriptions) == 1:
+            return descriptions[0] + "."
+        elif len(descriptions) == 2:
+            return descriptions[0] + " and " + descriptions[1] + "."
+        else:
+            return ", ".join(descriptions[:-1]) + ", and " + descriptions[-1] + "."
+    
+    def _translate_node_change(self, operation: str, node: Dict[str, Any]) -> str:
+        """
+        Translate a node change into natural language.
+        
+        Args:
+            operation: 'add' or 'remove'
+            node: Node data with 'name' and 'states'
+            
+        Returns:
+            str: Natural language description
+        """
+        object_name = self._format_object_name(node.get('name', ''))
+        states = node.get('states', [])
+        
+        if not states:
+            return ""
+        
+        # Handle multiple states
+        state_descriptions = []
+        for state in states:
+            if state in self._state_templates:
+                state_desc = self._state_templates[state]
+                template = random.choice(self._change_type_templates[operation]['nodes'])
+                desc = template.format(object=object_name, state=state_desc)
+                state_descriptions.append(desc)
+        
+        if not state_descriptions:
+            return ""
+        
+        if len(state_descriptions) == 1:
+            return state_descriptions[0]
+        else:
+            return ", ".join(state_descriptions[:-1]) + " and " + state_descriptions[-1]
+    
+    def _translate_edge_change(self, operation: str, edge: Dict[str, Any]) -> str:
+        """
+        Translate an edge change into natural language.
+        
+        Args:
+            operation: 'add' or 'remove'
+            edge: Edge data with 'from', 'to', and 'states'
+            
+        Returns:
+            str: Natural language description
+        """
+        from_obj = self._format_object_name(edge.get('from', ''))
+        to_obj = self._format_object_name(edge.get('to', ''))
+        states = edge.get('states', [])
+        
+        if not states or not from_obj or not to_obj:
+            return ""
+        
+        # Handle multiple relation states
+        relation_descriptions = []
+        for state in states:
+            # Skip contact states as they're often too low-level
+            if 'Contact' in state:
+                continue
+                
+            if state in self._state_templates:
+                relation_desc = self._state_templates[state]
+                template = random.choice(self._change_type_templates[operation]['edges'])
+                desc = template.format(object=from_obj, relation=relation_desc, target=to_obj)
+                relation_descriptions.append(desc)
+        
+        if not relation_descriptions:
+            return ""
+        
+        if len(relation_descriptions) == 1:
+            return relation_descriptions[0]
+        else:
+            return ", ".join(relation_descriptions[:-1]) + " and " + relation_descriptions[-1]
+    
+    def _format_object_name(self, name: str) -> str:
+        """
+        Format object name for natural language with advanced pattern recognition.
+        
+        Handles specific patterns:
+        - robot_r1 -> "robot r1" (keep meaningful suffixes, remove underscores)
+        - food_processor_90 -> "food processor" (remove numeric suffixes)
+        - top_cabinet_tynnnw_1 -> "top cabinet" (remove 6-char strange strings + numbers)
+        
+        Args:
+            name: Raw object name from scene graph
+            
+        Returns:
+            str: Formatted object name with "the" article
+        """
+        if not name:
+            return "the object"
+        
+        if name == "floors_sdejoi_0":
+            pass
+        
+        # Convert to lowercase for processing
+        original_name = name
+        name = name.lower()
+        
+        # Split by underscores
+        parts = name.split('_')
+        
+        if len(parts) == 1:
+            # No underscores, just clean and return
+            cleaned = self._clean_single_part(parts[0])
+            return f"the {cleaned}" if cleaned else "the object"
+        
+        cleaned_parts = []
+        
+        # Process each part with advanced logic
+        for i, part in enumerate(parts):
+            cleaned_part = self._process_name_part(part, i, len(parts), parts)
+            if cleaned_part:
+                cleaned_parts.append(cleaned_part)
+        
+        if not cleaned_parts:
+            print(f"No cleaned parts found for {original_name}")
+            exit()
+        
+        formatted_name = " ".join(cleaned_parts)
+        return f"the {formatted_name}"
+    
+    def _clean_single_part(self, part: str) -> str:
+        """Clean a single part that has no underscores."""
+        # Remove trailing numbers for single parts
+        cleaned = ''.join(c for c in part if not c.isdigit())
+        return cleaned if cleaned else part
+    
+    def _process_name_part(self, part: str, position: int, total_parts: int, all_parts: list) -> str:
+        """
+        Process a single part of an object name with advanced logic.
+        
+        Args:
+            part: The part to process
+            position: Position in the parts list (0-indexed)
+            total_parts: Total number of parts
+            all_parts: All parts for context
+            
+        Returns:
+            str: Cleaned part or None if should be removed
+        """
+        # Skip empty parts
+        if not part:
+            return None
+        
+        # Skip pure numbers at the end (like "_90", "_1")
+        if part.isdigit():
+            return None
+        
+        # Handle robot special case: keep meaningful robot IDs like "r1", "r2"
+        if position > 0 and any(prev_part in ['robot', 'agent', 'player'] for prev_part in all_parts[:position]):
+            if part.startswith('r') and len(part) <= 3 and part[1:].isdigit():
+                return part  # Keep "r1", "r2", etc.
+        
+        # Detect and remove 6-character strange strings (like "tynnnw")
+        if len(part) == 6 and self._is_strange_string(part) and position != 0:
+            return None
+        
+        # Remove numbers from the end of meaningful parts
+        # But keep the meaningful part (e.g., "processor90" -> "processor")
+        cleaned = self._remove_trailing_numbers(part)
+        
+        # Only keep if it has meaningful content
+        if len(cleaned) >= 2 and cleaned.isalpha():
+            return cleaned
+        
+        # Special case: if it's a very short part and not obviously garbage, keep it
+        if len(part) <= 3 and part.isalpha():
+            return part
+        
+        return None
+    
+    def _is_strange_string(self, part: str) -> bool:
+        """
+        Detect if a 6-character string is likely a strange/generated identifier.
+        
+        Characteristics of strange strings:
+        - Exactly 6 characters
+        - Mix of letters that don't form common English patterns
+        - Often have repeated characters or unusual patterns
+        - Sequential patterns like "abcdef"
+        
+        Args:
+            part: String part to check
+            
+        Returns:
+            bool: True if likely a strange string
+        """
+        if len(part) != 6:
+            return False
+        
+        # Check for common English prefixes/suffixes in 6-char words
+        common_6char_words = {
+            'camera', 'window', 'handle', 'switch', 'button', 'drawer', 
+            'bottle', 'holder', 'sensor', 'filter', 'plugin', 'socket',
+            'medium', 'normal', 'center', 'middle', 'indoor', 'output', "floors"
+        }
+        
+        if part in common_6char_words:
+            return False
+        
+        return True
+    
+    def _is_sequential_pattern(self, part: str) -> bool:
+        """
+        Check if a string is a sequential alphabetical pattern.
+        
+        Examples: "abcdef", "defghi", "mnopqr"
+        
+        Args:
+            part: String to check
+            
+        Returns:
+            bool: True if it's a sequential pattern
+        """
+        if len(part) < 3:
+            return False
+        
+        # Check for ascending sequential pattern
+        is_ascending = True
+        for i in range(1, len(part)):
+            if ord(part[i]) != ord(part[i-1]) + 1:
+                is_ascending = False
+                break
+        
+        if is_ascending:
+            return True
+        
+        # Check for descending sequential pattern
+        is_descending = True
+        for i in range(1, len(part)):
+            if ord(part[i]) != ord(part[i-1]) - 1:
+                is_descending = False
+                break
+        
+        return is_descending
+    
+    def _has_suspicious_pattern(self, part: str) -> bool:
+        """Check for suspicious repeating patterns."""
+        # Check for ABCABC pattern (3-char repeat)
+        if len(part) == 6:
+            if part[:3] == part[3:]:
+                return True
+        
+        # Check for ABABAB pattern (2-char repeat)
+        if len(part) >= 4:
+            first_two = part[:2]
+            is_repeating = True
+            for i in range(2, len(part), 2):
+                if i + 1 < len(part) and part[i:i+2] != first_two:
+                    is_repeating = False
+                    break
+            if is_repeating and len(part) % 2 == 0:
+                return True
+        
+        return False
+    
+    def _looks_like_word(self, part: str) -> bool:
+        """Check if a string looks like it could be a real word."""
+        # Very basic check: real words usually have some vowel-consonant structure
+        vowels = set('aeiou')
+        has_vowel = any(c in vowels for c in part)
+        has_consonant = any(c not in vowels and c.isalpha() for c in part)
+        
+        return has_vowel and has_consonant
+    
+    def _remove_trailing_numbers(self, part: str) -> str:
+        """Remove numbers from the end of a string."""
+        # Find the last non-digit character
+        last_alpha_idx = -1
+        for i in range(len(part) - 1, -1, -1):
+            if not part[i].isdigit():
+                last_alpha_idx = i
+                break
+        
+        if last_alpha_idx >= 0:
+            return part[:last_alpha_idx + 1]
+        else:
+            # All digits, return original (shouldn't happen due to earlier checks)
+            return part
+    
+    def get_core_objects_from_diff(self, diff: Dict[str, Any]) -> Set[str]:
+        """
+        Extract the core objects involved in a diff for FOV checking.
+        
+        Updated to work with the new state-centric diff format.
+        
+        Args:
+            diff: State-centric scene graph difference
+            
+        Returns:
+            Set[str]: Set of object names involved in the diff
+        """
+        objects = set()
+        
+        # Process only add and remove operations (no update in new format)
+        for operation in ['add', 'remove']:
+            if operation in diff:
+                # Add objects from node changes
+                for node in diff[operation].get('nodes', []):
+                    if 'name' in node:
+                        objects.add(node['name'])
+                
+                # Add objects from edge changes
+                for edge in diff[operation].get('edges', []):
+                    if 'from' in edge:
+                        objects.add(edge['from'])
+                    if 'to' in edge:
+                        objects.add(edge['to'])
+        
+        return objects
+    
+    def diff_signature(self, diff: Dict[str, Any]) -> str:
+        """
+        Generate a unique signature for a diff to enable comparison.
+        
+        Updated to work with the new state-centric diff format.
+        
+        Args:
+            diff: State-centric scene graph difference
+            
+        Returns:
+            str: Unique signature string
+        """
+        if diff.get('type') == 'empty':
+            return "empty"
+        
+        components = []
+        
+        # Process only add and remove operations (no update in new format)
+        for operation in ['add', 'remove']:
+            if operation in diff:
+                # Add signatures for node changes
+                for node in diff[operation].get('nodes', []):
+                    name = node.get('name', '')
+                    states = sorted(node.get('states', []))
+                    components.append(f"{operation}_node_{name}_{','.join(states)}")
+                
+                # Add signatures for edge changes
+                for edge in diff[operation].get('edges', []):
+                    from_obj = edge.get('from', '')
+                    to_obj = edge.get('to', '')
+                    states = sorted(edge.get('states', []))
+                    components.append(f"{operation}_edge_{from_obj}_{to_obj}_{','.join(states)}")
+        
+        return "|".join(sorted(components)) 

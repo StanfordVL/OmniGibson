@@ -15,14 +15,46 @@ def has_scene_graph_changes(diff: Dict[str, Any]) -> bool:
     Returns:
         bool: True if there are changes, False otherwise
     """
+    # Check for empty diff type
+    if diff.get('type') == 'empty':
+        return False
+    
     # Check if there are any additions, removals, or updates
     has_changes = (
         bool(diff.get('add', {}).get('nodes')) or 
         bool(diff.get('add', {}).get('edges')) or
         bool(diff.get('remove', {}).get('nodes')) or 
         bool(diff.get('remove', {}).get('edges')) or
-        bool(diff.get('update', {}).get('nodes')) or 
-        bool(diff.get('update', {}).get('edges'))
+        bool(diff.get('update', {}).get('nodes')) or  # For backward compatibility with old format
+        bool(diff.get('update', {}).get('edges'))     # For backward compatibility with old format
+    )
+    
+    return has_changes
+
+
+def has_state_centric_changes(diff: Dict[str, Any]) -> bool:
+    """
+    Check if a state-centric diff contains any actual changes.
+    
+    This function is specifically for the new state-centric diff format
+    that only uses 'add' and 'remove' operations.
+    
+    Args:
+        diff (Dict[str, Any]): State-centric scene graph difference dictionary
+        
+    Returns:
+        bool: True if there are changes, False otherwise
+    """
+    # Check for empty diff type
+    if diff.get('type') == 'empty':
+        return False
+    
+    # Check if there are any state additions or removals
+    has_changes = (
+        bool(diff.get('add', {}).get('nodes')) or 
+        bool(diff.get('add', {}).get('edges')) or
+        bool(diff.get('remove', {}).get('nodes')) or 
+        bool(diff.get('remove', {}).get('edges'))
     )
     
     return has_changes

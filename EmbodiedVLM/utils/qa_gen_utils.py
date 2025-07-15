@@ -1,5 +1,5 @@
 """
-Utility functions for Q&A generation.
+
 """
 
 import os
@@ -55,9 +55,11 @@ class QAPair:
         """Convert to dictionary format for serialization."""
         return {
             'id': self.id,
+            'type': self.gt_answer['type'],
             'images': self.images,
             'question': self.question,
-            'gt_answer': self.gt_answer
+            'options': self.gt_answer['options'],
+            'gt_answer': self.gt_answer['correct_option']
         }
 
 
