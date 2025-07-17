@@ -9,7 +9,7 @@ world modeling capabilities.
 import sys
 import os
 import json
-from typing import Dict, List
+from typing import Dict, List, Tuple
 from pathlib import Path
 
 # Add parent directories to path for relative imports
@@ -78,14 +78,15 @@ class QAGenerationManager:
                 key_frame_ids = scene_graph_reader.get_available_frame_ids()
                 
                 # Collect image paths for each frame and sensor
-                image_paths = self._collect_image_paths(task_dir, key_frame_ids)
+                image_root_path, image_paths = self._collect_image_paths(task_dir, key_frame_ids)
                 
                 task_data = TaskData(
                     task_name=task_name,
                     scene_graph_reader=scene_graph_reader,
                     key_frame_ids=key_frame_ids,
                     image_paths=image_paths,
-                    task_dir=str(task_dir)
+                    task_dir=str(task_dir),
+                    image_root_path=image_root_path
                 )
                 
                 self.task_data_list.append(task_data)
@@ -95,7 +96,7 @@ class QAGenerationManager:
                 print(f"Error loading task {task_name}: {str(e)}")
                 continue
 
-    def _collect_image_paths(self, task_dir: Path, key_frame_ids: List[str]) -> Dict[str, Dict[str, str]]:
+    def _collect_image_paths(self, task_dir: Path, key_frame_ids: List[str]) -> Tuple[str, Dict[str, Dict[str, str]]]:
         """
         Collect image paths for all key frames and sensors.
         
@@ -110,6 +111,8 @@ class QAGenerationManager:
         
         # Find all sensor directories
         sensor_dirs = [d for d in task_dir.iterdir() if d.is_dir() and d.name.startswith('external_sensor')]
+
+        image_root_path = task_dir.parent # file structure: image_root/task_name/sensor_name/frame_id.png
         
         for frame_id in key_frame_ids:
             image_paths[frame_id] = {}
@@ -122,7 +125,7 @@ class QAGenerationManager:
                 if image_file.exists():
                     image_paths[frame_id][sensor_name] = str(image_file)
         
-        return image_paths
+        return image_root_path, image_paths
 
     def generate(self, qa_type: str, qa_gen_logic: str=None) -> List[QAPair]:
         """
@@ -205,120 +208,3 @@ class QAGenerationManager:
     def num_qa_pairs(self) -> int:
         """Return the number of stored Q&A pairs."""
         return len(self.qa_pairs)
-
-
-# Keep mock implementations for backward compatibility and testing
-
-class MockForwardDynamicsGenerator(AbstractQAGenerator):
-    """
-    Mock implementation of forward dynamics Q&A generator for testing.
-    
-    Forward Dynamics: Given state A and state B, what happened?
-    """
-    def __init__(self, qa_gen_logic: str=None):
-        pass
-
-    @property
-    def qa_type(self) -> str:
-        return "forward_dynamics"
-
-    def generate(self, task_data: TaskData) -> List[QAPair]:
-        """
-        Generate mock forward dynamics Q&A pairs.
-        """
-        qa_pairs = []
-        
-        # Generate Q&A pairs for consecutive frame pairs
-        for i in range(len(task_data.key_frame_ids) - 1):
-            frame_a_id = task_data.key_frame_ids[i]
-            frame_b_id = task_data.key_frame_ids[i + 1]
-            
-            # Get images for both frames (using first available sensor)
-            images_a = list(task_data.image_paths.get(frame_a_id, {}).values())
-            images_b = list(task_data.image_paths.get(frame_b_id, {}).values())
-            
-            if not images_a or not images_b:
-                continue
-            
-            # Create Q&A pair
-            qa_id = f"{task_data.task_name}_forward_{frame_a_id}_{frame_b_id}"
-            question = f"What happened between the first image and the second image?"
-            
-            # Mock answer with multiple choice options
-            gt_answer = {
-                "type": "multiple_choice",
-                "options": [
-                    "The robot picked up an object",
-                    "The robot opened a container", 
-                    "The robot moved an object to a new location",
-                    "No significant change occurred"
-                ],
-                "correct_option": 0  # Mock: first option is correct
-            }
-            
-            qa_pair = QAPair(
-                id=qa_id,
-                images=[images_a[0], images_b[0]],  # Use first sensor
-                question=question,
-                gt_answer=gt_answer
-            )
-            
-            qa_pairs.append(qa_pair)
-        
-        return qa_pairs
-
-
-class MockInverseDynamicsGenerator(AbstractQAGenerator):
-    """
-    Mock implementation of inverse dynamics Q&A generator for testing.
-    
-    Inverse Dynamics: Given state A and a description of change, what is the final state?
-    """
-    def __init__(self, qa_gen_logic: str=None):
-        pass
-
-    @property
-    def qa_type(self) -> str:
-        return "inverse_dynamics"
-
-    def generate(self, task_data: TaskData) -> List[QAPair]:
-        """
-        Generate mock inverse dynamics Q&A pairs.
-        """
-        qa_pairs = []
-        
-        # Generate Q&A pairs using sets of 3 consecutive frames
-        for i in range(len(task_data.key_frame_ids) - 2):
-            frame_a_id = task_data.key_frame_ids[i]
-            frame_b_id = task_data.key_frame_ids[i + 1]
-            frame_c_id = task_data.key_frame_ids[i + 2]
-            
-            # Get images
-            images_a = list(task_data.image_paths.get(frame_a_id, {}).values())
-            images_b = list(task_data.image_paths.get(frame_b_id, {}).values())
-            images_c = list(task_data.image_paths.get(frame_c_id, {}).values())
-            
-            if not all([images_a, images_b, images_c]):
-                continue
-            
-            # Create Q&A pair
-            qa_id = f"{task_data.task_name}_inverse_{frame_a_id}_{frame_c_id}"
-            question = f"Starting from the given image, if the robot picks up an object and moves it to a new location, which of the following images shows the most likely result?"
-            
-            # Mock answer with image options
-            gt_answer = {
-                "type": "image_choice",
-                "options": [images_b[0], images_c[0]],  # Two candidate final states
-                "correct_option": 1  # Mock: second option (frame C) is correct
-            }
-            
-            qa_pair = QAPair(
-                id=qa_id,
-                images=[images_a[0]],  # Starting state
-                question=question,
-                gt_answer=gt_answer
-            )
-            
-            qa_pairs.append(qa_pair)
-        
-        return qa_pairs 

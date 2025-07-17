@@ -9,8 +9,11 @@ import sys
 import os
 import random
 import copy
-from typing import Dict, List, Any, Set
+from typing import Dict, List, Any, Set, Tuple
 from pathlib import Path
+
+# Add PIL imports for image processing
+from PIL import Image, ImageDraw, ImageFont
 
 # Add parent directories to path for relative imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -35,7 +38,7 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
     Forward Dynamics: Given state A and a description of change, what is the final state?
     """
     
-    def __init__(self, qa_gen_logic: str = None):
+    def __init__(self, qa_gen_logic: str = None, visual_prompt: bool=True):
         """
         Initialize the forward dynamics generator.
         
@@ -44,10 +47,21 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         """
         self.translator = StateChangeTranslator()
         self.qa_gen_logic = qa_gen_logic
-    
+        self.visual_prompt = visual_prompt
+
     @property
     def qa_type(self) -> str:
         return "forward_dynamics" if not self.qa_gen_logic else f"{self.qa_gen_logic}_forward_dynamics"
+    
+    def visual_prompt_path(self, image_root_dir) -> str:
+        """
+        Path to the visual prompt for this Q&A generator. Should be default to QA_images/[qa_type]/[images]
+
+        Returns:
+            str: Path to the visual prompt
+        """
+        # replace the image root path last folder with 'QA_images'
+        return image_root_dir / 'BehaviorEQA' / self.qa_type
     
     def generate(self, task_data: TaskData) -> List[QAPair]:
         """
@@ -109,6 +123,108 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         
         return qa_pairs
     
+    def _add_text_to_image(self, image_path: str, text: str, output_path: str) -> None:
+        """Helper function to add text label to an image and save it."""
+        try:
+            # Open the image
+            img = Image.open(image_path)
+            
+            # Create a drawing context
+            draw = ImageDraw.Draw(img)
+            
+            # Setup font - make it larger for better visibility
+            font_size = max(40, img.height // 10)  # Increased font size (was img.height // 20)
+            try:
+                # Try to use a standard font
+                font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf", font_size)
+            except (OSError, IOError):
+                try:
+                    # Fallback to DejaVu font
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
+                except (OSError, IOError):
+                    # Use default font if no system fonts available
+                    font = ImageFont.load_default()
+            
+            # Text styling - changed to bright red text with white outline
+            text_color = (255, 20, 20)   # Bright red text (was white)
+            outline_color = (255, 255, 255)  # White outline (was black)
+            outline_width = 3  # Slightly thicker outline
+            
+            # Position text at top-left corner with some padding
+            x, y = 15, 15  # Slightly more padding
+            
+            # Draw text with outline for better visibility
+            for dx in range(-outline_width, outline_width + 1):
+                for dy in range(-outline_width, outline_width + 1):
+                    if dx != 0 or dy != 0:
+                        draw.text((x + dx, y + dy), text, font=font, fill=outline_color)
+            
+            # Draw the main text
+            draw.text((x, y), text, font=font, fill=text_color)
+            
+            # Save the processed image
+            img.save(output_path)
+            
+        except Exception as e:
+            print(f"Error processing image {image_path}: {e}")
+            # If processing fails, copy the original image
+            import shutil
+            shutil.copy2(image_path, output_path)
+    
+    def _create_visual_prompt_for_images(self, qa_id: str, cur_state_image: str,all_image_options: List[str], task_data: TaskData) -> Tuple[str, List[str]]:
+        """
+        Create a visual prompt for the images.
+
+        Args:
+            qa_id: QA pair ID
+            cur_state_image: Current state image path
+            all_image_options: List of image paths (4 options)
+            task_data: Task data
+            
+        Returns:
+            Tuple containing the new current state image path and list of new option image paths
+        """
+        # Get the new directory path using visual_prompt_path method
+        image_root_dir = task_data.image_root_path.parent
+        new_base_dir = self.visual_prompt_path(image_root_dir)
+        task_name = task_data.task_name
+
+        assert len(all_image_options) == 4, f"There should be 4 image options. Got {len(all_image_options)} instead."
+        
+        # Create the full output directory path
+        output_dir = Path(new_base_dir) / task_name
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        
+        # Process current state image
+        cur_state_output_path = output_dir / f"{qa_id}_cur_state.png"
+        self._add_text_to_image(cur_state_image, "Current State", str(cur_state_output_path))
+        
+        # Process option images
+        option_labels = ["Option A", "Option B", "Option C", "Option D"]
+        option_output_paths = []
+        
+        for i, image_path in enumerate(all_image_options):
+            if i >= 4:  # Ensure we only process 4 options
+                break
+            
+            option_output_path = output_dir / f"{qa_id}_option_{chr(65 + i)}.png"
+            self._add_text_to_image(image_path, option_labels[i], str(option_output_path))
+            option_output_paths.append(str(option_output_path))
+        
+        # Ensure we have exactly 4 options (pad with last image if necessary)
+        while len(option_output_paths) < 4:
+            if all_image_options:
+                last_image = all_image_options[-1]
+                missing_option_idx = len(option_output_paths)
+                option_output_path = output_dir / f"{qa_id}_option_{chr(65 + missing_option_idx)}.png"
+                self._add_text_to_image(last_image, option_labels[missing_option_idx], str(option_output_path))
+                option_output_paths.append(str(option_output_path))
+            else:
+                break
+        
+        return str(cur_state_output_path), option_output_paths
+    
     def _create_forward_qa_pair(self, task_data: TaskData, frame_a_id: str, frame_b_id: str,
                                image_a_path: str, image_b_path: str, 
                                ground_truth_diff: Dict[str, Any]) -> QAPair:
@@ -148,11 +264,15 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         # convert correct_option_index to A, B, C, D
         correct_option_index = chr(correct_option_index + 65)
 
-
-        
         # Create QA pair
         qa_id = f"{task_data.task_name}_{self.qa_type}_{frame_a_id}_{frame_b_id}"
         
+        # Create and save the visual prompt for the images
+        if self.visual_prompt:
+            cur_state_image, option_images = self._create_visual_prompt_for_images(qa_id, image_a_path, all_image_options, task_data)
+            image_a_path = cur_state_image
+            all_image_options = option_images
+
         gt_answer = {
             "type": self.qa_type,
             "options": all_image_options,
@@ -161,7 +281,7 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         
         qa_pair = QAPair(
             id=qa_id,
-            images=[image_a_path],  # Only initial image is given
+            images=[image_a_path],
             question=question,
             gt_answer=gt_answer
         )
@@ -206,11 +326,6 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
                 diff_1 = task_data.scene_graph_reader.get_diff(correct_frame_a, frame_id)
                 diff_2 = task_data.scene_graph_reader.get_diff(correct_frame_b, frame_id)
                 if diff_1.get('type') == 'empty' or diff_2.get('type') == 'empty':
-                    print(f"Task name: {task_data.task_name}")
-                    print(f"Skipping frame {frame_id} because it has no meaningful changes")
-                    print(f"frame_id: {frame_id}")
-                    print(f"correct_frame_a: {correct_frame_a}, diff_1: {diff_1}")
-                    print(f"correct_frame_b: {correct_frame_b}, diff_2: {diff_2}")
                     continue
                 candidate_images.append(images[sensor_name])
 

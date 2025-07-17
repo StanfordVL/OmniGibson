@@ -33,6 +33,7 @@ class TaskData:
     key_frame_ids: List[str]
     image_paths: Dict[str, Dict[str, str]]
     task_dir: str
+    image_root_path: str
 
 
 @dataclass

@@ -8,8 +8,11 @@ This module implements the InverseDynamicsGenerator class that generates
 import sys
 import os
 import random
-from typing import Dict, List, Any
+from typing import Dict, List, Any, Tuple
 from pathlib import Path
+
+# Add PIL imports for image processing
+from PIL import Image, ImageDraw, ImageFont
 
 # Add parent directories to path for relative imports
 current_dir = os.path.dirname(os.path.abspath(__file__))
@@ -34,7 +37,7 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
     Inverse Dynamics: Given state A and state B, what happened?
     """
     
-    def __init__(self, qa_gen_logic: str = None):
+    def __init__(self, qa_gen_logic: str = None, visual_prompt: bool=True):
         """
         Initialize the inverse dynamics generator.
         
@@ -43,10 +46,21 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         """
         self.translator = StateChangeTranslator()
         self.qa_gen_logic = qa_gen_logic
-    
+        self.visual_prompt = visual_prompt
+
     @property
     def qa_type(self) -> str:
         return "inverse_dynamics" if not self.qa_gen_logic else f"{self.qa_gen_logic}_inverse_dynamics"
+    
+    def visual_prompt_path(self, image_root_dir) -> str:
+        """
+        Path to the visual prompt for this Q&A generator. Should be default to QA_images/[qa_type]/[images]
+
+        Returns:
+            str: Path to the visual prompt
+        """
+        # replace the image root path last folder with 'QA_images'
+        return image_root_dir / 'BehaviorEQA' / self.qa_type
     
     def generate(self, task_data: TaskData) -> List[QAPair]:
         """
@@ -108,6 +122,87 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         
         return qa_pairs
     
+    def _add_text_to_image(self, image_path: str, text: str, output_path: str) -> None:
+        """Helper function to add text label to an image and save it."""
+        try:
+            # Open the image
+            img = Image.open(image_path)
+            
+            # Create a drawing context
+            draw = ImageDraw.Draw(img)
+            
+            # Setup font - make it larger for better visibility
+            font_size = max(40, img.height // 10)  # Increased font size (was img.height // 20)
+            try:
+                # Try to use a standard font
+                font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf", font_size)
+            except (OSError, IOError):
+                try:
+                    # Fallback to DejaVu font
+                    font = ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf", font_size)
+                except (OSError, IOError):
+                    # Use default font if no system fonts available
+                    font = ImageFont.load_default()
+            
+            # Text styling - changed to bright red text with white outline
+            text_color = (255, 20, 20)   # Bright red text (was white)
+            outline_color = (255, 255, 255)  # White outline (was black)
+            outline_width = 3  # Slightly thicker outline
+            
+            # Position text at top-left corner with some padding
+            x, y = 15, 15  # Slightly more padding
+            
+            # Draw text with outline for better visibility
+            for dx in range(-outline_width, outline_width + 1):
+                for dy in range(-outline_width, outline_width + 1):
+                    if dx != 0 or dy != 0:
+                        draw.text((x + dx, y + dy), text, font=font, fill=outline_color)
+            
+            # Draw the main text
+            draw.text((x, y), text, font=font, fill=text_color)
+            
+            # Save the processed image
+            img.save(output_path)
+            
+        except Exception as e:
+            print(f"Error processing image {image_path}: {e}")
+            # If processing fails, copy the original image
+            import shutil
+            shutil.copy2(image_path, output_path)
+
+    def _create_visual_prompt_for_images(self, qa_id: str, cur_state_image: str, next_state_image: str, task_data: TaskData) -> Tuple[str, str]:
+        """
+        Create a visual prompt for the images.
+
+        Args:
+            qa_id: QA pair ID
+            cur_state_image: Current state image path
+            next_state_image: Next state image path
+            task_data: Task data
+            
+        Returns:
+            Tuple containing the new current state image path and list of new option image paths
+        """
+        # Get the new directory path using visual_prompt_path method
+        image_root_dir = task_data.image_root_path.parent
+        new_base_dir = self.visual_prompt_path(image_root_dir)
+        task_name = task_data.task_name
+
+        # Create the full output directory path
+        output_dir = Path(new_base_dir) / task_name
+        output_dir.mkdir(parents=True, exist_ok=True)
+        
+        
+        # Process current state image
+        cur_state_output_path = output_dir / f"{qa_id}_cur_state.png"
+        self._add_text_to_image(cur_state_image, "Current State", str(cur_state_output_path))
+
+        # Process next state image
+        next_state_output_path = output_dir / f"{qa_id}_next_state.png"
+        self._add_text_to_image(next_state_image, "Next State", str(next_state_output_path))
+        
+        return str(cur_state_output_path), str(next_state_output_path)
+    
     def _create_inverse_qa_pair(self, task_data: TaskData, frame_a_id: str, frame_b_id: str,
                                image_a_path: str, image_b_path: str, 
                                ground_truth_diff: Dict[str, Any]) -> QAPair:
@@ -147,12 +242,18 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         
         # Create QA pair
         qa_id = f"{task_data.task_name}_{self.qa_type}_{frame_a_id}_{frame_b_id}"
+
+        # Create visual prompt for the images
+        if self.visual_prompt:
+            image_a_path, image_b_path = self._create_visual_prompt_for_images(qa_id, image_a_path, image_b_path, task_data)
         
         gt_answer = {
             "type": self.qa_type,
             "options": all_options,
             "correct_option": correct_option_index,
         }
+
+        question = question.format(STATE_CHANGES_CHOICES="\n".join(all_options))
         
         qa_pair = QAPair(
             id=qa_id,

@@ -145,34 +145,45 @@ class SceneGraphBuilder(object):
         states = [s[0] for s in state_dict["states"]]
         filtered_edge = (obj_1, obj_2, deepcopy(state_dict))
 
-        # 1. if obj_1 is not a robot, obj_2 is a robot, and the state is 'Under', filtered
-        if not isinstance(obj_1, BaseRobot) and isinstance(obj_2, BaseRobot) and ("Under" in states or "OnTop" in states or "Inside" in states):
-            # remove the 'Under' state
-            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under" and s[0] != "OnTop" and s[0] != "Inside"]
-        
-        if isinstance(obj_2, BaseRobot) and ("OnTop" in states or "Inside" in states or 'Under' in states):
+        if (isinstance(obj_1, BaseRobot) or isinstance(obj_2, BaseRobot)) \
+            and ("OnTop" in states or "Inside" in states or 'Under' in states):
             filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "OnTop" and s[0] != "Inside" and s[0] != 'Under']
-        
+           
         # 2. if obj_1 and obj_2 have the relations 'Inside' and 'OnTop' and their values are both True, filtered 'OnTop'
         ## 2.1 remove 'OnTop' for (obj_1, obj_2)
         if "Inside" in states and "OnTop" in states:
-            both_true = True
-            for state_name, state_value in state_dict["states"]:
-                if state_name == "Inside":
-                    both_true = both_true and state_value
-                elif state_name == "OnTop":
-                    both_true = both_true and state_value
-            if both_true:
-                filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "OnTop"]
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "OnTop"]
         ## 2.2 if obj_1 is 'Under' obj_2 and obj_2 is 'Inside' obj_1, remove 'Under'
-        if 'Under' in states:
+        ## 2.3 if obj_1 is 'Inisde' obj_2, we should never consider the 'Under' states for obj_1 and obj_3
+        ## 2.4 if obj_1 is 'Inside' obj_2, we should never consider the 'OnTop' states for obj_1 and obj_3
+        ## it is never possible to do 2.3 and 2.4 checking, so we need to check reversely
+        ## 2.3 reverse: if obj_1 is 'Under' obj_2, and obj_1 is 'Inside' obj_3, remove 'Under'
+        ## 2.4 reverse: if obj_1 is 'OnTop' obj_2, and obj_1 is 'Inside' obj_3, remove 'OnTop'
+        ## merging 2.2 2.3 2.4, this basically means, for current edge (obj_1, obj_2), if detect 'Under' or 'OnTop', and obj_1 is 'Inside' something or the container, and obj_2 is inside something, then we do not consider this edge
+
+        if 'Under' in states or 'OnTop' in states:
             # first find the (obj_2, obj_1) edge
             for find_obj1, find_obj2, find_states in all_edges:
                 if find_obj1.name == obj_2.name \
                 and find_obj2.name == obj_1.name \
                 and 'Inside' in [s[0] for s in find_states["states"]]:
-                    filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != 'Under']
+                    filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != 'Under' and s[0] != 'OnTop']
                     break
+
+        if 'Under' in states or 'OnTop' in states:
+            obj_1_inside = False
+            obj_2_inside = False
+            for find_obj1, find_obj2, find_states in all_edges:
+                if find_obj1.name == obj_1.name \
+                and 'Inside' in [s[0] for s in find_states["states"]]:
+                    obj_1_inside = True
+                if find_obj1.name == obj_2.name \
+                and 'Inside' in [s[0] for s in find_states["states"]]:
+                    obj_2_inside = True
+                if obj_1_inside and obj_2_inside:
+                    filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != 'Under' and s[0] != 'OnTop']
+                    break
+        
         
         # 3. if obj_1 is a robot and is grasping obj_2, filtered 'Contact'
         if isinstance(obj_1, BaseRobot) and ("LeftContact" in states and "LeftGrasping" in states):
@@ -187,6 +198,18 @@ class SceneGraphBuilder(object):
         if obj_1.category == obj_2.category:
             filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "OnTop" and s[0] != "Under" and s[0] != "Touching"]
 
+        # 5. if floors in under obj_2, filter
+        if obj_1.category == "floors" and "Under" in states:
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
+
+        # 6. Experimental: if obj_1 is under obj_2 and obj_1 is being grasped, filtered
+        if "Under" in states:
+            for find_obj1, find_obj2, find_states in all_edges:
+                if find_obj2.name == obj_1.name \
+                and isinstance(find_obj1, BaseRobot) \
+                and ("LeftGrasping" in [s[0] for s in find_states["states"]] or "RightGrasping" in [s[0] for s in find_states["states"]]):
+                    filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
+                    break
 
         return filtered_edge
 

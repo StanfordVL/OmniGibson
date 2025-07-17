@@ -26,12 +26,11 @@ class StateChangeTranslator:
             'add': {
                 'nodes': [
                     "{object} is now {state}",
-                    "{object} became {state}",
+                    "{object} becomes {state}",
                     "{object} is {state}"
                 ],
                 'edges': [
                     "{object} is now {relation} {target}",
-                    "{object} was {relation} {target}",
                     "{object} is {relation} {target}"
                 ]
             },
@@ -78,8 +77,8 @@ class StateChangeTranslator:
             'Touching': 'touching',
             'Under': 'under',
             'Grasping': 'grasping',
-            'LeftGrasping': 'grasping with left hand',
-            'RightGrasping': 'grasping with right hand'
+            'LeftGrasping': 'using the left gripper to grasp',
+            'RightGrasping': 'using the right gripper to grasp'
         }
     
     def translate_diff(self, diff: Dict[str, Any]) -> str:
@@ -182,10 +181,6 @@ class StateChangeTranslator:
         # Handle multiple relation states
         relation_descriptions = []
         for state in states:
-            # Skip contact states as they're often too low-level
-            if 'Contact' in state:
-                continue
-                
             if state in self._state_templates:
                 relation_desc = self._state_templates[state]
                 template = random.choice(self._change_type_templates[operation]['edges'])
@@ -217,9 +212,6 @@ class StateChangeTranslator:
         """
         if not name:
             return "the object"
-        
-        if name == "floors_sdejoi_0":
-            pass
         
         # Convert to lowercase for processing
         original_name = name
@@ -318,11 +310,7 @@ class StateChangeTranslator:
             return False
         
         # Check for common English prefixes/suffixes in 6-char words
-        common_6char_words = {
-            'camera', 'window', 'handle', 'switch', 'button', 'drawer', 
-            'bottle', 'holder', 'sensor', 'filter', 'plugin', 'socket',
-            'medium', 'normal', 'center', 'middle', 'indoor', 'output', "floors"
-        }
+        common_6char_words = {'cutter', 'broken', 'paving', 'marker', 'napkin', 'edible', 'tablet', 'saddle', 'flower', 'wooden', 'square', 'peeler', 'shovel', 'nickel', 'pestle', 'gravel', 'french', 'sesame', 'bleach', 'pewter', 'outlet', 'fabric', 'staple', 'banana', 'almond', 'masher', 'carpet', 'fridge', 'swivel', 'normal', 'potato', 'litter', 'button', 'pomelo', 'hanger', 'trophy', 'drying', 'hamper', 'radish', 'grater', 'pillow', 'skates', 'canvas', 'cloche', 'nutmeg', 'indoor', 'slicer', 'lotion', 'rolled', 'starch', 'chives', 'tomato', 'dinner', 'tartar', 'goblet', 'polish', 'liners', 'runner', 'danish', 'tissue', 'shaped', 'tassel', 'quartz', 'muffin', 'lights', 'hoodie', 'burlap', 'wrench', 'shorts', 'hotdog', 'lemons', 'turnip', 'cookie', 'salmon', 'abacus', 'guitar', 'paddle', 'boxers', 'cherry', 'liquid', 'helmet', 'folder', 'silver', 'record', 'floors', 'middle', 'eraser', 'hinged', 'carton', 'wicker', 'coffee', 'smoker', 'tender', 'zipper', 'public', 'pastry', 'mallet', 'mussel', 'flakes', 'system', 'snacks', 'pebble', 'cereal', 'mixing', 'window', 'sandal', 'orange', 'toilet', 'fennel', 'cooker', 'puzzle', 'oyster', 'switch', 'barley', 'funnel', 'blower', 'infant', 'shaker', 'sensor', 'butter', 'jigger', 'ground', 'mirror', 'soccer', 'pallet', 'garage', 'longue', 'urinal', 'celery', 'bikini', 'shears', 'dental', 'waffle', 'handle', 'noodle', 'stairs', 'easter', 'socket', 'boiled', 'poster', 'drawer', 'chisel', 'holder', 'tackle', 'breast', 'pickle', 'plugin', 'jigsaw', 'collar', 'mortar', 'pepper', 'teapot', 'trowel', 'credit', 'screen', 'boxing', 'walker', 'garlic', 'laptop', 'server', 'deicer', 'omelet', 'pruner', 'makeup', 'chaise', 'shrimp', 'tennis', 'feeder', 'sticky', 'gloves', 'yogurt', 'pencil', 'icicle', 'powder', 'carafe', 'leaves', 'jersey', 'ginger', 'bucket', 'diaper', 'shower', 'grains', 'medium', 'pellet', 'honing', 'dahlia', 'gaming', 'chilli', 'router', 'icetea', 'pickup', 'figure', 'baking', 'cymbal', 'violin', 'frying', 'bottle', 'kettle', 'spirit', 'ticket', 'washer', 'burner', 'durian', 'carrot', 'statue', 'basket', 'blouse', 'roller', 'squash', 'webcam', 'candle', 'jacket', 'ladder', 'kidney', 'thread', 'dipper', 'loofah', 'tights', 'branch', 'ripsaw', 'pommel', 'heater', 'cactus', 'peanut', 'canned', 'walnut', 'pillar', 'cooler', 'cloves', 'hammer', 'wreath', 'hummus', 'hiking', 'letter', 'teacup', 'cotton', 'weight', 'fillet', 'juicer', 'cheese', 'crayon', 'bottom', 'garden', 'tinsel', 'camera', 'wading', 'analog', 'sponge', 'wallet', 'center', 'locker', 'copper', 'tripod', 'filter', 'raisin', 'rubber', 'ribbon', 'hockey', 'beaker', 'catsup', 'output', 'sodium', 'turkey', 'quiche', 'vacuum', 'saucer', 'papaya', 'sliced', 'hammam', 'grated', 'racket', 'motion', 'onesie'}
         
         if part in common_6char_words:
             return False
