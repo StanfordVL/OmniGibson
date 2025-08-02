@@ -72,15 +72,6 @@ def create_pointcloud_from_depth(
     # by default uses OpenBLAS. With PyTorch (CPU), we could process a depth image of size (480, 640)
     # in 0.0051 secs, while with numpy it took 0.0292 secs.
 
-    # convert depth to torch tensor
-    depth = torch.tensor(depth, dtype=torch.float32, device=device)
-    # update the device with the device of the depth image
-    # note: this is needed since warp does not provide the device directly
-    device = depth.device
-    # convert inputs to torch tensors
-    intrinsic_matrix = torch.tensor(intrinsic_matrix, dtype=torch.float32, device=device)
-    position = torch.tensor(position, dtype=torch.float32, device=device)
-    orientation = torch.tensor(orientation, dtype=torch.float32, device=device)
     # compute pointcloud
     depth_cloud = unproject_depth(depth, intrinsic_matrix)
 
