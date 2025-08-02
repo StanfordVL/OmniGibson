@@ -488,12 +488,12 @@ def _launch_simulator(*args, **kwargs):
         def _set_renderer_settings(self):
             lazy.carb.settings.get_settings().set_bool("/rtx/reflections/enabled", False)
             lazy.carb.settings.get_settings().set_bool("/rtx/indirectDiffuse/enabled", False)
-            lazy.carb.settings.get_settings().set_bool("/rtx/directLighting/enabled", False)
+            lazy.carb.settings.get_settings().set_bool("/rtx/directLighting/enabled", True)
             lazy.carb.settings.get_settings().set_int("/rtx/post/dlss/execMode", 1)  # "Performance"
             lazy.carb.settings.get_settings().set_bool("/rtx/ambientOcclusion/enabled", True)
             lazy.carb.settings.get_settings().set_bool("/rtx/directLighting/sampledLighting/enabled", True)
             lazy.carb.settings.get_settings().set_int("/rtx/raytracing/showLights", 1)
-            lazy.carb.settings.get_settings().set_float("/rtx/sceneDb/ambientLightIntensity", 3)
+            lazy.carb.settings.get_settings().set_float("/rtx/sceneDb/ambientLightIntensity", 2)
             lazy.carb.settings.get_settings().set_bool("/app/renderer/skipMaterialLoading", False)
             lazy.carb.settings.get_settings().set_bool("/rtx/flow/enabled", True)
 
@@ -653,7 +653,8 @@ def _launch_simulator(*args, **kwargs):
             )
             self._skybox.load(None)
             self._skybox.color = (1.07, 0.85, 0.61)
-            self._skybox.texture_file_path = f"{gm.ASSET_PATH}/models/background/sky.jpg"
+            # self._skybox.texture_file_path = f"{gm.ASSET_PATH}/models/background/sky.jpg"
+            self._skybox.set_attribute("visibleInPrimaryRay", False)
 
         def get_sim_step_dt(self):
             """
