@@ -114,7 +114,7 @@ class InteractiveTraversableScene(TraversableScene):
             str: Absolute path to the desired scene file (.json) to load
         """
         # Infer scene file from model and directory
-        fname = "{}_best".format(scene_model) if scene_instance is None else scene_instance
+        fname = "{}_with_clutter".format(scene_model) if scene_instance is None else scene_instance
         return os.path.join(self.scene_dir, "json", "{}.json".format(fname))
 
     def filter_rooms_and_object_categories(

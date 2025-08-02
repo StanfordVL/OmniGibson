@@ -1,3 +1,4 @@
+import math
 import shutil
 
 import cv2
@@ -13,129 +14,202 @@ import json
 import tqdm
 import fpsample
 
+
+def intrinsic_matrix(width, height):
+    """
+    Returns:
+        n-array: (3, 3) camera intrinsic matrix. Transforming point p (x,y,z) in the camera frame via K * p will
+            produce p' (x', y', w) - the point in the image plane. To get pixel coordiantes, divide x' and y' by w
+    """
+    focal_length = 17.0
+    horizontal_aperture = 20.995
+    horizontal_fov = 2 * math.atan(horizontal_aperture / (2 * focal_length))
+    vertical_fov = horizontal_fov * height / width
+
+    fx = (width / 2.0) / math.tan(horizontal_fov / 2.0)
+    fy = (height / 2.0) / math.tan(vertical_fov / 2.0)
+    cx = width / 2
+    cy = height / 2
+
+    intrinsic_matrix = np.array([[fx, 0.0, cx], [0.0, fy, cy], [0.0, 0.0, 1.0]], dtype=np.float32)
+    return intrinsic_matrix
+
 def hdf5_to_colmap(scene_dir):
-  images_dir = os.path.join(scene_dir, "images")
-  if not os.path.exists(images_dir):
-      raise FileNotFoundError(f"Images directory {images_dir} does not exist. Please run the data collection script first.")
+    images_dir = os.path.join(scene_dir, "images")
+    if not os.path.exists(images_dir):
+        raise FileNotFoundError(f"Images directory {images_dir} does not exist. Please run the data collection script first.")
 
-  MAX_IMAGES = 10
+    MAX_IMAGES = 10000
 
-  # Open the HDF5 file in read mode
-  print("Loading HDF5 file...")
-  hdf5_file_path = os.path.join(scene_dir, "camera_data.hdf5")
-  if not os.path.exists(hdf5_file_path):
-      raise FileNotFoundError(f"HDF5 file {hdf5_file_path} does not exist. Please run the data collection script first.")
-  with h5py.File(hdf5_file_path, 'r') as f:
-      # Load each dataset into memory
-      rgb_data = f['rgb'][:MAX_IMAGES]                 # shape: (TOTAL_IMAGES, HEIGHT, WIDTH, 4), dtype: uint8
-      depth_data = f['depth'][:MAX_IMAGES]             # shape: (TOTAL_IMAGES, HEIGHT, WIDTH), dtype: float32
-      segmentation_data = f['segmentation'][:MAX_IMAGES]  # shape: (TOTAL_IMAGES, HEIGHT, WIDTH), dtype: int32
-      
-      camera_pose_data = f['camera_pose'][:MAX_IMAGES]       # shape: (TOTAL_IMAGES, 4, 4), dtype: float32
-      camera_intrinsics_data = f['camera_intrinsics'][:MAX_IMAGES]  # shape: (TOTAL_IMAGES, 3, 3), dtype: float32
+    # Open the HDF5 file in read mode
+    print("Loading HDF5 file...")
+    hdf5_file_path = os.path.join(scene_dir, "camera_data.hdf5")
+    if not os.path.exists(hdf5_file_path):
+        raise FileNotFoundError(f"HDF5 file {hdf5_file_path} does not exist. Please run the data collection script first.")
+    with h5py.File(hdf5_file_path, 'r') as f:
+        rgb_data = f['rgb']                 # shape: (TOTAL_IMAGES, HEIGHT, WIDTH, 4), dtype: uint8
+        depth_data = f['depth']             # shape: (TOTAL_IMAGES, HEIGHT, WIDTH), dtype: float32
+        segmentation_data = f['segmentation']  # shape: (TOTAL_IMAGES, HEIGHT, WIDTH), dtype: int32
+        
+        camera_pose_data = f['camera_pose']       # shape: (TOTAL_IMAGES, 4, 4), dtype: float32
+        # camera_intrinsics_data = f['camera_intrinsics']  # shape: (TOTAL_IMAGES, 3, 3), dtype: float32
 
-      # Load the segmentation labels (stored as a JSON string in the file attributes)
-      # segmentation_labels = json.loads(f.attrs['segmentation_labels'])
+        # Load the segmentation labels (stored as a JSON string in the file attributes)
+        # segmentation_labels = json.loads(f.attrs['segmentation_labels'])
+        # print(len(segmentation_labels), "segmentation labels found in the HDF5 file.")
+        # assert len(segmentation_labels) < 256, "Only 256 segmentation labels are supported by Gaga."
 
-  # Find the image files in the images directory
-  image_files = os.listdir(images_dir)
-  image_files_by_idx = {int(os.path.splitext(os.path.basename(f))[0].split("_")[1]): f for f in image_files}
+        # Find the image files in the images directory
+        image_files = os.listdir(images_dir)
+        image_files_by_idx = {int(os.path.splitext(os.path.basename(f))[0].split("_")[1]): f for f in image_files}
 
-  # Create a directory for storing the depth images
-  depth_dir = os.path.join(scene_dir, "depth")
-  shutil.rmtree(depth_dir, ignore_errors=True)
-  os.makedirs(depth_dir, exist_ok=True)
+        # Create a directory for storing the depth images
+        depth_dir = os.path.join(scene_dir, "depth")
+        shutil.rmtree(depth_dir, ignore_errors=True)
+        os.makedirs(depth_dir, exist_ok=True)
 
-  # Convert the data to a point cloud format
-  points_3d = []
-  points_rgb = []
-  image_paths = []
-  extrinsics = []
-  for i, (rgb, depth, seg, cam_pose, cam_intrinsics) in tqdm.tqdm(enumerate(zip(
-      rgb_data, depth_data, segmentation_data, camera_pose_data, camera_intrinsics_data
-  )), total=rgb_data.shape[0], desc="Processing images"):
-    cam_pos, cam_orn = T.mat2pose(torch.as_tensor(cam_pose))
-    quat_for_conversion = ilutils.convert_camera_frame_orientation_convention(
-        cam_orn, "opengl", "ros"
-    ).reshape(4)
-    points = ilutils.create_pointcloud_from_depth(
-        torch.as_tensor(cam_intrinsics)[None],
-        torch.as_tensor(depth)[None],
-        True,
-        position=cam_pos[None],
-        orientation=quat_for_conversion[None],
-    )
-    points = points.reshape((rgb.shape[1], rgb.shape[0], 3)).permute(
-        1, 0, 2
-    )
+        # Create a directory for storing the segmentation images
+        segmentation_dir = os.path.join(scene_dir, "segmentation")
+        shutil.rmtree(segmentation_dir, ignore_errors=True)
+        os.makedirs(segmentation_dir, exist_ok=True)
 
-    # Move everything to the OpenCV-based frame
-    flip_yz = np.diag([1, -1, -1])  # 4x4 matrix
-    cam_rotation = cam_pose[:3, :3]
-    cam_rotation_opencv = cam_rotation @ flip_yz
-    cam_extrinsic_opencv = np.eye(4)
-    cam_extrinsic_opencv[:3, :3] = cam_rotation_opencv
-    cam_extrinsic_opencv[:3, 3] = cam_pose[:3, 3]  # Translation part
-    extrinsics.append(np.linalg.inv(cam_extrinsic_opencv))
+        # Convert the data to a point cloud format
+        all_points_3d = []
+        all_points_rgb = []
+        all_points_xyf = []
+        image_paths = []
+        extrinsics = []
+        depth_params = {}
 
-    colors = rgb[:, :, :3]
-    points_rgb.append(colors)
-    points_3d.append(points.numpy())
-    image_paths.append(image_files_by_idx[i])
+        if "camera_intrinsics" in f.attrs:
+            cam_intrinsics = np.array(json.loads(f.attrs["camera_intrinsics"]), dtype=np.float32)[None, :, :]
+        else:
+            # TODO: Remove this temporary fix for bad intrinsics data
+            cam_intrinsics = intrinsic_matrix(rgb_data.shape[2], rgb_data.shape[1])[None, :, :]
 
-    # Save the depth image also.
-    depth_path = os.path.join(depth_dir, os.path.basename(image_files_by_idx[i]))
-    depth_zero_to_one = (depth - np.min(depth)) / (np.max(depth) - np.min(depth))
-    cv2.imwrite(depth_path, (depth_zero_to_one * 255).astype(np.uint8))
+        # Total number of desired points
+        MAX_POINTS = 1000000
+        MAX_POINTS_FACTOR = 10  # Get this many more points than needed to ensure we have enough after filtering
+        image_count = min(rgb_data.shape[0], MAX_IMAGES)
+        points_per_image = MAX_POINTS * MAX_POINTS_FACTOR // image_count
 
-  print("Stacking points and colors...")
-  points_3d = np.stack(points_3d, axis=0)
-  points_rgb = np.stack(points_rgb, axis=0)
-  points_xyf = create_pixel_coordinate_grid(rgb_data.shape[0], rgb_data.shape[1], rgb_data.shape[2])
-  extrinsics = np.stack(extrinsics, axis=0)
+        for i in tqdm.trange(image_count, desc="Processing images"):
+            points_rgb = rgb_data[i][..., :3]
+            depth = depth_data[i]
+            seg = segmentation_data[i]
+            cam_pose = camera_pose_data[i]
+            # cam_intrinsics = camera_intrinsics_data[i]
+            cam_pos, cam_orn = T.mat2pose(torch.tensor(cam_pose))
 
-  print("Reducing point cloud size...")
-  # First find all the finite points in the point cloud
-  finite_mask = np.isfinite(points_3d).all(axis=-1)
-  points_3d = points_3d[finite_mask]
-  points_rgb = points_rgb[finite_mask]
-  points_xyf = points_xyf[finite_mask]
+            # Generate point cloud
+            quat_for_conversion = ilutils.convert_camera_frame_orientation_convention(
+                cam_orn, "opengl", "ros"
+            ).reshape(4)
+            points_3d = ilutils.create_pointcloud_from_depth(
+                torch.as_tensor(cam_intrinsics),
+                torch.as_tensor(depth)[None],
+                True,
+                position=cam_pos[None],
+                orientation=quat_for_conversion[None],
+            )
+            points_3d = points_3d.reshape((points_rgb.shape[1], points_rgb.shape[0], 3)).permute(
+                1, 0, 2
+            ).numpy()
 
-  # Limit the number of points
-  max_points = min(1000000, points_3d.shape[0])
-  if len(points_3d) > max_points:
-    indices = np.random.choice(points_3d.shape[0], max_points, replace=False)
-    # indices = fpsample.bucket_fps_kdline_sampling(points_3d.reshape(-1, 3), max_points, h=5)    
-    points_3d = points_3d[indices]
-    points_rgb = points_rgb[indices]
-    points_xyf = points_xyf[indices]
+            # Flatten point cloud and related data
+            points_xyf = create_pixel_coordinate_grid(1, points_rgb.shape[0], points_rgb.shape[1])[0]
+            points_xyf[..., 2] = i   # Set the image index as the third coordinate
 
-  assert points_3d.shape == points_rgb.shape == points_xyf.shape == (max_points, 3), \
-      "Mismatch in number of points, colors, and pixel coordinates."
+            assert points_3d.shape[:2] == points_xyf.shape[:2] == points_rgb.shape[:2], \
+                "Mismatch in shape of point cloud, pixel coordinates, and RGB data."
 
-  print("Creating COLMAP reconstruction...")
-  reconstruction = batch_np_matrix_to_pycolmap_wo_track(
-      points_3d,
-      points_xyf,
-      points_rgb,
-      extrinsics,
-      camera_intrinsics_data,
-      image_paths,
-      rgb_data.shape[1],
-      rgb_data.shape[2],
-      shared_camera=True,
-      camera_type="PINHOLE",
-  )
+            # Remove all the invalid points in the point cloud
+            finite_mask = np.isfinite(points_3d).all(axis=-1)
+            points_3d = points_3d[finite_mask]
+            points_rgb = points_rgb[finite_mask]
+            points_xyf = points_xyf[finite_mask]
 
-  print(f"Saving reconstruction to {scene_dir}/sparse")
-  sparse_reconstruction_dir = os.path.join(scene_dir, "sparse", "0")
-  shutil.rmtree(sparse_reconstruction_dir, ignore_errors=True)
-  os.makedirs(sparse_reconstruction_dir, exist_ok=True)
-  reconstruction.write(sparse_reconstruction_dir)
+            # Subsample points if there are too many
+            if points_3d.shape[0] > points_per_image:
+                indices = np.random.choice(points_3d.shape[0], points_per_image, replace=False)
+                points_3d = points_3d[indices]
+                points_rgb = points_rgb[indices]
+                points_xyf = points_xyf[indices]
 
-  # Save point cloud for fast visualization
-  print(f"Exporting point cloud to {sparse_reconstruction_dir}/points.ply")
-  trimesh.PointCloud(points_3d, colors=points_rgb).export(os.path.join(sparse_reconstruction_dir, "points.ply"))
+            all_points_rgb.append(points_rgb)
+            all_points_3d.append(points_3d)
+            all_points_xyf.append(points_xyf)
+            image_paths.append(image_files_by_idx[i])
+
+            # Move the camera extrinsics to the OpenCV-based frame
+            flip_yz = np.diag([1, -1, -1])  # 4x4 matrix
+            cam_rotation = cam_pose[:3, :3]
+            cam_rotation_opencv = cam_rotation @ flip_yz
+            cam_extrinsic_opencv = np.eye(4)
+            cam_extrinsic_opencv[:3, :3] = cam_rotation_opencv
+            cam_extrinsic_opencv[:3, 3] = cam_pose[:3, 3]  # Translation part
+            extrinsics.append(np.linalg.inv(cam_extrinsic_opencv))
+
+            # Save the depth and seg image also.
+            depth_path = os.path.join(depth_dir, os.path.basename(image_files_by_idx[i]))
+            finite_depth = depth[np.isfinite(depth) & (depth > 0)]
+            max_depth = np.max(finite_depth) if finite_depth.size > 0 else 0
+            min_depth = np.min(finite_depth) if finite_depth.size > 0 else 0
+            depth_range = max_depth - min_depth
+            depth_zero_to_one = (depth - min_depth) / depth_range if depth_range > 0 else np.zeros_like(depth)
+            depth_params[os.path.splitext(os.path.basename(image_files_by_idx[i]))[0]] = {"scale": float(depth_range), "offset": float(min_depth)}
+            cv2.imwrite(depth_path, (depth_zero_to_one * 255).astype(np.uint8))
+
+            seg_path = os.path.join(segmentation_dir, os.path.basename(image_files_by_idx[i]))
+            cv2.imwrite(seg_path, seg.astype(np.uint8))
+
+        print("Stacking points and colors...")
+        all_points_3d = np.concatenate(all_points_3d, axis=0)
+        all_points_rgb = np.concatenate(all_points_rgb, axis=0)
+        all_points_xyf = np.concatenate(all_points_xyf, axis=0)
+        extrinsics = np.stack(extrinsics, axis=0)
+
+        print("Reducing point cloud size...")
+
+        # Limit the number of points
+        max_points = min(MAX_POINTS, all_points_3d.shape[0])
+        if len(all_points_3d) > max_points:
+            indices = np.random.choice(all_points_3d.shape[0], max_points, replace=False)
+            # indices = fpsample.bucket_fps_kdline_sampling(points_3d.reshape(-1, 3), max_points, h=5)
+            all_points_3d = all_points_3d[indices]
+            all_points_rgb = all_points_rgb[indices]
+            all_points_xyf = all_points_xyf[indices]
+
+        assert all_points_3d.shape == all_points_rgb.shape == all_points_xyf.shape == (max_points, 3), \
+            "Mismatch in number of points, colors, and pixel coordinates."
+
+        print("Creating COLMAP reconstruction...")
+        reconstruction = batch_np_matrix_to_pycolmap_wo_track(
+            all_points_3d,
+            all_points_xyf,
+            all_points_rgb,
+            extrinsics,
+            cam_intrinsics,
+            image_paths,
+            rgb_data.shape[1],
+            rgb_data.shape[2],
+            shared_camera=True,
+            camera_type="PINHOLE",
+        )
+
+        print(f"Saving reconstruction to {scene_dir}/sparse")
+        sparse_reconstruction_dir = os.path.join(scene_dir, "sparse", "0")
+        shutil.rmtree(sparse_reconstruction_dir, ignore_errors=True)
+        os.makedirs(sparse_reconstruction_dir, exist_ok=True)
+        reconstruction.write(sparse_reconstruction_dir)
+
+        # Write the depth parameters to a JSON file as expected by the Gaussian Splatting code
+        with open(os.path.join(sparse_reconstruction_dir, "depth_params.json"), "w") as f:
+            json.dump(depth_params, f, indent=2)
+
+        # Save point cloud for fast visualization
+        print(f"Exporting point cloud to {sparse_reconstruction_dir}/points.ply")
+        trimesh.PointCloud(all_points_3d, colors=all_points_rgb).export(os.path.join(sparse_reconstruction_dir, "points.ply"))
 
 if __name__ == "__main__":
     import argparse
