@@ -1,7 +1,12 @@
 import colorsys
+from typing import Dict, List, Tuple
+import cv2
+import numpy as np
 
 import torch as th
 from PIL import Image, ImageDraw
+from skimage.color import rgb2lab, deltaE_ciede2000
+from scipy.ndimage import binary_dilation
 
 try:
     import accimage
@@ -195,6 +200,99 @@ def segmentation_to_rgb(seg_im, N, colors=None):
         return (255.0 * use_colors[seg_im]).to(th.uint8)
     else:
         return use_colors[seg_im]
+
+def instance_to_bbox(obs: th.Tensor, instance_mapping: Dict[int, str], unique_ins_ids: List[int]) -> List[Tuple[int, int, int, int, int]]:
+    """
+    Convert instance segmentation to bounding boxes.
+    
+    Args:
+        obs (th.Tensor): (H, W) tensor of instance IDs
+        instance_mapping (Dict[int, str]): Dict mapping instance IDs to instance names
+            Note: this does not need to include all instance IDs, only the ones that we want to generate bbox for
+        unique_ins_ids (List[int]): List of unique instance IDs
+    Returns:
+        List of tuples (x_min, y_min, x_max, y_max, instance_id) for each instance
+    """
+    bboxes = []
+    valid_ids = [id for id in instance_mapping if id in unique_ins_ids]
+    for instance_id in valid_ids:
+        # Create mask for this instance
+        mask = (obs == instance_id)  # (H, W)
+        if not mask.any():
+            continue
+        # Find non-zero indices (where instance exists)
+        y_coords, x_coords = th.where(mask)
+        if len(y_coords) == 0:
+            continue
+        # Calculate bounding box
+        x_min = x_coords.min().item()
+        x_max = x_coords.max().item()
+        y_min = y_coords.min().item()
+        y_max = y_coords.max().item()
+        bboxes.append((x_min, y_min, x_max, y_max, instance_id))
+
+    return bboxes
+
+def calculate_delta_e(
+    obs_ids: th.Tensor,
+    rgb_image: th.Tensor,
+    instance_mapping: Dict[int, str],
+    unique_ins_ids: List[int]
+) -> Dict[int, float]:
+    """
+    Calculates the CIEDE2000 Delta E color difference for each instance
+    against its immediate surrounding background.
+
+    Args:
+        obs_ids (th.Tensor): (H, W) tensor of instance IDs.
+        rgb_image (th.Tensor): (H, W, 3) tensor of the original RGB image (values 0-255).
+        instance_mapping (Dict[int, str]): Dict mapping instance IDs to names.
+        unique_ins_ids (List[int]): List of unique instance IDs in the current view.
+
+    Returns:
+        Dict[int, float]: A dictionary mapping each valid instance ID to its Delta E score.
+    """
+    # Convert PyTorch tensors to NumPy arrays for image processing, as SciPy and Scikit-image work with them.
+    # We only need to do this once.
+    ids_np = obs_ids.cpu().numpy()
+    rgb_np = rgb_image.cpu().numpy().astype(np.uint8)
+
+    delta_e_scores = {}
+    valid_ids = [id for id in instance_mapping if id in unique_ins_ids]
+
+    for instance_id in valid_ids:
+        # 1. Create a boolean mask for the current instance.
+        object_mask = (ids_np == instance_id)
+        if not object_mask.any():
+            continue
+
+        # 2. Create a "background ring" mask using morphological dilation.
+        # This creates a border of pixels immediately surrounding the object.
+        dilated_mask = binary_dilation(object_mask, iterations=2) # iterations control ring thickness
+        background_mask = dilated_mask & ~object_mask
+        
+        # If the object is at the edge of the image, the background ring might be empty.
+        if not background_mask.any():
+            delta_e_scores[instance_id] = 0.0 # Or float('nan') if you prefer
+            continue
+
+        # 3. Calculate the average color for the object and its background.
+        # NumPy's boolean array indexing makes this very efficient.
+        avg_rgb_object = rgb_np[object_mask][:, :3].mean(axis=0)
+        avg_rgb_background = rgb_np[background_mask][:, :3].mean(axis=0)
+
+        # 4. Convert the two average RGB colors to LAB color space.
+        # The library expects a 3D array, so we reshape our single color vectors.
+        lab_object = rgb2lab(avg_rgb_object.reshape(1, 1, 3))
+        lab_background = rgb2lab(avg_rgb_background.reshape(1, 1, 3))
+
+        # 5. Calculate the CIEDE2000 Delta E score.
+        delta_e = deltaE_ciede2000(lab_object, lab_background)
+        
+        # The result is in a nested array, so we extract the float value.
+        delta_e_scores[instance_id] = int(float(delta_e[0, 0]) + 0.5)
+
+    return delta_e_scores
 
 
 def colorize_bboxes_3d(bbox_3d_data, rgb_image, camera_params):

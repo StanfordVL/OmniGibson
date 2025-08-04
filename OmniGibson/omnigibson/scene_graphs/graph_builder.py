@@ -19,10 +19,27 @@ from omnigibson.utils.scene_graph_utils import CustomizedBinaryStates, Customize
 
 from dataclasses import fields
 from copy import deepcopy
-EXTRA_TASK_RELEVANT_CATEGORIES = {
-    "floors",
-    "driveway",
-    "lawn",
+
+EXTRA_OBJECT_WHITE_LIST = {
+    "straight_chair_uofiqj_0",
+    "door_bexenl_0",
+    "drop_in_sink_lkklqs_0",
+    "floors_qgmjvd_0",
+    "floors_kxcpgy_0",
+    "coffee_table_rlsebe_0",
+    "door_bexenl_0",
+    "breakfast_table_xftrki_0",
+    "garden_chair_lraplz_0",
+    "garden_chair_cottya_0",
+    "garden_chair_cottya_1",
+    "garden_chair_cottya_2",
+    "toilet_udiezm_0",
+    "lawn_aztwla_0",
+    "door_vudhlc_1",
+    "sliding_door_tprpvb_10",
+    "bottom_cabinet_rhdbzv_0",
+    "door_bexenl_0",
+    "drop_in_sink_awvzkn_0"
 }
 
 MAGNITUDE_TOLERANCE = 1e-1
@@ -41,7 +58,7 @@ class SceneGraphBuilder(object):
         merge_parallel_edges=False,
         exclude_states=(
             object_states.Touching,
-            object_states.NextTo,
+            object_states.NextTo
         ),
         only_task_relevant_objects=False,
         semantic_only=True
@@ -79,9 +96,9 @@ class SceneGraphBuilder(object):
         self._task_relevant_objects = None
         self._only_task_relevant_objects = only_task_relevant_objects
         self._contact_objects = set()
-        self._contact_callback = og.sim._physics_context._physx_sim_interface.subscribe_contact_report_events(
-            self._on_contact_handler
-        )
+        # self._contact_callback = og.sim._physics_context._physx_sim_interface.subscribe_contact_report_events(
+        #     self._on_contact_handler
+        # )
 
         # Whether to only include semantic states in the graph
         self._semantic_only = semantic_only
@@ -99,13 +116,13 @@ class SceneGraphBuilder(object):
             # TODO: Not all contact headers have valid impulse contact points
             # We need to skip those contact headers
             # This implementation has some issues
-            # current_contact_points = contact_data[current_contact_points_num:current_contact_points_num + contact_header.num_contact_data]
-            # current_contact_points_num += contact_header.num_contact_data # always update this
+            current_contact_points = contact_data[current_contact_points_num:current_contact_points_num + contact_header.num_contact_data]
+            current_contact_points_num += contact_header.num_contact_data # always update this
 
-            # has_evident_contact = any(self._get_impulse_magnitude(cp.impulse) >= MAGNITUDE_TOLERANCE 
-            #                         for cp in current_contact_points)
-            # if not has_evident_contact:
-            #     continue
+            has_evident_contact = any(self._get_impulse_magnitude(cp.impulse) >= MAGNITUDE_TOLERANCE 
+                                    for cp in current_contact_points)
+            if not has_evident_contact:
+                continue
 
             actor0_obj = og.sim._link_id_to_objects.get(contact_header.actor0, None)
             actor1_obj = og.sim._link_id_to_objects.get(contact_header.actor1, None)
@@ -199,13 +216,13 @@ class SceneGraphBuilder(object):
             filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "OnTop" and s[0] != "Under" and s[0] != "Touching"]
 
         # 5. if floors in under obj_2, filter
-        if obj_1.category == "floors" and "Under" in states:
+        if (obj_1.category == "floors" or obj_1.category == "driveway" or obj_1.category == "lawn") and "Under" in states:
             filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
 
         # 6. Experimental: if obj_1 is under obj_2 and obj_1 is being grasped, filtered
         if "Under" in states:
             for find_obj1, find_obj2, find_states in all_edges:
-                if find_obj2.name == obj_1.name \
+                if (find_obj2.name == obj_1.name or find_obj2.name == obj_2.name) \
                 and isinstance(find_obj1, BaseRobot) \
                 and ("LeftGrasping" in [s[0] for s in find_states["states"]] or "RightGrasping" in [s[0] for s in find_states["states"]]):
                     filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
@@ -310,8 +327,9 @@ class SceneGraphBuilder(object):
         # 0. if we only want task-relevant objects, filter them out first and directly return
         if self._task_relevant_objects is not None:
             objects_to_add = set(self._task_relevant_objects)
+        # 1.1 temp method: we only consider the active white list objects
         # 1. first get all objects with contact changes
-        objects_to_add.update(self._contact_objects)
+        # objects_to_add.update(self._contact_objects)
 
         # 2. then get all objects with acceleration changes
         # TODO: implement this
@@ -331,9 +349,11 @@ class SceneGraphBuilder(object):
             task_objects = [bddl_obj.wrapped_obj for bddl_obj in task.object_scope.values() 
                             if bddl_obj.wrapped_obj is not None and bddl_obj.exists]
             self._task_relevant_objects = [obj for obj in task_objects 
-                                          if not isinstance(obj, BaseSystem)
-                                          and obj.category != "agent" 
-                                          and obj.category not in EXTRA_TASK_RELEVANT_CATEGORIES]
+                                          if not isinstance(obj, BaseSystem)]
+            ## Jul 19 2025, this part is added only for B50 cases
+            self._white_list_objects = [obj for obj in scene.objects if obj.name in EXTRA_OBJECT_WHITE_LIST]
+            self._all_objects = self._task_relevant_objects + self._white_list_objects
+            
             # print(f"Loaded {len(self._task_relevant_objects)} task relevant objects")
         if self._robot_names is None:
             assert (
@@ -388,7 +408,10 @@ class SceneGraphBuilder(object):
                 self._G.nodes[robot]["bbox_extent"] = robot_bbox_extent
 
         # Go through the objects in FOV of the robot.
-        objs_to_add = self._get_object_candidates_via_heuristics(scene)
+
+
+        # objs_to_add = self._get_object_candidates_via_heuristics(scene) # this is a common implementation, useful, but needs revision
+        objs_to_add = self._all_objects
         if not self._full_obs:
             # If we're not in full observability mode, only pick the objects in FOV of robots.
             for robot in self._robots:

@@ -14,6 +14,7 @@ from omnigibson.envs.env_wrapper import EnvironmentWrapper, create_wrapper
 from omnigibson.macros import gm
 from omnigibson.objects.object_base import BaseObject
 from omnigibson.sensors.vision_sensor import VisionSensor
+from omnigibson.utils.vision_utils import instance_to_bbox, calculate_delta_e
 from omnigibson.utils.config_utils import TorchEncoder
 from omnigibson.utils.data_utils import merge_scene_files
 from omnigibson.utils.python_utils import create_object_from_init_info, h5py_group_to_torch, assert_valid_key
@@ -1218,6 +1219,7 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
         start_frame=None, 
         end_frame=None,
         scene_graph_writer=None,
+        replay_config=None,
     ):
         """
         Playback episode @episode_id, and optionally record observation data if @record is True
@@ -1234,6 +1236,10 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
             scene_graph_writer (None or SceneGraphWriter): If specified, a SceneGraphWriter object that will be used to record the scene graph
             frame_writers (None or list of FrameWriter): If specified, FrameWriter objects to save RGB frames to
             frame_rgb_keys (None or list of str): If specified, observation keys representing the RGB frames to save as PNG files.
+            replay_config (None or dict): If specified, the replay configuration to use for the replay, eg, whether to record the pixel visibility of objects from certain viewpoints. Must include the following keys:
+                "record_visibility": bool, whether to record the pixel visibility of objects from certain viewpoints
+                "record_rgb_keys": list of str, the observation keys representing the RGB frames to record
+                "sensors": list of str, the viewpoints to record the pixel visibility of objects
         """
         # Validate video_writers and video_rgb_keys
         if video_writers is not None:
@@ -1354,9 +1360,67 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
                     assert_valid_key(frame_rgb_key, self.current_obs.keys(), "frame_rgb_key")
                     frame_data = self.current_obs[frame_rgb_key][:, :, :3].numpy()
                     frame_writer.append_data(frame_data, i+1)
+            
+            if replay_config is not None and replay_config["record_visibility"]:
+                obj_visibility_in_camera_dict = {} # this is a dict of {obj_name:{camera_name: visibility}}
+
+                seg_camera_keys = [key.replace("rgb", "seg_instance") for key in replay_config["record_rgb_keys"]]
+                seg_camera_info_list = info["obs_info"]
+                camera_types = seg_camera_info_list.keys()
+
+                for sensor in replay_config["sensors"]:
+                    for camera_type in camera_types:
+                        if camera_type not in sensor:
+                            continue
+
+                        # below is the object id to object name mapping
+                        current_camera_info = seg_camera_info_list[camera_type][sensor]['seg_instance']
+                        all_unique_obj_ids = current_camera_info.keys()
+                        # now we get the corresponding seg_camera visibility matrix
+                        # we noticed that the sensor name is not the same as the obs stored name
+                        # so we need to find the correct
+                        found_seg_obs_key = None
+                        for key in seg_camera_keys:
+                            if sensor in key:
+                                found_seg_obs_key = key
+                                break
+                        assert found_seg_obs_key is not None, f"We cannot find the corresponding seg_camera visibility matrix for {sensor} and {camera_type}"
+
+                        # below is a tensor of shape (H, W), where each element is the object id of the visible object for curerent camera view
+                        current_seg_camera_visibility_matrix = self.current_obs[found_seg_obs_key]
+                        current_rgb_image = self.current_obs[found_seg_obs_key.replace("seg_instance", "rgb")]
+
+                        # for each object, will store a dict like {camera_name: [pixel_num, bbox_x_min, bbox_y_min, bbox_x_max, bbox_y_max, img_H, img_W]}
+                        
+                        # 1. we first get object id to num_pixels mapping
+                        # build a dictionary of {object_id: num_pixels}
+                        obj_pixels_dict = {}
+                        available_obj_ids = th.unique(current_seg_camera_visibility_matrix)
+                        for obj_id in available_obj_ids:
+                            obj_pixels_dict[obj_id.item()] = (current_seg_camera_visibility_matrix == obj_id).sum().item()
+                        
+                        # 2. we then get the bbox for each object
+                        bboxes = instance_to_bbox(current_seg_camera_visibility_matrix, current_camera_info, all_unique_obj_ids)
+                        bboxes_dict = {bbox[4]: bbox[:4] for bbox in bboxes}
+
+                        # 3. we then get the delta_e for each object (skipped for now, as it is too slow)
+                        # delta_e_dict = calculate_delta_e(current_seg_camera_visibility_matrix, current_rgb_image, current_camera_info, all_unique_obj_ids)
+
+                        # 4. lastly, we get the img_H and img_W
+                        img_H = current_rgb_image.shape[0]
+                        img_W = current_rgb_image.shape[1]
+
+                        # now we store the above info into the format we want: {obj_name: {sensor: [pixel_num, bbox_x_min, bbox_y_min, bbox_x_max, bbox_y_max, img_H, img_W]}}
+                        for obj_id in available_obj_ids:
+                            obj_name = current_camera_info[obj_id.item()]
+                            if obj_name not in obj_visibility_in_camera_dict:
+                                obj_visibility_in_camera_dict[obj_name] = {}
+                            obj_visibility_in_camera_dict[obj_name][sensor] = [obj_pixels_dict[obj_id.item()], bboxes_dict[obj_id.item()][0], bboxes_dict[obj_id.item()][1], bboxes_dict[obj_id.item()][2], bboxes_dict[obj_id.item()][3], img_H, img_W]
+                        break
+
 
             if scene_graph_writer is not None:
-                scene_graph_writer.step(self.env.get_scene_graph(), i+1)
+                scene_graph_writer.step(self.env.get_scene_graph(), i+1, obj_visibility_in_camera_dict)
 
 
         if record_data:

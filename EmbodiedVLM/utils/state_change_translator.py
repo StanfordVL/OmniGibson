@@ -20,7 +20,7 @@ class StateChangeTranslator:
     and 'remove' operations (no 'update' operations).
     """
     
-    def __init__(self):
+    def __init__(self, type: str = "forward_dynamics"):
         """Initialize the translator with predefined templates."""
         self._change_type_templates = {
             'add': {
@@ -80,6 +80,12 @@ class StateChangeTranslator:
             'LeftGrasping': 'using the left gripper to grasp',
             'RightGrasping': 'using the right gripper to grasp'
         }
+
+        self.mode = None
+        if type == "forward_dynamics":
+            self.mode = "forward_dynamics"
+        elif type == "inverse_dynamics":
+            self.mode = "inverse_dynamics"
     
     def translate_diff(self, diff: Dict[str, Any]) -> str:
         """
@@ -102,48 +108,49 @@ class StateChangeTranslator:
         # Process only add and remove operations (no update in new format)
         for operation in ['add', 'remove']:
             if operation in diff:
-                # Process node changes
+                # Process node changes - treat each state change atomically
                 for node in diff[operation].get('nodes', []):
-                    desc = self._translate_node_change(operation, node)
-                    if desc:
-                        descriptions.append(desc)
+                    atomic_descriptions = self._translate_node_change_atomic(operation, node)
+                    descriptions.extend(atomic_descriptions)
                 
-                # Process edge changes
+                # Process edge changes - treat each state change atomically
                 for edge in diff[operation].get('edges', []):
-                    desc = self._translate_edge_change(operation, edge)
-                    if desc:
-                        descriptions.append(desc)
+                    atomic_descriptions = self._translate_edge_change_atomic(operation, edge)
+                    descriptions.extend(atomic_descriptions)
         
         if not descriptions:
             print(f"No descriptions found for diff: {diff}")
             exit()
         
-        # Combine descriptions naturally
-        if len(descriptions) == 1:
-            return descriptions[0] + "."
-        elif len(descriptions) == 2:
-            return descriptions[0] + " and " + descriptions[1] + "."
-        else:
-            return ", ".join(descriptions[:-1]) + ", and " + descriptions[-1] + "."
+
+        if self.mode == "forward_dynamics":
+            # Combine descriptions naturally
+            numbered_descriptions = [f"{i+1}. {desc.capitalize()}" for i, desc in enumerate(descriptions)]
+            return "\n".join(numbered_descriptions) + "."
+        elif self.mode == "inverse_dynamics":
+            # Join naturally
+            descriptions = [desc.capitalize() for desc in descriptions]
+            return ". ".join(descriptions)
     
-    def _translate_node_change(self, operation: str, node: Dict[str, Any]) -> str:
+    def _translate_node_change_atomic(self, operation: str, node: Dict[str, Any]) -> List[str]:
         """
-        Translate a node change into natural language.
+        Translate a node change into atomic natural language descriptions.
+        Each state change gets its own separate description.
         
         Args:
             operation: 'add' or 'remove'
             node: Node data with 'name' and 'states'
             
         Returns:
-            str: Natural language description
+            List[str]: List of atomic natural language descriptions
         """
         object_name = self._format_object_name(node.get('name', ''))
         states = node.get('states', [])
         
         if not states:
-            return ""
+            return []
         
-        # Handle multiple states
+        # Generate separate description for each state
         state_descriptions = []
         for state in states:
             if state in self._state_templates:
@@ -152,33 +159,28 @@ class StateChangeTranslator:
                 desc = template.format(object=object_name, state=state_desc)
                 state_descriptions.append(desc)
         
-        if not state_descriptions:
-            return ""
-        
-        if len(state_descriptions) == 1:
-            return state_descriptions[0]
-        else:
-            return ", ".join(state_descriptions[:-1]) + " and " + state_descriptions[-1]
+        return state_descriptions
     
-    def _translate_edge_change(self, operation: str, edge: Dict[str, Any]) -> str:
+    def _translate_edge_change_atomic(self, operation: str, edge: Dict[str, Any]) -> List[str]:
         """
-        Translate an edge change into natural language.
+        Translate an edge change into atomic natural language descriptions.
+        Each state change gets its own separate description.
         
         Args:
             operation: 'add' or 'remove'
             edge: Edge data with 'from', 'to', and 'states'
             
         Returns:
-            str: Natural language description
+            List[str]: List of atomic natural language descriptions
         """
         from_obj = self._format_object_name(edge.get('from', ''))
         to_obj = self._format_object_name(edge.get('to', ''))
         states = edge.get('states', [])
         
         if not states or not from_obj or not to_obj:
-            return ""
+            return []
         
-        # Handle multiple relation states
+        # Generate separate description for each relation state
         relation_descriptions = []
         for state in states:
             if state in self._state_templates:
@@ -187,13 +189,7 @@ class StateChangeTranslator:
                 desc = template.format(object=from_obj, relation=relation_desc, target=to_obj)
                 relation_descriptions.append(desc)
         
-        if not relation_descriptions:
-            return ""
-        
-        if len(relation_descriptions) == 1:
-            return relation_descriptions[0]
-        else:
-            return ", ".join(relation_descriptions[:-1]) + " and " + relation_descriptions[-1]
+        return relation_descriptions
     
     def _format_object_name(self, name: str) -> str:
         """
@@ -394,37 +390,6 @@ class StateChangeTranslator:
         else:
             # All digits, return original (shouldn't happen due to earlier checks)
             return part
-    
-    def get_core_objects_from_diff(self, diff: Dict[str, Any]) -> Set[str]:
-        """
-        Extract the core objects involved in a diff for FOV checking.
-        
-        Updated to work with the new state-centric diff format.
-        
-        Args:
-            diff: State-centric scene graph difference
-            
-        Returns:
-            Set[str]: Set of object names involved in the diff
-        """
-        objects = set()
-        
-        # Process only add and remove operations (no update in new format)
-        for operation in ['add', 'remove']:
-            if operation in diff:
-                # Add objects from node changes
-                for node in diff[operation].get('nodes', []):
-                    if 'name' in node:
-                        objects.add(node['name'])
-                
-                # Add objects from edge changes
-                for edge in diff[operation].get('edges', []):
-                    if 'from' in edge:
-                        objects.add(edge['from'])
-                    if 'to' in edge:
-                        objects.add(edge['to'])
-        
-        return objects
     
     def diff_signature(self, diff: Dict[str, Any]) -> str:
         """

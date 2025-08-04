@@ -30,16 +30,18 @@ class BatchQAGenerator:
     Processes multiple task directories to generate Q&A pairs using QAGenerationManager.
     """
     
-    def __init__(self, input_root: str, output_file: str):
+    def __init__(self, input_root: str, output_file: str, raw_data_dir: str):
         """
         Initialize the batch QA generator.
         
         Args:
             input_root: Root directory containing segmented task directories
             output_file: Output JSONL file path
+            raw_data_dir: Root directory containing raw data
         """
         self.input_root = Path(input_root)
         self.output_file = Path(output_file)
+        self.raw_data_dir = Path(raw_data_dir)
         
         if not self.input_root.exists():
             raise FileNotFoundError(f"Input root directory not found: {input_root}")
@@ -77,13 +79,16 @@ class BatchQAGenerator:
         try:
             # Initialize QA generation manager with the input root
             # The manager will automatically load all valid tasks
-            manager = QAGenerationManager(str(self.input_root))
+            manager = QAGenerationManager(str(self.input_root), str(self.raw_data_dir))
             
             print(f"📚 Loaded {manager.num_tasks} tasks from {self.input_root}")
             
             if manager.num_tasks == 0:
                 print("❌ No valid tasks found for QA generation")
                 return
+            
+            forward_qa_pairs = []
+            inverse_qa_pairs = []
             
             # Generate forward dynamics Q&A pairs for all tasks
             print("\n⏭️ Generating Forward Dynamics Q&A pairs...")
@@ -132,6 +137,13 @@ def main():
     )
     
     parser.add_argument(
+        'raw_data_dir',
+        nargs='?',
+        default='/home/mll-laptop-1/01_projects/03_behavior_challenge/replayed_trajectories',
+        help='Root directory containing raw data'
+    )
+    
+    parser.add_argument(
         'output_file',
         nargs='?',
         default='/home/mll-laptop-1/01_projects/BEHAVIOR-1K/EmbodiedVLM/tmp/gen_qa.jsonl',
@@ -147,6 +159,7 @@ def main():
     args = parser.parse_args()
     
     print(f"Input root: {args.input_root}")
+    print(f"Raw data dir: {args.raw_data_dir}")
     print(f"Output file: {args.output_file}")
     
     if args.dry_run:
@@ -163,7 +176,7 @@ def main():
         return
     
     try:
-        generator = BatchQAGenerator(args.input_root, args.output_file)
+        generator = BatchQAGenerator(args.input_root, args.output_file, args.raw_data_dir)
         generator.run()
         print("\n🎉 Batch QA generation complete!")
     except Exception as e:

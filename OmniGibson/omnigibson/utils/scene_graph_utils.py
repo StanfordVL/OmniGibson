@@ -10,7 +10,7 @@ import networkx as nx
 from copy import deepcopy
 from math import ceil
 from tqdm import tqdm
-from typing import Dict, List, Tuple, Callable, Any
+from typing import Dict, List, Tuple, Callable, Any, Set, Union
 from dataclasses import field, dataclass
 from omnigibson.robots.manipulation_robot import ManipulationRobot
 from omnigibson.object_states import ContactBodies
@@ -32,7 +32,7 @@ def convert_to_serializable(obj):
         return str(obj)
 
 
-def get_symbolic_scene_graph(nx_graph: nx.Graph) -> Dict[str, List[Dict]]:
+def get_symbolic_scene_graph(nx_graph: nx.Graph, obj_visibility_dict: Dict[Any, Any]=None) -> Dict[str, List[Dict]]:
     '''
     Get the symbolic scene graph from the nx graph
     '''
@@ -44,12 +44,18 @@ def get_symbolic_scene_graph(nx_graph: nx.Graph) -> Dict[str, List[Dict]]:
     
     for node in nx_graph.nodes():
         node_name = node.name
+        node_category = node.category
         node_data = nx_graph.nodes[node]
         states = convert_to_serializable(node_data['states'])
         symbolic_graph['nodes'].append({
             'name': node_name,
+            'category': node_category,
             'states': set(states.keys())
         })
+        if obj_visibility_dict is not None and node_name in obj_visibility_dict:
+            symbolic_graph['nodes'][-1]['visibility'] = obj_visibility_dict[node_name]
+        else:
+            symbolic_graph['nodes'][-1]['visibility'] = {}
     
     for u, v, data in nx_graph.edges(data=True):
         edge_states = convert_to_serializable(data.get('states', []))
@@ -116,11 +122,14 @@ def generate_scene_graph_diff(
     for node_name in common_node_names:
         prev_states = prev_nodes[node_name]['states']
         new_states = new_nodes[node_name]['states']
+        # use **other_args to save other args (should remain the same)
+        other_args = {k: v for k, v in prev_nodes[node_name].items() if k not in ['states', 'name']}
         
         if prev_states != new_states:
             diff_graph['update']['nodes'].append({
                 'name': node_name,
-                'states': new_states
+                'states': new_states,
+                **other_args
             })
     
     # Pre-convert edge states to sets and create efficient lookups
@@ -197,6 +206,9 @@ def generate_state_centric_diff(
     # Convert node lists to dictionaries for efficient lookup
     prev_nodes = {node['name']: set(node.get('states', [])) for node in prev_graph['nodes']}
     new_nodes = {node['name']: set(node.get('states', [])) for node in new_graph['nodes']}
+
+    prev_nodes_category = {node['name']: node.get('category', None) for node in prev_graph['nodes']}
+    new_nodes_category = {node['name']: node.get('category', None) for node in new_graph['nodes']}
     
     # Process node state changes
     all_node_names = set(prev_nodes.keys()) | set(new_nodes.keys())
@@ -204,13 +216,15 @@ def generate_state_centric_diff(
     for node_name in all_node_names:
         prev_states = prev_nodes.get(node_name, set())
         new_states = new_nodes.get(node_name, set())
+        node_category = prev_nodes_category.get(node_name, None)
         
         # States that were added (present in new but not in prev)
         added_states = new_states - prev_states
         if added_states:
             diff['add']['nodes'].append({
                 'name': node_name,
-                'states': list(added_states)
+                'states': list(added_states),
+                'category': node_category
             })
         
         # States that were removed (present in prev but not in new)
@@ -218,7 +232,8 @@ def generate_state_centric_diff(
         if removed_states:
             diff['remove']['nodes'].append({
                 'name': node_name,
-                'states': list(removed_states)
+                'states': list(removed_states),
+                'category': node_category
             })
     
     # Convert edge lists to dictionaries for efficient lookup
@@ -271,7 +286,7 @@ class SceneGraphWriter:
     buffer_size: int
     buffer: List[Dict]
 
-    def __init__(self, output_path: str, interval: int=1000, buffer_size: int=1000):
+    def __init__(self, output_path: str, interval: int=1000, buffer_size: int=1000, write_full_graph_only: bool=False):
         self.output_path = output_path
         self.interval = interval
         self.batch_step = 0
@@ -280,18 +295,20 @@ class SceneGraphWriter:
         self.prev_graph = None
         self.current_graph = None
         self.prev_time = -1
+        self.write_full_graph_only = write_full_graph_only
 
-    def step(self, graph: nx.Graph, frame_step: int):
+    def step(self, graph: nx.Graph, frame_step: int, obj_visibility_dict: Dict[str, Dict[str, List[int]]]=None):
         '''
         Step the scene graph writer
         '''
-        symbolic_graph = get_symbolic_scene_graph(graph)
+        symbolic_graph = get_symbolic_scene_graph(graph, obj_visibility_dict)
         self.current_graph = symbolic_graph
 
         self.batch_step += 1
 
         # if this is the first graph, just write the full graph
-        if self.prev_graph is None or self.batch_step == self.interval or self.prev_time == 0:
+        if self.write_full_graph_only or \
+          (self.prev_graph is None or self.batch_step == self.interval or self.prev_time == 0):
             data = deepcopy(symbolic_graph)
             data['type'] = 'full'
             if self.batch_step == self.interval:
@@ -339,7 +356,7 @@ class SceneGraphWriter:
         self._flush()
 
 class SceneGraphReader:
-    def __init__(self, file_path: str, filter_transients: bool=False):
+    def __init__(self, file_path: str, filter_transients: bool=False, always_full: bool=True):
         """
         Initialize the scene graph reader.
         
@@ -347,6 +364,7 @@ class SceneGraphReader:
             file_path (str): Path to the JSON file containing scene graph data
         """
         self.file_path = file_path
+        self.always_full = always_full
         self.data = {}
         self._load_data()
         if filter_transients:
@@ -370,6 +388,151 @@ class SceneGraphReader:
         Reload the data from the file (useful if the file has been updated).
         """
         self._load_data()
+
+    def get_active_objects(self, diff: Dict[str, Dict]) -> Set[str]:
+        """
+        Get the active objects from a diff
+        """
+        active_objects = set()
+        options = ['add', 'remove', 'update']
+        for option in options:
+            if option in diff:
+                for node in diff[option]['nodes']:
+                    active_objects.add(node['name'])
+                for edge in diff[option]['edges']:
+                    active_objects.add(edge['from'])
+                    active_objects.add(edge['to'])
+        return active_objects
+    
+    # Class-level constant for better maintainability
+    OBJ_OBSERVABLE_PERCENT_THRESHOLD = 0.005
+
+    def is_object_visible(self, nodes: List[Dict], sensor_names: List[str], key_object: str) -> bool:
+        """
+        Check if the key object is visible from any of the specified sensors.
+        
+        Args:
+            nodes: List of scene graph nodes containing visibility data
+            sensor_names: List of camera/sensor names to check
+            key_object: Name of the object to check visibility for
+            
+        Returns:
+            bool: True if object is visible above threshold from any sensor, False otherwise
+        """
+        # Find the target object node
+        target_node = next((node for node in nodes if node['name'] == key_object), None)
+        if not target_node:
+            return False
+            
+        # Check if node has visibility data
+        visibility_data = target_node.get('visibility')
+        if not visibility_data:
+            return False
+            
+        # Check visibility from each sensor
+        for camera in sensor_names:
+            if self._is_visible_from_sensor(visibility_data, camera):
+                return True
+                
+        return False
+    
+    def _is_visible_from_sensor(self, visibility_data: Dict, camera: str) -> bool:
+        """
+        Helper method to check if object is visible from a specific sensor.
+        
+        Args:
+            visibility_data: Dictionary containing visibility information
+            camera: Name of the camera/sensor to check
+            
+        Returns:
+            bool: True if object is visible above threshold from this sensor
+        """
+        camera_data = visibility_data.get(camera)
+        if not camera_data:
+            return False
+            
+        # Unpack visibility data
+        obj_pixel_count, bbox_x_min, bbox_y_min, bbox_x_max, bbox_y_max, img_height, img_width = camera_data
+        
+        # Calculate visibility percentage
+        total_pixels = img_height * img_width
+        visibility_percentage = (obj_pixel_count / total_pixels) * 100
+        
+        return visibility_percentage > self.OBJ_OBSERVABLE_PERCENT_THRESHOLD
+    
+    def get_visible_objects_in_graph(self, active_objects: Set[str], sensor_names: List[str], graph: Dict[str, List[Dict]]) -> Set[str]:
+        """
+        Get the visible objects from active objects in a scene graph.
+        
+        Args:
+            active_objects: Set of object names that are active (changed between frames)
+            sensor_names: List of camera/sensor names to check visibility from
+            graph: Scene graph with 'nodes' and 'edges' keys
+            
+        Returns:
+            Set[str]: Names of objects that are visible from any of the specified sensors
+        """
+        visible_objects = set()
+        
+        for obj_name in active_objects:
+            if self.is_object_visible(graph['nodes'], sensor_names, obj_name):
+                visible_objects.add(obj_name)
+                
+        return visible_objects
+    
+    def get_all_visible_objects_in_graph(self, sensor_names: List[str], graph: Dict[str, List[Dict]]) -> Set[str]:
+        """
+        Get all visible objects in a scene graph.
+        """
+        visible_objects = set()
+        
+        for obj_node in graph['nodes']:
+            if self.is_object_visible(graph['nodes'], sensor_names, obj_node['name']):
+                visible_objects.add(obj_node['name'])
+                
+        return visible_objects
+    
+        
+
+    def get_visible_objects_in_both_graphs(self, active_objects: Set[str], sensor_names: List[str], from_graph: Dict[str, List[Dict]], to_graph: Dict[str, List[Dict]]) -> Set[str]:
+        """
+        Get the visible objects from active objects across two scene graphs.
+        
+        Args:
+            active_objects: Set of object names that are active (changed between frames)
+            sensor_names: List of camera/sensor names to check visibility from
+            from_graph: Source scene graph with 'nodes' and 'edges' keys
+            to_graph: Target scene graph with 'nodes' and 'edges' keys
+            
+        Returns:
+            Set[str]: Names of objects that are visible from any of the specified sensors
+        """
+        # Get visible objects from both graphs
+        from_visible_objects = self.get_visible_objects_in_graph(active_objects, sensor_names, from_graph)
+        to_visible_objects = self.get_visible_objects_in_graph(active_objects, sensor_names, to_graph)
+        
+        # Return intersection - objects that are visible in both frames
+        return from_visible_objects & to_visible_objects
+
+    def get_all_visible_objects_in_both_graphs(self, active_objects: Set[str], sensor_names: List[str], from_graph: Dict[str, List[Dict]], to_graph: Dict[str, List[Dict]]) -> Set[str]:
+        """
+        Get the visible objects from active objects across two scene graphs.
+        
+        Args:
+            active_objects: Set of object names that are active (changed between frames)
+            sensor_names: List of camera/sensor names to check visibility from
+            from_graph: Source scene graph with 'nodes' and 'edges' keys
+            to_graph: Target scene graph with 'nodes' and 'edges' keys
+            
+        Returns:
+            Set[str]: Names of objects that are visible from any of the specified sensors
+        """
+        # Get visible objects from both graphs
+        from_visible_objects = self.get_visible_objects_in_graph(active_objects, sensor_names, from_graph)
+        to_visible_objects = self.get_visible_objects_in_graph(active_objects, sensor_names, to_graph)
+        
+        # Return intersection - objects that are visible in both frames
+        return from_visible_objects | to_visible_objects
     
     def get_scene_graph(self, frame_id) -> Dict[str, List[Dict]]:
         """
@@ -485,11 +648,20 @@ class SceneGraphReader:
             to_states = to_nodes.get(node_name, set())
 
             unchanged_states = from_states & to_states
+
+            category_name = None
+            for node in from_graph['nodes']:
+                if node['name'] == node_name:
+                    category_name = node['category']
+                    break
+
+            assert category_name is not None, f"Node {node_name} not found in graph"
             
             if unchanged_states:
                 unchanged_nodes.append({
                     'name': node_name,
-                    'states': list(unchanged_states)
+                    'states': list(unchanged_states),
+                    'category': category_name
                 })
         
         from_edges = {(e['from'], e['to']): set(e.get('states', [])) for e in from_graph['edges']}
@@ -517,10 +689,6 @@ class SceneGraphReader:
             'edges': unchanged_edges
         }
         
-        
-        
-        
-    
     def get_state_full_diff(self, from_id, to_id) -> Dict[str, Dict]:
         """
         Get the state-centric difference between two scene graphs.
@@ -544,6 +712,306 @@ class SceneGraphReader:
         
         # Generate state-centric diff
         return generate_state_centric_diff(from_graph, to_graph)
+    
+    def diff_signature(self, diff: Dict[str, Any]) -> List[str]:
+        """
+        Generate a unique signature for a diff to enable comparison.
+        
+        Updated to work with the new state-centric diff format.
+        
+        Args:
+            diff: State-centric scene graph difference
+            
+        Returns:
+            List[str]: Unique signature strings
+        """
+        if diff.get('type') == 'empty':
+            return ["empty"]
+        
+        components = []
+        
+        # Process only add and remove operations (no update in new format)
+        for operation in ['add', 'remove']:
+            if operation in diff:
+                # Add signatures for node changes
+                for node in diff[operation].get('nodes', []):
+                    name = node.get('name', '')
+                    states = sorted(node.get('states', []))
+                    components.append(f"{operation}_node_{name}_{','.join(states)}")
+                
+                # Add signatures for edge changes
+                for edge in diff[operation].get('edges', []):
+                    from_obj = edge.get('from', '')
+                    to_obj = edge.get('to', '')
+                    states = sorted(edge.get('states', []))
+                    components.append(f"{operation}_edge_{from_obj}_{to_obj}_{','.join(states)}")
+        
+        return sorted(components)
+    
+    def is_subset_diff(self, diff_1: Dict[str, Dict], diff_2: Dict[str, Dict]) -> bool:
+        """
+        Check if diff_1 is a subset of diff_2.
+        """
+        signature_1 = self.diff_signature(diff_1)
+        signature_2 = self.diff_signature(diff_2)
+        return set(signature_1) <= set(signature_2)
+    
+    def is_diff_subset_scene(self, diff: Dict[str, Dict], scene_graph: Dict[str, List[Dict]]) -> bool:
+        """
+        Check if changed states also appear in the given scene graph
+        """
+        if diff.get('type') == 'empty':
+            return True
+        
+        # Create lookup dictionaries for the scene graph (next scene after diff is applied)
+        scene_nodes = {node['name']: set(node.get('states', [])) for node in scene_graph['nodes']}
+        scene_edges = {(edge['from'], edge['to']): set(edge.get('states', [])) for edge in scene_graph['edges']}
+        
+        # Check 'add' operations - states being added should exist in the next scene graph
+        add_operations = ['add', 'update']
+        for operation in add_operations:
+            if operation not in diff:
+                continue
+            # Check node additions
+            for node in diff[operation].get('nodes', []):
+                node_name = node['name']
+                states_to_add = set(node.get('states', []))
+                
+                if node_name not in scene_nodes:
+                    # If node doesn't exist in next scene, additions failed
+                    return False
+                
+                existing_states = scene_nodes[node_name]
+                if not states_to_add.issubset(existing_states):
+                    # Added states should be present in next scene
+                    return False
+            
+            # Check edge additions
+            for edge in diff[operation].get('edges', []):
+                edge_key = (edge['from'], edge['to'])
+                states_to_add = set(edge.get('states', []))
+                
+                if edge_key not in scene_edges:
+                    # If edge doesn't exist in next scene, additions failed
+                    return False
+                
+                existing_states = scene_edges[edge_key]
+                if not states_to_add.issubset(existing_states):
+                    # Added states should be present in next scene
+                    return False
+        
+        # Check 'remove' operations - states being removed should NOT exist in the next scene graph
+        if 'remove' in diff:
+            # Check node removals
+            for node in diff['remove'].get('nodes', []):
+                node_name = node['name']
+                states_to_remove = set(node.get('states', []))
+                
+                if node_name in scene_nodes:
+                    existing_states = scene_nodes[node_name]
+                    if states_to_remove & existing_states:  # intersection - removed states still exist
+                        return False
+                # If node doesn't exist in next scene, removal was successful
+            
+            # Check edge removals
+            for edge in diff['remove'].get('edges', []):
+                edge_key = (edge['from'], edge['to'])
+                states_to_remove = set(edge.get('states', []))
+                
+                if edge_key in scene_edges:
+                    existing_states = scene_edges[edge_key]
+                    if states_to_remove & existing_states:  # intersection - removed states still exist
+                        return False
+                # If edge doesn't exist in next scene, removal was successful
+        
+        return True
+    
+    def get_visible_objects_from_diff(self, from_id, to_id, sensor_names: List[str]) -> Set[str]:
+        """
+        Get the visible objects from a diff.
+
+        Args:
+            from_id: The starting frame ID (int or str)
+            to_id: The ending frame ID (int or str)
+            sensor_names: List of camera/sensor names to check visibility from
+            
+        Returns:
+            Set[str]: Names of objects that are visible from any of the specified sensors
+        """
+        from_id_str = str(from_id)
+        to_id_str = str(to_id)
+        # Reconstruct both scene graphs
+        from_graph = self.get_scene_graph(from_id_str)
+        to_graph = self.get_scene_graph(to_id_str)
+        
+        # Get the full state-centric diff
+        full_diff = self.get_state_full_diff(from_id_str, to_id_str)
+
+        # Get active objects from the diff
+        all_active_objects = self.get_active_objects(full_diff)
+
+        # Filter to only visible objects
+        visible_objects = self.get_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph)
+
+        return visible_objects
+    
+    def get_obj_category(self, obj_name: str, nodes: List[Dict]) -> Union[str, None]:
+        """
+        Get the category of an object from a list of nodes.
+        """
+
+        for node in nodes:
+            if node['name'] == obj_name:
+                return node['category']
+        return None
+
+    def get_visible_full_diff(self, from_id, to_id, sensor_names: List[str]) -> Dict[str, Dict]:
+        """
+        Get the visible state-centric difference between two scene graphs.
+        
+        This method filters the state-centric diff to only include changes for objects
+        that are visible from the specified sensors.
+        
+        Args:
+            from_id: The starting frame ID (int or str)
+            to_id: The ending frame ID (int or str)
+            sensor_names: List of camera/sensor names to check visibility from
+            
+        Returns:
+            Dict: Filtered state-centric difference with only 'add' and 'remove' keys
+                 containing only changes for visible objects
+        """
+        from_id_str = str(from_id)
+        to_id_str = str(to_id)
+        
+        # Reconstruct both scene graphs
+        from_graph = self.get_scene_graph(from_id_str)
+        to_graph = self.get_scene_graph(to_id_str)
+        
+        # Get the full state-centric diff
+        full_diff = self.get_state_full_diff(from_id_str, to_id_str)
+
+        # Get active objects from the diff
+        all_active_objects = self.get_active_objects(full_diff)
+
+        # Filter to only visible objects
+        visible_objects = self.get_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph)
+
+        all_visible_objects = self.get_all_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph)
+
+        all_nodes = from_graph['nodes'] + to_graph['nodes']
+
+        visible_objects_category_dict = {}
+        for obj in all_visible_objects:
+            category = self.get_obj_category(obj, all_nodes)
+            assert category is not None, f"Object {obj} not found in graph"
+            visible_objects_category_dict[category] = visible_objects_category_dict.get(category, 0) + 1
+        
+        # Filter the diff to only include visible objects
+        visible_diff = {
+            "add": {'nodes': [], 'edges': []},
+            "remove": {'nodes': [], 'edges': []}
+        }
+        
+        # Filter out if visible diff involves multiple same category objects
+        multiple_instance_categories = {category for category, count in visible_objects_category_dict.items() if count > 1}
+
+        # Filter node changes
+        for category in ['add', 'remove']:
+            if category in full_diff:
+                for node in full_diff[category]['nodes']:
+                    if node['name'] in visible_objects:
+                        node_category = self.get_obj_category(node['name'], all_nodes)
+                        if node_category in multiple_instance_categories:
+                            continue
+                        visible_diff[category]['nodes'].append(node)
+                
+                for edge in full_diff[category]['edges']:
+                    # Include edge if both endpoints are visible
+                    if edge['from'] in visible_objects and edge['to'] in visible_objects:
+                        edge_from_category = self.get_obj_category(edge['from'], all_nodes)
+                        edge_to_category = self.get_obj_category(edge['to'], all_nodes)
+                        if edge_from_category in multiple_instance_categories or edge_to_category in multiple_instance_categories:
+                            continue
+                        visible_diff[category]['edges'].append(edge)
+        
+        # Check if the filtered diff is empty
+        if (not visible_diff['add']['nodes'] and not visible_diff['add']['edges'] and
+            not visible_diff['remove']['nodes'] and not visible_diff['remove']['edges']):
+            return {"type": "empty"}
+            
+        return visible_diff
+    
+
+    def has_similar_edges(self, diff_1: Dict[str, Dict], diff_2: Dict[str, Dict], graph_1: Dict[str, List[Dict]], graph_2: Dict[str, List[Dict]]) -> bool:
+        """
+        Check if the two diffs have similar edges in terms of object category.
+        """
+        diff_1_edges = {
+            "add": {
+                "edges": [],
+            },
+            "remove": {
+                "edges": [],
+            }
+        }
+        diff_2_edges = {
+            "add": {
+                "edges": [],
+            },
+            "remove": {
+                "edges": [],
+            }
+        }
+
+        # translate edge from object name and to object name to object category
+        all_nodes = graph_1['nodes'] + graph_2['nodes']
+
+        for operation in ['add', 'remove']:
+            for edge in diff_1[operation]['edges']:
+                edge_from_category = self.get_obj_category(edge['from'], all_nodes)
+                edge_to_category = self.get_obj_category(edge['to'], all_nodes)
+                edge_states = edge['states']
+                cur_edge_dict = {
+                    "from": edge_from_category,
+                    "to": edge_to_category,
+                    "states": edge_states
+                }
+                diff_1_edges[operation]['edges'].append(cur_edge_dict)
+            
+            for edge in diff_2[operation]['edges']:
+                edge_from_category = self.get_obj_category(edge['from'], all_nodes)
+                edge_to_category = self.get_obj_category(edge['to'], all_nodes)
+                edge_states = edge['states']
+                cur_edge_dict = {
+                    "from": edge_from_category,
+                    "to": edge_to_category,
+                    "states": edge_states
+                }
+                diff_2_edges[operation]['edges'].append(cur_edge_dict)
+
+        # get signature of edges
+        diff_1_edge_signature = set(self.diff_signature(diff_1_edges))
+        diff_2_edge_signature = set(self.diff_signature(diff_2_edges))
+
+        # # remove 'add_' or 'remove_' from the signature
+        # diff_1_edge_signature = set(sig.replace('add_', '').replace('remove_', '') for sig in diff_1_edge_signature)
+        # diff_2_edge_signature = set(sig.replace('add_', '').replace('remove_', '') for sig in diff_2_edge_signature)
+
+        common_signature = diff_1_edge_signature & diff_2_edge_signature
+
+        ratio = len(common_signature) / len(diff_1_edge_signature) if len(diff_1_edge_signature) > 0 else 0
+
+        return ratio >= 0.49
+        
+
+    def has_same_category_objects(self, diff: Dict[str, Dict], graph: Dict[str, List[Dict]]) -> bool:
+        """
+        Check if the diff has same category objects as the graph.
+        """
+        all_nodes = graph['nodes']
+        
+        
 
     def _find_nearest_full_graph(self, target_frame_id: str) -> Tuple[str, Dict]:
         """
@@ -781,9 +1249,11 @@ class SceneGraphReader:
                     # Add missing node to all middle frames
                     for mid_frame in middle_frames:
                         mid_graph = graphs[mid_frame]
+                        other_args = {k: v for k, v in base_graph['nodes'][0].items() if k not in ['states', 'name']}
                         mid_graph['nodes'].append({
                             'name': node_name,
-                            'states': list(stable_states)
+                            'states': list(stable_states),
+                            **other_args
                         })
                     fixed += 1
 
@@ -873,14 +1343,15 @@ class SceneGraphReader:
             prev = frame_ids[i-1]
             curr = frame_ids[i]
 
-            if (i % FULL_GRAPH_INTERVAL == 0):
+            if (i % FULL_GRAPH_INTERVAL == 0) or self.always_full:
                 new_data[curr] = {
                     'type': 'full',
                     'nodes': graphs[curr]['nodes'],
                     'edges': graphs[curr]['edges']
                 }
-            diff = generate_scene_graph_diff(graphs[prev], graphs[curr])
-            new_data[curr] = diff
+            else:
+                diff = generate_scene_graph_diff(graphs[prev], graphs[curr])
+                new_data[curr] = diff
 
         self.data = new_data
 

@@ -13,7 +13,10 @@ from gello.utils.qa_utils import *
 from gello.utils.b1k_utils import ALL_QA_METRICS, COMMON_QA_METRICS, TASK_QA_METRICS
 import inspect
 
-RUN_QA = True
+import cv2
+import multiprocessing as mp
+
+RUN_QA = False
 
 gm.RENDER_VIEWER_CAMERA = False
 gm.DEFAULT_VIEWER_WIDTH = 128
@@ -23,6 +26,66 @@ gm.DEFAULT_VIEWER_HEIGHT = 128
 def extract_arg_names(func):
     return list(inspect.signature(func).parameters.keys())
 
+
+def save_frame(args):
+    '''worker function for multiprocessing'''
+    frame, frame_id, output_dir = args
+    filename = os.path.join(output_dir, f"{frame_id:05d}.png")
+    cv2.imwrite(filename, frame)
+
+def decompose_video_parallel(video_path, output_folder, base_frame_id=0, chunk_size=600):
+    '''Decompose a video into PNG frames using parallel processing with chunking to avoid memory issues'''
+    if base_frame_id is None:
+        base_frame_id = 0
+    base_frame_id = base_frame_id + 1
+    if not os.path.exists(output_folder):
+        os.makedirs(output_folder)
+        print(f"Created output folder: {output_folder}")
+
+    # Get video properties
+    vid_capture = cv2.VideoCapture(video_path)
+    if not vid_capture.isOpened():
+        print(f"Error: Could not open video file: {video_path}")
+        return
+    
+    total_frames = int(vid_capture.get(cv2.CAP_PROP_FRAME_COUNT))
+    print(f"Total frames to process: {total_frames}")
+    
+    num_cores = mp.cpu_count() - 2
+    print(f"Using {num_cores} cores for video decomposition with chunk size: {chunk_size}")
+
+    frame_id = base_frame_id
+    processed_frames = 0
+    
+    while True:
+        # Process frames in chunks to avoid memory explosion
+        chunk_tasks = []
+        
+        # Read a chunk of frames
+        for _ in range(chunk_size):
+            success, frame = vid_capture.read()
+            if not success:
+                break
+            chunk_tasks.append((frame.copy(), frame_id, output_folder))  # .copy() to avoid reference issues
+            frame_id += 1
+        
+        if not chunk_tasks:
+            break
+            
+        # Process this chunk in parallel
+        with mp.Pool(processes=num_cores) as pool:
+            pool.map(save_frame, chunk_tasks)
+        
+        processed_frames += len(chunk_tasks)
+        print(f"Processed {processed_frames}/{total_frames} frames ({processed_frames/total_frames*100:.1f}%)")
+        
+        # Clear the chunk from memory
+        del chunk_tasks
+    
+    # close video capture
+    vid_capture.release()
+    
+    print(f"Successfully decomposed {processed_frames} frames into {output_folder}")
 
 def replay_hdf5_file(hdf_input_path):
     """
@@ -34,11 +97,11 @@ def replay_hdf5_file(hdf_input_path):
     # Create folder with same name as HDF5 file (without extension)
     base_name = os.path.basename(hdf_input_path)
     folder_name = os.path.splitext(base_name)[0]
-    # folder_path = os.path.join(os.path.dirname(hdf_input_path), folder_name)
-    folder_path = os.path.dirname(hdf_input_path)
-    
+    folder_path = os.path.join(os.path.dirname(hdf_input_path), folder_name)
+    # folder_path = os.path.dirname(hdf_input_path)
+
     # # Create the folder if it doesn't exist
-    # os.makedirs(folder_path, exist_ok=True)
+    os.makedirs(folder_path, exist_ok=True)
     
     # Define output paths
     hdf_output_path = os.path.join(folder_path, f"{folder_name}_replay.hdf5")
@@ -46,6 +109,12 @@ def replay_hdf5_file(hdf_input_path):
 
     # Metrics path
     metrics_output_path = os.path.join(folder_path, f"qa_metrics.json")
+
+    # Move original HDF5 file to the new folder
+    new_hdf_input_path = os.path.join(folder_path, base_name)
+    if hdf_input_path != new_hdf_input_path:  # Avoid copying if already in target folder
+        os.rename(hdf_input_path, new_hdf_input_path)
+        hdf_input_path = new_hdf_input_path
     
     # Define resolution for consistency
     RESOLUTION_DEFAULT = 560
@@ -82,7 +151,7 @@ def replay_hdf5_file(hdf_input_path):
             "sensor_type": "VisionSensor",
             "name": f"external_sensor{i}",
             "relative_prim_path": f"/controllable__r1pro__robot_r1/base_link/external_sensor{i}",
-            "modalities": ["rgb"],
+            "modalities": ["rgb", "seg_instance"],
             "sensor_kwargs": {
                 "image_height": RESOLUTION_DEFAULT,
                 "image_width": RESOLUTION_DEFAULT,
@@ -99,7 +168,7 @@ def replay_hdf5_file(hdf_input_path):
         "sensor_type": "VisionSensor",
         "name": f"external_sensor{idx}",
         "relative_prim_path": f"/controllable__r1pro__robot_r1/zed_link/external_sensor{idx}",
-        "modalities": ["rgb", "seg_instance_id"],
+        "modalities": ["rgb", "seg_instance_id", "seg_instance"],
         "sensor_kwargs": {
             "image_height": RESOLUTION_DEFAULT,
             "image_width": RESOLUTION_DEFAULT,
@@ -119,7 +188,7 @@ def replay_hdf5_file(hdf_input_path):
     env = SceneGraphDataPlaybackWrapper.create_from_hdf5(
         input_path=hdf_input_path,
         output_path=hdf_output_path,
-        robot_obs_modalities=["rgb"],
+        robot_obs_modalities=["rgb", "seg_instance"],
         robot_sensor_config=robot_sensor_config,
         external_sensors_config=external_sensors_config,
         exclude_sensor_names=["zed"],
@@ -181,19 +250,20 @@ def replay_hdf5_file(hdf_input_path):
     frame_rgb_keys = []
     
     # Create video writer for robot cameras
-    robot_camera_names = ['robot_r1::robot_r1:left_realsense_link:Camera:0::rgb', 
-                        'robot_r1::robot_r1:right_realsense_link:Camera:0::rgb']
-    for robot_camera_name in robot_camera_names:
-        # video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{robot_camera_name}.mp4"))
-        # video_rgb_keys.append(robot_camera_name)
-        frame_writers.append(env.create_frame_writer(output_dir=f"{video_dir}/{robot_camera_name}/"))
-        frame_rgb_keys.append(robot_camera_name)
+    # robot_camera_names = ['robot_r1::robot_r1:left_realsense_link:Camera:0::rgb', 
+    #                     'robot_r1::robot_r1:right_realsense_link:Camera:0::rgb']
+    # for robot_camera_name in robot_camera_names:
+    #     # video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{robot_camera_name}.mp4"))
+    #     # video_rgb_keys.append(robot_camera_name)
+    #     frame_writers.append(env.create_frame_writer(output_dir=f"{video_dir}/{robot_camera_name}/"))
+    #     frame_rgb_keys.append(robot_camera_name)
+    #     pass
 
     # Create video writers for external cameras
     for i in range(len(external_sensors_config)):
         camera_name = f"external_sensor{i}"
-        # video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{camera_name}.mp4"))
-        # video_rgb_keys.append(f"external::{camera_name}::rgb")
+        video_writers.append(env.create_video_writer(fpath=f"{video_dir}/{camera_name}.mp4"))
+        video_rgb_keys.append(f"external::{camera_name}::rgb")
         frame_writers.append(env.create_frame_writer(output_dir=f"{video_dir}/{camera_name}/"))
         frame_rgb_keys.append(f"external::{camera_name}::rgb")
     
@@ -201,33 +271,44 @@ def replay_hdf5_file(hdf_input_path):
     # We avoid calling playback_dataset and call playback_episode individually in order to manually
     # aggregate per-episode metrics
     metrics = dict()
+
+    assert len(env.input_hdf5["data"].keys()) == 1, f"Only one episode is supported for now, got {len(env.input_hdf5['data'].keys())} from {hdf_input_path}"
+
+    replay_config = {
+        "record_visibility": True,
+        "record_rgb_keys": ["external::external_sensor0::rgb", "external::external_sensor1::rgb"],
+        "sensors": ["external_sensor0", "external_sensor1"],
+    }
+
+    start_frame = None
+    end_frame = None
+
     for episode_id in range(env.input_hdf5["data"].attrs["n_episodes"]):
-        scene_graph_writer = SceneGraphWriter(output_path=os.path.join(folder_path, f"scene_graph_{episode_id}.json"), interval=200, buffer_size=200)
+        scene_graph_writer = SceneGraphWriter(output_path=os.path.join(folder_path, f"scene_graph_{episode_id}.json"), interval=200, buffer_size=200, write_full_graph_only=True)
         env.playback_episode(
             episode_id=episode_id,
             record_data=False,
             video_writers=video_writers,
             video_rgb_keys=video_rgb_keys,
-            frame_writers=frame_writers,
-            frame_rgb_keys=frame_rgb_keys,
-            start_frame=4000,
-            end_frame=5000,
+            frame_writers=None,
+            frame_rgb_keys=None,
+            start_frame=start_frame,
+            end_frame=end_frame,
             scene_graph_writer=scene_graph_writer,
+            replay_config=replay_config,
         )
-        episode_metrics = env.aggregate_metrics(flatten=True)
-        for k, v in episode_metrics.items():
-            print(f"Metric [{k}]: {v}")
-        metrics[f"episode_{episode_id}"] = episode_metrics
-    
     # Close all video writers
     for writer in video_writers:
         writer.close()
+    
+    # Decompose videos into frames
+    for video_writer in video_writers:
+        video_path = video_writer._filename
+        output_folder = os.path.splitext(video_path)[0]
+        decompose_video_parallel(video_path, output_folder, base_frame_id=start_frame)
 
-    env.save_data()
 
-    # Save metrics
-    with open(metrics_output_path, "w+") as f:
-        json.dump(metrics, f, cls=TorchEncoder, indent=4)
+
 
     # Always clear the environment to free resources
     og.clear()
@@ -241,11 +322,13 @@ def main():
     parser.add_argument("--dir", help="Directory containing HDF5 files to process")
     parser.add_argument("--files", nargs="*", help="Individual HDF5 file(s) to process")
 
-    default_files = ["/home/mll-laptop-1/01_projects/03_behavior_challenge/raw_demos/test_set/cleaning_up_plates_and_food_1747365183765658_cleaning_up_plates_and_food.hdf5"]
+    default_files = ["/home/mll-laptop-1/01_projects/03_behavior_challenge/sampled_demo/cleaning_up_plates_and_food_1747631958405370_cleaning_up_plates_and_food.hdf5"]
+    # default_dir = "/home/mll-laptop-1/01_projects/03_behavior_challenge/raw_demos/Jul_2_demos/cleaning_up_plates_and_food_1747365183765658_cleaning_up_plates_and_food.hdf5"
     
     args = parser.parse_args()
 
-    args.files = default_files
+    # args.files = default_files
+    # args.dir = default_dir
     
     if args.dir and os.path.isdir(args.dir):
         # Process all HDF5 files in the directory (non-recursively)

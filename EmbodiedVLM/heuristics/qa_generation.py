@@ -39,14 +39,16 @@ class QAGenerationManager:
     - Aggregating and saving results
     """
 
-    def __init__(self, input_root_dir: str):
+    def __init__(self, input_root_dir: str, raw_data_dir: str):
         """
         Initialize the Q&A generation manager.
         
         Args:
             input_root_dir (str): Path to the root directory containing segmented trajectory results
+            raw_data_dir (str): Path to the root directory containing raw data. Other than the segmented frames, all other data will be loaded from this directory.
         """
         self.input_root_dir = Path(input_root_dir)
+        self.raw_data_dir = Path(raw_data_dir)
         self.task_data_list: List[TaskData] = []
         self.qa_pairs: List[QAPair] = []
         
@@ -59,30 +61,39 @@ class QAGenerationManager:
         """
         Load all task data from the output root directory.
         """
-        print(f"Loading tasks from: {self.input_root_dir}")
+        print(f"Loading segmented tasks from: {self.input_root_dir}")
+        print(f"Loading raw data from: {self.raw_data_dir}")
         
         for task_dir in self.input_root_dir.iterdir():
             if not task_dir.is_dir():
                 continue
                 
             task_name = task_dir.name
-            scene_graph_file = task_dir / "segmented_scene_graph_0.json"
+            segmented_scene_graph_file = task_dir / "segmented_scene_graph_0.json" # get all key frame ids from this file
+            raw_data_task_dir = self.raw_data_dir / task_name
+            raw_scene_graph_file = raw_data_task_dir / "scene_graph_0.json" # real working scene graph file
             
-            if not scene_graph_file.exists():
-                print(f"Warning: No scene graph file found for task {task_name}, skipping...")
+            if not segmented_scene_graph_file.exists():
+                print(f"Warning: No segmented scene graph file found for task {task_name}, skipping...")
+                continue
+
+            if not raw_scene_graph_file.exists():
+                print(f"Warning: No raw scene graph file found for task {task_name}, skipping...")
                 continue
             
             try:
                 # Load scene graph data using SceneGraphReader
-                scene_graph_reader = SceneGraphReader(str(scene_graph_file))
-                key_frame_ids = scene_graph_reader.get_available_frame_ids()
+                segmented_scene_graph_reader = SceneGraphReader(str(segmented_scene_graph_file))
+                key_frame_ids = segmented_scene_graph_reader.get_available_frame_ids()
+
+                raw_scene_graph_reader = SceneGraphReader(str(raw_scene_graph_file)) # real working scene graph reader
                 
                 # Collect image paths for each frame and sensor
-                image_root_path, image_paths = self._collect_image_paths(task_dir, key_frame_ids)
+                image_root_path, image_paths = self._collect_image_paths(raw_data_task_dir) # real working image paths
                 
                 task_data = TaskData(
                     task_name=task_name,
-                    scene_graph_reader=scene_graph_reader,
+                    scene_graph_reader=raw_scene_graph_reader,
                     key_frame_ids=key_frame_ids,
                     image_paths=image_paths,
                     task_dir=str(task_dir),
@@ -96,7 +107,7 @@ class QAGenerationManager:
                 print(f"Error loading task {task_name}: {str(e)}")
                 continue
 
-    def _collect_image_paths(self, task_dir: Path, key_frame_ids: List[str]) -> Tuple[str, Dict[str, Dict[str, str]]]:
+    def _collect_image_paths(self, task_dir: Path, key_frame_ids=None) -> Tuple[str, Dict[str, Dict[str, str]]]:
         """
         Collect image paths for all key frames and sensors.
         
@@ -113,6 +124,25 @@ class QAGenerationManager:
         sensor_dirs = [d for d in task_dir.iterdir() if d.is_dir() and d.name.startswith('external_sensor')]
 
         image_root_path = task_dir.parent # file structure: image_root/task_name/sensor_name/frame_id.png
+
+        if key_frame_ids is None:
+            # Collect all available frame IDs from sensor directories
+            all_frame_ids = set()
+            for sensor_dir in sensor_dirs:
+                # Get all PNG files in this sensor directory
+                for image_file in sensor_dir.glob("*.png"):
+                    # Extract frame ID from filename (remove .png extension)
+                    frame_id = image_file.stem
+                    # Convert to int and back to string to ensure consistent formatting
+                    try:
+                        frame_id_int = int(frame_id)
+                        all_frame_ids.add(str(frame_id_int))
+                    except ValueError:
+                        # Skip files that don't have numeric names
+                        continue
+            
+            # Convert to sorted list for consistent ordering
+            key_frame_ids = sorted(all_frame_ids, key=int)
         
         for frame_id in key_frame_ids:
             image_paths[frame_id] = {}
@@ -156,6 +186,9 @@ class QAGenerationManager:
                 generated_pairs.extend(task_pairs)
                 print(f"Generated {len(task_pairs)} Q&A pairs for task: {task_data.task_name}")
             except Exception as e:
+                import traceback
+                print(f"Full traceback:")
+                traceback.print_exc()
                 print(f"Error generating Q&A for task {task_data.task_name}: {str(e)}")
                 continue
         

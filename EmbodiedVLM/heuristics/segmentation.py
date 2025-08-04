@@ -44,6 +44,7 @@ class FrameSegmentManager:
         self.skip_first_frames_num = 10
         self.frame_ids = self.reader.get_available_frame_ids()[self.skip_first_frames_num:]
         self.extracted_frames = []
+        self.working_camera = 'external_sensor1'
     
     def extract_changes(self, method: str = "consecutive") -> dict:
         """
@@ -63,6 +64,145 @@ class FrameSegmentManager:
             return self._extract_temporal_threshold_segment_changes()
         else:
             raise ValueError(f"Unknown segmentation method: {method}")
+        
+    def _extract_features(self, scene_graph):
+        """Extract bag-of-features from a scene graph"""
+        features = defaultdict(int)
+        
+        # Extract node features
+        for node in scene_graph.get("nodes", []):
+            node_name = node.get("name", "")
+            for state in node.get("states", []):
+                feature = f"node:{node_name}:{state}"
+                features[feature] += 1
+        
+        # Extract edge features
+        for edge in scene_graph.get("edges", []):
+            from_node = edge.get("from", "")
+            to_node = edge.get("to", "")
+            for state in edge.get("states", []):
+                feature = f"edge:{from_node}->{to_node}:{state}"
+                features[feature] += 1
+        
+        return features
+    
+    def _cosine_similarity(self, scene_graph1, scene_graph2):
+        """
+        Compute cosine similarity between two scene graphs.
+        Scene graph format:
+        {
+            "nodes": [{
+                "name": "node_name",
+                "states": ["state1", "state2", ...]
+            }, ...]
+            "edges": [{
+                "from": "node_name",
+                "to": "node_name",
+                "states": ["state1", "state2", ...]
+            }, ...]
+        }
+        """
+        
+        
+        # Extract features from both graphs
+        features1 = self._extract_features(scene_graph1)
+        features2 = self._extract_features(scene_graph2)
+
+
+        vocabulary = set(features1.keys()) | set(features2.keys())
+
+        # create vectors
+        vec1 = [features1.get(feature, 0) for feature in vocabulary]
+        vec2 = [features2.get(feature, 0) for feature in vocabulary]
+
+        # compute consine similarity
+        dot_product = sum(a * b for a, b in zip(vec1, vec2))
+        magnitude1 = math.sqrt(sum(a ** 2 for a in vec1))
+        magnitude2 = math.sqrt(sum(b ** 2 for b in vec2))
+
+        if magnitude1 * magnitude2 == 0:
+            # print which magnitude is 0
+            return 1
+        return dot_product / (magnitude1 * magnitude2)
+    
+    def _is_key_object_observable(self, scene_graph, key_object):
+        """
+        Check if the key object is observable in the scene graph.
+        """
+        OBJ_OBSERVABLE_PERCENT_THRESHOLD = 0.00
+
+        # check if the key object is observable in the scene graph
+        nodes = scene_graph['nodes']
+        for node in nodes:
+            if node['name'] == key_object:
+                if node['visibility'] == {} or self.working_camera not in node['visibility'].keys():
+                    return False
+                
+                # now begin our heuristics
+                obj_pixel_num, bbox_x_min, bbox_y_min, bbox_x_max, bbox_y_max, img_h, img_w = node['visibility'][self.working_camera]
+                total_pixel_num = img_h * img_w
+                
+                obj_image_observable_percent = obj_pixel_num / total_pixel_num * 100
+                if obj_image_observable_percent < OBJ_OBSERVABLE_PERCENT_THRESHOLD:
+                    return False
+                
+                return True
+                
+        return False
+    
+    def _get_clean_object_name(self, object_name):
+        """
+        Get the clean object name from the object name.
+        """
+        common_6char_words = {'cutter', 'broken', 'paving', 'marker', 'napkin', 'edible', 'tablet', 'saddle', 'flower', 'wooden', 'square', 'peeler', 'shovel', 'nickel', 'pestle', 'gravel', 'french', 'sesame', 'bleach', 'pewter', 'outlet', 'fabric', 'staple', 'banana', 'almond', 'masher', 'carpet', 'fridge', 'swivel', 'normal', 'potato', 'litter', 'button', 'pomelo', 'hanger', 'trophy', 'drying', 'hamper', 'radish', 'grater', 'pillow', 'skates', 'canvas', 'cloche', 'nutmeg', 'indoor', 'slicer', 'lotion', 'rolled', 'starch', 'chives', 'tomato', 'dinner', 'tartar', 'goblet', 'polish', 'liners', 'runner', 'danish', 'tissue', 'shaped', 'tassel', 'quartz', 'muffin', 'lights', 'hoodie', 'burlap', 'wrench', 'shorts', 'hotdog', 'lemons', 'turnip', 'cookie', 'salmon', 'abacus', 'guitar', 'paddle', 'boxers', 'cherry', 'liquid', 'helmet', 'folder', 'silver', 'record', 'floors', 'middle', 'eraser', 'hinged', 'carton', 'wicker', 'coffee', 'smoker', 'tender', 'zipper', 'public', 'pastry', 'mallet', 'mussel', 'flakes', 'system', 'snacks', 'pebble', 'cereal', 'mixing', 'window', 'sandal', 'orange', 'toilet', 'fennel', 'cooker', 'puzzle', 'oyster', 'switch', 'barley', 'funnel', 'blower', 'infant', 'shaker', 'sensor', 'butter', 'jigger', 'ground', 'mirror', 'soccer', 'pallet', 'garage', 'longue', 'urinal', 'celery', 'bikini', 'shears', 'dental', 'waffle', 'handle', 'noodle', 'stairs', 'easter', 'socket', 'boiled', 'poster', 'drawer', 'chisel', 'holder', 'tackle', 'breast', 'pickle', 'plugin', 'jigsaw', 'collar', 'mortar', 'pepper', 'teapot', 'trowel', 'credit', 'screen', 'boxing', 'walker', 'garlic', 'laptop', 'server', 'deicer', 'omelet', 'pruner', 'makeup', 'chaise', 'shrimp', 'tennis', 'feeder', 'sticky', 'gloves', 'yogurt', 'pencil', 'icicle', 'powder', 'carafe', 'leaves', 'jersey', 'ginger', 'bucket', 'diaper', 'shower', 'grains', 'medium', 'pellet', 'honing', 'dahlia', 'gaming', 'chilli', 'router', 'icetea', 'pickup', 'figure', 'baking', 'cymbal', 'violin', 'frying', 'bottle', 'kettle', 'spirit', 'ticket', 'washer', 'burner', 'durian', 'carrot', 'statue', 'basket', 'blouse', 'roller', 'squash', 'webcam', 'candle', 'jacket', 'ladder', 'kidney', 'thread', 'dipper', 'loofah', 'tights', 'branch', 'ripsaw', 'pommel', 'heater', 'cactus', 'peanut', 'canned', 'walnut', 'pillar', 'cooler', 'cloves', 'hammer', 'wreath', 'hummus', 'hiking', 'letter', 'teacup', 'cotton', 'weight', 'fillet', 'juicer', 'cheese', 'crayon', 'bottom', 'garden', 'tinsel', 'camera', 'wading', 'analog', 'sponge', 'wallet', 'center', 'locker', 'copper', 'tripod', 'filter', 'raisin', 'rubber', 'ribbon', 'hockey', 'beaker', 'catsup', 'output', 'sodium', 'turkey', 'quiche', 'vacuum', 'saucer', 'papaya', 'sliced', 'hammam', 'grated', 'racket', 'motion', 'onesie'}
+
+        if 'robot' in object_name:
+            return object_name
+
+        parts = object_name.split('_')
+        clean_object_name_parts = []
+
+        for part in parts:
+            # if part is a number (like 10)
+            if part.isdigit():
+                continue
+            elif len(part) == 6 and part not in common_6char_words:
+                continue
+            else:
+                clean_object_name_parts.append(part)
+        
+        clean_object_name = '_'.join(clean_object_name_parts)
+        
+        return clean_object_name
+
+    def _no_same_category_objects(self, active_objects, prev_scene_graph, current_scene_graph):
+        """
+        Check if the active objects are of the same category in the previous and current scene graphs.
+        """
+        prev_objects = [obj['name'] for obj in prev_scene_graph['nodes']]
+        current_objects = [obj['name'] for obj in current_scene_graph['nodes']]
+
+        active_object_types = set(self._get_clean_object_name(obj) for obj in active_objects)
+
+        prev_active_object_num_board = {o_type: 0 for o_type in active_object_types}
+        current_active_object_num_board = {o_type: 0 for o_type in active_object_types}
+
+        for prev_obj in prev_objects:
+            # must check if the object is infov
+            if self._get_clean_object_name(prev_obj) in active_object_types and self._is_key_object_observable(prev_scene_graph, prev_obj):
+                prev_active_object_num_board[self._get_clean_object_name(prev_obj)] += 1
+
+        for current_obj in current_objects:
+            if self._get_clean_object_name(current_obj) in active_object_types and self._is_key_object_observable(current_scene_graph, current_obj):
+                current_active_object_num_board[self._get_clean_object_name(current_obj)] += 1
+
+        # if any infov active obj num is greater than 1, return False
+        for o_type in active_object_types:
+            if prev_active_object_num_board[o_type] > 1 or current_active_object_num_board[o_type] > 1:
+                return False
+        
+
+        return True
     
     def _extract_temporal_threshold_segment_changes(self) -> dict:
         """Extract changes by comparing consecutive frames, saving last frame of each stable segment."""
@@ -153,8 +293,6 @@ class FrameSegmentManager:
         self.extracted_frames = list(changes.keys())
         return changes
 
-    
-
     def _extract_consecutive_changes(self) -> dict:
         """Extract changes by comparing consecutive frames, saving last frame of each stable segment."""
         changes = {}
@@ -192,103 +330,83 @@ class FrameSegmentManager:
         changes[self.frame_ids[-1]]['type'] = 'diff'
         self.extracted_frames = list(changes.keys())
         return changes
-
+    
     def _extract_cosine_similarity_changes(self) -> dict:
         """Extract changes by comparing cosine similarity of scene graphs."""
+        SKIPPING_FRAMES = 50
+        SKIPPING_SAVED_INTERVAL = 10
         STATE_THRESHOLD = 0.98
         TEMPORAL_THRESHOLD = 200
 
-        def cosine_similarity(scene_graph1, scene_graph2):
-            """
-            Compute cosine similarity between two scene graphs.
-            Scene graph format:
-            {
-                "nodes": [{
-                    "name": "node_name",
-                    "states": ["state1", "state2", ...]
-                }, ...]
-                "edges": [{
-                    "from": "node_name",
-                    "to": "node_name",
-                    "states": ["state1", "state2", ...]
-                }, ...]
-            }
-            """
-            def extract_features(scene_graph):
-                """Extract bag-of-features from a scene graph"""
-                features = defaultdict(int)
-                
-                # Extract node features
-                for node in scene_graph.get("nodes", []):
-                    node_name = node.get("name", "")
-                    for state in node.get("states", []):
-                        feature = f"node:{node_name}:{state}"
-                        features[feature] += 1
-                
-                # Extract edge features
-                for edge in scene_graph.get("edges", []):
-                    from_node = edge.get("from", "")
-                    to_node = edge.get("to", "")
-                    for state in edge.get("states", []):
-                        feature = f"edge:{from_node}->{to_node}:{state}"
-                        features[feature] += 1
-                
-                return features
-            
-            # Extract features from both graphs
-            features1 = extract_features(scene_graph1)
-            features2 = extract_features(scene_graph2)
-
-            vocabulary = set(features1.keys()) | set(features2.keys())
-
-            # create vectors
-            vec1 = [features1.get(feature, 0) for feature in vocabulary]
-            vec2 = [features2.get(feature, 0) for feature in vocabulary]
-
-            # compute consine similarity
-            dot_product = sum(a * b for a, b in zip(vec1, vec2))
-            magnitude1 = math.sqrt(sum(a ** 2 for a in vec1))
-            magnitude2 = math.sqrt(sum(b ** 2 for b in vec2))
-
-            if magnitude1 * magnitude2 == 0:
-                return 0
-            return dot_product / (magnitude1 * magnitude2)
-            
-
         changes = {}
-        prev_frame = self.frame_ids[0]
+        prev_frame = self.frame_ids[SKIPPING_FRAMES-1]
         prev_frame_number = int(prev_frame)
         prev_scene_graph = self.reader.get_scene_graph(prev_frame)
-        first_change_saved = False
+        changes[prev_frame] = {
+            "type": "full",
+            "nodes": prev_scene_graph['nodes'],
+            "edges": prev_scene_graph['edges']
+        }
 
-        for i in range(len(self.frame_ids) - 1):
-            if i == 0:
+        # Track postponed candidate
+        candidate_frame = None
+        candidate_diff = None
+        min_save_frame_number = None
+
+        for i in range(SKIPPING_FRAMES, len(self.frame_ids) - 1):
+            if i == SKIPPING_FRAMES:
                 continue
             current_frame = self.frame_ids[i]
             current_frame_number = int(current_frame)
             current_scene_graph = self.reader.get_scene_graph(current_frame)
 
-
-            similarity = cosine_similarity(prev_scene_graph, current_scene_graph)
-            print(f"prev_frame: {prev_frame}, current_frame: {current_frame}, similarity: {similarity}")
+            similarity = self._cosine_similarity(prev_scene_graph, current_scene_graph)
             if similarity < STATE_THRESHOLD:
-                if not first_change_saved:
-                    changes[current_frame] = {
-                        "type": "full",
-                        "nodes": current_scene_graph['nodes'],
-                        "edges": current_scene_graph['edges']
-                    }
-                    first_change_saved = True
-                    prev_frame = current_frame
-                    prev_frame_number = current_frame_number
-                    prev_scene_graph = current_scene_graph
-                elif current_frame_number - prev_frame_number > TEMPORAL_THRESHOLD:
+                if current_frame_number - prev_frame_number > TEMPORAL_THRESHOLD:
                     diff = self.reader.get_diff(prev_frame, current_frame)
-                    changes[current_frame] = diff
-                    changes[current_frame]['type'] = 'diff'
-                    prev_frame = current_frame
-                    prev_frame_number = current_frame_number
-                    prev_scene_graph = current_scene_graph
+                    assert diff['type'] != 'empty', f"Diff type is empty for frame {current_frame}"
+                    active_objects = self.reader.get_active_objects(diff)
+
+                    # if not self._no_same_category_objects(active_objects, prev_scene_graph, current_scene_graph):
+                    #     # for active object types, if there is at least one object type that appears more than once in either prev or current views, skip
+                    #     continue
+
+                    current_all_active_objects_observable = all([self._is_key_object_observable(current_scene_graph, obj) for obj in active_objects])
+                    prev_all_active_objects_observable = all([self._is_key_object_observable(prev_scene_graph, obj) for obj in active_objects])
+                    if current_all_active_objects_observable or prev_all_active_objects_observable or True:
+                        # Check if we have a postponed candidate and this frame is eligible for saving
+                        if candidate_frame is not None and current_frame_number >= min_save_frame_number:
+                            # Save the postponed frame (current frame, not the original candidate)
+                            changes[current_frame] = diff
+                            changes[current_frame]['type'] = 'diff'
+                            prev_frame = current_frame
+                            prev_frame_number = current_frame_number
+                            prev_scene_graph = current_scene_graph
+                            
+                            # Reset candidate tracking
+                            candidate_frame = None
+                            candidate_diff = None
+                            min_save_frame_number = None
+                            
+                        # If no candidate is pending, set this frame as candidate for postponed saving
+                        elif candidate_frame is None:
+                            candidate_frame = current_frame
+                            candidate_diff = diff
+                            min_save_frame_number = current_frame_number + SKIPPING_SAVED_INTERVAL
+                            
+                        # If we have a pending candidate but haven't reached the minimum frame yet, keep waiting
+                        
+                    else:
+                        # continue
+                        print(f"Skipping frame {current_frame} because all active objects are not observable")
+                        print(f"current_all_active_objects_observable: {current_all_active_objects_observable}")
+                        print(f"prev_all_active_objects_observable: {prev_all_active_objects_observable}")
+
+        # Handle case where we have a pending candidate at the end of the loop
+        if candidate_frame is not None:
+            # If we reach the end and still have a pending candidate, save it
+            changes[candidate_frame] = candidate_diff
+            changes[candidate_frame]['type'] = 'diff'
 
         self.extracted_frames = list(changes.keys())
         return changes

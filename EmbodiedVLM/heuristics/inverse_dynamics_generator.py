@@ -44,9 +44,10 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         Args:
             qa_gen_logic: Optional logic specification (reserved for future use)
         """
-        self.translator = StateChangeTranslator()
+        self.translator = StateChangeTranslator(type="inverse_dynamics")
         self.qa_gen_logic = qa_gen_logic
         self.visual_prompt = visual_prompt
+        self.sensor_names = ["external_sensor1"]
 
     @property
     def qa_type(self) -> str:
@@ -74,53 +75,60 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         """
         qa_pairs = []
         key_frame_ids = task_data.key_frame_ids
-        
-        # Generate Q&A pairs for consecutive frame pairs
+
+        candidate_gt_frame_pairs = set()
         for i in range(len(key_frame_ids) - 1):
-            frame_a_id = key_frame_ids[i]
-            frame_b_id = key_frame_ids[i + 1]
+            for j in range(i + 1, len(key_frame_ids)):
+                candidate_gt_frame_pairs.add((key_frame_ids[i], key_frame_ids[j]))
+
+        # filter out pairs that:
+        ## 1. have no visible state changes
+        ## 2. have too much difference (> 5)
+        ## 3. have multiple same category objects in the visible diff
+
+        for frame_a_id, frame_b_id in list(candidate_gt_frame_pairs):
+            visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names)
+            if visible_diff.get('type') == 'empty' or not self._has_meaningful_changes(visible_diff):
+                candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
+            if len(visible_diff.get('add', {})) + len(visible_diff.get('remove', {})) > 5:
+                candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
             
+
+        # now we have a list of candidate gt frame pairs.
+        # we see if we can find enough distractor images for each candidate gt frame pair
+        for frame_a_id, frame_b_id in candidate_gt_frame_pairs:
             try:
-                # Get the diff between frames A and B (ground truth change)
-                ground_truth_diff = task_data.scene_graph_reader.get_state_full_diff(frame_a_id, frame_b_id)
-                
-                # Skip if no significant changes
-                if ground_truth_diff.get('type') == 'empty' or not self._has_meaningful_changes(ground_truth_diff):
-                    continue
-                
-                # Get images for both frames
+                visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names)
                 images_a = task_data.image_paths.get(frame_a_id, {})
                 images_b = task_data.image_paths.get(frame_b_id, {})
-                
+
                 if not images_a or not images_b:
                     continue
-                
-                # Use the first available sensor for consistency
-                sensor_name = list(images_a.keys())[0]
-                if sensor_name not in images_b:
+
+                # get the sensor name
+                sensor_name = self.sensor_names[0] # default to "external_sensor1"
+
+                if sensor_name not in images_a or sensor_name not in images_b:
                     continue
-                
+
                 image_a_path = images_a[sensor_name]
                 image_b_path = images_b[sensor_name]
-                
-                # Check FOV for ground truth objects
-                if not self._check_fov_for_diff(ground_truth_diff, task_data, [frame_a_id, frame_b_id]):
-                    continue
-                
+
                 # Generate the QA pair
                 qa_pair = self._create_inverse_qa_pair(
-                    task_data, frame_a_id, frame_b_id, 
-                    image_a_path, image_b_path, ground_truth_diff
+                    task_data, frame_a_id, frame_b_id, image_a_path, image_b_path, visible_diff
                 )
-                
                 if qa_pair:
                     qa_pairs.append(qa_pair)
-                    
             except Exception as e:
+                import traceback
+                print(f"Full traceback:")
+                traceback.print_exc()
                 print(f"Error generating inverse QA for frames {frame_a_id}-{frame_b_id}: {e}")
                 continue
-        
+
         return qa_pairs
+
     
     def _add_text_to_image(self, image_path: str, text: str, output_path: str) -> None:
         """Helper function to add text label to an image and save it."""
@@ -237,7 +245,7 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         correct_option_index = all_options.index(correct_answer)
 
         # convert all_options to A, B, C, D
-        all_options = [chr(i + 65) + ". " + option.capitalize() for i, option in enumerate(all_options)]
+        all_options = [chr(i + 65) + ". " + option for i, option in enumerate(all_options)]
         correct_option_index = chr(correct_option_index + 65)
         
         # Create QA pair
@@ -264,6 +272,62 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         
         return qa_pair
     
+    def _negate_part_of_diff(self, diff: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Negate part of the diff.
+        """
+        '''
+        diff = {
+            'add': {
+                'nodes': [{'name': 'node1', 'states': ['Contact']}, {'name': 'node2', 'states': ['Contact']}],
+                'edges': [{'from': 'node1', 'to': 'node2', 'states': ['Contact']}]
+            },
+            'remove': {
+                'nodes': [{'name': 'node3', 'states': ['...']}],
+                'edges': [{'from': 'node1', 'to': 'node2', 'states': ['Contact']}]
+            }
+        }
+        '''
+
+        negated_diff = {
+            'add': {
+                'nodes': [],
+                'edges': []
+            },
+            'remove': {
+                'nodes': [],
+                'edges': []
+            }
+        }
+
+        negated = False
+
+        for operation in ['add', 'remove']:
+            the_other_operation = 'add' if operation == 'remove' else 'remove'
+            if operation in diff:
+                for node in diff[operation]['nodes']:
+                    # randomly decide if we negate the node
+                    if random.random() < 0.5:
+                        negated_diff[the_other_operation]['nodes'].append(node)
+                        negated = True
+                    else:
+                        negated_diff[operation]['nodes'].append(node)
+                for edge in diff[operation]['edges']:
+                    # randomly decide if we negate the edge
+                    if random.random() < 0.5:
+                        negated_diff[the_other_operation]['edges'].append(edge)
+                        negated = True
+                    else:
+                        negated_diff[operation]['edges'].append(edge)
+
+        if not negated:
+            return {
+                'add': diff['remove'],
+                'remove': diff['add']
+            }
+        
+        return negated_diff
+    
     def _generate_distractor_options(self, task_data: TaskData, correct_frame_a: str, 
                                    correct_frame_b: str, ground_truth_diff: Dict[str, Any]) -> List[str]:
         """
@@ -287,7 +351,7 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         max_attempts = len(key_frame_ids) * 2  # Prevent infinite loops
         attempts = 0
         
-        while len(distractors) < 1 and attempts < max_attempts:
+        while len(distractors) < 2 and attempts < max_attempts:
             attempts += 1
             
             # Pick a random frame pair
@@ -309,19 +373,18 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
             
             try:
                 # Get diff for this pair
-                distractor_diff = task_data.scene_graph_reader.get_state_full_diff(frame_c_id, frame_d_id)
+                distractor_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_c_id, frame_d_id, self.sensor_names)
                 
                 # Skip empty diffs
                 if distractor_diff.get('type') == 'empty' or not self._has_meaningful_changes(distractor_diff):
                     continue
                 
-                # Check that this diff is different from ground truth
+                # Check that this diff is different from ground truth and not the subset of ground truth
                 distractor_signature = self.translator.diff_signature(distractor_diff)
                 if distractor_signature == ground_truth_signature:
                     continue
-                
-                # Check FOV for distractor objects
-                if not self._check_fov_for_diff(distractor_diff, task_data, [frame_c_id, frame_d_id]):
+
+                if task_data.scene_graph_reader.is_subset_diff(distractor_diff, ground_truth_diff):
                     continue
                 
                 # Generate description
@@ -333,11 +396,8 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
                 print(f"Error generating distractor from frames {frame_c_id}-{frame_d_id}: {e}")
                 continue
         
-        # Strategy 2: negate the ground truth answer
-        negated_diff = {
-            'remove': ground_truth_diff['add'],
-            'add': ground_truth_diff['remove']
-        }
+        # Strategy 2: negate part of the ground truth answer
+        negated_diff = self._negate_part_of_diff(ground_truth_diff)
         negated_desc = self.translator.translate_diff(negated_diff)
         if negated_desc and negated_desc not in distractors:
             distractors.append(negated_desc)
@@ -396,28 +456,3 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
                         return True
         
         return False
-    
-    def _check_fov_for_diff(self, diff: Dict[str, Any], task_data: TaskData, 
-                           frame_ids: List[str]) -> bool:
-        """
-        Check if objects in the diff are visible in the field of view.
-        
-        Args:
-            diff: Scene graph difference
-            task_data: Task data 
-            frame_ids: Frame IDs to check
-            
-        Returns:
-            bool: True if core objects are visible
-        """
-        # For now, we'll assume all objects are visible
-        # In a more sophisticated implementation, this would check:
-        # 1. Robot's FOV state for each frame
-        # 2. Whether the core objects from the diff are in view
-        # 3. Whether the objects are occluded or too small to see
-        
-        core_objects = self.translator.get_core_objects_from_diff(diff)
-        
-        # Simple heuristic: if there are core objects, assume they're visible
-        # This could be enhanced with actual FOV checking
-        return len(core_objects) > 0 

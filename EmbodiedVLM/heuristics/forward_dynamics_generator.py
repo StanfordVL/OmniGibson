@@ -45,9 +45,10 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         Args:
             qa_gen_logic: Optional logic specification (reserved for future use)
         """
-        self.translator = StateChangeTranslator()
+        self.translator = StateChangeTranslator(type="forward_dynamics")
         self.qa_gen_logic = qa_gen_logic
         self.visual_prompt = visual_prompt
+        self.sensor_names = ["external_sensor1"]
 
     @property
     def qa_type(self) -> str:
@@ -63,64 +64,75 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         # replace the image root path last folder with 'QA_images'
         return image_root_dir / 'BehaviorEQA' / self.qa_type
     
+
     def generate(self, task_data: TaskData) -> List[QAPair]:
         """
         Generate forward dynamics Q&A pairs for a task.
         
         Args:
             task_data: Task data containing scene graphs and images
-            
+        
         Returns:
             List[QAPair]: Generated Q&A pairs
         """
         qa_pairs = []
         key_frame_ids = task_data.key_frame_ids
         
-        # Generate Q&A pairs for consecutive frame pairs
+        # Get all candidate ground truth cur state and next state pairs (not confined to consecutive frames)
+
+        candidate_gt_frame_pairs = set()
         for i in range(len(key_frame_ids) - 1):
-            frame_a_id = key_frame_ids[i]
-            frame_b_id = key_frame_ids[i + 1]
-            
+            for j in range(i + 1, len(key_frame_ids)):
+                candidate_gt_frame_pairs.add((key_frame_ids[i], key_frame_ids[j]))
+        
+        # filter out pairs that:
+        ## 1. have no visible state changes
+        ## 1.1 current visible state changes is quite strict
+        ## 1.2 all objects in the state (unary and binary) must be visible in both frames
+        ## 1.3 visible object threshold is 0.01%
+        ## 2. have too much difference (> 5)
+        ## 3. have multiple same category objects in the visible diff
+
+        for frame_a_id, frame_b_id in list(candidate_gt_frame_pairs):
+            visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names)
+            if visible_diff.get('type') == 'empty' or not self._has_meaningful_changes(visible_diff):
+                candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
+            if len(visible_diff.get('add', {})) + len(visible_diff.get('remove', {})) > 5:
+                candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
+
+        # now we have a list of candidate gt frame pairs.
+        # we see if we can find enough distractor images for each candidate gt frame pair
+        for frame_a_id, frame_b_id in candidate_gt_frame_pairs:
             try:
-                # Get the diff between frames A and B (ground truth change)
-                ground_truth_diff = task_data.scene_graph_reader.get_state_full_diff(frame_a_id, frame_b_id)
-                
-                # Skip if no significant changes
-                if ground_truth_diff.get('type') == 'empty' or not self._has_meaningful_changes(ground_truth_diff):
-                    continue
-                
-                # Get images for both frames
+                visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names)
                 images_a = task_data.image_paths.get(frame_a_id, {})
                 images_b = task_data.image_paths.get(frame_b_id, {})
-                
+
                 if not images_a or not images_b:
                     continue
-                
-                # Use the first available sensor for consistency
-                sensor_name = list(images_a.keys())[0]
-                if sensor_name not in images_b:
+
+                # get the sensor name
+                sensor_name = self.sensor_names[0] # default to "external_sensor1"
+
+                if sensor_name not in images_a or sensor_name not in images_b:
                     continue
-                
+
                 image_a_path = images_a[sensor_name]
                 image_b_path = images_b[sensor_name]
                 
-                # Check FOV for ground truth objects
-                if not self._check_fov_for_diff(ground_truth_diff, task_data, [frame_a_id, frame_b_id]):
-                    continue
-                
                 # Generate the QA pair
                 qa_pair = self._create_forward_qa_pair(
-                    task_data, frame_a_id, frame_b_id, 
-                    image_a_path, image_b_path, ground_truth_diff
+                    task_data, frame_a_id, frame_b_id, image_a_path, image_b_path, visible_diff
                 )
-                
                 if qa_pair:
                     qa_pairs.append(qa_pair)
-                    
             except Exception as e:
+                import traceback
+                print(f"Full traceback:")
+                traceback.print_exc()
                 print(f"Error generating forward QA for frames {frame_a_id}-{frame_b_id}: {e}")
                 continue
-        
+
         return qa_pairs
     
     def _add_text_to_image(self, image_path: str, text: str, output_path: str) -> None:
@@ -246,7 +258,7 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         action_description = self.translator.translate_diff(ground_truth_diff)
 
         # Capitalize the first letter of the action description
-        action_description = action_description.capitalize()
+        # action_description = action_description.capitalize()
         
         # Generate question with action description
         question = fwd_prompt.format(STATE_CHANGES=action_description)
@@ -255,6 +267,10 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         distractor_images = self._generate_distractor_images(
             task_data, frame_a_id, frame_b_id, ground_truth_diff
         )
+
+        if len(distractor_images) < 3:
+            print(f"Not enough distractor images for {frame_a_id}-{frame_b_id}")
+            return None
         
         # Combine all image options
         all_image_options = [image_b_path] + distractor_images
@@ -288,8 +304,13 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         
         return qa_pair
     
-    def _generate_distractor_images(self, task_data: TaskData, correct_frame_a: str, 
-                                   correct_frame_b: str, ground_truth_diff: Dict[str, Any]) -> List[str]:
+    def _generate_distractor_images(
+        self,
+        task_data: TaskData,
+        correct_frame_a: str,
+        correct_frame_b: str,
+        ground_truth_diff: Dict[str, Any]
+    ) -> List[str]:
         """
         Generate distractor image options for the forward dynamics question.
         
@@ -303,53 +324,69 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
             List[str]: List of distractor image paths
         """
         distractors = []
-        key_frame_ids = task_data.key_frame_ids
-        
-        # Strategy 1: Simple approach - use random images from other frames
-        available_frames = [fid for fid in key_frame_ids if fid not in [correct_frame_a, correct_frame_b]]
-        
-        # Try to find frames with images using the same sensor
-        sensor_name = None
-        correct_images_a = task_data.image_paths.get(correct_frame_a, {})
-        if correct_images_a:
-            sensor_name = list(correct_images_a.keys())[0]
-        
-        if not sensor_name:
-            return distractors
-        
-        # Collect candidate distractor images
+        available_frame_ids = task_data.key_frame_ids
+
+        VISUAL_SIMILAR_FRAME_DISTANCE = 40
+        sensor_name = self.sensor_names[0]
+
         candidate_images = []
-        for frame_id in available_frames:
+        for frame_id in available_frame_ids:
             images = task_data.image_paths.get(frame_id, {})
             if sensor_name in images:
-                # Make sure the image is not the same as the correct image
-                diff_1 = task_data.scene_graph_reader.get_diff(correct_frame_a, frame_id)
-                diff_2 = task_data.scene_graph_reader.get_diff(correct_frame_b, frame_id)
-                if diff_1.get('type') == 'empty' or diff_2.get('type') == 'empty':
+                current_scene_graph = task_data.scene_graph_reader.get_scene_graph(frame_id)
+                visible_diff_1 = task_data.scene_graph_reader.get_visible_full_diff(correct_frame_a, frame_id, self.sensor_names)
+                visible_diff_2 = task_data.scene_graph_reader.get_visible_full_diff(correct_frame_b, frame_id, self.sensor_names)
+
+                if visible_diff_1.get('type') == 'empty' or visible_diff_2.get('type') == 'empty':
                     continue
+
+                # check if most of the objects (more than 50%) is visible in the current scene graph
+                all_current_visible_objects = task_data.scene_graph_reader.get_all_visible_objects_in_graph(self.sensor_names, current_scene_graph)
+                gt_diff_visible_objects = task_data.scene_graph_reader.get_visible_objects_from_diff(correct_frame_a, correct_frame_b, self.sensor_names)
+
+                if not gt_diff_visible_objects.issubset(all_current_visible_objects):
+                    continue
+
+                # check if the ground truth diff is the subset of current scene graph
+                if task_data.scene_graph_reader.is_diff_subset_scene(ground_truth_diff, current_scene_graph):
+                    continue
+
+                ground_truth_next_scene_graph = task_data.scene_graph_reader.get_scene_graph(correct_frame_b)
+
+                # filter out if visible diff involves multiple same category objects
+                # how to do this? well, just see if there is any similar edge is okay.
+                if task_data.scene_graph_reader.has_similar_edges(ground_truth_diff, visible_diff_1, ground_truth_next_scene_graph, current_scene_graph):
+                    continue
+
                 candidate_images.append(images[sensor_name])
 
+        # Strategy 1: Get closest visual similar frames for frame_a. Tipycally 20 frames away
+        random_number = random.choice([-VISUAL_SIMILAR_FRAME_DISTANCE, VISUAL_SIMILAR_FRAME_DISTANCE])
+        visual_similar_frame = str(int(correct_frame_a) + random_number)
+        images = task_data.image_paths.get(visual_similar_frame, {})
+        if sensor_name in images:
+            distractors.append(images[sensor_name])
         
-        # Strategy 2: Advanced approach - try to find semantically plausible but wrong results
+        # Strategy 2: Get other distractor images
         if len(candidate_images) >= 2:
-            # Try to find images that represent different but plausible outcomes
             advanced_distractors = self._generate_advanced_distractors(
-                task_data, correct_frame_a, correct_frame_b, ground_truth_diff, 
-                available_frames, sensor_name
+                task_data, correct_frame_a, ground_truth_diff, 
+                candidate_images, sensor_name
             )
             distractors.extend(advanced_distractors)
-        
-        # Fill remaining slots with random images
+
+        # Strategy 3: Get randomly sampled frames
         remaining_candidates = [img for img in candidate_images if img not in distractors]
         random.shuffle(remaining_candidates)
         
         while len(distractors) < 3 and remaining_candidates:
             distractors.append(remaining_candidates.pop())
-        
+
         return distractors[:3]
+
     
     def _generate_advanced_distractors(self, task_data: TaskData, correct_frame_a: str,
-                                     correct_frame_b: str, ground_truth_diff: Dict[str, Any],
+                                     ground_truth_diff: Dict[str, Any],
                                      available_frames: List[str], sensor_name: str) -> List[str]:
         """
         Generate semantically plausible but incorrect distractor images.
@@ -359,7 +396,6 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         Args:
             task_data: Task data
             correct_frame_a: Starting frame
-            correct_frame_b: Correct ending frame
             ground_truth_diff: The true diff
             available_frames: Available frames to choose from
             sensor_name: Sensor name to use
@@ -592,28 +628,3 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
                         return True
         
         return False
-    
-    def _check_fov_for_diff(self, diff: Dict[str, Any], task_data: TaskData, 
-                           frame_ids: List[str]) -> bool:
-        """
-        Check if objects in the diff are visible in the field of view.
-        
-        Args:
-            diff: Scene graph difference
-            task_data: Task data 
-            frame_ids: Frame IDs to check
-            
-        Returns:
-            bool: True if core objects are visible
-        """
-        # For now, we'll assume all objects are visible
-        # In a more sophisticated implementation, this would check:
-        # 1. Robot's FOV state for each frame
-        # 2. Whether the core objects from the diff are in view
-        # 3. Whether the objects are occluded or too small to see
-        
-        core_objects = self.translator.get_core_objects_from_diff(diff)
-        
-        # Simple heuristic: if there are core objects, assume they're visible
-        # This could be enhanced with actual FOV checking
-        return len(core_objects) > 0 
