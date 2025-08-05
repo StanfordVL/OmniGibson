@@ -1313,9 +1313,11 @@ class SceneGraphDataPlaybackWrapper(DataPlaybackWrapper):
                     scene.get_system(add_sys_name, force_init=True)
                 for remove_sys_name in cur_transitions["systems"]["remove"]:
                     scene.clear_system(remove_sys_name)
+                    
                 for remove_obj_name in cur_transitions["objects"]["remove"]:
                     obj = scene.object_registry("name", remove_obj_name)
                     scene.remove_object(obj)
+                    # TODO: delete this object from scene graph
                 for j, add_obj_info in enumerate(cur_transitions["objects"]["add"]):
                     obj = create_object_from_init_info(add_obj_info)
                     scene.add_object(obj)

@@ -369,6 +369,12 @@ class SceneGraphReader:
         self._load_data()
         if filter_transients:
             self._filter_transient_states()
+
+    def get_frame_number(self) -> int:
+        """
+        Get the frame number of the last frame in the scene graph
+        """
+        return int(list(self.data.keys())[-1])
     
     def _load_data(self):
         """
@@ -494,7 +500,7 @@ class SceneGraphReader:
     
         
 
-    def get_visible_objects_in_both_graphs(self, active_objects: Set[str], sensor_names: List[str], from_graph: Dict[str, List[Dict]], to_graph: Dict[str, List[Dict]]) -> Set[str]:
+    def get_visible_objects_in_both_graphs(self, active_objects: Set[str], sensor_names: List[str], from_graph: Dict[str, List[Dict]], to_graph: Dict[str, List[Dict]], partial_diff: bool = False) -> Set[str]:
         """
         Get the visible objects from active objects across two scene graphs.
         
@@ -512,7 +518,10 @@ class SceneGraphReader:
         to_visible_objects = self.get_visible_objects_in_graph(active_objects, sensor_names, to_graph)
         
         # Return intersection - objects that are visible in both frames
-        return from_visible_objects & to_visible_objects
+        if partial_diff:
+            return from_visible_objects & to_visible_objects
+        else:
+            return from_visible_objects | to_visible_objects
 
     def get_all_visible_objects_in_both_graphs(self, active_objects: Set[str], sensor_names: List[str], from_graph: Dict[str, List[Dict]], to_graph: Dict[str, List[Dict]]) -> Set[str]:
         """
@@ -865,7 +874,7 @@ class SceneGraphReader:
                 return node['category']
         return None
 
-    def get_visible_full_diff(self, from_id, to_id, sensor_names: List[str]) -> Dict[str, Dict]:
+    def get_visible_full_diff(self, from_id, to_id, sensor_names: List[str], partial_diff: bool = False) -> Dict[str, Dict]:
         """
         Get the visible state-centric difference between two scene graphs.
         
@@ -895,7 +904,7 @@ class SceneGraphReader:
         all_active_objects = self.get_active_objects(full_diff)
 
         # Filter to only visible objects
-        visible_objects = self.get_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph)
+        visible_objects = self.get_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph, partial_diff=partial_diff)
 
         all_visible_objects = self.get_all_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph)
 
@@ -1002,7 +1011,7 @@ class SceneGraphReader:
 
         ratio = len(common_signature) / len(diff_1_edge_signature) if len(diff_1_edge_signature) > 0 else 0
 
-        return ratio >= 0.49
+        return ratio >= 0.25 # if 25% of the edges are the same, then consider the diffs as similar
         
 
     def has_same_category_objects(self, diff: Dict[str, Dict], graph: Dict[str, List[Dict]]) -> bool:

@@ -92,6 +92,8 @@ class SceneGraphBuilder(object):
         self._last_desired_frame_to_world = None
         self._exclude_states = set(exclude_states)
 
+        self._all_objects = []
+
         # Heuristics fields for efficient scenegraph states updating
         self._task_relevant_objects = None
         self._only_task_relevant_objects = only_task_relevant_objects
@@ -99,6 +101,15 @@ class SceneGraphBuilder(object):
         # self._contact_callback = og.sim._physics_context._physx_sim_interface.subscribe_contact_report_events(
         #     self._on_contact_handler
         # )
+
+        self._objects_remove_callback = og.sim.add_callback_on_remove_obj(
+            "scene_graph_obj_remove_callback",
+            self._object_remove_handler
+        )
+        self._objects_add_callback = og.sim.add_callback_on_add_obj(
+            "scene_graph_obj_add_callback",
+            self._object_add_handler
+        )
 
         # Whether to only include semantic states in the graph
         self._semantic_only = semantic_only
@@ -131,6 +142,19 @@ class SceneGraphBuilder(object):
                 self._contact_objects.add(actor0_obj)
             if actor1_obj is not None:
                 self._contact_objects.add(actor1_obj)
+
+
+    def _object_remove_handler(self, obj):
+        # 1. Remove the object from scene graph if it exists
+        if self._G is not None and obj in self._G.nodes:
+            self._G.remove_node(obj)  # This also removes all edges connected to the object
+        
+        # 2. Remove the object from self._all_objects by query obj name
+        self._all_objects = [o for o in self._all_objects if o.name != obj.name]
+
+    def _object_add_handler(self, obj):        
+        # 1. Add the object to self._all_objects
+        self._all_objects.append(obj) if any(o.name == obj.name for o in self._all_objects) else None
 
     def get_scene_graph(self):
         return self._G.copy()

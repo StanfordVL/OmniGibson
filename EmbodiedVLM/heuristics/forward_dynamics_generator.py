@@ -30,6 +30,7 @@ except ImportError as e:
     print(f"Import error: {e}")
     sys.exit(1)
 
+random.seed(42)
 
 class ForwardDynamicsGenerator(AbstractQAGenerator):
     """
@@ -368,19 +369,25 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
             distractors.append(images[sensor_name])
         
         # Strategy 2: Get other distractor images
-        if len(candidate_images) >= 2:
-            advanced_distractors = self._generate_advanced_distractors(
-                task_data, correct_frame_a, ground_truth_diff, 
-                candidate_images, sensor_name
-            )
-            distractors.extend(advanced_distractors)
+        # if len(candidate_images) >= 2:
+        #     advanced_distractors = self._generate_advanced_distractors(
+        #         task_data, correct_frame_a, ground_truth_diff, 
+        #         candidate_images, sensor_name
+        #     )
+        #     distractors.extend(advanced_distractors)
 
         # Strategy 3: Get randomly sampled frames
         remaining_candidates = [img for img in candidate_images if img not in distractors]
         random.shuffle(remaining_candidates)
         
         while len(distractors) < 3 and remaining_candidates:
-            distractors.append(remaining_candidates.pop())
+            candidate_frame = remaining_candidates.pop()
+            candidate_frame_id = candidate_frame.split('/')[-1].split('.')[0]
+            if int(candidate_frame_id) <= task_data.scene_graph_reader.get_frame_number():
+                new_candidate_frame_id = int(candidate_frame_id) + 30
+                candidate_frame = candidate_frame.split('/')[:-1] + [f"{new_candidate_frame_id:05d}.png"]
+                candidate_frame = '/'.join(candidate_frame)
+            distractors.append(candidate_frame)
 
         return distractors[:3]
 
@@ -417,8 +424,12 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
                 best_match_frame = self._find_best_matching_frame(
                     task_data, correct_frame_a, fake_diff, available_frames
                 )
-                
+                print(f"Best match frame: {best_match_frame}")
+                print(f"available frames: {available_frames}")
                 if best_match_frame:
+                    candidate_frame = int(best_match_frame) + 20
+                    if candidate_frame <= task_data.scene_graph_reader.get_frame_number():
+                        best_match_frame = str(candidate_frame)
                     images = task_data.image_paths.get(best_match_frame, {})
                     if sensor_name in images:
                         distractor_image = images[sensor_name]

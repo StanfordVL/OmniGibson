@@ -29,6 +29,8 @@ except ImportError as e:
     print(f"Import error: {e}")
     sys.exit(1)
 
+random.seed(42)
+
 
 class InverseDynamicsGenerator(AbstractQAGenerator):
     """
@@ -87,7 +89,7 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         ## 3. have multiple same category objects in the visible diff
 
         for frame_a_id, frame_b_id in list(candidate_gt_frame_pairs):
-            visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names)
+            visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names, partial_diff=True)
             if visible_diff.get('type') == 'empty' or not self._has_meaningful_changes(visible_diff):
                 candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
             if len(visible_diff.get('add', {})) + len(visible_diff.get('remove', {})) > 5:
@@ -98,9 +100,14 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
         # we see if we can find enough distractor images for each candidate gt frame pair
         for frame_a_id, frame_b_id in candidate_gt_frame_pairs:
             try:
+
                 visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names)
+                # shift 30 frames away for frame_b_id if possible
+                final_frame_b_id = frame_b_id
+                if int(frame_b_id) + 30 < task_data.scene_graph_reader.get_frame_number():
+                    final_frame_b_id = str(int(frame_b_id) + 30)
                 images_a = task_data.image_paths.get(frame_a_id, {})
-                images_b = task_data.image_paths.get(frame_b_id, {})
+                images_b = task_data.image_paths.get(final_frame_b_id, {})
 
                 if not images_a or not images_b:
                     continue
@@ -427,6 +434,30 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
 
         distractors = random.sample(distractors, min(3, len(distractors)))
         return distractors
+    
+    def _is_in_description(self, description: str, descriptions: List[str]) -> bool:
+        """
+        Check if a description is in a list of descriptions.
+        """
+        templates = [
+            "now becomes",
+            "becomes",
+            "changes to be",
+            "transitions to be",
+            "is no longer",
+            "stopped being"
+        ]
+
+        all_descriptions = []
+        for template in templates:
+            description = description.replace(template, "")
+
+        for desc in descriptions:
+            for template in templates:
+                desc = desc.replace(template, "")
+            all_descriptions.append(desc)
+
+        return any(description in desc for desc in all_descriptions)
     
     def _has_meaningful_changes(self, diff: Dict[str, Any]) -> bool:
         """

@@ -25,24 +25,26 @@ class StateChangeTranslator:
         self._change_type_templates = {
             'add': {
                 'nodes': [
-                    "{object} is now {state}",
+                    "{object} now becomes {state}",
                     "{object} becomes {state}",
-                    "{object} is {state}"
+                    "{object} changes to be {state}",
+                    "{object} transitions to be {state}"
                 ],
                 'edges': [
-                    "{object} is now {relation} {target}",
-                    "{object} is {relation} {target}"
+                    "{object} now becomes {relation} {target}",
+                    "{object} becomes {relation} {target}",
+                    "{object} changes to be {relation} {target}",
+                    "{object} transitions to be {relation} {target}"
                 ]
             },
             'remove': {
                 'nodes': [
                     "{object} is no longer {state}",
                     "{object} stopped being {state}",
-                    "{object} is not {state}"
                 ],
                 'edges': [
                     "{object} is no longer {relation} {target}",
-                    "{object} is not {relation} {target}"
+                    "{object} stopped being {relation} {target}"
                 ]
             }
         }
@@ -71,7 +73,7 @@ class StateChangeTranslator:
             'Filled': 'filled with',
             'Inside': 'inside',
             'NextTo': 'next to',
-            'OnTop': 'on top of',
+            'OnTop': 'on top of and touching',
             'Overlaid': 'overlaid on',
             'Saturated': 'saturated with',
             'Touching': 'touching',
