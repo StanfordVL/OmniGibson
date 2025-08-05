@@ -1864,7 +1864,7 @@
                 },
                 "bowl.n.01": {
                     "bowl": {
-                        "szgdpc": null
+                        "szgdpc": 1.5
                     }
                 },
                 "vidalia_onion.n.01": {
@@ -2080,6 +2080,73 @@
                 "desk.n.01": {
                     "desk": {
                         "aduafr": null
+                    }
+                }
+            },
+            "blacklist": {}
+        }
+    },
+    "sorting_household_items": {
+        "room_types": [
+            "bathroom",
+            "bedroom"
+        ],
+        "house_single_floor": {
+            "whitelist": {
+                "basket.n.01": {
+                    "hamper": {
+                        "drgdfh": null
+                    }
+                },
+                "bottle__of__detergent.n.01": {
+                    "bottle_of_detergent": {
+                        "gkpmii": null,
+                        "qjkmhq": null
+                    }
+                },
+                "box__of__sanitary_napkin.n.01": {
+                    "box_of_sanitary_napkins": {
+                        "zqinib": null
+                    }
+                },
+                "cup.n.01": {
+                    "coffee_cup": {
+                        "ykuftq": [0.135, 0.09 , 0.15]
+                    }
+                },
+                "soap_dispenser.n.01": {
+                    "soap_dispenser": {
+                        "jmulpc": null
+                    }
+                },
+                "soap_dish.n.01": {
+                    "soap_dish": {
+                        "ownvqj": null
+                    }
+                },
+                "toothbrush.n.01": {
+                    "toothbrush": {
+                        "vkrjps": 1.5
+                    }
+                },
+                "tube__of__toothpaste.n.01": {
+                    "tube_of_toothpaste": {
+                        "vsclsj": null
+                    }
+                }
+            },
+            "blacklist": {}
+        }
+    },
+    "cook_hot_dogs": {
+        "room_types": [
+            "kitchen"
+        ],
+        "house_single_floor": {
+            "whitelist": {
+                "hotdog.n.02": {
+                    "hotdog": {
+                        "lsajfg": null
                     }
                 }
             },
