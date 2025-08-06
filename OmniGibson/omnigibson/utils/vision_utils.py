@@ -289,10 +289,13 @@ def colorize_bboxes_3d(bbox_3d_data, rgb_image, camera_params):
 
     return th.tensor(rgb)
 
-def instance_to_bbox(obs: th.Tensor, instance_mapping: Dict[int, str], unique_ins_ids: List[int]) -> List[Tuple[int, int, int, int, int]]:
+
+def instance_to_bbox(
+    obs: th.Tensor, instance_mapping: Dict[int, str], unique_ins_ids: List[int]
+) -> List[Tuple[int, int, int, int, int]]:
     """
     Convert instance segmentation to bounding boxes.
-    
+
     Args:
         obs (th.Tensor): (H, W) tensor of instance IDs
         instance_mapping (Dict[int, str]): Dict mapping instance IDs to instance names
@@ -305,7 +308,7 @@ def instance_to_bbox(obs: th.Tensor, instance_mapping: Dict[int, str], unique_in
     valid_ids = [id for id in instance_mapping if id in unique_ins_ids]
     for instance_id in valid_ids:
         # Create mask for this instance
-        mask = (obs == instance_id)  # (H, W)
+        mask = obs == instance_id  # (H, W)
         if not mask.any():
             continue
         # Find non-zero indices (where instance exists)
@@ -318,11 +321,12 @@ def instance_to_bbox(obs: th.Tensor, instance_mapping: Dict[int, str], unique_in
         y_min = y_coords.min().item()
         y_max = y_coords.max().item()
         bboxes.append((x_min, y_min, x_max, y_max, instance_id))
-    
+
     return bboxes
 
+
 def overlay_bboxes_with_names(
-    img: np.ndarray, 
+    img: np.ndarray,
     bbox_2d_data: List[Tuple[int, int, int, int, int]],
     instance_mapping: Dict[int, str],
     task_relevant_objects: List[str],
@@ -393,6 +397,7 @@ def overlay_bboxes_with_names(
 
 def get_consistent_color(instance_id):
     import colorsys
+
     colors = [
         (52, 73, 94),  # Dark blue-gray
         (142, 68, 173),  # Purple

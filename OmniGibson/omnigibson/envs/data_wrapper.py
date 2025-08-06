@@ -879,7 +879,9 @@ class DataPlaybackWrapper(DataWrapper):
         step_data["truncated"] = truncated
         return step_data
 
-    def playback_episode(self, episode_id, record_data=True, video_writers=None, video_rgb_keys=None, annotation_config=None):
+    def playback_episode(
+        self, episode_id, record_data=True, video_writers=None, video_rgb_keys=None, annotation_config=None
+    ):
         """
         Playback episode @episode_id, and optionally record observation data if @record is True
 
@@ -1005,12 +1007,14 @@ class DataPlaybackWrapper(DataWrapper):
                     ins_name = seg_instance_info[ins_id]
                     if ins_name in task_relevant_names:
                         task_relevant_ids.append(ins_id)
-                bboxes_2d = instance_to_bbox(obs=seg_instance, instance_mapping=seg_instance_info, unique_ins_ids=task_relevant_ids)
+                bboxes_2d = instance_to_bbox(
+                    obs=seg_instance, instance_mapping=seg_instance_info, unique_ins_ids=task_relevant_ids
+                )
                 rgb_with_annotation = overlay_bboxes_with_names(
-                    rgb_img, 
-                    bbox_2d_data=bboxes_2d, 
-                    instance_mapping=seg_instance_info, 
-                    task_relevant_objects=task_relevant_names
+                    rgb_img,
+                    bbox_2d_data=bboxes_2d,
+                    instance_mapping=seg_instance_info,
+                    task_relevant_objects=task_relevant_names,
                 )
                 annotation_config["annotation_writer"].append_data(rgb_with_annotation)
 
