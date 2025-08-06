@@ -44,7 +44,7 @@ def get_symbolic_scene_graph(nx_graph: nx.Graph, obj_visibility_dict: Dict[Any, 
     
     for node in nx_graph.nodes():
         node_name = node.name
-        node_category = node.category
+        node_category = node.category if hasattr(node, 'category') else 'System'
         node_data = nx_graph.nodes[node]
         states = convert_to_serializable(node_data['states'])
         symbolic_graph['nodes'].append({

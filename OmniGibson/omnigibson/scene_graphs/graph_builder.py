@@ -16,6 +16,7 @@ from omnigibson.systems.system_base import BaseSystem
 from omnigibson.utils import transform_utils as T
 from omnigibson.utils.numpy_utils import pil_to_tensor
 from omnigibson.utils.scene_graph_utils import CustomizedBinaryStates, CustomizedUnaryStates
+from omnigibson.objects.stateful_object import StatefulObject
 
 from dataclasses import fields
 from copy import deepcopy
@@ -58,7 +59,9 @@ class SceneGraphBuilder(object):
         merge_parallel_edges=False,
         exclude_states=(
             object_states.Touching,
-            object_states.NextTo
+            object_states.NextTo,
+            object_states.Frozen,
+            object_states.SlicerActive
         ),
         only_task_relevant_objects=False,
         semantic_only=True
@@ -90,6 +93,8 @@ class SceneGraphBuilder(object):
         self._only_true = only_true
         self._merge_parallel_edges = merge_parallel_edges
         self._last_desired_frame_to_world = None
+
+        self._initialized = False
         self._exclude_states = set(exclude_states)
 
         self._all_objects = []
@@ -109,6 +114,16 @@ class SceneGraphBuilder(object):
         self._objects_add_callback = og.sim.add_callback_on_add_obj(
             "scene_graph_obj_add_callback",
             self._object_add_handler
+        )
+
+        self._systems_remove_callback = og.sim.add_callback_on_system_clear(
+            "scene_graph_system_remove_callback",
+            self._system_remove_handler
+        )
+
+        self._systems_add_callback = og.sim.add_callback_on_system_init(
+            "scene_graph_system_add_callback",
+            self._system_add_handler
         )
 
         # Whether to only include semantic states in the graph
@@ -144,8 +159,19 @@ class SceneGraphBuilder(object):
                 self._contact_objects.add(actor1_obj)
 
 
+    def _system_remove_handler(self, system):
+        if self._G is not None and system in self._G.nodes:
+            self._G.remove_node(system)
+        
+        self._all_objects = [o for o in self._all_objects if o.name != system.name]
+
+    def _system_add_handler(self, system):
+        if self._initialized:
+            self._all_objects.append(system) if all(o.name != system.name for o in self._all_objects) else None
+
     def _object_remove_handler(self, obj):
         # 1. Remove the object from scene graph if it exists
+        # breakpoint()
         if self._G is not None and obj in self._G.nodes:
             self._G.remove_node(obj)  # This also removes all edges connected to the object
         
@@ -154,7 +180,8 @@ class SceneGraphBuilder(object):
 
     def _object_add_handler(self, obj):        
         # 1. Add the object to self._all_objects
-        self._all_objects.append(obj) if any(o.name == obj.name for o in self._all_objects) else None
+        if self._initialized:
+            self._all_objects.append(obj) if all(o.name != obj.name for o in self._all_objects) and isinstance(obj, StatefulObject) and obj.states else None
 
     def get_scene_graph(self):
         return self._G.copy()
@@ -185,6 +212,9 @@ class SceneGraphBuilder(object):
         obj_1, obj_2, state_dict = edge
         states = [s[0] for s in state_dict["states"]]
         filtered_edge = (obj_1, obj_2, deepcopy(state_dict))
+
+        if isinstance(obj_1, BaseSystem) or isinstance(obj_2, BaseSystem):
+            return filtered_edge
 
         if (isinstance(obj_1, BaseRobot) or isinstance(obj_2, BaseRobot)) \
             and ("OnTop" in states or "Inside" in states or 'Under' in states):
@@ -269,6 +299,9 @@ class SceneGraphBuilder(object):
     def _get_boolean_unary_states(self, obj):
         states = {}
 
+        if isinstance(obj, BaseSystem):
+            return {}
+
         # Add customized unary states
         customized_unary_states = CustomizedUnaryStates()
         for field in fields(customized_unary_states):
@@ -304,6 +337,10 @@ class SceneGraphBuilder(object):
         # Add customized binary states
         customized_binary_states = CustomizedBinaryStates()
         for obj1 in objs:
+
+            if isinstance(obj1, BaseSystem):
+                continue
+
             for obj2 in objs:
                 if obj1 == obj2:
                     continue
@@ -312,6 +349,9 @@ class SceneGraphBuilder(object):
                     state_name = field.name
                     state_func = getattr(customized_binary_states, state_name)
                     if not callable(state_func):
+                        continue
+
+                    if isinstance(obj2, BaseSystem):
                         continue
                     
                     value = state_func(obj1, obj2)
@@ -403,6 +443,8 @@ class SceneGraphBuilder(object):
 
         # Let's also take the first step.
         self.step(scene)
+
+        self._initialized = True
 
     def step(self, scene):
         assert self._G is not None, "Cannot step graph builder before starting it."
