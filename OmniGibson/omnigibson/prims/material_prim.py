@@ -285,6 +285,40 @@ class MaterialPrim(BasePrim):
             )
             self.set_input(inp_name, new_path)
 
+    def shader_fix_missing_asset_paths(self, root_path):
+        """
+        Fix shader asset inputs that reference missing assets by attempting to resolve them relative to root_path.
+
+        This is a conservative fix: only inputs whose current resolved path is empty or points to a non-existent
+        file will be updated. Existing valid absolute paths are preserved.
+
+        Args:
+            root_path (str): Directory to resolve relative asset paths against (e.g., directory of the USD).
+        """
+        for inp_name in self.get_shader_input_names_by_type("SdfAssetPath", include_default=True):
+            inp = self.get_input(inp_name)
+            if inp is None:
+                continue
+
+            current = inp.resolvedPath if inp.resolvedPath != "" else inp.path
+            if current == "":
+                continue
+
+            # If current path already exists, skip
+            try:
+                exists = os.path.exists(current)
+            except Exception:
+                exists = False
+            if exists:
+                continue
+
+            # Attempt to resolve relative to root_path
+            candidate = os.path.normpath(os.path.join(root_path, current))
+            # USD prefers forward slashes
+            candidate = candidate.replace("\\", "/")
+            if os.path.exists(candidate):
+                self.set_input(inp_name, candidate)
+
     def get_input(self, inp):
         """
         Grabs the input with corresponding name @inp associated with this material and shader

@@ -155,13 +155,14 @@ class USDObject(StatefulObject):
     def _post_load(self):
         super()._post_load()
 
-        if self._encrypted:
-            # The loaded USD is from an already-deleted temporary file, so the asset paths for texture maps are wrong.
-            # We explicitly provide the root_path to update all the asset paths: the asset paths are relative to the
-            # original USD folder, i.e. <category>/<model>/usd.
-            root_path = os.path.dirname(self._usd_path)
-            for material in self.materials:
+        # Fix shader asset paths that may be unresolved, especially after decryption or moved assets
+        root_path = os.path.dirname(self._usd_path)
+        for material in self.materials:
+            # If encrypted, proactively rewrite all paths relative to USD directory
+            if self._encrypted:
                 material.shader_update_asset_paths_with_root_path(root_path)
+            # Additionally, fix any inputs that reference missing assets
+            material.shader_fix_missing_asset_paths(root_path)
 
     def _create_prim_with_same_kwargs(self, relative_prim_path, name, load_config):
         # Add additional kwargs
