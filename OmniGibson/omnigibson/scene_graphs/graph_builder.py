@@ -61,7 +61,9 @@ class SceneGraphBuilder(object):
             object_states.Touching,
             object_states.NextTo,
             object_states.Frozen,
-            object_states.SlicerActive
+            object_states.Heated,
+            object_states.SlicerActive,
+            object_states.Filled
         ),
         only_task_relevant_objects=False,
         semantic_only=True
@@ -282,6 +284,10 @@ class SceneGraphBuilder(object):
                     filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
                     break
 
+        # 7. if obj_1 is a robot and obj_2 is system, and the state is "Covered" filtered
+        if isinstance(obj_1, BaseRobot) and isinstance(obj_2, BaseSystem):
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Covered"]
+
         return filtered_edge
 
 
@@ -414,6 +420,16 @@ class SceneGraphBuilder(object):
                             if bddl_obj.wrapped_obj is not None and bddl_obj.exists]
             self._task_relevant_objects = [obj for obj in task_objects 
                                           if not isinstance(obj, BaseSystem)]
+            system_objects = [obj for obj in task_objects 
+                              if isinstance(obj, BaseSystem)]
+            
+            # add task relevant systems into tracking list if they are in the scene
+            for sys_obj in system_objects:
+                for obj in scene.systems:
+                    if obj.name == sys_obj.name:
+                        self._task_relevant_objects.append(obj)
+
+                                          
             ## Jul 19 2025, this part is added only for B50 cases
             self._white_list_objects = [obj for obj in scene.objects if obj.name in EXTRA_OBJECT_WHITE_LIST]
             self._all_objects = self._task_relevant_objects + self._white_list_objects

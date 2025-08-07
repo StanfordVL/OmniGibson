@@ -92,7 +92,17 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
             visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names, partial_diff=True)
             if visible_diff.get('type') == 'empty' or not self._has_meaningful_changes(visible_diff):
                 candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
-            if len(visible_diff.get('add', {})) + len(visible_diff.get('remove', {})) > 5:
+                
+            total_diff = 0
+            for diff_type in ['add', 'remove']:
+                if 'nodes' in visible_diff.get(diff_type, {}).keys():
+                    for node in visible_diff.get(diff_type, {}).get('nodes', []):
+                        total_diff += len(node.get('states', []))
+                if 'edges' in visible_diff.get(diff_type, {}).keys():
+                    for edge in visible_diff.get(diff_type, {}).get('edges', []):
+                        total_diff += len(edge.get('states', []))
+
+            if total_diff > 8:
                 candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
             
 

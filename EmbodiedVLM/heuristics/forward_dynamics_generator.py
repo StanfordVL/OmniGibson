@@ -91,14 +91,24 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         ## 1.1 current visible state changes is quite strict
         ## 1.2 all objects in the state (unary and binary) must be visible in both frames
         ## 1.3 visible object threshold is 0.01%
-        ## 2. have too much difference (> 5)
+        ## 2. have too much difference (> 8)
         ## 3. have multiple same category objects in the visible diff
 
         for frame_a_id, frame_b_id in list(candidate_gt_frame_pairs):
-            visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names)
+            visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names, partial_diff=True)
             if visible_diff.get('type') == 'empty' or not self._has_meaningful_changes(visible_diff):
                 candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
-            if len(visible_diff.get('add', {})) + len(visible_diff.get('remove', {})) > 5:
+
+            total_diff = 0
+            for diff_type in ['add', 'remove']:
+                if 'nodes' in visible_diff.get(diff_type, {}).keys():
+                    for node in visible_diff.get(diff_type, {}).get('nodes', []):
+                        total_diff += len(node.get('states', []))
+                if 'edges' in visible_diff.get(diff_type, {}).keys():
+                    for edge in visible_diff.get(diff_type, {}).get('edges', []):
+                        total_diff += len(edge.get('states', []))
+
+            if total_diff > 8:
                 candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
 
         # now we have a list of candidate gt frame pairs.

@@ -509,7 +509,6 @@ class SceneGraphReader:
             sensor_names: List of camera/sensor names to check visibility from
             from_graph: Source scene graph with 'nodes' and 'edges' keys
             to_graph: Target scene graph with 'nodes' and 'edges' keys
-            
         Returns:
             Set[str]: Names of objects that are visible from any of the specified sensors
         """
