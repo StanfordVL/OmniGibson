@@ -211,7 +211,24 @@ def generate_state_centric_diff(
     new_nodes_category = {node['name']: node.get('category', None) for node in new_graph['nodes']}
     
     # Process node state changes
-    all_node_names = set(prev_nodes.keys()) | set(new_nodes.keys())
+    all_node_names = set(prev_nodes.keys()) & set(new_nodes.keys())
+
+    removed_nodes_names = set(prev_nodes.keys()) - set(new_nodes.keys())
+    added_nodes_names = set(new_nodes.keys()) - set(prev_nodes.keys())
+
+    for node_name in removed_nodes_names:
+        diff['remove']['nodes'].append({
+            'name': node_name,
+            'states': [],
+            'category': prev_nodes_category[node_name]
+        })
+    
+    for node_name in added_nodes_names:
+        diff['add']['nodes'].append({
+            'name': node_name,
+            'states': [],
+            'category': new_nodes_category[node_name]
+        })
     
     for node_name in all_node_names:
         prev_states = prev_nodes.get(node_name, set())

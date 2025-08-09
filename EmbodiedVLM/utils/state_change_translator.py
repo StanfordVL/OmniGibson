@@ -88,6 +88,39 @@ class StateChangeTranslator:
             self.mode = "forward_dynamics"
         elif type == "inverse_dynamics":
             self.mode = "inverse_dynamics"
+
+    def merge_add_and_remove_nodes(self, descriptions: List[str]) -> List[str]:
+        """
+        Merge add and remove nodes descriptions into a single description.
+        """
+        new_descriptions = []
+        added_descriptions = []
+        removed_descriptions = []
+        for description in descriptions:
+            if "is now added" in description:
+                added_descriptions.append(description)
+            elif "is now removed" in description:
+                removed_descriptions.append(description)
+            else:
+                new_descriptions.append(description)
+        if len(added_descriptions) == 0 and len(removed_descriptions) == 0:
+            return new_descriptions
+        elif len(added_descriptions) > 0 and len(removed_descriptions) == 0:
+            new_descriptions.extend(added_descriptions)
+        elif len(added_descriptions) == 0 and len(removed_descriptions) > 0:
+            new_descriptions.extend(removed_descriptions)
+        else:
+            added_objects = [d.replace(" is now added.", "") for d in added_descriptions]
+            removed_objects = [d.replace(" is now removed.", "") for d in removed_descriptions]
+            added_objects_str = ', '.join(added_objects[:-1]) + ', and ' + added_objects[-1] if len(added_objects) > 1 else added_objects[0]
+            removed_objects_str = ', '.join(removed_objects[:-1]) + ', and ' + removed_objects[-1] if len(removed_objects) > 1 else removed_objects[0]
+            if len(removed_objects) == 1:
+                description = f"{removed_objects_str} now turns into {added_objects_str}."
+            else:
+                description = f"{removed_objects_str} now turn into {added_objects_str}."
+                print(description)
+            new_descriptions.append(description)
+        return new_descriptions
     
     def translate_diff(self, diff: Dict[str, Any]) -> str:
         """
@@ -120,6 +153,9 @@ class StateChangeTranslator:
                     atomic_descriptions = self._translate_edge_change_atomic(operation, edge)
                     descriptions.extend(atomic_descriptions)
         
+        ## We merge the description for transition rules (merging add and remove nodes)
+        descriptions = self.merge_add_and_remove_nodes(descriptions)
+        
         if not descriptions:
             print(f"No descriptions found for diff: {diff}")
             exit()
@@ -128,7 +164,7 @@ class StateChangeTranslator:
         if self.mode == "forward_dynamics":
             # Combine descriptions naturally
             numbered_descriptions = [f"{i+1}. {desc.capitalize()}" for i, desc in enumerate(descriptions)]
-            return "\n".join(numbered_descriptions) + "."
+            return "\n".join(numbered_descriptions)
         elif self.mode == "inverse_dynamics":
             # Join naturally
             descriptions = [desc.capitalize() for desc in descriptions]
@@ -149,11 +185,18 @@ class StateChangeTranslator:
         object_name = self._format_object_name(node.get('name', ''))
         states = node.get('states', [])
         
-        if not states:
-            return []
+        # if not states:
+        #     return []
         
         # Generate separate description for each state
         state_descriptions = []
+
+        if states == []:
+            if operation == 'add':
+                return [f"{object_name} is now added."]
+            elif operation == 'remove':
+                return [f"{object_name} is now removed."]
+        
         for state in states:
             if state in self._state_templates:
                 state_desc = self._state_templates[state]

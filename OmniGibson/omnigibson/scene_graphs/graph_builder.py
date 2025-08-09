@@ -215,6 +215,10 @@ class SceneGraphBuilder(object):
         states = [s[0] for s in state_dict["states"]]
         filtered_edge = (obj_1, obj_2, deepcopy(state_dict))
 
+        # 0. if obj_1 is a robot and obj_2 is system, and the state is "Covered" filtered
+        if isinstance(obj_1, BaseRobot) and isinstance(obj_2, BaseSystem):
+            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Covered"]
+
         if isinstance(obj_1, BaseSystem) or isinstance(obj_2, BaseSystem):
             return filtered_edge
 
@@ -283,10 +287,6 @@ class SceneGraphBuilder(object):
                 and ("LeftGrasping" in [s[0] for s in find_states["states"]] or "RightGrasping" in [s[0] for s in find_states["states"]]):
                     filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Under"]
                     break
-
-        # 7. if obj_1 is a robot and obj_2 is system, and the state is "Covered" filtered
-        if isinstance(obj_1, BaseRobot) and isinstance(obj_2, BaseSystem):
-            filtered_edge[2]["states"] = [s for s in filtered_edge[2]["states"] if s[0] != "Covered"]
 
         return filtered_edge
 
