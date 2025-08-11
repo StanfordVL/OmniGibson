@@ -125,6 +125,20 @@ class FrameSegmentManager:
             return 1
         return dot_product / (magnitude1 * magnitude2)
     
+    def _has_added_object(self, diff):
+        """
+        Check if the diff has an added object.
+        """
+        add_dict = diff['add']['nodes']
+        for obj_dict in add_dict:
+            # Below is desired behavior
+            if hasattr(obj_dict, 'parent'):
+                return True
+            # for now, we check if the object states are empty as substitutes
+            # if obj_dict['states'] == []:
+            #     return True
+        return False
+    
     def _is_key_object_observable(self, scene_graph, key_object):
         """
         Check if the key object is observable in the scene graph.
@@ -335,6 +349,7 @@ class FrameSegmentManager:
         """Extract changes by comparing cosine similarity of scene graphs."""
         SKIPPING_FRAMES = 50
         SKIPPING_SAVED_INTERVAL = 10
+        SKIPPING_ADDED_OBJECT_INTERVAL = 20
         STATE_THRESHOLD = 0.98
         TEMPORAL_THRESHOLD = 200
 
@@ -392,7 +407,11 @@ class FrameSegmentManager:
                         elif candidate_frame is None:
                             candidate_frame = current_frame
                             candidate_diff = diff
-                            min_save_frame_number = current_frame_number + SKIPPING_SAVED_INTERVAL
+                            if self._has_added_object(diff):
+                                min_save_frame_number = current_frame_number + SKIPPING_ADDED_OBJECT_INTERVAL
+                                print(f"Skipping {SKIPPING_ADDED_OBJECT_INTERVAL} frames after an added object")
+                            else:
+                                min_save_frame_number = current_frame_number + SKIPPING_SAVED_INTERVAL
                             
                         # If we have a pending candidate but haven't reached the minimum frame yet, keep waiting
                         

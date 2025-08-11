@@ -101,6 +101,10 @@ class SceneGraphBuilder(object):
 
         self._all_objects = []
 
+        self._last_removed_object = []
+
+        self._obj_parent_dict = {}
+
         # Heuristics fields for efficient scenegraph states updating
         self._task_relevant_objects = None
         self._only_task_relevant_objects = only_task_relevant_objects
@@ -165,25 +169,44 @@ class SceneGraphBuilder(object):
         if self._G is not None and system in self._G.nodes:
             self._G.remove_node(system)
         
-        self._all_objects = [o for o in self._all_objects if o.name != system.name]
+        if self._initialized:
+            self._all_objects = [o for o in self._all_objects if o.name != system.name]
+            self._last_removed_object.append(system)
 
     def _system_add_handler(self, system):
         if self._initialized:
             self._all_objects.append(system) if all(o.name != system.name for o in self._all_objects) else None
-
+            system_parent_name = system.name.replace('diced__', '')
+            if system.name not in self._obj_parent_dict:
+                self._obj_parent_dict[system.name] = [system_parent_name]
+            
     def _object_remove_handler(self, obj):
         # 1. Remove the object from scene graph if it exists
         # breakpoint()
         if self._G is not None and obj in self._G.nodes:
             self._G.remove_node(obj)  # This also removes all edges connected to the object
-        
-        # 2. Remove the object from self._all_objects by query obj name
-        self._all_objects = [o for o in self._all_objects if o.name != obj.name]
+
+        if self._initialized:
+            # 2. Remove the object from self._all_objects by query obj name
+            self._all_objects = [o for o in self._all_objects if o.name != obj.name]
+
+            # 3. Add the object to self._last_removed_object
+            self._last_removed_object.append(obj)
 
     def _object_add_handler(self, obj):        
         # 1. Add the object to self._all_objects
         if self._initialized:
             self._all_objects.append(obj) if all(o.name != obj.name for o in self._all_objects) and isinstance(obj, StatefulObject) and obj.states else None
+        
+            # 2. Add the object to self._obj_parent_dict, and the parent is the first object in self._last_removed_object
+            if len(self._last_removed_object) == 1:
+                if obj.name not in self._obj_parent_dict:
+                    self._obj_parent_dict[obj.name] = [self._last_removed_object[0].name]
+                else:
+                    self._obj_parent_dict[obj.name].append(self._last_removed_object[0].name)
+            else:
+                print(f"Warning: {len(self._last_removed_object)} objects removed, expected 1.")
+
 
     def get_scene_graph(self):
         return self._G.copy()
@@ -494,6 +517,7 @@ class SceneGraphBuilder(object):
 
         # objs_to_add = self._get_object_candidates_via_heuristics(scene) # this is a common implementation, useful, but needs revision
         objs_to_add = self._all_objects
+        
         if not self._full_obs:
             # If we're not in full observability mode, only pick the objects in FOV of robots.
             for robot in self._robots:
@@ -509,6 +533,11 @@ class SceneGraphBuilder(object):
             # Add the object if not already in the graph
             if obj not in self._G.nodes:
                 self._G.add_node(obj)
+
+                # 1. If the object is within self._obj_parent_dict, add a field called 'parent' to the object
+                if obj.name in self._obj_parent_dict:
+                    self._G.nodes[obj]["parent"] = self._obj_parent_dict[obj.name]
+                    # print(f"Added parent {self._obj_parent_dict[obj.name]} to {obj.name}")
 
             if not self._semantic_only:
                 # Get the relative position of the object & update it (reducing accumulated errors)
@@ -544,6 +573,9 @@ class SceneGraphBuilder(object):
 
         # Save the robot's transform in this frame.
         self._last_desired_frame_to_world = desired_frame_to_world
+
+        # 3. clear self._last_removed_object
+        self._last_removed_object = []
 
 
 def visualize_scene_graph(scene, G, show_window=True, cartesian_positioning=False):

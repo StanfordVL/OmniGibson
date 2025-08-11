@@ -46,6 +46,7 @@ def get_symbolic_scene_graph(nx_graph: nx.Graph, obj_visibility_dict: Dict[Any, 
         node_name = node.name
         node_category = node.category if hasattr(node, 'category') else 'System'
         node_data = nx_graph.nodes[node]
+        node_parent = node_data['parent'] if 'parent' in node_data else None
         states = convert_to_serializable(node_data['states'])
         symbolic_graph['nodes'].append({
             'name': node_name,
@@ -56,6 +57,8 @@ def get_symbolic_scene_graph(nx_graph: nx.Graph, obj_visibility_dict: Dict[Any, 
             symbolic_graph['nodes'][-1]['visibility'] = obj_visibility_dict[node_name]
         else:
             symbolic_graph['nodes'][-1]['visibility'] = {}
+        if node_parent is not None:
+            symbolic_graph['nodes'][-1]['parent'] = node_parent
     
     for u, v, data in nx_graph.edges(data=True):
         edge_states = convert_to_serializable(data.get('states', []))
@@ -209,6 +212,9 @@ def generate_state_centric_diff(
 
     prev_nodes_category = {node['name']: node.get('category', None) for node in prev_graph['nodes']}
     new_nodes_category = {node['name']: node.get('category', None) for node in new_graph['nodes']}
+
+    prev_nodes_parent = {node['name']: node.get('parent', None) for node in prev_graph['nodes']}
+    new_nodes_parent = {node['name']: node.get('parent', None) for node in new_graph['nodes']}
     
     # Process node state changes
     all_node_names = set(prev_nodes.keys()) & set(new_nodes.keys())
@@ -220,14 +226,30 @@ def generate_state_centric_diff(
         diff['remove']['nodes'].append({
             'name': node_name,
             'states': [],
-            'category': prev_nodes_category[node_name]
+            'category': prev_nodes_category[node_name],
+            'parent': prev_nodes_parent[node_name]
         })
     
     for node_name in added_nodes_names:
+        node_parent = new_nodes_parent[node_name]
+        node_category = new_nodes_category[node_name]
+        assert node_parent is not None, f"Added node {node_name} has no parent"
+
+        if node_category == 'System':
+            # 1. We search if there if half objects exist
+            complete_string = f"{node_parent[0]}"
+            half_string = f"half_{node_parent[0]}"
+            updated_node_parent = [parent for parent in removed_nodes_names if half_string in parent]
+            if len(updated_node_parent) == 0:
+                updated_node_parent = [parent for parent in removed_nodes_names if complete_string in parent]
+            assert len(updated_node_parent) > 0, f"Added node {node_name} has no corresponding parent"
+            node_parent = updated_node_parent
+
         diff['add']['nodes'].append({
             'name': node_name,
             'states': [],
-            'category': new_nodes_category[node_name]
+            'category': node_category,
+            'parent': node_parent
         })
     
     for node_name in all_node_names:
@@ -241,7 +263,8 @@ def generate_state_centric_diff(
             diff['add']['nodes'].append({
                 'name': node_name,
                 'states': list(added_states),
-                'category': node_category
+                'category': node_category,
+                'parent': new_nodes_parent[node_name]
             })
         
         # States that were removed (present in prev but not in new)
@@ -250,8 +273,10 @@ def generate_state_centric_diff(
             diff['remove']['nodes'].append({
                 'name': node_name,
                 'states': list(removed_states),
-                'category': node_category
+                'category': node_category,
+                'parent': prev_nodes_parent[node_name]
             })
+    
     
     # Convert edge lists to dictionaries for efficient lookup
     prev_edges = {}
