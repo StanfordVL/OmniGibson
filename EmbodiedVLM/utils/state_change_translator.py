@@ -122,6 +122,66 @@ class StateChangeTranslator:
             new_descriptions.append(description)
         return new_descriptions
     
+    def process_object_add_and_remove(self, diff: Dict[str, Any]) -> List[str]:
+        """
+        Translate the object adding and removing into natural language descriptions.
+        """
+        descriptions = set()
+        # we first get all added objects
+        added_objects_dict = dict()
+
+        added_objects = set()
+        removed_objects = set()
+
+        mentioned_removed_objects = set()
+        for node in diff['add'].get('nodes', []):
+            node_name = self._format_object_name(node['name'])
+            if node['states'] == []:
+                added_objects.add(node_name)
+                added_objects_dict[node_name] = {
+                    'category': node['category'],
+                    'parent': node['parent']
+                }
+        for node in diff['remove'].get('nodes', []):
+            node_name = self._format_object_name(node['name'])
+            if node['states'] == []:
+                removed_objects.add(node_name)
+        
+        # we then do translation in terms of object addition
+        for node_name, node_info in added_objects_dict.items():
+            node_parent = node_info['parent']
+            from_parents = set()
+            if node_parent == [] or node_parent == None:
+                descriptions.add(f"{node_name} is now added.")
+                continue
+            for parent in node_parent:
+                parent = self._format_object_name(parent)
+                if parent in removed_objects:
+                    mentioned_removed_objects.add(parent)
+                    from_parents.add(parent)
+            
+            from_parents = list(from_parents)
+            if len(from_parents) == 1:
+                descriptions.add(f"{from_parents[0]} now becomes {node_name}.")
+            elif len(from_parents) > 1:
+                description = f"{', '.join(from_parents[:-1])}, and {from_parents[-1]} now turn into {node_name}."
+                descriptions.add(description)
+            else:
+                if 'cooked' in node_name.lower():
+                    descriptions.add(f"{node_name.replace('cooked ', '')} is now cooked.")
+                elif node_parent == [] or node_parent == None:
+                    descriptions.add(f"{node_name} is now added.")
+                elif len(node_parent) == 1:
+                    parent_name = self._format_object_name(node_parent[0])
+                    descriptions.add(f"{parent_name} now becomes {node_name}.")
+
+        # we then do translation in terms of object removal
+        # not_mentioned_removed_objects = removed_objects - mentioned_removed_objects
+        # for obj in not_mentioned_removed_objects:
+        #     descriptions.append(f"{obj} is now removed.")
+        return list(descriptions)
+
+    
     def translate_diff(self, diff: Dict[str, Any]) -> str:
         """
         Translate a scene graph diff into natural language description.
@@ -154,11 +214,14 @@ class StateChangeTranslator:
                     descriptions.extend(atomic_descriptions)
         
         ## We merge the description for transition rules (merging add and remove nodes)
-        descriptions = self.merge_add_and_remove_nodes(descriptions)
-        
+        # descriptions = self.merge_add_and_remove_nodes(descriptions)
+
+        # for object/system adding and removing, we process this separately
+        add_and_remove_descriptions = self.process_object_add_and_remove(diff)
+        if add_and_remove_descriptions:
+            descriptions.extend(add_and_remove_descriptions)
         if not descriptions:
-            print(f"No descriptions found for diff: {diff}")
-            exit()
+            return None
         
 
         if self.mode == "forward_dynamics":
@@ -185,17 +248,17 @@ class StateChangeTranslator:
         object_name = self._format_object_name(node.get('name', ''))
         states = node.get('states', [])
         
-        # if not states:
-        #     return []
+        if not states:
+            return []
         
         # Generate separate description for each state
         state_descriptions = []
 
-        if states == []:
-            if operation == 'add':
-                return [f"{object_name} is now added."]
-            elif operation == 'remove':
-                return [f"{object_name} is now removed."]
+        # if states == []:
+        #     if operation == 'add':
+        #         return [f"{object_name} is now added."]
+        #     elif operation == 'remove':
+        #         return [f"{object_name} is now removed."]
         
         for state in states:
             if state in self._state_templates:

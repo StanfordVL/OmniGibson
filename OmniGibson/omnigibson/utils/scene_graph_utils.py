@@ -233,17 +233,24 @@ def generate_state_centric_diff(
     for node_name in added_nodes_names:
         node_parent = new_nodes_parent[node_name]
         node_category = new_nodes_category[node_name]
-        assert node_parent is not None, f"Added node {node_name} has no parent"
+        # assert node_parent is not None, f"Added node {node_name} has no parent"
+        if node_parent is None:
+            node_parent = []
 
-        if node_category == 'System':
-            # 1. We search if there if half objects exist
-            complete_string = f"{node_parent[0]}"
-            half_string = f"half_{node_parent[0]}"
-            updated_node_parent = [parent for parent in removed_nodes_names if half_string in parent]
-            if len(updated_node_parent) == 0:
-                updated_node_parent = [parent for parent in removed_nodes_names if complete_string in parent]
-            assert len(updated_node_parent) > 0, f"Added node {node_name} has no corresponding parent"
-            node_parent = updated_node_parent
+        elif node_category == 'System':
+            # 1. If cooked, we only care about the system 
+            if 'cooked' in node_name.lower():
+                idealized_parent = node_name.replace('cooked__', '')
+                node_parent = [idealized_parent]
+            else:
+                # 2. We search if there if half objects exist
+                complete_string = f"{node_parent[0]}"
+                half_string = f"half_{node_parent[0]}"
+                updated_node_parent = [parent for parent in removed_nodes_names if half_string in parent]
+                if len(updated_node_parent) == 0:
+                    updated_node_parent = [parent for parent in removed_nodes_names if complete_string in parent]
+                assert len(updated_node_parent) > 0, f"Added node {node_name} has no corresponding parent"
+                node_parent = updated_node_parent
 
         diff['add']['nodes'].append({
             'name': node_name,
@@ -540,9 +547,23 @@ class SceneGraphReader:
                 
         return visible_objects
     
-        
+    def get_all_add_or_remove_objects(self, full_diff: Dict[str, Dict]) -> Set[str]:
+        """
+        Get all objects that are added or removed in a full diff
+        """
+        add_objects = set()
+        remove_objects = set()
+        if full_diff.get('type') == 'empty':
+            return set()
+        for node in full_diff['add'].get('nodes', []):
+            if node['states'] == []:
+                add_objects.add(node['name'])
+        for node in full_diff['remove'].get('nodes', []):
+            if node['states'] == []:
+                remove_objects.add(node['name'])
+        return add_objects | remove_objects
 
-    def get_visible_objects_in_both_graphs(self, active_objects: Set[str], sensor_names: List[str], from_graph: Dict[str, List[Dict]], to_graph: Dict[str, List[Dict]], partial_diff: bool = False) -> Set[str]:
+    def get_visible_objects_in_both_graphs(self, active_objects: Set[str], sensor_names: List[str], from_graph: Dict[str, List[Dict]], to_graph: Dict[str, List[Dict]], full_diff: Dict[str, Dict], partial_diff: bool = False) -> Set[str]:
         """
         Get the visible objects from active objects across two scene graphs.
         
@@ -560,7 +581,13 @@ class SceneGraphReader:
         
         # Return intersection - objects that are visible in both frames
         if partial_diff:
-            return from_visible_objects & to_visible_objects
+            visible_objects = from_visible_objects & to_visible_objects
+            # no matter what, we add the objects that are added or removed
+            all_objects = from_visible_objects | to_visible_objects
+            add_or_remove_objects = self.get_all_add_or_remove_objects(full_diff)
+            add_or_remove_objects = add_or_remove_objects & active_objects
+            add_or_remove_objects = add_or_remove_objects & all_objects
+            return visible_objects | add_or_remove_objects
         else:
             return from_visible_objects | to_visible_objects
 
@@ -901,7 +928,7 @@ class SceneGraphReader:
         all_active_objects = self.get_active_objects(full_diff)
 
         # Filter to only visible objects
-        visible_objects = self.get_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph)
+        visible_objects = self.get_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph, full_diff=full_diff, partial_diff=False)
 
         return visible_objects
     
@@ -945,7 +972,7 @@ class SceneGraphReader:
         all_active_objects = self.get_active_objects(full_diff)
 
         # Filter to only visible objects
-        visible_objects = self.get_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph, partial_diff=partial_diff)
+        visible_objects = self.get_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph, full_diff=full_diff, partial_diff=partial_diff)
 
         all_visible_objects = self.get_all_visible_objects_in_both_graphs(all_active_objects, sensor_names, from_graph, to_graph)
 
@@ -966,6 +993,8 @@ class SceneGraphReader:
         # Filter out if visible diff involves multiple same category objects
         multiple_instance_categories = {category for category, count in visible_objects_category_dict.items() if count > 1}
 
+        multiple_instance_categories.remove('System') if 'System' in multiple_instance_categories else None
+
         # Filter node changes
         for category in ['add', 'remove']:
             if category in full_diff:
@@ -973,7 +1002,10 @@ class SceneGraphReader:
                     if node['name'] in visible_objects:
                         node_category = self.get_obj_category(node['name'], all_nodes)
                         if node_category in multiple_instance_categories:
-                            continue
+                            if 'half' in node['name'] and category == 'remove' or 'half' in node['name'] and any(parent in visible_objects for parent in node.get('parent', [])):
+                                pass
+                            else:
+                                continue
                         visible_diff[category]['nodes'].append(node)
                 
                 for edge in full_diff[category]['edges']:

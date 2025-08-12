@@ -102,7 +102,7 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
                     for edge in visible_diff.get(diff_type, {}).get('edges', []):
                         total_diff += len(edge.get('states', []))
 
-            if total_diff > 8:
+            if total_diff > 5:
                 candidate_gt_frame_pairs.remove((frame_a_id, frame_b_id))
             
 
@@ -305,6 +305,8 @@ class InverseDynamicsGenerator(AbstractQAGenerator):
             }
         }
         '''
+
+        assert 'add' in diff and 'remove' in diff, f"Diff must contain both add and remove operations: {diff}"
 
         negated_diff = {
             'add': {

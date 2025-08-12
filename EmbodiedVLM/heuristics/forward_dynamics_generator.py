@@ -114,8 +114,12 @@ class ForwardDynamicsGenerator(AbstractQAGenerator):
         # now we have a list of candidate gt frame pairs.
         # we see if we can find enough distractor images for each candidate gt frame pair
         for frame_a_id, frame_b_id in candidate_gt_frame_pairs:
+            # if frame_a_id == '8326' and frame_b_id == '8537':
+            #     print("here")
+            # else:
+            #     continue
             try:
-                visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names)
+                visible_diff = task_data.scene_graph_reader.get_visible_full_diff(frame_a_id, frame_b_id, self.sensor_names, partial_diff=True)
                 images_a = task_data.image_paths.get(frame_a_id, {})
                 images_b = task_data.image_paths.get(frame_b_id, {})
 
