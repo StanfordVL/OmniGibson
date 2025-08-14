@@ -21,8 +21,8 @@ sys.path.insert(0, os.path.join(project_root, 'OmniGibson'))
 
 try:
     from EmbodiedVLM.utils.qa_gen_utils import TaskData, QAPair, AbstractQAGenerator
-    from EmbodiedVLM.heuristics.forward_dynamics_generator import ForwardDynamicsGenerator
-    from EmbodiedVLM.heuristics.inverse_dynamics_generator import InverseDynamicsGenerator
+    from EmbodiedVLM.heuristics.forward_dynamics_generator import ForwardDynamicsGenerator, MultiStepForwardDynamicsGenerator
+    from EmbodiedVLM.heuristics.inverse_dynamics_generator import InverseDynamicsGenerator, MultiStepInverseDynamicsGenerator
     from omnigibson.utils.scene_graph_utils import SceneGraphReader
 except ImportError as e:
     print(f"Import error: {e}")
@@ -157,7 +157,7 @@ class QAGenerationManager:
         
         return image_root_path, image_paths
 
-    def generate(self, qa_type: str, qa_gen_logic: str=None) -> List[QAPair]:
+    def generate(self, qa_type: str, qa_gen_logic: str=None, step_length=None) -> List[QAPair]:
         """
         Generate Q&A pairs of the specified type for all loaded tasks.
         
@@ -174,7 +174,10 @@ class QAGenerationManager:
             raise ValueError(f"No generator found for Q&A type: {qa_type}")
         
         # Instantiate the generator
-        generator = generator_class(qa_gen_logic)
+        if step_length is not None:
+            generator = generator_class(qa_gen_logic, step_length=step_length)
+        else:
+            generator = generator_class(qa_gen_logic)
         
         generated_pairs = []
         
@@ -208,6 +211,10 @@ class QAGenerationManager:
             return ForwardDynamicsGenerator
         elif qa_type == "inverse_dynamics":
             return InverseDynamicsGenerator
+        elif qa_type == "multi_forward_dynamics":
+            return MultiStepForwardDynamicsGenerator
+        elif qa_type == "multi_inverse_dynamics":
+            return MultiStepInverseDynamicsGenerator
         else:
             return None
 

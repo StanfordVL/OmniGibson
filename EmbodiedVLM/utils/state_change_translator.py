@@ -88,6 +88,10 @@ class StateChangeTranslator:
             self.mode = "forward_dynamics"
         elif type == "inverse_dynamics":
             self.mode = "inverse_dynamics"
+        elif type == "multi_forward_dynamics":
+            self.mode = "multi_forward_dynamics"
+        elif type == "multi_inverse_dynamics":
+            self.mode = "multi_inverse_dynamics"
 
     def merge_add_and_remove_nodes(self, descriptions: List[str]) -> List[str]:
         """
@@ -110,15 +114,14 @@ class StateChangeTranslator:
         elif len(added_descriptions) == 0 and len(removed_descriptions) > 0:
             new_descriptions.extend(removed_descriptions)
         else:
-            added_objects = [d.replace(" is now added.", "") for d in added_descriptions]
-            removed_objects = [d.replace(" is now removed.", "") for d in removed_descriptions]
+            added_objects = [d.replace(" is now added", "") for d in added_descriptions]
+            removed_objects = [d.replace(" is now removed", "") for d in removed_descriptions]
             added_objects_str = ', '.join(added_objects[:-1]) + ', and ' + added_objects[-1] if len(added_objects) > 1 else added_objects[0]
             removed_objects_str = ', '.join(removed_objects[:-1]) + ', and ' + removed_objects[-1] if len(removed_objects) > 1 else removed_objects[0]
             if len(removed_objects) == 1:
-                description = f"{removed_objects_str} now turns into {added_objects_str}."
+                description = f"{removed_objects_str} now turns into {added_objects_str}"
             else:
-                description = f"{removed_objects_str} now turn into {added_objects_str}."
-                print(description)
+                description = f"{removed_objects_str} now turn into {added_objects_str}"
             new_descriptions.append(description)
         return new_descriptions
     
@@ -152,7 +155,7 @@ class StateChangeTranslator:
             node_parent = node_info['parent']
             from_parents = set()
             if node_parent == [] or node_parent == None:
-                descriptions.add(f"{node_name} is now added.")
+                descriptions.add(f"{node_name} is now added")
                 continue
             for parent in node_parent:
                 parent = self._format_object_name(parent)
@@ -162,18 +165,18 @@ class StateChangeTranslator:
             
             from_parents = list(from_parents)
             if len(from_parents) == 1:
-                descriptions.add(f"{from_parents[0]} now becomes {node_name}.")
+                descriptions.add(f"{from_parents[0]} now becomes {node_name}")
             elif len(from_parents) > 1:
-                description = f"{', '.join(from_parents[:-1])}, and {from_parents[-1]} now turn into {node_name}."
+                description = f"{', '.join(from_parents[:-1])}, and {from_parents[-1]} now turn into {node_name}"
                 descriptions.add(description)
             else:
                 if 'cooked' in node_name.lower():
-                    descriptions.add(f"{node_name.replace('cooked ', '')} is now cooked.")
+                    descriptions.add(f"{node_name.replace('cooked ', '')} is now cooked")
                 elif node_parent == [] or node_parent == None:
-                    descriptions.add(f"{node_name} is now added.")
+                    descriptions.add(f"{node_name} is now added")
                 elif len(node_parent) == 1:
                     parent_name = self._format_object_name(node_parent[0])
-                    descriptions.add(f"{parent_name} now becomes {node_name}.")
+                    descriptions.add(f"{parent_name} now becomes {node_name}")
 
         # we then do translation in terms of object removal
         # not_mentioned_removed_objects = removed_objects - mentioned_removed_objects
@@ -196,7 +199,7 @@ class StateChangeTranslator:
             str: Natural language description of the changes
         """
         if diff.get('type') == 'empty':
-            return "No significant changes occurred."
+            return "No significant changes occurred"
         
         descriptions = []
         
@@ -231,8 +234,14 @@ class StateChangeTranslator:
         elif self.mode == "inverse_dynamics":
             # Join naturally
             descriptions = [desc.capitalize() for desc in descriptions]
-            return ". ".join(descriptions)
-    
+            return ". ".join(descriptions) + "."
+        elif self.mode == "multi_forward_dynamics":
+            descriptions = [desc.capitalize() for desc in descriptions]
+            return ". ".join(descriptions) + "."
+        elif self.mode == "multi_inverse_dynamics":
+            descriptions = [desc.capitalize() for desc in descriptions]
+            return ". ".join(descriptions) + "."
+            
     def _translate_node_change_atomic(self, operation: str, node: Dict[str, Any]) -> List[str]:
         """
         Translate a node change into atomic natural language descriptions.
@@ -533,3 +542,4 @@ class StateChangeTranslator:
                     components.append(f"{operation}_edge_{from_obj}_{to_obj}_{','.join(states)}")
         
         return "|".join(sorted(components)) 
+    

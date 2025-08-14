@@ -693,13 +693,13 @@ class SceneGraphReader:
         
         return generate_scene_graph_diff(from_graph, to_graph)
     
-    def get_unchanged_states(self, from_id, to_id) -> Dict[str, Dict]:
+    def get_unchanged_states(self, from_id, to_id, sensor_names: List[str]) -> Dict[str, Dict]:
         """
         Get the unchanged states between two frames.
         Args:
             from_id: The starting frame ID (int or str)
             to_id: The ending frame ID (int or str)
-            
+            sensor_names: List of camera/sensor names to check visibility from
         Returns:
             Dict: The unchanged states with 'nodes' and 'edges' keys
             {
@@ -712,15 +712,18 @@ class SceneGraphReader:
         
         from_graph = self.get_scene_graph(from_id_str)
         to_graph = self.get_scene_graph(to_id_str)
+
+        from_visible_objects = self.get_all_visible_objects_in_graph(sensor_names, from_graph)
+        to_visible_objects = self.get_all_visible_objects_in_graph(sensor_names, to_graph)
         
-        from_nodes = {n['name']: set(n.get('states', [])) for n in from_graph['nodes']}
-        to_nodes = {n['name']: set(n.get('states', [])) for n in to_graph['nodes']}
-        
-        shared_node_names = set(from_nodes.keys()) & set(to_nodes.keys())
+        shared_visible_objects = from_visible_objects & to_visible_objects
+
+        from_nodes = {n['name']: set(n.get('states', [])) for n in from_graph['nodes'] if n['name'] in shared_visible_objects}
+        to_nodes = {n['name']: set(n.get('states', [])) for n in to_graph['nodes'] if n['name'] in shared_visible_objects}
         
         unchanged_nodes = []
         
-        for node_name in shared_node_names:
+        for node_name in shared_visible_objects:
             from_states = from_nodes.get(node_name, set())
             to_states = to_nodes.get(node_name, set())
 
@@ -1025,7 +1028,7 @@ class SceneGraphReader:
         return visible_diff
     
 
-    def has_similar_edges(self, diff_1: Dict[str, Dict], diff_2: Dict[str, Dict], graph_1: Dict[str, List[Dict]], graph_2: Dict[str, List[Dict]]) -> bool:
+    def has_similar_edges(self, diff_1: Dict[str, Dict], diff_2: Dict[str, Dict], graph_0: Dict[str, List[Dict]], graph_1: Dict[str, List[Dict]], graph_2: Dict[str, List[Dict]]) -> bool:
         """
         Check if the two diffs have similar edges in terms of object category.
         """
@@ -1047,7 +1050,7 @@ class SceneGraphReader:
         }
 
         # translate edge from object name and to object name to object category
-        all_nodes = graph_1['nodes'] + graph_2['nodes']
+        all_nodes = graph_0['nodes'] + graph_1['nodes'] + graph_2['nodes']
 
         for operation in ['add', 'remove']:
             for edge in diff_1[operation]['edges']:

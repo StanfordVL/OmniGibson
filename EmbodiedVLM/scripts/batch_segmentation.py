@@ -78,14 +78,14 @@ class BatchSegmentationProcessor:
             bool: True if valid, False otherwise
         """
         scene_graph_file = task_dir / "scene_graph_0.json"
-        external_sensor0 = task_dir / "external_sensor0"
+        # external_sensor0 = task_dir / "external_sensor0"
         external_sensor1 = task_dir / "external_sensor1"
         
         if not scene_graph_file.exists():
             print(f"Warning: {task_dir.name} missing scene_graph_0.json")
             return False
         
-        if not external_sensor0.exists() or not external_sensor1.exists():
+        if not external_sensor1.exists():
             print(f"Warning: {task_dir.name} missing sensor directories")
             return False
         
@@ -155,12 +155,12 @@ class BatchSegmentationProcessor:
             print(f"  Extracted {len(extracted_frames)} frames: {extracted_frames}")
             
             # Copy frames from both sensor directories
-            source_sensor0 = task_dir / "external_sensor0"
+            # source_sensor0 = task_dir / "external_sensor0"
             source_sensor1 = task_dir / "external_sensor1"
-            target_sensor0 = output_task_dir / "external_sensor0"
+            # target_sensor0 = output_task_dir / "external_sensor0"
             target_sensor1 = output_task_dir / "external_sensor1"
             
-            self.copy_extracted_frames(source_sensor0, target_sensor0, extracted_frames)
+            # self.copy_extracted_frames(source_sensor0, target_sensor0, extracted_frames)
             self.copy_extracted_frames(source_sensor1, target_sensor1, extracted_frames)
             
             print(f"  Successfully processed {task_dir.name}")

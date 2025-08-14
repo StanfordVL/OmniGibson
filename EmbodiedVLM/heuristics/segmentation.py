@@ -349,7 +349,7 @@ class FrameSegmentManager:
         """Extract changes by comparing cosine similarity of scene graphs."""
         SKIPPING_FRAMES = 50
         SKIPPING_SAVED_INTERVAL = 10
-        SKIPPING_ADDED_OBJECT_INTERVAL = 20
+        SKIPPING_ADDED_OBJECT_INTERVAL = 40
         STATE_THRESHOLD = 0.98
         TEMPORAL_THRESHOLD = 200
 

@@ -87,22 +87,35 @@ class BatchQAGenerator:
                 print("❌ No valid tasks found for QA generation")
                 return
             
+            multi_forward_qa_pairs = []
+            multi_inv_qa_pairs = []
+            step_length = 7
+            # Generate multi-step forward dynamics Q&A pairs for all tasks
+            print("\n⏭️ Generating Multi-Step Forward Dynamics Q&A pairs...")
+            multi_forward_qa_pairs = manager.generate("multi_forward_dynamics", step_length=step_length)
+            print(f"✅ Generated {len(multi_forward_qa_pairs)} multi-step forward dynamics Q&A pairs")
+
+            # Generate multi-step inverse dynamics Q&A pairs for all tasks
+            print("\n⏪ Generating Multi-Step Inverse Dynamics Q&A pairs...")
+            multi_inv_qa_pairs = manager.generate("multi_inverse_dynamics", step_length=step_length)
+            print(f"✅ Generated {len(multi_inv_qa_pairs)} multi-step inverse dynamics Q&A pairs")
+            
             forward_qa_pairs = []
             inverse_qa_pairs = []
             
             # Generate forward dynamics Q&A pairs for all tasks
-            print("\n⏭️ Generating Forward Dynamics Q&A pairs...")
-            forward_qa_pairs = manager.generate("forward_dynamics")
-            print(f"✅ Generated {len(forward_qa_pairs)} forward dynamics Q&A pairs")
+            # print("\n⏭️ Generating Forward Dynamics Q&A pairs...")
+            # forward_qa_pairs = manager.generate("forward_dynamics")
+            # print(f"✅ Generated {len(forward_qa_pairs)} forward dynamics Q&A pairs")
             
             # Generate inverse dynamics Q&A pairs for all tasks
-            print("\n⏪ Generating Inverse Dynamics Q&A pairs...")
-            manager.clear_qa_pairs()
-            inverse_qa_pairs = manager.generate("inverse_dynamics")
-            print(f"✅ Generated {len(inverse_qa_pairs)} inverse dynamics Q&A pairs")
+            # print("\n⏪ Generating Inverse Dynamics Q&A pairs...")
+            # manager.clear_qa_pairs()
+            # inverse_qa_pairs = manager.generate("inverse_dynamics")
+            # print(f"✅ Generated {len(inverse_qa_pairs)} inverse dynamics Q&A pairs")
             
             # Combine all QA pairs
-            all_qa_pairs = forward_qa_pairs + inverse_qa_pairs
+            all_qa_pairs = forward_qa_pairs + inverse_qa_pairs + multi_forward_qa_pairs + multi_inv_qa_pairs
             manager.qa_pairs = all_qa_pairs
             
             # Save results to JSONL
@@ -112,6 +125,8 @@ class BatchQAGenerator:
             print("=" * 40)
             print(f"⏭️ Forward Dynamics Q&A pairs: {len(forward_qa_pairs)}")
             print(f"⏪ Inverse Dynamics Q&A pairs: {len(inverse_qa_pairs)}")
+            print(f"⏭️ Multi-Step Forward Dynamics Q&A pairs: {len(multi_forward_qa_pairs)}")
+            print(f"⏪ Multi-Step Inverse Dynamics Q&A pairs: {len(multi_inv_qa_pairs)}")
             print(f"📊 Total Q&A pairs: {len(all_qa_pairs)}")
             print(f"💾 Output saved to: {self.output_file}")
             
@@ -146,7 +161,7 @@ def main():
     parser.add_argument(
         'output_file',
         nargs='?',
-        default='/home/mll-laptop-1/01_projects/BEHAVIOR-1K/EmbodiedVLM/tmp/gen_qa.jsonl',
+        default='/home/mll-laptop-1/01_projects/BEHAVIOR-1K/EmbodiedVLM/tmp/gen_qa_step_7.jsonl',
         help='Output JSONL file path'
     )
     

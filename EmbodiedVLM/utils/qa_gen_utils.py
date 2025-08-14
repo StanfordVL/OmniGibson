@@ -46,17 +46,20 @@ class QAPair:
         images (List[str]): List of image paths involved in the question
         question (str): The question text (prompt for VLM)
         gt_answer (Any): Ground truth answer
+        meta_info (Any): Optional metadata (default: None)
     """
     id: str
     images: List[str]
     question: str
     gt_answer: Any
+    meta_info: Any = None
 
     def to_dict(self) -> Dict[str, Any]:
         """Convert to dictionary format for serialization."""
         return {
             'id': self.id,
             'type': self.gt_answer['type'],
+            'meta_info': self.meta_info,
             'images': self.images,
             'question': self.question,
             'options': self.gt_answer['options'],

@@ -9,7 +9,8 @@ from skimage.color import rgb2lab, deltaE_ciede2000
 from scipy.ndimage import binary_dilation
 
 try:
-    import accimage
+    # import accimage
+    pass
 except ImportError:
     accimage = None
 
