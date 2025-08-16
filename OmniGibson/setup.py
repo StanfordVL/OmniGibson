@@ -37,8 +37,6 @@ setup(
         "bddl~=3.7.0-alpha",
         "opencv-python>=4.8.1",
         "nest_asyncio>=1.5.6",
-        "imageio>=2.33.1",
-        "imageio-ffmpeg>=0.4.9",
         "termcolor>=2.4.0",
         "progressbar>=2.5",
         "pymeshlab~=2022.2",
@@ -51,6 +49,7 @@ setup(
         "numba>=0.59.1",
         "cffi>=1.16.0",
         "pillow~=11.0.0",
+        "open3d>=0.19.0",
     ],
     extras_require={
         "dev": [
@@ -73,6 +72,14 @@ setup(
             "nvidia-curobo @ git+https://github.com/StanfordVL/curobo@cbaf7d32436160956dad190a9465360fad6aba73",
             "ompl @ https://storage.googleapis.com/gibson_scenes/ompl-1.6.0-cp310-cp310-manylinux_2_28_x86_64.whl",
         ],
+        "eval": [
+            "dm_tree>=0.1.9",
+            "hydra-core>=1.3.2",
+            "websockets>=15.0.1",
+            "msgpack>=1.1.0",
+            "lerobot @ git+https://github.com/huggingface/lerobot@main",
+            "gspread>=6.2.1",
+        ]
     },
     tests_require=[],
     python_requires=">=3",

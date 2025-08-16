@@ -2,10 +2,9 @@ import os
 
 import omnigibson as og
 from omnigibson.maps.segmentation_map import SegmentationMap
-from omnigibson.robots.robot_base import REGISTERED_ROBOTS
 from omnigibson.scenes.traversable_scene import TraversableScene
 from omnigibson.utils.asset_utils import get_og_scene_path
-from omnigibson.utils.constants import STRUCTURE_CATEGORIES, GROUND_CATEGORIES
+from omnigibson.utils.constants import STRUCTURE_CATEGORIES
 from omnigibson.utils.ui_utils import create_module_logger
 
 # Create module logger
@@ -58,9 +57,6 @@ class InteractiveTraversableScene(TraversableScene):
             include_robots (bool): whether to also include the robot(s) defined in the scene
         """
 
-        # Store attributes from inputs
-        self.include_robots = include_robots
-
         # Infer scene directory
         self.scene_dir = get_og_scene_path(scene_model)
 
@@ -98,6 +94,7 @@ class InteractiveTraversableScene(TraversableScene):
             num_waypoints=num_waypoints,
             waypoint_resolution=waypoint_resolution,
             use_floor_plane=False,
+            include_robots=include_robots,
         )
 
     def get_scene_loading_info(self, scene_model, scene_instance=None):
@@ -165,6 +162,8 @@ class InteractiveTraversableScene(TraversableScene):
         self._trav_map.load_map(maps_path)
 
     def _should_load_object(self, obj_info, task_metadata):
+        agent_ok = super()._should_load_object(obj_info, task_metadata)
+
         name = obj_info["args"]["name"]
         category = obj_info["args"].get("category", "object")
         in_rooms = obj_info["args"].get("in_rooms", [])
@@ -193,11 +192,8 @@ class InteractiveTraversableScene(TraversableScene):
         # This object is not located in one of the selected rooms, skip
         valid_room = self.load_room_instances is None or len(set(self.load_room_instances) & set(in_rooms)) > 0
 
-        # Check whether this is an agent and we allow agents
-        agent_ok = self.include_robots or obj_info["class_name"] not in REGISTERED_ROBOTS
-
         # HACK: always load building structure
-        is_building_structure = category in (STRUCTURE_CATEGORIES - GROUND_CATEGORIES)
+        is_building_structure = category in (STRUCTURE_CATEGORIES) or category in ["door", "sliding_door"]
 
         # We only load this model if all the above conditions are met
         return is_building_structure or (not_blacklisted and whitelisted and valid_room and agent_ok)
