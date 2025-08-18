@@ -257,7 +257,7 @@ class FrankaPanda(ManipulationRobot):
 
     @cached_property
     def arm_joint_names(self):
-        return {self.default_arm: [f"panda_joint{i+1}" for i in range(7)]}
+        return {self.default_arm: [f"panda_joint{i + 1}" for i in range(7)]}
 
     @cached_property
     def eef_link_names(self):
@@ -288,18 +288,18 @@ class FrankaPanda(ManipulationRobot):
     @property
     def curobo_path(self):
         # Only supported for normal franka now
-        assert (
-            self._model_name == "franka_panda"
-        ), f"Only franka_panda is currently supported for curobo. Got: {self._model_name}"
+        assert self._model_name == "franka_panda", (
+            f"Only franka_panda is currently supported for curobo. Got: {self._model_name}"
+        )
         return os.path.join(
             gm.ASSET_PATH, "models/franka/franka_panda/curobo/franka_panda_description_curobo_default.yaml"
         )
 
     @cached_property
     def curobo_attached_object_link_names(self):
-        assert (
-            self._model_name == "franka_panda"
-        ), f"Only franka_panda is currently supported for curobo. Got: {self._model_name}"
+        assert self._model_name == "franka_panda", (
+            f"Only franka_panda is currently supported for curobo. Got: {self._model_name}"
+        )
         return super().curobo_attached_object_link_names
 
     @property
