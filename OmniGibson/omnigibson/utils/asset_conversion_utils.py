@@ -749,6 +749,9 @@ def import_obj_metadata(usd_path, obj_category, obj_model, dataset_root, force_a
     stage = lazy.isaacsim.core.utils.stage.get_current_stage()
     prim = stage.GetDefaultPrim()
 
+    # Update the collision meshes to not use the weird MeshMergeAPI but instead individually apply a
+    # CollisionAPI on each of the collision meshes.
+
     data = dict()
     for data_group in {"metadata", "mvbb_meta", "material_groups", "heights_per_link"}:
         data_path = f"{model_root_path}/misc/{data_group}.json"
@@ -1365,7 +1368,7 @@ def _add_meta_links_to_urdf(urdf_path, obj_category, obj_model, dataset_root):
     return _save_xmltree_as_urdf(
         root_element=root,
         name=f"{obj_model}_with_meta_links",
-        dirpath=f"{model_root_path}/urdf",
+        dirpath=os.path.dirname(urdf_path),
         unique_urdf=False,
     )
 

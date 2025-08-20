@@ -112,7 +112,7 @@ def import_custom_object(
             collision_method=collision_method,
             hull_count=hull_count,
             overwrite=overwrite,
-            use_usda=False,
+            use_usda=True,
         )
 
     finally:
@@ -125,9 +125,6 @@ def import_custom_object(
         click.echo("The asset has been successfully imported. You can view it and make changes and save if you'd like.")
         while True:
             og.sim.render()
-            if select.select([sys.stdin], [], [], 0)[0]:
-                sys.stdin.readline()  # Clear the input buffer
-                break
 
 
 if __name__ == "__main__":
