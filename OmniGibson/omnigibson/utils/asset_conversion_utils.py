@@ -751,6 +751,7 @@ def import_obj_metadata(usd_path, obj_category, obj_model, dataset_root, force_a
 
     # Update the collision meshes to not use the weird MeshMergeAPI but instead individually apply a
     # CollisionAPI on each of the collision meshes.
+    breakpoint()
 
     data = dict()
     for data_group in {"metadata", "mvbb_meta", "material_groups", "heights_per_link"}:
@@ -1290,7 +1291,7 @@ def _add_meta_links_to_urdf(urdf_path, obj_category, obj_model, dataset_root):
     root = tree.getroot()
 
     # Load metadata
-    metadata_fpath = f"{model_root_path}/misc/metadata.json"
+    metadata_fpath = pathlib.Path(urdf_path).parent.parent / "misc/metadata.json"
     with open(metadata_fpath, "r") as f:
         metadata = json.load(f)
 
@@ -2062,8 +2063,6 @@ def generate_urdf_for_mesh(
     obj_link_mesh_folder.mkdir(exist_ok=True)
     obj_link_collision_mesh_folder = obj_link_mesh_folder / "collision"
     obj_link_collision_mesh_folder.mkdir(exist_ok=True)
-    obj_link_material_folder = out_dir / "material"
-    obj_link_material_folder.mkdir(exist_ok=True)
 
     # Process collision meshes
     collision_info = []
@@ -2129,7 +2128,9 @@ def generate_urdf_for_mesh(
     xmlio = io.StringIO(xmlstr)
     tree = ET.parse(xmlio)
 
-    urdf_path = out_dir / f"{mdl}.urdf"
+    urdf_dir = out_dir / "urdf"
+    urdf_dir.mkdir(exist_ok=True)
+    urdf_path = urdf_dir / f"{mdl}.urdf"
     with open(urdf_path, "wb") as f:
         tree.write(f, xml_declaration=True)
 
@@ -2166,8 +2167,6 @@ def record_obj_metadata_from_urdf(urdf_path, obj_dir, joint_setting="zero", over
     for mesh, transform in vfk.items():
         scene.add_geometry(geometry=mesh, transform=transform)
 
-    # Calculate relevant metadata
-
     # Base link offset is pos offset from robot root link -> overall AABB center
     # Since robot is placed at origin, this is simply the AABB centroid
     base_link_offset = scene.bounding_box.centroid
@@ -2184,7 +2183,7 @@ def record_obj_metadata_from_urdf(urdf_path, obj_dir, joint_setting="zero", over
         "bbox_size": bbox_size.tolist(),
         "orientations": [],
     }
-    misc_dir = pathlib.Path(obj_dir) / "misc"
+    misc_dir = pathlib.Path(urdf_path).parent.parent / "misc"
     misc_dir.mkdir(exist_ok=overwrite)
     with open(misc_dir / "metadata.json", "w") as f:
         json.dump(out_metadata, f)

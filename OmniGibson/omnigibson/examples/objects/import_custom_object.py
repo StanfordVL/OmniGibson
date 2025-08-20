@@ -6,9 +6,7 @@ Improved version that can import obj file and articulated file (glb, gltf).
 import pathlib
 from typing import Literal
 import click
-import sys
 import shutil
-import select
 import tempfile
 import omnigibson as og
 
@@ -117,8 +115,7 @@ def import_custom_object(
 
     finally:
         # Clean up temp directories before exiting
-        # shutil.rmtree(temp_dir)
-        pass
+        shutil.rmtree(temp_dir)
 
     # Visualize if not headless
     if not headless:
