@@ -228,7 +228,7 @@ def _get_visual_objs_from_urdf(urdf_path):
     return visual_objs
 
 
-def _force_asset_pipeline_materials(obj_prim, obj_category, obj_model, model_root_path, usd_path, dataset_root):
+def _force_asset_pipeline_materials(obj_prim, obj_category, obj_model, usd_path, dataset_root):
     """
     Updates the object to use V-Ray and PBR materials rendered through the asset pipeline instead of
     its currently assigned materials.
@@ -245,7 +245,6 @@ def _force_asset_pipeline_materials(obj_prim, obj_category, obj_model, model_roo
         obj_prim (Usd.Prim): The USD prim representing the object.
         obj_category (str): The category of the object (e.g., "ceilings", "walls").
         obj_model (str): The model name of the object.
-        model_root_path (str): The root path of the model files.
         usd_path (str): The path to the USD file.
         dataset_root (str): The root path of the dataset containing the object files.
 
@@ -740,23 +739,19 @@ def import_obj_metadata(usd_path, obj_category, obj_model, dataset_root, force_a
     Returns:
         None
     """
-    # Check if filepath exists
-    model_root_path = f"{dataset_root}/objects/{obj_category}/{obj_model}"
-    log.debug("Loading", usd_path, "for metadata import.")
+    usd_path = pathlib.Path(usd_path)
+    usd_dir = usd_path.parent
+    model_root_path = usd_dir.parent
 
     # Load model
-    lazy.isaacsim.core.utils.stage.open_stage(usd_path)
+    lazy.isaacsim.core.utils.stage.open_stage(str(usd_path))
     stage = lazy.isaacsim.core.utils.stage.get_current_stage()
     prim = stage.GetDefaultPrim()
 
-    # Update the collision meshes to not use the weird MeshMergeAPI but instead individually apply a
-    # CollisionAPI on each of the collision meshes.
-    breakpoint()
-
     data = dict()
     for data_group in {"metadata", "mvbb_meta", "material_groups", "heights_per_link"}:
-        data_path = f"{model_root_path}/misc/{data_group}.json"
-        if exists(data_path):
+        data_path = model_root_path / f"misc/{data_group}.json"
+        if data_path.exists():
             # Load data
             with open(data_path, "r") as f:
                 data[data_group] = json.load(f)
@@ -858,8 +853,7 @@ def import_obj_metadata(usd_path, obj_category, obj_model, dataset_root, force_a
             obj_prim=prim,
             obj_category=obj_category,
             obj_model=obj_model,
-            model_root_path=model_root_path,
-            usd_path=usd_path,
+            usd_path=str(usd_path),
             dataset_root=dataset_root,
         )
     for link, link_tags in data["metadata"]["link_tags"].items():
@@ -883,7 +877,7 @@ def import_obj_metadata(usd_path, obj_category, obj_model, dataset_root, force_a
     for i, mat_prim in enumerate(mat_prims):
         mat = MaterialPrim(mat_prim.GetPrimPath().pathString, f"mat{i}")
         mat.load(DummyScene)
-        mat.shader_update_asset_paths_with_root_path(root_path=os.path.dirname(usd_path), relative=True)
+        mat.shader_update_asset_paths_with_root_path(root_path=str(usd_path.parent), relative=True)
 
     # Save stage
     stage.Save()
@@ -1002,7 +996,7 @@ def _create_urdf_import_config(
     return import_config
 
 
-def import_obj_urdf(
+def convert_urdf_to_usd(
     urdf_path,
     obj_category,
     obj_model,
@@ -1038,19 +1032,150 @@ def import_obj_urdf(
         use_convex_decomposition=use_omni_convex_decomp,
         merge_fixed_joints=merge_fixed_joints,
     )
-    # Check if filepath exists
-    usd_path = f"{dataset_root}/objects/{obj_category}/{obj_model}/usd/{obj_model}.{'usda' if use_usda else 'usd'}"
+
+    # Pre-clear the scene.
+    og.sim.clear()
+
+    model_root_path = pathlib.Path(dataset_root) / "objects" / obj_category / obj_model
+    usd_dir = model_root_path / "usd"
+    usd_filename = obj_model + (".usda" if use_usda else ".usd")
+    usd_path = usd_dir / usd_filename
     log.debug(f"Importing {obj_category}, {obj_model} into path {usd_path}...")
     # Only import if it doesn't exist
     lazy.omni.kit.commands.execute(
         "URDFParseAndImportFile",
         urdf_path=urdf_path,
         import_config=cfg,
-        dest_path=usd_path,
+        dest_path=str(usd_path),
     )
-    log.debug(f"Imported {obj_category}, {obj_model}")
 
-    return urdf_path, usd_path
+    # Also clear again to release the file.
+    og.sim.clear()
+
+    # Find all the relevant files
+    configuration_dir = usd_dir / "configuration"
+    physics_usd_path = configuration_dir / f"{obj_model}_physics.usd"
+    sensor_usd_path = configuration_dir / f"{obj_model}_sensor.usd"
+    base_usd_path = configuration_dir / f"{obj_model}_base.usd"
+
+    # Remove the mixed and sensor files
+    usd_path.unlink()
+    sensor_usd_path.unlink()
+
+    # Move the materials directory contents
+    current_materials = configuration_dir / "materials" / "textures"
+    new_materials = model_root_path / "material"
+    if current_materials.exists():
+        new_materials.mkdir()
+        for texture in current_materials.iterdir():
+            texture.rename(new_materials / texture.name)
+
+    # Load the physics USD file into a non-Omni stage
+    side_stage = lazy.pxr.Usd.Stage.Open(str(physics_usd_path))
+
+    # Find collision APIs as well as any other deletion-worthy prims
+    collision_apis = [
+        lazy.pxr.PhysxSchema.PhysxConvexHullCollisionAPI,
+        lazy.pxr.UsdPhysics.MeshCollisionAPI,
+        lazy.pxr.UsdPhysics.CollisionAPI,
+    ]
+    found_collision_prims = {}
+    to_delete = []
+    for child_prim in side_stage.Traverse():
+        # Delete any collision groups.
+        if child_prim.GetTypeName() == "PhysicsCollisionGroup":
+            to_delete.append(child_prim.GetPath())
+
+        # Check if the prim has any of the collision APIs
+        if any(child_prim.HasAPI(api) for api in collision_apis):
+            # Get the reference to the collisions prim
+            collision_tree_root_path = str(child_prim.GetPrimStack()[0].referenceList.prependedItems[0].primPath)
+            found_collision_prims[str(child_prim.GetParent().GetPath())] = collision_tree_root_path
+            to_delete.append(child_prim.GetPath())
+
+    # Remove any prims we should remove. This only removes stuff from the physics layer.
+    for delete_prim in to_delete:
+        del side_stage.GetRootLayer().GetPrimAtPath(delete_prim.GetParentPath()).nameChildren[delete_prim.name]
+
+    # Create references for all of the individual collision meshes
+    for parent_prim_path, collision_tree_root_path in found_collision_prims.items():
+        collision_tree_root = side_stage.GetPrimAtPath(collision_tree_root_path)
+
+        # Create an XFormPrim for the collisions tree
+        parent_prim = side_stage.GetPrimAtPath(parent_prim_path)
+        collisions_prim = lazy.pxr.UsdGeom.Xform.Define(side_stage, parent_prim.GetPath().AppendChild("collisions"))
+
+        # For each of the collision meshes, add a reference to the collisions prim
+        for collision_original in collision_tree_root.GetChildren():
+            # Create the prim
+            name = collision_original.GetName()
+            collision_prim = lazy.pxr.UsdGeom.Xform.Define(side_stage, collisions_prim.GetPath().AppendChild(name)).GetPrim()
+
+            # Add the collision APIs
+            collision_api = lazy.pxr.UsdPhysics.CollisionAPI.Apply(collision_prim)
+            mesh_collision_api = lazy.pxr.UsdPhysics.MeshCollisionAPI.Apply(collision_prim)
+            mesh_collision_api.GetApproximationAttr().Set("convexHull")
+            convex_hull_api = lazy.pxr.PhysxSchema.PhysxConvexHullCollisionAPI.Apply(collision_prim)
+
+            # Add the reference to the actual collisions
+            collision_prim.GetReferences().AddReference("", collision_original.GetPath())
+
+            # Make it instanceable
+            collision_prim.SetInstanceable(True)
+
+    # Prior to flattening things, we want to remove all instanceable flags and refs. We do this because
+    # if you flatten with instancing the flatten function ends up duplicating the whole mesh tree.
+    # We keep track to reenable them post-flattening
+    instanceable_prims_and_refs = {
+        str(prim.GetPath()): str(prim.GetPrimStack()[0].referenceList.prependedItems[0].primPath)
+        for prim in side_stage.Traverse() if prim.IsInstanceable()
+    }
+    for instanceable_prim_path, ref in instanceable_prims_and_refs.items():
+        instanceable_prim = side_stage.GetPrimAtPath(instanceable_prim_path)
+        instanceable_prim.SetInstanceable(False)
+        instanceable_prim.GetReferences().ClearReferences()
+
+    # Flatten everything and save at the target location.
+    side_stage.Flatten()
+    side_stage.Export(str(usd_path))
+    del side_stage
+
+    # Remove the old stage files.
+    shutil.rmtree(configuration_dir)
+
+    # Now load the flattened file and mark all previously instanceable prims as instanceable again.
+    flattened_stage = lazy.pxr.Usd.Stage.Open(str(usd_path))
+
+    for instanceable_prim_path, ref in instanceable_prims_and_refs.items():
+        instanceable_prim = flattened_stage.GetPrimAtPath(instanceable_prim_path)
+        instanceable_prim.SetInstanceable(True)
+        instanceable_prim.GetReferences().AddReference("", ref)
+
+    # Also update the asset paths
+    def _update_path(asset_path):
+        # Get the absolute path - the asset path is relative to where the USD is.
+        absolute_asset_path = (usd_dir / asset_path).resolve()
+        absolute_original_materials_path = current_materials.resolve()
+
+        # If the file is not in our current materials directory, we don't update.
+        if not absolute_asset_path.is_relative_to(absolute_original_materials_path):
+            return asset_path
+    
+        # Otherwise, first get the new absolute path of the asset in the new folder
+        relative_to_material_dir = absolute_asset_path.relative_to(absolute_original_materials_path)
+        absolute_moved_path = new_materials / relative_to_material_dir
+
+        # Finally, find where that file is relative to the path where the USD goes.
+        final_path = os.path.relpath(absolute_moved_path, usd_dir.resolve())
+        print("Updating", asset_path, "to", final_path)
+        return final_path
+    lazy.pxr.UsdUtils.ModifyAssetPaths(flattened_stage.GetRootLayer(), _update_path)
+
+    # Save the flattened stage and close it and return its path.
+    flattened_stage.Save()
+    del flattened_stage
+
+    return urdf_path, str(usd_path)
 
 
 def _pretty_print_xml(current, parent=None, index=-1, depth=0, use_tabs=False):
@@ -1283,15 +1408,12 @@ def _add_meta_links_to_urdf(urdf_path, obj_category, obj_model, dataset_root):
     Returns:
         str: The path to the updated URDF file.
     """
-    # Check if filepath exists
-    model_root_path = f"{dataset_root}/objects/{obj_category}/{obj_model}"
-
     # Load urdf
     tree = ET.parse(urdf_path)
     root = tree.getroot()
 
     # Load metadata
-    metadata_fpath = pathlib.Path(urdf_path).parent.parent / "misc/metadata.json"
+    metadata_fpath = pathlib.Path(dataset_root) / "objects" / obj_category / obj_model / "misc/metadata.json"
     with open(metadata_fpath, "r") as f:
         metadata = json.load(f)
 
@@ -2183,7 +2305,7 @@ def record_obj_metadata_from_urdf(urdf_path, obj_dir, joint_setting="zero", over
         "bbox_size": bbox_size.tolist(),
         "orientations": [],
     }
-    misc_dir = pathlib.Path(urdf_path).parent.parent / "misc"
+    misc_dir = pathlib.Path(obj_dir) / "misc"
     misc_dir.mkdir(exist_ok=overwrite)
     with open(misc_dir / "metadata.json", "w") as f:
         json.dump(out_metadata, f)
@@ -2266,7 +2388,7 @@ def import_og_asset_from_urdf(
     print("Converting obj URDF to USD...")
     og.launch()
     assert len(og.sim.scenes) == 0
-    urdf_path, usd_path = import_obj_urdf(
+    urdf_path, usd_path = convert_urdf_to_usd(
         urdf_path=urdf_path,
         obj_category=category,
         obj_model=model,
