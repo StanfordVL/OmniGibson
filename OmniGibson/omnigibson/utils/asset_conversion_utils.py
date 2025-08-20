@@ -1109,7 +1109,9 @@ def convert_urdf_to_usd(
         for collision_original in collision_tree_root.GetChildren():
             # Create the prim
             name = collision_original.GetName()
-            collision_prim = lazy.pxr.UsdGeom.Xform.Define(side_stage, collisions_prim.GetPath().AppendChild(name)).GetPrim()
+            collision_prim = lazy.pxr.UsdGeom.Xform.Define(
+                side_stage, collisions_prim.GetPath().AppendChild(name)
+            ).GetPrim()
 
             # Add the collision APIs
             collision_api = lazy.pxr.UsdPhysics.CollisionAPI.Apply(collision_prim)
@@ -1128,7 +1130,8 @@ def convert_urdf_to_usd(
     # We keep track to reenable them post-flattening
     instanceable_prims_and_refs = {
         str(prim.GetPath()): str(prim.GetPrimStack()[0].referenceList.prependedItems[0].primPath)
-        for prim in side_stage.Traverse() if prim.IsInstanceable()
+        for prim in side_stage.Traverse()
+        if prim.IsInstanceable()
     }
     for instanceable_prim_path, ref in instanceable_prims_and_refs.items():
         instanceable_prim = side_stage.GetPrimAtPath(instanceable_prim_path)
@@ -1160,7 +1163,7 @@ def convert_urdf_to_usd(
         # If the file is not in our current materials directory, we don't update.
         if not absolute_asset_path.is_relative_to(absolute_original_materials_path):
             return asset_path
-    
+
         # Otherwise, first get the new absolute path of the asset in the new folder
         relative_to_material_dir = absolute_asset_path.relative_to(absolute_original_materials_path)
         absolute_moved_path = new_materials / relative_to_material_dir
@@ -1169,6 +1172,7 @@ def convert_urdf_to_usd(
         final_path = os.path.relpath(absolute_moved_path, usd_dir.resolve())
         print("Updating", asset_path, "to", final_path)
         return final_path
+
     lazy.pxr.UsdUtils.ModifyAssetPaths(flattened_stage.GetRootLayer(), _update_path)
 
     # Save the flattened stage and close it and return its path.
