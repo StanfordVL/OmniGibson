@@ -2113,7 +2113,9 @@ def generate_urdf_for_mesh(
         asset_path = pathlib.Path(asset_path)
 
     # Validate that the filename starts with a letter. Isaac 4.5 has issues if you don't do this.
-    assert asset_path.stem[0].isalpha(), f"Invalid asset path: {asset_path}. Isaac Sim expects the filename to start with a letter."
+    assert asset_path.stem[
+        0
+    ].isalpha(), f"Invalid asset path: {asset_path}. Isaac Sim expects the filename to start with a letter."
 
     # Create directory structure
     if not overwrite:
@@ -2398,12 +2400,7 @@ def import_og_asset_from_urdf(
         merge_fixed_joints=merge_fixed_joints,
     )
 
-    prim = import_obj_metadata(
-        usd_path=usd_path,
-        obj_category=category,
-        obj_model=model,
-        dataset_root=dataset_root
-    )
+    prim = import_obj_metadata(usd_path=usd_path, obj_category=category, obj_model=model, dataset_root=dataset_root)
     print(
         f"\nConversion complete! Object has been successfully imported into OmniGibson-compatible USD, located at:\n\n{usd_path}\n"
     )
