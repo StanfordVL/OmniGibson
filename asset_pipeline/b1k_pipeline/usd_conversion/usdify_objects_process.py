@@ -60,7 +60,7 @@ if __name__ == "__main__":
             obj_category=obj_category,
             obj_model=obj_model,
             dataset_root=dataset_root,
-            import_render_channels=True,
+            force_asset_pipeline_materials=True,
         )
         print("Done importing metadata")
 
