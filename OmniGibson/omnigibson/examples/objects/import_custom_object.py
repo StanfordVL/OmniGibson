@@ -110,7 +110,7 @@ def import_custom_object(
             collision_method=collision_method,
             hull_count=hull_count,
             overwrite=overwrite,
-            use_usda=True,
+            use_usda=False,
         )
 
     finally:
