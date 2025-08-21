@@ -88,7 +88,7 @@ def import_custom_object(
 def main():
     spoc_root = pathlib.Path("/fsx-siro/cgokmen/procthor/assets/2023_07_28")
     annots = json.loads((spoc_root / "annotations.json").read_text())
-    models = list(spoc_root.glob("assets/*/*.glb"))
+    models = sorted(spoc_root.glob("assets/*/*.glb"))
     rank = int(sys.argv[1])
     world_size = int(sys.argv[2])
 

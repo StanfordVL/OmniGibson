@@ -1078,14 +1078,16 @@ def convert_urdf_to_usd(
     # Prior to flattening things, we want to remove all instanceable flags and refs. We do this because
     # if you flatten with instancing the flatten function ends up duplicating the whole mesh tree.
     # We keep track to reenable them post-flattening
-    instanceable_prims_and_refs = {
-        str(prim.GetPath()): (
-            str(prim.GetPrimStack()[0].referenceList.prependedItems[0].primPath),
+    instanceable_prims_and_refs = {}
+    for prim in physics_stage.Traverse():
+        arcs = lazy.pxr.Usd.PrimCompositionQuery.GetDirectReferences(prim).GetCompositionArcs()
+        if not arcs:
+            continue
+        assert len(arcs) == 1, f"Expected only one reference arc for {prim.GetPath()}"
+        instanceable_prims_and_refs[str(prim.GetPath())] = (
+            str(arcs[0].GetTargetPrimPath()),
             prim.IsInstanceable(),
         )
-        for prim in physics_stage.Traverse()
-        if prim.GetPrimStack()[0].referenceList.prependedItems
-    }
     for instanceable_prim_path, _ in instanceable_prims_and_refs.items():
         instanceable_prim = physics_stage.GetPrimAtPath(instanceable_prim_path)
         instanceable_prim.SetInstanceable(False)
