@@ -1138,7 +1138,9 @@ def convert_urdf_to_usd(
         grandparent_path = parent_path.GetParentPath()
 
         # Find the child prim - it's actually away at a reference. There should be exactly one.
-        referenced_wrapper_path_str = str(parent_prim.GetPrimStack()[0].referenceList.prependedItems[0].primPath)
+        references = parent_prim.GetPrimStack()[0].referenceList.prependedItems
+        assert len(references) == 1, f"{parent_path} is not a reference!"
+        referenced_wrapper_path_str = str(references[0].primPath)
         referenced_wrapper_prim = side_stage.GetPrimAtPath(referenced_wrapper_path_str)
         assert referenced_wrapper_prim.IsValid()
 

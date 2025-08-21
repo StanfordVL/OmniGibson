@@ -7,10 +7,10 @@ import pathlib
 import traceback
 import shutil
 import tempfile
-import pandas as pd
 import os
-import sys
 from tqdm import tqdm
+import sys
+import json
 
 import omnigibson as og
 from omnigibson.macros import gm
@@ -21,19 +21,20 @@ from omnigibson.utils.asset_conversion_utils import (
 
 gm.HEADLESS = True
 
-DATASET_ROOT = pathlib.Path("/fsx-siro/cgokmen/behavior-data/hssd")
+DATASET_ROOT = pathlib.Path("/fsx-siro/cgokmen/behavior-data/ai2thor")
 DATASET_ROOT.mkdir(exist_ok=True)
 ERRORS = DATASET_ROOT / "errors"
 ERRORS.mkdir(exist_ok=True)
 JOBS = DATASET_ROOT / "jobs"
 JOBS.mkdir(exist_ok=True)
-RESTART_EVERY = 128
+RESTART_EVERY = 64
 
 
 def import_custom_object(
     orig_path: str,
     category: str,
     model: str,
+    scale: float,
 ):
     """
     Imports a custom-defined object asset into an OmniGibson-compatible USD format and saves the imported asset
@@ -42,12 +43,19 @@ def import_custom_object(
 
     model_root = DATASET_ROOT / "objects" / category / model
     success_file = model_root / "import.success"
+    if model_root.exists():
+        # Check if we're fully done.
+        if success_file.exists():
+            return
+
+        # Otherwise nuke the directory
+        shutil.rmtree(model_root)
 
     # Create a temporary working directory
     try:
         with tempfile.TemporaryDirectory() as temp_dir:
             # Copy the GLB file to the temp dir first to prefix it with a letter-string.
-            asset_path = os.path.join(temp_dir, f"hssd{model}.glb")
+            asset_path = os.path.join(temp_dir, f"spoc{model}.glb")
             shutil.copy2(orig_path, asset_path)
 
             # Try to generate URDF, may raise ValueError if too many submeshes
@@ -57,7 +65,8 @@ def import_custom_object(
                 category,
                 model,
                 collision_method="coacd",
-                hull_count=128 if category == "stages" else 32,
+                hull_count=32,
+                scale=scale,
                 check_scale=False,
                 rescale=False,
                 overwrite=True,
@@ -71,6 +80,7 @@ def import_custom_object(
                 urdf_path=str(urdf_path),
                 collision_method=None,
                 dataset_root=str(DATASET_ROOT),
+                hull_count=32,
                 overwrite=False,
                 use_usda=False,
             )
@@ -83,50 +93,29 @@ def import_custom_object(
 
 
 def main():
-    hssd_root = pathlib.Path("/fsx-siro/cgokmen/habitat-data/scene_datasets/hssd-hab")
-    hssd_models_root = pathlib.Path("/fsx-siro/cgokmen/hssd-models")
-    metadata = pd.read_csv(hssd_root / "metadata/hssd_obj_semantics_condensed.csv")
-
-    models = [fn for fn in hssd_models_root.rglob("*.glb") if "filteredSupportSurface" not in fn.name and "collider" not in fn.name]
+    spoc_root = pathlib.Path("/fsx-siro/cgokmen/procthor/assets/2023_07_28")
+    annots = json.loads((spoc_root / "annotations.json").read_text())
+    models = list(spoc_root.glob("assets/*/*.glb"))
     rank = int(sys.argv[1])
     world_size = int(sys.argv[2])
 
     completed_count = 0
-    for obj_path in tqdm(models[rank::world_size]):
-        if obj_path.parts[-2] == "openings":
-            category = "openings"
-        elif obj_path.parts[-2] == "stages":
-            category = "stages"
-        else:
-            # Check if it exists in the dataframe
-            rows = metadata[metadata["Object Hash"] == obj_path.stem]
-            if not rows.empty:
-                category = rows.iloc[0][
-                    "Semantic Category:\nCONDENSED\n\nThis is an effort to condense the semantic categories by a couple hundred"
-                ]
-            else:
-                print(f"Warning: {obj_path.stem} not found in metadata, defaulting to 'object'")
-                category = "object"
+    for obj_path in tqdm(models[rank::world_size][:3]):
+        if obj_path.stem not in annots:
+            print(f"Skipping {obj_path.stem} as it has no annotations")
+            continue
+        this_annots = annots[obj_path.stem]
 
         # Sanitize both category and model names to contain only letters (and underscores for category)
-        category = "".join(c if c.isalnum() or c == "_" else "_" for c in category.lower())
-        model = "hssd" + "".join(c if c.isalnum() else "" for c in obj_path.stem)
-
-        model_root = DATASET_ROOT / "objects" / category / model
-        success_file = model_root / "import.success"
-        if model_root.exists():
-            # Check if we're fully done.
-            if success_file.exists():
-                continue
-
-            # Otherwise nuke the directory
-            shutil.rmtree(model_root)
+        category = "".join(c if c.isalnum() or c == "_" else "_" for c in this_annots["category"])
+        model = "".join(c if c.isalnum() else "_" for c in obj_path.stem)
 
         try:
             import_custom_object(
                 orig_path=obj_path,
                 category=category,
                 model=model,
+                scale=this_annots["scale"],
             )
             completed_count += 1
         except Exception as e:
@@ -139,9 +128,7 @@ def main():
             return
 
     # If we reach here, we're done. Record the rank success.
-    (JOBS / f"{rank}.success").touch()
-
-    og.shutdown()
+    (JOBS / str(rank).success).touch()
 
 
 if __name__ == "__main__":
