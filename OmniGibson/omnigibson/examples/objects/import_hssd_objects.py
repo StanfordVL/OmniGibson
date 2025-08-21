@@ -29,6 +29,7 @@ JOBS = DATASET_ROOT / "jobs"
 JOBS.mkdir(exist_ok=True)
 RESTART_EVERY = 64
 
+
 def import_custom_object(
     orig_path: str,
     category: str,
@@ -88,11 +89,12 @@ def import_custom_object(
         if og.sim:
             og.clear()
 
+
 def main():
     hssd_root = pathlib.Path("/home/cgokmen/projects/habitat-data/scene_datasets/hssd-hab")
     hssd_models_root = pathlib.Path("/home/cgokmen/projects/hssd-models")
     metadata = pd.read_csv(hssd_root / "metadata/hssd_obj_semantics_condensed.csv")
-    
+
     models = list(hssd_models_root.rglob("*.glb"))
     rank = int(os.environ.get("SLURM_ARRAY_TASK_ID", "0"))
     world_size = int(os.environ.get("SLURM_ARRAY_TASK_COUNT", "1"))
@@ -107,7 +109,9 @@ def main():
             # Check if it exists in the dataframe
             rows = metadata[metadata["Object Hash"] == obj_path.stem]
             if not rows.empty:
-                category = rows.iloc[0]['Semantic Category:\nCONDENSED\n\nThis is an effort to condense the semantic categories by a couple hundred']
+                category = rows.iloc[0][
+                    "Semantic Category:\nCONDENSED\n\nThis is an effort to condense the semantic categories by a couple hundred"
+                ]
             else:
                 print(f"Warning: {obj_path.stem} not found in metadata, defaulting to 'object'")
                 category = "object"
