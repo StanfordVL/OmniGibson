@@ -258,7 +258,9 @@ class DatasetObject(USDObject):
             category_mass = avg_specs[self.category]["mass"]
             category_density = avg_specs[self.category]["density"]
         else:
-            log.warning(f"Category {self.category} not found in average object specs! Defaulting to unit mass or density.")
+            log.warning(
+                f"Category {self.category} not found in average object specs! Defaulting to unit mass or density."
+            )
             category_mass = 1.0
             category_density = 1.0
 

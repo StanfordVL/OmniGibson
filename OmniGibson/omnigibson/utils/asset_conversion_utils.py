@@ -1079,7 +1079,10 @@ def convert_urdf_to_usd(
     # if you flatten with instancing the flatten function ends up duplicating the whole mesh tree.
     # We keep track to reenable them post-flattening
     instanceable_prims_and_refs = {
-        str(prim.GetPath()): (str(prim.GetPrimStack()[0].referenceList.prependedItems[0].primPath), prim.IsInstanceable())
+        str(prim.GetPath()): (
+            str(prim.GetPrimStack()[0].referenceList.prependedItems[0].primPath),
+            prim.IsInstanceable(),
+        )
         for prim in physics_stage.Traverse()
         if prim.GetPrimStack()[0].referenceList.prependedItems
     }
@@ -1111,7 +1114,7 @@ def convert_urdf_to_usd(
         # If the file is not in our current materials directory, we don't update.
         if not absolute_asset_path.is_relative_to(absolute_original_materials_path):
             return asset_path
-    
+
         # Otherwise, first get the new absolute path of the asset in the new folder
         relative_to_material_dir = absolute_asset_path.relative_to(absolute_original_materials_path)
         absolute_moved_path = new_materials / relative_to_material_dir
@@ -1120,6 +1123,7 @@ def convert_urdf_to_usd(
         final_path = os.path.relpath(absolute_moved_path, usd_dir.resolve())
         print("Updating", asset_path, "to", final_path)
         return final_path
+
     lazy.pxr.UsdUtils.ModifyAssetPaths(side_stage.GetRootLayer(), _update_path)
 
     # Go through all of the prims in the visuals and colliders trees, and promote the mesh prims
@@ -1171,7 +1175,11 @@ def convert_urdf_to_usd(
     # Delete any collision groups
     for child_prim in list(side_stage.Traverse()):
         if child_prim.GetTypeName() == "PhysicsCollisionGroup":
-            del side_stage.GetRootLayer().GetPrimAtPath(child_prim.GetPath().GetParentPath()).nameChildren[child_prim.GetPath().name]
+            del (
+                side_stage.GetRootLayer()
+                .GetPrimAtPath(child_prim.GetPath().GetParentPath())
+                .nameChildren[child_prim.GetPath().name]
+            )
 
     # Find references to correct. The idea here is that we do not want our `visuals` or `collisions`
     # prims to be references, because we want to be able to put properties on the meshes underneath.
@@ -1184,7 +1192,9 @@ def convert_urdf_to_usd(
         references = possible_referrer.GetPrimStack()[0].referenceList.prependedItems
         if references:
             assert possible_referrer.GetName() in ["visuals", "collisions"]
-            assert len(references) == 1, f"Expected exactly one reference for {possible_referrer.GetPath()}, got {len(references)}"
+            assert (
+                len(references) == 1
+            ), f"Expected exactly one reference for {possible_referrer.GetPath()}, got {len(references)}"
             referrer_path = possible_referrer.GetPath()
             referee_path = references[0].primPath
             found_reference_prims[referrer_path] = referee_path
