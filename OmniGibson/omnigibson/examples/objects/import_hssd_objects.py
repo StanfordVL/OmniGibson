@@ -87,7 +87,11 @@ def main():
     hssd_models_root = pathlib.Path("/fsx-siro/cgokmen/hssd-models")
     metadata = pd.read_csv(hssd_root / "metadata/hssd_obj_semantics_condensed.csv")
 
-    models = [fn for fn in hssd_models_root.rglob("*.glb") if "filteredSupportSurface" not in fn.name and "collider" not in fn.name]
+    models = [
+        fn
+        for fn in hssd_models_root.rglob("*.glb")
+        if "filteredSupportSurface" not in fn.name and "collider" not in fn.name
+    ]
     rank = int(sys.argv[1])
     world_size = int(sys.argv[2])
 

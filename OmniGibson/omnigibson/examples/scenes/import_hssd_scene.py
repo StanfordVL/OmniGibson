@@ -74,4 +74,3 @@ def convert_scene_urdf_to_json(urdf, json_path):
 
     with open(json_path, "w+") as f:
         json.dump(scene_info, f, cls=_TorchEncoder, indent=4)
-
