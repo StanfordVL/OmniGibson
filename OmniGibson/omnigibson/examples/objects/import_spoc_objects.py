@@ -93,7 +93,9 @@ def main():
 
     # Re-sort jobs differently per run, so that if a previous array job failed it doesn't end up
     # with all the work again.
-    models.sort(key=lambda x: hashlib.md5((str(x) + os.environ.get("SLURM_ARRAY_JOB_ID", default="")).encode()).hexdigest())
+    models.sort(
+        key=lambda x: hashlib.md5((str(x) + os.environ.get("SLURM_ARRAY_JOB_ID", default="")).encode()).hexdigest()
+    )
 
     rank = int(sys.argv[1])
     world_size = int(sys.argv[2])

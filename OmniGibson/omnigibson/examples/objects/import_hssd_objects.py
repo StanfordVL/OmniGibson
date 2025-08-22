@@ -88,11 +88,19 @@ def main():
     hssd_models_root = pathlib.Path("/fsx-siro/cgokmen/hssd-models")
     metadata = pd.read_csv(hssd_root / "metadata/hssd_obj_semantics_condensed.csv")
 
-    models = sorted([fn for fn in hssd_models_root.rglob("*.glb") if "filteredSupportSurface" not in fn.name and "collider" not in fn.name])
+    models = sorted(
+        [
+            fn
+            for fn in hssd_models_root.rglob("*.glb")
+            if "filteredSupportSurface" not in fn.name and "collider" not in fn.name
+        ]
+    )
 
     # Re-sort jobs differently per run, so that if a previous array job failed it doesn't end up
     # with all the work again.
-    models.sort(key=lambda x: hashlib.md5((str(x) + os.environ.get("SLURM_ARRAY_JOB_ID", default="")).encode()).hexdigest())
+    models.sort(
+        key=lambda x: hashlib.md5((str(x) + os.environ.get("SLURM_ARRAY_JOB_ID", default="")).encode()).hexdigest()
+    )
 
     rank = int(sys.argv[1])
     world_size = int(sys.argv[2])

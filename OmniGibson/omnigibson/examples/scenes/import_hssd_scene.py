@@ -25,7 +25,8 @@ JOBS = DATASET_ROOT / "jobs"
 JOBS.mkdir(exist_ok=True)
 RESTART_EVERY = 1
 
-ROTATE_EVERYTHING_BY = th.as_tensor(R.from_euler('x', -90, degrees=True).as_quat())
+ROTATE_EVERYTHING_BY = th.as_tensor(R.from_euler("x", -90, degrees=True).as_quat())
+
 
 def main():
     hssd_root = pathlib.Path("/fsx-siro/cgokmen/habitat-data/scene_datasets/hssd-hab")
@@ -35,7 +36,9 @@ def main():
 
     # Re-sort jobs differently per run, so that if a previous array job failed it doesn't end up
     # with all the work again.
-    scenes.sort(key=lambda x: hashlib.md5((str(x) + os.environ.get("SLURM_ARRAY_JOB_ID", default="")).encode()).hexdigest())
+    scenes.sort(
+        key=lambda x: hashlib.md5((str(x) + os.environ.get("SLURM_ARRAY_JOB_ID", default="")).encode()).hexdigest()
+    )
 
     rank = int(sys.argv[1])
     world_size = int(sys.argv[2])
@@ -72,7 +75,9 @@ def main():
             # Load the scene template
             stage_instance = scene_contents["stage_instance"]["template_name"].replace("stages/", "")
             stage_category, stage_model = object_mapping[stage_instance]
-            tmpl = DatasetObject(name="stage", category=stage_category, model=stage_model, fixed_base=True, dataset_type="hssd")
+            tmpl = DatasetObject(
+                name="stage", category=stage_category, model=stage_model, fixed_base=True, dataset_type="hssd"
+            )
             scene.add_object(tmpl)
             tmpl.set_position_orientation(position=th.zeros(3), orientation=ROTATE_EVERYTHING_BY)
 
@@ -122,7 +127,7 @@ def main():
                 json.dump(scene_info, f, indent=4)
 
             success_file.touch()
-                
+
             completed_count += 1
         except Exception as e:
             print(f"Error processing {scene_input_json}: {e}")
