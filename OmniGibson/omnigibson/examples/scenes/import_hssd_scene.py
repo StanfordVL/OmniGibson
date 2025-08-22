@@ -14,6 +14,9 @@ import omnigibson.utils.transform_utils as T
 from omnigibson.macros import gm
 from omnigibson.objects import DatasetObject
 from omnigibson.scenes import Scene
+from omnigibson.utils.ui_utils import create_module_logger
+
+log = create_module_logger(module_name=__name__)
 
 gm.HEADLESS = True
 
@@ -23,9 +26,9 @@ ERRORS = DATASET_ROOT / "errors"
 ERRORS.mkdir(exist_ok=True)
 JOBS = DATASET_ROOT / "jobs"
 JOBS.mkdir(exist_ok=True)
-RESTART_EVERY = 1
+RESTART_EVERY = 16
 
-ROTATE_EVERYTHING_BY = th.as_tensor(R.from_euler("x", -90, degrees=True).as_quat())
+ROTATE_EVERYTHING_BY = th.as_tensor(R.from_euler("x", 90, degrees=True).as_quat())
 
 
 def main():
@@ -86,8 +89,12 @@ def main():
                     template_name = obj_instance["template_name"]
                     category, model = object_mapping[template_name]
                     pos = th.as_tensor(obj_instance["translation"])
-                    orn = th.as_tensor(obj_instance["rotation"])
+                    orn = th.as_tensor(obj_instance["rotation"])[[1, 2, 3, 0]]
                     scale = th.as_tensor(obj_instance["non_uniform_scale"])
+
+                    if th.any(scale < 0):
+                        log.error(f"{category} {model} negative scale detected: {scale}")
+                        scale = th.abs(scale)
 
                     obj = DatasetObject(
                         name=f"{category}_{i}",
@@ -115,7 +122,7 @@ def main():
             # Take a sim step
             og.sim.step()
 
-            og.sim.save(json_paths=[scene_output_json])
+            og.sim.save(json_paths=[str(scene_output_json)])
 
             # Load the json, remove the init_info because we don't need it, then save it again
             with open(scene_output_json, "r") as f:
