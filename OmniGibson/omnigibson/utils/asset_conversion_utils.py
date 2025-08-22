@@ -2382,6 +2382,7 @@ def record_obj_metadata_from_urdf(urdf_path, obj_dir, joint_setting="zero", over
 def import_og_asset_from_urdf(
     category,
     model,
+    dataset_root,
     urdf_path=None,
     collision_method="coacd",
     coacd_links=None,
@@ -2389,7 +2390,6 @@ def import_og_asset_from_urdf(
     no_decompose_links=None,
     visual_only_links=None,
     merge_fixed_joints=False,
-    dataset_root=gm.CUSTOM_DATASET_PATH,
     hull_count=32,
     overwrite=False,
     use_usda=False,

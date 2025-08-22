@@ -6,10 +6,10 @@
 #SBATCH --ntasks-per-node=1
 #SBATCH --qos=siro_high
 #SBATCH --account=siro
-#SBATCH --job-name=spoc_to_behavior1k
+#SBATCH --job-name=ai2thor_to_behavior1k
 #SBATCH --output=logs/%A_%a.out
 #SBATCH --error=logs/%A_%a.err
-#SBATCH --array=0-0
+#SBATCH --array=0-120
 
 # This script launches a configurable number of concurrent python processes.
 # Each process is managed by a separate function call running in the background.
@@ -36,8 +36,8 @@ manage_process() {
   # The unique integer ID for the process.
   local process_id=$1
   # The name of the file that signals successful completion.
-  local success_file="/fsx-siro/cgokmen/behavior-data2/spoc/jobs/${process_id}.success"
-  local log_file="logs/spoc_${process_id}.log"
+  local success_file="/fsx-siro/cgokmen/behavior-data2/ai2thor/jobs/${process_id}.success"
+  local log_file="logs/ai2thor_${process_id}.log"
 
   # If the success file already exists, remove the success file to start fresh.
   if [ -f "${success_file}" ]; then
@@ -53,7 +53,7 @@ manage_process() {
     echo "[$(date)] Launching process for ID: ${process_id} ${TOTAL_JOBS_IN_ARRAY}"
     
     # Execute the python script with the calculated ID as an argument.
-    python -u -m omnigibson.examples.objects.import_spoc_objects "${process_id}" "${TOTAL_JOBS_IN_ARRAY}" >> ${log_file} 2>&1
+    python -u -m omnigibson.examples.objects.import_ai2thor_objects "${process_id}" "${TOTAL_JOBS_IN_ARRAY}" >> ${log_file} 2>&1
   done
   
   echo "[$(date)] Success file found for ID: ${process_id}. Process complete."

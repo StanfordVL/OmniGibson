@@ -3,6 +3,7 @@ Helper script to download OmniGibson dataset and assets.
 Improved version that can import obj file and articulated file (glb, gltf).
 """
 
+import hashlib
 import pathlib
 import traceback
 import shutil
@@ -21,7 +22,7 @@ from omnigibson.utils.asset_conversion_utils import (
 
 gm.HEADLESS = True
 
-DATASET_ROOT = pathlib.Path("/fsx-siro/cgokmen/behavior-data/spoc")
+DATASET_ROOT = pathlib.Path("/fsx-siro/cgokmen/behavior-data2/spoc")
 DATASET_ROOT.mkdir(exist_ok=True)
 ERRORS = DATASET_ROOT / "errors"
 ERRORS.mkdir(exist_ok=True)
@@ -89,6 +90,11 @@ def main():
     spoc_root = pathlib.Path("/fsx-siro/cgokmen/procthor/assets/2023_07_28")
     annots = json.loads((spoc_root / "annotations.json").read_text())
     models = sorted(spoc_root.glob("assets/*/*.glb"))
+
+    # Re-sort jobs differently per run, so that if a previous array job failed it doesn't end up
+    # with all the work again.
+    models.sort(key=lambda x: hashlib.md5((str(x) + os.environ.get("SLURM_ARRAY_JOB_ID", default="")).encode()).hexdigest())
+
     rank = int(sys.argv[1])
     world_size = int(sys.argv[2])
 

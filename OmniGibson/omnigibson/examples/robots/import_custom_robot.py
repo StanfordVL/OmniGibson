@@ -30,7 +30,7 @@ gm.ENABLE_FLATCACHE = False
 
 _DOCSTRING = """
 Imports an custom-defined robot URDF asset into an OmniGibson-compatible USD format and saves the imported asset
-files to the custom dataset directory (gm.CUSTOM_DATASET_PATH)
+files to the custom dataset directory data/custom_dataset
 
 Note that @config is expected to follow the following format (R1 config shown as an example):
 
