@@ -29,11 +29,6 @@ log = create_module_logger(module_name=__name__)
 m = create_module_macros(module_path=__file__)
 
 
-class DatasetType(IntEnum):
-    BEHAVIOR = 0
-    CUSTOM = 1
-
-
 class DatasetObject(USDObject):
     """
     DatasetObjects are instantiated from a USD file. It is an object that is assumed to come from an iG-supported
@@ -47,7 +42,7 @@ class DatasetObject(USDObject):
         relative_prim_path=None,
         category="object",
         model=None,
-        dataset_type=DatasetType.BEHAVIOR,
+        dataset_type="og_dataset",
         scale=None,
         visible=True,
         fixed_base=False,
@@ -75,9 +70,9 @@ class DatasetObject(USDObject):
                     {og_dataset_path}/objects/{category}/{model}/usd/{model}.usd
 
                 Otherwise, will randomly sample a model given @category
-            dataset_type (DatasetType): Dataset to search for this object. Default is BEHAVIOR, corresponding to the
-                proprietary (encrypted) BEHAVIOR-1K dataset (gm.DATASET_PATH). Possible values are {BEHAVIOR, CUSTOM}.
-                If CUSTOM, assumes asset is found at gm.CUSTOM_DATASET_PATH and additionally not encrypted.
+            dataset_type (str): Dataset to search for this object. Default is og_dataset, corresponding to the
+                proprietary (encrypted) BEHAVIOR-1K dataset (gm.DATASET_PATH). Any other dataset names are searched for
+                under the gm.DATA_PATH directory.
             scale (None or float or 3-array): if specified, sets either the uniform (float) or x,y,z (3-array) scale
                 for this object. A single number corresponds to uniform scaling along the x,y,z axes, whereas a
                 3-array specifies per-axis scaling.
@@ -138,7 +133,7 @@ class DatasetObject(USDObject):
         super().__init__(
             relative_prim_path=relative_prim_path,
             usd_path=usd_path,
-            encrypted=dataset_type == DatasetType.BEHAVIOR,
+            encrypted=dataset_type == "og_dataset",
             name=name,
             category=category,
             scale=scale,
@@ -157,7 +152,7 @@ class DatasetObject(USDObject):
         )
 
     @classmethod
-    def get_usd_path(cls, category, model, dataset_type=DatasetType.BEHAVIOR):
+    def get_usd_path(cls, category, model, dataset_type="og_dataset"):
         """
         Grabs the USD path for a DatasetObject corresponding to @category and @model.
 
@@ -166,12 +161,12 @@ class DatasetObject(USDObject):
         Args:
             category (str): Category for the object
             model (str): Specific model ID of the object
-            dataset_type (DatasetType): Dataset type, used to infer dataset directory to search for @category and @model
+            dataset_type (str): Dataset type, used to infer dataset directory to search for @category and @model
 
         Returns:
             str: Absolute filepath to the corresponding USD asset file
         """
-        dataset_path = gm.DATASET_PATH if dataset_type == DatasetType.BEHAVIOR else gm.CUSTOM_DATASET_PATH
+        dataset_path = gm.DATASET_PATH if dataset_type == "og_dataset" else os.path.join(gm.DATA_PATH, dataset_type)
         return os.path.join(dataset_path, "objects", category, model, "usd", f"{model}.usd")
 
     def sample_orientation(self):
@@ -254,9 +249,15 @@ class DatasetObject(USDObject):
 
         # Get the average mass/density for this object category
         avg_specs = get_og_avg_category_specs()
-        assert self.category in avg_specs, f"Category {self.category} not found in average object specs!"
-        category_mass = avg_specs[self.category]["mass"]
-        category_density = avg_specs[self.category]["density"]
+        if self.category in avg_specs:
+            category_mass = avg_specs[self.category]["mass"]
+            category_density = avg_specs[self.category]["density"]
+        else:
+            log.warning(
+                f"Category {self.category} not found in average object specs! Defaulting to unit mass or density."
+            )
+            category_mass = 1.0
+            category_density = 1.0
 
         if self._prim_type == PrimType.RIGID:
             total_volume = sum(link.volume for link in self._links.values())
