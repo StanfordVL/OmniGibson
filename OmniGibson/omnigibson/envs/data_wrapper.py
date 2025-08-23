@@ -64,7 +64,7 @@ class DataWrapper(EnvironmentWrapper):
         else:
             data_grp = self.hdf5_file["data"]
         if overwrite or "config" not in set(data_grp.attrs.keys()):
-            env.task.write_task_metadata(env)
+            env.task.update_bddl_scope_metadata(env)
             scene_file = env.scene.save()
             config = deepcopy(env.config)
             self.add_metadata(group=data_grp, name="config", data=config)
@@ -830,7 +830,7 @@ class DataPlaybackWrapper(DataWrapper):
         """
         # Make sure transition rules are DISABLED for playback since we manually propagate transitions
         assert not gm.ENABLE_TRANSITION_RULES, "Transition rules must be disabled for DataPlaybackWrapper env!"
-        
+
         # Stabilize skipped objects
         # we can do this here because we know that whatever's skipped during load state must have been asleep during data collection
         # which means they're not moving and we can safely keep them still

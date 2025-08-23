@@ -3,7 +3,6 @@ from copy import deepcopy
 
 import torch as th
 
-import omnigibson as og
 from omnigibson.utils.gym_utils import GymObservable
 from omnigibson.utils.numpy_utils import NumpyTypes
 from omnigibson.utils.python_utils import Registerable, classproperty
@@ -137,38 +136,6 @@ class BaseTask(GymObservable, Registerable, metaclass=ABCMeta):
         # Compute the low dimensional observation dimension
         obs = self.get_obs(env=env, flatten_low_dim=True)
         self._low_dim_obs_dim = len(obs["low_dim"]) if "low_dim" in obs else 0
-
-    @property
-    def task_metadata(self):
-        """
-        Returns:
-            dict: Relevant metadata for the current task
-        """
-        # Default is empty dictionary
-        return dict()
-
-    def write_task_metadata(self, env):
-        """
-        Store any relevant task metadata that should be written when the simulation state is saved
-
-        Args:
-            env (Environment): environment instance
-        """
-        # Write to sim
-        env.scene.write_metadata(key="task", data=self.task_metadata)
-
-    def load_task_metadata(self, env):
-        """
-        Load relevant task metadata stored in the simulator
-
-        Args:
-            env (Environment): environment instance
-
-        Returns:
-            dict: Relevant metadata for the ucrrent task
-        """
-        # Load from sim
-        return env.scene.get_metadata(key="task")
 
     @abstractmethod
     def _create_termination_conditions(self):

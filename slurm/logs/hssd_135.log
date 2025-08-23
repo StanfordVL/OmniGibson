@@ -1,0 +1,917 @@
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+/home/cgokmen/miniconda3/envs/behavior/bin/python: No module named omnigibson.examples.scenes.import_hssd_scenes
+  0%|          | 0/1 [00:00<?, ?it/s][INFO] [omnigibson.simulator] ----- Starting OmniGibson. This will take 10-30 seconds... -----
+Starting kit application with the following args:  ['/opt/hpcaas/.mounts/fs-0565f60d669b6a2d3/home/cgokmen/miniconda3/envs/behavior/lib/python3.10/site-packages/isaacsim/exts/isaacsim.simulation_app/isaacsim/simulation_app/simulation_app.py', '/opt/hpcaas/.mounts/fs-0565f60d669b6a2d3/home/cgokmen/miniconda3/envs/behavior/lib/python3.10/site-packages/isaacsim/apps/omnigibson_4_5_0.kit', '--/app/tokens/exe-path=/opt/hpcaas/.mounts/fs-0565f60d669b6a2d3/home/cgokmen/miniconda3/envs/behavior/lib/python3.10/site-packages/omni', '--/persistent/app/viewport/displayOptions=3094', '--/rtx/materialDb/syncLoads=True', '--/rtx/hydra/materialSyncLoads=True', '--/omni.kit.plugin/syncUsdLoads=True', '--/app/renderer/resolution/width=1280', '--/app/renderer/resolution/height=720', '--/app/window/width=1440', '--/app/window/height=900', '--/renderer/multiGpu/enabled=False', '--/app/fastShutdown=True', '--/app/installSignalHandlers=0', '--ext-folder', '/opt/hpcaas/.mounts/fs-0565f60d669b6a2d3/home/cgokmen/miniconda3/envs/behavior/lib/python3.10/site-packages/isaacsim/exts', '--ext-folder', '/opt/hpcaas/.mounts/fs-0565f60d669b6a2d3/home/cgokmen/miniconda3/envs/behavior/lib/python3.10/site-packages/isaacsim/apps', '--/physics/cudaDevice=0', '--portable', '--no-window', '--/app/window/hideUi=1']
+Passing the following args to the base kit application:  ['135', '168']
+[Info] [carb] Logging to file: /opt/hpcaas/.mounts/fs-0565f60d669b6a2d3/home/cgokmen/miniconda3/envs/behavior/lib/python3.10/site-packages/omni/logs/Kit/OmniGibson/3.7/kit_20250823_001919.log
+2025-08-23 00:19:19 [0ms] [Warning] [omni.kit.app.plugin] No crash reporter present, dumps uploading isn't available.
+[7.240s] [ext: omni.kit.async_engine-0.0.1] startup
+[DEBUG] [asyncio] Using selector: EpollSelector
+[40.295s] [ext: omni.metrics.core-0.0.1] startup
+[40.310s] [ext: omni.client.lib-1.0.0] startup
+[41.274s] [ext: omni.blobkey-1.1.2] startup
+[41.291s] [ext: omni.stats-1.0.1] startup
+[41.315s] [ext: omni.datastore-0.0.0] startup
+[41.626s] [ext: omni.client-1.2.2] startup
+[41.913s] [ext: omni.ujitso.default-1.0.0] startup
+[41.941s] [ext: omni.hsscclient-1.1.1] startup
+2025-08-23 00:20:01 [41,502ms] [Warning] [omni.datastore] OmniHub is inaccessible
+2025-08-23 00:20:01 [42,261ms] [Error] [omni.datastore] Failed to acquire exclusive lock to data store (64>=64)
+2025-08-23 00:20:01 [42,261ms] [Error] [omni.datastore] Failed to create local file data store at '/opt/hpcaas/.mounts/fs-0565f60d669b6a2d3/home/cgokmen/miniconda3/envs/behavior/lib/python3.10/site-packages/omni/cache/DerivedDataCache'
+[42.765s] [ext: omni.gpu_foundation.shadercache.vulkan-1.0.0] startup
+[42.809s] [ext: omni.assets.plugins-0.0.0] startup
+[42.856s] [ext: omni.gpu_foundation-0.0.0] startup
+[43.177s] [ext: carb.windowing.plugins-1.0.0] startup
+2025-08-23 00:20:02 [42,742ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-08-23 00:20:02 [42,742ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+[43.213s] [ext: omni.kit.renderer.init-0.0.0] startup
+2025-08-23 00:20:02 [42,841ms] [Warning] [omni.platforminfo.plugin] failed to open the default display.  Can't verify X Server version.
+2025-08-23 00:20:02 [43,136ms] [Warning] [gpu.foundation.plugin] [ShaderCache]: 95 percent of the driver's shadercache size limit has been reached. Max size: 4000.00 MB, Currently used: 3926.30 MB. To avoid a persistent long startup or USD load time on every app launch, recommended to free space by deleting driver caches using one of the following methods:
+- By running the app with --/renderer/shadercache/driverDiskCache/flush=true (only once).
+- Or by manually deleting the following folders: '%LOCALAPPDATA%/NVIDIA/DXCache/Omniverse' (Windows-DX) or '$omni_cache/shaders/nv_shadercache' (Windows-Vulkan, Linux-Vulkan).
+Driver caches will be re-generated which may take a few minutes on the next launch.
+2025-08-23 00:20:08 [48,986ms] [Warning] [carb.cudainterop.plugin] CUDA_VISIBLE_DEVICES environment variable is set.
+2025-08-23 00:20:08 [48,986ms] [Warning] [carb.cudainterop.plugin] Note CUDA device enumeration and Omniverse device enumeration are different.
+2025-08-23 00:20:08 [48,986ms] [Warning] [carb.cudainterop.plugin] Setting CUDA_VISIBLE_DEVICES can lead to undesired behavior or crashes.
+
+|---------------------------------------------------------------------------------------------|
+| Driver Version: 570.172.08    | Graphics API: Vulkan
+|=============================================================================================|
+| GPU | Name                             | Active | LDA | GPU Memory | Vendor-ID | LUID       |
+|     |                                  |        |     |            | Device-ID | UUID       |
+|     |                                  |        |     |            | Bus-ID    |            |
+|---------------------------------------------------------------------------------------------|
+| 0   | NVIDIA A100-SXM4-80GB            | Yes: 0 |     | 147446  MB | 10de      | 0          |
+|     |                                  |        |     |            | 20b2      | 46da172e.. |
+|     |                                  |        |     |            | 10        |            |
+|=============================================================================================|
+| OS: 22.04.5 LTS (Jammy Jellyfish) ubuntu, Version: 22.04.5, Kernel: 6.8.0-1033-aws
+| Processor: Intel(R) Xeon(R) Platinum 8275CL CPU @ 3.00GHz
+| Cores: 48 | Logical Cores: 96
+|---------------------------------------------------------------------------------------------|
+| Total Memory (MB): 1148721 | Free Memory: 1062961
+| Total Page/Swap (MB): 0 | Free Page/Swap: 0
+|---------------------------------------------------------------------------------------------|
+2025-08-23 00:20:11 [51,872ms] [Warning] [gpu.foundation.plugin] ECC is enabled on physical device 0
+[54.099s] [ext: omni.kit.pipapi-0.0.0] startup
+[54.102s] [ext: omni.kit.pip_archive-0.0.0] startup
+[54.103s] [ext: omni.services.pip_archive-0.13.11] startup
+[54.103s] [ext: omni.materialx.libs-1.0.6] startup
+[54.232s] [ext: omni.kit.telemetry-0.5.1] startup
+[54.380s] [ext: omni.kit.loop-isaac-1.2.1] startup
+[54.448s] [ext: omni.kit.test-1.1.2] startup
+[55.676s] [ext: omni.usd.config-1.0.5] startup
+[56.702s] [ext: omni.gpucompute.plugins-0.0.0] startup
+[56.737s] [ext: omni.usd.libs-1.0.1] startup
+[58.565s] [ext: omni.mdl-55.0.1] startup
+[58.733s] [ext: omni.iray.libs-0.0.0] startup
+[59.376s] [ext: omni.mdl.neuraylib-0.2.10] startup
+[59.514s] [ext: omni.kit.usd.mdl-1.0.7] startup
+[61.185s] [ext: omni.pip.compute-1.4.5] startup
+[61.210s] [ext: omni.appwindow-1.1.9] startup
+2025-08-23 00:20:20 [60,771ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-08-23 00:20:20 [60,771ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+[61.266s] [ext: omni.kit.renderer.core-1.0.2] startup
+2025-08-23 00:20:20 [61,080ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-08-23 00:20:20 [61,080ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2025-08-23 00:20:20 [61,118ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-08-23 00:20:20 [61,118ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+[61.617s] [ext: omni.kit.renderer.capture-0.0.0] startup
+[62.242s] [ext: omni.kit.renderer.imgui-1.0.2] startup
+2025-08-23 00:20:21 [62,237ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-08-23 00:20:21 [62,238ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2025-08-23 00:20:21 [62,242ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-08-23 00:20:21 [62,242ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2025-08-23 00:20:21 [62,243ms] [Warning] [carb.windowing-glfw.plugin] GLFW initialization failed.
+2025-08-23 00:20:21 [62,244ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+[64.591s] [ext: omni.ui-2.26.5] startup
+[64.863s] [ext: omni.kit.mainwindow-1.0.3] startup
+[64.965s] [ext: carb.audio-0.1.0] startup
+[65.021s] [ext: omni.uiaudio-1.0.0] startup
+[65.088s] [ext: omni.kit.uiapp-0.0.0] startup
+[65.088s] [ext: omni.usd.schema.metrics.assembler-106.5.0] startup
+[65.810s] [ext: omni.usd.schema.omniscripting-1.0.0] startup
+[66.002s] [ext: omni.usd.schema.physx-106.5.7] startup
+[66.367s] [ext: omni.usd.schema.audio-0.0.0] startup
+[66.483s] [ext: omni.usd.schema.omnigraph-1.0.0] startup
+[66.646s] [ext: omni.usd.schema.anim-0.0.0] startup
+[67.096s] [ext: omni.usd.schema.semantics-0.0.0] startup
+[67.181s] [ext: omni.usd.schema.geospatial-0.0.0] startup
+[67.245s] [ext: omni.kit.window.popup_dialog-2.0.24] startup
+[67.394s] [ext: omni.resourcemonitor-107.0.0] startup
+[67.590s] [ext: omni.activity.core-1.0.1] startup
+[67.653s] [ext: omni.timeline-1.0.11] startup
+[67.742s] [ext: omni.usd_resolver-1.0.0] startup
+[67.925s] [ext: omni.kit.widget.nucleus_connector-1.1.10] startup
+[68.014s] [ext: usdrt.scenegraph-7.5.1] startup
+[68.902s] [ext: omni.usd.core-1.4.2] startup
+[68.943s] [ext: omni.kit.usd_undo-0.1.8] startup
+[68.991s] [ext: omni.graph.exec-0.9.4] startup
+[69.098s] [ext: omni.kit.actions.core-1.0.0] startup
+[69.260s] [ext: omni.kit.audiodeviceenum-1.0.1] startup
+[69.397s] [ext: omni.kit.exec.core-0.13.4] startup
+[69.861s] [ext: omni.kit.commands-1.4.9] startup
+[70.189s] [ext: omni.hydra.usdrt_delegate-7.5.1] startup
+[70.917s] [ext: omni.hydra.scene_delegate-0.3.3] startup
+[71.023s] [ext: omni.usd-1.12.4] startup
+[76.540s] [ext: omni.kit.asset_converter-2.8.5] startup
+[76.972s] [ext: isaacsim.robot.schema-3.1.2] startup
+[77.748s] [ext: omni.pip.cloud-1.1.7] startup
+[77.850s] [ext: omni.usd.schema.isaac-3.0.2] startup
+[77.850s] [ext: omni.usd.schema.flow-107.0.0] startup
+[77.931s] [ext: omni.inspect-1.0.1] startup
+[78.035s] [ext: omni.kit.notification_manager-1.0.9] startup
+[78.221s] [ext: omni.graph.core-2.181.8] startup
+[78.719s] [ext: isaacsim.core.deprecation_manager-0.2.2] startup
+[78.886s] [ext: omni.usd.schema.forcefield-106.5.7] startup
+[79.002s] [ext: omni.kit.menu.core-1.1.2] startup
+[79.035s] [ext: omni.kit.clipboard-1.0.5] startup
+[79.115s] [ext: omni.kit.widget.context_menu-1.2.4] startup
+[79.268s] [ext: omni.kit.widget.options_menu-1.1.6] startup
+[79.596s] [ext: omni.kit.helper.file_utils-0.1.9] startup
+[79.707s] [ext: omni.kit.widget.path_field-2.0.11] startup
+[79.874s] [ext: omni.kit.property.adapter.core-1.0.2] startup
+[80.582s] [ext: omni.kit.widget.options_button-1.0.3] startup
+[80.855s] [ext: omni.kit.widget.filebrowser-2.10.52] startup
+[81.084s] [ext: omni.kit.widget.browser_bar-2.0.10] startup
+[81.118s] [ext: omni.kit.property.adapter.fabric-1.0.3] startup
+[81.194s] [ext: omni.ui.scene-1.11.2] startup
+[81.268s] [ext: omni.kit.numpy.common-0.1.2] startup
+[81.424s] [ext: omni.kit.window.filepicker-2.11.7] startup
+[82.653s] [ext: omni.kit.usd.layers-2.2.0] startup
+[82.870s] [ext: omni.hydra.rtx.shadercache.vulkan-1.0.0] startup
+[83.018s] [ext: omni.kit.window.file_importer-1.1.14] startup
+[83.099s] [ext: omni.kit.menu.utils-1.7.7] startup
+[83.348s] [ext: omni.kit.context_menu-1.8.3] startup
+[83.464s] [ext: omni.ujitso.processor.texture-1.0.0] startup
+[83.569s] [ext: omni.index.libs-380600.1777.0] startup
+[83.569s] [ext: omni.volume-0.5.0] startup
+[83.772s] [ext: omni.ujitso.client-0.0.0] startup
+[83.840s] [ext: omni.index-1.0.1] startup
+[83.880s] [ext: omni.kit.hotkeys.core-1.3.10] startup
+[83.881s] [ext: omni.hydra.rtx-1.0.0] startup
+2025-08-23 00:20:43 [83,519ms] [Warning] [omni.log] Source: omni.hydra was already registered.
+[84.461s] [ext: omni.kit.material.library-1.5.15] startup
+[84.606s] [ext: omni.convexdecomposition-106.5.7] startup
+[84.772s] [ext: omni.kit.viewport.legacy_gizmos-1.0.16] startup
+[84.848s] [ext: omni.kit.raycast.query-1.0.5] startup
+[84.969s] [ext: omni.hydra.engine.stats-1.0.3] startup
+[85.033s] [ext: omni.kvdb-106.5.7] startup
+[85.253s] [ext: omni.usdphysics-106.5.7] startup
+[85.337s] [ext: omni.physx.foundation-106.5.7] startup
+[85.449s] [ext: omni.localcache-106.5.7] startup
+[85.580s] [ext: isaacsim.core.version-2.0.2] startup
+[85.633s] [ext: omni.physx.cooking-106.5.7] startup
+[85.769s] [ext: omni.kit.viewport.scene_camera_model-1.0.5] startup
+[85.821s] [ext: omni.kit.hydra_texture-1.4.0] startup
+[85.931s] [ext: omni.physx-106.5.7] startup
+[86.148s] [ext: omni.kit.window.drop_support-1.0.4] startup
+[86.191s] [ext: omni.kit.widget.viewport-107.0.7] startup
+[86.480s] [ext: omni.kit.viewport.registry-104.0.6] startup
+[86.529s] [ext: omni.physx.stageupdate-106.5.7] startup
+[86.801s] [ext: omni.kit.viewport.window-107.0.8] startup
+[87.118s] [ext: isaacsim.storage.native-1.0.6] startup
+[87.179s] [ext: omni.isaac.dynamic_control-1.3.16] startup
+2025-08-23 00:20:46 [86,925ms] [Warning] [omni.isaac.dynamic_control] omni.isaac.dynamic_control is deprecated as of Isaac Sim 4.5. No action is needed from end-users.
+[87.402s] [ext: omni.warp.core-1.5.0] startup
+[87.866s] [ext: omni.kit.widget.searchfield-1.1.8] startup
+[87.973s] [ext: omni.kit.window.file_exporter-1.0.31] startup
+[88.092s] [ext: omni.kit.widget.filter-1.1.4] startup
+[88.144s] [ext: isaacsim.core.utils-2.2.8] startup
+[88.297s] [ext: omni.kit.stage_template.core-1.1.22] startup
+[88.405s] [ext: omni.kit.widget.stage-2.11.6] startup
+[88.932s] [ext: omni.kit.widget.stage_icons-1.0.6] startup
+[89.002s] [ext: omni.kit.window.file-1.3.57] startup
+[89.206s] [ext: omni.kit.window.content_browser_registry-0.0.6] startup
+[89.285s] [ext: omni.kit.widget.searchable_combobox-1.0.6] startup
+[89.442s] [ext: omni.kit.window.stage-2.5.11] startup
+[89.728s] [ext: omni.kit.window.content_browser-2.10.3] startup
+[89.992s] [ext: omni.kit.usd.collect-2.2.22] startup
+[90.088s] [ext: omni.kit.widget.settings-1.2.2] startup
+[90.162s] [ext: omni.kit.menu.stage-1.2.5] startup
+[90.236s] [ext: omni.kit.widget.prompt-1.0.7] startup
+[90.331s] [ext: omni.kit.window.preferences-1.7.0] startup
+[90.744s] [ext: omni.kit.viewport.utility-1.0.18] startup
+[90.826s] [ext: omni.kit.xr.configurations-106.5.13] startup
+[90.826s] [ext: omni.kit.widget.zoombar-1.0.5] startup
+[90.927s] [ext: omni.rtx.window.settings-0.6.17] startup
+[91.121s] [ext: omni.kit.manipulator.camera-106.0.3] startup
+[91.268s] [ext: omni.kit.xr.core-106.5.13] startup
+[94.286s] [ext: omni.physics.tensors-106.5.7] startup
+[94.618s] [ext: omni.kit.browser.core-2.3.11] startup
+[94.888s] [ext: omni.kit.xr.ui.window.viewport-106.5.13] startup
+[95.160s] [ext: omni.physx.tensors-106.5.7] startup
+[95.220s] [ext: omni.kit.browser.folder.core-1.10.1] startup
+[96.043s] [ext: omni.kit.xr.scene_view.core-106.5.13] startup
+[96.135s] [ext: isaacsim.core.simulation_manager-0.3.3] startup
+[97.096s] [ext: omni.kit.tool.collect-2.2.16] startup
+[97.274s] [ext: omni.services.facilities.base-1.0.4] startup
+[97.443s] [ext: isaacsim.core.prims-0.3.7] startup
+[98.080s] [ext: isaacsim.asset.browser-1.3.4] startup
+[99.437s] [ext: omni.graph.tools-1.79.1] startup
+[DEBUG] [AutoNode] Defining data type 'any' as 'Any'
+[DEBUG] [AutoNode] Defining data type 'bool' as 'Bool' and array 'BoolArray
+[DEBUG] [AutoNode] Defining data type 'bundle' as 'Bundle'
+[DEBUG] [AutoNode] Defining data type 'colord[3]' as 'Color3d' and array 'Color3dArray
+[DEBUG] [AutoNode] Defining data type 'colorf[3]' as 'Color3f' and array 'Color3fArray
+[DEBUG] [AutoNode] Defining data type 'colorh[3]' as 'Color3h' and array 'Color3hArray
+[DEBUG] [AutoNode] Defining data type 'colord[4]' as 'Color4d' and array 'Color4dArray
+[DEBUG] [AutoNode] Defining data type 'colorf[4]' as 'Color4f' and array 'Color4fArray
+[DEBUG] [AutoNode] Defining data type 'colorh[4]' as 'Color4h' and array 'Color4hArray
+[DEBUG] [AutoNode] Defining data type 'double' as 'Double' and array 'DoubleArray
+[DEBUG] [AutoNode] Defining data type 'double[2]' as 'Double2' and array 'Double2Array
+[DEBUG] [AutoNode] Defining data type 'double[3]' as 'Double3' and array 'Double3Array
+[DEBUG] [AutoNode] Defining data type 'double[4]' as 'Double4' and array 'Double4Array
+[DEBUG] [AutoNode] Defining data type 'execution' as 'Execution'
+[DEBUG] [AutoNode] Defining data type 'float' as 'Float' and array 'FloatArray
+[DEBUG] [AutoNode] Defining data type 'float[2]' as 'Float2' and array 'Float2Array
+[DEBUG] [AutoNode] Defining data type 'float[3]' as 'Float3' and array 'Float3Array
+[DEBUG] [AutoNode] Defining data type 'float[4]' as 'Float4' and array 'Float4Array
+[DEBUG] [AutoNode] Defining data type 'frame[4]' as 'Frame' and array 'FrameArray
+[DEBUG] [AutoNode] Defining data type 'half' as 'Half' and array 'HalfArray
+[DEBUG] [AutoNode] Defining data type 'half[2]' as 'Half2' and array 'Half2Array
+[DEBUG] [AutoNode] Defining data type 'half[3]' as 'Half3' and array 'Half3Array
+[DEBUG] [AutoNode] Defining data type 'half[4]' as 'Half4' and array 'Half4Array
+[DEBUG] [AutoNode] Defining data type 'int' as 'Int' and array 'IntArray
+[DEBUG] [AutoNode] Defining data type 'int[2]' as 'Int2' and array 'Int2Array
+[DEBUG] [AutoNode] Defining data type 'int[3]' as 'Int3' and array 'Int3Array
+[DEBUG] [AutoNode] Defining data type 'int[4]' as 'Int4' and array 'Int4Array
+[DEBUG] [AutoNode] Defining data type 'int64' as 'Int64' and array 'Int64Array
+[DEBUG] [AutoNode] Defining data type 'matrixd[2]' as 'Matrix2d' and array 'Matrix2dArray
+[DEBUG] [AutoNode] Defining data type 'matrixd[3]' as 'Matrix3d' and array 'Matrix3dArray
+[DEBUG] [AutoNode] Defining data type 'matrixd[4]' as 'Matrix4d' and array 'Matrix4dArray
+[DEBUG] [AutoNode] Defining data type 'normald[3]' as 'Normal3d' and array 'Normal3dArray
+[DEBUG] [AutoNode] Defining data type 'normalf[3]' as 'Normal3f' and array 'Normal3fArray
+[DEBUG] [AutoNode] Defining data type 'normalh[3]' as 'Normal3h' and array 'Normal3hArray
+[DEBUG] [AutoNode] Defining data type 'objectId' as 'ObjectId' and array 'ObjectIdArray
+[DEBUG] [AutoNode] Defining data type 'path' as 'Path'
+[DEBUG] [AutoNode] Defining data type 'pointd[3]' as 'Point3d' and array 'Point3dArray
+[DEBUG] [AutoNode] Defining data type 'pointf[3]' as 'Point3f' and array 'Point3fArray
+[DEBUG] [AutoNode] Defining data type 'pointh[3]' as 'Point3h' and array 'Point3hArray
+[DEBUG] [AutoNode] Defining data type 'quatd[4]' as 'Quatd' and array 'QuatdArray
+[DEBUG] [AutoNode] Defining data type 'quatf[4]' as 'Quatf' and array 'QuatfArray
+[DEBUG] [AutoNode] Defining data type 'quath[4]' as 'Quath' and array 'QuathArray
+[DEBUG] [AutoNode] Defining data type 'string' as 'String'
+[DEBUG] [AutoNode] Defining data type 'target' as 'Target'
+[DEBUG] [AutoNode] Defining data type 'texcoordd[2]' as 'TexCoord2d' and array 'TexCoord2dArray
+[DEBUG] [AutoNode] Defining data type 'texcoordf[2]' as 'TexCoord2f' and array 'TexCoord2fArray
+[DEBUG] [AutoNode] Defining data type 'texcoordh[2]' as 'TexCoord2h' and array 'TexCoord2hArray
+[DEBUG] [AutoNode] Defining data type 'texcoordd[3]' as 'TexCoord3d' and array 'TexCoord3dArray
+[DEBUG] [AutoNode] Defining data type 'texcoordf[3]' as 'TexCoord3f' and array 'TexCoord3fArray
+[DEBUG] [AutoNode] Defining data type 'texcoordh[3]' as 'TexCoord3h' and array 'TexCoord3hArray
+[DEBUG] [AutoNode] Defining data type 'timecode' as 'Timecode' and array 'TimecodeArray
+[DEBUG] [AutoNode] Defining data type 'token' as 'Token' and array 'TokenArray
+[DEBUG] [AutoNode] Defining data type 'uchar' as 'UChar' and array 'UCharArray
+[DEBUG] [AutoNode] Defining data type 'uint' as 'UInt' and array 'UIntArray
+[DEBUG] [AutoNode] Defining data type 'uint64' as 'UInt64' and array 'UInt64Array
+[DEBUG] [AutoNode] Defining data type 'vectord[3]' as 'Vector3d' and array 'Vector3dArray
+[DEBUG] [AutoNode] Defining data type 'vectorf[3]' as 'Vector3f' and array 'Vector3fArray
+[DEBUG] [AutoNode] Defining data type 'vectorh[3]' as 'Vector3h' and array 'Vector3hArray
+[100.647s] [ext: omni.services.core-1.9.0] startup
+[105.059s] [ext: omni.kit.primitive.mesh-1.0.17] startup
+[105.257s] [ext: omni.kit.widget.highlight_label-1.0.3] startup
+[105.300s] [ext: omni.services.transport.server.base-1.1.1] startup
+[105.434s] [ext: omni.kit.stage_templates-1.2.6] startup
+[105.631s] [ext: omni.kit.window.property-1.11.5] startup
+[105.926s] [ext: omni.services.transport.server.zeroconf-1.0.9] startup
+[106.452s] [ext: isaacsim.core.api-4.2.16] startup
+[107.478s] [ext: omni.kit.property.adapter.usd-1.0.2] startup
+[107.647s] [ext: omni.kit.xr.advertise-106.5.13] startup
+[107.689s] [ext: omni.isaac.assets_check-0.3.9] startup
+2025-08-23 00:21:06 [107,260ms] [Warning] [omni.isaac.assets_check] omni.isaac.assets_check has been deprecated in favor of isaacsim.asset.browser. Please update your code accordingly.
+[107.727s] [ext: omni.graph-1.140.2] startup
+[108.625s] [ext: omni.kit.property.usd-4.2.16] startup
+[109.173s] [ext: omni.graph.action_core-1.1.7] startup
+[109.437s] [ext: omni.kit.menu.create-1.0.17] startup
+[109.613s] [ext: omni.kit.widget.text_editor-1.0.2] startup
+[109.696s] [ext: omni.graph.action_nodes-1.40.1] startup
+[109.976s] [ext: isaacsim.core.cloner-1.3.4] startup
+[110.047s] [ext: omni.kit.scripting-106.5.2] startup
+[110.597s] [ext: omni.graph.scriptnode-1.40.1] startup
+[110.765s] [ext: omni.graph.action-1.120.0] startup
+[110.898s] [ext: omni.isaac.cloner-1.0.2] startup
+2025-08-23 00:21:10 [110,580ms] [Warning] [omni.isaac.cloner] omni.isaac.cloner has been deprecated in favor of isaacsim.core.cloner. Please update your code accordingly.
+[111.049s] [ext: isaacsim.replicator.behavior-1.0.8] startup
+[111.246s] [ext: omni.ui_query-1.1.7] startup
+[111.499s] [ext: omni.kit.widget.graph-1.12.17] startup
+[112.226s] [ext: omni.kit.manipulator.viewport-107.0.1] startup
+[112.459s] [ext: omni.kit.ui_test-1.3.3] startup
+[112.740s] [ext: omni.kit.graph.delegate.default-1.2.2] startup
+[112.948s] [ext: omni.kit.window.extensions-1.4.25] startup
+[113.518s] [ext: omni.graph.visualization.nodes-2.1.1] startup
+[113.825s] [ext: omni.graph.image.core-0.6.0] startup
+[113.888s] [ext: omni.kit.graph.editor.core-1.5.3] startup
+[114.182s] [ext: isaacsim.gui.components-1.0.9] startup
+[114.442s] [ext: omni.kit.widget.material_preview-1.0.16] startup
+[114.571s] [ext: omni.kit.graph.usd.commands-1.3.1] startup
+[114.672s] [ext: omni.graph.image.nodes-1.3.0] startup
+[114.742s] [ext: isaacsim.robot_motion.lula-4.0.4] startup
+[115.007s] [ext: omni.kit.viewport.menubar.core-107.1.2] startup
+[115.588s] [ext: omni.kit.window.material_graph-1.8.19] startup
+[116.103s] [ext: omni.isaac.core-4.0.3] startup
+2025-08-23 00:21:15 [115,672ms] [Warning] [omni.isaac.core.physics_context.physics_context] omni.isaac.core.physics_context.physics_context has been deprecated in favor of isaacsim.core.api.physics_context.physics_context. Please update your code accordingly.
+2025-08-23 00:21:15 [115,703ms] [Warning] [omni.isaac.core.simulation_context.simulation_context] omni.isaac.core.simulation_context.simulation_context has been deprecated in favor of isaacsim.core.api.simulation_context.simulation_context. Please update your code accordingly.
+2025-08-23 00:21:15 [115,727ms] [Warning] [omni.isaac.core.world.world] omni.isaac.core.world.world has been deprecated in favor of isaacsim.core.api.world.world. Please update your code accordingly.
+2025-08-23 00:21:15 [115,727ms] [Warning] [omni.isaac.core] omni.isaac.core has been deprecated in favor of isaacsim.core.api. Please update your code accordingly.
+[116.195s] [ext: isaacsim.robot_motion.motion_generation-8.0.6] startup
+[116.417s] [ext: omni.graph.nodes-1.162.1] startup
+[116.834s] [ext: omni.syntheticdata-0.6.10] startup
+[117.100s] [ext: omni.kit.xr.system.cloudxr-106.5.13] startup
+[117.333s] [ext: isaacsim.robot_motion.lula_test_widget-1.0.5] startup
+[117.495s] [ext: omni.kit.xr.telemetry-106.5.13] startup
+[117.656s] [ext: omni.kit.data2ui.core-1.0.27] startup
+[117.824s] [ext: omni.kit.xr.ui.window.profile-106.5.13] startup
+[118.534s] [ext: omni.kit.data2ui.usd-1.0.27] startup
+[119.218s] [ext: omni.warp-1.5.0] startup
+[119.344s] [ext: omni.no_code_ui.bundle-1.0.27] startup
+[119.346s] [ext: omni.replicator.core-1.11.35] startup
+Warp 1.5.0 initialized:
+   CUDA Toolkit 11.8, Driver 12.8
+   Devices:
+     "cpu"      : "x86_64"
+     "cuda:0"   : "NVIDIA A100-SXM4-80GB" (79 GiB, sm_80, mempool enabled)
+   Kernel cache:
+     /home/cgokmen/.cache/warp/1.5.0
+2025-08-23 00:21:19 [120,258ms] [Warning] [omni.replicator.core.scripts.extension] No material configuration file, adding configuration to material settings directly.
+[120.731s] [ext: omni.isaac.lula-4.0.2] startup
+2025-08-23 00:21:19 [120,281ms] [Warning] [omni.isaac.lula] omni.isaac.lula has been deprecated in favor of isaacsim.robot_motion.lula. Please update your code accordingly.
+[120.748s] [ext: omni.isaac.lula_test_widget-1.0.2] startup
+2025-08-23 00:21:19 [120,298ms] [Warning] [omni.isaac.lula_test_widget] omni.isaac.lula_test_widget has been deprecated in favor of isaacsim.robot_motion.lula_test_widget. Please update your code accordingly.
+[120.766s] [ext: omni.kit.xr.profile.common-106.5.13] startup
+[120.916s] [ext: omni.kit.xr.scene_view.utils-106.5.13] startup
+[130.210s] [ext: isaacsim.core.nodes-2.1.4] startup
+[130.344s] [ext: isaacsim.robot.surface_gripper-2.0.6] startup
+[130.406s] [ext: omni.kit.xr.system.openxr-106.5.13] startup
+[130.708s] [ext: omni.kit.xr.system.steamvr-106.5.13] startup
+[130.799s] [ext: omni.kit.xr.ui.stage-106.5.13] startup
+[131.256s] [ext: omni.kit.selection-0.1.5] startup
+[131.301s] [ext: isaacsim.robot.manipulators-3.0.4] startup
+[131.469s] [ext: omni.isaac.core_nodes-2.0.2] startup
+2025-08-23 00:21:30 [131,065ms] [Warning] [omni.isaac.core_nodes] omni.isaac.core_nodes has been deprecated in favor of isaacsim.core.nodes. Please update your code accordingly.
+[131.532s] [ext: omni.anim.curve.core-1.2.0] startup
+[131.813s] [ext: omni.kit.xr.profile.vr-106.5.13] startup
+[131.902s] [ext: isaacsim.gui.menu-2.0.9] startup
+[132.135s] [ext: omni.isaac.manipulators-3.0.3] startup
+2025-08-23 00:21:31 [131,691ms] [Warning] [omni.isaac.manipulators] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,712ms] [Warning] [omni.isaac.manipulators.controllers] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,723ms] [Warning] [omni.isaac.manipulators.controllers.pick_place_controller] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,756ms] [Warning] [omni.isaac.manipulators.controllers.stacking_controller] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,776ms] [Warning] [omni.isaac.manipulators.grippers] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,782ms] [Warning] [omni.isaac.manipulators.grippers.gripper] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,791ms] [Warning] [omni.isaac.manipulators.grippers.parallel_gripper] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,799ms] [Warning] [omni.isaac.manipulators.grippers.surface_gripper] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,811ms] [Warning] [omni.isaac.manipulators.manipulators] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+2025-08-23 00:21:31 [131,819ms] [Warning] [omni.isaac.manipulators.manipulators.single_manipulator] omni.isaac.manipulators has been deprecated in favor of isaacsim.robot.manipulators. Please update your code accordingly.
+[132.286s] [ext: isaacsim.sensors.physics-0.3.5] startup
+[132.401s] [ext: omni.isaac.menu-1.0.2] startup
+2025-08-23 00:21:31 [131,956ms] [Warning] [omni.isaac.menu] omni.isaac.menu has been deprecated in favor of isaacsim.gui.menu. Please update your code accordingly.
+[132.423s] [ext: omni.isaac.motion_generation-8.0.2] startup
+2025-08-23 00:21:31 [131,985ms] [Warning] [omni.isaac.motion_generation] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [131,998ms] [Warning] [omni.isaac.motion_generation.articulation_kinematics_solver] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,011ms] [Warning] [omni.isaac.motion_generation.articulation_motion_policy] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,024ms] [Warning] [omni.isaac.motion_generation.articulation_trajectory] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,037ms] [Warning] [omni.isaac.motion_generation.kinematics_interface] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,057ms] [Warning] [omni.isaac.motion_generation.lula] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,067ms] [Warning] [omni.isaac.motion_generation.lula.kinematics] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,078ms] [Warning] [omni.isaac.motion_generation.lula.motion_policies] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,088ms] [Warning] [omni.isaac.motion_generation.lula.path_planners] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,099ms] [Warning] [omni.isaac.motion_generation.lula.trajectory_generator] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,112ms] [Warning] [omni.isaac.motion_generation.motion_policy_controller] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,124ms] [Warning] [omni.isaac.motion_generation.motion_policy_interface] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,136ms] [Warning] [omni.isaac.motion_generation.path_planner_visualizer] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,145ms] [Warning] [omni.isaac.motion_generation.path_planning_interface] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,154ms] [Warning] [omni.isaac.motion_generation.trajectory] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+2025-08-23 00:21:31 [132,164ms] [Warning] [omni.isaac.motion_generation.world_interface] omni.isaac.motion_generation has been deprecated in favor of isaacsim.robot_motion.motion_generation. Please update your code accordingly.
+[132.645s] [ext: isaacsim.robot.policy.examples-4.0.3] startup
+[132.770s] [ext: omni.sensors.nv.common-2.5.0-coreapi] startup
+[133.427s] [ext: omni.isaac.nucleus-1.0.3] startup
+2025-08-23 00:21:32 [132,978ms] [Warning] [omni.isaac.nucleus] omni.isaac.nucleus has been deprecated in favor of isaacsim.storage.native. Please update your code accordingly.
+2025-08-23 00:21:32 [132,984ms] [Warning] [omni.isaac.nucleus.nucleus] omni.isaac.nucleus.nucleus has been deprecated in favor of isaacsim.storage.native. Please update your code accordingly.
+[133.451s] [ext: omni.isaac.quadruped-3.0.2] startup
+2025-08-23 00:21:32 [133,015ms] [Warning] [omni.isaac.quadruped] omni.isaac.quadruped has been deprecated in favor of isaacsim.robot.policy.examples. Please update your code accordingly.
+[133.482s] [ext: omni.sensors.nv.materials-1.4.0-coreapi] startup
+[133.640s] [ext: isaacsim.sensors.camera-0.2.9] startup
+[133.715s] [ext: omni.sensors.nv.wpm-2.4.0-coreapi] startup
+[133.826s] [ext: omni.sensors.nv.lidar-2.6.3-coreapi] startup
+[133.904s] [ext: isaacsim.util.debug_draw-2.0.2] startup
+[133.994s] [ext: omni.sensors.tiled-0.0.6] startup
+[134.057s] [ext: omni.sensors.nv.radar-2.6.1-coreapi] startup
+[134.164s] [ext: omni.sensors.nv.ids-1.4.0-coreapi] startup
+[134.219s] [ext: isaacsim.sensors.physx-2.2.4] startup
+[134.346s] [ext: isaacsim.robot.manipulators.examples-1.0.3] startup
+[134.381s] [ext: isaacsim.sensors.rtx-13.6.3] startup
+[134.591s] [ext: omni.isaac.range_sensor-4.0.2] startup
+[134.790s] [ext: isaacsim.cortex.framework-1.0.2] startup
+[134.853s] [ext: omni.isaac.sensor-13.0.3] startup
+2025-08-23 00:21:33 [134,405ms] [Warning] [omni.isaac.sensor] omni.isaac.sensor has been deprecated in favor of isaacsim.sensors.camera, isaacsim.sensors.physics, isaacsim.sensors.physx, and isaacsim.sensors.rtx. Please update your code accordingly.
+2025-08-23 00:21:34 [134,423ms] [Warning] [omni.isaac.sensor.camera] omni.isaac.sensor.camera has been deprecated in favor of isaacsim.sensors.camera.camera. Please update your code accordingly.
+2025-08-23 00:21:34 [134,432ms] [Warning] [omni.isaac.sensor.camera_view] omni.isaac.sensor.camera_view has been deprecated in favor of isaacsim.sensors.camera.camera_view. Please update your code accordingly.
+2025-08-23 00:21:34 [134,442ms] [Warning] [omni.isaac.sensor.commands] omni.isaac.sensor.commands has been deprecated in favor of isaacsim.sensors.physics.commands, isaacsim.sensors.physx.commands, and isaacsim.sensors.rtx.commands. Please update your code accordingly.
+2025-08-23 00:21:34 [134,453ms] [Warning] [omni.isaac.sensor.contact_sensor] omni.isaac.sensor.contact_sensor has been deprecated in favor of isaacsim.sensors.physics.contact_sensor. Please update your code accordingly.
+2025-08-23 00:21:34 [134,460ms] [Warning] [omni.isaac.sensor.imu_sensor] omni.isaac.sensor.imu_sensor has been deprecated in favor of isaacsim.sensors.physics.imu_sensor. Please update your code accordingly.
+2025-08-23 00:21:34 [134,467ms] [Warning] [omni.isaac.sensor.lidar_rtx] omni.isaac.sensor.lidar_rtx has been deprecated in favor of isaacsim.sensors.rtx.lidar_rtx. Please update your code accordingly.
+2025-08-23 00:21:34 [134,477ms] [Warning] [omni.isaac.sensor.rotating_lidar_physX] omni.isaac.sensor.imu_sensor has been deprecated in favor of isaacsim.sensors.physix.rotating_lidar_physX. Please update your code accordingly.
+2025-08-23 00:21:34 [134,513ms] [Warning] [omni.isaac.sensor.scripts.samples.contact_sensor] omni.isaac.sensor.scripts.samples.contact_sensor has been deprecated in favor of isaacsim.sensors.physics.scripts.samples.contact_sensor. Please update your code accordingly.
+2025-08-23 00:21:34 [134,519ms] [Warning] [omni.isaac.sensor.scripts.samples.imu_sensor] omni.isaac.sensor.scripts.samples.imu_sensor has been deprecated in favor of isaacsim.sensors.physics.scripts.samples.imu_sensor. Please update your code accordingly.
+2025-08-23 00:21:34 [134,523ms] [Warning] [omni.isaac.sensor.scripts.samples.lightbeam_sensor] omni.isaac.sensor.scripts.samples.lightbeam_sensor has been deprecated in favor of isaacsim.sensors.physx.scripts.samples.lightbeam_sensor. Please update your code accordingly.
+[134.990s] [ext: omni.isaac.surface_gripper-2.0.2] startup
+2025-08-23 00:21:34 [134,539ms] [Warning] [omni.isaac.surface_gripper] omni.isaac.surface_gripper has been deprecated in favor of isaacsim.robot.surface_gripper. Please update your code accordingly.
+[135.006s] [ext: omni.kit.manipulator.transform-106.0.1] startup
+[135.172s] [ext: omni.isaac.cortex-1.0.2] startup
+2025-08-23 00:21:34 [134,715ms] [Warning] [omni.isaac.cortex] omni.isaac.cortex has been deprecated in favor of isaacsim.cortex.framework. Please update your code accordingly.
+[135.182s] [ext: omni.kit.widget.toolbar-1.7.3] startup
+[135.412s] [ext: omni.isaac.universal_robots-1.0.2] startup
+2025-08-23 00:21:34 [134,951ms] [Warning] [omni.isaac.universal_robots] omni.isaac.universal_robots has been deprecated in favor of isaacsim.robot.manipulators.examples.universal_robots. Please update your code accordingly.
+2025-08-23 00:21:34 [134,962ms] [Warning] [omni.isaac.universal_robots.kinematics_solver] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.universal_robots. Please update your code accordingly.
+2025-08-23 00:21:34 [134,991ms] [Warning] [omni.isaac.universal_robots.ur10] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.universal_robots. Please update your code accordingly.
+[135.458s] [ext: isaacsim.cortex.behaviors-2.0.3] startup
+[135.493s] [ext: omni.kit.manipulator.tool.snap-1.5.12] startup
+[135.677s] [ext: omni.kit.manipulator.selector-1.1.1] startup
+[135.697s] [ext: omni.isaac.utils-2.0.2] startup
+[135.729s] [ext: omni.isaac.cortex.sample_behaviors-2.0.2] startup
+2025-08-23 00:21:34 [135,291ms] [Warning] [omni.isaac.cortex.sample_behaviors] omni.isaac.cortex.sample_behaviors has been deprecated in favor of isaacsim.cortex.behaviors. Please update your code accordingly.
+[135.757s] [ext: omni.kit.viewport.manipulator.transform-107.0.4] startup
+[135.838s] [ext: omni.graph.ui_nodes-1.40.1] startup
+[135.902s] [ext: omni.fabric.commands-1.1.5] startup
+[135.951s] [ext: omni.kit.manipulator.prim.core-107.0.7] startup
+[136.048s] [ext: omni.kit.property.camera-1.0.9] startup
+[136.072s] [ext: omni.kit.property.geometry-1.3.3] startup
+[136.111s] [ext: omni.kit.property.light-1.0.11] startup
+[136.153s] [ext: omni.kit.manipulator.prim.fabric-107.0.4] startup
+[136.172s] [ext: omni.kit.manipulator.prim.usd-107.0.3] startup
+[136.195s] [ext: omni.kit.property.material-1.10.17] startup
+[136.405s] [ext: omni.kit.viewport.actions-107.0.0] startup
+[136.446s] [ext: omni.debugdraw-0.1.3] startup
+[136.532s] [ext: omni.kit.manipulator.prim-107.0.0] startup
+[136.533s] [ext: omni.kit.manipulator.selection-106.0.1] startup
+[136.575s] [ext: omni.kit.viewport.menubar.display-107.0.3] startup
+[136.631s] [ext: omni.kit.widget.layers-1.8.2] startup
+[136.845s] [ext: omni.hydra.scene_api-0.1.2] startup
+[136.918s] [ext: omni.kit.property.render-1.1.3] startup
+[136.961s] [ext: omni.physx.commands-106.5.7] startup
+[137.014s] [ext: omni.usdphysics.ui-106.5.7] startup
+[137.185s] [ext: omni.kit.property.transform-1.5.10] startup
+[137.255s] [ext: omni.kit.property.audio-1.0.16] startup
+[137.340s] [ext: isaacsim.gui.property-1.0.4] startup
+[137.387s] [ext: omni.physx.ui-106.5.7] startup
+[137.596s] [ext: omni.kit.property.bundle-1.3.2] startup
+[137.620s] [ext: omni.kit.property.isaac-1.0.2] startup
+2025-08-23 00:21:36 [137,164ms] [Warning] [omni.kit.property.isaac] omni.kit.property.isaac has been deprecated in favor of isaacsim.gui.property. Please update your code accordingly.
+2025-08-23 00:21:36 [137,167ms] [Warning] [omni.kit.property.isaac.widgets] omni.kit.property.isaac.widgets has been deprecated in favor of isaacsim.gui.property.widgets. Please update your code accordingly.
+[137.634s] [ext: omni.kit.property.physx-106.5.7] startup
+[138.082s] [ext: omni.physx.demos-106.5.7] startup
+[138.462s] [ext: omni.kit.viewport.menubar.camera-107.0.2] startup
+[138.557s] [ext: omni.kit.viewport.menubar.lighting-106.0.2] startup
+[138.594s] [ext: omni.kit.viewport.menubar.render-107.0.8] startup
+[138.637s] [ext: omni.physx.vehicle-106.5.7] startup
+[138.828s] [ext: omni.kit.viewport.menubar.settings-107.0.3] startup
+[138.897s] [ext: omni.kit.window.console-0.2.14] startup
+[138.963s] [ext: omni.kit.window.toolbar-1.6.2] startup
+[139.000s] [ext: omni.physx.camera-106.5.7] startup
+[139.103s] [ext: omni.physx.cct-106.5.7] startup
+[139.192s] [ext: omni.physx.graph-106.5.7] startup
+[139.359s] [ext: omni.physx.supportui-106.5.7] startup
+[139.547s] [ext: isaacsim.replicator.writers-1.0.1] startup
+[139.726s] [ext: omni.physx.telemetry-106.5.7] startup
+[139.775s] [ext: omni.isaac.version-2.0.2] startup
+2025-08-23 00:21:38 [139,316ms] [Warning] [omni.isaac.version] omni.isaac.version has been deprecated in favor of isaacsim.core.version. Please update your code accordingly.
+[139.783s] [ext: isaacsim.robot.wheeled_robots-4.0.3] startup
+[139.936s] [ext: isaacsim.replicator.domain_randomization-1.0.2] startup
+[140.007s] [ext: isaacsim.replicator.examples-1.1.2] startup
+[140.034s] [ext: omni.kit.window.status_bar-0.1.7] startup
+[140.174s] [ext: omni.physx.bundle-106.5.7] startup
+[140.176s] [ext: omni.usd.metrics.assembler-106.5.0] startup
+[140.381s] [ext: omni.isaac.wheeled_robots-3.0.3] startup
+2025-08-23 00:21:39 [139,920ms] [Warning] [omni.isaac.wheeled_robots] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,930ms] [Warning] [omni.isaac.wheeled_robots.controllers] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,935ms] [Warning] [omni.isaac.wheeled_robots.controllers.ackermann_controller] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,946ms] [Warning] [omni.isaac.wheeled_robots.controllers.differential_controller] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,954ms] [Warning] [omni.isaac.wheeled_robots.controllers.holonomic_controller] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,961ms] [Warning] [omni.isaac.wheeled_robots.controllers.quintic_path_planner] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,970ms] [Warning] [omni.isaac.wheeled_robots.controllers.stanley_control] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,977ms] [Warning] [omni.isaac.wheeled_robots.controllers.wheel_base_pose_controller] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,986ms] [Warning] [omni.isaac.wheeled_robots.impl] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [139,997ms] [Warning] [omni.isaac.wheeled_robots.robots] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [140,004ms] [Warning] [omni.isaac.wheeled_robots.robots.holonomic_robot_usd_setup] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+2025-08-23 00:21:39 [140,004ms] [Warning] [omni.isaac.wheeled_robots.robots.wheeled_robot] omni.isaac.wheeled_robots has been deprecated in favor of isaacsim.robot.wheeled_robots. Please update your code accordingly.
+[140.471s] [ext: omni.isaac.franka-1.0.2] startup
+2025-08-23 00:21:39 [140,009ms] [Warning] [omni.isaac.franka] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.franka. Please update your code accordingly.
+2025-08-23 00:21:39 [140,013ms] [Warning] [omni.isaac.franka.franka] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.franka. Please update your code accordingly.
+2025-08-23 00:21:39 [140,022ms] [Warning] [omni.isaac.franka.kinematics_solver] omni.isaac.franka has been deprecated in favor of isaacsim.robot.manipulators.examples.franka. Please update your code accordingly.
+[140.490s] [ext: omni.replicator.isaac-2.0.3] startup
+2025-08-23 00:21:39 [140,031ms] [Warning] [omni.replicator.isaac] omni.replicator.isaac has been deprecated in favor of isaacsim.replicator.domain_randomization, isaacsim.replicator.examples, isaacsim.replicator.writers. Please update your code accordingly.
+[140.500s] [ext: omni.replicator.replicator_yaml-2.0.10] startup
+[140.534s] [ext: omni.rtx.settings.core-0.6.3] startup
+[140.584s] [ext: omni.usd.metrics.assembler.ui-106.5.0] startup
+[140.663s] [ext: omni.kit.tool.asset_importer-2.12.3] startup
+[140.769s] [ext: isaacsim.app.about-2.0.7] startup
+[140.793s] [ext: semantics.schema.editor-0.3.10] startup
+[140.840s] [ext: isaacsim.examples.browser-0.1.8] startup
+[140.889s] [ext: isaacsim.simulation_app-2.4.2] startup
+[140.892s] [ext: semantics.schema.property-1.0.5] startup
+[140.925s] [ext: isaacsim.asset.importer.mjcf-2.3.7] startup
+[141.098s] [ext: omni.isaac.window.about-2.0.2] startup
+2025-08-23 00:21:40 [140,654ms] [Warning] [omni.isaac.window.about] omni.isaac.window.about has been deprecated in favor of isaacsim.app.about. Please update your code accordingly.
+2025-08-23 00:21:40 [140,659ms] [Warning] [omni.isaac.window.about.about] omni.isaac.window.about.about has been deprecated in favor of isaacsim.app.about.about. Please update your code accordingly.
+[141.126s] [ext: omni.kit.ui.actions-1.0.2] startup
+[141.163s] [ext: isaacsim.asset.importer.urdf-2.3.14] startup
+[141.336s] [ext: omni.isaac.kit-2.0.3] startup
+2025-08-23 00:21:40 [140,879ms] [Warning] [omni.isaac.kit] omni.isaac.kit has been deprecated in favor of isaacsim.simulation_app. Please update your code accordingly.
+[141.346s] [ext: omni.isaac.asset_browser-1.0.2] startup
+2025-08-23 00:21:40 [140,895ms] [Warning] [omni.isaac.asset_browser] omni.isaac.asset_browser has been deprecated in favor of isaacsim.asset.browser. Please update your code accordingly.
+[141.362s] [ext: isaacsim.core.throttling-2.0.2] startup
+[141.421s] [ext: omni.flowusd-106.5.2] startup
+2025-08-23 00:21:40 [141,048ms] [Warning] [omni.stageupdate.plugin] Deprecated: direct use of IStageUpdate callbacks is deprecated. Use IStageUpdate::getStageUpdate instead.
+[141.549s] [ext: omni.kit.menu.common-1.1.9] startup
+[141.571s] [ext: isaacsim.exp.base-4.5.0] startup
+[141.573s] [ext: omnigibson_4_5_0-1.5.0] startup
+[141.586s] Simulation App Starting
+2025-08-23 00:21:41 [141,847ms] [Warning] [omni.kvdb.plugin] Disabling key-value database because another kit process is locking it
+2025-08-23 00:21:41 [141,877ms] [Warning] [carb.audio.device] audio device is misconfigured or broken {deviceIndex = 0, name = 'default'} (The device is likely misconfigured, check your $HOME/.asoundrc)
+2025-08-23 00:21:41 [141,877ms] [Warning] [carb.audio.output] failed to retrieve the capabilities for device 0 {result = eDeviceLost (2)}
+2025-08-23 00:21:41 [141,877ms] [Warning] [carb.audio.context] failed to set the requested output during context creation.  Using a null streamer instead {result = eDeviceLost (2)}
+[142.477s] app ready
+2025-08-23 00:21:42 [143,085ms] [Warning] [rtx.neuraylib.plugin] [IRAY:RENDER]   1.1   IRAY   rend warn : CUDA device 0 (NVIDIA A100-SXM4-80GB): ECC is enabled, this will reduce rendering performance (it is strongly recommended to disable ECC with iray)
+2025-08-23 00:21:42 [143,134ms] [Warning] [rtx.scenedb.plugin] SceneDbContext : TLAS limit buffer size 2705217792
+2025-08-23 00:21:42 [143,136ms] [Warning] [rtx.scenedb.plugin] SceneDbContext : TLAS limit : valid true, within: false
+2025-08-23 00:26:40 [440,575ms] [Warning] [omni.usd-abi.plugin] No setting was found for '/rtx-defaults-transient/meshlights/forceDisable'
+2025-08-23 00:26:44 [444,675ms] [Warning] [omni.usd-abi.plugin] No setting was found for '/rtx-defaults/post/dlss/execMode'
+2025-08-23 00:32:16 [777,292ms] [Warning] [rtx.postprocessing.plugin] DLSS-RR is not supported in the current build due to some known bugs with this GPU: NVIDIA A100-SXM4-80GB.Note that RTX Real-Time raytracing mode will not be able to denoise the output correctly.
+[778.285s] Simulation App Startup Complete
+2025-08-23 00:33:38 [859,383ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2025-08-23 00:33:58 [879,037ms] [Warning] [omni.syntheticdata.plugin] OgnSdPostRenderVarToHost : rendervar copy from texture directly to host buffer is counter-performant. Please use copy from texture to device buffer first.
+2025-08-23 00:33:58 [879,166ms] [Warning] [omni.fabric.plugin] removePath called on non-existent path /Render/OmniverseKit/HydraTextures/Replicator/PostRender/SDGPipeline/Replicator_GpuInteropEntry 
+
+
+                   ____________
+                  /          / \
+                 /          / /__
+                /          / /  /\
+               /__________/ /__/  \
+               \   _____  \ \__\  /
+                \  \  / \  \ \_/ /
+                 \  \/___\  \   /
+                  \__________\_/  
+       ___                  _  ____ _ _                     
+      / _ \ _ __ ___  _ __ (_)/ ___(_) |__  ___  ___  _ __  
+     | | | | '_ ` _ \| '_ \| | |  _| | '_ \/ __|/ _ \| '_ \ 
+     | |_| | | | | | | | | | | |_| | | |_) \__ \ (_) | | | |
+      \___/|_| |_| |_|_| |_|_|\____|_|_.__/|___/\___/|_| |_|
+
+[INFO] [omnigibson.simulator] ---------- Welcome to OmniGibson! ----------
+2025-08-23 00:34:06 [886,757ms] [Warning] [omni.syntheticdata.plugin] SdRenderVarPtr missing valid input renderVar LdrColorSDhost
+2025-08-23 00:34:06 [886,827ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+[INFO] [omnigibson.simulator] Imported scene 0.
+[WARNING] [omnigibson.objects.dataset_object] Category stages not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:09 [889,933ms] [Warning] [omnigibson.objects.dataset_object] Category stages not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category bin not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:10 [890,962ms] [Warning] [omnigibson.objects.dataset_object] Category bin not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category clock not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:15 [896,295ms] [Warning] [omnigibson.objects.dataset_object] Category clock not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category container not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:16 [897,007ms] [Warning] [omnigibson.objects.dataset_object] Category container not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj vase_3. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj vase_3 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+2025-08-23 00:34:17 [897,443ms] [Warning] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj vase_3. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj vase_3 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+[WARNING] [omnigibson.objects.stateful_object] State Filled is incompatible with obj vase_3. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:34:17 [897,443ms] [Warning] [omnigibson.objects.stateful_object] State Filled is incompatible with obj vase_3. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.objects.stateful_object] State Contains is incompatible with obj vase_3. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:34:17 [897,444ms] [Warning] [omnigibson.objects.stateful_object] State Contains is incompatible with obj vase_3. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.objects.dataset_object] Category knife_holder not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:17 [897,930ms] [Warning] [omnigibson.objects.dataset_object] Category knife_holder not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/tv_5/Looks/TV_Screen2 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:17 [898,053ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/tv_5/Looks/TV_Screen2 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.dataset_object] Category tv not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:18 [898,626ms] [Warning] [omnigibson.objects.dataset_object] Category tv not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category clock not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:19 [899,778ms] [Warning] [omnigibson.objects.dataset_object] Category clock not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/decoration_7/Looks/Oak_Natur with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:19 [900,330ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/decoration_7/Looks/Oak_Natur with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.dataset_object] Category decoration not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:21 [901,445ms] [Warning] [omnigibson.objects.dataset_object] Category decoration not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.stateful_object] Ability 'particleSink' is incompatible with obj shower_8, because requirement ParticleRequirement was not met. Reason: Particle systems are not enabled when GPU dynamics is off.
+2025-08-23 00:34:21 [902,213ms] [Warning] [omnigibson.objects.stateful_object] Ability 'particleSink' is incompatible with obj shower_8, because requirement ParticleRequirement was not met. Reason: Particle systems are not enabled when GPU dynamics is off.
+[WARNING] [omnigibson.objects.dataset_object] Category cup not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:23 [903,759ms] [Warning] [omnigibson.objects.dataset_object] Category cup not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category food_tray not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:24 [905,245ms] [Warning] [omnigibson.objects.dataset_object] Category food_tray not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category table not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:25 [905,782ms] [Warning] [omnigibson.objects.dataset_object] Category table not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category plant not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:28 [909,181ms] [Warning] [omnigibson.objects.dataset_object] Category plant not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_17. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:34:29 [909,868ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_17. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.stateful_object] State ToggledOn is incompatible with obj toaster_18. Reason: LinkBasedStateMixin ToggledOn requires meta link with type ['togglebutton'] for obj toaster_18 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+2025-08-23 00:34:30 [911,239ms] [Warning] [omnigibson.objects.stateful_object] State ToggledOn is incompatible with obj toaster_18. Reason: LinkBasedStateMixin ToggledOn requires meta link with type ['togglebutton'] for obj toaster_18 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+[WARNING] [omnigibson.objects.stateful_object] State HeatSourceOrSink is incompatible with obj toaster_18. Reason: HeatSourceOrSink has requires_toggled_on but obj has no ToggledOn state!
+2025-08-23 00:34:30 [911,239ms] [Warning] [omnigibson.objects.stateful_object] State HeatSourceOrSink is incompatible with obj toaster_18. Reason: HeatSourceOrSink has requires_toggled_on but obj has no ToggledOn state!
+[WARNING] [omnigibson.objects.dataset_object] Category pot not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:31 [912,074ms] [Warning] [omnigibson.objects.dataset_object] Category pot not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category kitchen_appliance not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:32 [913,380ms] [Warning] [omnigibson.objects.dataset_object] Category kitchen_appliance not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_21/Looks/fabric with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:33 [913,748ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_21/Looks/fabric with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_21. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:34:33 [914,160ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_21. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/carpet_22/Looks/Fabric_rug with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:33 [914,308ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/carpet_22/Looks/Fabric_rug with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj carpet_22. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:34:33 [914,361ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj carpet_22. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.dataset_object] Category kitchen_appliance not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:35 [915,528ms] [Warning] [omnigibson.objects.dataset_object] Category kitchen_appliance not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category decoration not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:36 [917,135ms] [Warning] [omnigibson.objects.dataset_object] Category decoration not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category decoration not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:38 [918,705ms] [Warning] [omnigibson.objects.dataset_object] Category decoration not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category clock not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:40 [920,714ms] [Warning] [omnigibson.objects.dataset_object] Category clock not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category cabinet not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:42 [922,719ms] [Warning] [omnigibson.objects.dataset_object] Category cabinet not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj plate_32. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj plate_32 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+2025-08-23 00:34:44 [925,289ms] [Warning] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj plate_32. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj plate_32 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+[WARNING] [omnigibson.objects.stateful_object] State Filled is incompatible with obj plate_32. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:34:44 [925,289ms] [Warning] [omnigibson.objects.stateful_object] State Filled is incompatible with obj plate_32. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.objects.stateful_object] State Contains is incompatible with obj plate_32. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:34:44 [925,289ms] [Warning] [omnigibson.objects.stateful_object] State Contains is incompatible with obj plate_32. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/carpet_33/Looks/Shader1 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:45 [925,597ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/carpet_33/Looks/Shader1 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj carpet_33. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:34:45 [925,637ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj carpet_33. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:46 [926,887ms] [Warning] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category phone not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:46 [927,281ms] [Warning] [omnigibson.objects.dataset_object] Category phone not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category cabinet not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:47 [928,403ms] [Warning] [omnigibson.objects.dataset_object] Category cabinet not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/blanket_37/Looks/mig_07___Default with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:48 [928,830ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/blanket_37/Looks/mig_07___Default with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State FoldedLevel is incompatible with obj blanket_37. Reason: Cannot use ClothStateMixin FoldedLevel with rigid object, make sure object is created with prim_type=PrimType.CLOTH!
+2025-08-23 00:34:49 [929,909ms] [Warning] [omnigibson.objects.stateful_object] State FoldedLevel is incompatible with obj blanket_37. Reason: Cannot use ClothStateMixin FoldedLevel with rigid object, make sure object is created with prim_type=PrimType.CLOTH!
+[WARNING] [omnigibson.objects.stateful_object] State Unfolded is incompatible with obj blanket_37. Reason: Missing required dependency state FoldedLevel
+2025-08-23 00:34:49 [929,909ms] [Warning] [omnigibson.objects.stateful_object] State Unfolded is incompatible with obj blanket_37. Reason: Missing required dependency state FoldedLevel
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj blanket_37. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:34:49 [929,910ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj blanket_37. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.stateful_object] State Folded is incompatible with obj blanket_37. Reason: Missing required dependency state FoldedLevel
+2025-08-23 00:34:49 [929,911ms] [Warning] [omnigibson.objects.stateful_object] State Folded is incompatible with obj blanket_37. Reason: Missing required dependency state FoldedLevel
+[WARNING] [omnigibson.objects.stateful_object] State Draped is incompatible with obj blanket_37. Reason: Cannot use ClothStateMixin Draped with rigid object, make sure object is created with prim_type=PrimType.CLOTH!
+2025-08-23 00:34:49 [929,911ms] [Warning] [omnigibson.objects.stateful_object] State Draped is incompatible with obj blanket_37. Reason: Cannot use ClothStateMixin Draped with rigid object, make sure object is created with prim_type=PrimType.CLOTH!
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_38. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:34:50 [930,683ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_38. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.dataset_object] Category container not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:50 [930,968ms] [Warning] [omnigibson.objects.dataset_object] Category container not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/coat_hanger_41/Looks/Shader1 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:51 [932,087ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/coat_hanger_41/Looks/Shader1 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.dataset_object] Category coat_hanger not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:52 [933,324ms] [Warning] [omnigibson.objects.dataset_object] Category coat_hanger not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.stateful_object] State Open is incompatible with obj oven_42. Reason: No relevant joints for Open state found for object oven_42
+2025-08-23 00:34:53 [933,704ms] [Warning] [omnigibson.objects.stateful_object] State Open is incompatible with obj oven_42. Reason: No relevant joints for Open state found for object oven_42
+[WARNING] [omnigibson.objects.stateful_object] State ToggledOn is incompatible with obj oven_42. Reason: LinkBasedStateMixin ToggledOn requires meta link with type ['togglebutton'] for obj oven_42 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+2025-08-23 00:34:53 [933,704ms] [Warning] [omnigibson.objects.stateful_object] State ToggledOn is incompatible with obj oven_42. Reason: LinkBasedStateMixin ToggledOn requires meta link with type ['togglebutton'] for obj oven_42 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+[WARNING] [omnigibson.objects.stateful_object] State HeatSourceOrSink is incompatible with obj oven_42. Reason: HeatSourceOrSink has requires_toggled_on but obj has no ToggledOn state!
+2025-08-23 00:34:53 [933,704ms] [Warning] [omnigibson.objects.stateful_object] State HeatSourceOrSink is incompatible with obj oven_42. Reason: HeatSourceOrSink has requires_toggled_on but obj has no ToggledOn state!
+[WARNING] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj oven_42. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj oven_42 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+2025-08-23 00:34:53 [933,705ms] [Warning] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj oven_42. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj oven_42 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+[WARNING] [omnigibson.objects.stateful_object] State Filled is incompatible with obj oven_42. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:34:53 [933,705ms] [Warning] [omnigibson.objects.stateful_object] State Filled is incompatible with obj oven_42. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.objects.stateful_object] State Contains is incompatible with obj oven_42. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:34:53 [933,706ms] [Warning] [omnigibson.objects.stateful_object] State Contains is incompatible with obj oven_42. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.objects.dataset_object] Category cup not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:54 [935,049ms] [Warning] [omnigibson.objects.dataset_object] Category cup not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj tray_44. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj tray_44 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+2025-08-23 00:34:55 [935,848ms] [Warning] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj tray_44. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj tray_44 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+[WARNING] [omnigibson.objects.stateful_object] State Filled is incompatible with obj tray_44. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:34:55 [935,849ms] [Warning] [omnigibson.objects.stateful_object] State Filled is incompatible with obj tray_44. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.objects.stateful_object] State Contains is incompatible with obj tray_44. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:34:55 [935,849ms] [Warning] [omnigibson.objects.stateful_object] State Contains is incompatible with obj tray_44. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/decoration_45/Looks/Fabric with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:55 [935,984ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/decoration_45/Looks/Fabric with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.dataset_object] Category decoration not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:56 [937,099ms] [Warning] [omnigibson.objects.dataset_object] Category decoration not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category table not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:34:58 [938,532ms] [Warning] [omnigibson.objects.dataset_object] Category table not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/carpet_48/Looks/Rug with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:34:59 [940,383ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/carpet_48/Looks/Rug with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj carpet_48. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:00 [940,439ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj carpet_48. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.dataset_object] Category plant not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:01 [941,774ms] [Warning] [omnigibson.objects.dataset_object] Category plant not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] candle hssd9cbee54a4e7bc24a5b6a9764a92c1fee1fe7381b negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:01 [942,101ms] [Error] [__main__] candle hssd9cbee54a4e7bc24a5b6a9764a92c1fee1fe7381b negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category candle not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:02 [942,795ms] [Warning] [omnigibson.objects.dataset_object] Category candle not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category book not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:02 [943,193ms] [Warning] [omnigibson.objects.dataset_object] Category book not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] flowerpot hssd054a4edb60cf2145e98274ad3fcbfc212e6e2445 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:02 [943,234ms] [Error] [__main__] flowerpot hssd054a4edb60cf2145e98274ad3fcbfc212e6e2445 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category flowerpot not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:04 [944,456ms] [Warning] [omnigibson.objects.dataset_object] Category flowerpot not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_53/Looks/Material__14 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:35:04 [944,842ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_53/Looks/Material__14 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_53. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:04 [944,978ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_53. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.dataset_object] Category table not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:05 [945,956ms] [Warning] [omnigibson.objects.dataset_object] Category table not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_55/Looks/Material__14 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:35:05 [946,277ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_55/Looks/Material__14 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_55. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:06 [946,810ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_55. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.dataset_object] Category cabinet not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:07 [947,614ms] [Warning] [omnigibson.objects.dataset_object] Category cabinet not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category kitchen_appliance not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:08 [948,603ms] [Warning] [omnigibson.objects.dataset_object] Category kitchen_appliance not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_58/Looks/Fabric with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:35:08 [948,894ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_58/Looks/Fabric with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_58. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:09 [949,655ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_58. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.dataset_object] Category towel not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:10 [951,300ms] [Warning] [omnigibson.objects.dataset_object] Category towel not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:11 [952,201ms] [Warning] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:12 [952,884ms] [Warning] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:13 [953,633ms] [Warning] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:14 [954,591ms] [Warning] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:14 [955,345ms] [Warning] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_1', 'translation': [-7.502747472424152, 0.6456646345671452, -1.2850330930173142], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_2', 'translation': [-6.5921983710122625, 0.5666516857798404, -1.718664817067701], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_3', 'translation': [-6.752932770603277, 0.530341095710326, -1.6802810476379884], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_3', 'translation': [-6.669147299530236, 0.5398303161201928, -1.606613017483589], 'rotation': [-0.10478926410733119, 0.004053488597946602, 0.9943331061087447, -0.017448594618657248], 'non_uniform_scale': [0.9999999306737919, 0.9999999999111194, 0.9999999311197656], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_4', 'translation': [-6.523985383386385, 0.5494547552511184, -1.6827862030659377], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_5', 'translation': [-6.573374239154029, 0.5163290788227013, -1.5114902480986392], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_7', 'translation': [-6.444838351432288, 0.5487496595489038, -1.4635157401954595], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_8', 'translation': [-8.823875000151375, 1.0934500230831041, -1.3716583144887489], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_9', 'translation': [-9.48787852663545, 0.08388909910804403, -1.5879205719211322], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_14', 'translation': [-7.045425896386713, 2.2064801000350966, -1.387178652473205], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_14', 'translation': [-6.517933975659696, 2.206480100309481, -1.3917820582536937], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_10', 'translation': [-8.8413765318035, 0.5143391108704491, -1.4405088787406006], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_11', 'translation': [-9.331866335472832, 0.5164196070193425, -1.4050066193069422], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_11', 'translation': [-9.54586049098712, 0.5164196069075065, -1.4031347109441883], 'rotation': [0.6723666974196603, 4.0267930494261676e-08, 0.7402182274174122, 4.394474069776868e-08], 'non_uniform_scale': [0.9999999309394346, 0.9999999999999929, 0.9999999307652498], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_13', 'translation': [-8.799955881214528, 2.1883931933782357, -1.4096465049908136], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_50', 'translation': [-8.969752965442588, 1.6549155226645655, -1.3525344849674639], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_50', 'translation': [-8.942773163416678, 1.6549155226946934, -1.3529049427970825], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_50', 'translation': [-8.916214420429249, 1.654915522670838, -1.3528207140956396], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.446005503050612, 1.6544571646853132, -1.3737718639302974], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.506548593341981, 1.6544571646538224, -1.373243521143756], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.567091892111612, 1.6544571646223298, -1.3727151616361055], 'rotation': [-0.004363397189413892, -2.1968125322581994e-15, 0.99999048033717, 5.960408092147442e-08], 'non_uniform_scale': [0.9999999308460079, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.627635161088183, 1.6544571645908372, -1.37218680331981], 'rotation': [-0.004363323312699486, 2.2065832018744328e-15, 0.9999904806595237, 5.9604080921474426e-08], 'non_uniform_scale': [0.9999999308460085, 0.9999999999999929, 0.9999999308586759], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.688178280871901, 1.6544571645593422, -1.3716584248842887], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.748721564919739, 1.654457164527852, -1.3711300859949884], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.809264841167806, 1.654457164496357, -1.3706017071253636], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.869807946408533, 1.654457164464867, -1.3700733697965115], 'rotation': [-0.004363432705568143, -4.313740490065616e-15, 0.9999904801821967, 5.96040809214743e-08], 'non_uniform_scale': [0.9999999308460078, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.930351063406515, 1.654457164433372, -1.369544992316656], 'rotation': [-0.004363413880833448, -3.1916987594924907e-15, 0.9999904802643378, 5.960408092147438e-08], 'non_uniform_scale': [0.9999999308460081, 0.9999999999999929, 0.9999999308586759], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-7.990894341866632, 1.6544571644018817, -1.3690166534761237], 'rotation': [-0.004363487757568558, -7.595095729435423e-15, 0.9999904799419773, 5.960408092147398e-08], 'non_uniform_scale': [0.9999999308460079, 0.9999999999999929, 0.9999999308586759], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_27', 'translation': [-8.051437455131337, 1.6544571643703867, -1.3684882750974865], 'rotation': [-0.004363395767201262, -2.1120420456184405e-15, 0.9999904803433757, 5.960408092147442e-08], 'non_uniform_scale': [0.9999999308460084, 0.9999999999999929, 0.9999999308586761], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.4440740836547725, 2.20555932743311, -1.3850239711845151], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.496189115277432, 2.205559327405999, -1.3845691462780645], 'rotation': [-0.00436344704155054, -5.168231709132086e-15, 0.9999904801196419, 5.9604080921474234e-08], 'non_uniform_scale': [0.9999999308460085, 0.9999999999999929, 0.9999999308586763], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.548304161930722, 2.20555932737889, -1.3841143361421693], 'rotation': [-0.00436344704155054, -5.168231709132086e-15, 0.9999904801196419, 5.9604080921474234e-08], 'non_uniform_scale': [0.9999999308460085, 0.9999999999999929, 0.9999999308586763], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.600419744989097, 2.2055593273517804, -1.3836595194623675], 'rotation': [-0.00436344704155054, -5.168231709132086e-15, 0.9999904801196419, 5.9604080921474234e-08], 'non_uniform_scale': [0.9999999308460085, 0.9999999999999929, 0.9999999308586763], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.652534672437644, 2.2055593273246714, -1.3832047103667686], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.704649823265046, 2.2055593272975607, -1.3827498844200217], 'rotation': [-0.00436344704155054, -5.168231709132086e-15, 0.9999904801196419, 5.9604080921474234e-08], 'non_uniform_scale': [0.9999999308460085, 0.9999999999999929, 0.9999999308586763], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.756765033776092, 2.205559327270451, -1.3822950672659973], 'rotation': [-0.00436344704155054, -5.168231709132086e-15, 0.9999904801196419, 5.9604080921474234e-08], 'non_uniform_scale': [0.9999999308460085, 0.9999999999999929, 0.9999999308586763], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.808880452797909, 2.2055593272433396, -1.38184023711601], 'rotation': [-0.00436344704155054, -5.168231709132086e-15, 0.9999904801196419, 5.9604080921474234e-08], 'non_uniform_scale': [0.9999999308460085, 0.9999999999999929, 0.9999999308586763], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.860995488275754, 2.2055593272162306, -1.3813854270776427], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.913110525616173, 2.2055593271891216, -1.3809306170230207], 'rotation': [-0.0043634896013522275, -7.704993810538644e-15, 0.9999904799339319, 5.9604080921473956e-08], 'non_uniform_scale': [0.999999930846008, 0.9999999999999929, 0.999999930858676], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-7.9652255671798935, 2.2055593271620126, -1.380475810656974], 'rotation': [-0.004363468321449525, -6.436612648990652e-15, 0.9999904800267871, 5.960408092147411e-08], 'non_uniform_scale': [0.9999999308460081, 0.9999999999999929, 0.999999930858676], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.749786180089053, 1.6572200765790432, -1.3616244998803693], 'rotation': [-0.00436404120947459, -4.058340315415058e-14, 0.9999904775268206, 5.960408092146062e-08], 'non_uniform_scale': [0.9999999308460071, 0.9999999999999929, 0.9999999308586772], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.697670880125687, 1.6572200766061524, -1.3620793122268937], 'rotation': [-0.00436404120947459, -4.058340315415058e-14, 0.9999904775268206, 5.960408092146062e-08], 'non_uniform_scale': [0.9999999308460071, 0.9999999999999929, 0.9999999308586772], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.645555758871906, 1.65722007663326, -1.3625341118375294], 'rotation': [-0.004362852877026475, 3.024673698916587e-14, 0.9999904827120956, 5.9604080921466816e-08], 'non_uniform_scale': [0.9999999308460094, 0.9999999999999929, 0.9999999308586749], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.593440518738475, 1.6572200766603724, -1.3629889497399428], 'rotation': [-0.004364214790810428, -5.0929658025604856e-14, 0.9999904767692821, 5.960408092145267e-08], 'non_uniform_scale': [0.9999999308460068, 0.9999999999999929, 0.9999999308586774], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.541325397549712, 1.657220076687481, -1.3634437568008748], 'rotation': [-0.0043626792964218735, 4.0592948214040815e-14, 0.9999904834693943, 5.960408092146067e-08], 'non_uniform_scale': [0.9999999308460097, 0.9999999999999929, 0.9999999308586747], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.489210157156207, 1.6572200767145897, -1.363898564902103], 'rotation': [-0.00436404120947459, -4.058340315415058e-14, 0.9999904775268206, 5.960408092146062e-08], 'non_uniform_scale': [0.9999999308460071, 0.9999999999999929, 0.9999999308586772], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.4370950359999535, 1.6572200767416987, -1.3643533756881832], 'rotation': [-0.0043626792964218735, 4.0592948214040815e-14, 0.9999904834693943, 5.960408092146067e-08], 'non_uniform_scale': [0.9999999308460097, 0.9999999999999929, 0.9999999308586747], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.384979795411393, 1.6572200767688048, -1.3648081614385221], 'rotation': [-0.004364214790810428, -5.0929658025604856e-14, 0.9999904767692821, 5.960408092145267e-08], 'non_uniform_scale': [0.9999999308460068, 0.9999999999999929, 0.9999999308586774], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.332864674385177, 1.6572200767959155, -1.365262987125195], 'rotation': [-0.004362852877026475, 3.024673698916587e-14, 0.9999904827120956, 5.9604080921466816e-08], 'non_uniform_scale': [0.9999999308460094, 0.9999999999999929, 0.9999999308586749], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.280749434024181, 1.6572200768230247, -1.3657177989515712], 'rotation': [-0.00436404120947459, -4.058340315415058e-14, 0.9999904775268206, 5.960408092146062e-08], 'non_uniform_scale': [0.9999999308460071, 0.9999999999999929, 0.9999999308586772], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_16', 'translation': [-6.22863443207267, 1.6572200768501337, -1.3661726086973551], 'rotation': [-0.00436404120947459, -4.058340315415058e-14, 0.9999904775268206, 5.960408092146062e-08], 'non_uniform_scale': [0.9999999308460071, 0.9999999999999929, 0.9999999308586772], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_38', 'translation': [-6.837050225403672, 1.7928388399649458, -1.3613669213233408], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_61', 'translation': [-9.225411659917084, 1.795529763159897, -1.3840490850576261], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_56', 'translation': [-8.83614086898277, 1.6551916138758036, -1.3740612059522268], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_68', 'translation': [-9.420280398497118, 1.0927569406832127, -1.3724916355094257], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_60', 'translation': [-9.338322539634227, 1.642573208811432, -1.3802580450776014], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_55', 'translation': [-8.857442971202886, 1.6544599053052889, -1.3575996587280836], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_58', 'translation': [-8.795637133940893, 1.6554221655378636, -1.3817548526748245], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_58', 'translation': [-8.773164799739286, 1.6557002808085692, -1.3818376703401052], 'rotation': [-0.004363360251183219, 8.518074168064155e-11, 0.9999904804983456, 7.912481952560159e-08], 'non_uniform_scale': [0.9999999308460079, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_64', 'translation': [-9.430344669418746, 1.1724581253925024, -1.3681094649642276], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_64', 'translation': [-9.422859711348963, 1.1449849736278124, -1.3674620136574784], 'rotation': [0.043640289640477684, -2.617275553190927e-06, 0.9990473087463095, 3.3120919749580126e-08], 'non_uniform_scale': [0.9999999309350085, 0.9999999999999929, 0.9999999307696761], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_54', 'translation': [-8.884752964974034, 1.6556080099446018, -1.3572426658796406], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_63', 'translation': [-9.418415265024336, 1.2186879657672671, -1.3769681568359093], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_65', 'translation': [-9.435725020283355, 1.1996402282882266, -1.3738939912772192], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_51', 'translation': [-8.991218545815249, 1.6555025103659464, -1.3621687104570468], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_57', 'translation': [-8.81600568061817, 1.654517009596111, -1.3832917737004689], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_67', 'translation': [-9.418221012619533, 1.120742513197391, -1.3699775894348654], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_62', 'translation': [-9.31297919906484, 1.6560314235681861, -1.3731823811777493], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_69', 'translation': [-8.66399308247043, 1.6571079030153795, -1.3732188851708342], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+Skipping object {'template_name': '4d6310a9ffa5b50e7dc45940cf724ba1fa3ffddd_part_70', 'translation': [-7.984231133054454, -0.015017348374567734, -1.5294386403982982], 'rotation': [-0.004363360251058025, 4.88525541684274e-18, 0.9999904804983475, 5.960408092147447e-08], 'non_uniform_scale': [0.9999999308460082, 0.9999999999999929, 0.9999999308586757], 'motion_type': 'STATIC'}
+[WARNING] [omnigibson.objects.dataset_object] Category drawer_desk not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:16 [957,074ms] [Warning] [omnigibson.objects.dataset_object] Category drawer_desk not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj wardrobe_137. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj wardrobe_137 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+2025-08-23 00:35:17 [957,447ms] [Warning] [omnigibson.objects.stateful_object] State ContainedParticles is incompatible with obj wardrobe_137. Reason: LinkBasedStateMixin ContainedParticles requires meta link with type ['fillable', 'openfillable'] for obj wardrobe_137 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+[WARNING] [omnigibson.objects.stateful_object] State Filled is incompatible with obj wardrobe_137. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:35:17 [957,447ms] [Warning] [omnigibson.objects.stateful_object] State Filled is incompatible with obj wardrobe_137. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.objects.stateful_object] State Contains is incompatible with obj wardrobe_137. Reason: Missing required dependency state ContainedParticles
+2025-08-23 00:35:17 [957,447ms] [Warning] [omnigibson.objects.stateful_object] State Contains is incompatible with obj wardrobe_137. Reason: Missing required dependency state ContainedParticles
+[WARNING] [omnigibson.objects.stateful_object] State AttachedTo is incompatible with obj wardrobe_137. Reason: LinkBasedStateMixin AttachedTo requires meta link with type ['attachment'] for obj wardrobe_137 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+2025-08-23 00:35:17 [957,448ms] [Warning] [omnigibson.objects.stateful_object] State AttachedTo is incompatible with obj wardrobe_137. Reason: LinkBasedStateMixin AttachedTo requires meta link with type ['attachment'] for obj wardrobe_137 but none was found! To get valid compatible object models, please use omnigibson.utils.asset_utils.get_all_object_category_models_with_abilities(...)
+[WARNING] [omnigibson.objects.dataset_object] Category computer not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:17 [957,901ms] [Warning] [omnigibson.objects.dataset_object] Category computer not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category book not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:18 [958,932ms] [Warning] [omnigibson.objects.dataset_object] Category book not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_143/Looks/Material__11 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:35:19 [959,579ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_143/Looks/Material__11 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_143. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:19 [960,015ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_143. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_144/Looks/Fabricg with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:35:19 [960,323ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_144/Looks/Fabricg with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_144. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:20 [960,757ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_144. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.objects.dataset_object] Category cabinet not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:25 [966,180ms] [Warning] [omnigibson.objects.dataset_object] Category cabinet not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category book not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:27 [967,921ms] [Warning] [omnigibson.objects.dataset_object] Category book not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category couch not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:32 [973,028ms] [Warning] [omnigibson.objects.dataset_object] Category couch not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:37 [978,265ms] [Warning] [omnigibson.objects.dataset_object] Category seat not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category stool not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:42 [983,228ms] [Warning] [omnigibson.objects.dataset_object] Category stool not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category stool not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:47 [987,688ms] [Warning] [omnigibson.objects.dataset_object] Category stool not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.objects.dataset_object] Category stool not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:52 [992,566ms] [Warning] [omnigibson.objects.dataset_object] Category stool not found in average object specs! Defaulting to unit mass or density.
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_152/Looks/FABRIC_G2354 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:35:52 [992,950ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_152/Looks/FABRIC_G2354 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_152. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:52 [993,159ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_152. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_153/Looks/FABRIC_G2354 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:35:52 [993,250ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_153/Looks/FABRIC_G2354 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_153. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:52 [993,389ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_153. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[WARNING] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_154/Looks/Material__14 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+2025-08-23 00:35:53 [993,497ms] [Warning] [omnigibson.prims.material_prim] No compatible material prim class found for material at /World/scene_0/pillow_154/Looks/Material__14 with asset path gltf/pbr.mdl and sub-identifier gltf_material. Using MaterialPrim as a fallback.
+[WARNING] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_154. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+2025-08-23 00:35:53 [993,836ms] [Warning] [omnigibson.objects.stateful_object] State ParticleRemover is incompatible with obj pillow_154. Reason: ParticleRemover requires gm.USE_GPU_DYNAMICS=True!
+[ERROR] [__main__] openings hssd37543 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:53 [993,940ms] [Error] [__main__] openings hssd37543 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:53 [994,360ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:54 [994,445ms] [Error] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:54 [994,843ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:54 [994,933ms] [Error] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:54 [995,304ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:54 [995,390ms] [Error] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:55 [995,779ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:55 [995,868ms] [Error] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:55 [996,248ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] openings hssd2043 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:55 [996,332ms] [Error] [__main__] openings hssd2043 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:56 [996,516ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:56 [996,577ms] [Error] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:56 [996,967ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:56 [997,053ms] [Error] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:57 [997,467ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+[ERROR] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+2025-08-23 00:35:57 [997,561ms] [Error] [__main__] openings hssd37542 negative scale detected: tensor([-1.0000,  1.0000,  1.0000])
+[WARNING] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+2025-08-23 00:35:57 [997,840ms] [Warning] [omnigibson.objects.dataset_object] Category openings not found in average object specs! Defaulting to unit mass or density.
+100%|██████████| 1/1 [17:28<00:00, 1048.63s/it]100%|██████████| 1/1 [17:28<00:00, 1048.63s/it]
+2025-08-23 00:36:46 [1,047,090ms] [Warning] [carb] Failed to startup plugin carb.windowing-glfw.plugin (interfaces: [carb::windowing::IGLContext v1.0],[carb::windowing::IWindowing v1.5]) (impl: carb.windowing-glfw.plugin)
+2025-08-23 00:36:48 [1,048,659ms] [Warning] [carb] Plugin interface for a client: omni.hydratexture.plugin was already released.
+[1049.382s] Simulation App Shutting Down

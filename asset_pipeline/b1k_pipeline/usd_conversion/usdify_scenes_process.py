@@ -16,8 +16,6 @@ import omnigibson as og
 from omnigibson.utils.asset_conversion_utils import convert_scene_urdf_to_json
 from b1k_pipeline.usd_conversion.make_maps import generate_maps_for_current_scene
 
-IMPORT_RENDER_CHANNELS = True
-
 
 if __name__ == "__main__":
     og.launch()

@@ -1,7 +1,8 @@
 import omnigibson as og
+import omnigibson.lazy as lazy
 from omnigibson.macros import gm
-from omnigibson.utils.asset_utils import get_available_g_scenes, get_available_og_scenes
-from omnigibson.utils.ui_utils import choose_from_options
+from omnigibson.utils.asset_utils import get_available_og_scenes
+from omnigibson.utils.ui_utils import choose_from_options, KeyboardEventHandler
 
 # Configure macros for maximum performance
 gm.USE_GPU_DYNAMICS = False
@@ -12,9 +13,7 @@ gm.ENABLE_TRANSITION_RULES = False
 
 def main(random_selection=False, headless=False, short_exec=False):
     """
-    Prompts the user to select any available interactive scene and loads a turtlebot into it.
-    It steps the environment 100 times with random actions sampled from the action space,
-    using the Gym interface, resetting it 10 times.
+    Prompts the user to select any available interactive scene and loads it.
     """
     og.log.info(f"Demo {__file__}\n    " + "*" * 80 + "\n    Description:\n" + main.__doc__ + "*" * 80)
 
@@ -31,7 +30,7 @@ def main(random_selection=False, headless=False, short_exec=False):
 
     cfg = {
         "scene": {
-            "type": scene_type,
+            "type": "InteractiveTraversableScene",
             "scene_model": scene_model,
         },
     }
@@ -61,13 +60,20 @@ def main(random_selection=False, headless=False, short_exec=False):
     if not gm.HEADLESS:
         og.sim.enable_viewer_camera_teleoperation()
 
-    # Run a simple loop and reset periodically
+    KeyboardEventHandler.add_keyboard_callback(
+        key=lazy.carb.input.KeyboardInput.ESCAPE,
+        callback_fn=lambda: og.shutdown(),
+    )
+
+    print("Running demo.")
+    print("Press ESC to quit")
+
+    # Loop indefinitely
     steps = 0
     while not short_exec or steps < 1000:
         og.sim.render()
 
-    # Always close the environment at the end
-    og.clear()
+    og.shutdown()
 
 
 if __name__ == "__main__":

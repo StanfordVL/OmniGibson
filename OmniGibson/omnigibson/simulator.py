@@ -9,6 +9,7 @@ import socket
 from collections import defaultdict
 from contextlib import nullcontext
 from pathlib import Path
+import sys
 
 import torch as th
 
@@ -100,9 +101,9 @@ def _launch_app():
             pass
 
         # TODO: Find a more elegant way to prune omni logging
-        # sys.argv.append("--/log/level=warning")
-        # sys.argv.append("--/log/fileLogLevel=warning")
-        # sys.argv.append("--/log/outputStreamLevel=error")
+        # sys.argv.append("--/log/level=info")
+        # sys.argv.append("--/log/fileLogLevel=info")
+        # sys.argv.append("--/log/outputStreamLevel=info")
 
     # Try to import the isaacsim module that only shows up in Isaac Sim 4.0.0. This ensures that
     # if we are using the pip installed version, all the ISAAC_PATH etc. env vars are set correctly.
