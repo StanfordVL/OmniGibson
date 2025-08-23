@@ -15,7 +15,9 @@ def fix_usd_path(path):
         def _update_path(asset_path):
             if "fsx-siro" not in asset_path or "material" not in asset_path:
                 return asset_path
-            return os.path.join("..", "material", os.path.basename(asset_path))
+            fixed_path = os.path.join("..", "material", os.path.basename(asset_path))
+            print(asset_path, "->", fixed_path)
+            return fixed_path
 
         UsdUtils.ModifyAssetPaths(stage.GetRootLayer(), _update_path)
         stage.GetRootLayer().Save()
