@@ -99,9 +99,9 @@ class BehaviorTask(BaseTask):
 
         # Make sure task name is valid if not specifying a predefined problem
         if predefined_problem is None:
-            assert (
-                activity_name is not None
-            ), "Activity name must be specified if no predefined_problem is specified for BehaviorTask!"
+            assert activity_name is not None, (
+                "Activity name must be specified if no predefined_problem is specified for BehaviorTask!"
+            )
             assert_valid_key(key=activity_name, valid_keys=BEHAVIOR_ACTIVITIES, name="Behavior Task")
         else:
             # Infer activity name
@@ -247,9 +247,9 @@ class BehaviorTask(BaseTask):
         if self.use_presampled_robot_pose:
             robot = self.get_agent(env)
             presampled_poses = env.scene.get_task_metadata(key="robot_poses")
-            assert (
-                robot.model_name in presampled_poses
-            ), f"{robot.model_name} presampled pose is not found in task metadata; please set use_presampled_robot_pose to False in task config"
+            assert robot.model_name in presampled_poses, (
+                f"{robot.model_name} presampled pose is not found in task metadata; please set use_presampled_robot_pose to False in task config"
+            )
 
             # Select pose based on randomize_presampled_pose flag
             available_poses = presampled_poses[robot.model_name]

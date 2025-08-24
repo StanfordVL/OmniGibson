@@ -42,9 +42,9 @@ class DataWrapper(EnvironmentWrapper):
             flush_every_n_traj (int): How often to flush (write) current data to file
         """
         # Make sure the wrapped environment inherits correct omnigibson format
-        assert isinstance(
-            env, (og.Environment, EnvironmentWrapper)
-        ), "Expected wrapped @env to be a subclass of OmniGibson's Environment class or EnvironmentWrapper!"
+        assert isinstance(env, (og.Environment, EnvironmentWrapper)), (
+            "Expected wrapped @env to be a subclass of OmniGibson's Environment class or EnvironmentWrapper!"
+        )
 
         # Only one scene is supported for now
         assert len(og.sim.scenes) == 1, "Only one scene is currently supported for DataWrapper env!"
@@ -627,9 +627,9 @@ class DataCollectionWrapper(DataWrapper):
         # and will therefore not be tracked properly in subsequent states during playback. So we assert that the current
         # idx is NOT the current checkpoint idx
         if len(self.checkpoint_step_idxs) > 0:
-            assert (
-                self.checkpoint_step_idxs[-1] - 1 != self.env.episode_steps
-            ), "A checkpoint was just updated. Any subsequent transitions at this immediate timestep will not be replayed properly!"
+            assert self.checkpoint_step_idxs[-1] - 1 != self.env.episode_steps, (
+                "A checkpoint was just updated. Any subsequent transitions at this immediate timestep will not be replayed properly!"
+            )
 
         if self.env.episode_steps not in self.current_transitions:
             self.current_transitions[self.env.episode_steps] = {
@@ -903,9 +903,9 @@ class DataPlaybackWrapper(DataWrapper):
         # Validate video_writers and video_rgb_keys
         if video_writers is not None:
             assert video_rgb_keys is not None, "If video_writers is specified, video_rgb_keys must also be specified!"
-            assert len(video_writers) == len(
-                video_rgb_keys
-            ), "video_writers and video_rgb_keys must have the same length!"
+            assert len(video_writers) == len(video_rgb_keys), (
+                "video_writers and video_rgb_keys must have the same length!"
+            )
 
         data_grp = self.input_hdf5["data"]
         assert f"demo_{episode_id}" in data_grp, f"No valid episode with ID {episode_id} found!"
