@@ -7,6 +7,7 @@ param(
     [switch]$Teleop,
     [switch]$Dataset,
     [switch]$Primitives,
+    [switch]$Eval,
     [switch]$Dev,
     [string]$CudaVersion = "12.4",
     [switch]$AcceptCondaTos,
@@ -32,6 +33,7 @@ Options:
   -Teleop                 Install JoyLo (teleoperation interface)
   -Dataset                Download BEHAVIOR datasets (requires -OmniGibson)
   -Primitives             Install OmniGibson with primitives support
+  -Eval                   Install evaluation dependencies
   -Dev                    Install development dependencies
   -CudaVersion VERSION    Specify CUDA version (default: 12.4)
   -AcceptCondaTos         Automatically accept Conda Terms of Service
@@ -59,6 +61,10 @@ if ($Dataset -and -not $OmniGibson) {
 if ($Primitives -and -not $OmniGibson) {
     Write-Error "ERROR: -Primitives requires -OmniGibson"
     exit 1
+}
+
+if ($Eval -and -not $OmniGibson) {
+    Write-Error "ERROR: -Eval requires -OmniGibson"
 }
 
 if ($NewEnv -and $ConfirmNoConda) {
@@ -376,10 +382,17 @@ Please unset EXP_PATH, CARB_APP_PATH, and ISAAC_PATH and restart.
     }
     
     # Build extras string
+$extrasList = @()
+
+if ($Dev) { $extrasList += "dev" }
+if ($Primitives) { $extrasList += "primitives" }
+if ($Eval) { $extrasList += "eval" }
+
+if ($extrasList.Count -gt 0) {
+    $extras = "[" + ($extrasList -join ",") + "]"
+} else {
     $extras = ""
-    if ($Dev -and $Primitives) { $extras = "[dev,primitives]" }
-    elseif ($Dev) { $extras = "[dev]" }
-    elseif ($Primitives) { $extras = "[primitives]" }
+}
     
     pip install -e "$WorkDir\OmniGibson$extras"
     
@@ -531,6 +544,15 @@ if ($Teleop) {
     pip install -e "$WorkDir\joylo"
 }
 
+if ($Eval) {
+    Write-Host "Installing evaluation dependencies..."
+
+    # get torch version via pip
+    $TorchVersion = (pip show torch | Select-String "Version" | ForEach-Object { $_.ToString().Split(" ")[-1] })
+    pip install torch-cluster -f "https://data.pyg.org/whl/torch-$TorchVersion.html"
+    conda install av -c conda-forge -y
+}
+
 # Installation summary
 Write-Host ""
 Write-Host "=== Installation Complete! ==="
@@ -538,6 +560,8 @@ if ($NewEnv) { Write-Host "✓ Created conda environment 'behavior'" }
 if ($OmniGibson) { Write-Host "✓ Installed OmniGibson + Isaac Sim" }
 if ($BDDL) { Write-Host "✓ Installed BDDL" }
 if ($Teleop) { Write-Host "✓ Installed JoyLo" }
+if ($Primitives) { Write-Host "✓ Installed primitives support" }
+if ($Eval) { Write-Host "✓ Installed evaluation support" }
 if ($Dataset) { Write-Host "✓ Downloaded datasets" }
 Write-Host ""
 if ($NewEnv) { Write-Host "To activate: conda activate behavior" }
