@@ -47,7 +47,7 @@ class SegmentationMap(BaseMap):
         super().__init__(map_resolution=map_resolution)
 
         # Load the map
-        self.load_map()
+        # self.load_map()
 
     def _load_map(self):
         layout_dir = os.path.join(self.scene_dir, "layout")

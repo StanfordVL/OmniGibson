@@ -494,7 +494,7 @@ def _launch_simulator(*args, **kwargs):
             lazy.carb.settings.get_settings().set_bool("/rtx/ambientOcclusion/enabled", True)
             lazy.carb.settings.get_settings().set_bool("/rtx/directLighting/sampledLighting/enabled", True)
             lazy.carb.settings.get_settings().set_int("/rtx/raytracing/showLights", 1)
-            lazy.carb.settings.get_settings().set_float("/rtx/sceneDb/ambientLightIntensity", 2)
+            lazy.carb.settings.get_settings().set_float("/rtx/sceneDb/ambientLightIntensity", 3)
             lazy.carb.settings.get_settings().set_bool("/app/renderer/skipMaterialLoading", False)
             lazy.carb.settings.get_settings().set_bool("/rtx/flow/enabled", True)
 

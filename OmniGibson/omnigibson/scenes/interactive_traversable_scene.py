@@ -24,6 +24,7 @@ class InteractiveTraversableScene(TraversableScene):
         scene_model,
         scene_instance=None,
         scene_file=None,
+        dataset_type="og_dataset",
         trav_map_resolution=0.1,
         default_erosion_radius=0.0,
         trav_map_with_objects=True,
@@ -44,6 +45,7 @@ class InteractiveTraversableScene(TraversableScene):
                 defaults to og_dataset/scenes/<scene_model>/json/<scene_instance>.urdf
             scene_file (None or str): If specified, full path of JSON file to load (with .json).
                 This will override scene_instance and scene_model!
+            dataset_type (str): Type of dataset to load the scene from, e.g.: "og_dataset"
             trav_map_resolution (float): traversability map resolution
             default_erosion_radius (float): default map erosion radius in meters
             trav_map_with_objects (bool): whether to use objects or not when constructing graph
@@ -62,7 +64,7 @@ class InteractiveTraversableScene(TraversableScene):
         self.include_robots = include_robots
 
         # Infer scene directory
-        self.scene_dir = get_og_scene_path(scene_model)
+        self.scene_dir = get_og_scene_path(scene_model, dataset_type=dataset_type)
 
         # Other values that will be loaded at runtime
         self.load_object_categories = None

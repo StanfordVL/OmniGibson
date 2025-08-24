@@ -102,7 +102,7 @@ def get_available_og_scenes():
     return available_og_scenes
 
 
-def get_og_scene_path(scene_name):
+def get_og_scene_path(scene_name, dataset_type="og_dataset"):
     """
     Get OmniGibson scene path
 
@@ -112,14 +112,14 @@ def get_og_scene_path(scene_name):
     Returns:
         str: file path to the scene name
     """
-    og_dataset_path = gm.DATASET_PATH
-    og_scenes_path = os.path.join(og_dataset_path, "scenes")
+    dataset_path = gm.DATASET_PATH if dataset_type == "og_dataset" else os.path.join(gm.DATA_PATH, dataset_type)
+    scenes_path = os.path.join(dataset_path, "scenes")
     log.info("Scene name: {}".format(scene_name))
-    assert scene_name in os.listdir(og_scenes_path), "Scene {} does not exist".format(scene_name)
-    return os.path.join(og_scenes_path, scene_name)
+    assert scene_name in os.listdir(scenes_path), "Scene {} does not exist".format(scene_name)
+    return os.path.join(scenes_path, scene_name)
 
 
-def get_og_category_path(category_name):
+def get_og_category_path(category_name, dataset_type="og_dataset"):
     """
     Get OmniGibson object category path
 
@@ -129,13 +129,13 @@ def get_og_category_path(category_name):
     Returns:
         str: file path to the object category
     """
-    og_dataset_path = gm.DATASET_PATH
-    og_categories_path = os.path.join(og_dataset_path, "objects")
+    dataset_path = gm.DATASET_PATH if dataset_type == "og_dataset" else os.path.join(gm.DATA_PATH, dataset_type)
+    og_categories_path = os.path.join(dataset_path, "objects")
     assert category_name in os.listdir(og_categories_path), "Category {} does not exist".format(category_name)
     return os.path.join(og_categories_path, category_name)
 
 
-def get_og_model_path(category_name, model_name):
+def get_og_model_path(category_name, model_name, dataset_type="og_dataset"):
     """
     Get OmniGibson object model path
 
@@ -146,9 +146,9 @@ def get_og_model_path(category_name, model_name):
     Returns:
         str: file path to the object model
     """
-    og_category_path = get_og_category_path(category_name)
-    assert model_name in os.listdir(og_category_path), "Model {} from category {} does not exist".format(
-        model_name, category_name
+    og_category_path = get_og_category_path(category_name, dataset_type=dataset_type)
+    assert model_name in os.listdir(og_category_path), "Model {} from category {} in dataset {} does not exist".format(
+        model_name, category_name, dataset_type
     )
     return os.path.join(og_category_path, model_name)
 
@@ -182,8 +182,9 @@ def get_all_object_categories():
     og_dataset_path = gm.DATASET_PATH
     og_categories_path = os.path.join(og_dataset_path, "objects")
 
-    categories = [f for f in os.listdir(og_categories_path) if not is_dot_file(f)]
-    return sorted(categories)
+    og_categories = {f for f in os.listdir(og_categories_path) if not is_dot_file(f)}
+    other_categories = {x.name for x in Path(gm.DATA_PATH).glob("*/objects/*") if x.is_dir() and not is_dot_file(x.name)}
+    return sorted(og_categories | other_categories)
 
 
 def get_all_object_models():

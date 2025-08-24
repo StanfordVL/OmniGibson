@@ -8,6 +8,7 @@ import sys
 import json
 import torch as th
 from scipy.spatial.transform import Rotation as R
+import glob
 
 import omnigibson as og
 import omnigibson.utils.transform_utils as T
@@ -20,20 +21,20 @@ log = create_module_logger(module_name=__name__)
 
 gm.HEADLESS = True
 
-DATASET_ROOT = pathlib.Path("/fsx-siro/cgokmen/behavior-data2/hssd")
-DATASET_ROOT.mkdir(exist_ok=True)
-ERRORS = DATASET_ROOT / "errors"
-ERRORS.mkdir(exist_ok=True)
-JOBS = DATASET_ROOT / "jobs"
-JOBS.mkdir(exist_ok=True)
-RESTART_EVERY = 16
-
-ROTATE_EVERYTHING_BY = th.as_tensor(R.from_euler("x", 90, degrees=True).as_quat())
-
-
 def main():
-    hssd_root = pathlib.Path("/fsx-siro/cgokmen/habitat-data/scene_datasets/hssd-hab")
-    scenes = sorted(hssd_root.glob("scenes/*.json"))
+    dataset_name = sys.argv[1]
+    input_glob = sys.argv[2]
+    DATASET_ROOT = pathlib.Path("/fsx-siro/cgokmen/behavior-data2") / dataset_name
+    DATASET_ROOT.mkdir(exist_ok=True)
+    ERRORS = DATASET_ROOT / "errors"
+    ERRORS.mkdir(exist_ok=True)
+    JOBS = DATASET_ROOT / "jobs"
+    JOBS.mkdir(exist_ok=True)
+    RESTART_EVERY = 16
+
+    ROTATE_EVERYTHING_BY = th.as_tensor(R.from_euler("x", 90, degrees=True).as_quat())
+
+    scenes = sorted([pathlib.Path(x) for x in glob.glob(input_glob, recursive=True)])
 
     object_mapping = json.loads((DATASET_ROOT / "object_name_mapping.json").read_text())
 
@@ -43,8 +44,8 @@ def main():
         key=lambda x: hashlib.md5((str(x) + os.environ.get("SLURM_ARRAY_JOB_ID", default="")).encode()).hexdigest()
     )
 
-    rank = int(sys.argv[1])
-    world_size = int(sys.argv[2])
+    rank = int(sys.argv[3])
+    world_size = int(sys.argv[4])
 
     completed_count = 0
     for scene_input_json in tqdm(scenes[rank::world_size]):
@@ -75,18 +76,19 @@ def main():
             scene = Scene(use_floor_plane=False)
             og.sim.import_scene(scene)
 
-            # Load the scene template
-            stage_instance = scene_contents["stage_instance"]["template_name"].replace("stages/", "")
+            # Load the scene template. This is not an actual path but is namespaced as stages/iThor/etc and we just want the etc.
+            stage_instance = os.path.basename(scene_contents["stage_instance"]["template_name"])
             stage_category, stage_model = object_mapping[stage_instance]
             tmpl = DatasetObject(
-                name="stage", category=stage_category, model=stage_model, fixed_base=True, dataset_type="hssd"
+                name="stage", category=stage_category, model=stage_model, fixed_base=True, dataset_type=dataset_name
             )
             scene.add_object(tmpl)
             tmpl.set_position_orientation(position=th.zeros(3), orientation=ROTATE_EVERYTHING_BY)
 
             for i, obj_instance in enumerate(scene_contents["object_instances"]):
                 try:
-                    template_name = obj_instance["template_name"]
+                    # This can similarly be prefixed, so we undo that.
+                    template_name = os.path.basename(obj_instance["template_name"])
                     category, model = object_mapping[template_name]
                     pos = th.as_tensor(obj_instance["translation"])
                     orn = th.as_tensor(obj_instance["rotation"])[[1, 2, 3, 0]]
@@ -102,7 +104,7 @@ def main():
                         model=model,
                         scale=scale,
                         fixed_base=True,
-                        dataset_type="hssd",
+                        dataset_type=dataset_name,
                     )
                 except:
                     print("Skipping object", obj_instance)

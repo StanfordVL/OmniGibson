@@ -19,7 +19,7 @@ import torch as th
 from PIL import Image
 
 # Configure macros for maximum performance
-gm.USE_GPU_DYNAMICS = True
+gm.USE_GPU_DYNAMICS = False
 gm.ENABLE_FLATCACHE = True
 gm.ENABLE_OBJECT_STATES = False
 gm.ENABLE_TRANSITION_RULES = False
@@ -43,7 +43,9 @@ def main():
         },
         "scene": {
             "type": "InteractiveTraversableScene",
-            "scene_model": "Rs_int",
+            "scene_model": "102817200",
+            "dataset_type": "hssd",
+            "scene_instance": "102817200_best",
             # "load_object_categories": [
             #     "floors",
             #     "walls",
@@ -61,14 +63,20 @@ def main():
     # Load the environment
     env = og.Environment(configs=cfg)
 
+    import omnigibson.lazy as lazy
+    # lazy.omni.replicator.core.settings.set_render_pathtraced(samples_per_pixel=64)
+    lazy.carb.settings.get_settings().set_string("/rtx/rendermode", "PathTracing")
+    lazy.carb.settings.get_settings().set_bool("/rtx/useViewLightingMode", True)
+    lazy.carb.settings.get_settings().set_bool("/rtx/autoExposure/enabled", True)
+
     # Do 100 steps of rendering
-    for _ in range(100):
+    for _ in range(5):
         og.sim.render()
 
     # Get the rooms in the scene and the eroded traversable map
-    rooms = list(env.scene.seg_map.room_ins_name_to_ins_id.keys())
-    trav_map = th.clone(env.scene.trav_map.floor_map[0])
-    trav_map = env.scene.trav_map._erode_trav_map(trav_map)
+    # rooms = list(env.scene.seg_map.room_ins_name_to_ins_id.keys())
+    # trav_map = th.clone(env.scene.trav_map.floor_map[0])
+    # trav_map = env.scene.trav_map._erode_trav_map(trav_map)
 
     index = 0
     
@@ -89,28 +97,40 @@ def main():
         f.create_dataset('camera_pose', shape=(TOTAL_IMAGES, 4, 4), dtype='float32')
 
         # Warm up.
-        for _ in range(100):
+        for _ in range(5):
             og.sim.render()
 
         # Record the camera intrinsics
         K = og.sim.viewer_camera.intrinsic_matrix.cpu().numpy()
         f.attrs["camera_intrinsics"] = json.dumps(K.tolist())
 
+        # Calculate scene AABB
+        scene_aabb_min, scene_aabb_max = None, None
+        for obj in env.scene.objects:
+            aabb_min, aabb_max = obj.aabb
+            if scene_aabb_min is None:
+                scene_aabb_min = aabb_min
+                scene_aabb_max = aabb_max
+            else:
+                scene_aabb_min = th.minimum(scene_aabb_min, aabb_min)
+                scene_aabb_max = th.maximum(scene_aabb_max, aabb_max)
+
         # with tqdm.tqdm(total=TOTAL_IMAGES, desc="Collecting images") as pbar:
         while index < TOTAL_IMAGES:
             # Pick a room from the scene, uniformly
-            room_name = random.choice(rooms)
-            if room_name in ("garden_0", "sauna_0", "garage_0"):
-                continue
+            # room_name = random.choice(rooms)
+            # if room_name in ("garden_0", "sauna_0", "garage_0"):
+            #     continue
 
-            _, camera_point = env.scene.seg_map.get_random_point_by_room_instance(room_name)
-            if camera_point is None:
-                continue
+            # _, camera_point = env.scene.seg_map.get_random_point_by_room_instance(room_name)
+            # if camera_point is None:
+            #     continue
 
             # Check if the camera point is valid (e.g. not within 10cm of a wall)
-            map_coords = env.scene.trav_map.world_to_map(camera_point[:2])
-            if trav_map[map_coords[0], map_coords[1]] == 0:
-                continue
+            # map_coords = env.scene.trav_map.world_to_map(camera_point[:2])
+            # if trav_map[map_coords[0], map_coords[1]] == 0:
+            #     continue
+            camera_point = scene_aabb_min + th.rand(3) * (scene_aabb_max - scene_aabb_min)
 
             # Pick a random height
             camera_point[2] = random.uniform(1.5, 2.0)  # Height in meters
@@ -127,7 +147,7 @@ def main():
             rotation = convert_camera_frame_orientation_convention(rotation, "world", "opengl")
 
             # Get the rotation as a quaternion
-            for jitter_idx in range(10):
+            for jitter_idx in range(1):
                 jittered_position = camera_point.clone()
                 jittered_rotation = rotation.clone()
 
@@ -146,8 +166,8 @@ def main():
                 # Set the camera pose
                 og.sim.viewer_camera.set_position_orientation(position=jittered_position, orientation=jittered_rotation)
 
-                # Render 30 times to ensure the camera is stable
-                for _ in range(30):
+                # Render 5 times to ensure the camera is stable
+                for _ in range(5):
                     og.sim.render()
 
                 # Get the observation from the viewer camera sensor
@@ -173,7 +193,7 @@ def main():
                     continue
 
                 # Save the image to a file
-                image_file = f"camera_{index:04d}_room_{room_name}_yaw_{yaw}_pitch_{int(pitch)}.png"
+                image_file = f"camera_{index:04d}_yaw_{yaw}_pitch_{int(pitch)}.png"
                 Image.fromarray(rgb).save(os.path.join(images_dir, image_file))
 
                 # Save the data into hdf5
