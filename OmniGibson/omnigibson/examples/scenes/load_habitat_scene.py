@@ -42,7 +42,13 @@ def load_habitat_scene(dataset_name, scene_input_json):
         name="stage", category=stage_category, model=stage_model, fixed_base=True, dataset_type=dataset_name
     )
     scene.add_object(tmpl)
-    tmpl.set_position_orientation(position=th.zeros(3), orientation=ROTATE_EVERYTHING_BY)
+
+    stage_orn = ROTATE_EVERYTHING_BY
+    if "ProcTHOR" in stage_instance:
+        # Additional -90 rotation around world Z+
+        stage_orn = T.quat_multiply(T.euler2quat(th.tensor([0, 0, -th.pi / 2])), stage_orn)
+
+    tmpl.set_position_orientation(position=th.zeros(3), orientation=stage_orn)
 
     for i, obj_instance in enumerate(scene_contents["object_instances"]):
         try:
@@ -65,9 +71,6 @@ def load_habitat_scene(dataset_name, scene_input_json):
             print("Skipping object", obj_instance)
             continue
         scene.add_object(obj)
-        if "ProcTHOR" in template_name:
-            # Additional -90 rotation around world Z+
-            rotated_orn = T.quat_multiply(T.euler2quat(th.tensor([0, 0, -th.pi / 2])), orn)
 
         rotated_pos, rotated_orn = T.pose_transform(th.zeros(3), ROTATE_EVERYTHING_BY, pos, orn)
         obj.set_bbox_center_position_orientation(rotated_pos, rotated_orn)
