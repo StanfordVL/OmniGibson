@@ -73,7 +73,7 @@ def load_habitat_scene(dataset_name, scene_input_json):
         scene.add_object(obj)
 
         rotated_pos, rotated_orn = T.pose_transform(th.zeros(3), ROTATE_EVERYTHING_BY, pos, orn)
-        obj.set_bbox_center_position_orientation(rotated_pos, rotated_orn)
+        obj.set_position_orientation(rotated_pos, rotated_orn)
 
     # Play the simulator, then save
     og.sim.play()
